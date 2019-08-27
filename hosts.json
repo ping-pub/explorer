@@ -14,7 +14,7 @@
                 "chain_id": "test",
                 "lcd": "https://qianbao.yaoling.io:26659",
                 "rpc": "https://qianbao.yaoling.io:26670"
-            },
+            }
         ]
-    },
+    }
 ]
