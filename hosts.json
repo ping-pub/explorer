@@ -1,19 +1,19 @@
 [
     {
-        "name": "Cell Network",
+        "name": "Cosmos",
         "logo": "https://gist.githubusercontent.com/kwunyeung/8be4598c77c61e497dfc7220a678b3ee/raw/8178b6bcce1d1563bac10f8a150c713724a742f1/cosmoshub.svg?sanitize=true",
         "chains": [
             {
                 "type": "mainnet",
-                "chain_id": "cell-network",
-                "lcd": "https://qianbao.yaoling.io:26659",
-                "rpc": "https://qianbao.yaoling.io:26670"
+                "chain_id": "cosmoshub-2",
+                "lcd": "https://lcd.nylira.net",
+                "rpc": "https://rpc.nylira.net"
             },
             {
                 "type": "testnet",
-                "chain_id": "test",
-                "lcd": "https://qianbao.yaoling.io:26659",
-                "rpc": "https://qianbao.yaoling.io:26670"
+                "chain_id": "cosmoshub-2",
+                "lcd": "https://lcd.nylira.net",
+                "rpc": "https://rpc.nylira.net"
             }
         ]
     }
