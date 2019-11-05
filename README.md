@@ -14,7 +14,7 @@ If you want Look to explore your blockchain, pull a request [here](https://githu
 
 Look是一个轻浏览器，免费为所有的基于Cosmos-SDK开发的区块链提供浏览服务
 
-# Look 和其他区块链有什么不同？
+# Look 和其他区块链浏览器有什么不同？
 
 Look的设计理念是尽可能的保持数据的真实性，所以，他不会在服务器端缓存或者保存任何数据，也不会增加任何分析处理。它仅仅通过LCD/RPC来获取他所需要的所有数据。因此我们叫它“轻浏览器”。
 
