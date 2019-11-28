@@ -5,7 +5,8 @@
       "chains": [
         {
           "chainId": "cosmoshub",
-          "lcd":  "https://lcd.nylira.net",
+          "group": "cosmoshub",
+          "lcd": "https://lcd.nylira.net",
           "rpc": "https://rpc.nylira.net"
         }
       ]
@@ -16,7 +17,8 @@
       "chains": [
         {
           "chainId": "kava",
-          "lcd":  "https://kava-relay.01node.com",
+          "group": "kava",
+          "lcd": "https://kava-relay.01node.com",
           "rpc": "http://178.62.8.178:26657"
         }
       ]
@@ -27,8 +29,21 @@
       "chains": [
         {
           "chainId": "irishub",
-          "lcd":  "https://rpc.irisnet.org",
+          "group": "irishub",
+          "lcd": "https://rpc.irisnet.org",
           "rpc": "http://seed-1.mainnet.irisnet.org:26657"
+        }
+      ]
+    },
+    {
+      "name": "Cell",
+      "logo": "https://hub.cosmos.network/hub.svg",
+      "chains": [
+        {
+          "chainId": "cell-test-01",
+          "group": "kava",
+          "lcd": "http://sz1.icell.one:1317",
+          "rpc": " http://sz1.icell.one:26657"
         }
       ]
     }
