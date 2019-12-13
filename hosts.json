@@ -46,5 +46,17 @@
           "rpc": " http://sz1.icell.one:26657"
         }
       ]
+    },
+    {
+      "name": "Sentinel Network",
+      "logo": "https://hub.cosmos.network/hub.svg",
+      "chains": [
+        {
+          "chainId": "sentinelhub",
+          "group": "sentinel",
+          "lcd": "https://lcd.turing.sentinel.co",
+          "rpc": "https://rpc.turing.sentinel.co"
+        }
+      ]
     }
   ]
