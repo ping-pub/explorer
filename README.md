@@ -25,7 +25,7 @@ Data providers: [full list](https://github.com/ping-pub/look/blob/master/hosts.j
 * 01node.com, 
 * kava.io
 
-_If you don't want to provide data services for LOOK exporer, let us know. _
+*If you don't want to provide data services for LOOK exporer, let us know. *
 
 ## Blockchains on LOOK explorer:
 * https://cosmos.ping.pub
@@ -60,7 +60,7 @@ Look的设计理念是尽可能的保持数据的真实性，所以，他不会�
 * 01node.com, 
 * kava.io
 
-_如果你觉得我们滥用了你的服务器资源，请告知我们 _
+*如果你觉得我们滥用了你的服务器资源，请告知我们。*
 
 ## LOOK explorer 上的区块链:
 * https://cosmos.ping.pub
