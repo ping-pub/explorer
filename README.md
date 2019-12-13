@@ -10,7 +10,18 @@ Look is designed to explore blockchain data as real as possible, therefore there
 
 If you want Look to explore your blockchain, pull a request [here](https://github.com/liangping/look/issues), We will explore your chains as soon as possibe. And the most important thing is that Look is free for all public cosmos-based blockchains.
 
-# look
+## Why LOOK explorer use official/trusted public LCD/rpc server? 
+
+We have to considerations: 1, Trust, In decentralize system, everything controled by one single team/orgnization could be risks. So we decided to co-build LOOK explorer with the community. 2. Look explorer will explose handreds and thousands cosmos-based blockchains in the future, it's impossible for our team to run validators or fullnodes of those chains.
+
+## Contributors
+
+Developers: @liangping @dingyiming
+
+Data providers: [full list](https://github.com/ping-pub/look/blob/master/hosts.json)
+irisnet.org, nylira.net, 01node.com, kava.io
+
+if you don't want provide data for LOOK exporer, let us know. 
 
 Look是一个轻浏览器，免费为所有的基于Cosmos-SDK开发的区块链提供浏览服务
 
