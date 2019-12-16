@@ -1,4 +1,4 @@
-# LOOK explorer
+# LOOK Explorer
 
 Look is a light explorer for Cosmos-based Blockchains.  https://look.ping.pub .
 
