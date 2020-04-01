@@ -16,6 +16,10 @@ We have two considerations: 1, Trust, In decentralize system, everything control
 
 ## Contributors
 
+Translations:
+* Franch: [@Catdotfish](https://github.com/Catdotfish)
+* Italian: [@Catdotfish](https://github.com/Catdotfish)
+
 Developers: @liangping @dingyiming
 
 Data providers: [full list](https://github.com/ping-pub/look/blob/master/hosts.json)
