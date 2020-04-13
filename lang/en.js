@@ -68,6 +68,7 @@ export default {
     governanceid_Voter: 'Voter',
     governanceid_Option: 'Option',
     // parameter
+    parameter_NodeParameters: 'Validator Parameters',
     parameter_GovernanceParameters: 'Governance Parameters',
     parameter_Deposit: 'Deposit',
     parameter_MaxDepositPeriod: 'Max Deposit Period',
@@ -152,6 +153,9 @@ export default {
     validatoraddress_HEXAddress: 'HEX Address',
     validatoraddress_Info: 'Info',
     validatoraddress_Delegations: 'Delegations',
+    validatoraddress_Delegator: 'Delegator',
+    validatoraddress_Amount: 'Amount',
+    validatoraddress_Share: 'Share',
     // wallet
     wallet_Addressisrequired: 'Address is required.',
     wallet_Useanexistingaddress: 'Use an existing address',

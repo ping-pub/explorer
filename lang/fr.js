@@ -1,3 +1,11 @@
+/*
+ * @Description: 
+ * @Autor: dingyi
+ * @Date: 2020-04-01 21:41:06
+ * @LastEditors: dingyi
+ * @LastEditTime: 2020-04-05 10:47:32
+ * @FilePath: /look-web/src/utils/lang/fr.js
+ */
 export default {
   message: {
     lang: 'Français',
@@ -49,7 +57,7 @@ export default {
     governanceid_vote: 'Vote',
     governanceid_proposalId: 'ID Proposal',
     governanceid_submit_time: 'Heure de présentation',
-    governanceid_voting_start_time: 'Heure Début du vote,
+    governanceid_voting_start_time: `Heure Début du vote`,
     governanceid_proposalType: 'Typologie Proposal',
     governanceid_deposit_end_time: 'Délai de Dépôt',
     governanceid_voting_end_time: 'Délai de Vote',
@@ -68,6 +76,7 @@ export default {
     governanceid_Voter: 'Électeur',
     governanceid_Option: 'Option',
     // parameter
+    parameter_NodeParameters: 'Paramètres Validateurs',
     parameter_GovernanceParameters: 'Paramètres Gouvernance',
     parameter_Deposit: 'Dépôt',
     parameter_MaxDepositPeriod: 'Durée Max Dépôt',
@@ -152,8 +161,11 @@ export default {
     validatoraddress_HEXAddress: 'Addresse HEX',
     validatoraddress_Info: 'Info',
     validatoraddress_Delegations: 'Délégations',
+    validatoraddress_Delegator: 'Client',
+    validatoraddress_Amount: 'Quantité',
+    validatoraddress_Share: 'Share',
     // wallet
-    wallet_Addressisrequired: 'L'adresse est requise.',
+    wallet_Addressisrequired: `L'adresse est requise.`,
     wallet_Useanexistingaddress: 'Indiquer une adresse existante',
     wallet_switch: 'change',
     wallet_Send: 'Invoie',
@@ -170,10 +182,10 @@ export default {
     // wallet-add
     walletadd_Chooseaway: 'Choisir le mode',
     walletadd_UseLedger: 'User Ledger',
-    walletadd_Inputaddress: 'Indiquer l'adresse',
+    walletadd_Inputaddress: `Indiquer l'adresse`,
     walletadd_Pleasefollowthesteps: 'Veuillez suivre les instructions.',
     walletadd_1: 'Allumer votre Ledger Nano et entrer le code PIN.',
-    walletadd_2: 'Sélectionner l'application Cosmos dans le Ledger.',
+    walletadd_2: `Sélectionner l'application Cosmos dans le Ledger.`,
     walletadd_3: 'Sélectionner le compte du Ledger (Default 0, 0).',
     walletadd_Account: 'Account',
     walletadd_Index: 'Index',
@@ -181,11 +193,11 @@ export default {
     walletadd_features: 'Experimental Web Platform features',
     walletadd_dueto: 'En conséquence des récentes mises à jour de Ledger, pour utiliser un Ledger sur Windows, il faut maintenant activer "Experimental Web Platform features".',
     walletadd_pleasecopy: 'Veuillez copier le link ci-dessous dans un nouvel onglet et mettre le paramètre "Experimental Web Platform features" sur "Enabled".',
-    walletadd_getmyledger: 'Obtenir l'adresse de mon Ledger Nano',
-    walletadd_Enteraddresstoview: 'Saisir l'adresse pour afficher',
-    walletadd_pleaseinputaddress: 'Saisir l'adresse',
+    walletadd_getmyledger: `Obtenir l'adresse de mon Ledger Nano`,
+    walletadd_Enteraddresstoview: `Saisir l'adresse pour afficher`,
+    walletadd_pleaseinputaddress: `Saisir l'adresse`,
     walletadd_copy: 'Copie Réussie.',
-    walletadd_GetAddress: 'Obtenir l'adresse',
+    walletadd_GetAddress: `Obtenir l'adresse`,
     // wallet-send
     walletsend_Send: 'Envoyer',
     walletsend_From: 'Par',
@@ -202,18 +214,18 @@ export default {
     walletsend_Sendbyledger: 'Envoyer via le Ledger',
     walletsend_exception: 'En cas de problème, refresh la page et réessayez.',
     walletsend_sign: 'Vous pouvez consulter les informations relatives aux transactions et signer.',
-    walletsend_openledger: 'Allumer le Ledger et sélectionner l'app Cosmos.',
+    walletsend_openledger: `Allumer le Ledger et sélectionner l'app Cosmos.`,
     walletsend_Canceltransaction: 'Supprimer la transaction',
     walletsend_Success: 'Succès',
     walletsend_BlockHeight: 'Hauteur Bloc',
     walletsend_TxHash: 'Hash Tx',
     walletsend_SendAgain: 'Envoyer à nouveau',
     walletsend_checkit: 'Vérifier plus tard..',
-    walletsend_notbeenfoun: 'Les informations relatives à la transaction n'ont pas été retrouvées.',
+    walletsend_notbeenfoun: `Les informations relatives à la transaction n'ont pas été retrouvées.`,
     walletsend_gettransaction: 'Réaliser une nouvelle transaction.',
     walletsend_SubmissionFailed: 'Échec de la transmission.',
     walletsend_pleasecheck: 'Vérifier et modifier les informations suivantes avant de soumettre.',
-    walletsend_Pleaseinputtoaddress: 'Indiquer l'adresse du destinataire',
+    walletsend_Pleaseinputtoaddress: `Indiquer l'adresse du destinataire`,
     walletsend_pleaseinputamount: 'Indiquer le montant',
     walletsend_memodefault: 'Envoyer via look.ping.pub 2020',
     walletsend_Pleaseinputform: 'Indiquer form.',

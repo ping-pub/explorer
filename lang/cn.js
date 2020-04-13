@@ -1,6 +1,6 @@
 export default {
   message: {
-    lang: '中文(简体)',
+    lang: '中文',
     validators: '节点',
     blocks: '区块链',
     uptime: '在线状态',
@@ -10,9 +10,9 @@ export default {
     testnet: '测试链',
     mainnet: '正式链',
     // block
-    block_lastBlockHash: '前一区块哈希值',
-    block_hash: '哈希值',
-    block_proposer: '提议人',
+    block_lastBlockHash: '上一块',
+    block_hash: '当前块',
+    block_proposer: '出块节点',
     block_time: '时间',
     block_detail: '细节',
     block_transactions: '交易',
@@ -68,6 +68,7 @@ export default {
     governanceid_Voter: '投票人',
     governanceid_Option: '比例',
     // parameter
+    parameter_NodeParameters: '节点参数',
     parameter_GovernanceParameters: '治理参数',
     parameter_Deposit: '质押',
     parameter_MaxDepositPeriod: '最大质押期',
@@ -152,6 +153,9 @@ export default {
     validatoraddress_HEXAddress: '十六进制地址',
     validatoraddress_Info: '信息',
     validatoraddress_Delegations: '委托信息',
+    validatoraddress_Delegator: '委托人',
+    validatoraddress_Amount: '数量',
+    validatoraddress_Share: '比例',
     // wallet
     wallet_Addressisrequired: '必须查看一个地址。',
     wallet_Useanexistingaddress: '使用已存在的地址',
