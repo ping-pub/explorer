@@ -48,7 +48,7 @@ export default {
       blockheight_DataHash: 'Data Hash',
       blockheight_LastCommitHash: 'Hash del último commit',
       //¿?
-      blockheight_LastResultsHash: 'Hash del último recursos',
+      blockheight_LastResultsHash: 'Hash del último resultado',
       // governance-id
       governanceid_vote: 'Voto',
       governanceid_proposalId: 'ID de la propuesta',
