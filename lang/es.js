@@ -34,21 +34,21 @@ export default {
       blockheight_TotalofTransactions: 'Total de transacciones',
       blockheight_ChainId: 'ID de la cadena',
       //¿?
-      blockheight_BlockApp: 'Block App',
+      blockheight_BlockApp: 'Bloque del APP',
       blockheight_BlockVersion: 'Versión del Bloque',
       blockheight_Evidence: 'Evidencia',
       blockheight_EvidenceHash: 'Hash de evidencia',
       //¿?
-      blockheight_AppHash: 'App Hash',
+      blockheight_AppHash: 'Hash del APP',
       blockheight_ValidatorsHash: 'Hash de validadores',
       blockheight_NextValidatorsHash: 'Hash del siguiente validador',
       blockheight_ConsensusHash: 'Hash de consenso',
       //¿?
-      blockheight_PartsHash: 'Parts Hash',
+      blockheight_PartsHash: 'Hash de las partes',
       blockheight_DataHash: 'Data Hash',
       blockheight_LastCommitHash: 'Hash del último commit',
       //¿?
-      blockheight_LastResultsHash: 'Hash de los últimos recursos',
+      blockheight_LastResultsHash: 'Hash del último recursos',
       // governance-id
       governanceid_vote: 'Voto',
       governanceid_proposalId: 'ID de la propuesta',
@@ -94,7 +94,7 @@ export default {
       parameter_MaxEvidenceAge: 'Tiempo máximo de la evidencia',
       parameter_SignedBlocksWindow: 'Ventana para los bloques firmados',
       //¿?
-      parameter_MinSignedPerWindow: 'Min Signed Per Window',
+      parameter_MinSignedPerWindow: 'Firma mínima por ventana',
       parameter_DowntimeJailDuration: 'Tiempo de inactividad encarcelado',
       parameter_DoubleSignSlash: 'Penalización de doble firma',
       parameter_DowntimeSlash: 'Penalización por tiempo de inactividad',
@@ -103,7 +103,7 @@ export default {
       parameter_BonusProposerReward: 'Recompensa para el candidato a la bonificación',
       parameter_WithdrawAddrEnabled: 'Dirección de retiro habilitada',
       //¿?
-      parameter_GoalBonded: 'Meta de la vinculación',
+      parameter_GoalBonded: 'Objetivo garantizado',
       parameter_Inflation: 'Inflación',
       parameter_InflationMax: 'Inflación Máxima',
       parameter_InflationMin: 'Inflación Mínima',
@@ -111,7 +111,7 @@ export default {
       parameter_BlocksPerYear: 'Bloques por año',
       parameter_AnnualProvisions: 'Provisiones anuales',
       //¿?
-      parameter_MintDenom: 'Mint Denom',
+      parameter_MintDenom: 'Denominación creada',
       parameter_min: 'minutos',
       parameter_hour: 'horas',
       parameter_day: 'días',
@@ -124,7 +124,7 @@ export default {
       txhash_Gas: 'Gas ( usado / deseado )',
       txhash_Time: 'Tiempo',
       //¿?
-      txhash_Msgs: 'Msgs',
+      txhash_Msgs: 'Mensajes',
       txhash_moniker: 'moniker',
       txhash_identity: 'identidad',
       txhash_website: 'sitio web',
@@ -164,7 +164,7 @@ export default {
       validatoraddress_Delegations: 'Delegaciones',
       validatoraddress_Delegator: 'Delegador',
       validatoraddress_Amount: 'Cantidad',
-      //¿?
+      //¿? También puede ser "en común"
       validatoraddress_Share: 'Compartido',
       // wallet
       wallet_Addressisrequired: 'La dirección es requerida.',
