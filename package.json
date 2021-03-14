@@ -1,0 +1,43 @@
+{
+  "name": "look",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "start": "pm2 delete all && git pull origin dev && cd server && npm run start"
+  },
+  "dependencies": {
+    "@cosmostation/cosmosjs": "^0.5.2",
+    "@lunie/cosmos-api": "^0.2.5",
+    "@lunie/cosmos-ledger": "^0.1.7",
+    "bignumber.js": "^9.0.0",
+    "core-js": "^3.6.4",
+    "cosmos-lib": "^1.1.0",
+    "dayjs": "^1.8.21",
+    "element-ui": "^2.13.0",
+    "fingerprintjs2": "^2.1.0",
+    "hash.js": "^1.1.7",
+    "js-base64": "^3.6.0",
+    "localforage": "^1.7.3",
+    "vant": "^2.6.1",
+    "vue": "^2.6.11",
+    "vue-i18n": "^8.15.1",
+    "vue-router": "^3.1.5",
+    "vue-worker": "^1.2.1",
+    "vuex": "^3.1.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.2.0",
+    "@vue/cli-plugin-router": "~4.2.0",
+    "@vue/cli-plugin-vuex": "~4.2.0",
+    "@vue/cli-service": "~4.2.0",
+    "sass": "^1.25.0",
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
+}

@@ -1,0 +1,102 @@
+html,
+body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  background-color: #f0f2f5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+a {
+  text-decoration: none;
+  color: #0170fe;
+}
+a:hover {
+  color: #000;
+}
+p {
+  margin: 0;
+  padding: 0;
+}
+.p-20 {
+  padding: 20px;
+}
+.tc {
+  text-align: center;
+}
+.mt-20 {
+  margin-top: 20px;
+}
+.mr-10 {
+  margin-right: 10px;
+}
+.mb-10 {
+  margin-bottom: 10px;
+}
+.mb-20 {
+  margin-bottom: 20px;
+}
+.noselect {
+  user-select: none;
+}
+.pointer {
+  cursor: pointer;
+}
+.font-16 {
+  font-size: 16px;
+}
+.bg-white {
+  background: #fff;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.flex-sb {
+  justify-content: space-between;
+}
+.flex-1 {
+  flex: 1;
+}
+.flex-justifycenter {
+  justify-content: center;
+}
+.area-title {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.box-base {
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+.box-dark {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+}
+
+.max-width {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mb-5 {
+  margin-bottom: 5px
+}
+
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -webkit-text-overflow: ellipsis;
+  -moz-text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.border-eee {
+  border: 1px solid #eee;
+}

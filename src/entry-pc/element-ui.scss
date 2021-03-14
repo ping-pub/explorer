@@ -1,0 +1,65 @@
+$--color-primary: #343a40; // #1890ff;
+$--color-success: #52c41a;
+$--color-warning: #faad14;
+$--color-danger: #ff4d4f;
+$--border-radius-base: 0;
+$--border-radius-small: 0;
+$--tag-border-radius: 0;
+$--pagination-border-radius: 0;
+$--font-path: "~element-ui/lib/theme-chalk/fonts";
+
+@import "~element-ui/packages/theme-chalk/src/index";
+@import "~element-ui/lib/theme-chalk/display.css";
+
+/* element-ui 样式重置 */
+.el-message {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 10px 16px;
+  border-radius: 2px;
+  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  pointer-events: all;
+}
+.el-message--error .el-message__content,
+.el-message--success .el-message__content,
+.el-message--warning .el-message__content,
+.el-message__content {
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+}
+.el-message__icon {
+  font-size: 16px;
+}
+.el-alert--warning.is-light {
+  background-color: #fffbe6;
+  border: 1px solid #ffe58f;
+
+  color: rgba(0, 0, 0, 0.65);
+}
+.el-alert__title {
+  display: block;
+  margin-bottom: 4px;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 16px;
+}
+
+.el-alert--warning.is-light .el-alert__description {
+  color: rgba(0, 0, 0, 0.65);
+}
+.el-alert__icon.el-icon-warning {
+  align-self: flex-start;
+  color: #faad14;
+}
+.el-menu.el-menu--horizontal {
+  border-bottom: none;
+}
+
+.el-pagination.is-background .btn-prev,
+.el-pagination.is-background .btn-next,
+.el-pagination.is-background .el-pager li {
+  border-radius: 0;
+}

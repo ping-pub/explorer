@@ -1,0 +1,10 @@
+{
+  "apps": [{
+      "name": "look",
+      "script": "./src/main.js",
+      "out_fil": "~/look.log",
+      "watch": true,
+      "instances" : "1",
+      "exec_mode" : "cluster"
+  }]
+}
