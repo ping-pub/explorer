@@ -79,6 +79,16 @@ export default {
 		"logo": "/static/chains/cosmoshub.svg",
 		"prefix": "gauss",
 		"unit": "gauss"
+	}, {
+		"hash": "5fa15123f559583ed7465023",
+		"api": "V4",
+		"chainId": "crypto-org-chain-mainnet-1",
+		"name": "Crypto",
+		"lcd": "https://mainnet.crypto.org:1317",
+		"rpc": "https://mainnet.crypto.org:26657",
+		"logo": "/static/chains/cosmoshub.svg",
+		"prefix": "crocncl",
+		"unit": "BASECRO"
 	}],
 	"Testnet": [{
 		"hash": "5e95f8d18ee6e64f7685a4df",
