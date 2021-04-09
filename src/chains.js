@@ -53,7 +53,7 @@ export default {
 		"chainId": "kava-2",
 		"name": "Kava",
 		"lcd": "https://kava4.data.kava.io",
-		"rpc": "http://13.125.71.131:26657",
+		"rpc": "https://rpc.data.kava.io",
 		"logo": "/static/chains/kava.svg",
 		"prefix": "kava",
 		"unit": "KAVA",
