@@ -27,24 +27,13 @@ export default {
 		"unit": "IRIS",
 		"host": "iris.ping.pub"
 	}, {
-		"hash": "5e95f8d18ee6e64f7685a4de",
-		"api": "V1",
-		"chainId": "e-money",
-		"name": "e-money",
-		"lcd": "http://emoney.validator.network/light",
-		"rpc": "https://emoney.validator.network",
-		"logo": "/static/chains/cosmoshub.svg",
-		"prefix": "",
-		"unit": "",
-		"host": "e-money.ping.pub"
-	}, {
 		"hash": "5f46381683d9d569a6ecc5dd",
 		"api": "V1",
 		"chainId": "iov-mainnet-2",
 		"name": "IOV Name Service",
 		"lcd": "http://lcd-private-iov-mainnet-2.iov.one",
 		"rpc": "https://rpc-private-iov-mainnet-2.iov.one",
-		"logo": "https://iov.one/static/media/logoIOV2.d25f8426.png",
+		"logo": "/static/chains/cosmoshub.svg",
 		"prefix": "star",
 		"unit": "IOV"
 	}, {
@@ -132,25 +121,5 @@ export default {
 		"logo": "/static/chains/cosmoshub.svg",
 		"prefix": "cosmos",
 		"unit": "Muon"
-	}, {
-		"hash": "5f92bb80ea5b4a772bfebd02",
-		"api": "V1",
-		"chainId": "bigbang-1",
-		"name": "BigBand-1",
-		"lcd": "http://47.101.10.160:1317",
-		"rpc": "http://47.101.10.160:26657",
-		"logo": "/static/chains/cosmoshub.svg",
-		"prefix": "akash",
-		"unit": "STAR"
-	}, {
-		"hash": "5f92bb80ea5b4a772bfebd03",
-		"api": "V3",
-		"chainId": "stargate-final",
-		"name": "stargate-final",
-		"lcd": "http://47.101.10.160:1317/",
-		"rpc": "http://47.101.10.160:26657/",
-		"logo": "/static/chains/cosmoshub.svg",
-		"prefix": "cosmos",
-		"unit": "ATOM"
 	}]
 };
