@@ -69,29 +69,7 @@ export default {
 		"prefix": "crocncl",
 		"unit": "BASECRO"
 	}],
-	"Testnet": [{
-		"hash": "5e95f8d18ee6e64f7685a4df",
-		"api": "V1",
-		"chainId": "sentinelhub-test",
-		"name": "Sentinel Network",
-		"lcd": "https://lcd.turing.sentinel.co",
-		"rpc": "https://rpc.turing.sentinel.co",
-		"logo": "/static/chains/cosmoshub.svg",
-		"prefix": "",
-		"unit": "",
-		"host": "sentinel-test.ping.pub"
-	}, {
-		"hash": "5e95f8d18ee6e64f7685a4e1",
-		"api": "V1",
-		"chainId": "cyber-test",
-		"name": "cyber",
-		"lcd": "https://titan.cybernode.ai/lcd",
-		"rpc": "https://titan.cybernode.ai/api",
-		"logo": "/static/chains/cosmoshub.svg",
-		"prefix": "",
-		"unit": "",
-		"host": "cyber-test.ping.pub"
-	}, {
+	"Testnet": [ {
 		"hash": "5eabf1d1b8eb6314e2d99264",
 		"api": "V1",
 		"chainId": "iovns-galaxynet",
@@ -101,15 +79,5 @@ export default {
 		"logo": "/static/chains/cosmoshub.svg",
 		"prefix": "cosmos",
 		"unit": "ATOM"
-	}, {
-		"hash": "5f92b494ea5b4a772bfebd01",
-		"api": "V1",
-		"chainId": "stargate-4",
-		"name": "stargate-4",
-		"lcd": "https://rest.gaiasg4.hub.hackatom.dev",
-		"rpc": "https://rpc.gaiasg4.hub.hackatom.dev",
-		"logo": "/static/chains/cosmoshub.svg",
-		"prefix": "cosmos",
-		"unit": "Muon"
 	}]
 };
