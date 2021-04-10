@@ -59,16 +59,6 @@ export default {
 		"unit": "AKT",
 		"host": "akash.ping.pub"
 	}, {
-		"hash": "5fa15123f559583ed7465024",
-		"api": "V1",
-		"chainId": "gauss",
-		"name": "GAUSS",
-		"lcd": "https://txs-api-dev.app.gausslab.de:1317",
-		"rpc": "https://txs-api-dev.app.gausslab.de",
-		"logo": "/static/chains/cosmoshub.svg",
-		"prefix": "gauss",
-		"unit": "gauss"
-	}, {
 		"hash": "5fa15123f559583ed7465023",
 		"api": "V4",
 		"chainId": "crypto-org-chain-mainnet-1",
