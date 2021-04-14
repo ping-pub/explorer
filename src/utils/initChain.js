@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-03-08 21:59:04
- * @lastTime: 2020-12-11 11:20:32
+ * @lastTime: 2021-04-14 15:31:31
  * @LastEditors: dingyi
  * @Description: In User Settings Edit
  * @FilePath: /look-web/src/utils/initChain.js
@@ -45,6 +45,7 @@ export function switchChain(chain) {
     return
   }
   if (chain.host && (location.hostname !== 'localhost' && location.hostname !== chain.host)) {
+    window.sessionStorage.removeItem('chain')
     window.location.href = '//' + chain.host + '/#/validator'
   } else {
     window.sessionStorage.setItem('chain', JSON.stringify(chain))
