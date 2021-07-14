@@ -70,14 +70,14 @@ export default {
       this.getKeyBase(res.identity)
     },
     async getStakingValidatorsDelegations(address) {
-      this.loadingDelegations = true
-      const res = await this.$api.fetch('getStakingValidatorsDelegations', {
-        validatorAddress: address
-      })
-      this.loadingDelegations = false
-      if (!res) return
-      this.delegationList = res
-      this.selfDelegations(res)
+//      this.loadingDelegations = true
+//      const res = await this.$api.fetch('getStakingValidatorsDelegations', {
+//        validatorAddress: address
+//      })
+//      this.loadingDelegations = false
+//      if (!res) return
+//      this.delegationList = res
+//      this.selfDelegations(res)
     },
     // 计算自委托比例
     selfDelegations(list) {
