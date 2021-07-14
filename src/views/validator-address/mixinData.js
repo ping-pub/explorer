@@ -74,7 +74,7 @@ export default {
 //      const res = await this.$api.fetch('getStakingValidatorsDelegations', {
 //        validatorAddress: address
 //      })
-//      this.loadingDelegations = false
+      this.loadingDelegations = false
 //      if (!res) return
 //      this.delegationList = res
 //      this.selfDelegations(res)
