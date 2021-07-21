@@ -1,0 +1,6 @@
+{
+    "chain_name": "akash",
+    "chain_id": "akashnet-1",
+    "api": "http://lcd.akash.forbole.com",
+    "logo": "https://look.ping.pub/static/chains/cosmoshub.svg"
+}

@@ -1,0 +1,5 @@
+{
+    "chain_name": "cosmos",
+    "api":"https://api.cosmos.network",
+    "logo": "https://look.ping.pub/static/chains/cosmoshub.svg"
+}
