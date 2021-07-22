@@ -20,9 +20,9 @@ export default {
   },
   mounted() {
     this.$http.get('/api/node_info', { crossdomain: true }).then(response => {
-      this.data.info = response.data
+      this.info = response.data
     }).catch(e => {
-      this.errors.push(e)
+      console.log(e)
     })
   },
 }

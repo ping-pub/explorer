@@ -46,8 +46,8 @@ module.exports = {
   transpileDependencies: ['vue-echarts', 'resize-detector'],
   devServer: {
     proxy: {
-      api: {
-        target: 'https://api.cosmos.network',
+      '/api': {
+        target: 'https://lcd-cosmos.cosmostation.io/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '',
