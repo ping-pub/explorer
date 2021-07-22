@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
-import i18n from '@/libs/i18n'
+import messages from '@/lang'
+
+import VueI18n from 'vue-i18n'
 
 import router from './router'
 import store from './store'
@@ -13,6 +15,14 @@ import './global-components'
 // 3rd party plugins
 import '@/libs/portal-vue'
 import '@/libs/toastification'
+
+Vue.use(VueI18n)
+
+const i18n = new VueI18n({
+  locale: 'en',
+  messages,
+  fallbackLocale: 'en',
+})
 
 // BSV Plugin Registration
 Vue.use(ToastPlugin)

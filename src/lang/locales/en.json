@@ -1,0 +1,14 @@
+{
+  "message": {
+
+  },
+  "cosmos": "Cosmos Hub",
+  "kava": "Kava",
+  "akash": "Akash Decloud",
+  "iris": "Irisnet",
+  "staking": "Staking",
+  "governance": "Governance",
+  "summary": "Summary",
+  "blockchains": "Blockchains"
+  
+}

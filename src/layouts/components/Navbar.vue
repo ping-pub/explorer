@@ -90,7 +90,11 @@ export default {
   computed: {
     selected_chain() {
       const c = this.$route.params.chain
-      return store.state.chains.chains[c]
+      const has = Object.keys(store.state.chains.chains).findIndex(i => i === c)
+      if (has > -1) {
+        return store.state.chains.chains[c]
+      }
+      return store.state.chains.chains.cosmos
     },
   },
 }

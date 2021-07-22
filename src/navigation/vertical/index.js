@@ -3,35 +3,35 @@ import store from '@/store'
 const modules = [
   {
     scope: 'normal',
-    title: 'Summary',
+    title: 'summary',
     route: 'info',
   },
   {
     scope: 'normal',
-    title: 'Staking',
+    title: 'staking',
     route: 'staking',
   },
   {
     scope: 'normal',
-    title: 'Governance',
+    title: 'governance',
     route: 'governance',
   },
 ]
 
 function processMenu() {
   const chainMenus = [
+    // {
+    //   title: 'Home',
+    //   route: 'home',
+    //   icon: 'HomeIcon',
+    // },
     {
-      title: 'Home',
-      route: 'home',
-      icon: 'HomeIcon',
-    },
-    {
-      header: 'Blockchains',
+      header: 'blockchains',
     },
   ]
   Object.keys(store.state.chains.chains).forEach(chain => {
     const menu = {
-      title: chain.toUpperCase(),
+      title: chain,
       icon: 'PieChartIcon',
     }
     const children = []
@@ -49,6 +49,5 @@ function processMenu() {
   })
   return chainMenus
 }
-console.log(modules)
 
 export default processMenu()

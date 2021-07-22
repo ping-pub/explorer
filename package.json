@@ -1,6 +1,6 @@
 {
-  "name": "vuexy-vuejs-react-html-laravel-admin-dashboard-template",
-  "version": "6.4.0",
+  "name": "ping-wallet",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -19,6 +19,7 @@
     "@fullcalendar/list": "5.x",
     "@fullcalendar/timegrid": "5.x",
     "@fullcalendar/vue": "5.x",
+    "@intlify/vue-i18n-loader": "^2.1.2",
     "@vue/composition-api": "1.0.0-beta.22",
     "@vueuse/core": "4.0.0",
     "animate.css": "4.1.1",
@@ -52,6 +53,7 @@
     "vue-form-wizard": "0.8.4",
     "vue-good-table": "2.21.0",
     "vue-i18n": "8.22.2",
+    "vue-loader": "^15.9.6",
     "vue-perfect-scrollbar": "0.2.1",
     "vue-prism-component": "1.1.1",
     "vue-quill-editor": "3.0.6",
