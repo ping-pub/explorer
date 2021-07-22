@@ -199,9 +199,6 @@ import {
   BRow, BCol, BCard, BCardTitle, BCardText, BCardBody, BCardFooter, BButton, BProgressBar, BProgress, BBadge, BTooltip,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
-import store from '@/store'
-
-console.log(store.state.chains)
 
 export default {
   components: {

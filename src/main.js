@@ -11,6 +11,7 @@ import App from './App.vue'
 
 // Global Components
 import './global-components'
+import '@/libs/axios'
 
 // 3rd party plugins
 import '@/libs/portal-vue'
