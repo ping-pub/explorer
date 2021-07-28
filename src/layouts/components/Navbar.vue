@@ -87,14 +87,18 @@ export default {
       default: () => {},
     },
   },
+  data() {
+    return {
+      // result: {},
+    }
+  },
   computed: {
     selected_chain() {
       const c = this.$route.params.chain
       const has = Object.keys(store.state.chains.chains).findIndex(i => i === c)
-      if (has > -1) {
-        return store.state.chains.chains[c]
-      }
-      return store.state.chains.chains.cosmos
+      const selected = (has > -1) ? store.state.chains.chains[c] : store.state.chains.chains.cosmos
+      localStorage.setItem('selected_chain', selected)
+      return selected
     },
   },
 }

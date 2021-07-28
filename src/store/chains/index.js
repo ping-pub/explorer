@@ -1,26 +1,23 @@
 const chains = {}
 const configs = require.context('.', false, /\.json$/)
 
-let selectedChain = {}
 configs.keys().forEach(k => {
   const c = configs(k)
-  if (c.chain_name === 'cosmos') {
-    selectedChain = c
-  }
   chains[c.chain_name] = c
 })
 
 export default {
   namespaced: true,
   state: {
-    selectedChain,
     chains,
   },
   getters: {
     getchains: state => state.chains,
-    currentChain: state => chain => state.chains[chain],
   },
   mutations: {
+    setup_sdk_version(state, info) {
+      state.chains.chains[info.chain_name].sdk_version = info.version
+    },
 
   },
   actions: {},

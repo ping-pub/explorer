@@ -1,5 +1,5 @@
 {
     "chain_name": "cosmos",
-    "api":"https://api.cosmos.network",
+    "api":"https://lcd-cosmoshub.keplr.app",
     "logo": "https://look.ping.pub/static/chains/cosmoshub.svg"
 }

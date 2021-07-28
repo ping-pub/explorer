@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import AsyncComputed from 'vue-async-computed'
 import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
 import messages from '@/lang'
@@ -11,12 +12,13 @@ import App from './App.vue'
 
 // Global Components
 import './global-components'
-import '@/libs/axios'
+import '@/libs/fetch'
 
 // 3rd party plugins
 import '@/libs/portal-vue'
 import '@/libs/toastification'
 
+Vue.use(AsyncComputed)
 Vue.use(VueI18n)
 
 const i18n = new VueI18n({

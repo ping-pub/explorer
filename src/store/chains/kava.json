@@ -1,0 +1,6 @@
+{
+    "chain_name": "kava",
+    "chain_id": "kava-7",
+    "api": "https://kava4.data.kava.io",
+    "logo": "https://look.ping.pub/static/chains/cosmoshub.svg"
+}

@@ -1,213 +1,170 @@
 <template>
   <section>
-    <b-row>
-      <!-- left align -->
-      <b-col
-        md="6"
-      >
-        <b-card>
-          <b-card-title class="mb-0">
-            <b-badge
-              pill
-              variant="light-primary"
-              class="text-right"
-            >
-              Passed
-            </b-badge> #1. With supporting text below as a natural lead-in to additional content.With supporting text below as a natural lead-in to additional content
-          </b-card-title>
-          <b-card-body md="12">
-            <div class="gov-wrapper">
-              <div class="gov">
-                <p class="card-text mb-25">
-                  Start Date
-                </p>
-                <h6 class="mb-0">
-                  2020-05-06
-                </h6>
-              </div>
-              <div class="gov">
-                <p class="card-text mb-25">
-                  End Date
-                </p>
-                <h6 class="mb-0">
-                  2020-05-06
-                </h6>
-              </div>
-              <div class="gov">
-                <p class="card-text mb-25">
-                  Proposer
-                </p>
-                <h6 class="mb-0">
-                  Ping.pub
-                </h6>
-              </div>
-              <div class="gov">
-                <p class="card-text mb-25">
-                  Deposit
-                </p>
-                <h6 class="mb-0">
-                  840.99
-                </h6>
-              </div>
-              <div class="gov">
-                <p class="card-text mb-25">
-                  Turnout
-                </p>
-                <h6 class="mb-0">
-                  84.86%
-                </h6>
-              </div>
-            </div>
-          </b-card-body>
-
-          <b-progress
-            :max="max"
-            height="2rem"
-            class="mb-2"
-            show-progress
-          >
-            <b-progress-bar
-              id="vote-yes"
-              variant="success"
-              :value="values[0]"
-              show-progress
-            />
-            <b-progress-bar
-              id="vote-no"
-              variant="warning"
-              :value="values[1]"
-              show-progress
-            />
-            <b-progress-bar
-              id="vote-veto"
-              variant="danger"
-              :value="values[2]"
-              show-progress
-            />
-            <b-progress-bar
-              id="vote-abstain"
-              variant="info"
-              :value="values[3]"
-              show-progress
-            />
-          </b-progress>
-          <b-tooltip
-            target="vote-yes"
-          >
-            {{ values[0] }} voted Yes
-          </b-tooltip>
-          <b-tooltip
-            target="vote-no"
-          >
-            {{ values[1] }} voted No
-          </b-tooltip>
-          <b-tooltip
-            target="vote-veto"
-          >
-            {{ values[2] }} voted Veta
-          </b-tooltip>
-          <b-tooltip
-            target="vote-abstain"
-          >
-            {{ values[3] }} voted Abstain
-          </b-tooltip>
-          <b-card-footer>
-            <b-button
-              v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-              variant="outline-primary"
-            >
-              Detail
-            </b-button>
-            <b-button
-              variant="primary"
-              class="btn float-right mg-2"
-            >
-              Vote
-            </b-button>
-          </b-card-footer>
-        </b-card>
-      </b-col>
-    </b-row>
-    <b-row>
-
-      <b-col
-        md="12"
-        class="mb-1"
-      >
-        <b-card
-          title="# 1. Special title treatment"
-          class="mb-3"
-        >
-          <b-card-text>
-            # 1. With supporting text below as a natural lead-in to additional content.
-          </b-card-text>
-          <b-button
-            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            variant="outline-primary"
-          >
-            Vote
-          </b-button>
-        </b-card>
-      </b-col>
-      <!-- center align -->
-      <b-col
-        md="6"
-        lg="4"
-      >
-        <b-card
-          title="Special title treatment"
-          class="text-center"
-        >
-          <b-card-text>
-            With supporting text below as a natural lead-in to additional content
-          </b-card-text>
-          <b-button
-            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            variant="outline-primary"
-          >
-            Go somewhere
-          </b-button>
-        </b-card>
-      </b-col>
-
-      <!-- right align -->
-      <b-col
-        md="6"
-        lg="4"
-      >
-        <b-card
+    <b-card
+      v-for="p in proposals"
+      :key="p.id"
+    >
+      <b-card-title class="mb-0">
+        <b-badge
+          v-if="p.status == 1"
+          pill
+          variant="light-info"
           class="text-right"
-          title="Special title treatment"
         >
-          <b-card-text>
-            With supporting text below as a natural lead-in to additional content.
-          </b-card-text>
-          <b-button
-            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            variant="outline-primary"
-          >
-            Go somewhere
-          </b-button>
-        </b-card>
-      </b-col>
-    </b-row>
+          Deposit
+        </b-badge>
+        <b-badge
+          v-if="p.status == 2"
+          pill
+          variant="light-primary"
+          class="text-right"
+        >
+          Voting
+        </b-badge>
+        <b-badge
+          v-if="p.status == 3"
+          pill
+          variant="light-success"
+          class="text-right"
+        >
+          Passed
+        </b-badge>
+        <b-badge
+          v-if="p.status == 4"
+          pill
+          variant="light-danger"
+          class="text-right"
+        >
+          Rejected
+        </b-badge>
+        #{{ p.id }}. {{ p.title }}
+      </b-card-title>
+      <b-card-body md="12">
+        <div class="gov-wrapper">
+          <div class="gov">
+            <p class="card-text mb-25">
+              Start Date
+            </p>
+            <h6 class="mb-0">
+              {{ p.voting_start_time }}
+            </h6>
+          </div>
+          <div class="gov">
+            <p class="card-text mb-25">
+              End Date
+            </p>
+            <h6 class="mb-0">
+              {{ p.voting_end_time }}
+            </h6>
+          </div>
+          <!-- <div class="gov">
+            <p class="card-text mb-25">
+              Proposer
+            </p>
+            <h6 class="mb-0">
+              Ping.pub
+            </h6>
+          </div> -->
+          <div class="gov">
+            <p class="card-text mb-25">
+              Deposit
+            </p>
+            <h6 class="mb-0">
+              {{ p.total_deposit }}
+            </h6>
+          </div>
+          <div class="gov">
+            <p class="card-text mb-25">
+              Turnout
+            </p>
+            <h6 class="mb-0">
+              {{ p.tally.turnout }}%
+            </h6>
+          </div>
+        </div>
+      </b-card-body>
+
+      <b-progress
+        :max="100"
+        height="2rem"
+        class="mb-2"
+        show-progress
+      >
+        <b-progress-bar
+          :id="'vote-yes'+p.id"
+          variant="success"
+          :value="p.tally.yes"
+          show-progress
+        />
+        <b-progress-bar
+          :id="'vote-no'+p.id"
+          variant="warning"
+          :value="p.tally.no"
+          show-progress
+        />
+        <b-progress-bar
+          :id="'vote-veto'+p.id"
+          variant="danger"
+          :value="p.tally.veto"
+          show-progress
+        />
+        <b-progress-bar
+          :id="'vote-abstain'+p.id"
+          variant="info"
+          :value="p.tally.abstain"
+          show-progress
+        />
+      </b-progress>
+      <b-tooltip
+        :target="'vote-yes'+p.id"
+      >
+        {{ p.tally.yes }}% voted Yes
+      </b-tooltip>
+      <b-tooltip
+        :target="'vote-no'+p.id"
+      >
+        {{ p.tally.no }}% voted No
+      </b-tooltip>
+      <b-tooltip
+        :target="'vote-veto'+p.id"
+      >
+        {{ p.tally.veto }}% voted No With Veta
+      </b-tooltip>
+      <b-tooltip
+        :target="'vote-abstain'+p.id"
+      >
+        {{ p.tally.abstain }}% voted Abstain
+      </b-tooltip>
+      <b-card-footer>
+        <b-button
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="outline-primary"
+        >
+          Detail
+        </b-button>
+        <b-button
+          variant="primary"
+          class="btn float-right mg-2"
+        >
+          Vote
+        </b-button>
+      </b-card-footer>
+    </b-card>
   </section>
 </template>
 
 <script>
 import {
-  BRow, BCol, BCard, BCardTitle, BCardText, BCardBody, BCardFooter, BButton, BProgressBar, BProgress, BBadge, BTooltip,
+  BCard, BCardTitle, BCardBody, BCardFooter, BButton, BProgressBar, BProgress, BBadge, BTooltip,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
+import ChainAPI from '@/libs/fetch'
 
 export default {
   components: {
     BCard,
-    BRow,
-    BCol,
     BButton,
     BCardFooter,
-    BCardText,
     BProgressBar,
     BProgress,
     BBadge,
@@ -221,13 +178,59 @@ export default {
   data() {
     return {
       values: [15, 50, 10, 5],
-      max: 100,
+      max: 1,
     }
   },
+  computed: {
+    selected_c() {
+      console.log(localStorage.getItem('selected_chain'))
+      return localStorage.getItem('selected_chain')
+    },
+    // this.$http.get()
+  },
+  asyncComputed: {
+    proposals: {
+      get() {
+        const api = new ChainAPI(this.$route)
+        return api.getGovernanceList().then(res => {
+          const voting = res.filter(i => i.status === 2)
+          if (voting.length > 0) {
+            let i = 0
+            Promise.all(voting.reverse().map(p => api.getGovernanceTally(p.id, p.tally.total))).then(update => {
+              this.proposals.map(x => {
+                if (x.status === 2) {
+                  const xh = x
+                  xh.tally = update[i]
+                  i += 1
+                  return xh
+                }
+                return x
+              })
+            })
+          }
+          return res.reverse()
+        })
+      },
+      // default: 'loading...',
+    },
+  },
+  // watch: {
+  //   proposals(val, newdata) {
+  //     console.log('In watch', val, newdata)
+  //   },
+  // },
 }
 </script>
 
 <style scoped>
+section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.card {
+  flex-basis: 49%;
+}
 .gov-wrapper {
     display: flex;
     justify-content:center;
