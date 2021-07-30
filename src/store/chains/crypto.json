@@ -1,0 +1,7 @@
+
+{
+    "chain_name": "crypto",
+    "chain_id": "akashnet-1",
+    "api": "https://mainnet.crypto.org:1317",
+    "logo": "https://look.ping.pub/static/chains/cosmoshub.svg"
+}

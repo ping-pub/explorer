@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import fetch from 'node-fetch'
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -19,20 +21,6 @@ const router = new VueRouter({
         breadcrumb: [
           {
             text: 'Home',
-            active: true,
-          },
-        ],
-      },
-    },
-    {
-      path: '/second-page',
-      name: 'second-page',
-      component: () => import('@/views/Info.vue'),
-      meta: {
-        pageTitle: 'Second Page',
-        breadcrumb: [
-          {
-            text: 'Second Page',
             active: true,
           },
         ],
@@ -79,6 +67,28 @@ const router = new VueRouter({
             text: 'Governance',
             active: true,
           },
+          {
+            text: 'Proposals',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/:chain/gov/:proposalid',
+      name: 'proposal',
+      component: () => import('@/views/ProposalView.vue'),
+      meta: {
+        pageTitle: 'Governance',
+        breadcrumb: [
+          {
+            text: 'Governance',
+            active: true,
+          },
+          {
+            text: 'Proposal Detail',
+            active: true,
+          },
         ],
       },
     },
@@ -103,6 +113,26 @@ const router = new VueRouter({
       redirect: 'error-404',
     },
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  const c = to.params.chain
+  const has = Object.keys(store.state.chains.config).findIndex(i => i === c)
+  if (has > -1) {
+    const chain = store.state.chains.config[c]
+    store.commit('select', { chain_name: c })
+    if (chain.sdk_version === undefined) {
+      fetch(`${chain.api}/node_info`)
+        .then(res => res.json())
+        .then(json => {
+          const sdk = json.application_version.build_deps.find(e => e.startsWith('github.com/cosmos/cosmos-sdk'))
+          const re = /(\d+(\.\d+)*)/i
+          const version = sdk.match(re)
+          store.commit('setup_sdk_version', { chain_name: c, version: version[0] })
+        })
+    }
+  }
+  next()
 })
 
 // ? For splash screen

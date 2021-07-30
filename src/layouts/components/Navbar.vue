@@ -33,7 +33,7 @@
           <h6 class="mb-0 text-uppercase">
             {{ selected_chain.chain_name }}
           </h6>
-          <small v-b-tooltip.hover.bottom="'Data Provider'">{{ selected_chain.api }}</small>
+          <small v-b-tooltip.hover.bottom="'Data Provider'">{{ selected_chain.api }} {{ selected_chain.sdk_version }}</small>
         </b-media-body>
       </b-media>
     </div>
@@ -94,11 +94,10 @@ export default {
   },
   computed: {
     selected_chain() {
-      const c = this.$route.params.chain
-      const has = Object.keys(store.state.chains.chains).findIndex(i => i === c)
-      const selected = (has > -1) ? store.state.chains.chains[c] : store.state.chains.chains.cosmos
-      localStorage.setItem('selected_chain', selected)
-      return selected
+      // const c = this.$route.params.chain
+      // const has = Object.keys(store.state.chains.config).findIndex(i => i === c)
+      // const selected = (has > -1) ? store.state.chains.config[c] : store.state.chains.config.cosmos
+      return store.state.chains.selected
     },
   },
 }

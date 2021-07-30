@@ -1,31 +1,43 @@
 import compareVersions from 'compare-versions'
-import { toDay, formatToken, percent } from './data'
+import { toDay, formatToken } from './data'
+import ProposalTally from './proposal-tally'
 
 export default class Proposal {
-  constructor(element, total) {
+  constructor() {
+    this.element = null
+
+    this.id = 0
+    this.status = 1
+    this.type = '-'
+    this.title = '-'
+    this.description = '-'
+    this.tally = new ProposalTally()
+    this.submit_time = ' - '
+    this.voting_end_time = '0000-00-00'
+    this.voting_start_time = '-'
+    this.total_deposit = '-'
+    this.contents = null
+  }
+
+  init(element, total) {
     this.element = element
-    const yes = Number(element.final_tally_result.yes)
-    const no = Number(element.final_tally_result.no)
-    const abstain = Number(element.final_tally_result.abstain)
-    const veto = Number(element.final_tally_result.no_with_veto)
 
     this.id = element.id
     this.status = element.status
     this.type = element.content.type
     this.title = element.content.value.title
     this.description = element.content.value.description
-    this.tally = {
-      yes: percent(yes / total),
-      no: percent(no / total),
-      abstain: percent(abstain / total),
-      veto: percent(veto / total),
-      turnout: percent((yes + no + abstain + veto) / total),
-      total,
-    }
+    this.tally = new ProposalTally().init(element.final_tally_result, total)
     this.submit_time = toDay(element.submit_time)
     this.voting_end_time = toDay(element.voting_end_time)
     this.voting_start_time = toDay(element.voting_start_time)
     this.total_deposit = formatToken(element.total_deposit[0])
+    this.contents = element.content.value
+    return this
+  }
+
+  hello() {
+    return this.title
   }
 
   updateTally(newTally) {
@@ -33,7 +45,6 @@ export default class Proposal {
   }
 
   versionFixed(ver) {
-    console.log(ver, compareVersions(ver, '0.4'))
     if (compareVersions(ver, '0.40') >= 0) {
       // do nothing
     } else if (compareVersions(ver, '0.37') >= 0) {
@@ -50,7 +61,6 @@ export default class Proposal {
         default:
           this.status = 1
       }
-      console.log(this)
     }
   }
 }

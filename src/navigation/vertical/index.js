@@ -29,10 +29,10 @@ function processMenu() {
       header: 'blockchains',
     },
   ]
-  Object.keys(store.state.chains.chains).forEach(chain => {
+  Object.keys(store.state.chains.config).forEach(chain => {
     const menu = {
       title: chain,
-      icon: 'PieChartIcon',
+      icon: store.state.chains.config[chain].logo,
     }
     const children = []
     modules.forEach(m => {

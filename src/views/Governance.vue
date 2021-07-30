@@ -37,7 +37,7 @@
         >
           Rejected
         </b-badge>
-        #{{ p.id }}. {{ p.title }}
+        #{{ p.id }}. <a :href="`./gov/${p.id}`">{{ p.title }}</a>
       </b-card-title>
       <b-card-body md="12">
         <div class="gov-wrapper">
@@ -57,14 +57,6 @@
               {{ p.voting_end_time }}
             </h6>
           </div>
-          <!-- <div class="gov">
-            <p class="card-text mb-25">
-              Proposer
-            </p>
-            <h6 class="mb-0">
-              Ping.pub
-            </h6>
-          </div> -->
           <div class="gov">
             <p class="card-text mb-25">
               Deposit
@@ -136,17 +128,26 @@
         {{ p.tally.abstain }}% voted Abstain
       </b-tooltip>
       <b-card-footer>
-        <b-button
+        <router-link
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          :to="`./gov/${p.id}`"
           variant="outline-primary"
+          class="btn"
         >
-          Detail
-        </b-button>
+          <b-button
+            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+            :href="`./gov/${p.id}`"
+            variant="outline-primary"
+          >
+            {{ $t('btn_detail') }}
+          </b-button>
+        </router-link>
         <b-button
+          :disabled="p.status!=2"
           variant="primary"
           class="btn float-right mg-2"
         >
-          Vote
+          {{ $t('btn_vote') }}
         </b-button>
       </b-card-footer>
     </b-card>
@@ -158,7 +159,7 @@ import {
   BCard, BCardTitle, BCardBody, BCardFooter, BButton, BProgressBar, BProgress, BBadge, BTooltip,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
-import ChainAPI from '@/libs/fetch'
+import { Proposal } from '@/libs/data'
 
 export default {
   components: {
@@ -177,43 +178,64 @@ export default {
   },
   data() {
     return {
+      proposals: [new Proposal()],
       values: [15, 50, 10, 5],
       max: 1,
     }
   },
-  computed: {
-    selected_c() {
-      console.log(localStorage.getItem('selected_chain'))
-      return localStorage.getItem('selected_chain')
-    },
-    // this.$http.get()
+  mounted() {
+    this.getList()
   },
-  asyncComputed: {
-    proposals: {
-      get() {
-        const api = new ChainAPI(this.$route)
-        return api.getGovernanceList().then(res => {
-          const voting = res.filter(i => i.status === 2)
-          if (voting.length > 0) {
-            let i = 0
-            Promise.all(voting.reverse().map(p => api.getGovernanceTally(p.id, p.tally.total))).then(update => {
-              this.proposals.map(x => {
-                if (x.status === 2) {
-                  const xh = x
-                  xh.tally = update[i]
-                  i += 1
-                  return xh
-                }
-                return x
-              })
+  methods: {
+    getList() {
+      // this.$http.setup(this.$route)
+      this.$http.getGovernanceList().then(res => {
+        const voting = res.filter(i => i.status === 2)
+        if (voting.length > 0) {
+          let i = 0
+          Promise.all(voting.reverse().map(p => this.$http.getGovernanceTally(p.id, p.tally.total))).then(update => {
+            this.proposals.map(x => {
+              if (x.status === 2) {
+                const xh = x
+                xh.tally = update[i]
+                i += 1
+                return xh
+              }
+              return x
             })
-          }
-          return res.reverse()
-        })
-      },
-      // default: 'loading...',
+          })
+        }
+        this.proposals = res.reverse()
+      })
     },
   },
+  // asyncComputed: {
+  //   proposals: {
+  //     get() {
+  //       const api = new ChainAPI(this.$route)
+  //       api.setup(this.$route)
+  //       return api.getGovernanceList().then(res => {
+  //         const voting = res.filter(i => i.status === 2)
+  //         if (voting.length > 0) {
+  //           let i = 0
+  //           Promise.all(voting.reverse().map(p => api.getGovernanceTally(p.id, p.tally.total))).then(update => {
+  //             this.proposals.map(x => {
+  //               if (x.status === 2) {
+  //                 const xh = x
+  //                 xh.tally = update[i]
+  //                 i += 1
+  //                 return xh
+  //               }
+  //               return x
+  //             })
+  //           })
+  //         }
+  //         return res.reverse()
+  //       })
+  //     },
+  //     // default: 'loading...',
+  //   },
+  // },
   // watch: {
   //   proposals(val, newdata) {
   //     console.log('In watch', val, newdata)
@@ -251,6 +273,6 @@ section {
 }
 
 .gov-wrapper .gov {
-    width: 8.4rem;
+    width: 9.8rem;
 }
 </style>

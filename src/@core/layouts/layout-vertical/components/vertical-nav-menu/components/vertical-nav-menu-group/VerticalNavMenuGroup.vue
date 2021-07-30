@@ -12,7 +12,14 @@
       class="d-flex align-items-center"
       @click="() => updateGroupOpen(!isOpen)"
     >
-      <feather-icon :icon="item.icon || 'CircleIcon'" />
+      <b-avatar
+        variant="info"
+        :src="item.icon"
+        icon="people-fill"
+        size="sm"
+        class="mr-1"
+      />
+
       <span class="menu-title text-truncate">{{ t(item.title) }}</span>
       <b-badge
         v-if="item.tag"
@@ -40,7 +47,9 @@
 </template>
 
 <script>
-import { BLink, BBadge, BCollapse } from 'bootstrap-vue'
+import {
+  BLink, BBadge, BCollapse, BAvatar,
+} from 'bootstrap-vue'
 import { resolveVerticalNavMenuItemComponent as resolveNavItemComponent } from '@core/layouts/utils'
 import { useUtils as useI18nUtils } from '@core/libs/i18n'
 import { useUtils as useAclUtils } from '@core/libs/acl'
@@ -56,6 +65,7 @@ export default {
   components: {
     VerticalNavMenuHeader,
     VerticalNavMenuLink,
+    BAvatar,
     BLink,
     BBadge,
     BCollapse,

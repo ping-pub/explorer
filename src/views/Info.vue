@@ -8,7 +8,6 @@
 <script>
 import { BCard, BCardText } from 'bootstrap-vue'
 // import fetch from 'node-fetch'
-import '@/libs/fetch'
 
 export default {
   components: {
@@ -26,14 +25,6 @@ export default {
     // }).catch(e => {
     //   console.log(e)
     // })
-    this.fetchdata('http://lcd.akash.forbole.com/node_info', {
-      Headers: {
-        'Content-Type': 'text/html',
-      },
-    })
-      .then(response => {
-        console.log(response)
-      })
   },
 }
 </script>

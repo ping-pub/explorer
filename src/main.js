@@ -6,13 +6,14 @@ import messages from '@/lang'
 
 import VueI18n from 'vue-i18n'
 
+import ChainAPI from '@/libs/fetch'
+
 import router from './router'
 import store from './store'
 import App from './App.vue'
 
 // Global Components
 import './global-components'
-import '@/libs/fetch'
 
 // 3rd party plugins
 import '@/libs/portal-vue'
@@ -41,6 +42,7 @@ require('@core/scss/core.scss')
 require('@/assets/scss/style.scss')
 
 Vue.config.productionTip = false
+Vue.prototype.$http = new ChainAPI()
 
 new Vue({
   router,

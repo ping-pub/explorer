@@ -1,7 +1,7 @@
 <template>
   <layout-vertical>
 
-    <router-view />
+    <router-view :key="$route.fullPath" />
 
     <template #navbar="{ toggleVerticalMenuActive }">
       <navbar :toggle-vertical-menu-active="toggleVerticalMenuActive" />

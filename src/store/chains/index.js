@@ -9,14 +9,18 @@ configs.keys().forEach(k => {
 export default {
   namespaced: true,
   state: {
-    chains,
+    config: chains,
+    selected: {},
   },
   getters: {
     getchains: state => state.chains,
   },
   mutations: {
     setup_sdk_version(state, info) {
-      state.chains.chains[info.chain_name].sdk_version = info.version
+      state.chains.config[info.chain_name].sdk_version = info.version
+    },
+    select(state, args) {
+      state.chains.selected = state.chains.config[args.chain_name]
     },
 
   },

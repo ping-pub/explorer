@@ -9,6 +9,20 @@
   "staking": "Staking",
   "governance": "Governance",
   "summary": "Summary",
-  "blockchains": "Blockchains"
+  "blockchains": "Blockchains",
+
+  "proposal_id": "Proposal ID",
+  "proposal_type": "Proposal Type",
+  "proposal_proposer": "Proposer",
+  "proposal_submit_time": "Submited Time",
+  "proposal_voting_start_time": "Voting Begin Time",
+  "proposal_voting_end_time": "Voting End Time",
+  "proposal_description": "Description",
+  "proposal_content": "Content",
+  "proposal_total_deposit": "Total Deposit",
+
+  "btn_vote": "Vote",
+  "btn_detail": "Detail",
+  "btn_back_list": "Back To List"
   
 }
