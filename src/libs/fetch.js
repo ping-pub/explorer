@@ -2,7 +2,7 @@ import fetch from 'node-fetch'
 import store from '@/store'
 import {
   Proposal, ProposalTally, Proposer, StakingPool, Votes, Deposit,
-  Validator,
+  Validator, StakingParameters,
 } from './data'
 
 function commonProcess(res) {
@@ -23,6 +23,14 @@ const chainAPI = class ChainFetch {
 
   async getStakingPool() {
     return this.get('/staking/pool').then(data => new StakingPool().init(commonProcess(data)))
+  }
+
+  async getMintingInflation() {
+    return this.get('/minting/inflation').then(data => Number(commonProcess(data)))
+  }
+
+  async getStakingParameters() {
+    return this.get('/staking/parameters').then(data => new StakingParameters().init(commonProcess(data)))
   }
 
   async getValidatorList() {

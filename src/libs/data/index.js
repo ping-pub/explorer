@@ -5,6 +5,7 @@ export { default as Proposer } from './proposer'
 export { default as Votes } from './votes'
 export { default as Deposit } from './deposit'
 export { default as Validator } from './validator'
+export { default as StakingParameters } from './staking-parameters'
 export * from './data'
 
 export default class Test {}

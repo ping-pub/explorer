@@ -11,9 +11,11 @@ export default {
   state: {
     config: chains,
     selected: {},
+    avatars: {},
   },
   getters: {
     getchains: state => state.chains,
+    getAvatarById: state => id => state.avatars[id],
   },
   mutations: {
     setup_sdk_version(state, info) {
@@ -21,6 +23,9 @@ export default {
     },
     select(state, args) {
       state.chains.selected = state.chains.config[args.chain_name]
+    },
+    cacheAvatar(state, args) {
+      state.chains.avatars[args.identity] = args.url
     },
 
   },

@@ -1,76 +1,115 @@
 <template>
   <div>
-    <b-card-code
+    <b-card
       no-body
-      title="My Delegations"
     >
+      <b-card-header>
+        <b-card-title>
+          Validators (Max:{{ stakingParameters.max_validators }})
+          <small class="text-muted">
+            <b-badge variant="danger">
+              &nbsp;
+            </b-badge>
+            Top 33%
+            <b-badge variant="warning">
+              &nbsp;
+            </b-badge>
+            Top 67% of Voting Power
+          </small>
+        </b-card-title>
+      </b-card-header>
       <b-table
-        responsive="sm"
-        :items="delegations"
-        :fields="validator_fields"
-      />
-    </b-card-code>
-
-    <b-card-code
-      no-body
-      title="Validators"
-    >
-      <b-table
-        responsive="sm"
-        striped
         :items="validators"
         :fields="validator_fields"
         :sort-desc="true"
         sort-by="tokens"
+        striped
+        hover
+        responsive="sm"
       >
+        <!-- A virtual column -->
+        <template #cell(index)="data">
+          <b-badge
+            :variant="rankBadge(data)"
+          >
+            {{ data.index + 1 }}
+          </b-badge>
+        </template>
         <!-- Column: Validator -->
         <template #cell(description)="data">
           <b-media vertical-align="center">
             <template #aside>
               <b-avatar
+                v-if="data.item.avatar"
+                v-b-tooltip.hover.v-primary
+                v-b-tooltip.hover.right="data.item.description.details"
                 size="32"
-                icon="ChevronRightIcon"
                 variant="light-primary"
                 :src="data.item.avatar"
               />
+              <b-avatar
+                v-if="!data.item.avatar"
+                v-b-tooltip.hover.v-primary
+                v-b-tooltip.hover.right="data.item.description.details"
+              >
+                <feather-icon icon="ServerIcon" />
+              </b-avatar>
             </template>
-            <span class="font-weight-bold d-block text-nowrap">
+            <span class="font-weight-bolder d-block text-nowrap">
               {{ data.item.description.moniker }}
             </span>
             <small class="text-muted">{{ data.item.description.website || data.item.description.identity }}</small>
           </b-media>
         </template>
+        <!-- Token -->
+        <template #cell(tokens)="data">
+          <div class="d-flex flex-column">
+            <span class="font-weight-bold mb-0">{{ tokenFormatter(data.item.tokens, stakingParameters.bond_denom) }}</span>
+            <span class="font-small-2 text-muted text-nowrap">{{ percent(data.item.tokens/stakingPool.bondedToken) }}%</span>
+          </div>
+        </template>
       </b-table>
-    </b-card-code>
+    </b-card>
   </div>
 </template>
 
 <script>
-import { BTable, BMedia, BAvatar } from 'bootstrap-vue'
-import BCardCode from '@core/components/b-card-code/BCardCode.vue'
-import { Validator, percent } from '@/libs/data'
+import {
+  BTable, BMedia, BAvatar, BBadge, BCard, BCardHeader, BCardTitle, VBTooltip,
+} from 'bootstrap-vue'
+import {
+  Validator, percent, StakingParameters, formatToken,
+} from '@/libs/data'
 import { keybase } from '@/libs/fetch'
+// import fetch from 'node-fetch'
 
 export default {
   components: {
-    BCardCode,
+    BCard,
     BTable,
     BMedia,
     BAvatar,
+    BBadge,
+    BCardHeader,
+    BCardTitle,
+  },
+  directives: {
+    'b-tooltip': VBTooltip,
   },
   data() {
     return {
-
-      sortBy: 'tokens',
-      sortDesc: true,
+      mintInflation: 0,
+      stakingPool: {},
+      stakingParameters: new StakingParameters(),
       validators: [new Validator()],
       delegations: [new Validator()],
       validator_fields: [
+        { key: 'index', label: '#' },
         { key: 'description', label: 'Validator', sortable: true },
         {
           key: 'tokens',
+          label: 'Voting Power',
           sortable: true,
-          formatter: value => parseInt(value / 100000, 0),
           tdClass: 'text-right',
           thClass: 'text-right',
           sortByFormatted: true,
@@ -82,25 +121,80 @@ export default {
           tdClass: 'text-right',
           thClass: 'text-right',
         },
-        { key: 'delegator_shares', sortable: true },
+        {
+          key: 'apr',
+          formatter: (value, i, data) => this.apr(value, i, data),
+          tdClass: 'text-right',
+          thClass: 'text-right',
+        },
+        { key: 'operation' },
       ],
     }
   },
   created() {
+    this.$http.getStakingPool().then(res => {
+      this.stakingPool = res
+    })
+    this.$http.getMintingInflation().then(res => {
+      this.mintInflation = res
+    })
+    this.$http.getStakingParameters().then(res => {
+      this.stakingParameters = res
+    })
     this.$http.getValidatorList().then(res => {
       this.validators = res
-      this.validators.forEach(i => {
-        if (i.description.identity) {
-          keybase(i.description.identity).then(d => {
-            if (Array.isArray(d.them) && d.them.length > 0) {
-              console.log(d.them[0].pictures.primary.url)
-              const validator = this.validators.find(u => u.description.identity === i.description.identity)
-              validator.avatar = d.them[0].pictures.primary.url
-            }
-          })
-        }
+      let promise = Promise.resolve()
+      res.forEach((item, index) => {
+        promise = promise.then(() => new Promise(resolve => {
+          this.avatar(item.description.identity, index, resolve)
+        }))
       })
     })
+  },
+  methods: {
+    percent,
+    tokenFormatter(amount, denom) {
+      return formatToken({ amount, denom })
+    },
+    apr(value, i, data) {
+      return `${percent((1 - data.commission.rate) * this.mintInflation)} %`
+    },
+    rankBadge(data) {
+      const { index, item } = data
+      if (index === 0) {
+        window.sum = item.tokens
+      } else {
+        window.sum += item.tokens
+      }
+      const rank = window.sum / this.stakingPool.bondedToken
+      if (rank < 0.333) {
+        return 'danger'
+      }
+      if (rank < 0.67) {
+        return 'warning'
+      }
+      return 'primary'
+    },
+    avatar(identity, index, resolve) {
+      const url = this.$store.getters['chains/getAvatarById'](identity)
+      if (url !== undefined) {
+        resolve()
+
+        const validator = this.validators.find(u => u.description.identity === identity)
+        this.$set(validator, 'avatar', url)
+      } else if (identity) {
+        keybase(identity).then(d => {
+          resolve()
+          if (Array.isArray(d.them) && d.them.length > 0) {
+            const validator = this.validators.find(u => u.description.identity === identity)
+            this.$set(validator, 'avatar', d.them[0].pictures.primary.url)
+            this.$store.commit('cacheAvatar', { identity, url: d.them[0].pictures.primary.url })
+          }
+        })
+      } else {
+        resolve()
+      }
+    },
   },
 }
 </script>

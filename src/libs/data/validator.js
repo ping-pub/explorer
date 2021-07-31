@@ -7,7 +7,7 @@ export default class Validator {
     this.consensus_pubkey = 'cosmosvalconspub1zcjduepq0vu2zgkgk49efa0nqwzndanq5m4c7pa3u4apz4g2r9gspqg6g9cs3k9cuf'
     this.jailed = true
     this.status = 0
-    this.tokens = '-'
+    this.tokens = 0
     this.delegator_shares = 0
     this.description = new ValidatorDescription()
     this.bond_height = 0
@@ -22,10 +22,10 @@ export default class Validator {
     this.consensus_pubkey = element.consensus_pubkey
     this.jailed = element.jailed
     this.status = element.status
-    this.tokens = element.tokens
+    this.tokens = Number(element.tokens)
     this.delegator_shares = element.delegator_shares
     this.description = new ValidatorDescription().init(element.description)
-    this.bond_height = element.bond_height
+    this.bond_height = Number(element.bond_height)
     this.bond_intra_tx_counter = element.bond_intra_tx_counter
     this.unbonding_height = element.unbonding_height
     this.unbonding_time = element.unbonding_time
