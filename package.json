@@ -12,6 +12,9 @@
   "dependencies": {
     "@casl/ability": "4.1.6",
     "@casl/vue": "1.1.1",
+    "@cosmjs/amino": "^0.25.6",
+    "@cosmjs/crypto": "^0.25.6",
+    "@cosmjs/encoding": "^0.25.6",
     "@fullcalendar/common": "5.x",
     "@fullcalendar/core": "5.x",
     "@fullcalendar/daygrid": "5.x",

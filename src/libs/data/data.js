@@ -1,4 +1,8 @@
 import dayjs from 'dayjs'
+import {
+  Bech32, fromBase64, fromHex, toHex,
+} from '@cosmjs/encoding'
+import { sha256 } from '@cosmjs/crypto'
 
 export function toDay(time) {
   return dayjs(time).format('YYYY-MM-DD HH:mm')
@@ -21,6 +25,22 @@ export function tokenFormatter(tokens) {
     return tokens.map(t => formatToken(t))
   }
   return formatToken(tokens)
+}
+
+export function operatorAddressToAccount(operAddress) {
+  const { prefix, data } = Bech32.decode(operAddress)
+  return Bech32.encode(prefix.replace('valoper', ''), data)
+}
+
+export function consensusPubkeyToHexAddress(consensusPubkey) {
+  let raw = null
+  if (typeof consensusPubkey === 'object') {
+    raw = toHex(fromBase64(consensusPubkey.value))
+  } else {
+    raw = toHex(Bech32.decode(consensusPubkey).data).toUpperCase().replace('1624DE6420', '')
+  }
+  const address = toHex(sha256(fromHex(raw))).slice(0, 40).toUpperCase()
+  return address
 }
 
 export * from 'compare-versions'

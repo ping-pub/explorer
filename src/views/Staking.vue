@@ -56,7 +56,11 @@
               </b-avatar>
             </template>
             <span class="font-weight-bolder d-block text-nowrap">
-              {{ data.item.description.moniker }}
+              <router-link
+                :to="`./staking/${data.item.operator_address}`"
+              >
+                {{ data.item.description.moniker }}
+              </router-link>
             </span>
             <small class="text-muted">{{ data.item.description.website || data.item.description.identity }}</small>
           </b-media>

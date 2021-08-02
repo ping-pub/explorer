@@ -2,7 +2,7 @@ import fetch from 'node-fetch'
 import store from '@/store'
 import {
   Proposal, ProposalTally, Proposer, StakingPool, Votes, Deposit,
-  Validator, StakingParameters,
+  Validator, StakingParameters, Block, ValidatorDistribution, StakingDelegation,
 } from './data'
 
 function commonProcess(res) {
@@ -21,6 +21,26 @@ const chainAPI = class ChainFetch {
     return this.config
   }
 
+  async getLatestBlock() {
+    return this.get('/blocks/latest').then(data => Block.create(data))
+  }
+
+  async getBlockByHeight(height) {
+    return this.get(`/blocks/${height}`).then(data => Block.create(data))
+  }
+
+  async getValidatorDistribution(address) {
+    return this.get(`/distribution/validators/${address}`).then(data => {
+      const ret = ValidatorDistribution.create(commonProcess(data))
+      ret.versionFixed(this.config.sdk_version)
+      return ret
+    })
+  }
+
+  async getStakingDelegatorDelegation(delegatorAddr, validatorAddr) {
+    return this.get(`/staking/delegators/${delegatorAddr}/delegations/${validatorAddr}`).then(data => StakingDelegation.create(commonProcess(data)))
+  }
+
   async getStakingPool() {
     return this.get('/staking/pool').then(data => new StakingPool().init(commonProcess(data)))
   }
@@ -35,6 +55,10 @@ const chainAPI = class ChainFetch {
 
   async getValidatorList() {
     return this.get('/staking/validators').then(data => commonProcess(data).map(i => new Validator().init(i)))
+  }
+
+  async getStakingValidator(address) {
+    return this.get(`/staking/validators/${address}`).then(data => new Validator().init(commonProcess(data)))
   }
 
   async getGovernanceTally(pid, total) {

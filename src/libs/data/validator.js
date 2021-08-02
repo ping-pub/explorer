@@ -15,6 +15,7 @@ export default class Validator {
     this.unbonding_height = 0
     this.unbonding_time = '1970-01-01T00:00:00Z'
     this.commission = new ValidatorCommission()
+    this.min_self_delegation = 1
   }
 
   init(element) {
@@ -30,6 +31,7 @@ export default class Validator {
     this.unbonding_height = element.unbonding_height
     this.unbonding_time = element.unbonding_time
     this.commission = new ValidatorCommission().init(element.commission)
+    this.min_self_delegation = element.min_self_delegation
     return this
   }
 }

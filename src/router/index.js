@@ -57,6 +57,24 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/:chain/staking/:address',
+      name: 'staking-valiator',
+      component: () => import('@/views/StakingValidator.vue'),
+      meta: {
+        pageTitle: 'Staking Valdiator',
+        breadcrumb: [
+          {
+            text: 'Staking',
+            active: true,
+          },
+          {
+            text: 'Validator',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
       path: '/:chain/gov',
       name: 'governance',
       component: () => import('@/views/Governance.vue'),
