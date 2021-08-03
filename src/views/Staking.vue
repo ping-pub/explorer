@@ -102,6 +102,7 @@ export default {
   },
   data() {
     return {
+      islive: true,
       mintInflation: 0,
       stakingPool: {},
       stakingParameters: new StakingParameters(),
@@ -146,14 +147,34 @@ export default {
       this.stakingParameters = res
     })
     this.$http.getValidatorList().then(res => {
-      this.validators = res
+      const identities = []
+      const temp = res
+      for (let i = 0; i < temp.length; i += 1) {
+        const { identity } = temp[i].description
+        const url = this.$store.getters['chains/getAvatarById'](identity)
+        if (url) {
+          temp[i].avatar = url
+        } else if (identity && identity !== '') {
+          identities.push(identity)
+        }
+      }
+      this.validators = temp
+
+      // fetch avatar from keybase
+      console.log(identities)
       let promise = Promise.resolve()
-      res.forEach((item, index) => {
-        promise = promise.then(() => new Promise(resolve => {
-          this.avatar(item.description.identity, index, resolve)
-        }))
+      identities.forEach(item => {
+        if (this.islive) {
+          promise = promise.then(() => new Promise(resolve => {
+            this.avatar(item, resolve)
+          }))
+        }
       })
     })
+  },
+  beforeDestroy() {
+    console.log('destroying')
+    this.islive = false
   },
   methods: {
     percent,
@@ -179,25 +200,20 @@ export default {
       }
       return 'primary'
     },
-    avatar(identity, index, resolve) {
-      const url = this.$store.getters['chains/getAvatarById'](identity)
-      if (url !== undefined) {
+    avatar(identity, resolve) {
+      keybase(identity).then(d => {
         resolve()
-
-        const validator = this.validators.find(u => u.description.identity === identity)
-        this.$set(validator, 'avatar', url)
-      } else if (identity) {
-        keybase(identity).then(d => {
-          resolve()
-          if (Array.isArray(d.them) && d.them.length > 0) {
+        console.log(identity)
+        if (Array.isArray(d.them) && d.them.length > 0) {
+          const pic = d.them[0].pictures
+          console.log('fetch new avatar:', pic)
+          if (pic) {
             const validator = this.validators.find(u => u.description.identity === identity)
-            this.$set(validator, 'avatar', d.them[0].pictures.primary.url)
-            this.$store.commit('cacheAvatar', { identity, url: d.them[0].pictures.primary.url })
+            this.$set(validator, 'avatar', pic.primary.url)
+            this.$store.commit('cacheAvatar', { identity, url: pic.primary.url })
           }
-        })
-      } else {
-        resolve()
-      }
+        }
+      })
     },
   },
 }
