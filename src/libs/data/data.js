@@ -20,9 +20,20 @@ export function formatToken(token) {
   return `${(token.amount / 1000000).toFixed()} ${denom}`
 }
 
+const COUNT_ABBRS = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
+
+export function formatNumber(count, withAbbr = false, decimals = 2) {
+  const i = count === 0 ? count : Math.floor(Math.log(count) / Math.log(1000))
+  let result = parseFloat((count / (1000 ** i)).toFixed(decimals))
+  if (withAbbr) {
+    result += `${COUNT_ABBRS[i]}`
+  }
+  return result
+}
+
 export function tokenFormatter(tokens) {
   if (Array.isArray(tokens)) {
-    return tokens.map(t => formatToken(t))
+    return tokens.map(t => formatToken(t)).join()
   }
   return formatToken(tokens)
 }

@@ -1,5 +1,6 @@
 import fetch from 'node-fetch'
 import store from '@/store'
+import compareVersions from 'compare-versions'
 import {
   Proposal, ProposalTally, Proposer, StakingPool, Votes, Deposit,
   Validator, StakingParameters, Block, ValidatorDistribution, StakingDelegation,
@@ -41,6 +42,13 @@ const chainAPI = class ChainFetch {
     return this.get(`/staking/delegators/${delegatorAddr}/delegations/${validatorAddr}`).then(data => StakingDelegation.create(commonProcess(data)))
   }
 
+  async getBankTotal(denom) {
+    if (compareVersions(this.config.sdk_version, '0.40') < 0) {
+      return this.get(`/supply/total/${denom}`).then(data => ({ amount: commonProcess(data), denom }))
+    }
+    return this.get(`/bank/total/${denom}`).then(data => commonProcess(data))
+  }
+
   async getStakingPool() {
     return this.get('/staking/pool').then(data => new StakingPool().init(commonProcess(data)))
   }
@@ -59,6 +67,30 @@ const chainAPI = class ChainFetch {
 
   async getStakingValidator(address) {
     return this.get(`/staking/validators/${address}`).then(data => new Validator().init(commonProcess(data)))
+  }
+
+  async getSlashingParameters() {
+    return this.get('/slashing/parameters').then(data => commonProcess(data))
+  }
+
+  async getMintParameters() {
+    return this.get('/minting/parameters').then(data => commonProcess(data))
+  }
+
+  async getDistributionParameters() {
+    return this.get('/distribution/parameters').then(data => commonProcess(data))
+  }
+
+  async getGovernanceParameterDeposit() {
+    return this.get('/gov/parameters/deposit').then(data => commonProcess(data))
+  }
+
+  async getGovernanceParameterTallying() {
+    return this.get('/gov/parameters/tallying').then(data => commonProcess(data))
+  }
+
+  async getGovernanceParameterVoting() {
+    return this.get('/gov/parameters/voting').then(data => commonProcess(data))
   }
 
   async getGovernanceTally(pid, total) {

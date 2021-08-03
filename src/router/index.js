@@ -31,7 +31,7 @@ const router = new VueRouter({
       path: '/:chain/info',
       name: 'info',
       alias: '/:chain',
-      component: () => import('@/views/Info.vue'),
+      component: () => import('@/views/Summary.vue'),
       meta: {
         pageTitle: 'Home',
         breadcrumb: [
