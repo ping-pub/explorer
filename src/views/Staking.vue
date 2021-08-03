@@ -164,11 +164,9 @@ export default {
       console.log(identities)
       let promise = Promise.resolve()
       identities.forEach(item => {
-        if (this.islive) {
-          promise = promise.then(() => new Promise(resolve => {
-            this.avatar(item, resolve)
-          }))
-        }
+        promise = promise.then(() => new Promise(resolve => {
+          this.avatar(item, resolve)
+        }))
       })
     })
   },
@@ -201,19 +199,21 @@ export default {
       return 'primary'
     },
     avatar(identity, resolve) {
-      keybase(identity).then(d => {
-        resolve()
-        console.log(identity)
-        if (Array.isArray(d.them) && d.them.length > 0) {
-          const pic = d.them[0].pictures
-          console.log('fetch new avatar:', pic)
-          if (pic) {
-            const validator = this.validators.find(u => u.description.identity === identity)
-            this.$set(validator, 'avatar', pic.primary.url)
-            this.$store.commit('cacheAvatar', { identity, url: pic.primary.url })
+      if (this.islive) {
+        keybase(identity).then(d => {
+          resolve()
+          console.log(identity)
+          if (Array.isArray(d.them) && d.them.length > 0) {
+            const pic = d.them[0].pictures
+            console.log('fetch new avatar:', pic)
+            if (pic) {
+              const validator = this.validators.find(u => u.description.identity === identity)
+              this.$set(validator, 'avatar', pic.primary.url)
+              this.$store.commit('cacheAvatar', { identity, url: pic.primary.url })
+            }
           }
-        }
-      })
+        })
+      }
     },
   },
 }
