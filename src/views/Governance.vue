@@ -1,162 +1,172 @@
 <template>
-  <section>
-    <b-card
+  <b-row class="match-height">
+    <b-col
       v-for="p in proposals"
       :key="p.id"
+      lg="6"
+      md="12"
     >
-      <b-card-title class="mb-0">
-        <b-badge
-          v-if="p.status == 1"
-          pill
-          variant="light-info"
-          class="text-right"
+      <b-card>
+        <b-card-title
+          class="mb-0"
+          style="height:40px;"
         >
-          Deposit
-        </b-badge>
-        <b-badge
-          v-if="p.status == 2"
-          pill
-          variant="light-primary"
-          class="text-right"
-        >
-          Voting
-        </b-badge>
-        <b-badge
-          v-if="p.status == 3"
-          pill
-          variant="light-success"
-          class="text-right"
-        >
-          Passed
-        </b-badge>
-        <b-badge
-          v-if="p.status == 4"
-          pill
-          variant="light-danger"
-          class="text-right"
-        >
-          Rejected
-        </b-badge>
-        #{{ p.id }}. <a :href="`./gov/${p.id}`">{{ p.title }}</a>
-      </b-card-title>
-      <b-card-body md="12">
-        <div class="gov-wrapper">
-          <div class="gov">
-            <p class="card-text mb-25">
-              Start Date
-            </p>
-            <h6 class="mb-0">
-              {{ p.voting_start_time }}
-            </h6>
+          <b-badge
+            v-if="p.status == 1"
+            pill
+            variant="light-info"
+            class="text-right"
+          >
+            Deposit
+          </b-badge>
+          <b-badge
+            v-if="p.status == 2"
+            pill
+            variant="light-primary"
+            class="text-right"
+          >
+            Voting
+          </b-badge>
+          <b-badge
+            v-if="p.status == 3"
+            pill
+            variant="light-success"
+            class="text-right"
+          >
+            Passed
+          </b-badge>
+          <b-badge
+            v-if="p.status == 4"
+            pill
+            variant="light-danger"
+            class="text-right"
+          >
+            Rejected
+          </b-badge>
+          #{{ p.id }}.
+          <router-link
+            :to="`./gov/${p.id}`"
+          >
+            {{ p.title }}
+          </router-link></b-card-title>
+        <b-card-body md="12">
+          <div class="gov-wrapper">
+            <div class="gov">
+              <p class="card-text mb-25">
+                Start Date
+              </p>
+              <h6 class="mb-0">
+                {{ p.voting_start_time }}
+              </h6>
+            </div>
+            <div class="gov">
+              <p class="card-text mb-25">
+                End Date
+              </p>
+              <h6 class="mb-0">
+                {{ p.voting_end_time }}
+              </h6>
+            </div>
+            <div class="gov">
+              <p class="card-text mb-25">
+                Deposit
+              </p>
+              <h6 class="mb-0">
+                {{ p.total_deposit }}
+              </h6>
+            </div>
+            <div class="gov">
+              <p class="card-text mb-25">
+                Turnout
+              </p>
+              <h6 class="mb-0">
+                {{ p.tally.turnout }}%
+              </h6>
+            </div>
           </div>
-          <div class="gov">
-            <p class="card-text mb-25">
-              End Date
-            </p>
-            <h6 class="mb-0">
-              {{ p.voting_end_time }}
-            </h6>
-          </div>
-          <div class="gov">
-            <p class="card-text mb-25">
-              Deposit
-            </p>
-            <h6 class="mb-0">
-              {{ p.total_deposit }}
-            </h6>
-          </div>
-          <div class="gov">
-            <p class="card-text mb-25">
-              Turnout
-            </p>
-            <h6 class="mb-0">
-              {{ p.tally.turnout }}%
-            </h6>
-          </div>
-        </div>
-      </b-card-body>
+        </b-card-body>
 
-      <b-progress
-        :max="100"
-        height="2rem"
-        class="mb-2"
-        show-progress
-      >
-        <b-progress-bar
-          :id="'vote-yes'+p.id"
-          variant="success"
-          :value="p.tally.yes"
+        <b-progress
+          :max="100"
+          height="2rem"
+          class="mb-2"
           show-progress
-        />
-        <b-progress-bar
-          :id="'vote-no'+p.id"
-          variant="warning"
-          :value="p.tally.no"
-          show-progress
-        />
-        <b-progress-bar
-          :id="'vote-veto'+p.id"
-          variant="danger"
-          :value="p.tally.veto"
-          show-progress
-        />
-        <b-progress-bar
-          :id="'vote-abstain'+p.id"
-          variant="info"
-          :value="p.tally.abstain"
-          show-progress
-        />
-      </b-progress>
-      <b-tooltip
-        :target="'vote-yes'+p.id"
-      >
-        {{ p.tally.yes }}% voted Yes
-      </b-tooltip>
-      <b-tooltip
-        :target="'vote-no'+p.id"
-      >
-        {{ p.tally.no }}% voted No
-      </b-tooltip>
-      <b-tooltip
-        :target="'vote-veto'+p.id"
-      >
-        {{ p.tally.veto }}% voted No With Veta
-      </b-tooltip>
-      <b-tooltip
-        :target="'vote-abstain'+p.id"
-      >
-        {{ p.tally.abstain }}% voted Abstain
-      </b-tooltip>
-      <b-card-footer>
-        <router-link
-          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-          :to="`./gov/${p.id}`"
-          variant="outline-primary"
-          class="btn"
         >
-          <b-button
+          <b-progress-bar
+            :id="'vote-yes'+p.id"
+            variant="success"
+            :value="p.tally.yes"
+            show-progress
+          />
+          <b-progress-bar
+            :id="'vote-no'+p.id"
+            variant="warning"
+            :value="p.tally.no"
+            show-progress
+          />
+          <b-progress-bar
+            :id="'vote-veto'+p.id"
+            variant="danger"
+            :value="p.tally.veto"
+            show-progress
+          />
+          <b-progress-bar
+            :id="'vote-abstain'+p.id"
+            variant="info"
+            :value="p.tally.abstain"
+            show-progress
+          />
+        </b-progress>
+        <b-tooltip
+          :target="'vote-yes'+p.id"
+        >
+          {{ p.tally.yes }}% voted Yes
+        </b-tooltip>
+        <b-tooltip
+          :target="'vote-no'+p.id"
+        >
+          {{ p.tally.no }}% voted No
+        </b-tooltip>
+        <b-tooltip
+          :target="'vote-veto'+p.id"
+        >
+          {{ p.tally.veto }}% voted No With Veta
+        </b-tooltip>
+        <b-tooltip
+          :target="'vote-abstain'+p.id"
+        >
+          {{ p.tally.abstain }}% voted Abstain
+        </b-tooltip>
+        <b-card-footer class="pb-0">
+          <router-link
             v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            :href="`./gov/${p.id}`"
+            :to="`./gov/${p.id}`"
             variant="outline-primary"
           >
-            {{ $t('btn_detail') }}
+            <b-button
+              v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+              :href="`./gov/${p.id}`"
+              variant="outline-primary"
+            >
+              {{ $t('btn_detail') }}
+            </b-button>
+          </router-link>
+          <b-button
+            :disabled="p.status!=2"
+            variant="primary"
+            class="btn float-right mg-2"
+          >
+            {{ $t('btn_vote') }}
           </b-button>
-        </router-link>
-        <b-button
-          :disabled="p.status!=2"
-          variant="primary"
-          class="btn float-right mg-2"
-        >
-          {{ $t('btn_vote') }}
-        </b-button>
-      </b-card-footer>
-    </b-card>
-  </section>
+        </b-card-footer>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
 import {
-  BCard, BCardTitle, BCardBody, BCardFooter, BButton, BProgressBar, BProgress, BBadge, BTooltip,
+  BCard, BCardTitle, BCardBody, BCardFooter, BButton, BProgressBar, BProgress, BBadge, BTooltip, BRow, BCol,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import { Proposal } from '@/libs/data'
@@ -172,6 +182,8 @@ export default {
     BCardTitle,
     BTooltip,
     BCardBody,
+    BRow,
+    BCol,
   },
   directives: {
     Ripple,

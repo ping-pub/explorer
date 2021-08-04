@@ -41,7 +41,7 @@
       <b-card-body>
         <b-table-simple>
           <b-tr>
-            <b-td lg="2">
+            <b-td style="width:200px">
               {{ $t('proposal_id') }}
             </b-td><b-td>{{ proposal.id }}</b-td>
           </b-tr>
@@ -75,39 +75,8 @@
               {{ $t('proposal_type') }}
             </b-td><b-td>{{ proposal.type }}</b-td>
           </b-tr>
-          <b-tr
-            v-for="(value, name) in proposal.contents"
-            :key="name"
-          >
-            <b-td style="text-transform: capitalize; vertical-align: top;">
-              {{ name.replaceAll('_',' ') }}
-            </b-td>
-            <b-td v-if="!Array.isArray(value)">
-              {{ value }}
-            </b-td>
-            <b-td v-if="Array.isArray(value) && name === 'amount'">
-              <span
-                v-for="token in value"
-                :key="token.amount"
-              >
-                {{ token.amount }} {{ token.denom }}
-              </span>
-            </b-td>
-            <b-td v-if="Array.isArray(value) && name != 'amount'">
-              <b-table :items="value">
-                <!-- A custom formatted column -->
-                <template #cell(amount)="data">
-                  <span
-                    v-for="token in data.value"
-                    :key="token.amount"
-                  >
-                    {{ token.amount }} {{ token.denom }}
-                  </span>
-                </template>
-              </b-table>
-            </b-td>
-          </b-tr>
         </b-table-simple>
+        <object-field-component :tablefield="proposal.contents" />
       </b-card-body>
       <b-card-footer>
         <router-link :to="`../gov`">
@@ -232,6 +201,7 @@ import {
 
 import { tokenFormatter } from '@/libs/data/data'
 import { Proposal, Proposer } from '@/libs/data'
+import ObjectFieldComponent from './ObjectFieldComponent.vue'
 // import { formatToken } from '@/libs/data/data'
 
 export default {
@@ -250,6 +220,7 @@ export default {
     BProgress,
     BTooltip,
     BBadge,
+    ObjectFieldComponent,
   },
   data() {
     return {

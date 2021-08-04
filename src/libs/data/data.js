@@ -12,12 +12,24 @@ export function percent(num) {
   return parseFloat((num * 100).toFixed(2))
 }
 
+export function isToken(value) {
+  let is = false
+  if (Array.isArray(value)) {
+    is = value.findIndex(x => Object.keys(x).includes('denom')) > -1
+  }
+  return is
+}
+
 export function formatToken(token) {
   let denom = token.denom.toUpperCase()
   if (denom.charAt(0) === 'U') {
     denom = denom.substring(1)
   }
-  return `${(token.amount / 1000000).toFixed()} ${denom}`
+  const amount = token.amount / 1000000
+  if (amount > 10) {
+    return `${amount.toFixed()} ${denom}`
+  }
+  return `${amount} ${denom}`
 }
 
 const COUNT_ABBRS = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']

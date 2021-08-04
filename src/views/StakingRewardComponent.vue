@@ -28,16 +28,16 @@
           </b-media-aside>
           <b-media-body>
             <h6 class="transaction-title">
-              {{ d.amount }}
+              {{ formatNumber(d.amount) }}
             </h6>
             <small>{{ d.denom }} </small>
           </b-media-body>
         </b-media>
-        <div
-          class="font-weight-bolder text-success d-none d-md-block hidden-md-down "
+        <small
+          class="text-success d-none d-xl-block "
         >
           Reward
-        </div>
+        </small>
       </div>
       <div
         v-for="d in data.val_commission"
@@ -59,16 +59,16 @@
           </b-media-aside>
           <b-media-body>
             <h6 class="transaction-title">
-              {{ d.amount }}
+              {{ formatNumber(d.amount) }}
             </h6>
             <small>{{ d.denom }}</small>
           </b-media-body>
         </b-media>
-        <div
-          class="font-weight-bolder text-primary hidden-sm hidden-md"
+        <small
+          class="text-primary d-none d-xl-block"
         >
           Commission
-        </div>
+        </small>
       </div>
     </b-card-body>
   </b-card>
@@ -141,6 +141,11 @@ export default {
         },
       ],
     }
+  },
+  methods: {
+    formatNumber(value) {
+      return Number(value).toFixed(2)
+    },
   },
 }
 </script>

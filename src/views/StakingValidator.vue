@@ -202,21 +202,18 @@
     <template>
       <b-row class="match-height">
         <b-col
-          xl="4"
           lg="4"
           md="12"
         >
           <staking-commission-component :data="validator.commission" />
         </b-col>
         <b-col
-          xl="4"
           lg="4"
           md="12"
         >
           <staking-reward-component :data="distribution" />
         </b-col>
         <b-col
-          xl="4"
           lg="4"
           md="12"
         >
@@ -243,6 +240,15 @@
                 class="btn-icon mb-25 mr-25"
               > &nbsp; </b-button>
             </b-card-body>
+            <b-card-footer>
+              <router-link :to="`../staking`">
+                <b-button
+                  variant="outline-primary"
+                >
+                  {{ $t('btn_back_list') }}
+                </b-button>
+              </router-link>
+            </b-card-footer>
           </b-card>
         </b-col>
       </b-row>
