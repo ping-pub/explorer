@@ -200,7 +200,6 @@ export default {
   },
   methods: {
     getList() {
-      // this.$http.setup(this.$route)
       this.$http.getGovernanceList().then(res => {
         const voting = res.filter(i => i.status === 2)
         if (voting.length > 0) {
@@ -221,38 +220,6 @@ export default {
       })
     },
   },
-  // asyncComputed: {
-  //   proposals: {
-  //     get() {
-  //       const api = new ChainAPI(this.$route)
-  //       api.setup(this.$route)
-  //       return api.getGovernanceList().then(res => {
-  //         const voting = res.filter(i => i.status === 2)
-  //         if (voting.length > 0) {
-  //           let i = 0
-  //           Promise.all(voting.reverse().map(p => api.getGovernanceTally(p.id, p.tally.total))).then(update => {
-  //             this.proposals.map(x => {
-  //               if (x.status === 2) {
-  //                 const xh = x
-  //                 xh.tally = update[i]
-  //                 i += 1
-  //                 return xh
-  //               }
-  //               return x
-  //             })
-  //           })
-  //         }
-  //         return res.reverse()
-  //       })
-  //     },
-  //     // default: 'loading...',
-  //   },
-  // },
-  // watch: {
-  //   proposals(val, newdata) {
-  //     console.log('In watch', val, newdata)
-  //   },
-  // },
 }
 </script>
 

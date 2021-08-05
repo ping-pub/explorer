@@ -25,6 +25,7 @@ async function refetchVersion(chain) {
       const version = sdk.match(re)
       return version[0]
     })
+    .catch(e => console.error(e))
 }
 
 const chainAPI = class ChainFetch {
