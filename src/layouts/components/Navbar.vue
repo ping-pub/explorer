@@ -18,7 +18,10 @@
 
     <!-- Left Col -->
     <div class="bookmark-wrapper align-items-center flex-grow-1 d-none d-lg-flex">
-      <b-media no-body>
+      <b-media
+        v-if="selected_chain.api"
+        no-body
+      >
         <b-media-aside class="mr-75">
           <b-avatar
             badge
@@ -38,12 +41,11 @@
       </b-media>
     </div>
 
-    <dark-Toggler class="d-none d-lg-block" />
+    <!-- <dark-Toggler class="d-none d-lg-block" /> -->
     <!-- Right Col -->
     <b-navbar-nav class="nav align-items-center ml-auto">
       <dark-Toggler class="d-none d-lg-block" />
       <search-bar />
-      <notification-dropdown />
       <locale />
     </b-navbar-nav>
   </div>
@@ -57,7 +59,6 @@ import DarkToggler from '@core/layouts/components/app-navbar/components/DarkTogg
 import Locale from '@core/layouts/components/app-navbar/components/Locale.vue'
 import SearchBar from '@core/layouts/components/app-navbar/components/SearchBar.vue'
 // import CartDropdown from '@core/layouts/components/app-navbar/components/CartDropdown.vue'
-import NotificationDropdown from '@core/layouts/components/app-navbar/components/NotificationDropdown.vue'
 import store from '@/store'
 // import UserDropdown from '@core/layouts/components/app-navbar/components/UserDropdown.vue'
 
@@ -75,7 +76,6 @@ export default {
     Locale,
     SearchBar,
     // CartDropdown,
-    NotificationDropdown,
     // UserDropdown,
   },
   directives: {
