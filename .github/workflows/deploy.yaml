@@ -15,8 +15,11 @@ jobs:
     - name: Git Checkout Latest
       uses: actions/checkout@v2
       
-    - name: deploy
+    - name: Install
       run: yarn install
 
-    - name: deploy
+    - name: Build
       run: yarn run vue-cli-service build
+
+    - name: Deploy
+      run: cp -rf ./dist/* /var/www/html/
