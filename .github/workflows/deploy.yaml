@@ -9,10 +9,10 @@ on:
 
 jobs:
   deploy:
-    name: Look deploy
+    name: Ping deploy
     runs-on: self-hosted
     steps:
-    - name: Git Checkout master
+    - name: Git Checkout Latest
       uses: actions/checkout@v2
       
     - name: deploy
