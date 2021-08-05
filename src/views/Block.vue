@@ -79,7 +79,7 @@ export default {
           tx.setHash(txs[i])
           array.push(tx)
         } catch (e) {
-          console.error(e)
+          // catch errors
         }
       }
       if (array.length > 0) this.txs = array

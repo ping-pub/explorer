@@ -17,8 +17,4 @@ export default class StakingParameters {
     }
     return this
   }
-
-  debug() {
-    return console.log(this)
-  }
 }

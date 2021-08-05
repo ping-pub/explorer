@@ -25,7 +25,6 @@ async function refetchVersion(chain) {
       const version = sdk.match(re)
       return version[0]
     })
-    .catch(e => console.error(e))
 }
 
 const chainAPI = class ChainFetch {
@@ -135,7 +134,7 @@ const chainAPI = class ChainFetch {
   }
 
   async getGovernanceProposer(pid) {
-    return this.get(`/gov/proposals/${pid}/proposer`).then(data => new Proposer().init(commonProcess(data))).catch(e => console.log(e))
+    return this.get(`/gov/proposals/${pid}/proposer`).then(data => new Proposer().init(commonProcess(data)))
   }
 
   async getGovernanceDeposits(pid) {
@@ -164,7 +163,7 @@ const chainAPI = class ChainFetch {
 
   async get(url) {
     this.getSelectedConfig()
-    const ret = await fetch(this.config.api + url).then(response => response.json()).catch(e => console.error(e))
+    const ret = await fetch(this.config.api + url).then(response => response.json())
     return ret
   }
 }

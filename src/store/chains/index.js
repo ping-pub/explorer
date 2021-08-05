@@ -25,7 +25,6 @@ Object.keys(chains).forEach(key => {
       chain.sdk_version = version[0]
       localStorage.setItem('chains', JSON.stringify(chains))
     })
-    .catch(e => console.error(`Failed get api vesion of ${key}`, e))
 })
 
 export default {

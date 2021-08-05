@@ -16,4 +16,5 @@ jobs:
       uses: actions/checkout@v2
       
     - name: deploy
+      run: yarn install
       run: yarn run vue-cli-service build

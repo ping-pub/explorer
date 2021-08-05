@@ -11,8 +11,4 @@ export default class Deposit {
     this.amount = element.amount
     return this
   }
-
-  debug() {
-    return console.log(this)
-  }
 }

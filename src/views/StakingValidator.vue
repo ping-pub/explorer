@@ -388,7 +388,6 @@ export default {
     },
     fetch_latest() {
       this.$http.getLatestBlock().then(res => {
-        console.log('fetched: ', res.block.last_commit.height)
         const sigs = res.block.last_commit.signatures.find(s => s.validator_address === this.hexAddress)
         const block = this.blocks.find(b => b[1] === res.block.last_commit.height)
         if (typeof block === 'undefined') { // mei

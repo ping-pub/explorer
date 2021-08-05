@@ -17,8 +17,4 @@ export default class ValidatorDescription {
     }
     return this
   }
-
-  debug() {
-    return console.log(this)
-  }
 }

@@ -15,8 +15,4 @@ export default class ValidatorCommission {
     }
     return this
   }
-
-  debug() {
-    return console.log(this)
-  }
 }

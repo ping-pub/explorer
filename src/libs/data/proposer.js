@@ -11,8 +11,4 @@ export default class Proposer {
     }
     return this
   }
-
-  debug() {
-    return console.log(this)
-  }
 }

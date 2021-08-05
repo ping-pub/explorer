@@ -11,8 +11,4 @@ export default class Votes {
     this.option = element.option
     return this
   }
-
-  debug() {
-    return console.log(this)
-  }
 }
