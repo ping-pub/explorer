@@ -1,0 +1,19 @@
+
+name: Ping Deploy
+
+on:
+  push:
+    branches: [ v2 ]
+  pull_request:
+    branches: [ v2 ]
+
+jobs:
+  deploy:
+    name: Look deploy
+    runs-on: self-hosted
+    steps:
+    - name: Git Checkout master
+      uses: actions/checkout@v2
+      
+    - name: deploy
+      run: yarn run vue-cli-service build
