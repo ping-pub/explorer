@@ -111,6 +111,34 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/:chain/block/:height',
+      name: 'block',
+      component: () => import('@/views/Block.vue'),
+      meta: {
+        pageTitle: 'Block',
+        breadcrumb: [
+          {
+            text: 'Block',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/:chain/tx/:hash',
+      name: 'transaction',
+      component: () => import('@/views/Transaction.vue'),
+      meta: {
+        pageTitle: 'Transaction',
+        breadcrumb: [
+          {
+            text: 'Transaction',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('@/views/Login.vue'),
@@ -139,7 +167,7 @@ router.beforeEach((to, from, next) => {
   if (has > -1) {
     const chain = store.state.chains.config[c]
     store.commit('select', { chain_name: c })
-    if (chain.sdk_version === undefined) {
+    if (chain.sdk_version) {
       fetch(`${chain.api}/node_info`)
         .then(res => res.json())
         .then(json => {

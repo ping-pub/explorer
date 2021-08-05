@@ -293,7 +293,7 @@ export default {
         inProgress: 64,
       },
       selfDelegation: {
-        balance: {},
+        balance: { amount: 0 },
       },
       latestHeight: 0,
       accountAddress: '-',

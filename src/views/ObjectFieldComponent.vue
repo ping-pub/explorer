@@ -1,5 +1,11 @@
 <template>
-  <b-table-simple>
+  <b-table-simple
+    v-if="typeof tablefield === 'object'"
+    hover
+    small
+    striped
+    responsive
+  >
     <b-tr
       v-for="(value, name) in tablefield"
       :key="name"
@@ -7,7 +13,7 @@
       <b-td
         style="text-transform: capitalize; vertical-align: top; width:200px"
       >
-        {{ name.replaceAll('_',' ') }}
+        {{ name }}
       </b-td>
       <b-td v-if="isTokenField(value)">
         {{ formatTokens( value ) }}
@@ -15,8 +21,31 @@
       <b-td v-else-if="Array.isArray(value)">
         <array-field-component :tablefield="value" />
       </b-td>
+      <b-td
+        v-else-if="typeof (value) ==='object'"
+        hover
+      >
+        <b-tabs>
+          <b-tab
+            v-for="key in Object.keys(value)"
+            :key="key"
+            :title="key"
+            variant="danger"
+          >
+            <array-field-component
+              v-if="Array.isArray(value[key])"
+              :tablefield="value[key]"
+            />
+            <object-field-component
+              v-else-if="typeof value[key] === 'object'"
+              :tablefield="value[key]"
+            />
+            <span v-else>{{ formatText(value[key]) }} </span>
+          </b-tab>
+        </b-tabs>
+      </b-td>
       <b-td v-else>
-        {{ value }}
+        {{ formatText(value) }}
       </b-td>
     </b-tr>
   </b-table-simple>
@@ -24,15 +53,10 @@
 
 <script>
 import {
-  BTableSimple, BTr, BTd,
+  BTableSimple, BTr, BTd, BTabs, BTab,
 } from 'bootstrap-vue'
-import { isToken, tokenFormatter } from '@/libs/data'
+import { abbr, isToken, tokenFormatter } from '@/libs/data'
 import ArrayFieldComponent from './ArrayFieldComponent.vue'
-// import fetch from 'node-fetch'
-
-// import { tokenFormatter } from '@/libs/data/data'
-// import { Proposal, Proposer } from '@/libs/data'
-// import { formatToken } from '@/libs/data/data'
 
 export default {
   name: 'ObjectFieldComponent',
@@ -40,15 +64,26 @@ export default {
     BTableSimple,
     BTr,
     BTd,
+    BTabs,
+    BTab,
     ArrayFieldComponent,
   },
   props: {
     tablefield: {
-      type: Object,
+      type: [Array, Object],
       default: () => {},
     },
   },
   methods: {
+    formatObject(value) {
+      // console.log(value, typeof (value) === 'object', Object.keys(value))
+      // if (typeof (value) === 'object' && Object.keys(value).length === 1) {
+      //   console.log(value)
+      //   return value[Object.keys(value)[0]]
+      // }
+      return value
+    },
+    formatText: v => abbr(v, 60),
     eval_value(value) {
       return Array.from(value)
     },
@@ -61,3 +96,7 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+
+</style>

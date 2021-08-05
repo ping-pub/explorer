@@ -3,7 +3,7 @@ import store from '@/store'
 import compareVersions from 'compare-versions'
 import {
   Proposal, ProposalTally, Proposer, StakingPool, Votes, Deposit,
-  Validator, StakingParameters, Block, ValidatorDistribution, StakingDelegation,
+  Validator, StakingParameters, Block, ValidatorDistribution, StakingDelegation, WrapStdTx,
 } from './data'
 
 function commonProcess(res) {
@@ -11,14 +11,34 @@ function commonProcess(res) {
 }
 
 // 头像
-export async function keybase(identity) {
+export function keybase(identity) {
   return fetch(`https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`)
     .then(res => res.json())
 }
 
+async function refetchVersion(chain) {
+  await fetch(`${chain.api}/node_info`)
+    .then(res => res.json())
+    .then(json => {
+      const sdk = json.application_version.build_deps.find(e => e.startsWith('github.com/cosmos/cosmos-sdk'))
+      const re = /(\d+(\.\d+)*)/i
+      const version = sdk.match(re)
+      return version[0]
+    })
+}
+
 const chainAPI = class ChainFetch {
   getSelectedConfig() {
-    this.config = store.state.chains.selected
+    let chain = store.state.chains.selected
+    const lschains = localStorage.getItem('chains')
+    if (lschains) {
+      chain = JSON.parse(lschains)[chain.chain_name]
+    }
+    if (!chain.sdk_version) {
+      chain.sdk_version = refetchVersion(chain)
+    }
+    this.config = chain
+    console.log(this.config)
     return this.config
   }
 
@@ -28,6 +48,17 @@ const chainAPI = class ChainFetch {
 
   async getBlockByHeight(height) {
     return this.get(`/blocks/${height}`).then(data => Block.create(data))
+  }
+
+  async getTxs(hash) {
+    const FIELD = 'sdk_version'
+    const ver = this.getSelectedConfig() ? this.config.sdk_version : '0.41'
+    console.log(ver, this.config[FIELD])
+    // /cosmos/tx/v1beta1/txs/{hash}
+    if (ver && compareVersions(ver, '0.40') < 1) {
+      return this.get(`/txs/${hash}`).then(data => WrapStdTx.create(data, ver))
+    }
+    return this.get(`/cosmos/tx/v1beta1/txs/${hash}`).then(data => WrapStdTx.create(data, ver))
   }
 
   async getValidatorDistribution(address) {

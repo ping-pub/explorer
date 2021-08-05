@@ -9,6 +9,7 @@ export { default as StakingParameters } from './staking-parameters'
 export { default as Block } from './block'
 export { default as ValidatorDistribution } from './validator-distribution'
 export { default as StakingDelegation } from './staking-delegation'
+export { default as WrapStdTx } from './wrapstdtx'
 export * from './data'
 
 export default class Test {}

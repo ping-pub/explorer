@@ -12,6 +12,20 @@ export function percent(num) {
   return parseFloat((num * 100).toFixed(2))
 }
 
+export function abbr(string, length = 6) {
+  if (string && string.length > length) {
+    return `${string.substring(0, length)}...`
+  }
+  return string
+}
+
+export function abbrMessage(msg) {
+  if (Array.isArray(msg)) {
+    return msg.map(x => abbrMessage(x)).join()
+  }
+  return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1)
+}
+
 export function isToken(value) {
   let is = false
   if (Array.isArray(value)) {
@@ -21,15 +35,18 @@ export function isToken(value) {
 }
 
 export function formatToken(token) {
-  let denom = token.denom.toUpperCase()
-  if (denom.charAt(0) === 'U') {
-    denom = denom.substring(1)
+  if (token) {
+    let denom = token.denom.toUpperCase()
+    if (denom.charAt(0) === 'U') {
+      denom = denom.substring(1)
+    }
+    const amount = token.amount / 1000000
+    if (amount > 10) {
+      return `${amount.toFixed()} ${denom}`
+    }
+    return `${amount} ${denom}`
   }
-  const amount = token.amount / 1000000
-  if (amount > 10) {
-    return `${amount.toFixed()} ${denom}`
-  }
-  return `${amount} ${denom}`
+  return ''
 }
 
 const COUNT_ABBRS = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']

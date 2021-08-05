@@ -1,9 +1,32 @@
-const chains = {}
-const configs = require.context('.', false, /\.json$/)
+let chains = {}
 
-configs.keys().forEach(k => {
-  const c = configs(k)
-  chains[c.chain_name] = c
+const localChains = localStorage.getItem('chains')
+if (localChains) {
+  chains = JSON.parse(localChains)
+} else {
+  const configs = require.context('.', false, /\.json$/)
+
+  configs.keys().forEach(k => {
+    const c = configs(k)
+    chains[c.chain_name] = c
+  })
+  localStorage.setItem('chains', JSON.stringify(chains))
+}
+
+Object.keys(chains).forEach(key => {
+  const chain = chains[key]
+  fetch(`${chain.api}/node_info`)
+    .then(res => res.json())
+    .then(json => {
+      const sdk = json.application_version.build_deps.find(e => e.startsWith('github.com/cosmos/cosmos-sdk'))
+      const re = /(\d+(\.\d+)*)/i
+      const version = sdk.match(re)
+      // eslint-disable-next-line prefer-destructuring
+      chain.sdk_version = version[0]
+      localStorage.setItem('chains', JSON.stringify(chains))
+      console.log(`${chain.api}/node_info`, localStorage.getItem('chains'))
+    })
+    .catch(e => console.log(`Failed get api vesion of ${key}`, e))
 })
 
 export default {

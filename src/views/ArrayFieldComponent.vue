@@ -1,5 +1,6 @@
 <template>
   <b-table
+    v-if="Array.isArray(tablefield)"
     :items="tablefield"
     :sticky-header="true"
     :no-border-collapse="true"
@@ -11,7 +12,10 @@
         v-else-if="isArrayText(data.value)"
         :tablefield="eval_value(data.value)"
       />
-      <span v-else>{{ data.value }}</span>
+      <span
+        v-else
+        :title="data.value"
+      >{{ formatText(data.value) }}</span>
     </template>
   </b-table>
 </template>
@@ -20,7 +24,9 @@
 import { BTable } from 'bootstrap-vue'
 // import fetch from 'node-fetch'
 
-import { isToken, tokenFormatter } from '@/libs/data/data'
+import {
+  abbr, isToken, toDay, tokenFormatter,
+} from '@/libs/data/data'
 // import { Proposal, Proposer } from '@/libs/data'
 // import { formatToken } from '@/libs/data/data'
 
@@ -31,7 +37,7 @@ export default {
   },
   props: {
     tablefield: {
-      type: Array,
+      type: [Array, Object],
       default: () => [],
     },
   },
@@ -46,8 +52,15 @@ export default {
       return isToken(value)
     },
     isArrayText(value) {
-      const has = String(value).startsWith('[')
+      const has = String(value).startsWith('[') && String(value).endsWith(']')
       return has
+    },
+    formatText(value) {
+      const reg = /^\d{4}.\d{1,2}.\d{1,2}T\d{2}:\d{2}:.+Z$/
+      if (reg.test(value)) {
+        return toDay(value)
+      }
+      return abbr(value, 40)
     },
     formatTokens(value) {
       return tokenFormatter(value)
