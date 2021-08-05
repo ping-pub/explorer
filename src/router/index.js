@@ -28,7 +28,7 @@ const router = new VueRouter({
     },
     // chain modules
     {
-      path: '/:chain/info',
+      path: '/:chain/',
       name: 'info',
       alias: '/:chain',
       component: () => import('@/views/Summary.vue'),
@@ -139,7 +139,7 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/login',
+      path: '/user/login',
       name: 'login',
       component: () => import('@/views/Login.vue'),
       meta: {
@@ -147,7 +147,7 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/error-404',
+      path: '/error/error-404',
       name: 'error-404',
       component: () => import('@/views/error/Error404.vue'),
       meta: {
