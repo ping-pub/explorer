@@ -17,4 +17,6 @@ jobs:
       
     - name: deploy
       run: yarn install
+
+    - name: deploy
       run: yarn run vue-cli-service build
