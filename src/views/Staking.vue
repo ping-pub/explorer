@@ -161,7 +161,6 @@ export default {
       this.validators = temp
 
       // fetch avatar from keybase
-      console.log(identities)
       let promise = Promise.resolve()
       identities.forEach(item => {
         promise = promise.then(() => new Promise(resolve => {
@@ -171,7 +170,6 @@ export default {
     })
   },
   beforeDestroy() {
-    console.log('destroying')
     this.islive = false
   },
   methods: {
@@ -202,10 +200,8 @@ export default {
       if (this.islive) {
         keybase(identity).then(d => {
           resolve()
-          console.log(identity)
           if (Array.isArray(d.them) && d.them.length > 0) {
             const pic = d.them[0].pictures
-            console.log('fetch new avatar:', pic)
             if (pic) {
               const validator = this.validators.find(u => u.description.identity === identity)
               this.$set(validator, 'avatar', pic.primary.url)

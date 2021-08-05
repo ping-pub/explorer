@@ -78,13 +78,11 @@ export default {
           const tx = Tx.create(origin)
           tx.setHash(txs[i])
           array.push(tx)
-          console.log('tx', origin, tx)
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
       }
       if (array.length > 0) this.txs = array
-      console.log(this.txs)
     })
   },
 }

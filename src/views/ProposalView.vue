@@ -265,7 +265,7 @@ export default {
 
     this.$http.getGovernance(pid).then(p => {
       if (p.status === 2) {
-        this.$http.getGovernanceTally(pid, 0).then(t => p.updateTally(t)).catch(e => console.log('failed on update voting tally:', e))
+        this.$http.getGovernanceTally(pid, 0).then(t => p.updateTally(t)).catch(e => console.error('failed on update voting tally:', e))
       }
       this.proposal = p
     })

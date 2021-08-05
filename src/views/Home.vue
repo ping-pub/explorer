@@ -139,7 +139,7 @@ export default {
       Object.keys(this.chains).forEach(k => {
         const chain = this.chains[k]
         fetch(`${chain.api}/blocks/latest`).then(res => res.json()).then(b => {
-          console.log(b.block.header)
+          // console.log(b.block.header)
           const { header } = b.block
           this.$set(chain, 'height', header.height)
           this.$set(chain, 'time', toDay(header.time))

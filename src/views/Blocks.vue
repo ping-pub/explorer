@@ -92,7 +92,7 @@ export default {
       for (let i = 1; i < 20; i += 1) {
         list.push(height - i)
       }
-      console.log(height, list)
+
       let promise = Promise.resolve()
       list.forEach(item => {
         promise = promise.then(() => new Promise(resolve => {

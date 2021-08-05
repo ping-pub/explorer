@@ -329,7 +329,6 @@ export default {
     this.initBlocks()
   },
   beforeDestroy() {
-    console.log('destroying')
     clearInterval(this.timer)
   },
   methods: {
@@ -343,7 +342,6 @@ export default {
       this.accountAddress = operatorAddressToAccount(operAddress)
       this.hexAddress = consensusPubkeyToHexAddress(consensusPubkey)
       this.$http.getStakingDelegatorDelegation(this.accountAddress, operAddress).then(d => {
-        console.log(d)
         this.selfDelegation = d
       })
     },

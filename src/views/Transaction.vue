@@ -106,7 +106,6 @@ export default {
   created() {
     const { hash } = this.$route.params
     this.$http.getTxs(hash).then(res => {
-      console.log(res)
       this.tx = res
     })
   },

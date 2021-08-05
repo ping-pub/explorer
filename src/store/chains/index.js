@@ -24,9 +24,8 @@ Object.keys(chains).forEach(key => {
       // eslint-disable-next-line prefer-destructuring
       chain.sdk_version = version[0]
       localStorage.setItem('chains', JSON.stringify(chains))
-      console.log(`${chain.api}/node_info`, localStorage.getItem('chains'))
     })
-    .catch(e => console.log(`Failed get api vesion of ${key}`, e))
+    .catch(e => console.error(`Failed get api vesion of ${key}`, e))
 })
 
 export default {

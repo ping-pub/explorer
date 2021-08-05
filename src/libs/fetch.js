@@ -39,7 +39,6 @@ const chainAPI = class ChainFetch {
       chain.sdk_version = refetchVersion(chain)
     }
     this.config = chain
-    console.log(this.config)
     return this.config
   }
 
@@ -52,9 +51,7 @@ const chainAPI = class ChainFetch {
   }
 
   async getTxs(hash) {
-    const FIELD = 'sdk_version'
     const ver = this.getSelectedConfig() ? this.config.sdk_version : '0.41'
-    console.log(ver, this.config[FIELD])
     // /cosmos/tx/v1beta1/txs/{hash}
     if (ver && compareVersions(ver, '0.40') < 1) {
       return this.get(`/txs/${hash}`).then(data => WrapStdTx.create(data, ver))
@@ -167,7 +164,7 @@ const chainAPI = class ChainFetch {
 
   async get(url) {
     this.getSelectedConfig()
-    const ret = await fetch(this.config.api + url).then(response => response.json()).catch(e => console.log(e))
+    const ret = await fetch(this.config.api + url).then(response => response.json()).catch(e => console.error(e))
     return ret
   }
 }
