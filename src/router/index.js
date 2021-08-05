@@ -112,6 +112,20 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/:chain/blocks',
+      name: 'blocks',
+      component: () => import('@/views/Blocks.vue'),
+      meta: {
+        pageTitle: 'Block',
+        breadcrumb: [
+          {
+            text: 'Blocks',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
       path: '/:chain/block/:height',
       name: 'block',
       component: () => import('@/views/Block.vue'),

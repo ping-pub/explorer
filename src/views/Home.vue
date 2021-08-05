@@ -25,50 +25,53 @@
           md="4"
           sm="6"
         >
-          <b-card
-            v-if="data"
-            no-body
-          >
-            <b-card-header>
-              <h4 class="mb-0 text-uppercase">
-                {{ data.chain_name }}
-              </h4>
-              <b-card-text class="mb-0">
-                Updated on {{ data.time }}
-              </b-card-text>
-            </b-card-header>
-
-            <b-img
-              :src="data.logo"
-              height="145"
-              class="mb-2"
-            />
-            <b-row class="text-center mx-0">
-              <b-col
-                cols="6"
-                class="border-top border-right d-flex align-items-between flex-column py-1"
-              >
-                <b-card-text class="text-muted mb-0">
-                  SDK Version
+          <router-link :to="data.chain_name">
+            <b-card
+              v-if="data"
+              no-body
+              hover
+            >
+              <b-card-header>
+                <h4 class="mb-0 text-uppercase">
+                  {{ data.chain_name }}
+                </h4>
+                <b-card-text class="mb-0">
+                  Updated on {{ data.time }}
                 </b-card-text>
-                <h3 class="font-weight-bolder mb-0">
-                  {{ data.sdk_version }}
-                </h3>
-              </b-col>
+              </b-card-header>
 
-              <b-col
-                cols="6"
-                class="border-top d-flex align-items-between flex-column py-1"
-              >
-                <b-card-text class="text-muted mb-0">
-                  Height
-                </b-card-text>
-                <h3 class="font-weight-bolder mb-0">
-                  {{ data.height }}
-                </h3>
-              </b-col>
-            </b-row>
-          </b-card>
+              <b-img
+                :src="data.logo"
+                height="145"
+                class="mb-2"
+              />
+              <b-row class="text-center mx-0">
+                <b-col
+                  cols="6"
+                  class="border-top border-right d-flex align-items-between flex-column py-1"
+                >
+                  <b-card-text class="text-muted mb-0">
+                    SDK Version
+                  </b-card-text>
+                  <h3 class="font-weight-bolder mb-0">
+                    {{ data.sdk_version }}
+                  </h3>
+                </b-col>
+
+                <b-col
+                  cols="6"
+                  class="border-top d-flex align-items-between flex-column py-1"
+                >
+                  <b-card-text class="text-muted mb-0">
+                    Height
+                  </b-card-text>
+                  <h3 class="font-weight-bolder mb-0">
+                    {{ data.height }}
+                  </h3>
+                </b-col>
+              </b-row>
+            </b-card>
+          </router-link>
         </b-col>
 
         <!-- no result found -->
