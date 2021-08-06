@@ -61,10 +61,10 @@ export default {
         title: '',
         class: 'border-primary',
         items: [
-          { subtitle: 'chain_id', icon: 'LinkIcon', color: 'light-primary' },
           { subtitle: 'height', icon: 'BoxIcon', color: 'light-success' },
           { subtitle: 'bonded_and_supply', icon: 'DollarSignIcon', color: 'light-danger' },
           { subtitle: 'bonded_ratio', icon: 'PercentIcon', color: 'light-warning' },
+          { subtitle: 'inflation', icon: 'TrendingUpIcon', color: 'light-primary' },
         ],
       },
       staking: {
@@ -91,11 +91,15 @@ export default {
   },
   created() {
     this.$http.getLatestBlock().then(res => {
-      const chainIndex = this.chain.items.findIndex(x => x.subtitle === 'chain_id')
       const height = this.chain.items.findIndex(x => x.subtitle === 'height')
 
-      this.$set(this.chain.items[chainIndex], 'title', res.block.header.chain_id)
+      this.$set(this.chain, 'title', `Chain ID: ${res.block.header.chain_id}`)
       this.$set(this.chain.items[height], 'title', res.block.header.height)
+    })
+
+    this.$http.getMintingInflation().then(res => {
+      const chainIndex = this.chain.items.findIndex(x => x.subtitle === 'inflation')
+      this.$set(this.chain.items[chainIndex], 'title', `${percent(res)}%`)
     })
 
     this.$http.getStakingParameters().then(res => {
