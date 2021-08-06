@@ -39,14 +39,15 @@ export function formatToken(token) {
     let denom = token.denom.toUpperCase()
     if (denom.charAt(0) === 'U') {
       denom = denom.substring(1)
+      const amount = token.amount / 1000000
+      if (amount > 10) {
+        return `${amount.toFixed()} ${denom}`
+      }
+      return `${amount} ${denom}`
     }
-    const amount = token.amount / 1000000
-    if (amount > 10) {
-      return `${amount.toFixed()} ${denom}`
-    }
-    return `${amount} ${denom}`
+    return `${token.amount} ${denom}`
   }
-  return ''
+  return token
 }
 
 const COUNT_ABBRS = ['', 'K', 'M', 'B', 'T', 'P', 'E', 'Z', 'Y']

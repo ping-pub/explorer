@@ -35,7 +35,9 @@
 
 <script>
 import { BRow, BCol } from 'bootstrap-vue'
-import { formatNumber, percent, tokenFormatter } from '@/libs/data'
+import {
+  formatNumber, isToken, percent, tokenFormatter,
+} from '@/libs/data'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -58,7 +60,12 @@ export default {
       chain: {
         title: '',
         class: 'border-primary',
-        items: [],
+        items: [
+          { subtitle: 'chain_id', icon: 'LinkIcon', color: 'light-primary' },
+          { subtitle: 'height', icon: 'BoxIcon', color: 'light-success' },
+          { subtitle: 'bonded_and_supply', icon: 'DollarSignIcon', color: 'light-danger' },
+          { subtitle: 'bonded_ratio', icon: 'PercentIcon', color: 'light-warning' },
+        ],
       },
       staking: {
         title: 'Staking Parameters',
@@ -73,8 +80,8 @@ export default {
         items: [],
       },
       mint: {
-        title: 'Distribution Parameters',
-        items: [],
+        title: 'Mint Parameters',
+        items: null,
       },
       gov: {
         title: 'Governance Parameters',
@@ -84,12 +91,11 @@ export default {
   },
   created() {
     this.$http.getLatestBlock().then(res => {
-      this.chain.items.push({
-        title: res.block.header.chain_id, subtitle: 'chain_id', icon: 'LinkIcon', color: 'light-primary',
-      })
-      this.chain.items.push({
-        title: res.block.header.height, subtitle: 'height', icon: 'BoxIcon', color: 'light-success',
-      })
+      const chainIndex = this.chain.items.findIndex(x => x.subtitle === 'chain_id')
+      const height = this.chain.items.findIndex(x => x.subtitle === 'height')
+
+      this.$set(this.chain.items[chainIndex], 'title', res.block.header.chain_id)
+      this.$set(this.chain.items[height], 'title', res.block.header.height)
     })
 
     this.$http.getStakingParameters().then(res => {
@@ -97,20 +103,25 @@ export default {
       Promise.all([this.$http.getStakingPool(), this.$http.getBankTotal(res.bond_denom)])
         .then(pool => {
           const nano = 1000000
-          this.chain.items.push({
-            title: `${formatNumber(pool[0].bondedToken / nano, true, 0)} / ${formatNumber(pool[1].amount / nano, true, 0)}`, subtitle: 'bonded_and_supply', icon: 'DollarSignIcon', color: 'light-danger',
-          })
-          this.chain.items.push({
-            title: `${percent(pool[0].bondedToken / pool[1].amount)}%`, subtitle: 'bonded_ratio', icon: 'PercentIcon', color: 'light-warning',
-          })
+          const bondedAndSupply = this.chain.items.findIndex(x => x.subtitle === 'bonded_and_supply')
+          this.$set(this.chain.items[bondedAndSupply], 'title', `${formatNumber(pool[0].bondedToken / nano, true, 1)} / ${formatNumber(pool[1].amount / nano, true, 1)}`)
+          const bondedRatio = this.chain.items.findIndex(x => x.subtitle === 'bonded_ratio')
+          this.$set(this.chain.items[bondedRatio], 'title', `${percent(pool[0].bondedToken / pool[1].amount)}%`)
         })
     })
     this.$http.getSlashingParameters().then(res => {
       this.slasing = this.normalize(res, 'Slasing Parameters')
     })
-    this.$http.getMintParameters().then(res => {
-      this.mint = this.normalize(res, 'Minting Parameters')
-    })
+
+    const selected = this.$route.params.chain
+    if (selected === 'iris') {
+      this.mint = null
+    } else {
+      this.$http.getMintParameters().then(res => {
+        this.mint = this.normalize(res, 'Minting Parameters')
+      })
+    }
+
     this.$http.getDistributionParameters().then(res => {
       this.distribution = this.normalize(res, 'Distribution Parameters')
     })
@@ -138,7 +149,7 @@ export default {
     },
     makeItems(data) {
       return Object.keys(data).map(k => {
-        if (Array.isArray(data[k])) {
+        if (isToken(data[k])) {
           return { title: tokenFormatter(data[k]), subtitle: k }
         }
         const d = Number(data[k])

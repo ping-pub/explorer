@@ -17,9 +17,42 @@
           sm="6"
           :class="item.customClass"
         >
-          <b-media no-body>
+          <div
+            v-if="typeof item.title ==='object'"
+          >
+            <b-button
+              :id="item.subtitle"
+              variant="outline-primary"
+              class="ml-2"
+              size="sm"
+            >
+              {{ item.subtitle }}
+            </b-button>
+            <b-popover
+              :target="item.subtitle"
+              variant="primary"
+              triggers="hover"
+              placement="bottom"
+            >
+              <template #title>
+                <span>{{ item.subtitle }}</span>
+              </template>
+              <span>
+                <array-field-component
+                  v-if="Array.isArray(item.title)"
+                  :tablefield="item.title"
+                />
+                <object-field-component
+                  v-else
+                  :tablefield="item.title"
+                /></span>
+            </b-popover>
+          </div>
+          <b-media
+            v-else
+            no-body
+          >
             <b-media-aside
-
               class="mr-2"
             >
               <b-avatar
@@ -35,7 +68,7 @@
             </b-media-aside>
             <b-media-body class="my-auto">
               <h4 class="font-weight-bolder mb-0">
-                {{ item.title }}
+                {{ item.title || '-' }}
               </h4>
               <b-card-text class="font-small-3 mb-1">
                 {{ item.subtitle }}
@@ -50,8 +83,10 @@
 
 <script>
 import {
-  BCard, BCardHeader, BCardTitle, BCardText, BCardBody, BRow, BCol, BMedia, BMediaAside, BAvatar, BMediaBody,
+  BCard, BCardHeader, BCardTitle, BCardText, BCardBody, BRow, BCol, BMedia, BMediaAside, BAvatar, BMediaBody, BPopover, BButton,
 } from 'bootstrap-vue'
+import ObjectFieldComponent from './ObjectFieldComponent.vue'
+import ArrayFieldComponent from './ArrayFieldComponent.vue'
 
 export default {
   components: {
@@ -66,10 +101,14 @@ export default {
     BAvatar,
     BMediaAside,
     BMediaBody,
+    BPopover,
+    BButton,
+    ObjectFieldComponent,
+    ArrayFieldComponent,
   },
   props: {
     data: {
-      type: Object,
+      type: [Object, Array],
       default: () => {},
     },
   },
