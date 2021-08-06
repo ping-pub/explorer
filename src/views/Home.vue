@@ -1,11 +1,12 @@
 <template>
   <div class="text-center container-lg">
     <b-link>
-      <div class="mb-3 mt-3">
-        <vuexy-logo />
-
-        <h1 class="brand-text text-primary mt-2">
-          Ping Explorer
+      <div class="d-flex justify-content-center align-items-center">
+        <vuexy-logo class="mr-1" />
+        <h1
+          class="text-primary display-4 font-weight-bolder"
+        >
+          Ping Explorer<small class="flow-left">Beta</small>
         </h1>
       </div>
     </b-link>
@@ -32,7 +33,7 @@
             >
               <b-row>
                 <b-col cols="8">
-                  <b-card-title class="mb-1">
+                  <b-card-title class="mb-1 text-uppercase">
                     {{ data.chain_name }} <small class="font-small-2">{{ data.sdk_version }}</small>
                   </b-card-title>
                   <div class="font-small-2">
