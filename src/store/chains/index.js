@@ -3,18 +3,18 @@ let chains = {}
 const localChains = localStorage.getItem('chains')
 if (localChains) {
   chains = JSON.parse(localChains)
-} else {
-  const configs = require.context('.', false, /\.json$/)
-
-  configs.keys().forEach(k => {
-    const c = configs(k)
-    chains[c.chain_name] = c
-  })
-  localStorage.setItem('chains', JSON.stringify(chains))
 }
 
-Object.keys(chains).forEach(key => {
-  const chain = chains[key]
+const configs = require.context('.', false, /\.json$/)
+
+const update = {}
+configs.keys().forEach(k => {
+  const c = configs(k)
+  update[c.chain_name] = c
+})
+
+Object.keys(update).forEach(key => {
+  const chain = update[key]
   fetch(`${chain.api}/node_info`)
     .then(res => res.json())
     .then(json => {
@@ -23,7 +23,7 @@ Object.keys(chains).forEach(key => {
       const version = sdk.match(re)
       // eslint-disable-next-line prefer-destructuring
       chain.sdk_version = version[0]
-      localStorage.setItem('chains', JSON.stringify(chains))
+      localStorage.setItem('chains', JSON.stringify(update))
     })
 })
 

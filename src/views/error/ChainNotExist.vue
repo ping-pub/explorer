@@ -11,10 +11,10 @@
     <div class="misc-inner p-2 p-sm-3">
       <div class="w-100 text-center">
         <h2 class="mb-1">
-          Page Not Found 🕵🏻‍♀️
+          Sorry, The chain is not found
         </h2>
         <p class="mb-2">
-          Oops! 😖 The requested URL was not found on this server.
+          Be free to contact us if you want to add your chain.
         </p>
 
         <b-button

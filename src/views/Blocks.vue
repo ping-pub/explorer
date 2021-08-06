@@ -19,7 +19,7 @@
       >
         <!-- Column: Height -->
         <template #cell(height)="data">
-          <router-link :to="`./block/${data.item.block.header.height}`">
+          <router-link :to="`./blocks/${data.item.block.header.height}`">
             #{{ data.item.block.header.height }}
           </router-link>
         </template>

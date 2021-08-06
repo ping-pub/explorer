@@ -76,7 +76,10 @@
             </b-td><b-td>{{ proposal.type }}</b-td>
           </b-tr>
         </b-table-simple>
-        <object-field-component :tablefield="proposal.contents" />
+        <object-field-component
+          :tablefield="proposal.contents"
+          :small="false"
+        />
       </b-card-body>
       <b-card-footer>
         <router-link :to="`../gov`">

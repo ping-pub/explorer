@@ -1,5 +1,5 @@
 {
     "chain_name": "cosmos",
-    "api":"https://lcd-cosmoshub.keplr.app",
+    "api":"https://cosmos.api.ping.pub",
     "logo": "https://dl.airtable.com/.attachments/e54f814bba8c0f9af8a3056020210de0/2d1155fb/cosmos-hub.svg"
 }

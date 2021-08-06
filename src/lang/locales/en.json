@@ -5,10 +5,13 @@
   "cosmos": "Cosmos Hub",
   "kava": "Kava",
   "akash": "Akash Decloud",
-  "iris": "Irisnet",
+  "iris": "Iris Hub",
+  "crypto": "Crypto.com",
+  
   "staking": "Staking",
   "governance": "Governance",
   "summary": "Summary",
+  "blocks": "Blocks",
   "blockchains": "Blockchains",
 
   "proposal_id": "Proposal ID",

@@ -8,6 +8,11 @@ const modules = [
   },
   {
     scope: 'normal',
+    title: 'blocks',
+    route: 'blocks',
+  },
+  {
+    scope: 'normal',
     title: 'staking',
     route: 'staking',
   },

@@ -14,7 +14,7 @@
     </h2>
 
     <p class="mb-3">
-      If you want add your chain to our explorer, be free to contact us.
+      If you want to add your chain to our explorer, be free to contact us.
     </p>
 
     <div>

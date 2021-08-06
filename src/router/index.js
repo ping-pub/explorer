@@ -116,7 +116,7 @@ const router = new VueRouter({
       name: 'blocks',
       component: () => import('@/views/Blocks.vue'),
       meta: {
-        pageTitle: 'Block',
+        pageTitle: 'Blocks',
         breadcrumb: [
           {
             text: 'Blocks',
@@ -126,12 +126,16 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/:chain/block/:height',
+      path: '/:chain/blocks/:height',
       name: 'block',
       component: () => import('@/views/Block.vue'),
       meta: {
         pageTitle: 'Block',
         breadcrumb: [
+          {
+            text: 'Blocks',
+            active: true,
+          },
           {
             text: 'Block',
             active: true,
@@ -170,8 +174,16 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/error/chain-not-exists',
+      name: 'chain-404',
+      component: () => import('@/views/error/ChainNotExist.vue'),
+      meta: {
+        layout: 'full',
+      },
+    },
+    {
       path: '*',
-      redirect: 'error-404',
+      redirect: '/error/error-404',
     },
   ],
 })
@@ -192,8 +204,14 @@ router.beforeEach((to, from, next) => {
           store.commit('setup_sdk_version', { chain_name: c, version: version[0] })
         })
     }
+    next()
+  } else if (c) {
+    console.log(from, to, c)
+    // if (c) {
+    next({ name: 'chain-404' })
+  } else {
+    next()
   }
-  next()
 })
 
 // ? For splash screen

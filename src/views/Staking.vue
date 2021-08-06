@@ -25,7 +25,7 @@
         sort-by="tokens"
         striped
         hover
-        responsive="sm"
+        responsive
       >
         <!-- A virtual column -->
         <template #cell(index)="data">

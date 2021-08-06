@@ -2,7 +2,7 @@
   <b-table-simple
     v-if="typeof tablefield === 'object'"
     hover
-    small
+    :small="small"
     striped
     responsive
   >
@@ -24,6 +24,7 @@
       <b-td
         v-else-if="typeof (value) ==='object'"
         hover
+        class="overflow-hidden"
       >
         <b-tabs>
           <b-tab
@@ -45,7 +46,7 @@
         </b-tabs>
       </b-td>
       <b-td v-else>
-        {{ formatText(value) }}
+        {{ value }}
       </b-td>
     </b-tr>
   </b-table-simple>
@@ -72,6 +73,10 @@ export default {
     tablefield: {
       type: [Array, Object],
       default: () => {},
+    },
+    small: {
+      type: Boolean,
+      default: true,
     },
   },
   methods: {
