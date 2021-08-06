@@ -13,7 +13,7 @@
       @click="() => updateGroupOpen(!isOpen)"
     >
       <b-avatar
-        variant="info"
+        variant="transparent"
         :src="item.icon"
         icon="people-fill"
         size="sm"

@@ -28,47 +28,33 @@
           <router-link :to="data.chain_name">
             <b-card
               v-if="data"
-              no-body
-              hover
+              class="earnings-card text-left"
             >
-              <b-card-header>
-                <h4 class="mb-0 text-uppercase">
-                  {{ data.chain_name }}
-                </h4>
-                <b-card-text class="mb-0">
-                  Updated on {{ data.time }}
-                </b-card-text>
-              </b-card-header>
-
-              <b-img
-                :src="data.logo"
-                height="145"
-                class="mb-2"
-              />
-              <b-row class="text-center mx-0">
-                <b-col
-                  cols="6"
-                  class="border-top border-right d-flex align-items-between flex-column py-1"
-                >
-                  <b-card-text class="text-muted mb-0">
-                    SDK Version
-                  </b-card-text>
-                  <h3 class="font-weight-bolder mb-0">
-                    {{ data.sdk_version }}
-                  </h3>
-                </b-col>
-
-                <b-col
-                  cols="6"
-                  class="border-top d-flex align-items-between flex-column py-1"
-                >
-                  <b-card-text class="text-muted mb-0">
+              <b-row>
+                <b-col cols="8">
+                  <b-card-title class="mb-1">
+                    {{ data.chain_name }} <small class="font-small-2">{{ data.sdk_version }}</small>
+                  </b-card-title>
+                  <div class="font-small-2">
                     Height
+                  </div>
+                  <h5 class="mb-1">
+                    {{ data.height || '0' }}
+                  </h5>
+                  <b-card-text class="text-muted font-small-2">
+                    <span> Update on </span><span class="font-weight-bolder">{{ data.time || '...' }}</span>
                   </b-card-text>
-                  <h3 class="font-weight-bolder mb-0">
-                    {{ data.height }}
-                  </h3>
                 </b-col>
+                <b-col
+                  cols="4"
+                >
+                  <b-avatar
+                    :src="data.logo"
+                    class="mt-1"
+                    variant="light-primary"
+                    rounded
+                    size="82"
+                  /></b-col>
               </b-row>
             </b-card>
           </router-link>
@@ -94,7 +80,7 @@
 <script>
 /* eslint-disable global-require */
 import {
-  BLink, BImg, BRow, BCol, BCard, BCardText, BCardHeader,
+  BLink, BAvatar, BRow, BCol, BCard, BCardText, BCardTitle,
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import store from '@/store/index'
@@ -103,12 +89,12 @@ import { toDay } from '@/libs/data'
 export default {
   components: {
     BLink,
-    BImg,
+    BAvatar,
     BRow,
     BCol,
     BCard,
     BCardText,
-    BCardHeader,
+    BCardTitle,
     VuexyLogo,
   },
   data() {

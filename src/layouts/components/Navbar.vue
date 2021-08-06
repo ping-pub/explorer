@@ -24,6 +24,7 @@
       >
         <b-media-aside class="mr-75">
           <b-avatar
+            variant="transparent"
             badge
             rounded
             size="42"
