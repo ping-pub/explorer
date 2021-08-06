@@ -110,7 +110,7 @@ export default {
         })
     })
     this.$http.getSlashingParameters().then(res => {
-      this.slasing = this.normalize(res, 'Slasing Parameters')
+      this.slasing = this.normalize(res, 'Slashing Parameters')
     })
 
     const selected = this.$route.params.chain

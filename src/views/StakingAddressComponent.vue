@@ -20,7 +20,7 @@
           />
         </b-avatar>
       </b-media-aside>
-      <b-media-body>
+      <b-media-body class="text-truncate">
         <h6 class="mb-0">
           Account Address
         </h6>
@@ -43,7 +43,7 @@
           />
         </b-avatar>
       </b-media-aside>
-      <b-media-body>
+      <b-media-body class="text-truncate">
         <h6 class="mb-0">
           Validator Address
         </h6>
@@ -66,7 +66,7 @@
           />
         </b-avatar>
       </b-media-aside>
-      <b-media-body>
+      <b-media-body class="text-truncate">
         <h6 class="mb-0">
           Consensus Public Address
         </h6>
@@ -74,7 +74,7 @@
       </b-media-body>
     </b-media>
     <b-media
-      class="mb-1"
+      class="mb-1 text-truncate"
       no-body
     >
       <b-media-aside class="mr-1">

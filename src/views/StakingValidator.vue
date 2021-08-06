@@ -25,11 +25,13 @@
               </div>
               <div class="d-flex flex-wrap">
                 <b-button
+                  size="sm"
                   variant="primary"
                 >
                   Delegate
                 </b-button>
                 <b-button
+                  size="sm"
                   variant="outline-danger"
                   class="ml-1"
                 >
@@ -40,7 +42,7 @@
           </div>
 
           <!-- User Stats -->
-          <div class="d-flex align-items-center mt-2">
+          <div class="d-flex flex-wrap align-items-center mt-2">
             <div class="d-flex align-items-center mr-2">
               <b-avatar
                 variant="light-primary"
@@ -228,7 +230,7 @@
       <b-row>
         <b-col>
           <b-card title="Uptime">
-            <b-card-body>
+            <b-card-body class="border-top">
               <b-button
                 v-for="(b,i) in blocks"
                 :key="i"

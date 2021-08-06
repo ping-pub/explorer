@@ -122,7 +122,9 @@ export default {
     border-top-style: double;
 }
 #message table.table-hover tr td:hover {
-    border-width: 1px;
+  border-style: solid;
+  border-color: green;
+
     border: double;
     border-radius: 0.5px;
 }
