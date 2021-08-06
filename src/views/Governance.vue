@@ -50,7 +50,7 @@
             {{ p.title }}
           </router-link></b-card-title>
         <b-card-body md="12">
-          <div class="gov-wrapper">
+          <div class="gov-wrapper d-flex flex-wrap">
             <div class="gov">
               <p class="card-text mb-25">
                 Start Date
@@ -72,7 +72,7 @@
                 Deposit
               </p>
               <h6 class="mb-0">
-                {{ p.total_deposit }}
+                {{ p.total_deposit || '-' }}
               </h6>
             </div>
             <div class="gov">
