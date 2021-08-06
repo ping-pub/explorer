@@ -37,7 +37,7 @@
           <h6 class="mb-0 text-uppercase">
             {{ selected_chain.chain_name }}
           </h6>
-          <small v-b-tooltip.hover.bottom="'Data Provider'">{{ selected_chain.api }} {{ selected_chain.sdk_version }}</small>
+          <small v-b-tooltip.hover.bottom="'Data Provider'">{{ selected_chain.api }} ({{ selected_chain.sdk_version || '-' }})</small>
         </b-media-body>
       </b-media>
     </div>

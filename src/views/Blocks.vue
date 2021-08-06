@@ -15,7 +15,7 @@
         sort-by="tokens"
         striped
         hover
-        responsive="sm"
+        responsive
       >
         <!-- Column: Height -->
         <template #cell(height)="data">

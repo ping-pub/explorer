@@ -21,9 +21,9 @@ export function abbr(string, length = 6) {
 
 export function abbrMessage(msg) {
   if (Array.isArray(msg)) {
-    return msg.map(x => abbrMessage(x)).join()
+    return msg.map(x => abbrMessage(x)).join(', ')
   }
-  return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1)
+  return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1).replace('Msg', '')
 }
 
 export function isToken(value) {
