@@ -206,8 +206,6 @@ router.beforeEach((to, from, next) => {
     }
     next()
   } else if (c) {
-    console.log(from, to, c)
-    // if (c) {
     next({ name: 'chain-404' })
   } else {
     next()
