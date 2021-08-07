@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import fetch from 'node-fetch'
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -190,20 +189,12 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const c = to.params.chain
-  const has = Object.keys(store.state.chains.config).findIndex(i => i === c)
-  if (has > -1) {
-    const chain = store.state.chains.config[c]
-    store.commit('select', { chain_name: c })
-    if (chain.sdk_version) {
-      fetch(`${chain.api}/node_info`)
-        .then(res => res.json())
-        .then(json => {
-          const sdk = json.application_version.build_deps.find(e => e.startsWith('github.com/cosmos/cosmos-sdk'))
-          const re = /(\d+(\.\d+)*)/i
-          const version = sdk.match(re)
-          store.commit('setup_sdk_version', { chain_name: c, version: version[0] })
-        })
-    }
+  store.commit('select', { chain_name: c })
+
+  const config = JSON.parse(localStorage.getItem('chains'))
+  console.log(config, c)
+  // const has = Object.keys(config).findIndex(i => i === c)
+  if (!config || Object.keys(config).findIndex(i => i === c) > -1) {
     next()
   } else if (c) {
     next({ name: 'chain-404' })

@@ -27,7 +27,7 @@ async function refetchVersion(chain) {
       const re = /(\d+(\.\d+)*)/i
       const version = sdk.match(re)
       return version[0]
-    })
+    }).catch(() => null)
 }
 
 const chainAPI = class ChainFetch {

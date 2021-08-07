@@ -130,12 +130,6 @@ export default {
           tdClass: 'text-right',
           thClass: 'text-right',
         },
-        {
-          key: 'apr',
-          formatter: (value, i, data) => this.apr(value, i, data),
-          tdClass: 'text-right',
-          thClass: 'text-right',
-        },
         { key: 'operation' },
       ],
     }
@@ -143,9 +137,6 @@ export default {
   created() {
     this.$http.getStakingPool().then(res => {
       this.stakingPool = res
-    })
-    this.$http.getMintingInflation().then(res => {
-      this.mintInflation = res
     })
     this.$http.getStakingParameters().then(res => {
       this.stakingParameters = res
@@ -180,9 +171,6 @@ export default {
     percent,
     tokenFormatter(amount, denom) {
       return formatToken({ amount, denom })
-    },
-    apr(value, i, data) {
-      return `${percent((1 - data.commission.rate) * this.mintInflation)} %`
     },
     rankBadge(data) {
       const { index, item } = data

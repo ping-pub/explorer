@@ -1,10 +1,5 @@
 let chains = {}
 
-const localChains = localStorage.getItem('chains')
-if (localChains) {
-  chains = JSON.parse(localChains)
-}
-
 const configs = require.context('.', false, /\.json$/)
 
 const update = {}
@@ -12,6 +7,13 @@ configs.keys().forEach(k => {
   const c = configs(k)
   update[c.chain_name] = c
 })
+
+const localChains = localStorage.getItem('chains')
+if (localChains) {
+  chains = JSON.parse(localChains)
+} else {
+  chains = update
+}
 
 Object.keys(update).forEach(key => {
   const chain = update[key]
