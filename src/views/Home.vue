@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-center align-items-center">
         <vuexy-logo class="mr-1" />
         <h1
-          class="text-primary display-4 font-weight-bolder"
+          class="text-primary display-4 font-weight-bolder d-none d-md-block"
         >
           Ping Explorer<small class="flow-left">Beta</small>
         </h1>
