@@ -191,7 +191,6 @@ export default {
       } else {
         window.sum += item.tokens
       }
-      console.log(this.stakingPool.bondedToken)
       const rank = window.sum / this.stakingPool.bondedToken
       if (rank < 0.333) {
         return 'danger'
