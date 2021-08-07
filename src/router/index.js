@@ -192,7 +192,6 @@ router.beforeEach((to, from, next) => {
   store.commit('select', { chain_name: c })
 
   const config = JSON.parse(localStorage.getItem('chains'))
-  console.log(config, c)
   // const has = Object.keys(config).findIndex(i => i === c)
   if (!config || Object.keys(config).findIndex(i => i === c) > -1) {
     next()
