@@ -1,0 +1,6 @@
+{
+    "chain_name": "okexchain",
+    "api": "https://exchainrpc.okex.org/okexchain/v1",
+    "logo": "https://dl.airtable.com/.attachments/4620a173477efece7f459a3d6fc770c0/9f6618ad/OKexchain.svg",
+    "unload_module": ["minting", "slashing"]
+}

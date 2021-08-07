@@ -26,6 +26,14 @@ export function abbrMessage(msg) {
   return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1).replace('Msg', '')
 }
 
+export function isStringArray(value) {
+  let is = false
+  if (Array.isArray(value)) {
+    is = value.findIndex(x => typeof x === 'string') > -1
+  }
+  return is
+}
+
 export function isToken(value) {
   let is = false
   if (Array.isArray(value)) {
@@ -41,11 +49,11 @@ export function formatToken(token) {
       denom = denom.substring(1)
       const amount = token.amount / 1000000
       if (amount > 10) {
-        return `${amount.toFixed()} ${denom}`
+        return `${parseFloat(amount.toFixed())} ${denom}`
       }
-      return `${amount} ${denom}`
+      return `${parseFloat(amount)} ${denom}`
     }
-    return `${token.amount} ${denom}`
+    return `${parseFloat(token.amount)} ${denom}`
   }
   return token
 }

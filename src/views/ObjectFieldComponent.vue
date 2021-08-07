@@ -18,6 +18,9 @@
       <b-td v-if="isTokenField(value)">
         {{ formatTokens( value ) }}
       </b-td>
+      <b-td v-else-if="isArrayText(value)">
+        {{ value.join(', ') }}
+      </b-td>
       <b-td v-else-if="Array.isArray(value)">
         <array-field-component :tablefield="value" />
       </b-td>
@@ -56,7 +59,9 @@
 import {
   BTableSimple, BTr, BTd, BTabs, BTab,
 } from 'bootstrap-vue'
-import { abbr, isToken, tokenFormatter } from '@/libs/data'
+import {
+  abbr, isStringArray, isToken, tokenFormatter,
+} from '@/libs/data'
 import ArrayFieldComponent from './ArrayFieldComponent.vue'
 
 export default {
@@ -94,6 +99,9 @@ export default {
     },
     isTokenField(value) {
       return isToken(value)
+    },
+    isArrayText(value) {
+      return isStringArray(value)
     },
     formatTokens(value) {
       return tokenFormatter(value)

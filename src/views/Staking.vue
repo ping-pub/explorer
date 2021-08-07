@@ -67,10 +67,14 @@
         </template>
         <!-- Token -->
         <template #cell(tokens)="data">
-          <div class="d-flex flex-column">
+          <div
+            v-if="data.item.tokens > 0"
+            class="d-flex flex-column"
+          >
             <span class="font-weight-bold mb-0">{{ tokenFormatter(data.item.tokens, stakingParameters.bond_denom) }}</span>
             <span class="font-small-2 text-muted text-nowrap">{{ percent(data.item.tokens/stakingPool.bondedToken) }}%</span>
           </div>
+          <span v-else>{{ data.item.delegator_shares }}</span>
         </template>
       </b-table>
     </b-card>
@@ -187,6 +191,7 @@ export default {
       } else {
         window.sum += item.tokens
       }
+      console.log(this.stakingPool.bondedToken)
       const rank = window.sum / this.stakingPool.bondedToken
       if (rank < 0.333) {
         return 'danger'

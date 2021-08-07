@@ -114,7 +114,7 @@
                 <span class="font-weight-bold">Identity</span>
               </th>
               <td class="pb-50">
-                {{ validator.description.identity }}
+                {{ validator.description.identity || '-' }}
               </td>
             </tr>
             <tr>
@@ -138,7 +138,7 @@
                 <span class="font-weight-bold">Unbond Height</span>
               </th>
               <td class="pb-50 text-capitalize">
-                {{ validator.unbonding_height }}
+                {{ validator.unbonding_height || '-' }}
               </td>
             </tr>
             <tr>
@@ -162,7 +162,7 @@
                 <span class="font-weight-bold">Min Self Delegation</span>
               </th>
               <td class="pb-50">
-                {{ validator.min_self_delegation }}
+                {{ parseFloat(validator.min_self_delegation) }}
               </td>
             </tr>
             <tr>
@@ -174,7 +174,7 @@
                 <span class="font-weight-bold">Jailed</span>
               </th>
               <td class="pb-50">
-                {{ validator.jailed }}
+                {{ validator.jailed || '-' }}
               </td>
             </tr>
             <tr>
@@ -186,7 +186,7 @@
                 <span class="font-weight-bold">Contact</span>
               </th>
               <td>
-                {{ validator.security_contact }}
+                {{ validator.security_contact || '-' }}
               </td>
             </tr>
           </table>

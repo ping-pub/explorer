@@ -7,14 +7,22 @@ export default class StakingParameters {
     this.bond_denom = ''
   }
 
-  init(element) {
+  static create(element, chain = '') {
+    const self = new StakingParameters()
     if (element != null) {
-      this.max_entries = Number(element.max_entries)
-      this.historical_entries = Number(element.historical_entries)
-      this.unbonding_time = element.unbonding_time
-      this.max_validators = Number(element.max_validators)
-      this.bond_denom = element.bond_denom
+      if (chain === 'okexchain') {
+        // self = element
+        self.unbonding_time = element.unbonding_time
+        self.max_validators = Number(element.max_bonded_validators)
+        self.bond_denom = 'OKT'
+      } else {
+        self.max_entries = Number(element.max_entries)
+        self.historical_entries = Number(element.historical_entries)
+        self.unbonding_time = element.unbonding_time
+        self.max_validators = Number(element.max_validators)
+        self.bond_denom = element.bond_denom
+      }
     }
-    return this
+    return self
   }
 }

@@ -77,7 +77,7 @@ export default {
       },
       slasing: {
         title: 'Slasing Parameters',
-        items: [],
+        items: null,
       },
       mint: {
         title: 'Mint Parameters',
@@ -145,6 +145,7 @@ export default {
   },
   methods: {
     normalize(data, title) {
+      if (!data) return null
       const items = this.makeItems(data)
       return {
         title,

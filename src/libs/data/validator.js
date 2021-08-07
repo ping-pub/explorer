@@ -24,7 +24,7 @@ export default class Validator {
     this.jailed = element.jailed
     this.status = element.status
     this.tokens = Number(element.tokens)
-    this.delegator_shares = element.delegator_shares
+    this.delegator_shares = Number(element.delegator_shares)
     this.description = new ValidatorDescription().init(element.description)
     this.bond_height = Number(element.bond_height)
     this.bond_intra_tx_counter = element.bond_intra_tx_counter

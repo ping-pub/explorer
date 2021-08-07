@@ -7,7 +7,10 @@ import {
 } from './data'
 
 function commonProcess(res) {
-  return res.result
+  if (res && Object.keys(res).includes('result')) {
+    return res.result
+  }
+  return res
 }
 
 // 头像
@@ -39,6 +42,13 @@ const chainAPI = class ChainFetch {
     }
     this.config = chain
     return this.config
+  }
+
+  isModuleLoaded(name) {
+    if (this.config.unload_module) {
+      return !this.config.unload_module.includes(name)
+    }
+    return true
   }
 
   async getLatestBlock() {
@@ -82,11 +92,17 @@ const chainAPI = class ChainFetch {
   }
 
   async getMintingInflation() {
-    return this.get('/minting/inflation').then(data => Number(commonProcess(data)))
+    if (this.isModuleLoaded('minting')) {
+      return this.get('/minting/inflation').then(data => Number(commonProcess(data)))
+    }
+    return null
   }
 
   async getStakingParameters() {
-    return this.get('/staking/parameters').then(data => new StakingParameters().init(commonProcess(data)))
+    return this.get('/staking/parameters').then(data => {
+      this.getSelectedConfig()
+      return StakingParameters.create(commonProcess(data), this.config.chain_name)
+    })
   }
 
   async getValidatorList() {
@@ -98,11 +114,17 @@ const chainAPI = class ChainFetch {
   }
 
   async getSlashingParameters() {
-    return this.get('/slashing/parameters').then(data => commonProcess(data))
+    if (this.isModuleLoaded('slashing')) {
+      return this.get('/slashing/parameters').then(data => commonProcess(data))
+    }
+    return null
   }
 
   async getMintParameters() {
-    return this.get('/minting/parameters').then(data => commonProcess(data))
+    if (this.isModuleLoaded('minting')) {
+      return this.get('/minting/parameters').then(data => commonProcess(data))
+    }
+    return null
   }
 
   async getDistributionParameters() {
