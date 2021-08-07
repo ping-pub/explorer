@@ -108,7 +108,6 @@ export default {
   },
   beforeRouteUpdate(to, from, next) {
     const { hash } = to.params
-    console.log(hash !== from.params.hash, hash, from.params)
     if (hash !== from.params.hash) {
       this.$http.getTxs(hash).then(res => {
         this.tx = res
