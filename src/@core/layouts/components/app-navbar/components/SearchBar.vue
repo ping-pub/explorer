@@ -30,10 +30,11 @@
         placeholder="Search Height/Transaction/Address"
         autofocus
         autocomplete="off"
+        @keyup.enter="doQuery"
       />
       <div
         class="search-input-close"
-        @click="showSearchBar = false; resetsearchQuery()"
+        @click="showSearchBar = false;"
       >
         <feather-icon icon="XIcon" />
       </div>
@@ -45,7 +46,7 @@
 import { BFormInput } from 'bootstrap-vue'
 import { ref } from '@vue/composition-api'
 import { title } from '@core/utils/filter'
-import searchAndBookmarkData from '../search-and-bookmark-data'
+import store from '@/store'
 
 export default {
   components: {
@@ -61,9 +62,33 @@ export default {
     return {
       showSearchBar,
       perfectScrollbarSettings,
-      searchAndBookmarkData,
       title,
     }
+  },
+  data() {
+    return {
+      searchQuery: null,
+    }
+  },
+  methods: {
+    doQuery() {
+      const height = /^\d+$/
+      const txhash = /^[A-Z\d]{64}$/
+      const addr = /^[a-z]{2,6}1[a-z\d]{38}$/
+      const key = this.searchQuery
+
+      const c = store.state.chains.selected
+      if (!Object.values(this.$route.params).includes(key)) {
+        if (height.test(key)) {
+          this.$router.push({ name: 'block', params: { chain: c.chain_name, height: key } })
+        } else if (txhash.test(key)) {
+          this.$router.push({ name: 'transaction', params: { chain: c.chain_name, hash: key } })
+        } else if (addr.test(key)) {
+          // console.log('address', key)
+        }
+      }
+      // this.$router.push('/')
+    },
   },
 }
 </script>

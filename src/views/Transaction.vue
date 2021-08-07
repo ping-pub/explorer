@@ -25,7 +25,10 @@
         <b-tr>
           <b-td>
             {{ 'height' }}
-          </b-td><b-td>{{ tx.height }}</b-td>
+          </b-td><b-td>
+            <router-link :to="`../blocks/${tx.height}`">
+              {{ tx.height }}
+            </router-link></b-td>
         </b-tr>
         <b-tr>
           <b-td>
@@ -101,6 +104,16 @@ export default {
   data() {
     return {
       tx: { tx: {} },
+    }
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { hash } = to.params
+    console.log(hash !== from.params.hash, hash, from.params)
+    if (hash !== from.params.hash) {
+      this.$http.getTxs(hash).then(res => {
+        this.tx = res
+      })
+      next()
     }
   },
   created() {

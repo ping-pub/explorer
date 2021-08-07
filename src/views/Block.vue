@@ -66,24 +66,36 @@ export default {
       ],
     }
   },
+  beforeRouteUpdate(to, from, next) {
+    const { height } = to.params
+    if (height > 0 && height !== from.params.height) {
+      this.initData(height)
+      next()
+    }
+  },
   created() {
     const { height } = this.$route.params
-    this.$http.getBlockByHeight(height).then(res => {
-      this.block = res
-      const { txs } = res.block.data
-      const array = []
-      for (let i = 0; i <= txs.length; i += 1) {
-        try {
-          const origin = decodeTxRaw(fromBase64(txs[i]))
-          const tx = Tx.create(origin)
-          tx.setHash(txs[i])
-          array.push(tx)
-        } catch (e) {
+    this.initData(height)
+  },
+  methods: {
+    initData(height) {
+      this.$http.getBlockByHeight(height).then(res => {
+        this.block = res
+        const { txs } = res.block.data
+        const array = []
+        for (let i = 0; i <= txs.length; i += 1) {
+          try {
+            const origin = decodeTxRaw(fromBase64(txs[i]))
+            const tx = Tx.create(origin)
+            tx.setHash(txs[i])
+            array.push(tx)
+          } catch (e) {
           // catch errors
+          }
         }
-      }
-      if (array.length > 0) this.txs = array
-    })
+        if (array.length > 0) this.txs = array
+      })
+    },
   },
 }
 </script>
