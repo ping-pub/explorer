@@ -191,7 +191,6 @@ export default {
   data() {
     return {
       proposals: [new Proposal()],
-      values: [15, 50, 10, 5],
       max: 1,
     }
   },
