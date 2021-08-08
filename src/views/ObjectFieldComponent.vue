@@ -21,6 +21,9 @@
       <b-td v-else-if="isArrayText(value)">
         {{ value.join(', ') }}
       </b-td>
+      <b-td v-else-if="isHex(value)">
+        {{ formatHexAddress(value) }}
+      </b-td>
       <b-td v-else-if="Array.isArray(value)">
         <array-field-component :tablefield="value" />
       </b-td>
@@ -60,7 +63,7 @@ import {
   BTableSimple, BTr, BTd, BTabs, BTab,
 } from 'bootstrap-vue'
 import {
-  abbr, isStringArray, isToken, tokenFormatter,
+  abbr, getStakingValidatorByHex, isHexAddress, isStringArray, isToken, tokenFormatter,
 } from '@/libs/data'
 import ArrayFieldComponent from './ArrayFieldComponent.vue'
 
@@ -99,6 +102,12 @@ export default {
     },
     isTokenField(value) {
       return isToken(value)
+    },
+    isHex(value) {
+      return isHexAddress(value)
+    },
+    formatHexAddress(v) {
+      return getStakingValidatorByHex(this.$http.config.chain_name, v)
     },
     isArrayText(value) {
       return isStringArray(value)

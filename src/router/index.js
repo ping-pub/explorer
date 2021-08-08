@@ -95,7 +95,7 @@ const router = new VueRouter({
     {
       path: '/:chain/gov/:proposalid',
       name: 'proposal',
-      component: () => import('@/views/ProposalView.vue'),
+      component: () => import('@/views/GovernanceProposalView.vue'),
       meta: {
         pageTitle: 'Governance',
         breadcrumb: [

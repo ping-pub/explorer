@@ -106,7 +106,11 @@ const chainAPI = class ChainFetch {
   }
 
   async getValidatorList() {
-    return this.get('/staking/validators').then(data => commonProcess(data).map(i => new Validator().init(i)))
+    return this.get('/staking/validators').then(data => {
+      const vals = commonProcess(data).map(i => new Validator().init(i))
+      localStorage.setItem(`validators-${this.config.chain_name}`, JSON.stringify(vals))
+      return vals
+    })
   }
 
   async getStakingValidator(address) {

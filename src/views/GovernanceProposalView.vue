@@ -48,7 +48,7 @@
           <b-tr>
             <b-td>
               {{ $t('proposal_proposer') }}
-            </b-td><b-td>{{ proposer.proposer }} </b-td>
+            </b-td><b-td>{{ formatAddress(proposer.proposer) }} </b-td>
           </b-tr>
           <b-tr>
             <b-td>
@@ -202,7 +202,7 @@ import {
 } from 'bootstrap-vue'
 // import fetch from 'node-fetch'
 
-import { tokenFormatter } from '@/libs/data/data'
+import { getCachedValidators, getStakingValidatorByAccount, tokenFormatter } from '@/libs/data/data'
 import { Proposal, Proposer } from '@/libs/data'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
 // import { formatToken } from '@/libs/data/data'
@@ -232,7 +232,11 @@ export default {
       deposits: [],
       votes: [],
       votes_fields: [
-        { key: 'voter', sortable: true },
+        {
+          key: 'voter',
+          sortable: true,
+          formatter: v => this.formatAddress(v),
+        },
         {
           key: 'option',
           sortable: true,
@@ -253,7 +257,10 @@ export default {
         },
       ],
       deposit_fields: [
-        'depositor',
+        {
+          key: 'depositor',
+          formatter: v => this.formatAddress(v),
+        },
         {
           key: 'amount',
           sortable: true,
@@ -273,6 +280,10 @@ export default {
       this.proposal = p
     })
 
+    if (!getCachedValidators()) {
+      this.$http.getValidatorList()
+    }
+
     this.$http.getGovernanceProposer(pid).then(res => {
       this.proposer = res
     })
@@ -283,46 +294,11 @@ export default {
       this.votes = res
     })
   },
-
-  // asyncComputed: {
-  //   proposal: {
-  //     get() {
-  //       const pid = this.$route.params.proposalid
-  //       // const api = new ChainAPI(this.$route)
-  //       return this.$http.getGovernance(pid).then(p => {
-  //         if (p.status === 2) {
-  //           this.$http.getGovernanceTally(pid, 0).then(t => p.updateTally(t)).catch(e => console.log('failed on update voting tally:', e))
-  //         }
-  //         return p
-  //       })
-  //     },
-  //     default: new Proposal(),
-  //   },
-  //   proposer: {
-  //     get() {
-  //       const pid = this.$route.params.proposalid
-  //       // const api = new ChainAPI(this.$route)
-  //       return this.$http.getGovernanceProposer(pid)
-  //     },
-  //     default: new Proposer(),
-  //   },
-  //   deposits: {
-  //     get() {
-  //       const pid = this.$route.params.proposalid
-  //       // const api = new ChainAPI(this.$route)
-  //       return this.$http.getGovernanceDeposits(pid)
-  //     },
-  //     default: [],
-  //   },
-  //   votes: {
-  //     get() {
-  //       const pid = this.$route.params.proposalid
-  //       // const api = new ChainAPI(this.$route)
-  //       return this.$http.getGovernanceVotes(pid)
-  //     },
-  //     default: [],
-  //   },
-  // },
+  methods: {
+    formatAddress(v) {
+      return getStakingValidatorByAccount(this.$http.config.chain_name, v)
+    },
+  },
 }
 </script>
 

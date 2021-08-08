@@ -30,7 +30,7 @@
           {{ formatTime(data.item.block.header.time) }}
         </template>
         <template #cell(proposer)="data">
-          {{ data.item.block.header.proposer_address }}
+          {{ formatProposer(data.item.block.header.proposer_address) }}
         </template>
         <template #cell(txs)="data">
           {{ length(data.item.block.data.txs) }}
@@ -46,6 +46,8 @@ import {
   BTable, BCard, BCardHeader, BCardTitle, VBTooltip,
 } from 'bootstrap-vue'
 import {
+  getCachedValidators,
+  getStakingValidatorByHex,
   toDay,
 } from '@/libs/data'
 // import fetch from 'node-fetch'
@@ -101,6 +103,10 @@ export default {
         list.push(height - i)
       }
 
+      if (!getCachedValidators()) {
+        this.$http.getValidatorList()
+      }
+
       let promise = Promise.resolve()
       list.forEach(item => {
         promise = promise.then(() => new Promise(resolve => {
@@ -120,6 +126,9 @@ export default {
   methods: {
     length: v => (Array.isArray(v) ? v.length : 0),
     formatTime: v => toDay(v, 'time'),
+    formatProposer(v) {
+      return getStakingValidatorByHex(this.$http.config.chain_name, v)
+    },
     fetch() {
       this.$http.getLatestBlock().then(b => {
         const has = this.blocks.findIndex(x => x.block.header.height === b.block.header.height)

@@ -8,9 +8,9 @@ import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import localeData from 'dayjs/plugin/localeData'
 
+dayjs.extend(localeData)
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
-dayjs.extend(localeData)
 
 export function toDuration(value) {
   return dayjs.duration(value).humanize()
@@ -39,9 +39,16 @@ export function percent(num) {
   return parseFloat((num * 100).toFixed(2))
 }
 
-export function abbr(string, length = 6) {
+export function abbr(string, length = 6, suffix = '...') {
   if (string && string.length > length) {
-    return `${string.substring(0, length)}...`
+    return `${string.substring(0, length)}${suffix}`
+  }
+  return string
+}
+
+export function abbrRight(string, length = 6, suffix = '...') {
+  if (string && string.length > length) {
+    return `${string.substring(string.length - length)}${suffix}`
   }
   return string
 }
@@ -105,6 +112,9 @@ export function tokenFormatter(tokens) {
 
 export function operatorAddressToAccount(operAddress) {
   const { prefix, data } = Bech32.decode(operAddress)
+  if (prefix === 'iva') { // handle special cases
+    return Bech32.encode('iaa', data)
+  }
   return Bech32.encode(prefix.replace('valoper', ''), data)
 }
 
@@ -117,6 +127,38 @@ export function consensusPubkeyToHexAddress(consensusPubkey) {
   }
   const address = toHex(sha256(fromHex(raw))).slice(0, 40).toUpperCase()
   return address
+}
+
+export function getCachedValidators(chainName) {
+  const locals = localStorage.getItem(`validators-${chainName}`)
+  return locals
+}
+
+export function isHexAddress(v) {
+  const re = /^[A-Z\d]{40}$/
+  return re.test(v)
+}
+
+export function getStakingValidatorByHex(chainName, hex) {
+  const locals = localStorage.getItem(`validators-${chainName}`)
+  if (locals) {
+    const val = JSON.parse(locals).find(x => consensusPubkeyToHexAddress(x.consensus_pubkey) === hex)
+    if (val) {
+      return val.description.moniker
+    }
+  }
+  return abbr(hex)
+}
+
+export function getStakingValidatorByAccount(chainName, addr) {
+  const locals = localStorage.getItem(`validators-${chainName}`)
+  if (locals) {
+    const val = JSON.parse(locals).find(x => operatorAddressToAccount(x.operator_address) === addr)
+    if (val) {
+      return val.description.moniker
+    }
+  }
+  return addr
 }
 
 export * from 'compare-versions'

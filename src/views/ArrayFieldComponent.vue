@@ -8,6 +8,7 @@
   >
     <template #cell()="data">
       <span v-if="isTokenField(data.value)">{{ formatTokens(data.value) }}</span>
+      <span v-else-if="isHex(data.value)">{{ formatHexAddress(data.value) }}</span>
       <array-field-component
         v-else-if="isArrayText(data.value)"
         :tablefield="eval_value(data.value)"
@@ -25,7 +26,7 @@ import { BTable } from 'bootstrap-vue'
 // import fetch from 'node-fetch'
 
 import {
-  abbr, isToken, toDay, tokenFormatter,
+  abbr, getStakingValidatorByHex, isHexAddress, isToken, toDay, tokenFormatter,
 } from '@/libs/data/data'
 // import { Proposal, Proposer } from '@/libs/data'
 // import { formatToken } from '@/libs/data/data'
@@ -64,6 +65,12 @@ export default {
     },
     formatTokens(value) {
       return tokenFormatter(value)
+    },
+    isHex(value) {
+      return isHexAddress(value)
+    },
+    formatHexAddress(v) {
+      return getStakingValidatorByHex(this.$http.config.chain_name, v)
     },
   },
 }
