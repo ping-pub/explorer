@@ -71,7 +71,7 @@
                 {{ item.title || '-' }}
               </h4>
               <b-card-text class="font-small-3 mb-1 text-capitalize">
-                {{ formatText(item.subtitle) }}
+                {{ item.subtitle }}
               </b-card-text>
             </b-media-body>
           </b-media>
@@ -111,9 +111,6 @@ export default {
       type: [Object, Array],
       default: () => {},
     },
-  },
-  methods: {
-    formatText: v => String(v).replaceAll('_', ' '),
   },
 }
 </script>
