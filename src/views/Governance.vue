@@ -236,15 +236,12 @@ section {
     justify-content:center;
     align-items:center;
 }
-.gov-wrapper .gov:not(:last-child) {
-    margin-right: .7rem;
-}
 .dark-layout .gov-wrapper .gov {
     background-color: #161d31;
 }
 .gov-wrapper .gov {
     padding: .5rem;
-    margin-bottom: .7rem;
+    margin: .3rem;
     text-align: center;
     background-color: #f8f8f8;
     border-radius: .357rem;
