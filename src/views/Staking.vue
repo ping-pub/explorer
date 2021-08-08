@@ -4,7 +4,7 @@
       no-body
     >
       <b-card-header class="d-flex justify-content-between">
-        <small>
+        <small class="d-none d-md-block">
           <b-badge variant="danger">
               &nbsp;
           </b-badge>
@@ -25,7 +25,8 @@
         sort-by="tokens"
         striped
         hover
-        responsive
+        responsive="sm"
+        class="text-nowrap"
       >
         <!-- A virtual column -->
         <template #cell(index)="data">
@@ -37,7 +38,7 @@
         </template>
         <!-- Column: Validator -->
         <template #cell(description)="data">
-          <b-media vertical-align="center">
+          <b-media vertical-align="center d-none d-md-block">
             <template #aside>
               <b-avatar
                 v-if="data.item.avatar"
@@ -113,7 +114,10 @@ export default {
       validators: [new Validator()],
       delegations: [new Validator()],
       validator_fields: [
-        { key: 'index', label: '#' },
+        {
+          key: 'index',
+          label: '#',
+        },
         { key: 'description', label: 'Validator', sortable: true },
         {
           key: 'tokens',
@@ -130,7 +134,10 @@ export default {
           tdClass: 'text-right',
           thClass: 'text-right',
         },
-        { key: 'operation' },
+        {
+          key: 'operation',
+          label: '',
+        },
       ],
     }
   },
