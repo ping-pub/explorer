@@ -20,11 +20,11 @@
         <!-- Column: Height -->
         <template #cell(height)="data">
           <router-link :to="`./blocks/${data.item.block.header.height}`">
-            #{{ data.item.block.header.height }}
+            {{ data.item.block.header.height }}
           </router-link>
         </template>
         <template #cell(hash)="data">
-          {{ data.item.block_id.hash }}
+          <small>{{ data.item.block_id.hash }}</small>
         </template>
         <template #cell(time)="data">
           {{ formatTime(data.item.block.header.time) }}
@@ -65,10 +65,14 @@ export default {
       islive: true,
       blocks: [],
       list_fields: [
-        { key: 'height', sortable: true },
+        {
+          key: 'height',
+          sortable: true,
+        },
         {
           key: 'hash',
-          tdClass: 'text-truncate',
+          thClass: 'd-none d-lg-block',
+          tdClass: 'd-none d-lg-block',
         },
         {
           key: 'proposer',
@@ -80,7 +84,11 @@ export default {
           tdClass: 'text-right',
           thClass: 'text-right',
         },
-        { key: 'time' },
+        {
+          key: 'time',
+          thClass: 'd-none d-md-block',
+          tdClass: 'd-none d-md-block',
+        },
       ],
     }
   },
@@ -111,7 +119,7 @@ export default {
   },
   methods: {
     length: v => (Array.isArray(v) ? v.length : 0),
-    formatTime: v => toDay(v),
+    formatTime: v => toDay(v, 'time'),
     fetch() {
       this.$http.getLatestBlock().then(b => {
         const has = this.blocks.findIndex(x => x.block.header.height === b.block.header.height)

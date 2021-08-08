@@ -3,6 +3,7 @@ import StdTx from './stdtx'
 
 export default class WrapStdTx {
   constructor() {
+    this.std = true
     this.code = 0
     this.txhash = ''
     this.data = ''
@@ -19,14 +20,19 @@ export default class WrapStdTx {
   static create(element, version = '0.40') {
     const self = new WrapStdTx()
     if (compareVersions(version, '0.40') < 1) {
-      self.txhash = element.txhash
-      self.data = element.data
-      self.gas_used = element.gas_used
-      self.gas_wanted = element.gas_wanted
-      self.height = Number(element.height)
-      self.logs = element.logs
-      self.timestamp = element.timestamp
-      self.tx = StdTx.create(element.tx)
+      if (element.txhash) {
+        self.txhash = element.txhash
+        self.data = element.data
+        self.gas_used = element.gas_used
+        self.gas_wanted = element.gas_wanted
+        self.height = Number(element.height)
+        self.logs = element.logs
+        self.timestamp = element.timestamp
+        self.tx = StdTx.create(element.tx)
+      } else {
+        self.std = false
+        self.raw = element
+      }
     } else {
       self.code = element.tx_response.code
       self.txhash = element.tx_response.txhash

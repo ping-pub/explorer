@@ -82,16 +82,18 @@ export default {
       this.$http.getBlockByHeight(height).then(res => {
         this.block = res
         const { txs } = res.block.data
+        if (txs === null) return
         const array = []
-        for (let i = 0; i <= txs.length; i += 1) {
+        for (let i = 0; i < txs.length; i += 1) {
+          let tx = new Tx()
           try {
             const origin = decodeTxRaw(fromBase64(txs[i]))
-            const tx = Tx.create(origin)
-            tx.setHash(txs[i])
-            array.push(tx)
+            tx = Tx.create(origin)
           } catch (e) {
-          // catch errors
+            // catch errors
           }
+          tx.setHash(txs[i])
+          array.push(tx)
         }
         if (array.length > 0) this.txs = array
       })

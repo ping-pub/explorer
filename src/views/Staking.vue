@@ -3,19 +3,19 @@
     <b-card
       no-body
     >
-      <b-card-header>
+      <b-card-header class="d-flex justify-content-between">
+        <small>
+          <b-badge variant="danger">
+              &nbsp;
+          </b-badge>
+          Top 33%
+          <b-badge variant="warning">
+              &nbsp;
+          </b-badge>
+          Top 67% of Voting Power
+        </small>
         <b-card-title>
-          Validators (Max:{{ stakingParameters.max_validators }})
-          <small class="text-muted">
-            <b-badge variant="danger">
-              &nbsp;
-            </b-badge>
-            Top 33%
-            <b-badge variant="warning">
-              &nbsp;
-            </b-badge>
-            Top 67% of Voting Power
-          </small>
+          <span><small> {{ validators.length }}/{{ stakingParameters.max_validators }}</small> Validators</span>
         </b-card-title>
       </b-card-header>
       <b-table
@@ -108,7 +108,7 @@ export default {
     return {
       islive: true,
       mintInflation: 0,
-      stakingPool: {},
+      stakingPool: 1,
       stakingParameters: new StakingParameters(),
       validators: [new Validator()],
       delegations: [new Validator()],
@@ -135,16 +135,15 @@ export default {
     }
   },
   created() {
-    this.$http.getStakingPool().then(res => {
-      this.stakingPool = res
-    })
     this.$http.getStakingParameters().then(res => {
       this.stakingParameters = res
     })
     this.$http.getValidatorList().then(res => {
       const identities = []
       const temp = res
+      let total = 0
       for (let i = 0; i < temp.length; i += 1) {
+        total += temp[i].tokens
         const { identity } = temp[i].description
         const url = this.$store.getters['chains/getAvatarById'](identity)
         if (url) {
@@ -153,6 +152,7 @@ export default {
           identities.push(identity)
         }
       }
+      this.stakingPool = total
       this.validators = temp
 
       // fetch avatar from keybase
@@ -179,7 +179,7 @@ export default {
       } else {
         window.sum += item.tokens
       }
-      const rank = window.sum / this.stakingPool.bondedToken
+      const rank = window.sum / this.stakingPool
       if (rank < 0.333) {
         return 'danger'
       }

@@ -250,7 +250,4 @@ section {
     border-radius: .357rem;
 }
 
-.gov-wrapper .gov {
-    width: 9.8rem;
-}
 </style>

@@ -1,11 +1,29 @@
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import {
   Bech32, fromBase64, fromHex, toHex,
 } from '@cosmjs/encoding'
 import { sha256 } from '@cosmjs/crypto'
 
-export function toDay(time) {
-  return dayjs(time).format('YYYY-MM-DD HH:mm')
+dayjs.extend(relativeTime)
+
+export function toDay(time, format = 'long') {
+  if (format === 'long') {
+    return dayjs(time).format('YYYY-MM-DD HH:mm')
+  }
+  if (format === 'date') {
+    return dayjs(time).format('YYYY-MM-DD')
+  }
+  if (format === 'time') {
+    return dayjs(time).format('HH:mm:ss')
+  }
+  if (format === 'from') {
+    return dayjs(time).fromNow()
+  }
+  if (format === 'to') {
+    return dayjs(time).toNow()
+  }
+  return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
 }
 
 export function percent(num) {

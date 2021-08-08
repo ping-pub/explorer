@@ -7,7 +7,7 @@ export default class StdTx {
     this.fee = [new Token()]
     this.gas = 0
     this.memo = ''
-    this.messages = []
+    this.messages = null
     this.signatures = []
     this.timeout_height = 0
   }

@@ -1,7 +1,11 @@
 <template>
   <div>
     <b-card title="Baisc">
-      <b-table-simple>
+      <object-field-component
+        v-if="!tx.std"
+        :tablefield="tx.raw"
+      />
+      <b-table-simple v-else>
         <b-tr>
           <b-td style="width:200px">
             {{ 'txhash' }}
