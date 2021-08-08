@@ -72,7 +72,7 @@
             class="d-flex flex-column"
           >
             <span class="font-weight-bold mb-0">{{ tokenFormatter(data.item.tokens, stakingParameters.bond_denom) }}</span>
-            <span class="font-small-2 text-muted text-nowrap">{{ percent(data.item.tokens/stakingPool.bondedToken) }}%</span>
+            <span class="font-small-2 text-muted text-nowrap">{{ percent(data.item.tokens/stakingPool) }}%</span>
           </div>
           <span v-else>{{ data.item.delegator_shares }}</span>
         </template>
