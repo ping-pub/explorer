@@ -43,7 +43,7 @@
                     {{ data.height || '0' }}
                   </h5>
                   <b-card-text class="text-muted font-small-2">
-                    <span> Update on </span><span class="font-weight-bolder">{{ data.time || '...' }}</span>
+                    <span> Updated on </span><span class="font-weight-bolder">{{ data.time || '...' }}</span>
                   </b-card-text>
                 </b-col>
                 <b-col
