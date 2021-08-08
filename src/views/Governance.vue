@@ -242,6 +242,7 @@ section {
 .gov-wrapper .gov {
     padding: .5rem;
     margin: .3rem;
+    min-width: 8rem;
     text-align: center;
     background-color: #f8f8f8;
     border-radius: .357rem;

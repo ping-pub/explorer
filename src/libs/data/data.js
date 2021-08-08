@@ -1,11 +1,20 @@
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
 import {
   Bech32, fromBase64, fromHex, toHex,
 } from '@cosmjs/encoding'
 import { sha256 } from '@cosmjs/crypto'
 
+import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import localeData from 'dayjs/plugin/localeData'
+
+dayjs.extend(duration)
 dayjs.extend(relativeTime)
+dayjs.extend(localeData)
+
+export function toDuration(value) {
+  return dayjs.duration(value).humanize()
+}
 
 export function toDay(time, format = 'long') {
   if (format === 'long') {

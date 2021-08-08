@@ -15,7 +15,7 @@
           Top 67% of Voting Power
         </small>
         <b-card-title>
-          <span>Validators<small> {{ validators.length }}/{{ stakingParameters.max_validators }}</small> </span>
+          <span>Validators {{ validators.length }}/{{ stakingParameters.max_validators }} </span>
         </b-card-title>
       </b-card-header>
       <b-table

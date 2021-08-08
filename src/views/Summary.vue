@@ -36,18 +36,10 @@
 <script>
 import { BRow, BCol } from 'bootstrap-vue'
 import {
-  formatNumber, isToken, percent, tokenFormatter,
+  formatNumber, isToken, percent, toDuration, tokenFormatter,
 } from '@/libs/data'
-import dayjs from 'dayjs'
-import duration from 'dayjs/plugin/duration'
-import relativeTime from 'dayjs/plugin/relativeTime'
 
-import localeData from 'dayjs/plugin/localeData'
 import SummaryParmetersComponent from './SummaryParmetersComponent.vue'
-
-dayjs.extend(duration)
-dayjs.extend(relativeTime)
-dayjs.extend(localeData)
 
 export default {
   components: {
@@ -162,7 +154,7 @@ export default {
           return { title: `${percent(d)}%`, subtitle: k }
         }
         if (d > 1000000000) {
-          return { title: `${dayjs.duration(d / 1000000).humanize()}`, subtitle: k }
+          return { title: `${toDuration(d / 1000000)}`, subtitle: k }
         }
         return { title: data[k], subtitle: k }
       })
