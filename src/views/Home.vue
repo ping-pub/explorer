@@ -1,5 +1,13 @@
 <template>
   <div class="text-center container-lg">
+    <b-nav
+      align="right"
+      style="width:100%"
+      class="nav text-right text-nowrap ml-auto"
+    >
+      <b-nav-item><dark-toggler /></b-nav-item>
+      <b-nav-item><locale /></b-nav-item>
+    </b-nav>
     <b-link>
       <div class="d-flex justify-content-center align-items-center">
         <vuexy-logo class="mr-1" />
@@ -11,7 +19,7 @@
       </div>
     </b-link>
     <h2 class="mb-1">
-      Cosmos Ecosystem Blockchains 🛠
+      Cosmos Ecosystem Blockchains 🚀
     </h2>
 
     <p class="mb-3">
@@ -81,11 +89,13 @@
 <script>
 /* eslint-disable global-require */
 import {
-  BLink, BAvatar, BRow, BCol, BCard, BCardText, BCardTitle,
+  BLink, BAvatar, BRow, BCol, BCard, BCardText, BCardTitle, BNav, BNavItem,
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import store from '@/store/index'
 import { toDay } from '@/libs/data'
+import DarkToggler from '@/@core/layouts/components/app-navbar/components/DarkToggler.vue'
+import Locale from '@/@core/layouts/components/app-navbar/components/Locale.vue'
 
 export default {
   components: {
@@ -96,7 +106,11 @@ export default {
     BCard,
     BCardText,
     BCardTitle,
+    BNav,
+    BNavItem,
     VuexyLogo,
+    DarkToggler,
+    Locale,
   },
   data() {
     return {
