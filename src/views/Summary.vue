@@ -7,6 +7,11 @@
     </b-row>
     <b-row>
       <b-col>
+        <summary-assets-component />
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
         <summary-parmeters-component :data="mint" />
       </b-col>
     </b-row>
@@ -40,12 +45,14 @@ import {
 } from '@/libs/data'
 
 import SummaryParmetersComponent from './SummaryParmetersComponent.vue'
+import SummaryAssetsComponent from './SummaryAssetsComponent.vue'
 
 export default {
   components: {
     BRow,
     BCol,
     SummaryParmetersComponent,
+    SummaryAssetsComponent,
   },
   data() {
     return {
@@ -78,6 +85,77 @@ export default {
       gov: {
         title: 'Governance Parameters',
         items: [],
+      },
+      aaaa: {
+        options: {
+          elements: {
+            rectangle: {
+              borderWidth: 2,
+              borderSkipped: 'top',
+            },
+          },
+          tooltips: {
+            // Updated default tooltip UI
+            shadowOffsetX: 1,
+            shadowOffsetY: 1,
+            shadowBlur: 8,
+            // shadowColor: chartColors.tooltipShadow,
+            // backgroundColor: this.$themeColors.light,
+            // titleFontColor: this.$themeColors.dark,
+            // bodyFontColor: this.$themeColors.dark,
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          responsiveAnimationDuration: 500,
+          legend: {
+            display: false,
+          },
+          scales: {
+            xAxes: [
+              {
+                display: true,
+                gridLines: {
+                  // zeroLineColor: chartColors.grid_line_color,
+                  borderColor: 'transparent',
+                  // color: chartColors.grid_line_color,
+                  drawTicks: false,
+                },
+                scaleLabel: {
+                  display: true,
+                },
+                ticks: {
+                  min: 0,
+                  // fontColor: chartColors.labelColor,
+                },
+              },
+            ],
+            yAxes: [
+              {
+                display: true,
+                gridLines: {
+                  display: false,
+                },
+                scaleLabel: {
+                  display: true,
+                },
+                ticks: {
+                  // fontColor: chartColors.labelColor,
+                },
+              },
+            ],
+          },
+        },
+        data: {
+          labels: ['MON', 'TUE', 'WED ', 'THU', 'FRI', 'SAT', 'SUN'],
+          datasets: [
+            {
+              data: [710, 350, 470, 580, 230, 460, 120],
+              // backgroundColor: this.$themeColors.info,
+              borderColor: 'transparent',
+              barThickness: 15,
+            },
+          ],
+        },
       },
     }
   },

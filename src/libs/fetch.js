@@ -23,10 +23,16 @@ async function refetchVersion(chain) {
   await fetch(`${chain.api}/node_info`)
     .then(res => res.json())
     .then(json => {
-      const sdk = json.application_version.build_deps.find(e => e.startsWith('github.com/cosmos/cosmos-sdk'))
-      const re = /(\d+(\.\d+)*)/i
-      const version = sdk.match(re)
-      return version[0]
+      const { build_deps } = json.application_version
+      // eslint-disable-next-line camelcase
+      if (build_deps) {
+        const sdk = build_deps.find(e => e.startsWith('github.com/cosmos/cosmos-sdk'))
+        const re = /(\d+(\.\d+)*)/i
+        const version = sdk.match(re)
+        // eslint-disable-next-line prefer-destructuring
+        return version[0]
+      }
+      return json.node_info.version
     }).catch(() => null)
 }
 
@@ -39,6 +45,9 @@ const chainAPI = class ChainFetch {
     }
     if (!chain.sdk_version) {
       chain.sdk_version = refetchVersion(chain)
+    }
+    if (!chain.sdk_version) {
+      chain.sdk_version = '0.33'
     }
     this.config = chain
     return this.config
@@ -85,6 +94,13 @@ const chainAPI = class ChainFetch {
       return this.get(`/supply/total/${denom}`).then(data => ({ amount: commonProcess(data), denom }))
     }
     return this.get(`/bank/total/${denom}`).then(data => commonProcess(data))
+  }
+
+  async getBankTotals() {
+    if (compareVersions(this.config.sdk_version, '0.40') < 0) {
+      return this.get('/supply/total').then(data => commonProcess(data))
+    }
+    return this.get('/cosmos/bank/v1beta1/supply').then(data => data.supply)
   }
 
   async getStakingPool() {

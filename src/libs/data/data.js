@@ -92,12 +92,12 @@ export function formatToken(token) {
   return token
 }
 
-const COUNT_ABBRS = ['', 'K', 'M', 'B', 'T', 'P', 'E', 'Z', 'Y']
+const COUNT_ABBRS = ['', 'K', 'M', 'B', 't', 'q', 's', 'S', 'o', 'n', 'd', 'U', 'D', 'T', 'Qt', 'Qd', 'Sd', 'St']
 
 export function formatNumber(count, withAbbr = false, decimals = 2) {
   const i = count === 0 ? count : Math.floor(Math.log(count) / Math.log(1000))
   let result = parseFloat((count / (1000 ** i)).toFixed(decimals))
-  if (withAbbr) {
+  if (withAbbr && COUNT_ABBRS[i]) {
     result += `${COUNT_ABBRS[i]}`
   }
   return result

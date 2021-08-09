@@ -10,7 +10,7 @@
     </b-nav>
     <b-link>
       <div class="d-flex justify-content-center align-items-center">
-        <vuexy-logo class="mr-1" />
+        <vuexy-logo />
         <h1
           class="text-primary display-4 font-weight-bolder d-none d-md-block"
         >
@@ -18,13 +18,13 @@
         </h1>
       </div>
     </b-link>
-    <h2 class="mb-1">
+
+    <p class="mb-1">
+      Ping explorer is not just an explorer but also a wallet and more ... 🛠
+    </p>
+    <h2 class="mb-3">
       Cosmos Ecosystem Blockchains 🚀
     </h2>
-
-    <p class="mb-3">
-      It's not just an explorer but also a wallet and more ... 🛠
-    </p>
 
     <div>
       <b-row class="match-height">
@@ -82,7 +82,7 @@
         <!--/ no result found -->
       </b-row>
     </div>
-    <app-footer class="mb-1" />
+    <!-- <app-footer class="mb-1" /> -->
   </div>
 </template>
 
@@ -96,7 +96,7 @@ import store from '@/store/index'
 import { toDay } from '@/libs/data'
 import DarkToggler from '@/@core/layouts/components/app-navbar/components/DarkToggler.vue'
 import Locale from '@/@core/layouts/components/app-navbar/components/Locale.vue'
-import AppFooter from '@/@core/layouts/components/AppFooter.vue'
+// import AppFooter from '@/@core/layouts/components/AppFooter.vue'
 
 export default {
   components: {
@@ -112,7 +112,6 @@ export default {
     VuexyLogo,
     DarkToggler,
     Locale,
-    AppFooter,
   },
   data() {
     return {
@@ -141,12 +140,14 @@ export default {
     fetch() {
       Object.keys(this.chains).forEach(k => {
         const chain = this.chains[k]
-        fetch(`${chain.api}/blocks/latest`).then(res => res.json()).then(b => {
+        if (chain.api) {
+          fetch(`${chain.api}/blocks/latest`).then(res => res.json()).then(b => {
           // console.log(b.block.header)
-          const { header } = b.block
-          this.$set(chain, 'height', header.height)
-          this.$set(chain, 'time', toDay(header.time))
-        })
+            const { header } = b.block
+            this.$set(chain, 'height', header.height)
+            this.$set(chain, 'time', toDay(header.time))
+          })
+        }
       })
     },
   },

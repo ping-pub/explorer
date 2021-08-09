@@ -117,8 +117,10 @@ export default {
         {
           key: 'index',
           label: '#',
+          tdClass: 'text-right d-none d-md-block',
+          thClass: 'text-right d-none d-md-block',
         },
-        { key: 'description', label: 'Validator', sortable: true },
+        { key: 'description', label: 'Validator' },
         {
           key: 'tokens',
           label: 'Voting Power',
@@ -129,10 +131,9 @@ export default {
         },
         {
           key: 'commission',
-          sortable: true,
           formatter: value => `${percent(value.rate)}%`,
-          tdClass: 'text-right',
-          thClass: 'text-right',
+          tdClass: 'text-right d-none d-md-block',
+          thClass: 'text-right d-none d-md-block',
         },
         {
           key: 'operation',
