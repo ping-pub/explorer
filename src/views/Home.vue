@@ -23,7 +23,7 @@
     </h2>
 
     <p class="mb-3">
-      If you want to add your chain to our explorer, be free to contact us.
+      It's not just an explorer but also a wallet and more ... 🛠
     </p>
 
     <div>
@@ -82,8 +82,8 @@
         <!--/ no result found -->
       </b-row>
     </div>
+    <app-footer class="mb-1" />
   </div>
-<!-- / Under maintenance-->
 </template>
 
 <script>
@@ -96,6 +96,7 @@ import store from '@/store/index'
 import { toDay } from '@/libs/data'
 import DarkToggler from '@/@core/layouts/components/app-navbar/components/DarkToggler.vue'
 import Locale from '@/@core/layouts/components/app-navbar/components/Locale.vue'
+import AppFooter from '@/@core/layouts/components/AppFooter.vue'
 
 export default {
   components: {
@@ -111,6 +112,7 @@ export default {
     VuexyLogo,
     DarkToggler,
     Locale,
+    AppFooter,
   },
   data() {
     return {

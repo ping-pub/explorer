@@ -3,7 +3,7 @@
     <span class="float-md-left d-block d-md-inline-block mt-25">
       Powered By
       <b-link
-        class="ml-25"
+        class="ml-25 font-weight-bolder"
         href="#"
         target="_blank"
       >Ping.pub</b-link>
@@ -31,6 +31,7 @@ import { BLink, VBPopover } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 
 export default {
+  name: 'AppFooter',
   components: {
     BLink,
   },
