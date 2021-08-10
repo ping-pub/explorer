@@ -117,8 +117,8 @@ export default {
         {
           key: 'index',
           label: '#',
-          tdClass: 'text-right d-none d-md-block',
-          thClass: 'text-right d-none d-md-block',
+          tdClass: 'd-none d-md-block',
+          thClass: 'd-none d-md-block',
         },
         { key: 'description', label: 'Validator' },
         {

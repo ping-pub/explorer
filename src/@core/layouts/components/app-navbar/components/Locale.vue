@@ -12,7 +12,7 @@
         width="22px"
         :alt="currentLocale.locale"
       />
-      <span class="ml-50 text-body">{{ currentLocale.name }}</span>
+      <span class="ml-50 text-body d-none">{{ currentLocale.name }}</span>
     </template>
     <b-dropdown-item
       v-for="localeObj in locales"
