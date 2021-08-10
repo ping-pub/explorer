@@ -2,13 +2,22 @@
   <div class="navbar-container d-flex content align-items-center">
 
     <!-- Nav Menu Toggler -->
-    <ul class="nav navbar-nav d-xl-none">
+    <ul class="nav navbar-nav d-lg-none">
       <li class="nav-item">
         <b-link
           class="nav-link"
           @click="toggleVerticalMenuActive"
         >
+          <b-avatar
+            v-if="selected_chain && selected_chain.logo"
+            variant="transparent"
+            rounded
+            size="21"
+            :src="selected_chain.logo"
+            class="badge-minimal"
+          />
           <feather-icon
+            v-else
             icon="MenuIcon"
             size="21"
           />
@@ -19,19 +28,23 @@
     <!-- Left Col -->
     <div class="bookmark-wrapper align-items-center flex-grow-1 d-none d-lg-flex">
       <b-media
-        v-if="selected_chain.api"
+        v-if="selected_chain"
         no-body
       >
         <b-media-aside class="mr-75">
-          <b-avatar
-            variant="transparent"
-            badge
-            rounded
-            size="42"
-            :src="selected_chain.logo"
-            class="badge-minimal"
-            badge-variant="success"
-          />
+          <b-link
+            class="nav-link"
+            @click="toggleVerticalMenuActive"
+          >
+            <b-avatar
+              variant="transparent"
+              badge
+              rounded
+              size="42"
+              :src="selected_chain.logo"
+              class="badge-minimal"
+              badge-variant="success"
+            /></b-link>
         </b-media-aside>
         <b-media-body class="my-auto">
           <h6 class="mb-0 text-uppercase">
