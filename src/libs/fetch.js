@@ -19,32 +19,12 @@ export function keybase(identity) {
     .then(res => res.json())
 }
 
-async function refetchVersion(chain) {
-  await fetch(`${chain.api}/node_info`)
-    .then(res => res.json())
-    .then(json => {
-      const { build_deps } = json.application_version
-      // eslint-disable-next-line camelcase
-      if (build_deps) {
-        const sdk = build_deps.find(e => e.startsWith('github.com/cosmos/cosmos-sdk'))
-        const re = /(\d+(\.\d+)*)/i
-        const version = sdk.match(re)
-        // eslint-disable-next-line prefer-destructuring
-        return version[0]
-      }
-      return json.node_info.version
-    }).catch(() => null)
-}
-
 const chainAPI = class ChainFetch {
   getSelectedConfig() {
     let chain = store.state.chains.selected
     const lschains = localStorage.getItem('chains')
     if (lschains) {
       chain = JSON.parse(lschains)[chain.chain_name]
-    }
-    if (!chain.sdk_version) {
-      chain.sdk_version = refetchVersion(chain)
     }
     if (!chain.sdk_version) {
       chain.sdk_version = '0.33'

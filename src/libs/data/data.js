@@ -87,6 +87,13 @@ export function formatToken(token) {
       }
       return `${parseFloat(amount)} ${denom}`
     }
+    if (denom === 'BASECRO') {
+      const amount = token.amount / 1000000
+      if (amount > 10) {
+        return `${parseFloat(amount.toFixed())} CRO`
+      }
+      return `${parseFloat(amount)} CRO`
+    }
     return `${parseFloat(token.amount)} ${denom}`
   }
   return token

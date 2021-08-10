@@ -13,27 +13,30 @@ if (localChains) {
   chains = JSON.parse(localChains)
 } else {
   chains = update
+  localStorage.setItem('chains', JSON.stringify(update))
 }
 
-Object.keys(update).forEach(key => {
-  const chain = update[key]
-  fetch(`${chain.api}/node_info`)
-    .then(res => res.json())
-    .then(json => {
-      const { build_deps } = json.application_version
-      // eslint-disable-next-line camelcase
-      if (build_deps) {
-        const sdk = build_deps.find(e => e.startsWith('github.com/cosmos/cosmos-sdk'))
-        const re = /(\d+(\.\d+)*)/i
-        const version = sdk.match(re)
-        // eslint-disable-next-line prefer-destructuring
-        chain.sdk_version = version[0]
-      } else {
-        chain.sdk_version = json.node_info.version
-      }
-      localStorage.setItem('chains', JSON.stringify(update))
-    })
-})
+// Object.keys(update).forEach(key => {
+//   const chain = update[key]
+//   if (!chain.sdk_version) {
+//     fetch(`${chain.api}/node_info`)
+//       .then(res => res.json())
+//       .then(json => {
+//         const { build_deps } = json.application_version
+//         // eslint-disable-next-line camelcase
+//         if (build_deps) {
+//           const sdk = build_deps.find(e => e.startsWith('github.com/cosmos/cosmos-sdk'))
+//           const re = /(\d+(\.\d+)*)/i
+//           const version = sdk.match(re)
+//           // eslint-disable-next-line prefer-destructuring
+//           chain.sdk_version = version[0]
+//         } else {
+//           chain.sdk_version = json.node_info.version
+//         }
+//         localStorage.setItem('chains', JSON.stringify(update))
+//       })
+//   }
+// })
 
 export default {
   namespaced: true,
