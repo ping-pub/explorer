@@ -82,7 +82,7 @@
         <!--/ no result found -->
       </b-row>
     </div>
-    <!-- <app-footer class="mb-1" /> -->
+    <app-footer class="mb-1" />
   </div>
 </template>
 
@@ -96,7 +96,7 @@ import store from '@/store/index'
 import { toDay } from '@/libs/data'
 import DarkToggler from '@/@core/layouts/components/app-navbar/components/DarkToggler.vue'
 import Locale from '@/@core/layouts/components/app-navbar/components/Locale.vue'
-// import AppFooter from '@/@core/layouts/components/AppFooter.vue'
+import AppFooter from '@/@core/layouts/components/AppFooter.vue'
 
 export default {
   components: {
@@ -112,6 +112,7 @@ export default {
     VuexyLogo,
     DarkToggler,
     Locale,
+    AppFooter,
   },
   data() {
     return {
