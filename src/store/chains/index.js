@@ -8,13 +8,13 @@ configs.keys().forEach(k => {
   update[c.chain_name] = c
 })
 
-const localChains = localStorage.getItem('chains')
-if (localChains) {
-  chains = JSON.parse(localChains)
-} else {
-  chains = update
-  localStorage.setItem('chains', JSON.stringify(update))
-}
+// const localChains = localStorage.getItem('chains')
+// if (localChains) {
+//   chains = JSON.parse(localChains)
+// } else {
+chains = update
+localStorage.setItem('chains', JSON.stringify(update))
+// }
 
 // Object.keys(update).forEach(key => {
 //   const chain = update[key]
