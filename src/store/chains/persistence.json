@@ -1,0 +1,7 @@
+{
+    "chain_name": "persistence",
+    "api": "https://rest.core.persistence.one",
+    "sdk_version": "0.42.4",
+    "addr_prefix": "persistence",
+    "logo": "https://dl.airtable.com/.attachments/23178be773dc4de133ca4c07056aba1c/6e855850/persistence.png"
+}

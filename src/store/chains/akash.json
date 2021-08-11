@@ -2,5 +2,6 @@
     "chain_name": "akash",
     "api": "https://akash.api.ping.pub",
     "sdk_version": "0.41.3",
+    "addr_prefix": "akash",
     "logo": "https://dl.airtable.com/.attachments/52586702dd8352d97834fce5c2d83614/969b4d53/akash-network.png"
 }

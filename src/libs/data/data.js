@@ -122,7 +122,23 @@ export function operatorAddressToAccount(operAddress) {
   if (prefix === 'iva') { // handle special cases
     return Bech32.encode('iaa', data)
   }
+  if (prefix === 'crocncl') { // handle special cases
+    return Bech32.encode('cro', data)
+  }
   return Bech32.encode(prefix.replace('valoper', ''), data)
+}
+
+// TODO, not tested
+export function pubkeyToAccountAddress(pubkey, prefix) {
+  return Bech32.encode(prefix, pubkey, 40)
+}
+
+export function addressDecode(address) {
+  return Bech32.decode(address)
+}
+
+export function addressEnCode(prefix, pubkey) {
+  return Bech32.encode(prefix, pubkey)
 }
 
 export function consensusPubkeyToHexAddress(consensusPubkey) {
