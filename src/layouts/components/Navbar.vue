@@ -61,14 +61,65 @@
       <dark-Toggler class="d-none d-lg-block" />
       <search-bar />
       <locale />
+      <b-dropdown
+        class="ml-1"
+        variant="link"
+        no-caret
+        toggle-class="p-0"
+        right
+      >
+
+        <template #button-content>
+          <b-button
+            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+            variant="primary"
+            class="btn-icon"
+          >
+            <feather-icon icon="UserIcon" />
+          </b-button>
+        </template>
+
+        <b-dropdown-item :to="{ name: 'portfolio' }">
+          <feather-icon
+            icon="PieChartIcon"
+            size="16"
+          />
+          <span class="align-middle ml-50">Portofolio</span>
+        </b-dropdown-item>
+
+        <b-dropdown-item :to="{ name: 'accounts' }">
+          <feather-icon
+            icon="KeyIcon"
+            size="16"
+          />
+          <span class="align-middle ml-50">Accounts</span>
+        </b-dropdown-item>
+
+        <b-dropdown-item :to="{ name: 'addresses' }">
+          <feather-icon
+            icon="BookOpenIcon"
+            size="16"
+          />
+          <span class="align-middle ml-50">Address Book</span>
+        </b-dropdown-item>
+
+        <b-dropdown-item :to="{ name: 'setting' }">
+          <feather-icon
+            icon="SettingsIcon"
+            size="16"
+          />
+          <span class="align-middle ml-50">Setting</span>
+        </b-dropdown-item>
+      </b-dropdown>
     </b-navbar-nav>
   </div>
 </template>
 
 <script>
 import {
-  BLink, BNavbarNav, BMedia, BMediaAside, BAvatar, BMediaBody, VBTooltip,
+  BLink, BNavbarNav, BMedia, BMediaAside, BAvatar, BMediaBody, VBTooltip, BButton, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
+import Ripple from 'vue-ripple-directive'
 import DarkToggler from '@core/layouts/components/app-navbar/components/DarkToggler.vue'
 import Locale from '@core/layouts/components/app-navbar/components/Locale.vue'
 import SearchBar from '@core/layouts/components/app-navbar/components/SearchBar.vue'
@@ -84,6 +135,9 @@ export default {
     BMedia,
     BMediaAside,
     BMediaBody,
+    BButton,
+    BDropdown,
+    BDropdownItem,
 
     // Navbar Components
     DarkToggler,
@@ -94,6 +148,7 @@ export default {
   },
   directives: {
     'b-tooltip': VBTooltip,
+    Ripple,
   },
   props: {
     toggleVerticalMenuActive: {
@@ -108,9 +163,6 @@ export default {
   },
   computed: {
     selected_chain() {
-      // const c = this.$route.params.chain
-      // const has = Object.keys(store.state.chains.config).findIndex(i => i === c)
-      // const selected = (has > -1) ? store.state.chains.config[c] : store.state.chains.config.cosmos
       return store.state.chains.selected
     },
   },

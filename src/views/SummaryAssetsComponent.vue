@@ -1,7 +1,7 @@
 <template>
   <b-card v-if="assets">
     <b-card-title>
-      Onchain Assets
+      Assets
     </b-card-title>
     <b-table
       :items="assets"

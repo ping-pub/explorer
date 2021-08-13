@@ -188,6 +188,38 @@ const chainAPI = class ChainFetch {
     const ret = await fetch(this.config.api + url).then(response => response.json())
     return ret
   }
+
+  static fetch(host, url) {
+    const ret = fetch(host + url).then(response => response.json())
+    return ret
+  }
+
+  static async getAuthAccount(baseurl, address) {
+    return ChainFetch.fetch(baseurl, '/auth/accounts/'.concat(address)).then(data => commonProcess(data))
+  }
+
+  static async getBankBalance(baseurl, address) {
+    return ChainFetch.fetch(baseurl, '/bank/balances/'.concat(address)).then(data => commonProcess(data))
+  }
+
+  static async getIBCDenomTrace(baseurl, hash) {
+    const h = hash.substring(hash.indexOf('/'))
+    return ChainFetch.fetch(baseurl, '/ibc/applications/transfer/v1beta1/denom_traces/'.concat(h)).then(data => commonProcess(data))
+  }
+
+  static async getIBCDenomTraceText(baseurl, hash) {
+    return ChainFetch.getIBCDenomTrace(baseurl, hash).then(res => res.denom_trace.base_denom)
+  }
+
+  // CoinMarketCap
+  static async fetchCoinMarketCap(url) {
+    const host = 'https://price.ping.pub'
+    return fetch(host + url).then(response => response.json())
+  }
+
+  static async fetchTokenQuote(symbol) {
+    return ChainFetch.fetchCoinMarketCap(`/quote/${symbol}`)
+  }
 }
 
 export default chainAPI

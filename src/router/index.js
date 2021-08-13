@@ -26,6 +26,62 @@ const router = new VueRouter({
         ],
       },
     },
+    {
+      path: '/user/setting',
+      name: 'setting',
+      component: () => import('@/views/UserSetting.vue'),
+      meta: {
+        pageTitle: 'Setting',
+        breadcrumb: [
+          {
+            text: 'Setting',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/user/portfolio',
+      name: 'portfolio',
+      component: () => import('@/views/UserPortfolio.vue'),
+      meta: {
+        pageTitle: 'Portfolio',
+        breadcrumb: [
+          {
+            text: 'Portfolio',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/user/accounts',
+      name: 'accounts',
+      component: () => import('@/views/UserAccounts.vue'),
+      meta: {
+        pageTitle: 'Accounts',
+        breadcrumb: [
+          {
+            text: 'Accounts',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/user/address',
+      name: 'addresses',
+      component: () => import('@/views/UserAddressBook.vue'),
+      meta: {
+        pageTitle: 'Address Book',
+        breadcrumb: [
+          {
+            text: 'Transaction',
+            active: true,
+          },
+        ],
+      },
+    },
     // chain modules
     {
       path: '/:chain/',
@@ -189,7 +245,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const c = to.params.chain
-  store.commit('select', { chain_name: c })
+  if (c) store.commit('select', { chain_name: c })
 
   const config = JSON.parse(localStorage.getItem('chains'))
   // const has = Object.keys(config).findIndex(i => i === c)

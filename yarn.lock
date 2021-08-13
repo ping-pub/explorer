@@ -950,6 +950,19 @@
     bech32 "^1.1.4"
     readonly-date "^1.0.0"
 
+"@cosmjs/launchpad@^0.25.6":
+  version "0.25.6"
+  resolved "https://registry.yarnpkg.com/@cosmjs/launchpad/-/launchpad-0.25.6.tgz#c75f5d21be57af55fcb892f929520fa97f2d5bcc"
+  integrity sha512-4Yhn4cX50UE6jZz/hWqKeeCmvrlrz0BBwOdYX/29k25FqP+oLAow1xKm6UxgYuuAq8Pg/bUvswxSqwegZJTb6g==
+  dependencies:
+    "@cosmjs/amino" "^0.25.6"
+    "@cosmjs/crypto" "^0.25.6"
+    "@cosmjs/encoding" "^0.25.6"
+    "@cosmjs/math" "^0.25.6"
+    "@cosmjs/utils" "^0.25.6"
+    axios "^0.21.1"
+    fast-deep-equal "^3.1.3"
+
 "@cosmjs/math@^0.25.6":
   version "0.25.6"
   resolved "https://registry.yarnpkg.com/@cosmjs/math/-/math-0.25.6.tgz#25c7b106aaded889a5b80784693caa9e654b0c28"
@@ -2304,7 +2317,7 @@ axios-mock-adapter@1.19.0:
     fast-deep-equal "^3.1.3"
     is-buffer "^2.0.3"
 
-axios@0.21.1:
+axios@0.21.1, axios@^0.21.1:
   version "0.21.1"
   resolved "https://registry.npmjs.org/axios/-/axios-0.21.1.tgz"
   integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
@@ -11060,6 +11073,11 @@ vue-flatpickr-component@8.1.6:
   integrity sha512-RUu/M/1lbuzQT+U3yP7O5/M2EIizr9vXLXqSc1eFOvCT3AHurQg8+iO02rjW+2l78Kit8pCNAUvHw7eexws6hw==
   dependencies:
     flatpickr "^4.6.6"
+
+vue-flex-waterfall@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/vue-flex-waterfall/-/vue-flex-waterfall-1.0.7.tgz#843597024eb3f880a03b949baad1f6b4be9f68ff"
+  integrity sha512-YaxIUEvBQAOwBMastaJ8z5gFZFa+pZHHrpoTcZxxfCRZUdOxFBjLoyzCP9q+T8WlAhjeHD+Zsaeor9kKzRpccg==
 
 vue-form-wizard@0.8.4:
   version "0.8.4"

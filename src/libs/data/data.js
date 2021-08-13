@@ -12,6 +12,22 @@ dayjs.extend(localeData)
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
 
+export function getLocalObject(name) {
+  const text = localStorage.getItem(name)
+  if (text) {
+    return JSON.parse(text)
+  }
+  return null
+}
+
+export function getLocalChains() {
+  return getLocalObject('chains')
+}
+
+export function getLocalAccounts() {
+  return getLocalObject('accounts')
+}
+
 export function toDuration(value) {
   return dayjs.duration(value).humanize()
 }
@@ -76,25 +92,33 @@ export function isToken(value) {
   return is
 }
 
-export function formatToken(token) {
-  if (token) {
-    let denom = token.denom.toUpperCase()
+export function formatTokenDenom(tokenDenom) {
+  if (tokenDenom) {
+    let denom = tokenDenom.toUpperCase()
     if (denom.charAt(0) === 'U') {
       denom = denom.substring(1)
-      const amount = token.amount / 1000000
-      if (amount > 10) {
-        return `${parseFloat(amount.toFixed())} ${denom}`
-      }
-      return `${parseFloat(amount)} ${denom}`
+    } else if (denom === 'BASECRO') {
+      denom = 'CRO'
     }
-    if (denom === 'BASECRO') {
-      const amount = token.amount / 1000000
-      if (amount > 10) {
-        return `${parseFloat(amount.toFixed())} CRO`
-      }
-      return `${parseFloat(amount)} CRO`
-    }
-    return `${parseFloat(token.amount)} ${denom}`
+    return denom
+  }
+  return tokenDenom
+}
+
+export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
+  if (denom.startsWith('u')) {
+    // for special case
+  }
+  const amount = tokenAmount / 1000000
+  if (amount > 10) {
+    return parseFloat(amount.toFixed(fraction))
+  }
+  return parseFloat(amount)
+}
+
+export function formatToken(token) {
+  if (token) {
+    return `${formatTokenAmount(token.amount, 2, token.denom)} ${formatTokenDenom(token.denom)}`
   }
   return token
 }
