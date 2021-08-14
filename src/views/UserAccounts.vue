@@ -114,15 +114,15 @@
     </b-tabs>
 
     <b-card
-      v-b-modal.modal-center
+      v-b-modal.add-account
       class="addzone"
     >
       <feather-icon icon="PlusIcon" />
       Import Accounts
     </b-card>
-    <!-- modal vertical center -->
+    <!-- modal add accout -->
     <b-modal
-      id="modal-center"
+      id="add-account"
       centered
       size="lg"
       title="Add Account"
@@ -131,7 +131,7 @@
       cancel-disabled
       scrollable
     >
-      <form-wizard-number />
+      <user-account-import-address />
     </b-modal>
 
   </div>
@@ -147,7 +147,7 @@ import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import {
   formatTokenAmount, formatTokenDenom, getLocalAccounts, getLocalChains,
 } from '@/libs/data'
-import FormWizardNumber from './FormWizardNumber.vue'
+import UserAccountImportAddress from './UserAccountImportAddress.vue'
 // import { SigningCosmosClient } from '@cosmjs/launchpad'
 
 export default {
@@ -163,7 +163,7 @@ export default {
     BCardTitle,
     BDropdown,
     BDropdownItem,
-    FormWizardNumber,
+    UserAccountImportAddress,
     FeatherIcon,
   },
   directives: {
@@ -212,6 +212,10 @@ export default {
     }
   },
   methods: {
+    completeAdd() {
+      this.$set(this, 'accounts', getLocalAccounts())
+      this.$bvModal.hide('add-account')
+    },
     formatDenom(v) {
       const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v)
       return formatTokenDenom(denom)

@@ -2,6 +2,11 @@ import {
   Bech32, fromBase64, fromHex, toHex,
 } from '@cosmjs/encoding'
 import { sha256 } from '@cosmjs/crypto'
+// ledger
+import TransportWebBLE from '@ledgerhq/hw-transport-web-ble'
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
+// import Cosmos from '@ledgerhq/hw-app-cosmos'
+import CosmosApp from 'ledger-cosmos-js'
 
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
@@ -11,6 +16,20 @@ import localeData from 'dayjs/plugin/localeData'
 dayjs.extend(localeData)
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
+
+export async function connectLedger(transport = 'usb') {
+  const trans = await transport === 'usb' ? TransportWebUSB.create() : TransportWebBLE.create()
+  return new CosmosApp(trans)
+}
+const COSMOS_PATH = [44, 118, 0, 0, 0]
+
+export async function getLedgerAddress(transport = 'blu') {
+  const trans = transport === 'usb' ? await TransportWebUSB.create() : await TransportWebBLE.create()
+
+  trans.setDebugMode(true)
+  const cosmos = new CosmosApp(trans)
+  return cosmos.getAddressAndPubKey(COSMOS_PATH, 'cosmos')
+}
 
 export function getLocalObject(name) {
   const text = localStorage.getItem(name)

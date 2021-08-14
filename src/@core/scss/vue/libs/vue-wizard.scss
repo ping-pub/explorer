@@ -86,8 +86,8 @@
         &:not(:first-child) {
           a {
             &::before {
-              content: '\e844';
-              font-family: feather !important;
+              content: '>';
+              // font-family: feather !important;/*
               speak: none;
               font-style: normal;
               font-weight: 400;
@@ -123,8 +123,8 @@
           background-color: rgba($secondary, 0.04) !important;
         }
         &::before {
-          content: '\e843';
-          font-family: feather !important;
+          content: '<';
+          // font-family: feather !important;
           speak: none;
           font-style: normal;
           font-variant: normal;
@@ -143,8 +143,8 @@
           box-shadow: 0 8px 25px -8px $primary;
         }
         &::after {
-          content: '\e844';
-          font-family: feather !important;
+          content: '>';
+          //font-family: feather !important;
           speak: none;
           font-style: normal;
           font-weight: 400;

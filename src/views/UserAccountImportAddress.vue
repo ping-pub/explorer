@@ -7,6 +7,7 @@
       shape="square"
       finish-button-text="Submit"
       back-button-text="Previous"
+      class="steps-transparent mb-3 md"
       @on-complete="formSubmitted"
     >
       <!-- Device tab -->
@@ -29,12 +30,17 @@
                   name="device"
                   rules="required"
                 >
-                  <div class="demo-inline-spacing">
+                  <b-form-radio-group
+                    v-model="device"
+                    stacked
+                  >
+
                     <b-form-radio
                       v-model="device"
                       name="device"
                       value="keplr"
                       checked
+                      class="mb-1 mt-1"
                     >
                       Keplr
                     </b-form-radio>
@@ -42,20 +48,34 @@
                       v-model="device"
                       name="device"
                       value="ledger"
-                      disabled
+                      class="mb-1"
                     >
-                      Ledger Nano
+                      Ledger via WebUSB
                     </b-form-radio>
                     <b-form-radio
                       v-model="device"
                       name="device"
-                      value="nmemonic"
-                      disabled
+                      value="ledger2"
+                      class="mb-1"
                     >
-                      Nmemonic
+                      Ledger via Bluetooth
                     </b-form-radio>
-                  </div>
-                  <small class="text-danger">{{ errors[0] }}</small>
+                    <b-form-radio
+                      v-model="device"
+                      name="device"
+                      value="address"
+                    >
+                      Address (Observe Only)
+                    </b-form-radio>
+                  </b-form-radio-group>
+                  <b-form-input
+                    v-if="device === 'address'"
+                    v-model="address"
+                    class="mt-1"
+                    name="address"
+                    placeholder="cosmos1ev0vtddkl7jlwfawlk06yzncapw2x9quyxx75u"
+                  />
+                  <small class="text-danger">{{ debug }}{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
             </b-col>
@@ -107,7 +127,9 @@
                       <b-col
                         v-for="item, key in chains"
                         :key="key"
-                        cols="3"
+                        xs="12"
+                        md="4"
+                        lg="3"
                         class="mb-25"
                       >
                         <b-form-checkbox
@@ -189,11 +211,11 @@ import {
   BAvatar,
   BInputGroup,
   BInputGroupPrepend,
+  BFormRadioGroup,
 } from 'bootstrap-vue'
 import { required } from '@validations'
 import store from '@/store'
-import { addressDecode, addressEnCode } from '@/libs/data'
-import { Bech32 } from '@cosmjs/encoding'
+import { addressDecode, addressEnCode, getLedgerAddress } from '@/libs/data'
 
 export default {
   components: {
@@ -210,12 +232,15 @@ export default {
     BFormCheckbox,
     BInputGroup,
     BInputGroupPrepend,
+    BFormRadioGroup,
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
   },
   data() {
     return {
+      debug: '',
       device: 'keplr',
+      address: '',
       name: '',
       options: {},
       required,
@@ -231,7 +256,7 @@ export default {
 
     addresses() {
       if (!this.accounts) return []
-      const { data } = addressDecode(this.accounts[0].address)
+      const { data } = addressDecode(this.accounts.address)
       return this.selected.map(x => {
         const { logo, addr_prefix } = this.chains[x]
         const addr = addressEnCode(addr_prefix, data)
@@ -246,16 +271,35 @@ export default {
     }
   },
   methods: {
+    async connect() {
+      const transport = this.device === 'ledger' ? 'usb' : 'bluetooth'
+      return getLedgerAddress(transport).catch(e => {
+        this.debug = e
+      })
+    },
     async cennectKeplr() {
       if (!window.getOfflineSigner || !window.keplr) {
-        // eslint-disable-next-line no-alert
-        alert('Please install keplr extension')
+        this.debug = 'Please install keplr extension'
         return null
       }
       const chainId = 'cosmoshub'
       await window.keplr.enable(chainId)
       const offlineSigner = window.getOfflineSigner(chainId)
       return offlineSigner.getAccounts()
+    },
+    localAddress() {
+      if (!this.address) return false
+      try {
+        const { data } = addressDecode(this.address)
+        if (data) {
+          this.accounts = {
+            address: this.address,
+            pubkey: data,
+          }
+          return true
+        }
+      } catch (e) { this.debug = e }
+      return false
     },
     formSubmitted() {
       const string = localStorage.getItem('accounts')
@@ -268,6 +312,7 @@ export default {
       }
       localStorage.setItem('accounts', JSON.stringify(accounts))
 
+      this.$parent.$parent.$parent.completeAdd()
       this.$toast({
         component: ToastificationContent,
         props: {
@@ -278,16 +323,36 @@ export default {
       })
     },
     async validationFormDevice() {
-      await this.cennectKeplr().then(accounts => {
-        if (accounts) {
-          this.accounts = accounts
-          const key = Bech32.decode(accounts[0].address)
-          console.log(accounts, key)
-        }
-      })
+      let ok = false
+      switch (this.device) {
+        case 'keplr':
+          await this.cennectKeplr().then(accounts => {
+            if (accounts) {
+              // eslint-disable-next-line prefer-destructuring
+              this.accounts = accounts[0]
+              ok = true
+            }
+          })
+          break
+        case 'ledger':
+        case 'ledger2':
+          await this.connect().then(accounts => {
+            if (accounts) {
+              this.accounts = {
+                address: accounts.bech32_address,
+                pubkey: accounts.compressed_pk,
+              }
+              ok = true
+            }
+          })
+          break
+        default:
+          ok = this.localAddress()
+      }
+
       return new Promise((resolve, reject) => {
         this.$refs.deviceRules.validate().then(success => {
-          if (success) {
+          if (ok && success) {
             resolve(true)
           }
           reject()
@@ -310,6 +375,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '@core/scss/vue/pages/ui-feather.scss';
   @import '@core/scss/vue/libs/vue-wizard.scss';
 </style>
