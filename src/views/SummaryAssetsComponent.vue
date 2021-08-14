@@ -5,6 +5,7 @@
     </b-card-title>
     <b-table
       :items="assets"
+      :fields="cfield"
       hover
       striped
       sticky-header="true"
@@ -15,7 +16,8 @@
 
 <script>
 import { BTable, BCardTitle, BCard } from 'bootstrap-vue'
-import { formatNumber } from '@/libs/data'
+import { formatNumber, formatTokenDenom } from '@/libs/data'
+import chainAPI from '@/libs/fetch'
 
 export default {
   components: {
@@ -26,10 +28,16 @@ export default {
   data() {
     return {
       assets: [],
-      field: [
+      denoms: [],
+      cfield: [
         {
           key: 'denom',
+          formatter: this.formatDenom,
           tdClass: 'text-nowrap text-truncate overflow-hidden',
+        },
+        'abbr',
+        {
+          key: 'amount',
         },
       ],
     }
@@ -38,12 +46,22 @@ export default {
     this.$http.getBankTotals().then(res => {
       const toshow = res.sort()
       this.assets = toshow.reverse().map(x => {
+        if (x.denom.startsWith('ibc/')) {
+          chainAPI.getIBCDenomTraceText(this.$http.config.api, x.denom).then(denom => {
+            this.$set(this.denoms, x.denom, denom)
+          })
+        }
         const xh = x
         const amount = Number(x.amount) / 1000000
         xh.abbr = amount > 1 ? formatNumber(amount, true) : amount
         return xh
       })
     })
+  },
+  methods: {
+    formatDenom(v) {
+      return formatTokenDenom(this.denoms[v] ? this.denoms[v] : v)
+    },
   },
 }
 </script>

@@ -227,6 +227,9 @@ export default {
         if (isToken(data[k])) {
           return { title: tokenFormatter(data[k]), subtitle: k }
         }
+        if (typeof data[k] === 'boolean') {
+          return { title: data[k], subtitle: k }
+        }
         const d = Number(data[k])
         if (d < 1.01) {
           return { title: `${percent(d)}%`, subtitle: k }
