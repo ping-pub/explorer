@@ -244,7 +244,6 @@ export default {
     removeAddress(v) {
       Object.values(this.accounts).forEach(item => {
         const newAddrs = item.address.filter(a => a.addr !== v)
-        console.log(item, newAddrs, v)
         this.$set(item, 'address', newAddrs)
       })
       localStorage.setItem('accounts', JSON.stringify(this.accounts))
