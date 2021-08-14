@@ -26,19 +26,46 @@
 
             <b-card
               no-body
-              class="card-browser-states text-truncate"
+              class="card-browser-states"
             >
               <b-card-header>
                 <div>
                   <b-card-title> <span class="text-uppercase">{{ acc.chain }}</span></b-card-title>
                 </div>
-                <feather-icon
-                  icon="MoreVerticalIcon"
-                  size="18"
-                  class="cursor-pointer"
-                />
+                <b-dropdown
+                  class="ml-1"
+                  variant="link"
+                  no-caret
+                  toggle-class="p-0"
+                  right
+                >
+                  <template #button-content>
+                    <feather-icon
+                      icon="MoreVerticalIcon"
+                      size="18"
+                      class="cursor-pointer"
+                    />
+                  </template>
+
+                  <b-dropdown-item
+                    v-if="balances[acc.addr]"
+                    @click="removeAddress(acc.chain)"
+                  >
+                    Send
+                  </b-dropdown-item>
+                  <b-dropdown-item
+                    v-if="balances[acc.addr]"
+                    @click="removeAddress(acc.chain)"
+                  >
+                    Detail
+                  </b-dropdown-item>
+                  <b-dropdown-item @click="removeAddress(acc.addr)">
+                    Remove
+                  </b-dropdown-item>
+                </b-dropdown>
+
               </b-card-header>
-              <b-card-body>
+              <b-card-body class="text-truncate">
                 <b-row>
                   <b-col>
                     <div class="d-flex justify-content-between">
@@ -113,7 +140,7 @@
 <script>
 import chainAPI from '@/libs/fetch'
 import {
-  BCard, BCardHeader, BCardTitle, BCardBody, VBModal, BRow, BCol, BTabs, BTab, BAvatar,
+  BCard, BCardHeader, BCardTitle, BCardBody, VBModal, BRow, BCol, BTabs, BTab, BAvatar, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
@@ -134,6 +161,8 @@ export default {
     BCardHeader,
     BCardBody,
     BCardTitle,
+    BDropdown,
+    BDropdownItem,
     FormWizardNumber,
     FeatherIcon,
   },
@@ -207,6 +236,14 @@ export default {
         return parseFloat(ret.toFixed(2))
       }
       return 0
+    },
+    removeAddress(v) {
+      Object.values(this.accounts).forEach(item => {
+        const newAddrs = item.address.filter(a => a.addr !== v)
+        console.log(item, newAddrs, v)
+        this.$set(item, 'address', newAddrs)
+      })
+      localStorage.setItem('accounts', JSON.stringify(this.accounts))
     },
   },
 }
