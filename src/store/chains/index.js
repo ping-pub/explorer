@@ -14,6 +14,8 @@ configs.keys().forEach(k => {
 // } else {
 chains = update
 localStorage.setItem('chains', JSON.stringify(update))
+const selected = chains.cosmos
+
 // }
 
 // Object.keys(update).forEach(key => {
@@ -42,7 +44,7 @@ export default {
   namespaced: true,
   state: {
     config: chains,
-    selected: {},
+    selected,
     avatars: {},
   },
   getters: {
