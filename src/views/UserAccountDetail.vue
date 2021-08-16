@@ -432,13 +432,20 @@ export default {
         if (x.denom.startsWith('ibc/')) {
           chainAPI.getIBCDenomTraceText(this.$http.config.api, x.denom).then(denom => {
             this.$set(this.denoms, x.denom, denom)
+            const symbol = formatTokenDenom(denom)
+            if (!this.quotes[symbol] && symbol.indexOf('/') === -1) {
+              chainAPI.fetchTokenQuote(symbol).then(quote => {
+                this.$set(this.quotes, symbol, quote)
+              })
+            }
           })
-        }
-        const symbol = formatTokenDenom(x.denom)
-        if (!this.quotes[symbol]) {
-          chainAPI.fetchTokenQuote(symbol).then(quote => {
-            this.$set(this.quotes, symbol, quote)
-          })
+        } else {
+          const symbol = formatTokenDenom(x.denom)
+          if (!this.quotes[symbol] && symbol.indexOf('/') === -1) {
+            chainAPI.fetchTokenQuote(symbol).then(quote => {
+              this.$set(this.quotes, symbol, quote)
+            })
+          }
         }
       })
     })
