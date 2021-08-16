@@ -16,6 +16,7 @@
         striped
         hover
         responsive
+        stacked="sm"
       >
         <!-- Column: Height -->
         <template #cell(height)="data">
@@ -82,9 +83,6 @@ export default {
         },
         {
           key: 'txs',
-          // formatter: (value, i, data) => this.apr(value, i, data),
-          tdClass: 'text-right',
-          thClass: 'text-right',
         },
         {
           key: 'time',
