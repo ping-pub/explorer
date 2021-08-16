@@ -164,14 +164,12 @@
             <b-td> Vesting Periods </b-td>
             <b-td>
               <b-table-simple>
-                <th style="width:50px;">
-                  #
-                </th><th>Length</th><th>Amount</th>
+                <th>Length</th><th>Amount</th>
                 <b-tr
                   v-for="p, index in account.value.vesting_periods"
                   :key="index"
                 >
-                  <td>{{ index+1 }}</td><td>{{ p.length }} - {{ formatLength(p.length) }} </td><td>{{ formatToken(p.amount) }}</td>
+                  <td>{{ p.length }} - {{ formatLength(p.length) }} </td><td>{{ formatToken(p.amount) }}</td>
                 </b-tr>
               </b-table-simple>
             </b-td>

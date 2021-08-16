@@ -61,7 +61,15 @@
       <dark-Toggler class="d-none d-lg-block" />
       <search-bar />
       <locale />
-      <b-dropdown
+      <b-button
+        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+        variant="primary"
+        class="btn-icon"
+        :to="{ name: 'accounts' }"
+      >
+        <feather-icon icon="UserIcon" />
+      </b-button>
+      <!-- <b-dropdown
         class="ml-1"
         variant="link"
         no-caret
@@ -79,13 +87,13 @@
           </b-button>
         </template>
 
-        <!-- <b-dropdown-item :to="{ name: 'portfolio' }">
+        <b-dropdown-item :to="{ name: 'portfolio' }">
           <feather-icon
             icon="PieChartIcon"
             size="16"
           />
           <span class="align-middle ml-50">Portofolio</span>
-        </b-dropdown-item> -->
+        </b-dropdown-item>
 
         <b-dropdown-item :to="{ name: 'accounts' }">
           <feather-icon
@@ -110,14 +118,14 @@
           />
           <span class="align-middle ml-50">Setting</span>
         </b-dropdown-item>
-      </b-dropdown>
+      </b-dropdown> -->
     </b-navbar-nav>
   </div>
 </template>
 
 <script>
 import {
-  BLink, BNavbarNav, BMedia, BMediaAside, BAvatar, BMediaBody, VBTooltip, BButton, BDropdown, BDropdownItem,
+  BLink, BNavbarNav, BMedia, BMediaAside, BAvatar, BMediaBody, VBTooltip, BButton,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import DarkToggler from '@core/layouts/components/app-navbar/components/DarkToggler.vue'
@@ -136,8 +144,6 @@ export default {
     BMediaAside,
     BMediaBody,
     BButton,
-    BDropdown,
-    BDropdownItem,
 
     // Navbar Components
     DarkToggler,
