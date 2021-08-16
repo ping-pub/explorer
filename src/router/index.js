@@ -76,7 +76,7 @@ const router = new VueRouter({
         pageTitle: 'Address Book',
         breadcrumb: [
           {
-            text: 'Transaction',
+            text: 'Address Book',
             active: true,
           },
         ],
@@ -93,6 +93,24 @@ const router = new VueRouter({
         breadcrumb: [
           {
             text: 'Home',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/:chain/account/:address',
+      name: 'chain-account',
+      component: () => import('@/views/UserAccountDetail.vue'),
+      meta: {
+        pageTitle: 'Accounts',
+        breadcrumb: [
+          {
+            text: 'Accounts',
+            active: true,
+          },
+          {
+            text: 'Detail',
             active: true,
           },
         ],

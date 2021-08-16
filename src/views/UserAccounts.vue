@@ -46,21 +46,19 @@
                       class="cursor-pointer"
                     />
                   </template>
-
                   <b-dropdown-item
                     v-if="balances[acc.addr]"
-                    @click="removeAddress(acc.chain)"
                   >
-                    Send
+                    <feather-icon icon="SendIcon" /> Transfer
                   </b-dropdown-item>
                   <b-dropdown-item
                     v-if="balances[acc.addr]"
-                    @click="removeAddress(acc.chain)"
+                    :to="`/${acc.chain}/account/${acc.addr}`"
                   >
-                    Detail
+                    <feather-icon icon="TrelloIcon" /> Detail
                   </b-dropdown-item>
                   <b-dropdown-item @click="removeAddress(acc.addr)">
-                    Remove
+                    <feather-icon icon="Trash2Icon" /> Remove
                   </b-dropdown-item>
                 </b-dropdown>
 

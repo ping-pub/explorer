@@ -11255,6 +11255,11 @@ vue-property-decorator@^8.0.0:
   dependencies:
     vue-class-component "^7.1.0"
 
+vue-qr@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/vue-qr/-/vue-qr-2.5.0.tgz#2b938f8d4c3d07eaf9e4931b714e32f7ca15b5dd"
+  integrity sha512-lVCEqzZyhrZ49dr6n1C4dMNH/tvKJzRwJhCi9vxWYpiosYTWM0J5m5RsJ745S88XWwgTeOynKMGbyOLG9ZP20Q==
+
 vue-ripple-directive@2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/vue-ripple-directive/-/vue-ripple-directive-2.0.1.tgz"

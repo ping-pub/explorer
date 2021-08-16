@@ -227,6 +227,20 @@ export function getStakingValidatorByAccount(chainName, addr) {
   return addr
 }
 
+export function getStakingValidatorOperator(chainName, addr, length = -1) {
+  const locals = localStorage.getItem(`validators-${chainName}`)
+  if (locals) {
+    const val = JSON.parse(locals).find(x => x.operator_address === addr)
+    if (val) {
+      return val.description.moniker
+    }
+  }
+  if (length > 0) {
+    return addr.substring(addr.length - length)
+  }
+  return addr
+}
+
 export * from 'compare-versions'
 
 export class Data {

@@ -59,6 +59,7 @@
     "vue-loader": "^15.9.6",
     "vue-perfect-scrollbar": "0.2.1",
     "vue-prism-component": "1.1.1",
+    "vue-qr": "^2.5.0",
     "vue-ripple-directive": "2.0.1",
     "vue-router": "3.4.9",
     "vue-select": "3.11.2",

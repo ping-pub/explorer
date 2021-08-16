@@ -79,13 +79,13 @@
           </b-button>
         </template>
 
-        <b-dropdown-item :to="{ name: 'portfolio' }">
+        <!-- <b-dropdown-item :to="{ name: 'portfolio' }">
           <feather-icon
             icon="PieChartIcon"
             size="16"
           />
           <span class="align-middle ml-50">Portofolio</span>
-        </b-dropdown-item>
+        </b-dropdown-item> -->
 
         <b-dropdown-item :to="{ name: 'accounts' }">
           <feather-icon

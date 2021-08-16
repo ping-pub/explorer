@@ -194,9 +194,34 @@ const chainAPI = class ChainFetch {
     return ret
   }
 
-  static async getAuthAccount(baseurl, address) {
-    return ChainFetch.fetch(baseurl, '/auth/accounts/'.concat(address)).then(data => commonProcess(data))
+  async getAuthAccount(address) {
+    return this.get('/auth/accounts/'.concat(address)).then(data => commonProcess(data))
   }
+
+  async getBankAccountBalance(address) {
+    return this.get('/bank/balances/'.concat(address)).then(data => commonProcess(data))
+  }
+
+  async getStakingReward(address) {
+    return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/rewards`).then(data => commonProcess(data))
+  }
+
+  async getStakingValidators(address) {
+    return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/validators`).then(data => commonProcess(data))
+  }
+
+  async getStakingDelegations(address) {
+    return this.get(`/cosmos/staking/v1beta1/delegations/${address}`).then(data => commonProcess(data))
+  }
+
+  async getStakingRedelegations(address) {
+    return this.get(`/cosmos/staking/v1beta1/delegators/${address}/redelegations`).then(data => commonProcess(data))
+  }
+
+  async getStakingUnbonding(address) {
+    return this.get(`/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations`).then(data => commonProcess(data))
+  }
+  // /cosmos/staking/v1beta1/delegations/{delegator_addr}
 
   static async getBankBalance(baseurl, address) {
     return ChainFetch.fetch(baseurl, '/bank/balances/'.concat(address)).then(data => commonProcess(data))
