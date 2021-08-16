@@ -4,63 +4,67 @@
     hover
     :small="small"
     striped
-    responsive
+    stacked="sm"
+    responsive="sm"
   >
-    <b-tr
-      v-for="(value, name) in tablefield"
-      :key="name"
-    >
-      <b-td
-        style="text-transform: capitalize; vertical-align: top; width:200px"
+    <b-tbody>
+      <b-tr
+        v-for="(value, name) in tablefield"
+        :key="name"
       >
-        {{ name }}
-      </b-td>
-      <b-td v-if="isTokenField(value)">
-        {{ formatTokens( value ) }}
-      </b-td>
-      <b-td v-else-if="isArrayText(value)">
-        {{ value.join(', ') }}
-      </b-td>
-      <b-td v-else-if="isHex(value)">
-        {{ formatHexAddress(value) }}
-      </b-td>
-      <b-td v-else-if="Array.isArray(value)">
-        <array-field-component :tablefield="value" />
-      </b-td>
-      <b-td
-        v-else-if="typeof (value) ==='object'"
-        hover
-        class="overflow-hidden"
-      >
-        <b-tabs>
-          <b-tab
-            v-for="key in Object.keys(value)"
-            :key="key"
-            :title="key"
-            variant="danger"
-          >
-            <array-field-component
-              v-if="Array.isArray(value[key])"
-              :tablefield="value[key]"
-            />
-            <object-field-component
-              v-else-if="typeof value[key] === 'object'"
-              :tablefield="value[key]"
-            />
-            <span v-else>{{ formatText(value[key]) }} </span>
-          </b-tab>
-        </b-tabs>
-      </b-td>
-      <b-td v-else>
-        {{ value }}
-      </b-td>
-    </b-tr>
+        <b-td
+          style="text-transform: capitalize; vertical-align: top;"
+        >
+          {{ name }}
+        </b-td>
+        <b-td v-if="isTokenField(value)">
+          {{ formatTokens( value ) }}
+        </b-td>
+        <b-td v-else-if="isArrayText(value)">
+          {{ value.join(', ') }}
+        </b-td>
+        <b-td v-else-if="isHex(value)">
+          {{ formatHexAddress(value) }}
+        </b-td>
+        <b-td v-else-if="Array.isArray(value)">
+          <array-field-component :tablefield="value" />
+        </b-td>
+        <b-td
+          v-else-if="typeof (value) ==='object'"
+          hover
+          class="overflow-hidden"
+        >
+          <b-tabs pills>
+            <b-tab
+              v-for="key in Object.keys(value)"
+              :key="key"
+              :title="key"
+              class="pl-0 pr-0"
+              title-item-class="bg-light-primary"
+            >
+              <array-field-component
+                v-if="Array.isArray(value[key])"
+                :tablefield="value[key]"
+              />
+              <object-field-component
+                v-else-if="typeof value[key] === 'object'"
+                :tablefield="value[key]"
+              />
+              <span v-else>{{ formatText(value[key]) }} </span>
+            </b-tab>
+          </b-tabs>
+        </b-td>
+        <b-td v-else>
+          {{ value }}
+        </b-td>
+      </b-tr>
+    </b-tbody>
   </b-table-simple>
 </template>
 
 <script>
 import {
-  BTableSimple, BTr, BTd, BTabs, BTab,
+  BTableSimple, BTr, BTd, BTabs, BTab, BTbody,
 } from 'bootstrap-vue'
 import {
   abbr, getStakingValidatorByHex, isHexAddress, isStringArray, isToken, tokenFormatter,
@@ -75,6 +79,7 @@ export default {
     BTd,
     BTabs,
     BTab,
+    BTbody,
     ArrayFieldComponent,
   },
   props: {

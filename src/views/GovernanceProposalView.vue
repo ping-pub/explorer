@@ -1,6 +1,8 @@
 <template>
   <section>
-    <b-card>
+    <b-card
+      no-body
+    >
       <b-card-header>
         <b-card-title>
           <b-badge
@@ -39,47 +41,58 @@
         </b-card-title>
       </b-card-header>
       <b-card-body>
-        <b-table-simple>
-          <b-tr>
-            <b-td style="width:200px">
-              {{ $t('proposal_id') }}
-            </b-td><b-td>{{ proposal.id }}</b-td>
-          </b-tr>
-          <b-tr>
-            <b-td>
-              {{ $t('proposal_proposer') }}
-            </b-td><b-td>{{ formatAddress(proposer.proposer) }} </b-td>
-          </b-tr>
-          <b-tr>
-            <b-td>
-              {{ $t('proposal_total_deposit') }}
-            </b-td><b-td>{{ proposal.total_deposit }} </b-td>
-          </b-tr>
-          <b-tr>
-            <b-td>
-              {{ $t('proposal_submit_time') }}
-            </b-td><b-td>{{ proposal.submit_time }}</b-td>
-          </b-tr>
-          <b-tr>
-            <b-td>
-              {{ $t('proposal_voting_start_time') }}
-            </b-td><b-td>{{ proposal.voting_start_time }}</b-td>
-          </b-tr>
-          <b-tr>
-            <b-td>
-              {{ $t('proposal_voting_end_time') }}
-            </b-td><b-td>{{ proposal.voting_end_time }}</b-td>
-          </b-tr>
-          <b-tr>
-            <b-td>
-              {{ $t('proposal_type') }}
-            </b-td><b-td>{{ proposal.type }}</b-td>
-          </b-tr>
+        <b-table-simple
+          stacked="sm"
+          hover
+          striped
+        >
+          <tbody>
+            <b-tr>
+              <b-td
+                style="text-transform: capitalize; vertical-align: top; width:200px"
+              >
+                {{ $t('proposal_id') }}
+              </b-td><b-td>{{ proposal.id }}</b-td>
+            </b-tr>
+            <b-tr>
+              <b-td>
+                {{ $t('proposal_proposer') }}
+              </b-td><b-td>{{ formatAddress(proposer.proposer) }} </b-td>
+            </b-tr>
+            <b-tr>
+              <b-td>
+                {{ $t('proposal_total_deposit') }}
+              </b-td><b-td>{{ proposal.total_deposit }} </b-td>
+            </b-tr>
+            <b-tr>
+              <b-td>
+                {{ $t('proposal_submit_time') }}
+              </b-td><b-td>{{ proposal.submit_time }}</b-td>
+            </b-tr>
+            <b-tr>
+              <b-td>
+                {{ $t('proposal_voting_start_time') }}
+              </b-td><b-td>{{ proposal.voting_start_time }}</b-td>
+            </b-tr>
+            <b-tr>
+              <b-td>
+                {{ $t('proposal_voting_end_time') }}
+              </b-td><b-td>{{ proposal.voting_end_time }}</b-td>
+            </b-tr>
+            <b-tr>
+              <b-td>
+                {{ $t('proposal_type') }}
+              </b-td><b-td>
+                {{ proposal.type }}
+              </b-td>
+            </b-tr>
+          </tbody>
         </b-table-simple>
-        <object-field-component
-          :tablefield="proposal.contents"
-          :small="false"
-        />
+        <div>
+          <object-field-component
+            :tablefield="proposal.contents"
+            :small="false"
+          /></div>
       </b-card-body>
       <b-card-footer>
         <router-link :to="`../gov`">
@@ -99,7 +112,7 @@
       </b-card-footer>
     </b-card>
 
-    <b-card>
+    <b-card no-body>
       <b-card-header>
         <b-card-title>
           Votes
@@ -158,12 +171,14 @@
           {{ proposal.tally.abstain }}% voted Abstain
         </b-tooltip>
         <b-table
+          stacked="sm"
           :fields="votes_fields"
           :items="votes"
+          striped
         />
       </b-card-body>
     </b-card>
-    <b-card>
+    <b-card no-body>
       <b-card-header>
         <b-card-title>
           Deposits ({{ proposal.total_deposit }})
@@ -171,8 +186,10 @@
       </b-card-header>
       <b-card-body>
         <b-table
+          stacked="sm"
           :items="deposits"
           :fields="deposit_fields"
+          striped
         />
       </b-card-body>
       <b-card-footer>

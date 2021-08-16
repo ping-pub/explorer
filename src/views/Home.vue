@@ -132,7 +132,7 @@ export default {
   },
   created() {
     this.chains = JSON.parse(localStorage.getItem('chains'))
-    this.timer = setInterval(this.fetch, 12000)
+    this.timer = setInterval(this.fetch, 120000)
   },
   beforeDestroy() {
     clearInterval(this.timer)
