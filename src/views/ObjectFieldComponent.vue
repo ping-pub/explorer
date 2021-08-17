@@ -34,13 +34,14 @@
           hover
           class="overflow-hidden"
         >
-          <b-tabs pills>
+          <b-tabs small>
             <b-tab
               v-for="key in Object.keys(value)"
               :key="key"
               :title="key"
               class="pl-0 pr-0"
               title-item-class="bg-light-primary"
+              style="padding: 0px;"
             >
               <array-field-component
                 v-if="Array.isArray(value[key])"
