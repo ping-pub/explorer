@@ -5,6 +5,7 @@
     :sticky-header="true"
     :no-border-collapse="true"
     responsive
+    class="ml-0 mr-0"
   >
     <template #cell()="data">
       <span v-if="isTokenField(data.value)">{{ formatTokens(data.value) }}</span>
@@ -26,7 +27,7 @@ import { BTable } from 'bootstrap-vue'
 // import fetch from 'node-fetch'
 
 import {
-  abbr, getStakingValidatorByHex, isHexAddress, isToken, toDay, tokenFormatter,
+  getStakingValidatorByHex, isHexAddress, isToken, toDay, tokenFormatter,
 } from '@/libs/data/data'
 // import { Proposal, Proposer } from '@/libs/data'
 // import { formatToken } from '@/libs/data/data'
@@ -61,7 +62,7 @@ export default {
       if (reg.test(value)) {
         return toDay(value)
       }
-      return abbr(value, 40)
+      return value
     },
     formatTokens(value) {
       return tokenFormatter(value)

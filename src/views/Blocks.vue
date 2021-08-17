@@ -2,6 +2,7 @@
   <div>
     <b-card
       no-body
+      class="text-truncate"
     >
       <b-card-header>
         <b-card-title>
@@ -15,7 +16,6 @@
         sort-by="tokens"
         striped
         hover
-        responsive
         stacked="sm"
       >
         <!-- Column: Height -->
@@ -75,7 +75,7 @@ export default {
         {
           key: 'hash',
           thClass: 'd-none d-lg-block',
-          tdClass: 'd-none d-lg-block',
+          tdClass: 'd-none d-lg-block text-truncate',
         },
         {
           key: 'proposer',

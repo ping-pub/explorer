@@ -5,6 +5,7 @@
     >
       <b-card-header>
         <b-card-title>
+          #{{ proposal.id }}
           <b-badge
             v-if="proposal.status == 1"
             pill
@@ -37,7 +38,7 @@
           >
             Rejected
           </b-badge>
-          #{{ proposal.id }} {{ proposal.title }}
+          {{ proposal.title }}
         </b-card-title>
       </b-card-header>
       <b-card-body>
@@ -71,13 +72,8 @@
             </b-tr>
             <b-tr>
               <b-td>
-                {{ $t('proposal_voting_start_time') }}
-              </b-td><b-td>{{ proposal.voting_start_time }}</b-td>
-            </b-tr>
-            <b-tr>
-              <b-td>
-                {{ $t('proposal_voting_end_time') }}
-              </b-td><b-td>{{ proposal.voting_end_time }}</b-td>
+                {{ $t('voting_time') }}
+              </b-td><b-td>{{ proposal.voting_start_time }} - {{ proposal.voting_end_time }}</b-td>
             </b-tr>
             <b-tr>
               <b-td>
@@ -88,7 +84,7 @@
             </b-tr>
           </tbody>
         </b-table-simple>
-        <div>
+        <div style="white-space: pre-line">
           <object-field-component
             :tablefield="proposal.contents"
             :small="false"

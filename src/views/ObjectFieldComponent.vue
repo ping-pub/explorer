@@ -124,6 +124,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang='css'>
+@media (min-width: 768px) {
+  td:first-child { width: 20% ;}
+}
 </style>

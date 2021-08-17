@@ -1,6 +1,9 @@
 <template>
   <div>
-    <b-card title="Baisc">
+    <b-card
+      title="Baisc"
+      class="text-truncate"
+    >
       <object-field-component
         v-if="!tx.std"
         :tablefield="tx.raw"
@@ -14,7 +17,9 @@
           <b-tr>
             <b-td style="width:200px">
               {{ 'txhash' }}
-            </b-td><b-td>{{ tx.txhash }}</b-td>
+            </b-td><b-td
+              class="text-truncate"
+            >{{ tx.txhash }}</b-td>
           </b-tr>
           <b-tr>
             <b-td>
@@ -46,18 +51,8 @@
           </b-tr>
           <b-tr>
             <b-td>
-              {{ 'gas_used' }}
-            </b-td><b-td>{{ tx.gas_used }}</b-td>
-          </b-tr>
-          <b-tr>
-            <b-td>
-              {{ 'gas_wanted' }}
-            </b-td><b-td>{{ tx.gas_wanted }}</b-td>
-          </b-tr>
-          <b-tr>
-            <b-td>
               {{ 'gas' }}
-            </b-td><b-td>{{ tx.tx.gas }}</b-td>
+            </b-td><b-td>{{ tx.gas_used }} / {{ tx.gas_wanted }}</b-td>
           </b-tr>
           <b-tr>
             <b-td>

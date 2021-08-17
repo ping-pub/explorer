@@ -9,8 +9,8 @@
       <b-card>
         <b-card-title
           class="mb-0"
-          style="height:40px;"
         >
+          #{{ p.id }}.
           <b-badge
             v-if="p.status == 1"
             pill
@@ -43,7 +43,6 @@
           >
             Rejected
           </b-badge>
-          #{{ p.id }}.
           <router-link
             :to="`./gov/${p.id}`"
           >
