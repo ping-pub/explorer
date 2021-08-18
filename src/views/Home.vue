@@ -140,7 +140,6 @@ export default {
   },
   methods: {
     fetch() {
-      console.log('fetch')
       Object.keys(this.chains).forEach(k => {
         const chain = this.chains[k]
         if (chain.api) {
