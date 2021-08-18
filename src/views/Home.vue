@@ -115,8 +115,9 @@ export default {
     AppFooter,
   },
   data() {
+    const chains = this.$store.state.chains.config
     return {
-      chains: [],
+      chains,
       downImg: require('@/assets/images/pages/under-maintenance.svg'),
     }
   },
@@ -131,7 +132,7 @@ export default {
     },
   },
   created() {
-    this.chains = JSON.parse(localStorage.getItem('chains'))
+    this.fetch()
     this.timer = setInterval(this.fetch, 120000)
   },
   beforeDestroy() {
@@ -139,6 +140,7 @@ export default {
   },
   methods: {
     fetch() {
+      console.log('fetch')
       Object.keys(this.chains).forEach(k => {
         const chain = this.chains[k]
         if (chain.api) {
