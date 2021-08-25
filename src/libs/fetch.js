@@ -1,6 +1,9 @@
 import fetch from 'node-fetch'
+// import axios from 'axios'
 import store from '@/store'
 import compareVersions from 'compare-versions'
+import { TxRaw } from '@cosmjs/stargate/build/codec/cosmos/tx/v1beta1/tx'
+import { toBase64 } from '@cosmjs/encoding'
 import {
   Proposal, ProposalTally, Proposer, StakingPool, Votes, Deposit,
   Validator, StakingParameters, Block, ValidatorDistribution, StakingDelegation, WrapStdTx,
@@ -40,8 +43,8 @@ const chainAPI = class ChainFetch {
     return true
   }
 
-  async getLatestBlock() {
-    return this.get('/blocks/latest').then(data => Block.create(data))
+  async getLatestBlock(config = null) {
+    return this.get('/blocks/latest', config).then(data => Block.create(data))
   }
 
   async getBlockByHeight(height) {
@@ -183,9 +186,11 @@ const chainAPI = class ChainFetch {
     })
   }
 
-  async get(url) {
-    this.getSelectedConfig()
-    const ret = await fetch(this.config.api + url).then(response => response.json())
+  async get(url, config = null) {
+    if (!config) {
+      this.getSelectedConfig()
+    }
+    const ret = await fetch((config ? config.api : this.config.api) + url).then(response => response.json())
     return ret
   }
 
@@ -194,8 +199,8 @@ const chainAPI = class ChainFetch {
     return ret
   }
 
-  async getAuthAccount(address) {
-    return this.get('/auth/accounts/'.concat(address)).then(data => commonProcess(data))
+  async getAuthAccount(address, config = null) {
+    return this.get('/auth/accounts/'.concat(address), config).then(data => commonProcess(data))
   }
 
   async getBankAccountBalance(address) {
@@ -244,6 +249,36 @@ const chainAPI = class ChainFetch {
 
   static async fetchTokenQuote(symbol) {
     return ChainFetch.fetchCoinMarketCap(`/quote/${symbol}`)
+  }
+
+  async broadcastTx(bodyBytes, config = null) {
+    const txString = toBase64(TxRaw.encode(bodyBytes).finish())
+    const txRaw = {
+      tx_bytes: txString,
+      mode: 'BROADCAST_MODE_SYNC',
+    }
+    return this.post('/cosmos/tx/v1beta1/txs', txRaw, config)
+  }
+
+  async post(url = '', data = {}, config = null) {
+    if (!config) {
+      this.getSelectedConfig()
+    }
+    // Default options are marked with *
+    const response = await fetch((config ? config.api : this.config.api) + url, {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      // mode: 'cors', // no-cors, *cors, same-origin
+      // credentials: 'same-origin', // redirect: 'follow', // manual, *follow, error
+      // referrerPolicy: 'origin', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      headers: {
+        'Content-Type': 'text/plain',
+        Accept: '*/*',
+        'Accept-Encoding': 'gzip, deflate, br',
+      },
+      body: JSON.stringify(data), // body data type must match "Content-Type" header
+    })
+    // const response = axios.post((config ? config.api : this.config.api) + url, data)
+    return response.json() // parses JSON response into native JavaScript objects
   }
 }
 

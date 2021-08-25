@@ -2,13 +2,12 @@
   <div class="text-center">
 
     <b-tabs
+      v-for="item,index in accounts"
+      :key="index"
       pills
       active-nav-item-class="font-weight-bolder"
     >
-      <b-tab
-        v-for="item,index in accounts"
-        :key="index"
-      >
+      <b-tab>
         <template #title>
           <feather-icon icon="UserIcon" />
           <span>{{ item.name }}</span>
@@ -48,6 +47,8 @@
                   </template>
                   <b-dropdown-item
                     v-if="balances[acc.addr]"
+                    v-b-modal.transfer-window
+                    @click="transfer(acc.addr)"
                   >
                     <feather-icon icon="SendIcon" /> Transfer
                   </b-dropdown-item>
@@ -116,14 +117,14 @@
       class="addzone"
     >
       <feather-icon icon="PlusIcon" />
-      Import Accounts
+      Connect Wallet
     </b-card>
     <!-- modal add accout -->
     <b-modal
       id="add-account"
       centered
       size="lg"
-      title="Add Account"
+      title="Connect Wallet"
       hide-footer
       hide-header-close
       cancel-disabled
@@ -131,7 +132,9 @@
     >
       <user-account-import-address />
     </b-modal>
-
+    <operation-transfer-component
+      :address.sync="selectedAddress"
+    />
   </div>
 </template>
 
@@ -146,6 +149,7 @@ import {
   formatTokenAmount, formatTokenDenom, getLocalAccounts, getLocalChains,
 } from '@/libs/data'
 import UserAccountImportAddress from './UserAccountImportAddress.vue'
+import OperationTransferComponent from './OperationTransferComponent.vue'
 // import { SigningCosmosClient } from '@cosmjs/launchpad'
 
 export default {
@@ -163,6 +167,7 @@ export default {
     BDropdownItem,
     UserAccountImportAddress,
     FeatherIcon,
+    OperationTransferComponent,
   },
   directives: {
     'b-modal': VBModal,
@@ -170,6 +175,9 @@ export default {
   },
   data() {
     return {
+      selectedAddress: '',
+      selectedName: '',
+      transferWindow: false,
       accounts: [],
       balances: {},
       ibcDenom: {},
@@ -177,41 +185,48 @@ export default {
     }
   },
   created() {
-    this.accounts = getLocalAccounts()
-    const chains = getLocalChains()
-    if (this.accounts) {
-      Object.keys(this.accounts).forEach(acc => {
-        this.accounts[acc].address.forEach(add => {
-          chainAPI.getBankBalance(chains[add.chain].api, add.addr).then(res => {
-            if (res && res.length > 0) {
-              this.$set(this.balances, add.addr, res)
-              res.forEach(token => {
-                let symbol
-                if (token.denom.startsWith('ibc')) {
-                  chainAPI.getIBCDenomTraceText(chains[add.chain].api, token.denom).then(denom => {
-                    this.$set(this.ibcDenom, token.denom, denom)
-                    symbol = formatTokenDenom(denom)
-                  })
-                } else {
-                  symbol = formatTokenDenom(token.denom)
-                }
-                if (symbol) {
-                  if (!this.quotes[symbol]) {
-                    chainAPI.fetchTokenQuote(symbol).then(quote => {
-                      this.$set(this.quotes, symbol, quote)
-                    })
-                  }
-                }
-              })
-            }
-          })
-        })
-      })
-    }
+    this.init()
   },
   methods: {
+    init() {
+      this.accounts = getLocalAccounts()
+      const chains = getLocalChains()
+      if (this.accounts) {
+        Object.keys(this.accounts).forEach(acc => {
+          this.accounts[acc].address.forEach(add => {
+            chainAPI.getBankBalance(chains[add.chain].api, add.addr).then(res => {
+              if (res && res.length > 0) {
+                this.$set(this.balances, add.addr, res)
+                res.forEach(token => {
+                  let symbol
+                  if (token.denom.startsWith('ibc')) {
+                    chainAPI.getIBCDenomTraceText(chains[add.chain].api, token.denom).then(denom => {
+                      this.$set(this.ibcDenom, token.denom, denom)
+                      symbol = formatTokenDenom(denom)
+                    })
+                  } else {
+                    symbol = formatTokenDenom(token.denom)
+                  }
+                  if (symbol) {
+                    if (!this.quotes[symbol]) {
+                      chainAPI.fetchTokenQuote(symbol).then(quote => {
+                        this.$set(this.quotes, symbol, quote)
+                      })
+                    }
+                  }
+                })
+              }
+            })
+          })
+        })
+      }
+    },
+    transfer(addr) {
+      this.selectedAddress = addr
+      console.log(this.selectedAddress)
+    },
     completeAdd() {
-      this.$set(this, 'accounts', getLocalAccounts())
+      this.init()
       this.$bvModal.hide('add-account')
     },
     formatDenom(v) {

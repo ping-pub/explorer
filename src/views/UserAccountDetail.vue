@@ -38,6 +38,7 @@
       <b-card-header class="pt-0 pl-0 pr-0">
         <b-card-title>Assets</b-card-title>
         <b-button
+          v-b-modal.transfer-window
           variant="primary"
           size="sm"
         >
@@ -103,6 +104,7 @@
       <b-card-header class="pt-0 pl-0 pr-0">
         <b-card-title>Delegation</b-card-title>
         <b-button
+          v-b-modal.withdraw-window
           variant="primary"
           size="sm"
         >
@@ -169,7 +171,7 @@
                   v-for="p, index in account.value.vesting_periods"
                   :key="index"
                 >
-                  <td>{{ p.length }} - {{ formatLength(p.length) }} </td><td>{{ formatToken(p.amount) }}</td>
+                  <td><small>{{ p.length }} <br>{{ formatLength(p.length) }}</small> </td><td>{{ formatToken(p.amount) }}</td>
                 </b-tr>
               </b-table-simple>
             </b-td>
@@ -210,12 +212,16 @@
       placement="bottom"
     >
       <vue-qr :text="address" />
-    </b-popover></div>
+    </b-popover>
+
+    <operation-transfer-component :address="address" />
+    <operation-withdraw-component :address="address" />
+  </div>
 </template>
 
 <script>
 import {
-  BCard, BAvatar, BPopover, BTable, BRow, BCol, BTableSimple, BTr, BTd, BTbody, BCardHeader, BCardTitle, BButton, BCardBody,
+  BCard, BAvatar, BPopover, BTable, BRow, BCol, BTableSimple, BTr, BTd, BTbody, BCardHeader, BCardTitle, BButton, BCardBody, VBModal,
 } from 'bootstrap-vue'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -228,6 +234,8 @@ import {
 import { $themeColors } from '@themeConfig'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
 import ChartjsComponentDoughnutChart from './ChartjsComponentDoughnutChart.vue'
+import OperationTransferComponent from './OperationTransferComponent.vue'
+import OperationWithdrawComponent from './OperationWithdrawComponent.vue'
 
 export default {
   components: {
@@ -251,8 +259,11 @@ export default {
     ToastificationContent,
     ObjectFieldComponent,
     ChartjsComponentDoughnutChart,
+    OperationTransferComponent,
+    OperationWithdrawComponent,
   },
   directives: {
+    'b-modal': VBModal,
     Ripple,
   },
   data() {

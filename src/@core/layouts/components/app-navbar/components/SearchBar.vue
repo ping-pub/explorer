@@ -84,6 +84,7 @@ export default {
         } else if (txhash.test(key)) {
           this.$router.push({ name: 'transaction', params: { chain: c.chain_name, hash: key } })
         } else if (addr.test(key)) {
+          this.$router.push({ name: 'chain-account', params: { chain: c.chain_name, address: key } })
           // console.log('address', key)
         }
       }

@@ -5,13 +5,23 @@ import { sha256 } from '@cosmjs/crypto'
 // ledger
 import TransportWebBLE from '@ledgerhq/hw-transport-web-ble'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
+import { SigningStargateClient } from '@cosmjs/stargate'
 // import Cosmos from '@ledgerhq/hw-app-cosmos'
 import CosmosApp from 'ledger-cosmos-js'
+import { LedgerSigner } from '@cosmjs/ledger-amino'
+import {
+  makeAuthInfoBytes, makeSignBytes, Registry,
+} from '@cosmjs/proto-signing'
+import { encodeSecp256k1Signature } from '@cosmjs/amino'
+import { Uint53 } from '@cosmjs/math'
+import { TxRaw } from '@cosmjs/stargate/build/codec/cosmos/tx/v1beta1/tx'
 
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import localeData from 'dayjs/plugin/localeData'
+
+const COSMOS_PATH = [44, 118, 0, 0, 0]
 
 dayjs.extend(localeData)
 dayjs.extend(duration)
@@ -21,7 +31,87 @@ export async function connectLedger(transport = 'usb') {
   const trans = await transport === 'usb' ? TransportWebUSB.create() : TransportWebBLE.create()
   return new CosmosApp(trans)
 }
-const COSMOS_PATH = [44, 118, 0, 0, 0]
+
+/* eslint-enable */
+function unharden(hdPath) {
+  return hdPath.map(n => (n.isHardened() ? n.toNumber() - 2 ** 31 : n.toNumber()))
+}
+
+function makeSignDoc(bodyBytes, authInfoBytes, chainId, accountNumber) {
+  return {
+    bodyBytes,
+    authInfoBytes,
+    chainId,
+    accountNumber: Uint53.fromString(String(accountNumber)),
+  }
+}
+
+export async function signDirect(signer, signerAddress, messages, fee, memo, { accountNumber, sequence, chainId }) {
+  // const accountFromSigner = (await this.signer.getAccounts()).find(account => account.address === signerAddress)
+  // if (!accountFromSigner) {
+  //     throw new Error("Failed to retrieve account from signer");
+  // }
+  const accountFromSigner = await signer.getAddressAndPubKey(COSMOS_PATH, 'cosmos')
+  if (!accountFromSigner) {
+    throw new Error('Failed to retrieve account from signer')
+  }
+  const { pubkey } = accountFromSigner
+  console.log('accout:', accountFromSigner, pubkey)
+  const txBodyEncodeObject = {
+    typeUrl: '/cosmos.tx.v1beta1.TxBody',
+    value: {
+      messages,
+      memo,
+    },
+  }
+  const txBodyBytes = new Registry().encode(txBodyEncodeObject)
+  const gasLimit = Uint53.fromString(String(fee.gas))
+  console.log('account from signer: ', txBodyBytes, gasLimit)
+  const authInfoBytes = makeAuthInfoBytes([pubkey], fee.amount, gasLimit, sequence)
+  console.log('authinfo: ', authInfoBytes, chainId, accountNumber)
+  const signDoc = makeSignDoc(txBodyBytes, authInfoBytes, chainId, accountNumber)
+  console.log('signdoc: ', signDoc, signer)
+  // const { signature, signed } = await signer.signDirect(signerAddress, signDoc)
+  const signBytes = makeSignBytes(signDoc)
+  const hashedMessage = sha256(signBytes)
+  const signature = await signer.sign(unharden(COSMOS_PATH), hashedMessage)
+  const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)])
+  const stdSignature = encodeSecp256k1Signature(pubkey, signatureBytes)
+
+  console.log('custom sign:', txBodyBytes, authInfoBytes, signDoc)
+  return TxRaw.fromPartial({
+    bodyBytes: txBodyBytes,
+    authInfoBytes,
+    signatures: [fromBase64(stdSignature)],
+  })
+}
+
+export async function sign(device, chainId, signerAddress, messages, fee, memo, signerData) {
+  let transport
+  let signer
+  switch (device) {
+    case 'ledgerBle':
+      transport = await TransportWebBLE.create()
+      signer = new LedgerSigner(transport)
+      break
+    case 'ledgerUSB':
+      transport = await TransportWebUSB.create()
+      signer = new LedgerSigner(transport)
+      break
+    case 'keplr':
+    default:
+      if (!window.getOfflineSigner || !window.keplr) {
+        throw new Error('Please install keplr extension')
+      }
+      await window.keplr.enable(chainId)
+      signer = window.getOfflineSignerOnlyAmino(chainId)
+  }
+
+  // Ensure the address has some tokens to spend
+  const client = await SigningStargateClient.offline(signer)
+  return client.signAmino(signerAddress, messages, fee, memo, signerData)
+  // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
+}
 
 export async function getLedgerAddress(transport = 'blu') {
   const trans = transport === 'usb' ? await TransportWebUSB.create() : await TransportWebBLE.create()
@@ -49,6 +139,11 @@ export function getLocalAccounts() {
 
 export function toDuration(value) {
   return dayjs.duration(value).humanize()
+}
+
+// unit(y M d h m s ms)
+export function timeIn(time, amount, unit = 's') {
+  return dayjs().isAfter(dayjs(time).add(amount, unit))
 }
 
 export function toDay(time, format = 'long') {
