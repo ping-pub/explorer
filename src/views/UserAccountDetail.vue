@@ -103,19 +103,65 @@
     <b-card>
       <b-card-header class="pt-0 pl-0 pr-0">
         <b-card-title>Delegation</b-card-title>
-        <b-button
-          v-b-modal.withdraw-window
-          variant="primary"
-          size="sm"
-        >
-          Withdraw
-        </b-button>
+        <div>
+          <b-button
+            v-b-modal.delegate-window
+            variant="primary"
+            size="sm"
+            class="mr-25"
+          >
+            Delegate
+          </b-button>
+          <b-button
+            v-if="delegations"
+            v-b-modal.withdraw-window
+            variant="primary"
+            size="sm"
+          >
+            Withdraw
+          </b-button>
+        </div>
       </b-card-header>
       <b-card-body class="pl-0 pr-0">
         <b-table
           :items="deleTable"
           stacked="sm"
-        />
+        >
+          <template #cell(action)="data">
+            <!-- size -->
+            <b-button-group
+              size="sm"
+            >
+              <b-button
+                v-b-modal.delegate-window
+                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                v-b-tooltip.hover.top="'Delegate'"
+                variant="outline-primary"
+                @click="selectValue(data.value)"
+              >
+                <feather-icon icon="LogInIcon" />
+              </b-button>
+              <b-button
+                v-b-modal.redelegate-window
+                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                v-b-tooltip.hover.top="'Redelegate'"
+                variant="outline-primary"
+                @click="selectValue(data.value)"
+              >
+                <feather-icon icon="ShuffleIcon" />
+              </b-button>
+              <b-button
+                v-b-modal.unbond-window
+                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                v-b-tooltip.hover.top="'Unbond'"
+                variant="outline-primary"
+                @click="selectValue(data.value)"
+              >
+                <feather-icon icon="LogOutIcon" />
+              </b-button>
+            </b-button-group>
+          </template>
+        </b-table>
       </b-card-body>
     </b-card>
 
@@ -216,12 +262,25 @@
 
     <operation-transfer-component :address="address" />
     <operation-withdraw-component :address="address" />
+    <operation-unbond-component
+      :address="address"
+      :validator-address.sync="selectedValidator"
+    />
+    <operation-delegate-component
+      :address="address"
+      :validator-address.sync="selectedValidator"
+    />
+    <operation-redelegate-component
+      :address="address"
+      :validator-address.sync="selectedValidator"
+    />
   </div>
 </template>
 
 <script>
 import {
   BCard, BAvatar, BPopover, BTable, BRow, BCol, BTableSimple, BTr, BTd, BTbody, BCardHeader, BCardTitle, BButton, BCardBody, VBModal,
+  BButtonGroup, VBTooltip,
 } from 'bootstrap-vue'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -236,6 +295,9 @@ import ObjectFieldComponent from './ObjectFieldComponent.vue'
 import ChartjsComponentDoughnutChart from './ChartjsComponentDoughnutChart.vue'
 import OperationTransferComponent from './OperationTransferComponent.vue'
 import OperationWithdrawComponent from './OperationWithdrawComponent.vue'
+import OperationUnbondComponent from './OperationUnbondComponent.vue'
+import OperationDelegateComponent from './OperationDelegateComponent.vue'
+import OperationRedelegateComponent from './OperationRedelegateComponent.vue'
 
 export default {
   components: {
@@ -253,6 +315,7 @@ export default {
     BCardTitle,
     BCardBody,
     BButton,
+    BButtonGroup,
     BTr,
     BTd,
     // eslint-disable-next-line vue/no-unused-components
@@ -261,14 +324,19 @@ export default {
     ChartjsComponentDoughnutChart,
     OperationTransferComponent,
     OperationWithdrawComponent,
+    OperationDelegateComponent,
+    OperationRedelegateComponent,
+    OperationUnbondComponent,
   },
   directives: {
     'b-modal': VBModal,
+    'b-tooltip': VBTooltip,
     Ripple,
   },
   data() {
     const { address } = this.$route.params
     return {
+      selectedValidator: '',
       totalCurrency: 0,
       address,
       account: null,
@@ -336,16 +404,26 @@ export default {
         return xh
       }))
 
-      total = total.concat(this.delegations.map(x => {
-        const xh = x.balance
-        xh.type = 'Delegation'
-        xh.color = 'success'
-        xh.icon = 'LockIcon'
-        xh.currency = this.formatCurrency(xh.amount, xh.denom)
-        sumCurrency += xh.currency
-        sum += Number(xh.amount)
-        return xh
-      }))
+      let stakingDenom = ''
+
+      if (this.delegations) {
+        let temp = 0
+        this.delegations.forEach(x => {
+          const xh = x.balance
+          temp += Number(xh.amount)
+          sumCurrency += this.formatCurrency(xh.amount, xh.denom)
+          sum += Number(xh.amount)
+          stakingDenom = xh.denom
+        })
+        total.push({
+          type: 'Delegation',
+          color: 'success',
+          icon: 'LockIcon',
+          amount: temp,
+          denom: stakingDenom,
+          currency: this.formatCurrency(temp, stakingDenom),
+        })
+      }
 
       if (this.reward.total) {
         total = total.concat(this.reward.total.map(x => {
@@ -367,12 +445,23 @@ export default {
         //   xh.icon = 'TrendingUpIcon'
         //   return xh
         // }))
+        let tmp1 = 0
+        this.unbonding.forEach(x => {
+          x.entries.forEach(e => {
+            tmp1 += Number(e.balance)
+          })
+        })
+        this.redelegations.forEach(x => {
+          x.entries.forEach(e => {
+            tmp1 += Number(e.balance)
+          })
+        })
         total.push({
           type: 'unbonding',
           color: 'danger',
           icon: 'TrendingDownIcon',
-          denom: '',
-          amount: 0,
+          denom: stakingDenom,
+          amount: tmp1,
           percent: 0,
           currency: 0,
         })
@@ -411,13 +500,14 @@ export default {
     },
     deleTable() {
       const re = []
-      if (this.reward.rewards) {
+      if (this.reward.rewards && this.delegations) {
         this.delegations.forEach(e => {
           const reward = this.reward.rewards.find(r => r.validator_address === e.delegation.validator_address)
           re.push({
             validator: getStakingValidatorOperator(this.$http.config.chain_name, e.delegation.validator_address, 8),
             token: formatToken(e.balance),
             reward: tokenFormatter(reward.reward),
+            action: e.delegation.validator_address,
           })
         })
       }
@@ -475,6 +565,9 @@ export default {
     // })
   },
   methods: {
+    selectValue(v) {
+      this.selectedValidator = v
+    },
     formatDenom(v) {
       return formatTokenDenom(this.denoms[v] ? this.denoms[v] : v)
     },

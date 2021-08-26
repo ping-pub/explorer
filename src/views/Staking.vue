@@ -18,73 +18,74 @@
           <span>Validators {{ validators.length }}/{{ stakingParameters.max_validators }} </span>
         </b-card-title>
       </b-card-header>
-      <b-table
-        :items="validators"
-        :fields="validator_fields"
-        :sort-desc="true"
-        sort-by="tokens"
-        striped
-        hover
-        responsive="sm"
-        class="text-nowrap"
-      >
-        <!-- A virtual column -->
-        <template #cell(index)="data">
-          <b-badge
-            :variant="rankBadge(data)"
-          >
-            {{ data.index + 1 }}
-          </b-badge>
-        </template>
-        <!-- Column: Validator -->
-        <template #cell(description)="data">
-          <b-media vertical-align="center d-none d-md-block">
-            <template #aside>
-              <b-avatar
-                v-if="data.item.avatar"
-                v-b-tooltip.hover.v-primary
-                v-b-tooltip.hover.right="data.item.description.details"
-                size="32"
-                variant="light-primary"
-                :src="data.item.avatar"
-              />
-              <b-avatar
-                v-if="!data.item.avatar"
-                v-b-tooltip.hover.v-primary
-                v-b-tooltip.hover.right="data.item.description.details"
-              >
-                <feather-icon icon="ServerIcon" />
-              </b-avatar>
-            </template>
-            <span class="font-weight-bolder d-block text-nowrap">
-              <router-link
-                :to="`./staking/${data.item.operator_address}`"
-              >
-                {{ data.item.description.moniker }}
-              </router-link>
-            </span>
-            <small class="text-muted">{{ data.item.description.website || data.item.description.identity }}</small>
-          </b-media>
-        </template>
-        <!-- Token -->
-        <template #cell(tokens)="data">
-          <div
-            v-if="data.item.tokens > 0"
-            class="d-flex flex-column"
-          >
-            <span class="font-weight-bold mb-0">{{ tokenFormatter(data.item.tokens, stakingParameters.bond_denom) }}</span>
-            <span class="font-small-2 text-muted text-nowrap">{{ percent(data.item.tokens/stakingPool) }}%</span>
-          </div>
-          <span v-else>{{ data.item.delegator_shares }}</span>
-        </template>
-      </b-table>
+      <b-card-body class="pl-0 pr-0">
+        <b-table
+          :items="validators"
+          :fields="validator_fields"
+          :sort-desc="true"
+          sort-by="tokens"
+          striped
+          hover
+          responsive="sm"
+        >
+          <!-- A virtual column -->
+          <template #cell(index)="data">
+            <b-badge
+              :variant="rankBadge(data)"
+            >
+              {{ data.index + 1 }}
+            </b-badge>
+          </template>
+          <!-- Column: Validator -->
+          <template #cell(description)="data">
+            <b-media vertical-align="center d-none d-md-block">
+              <template #aside>
+                <b-avatar
+                  v-if="data.item.avatar"
+                  v-b-tooltip.hover.v-primary
+                  v-b-tooltip.hover.right="data.item.description.details"
+                  size="32"
+                  variant="light-primary"
+                  :src="data.item.avatar"
+                />
+                <b-avatar
+                  v-if="!data.item.avatar"
+                  v-b-tooltip.hover.v-primary
+                  v-b-tooltip.hover.right="data.item.description.details"
+                >
+                  <feather-icon icon="ServerIcon" />
+                </b-avatar>
+              </template>
+              <span class="font-weight-bolder d-block text-nowrap">
+                <router-link
+                  :to="`./staking/${data.item.operator_address}`"
+                >
+                  {{ data.item.description.moniker }}
+                </router-link>
+              </span>
+              <small class="text-muted">{{ data.item.description.website || data.item.description.identity }}</small>
+            </b-media>
+          </template>
+          <!-- Token -->
+          <template #cell(tokens)="data">
+            <div
+              v-if="data.item.tokens > 0"
+              class="d-flex flex-column"
+            >
+              <span class="font-weight-bold mb-0">{{ tokenFormatter(data.item.tokens, stakingParameters.bond_denom) }}</span>
+              <span class="font-small-2 text-muted text-nowrap d-none d-lg-block">{{ percent(data.item.tokens/stakingPool) }}%</span>
+            </div>
+            <span v-else>{{ data.item.delegator_shares }}</span>
+          </template>
+        </b-table>
+      </b-card-body>
     </b-card>
   </div>
 </template>
 
 <script>
 import {
-  BTable, BMedia, BAvatar, BBadge, BCard, BCardHeader, BCardTitle, VBTooltip,
+  BTable, BMedia, BAvatar, BBadge, BCard, BCardHeader, BCardTitle, VBTooltip, BCardBody,
 } from 'bootstrap-vue'
 import {
   Validator, percent, StakingParameters, formatToken,
@@ -101,6 +102,7 @@ export default {
     BBadge,
     BCardHeader,
     BCardTitle,
+    BCardBody,
   },
   directives: {
     'b-tooltip': VBTooltip,

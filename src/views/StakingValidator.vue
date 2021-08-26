@@ -25,17 +25,28 @@
               </div>
               <div class="d-flex flex-wrap">
                 <b-button
+                  v-b-modal.delegate-window
                   size="sm"
                   variant="primary"
+                  class="mr-25 mb-25"
                 >
                   Delegate
                 </b-button>
                 <b-button
+                  v-b-modal.redelegate-window
                   size="sm"
                   variant="outline-danger"
-                  class="ml-1"
+                  class="mr-25 mb-25"
                 >
                   Redelegate
+                </b-button>
+                <b-button
+                  v-b-modal.unbond-window
+                  size="sm"
+                  variant="outline-danger"
+                  class="mr-25 mb-25"
+                >
+                  Unbond
                 </b-button>
               </div>
             </div>
@@ -63,24 +74,6 @@
 
             <div class="d-flex align-items-center mr-2">
               <b-avatar
-                variant="light-success"
-                rounded
-              >
-                <feather-icon
-                  icon="TrendingUpIcon"
-                  size="18"
-                />
-              </b-avatar>
-              <div class="ml-1">
-                <h5 class="mb-0">
-                  {{ apr(validator.commission.rate) }}
-                </h5>
-                <small>Annual Profit</small>
-              </div>
-            </div>
-
-            <div class="d-flex align-items-center">
-              <b-avatar
                 variant="light-warning"
                 rounded
               >
@@ -94,6 +87,27 @@
                   {{ percentFormat(selfDelegation.balance.amount/validator.tokens) }}%
                 </h5>
                 <small>Self Delegation</small>
+              </div>
+            </div>
+
+            <div
+              v-if="mintInflation"
+              class="d-flex align-items-center"
+            >
+              <b-avatar
+                variant="light-success"
+                rounded
+              >
+                <feather-icon
+                  icon="TrendingUpIcon"
+                  size="18"
+                />
+              </b-avatar>
+              <div class="ml-1">
+                <h5 class="mb-0">
+                  {{ apr(validator.commission.rate) }}
+                </h5>
+                <small>Annual Profit</small>
               </div>
             </div>
           </div>
@@ -195,7 +209,7 @@
 
       <b-card-footer
         v-if="validator.description.details"
-        class="mt-1"
+        class="mt-1 pl-0 pr-0"
       >
         {{ validator.description.details || '' }}
       </b-card-footer>
@@ -255,12 +269,15 @@
         </b-col>
       </b-row>
     </template>
+    <operation-delegate-component :validator-address="validator.operator_address" />
+    <operation-redelegate-component :validator-address="validator.operator_address" />
+    <operation-unbond-component :validator-address="validator.operator_address" />
   </div>
 </template>
 
 <script>
 import {
-  BCard, BButton, BAvatar, BRow, BCol, BCardBody, BCardFooter, VBTooltip,
+  BCard, BButton, BAvatar, BRow, BCol, BCardBody, BCardFooter, VBTooltip, VBModal,
 } from 'bootstrap-vue'
 
 import {
@@ -270,6 +287,9 @@ import { keybase } from '@/libs/fetch'
 import StakingAddressComponent from './StakingAddressComponent.vue'
 import StakingCommissionComponent from './StakingCommissionComponent.vue'
 import StakingRewardComponent from './StakingRewardComponent.vue'
+import OperationDelegateComponent from './OperationDelegateComponent.vue'
+import OperationRedelegateComponent from './OperationRedelegateComponent.vue'
+import OperationUnbondComponent from './OperationUnbondComponent.vue'
 
 export default {
   components: {
@@ -283,8 +303,12 @@ export default {
     StakingAddressComponent,
     StakingCommissionComponent,
     StakingRewardComponent,
+    OperationDelegateComponent,
+    OperationRedelegateComponent,
+    OperationUnbondComponent,
   },
   directives: {
+    'b-modal': VBModal,
     'b-tooltip': VBTooltip,
   },
   data() {

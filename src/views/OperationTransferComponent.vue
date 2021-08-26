@@ -134,20 +134,19 @@
                   name="fee"
                 >
                   <b-input-group>
-                    <b-input-group-prepend>
-                      <b-form-input v-model="fee" />
-                      <b-form-select
-                        v-model="feeDenom"
+                    <b-form-input v-model="fee" />
+                    <b-form-select
+                      v-model="feeDenom"
+                    >
+                      <b-form-select-option
+                        v-for="item in feeDenoms"
+                        :key="item.denom"
+                        :value="item.denom"
                       >
-                        <b-form-select-option
-                          v-for="item in feeDenoms"
-                          :key="item.denom"
-                          :value="item.denom"
-                        >
-                          {{ item.denom }}
-                        </b-form-select-option>
-                      </b-form-select>
-                    </b-input-group-prepend></b-input-group>
+                        {{ item.denom }}
+                      </b-form-select-option>
+                    </b-form-select>
+                  </b-input-group>
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -239,7 +238,7 @@ import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  formatToken, getLocalAccounts, getLocalChains, sign, timeIn,
+  formatToken, getLocalAccounts, getLocalChains, setLocalTxHistory, sign, timeIn,
 } from '@/libs/data'
 import chainAPI from '@/libs/fetch'
 import { Cosmos } from '@cosmostation/cosmosjs'
@@ -431,7 +430,7 @@ export default {
       ).then((bodyBytes, s) => {
         console.log('signed: ', bodyBytes, s)
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
-          console.log(res)
+          setLocalTxHistory({ op: 'send', hash: res.txhash, time: new Date() })
           this.$bvModal.hide('transfer-window')
           this.$toast({
             component: ToastificationContent,

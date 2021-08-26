@@ -223,7 +223,6 @@ export default {
     },
     transfer(addr) {
       this.selectedAddress = addr
-      console.log(this.selectedAddress)
     },
     completeAdd() {
       this.init()

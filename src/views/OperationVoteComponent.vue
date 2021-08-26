@@ -1,10 +1,10 @@
 <template>
   <div>
     <b-modal
-      id="withdraw-window"
+      id="vote-window"
       centered
       size="md"
-      title="Withdraw Rewards"
+      title="Vote"
       hide-header-close
       scrollable
       @hidden="resetModal"
@@ -14,25 +14,74 @@
       <validation-observer ref="simpleRules">
         <b-form>
           <b-row>
-            <b-col v-if="account">
+            <b-col>
+              <h4>{{ proposalId }}. {{ title }}</h4>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
               <b-form-group
-                label="Sender"
+                label="Voter"
                 label-for="Account"
               >
-                <b-input-group class="mb-25">
-                  <b-input-group-prepend is-text>
-                    <b-avatar
-                      :src="account.logo"
-                      size="18"
-                      variant="light-primary"
-                      rounded
-                    />
-                  </b-input-group-prepend>
-                  <b-form-input
-                    :value="account.addr"
-                    readonly
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="Voter"
+                >
+                  <v-select
+                    v-model="voter"
+                    :options="account"
+                    :reduce="val => val.addr"
+                    label="addr"
+                    placeholder="Select an address"
                   />
-                </b-input-group>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-form-group
+                label="Option"
+                label-for="option"
+              >
+                <div class="demo-inline-spacing">
+
+                  <b-form-radio
+                    v-model="option"
+                    name="option"
+                    value="1"
+                    class="custom-control-success"
+                  >
+                    Yes
+                  </b-form-radio>
+                  <b-form-radio
+                    v-model="option"
+                    name="option"
+                    value="3"
+                    class="custom-control-warning"
+                  >
+                    No
+                  </b-form-radio>
+                  <b-form-radio
+                    v-model="option"
+                    name="option"
+                    value="4"
+                    class="custom-control-danger"
+                  >
+                    No with Veto
+                  </b-form-radio>
+                  <b-form-radio
+                    v-model="option"
+                    name="option"
+                    value="2"
+                    class="custom-control-secondary"
+                  >
+                    Abstain
+                  </b-form-radio>
+                </div>
               </b-form-group>
             </b-col>
           </b-row>
@@ -145,49 +194,57 @@
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
-  BModal, BRow, BCol, BInputGroup, BFormInput, BAvatar, BFormGroup, BFormSelect, BFormSelectOption,
-  BForm, BFormRadioGroup, BFormRadio, BInputGroupPrepend,
+  BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
+  BForm, BFormRadioGroup, BFormRadio,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  formatToken, getLocalAccounts, getLocalChains, sign, timeIn,
+  formatToken, getLocalAccounts, getLocalChains, setLocalTxHistory, sign, timeIn,
 } from '@/libs/data'
 import chainAPI from '@/libs/fetch'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import vSelect from 'vue-select'
 
 export default {
-  name: 'TransforDialogue',
+  name: 'VoteDialogue',
   components: {
     BModal,
     BRow,
     BCol,
     BForm,
     BInputGroup,
-    BInputGroupPrepend,
     BFormInput,
-    BAvatar,
     BFormGroup,
     BFormSelect,
     BFormSelectOption,
     BFormRadioGroup,
     BFormRadio,
+    vSelect,
 
     ValidationProvider,
     ValidationObserver,
+    // eslint-disable-next-line vue/no-unused-components
+    ToastificationContent,
   },
   props: {
-    address: {
+    proposalId: {
+      type: Number,
+      required: true,
+    },
+    title: {
       type: String,
-      default: '',
+      required: true,
     },
   },
   data() {
     return {
+      voter: null,
+      option: null,
       chainId: '',
       selectedChain: '',
       balance: [],
-      delegations: [],
       memo: '',
       fee: 800,
       feeDenom: '',
@@ -222,26 +279,37 @@ export default {
       return this.computeAccount()
     },
   },
-  created() {
-    // console.log('address: ', this.address)
-  },
   methods: {
     computeAccount() {
       const accounts = getLocalAccounts()
       const chains = getLocalChains()
       const values = Object.values(accounts)
+      let array = []
       for (let i = 0; i < values.length; i += 1) {
-        const addr = values[i].address.find(x => x.addr === this.address)
+        const addrs = values[i].address.filter(x => x.chain === this.$route.params.chain)
+        if (addrs && addrs.length > 0) {
+          array = array.concat(addrs)
+          if (!this.voter) {
+            this.voter = addrs[0].addr
+          }
+        }
+        const addr = values[i].address.find(x => x.addr === this.selectedAddress)
         if (addr) {
           this.selectedChain = chains[addr.chain]
-          return addr
         }
       }
-      return null
+      if (!this.selectedChain) {
+        this.selectedChain = chains[this.$route.params.chain]
+      }
+      const reducer = (t, c) => {
+        if (!(t.find(x => x.addr === c.addr))) t.push(c)
+        return t
+      }
+      return array.reduce(reducer, [])
     },
     loadBalance() {
-      if (this.address) {
-        chainAPI.getBankBalance(this.selectedChain.api, this.address).then(res => {
+      if (this.voter) {
+        chainAPI.getBankBalance(this.selectedChain.api, this.voter).then(res => {
           if (res && res.length > 0) {
             this.balance = res
             const token = this.balance.find(i => !i.denom.startsWith('ibc'))
@@ -257,7 +325,7 @@ export default {
             this.error = null
           }
         })
-        this.$http.getAuthAccount(this.address, this.selectedChain).then(ret => {
+        this.$http.getAuthAccount(this.voter, this.selectedChain).then(ret => {
           if (ret.value.base_vesting_account) {
             this.accountNumber = ret.value.base_vesting_account.base_account.account_number
             this.sequence = ret.value.base_vesting_account.base_account.sequence
@@ -268,19 +336,18 @@ export default {
           }
         })
       }
-      this.$http.getStakingDelegations(this.address).then(res => {
-        this.delegations = res.delegation_responses
-      })
     },
     handleOk(bvModalEvt) {
       // console.log('send')
       // Prevent modal from closing
       bvModalEvt.preventDefault()
-      // Trigger submit handler
-      // this.handleSubmit()
-      this.sendTx().then(ret => {
-        // console.log(ret)
-        this.error = ret
+      this.$refs.simpleRules.validate().then(ok => {
+        if (ok) {
+          this.sendTx().then(ret => {
+            // console.log(ret)
+            this.error = ret
+          })
+        }
       })
     },
     resetModal() {
@@ -291,17 +358,14 @@ export default {
       return formatToken(v)
     },
     async sendTx() {
-      const txMsgs = []
-      this.delegations.forEach(i => {
-        console.log(i.delegation.validator_address)
-        txMsgs.push({
-          typeUrl: '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward',
-          value: {
-            delegatorAddress: this.address,
-            validatorAddress: i.delegation.validator_address,
-          },
-        })
-      })
+      const txMsgs = [{
+        typeUrl: '/cosmos.gov.v1beta1.MsgVote',
+        value: {
+          voter: this.voter,
+          proposalId: this.proposalId,
+          option: this.option,
+        },
+      }]
 
       if (txMsgs.length === 0) {
         this.error = 'No delegation found'
@@ -328,20 +392,26 @@ export default {
         chainId: this.chainId,
       }
 
-      console.log('tx:', txMsgs, txFee, signerData)
-
       sign(
         this.wallet,
         this.chainId,
-        this.address,
+        this.voter,
         txMsgs,
         txFee,
         this.memo,
         signerData,
-      ).then((bodyBytes, s) => {
-        console.log('signed: ', bodyBytes, s)
+      ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
-          console.log(res)
+          setLocalTxHistory({ op: 'vote', hash: res.tx_response.txhash, time: new Date() })
+          this.$bvModal.hide('vote-window')
+          this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Transaction sent!',
+              icon: 'EditIcon',
+              variant: 'success',
+            },
+          })
         }).catch(e => {
           this.error = e
         })
@@ -355,3 +425,7 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+@import '@core/scss/vue/libs/vue-select.scss';
+</style>

@@ -56,7 +56,6 @@ export async function signDirect(signer, signerAddress, messages, fee, memo, { a
     throw new Error('Failed to retrieve account from signer')
   }
   const { pubkey } = accountFromSigner
-  console.log('accout:', accountFromSigner, pubkey)
   const txBodyEncodeObject = {
     typeUrl: '/cosmos.tx.v1beta1.TxBody',
     value: {
@@ -66,11 +65,8 @@ export async function signDirect(signer, signerAddress, messages, fee, memo, { a
   }
   const txBodyBytes = new Registry().encode(txBodyEncodeObject)
   const gasLimit = Uint53.fromString(String(fee.gas))
-  console.log('account from signer: ', txBodyBytes, gasLimit)
   const authInfoBytes = makeAuthInfoBytes([pubkey], fee.amount, gasLimit, sequence)
-  console.log('authinfo: ', authInfoBytes, chainId, accountNumber)
   const signDoc = makeSignDoc(txBodyBytes, authInfoBytes, chainId, accountNumber)
-  console.log('signdoc: ', signDoc, signer)
   // const { signature, signed } = await signer.signDirect(signerAddress, signDoc)
   const signBytes = makeSignBytes(signDoc)
   const hashedMessage = sha256(signBytes)
@@ -78,7 +74,6 @@ export async function signDirect(signer, signerAddress, messages, fee, memo, { a
   const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)])
   const stdSignature = encodeSecp256k1Signature(pubkey, signatureBytes)
 
-  console.log('custom sign:', txBodyBytes, authInfoBytes, signDoc)
   return TxRaw.fromPartial({
     bodyBytes: txBodyBytes,
     authInfoBytes,
@@ -104,12 +99,12 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
         throw new Error('Please install keplr extension')
       }
       await window.keplr.enable(chainId)
-      signer = window.getOfflineSignerOnlyAmino(chainId)
+      signer = window.getOfflineSigner(chainId)
   }
 
   // Ensure the address has some tokens to spend
   const client = await SigningStargateClient.offline(signer)
-  return client.signAmino(signerAddress, messages, fee, memo, signerData)
+  return client.sign(signerAddress, messages, fee, memo, signerData)
   // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
 }
 
@@ -135,6 +130,19 @@ export function getLocalChains() {
 
 export function getLocalAccounts() {
   return getLocalObject('accounts')
+}
+
+export function getLocalTxHistory() {
+  return getLocalObject('txHistory')
+}
+
+export function setLocalTxHistory(newTx) {
+  const txs = getLocalTxHistory()
+  if (txs) {
+    txs.push(newTx)
+    return localStorage.setItem('txHistory', JSON.stringify(txs))
+  }
+  return localStorage.setItem('txHistory', JSON.stringify([newTx]))
 }
 
 export function toDuration(value) {
