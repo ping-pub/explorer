@@ -1,3 +1,3 @@
 FROM nginx:alpine
-COPY ping.conf /etc/nginx/conf.d/ping.conf
-COPY dist   /var/www/html
+COPY ping.conf /etc/nginx/conf.d/default.conf
+COPY dist   /usr/share/nginx/html
