@@ -152,9 +152,10 @@ import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  formatToken, getLocalAccounts, getLocalChains, sign, timeIn,
+  formatToken, getLocalAccounts, getLocalChains, setLocalTxHistory, sign, timeIn,
 } from '@/libs/data'
 import chainAPI from '@/libs/fetch'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
   name: 'TransforDialogue',
@@ -175,6 +176,8 @@ export default {
 
     ValidationProvider,
     ValidationObserver,
+    // eslint-disable-next-line vue/no-unused-components
+    ToastificationContent,
   },
   props: {
     address: {
@@ -293,7 +296,6 @@ export default {
     async sendTx() {
       const txMsgs = []
       this.delegations.forEach(i => {
-        console.log(i.delegation.validator_address)
         txMsgs.push({
           typeUrl: '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward',
           value: {
@@ -328,8 +330,6 @@ export default {
         chainId: this.chainId,
       }
 
-      console.log('tx:', txMsgs, txFee, signerData)
-
       sign(
         this.wallet,
         this.chainId,
@@ -338,10 +338,18 @@ export default {
         txFee,
         this.memo,
         signerData,
-      ).then((bodyBytes, s) => {
-        console.log('signed: ', bodyBytes, s)
+      ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
-          console.log(res)
+          setLocalTxHistory({ op: 'delegate', hash: res.tx_response.txhash, time: new Date() })
+          this.$bvModal.hide('delegate-window')
+          this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Transaction sent!',
+              icon: 'EditIcon',
+              variant: 'success',
+            },
+          })
         }).catch(e => {
           this.error = e
         })
