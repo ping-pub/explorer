@@ -417,8 +417,6 @@ export default {
         chainId: this.chainId,
       }
 
-      console.log('tx:', txMsgs)
-
       sign(
         this.wallet,
         this.chainId,
@@ -427,8 +425,7 @@ export default {
         txFee,
         this.memo,
         signerData,
-      ).then((bodyBytes, s) => {
-        console.log('signed: ', bodyBytes, s)
+      ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
           setLocalTxHistory({ op: 'send', hash: res.txhash, time: new Date() })
           this.$bvModal.hide('transfer-window')

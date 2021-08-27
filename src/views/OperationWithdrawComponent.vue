@@ -158,7 +158,7 @@ import chainAPI from '@/libs/fetch'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
-  name: 'TransforDialogue',
+  name: 'WithdrawDialogue',
   components: {
     BModal,
     BRow,
@@ -340,8 +340,8 @@ export default {
         signerData,
       ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
-          setLocalTxHistory({ op: 'delegate', hash: res.tx_response.txhash, time: new Date() })
-          this.$bvModal.hide('delegate-window')
+          setLocalTxHistory({ op: 'withdraw', hash: res.tx_response.txhash, time: new Date() })
+          this.$bvModal.hide('withdraw-window')
           this.$toast({
             component: ToastificationContent,
             props: {
