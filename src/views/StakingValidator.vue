@@ -128,7 +128,7 @@
                 <span class="font-weight-bold">Identity</span>
               </th>
               <td class="pb-50">
-                {{ validator.description.identity || '-' }}
+                <small>{{ validator.description.identity || '-' }}</small>
               </td>
             </tr>
             <tr>
