@@ -1,6 +1,6 @@
 {
     "chain_name": "kava",
-    "api": "https://kava4.data.kava.io",
+    "api": "https://api.data.kava.io",
     "sdk_version": "0.39.2",
     "addr_prefix": "kava",
     "logo": "https://dl.airtable.com/.attachments/f25737491bd0034240093a7b4e039b15/afec77ff/logo.png"
