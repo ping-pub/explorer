@@ -134,7 +134,6 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
 
   // Ensure the address has some tokens to spend
   const client = await SigningStargateClient.offline(signer)
-  console.log('Registry: ', client.registry)
   return client.sign(signerAddress, messages, fee, memo, signerData)
   // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
 }
