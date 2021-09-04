@@ -283,6 +283,7 @@ export default {
       error: null,
       sequence: 1,
       accountNumber: 0,
+      account: [],
 
       required,
       password,
@@ -308,9 +309,6 @@ export default {
     feeDenoms() {
       if (!this.balance) return []
       return this.balance.filter(item => !item.denom.startsWith('ibc'))
-    },
-    account() {
-      return this.computeAccount()
     },
   },
   created() {
@@ -346,6 +344,8 @@ export default {
       return array.reduce(reducer, [])
     },
     loadBalance() {
+      this.account = this.computeAccount()
+      if (this.account && this.account.length > 0) this.selectedAddress = this.account[0].addr
       if (this.selectedAddress) {
         if (!getCachedValidators(this.selectedChain.chain)) {
           this.$http.getValidatorList().then(v => {

@@ -6,15 +6,15 @@ import { sha256 } from '@cosmjs/crypto'
 import TransportWebBLE from '@ledgerhq/hw-transport-web-ble'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 import { SigningStargateClient } from '@cosmjs/stargate'
+import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 // import Cosmos from '@ledgerhq/hw-app-cosmos'
 import CosmosApp from 'ledger-cosmos-js'
 import { LedgerSigner } from '@cosmjs/ledger-amino'
 import {
-  makeAuthInfoBytes, makeSignBytes, Registry,
+  makeAuthInfoBytes, makeSignBytes, Registry, SignMode,
 } from '@cosmjs/proto-signing'
-import { encodeSecp256k1Signature } from '@cosmjs/amino'
+import { encodeSecp256k1Pubkey, encodeSecp256k1Signature, encodePubkey } from '@cosmjs/amino'
 import { Uint53 } from '@cosmjs/math'
-import { TxRaw } from '@cosmjs/stargate/build/codec/cosmos/tx/v1beta1/tx'
 
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
@@ -81,6 +81,35 @@ export async function signDirect(signer, signerAddress, messages, fee, memo, { a
   })
 }
 
+export async function signAmino(signerAddress, messages, fee, memo, { accountNumber, sequence, chainId }) {
+  const accountFromSigner = (await this.signer.getAccounts()).find(account => account.address === signerAddress)
+  if (!accountFromSigner) {
+    throw new Error('Failed to retrieve account from signer')
+  }
+  const pubkey = encodePubkey(encodeSecp256k1Pubkey(accountFromSigner.pubkey))
+  const signMode = SignMode.SIGN_MODE_LEGACY_AMINO_JSON
+  const msgs = messages.map(msg => this.aminoTypes.toAmino(msg))
+  const signDoc = makeSignDoc(msgs, fee, chainId, memo, accountNumber, sequence)
+  const { signature, signed } = await this.signer.signAmino(signerAddress, signDoc)
+  const signedTxBody = {
+    messages: signed.msgs.map(msg => this.aminoTypes.fromAmino(msg)),
+    memo: signed.memo,
+  }
+  const signedTxBodyEncodeObject = {
+    typeUrl: '/cosmos.tx.v1beta1.TxBody',
+    value: signedTxBody,
+  }
+  const signedTxBodyBytes = this.registry.encode(signedTxBodyEncodeObject)
+  const signedGasLimit = Number(signed.fee.gas)
+  const signedSequence = Number(signed.sequence)
+  const signedAuthInfoBytes = makeAuthInfoBytes([pubkey], signed.fee.amount, signedGasLimit, signedSequence, signMode)
+  return TxRaw.fromPartial({
+    bodyBytes: signedTxBodyBytes,
+    authInfoBytes: signedAuthInfoBytes,
+    signatures: [fromBase64(signature.signature)],
+  })
+}
+
 export async function sign(device, chainId, signerAddress, messages, fee, memo, signerData) {
   let transport
   let signer
@@ -99,11 +128,13 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
         throw new Error('Please install keplr extension')
       }
       await window.keplr.enable(chainId)
-      signer = window.getOfflineSigner(chainId)
+      // signer = window.getOfflineSigner(chainId)
+      signer = window.getOfflineSignerOnlyAmino(chainId)
   }
 
   // Ensure the address has some tokens to spend
   const client = await SigningStargateClient.offline(signer)
+  console.log('Registry: ', client.registry)
   return client.sign(signerAddress, messages, fee, memo, signerData)
   // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
 }

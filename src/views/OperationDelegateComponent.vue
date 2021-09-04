@@ -293,9 +293,6 @@ export default {
       if (!this.balance) return []
       return this.balance.filter(item => !item.denom.startsWith('ibc'))
     },
-    account() {
-      return this.computeAccount()
-    },
   },
   created() {
     // console.log('address: ', this.address)
@@ -330,6 +327,8 @@ export default {
       return array.reduce(reducer, [])
     },
     loadBalance() {
+      this.account = this.computeAccount()
+      if (this.account && this.account.length > 0) this.selectedAddress = this.account[0].addr
       if (this.selectedAddress) {
         if (!getCachedValidators(this.selectedChain.chain)) {
           this.$http.getValidatorList().then(v => {

@@ -188,6 +188,7 @@ export default {
   data() {
     return {
       chainId: '',
+      account: [],
       selectedChain: '',
       balance: [],
       delegations: [],
@@ -216,14 +217,6 @@ export default {
     feeDenoms() {
       return this.balance.filter(item => !item.denom.startsWith('ibc'))
     },
-    account() {
-      // if (accounts && accounts[this.name]) {
-      //   const config = accounts[this.name]
-      //   const addr = config.address.find(x => x.addr === this.address)
-      //   if (addr) return addr
-      // }
-      return this.computeAccount()
-    },
   },
   created() {
     // console.log('address: ', this.address)
@@ -243,6 +236,8 @@ export default {
       return null
     },
     loadBalance() {
+      this.account = this.computeAccount()
+      if (this.account && this.account.length > 0) this.address = this.account[0].addr
       if (this.address) {
         chainAPI.getBankBalance(this.selectedChain.api, this.address).then(res => {
           if (res && res.length > 0) {

@@ -2,7 +2,7 @@ import fetch from 'node-fetch'
 // import axios from 'axios'
 import store from '@/store'
 import compareVersions from 'compare-versions'
-import { TxRaw } from '@cosmjs/stargate/build/codec/cosmos/tx/v1beta1/tx'
+import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { toBase64 } from '@cosmjs/encoding'
 import {
   Proposal, ProposalTally, Proposer, StakingPool, Votes, Deposit,

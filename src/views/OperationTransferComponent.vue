@@ -288,6 +288,7 @@ export default {
       error: null,
       sequence: 1,
       accountNumber: 0,
+      account: [],
 
       required,
       password,
@@ -305,14 +306,6 @@ export default {
   computed: {
     feeDenoms() {
       return this.balance.filter(item => !item.denom.startsWith('ibc'))
-    },
-    account() {
-      // if (accounts && accounts[this.name]) {
-      //   const config = accounts[this.name]
-      //   const addr = config.address.find(x => x.addr === this.address)
-      //   if (addr) return addr
-      // }
-      return this.computeAccount()
     },
   },
   created() {
@@ -333,12 +326,14 @@ export default {
       return null
     },
     loadBalance() {
+      this.account = this.computeAccount()
+      if (this.account && this.account.length > 0) this.address = this.account[0].addr
       if (this.address) {
         chainAPI.getBankBalance(this.selectedChain.api, this.address).then(res => {
           if (res && res.length > 0) {
             this.balance = res
             this.token = this.balance[0].denom
-            this.feeDenom = this.balance[0].denom
+            this.feeDenom = this.balance.find(x => !x.denom.startsWith('ibc')).denom
           }
         })
         this.$http.getLatestBlock(this.selectedChain).then(ret => {

@@ -7,6 +7,7 @@
       title="Vote"
       hide-header-close
       scrollable
+      :ok-disabled="!voter"
       @hidden="resetModal"
       @ok="handleOk"
       @show="loadBalance"
@@ -31,12 +32,12 @@
                 >
                   <v-select
                     v-model="voter"
-                    :options="account"
+                    :options="accounts"
                     :reduce="val => val.addr"
                     label="addr"
                     placeholder="Select an address"
                   />
-                  <small class="text-danger">{{ errors[0] }}</small>
+                  <small class="text-danger">{{ errors[0] }} <strong v-if="!accounts">Please import an account first!</strong> </small>
                 </validation-provider>
               </b-form-group>
             </b-col>
@@ -240,13 +241,14 @@ export default {
   },
   data() {
     return {
+      accounts: [],
       voter: null,
       option: null,
       chainId: '',
       selectedChain: '',
       balance: [],
       memo: '',
-      fee: 800,
+      fee: null,
       feeDenom: '',
       wallet: 'keplr',
       error: null,
@@ -269,14 +271,6 @@ export default {
   computed: {
     feeDenoms() {
       return this.balance.filter(item => !item.denom.startsWith('ibc'))
-    },
-    account() {
-      // if (accounts && accounts[this.name]) {
-      //   const config = accounts[this.name]
-      //   const addr = config.address.find(x => x.addr === this.address)
-      //   if (addr) return addr
-      // }
-      return this.computeAccount()
     },
   },
   methods: {
@@ -308,6 +302,9 @@ export default {
       return array.reduce(reducer, [])
     },
     loadBalance() {
+      this.accounts = this.computeAccount()
+      // eslint-disable-next-line prefer-destructuring
+      if (this.accounts && this.accounts.length > 0) this.voter = this.accounts[0].addr
       if (this.voter) {
         chainAPI.getBankBalance(this.selectedChain.api, this.voter).then(res => {
           if (res && res.length > 0) {
@@ -401,6 +398,7 @@ export default {
         this.memo,
         signerData,
       ).then(bodyBytes => {
+        console.log('bodybytes:', bodyBytes)
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
           setLocalTxHistory({ op: 'vote', hash: res.tx_response.txhash, time: new Date() })
           this.$bvModal.hide('vote-window')

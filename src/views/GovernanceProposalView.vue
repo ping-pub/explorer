@@ -99,7 +99,8 @@
           </b-button>
         </router-link>
         <b-button
-          :disabled="proposer.status!=2"
+          v-b-modal.vote-window
+          :disabled="proposal.status!=2"
           variant="primary"
           class="btn float-right mg-2"
         >
@@ -107,7 +108,10 @@
         </b-button>
       </b-card-footer>
     </b-card>
-
+    <operation-vote-component
+      :proposal-id="proposal.id"
+      :title="proposal.title"
+    />
     <b-card no-body>
       <b-card-header>
         <b-card-title>
@@ -218,6 +222,7 @@ import {
 import { getCachedValidators, getStakingValidatorByAccount, tokenFormatter } from '@/libs/data/data'
 import { Proposal, Proposer } from '@/libs/data'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
+import OperationVoteComponent from './OperationVoteComponent.vue'
 // import { formatToken } from '@/libs/data/data'
 
 export default {
@@ -237,6 +242,7 @@ export default {
     BTooltip,
     BBadge,
     ObjectFieldComponent,
+    OperationVoteComponent,
   },
   data() {
     return {

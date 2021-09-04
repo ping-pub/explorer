@@ -250,7 +250,7 @@ section {
 .gov-wrapper {
     display: flex;
     justify-content:center;
-    align-items:center;
+    align-items:flex-end;
 }
 .dark-layout .gov-wrapper .gov {
     background-color: #161d31;
@@ -258,7 +258,7 @@ section {
 .gov-wrapper .gov {
     padding: .5rem;
     margin: .3rem;
-    min-width: 8rem;
+    min-width: 7.5rem;
     text-align: center;
     background-color: #f8f8f8;
     border-radius: .357rem;
