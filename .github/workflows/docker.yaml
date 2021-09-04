@@ -31,4 +31,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: yaoling/wallet:${{ github.head_ref }}
+          image: yaoling/wallet
+          tags: ${{ git_hash }}
+          addLatest: true
