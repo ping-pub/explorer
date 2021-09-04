@@ -1,0 +1,7 @@
+{
+    "chain_name": "desmos",
+    "api": "https://api.mainnet.desmos.network",
+    "sdk_version": "0.42.0",
+    "addr_prefix": "desmos",
+    "logo": "https://dl.airtable.com/.attachments/e8232a86dd06af4e0591ed300376f9b2/3aab415f/logo1.png"
+}
