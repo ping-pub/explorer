@@ -169,11 +169,15 @@ const chainAPI = class ChainFetch {
     })
   }
 
-  async getGovernanceVotes(pid, offset = 0, limit = 50) {
+  async getGovernanceVotes(pid, next = '', limit = 50) {
     if (compareVersions(this.config.sdk_version, '0.40') < 0) {
-      return this.get(`/gov/proposals/${pid}/votes`).then(data => commonProcess(data).map(d => new Votes().init(d)))
+      return this.get(`/gov/proposals/${pid}/votes`).then(data => ({
+        votes: commonProcess(data).map(d => new Votes().init(d)),
+        pagination: {},
+      }))
     }
-    return this.get(`/cosmos/gov/v1beta1/proposals/${pid}/votes?pagination.offset=${offset}&pagination.limit=${limit}`).then(data => data.votes.map(d => new Votes().init(d)))
+    console.log('url:', encodeURIComponent(next))
+    return this.get(`/cosmos/gov/v1beta1/proposals/${pid}/votes?pagination.key=${encodeURIComponent(next)}&pagination.limit=${limit}`)
   }
 
   async getGovernanceList() {

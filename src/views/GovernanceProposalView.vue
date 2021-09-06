@@ -171,11 +171,20 @@
           {{ proposal.tally.abstain }}% voted Abstain
         </b-tooltip>
         <b-table
+          v-if="votes.votes && votes.votes.length > 0"
           stacked="sm"
           :fields="votes_fields"
-          :items="votes"
+          :items="votes.votes"
           striped
         />
+        <b-card
+          v-if="next"
+          class="addzone text-center"
+          @click="loadVotes()"
+        >
+          <feather-icon icon="PlusIcon" />
+          Load More Votes
+        </b-card>
       </b-card-body>
     </b-card>
     <b-card no-body>
@@ -246,6 +255,7 @@ export default {
   },
   data() {
     return {
+      next: null,
       proposal: new Proposal(),
       proposer: new Proposer(),
       deposits: [],
@@ -311,9 +321,20 @@ export default {
     })
     this.$http.getGovernanceVotes(pid).then(res => {
       this.votes = res
+      this.next = res.pagination ? res.pagination.next_key : null
     })
   },
   methods: {
+    loadVotes() {
+      if (this.next) {
+        this.next = null
+        const pid = this.$route.params.proposalid
+        this.$http.getGovernanceVotes(pid, this.next).then(res => {
+          this.$set(this.votes, 'votes', this.votes.votes.concat(res.votes))
+          this.next = res.pagination ? res.pagination.next_key : null
+        })
+      }
+    },
     formatAddress(v) {
       return getStakingValidatorByAccount(this.$http.config.chain_name, v)
     },
@@ -321,6 +342,16 @@ export default {
 }
 </script>
 
-<style>
+<style lang="css">
+.addzone {
+    border: 2px dashed #ced4da;
+    background: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: none;
+}
+.addzone :hover {
+    border: 2px dashed #7367F0;
+}
 
 </style>
