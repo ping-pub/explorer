@@ -56,7 +56,7 @@
           </b-tabs>
         </b-td>
         <b-td v-else>
-          {{ value }}
+          {{ addNewLine(value) }}
         </b-td>
       </b-tr>
     </b-tbody>
@@ -120,6 +120,9 @@ export default {
     },
     formatTokens(value) {
       return tokenFormatter(value)
+    },
+    addNewLine(value) {
+      return value.replaceAll('\\n', '\n')
     },
   },
 }
