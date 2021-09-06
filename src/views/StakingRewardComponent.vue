@@ -6,13 +6,17 @@
     <b-card-header>
       <b-card-title>Outstanding Rewards</b-card-title>
       <feather-icon
+        v-b-modal.withdraw-commission-window
         icon="MoreVerticalIcon"
         size="18"
         class="cursor-pointer"
       />
     </b-card-header>
 
-    <b-card-body>
+    <b-card-body
+      class="overflow-auto"
+      style="max-height:220px;"
+    >
       <div
         v-for="d in data.self_bond_rewards"
         :key="d.amount"
@@ -71,6 +75,10 @@
         </small>
       </div>
     </b-card-body>
+    <operation-withdraw-commission-component
+      :validator-address="validator"
+      :address="address"
+    />
   </b-card>
 </template>
 
@@ -78,6 +86,7 @@
 import {
   BCard, BCardHeader, BCardTitle, BCardBody, BMediaBody, BMedia, BMediaAside, BAvatar,
 } from 'bootstrap-vue'
+import OperationWithdrawCommissionComponent from './OperationWithdrawCommissionComponent.vue'
 
 export default {
   components: {
@@ -89,57 +98,24 @@ export default {
     BMedia,
     BMediaAside,
     BAvatar,
+    OperationWithdrawCommissionComponent,
   },
   props: {
     data: {
       type: Object,
       required: true,
     },
+    validator: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
-      transactionData: [
-        {
-          mode: 'Wallet',
-          types: 'Starbucks',
-          avatar: 'PocketIcon',
-          avatarVariant: 'light-primary',
-          payment: '-$74',
-          deduction: true,
-        },
-        {
-          mode: 'Bank Transfer',
-          types: 'Add Money',
-          avatar: 'CheckIcon',
-          avatarVariant: 'light-success',
-          payment: '+$480',
-          deduction: false,
-        },
-        {
-          mode: 'Paypal',
-          types: 'Add Money',
-          avatar: 'DollarSignIcon',
-          avatarVariant: 'light-danger',
-          payment: '+$480',
-          deduction: false,
-        },
-        {
-          mode: 'Mastercard',
-          types: 'Ordered Food',
-          avatar: 'CreditCardIcon',
-          avatarVariant: 'light-warning',
-          payment: '-$23',
-          deduction: true,
-        },
-        {
-          mode: 'Transfer',
-          types: 'Refund',
-          avatar: 'TrendingUpIcon',
-          avatarVariant: 'light-info',
-          payment: '+$98',
-          deduction: false,
-        },
-      ],
     }
   },
   methods: {

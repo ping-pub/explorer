@@ -7,6 +7,7 @@
       title="Redelegate Token"
       hide-header-close
       scrollable
+      :ok-disabled="!selectedAddress"
       @hidden="resetModal"
       @ok="handleOk"
       @show="loadBalance"

@@ -109,7 +109,7 @@
       </b-card-footer>
     </b-card>
     <operation-vote-component
-      :proposal-id="proposal.id"
+      :proposal-id="Number(proposal.id)"
       :title="proposal.title"
     />
     <b-card no-body>

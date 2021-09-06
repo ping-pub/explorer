@@ -7,6 +7,7 @@
       title="Transfer Tokens"
       hide-header-close
       scrollable
+      :ok-disabled="!address"
       @hidden="resetModal"
       @ok="handleOk"
       @show="loadBalance"

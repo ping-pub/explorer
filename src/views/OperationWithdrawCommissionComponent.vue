@@ -1,10 +1,10 @@
 <template>
   <div>
     <b-modal
-      id="withdraw-window"
+      id="withdraw-commission-window"
       centered
       size="md"
-      title="Withdraw Rewards"
+      title="Withdraw Commission"
       hide-header-close
       scrollable
 
@@ -139,7 +139,7 @@
           </b-row>
         </b-form>
       </validation-observer>
-      {{ error }}
+      <small class="text-danger">{{ error }}</small>
     </b-modal>
   </div>
 </template>
@@ -160,7 +160,7 @@ import chainAPI from '@/libs/fetch'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
-  name: 'WithdrawDialogue',
+  name: 'WithdrawCommissionDialogue',
   components: {
     BModal,
     BRow,
@@ -183,6 +183,10 @@ export default {
   },
   props: {
     address: {
+      type: String,
+      default: '',
+    },
+    validatorAddress: {
       type: String,
       default: '',
     },
@@ -235,6 +239,7 @@ export default {
           return addr
         }
       }
+      this.error = 'You are not the owner of this validator'
       return null
     },
     loadBalance() {
@@ -253,8 +258,6 @@ export default {
           const notSynced = timeIn(ret.block.header.time, 10, 'm')
           if (notSynced) {
             this.error = 'Client is not synced or blockchain is halted'
-          } else {
-            this.error = null
           }
         })
         this.$http.getAuthAccount(this.address, this.selectedChain).then(ret => {
@@ -291,16 +294,30 @@ export default {
       return formatToken(v)
     },
     async sendTx() {
-      const txMsgs = []
-      this.delegations.forEach(i => {
-        txMsgs.push({
+      const txMsgs = [
+        {
           typeUrl: '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward',
           value: {
             delegatorAddress: this.address,
-            validatorAddress: i.delegation.validator_address,
+            validatorAddress: this.validatorAddress,
           },
-        })
-      })
+        }, {
+          typeUrl: '/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission',
+          value: {
+            validatorAddress: this.validatorAddress,
+          },
+        },
+      ]
+      // this.delegations.forEach(i => {
+      //   if ()
+      //   txMsgs.push({
+      //     typeUrl: '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward',
+      //     value: {
+      //       delegatorAddress: this.address,
+      //       validatorAddress: i.delegation.validator_address,
+      //     },
+      //   })
+      // })
 
       if (txMsgs.length === 0) {
         this.error = 'No delegation found'
@@ -338,7 +355,7 @@ export default {
       ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
           setLocalTxHistory({ op: 'withdraw', hash: res.tx_response.txhash, time: new Date() })
-          this.$bvModal.hide('withdraw-window')
+          this.$bvModal.hide('withdraw-commission-window')
           this.$toast({
             component: ToastificationContent,
             props: {

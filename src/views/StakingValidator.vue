@@ -227,7 +227,11 @@
           lg="4"
           md="12"
         >
-          <staking-reward-component :data="distribution" />
+          <staking-reward-component
+            :data="distribution"
+            :validator="validator.operator_address"
+            :address="accountAddress"
+          />
         </b-col>
         <b-col
           lg="4"

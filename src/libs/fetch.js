@@ -169,8 +169,11 @@ const chainAPI = class ChainFetch {
     })
   }
 
-  async getGovernanceVotes(pid) {
-    return this.get(`/gov/proposals/${pid}/votes`).then(data => commonProcess(data).map(d => new Votes().init(d)))
+  async getGovernanceVotes(pid, offset = 0, limit = 50) {
+    if (compareVersions(this.config.sdk_version, '0.40') < 0) {
+      return this.get(`/gov/proposals/${pid}/votes`).then(data => commonProcess(data).map(d => new Votes().init(d)))
+    }
+    return this.get(`/cosmos/gov/v1beta1/proposals/${pid}/votes?pagination.offset=${offset}&pagination.limit=${limit}`).then(data => data.votes.map(d => new Votes().init(d)))
   }
 
   async getGovernanceList() {
