@@ -215,10 +215,13 @@ export function formatTokenDenom(tokenDenom) {
       denom = denom.substring(1)
     } else if (denom === 'BASECRO') {
       denom = 'CRO'
+    } else if (denom.startsWith('IBC')) {
+      denom = 'IBC...'
     }
+
     return denom
   }
-  return tokenDenom
+  return ''
 }
 
 export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
