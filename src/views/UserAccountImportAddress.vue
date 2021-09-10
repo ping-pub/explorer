@@ -79,6 +79,29 @@
                 </validation-provider>
               </b-form-group>
             </b-col>
+            <b-col
+              v-if="device.startsWith('ledger')"
+              md="12"
+            >
+              <b-form-group
+                label="HD Path"
+                label-for="hdpath"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  name="HD Path"
+                  rules="required"
+                >
+                  <b-form-input
+                    v-model="hdpath"
+                    class="mt-1"
+                    name="hdpath"
+                    placeholder="m/44'/118/0'/0/0"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
           </b-row>
         </validation-observer>
       </tab-content>
@@ -108,6 +131,29 @@
                     v-model="name"
                     :state="errors.length > 0 ? false:null"
                     placeholder="Keplr"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col
+              v-if="accounts"
+              md="12"
+            >
+              <b-form-group
+                label="Public Key"
+                label-for="ir"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  name="Public Key"
+                  rules="required"
+                >
+                  <b-form-input
+                    id="ir"
+                    :value="formatPubkey(accounts.pubkey)"
+                    readonly
+                    :state="errors.length > 0 ? false:null"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -216,6 +262,7 @@ import {
 import { required } from '@validations'
 import store from '@/store'
 import { addressDecode, addressEnCode, getLedgerAddress } from '@/libs/data'
+import { toHex } from '@cosmjs/encoding'
 
 export default {
   components: {
@@ -241,6 +288,7 @@ export default {
       debug: '',
       device: 'keplr',
       address: '',
+      hdpath: "m/44'/118/0'/0/0",
       name: '',
       options: {},
       required,
@@ -255,13 +303,17 @@ export default {
     },
 
     addresses() {
-      if (!this.accounts) return []
-      const { data } = addressDecode(this.accounts.address)
-      return this.selected.map(x => {
-        const { logo, addr_prefix } = this.chains[x]
-        const addr = addressEnCode(addr_prefix, data)
-        return { chain: x, addr, logo }
-      })
+      if (this.accounts && this.accounts.address) {
+        const { data } = addressDecode(this.accounts.address)
+        return this.selected.map(x => {
+          const { logo, addr_prefix } = this.chains[x]
+          const addr = addressEnCode(addr_prefix, data)
+          return {
+            chain: x, addr, logo, hdpath: this.hdpath,
+          }
+        })
+      }
+      return []
     },
   },
   created() {
@@ -271,11 +323,18 @@ export default {
     }
   },
   methods: {
+    formatPubkey(v) {
+      if (typeof (v) === 'string') {
+        return v
+      }
+      if (v) {
+        return toHex(v)
+      }
+      return ''
+    },
     async connect() {
       const transport = this.device === 'ledger' ? 'usb' : 'bluetooth'
-      return getLedgerAddress(transport).catch(e => {
-        this.debug = e
-      })
+      return getLedgerAddress(transport, this.hdpath)
     },
     async cennectKeplr() {
       if (!window.getOfflineSigner || !window.keplr) {
@@ -338,12 +397,12 @@ export default {
         case 'ledger2':
           await this.connect().then(accounts => {
             if (accounts) {
-              this.accounts = {
-                address: accounts.bech32_address,
-                pubkey: accounts.compressed_pk,
-              }
+              // eslint-disable-next-line prefer-destructuring
+              this.accounts = accounts[0]
               ok = true
             }
+          }).catch(e => {
+            this.debug = e
           })
           break
         default:

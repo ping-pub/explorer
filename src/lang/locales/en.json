@@ -31,6 +31,7 @@
   "proposal_description": "Description",
   "proposal_content": "Content",
   "proposal_total_deposit": "Total Deposit",
+  "voting_time": "Voting Time",
 
   "btn_vote": "Vote",
   "btn_detail": "Detail",

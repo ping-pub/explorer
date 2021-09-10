@@ -102,13 +102,20 @@
                 label="Fee"
                 label-for="Fee"
               >
-                <validation-provider
-                  v-slot="{ errors }"
-                  rules="required"
-                  name="fee"
-                >
-                  <b-input-group>
+                <b-input-group>
+                  <validation-provider
+                    v-slot="{ errors }"
+                    rules="required|integer"
+                    name="fee"
+                  >
                     <b-form-input v-model="fee" />
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                  <validation-provider
+                    v-slot="{ errors }"
+                    rules="required"
+                    name="feeDenom"
+                  >
                     <b-form-select
                       v-model="feeDenom"
                     >
@@ -120,9 +127,9 @@
                         {{ item.denom }}
                       </b-form-select-option>
                     </b-form-select>
-                  </b-input-group>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                </b-input-group>
               </b-form-group>
             </b-col>
           </b-row>
@@ -171,12 +178,11 @@
                     >
                       Keplr
                     </b-form-radio>
-                    <!-- <b-form-radio
+                    <b-form-radio
                       v-model="wallet"
                       name="wallet"
                       value="ledgerUSB"
                       class="mb-1 mt-1"
-                      disabled
                     >
                       Ledger (USB)
                     </b-form-radio>
@@ -185,10 +191,9 @@
                       name="wallet"
                       value="ledgerBle"
                       class="mb-1 mt-1"
-                      disabled
                     >
                       Ledger (Bluetooth)
-                    </b-form-radio> -->
+                    </b-form-radio>
                   </b-form-radio-group>
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -262,7 +267,7 @@ export default {
       balance: [],
       delegations: [],
       memo: '',
-      fee: 800,
+      fee: '800',
       feeDenom: '',
       wallet: 'keplr',
       error: null,

@@ -100,7 +100,9 @@
       </b-card-body>
     </b-card>
 
-    <b-card>
+    <b-card
+      v-if="delegations"
+    >
       <b-card-header class="pt-0 pl-0 pr-0">
         <b-card-title>Delegation</b-card-title>
         <div>
