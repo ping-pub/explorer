@@ -176,7 +176,6 @@ const chainAPI = class ChainFetch {
         pagination: {},
       }))
     }
-    console.log('url:', encodeURIComponent(next))
     return this.get(`/cosmos/gov/v1beta1/proposals/${pid}/votes?pagination.key=${encodeURIComponent(next)}&pagination.limit=${limit}`)
   }
 
