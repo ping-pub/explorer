@@ -59,10 +59,12 @@
                 >
                   <b-avatar
                     :src="data.logo"
-                    class="mt-1"
+                    class="mt-1 badge-minimal"
                     variant="light-primary"
                     rounded
                     size="82"
+                    badge
+                    :badge-variant="data.variant"
                   /></b-col>
               </b-row>
             </b-card>
@@ -93,7 +95,7 @@ import {
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import store from '@/store/index'
-import { toDay } from '@/libs/data'
+import { timeIn, toDay } from '@/libs/data'
 import DarkToggler from '@/@core/layouts/components/app-navbar/components/DarkToggler.vue'
 import Locale from '@/@core/layouts/components/app-navbar/components/Locale.vue'
 import AppFooter from '@/@core/layouts/components/AppFooter.vue'
@@ -148,6 +150,7 @@ export default {
             const { header } = b.block
             this.$set(chain, 'height', header.height)
             this.$set(chain, 'time', toDay(header.time))
+            this.$set(chain, 'variant', timeIn(header, 1, 'm') ? 'danger' : 'success')
           })
         }
       })

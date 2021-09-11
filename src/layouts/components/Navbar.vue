@@ -37,13 +37,14 @@
             @click="toggleVerticalMenuActive"
           >
             <b-avatar
+              v-b-tooltip.hover.bottom="tips"
               variant="transparent"
               badge
               rounded
               size="42"
               :src="selected_chain.logo"
               class="badge-minimal"
-              badge-variant="success"
+              :badge-variant="chainVariant"
             /></b-link>
         </b-media-aside>
         <b-media-body class="my-auto">
@@ -133,6 +134,7 @@ import Locale from '@core/layouts/components/app-navbar/components/Locale.vue'
 import SearchBar from '@core/layouts/components/app-navbar/components/SearchBar.vue'
 // import CartDropdown from '@core/layouts/components/app-navbar/components/CartDropdown.vue'
 import store from '@/store'
+import { timeIn, toDay } from '@/libs/data'
 // import UserDropdown from '@core/layouts/components/app-navbar/components/UserDropdown.vue'
 
 export default {
@@ -164,13 +166,22 @@ export default {
   },
   data() {
     return {
-      // result: {},
+      chainVariant: 'success',
+      tips: 'Synced',
     }
   },
   computed: {
     selected_chain() {
       return store.state.chains.selected
     },
+  },
+  created() {
+    this.$http.getLatestBlock().then(block => {
+      if (timeIn(block.block.header.time, 1, 'm')) {
+        this.chainVariant = 'danger'
+        this.tips = `Halted ${toDay(block.block.header.time, 'from')} `
+      }
+    })
   },
 }
 </script>
