@@ -122,7 +122,10 @@ export default {
       return tokenFormatter(value)
     },
     addNewLine(value) {
-      return value.replaceAll('\\n', '\n')
+      if (typeof value === 'string') {
+        return value.replaceAll('\\n', '\n')
+      }
+      return value
     },
   },
 }
