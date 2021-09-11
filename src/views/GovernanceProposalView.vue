@@ -345,9 +345,10 @@ export default {
   methods: {
     loadVotes() {
       if (this.next) {
-        this.next = null
         const pid = this.$route.params.proposalid
-        this.$http.getGovernanceVotes(pid, this.next).then(res => {
+        const { next } = this
+        this.next = null
+        this.$http.getGovernanceVotes(pid, next).then(res => {
           this.$set(this.votes, 'votes', this.votes.votes.concat(res.votes))
           this.next = res.pagination ? res.pagination.next_key : null
         })
