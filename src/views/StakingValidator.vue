@@ -60,7 +60,7 @@
                 rounded
               >
                 <feather-icon
-                  icon="DollarSignIcon"
+                  icon="DiscIcon"
                   size="18"
                 />
               </b-avatar>
@@ -78,7 +78,7 @@
                 rounded
               >
                 <feather-icon
-                  icon="SmileIcon"
+                  icon="DivideCircleIcon"
                   size="18"
                 />
               </b-avatar>

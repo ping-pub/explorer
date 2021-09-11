@@ -58,7 +58,9 @@
             <b-tr>
               <b-td>
                 {{ $t('proposal_proposer') }}
-              </b-td><b-td>{{ formatAddress(proposer.proposer) }} </b-td>
+              </b-td><b-td><router-link :to="`../account/${proposer.proposer}`">
+                {{ formatAddress(proposer.proposer) }}
+              </router-link> </b-td>
             </b-tr>
             <b-tr>
               <b-td>
@@ -176,7 +178,13 @@
           :fields="votes_fields"
           :items="votes.votes"
           striped
-        />
+        >
+          <template #cell(voter)="data">
+            <router-link :to="`../account/${data.item.voter}`">
+              {{ formatAddress(data.item.voter) }}
+            </router-link>
+          </template>
+        </b-table>
         <b-card
           v-if="next"
           class="addzone text-center"
@@ -199,7 +207,13 @@
           :items="deposits"
           :fields="deposit_fields"
           striped
-        />
+        >
+          <template #cell(depositor)="data">
+            <router-link :to="`../account/${data.item.depositor}`">
+              {{ formatAddress(data.item.depositor) }}
+            </router-link>
+          </template>
+        </b-table>
       </b-card-body>
       <b-card-footer>
         <router-link :to="`../gov`">
@@ -272,12 +286,16 @@ export default {
           formatter: value => {
             switch (value) {
               case 1:
+              case 'VOTE_OPTION_YES':
                 return 'Yes'
               case 2:
+              case 'VOTE_OPTION_ABSTAIN':
                 return 'Abstain'
               case 3:
+              case 'VOTE_OPTION_NO':
                 return 'No'
               case 4:
+              // case 'VOTE_OPTION_NO_WITH':
                 return 'No With Veto'
               default:
                 return value

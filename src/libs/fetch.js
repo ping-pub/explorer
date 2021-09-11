@@ -221,12 +221,12 @@ const chainAPI = class ChainFetch {
     return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/validators`).then(data => commonProcess(data))
   }
 
-  async getStakingDelegations(address) {
-    return this.get(`/cosmos/staking/v1beta1/delegations/${address}`).then(data => commonProcess(data))
+  async getStakingDelegations(address, config = null) {
+    return this.get(`/cosmos/staking/v1beta1/delegations/${address}`, config).then(data => commonProcess(data))
   }
 
-  async getStakingRedelegations(address) {
-    return this.get(`/cosmos/staking/v1beta1/delegators/${address}/redelegations`).then(data => commonProcess(data))
+  async getStakingRedelegations(address, config = null) {
+    return this.get(`/cosmos/staking/v1beta1/delegators/${address}/redelegations`, config).then(data => commonProcess(data))
   }
 
   async getStakingUnbonding(address) {

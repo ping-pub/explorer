@@ -76,8 +76,11 @@
                       />
                       <h3>${{ formatBalance(balances[acc.addr]) }}</h3>
                     </div>
-                    <small class="pl-1 float-right text-muted text-overflow ">
-                      {{ acc.addr }}
+                    <small
+                      class="pl-1 float-right text-muted text-overflow "
+                      @click="copy(acc.addr)"
+                    >
+                      {{ formatAddr(acc.addr) }}
                     </small>
                   </b-col>
                 </b-row>
@@ -148,9 +151,9 @@ import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import {
   formatTokenAmount, formatTokenDenom, getLocalAccounts, getLocalChains,
 } from '@/libs/data'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import UserAccountImportAddress from './UserAccountImportAddress.vue'
 import OperationTransferComponent from './OperationTransferComponent.vue'
-// import { SigningCosmosClient } from '@cosmjs/launchpad'
 
 export default {
   components: {
@@ -168,6 +171,8 @@ export default {
     UserAccountImportAddress,
     FeatherIcon,
     OperationTransferComponent,
+    // eslint-disable-next-line vue/no-unused-components
+    ToastificationContent,
   },
   directives: {
     'b-modal': VBModal,
@@ -235,6 +240,9 @@ export default {
     formatAmount(v) {
       return formatTokenAmount(v)
     },
+    formatAddr(v) {
+      return v.substring(0, 10).concat('...', v.substring(v.length - 10))
+    },
     formatCurrency(amount, denom) {
       const qty = this.formatAmount(amount)
       const d2 = this.formatDenom(denom)
@@ -264,6 +272,26 @@ export default {
         }
       })
       localStorage.setItem('accounts', JSON.stringify(this.accounts))
+    },
+    copy(v) {
+      this.$copyText(v).then(() => {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Address copied',
+            icon: 'BellIcon',
+          },
+        })
+      }, e => {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: `Failed to copy address! ${e}`,
+            icon: 'BellIcon',
+            variant: 'danger',
+          },
+        })
+      })
     },
   },
 }

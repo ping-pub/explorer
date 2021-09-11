@@ -24,7 +24,9 @@
         <h6 class="mb-0">
           Account Address
         </h6>
-        <small>{{ accountAddress }}</small>
+        <router-link :to="`../account/${accountAddress}`">
+          <small>{{ accountAddress }}</small>
+        </router-link>
       </b-media-body>
     </b-media>
     <b-media
@@ -47,7 +49,7 @@
         <h6 class="mb-0">
           Validator Address
         </h6>
-        <small>{{ operatorAddress }}</small>
+        <small @click="copy(operatorAddress)">{{ operatorAddress }}</small>
       </b-media-body>
     </b-media>
     <b-media
@@ -70,7 +72,7 @@
         <h6 class="mb-0">
           Consensus Public Address
         </h6>
-        <small>{{ consensusPubkey }}</small>
+        <small @click="copy(consensusPubkey)">{{ consensusPubkey }}</small>
       </b-media-body>
     </b-media>
     <b-media
@@ -93,7 +95,7 @@
         <h6 class="mb-0">
           Hex Address
         </h6>
-        <small>{{ hexAddress }}</small>
+        <small @click="copy(hexAddress)">{{ hexAddress }}</small>
       </b-media-body>
     </b-media>
   </b-card>
@@ -104,6 +106,8 @@ import {
   BCard, BAvatar, BMedia, BMediaAside, BMediaBody, VBTooltip,
 } from 'bootstrap-vue'
 
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+
 export default {
   components: {
     BCard,
@@ -111,6 +115,8 @@ export default {
     BMedia,
     BMediaAside,
     BMediaBody,
+    // eslint-disable-next-line vue/no-unused-components
+    ToastificationContent,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -131,6 +137,28 @@ export default {
     hexAddress: {
       type: String,
       default: '-',
+    },
+  },
+  methods: {
+    copy(v) {
+      this.$copyText(v).then(() => {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Address copied',
+            icon: 'BellIcon',
+          },
+        })
+      }, e => {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: `Failed to copy address! ${e}`,
+            icon: 'BellIcon',
+            variant: 'danger',
+          },
+        })
+      })
     },
   },
 }

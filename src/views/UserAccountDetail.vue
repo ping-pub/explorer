@@ -112,7 +112,10 @@
             size="sm"
             class="mr-25"
           >
-            Delegate
+            <feather-icon
+              icon="PlusIcon"
+              class="d-md-none"
+            /><small class="d-none d-md-block">Delegate</small>
           </b-button>
           <b-button
             v-if="delegations"
@@ -120,7 +123,10 @@
             variant="primary"
             size="sm"
           >
-            Withdraw
+            <feather-icon
+              icon="MinusIcon"
+              class="d-md-none"
+            /><small class="d-none d-md-block"> Withdraw</small>
           </b-button>
         </div>
       </b-card-header>
