@@ -140,7 +140,13 @@
                 <span class="font-weight-bold">Status</span>
               </th>
               <td class="pb-50 text-capitalize">
-                {{ validator.status }}
+                <b-badge
+                  v-if="validator.status===3"
+                  variant="light-success"
+                >
+                  Active
+                </b-badge>
+                <span v-else>{{ validator.status }}</span>
               </td>
             </tr>
             <tr>
@@ -281,7 +287,7 @@
 
 <script>
 import {
-  BCard, BButton, BAvatar, BRow, BCol, BCardBody, BCardFooter, VBTooltip, VBModal,
+  BCard, BButton, BAvatar, BRow, BCol, BCardBody, BCardFooter, VBTooltip, VBModal, BBadge,
 } from 'bootstrap-vue'
 
 import {
@@ -304,6 +310,7 @@ export default {
     BAvatar,
     BCardBody,
     BCardFooter,
+    BBadge,
     StakingAddressComponent,
     StakingCommissionComponent,
     StakingRewardComponent,

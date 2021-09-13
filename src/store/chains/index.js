@@ -46,6 +46,7 @@ export default {
     config: chains,
     selected,
     avatars: {},
+    height: 0,
   },
   getters: {
     getchains: state => state.chains,
@@ -61,7 +62,9 @@ export default {
     cacheAvatar(state, args) {
       state.chains.avatars[args.identity] = args.url
     },
-
+    setHeight(state, height) {
+      state.chains.height = height
+    },
   },
   actions: {},
 }

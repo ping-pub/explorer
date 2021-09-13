@@ -20,7 +20,7 @@
       </b-card-header>
       <b-card-body class="pl-0 pr-0">
         <b-table
-          :items="validators"
+          :items="list"
           :fields="validator_fields"
           :sort-desc="true"
           sort-by="tokens"
@@ -30,15 +30,17 @@
         >
           <!-- A virtual column -->
           <template #cell(index)="data">
-            <b-badge
-              :variant="rankBadge(data)"
-            >
+            <b-badge :variant="rankBadge(data)">
               {{ data.index + 1 }}
             </b-badge>
           </template>
           <!-- Column: Validator -->
           <template #cell(description)="data">
-            <b-media vertical-align="center d-none d-md-block">
+            <b-media
+              vertical-align="center"
+              class="text-truncate"
+              style="max-width:320px;"
+            >
               <template #aside>
                 <b-avatar
                   v-if="data.item.avatar"
@@ -63,7 +65,9 @@
                   {{ data.item.description.moniker }}
                 </router-link>
               </span>
-              <small class="text-muted">{{ data.item.description.website || data.item.description.identity }}</small>
+              <small
+                class="text-muted"
+              >{{ data.item.description.website || data.item.description.identity }}</small>
             </b-media>
           </template>
           <!-- Token -->
@@ -76,6 +80,18 @@
               <span class="font-small-2 text-muted text-nowrap d-none d-lg-block">{{ percent(data.item.tokens/stakingPool) }}%</span>
             </div>
             <span v-else>{{ data.item.delegator_shares }}</span>
+          </template>
+          <!-- Token -->
+          <template #cell(changes)="data">
+            <small
+              v-if="data.item.changes>0"
+              class="text-success"
+            >+{{ data.item.changes }}</small>
+            <small v-else-if="data.item.changes===0">-</small>
+            <small
+              v-else
+              class="text-danger"
+            >{{ data.item.changes }}</small>
           </template>
         </b-table>
       </b-card-body>
@@ -91,6 +107,7 @@ import {
   Validator, percent, StakingParameters, formatToken,
 } from '@/libs/data'
 import { keybase } from '@/libs/fetch'
+// import { toHex } from '@cosmjs/encoding'
 // import fetch from 'node-fetch'
 
 export default {
@@ -115,6 +132,7 @@ export default {
       stakingParameters: new StakingParameters(),
       validators: [new Validator()],
       delegations: [new Validator()],
+      changes: {},
       validator_fields: [
         {
           key: 'index',
@@ -132,19 +150,53 @@ export default {
           sortByFormatted: true,
         },
         {
+          key: 'changes',
+          label: '24H Changes',
+        },
+        {
           key: 'commission',
           formatter: value => `${percent(value.rate)}%`,
           tdClass: 'text-right d-none d-md-block',
           thClass: 'text-right d-none d-md-block',
         },
-        {
-          key: 'operation',
-          label: '',
-        },
       ],
     }
   },
+  computed: {
+    list() {
+      return this.validators.map(x => {
+        const xh = x
+        const change = this.changes[x.consensus_pubkey.value]
+        if (change) {
+          xh.changes = change.latest - change.previous
+        }
+        return xh
+      })
+    },
+  },
   created() {
+    this.$http.getValidatorListByHeight('latest').then(data => {
+      let height = Number(data.block_height)
+      if (height > 14400) {
+        height -= 14400
+      } else {
+        height = 1
+      }
+      const changes = []
+      data.validators.forEach(x => {
+        changes[x.pub_key.value] = { latest: Number(x.voting_power), previous: 0 }
+      })
+      this.$http.getValidatorListByHeight(height).then(previous => {
+        previous.validators.forEach(x => {
+          if (changes[x.pub_key.value]) {
+            changes[x.pub_key.value].previous = Number(x.voting_power)
+          } else {
+            changes[x.pub_key.value] = { latest: 0, previous: Number(x.voting_power) }
+          }
+        })
+        this.$set(this, 'changes', changes)
+      })
+    })
     this.$http.getStakingParameters().then(res => {
       this.stakingParameters = res
     })

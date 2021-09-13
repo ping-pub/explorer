@@ -44,7 +44,7 @@
               size="42"
               :src="selected_chain.logo"
               class="badge-minimal"
-              :badge-variant="chainVariant"
+              :badge-variant="variant"
             /></b-link>
         </b-media-aside>
         <b-media-body class="my-auto">
@@ -166,22 +166,31 @@ export default {
   },
   data() {
     return {
-      chainVariant: 'success',
+      variant: 'success',
       tips: 'Synced',
     }
   },
   computed: {
     selected_chain() {
+      this.block()
       return store.state.chains.selected
     },
+    chainVariant() {
+      return this.variant
+    },
   },
-  created() {
-    this.$http.getLatestBlock().then(block => {
-      if (timeIn(block.block.header.time, 1, 'm')) {
-        this.chainVariant = 'danger'
-        this.tips = `Halted ${toDay(block.block.header.time, 'from')} `
-      }
-    })
+  methods: {
+    block() {
+      store.commit('setHeight', 0)
+      this.$http.getLatestBlock().then(block => {
+        store.commit('setHeight', Number(block.block.header.height))
+        this.tips = `Synced height:${block.block.header.height}`
+        if (timeIn(block.block.header.time, 1, 'm')) {
+          this.variant = 'danger'
+          this.tips = `Halted ${toDay(block.block.header.time, 'from')}, Height: ${store.state.chains.height} `
+        }
+      })
+    },
   },
 }
 </script>

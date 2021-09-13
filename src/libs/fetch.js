@@ -112,6 +112,10 @@ const chainAPI = class ChainFetch {
     })
   }
 
+  async getValidatorListByHeight(height) {
+    return this.get(`/validatorsets/${height}`).then(data => commonProcess(data))
+  }
+
   async getStakingValidator(address) {
     return this.get(`/staking/validators/${address}`).then(data => new Validator().init(commonProcess(data)))
   }

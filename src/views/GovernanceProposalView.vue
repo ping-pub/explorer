@@ -372,5 +372,7 @@ export default {
 .addzone :hover {
     border: 2px dashed #7367F0;
 }
-
+@media (min-width: 768px) {
+  td:first-child { width: 20% ;}
+}
 </style>

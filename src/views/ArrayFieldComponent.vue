@@ -4,7 +4,7 @@
     :items="tablefield"
     :sticky-header="true"
     :no-border-collapse="true"
-    responsive
+    responsive="sm"
     class="ml-0 mr-0"
   >
     <template #cell()="data">
@@ -24,13 +24,10 @@
 
 <script>
 import { BTable } from 'bootstrap-vue'
-// import fetch from 'node-fetch'
 
 import {
   getStakingValidatorByHex, isHexAddress, isToken, toDay, tokenFormatter,
 } from '@/libs/data/data'
-// import { Proposal, Proposer } from '@/libs/data'
-// import { formatToken } from '@/libs/data/data'
 
 export default {
   name: 'ArrayFieldComponent',
@@ -61,6 +58,9 @@ export default {
       const reg = /^\d{4}.\d{1,2}.\d{1,2}T\d{2}:\d{2}:.+Z$/
       if (reg.test(value)) {
         return toDay(value)
+      }
+      if (value.length > 30) {
+        return value.substring(0, 30).concat('...')
       }
       return value
     },

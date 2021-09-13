@@ -33,7 +33,10 @@
     </b-card>
 
     <b-card title="Last Commit">
-      <object-field-component :tablefield="block.block.last_commit" />
+      <object-field-component
+        :tablefield="block.block.last_commit"
+        :small="true"
+      />
     </b-card>
   </div>
 </template>
@@ -101,7 +104,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>
