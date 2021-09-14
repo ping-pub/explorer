@@ -184,10 +184,12 @@ export default {
       store.commit('setHeight', 0)
       this.$http.getLatestBlock().then(block => {
         store.commit('setHeight', Number(block.block.header.height))
-        this.tips = `Synced height:${block.block.header.height}`
         if (timeIn(block.block.header.time, 1, 'm')) {
           this.variant = 'danger'
           this.tips = `Halted ${toDay(block.block.header.time, 'from')}, Height: ${store.state.chains.height} `
+        } else {
+          this.variant = 'success'
+          this.tips = 'Synced'
         }
       })
     },
