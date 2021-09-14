@@ -59,8 +59,8 @@ export default {
       if (reg.test(value)) {
         return toDay(value)
       }
-      if (value.length > 30) {
-        return value.substring(0, 30).concat('...')
+      if (value.length > 40) {
+        return value.substring(0, 40).concat('...')
       }
       return value
     },
