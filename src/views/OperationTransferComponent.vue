@@ -5,6 +5,7 @@
       centered
       size="md"
       title="Transfer Tokens"
+      ok-title="Send"
       hide-header-close
       scrollable
       :ok-disabled="!address"
@@ -54,14 +55,6 @@
                       v-model="recipient"
                       :state="errors.length > 0 ? false:null"
                     />
-                    <!-- <b-input-group-append is-text>
-                      <b-avatar
-                        src="BookIcon"
-                        size="18"
-                        variant="light-primary"
-                        rounded
-                      />
-                    </b-input-group-append> -->
                   </b-input-group>
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -115,7 +108,7 @@
                       type="number"
                     />
                     <b-input-group-append is-text>
-                      MAX
+                      {{ printDenom() }}
                     </b-input-group-append>
                   </b-input-group>
                   <small class="text-danger">{{ errors[0] }}</small>
@@ -244,9 +237,8 @@ import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  formatToken, getLocalAccounts, getLocalChains, setLocalTxHistory, sign, timeIn,
+  formatToken, formatTokenDenom, getLocalAccounts, getLocalChains, setLocalTxHistory, sign, timeIn,
 } from '@/libs/data'
-import chainAPI from '@/libs/fetch'
 import { Cosmos } from '@cosmostation/cosmosjs'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
@@ -295,6 +287,7 @@ export default {
       sequence: 1,
       accountNumber: 0,
       account: [],
+      IBCDenom: {},
 
       required,
       password,
@@ -318,6 +311,9 @@ export default {
     // console.log('address: ', this.address)
   },
   methods: {
+    printDenom() {
+      return formatTokenDenom(this.IBCDenom[this.token] || this.token)
+    },
     computeAccount() {
       const accounts = getLocalAccounts()
       const chains = getLocalChains()
@@ -335,11 +331,18 @@ export default {
       this.account = this.computeAccount()
       if (this.account && this.account.length > 0) this.address = this.account[0].addr
       if (this.address) {
-        chainAPI.getBankBalance(this.selectedChain.api, this.address).then(res => {
+        this.$http.getBankBalances(this.address, this.selectedChain).then(res => {
           if (res && res.length > 0) {
             this.balance = res
             this.token = this.balance[0].denom
             this.feeDenom = this.balance.find(x => !x.denom.startsWith('ibc')).denom
+            this.balance.filter(i => i.denom.startsWith('ibc')).forEach(x => {
+              if (!this.IBCDenom[x.denom]) {
+                this.$http.getIBCDenomTrace(x.denom).then(denom => {
+                  this.IBCDenom[x.denom] = denom.denom_trace.base_denom
+                })
+              }
+            })
           }
         })
         this.$http.getLatestBlock(this.selectedChain).then(ret => {
@@ -379,7 +382,7 @@ export default {
       this.error = null
     },
     format(v) {
-      return formatToken(v)
+      return formatToken(v, this.IBCDenom)
     },
     async sendCosmos() {
       const cosmos = new Cosmos(this.selectedChain.api, this.chainId)

@@ -5,6 +5,7 @@
       centered
       size="md"
       title="Vote"
+      ok-title="Send"
       hide-header-close
       scrollable
       :ok-disabled="!voter"
@@ -30,12 +31,12 @@
                   rules="required"
                   name="Voter"
                 >
-                  <v-select
+                  <b-form-select
                     v-model="voter"
                     :options="accounts"
-                    :reduce="val => val.addr"
-                    label="addr"
+                    text-field="label"
                     placeholder="Select an address"
+                    @change="onChange"
                   />
                   <small class="text-danger">{{ errors[0] }} <strong v-if="!accounts">Please import an account first!</strong> </small>
                 </validation-provider>
@@ -207,11 +208,10 @@ import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  formatToken, getLocalAccounts, getLocalChains, setLocalTxHistory, sign, timeIn,
+  abbrAddress,
+  formatToken, getLocalAccounts, setLocalTxHistory, sign, timeIn,
 } from '@/libs/data'
-import chainAPI from '@/libs/fetch'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import vSelect from 'vue-select'
 
 export default {
   name: 'VoteDialogue',
@@ -227,7 +227,6 @@ export default {
     BFormSelectOption,
     BFormRadioGroup,
     BFormRadio,
-    vSelect,
 
     ValidationProvider,
     ValidationObserver,
@@ -281,44 +280,26 @@ export default {
   methods: {
     computeAccount() {
       const accounts = getLocalAccounts()
-      const chains = getLocalChains()
       const values = Object.values(accounts)
       let array = []
       for (let i = 0; i < values.length; i += 1) {
         const addrs = values[i].address.filter(x => x.chain === this.$route.params.chain)
         if (addrs && addrs.length > 0) {
-          array = array.concat(addrs)
-          if (!this.voter) {
-            this.voter = addrs[0].addr
-          }
-        }
-        const addr = values[i].address.find(x => x.addr === this.selectedAddress)
-        if (addr) {
-          this.selectedChain = chains[addr.chain]
+          array = array.concat(addrs.map(x => ({ value: x.addr, label: values[i].name.concat(' - ', abbrAddress(x.addr)) })))
         }
       }
-      if (!this.selectedChain) {
-        this.selectedChain = chains[this.$route.params.chain]
-      }
-      const reducer = (t, c) => {
-        if (!(t.find(x => x.addr === c.addr))) t.push(c)
-        return t
-      }
-      return array.reduce(reducer, [])
+      return array
     },
-    loadBalance() {
-      this.accounts = this.computeAccount()
-      // eslint-disable-next-line prefer-destructuring
-      if (this.accounts && this.accounts.length > 0) this.voter = this.accounts[0].addr
+    onChange() {
       if (this.voter) {
-        chainAPI.getBankBalance(this.selectedChain.api, this.voter).then(res => {
+        this.$http.getBankBalances(this.voter).then(res => {
           if (res && res.length > 0) {
             this.balance = res
             const token = this.balance.find(i => !i.denom.startsWith('ibc'))
             if (token) this.feeDenom = token.denom
           }
         })
-        this.$http.getLatestBlock(this.selectedChain).then(ret => {
+        this.$http.getLatestBlock().then(ret => {
           this.chainId = ret.block.header.chain_id
           const notSynced = timeIn(ret.block.header.time, 10, 'm')
           if (notSynced) {
@@ -327,7 +308,7 @@ export default {
             this.error = null
           }
         })
-        this.$http.getAuthAccount(this.voter, this.selectedChain).then(ret => {
+        this.$http.getAuthAccount(this.voter).then(ret => {
           if (ret.value.base_vesting_account) {
             this.accountNumber = ret.value.base_vesting_account.base_account.account_number
             this.sequence = ret.value.base_vesting_account.base_account.sequence
@@ -338,6 +319,12 @@ export default {
           }
         })
       }
+    },
+    loadBalance() {
+      this.accounts = this.computeAccount()
+      // eslint-disable-next-line prefer-destructuring
+      if (this.accounts && this.accounts.length > 0) this.voter = this.accounts[0].value
+      this.onChange()
     },
     handleOk(bvModalEvt) {
       // console.log('send')

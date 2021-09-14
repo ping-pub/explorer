@@ -5,6 +5,7 @@
       centered
       size="md"
       title="Delegate Token"
+      ok-title="Send"
       hide-header-close
       scrollable
       :ok-disabled="!selectedAddress"
@@ -13,7 +14,30 @@
       @show="loadBalance"
     >
       <validation-observer ref="simpleRules">
-        <b-form>
+        <b-form v-if="selectedAddress">
+          <b-row>
+            <b-col>
+              <validation-provider
+                #default="{ errors }"
+                rules="required"
+                name="Validator"
+              >
+                <b-form-group
+                  label="Validator"
+                  label-for="validator"
+                >
+                  <v-select
+                    v-model="selectedValidator"
+                    :options="valOptions"
+                    :reduce="val => val.value"
+                    placeholder="Select a validator"
+                    :readonly="validatorAddress"
+                  />
+                </b-form-group>
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-col>
+          </b-row>
           <b-row>
             <b-col>
               <b-form-group
@@ -25,31 +49,14 @@
                   rules="required"
                   name="Delegator"
                 >
-                  <v-select
+                  <b-form-select
                     v-model="selectedAddress"
                     :options="account"
-                    :reduce="val => val.addr"
-                    label="addr"
-                    placeholder="Select an address"
-                    @change="loadBalance()"
+                    text-field="label"
+                    @change="onChange"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
-              </b-form-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <b-form-group
-                label="Validator"
-                label-for="validator"
-              >
-                <v-select
-                  v-model="selectedValidator"
-                  :options="valOptions"
-                  :reduce="val => val.value"
-                  placeholder="Select a validator"
-                />
               </b-form-group>
             </b-col>
           </b-row>
@@ -64,11 +71,18 @@
                   rules="required"
                   name="Token"
                 >
-                  <v-select
+                  <b-form-select
                     v-model="token"
-                    :options="tokenOptions"
-                    :reduce="token => token.value"
-                  />
+                    text-field="label"
+                  >
+                    <b-form-select-option
+                      v-for="x in balance"
+                      :key="x.denom"
+                      :value="x.denom"
+                    >
+                      {{ format(x) }}
+                    </b-form-select-option>
+                  </b-form-select>
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -84,13 +98,18 @@
                   rules="required|regex:^([0-9\.]+)$"
                   name="amount"
                 >
-                  <b-form-input
-                    id="Amount"
-                    v-model="amount"
-                    :state="errors.length > 0 ? false:null"
-                    placeholder="Input a number"
-                    type="number"
-                  />
+                  <b-input-group>
+                    <b-form-input
+                      id="Amount"
+                      v-model="amount"
+                      :state="errors.length > 0 ? false:null"
+                      placeholder="Input a number"
+                      type="number"
+                    />
+                    <b-input-group-append is-text>
+                      {{ printDenom() }}
+                    </b-input-group-append>
+                  </b-input-group>
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -201,6 +220,13 @@
             </b-col>
           </b-row>
         </b-form>
+        <b-button
+          v-else
+          to="/user/accounts"
+          variant="primary"
+        >
+          Connect Wallet
+        </b-button>
       </validation-observer>
       {{ error }}
     </b-modal>
@@ -211,15 +237,14 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
   BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
-  BForm, BFormRadioGroup, BFormRadio,
+  BForm, BFormRadioGroup, BFormRadio, BButton, BInputGroupAppend,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  formatToken, getCachedValidators, getLocalAccounts, getLocalChains, setLocalTxHistory, sign, timeIn,
+  abbrAddress, formatToken, formatTokenDenom, getLocalAccounts, setLocalTxHistory, sign, timeIn,
 } from '@/libs/data'
-import chainAPI from '@/libs/fetch'
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
@@ -238,6 +263,8 @@ export default {
     BFormRadioGroup,
     BFormRadio,
     vSelect,
+    BButton,
+    BInputGroupAppend,
 
     ValidationProvider,
     ValidationObserver,
@@ -266,6 +293,7 @@ export default {
       selectedChain: '',
       balance: [],
       delegations: [],
+      IBCDenom: {},
       memo: '',
       fee: '800',
       feeDenom: '',
@@ -289,11 +317,7 @@ export default {
   },
   computed: {
     valOptions() {
-      return this.validators.map(x => ({ value: x.operator_address, label: x.description.moniker }))
-    },
-    tokenOptions() {
-      if (!this.balance) return []
-      return this.balance.map(x => ({ value: x.denom, label: formatToken(x) }))
+      return this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
     },
     feeDenoms() {
       if (!this.balance) return []
@@ -304,56 +328,27 @@ export default {
     // console.log('address: ', this.address)
   },
   methods: {
-    computeAccount() {
-      const accounts = getLocalAccounts()
-      const chains = getLocalChains()
-      const values = Object.values(accounts)
-      let array = []
-      for (let i = 0; i < values.length; i += 1) {
-        const addrs = values[i].address.filter(x => x.chain === this.$route.params.chain)
-        if (addrs && addrs.length > 0) {
-          array = array.concat(addrs)
-          if (!this.selectedAddress) {
-            this.selectedAddress = addrs[0].addr
-          }
-        }
-        const addr = values[i].address.find(x => x.addr === this.selectedAddress)
-        if (addr) {
-          this.selectedChain = chains[addr.chain]
-        }
-      }
-      if (!this.selectedChain) {
-        this.selectedChain = chains[this.$route.params.chain]
-      }
-      this.selectedValidator = this.validatorAddress
-      const reducer = (t, c) => {
-        if (!(t.find(x => x.addr === c.addr))) t.push(c)
-        return t
-      }
-      return array.reduce(reducer, [])
+    printDenom() {
+      return formatTokenDenom(this.IBCDenom[this.token] || this.token)
     },
-    loadBalance() {
-      this.account = this.computeAccount()
-      if (this.account && this.account.length > 0) this.selectedAddress = this.account[0].addr
+    onChange() {
       if (this.selectedAddress) {
-        if (!getCachedValidators(this.selectedChain.chain)) {
-          this.$http.getValidatorList().then(v => {
-            this.validators = v
-          })
-        } else {
-          this.validators = JSON.parse(getCachedValidators(this.selectedChain.chain))
-        }
-        if (this.selectedChain && this.selectedAddress) {
-          chainAPI.getBankBalance(this.selectedChain.api, this.selectedAddress).then(res => {
-            if (res && res.length > 0) {
-              this.balance = res
-              const token = this.balance.find(i => !i.denom.startsWith('ibc'))
-              this.token = token.denom
-              if (token) this.feeDenom = token.denom
-            }
-          })
-        }
-        this.$http.getLatestBlock(this.selectedChain).then(ret => {
+        this.$http.getBankBalances(this.selectedAddress).then(res => {
+          if (res && res.length > 0) {
+            this.balance = res
+            const token = this.balance.find(i => !i.denom.startsWith('ibc'))
+            this.token = token.denom
+            if (token) this.feeDenom = token.denom
+            this.balance.filter(i => i.denom.startsWith('ibc')).forEach(x => {
+              if (!this.IBCDenom[x.denom]) {
+                this.$http.getIBCDenomTrace(x.denom).then(denom => {
+                  this.IBCDenom[x.denom] = denom.denom_trace.base_denom
+                })
+              }
+            })
+          }
+        })
+        this.$http.getLatestBlock().then(ret => {
           this.chainId = ret.block.header.chain_id
           const notSynced = timeIn(ret.block.header.time, 10, 'm')
           if (notSynced) {
@@ -362,7 +357,7 @@ export default {
             this.error = null
           }
         })
-        this.$http.getAuthAccount(this.selectedAddress, this.selectedChain).then(ret => {
+        this.$http.getAuthAccount(this.selectedAddress).then(ret => {
           if (ret.value.base_vesting_account) {
             this.accountNumber = ret.value.base_vesting_account.base_account.account_number
             this.sequence = ret.value.base_vesting_account.base_account.sequence
@@ -372,10 +367,34 @@ export default {
             this.sequence = ret.value.sequence ? ret.value.sequence : 0
           }
         })
-        this.$http.getStakingDelegations(this.selectedAddress).then(res => {
-          this.delegations = res.delegation_responses
-        })
       }
+      // this.$http.getStakingDelegations(this.selectedAddress).then(res => {
+      //   this.delegations = res.delegation_responses
+      // })
+    },
+    computeAccount() {
+      const accounts = getLocalAccounts()
+      const values = Object.values(accounts)
+      let array = []
+      for (let i = 0; i < values.length; i += 1) {
+        const addrs = values[i].address.filter(x => x.chain === this.$route.params.chain)
+        if (addrs && addrs.length > 0) {
+          array = array.concat(addrs.map(x => ({ value: x.addr, label: values[i].name.concat(' - ', abbrAddress(x.addr)) })))
+          if (!this.selectedAddress) {
+            this.selectedAddress = addrs[0].addr
+          }
+        }
+      }
+      this.selectedValidator = this.validatorAddress
+      return array
+    },
+    loadBalance() {
+      this.account = this.computeAccount()
+      // if (this.account && this.account.length > 0) this.selectedAddress
+      this.$http.getValidatorList().then(v => {
+        this.validators = v
+      })
+      this.onChange()
     },
     handleOk(bvModalEvt) {
       // console.log('send')
@@ -397,7 +416,7 @@ export default {
       this.error = null
     },
     format(v) {
-      return formatToken(v)
+      return formatToken(v, this.IBCDenom)
     },
     async sendTx() {
       const txMsgs = [{

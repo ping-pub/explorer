@@ -236,6 +236,15 @@ const chainAPI = class ChainFetch {
   async getStakingUnbonding(address) {
     return this.get(`/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations`).then(data => commonProcess(data))
   }
+
+  async getBankBalances(address, config = null) {
+    return this.get('/bank/balances/'.concat(address), config).then(data => commonProcess(data))
+  }
+
+  async getIBCDenomTrace(hash, config = null) {
+    const h = hash.substring(hash.indexOf('/'))
+    return this.get('/ibc/applications/transfer/v1beta1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
+  }
   // /cosmos/staking/v1beta1/delegations/{delegator_addr}
 
   static async getBankBalance(baseurl, address) {

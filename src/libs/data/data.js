@@ -192,6 +192,10 @@ export function abbrMessage(msg) {
   return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1).replace('Msg', '')
 }
 
+export function abbrAddress(address, length = 10) {
+  return address.substring(0, length).concat('...', address.substring(address.length - length))
+}
+
 export function isStringArray(value) {
   let is = false
   if (Array.isArray(value)) {
@@ -235,9 +239,9 @@ export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
   return parseFloat(amount)
 }
 
-export function formatToken(token) {
+export function formatToken(token, IBCDenom = {}) {
   if (token) {
-    return `${formatTokenAmount(token.amount, 2, token.denom)} ${formatTokenDenom(token.denom)}`
+    return `${formatTokenAmount(token.amount, 2, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`
   }
   return token
 }
