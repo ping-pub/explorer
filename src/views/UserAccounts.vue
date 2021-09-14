@@ -89,7 +89,7 @@
                     <b-tabs
                       active-nav-item-class="font-weight-bold text-second"
                     >
-                      <b-tab title="Assets">
+                      <b-tab title="Balance">
                         <div
                           v-for="b,i in balances[acc.addr]"
                           :key="i"
