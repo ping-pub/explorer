@@ -97,11 +97,13 @@
               variant="success"
               :value="p.tally.yes"
               show-progress
+              :label="`${p.tally.yes.toFixed()}%`"
             />
             <b-progress-bar
               :id="'vote-no'+p.id"
               variant="warning"
               :value="p.tally.no"
+              :label="`${p.tally.no.toFixed()}%`"
               show-progress
             />
             <b-progress-bar

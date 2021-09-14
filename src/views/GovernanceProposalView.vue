@@ -224,7 +224,7 @@
           </b-button>
         </router-link>
         <b-button
-          :disabled="proposer.status!=2"
+          :disabled="proposal.status!=2"
           variant="primary"
           class="btn float-right mg-2"
         >
@@ -295,7 +295,7 @@ export default {
               case 'VOTE_OPTION_NO':
                 return 'No'
               case 4:
-              // case 'VOTE_OPTION_NO_WITH':
+              case 'VOTE_OPTION_NO_WITH_VETO':
                 return 'No With Veto'
               default:
                 return value

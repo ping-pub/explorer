@@ -365,7 +365,7 @@ export default {
         value: {
           voter: this.voter,
           proposalId: this.proposalId,
-          option: this.option,
+          option: Number(this.option),
         },
       }]
 
