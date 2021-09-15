@@ -165,7 +165,7 @@
                       v-model="wallet"
                       name="wallet"
                       value="keplr"
-                      class="mb-1 mt-1"
+                      class="d-none d-md-block"
                     >
                       Keplr
                     </b-form-radio>
@@ -173,17 +173,16 @@
                       v-model="wallet"
                       name="wallet"
                       value="ledgerUSB"
-                      class="mb-1 mt-1"
                     >
-                      Ledger (USB)
+                      <small>Ledger(USB)</small>
                     </b-form-radio>
                     <b-form-radio
                       v-model="wallet"
                       name="wallet"
                       value="ledgerBle"
-                      class="mb-1 mt-1"
+                      class="mr-0"
                     >
-                      Ledger (Bluetooth)
+                      <small>Ledger(Bluetooth)</small>
                     </b-form-radio>
                   </b-form-radio-group>
                   <small class="text-danger">{{ errors[0] }}</small>
@@ -254,10 +253,11 @@ export default {
       memo: '',
       fee: '',
       feeDenom: '',
-      wallet: 'keplr',
+      wallet: 'ledgerUSB',
       error: null,
       sequence: 1,
       accountNumber: 0,
+      gas: '200000',
 
       required,
       password,
@@ -372,7 +372,7 @@ export default {
             denom: this.feeDenom,
           },
         ],
-        gas: '200000',
+        gas: this.gas,
       }
 
       const signerData = {

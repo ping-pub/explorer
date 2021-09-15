@@ -44,39 +44,58 @@
                 label="Fee"
                 label-for="Fee"
               >
-                <b-input-group>
-                  <validation-provider
-                    v-slot="{ errors }"
-                    rules="required|integer"
-                    name="fee"
-                  >
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="required|integer"
+                  name="fee"
+                >
+                  <b-input-group>
                     <b-form-input v-model="fee" />
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                  <validation-provider
-                    v-slot="{ errors }"
-                    rules="required"
-                    name="feeDenom"
-                  >
-                    <b-form-select
-                      v-model="feeDenom"
-                    >
-                      <b-form-select-option
-                        v-for="item in feeDenoms"
-                        :key="item.denom"
-                        :value="item.denom"
-                      >
-                        {{ item.denom }}
-                      </b-form-select-option>
-                    </b-form-select>
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-input-group>
+                    <b-input-group-append>
+                      <b-form-select
+                        v-model="feeDenom"
+                        :options="feeDenoms"
+                        value-field="denom"
+                        text-field="denom"
+                      />
+                    </b-input-group-append>
+                  </b-input-group>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col cols="12">
+              <b-form-group>
+                <b-form-checkbox
+                  v-model="advance"
+                  name="advance"
+                  value="true"
+                >
+                  <small>Advance</small>
+                </b-form-checkbox>
               </b-form-group>
             </b-col>
           </b-row>
-          <b-row>
-            <b-col>
+          <b-row v-if="advance">
+            <b-col cols="12">
+              <b-form-group
+                label="Gas"
+                label-for="gas"
+              >
+                <validation-provider
+                  v-slot="{ errors }"
+                  name="gas"
+                >
+                  <b-form-input
+                    id="gas"
+                    v-model="gas"
+                    type="number"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col cols="12">
               <b-form-group
                 label="Memo"
                 label-for="Memo"
@@ -95,7 +114,6 @@
               </b-form-group>
             </b-col>
           </b-row>
-
           <b-row>
             <b-col>
               <b-form-group
@@ -116,7 +134,7 @@
                       v-model="wallet"
                       name="wallet"
                       value="keplr"
-                      class="mb-1 mt-1"
+                      class="d-none d-md-block"
                     >
                       Keplr
                     </b-form-radio>
@@ -124,17 +142,16 @@
                       v-model="wallet"
                       name="wallet"
                       value="ledgerUSB"
-                      class="mb-1 mt-1"
                     >
-                      Ledger (USB)
+                      <small>Ledger(USB)</small>
                     </b-form-radio>
                     <b-form-radio
                       v-model="wallet"
                       name="wallet"
                       value="ledgerBle"
-                      class="mb-1 mt-1"
+                      class="mr-0"
                     >
-                      Ledger (Bluetooth)
+                      <small>Ledger(Bluetooth)</small>
                     </b-form-radio>
                   </b-form-radio-group>
                   <small class="text-danger">{{ errors[0] }}</small>
@@ -152,8 +169,8 @@
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
-  BModal, BRow, BCol, BInputGroup, BFormInput, BAvatar, BFormGroup, BFormSelect, BFormSelectOption,
-  BForm, BFormRadioGroup, BFormRadio, BInputGroupPrepend,
+  BModal, BRow, BCol, BInputGroup, BFormInput, BAvatar, BFormGroup, BFormSelect,
+  BForm, BFormRadioGroup, BFormRadio, BInputGroupPrepend, BFormCheckbox, BInputGroupAppend,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
@@ -177,9 +194,10 @@ export default {
     BAvatar,
     BFormGroup,
     BFormSelect,
-    BFormSelectOption,
     BFormRadioGroup,
     BFormRadio,
+    BFormCheckbox,
+    BInputGroupAppend,
 
     ValidationProvider,
     ValidationObserver,
@@ -202,10 +220,12 @@ export default {
       memo: '',
       fee: '800',
       feeDenom: '',
-      wallet: 'keplr',
+      wallet: 'ledgerUSB',
       error: null,
       sequence: 1,
       accountNumber: 0,
+      gas: '200000',
+      advance: false,
 
       required,
       password,
@@ -323,7 +343,7 @@ export default {
             denom: this.feeDenom,
           },
         ],
-        gas: '200000',
+        gas: this.gas,
       }
 
       const signerData = {

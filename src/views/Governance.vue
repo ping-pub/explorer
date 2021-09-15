@@ -110,12 +110,14 @@
               :id="'vote-veto'+p.id"
               variant="danger"
               :value="p.tally.veto"
+              :label="`${p.tally.veto.toFixed()}%`"
               show-progress
             />
             <b-progress-bar
               :id="'vote-abstain'+p.id"
               variant="info"
               :value="p.tally.abstain"
+              :label="`${p.tally.abstain.toFixed()}%`"
               show-progress
             />
           </b-progress>

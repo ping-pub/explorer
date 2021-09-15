@@ -4,7 +4,7 @@
       id="withdraw-commission-window"
       centered
       size="md"
-      title="Withdraw Commission"
+      title="Withdraw Validator Commission"
       hide-header-close
       scrollable
 
@@ -16,22 +16,14 @@
       <validation-observer ref="simpleRules">
         <b-form>
           <b-row>
-            <b-col v-if="account">
+            <b-col>
               <b-form-group
                 label="Sender"
                 label-for="Account"
               >
                 <b-input-group class="mb-25">
-                  <b-input-group-prepend is-text>
-                    <b-avatar
-                      :src="account.logo"
-                      size="18"
-                      variant="light-primary"
-                      rounded
-                    />
-                  </b-input-group-prepend>
                   <b-form-input
-                    :value="account.addr"
+                    :value="address"
                     readonly
                   />
                 </b-input-group>
@@ -44,39 +36,58 @@
                 label="Fee"
                 label-for="Fee"
               >
-                <b-input-group>
-                  <validation-provider
-                    v-slot="{ errors }"
-                    rules="required|integer"
-                    name="fee"
-                  >
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="required|integer"
+                  name="fee"
+                >
+                  <b-input-group>
                     <b-form-input v-model="fee" />
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                  <validation-provider
-                    v-slot="{ errors }"
-                    rules="required"
-                    name="feeDenom"
-                  >
-                    <b-form-select
-                      v-model="feeDenom"
-                    >
-                      <b-form-select-option
-                        v-for="item in feeDenoms"
-                        :key="item.denom"
-                        :value="item.denom"
-                      >
-                        {{ item.denom }}
-                      </b-form-select-option>
-                    </b-form-select>
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-input-group>
+                    <b-input-group-append name="xx">
+                      <b-form-select
+                        v-model="feeDenom"
+                        :options="feeDenoms"
+                        value-field="denom"
+                        text-field="denom"
+                      />
+                    </b-input-group-append>
+                  </b-input-group>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col cols="12">
+              <b-form-group>
+                <b-form-checkbox
+                  v-model="advance"
+                  name="advance"
+                  value="true"
+                >
+                  <small>Advance</small>
+                </b-form-checkbox>
               </b-form-group>
             </b-col>
           </b-row>
-          <b-row>
-            <b-col>
+          <b-row v-if="advance">
+            <b-col cols="12">
+              <b-form-group
+                label="Gas"
+                label-for="gas"
+              >
+                <validation-provider
+                  v-slot="{ errors }"
+                  name="gas"
+                >
+                  <b-form-input
+                    id="gas"
+                    v-model="gas"
+                    type="number"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col cols="12">
               <b-form-group
                 label="Memo"
                 label-for="Memo"
@@ -95,7 +106,6 @@
               </b-form-group>
             </b-col>
           </b-row>
-
           <b-row>
             <b-col>
               <b-form-group
@@ -116,7 +126,7 @@
                       v-model="wallet"
                       name="wallet"
                       value="keplr"
-                      class="mb-1 mt-1"
+                      class="d-none d-md-block"
                     >
                       Keplr
                     </b-form-radio>
@@ -124,17 +134,16 @@
                       v-model="wallet"
                       name="wallet"
                       value="ledgerUSB"
-                      class="mb-1 mt-1"
                     >
-                      Ledger (USB)
+                      <small>Ledger(USB)</small>
                     </b-form-radio>
                     <b-form-radio
                       v-model="wallet"
                       name="wallet"
                       value="ledgerBle"
-                      class="mb-1 mt-1"
+                      class="mr-0"
                     >
-                      Ledger (Bluetooth)
+                      <small>Ledger(Bluetooth)</small>
                     </b-form-radio>
                   </b-form-radio-group>
                   <small class="text-danger">{{ errors[0] }}</small>
@@ -152,16 +161,15 @@
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
-  BModal, BRow, BCol, BInputGroup, BFormInput, BAvatar, BFormGroup, BFormSelect, BFormSelectOption,
-  BForm, BFormRadioGroup, BFormRadio, BInputGroupPrepend,
+  BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormCheckbox,
+  BForm, BFormRadioGroup, BFormRadio, BInputGroupAppend,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  formatToken, getLocalAccounts, getLocalChains, setLocalTxHistory, sign, timeIn,
+  formatToken, setLocalTxHistory, sign, timeIn,
 } from '@/libs/data'
-import chainAPI from '@/libs/fetch'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
@@ -172,14 +180,13 @@ export default {
     BCol,
     BForm,
     BInputGroup,
-    BInputGroupPrepend,
     BFormInput,
-    BAvatar,
     BFormGroup,
     BFormSelect,
-    BFormSelectOption,
     BFormRadioGroup,
     BFormRadio,
+    BFormCheckbox,
+    BInputGroupAppend,
 
     ValidationProvider,
     ValidationObserver,
@@ -206,10 +213,12 @@ export default {
       memo: '',
       fee: '800',
       feeDenom: '',
-      wallet: 'keplr',
+      wallet: 'ledgerUSB',
       error: null,
       sequence: 1,
       accountNumber: 0,
+      gas: '200000',
+      advance: false,
 
       required,
       password,
@@ -233,51 +242,31 @@ export default {
     // console.log('address: ', this.address)
   },
   methods: {
-    computeAccount() {
-      const accounts = getLocalAccounts()
-      const chains = getLocalChains()
-      const values = Object.values(accounts)
-      for (let i = 0; i < values.length; i += 1) {
-        const addr = values[i].address.find(x => x.addr === this.address)
-        if (addr) {
-          this.selectedChain = chains[addr.chain]
-          return addr
-        }
-      }
-      this.error = 'You are not the owner of this validator'
-      return null
-    },
+
     loadBalance() {
-      this.account = this.computeAccount()
-      if (this.account && this.account.length > 0) this.address = this.account[0].addr
-      if (this.address) {
-        chainAPI.getBankBalance(this.selectedChain.api, this.address).then(res => {
-          if (res && res.length > 0) {
-            this.balance = res
-            const token = this.balance.find(i => !i.denom.startsWith('ibc'))
-            if (token) this.feeDenom = token.denom
-          }
-        })
-        this.$http.getLatestBlock(this.selectedChain).then(ret => {
-          this.chainId = ret.block.header.chain_id
-          const notSynced = timeIn(ret.block.header.time, 10, 'm')
-          if (notSynced) {
-            this.error = 'Client is not synced or blockchain is halted'
-          }
-        })
-        this.$http.getAuthAccount(this.address, this.selectedChain).then(ret => {
-          if (ret.value.base_vesting_account) {
-            this.accountNumber = ret.value.base_vesting_account.base_account.account_number
-            this.sequence = ret.value.base_vesting_account.base_account.sequence
-            if (!this.sequence) this.sequence = 0
-          } else {
-            this.accountNumber = ret.value.account_number
-            this.sequence = ret.value.sequence ? ret.value.sequence : 0
-          }
-        })
-      }
-      this.$http.getStakingDelegations(this.address).then(res => {
-        this.delegations = res.delegation_responses
+      this.$http.getBankBalances(this.address).then(res => {
+        if (res && res.length > 0) {
+          this.balance = res
+          const token = this.balance.find(i => !i.denom.startsWith('ibc'))
+          if (token) this.feeDenom = token.denom
+        }
+      })
+      this.$http.getLatestBlock().then(ret => {
+        this.chainId = ret.block.header.chain_id
+        const notSynced = timeIn(ret.block.header.time, 10, 'm')
+        if (notSynced) {
+          this.error = 'Client is not synced or blockchain is halted'
+        }
+      })
+      this.$http.getAuthAccount(this.address).then(ret => {
+        if (ret.value.base_vesting_account) {
+          this.accountNumber = ret.value.base_vesting_account.base_account.account_number
+          this.sequence = ret.value.base_vesting_account.base_account.sequence
+          if (!this.sequence) this.sequence = 0
+        } else {
+          this.accountNumber = ret.value.account_number
+          this.sequence = ret.value.sequence ? ret.value.sequence : 0
+        }
       })
     },
     handleOk(bvModalEvt) {
@@ -313,16 +302,6 @@ export default {
           },
         },
       ]
-      // this.delegations.forEach(i => {
-      //   if ()
-      //   txMsgs.push({
-      //     typeUrl: '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward',
-      //     value: {
-      //       delegatorAddress: this.address,
-      //       validatorAddress: i.delegation.validator_address,
-      //     },
-      //   })
-      // })
 
       if (txMsgs.length === 0) {
         this.error = 'No delegation found'
@@ -340,7 +319,7 @@ export default {
             denom: this.feeDenom,
           },
         ],
-        gas: '200000',
+        gas: this.gas,
       }
 
       const signerData = {

@@ -7,6 +7,7 @@
       title="Unbond Token"
       hide-header-close
       scrollable
+      ok-title="Send"
       :ok-disabled="!selectedAddress"
       @hidden="resetModal"
       @ok="handleOk"
@@ -20,21 +21,10 @@
                 label="Delegator"
                 label-for="Account"
               >
-                <validation-provider
-                  #default="{ errors }"
-                  rules="required"
-                  name="Delegator"
-                >
-                  <v-select
-                    v-model="selectedAddress"
-                    :options="account"
-                    :reduce="val => val.addr"
-                    label="addr"
-                    placeholder="Select an address"
-                    @change="loadBalance()"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
+                <b-form-input
+                  v-model="address"
+                  readonly
+                />
               </b-form-group>
             </b-col>
           </b-row>
@@ -49,6 +39,7 @@
                   :options="valOptions"
                   :reduce="val => val.value"
                   placeholder="Select a validator"
+                  :disabled="true"
                 />
               </b-form-group>
             </b-col>
@@ -56,7 +47,7 @@
           <b-row>
             <b-col>
               <b-form-group
-                label="Staking Token"
+                label="Current Delegation"
                 label-for="Token"
               >
                 <validation-provider
@@ -73,7 +64,8 @@
                 </validation-provider>
               </b-form-group>
             </b-col>
-          </b-row><b-row>
+          </b-row>
+          <b-row>
             <b-col>
               <b-form-group
                 label="Amount"
@@ -84,13 +76,18 @@
                   rules="required|regex:^([0-9\.]+)$"
                   name="amount"
                 >
-                  <b-form-input
-                    id="Amount"
-                    v-model="amount"
-                    :state="errors.length > 0 ? false:null"
-                    placeholder="Input a number"
-                    type="number"
-                  />
+                  <b-input-group>
+                    <b-form-input
+                      id="Amount"
+                      v-model="amount"
+                      :state="errors.length > 0 ? false:null"
+                      placeholder="Input a number"
+                      type="number"
+                    />
+                    <b-input-group-append is-text>
+                      {{ printDenom() }}
+                    </b-input-group-append>
+                  </b-input-group>
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -102,39 +99,58 @@
                 label="Fee"
                 label-for="Fee"
               >
-                <b-input-group>
-                  <validation-provider
-                    v-slot="{ errors }"
-                    rules="required|integer"
-                    name="fee"
-                  >
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="required|integer"
+                  name="fee"
+                >
+                  <b-input-group>
                     <b-form-input v-model="fee" />
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                  <validation-provider
-                    v-slot="{ errors }"
-                    rules="required"
-                    name="feeDenom"
-                  >
-                    <b-form-select
-                      v-model="feeDenom"
-                    >
-                      <b-form-select-option
-                        v-for="item in feeDenoms"
-                        :key="item.denom"
-                        :value="item.denom"
-                      >
-                        {{ item.denom }}
-                      </b-form-select-option>
-                    </b-form-select>
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-input-group>
+                    <b-input-group-append>
+                      <b-form-select
+                        v-model="feeDenom"
+                        :options="feeDenoms"
+                        value-field="denom"
+                        text-field="denom"
+                      />
+                    </b-input-group-append>
+                  </b-input-group>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col cols="12">
+              <b-form-group>
+                <b-form-checkbox
+                  v-model="advance"
+                  name="advance"
+                  value="true"
+                >
+                  <small>Advance</small>
+                </b-form-checkbox>
               </b-form-group>
             </b-col>
           </b-row>
-          <b-row>
-            <b-col>
+          <b-row v-if="advance">
+            <b-col cols="12">
+              <b-form-group
+                label="Gas"
+                label-for="gas"
+              >
+                <validation-provider
+                  v-slot="{ errors }"
+                  name="gas"
+                >
+                  <b-form-input
+                    id="gas"
+                    v-model="gas"
+                    type="number"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col cols="12">
               <b-form-group
                 label="Memo"
                 label-for="Memo"
@@ -153,7 +169,6 @@
               </b-form-group>
             </b-col>
           </b-row>
-
           <b-row>
             <b-col>
               <b-form-group
@@ -174,7 +189,7 @@
                       v-model="wallet"
                       name="wallet"
                       value="keplr"
-                      class="mb-1 mt-1"
+                      class="d-none d-md-block"
                     >
                       Keplr
                     </b-form-radio>
@@ -182,17 +197,16 @@
                       v-model="wallet"
                       name="wallet"
                       value="ledgerUSB"
-                      class="mb-1 mt-1"
                     >
-                      Ledger (USB)
+                      <small>Ledger(USB)</small>
                     </b-form-radio>
                     <b-form-radio
                       v-model="wallet"
                       name="wallet"
                       value="ledgerBle"
-                      class="mb-1 mt-1"
+                      class="mr-0"
                     >
-                      Ledger (Bluetooth)
+                      <small>Ledger(Bluetooth)</small>
                     </b-form-radio>
                   </b-form-radio-group>
                   <small class="text-danger">{{ errors[0] }}</small>
@@ -210,16 +224,15 @@
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
-  BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
-  BForm, BFormRadioGroup, BFormRadio,
+  BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BInputGroupAppend,
+  BForm, BFormRadioGroup, BFormRadio, BFormCheckbox,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  formatToken, getCachedValidators, getLocalAccounts, getLocalChains, setLocalTxHistory, sign, timeIn,
+  formatToken, formatTokenDenom, setLocalTxHistory, sign, timeIn,
 } from '@/libs/data'
-import chainAPI from '@/libs/fetch'
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
@@ -234,10 +247,11 @@ export default {
     BFormInput,
     BFormGroup,
     BFormSelect,
-    BFormSelectOption,
     BFormRadioGroup,
     BFormRadio,
     vSelect,
+    BInputGroupAppend,
+    BFormCheckbox,
 
     ValidationProvider,
     ValidationObserver,
@@ -269,11 +283,13 @@ export default {
       memo: '',
       fee: '800',
       feeDenom: '',
-      wallet: 'keplr',
+      wallet: 'ledgerUSB',
       error: null,
       sequence: 1,
       accountNumber: 0,
       account: [],
+      gas: '200000',
+      advance: false,
 
       required,
       password,
@@ -290,7 +306,7 @@ export default {
   },
   computed: {
     valOptions() {
-      return this.validators.map(x => ({ value: x.operator_address, label: x.description.moniker }))
+      return this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
     },
     tokenOptions() {
       if (!this.delegations) return []
@@ -305,77 +321,47 @@ export default {
     // console.log('address: ', this.address)
   },
   methods: {
-    computeAccount() {
-      const accounts = getLocalAccounts()
-      const chains = getLocalChains()
-      const values = Object.values(accounts)
-      let array = []
-      for (let i = 0; i < values.length; i += 1) {
-        const addrs = values[i].address.filter(x => x.chain === this.$route.params.chain)
-        if (addrs && addrs.length > 0) {
-          array = array.concat(addrs)
-          if (!this.selectedAddress) {
-            this.selectedAddress = addrs[0].addr
-          }
-        }
-        const addr = values[i].address.find(x => x.addr === this.selectedAddress)
-        if (addr) {
-          this.selectedChain = chains[addr.chain]
-        }
-      }
-      if (!this.selectedChain) {
-        this.selectedChain = chains[this.$route.params.chain]
-      }
-      this.selectedValidator = this.validatorAddress
-      const reducer = (t, c) => {
-        if (!(t.find(x => x.addr === c.addr))) t.push(c)
-        return t
-      }
-      return array.reduce(reducer, [])
+    printDenom() {
+      return formatTokenDenom(this.token)
     },
     loadBalance() {
-      this.account = this.computeAccount()
-      if (this.account && this.account.length > 0) this.selectedAddress = this.account[0].addr
-      if (this.selectedAddress) {
-        if (!getCachedValidators(this.selectedChain.chain)) {
-          this.$http.getValidatorList().then(v => {
-            this.validators = v
-          })
-        } else {
-          this.validators = JSON.parse(getCachedValidators(this.selectedChain.chain))
-        }
-        if (this.selectedChain) {
-          chainAPI.getBankBalance(this.selectedChain.api, this.selectedAddress).then(res => {
-            if (res && res.length > 0) {
-              this.balance = res
-              const token = this.balance.find(i => !i.denom.startsWith('ibc'))
-              this.token = token.denom
-              if (token) this.feeDenom = token.denom
-            }
-          })
-        }
-        this.$http.getLatestBlock(this.selectedChain).then(ret => {
-          this.chainId = ret.block.header.chain_id
-          const notSynced = timeIn(ret.block.header.time, 10, 'm')
-          if (notSynced) {
-            this.error = 'Client is not synced or blockchain is halted'
-          } else {
-            this.error = null
-          }
-        })
-        this.$http.getAuthAccount(this.selectedAddress, this.selectedChain).then(ret => {
-          if (ret.value.base_vesting_account) {
-            this.accountNumber = ret.value.base_vesting_account.base_account.account_number
-            this.sequence = ret.value.base_vesting_account.base_account.sequence
-            if (!this.sequence) this.sequence = 0
-          } else {
-            this.accountNumber = ret.value.account_number
-            this.sequence = ret.value.sequence ? ret.value.sequence : 0
-          }
+      if (this.address) {
+        this.$http.getValidatorList().then(v => {
+          this.validators = v
         })
       }
+      this.$http.getBankBalances(this.address).then(res => {
+        if (res && res.length > 0) {
+          this.balance = res
+        }
+      })
+      this.$http.getLatestBlock(this.selectedChain).then(ret => {
+        this.chainId = ret.block.header.chain_id
+        const notSynced = timeIn(ret.block.header.time, 10, 'm')
+        if (notSynced) {
+          this.error = 'Client is not synced or blockchain is halted'
+        } else {
+          this.error = null
+        }
+      })
+      this.$http.getAuthAccount(this.selectedAddress, this.selectedChain).then(ret => {
+        if (ret.value.base_vesting_account) {
+          this.accountNumber = ret.value.base_vesting_account.base_account.account_number
+          this.sequence = ret.value.base_vesting_account.base_account.sequence
+          if (!this.sequence) this.sequence = 0
+        } else {
+          this.accountNumber = ret.value.account_number
+          this.sequence = ret.value.sequence ? ret.value.sequence : 0
+        }
+      })
       this.$http.getStakingDelegations(this.selectedAddress).then(res => {
         this.delegations = res.delegation_responses
+        this.delegations.forEach(x => {
+          if (x.delegation.validator_address === this.validatorAddress) {
+            this.token = x.balance.denom
+            this.feeDenom = x.balance.denom
+          }
+        })
       })
     },
     handleOk(bvModalEvt) {
@@ -427,7 +413,7 @@ export default {
             denom: this.feeDenom,
           },
         ],
-        gas: '200000',
+        gas: this.gas,
       }
 
       const signerData = {

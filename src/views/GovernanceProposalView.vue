@@ -131,24 +131,28 @@
             :id="'vote-yes'+proposal.id"
             variant="success"
             :value="proposal.tally.yes"
+            :label="`${proposal.tally.yes.toFixed()}%`"
             show-progress
           />
           <b-progress-bar
             :id="'vote-no'+proposal.id"
             variant="warning"
             :value="proposal.tally.no"
+            :label="`${proposal.tally.no.toFixed()}%`"
             show-progress
           />
           <b-progress-bar
             :id="'vote-veto'+proposal.id"
             variant="danger"
             :value="proposal.tally.veto"
+            :label="`${proposal.tally.veto.toFixed()}%`"
             show-progress
           />
           <b-progress-bar
             :id="'vote-abstain'+proposal.id"
             variant="info"
             :value="proposal.tally.abstain"
+            :label="`${proposal.tally.abstain.toFixed()}%`"
             show-progress
           />
         </b-progress>

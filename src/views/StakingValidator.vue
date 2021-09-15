@@ -26,27 +26,10 @@
               <div class="d-flex flex-wrap">
                 <b-button
                   v-b-modal.delegate-window
-                  size="sm"
                   variant="primary"
                   class="mr-25 mb-25"
                 >
                   Delegate
-                </b-button>
-                <b-button
-                  v-b-modal.redelegate-window
-                  size="sm"
-                  variant="outline-danger"
-                  class="mr-25 mb-25"
-                >
-                  Redelegate
-                </b-button>
-                <b-button
-                  v-b-modal.unbond-window
-                  size="sm"
-                  variant="outline-danger"
-                  class="mr-25 mb-25"
-                >
-                  Unbond
                 </b-button>
               </div>
             </div>
@@ -280,8 +263,6 @@
       </b-row>
     </template>
     <operation-delegate-component :validator-address="validator.operator_address" />
-    <operation-redelegate-component :validator-address="validator.operator_address" />
-    <operation-unbond-component :validator-address="validator.operator_address" />
   </div>
 </template>
 
@@ -298,8 +279,6 @@ import StakingAddressComponent from './StakingAddressComponent.vue'
 import StakingCommissionComponent from './StakingCommissionComponent.vue'
 import StakingRewardComponent from './StakingRewardComponent.vue'
 import OperationDelegateComponent from './OperationDelegateComponent.vue'
-import OperationRedelegateComponent from './OperationRedelegateComponent.vue'
-import OperationUnbondComponent from './OperationUnbondComponent.vue'
 
 export default {
   components: {
@@ -315,8 +294,6 @@ export default {
     StakingCommissionComponent,
     StakingRewardComponent,
     OperationDelegateComponent,
-    OperationRedelegateComponent,
-    OperationUnbondComponent,
   },
   directives: {
     'b-modal': VBModal,
