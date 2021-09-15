@@ -35,7 +35,7 @@
                 label-for="validator"
               >
                 <v-select
-                  v-model="selectedValidator"
+                  :value="validatorAddress"
                   :options="valOptions"
                   :reduce="val => val.value"
                   placeholder="Select a validator"
