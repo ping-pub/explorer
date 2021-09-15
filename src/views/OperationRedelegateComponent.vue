@@ -374,7 +374,6 @@ export default {
           this.sequence = ret.value.sequence ? ret.value.sequence : 0
         }
       })
-      console.log(this.validatorAddress)
       this.$http.getStakingDelegations(this.address).then(res => {
         this.delegations = res.delegation_responses
         this.delegations.forEach(x => {
@@ -443,8 +442,6 @@ export default {
         sequence: this.sequence,
         chainId: this.chainId,
       }
-
-      console.log(txMsgs)
 
       sign(
         this.wallet,
