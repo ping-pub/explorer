@@ -27,9 +27,9 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/user/setting',
+      path: '/wallet/setting',
       name: 'setting',
-      component: () => import('@/views/UserSetting.vue'),
+      component: () => import('@/views/WalletSetting.vue'),
       meta: {
         pageTitle: 'Setting',
         breadcrumb: [
@@ -41,9 +41,9 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/user/portfolio',
+      path: '/wallet/portfolio',
       name: 'portfolio',
-      component: () => import('@/views/UserPortfolio.vue'),
+      component: () => import('@/views/WalletPortfolio.vue'),
       meta: {
         pageTitle: 'Portfolio',
         breadcrumb: [
@@ -55,9 +55,9 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/user/accounts',
+      path: '/wallet/accounts',
       name: 'accounts',
-      component: () => import('@/views/UserAccounts.vue'),
+      component: () => import('@/views/WalletAccounts.vue'),
       meta: {
         pageTitle: 'Accounts',
         breadcrumb: [
@@ -69,9 +69,23 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/user/address',
+      path: '/wallet/import',
+      name: 'accounts-import',
+      component: () => import('@/views/WalletAccountImportAddress.vue'),
+      meta: {
+        pageTitle: 'Accounts',
+        breadcrumb: [
+          {
+            text: 'Import',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/wallet/address',
       name: 'addresses',
-      component: () => import('@/views/UserAddressBook.vue'),
+      component: () => import('@/views/WalletAddressBook.vue'),
       meta: {
         pageTitle: 'Address Book',
         breadcrumb: [
@@ -101,7 +115,7 @@ const router = new VueRouter({
     {
       path: '/:chain/account/:address',
       name: 'chain-account',
-      component: () => import('@/views/UserAccountDetail.vue'),
+      component: () => import('@/views/WalletAccountDetail.vue'),
       meta: {
         pageTitle: 'Accounts',
         breadcrumb: [

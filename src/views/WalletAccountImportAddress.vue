@@ -5,7 +5,7 @@
       :title="null"
       :subtitle="null"
       shape="square"
-      finish-button-text="Submit"
+      finish-button-text="Save"
       back-button-text="Previous"
       class="steps-transparent mb-3 md"
       @on-complete="formSubmitted"
@@ -130,7 +130,7 @@
                     id="account_name"
                     v-model="name"
                     :state="errors.length > 0 ? false:null"
-                    placeholder="Keplr"
+                    placeholder="Ping Nano X"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -294,14 +294,17 @@ export default {
       required,
       selected: [],
       accounts: null,
+      exludes: ['desmos', 'crypto'], // HD Path is NOT supported,
     }
   },
   computed: {
     chains() {
       const config = JSON.parse(localStorage.getItem('chains'))
+      this.exludes.forEach(x => {
+        delete config[x]
+      })
       return config
     },
-
     addresses() {
       if (this.accounts && this.accounts.address) {
         const { data } = addressDecode(this.accounts.address)
@@ -318,7 +321,8 @@ export default {
   },
   created() {
     const { selected } = store.state.chains
-    if (selected && selected.chain_name) {
+    if (selected && selected.chain_name && !this.exludes.includes(selected.chain_name)) {
+      console.log(this.exludes, selected.chain_name, this.exludes.includes(selected.chain_name))
       this.selected.push(selected.chain_name)
     }
   },
@@ -371,7 +375,6 @@ export default {
       }
       localStorage.setItem('accounts', JSON.stringify(accounts))
 
-      this.$parent.$parent.$parent.completeAdd()
       this.$toast({
         component: ToastificationContent,
         props: {
@@ -380,6 +383,8 @@ export default {
           variant: 'success',
         },
       })
+
+      this.$router.push('./accounts')
     },
     async validationFormDevice() {
       let ok = false

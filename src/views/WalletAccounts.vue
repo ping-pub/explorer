@@ -115,26 +115,12 @@
       </b-tab>
     </b-tabs>
 
-    <b-card
-      v-b-modal.add-account
-      class="addzone"
-    >
-      <feather-icon icon="PlusIcon" />
-      Connect Wallet
-    </b-card>
-    <!-- modal add accout -->
-    <b-modal
-      id="add-account"
-      centered
-      size="lg"
-      title="Connect Wallet"
-      hide-footer
-      hide-header-close
-      cancel-disabled
-      scrollable
-    >
-      <user-account-import-address />
-    </b-modal>
+    <router-link to="./import">
+      <b-card class="addzone">
+        <feather-icon icon="PlusIcon" />
+        Connect Wallet
+      </b-card>
+    </router-link>
     <operation-transfer-component
       :address.sync="selectedAddress"
     />
@@ -152,7 +138,6 @@ import {
   formatTokenAmount, formatTokenDenom, getLocalAccounts, getLocalChains,
 } from '@/libs/data'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import UserAccountImportAddress from './UserAccountImportAddress.vue'
 import OperationTransferComponent from './OperationTransferComponent.vue'
 
 export default {
@@ -168,7 +153,6 @@ export default {
     BCardTitle,
     BDropdown,
     BDropdownItem,
-    UserAccountImportAddress,
     FeatherIcon,
     OperationTransferComponent,
     // eslint-disable-next-line vue/no-unused-components

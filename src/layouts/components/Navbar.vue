@@ -68,7 +68,8 @@
         class="btn-icon"
         :to="{ name: 'accounts' }"
       >
-        <feather-icon icon="UserIcon" />
+        <feather-icon icon="KeyIcon" />
+        <span class="align-middle ml-25">Wallet</span>
       </b-button>
       <!-- <b-dropdown
         class="ml-1"

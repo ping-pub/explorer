@@ -438,7 +438,7 @@ export default {
 
       const signerData = {
         accountNumber: this.accountNumber,
-        sequence: this.sequence,
+        sequence: String(Number(this.sequence) + 1),
         chainId: this.chainId,
       }
 

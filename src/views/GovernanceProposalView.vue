@@ -189,14 +189,14 @@
             </router-link>
           </template>
         </b-table>
-        <b-card
+        <div
           v-if="next"
-          class="addzone text-center"
+          class="addzone text-center pt-50 pb-50 bg-transparent text-primary"
           @click="loadVotes()"
         >
           <feather-icon icon="PlusIcon" />
           Load More Votes
-        </b-card>
+        </div>
       </b-card-body>
     </b-card>
     <b-card no-body>

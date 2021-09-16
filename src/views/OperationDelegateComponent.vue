@@ -241,7 +241,7 @@
         </b-form>
         <b-button
           v-else
-          to="/user/accounts"
+          to="/wallet/import"
           variant="primary"
         >
           Connect Wallet
