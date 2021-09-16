@@ -7,6 +7,15 @@
     >
       <b-nav-item><dark-toggler /></b-nav-item>
       <b-nav-item><locale /></b-nav-item>
+      <b-button
+        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+        variant="primary"
+        class="btn-icon mt-25"
+        :to="{ name: 'accounts' }"
+      >
+        <feather-icon icon="KeyIcon" />
+        <span class="align-middle ml-25">Wallet</span>
+      </b-button>
     </b-nav>
     <b-link>
       <div class="d-flex justify-content-center align-items-center">
@@ -91,7 +100,7 @@
 <script>
 /* eslint-disable global-require */
 import {
-  BLink, BAvatar, BRow, BCol, BCard, BCardText, BCardTitle, BNav, BNavItem,
+  BLink, BAvatar, BRow, BCol, BCard, BCardText, BCardTitle, BNav, BNavItem, BButton,
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import store from '@/store/index'
@@ -111,6 +120,8 @@ export default {
     BCardTitle,
     BNav,
     BNavItem,
+    BButton,
+
     VuexyLogo,
     DarkToggler,
     Locale,
