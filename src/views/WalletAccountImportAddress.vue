@@ -294,7 +294,7 @@ export default {
       required,
       selected: [],
       accounts: null,
-      exludes: ['desmos', 'crypto'], // HD Path is NOT supported,
+      exludes: ['desmos'], // HD Path is NOT supported,
     }
   },
   computed: {
