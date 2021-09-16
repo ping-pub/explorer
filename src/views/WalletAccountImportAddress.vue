@@ -322,7 +322,6 @@ export default {
   created() {
     const { selected } = store.state.chains
     if (selected && selected.chain_name && !this.exludes.includes(selected.chain_name)) {
-      console.log(this.exludes, selected.chain_name, this.exludes.includes(selected.chain_name))
       this.selected.push(selected.chain_name)
     }
   },
