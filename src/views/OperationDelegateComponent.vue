@@ -481,13 +481,13 @@ export default {
       sign(
         this.wallet,
         this.chainId,
-        this.address,
+        this.selectedAddress,
         txMsgs,
         txFee,
         this.memo,
         signerData,
       ).then(bodyBytes => {
-        this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
+        this.$http.broadcastTx(bodyBytes).then(res => {
           setLocalTxHistory({ op: 'delegate', hash: res.tx_response.txhash, time: new Date() })
           this.$bvModal.hide('delegate-window')
           this.$toast({

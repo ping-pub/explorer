@@ -8,7 +8,7 @@
       hide-header-close
       scrollable
       ok-title="Send"
-      :ok-disabled="!selectedAddress"
+      :ok-disabled="!address"
       @hidden="resetModal"
       @ok="handleOk"
       @show="loadBalance"
@@ -270,7 +270,6 @@ export default {
   },
   data() {
     return {
-      selectedAddress: this.address,
       availableAddress: [],
       validators: [],
       selectedValidator: this.validatorAddress,
@@ -310,7 +309,7 @@ export default {
     },
     tokenOptions() {
       if (!this.delegations) return []
-      return this.delegations.filter(x => x.delegation.validator_address === this.selectedValidator).map(x => ({ value: x.balance.denom, label: formatToken(x.balance) }))
+      return this.delegations.filter(x => x.delegation.validator_address === this.validatorAddress).map(x => ({ value: x.balance.denom, label: formatToken(x.balance) }))
     },
     feeDenoms() {
       if (!this.balance) return []
@@ -335,7 +334,7 @@ export default {
           this.balance = res
         }
       })
-      this.$http.getLatestBlock(this.selectedChain).then(ret => {
+      this.$http.getLatestBlock().then(ret => {
         this.chainId = ret.block.header.chain_id
         const notSynced = timeIn(ret.block.header.time, 10, 'm')
         if (notSynced) {
@@ -344,7 +343,7 @@ export default {
           this.error = null
         }
       })
-      this.$http.getAuthAccount(this.selectedAddress, this.selectedChain).then(ret => {
+      this.$http.getAuthAccount(this.address).then(ret => {
         if (ret.value.base_vesting_account) {
           this.accountNumber = ret.value.base_vesting_account.base_account.account_number
           this.sequence = ret.value.base_vesting_account.base_account.sequence
@@ -354,7 +353,7 @@ export default {
           this.sequence = ret.value.sequence ? ret.value.sequence : 0
         }
       })
-      this.$http.getStakingDelegations(this.selectedAddress).then(res => {
+      this.$http.getStakingDelegations(this.address).then(res => {
         this.delegations = res.delegation_responses
         this.delegations.forEach(x => {
           if (x.delegation.validator_address === this.validatorAddress) {

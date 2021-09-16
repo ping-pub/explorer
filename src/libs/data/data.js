@@ -129,7 +129,7 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
 
   // Ensure the address has some tokens to spend
   const client = await SigningStargateClient.offline(signer)
-  return client.signAmino(toSignAddress(signerAddress), messages, fee, memo, signerData)
+  return client.signAmino(device === 'keplr' ? signerAddress : toSignAddress(signerAddress), messages, fee, memo, signerData)
   // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
 }
 
