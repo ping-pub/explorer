@@ -102,6 +102,7 @@
 import {
   BLink, BAvatar, BRow, BCol, BCard, BCardText, BCardTitle, BNav, BNavItem, BButton,
 } from 'bootstrap-vue'
+import Ripple from 'vue-ripple-directive'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import store from '@/store/index'
 import { timeIn, toDay } from '@/libs/data'
@@ -126,6 +127,9 @@ export default {
     DarkToggler,
     Locale,
     AppFooter,
+  },
+  directives: {
+    Ripple,
   },
   data() {
     const chains = this.$store.state.chains.config

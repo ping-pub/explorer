@@ -122,7 +122,7 @@ export default {
       return tokenFormatter(value)
     },
     addNewLine(value) {
-      if (typeof value === 'string') {
+      if (typeof value === 'string' && value.indexOf('\\n') > -1) {
         return value.replaceAll('\\n', '\n')
       }
       return value
