@@ -256,6 +256,10 @@
             <b-td> End Time </b-td><b-td> {{ formatTime(account.value.base_vesting_account.end_time) }}</b-td>
           </b-tr>
         </b-tbody>
+        <object-field-component
+          v-else
+          :tablefield="account.value?account.value:account"
+        />
       </b-table-simple>
     </b-card>
 
@@ -392,10 +396,10 @@ export default {
   },
   computed: {
     accountTitle() {
-      if (this.account) {
+      if (this.account && this.account.type) {
         return this.account.type.substring(this.account.type.indexOf('/') + 1)
       }
-      return ''
+      return 'Profile'
     },
     assetTable() {
       let total = []

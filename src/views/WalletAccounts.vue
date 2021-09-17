@@ -54,6 +54,13 @@
                   </b-dropdown-item>
                   <b-dropdown-item
                     v-if="balances[acc.addr]"
+                    v-b-modal.ibc-transfer-window
+                    @click="transfer(acc.addr)"
+                  >
+                    <feather-icon icon="SendIcon" /> IBC Transfer
+                  </b-dropdown-item>
+                  <b-dropdown-item
+                    v-if="balances[acc.addr]"
                     :to="`/${acc.chain}/account/${acc.addr}`"
                   >
                     <feather-icon icon="TrelloIcon" /> Detail
@@ -124,6 +131,7 @@
     <operation-transfer-component
       :address.sync="selectedAddress"
     />
+    <operation-transfer-2-component :address="selectedAddress" />
   </div>
 </template>
 
@@ -139,6 +147,7 @@ import {
 } from '@/libs/data'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import OperationTransferComponent from './OperationTransferComponent.vue'
+import OperationTransfer2Component from './OperationTransfer2Component.vue'
 
 export default {
   components: {
@@ -157,6 +166,7 @@ export default {
     OperationTransferComponent,
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
+    OperationTransfer2Component,
   },
   directives: {
     'b-modal': VBModal,

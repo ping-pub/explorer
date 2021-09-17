@@ -208,7 +208,7 @@
       <b-card-body>
         <b-table
           stacked="sm"
-          :items="deposits"
+          :items="deposits.deposits?deposits.deposits:deposits"
           :fields="deposit_fields"
           striped
         >

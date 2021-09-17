@@ -222,6 +222,11 @@ const chainAPI = class ChainFetch {
     return ret
   }
 
+  async getUrl(url) {
+    this.getSelectedConfig()
+    return fetch(url).then(res => res.json())
+  }
+
   static fetch(host, url) {
     const ret = fetch(host + url).then(response => response.json())
     return ret
@@ -267,13 +272,18 @@ const chainAPI = class ChainFetch {
     return this.get('/ibc/applications/transfer/v1beta1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
   }
 
-  async getIBCChannels(key = null, config = null) {
+  async getIBCChannels(config = null, key = null) {
     if (key) {
       return this.get('/ibc/core/channel/v1beta1/channels?pagination.key='.concat(key), config).then(data => commonProcess(data))
     }
     return this.get('/ibc/core/channel/v1beta1/channels', config).then(data => commonProcess(data))
   }
-  // /cosmos/staking/v1beta1/delegations/{delegator_addr}
+
+  // eslint-disable-next-line camelcase
+  async getIBCChannelClientState(channel_id, port_id, config = null) {
+    // eslint-disable-next-line camelcase
+    return this.get(`/ibc/core/channel/v1beta1/channels/${channel_id}/ports/${port_id}/client_state`, config).then(data => commonProcess(data))
+  }
 
   static async getBankBalance(baseurl, address) {
     return ChainFetch.fetch(baseurl, '/bank/balances/'.concat(address)).then(data => commonProcess(data))

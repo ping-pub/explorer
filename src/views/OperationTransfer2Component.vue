@@ -1,10 +1,10 @@
 <template>
   <div>
     <b-modal
-      id="transfer-window"
+      id="ibc-transfer-window"
       centered
       size="md"
-      title="Transfer Tokens"
+      title="IBC Transfer Tokens"
       ok-title="Send"
       hide-header-close
       scrollable
@@ -35,29 +35,6 @@
                     readonly
                   />
                 </b-input-group>
-              </b-form-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <b-form-group
-                label="Recipient"
-                label-for="Recipient"
-              >
-                <validation-provider
-                  #default="{ errors }"
-                  rules="required"
-                  name="recipient"
-                >
-                  <b-input-group class="mb-25">
-                    <b-form-input
-                      id="Recipient"
-                      v-model="recipient"
-                      :state="errors.length > 0 ? false:null"
-                    />
-                  </b-input-group>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
               </b-form-group>
             </b-col>
           </b-row>
@@ -110,6 +87,51 @@
                     <b-input-group-append is-text>
                       {{ printDenom() }}
                     </b-input-group-append>
+                  </b-input-group>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-form-group
+                label="Destination"
+                label-for="destination"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="destination"
+                >
+                  <b-input-group class="mb-25">
+                    <v-select
+                      v-model="destination"
+                      placeholder="Select a channel"
+                    />
+                  </b-input-group>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-form-group
+                label="Recipient"
+                label-for="Recipient"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="recipient"
+                >
+                  <b-input-group class="mb-25">
+                    <b-form-input
+                      id="Recipient"
+                      v-model="recipient"
+                      :state="errors.length > 0 ? false:null"
+                    />
                   </b-input-group>
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -258,6 +280,7 @@ import {
   formatToken, formatTokenDenom, getLocalAccounts, getLocalChains, setLocalTxHistory, sign, timeIn,
 } from '@/libs/data'
 import { Cosmos } from '@cosmostation/cosmosjs'
+import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
@@ -278,6 +301,7 @@ export default {
     BFormRadioGroup,
     BFormRadio,
     BFormCheckbox,
+    vSelect,
 
     ValidationProvider,
     ValidationObserver,
@@ -309,6 +333,8 @@ export default {
       IBCDenom: {},
       gas: '200000',
       advance: false,
+      paths: {},
+      destination: {},
 
       required,
       password,
@@ -361,6 +387,12 @@ export default {
               if (!this.IBCDenom[x.denom]) {
                 this.$http.getIBCDenomTrace(x.denom, this.selectedChain).then(denom => {
                   this.IBCDenom[x.denom] = denom.denom_trace.base_denom
+                  // console.log(denom.denom_trace)
+                  const path = denom.denom_trace.path.split('/')
+                  this.paths[x.denom] = {
+                    channel: path[1],
+                    port: path[0],
+                  }
                 })
               }
             })
@@ -385,6 +417,19 @@ export default {
             this.sequence = ret.value.sequence ? ret.value.sequence : 0
           }
         })
+
+        const channels = this.$store.state.chains.ibcChannels[this.selectedChain.chain_name]
+        if (!channels) {
+          this.$http.getIBCChannels(this.selectedChain, null).then(ret => {
+            const chans = ret.channels.filter(x => x.state === 'STATE_OPEN').map(x => ({ channel_id: x.channel_id, port_id: x.port_id }))
+            chans.forEach((x, i) => {
+              this.$http.getIBCChannelClientState(x.channel_id, x.port_id, this.selectedChain).then(cs => {
+                chans[i].chain_id = cs.identified_client_state.client_state.chain_id
+                // console.log(i, chans[i])
+              })
+            })
+          })
+        }
       }
     },
     handleOk(bvModalEvt) {
@@ -412,19 +457,24 @@ export default {
     async send() {
       const txMsgs = [
         {
-          typeUrl: '/cosmos.bank.v1beta1.MsgSend',
+          typeUrl: '/ibc.applications.transfer.v1.MsgTransfer',
           value: {
-            fromAddress: this.address,
-            toAddress: this.recipient,
-            amount: [
-              {
-                amount: String((Number(this.amount) * 1000000).toFixed()),
-                denom: this.token,
-              },
-            ],
+            source_port: this.paths[this.token].port,
+            source_channel: this.paths[this.token].channel,
+            token: {
+              amount: String((Number(this.amount) * 1000000).toFixed()),
+              denom: this.token,
+            },
+            sender: this.address,
+            receiver: this.recipient,
+            // timeout_height: this.timeoutHeight ? { revision_height: '', revision_number: '' } : {},
+            // timeout_timestamp: null,
           },
         },
       ]
+
+      // console.log(txMsgs)
+      if (this.token) return
 
       const txFee = {
         amount: [
@@ -453,7 +503,7 @@ export default {
       ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
           setLocalTxHistory({ op: 'send', hash: res.txhash, time: new Date() })
-          this.$bvModal.hide('transfer-window')
+          this.$bvModal.hide('ibc-transfer-window')
           this.$toast({
             component: ToastificationContent,
             props: {
@@ -470,8 +520,11 @@ export default {
       })
       // Send tokens
       // return client.sendTokens(this.address, this.recipient, sendCoins, this.memo)
-      return ''
+      // return
     },
   },
 }
 </script>
+<style lang="scss">
+@import '@core/scss/vue/libs/vue-select.scss';
+</style>

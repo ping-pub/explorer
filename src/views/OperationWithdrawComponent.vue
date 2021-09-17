@@ -178,7 +178,6 @@ import {
 import {
   formatToken, getLocalAccounts, getLocalChains, sign, timeIn, setLocalTxHistory,
 } from '@/libs/data'
-import chainAPI from '@/libs/fetch'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
@@ -266,14 +265,14 @@ export default {
       this.account = this.computeAccount()
       if (this.account && this.account.length > 0) this.address = this.account[0].addr
       if (this.address) {
-        chainAPI.getBankBalance(this.selectedChain.api, this.address).then(res => {
+        this.$http.getBankBalances(this.address).then(res => {
           if (res && res.length > 0) {
             this.balance = res
             const token = this.balance.find(i => !i.denom.startsWith('ibc'))
             if (token) this.feeDenom = token.denom
           }
         })
-        this.$http.getLatestBlock(this.selectedChain).then(ret => {
+        this.$http.getLatestBlock().then(ret => {
           this.chainId = ret.block.header.chain_id
           const notSynced = timeIn(ret.block.header.time, 10, 'm')
           if (notSynced) {
@@ -282,7 +281,7 @@ export default {
             this.error = null
           }
         })
-        this.$http.getAuthAccount(this.address, this.selectedChain).then(ret => {
+        this.$http.getAuthAccount(this.address).then(ret => {
           if (ret.value.base_vesting_account) {
             this.accountNumber = ret.value.base_vesting_account.base_account.account_number
             this.sequence = ret.value.base_vesting_account.base_account.sequence

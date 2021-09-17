@@ -47,6 +47,7 @@ export default {
     selected,
     avatars: {},
     height: 0,
+    ibcChannels: {},
   },
   getters: {
     getchains: state => state.chains,
@@ -64,6 +65,9 @@ export default {
     },
     setHeight(state, height) {
       state.chains.height = height
+    },
+    setChannels(state, { chain, channels }) {
+      state.chains.ibcChannels[chain] = channels
     },
   },
   actions: {},
