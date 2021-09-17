@@ -47,7 +47,7 @@ export default class Proposal {
   versionFixed(ver) {
     if (compareVersions(ver, '0.40') >= 0) {
       // do nothing
-    } else if (compareVersions(ver, '0.37') >= 0) {
+    } else if (compareVersions(ver, '0.30') >= 0) {
       switch (this.element.proposal_status) {
         case 'Passed':
           this.status = 3
@@ -61,6 +61,9 @@ export default class Proposal {
         default:
           this.status = 1
       }
+    }
+    if (String(this.status).indexOf('PASSED') > -1) {
+      this.status = 3
     }
   }
 }

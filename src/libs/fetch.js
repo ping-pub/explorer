@@ -163,10 +163,19 @@ const chainAPI = class ChainFetch {
   }
 
   async getGovernanceProposer(pid) {
+    if (this.config.chain_name === 'certik') {
+      return this.get(`/shentu/gov/v1alpha1/${pid}/proposer`).then(data => new Proposer().init(commonProcess(data)))
+    }
     return this.get(`/gov/proposals/${pid}/proposer`).then(data => new Proposer().init(commonProcess(data)))
   }
 
   async getGovernanceDeposits(pid) {
+    if (this.config.chain_name === 'certik') {
+      return this.get(`/shentu/gov/v1alpha1/proposals/${pid}/deposits`).then(data => {
+        const result = commonProcess(data)
+        return Array.isArray(result) ? result.reverse().map(d => new Deposit().init(d)) : result
+      })
+    }
     return this.get(`/gov/proposals/${pid}/deposits`).then(data => {
       const result = commonProcess(data)
       return Array.isArray(result) ? result.reverse().map(d => new Deposit().init(d)) : result
@@ -180,18 +189,27 @@ const chainAPI = class ChainFetch {
         pagination: {},
       }))
     }
+    if (this.config.chain_name === 'certik') {
+      return this.get(`/shentu/gov/v1alpha1/proposals/${pid}/votes?pagination.key=${encodeURIComponent(next)}&pagination.limit=${limit}`)
+    }
     return this.get(`/cosmos/gov/v1beta1/proposals/${pid}/votes?pagination.key=${encodeURIComponent(next)}&pagination.limit=${limit}`)
   }
 
   async getGovernanceList() {
     return Promise.all([this.get('/gov/proposals'), this.get('/staking/pool')]).then(data => {
       const pool = new StakingPool().init(commonProcess(data[1]))
+      let proposals = commonProcess(data[0])
+      if (Array.isArray(proposals.proposals)) {
+        proposals = proposals.proposals
+      }
       const ret = []
-      commonProcess(data[0]).forEach(e => {
-        const g = new Proposal().init(e, pool.bondedToken)
-        g.versionFixed(this.config.sdk_version)
-        ret.push(g)
-      })
+      if (proposals) {
+        proposals.forEach(e => {
+          const g = new Proposal().init(e, pool.bondedToken)
+          g.versionFixed(this.config.sdk_version)
+          ret.push(g)
+        })
+      }
       return ret
     })
   }
@@ -210,7 +228,10 @@ const chainAPI = class ChainFetch {
   }
 
   async getAuthAccount(address, config = null) {
-    return this.get('/auth/accounts/'.concat(address), config).then(data => commonProcess(data))
+    return this.get('/auth/accounts/'.concat(address), config).then(data => {
+      const result = commonProcess(data)
+      return result.value ? result : { value: result }
+    })
   }
 
   async getBankAccountBalance(address) {
@@ -244,6 +265,13 @@ const chainAPI = class ChainFetch {
   async getIBCDenomTrace(hash, config = null) {
     const h = hash.substring(hash.indexOf('/'))
     return this.get('/ibc/applications/transfer/v1beta1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
+  }
+
+  async getIBCChannels(key = null, config = null) {
+    if (key) {
+      return this.get('/ibc/core/channel/v1beta1/channels?pagination.key='.concat(key), config).then(data => commonProcess(data))
+    }
+    return this.get('/ibc/core/channel/v1beta1/channels', config).then(data => commonProcess(data))
   }
   // /cosmos/staking/v1beta1/delegations/{delegator_addr}
 
