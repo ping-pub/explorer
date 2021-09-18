@@ -24,7 +24,7 @@
           <b-tr>
             <b-td>
               {{ 'status' }}
-            </b-td><b-td> <b-badge
+            </b-td><b-td class="text-wrap"> <b-badge
               v-if="tx.code===0"
               variant="light-success"
             >

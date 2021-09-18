@@ -331,7 +331,7 @@ export default {
       }
       this.$http.getBankBalances(this.address).then(res => {
         if (res && res.length > 0) {
-          this.balance = res
+          this.balance = res.reverse()
         }
       })
       this.$http.getLatestBlock().then(ret => {

@@ -315,7 +315,7 @@ export default {
       if (this.voter) {
         this.$http.getBankBalances(this.voter).then(res => {
           if (res && res.length > 0) {
-            this.balance = res
+            this.balance = res.reverse()
             const token = this.balance.find(i => !i.denom.startsWith('ibc'))
             if (token) this.feeDenom = token.denom
           }

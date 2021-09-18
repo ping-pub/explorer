@@ -175,11 +175,16 @@
 
     <b-card
       v-if="account"
-      :title="accountTitle"
+      title="Profile"
       class="text-trancate"
     >
       <b-table-simple stacked="sm">
         <b-tbody v-if="account.type === 'cosmos-sdk/BaseAccount'">
+          <b-tr>
+            <b-td>
+              Account Type
+            </b-td><b-td> {{ account.type }} </b-td>
+          </b-tr>
           <b-tr>
             <b-td class="max-width:100px;">
               Account Number
@@ -192,7 +197,12 @@
             <b-td> Public Key </b-td><b-td> <object-field-component :tablefield="account.value.public_key" /> </b-td>
           </b-tr>
         </b-tbody>
-        <b-tbody v-if="account.type === 'cosmos-sdk/PeriodicVestingAccount'">
+        <b-tbody v-else-if="account.type === 'cosmos-sdk/PeriodicVestingAccount'">
+          <b-tr>
+            <b-td>
+              Account Type
+            </b-td><b-td> {{ account.type }} </b-td>
+          </b-tr>
           <b-tr>
             <b-td class="max-width:100px;">
               Account Number
@@ -231,7 +241,12 @@
             </b-td>
           </b-tr>
         </b-tbody>
-        <b-tbody v-if="account.type === 'cosmos-sdk/DelayedVestingAccount'">
+        <b-tbody v-else-if="account.type === 'cosmos-sdk/DelayedVestingAccount'">
+          <b-tr>
+            <b-td>
+              Account Type
+            </b-td><b-td> {{ account.type }} </b-td>
+          </b-tr>
           <b-tr>
             <b-td style="max-width:100px;">
               Account Number

@@ -354,7 +354,7 @@ export default {
       if (this.address) {
         this.$http.getBankBalances(this.address, this.selectedChain).then(res => {
           if (res && res.length > 0) {
-            this.balance = res
+            this.balance = res.reverse()
             this.token = this.balance[0].denom
             this.feeDenom = this.balance.find(x => !x.denom.startsWith('ibc')).denom
             this.balance.filter(i => i.denom.startsWith('ibc')).forEach(x => {
