@@ -37,13 +37,29 @@
     >
       <b-card-header class="pt-0 pl-0 pr-0">
         <b-card-title>Assets</b-card-title>
-        <b-button
-          v-b-modal.transfer-window
-          variant="primary"
-          size="sm"
-        >
-          Transfer
-        </b-button>
+        <div>
+          <b-button
+            v-b-modal.transfer-window
+            variant="primary"
+            size="sm"
+            class="mr-25"
+          ><feather-icon
+             icon="SendIcon"
+             class="d-md-none"
+           />
+            <span class="d-none d-md-block">Transfer</span>
+          </b-button>
+          <b-button
+            v-b-modal.ibc-transfer-window
+            variant="success"
+            size="sm"
+          ><feather-icon
+             icon="SendIcon"
+             class="d-md-none"
+           />
+            <span class="d-none d-md-block">IBC Transfer
+            </span></b-button>
+        </div>
       </b-card-header>
       <b-card-body class="pl-0 pr-0">
         <b-row>
@@ -288,6 +304,7 @@
     </b-popover>
 
     <operation-transfer-component :address="address" />
+    <operation-transfer-2-component :address="address" />
     <operation-withdraw-component :address="address" />
     <operation-unbond-component
       :address="address"
@@ -325,6 +342,7 @@ import OperationWithdrawComponent from './OperationWithdrawComponent.vue'
 import OperationUnbondComponent from './OperationUnbondComponent.vue'
 import OperationDelegateComponent from './OperationDelegateComponent.vue'
 import OperationRedelegateComponent from './OperationRedelegateComponent.vue'
+import OperationTransfer2Component from './OperationTransfer2Component.vue'
 
 export default {
   components: {
@@ -354,6 +372,7 @@ export default {
     OperationDelegateComponent,
     OperationRedelegateComponent,
     OperationUnbondComponent,
+    OperationTransfer2Component,
   },
   directives: {
     'b-modal': VBModal,

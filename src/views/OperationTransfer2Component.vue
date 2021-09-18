@@ -53,6 +53,13 @@
                     v-model="token"
                     @change="tokenChange"
                   >
+                    <template #first>
+                      <b-form-select-option
+                        value=""
+                      >
+                        -- Please select a token --
+                      </b-form-select-option>
+                    </template>
                     <b-form-select-option
                       v-for="item in balance"
                       :key="item.denom"
@@ -285,7 +292,6 @@ import { Cosmos } from '@cosmostation/cosmosjs'
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { coin } from '@cosmjs/amino'
-import dayjs from 'dayjs'
 
 export default {
   name: 'TransforDialogue',
@@ -359,6 +365,7 @@ export default {
       return this.balance.filter(item => !item.denom.startsWith('ibc'))
     },
     destinationOptions() {
+      if (!this.token && this.token === '') return []
       const options = this.channels.map(x => ({ port_id: x.port_id, channel_id: x.channel_id, label: `${x.chain_id ? x.chain_id : ''} ${x.port_id}/${x.channel_id}` }))
       const query = this.paths[this.token]
       return query && String(this.token).startsWith('ibc/') ? options.filter(x => x.channel_id === query.channel_id) : options
@@ -393,13 +400,14 @@ export default {
     },
     loadBalance() {
       this.destination = null
+      this.token = ''
       this.account = this.computeAccount()
       if (this.account && this.account.length > 0) this.address = this.account[0].addr
       if (this.address) {
         this.$http.getBankBalances(this.address, this.selectedChain).then(res => {
           if (res && res.length > 0) {
             this.balance = res.reverse()
-            this.token = this.balance[0].denom
+            // this.token = this.balance[0].denom
             this.feeDenom = this.balance.find(x => !x.denom.startsWith('ibc')).denom
             this.balance.filter(i => i.denom.startsWith('ibc')).forEach(x => {
               if (!this.IBCDenom[x.denom]) {
@@ -407,9 +415,11 @@ export default {
                   this.IBCDenom[x.denom] = denom.denom_trace.base_denom
                   // console.log(denom.denom_trace)
                   const path = denom.denom_trace.path.split('/')
-                  this.paths[x.denom] = {
-                    channel_id: path[1],
-                    port_id: path[0],
+                  if (path.length >= 2) {
+                    this.paths[x.denom] = {
+                      channel_id: path[path.length - 1],
+                      port_id: path[path.length - 2],
+                    }
                   }
                 })
               }
@@ -489,8 +499,8 @@ export default {
             token: coin(Number(this.amount) * 1000000, this.token),
             sender: this.address,
             receiver: this.recipient,
-            timeoutHeight: { revisionHeight: '1000', revisionNumber: '1000' },
-            timeoutTimestamp: String(dayjs().add(5, 'm') * 1000),
+            // timeoutHeight: undefined, // { revisionHeight: '0', revisionNumber: '0' },
+            timeoutTimestamp: String((Math.floor(Date.now() / 1000) + 60) * 1_000_000_000),
           },
         },
       ]
@@ -510,8 +520,6 @@ export default {
         sequence: this.sequence,
         chainId: this.chainId,
       }
-
-      console.log(txMsgs, txFee, signerData)
 
       sign(
         this.wallet,
