@@ -16,23 +16,25 @@
           :key="index"
           sm="12"
           md="4"
-          class=" text-trancate"
         >
           <span class="d-inline-block text-truncate font-weight-bold">{{ index+1 }} {{ x.validator.moniker }}</span>
-          <div class="d-flex justify-content-between align-self-stretch flex-wrap">
-            <div
-              v-for="(b,i) in blocks"
-              :key="i"
-              style="width:1.5%; margin:0.5px; border-radius: 3px; display: inline-block;"
-            ><router-link :to="`./blocks/${b.height}`">
+          <template>
+            <div class="d-flex justify-content-between align-self-stretch flex-wrap">
               <div
-                v-b-tooltip.hover.v-second
-                :title="b.height"
-                :class="b.sigs && b.sigs[x.address] ? 'bg-success':'bg-danger'"
-              >&nbsp;</div>
-            </router-link>
+                v-for="(b,i) in blocks"
+                :key="i"
+                style="width:1.5%; margin:0.5px; border-radius: 3px; display: inline-block;"
+              ><router-link :to="`./blocks/${b.height}`">
+                <div
+                  v-b-tooltip.hover.v-second
+                  :title="b.height"
+                  :class="b.sigs && b.sigs[x.address] ? 'bg-success':'bg-danger'"
+                >&nbsp;</div>
+              </router-link>
+              </div>
             </div>
-          </div></b-col>
+          </template>
+        </b-col>
       </b-row>
     </b-card>
   </div>
@@ -60,7 +62,7 @@ export default {
       query: '',
       validators: [],
       missing: {},
-      blocks: Array.from('0'.repeat(100)).map(x => [Boolean(x), Number(x)]),
+      blocks: Array.from('0'.repeat(50)).map(x => ({ sigs: {}, height: Number(x) })),
     }
   },
   computed: {
@@ -85,15 +87,16 @@ export default {
     initBlocks() {
       this.$http.getLatestBlock().then(d => {
         const { height } = d.block.last_commit
-
+        const blocks = []
         // update height
         let promise = Promise.resolve()
-        const blocks = []
         for (let i = height - 1; i > height - 50; i -= 1) {
-          blocks.unshift({ sigs: {}, height: i })
-          promise = promise.then(() => new Promise(resolve => {
-            this.fetch_status(i, height, resolve)
-          }))
+          blocks.unshift({ sigs: {}, height: i > 0 ? i : 0 })
+          if (i > height - 48 && i > 0) {
+            promise = promise.then(() => new Promise(resolve => {
+              this.fetch_status(i, resolve)
+            }))
+          }
         }
 
         const sigs = {}
@@ -106,20 +109,18 @@ export default {
         this.timer = setInterval(this.fetch_latest, 6000)
       })
     },
-    fetch_status(height, lastHeight, resolve) {
-      return this.$http.getBlockByHeight(height).then(res => {
-        resolve()
-        if (height !== lastHeight) {
+    fetch_status(height, resolve) {
+      const block = this.blocks.find(b => b.height === height)
+      if (block) {
+        this.$http.getBlockByHeight(height).then(res => {
+          resolve()
           const sigs = {}
           res.block.last_commit.signatures.forEach(x => {
             sigs[x.validator_address] = !!x.signature
           })
-          const block = this.blocks.find(b => b.height === height)
-          if (typeof block !== 'undefined') {
-            this.$set(block, 'sigs', sigs)
-          }
-        }
-      })
+          this.$set(block, 'sigs', sigs)
+        })
+      }
     },
     fetch_latest() {
       this.$http.getLatestBlock().then(res => {
