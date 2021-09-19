@@ -21,6 +21,11 @@ const modules = [
     title: 'governance',
     route: 'governance',
   },
+  {
+    scope: 'normal',
+    title: 'uptime',
+    route: 'uptime',
+  },
 ]
 
 function processMenu() {

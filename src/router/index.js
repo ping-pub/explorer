@@ -113,6 +113,20 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/:chain/uptime',
+      name: 'uptime',
+      component: () => import('@/views/Uptime.vue'),
+      meta: {
+        pageTitle: 'Uptime',
+        breadcrumb: [
+          {
+            text: 'Uptime',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
       path: '/:chain/account/:address',
       name: 'chain-account',
       component: () => import('@/views/WalletAccountDetail.vue'),

@@ -1,0 +1,136 @@
+<template>
+  <div class="container-md px-0">
+    <b-card>
+      <b-card
+        no-body
+        class="mb-1"
+      >
+        <b-form-input
+          v-model="query"
+          placeholder="Keywords to filter validators"
+        />
+      </b-card>
+      <b-row>
+        <b-col
+          v-for="x in uptime"
+          :key="x.moniker"
+          sm="12"
+          md="6"
+        >
+          <span class="font-weight-bold">{{ x.validator.moniker?x.validator.moniker:x.address }}</span>
+          <div class="d-flex justify-content-between align-self-stretch flex-wrap">
+            <div
+              v-for="(b,i) in blocks"
+              :key="i"
+              style="width:1.5%; margin:0.5px; border-radius: 3px; display: inline-block;"
+            ><router-link :to="`./blocks/${b.height}`">
+              <div
+                v-b-tooltip.hover.v-second
+                :title="b.height"
+                :class="b.sigs && b.sigs[x.address] ? 'bg-success':'bg-danger'"
+              >&nbsp;</div>
+            </router-link>
+            </div>
+          </div></b-col>
+      </b-row>
+    </b-card>
+  </div>
+</template>
+
+<script>
+import {
+  BRow, BCol, VBTooltip, BFormInput, BCard,
+} from 'bootstrap-vue'
+
+import { consensusPubkeyToHexAddress } from '@/libs/data'
+
+export default {
+  components: {
+    BRow,
+    BCol,
+    BFormInput,
+    BCard,
+  },
+  directives: {
+    'b-tooltip': VBTooltip,
+  },
+  data() {
+    return {
+      query: '',
+      validators: [],
+      missing: {},
+      blocks: Array.from('0'.repeat(100)).map(x => [Boolean(x), Number(x)]),
+    }
+  },
+  computed: {
+    uptime() {
+      const vals = this.query ? this.validators.filter(x => String(x.description.moniker).indexOf(this.query) > -1) : this.validators
+      return vals.map(x => ({
+        validator: x.description,
+        address: consensusPubkeyToHexAddress(x.consensus_pubkey),
+      }))
+    },
+  },
+  created() {
+    this.$http.getValidatorList().then(res => {
+      this.validators = res
+    })
+    this.initBlocks()
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
+  },
+  methods: {
+    initBlocks() {
+      this.$http.getLatestBlock().then(d => {
+        const { height } = d.block.last_commit
+
+        // update height
+        const blocks = []
+        for (let i = height - 49; i < height; i += 1) {
+          blocks.push({ sigs: {}, height: i })
+          this.fetch_status(i, height)
+        }
+        const sigs = {}
+        d.block.last_commit.signatures.forEach(x => {
+          sigs[x.validator_address] = !!x.signature
+        })
+        blocks.push({ sigs, height })
+        this.blocks = blocks
+
+        this.timer = setInterval(this.fetch_latest, 6000)
+      })
+    },
+    fetch_status(height, lastHeight) {
+      return this.$http.getBlockByHeight(height).then(res => {
+        if (height !== lastHeight) {
+          const sigs = {}
+          res.block.last_commit.signatures.forEach(x => {
+            sigs[x.validator_address] = !!x.signature
+          })
+          const block = this.blocks.find(b => b.height === height)
+          if (typeof block !== 'undefined') {
+            this.$set(block, 'sigs', sigs)
+          }
+        }
+      })
+    },
+    fetch_latest() {
+      this.$http.getLatestBlock().then(res => {
+        const sigs = {}
+        res.block.last_commit.signatures.forEach(x => {
+          sigs[x.validator_address] = !!x.signature
+        })
+        const block = this.blocks.find(b => b[1] === res.block.last_commit.height)
+        if (typeof block === 'undefined') { // mei
+          // this.$set(block, 0, typeof sigs !== 'undefined')
+          if (this.blocks.length > 50) this.blocks.shift()
+          this.blocks.push({ sigs, height: res.block.last_commit.height })
+        }
+      })
+    },
+  },
+}
+</script>
+
+<style></style>

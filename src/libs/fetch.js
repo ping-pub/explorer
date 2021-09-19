@@ -51,6 +51,10 @@ const chainAPI = class ChainFetch {
     return this.get(`/blocks/${height}`).then(data => Block.create(data))
   }
 
+  async getSlashingSigningInfo() {
+    return this.get('/cosmos/slashing/v1beta1/signing_infos')
+  }
+
   async getTxs(hash) {
     const ver = this.getSelectedConfig() ? this.config.sdk_version : '0.41'
     // /cosmos/tx/v1beta1/txs/{hash}
@@ -58,6 +62,18 @@ const chainAPI = class ChainFetch {
       return this.get(`/txs/${hash}`).then(data => WrapStdTx.create(data, ver))
     }
     return this.get(`/cosmos/tx/v1beta1/txs/${hash}`).then(data => WrapStdTx.create(data, ver))
+  }
+
+  async getTxsBySender(sender, page = 1) {
+    return this.get(`/txs?message.sender=${sender}&page=${page}&limit=20`)
+  }
+
+  async getTxsByRecipient(recipient) {
+    return this.get(`/txs?message.recipient=${recipient}`)
+  }
+
+  async getTxsByHeight(height) {
+    return this.get(`/txs?tx.height=${height}`)
   }
 
   async getValidatorDistribution(address) {

@@ -189,6 +189,37 @@
       </b-card-body>
     </b-card>
 
+    <b-card title="Transactions">
+      <b-table
+        :items="txs"
+        striped
+        hover
+        responsive="sm"
+        stacked="sm"
+      >
+        <template #cell(height)="data">
+          <router-link :to="`../blocks/${data.item.height}`">
+            {{ data.item.height }}
+          </router-link>
+        </template>
+        <template #cell(txhash)="data">
+          <router-link :to="`../tx/${data.item.txhash}`">
+            {{ formatHash(data.item.txhash) }}
+          </router-link>
+        </template>
+      </b-table>
+
+      <b-pagination
+        v-if="Number(transactions.page_total) > 1"
+        :total-rows="transactions.total_count"
+        :per-page="transactions.limit"
+        :value="transactions.page_number"
+        align="center"
+        class="mt-1"
+        @change="pageload"
+      />
+    </b-card>
+
     <b-card
       v-if="account"
       title="Profile"
@@ -324,7 +355,7 @@
 <script>
 import {
   BCard, BAvatar, BPopover, BTable, BRow, BCol, BTableSimple, BTr, BTd, BTbody, BCardHeader, BCardTitle, BButton, BCardBody, VBModal,
-  BButtonGroup, VBTooltip,
+  BButtonGroup, VBTooltip, BPagination,
 } from 'bootstrap-vue'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -332,7 +363,7 @@ import Ripple from 'vue-ripple-directive'
 import VueQr from 'vue-qr'
 import chainAPI from '@/libs/fetch'
 import {
-  formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay, toDuration,
+  formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay, toDuration, abbrMessage, abbrAddress,
 } from '@/libs/data'
 import { $themeColors } from '@themeConfig'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
@@ -363,6 +394,7 @@ export default {
     BButtonGroup,
     BTr,
     BTd,
+    BPagination,
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
     ObjectFieldComponent,
@@ -393,6 +425,7 @@ export default {
       redelegations: [],
       unbonding: [],
       quotes: {},
+      transactions: [],
       doughnutChart: {
         options: {
           responsive: true,
@@ -434,6 +467,17 @@ export default {
         return this.account.type.substring(this.account.type.indexOf('/') + 1)
       }
       return 'Profile'
+    },
+    txs() {
+      if (this.transactions.txs) {
+        return this.transactions.txs.map(x => ({
+          height: Number(x.height),
+          txhash: x.txhash,
+          msgs: abbrMessage(x.tx.value.msg),
+          time: toDay(x.timestamp),
+        }))
+      }
+      return []
     },
     assetTable() {
       let total = []
@@ -606,14 +650,24 @@ export default {
     this.$http.getStakingUnbonding(this.address).then(res => {
       this.unbonding = res.unbonding_responses
     })
+    this.$http.getTxsBySender(this.address).then(res => {
+      this.transactions = res
+    })
+
     // this.$http.getStakingValidators(this.address).then(res => {
     //   console.log(res)
     // })
   },
   methods: {
+    pageload(v) {
+      this.$http.getTxsBySender(this.address, v).then(res => {
+        this.transactions = res
+      })
+    },
     selectValue(v) {
       this.selectedValidator = v
     },
+    formatHash: abbrAddress,
     formatDenom(v) {
       return formatTokenDenom(this.denoms[v] ? this.denoms[v] : v)
     },

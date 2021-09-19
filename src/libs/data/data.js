@@ -189,7 +189,10 @@ export function abbrMessage(msg) {
   if (Array.isArray(msg)) {
     return msg.map(x => abbrMessage(x)).join(', ')
   }
-  return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1).replace('Msg', '')
+  if (msg.typeUrl) {
+    return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1).replace('Msg', '')
+  }
+  return msg.type.substring(msg.type.lastIndexOf('/') + 1).replace('Msg', '')
 }
 
 export function abbrAddress(address, length = 10) {

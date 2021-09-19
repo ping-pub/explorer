@@ -236,28 +236,34 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-card title="Uptime">
-            <b-card-body class="border-top">
-              <b-button
-                v-for="(b,i) in blocks"
-                :key="i"
-                v-b-tooltip.hover.v-second
-                :variant="b[0]?'primary':'outline-danger'"
-                :title="b"
-                rounded
-                size="sm"
-                class="btn-icon mb-25 mr-25"
-              > &nbsp; </b-button>
-            </b-card-body>
-            <b-card-footer>
-              <router-link :to="`../staking`">
-                <b-button
-                  variant="outline-primary"
-                >
-                  {{ $t('btn_back_list') }}
-                </b-button>
-              </router-link>
-            </b-card-footer>
+          <b-card title="Transactions">
+            <b-table
+              :items="txs"
+              striped
+              hover
+              responsive="sm"
+              stacked="sm"
+            >
+              <template #cell(height)="data">
+                <router-link :to="`../blocks/${data.item.height}`">
+                  {{ data.item.height }}
+                </router-link>
+              </template>
+              <template #cell(txhash)="data">
+                <router-link :to="`../tx/${data.item.txhash}`">
+                  {{ formatHash(data.item.txhash) }}
+                </router-link>
+              </template>
+            </b-table>
+            <b-pagination
+              v-if="Number(transactions.page_total) > 1"
+              :total-rows="transactions.total_count"
+              :per-page="transactions.limit"
+              :value="transactions.page_number"
+              align="center"
+              class="mt-1"
+              @change="pageload"
+            />
           </b-card>
         </b-col>
       </b-row>
@@ -268,11 +274,11 @@
 
 <script>
 import {
-  BCard, BButton, BAvatar, BRow, BCol, BCardBody, BCardFooter, VBTooltip, VBModal, BBadge,
+  BCard, BButton, BAvatar, BRow, BCol, BTable, BCardFooter, VBTooltip, VBModal, BBadge, BPagination,
 } from 'bootstrap-vue'
 
 import {
-  percent, formatToken, StakingParameters, Validator, operatorAddressToAccount, consensusPubkeyToHexAddress, toDay,
+  percent, formatToken, StakingParameters, Validator, operatorAddressToAccount, consensusPubkeyToHexAddress, toDay, abbrMessage, abbrAddress,
 } from '@/libs/data'
 import { keybase } from '@/libs/fetch'
 import StakingAddressComponent from './StakingAddressComponent.vue'
@@ -287,9 +293,10 @@ export default {
     BRow,
     BCol,
     BAvatar,
-    BCardBody,
     BCardFooter,
     BBadge,
+    BPagination,
+    BTable,
     StakingAddressComponent,
     StakingCommissionComponent,
     StakingRewardComponent,
@@ -319,7 +326,21 @@ export default {
       userData: {},
       blocks: Array.from('0'.repeat(100)).map(x => [Boolean(x), Number(x)]),
       distribution: {},
+      transactions: {},
     }
+  },
+  computed: {
+    txs() {
+      if (this.transactions.txs) {
+        return this.transactions.txs.map(x => ({
+          height: Number(x.height),
+          txhash: x.txhash,
+          msgs: abbrMessage(x.tx.value ? x.tx.value.msg : x.tx.msg),
+          time: toDay(x.timestamp),
+        }))
+      }
+      return []
+    },
   },
   created() {
     this.$http.getStakingPool().then(res => { this.stakingPool = res })
@@ -331,6 +352,9 @@ export default {
       this.validator = data
 
       this.processAddress(data.operator_address, data.consensus_pubkey)
+      this.$http.getTxsBySender(this.accountAddress).then(res => {
+        this.transactions = res
+      })
 
       const { identity } = data.description
       keybase(identity).then(d => {
@@ -340,12 +364,14 @@ export default {
         }
       })
     })
-    this.initBlocks()
-  },
-  beforeDestroy() {
-    clearInterval(this.timer)
   },
   methods: {
+    pageload(v) {
+      this.$http.getTxsBySender(this.accountAddress, v).then(res => {
+        this.transactions = res
+      })
+    },
+    formatHash: abbrAddress,
     timeFormat(value) {
       return toDay(value)
     },
@@ -364,30 +390,6 @@ export default {
     },
     apr(rate) {
       return `${percent((1 - rate) * this.mintInflation)} %`
-    },
-    initBlocks() {
-      this.$http.getLatestBlock().then(d => {
-        const { height } = d.block.last_commit
-
-        // update height
-        const blocks = []
-        for (let i = height - 99; i < height; i += 1) {
-          blocks.push([false, i])
-        }
-        const sig = d.block.last_commit.signatures.find((s => s.validator_address === this.hexAddress))
-        const exist = typeof sig !== 'undefined'
-        blocks.push([exist, height])
-        this.blocks = blocks
-
-        // update uptime status
-        const previous = []
-        blocks.forEach(item => {
-          previous.push(this.fetch_status(item))
-        })
-        Promise.allSettled(previous).then(() => {
-          this.timer = setInterval(this.fetch_latest, 6000)
-        })
-      })
     },
     fetch_status(item, lastHeight) {
       return this.$http.getBlockByHeight(item[1]).then(res => {
