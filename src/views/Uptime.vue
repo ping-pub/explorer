@@ -12,12 +12,13 @@
       </b-card>
       <b-row>
         <b-col
-          v-for="x in uptime"
-          :key="x.moniker"
+          v-for="(x,index) in uptime"
+          :key="index"
           sm="12"
-          md="6"
+          md="4"
+          class=" text-trancate"
         >
-          <span class="font-weight-bold">{{ x.validator.moniker?x.validator.moniker:x.address }}</span>
+          <span class="d-inline-block text-truncate font-weight-bold">{{ index+1 }} {{ x.validator.moniker }}</span>
           <div class="d-flex justify-content-between align-self-stretch flex-wrap">
             <div
               v-for="(b,i) in blocks"
@@ -86,11 +87,15 @@ export default {
         const { height } = d.block.last_commit
 
         // update height
+        let promise = Promise.resolve()
         const blocks = []
-        for (let i = height - 49; i < height; i += 1) {
-          blocks.push({ sigs: {}, height: i })
-          this.fetch_status(i, height)
+        for (let i = height - 1; i > height - 50; i -= 1) {
+          blocks.unshift({ sigs: {}, height: i })
+          promise = promise.then(() => new Promise(resolve => {
+            this.fetch_status(i, height, resolve)
+          }))
         }
+
         const sigs = {}
         d.block.last_commit.signatures.forEach(x => {
           sigs[x.validator_address] = !!x.signature
@@ -101,8 +106,9 @@ export default {
         this.timer = setInterval(this.fetch_latest, 6000)
       })
     },
-    fetch_status(height, lastHeight) {
+    fetch_status(height, lastHeight, resolve) {
       return this.$http.getBlockByHeight(height).then(res => {
+        resolve()
         if (height !== lastHeight) {
           const sigs = {}
           res.block.last_commit.signatures.forEach(x => {
