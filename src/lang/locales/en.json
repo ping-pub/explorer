@@ -25,6 +25,8 @@
   "blockchains": "Blockchains",
   "uptime": "Uptime",
 
+  "gravity": "Gravity",
+
   "proposal_id": "Proposal ID",
   "proposal_type": "Proposal Type",
   "proposal_proposer": "Proposer",

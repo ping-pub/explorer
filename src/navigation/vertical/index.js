@@ -26,6 +26,11 @@ const modules = [
     title: 'uptime',
     route: 'uptime',
   },
+  {
+    scope: 'cosmos',
+    title: 'gravity',
+    route: 'gravity',
+  },
 ]
 
 function processMenu() {

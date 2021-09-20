@@ -259,6 +259,20 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/cosmos/gravity',
+      name: 'gravity',
+      component: () => import('@/views/GravityPool.vue'),
+      meta: {
+        pageTitle: 'Gravity Pools',
+        breadcrumb: [
+          {
+            text: 'Gravity',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
       path: '/user/login',
       name: 'login',
       component: () => import('@/views/Login.vue'),

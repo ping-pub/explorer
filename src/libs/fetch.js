@@ -314,6 +314,10 @@ const chainAPI = class ChainFetch {
     return ChainFetch.getIBCDenomTrace(baseurl, hash).then(res => res.denom_trace.base_denom)
   }
 
+  async getGravityPools() {
+    return this.get('/cosmos/liquidity/v1beta1/pools').then(data => commonProcess(data))
+  }
+
   // CoinMarketCap
   static async fetchCoinMarketCap(url) {
     const host = 'https://price.ping.pub'
@@ -328,9 +332,17 @@ const chainAPI = class ChainFetch {
     const txString = toBase64(TxRaw.encode(bodyBytes).finish())
     const txRaw = {
       tx_bytes: txString,
-      mode: 'BROADCAST_MODE_SYNC',
+      mode: 'BROADCAST_MODE_BLOCK', // BROADCAST_MODE_SYNC, BROADCAST_MODE_BLOCK, BROADCAST_MODE_ASYNC
     }
-    return this.post('/cosmos/tx/v1beta1/txs', txRaw, config)
+    return this.post('/cosmos/tx/v1beta1/txs', txRaw, config).then(res => {
+      if (res.code && res.code !== 0) {
+        throw new Error(res.message)
+      }
+      if (res.tx_response && res.tx_response.code !== 0) {
+        throw new Error(res.tx_response.raw_log)
+      }
+      return res
+    })
   }
 
   async post(url = '', data = {}, config = null) {
