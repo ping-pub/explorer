@@ -105,7 +105,7 @@ export default {
   },
   methods: {
     formatDenom(v) {
-      console.log(v, this.ibcDenom[v])
+      // console.log(v, this.ibcDenom[v])
       const denom = (v.startsWith('ibc') ? this.ibcDenom[v].denom_trace.base_denom : v)
       return formatTokenDenom(denom)
     },
