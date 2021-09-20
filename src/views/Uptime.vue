@@ -23,12 +23,13 @@
               <div
                 v-for="(b,i) in blocks"
                 :key="i"
-                style="width:1.5%; margin:0.5px; border-radius: 3px; display: inline-block;"
+                style="width:1.5%;"
               ><router-link :to="`./blocks/${b.height}`">
                 <div
                   v-b-tooltip.hover.v-second
                   :title="b.height"
                   :class="b.sigs && b.sigs[x.address] ? 'bg-success':'bg-danger'"
+                  class="m-auto"
                 >&nbsp;</div>
               </router-link>
               </div>
@@ -131,7 +132,7 @@ export default {
         const block = this.blocks.find(b => b[1] === res.block.last_commit.height)
         if (typeof block === 'undefined') { // mei
           // this.$set(block, 0, typeof sigs !== 'undefined')
-          if (this.blocks.length > 50) this.blocks.shift()
+          if (this.blocks.length >= 50) this.blocks.shift()
           this.blocks.push({ sigs, height: res.block.last_commit.height })
         }
       })
