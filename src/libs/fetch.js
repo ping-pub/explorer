@@ -332,7 +332,7 @@ const chainAPI = class ChainFetch {
     const txString = toBase64(TxRaw.encode(bodyBytes).finish())
     const txRaw = {
       tx_bytes: txString,
-      mode: 'BROADCAST_MODE_BLOCK', // BROADCAST_MODE_SYNC, BROADCAST_MODE_BLOCK, BROADCAST_MODE_ASYNC
+      mode: 'BROADCAST_MODE_SYNC', // BROADCAST_MODE_SYNC, BROADCAST_MODE_BLOCK, BROADCAST_MODE_ASYNC
     }
     return this.post('/cosmos/tx/v1beta1/txs', txRaw, config).then(res => {
       if (res.code && res.code !== 0) {
