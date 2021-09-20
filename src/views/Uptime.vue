@@ -16,6 +16,7 @@
           :key="index"
           sm="12"
           md="4"
+          class="text-truncate"
         >
           <span class="d-inline-block text-truncate font-weight-bold">{{ index+1 }} {{ x.validator.moniker }}</span>
           <template>
@@ -82,6 +83,7 @@ export default {
     this.initBlocks()
   },
   beforeDestroy() {
+    this.blocks = [] // clear running tasks if it is not finish
     clearInterval(this.timer)
   },
   methods: {
