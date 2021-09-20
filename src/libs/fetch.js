@@ -284,7 +284,7 @@ const chainAPI = class ChainFetch {
   }
 
   async getIBCDenomTrace(hash, config = null) {
-    const h = hash.substring(hash.indexOf('/'))
+    const h = hash.substring(hash.indexOf('/') + 1)
     return this.get('/ibc/applications/transfer/v1beta1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
   }
 
