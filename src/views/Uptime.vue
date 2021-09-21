@@ -29,7 +29,7 @@
                 <div
                   v-b-tooltip.hover.v-second
                   :title="b.height"
-                  :class="b.sigs && b.sigs[x.address] ? 'bg-success':'bg-danger'"
+                  :class="b.sigs && b.sigs[x.address] ? b.sigs[x.address] : 'bg-light-success'"
                   class="m-auto"
                 >&nbsp;</div>
               </router-link>
@@ -102,9 +102,9 @@ export default {
           }
         }
 
-        const sigs = {}
+        const sigs = this.initColor()
         d.block.last_commit.signatures.forEach(x => {
-          sigs[x.validator_address] = !!x.signature
+          if (x.validator_address) sigs[x.validator_address] = 'bg-success'
         })
         blocks.push({ sigs, height })
         this.blocks = blocks
@@ -112,14 +112,21 @@ export default {
         this.timer = setInterval(this.fetch_latest, 6000)
       })
     },
+    initColor() {
+      const sigs = {}
+      this.validators.forEach(x => {
+        sigs[consensusPubkeyToHexAddress(x.consensus_pubkey)] = 'bg-danger'
+      })
+      return sigs
+    },
     fetch_status(height, resolve) {
       const block = this.blocks.find(b => b.height === height)
       if (block) {
         this.$http.getBlockByHeight(height).then(res => {
           resolve()
-          const sigs = {}
+          const sigs = this.initColor()
           res.block.last_commit.signatures.forEach(x => {
-            sigs[x.validator_address] = !!x.signature
+            if (x.validator_address) sigs[x.validator_address] = 'bg-success'
           })
           this.$set(block, 'sigs', sigs)
         })
@@ -127,9 +134,9 @@ export default {
     },
     fetch_latest() {
       this.$http.getLatestBlock().then(res => {
-        const sigs = {}
+        const sigs = this.initColor()
         res.block.last_commit.signatures.forEach(x => {
-          sigs[x.validator_address] = !!x.signature
+          if (x.validator_address) sigs[x.validator_address] = 'bg-success'
         })
         const block = this.blocks.find(b => b[1] === res.block.last_commit.height)
         if (typeof block === 'undefined') { // mei
