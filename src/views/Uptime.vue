@@ -10,6 +10,14 @@
           placeholder="Keywords to filter validators"
         />
       </b-card>
+      <b-alert
+        variant="danger"
+        :show="syncing"
+      >
+        <div class="alert-body">
+          <span>No new block is produced since  <strong>{{ latestTime }}</strong> </span>
+        </div>
+      </b-alert>
       <b-row>
         <b-col
           v-for="(x,index) in uptime"
@@ -44,10 +52,10 @@
 
 <script>
 import {
-  BRow, BCol, VBTooltip, BFormInput, BCard,
+  BRow, BCol, VBTooltip, BFormInput, BCard, BAlert,
 } from 'bootstrap-vue'
 
-import { consensusPubkeyToHexAddress } from '@/libs/data'
+import { consensusPubkeyToHexAddress, timeIn, toDay } from '@/libs/data'
 
 export default {
   components: {
@@ -55,6 +63,7 @@ export default {
     BCol,
     BFormInput,
     BCard,
+    BAlert,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -65,6 +74,8 @@ export default {
       validators: [],
       missing: {},
       blocks: Array.from('0'.repeat(50)).map(x => ({ sigs: {}, height: Number(x) })),
+      syncing: false,
+      latestTime: '',
     }
   },
   computed: {
@@ -84,12 +95,19 @@ export default {
   },
   beforeDestroy() {
     this.blocks = [] // clear running tasks if it is not finish
+    this.syncing = false
     clearInterval(this.timer)
   },
   methods: {
     initBlocks() {
       this.$http.getLatestBlock().then(d => {
         const { height } = d.block.last_commit
+        if (timeIn(d.block.header.time, 3, 'm')) {
+          this.syncing = true
+        } else {
+          this.syncing = false
+        }
+        this.latestTime = toDay(d.block.header.time, 'long')
         const blocks = []
         // update height
         let promise = Promise.resolve()
