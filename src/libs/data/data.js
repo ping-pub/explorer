@@ -145,7 +145,8 @@ export function toDuration(value) {
 
 // unit(y M d h m s ms)
 export function timeIn(time, amount, unit = 's') {
-  return dayjs().isAfter(dayjs(time).add(amount, unit))
+  const input = dayjs(time).add(amount, unit)
+  return dayjs().unix() > input.unix()
 }
 
 export function toDay(time, format = 'long') {

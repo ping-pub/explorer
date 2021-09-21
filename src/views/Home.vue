@@ -165,7 +165,7 @@ export default {
             const { header } = b.block
             this.$set(chain, 'height', header.height)
             this.$set(chain, 'time', toDay(header.time))
-            this.$set(chain, 'variant', timeIn(header, 1, 'm') ? 'danger' : 'success')
+            this.$set(chain, 'variant', timeIn(header.time, 3, 'm') ? 'danger' : 'success')
           })
         }
       })
