@@ -18,7 +18,7 @@
           md="4"
           class="text-truncate"
         >
-          <span class="d-inline-block text-truncate font-weight-bold">{{ index+1 }} {{ x.validator.moniker }}</span>
+          <span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
           <template>
             <div class="d-flex justify-content-between align-self-stretch flex-wrap">
               <div
