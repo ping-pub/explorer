@@ -1,6 +1,14 @@
 <template>
   <div class="container-md px-0">
     <b-card>
+      <b-alert
+        variant="danger"
+        :show="syncing"
+      >
+        <div class="alert-body">
+          <span>No new block is produced since  <strong>{{ latestTime }}</strong> </span>
+        </div>
+      </b-alert>
       <b-card
         no-body
         class="mb-1"
@@ -10,14 +18,6 @@
           placeholder="Keywords to filter validators"
         />
       </b-card>
-      <b-alert
-        variant="danger"
-        :show="syncing"
-      >
-        <div class="alert-body">
-          <span>No new block is produced since  <strong>{{ latestTime }}</strong> </span>
-        </div>
-      </b-alert>
       <b-row>
         <b-col
           v-for="(x,index) in uptime"
@@ -55,7 +55,9 @@ import {
   BRow, BCol, VBTooltip, BFormInput, BCard, BAlert,
 } from 'bootstrap-vue'
 
-import { consensusPubkeyToHexAddress, timeIn, toDay } from '@/libs/data'
+import {
+  consensusPubkeyToHexAddress, getCachedValidators, timeIn, toDay,
+} from '@/libs/data'
 
 export default {
   components: {
@@ -88,9 +90,15 @@ export default {
     },
   },
   created() {
-    this.$http.getValidatorList().then(res => {
-      this.validators = res
-    })
+    const cached = JSON.parse(getCachedValidators(this.$route.params.chain))
+
+    if (cached) {
+      this.validators = cached
+    } else {
+      this.$http.getValidatorList().then(res => {
+        this.validators = res
+      })
+    }
     this.initBlocks()
   },
   beforeDestroy() {
