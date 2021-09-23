@@ -1,7 +1,7 @@
 {
     "chain_name": "band",
-    "api": "https://api-gm-lb.bandchain.org",
+    "api": "https://laozi1.bandchain.org/api",
     "addr_prefix": "band",
     "logo": "https://dl.airtable.com/.attachments/472ae99a508e32b4439b416beddd4eb9/c5166f62/band-symbol-blue-bg.75a3ad91.svg",
-    "sdk_version": "0.33.8"
+    "sdk_version": "0.44.0"
 }
