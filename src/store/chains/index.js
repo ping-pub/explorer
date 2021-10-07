@@ -48,6 +48,7 @@ export default {
     avatars: {},
     height: 0,
     ibcChannels: {},
+    quotes: {},
   },
   getters: {
     getchains: state => state.chains,
@@ -69,6 +70,15 @@ export default {
     setChannels(state, { chain, channels }) {
       state.chains.ibcChannels[chain] = channels
     },
+    setQuotes(state, quotes) {
+      state.quotes = quotes
+    },
   },
-  actions: {},
+  actions: {
+    async getQuotes(context) {
+      fetch('https://price.ping.pub/quotes').then(data => data.json()).then(data => {
+        context.commit('setQuotes', data)
+      })
+    },
+  },
 }

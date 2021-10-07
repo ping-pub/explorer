@@ -26,11 +26,16 @@ const modules = [
     title: 'uptime',
     route: 'uptime',
   },
-  // {
-  //   scope: 'cosmos',
-  //   title: 'gravity',
-  //   route: 'gravity',
-  // },
+  {
+    scope: 'cosmos',
+    title: 'gravity',
+    route: 'gravity',
+  },
+  {
+    scope: 'osmosis',
+    title: 'pools',
+    route: 'osmosis-pool',
+  },
 ]
 
 function processMenu() {

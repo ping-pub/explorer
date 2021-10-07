@@ -328,6 +328,7 @@ const chainAPI = class ChainFetch {
     return ChainFetch.fetchCoinMarketCap(`/quote/${symbol}`)
   }
 
+  // Tx Submit
   async broadcastTx(bodyBytes, config = null) {
     const txString = toBase64(TxRaw.encode(bodyBytes).finish())
     const txRaw = {
@@ -364,6 +365,15 @@ const chainAPI = class ChainFetch {
     })
     // const response = axios.post((config ? config.api : this.config.api) + url, data)
     return response.json() // parses JSON response into native JavaScript objects
+  }
+
+  // Custom Module
+  async getOsmosisPools() {
+    return this.get('/osmosis/gamm/v1beta1/pools')
+  }
+
+  async getOsmosisIncentivesPools() {
+    return this.get('/osmosis/pool-incentives/v1beta1/incentivized_pools')
   }
 }
 

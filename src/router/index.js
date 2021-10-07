@@ -258,8 +258,10 @@ const router = new VueRouter({
         ],
       },
     },
+    // custom modules for specified chains
+    // 1. cosmos
     {
-      path: '/cosmos/gravity',
+      path: '/:chain/cosmos/pools',
       name: 'gravity',
       component: () => import('@/views/GravityPool.vue'),
       meta: {
@@ -272,6 +274,22 @@ const router = new VueRouter({
         ],
       },
     },
+    // 2. OSMOSIS
+    {
+      path: '/:chain/osmosis/pools',
+      name: 'osmosis-pool',
+      component: () => import('@/views/OsmosisPools.vue'),
+      meta: {
+        pageTitle: 'Pools',
+        breadcrumb: [
+          {
+            text: 'Pools',
+            active: true,
+          },
+        ],
+      },
+    },
+    // common modules
     {
       path: '/user/login',
       name: 'login',

@@ -13,6 +13,7 @@ import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import localeData from 'dayjs/plugin/localeData'
+import { $themeColors } from '@themeConfig'
 
 dayjs.extend(localeData)
 dayjs.extend(duration)
@@ -74,6 +75,41 @@ export function addressDecode(address) {
 
 export function addressEnCode(prefix, pubkey) {
   return Bech32.encode(prefix, pubkey)
+}
+
+export function getUserCurrency() {
+  const currency = localStorage.getItem('currency')
+  return currency || 'usd'
+}
+
+export function setUserCurrency(currency) {
+  localStorage.setItem('currency', currency)
+}
+
+export function chartColors() {
+  const colors = ['#6610f2', '#20c997', '#000000', '#FF0000',
+    '#800000', '#FFFF00', '#808000', '#00FF00', '#008000', '#00FFFF',
+    '#008080', '#0000FF', '#000080', '#FF00FF', '#800080']
+  return Object.values($themeColors).concat(colors)
+}
+
+export function getUserCurrencySign() {
+  let s = ''
+  switch (getUserCurrency()) {
+    case 'cny':
+    case 'jpy':
+      s = '¥'
+      break
+    case 'krw':
+      s = '₩'
+      break
+    case 'eur':
+      s = '€'
+      break
+    default:
+      s = '$'
+  }
+  return s
 }
 
 export function consensusPubkeyToHexAddress(consensusPubkey) {
@@ -218,7 +254,7 @@ export function isToken(value) {
 
 export function formatTokenDenom(tokenDenom) {
   if (tokenDenom) {
-    let denom = tokenDenom.toUpperCase()
+    let denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom.toUpperCase() : tokenDenom.toUpperCase()
     if (denom.charAt(0) === 'U') {
       denom = denom.substring(1)
     } else if (denom === 'BASECRO') {

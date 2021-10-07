@@ -94,6 +94,8 @@ export default {
       store.commit('app/UPDATE_WINDOW_WIDTH', val)
     })
 
+    store.dispatch('chains/getQuotes')
+
     return {
       skinClasses,
     }

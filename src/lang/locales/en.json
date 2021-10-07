@@ -15,7 +15,7 @@
   "regen": "Regen Network",
   "secret": "Secret Network",
   "desmos": "Desmos",
-  "juno": "Juno Hera",
+  "juno": "Juno",
   "certik": "Certik",
   "sentinel": "Sentinel",
   
@@ -26,7 +26,8 @@
   "blockchains": "Blockchains",
   "uptime": "Uptime",
 
-  "gravity": "Gravity",
+  "gravity": "Gravity(WIP)",
+  "pools": "Pools(WIP)",
 
   "proposal_id": "Proposal ID",
   "proposal_type": "Proposal Type",

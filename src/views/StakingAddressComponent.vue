@@ -72,7 +72,7 @@
         <h6 class="mb-0">
           Consensus Public Address
         </h6>
-        <small @click="copy(consensusPubkey)">{{ consensusPubkey }}</small>
+        <small @click="copy(JSON.stringify(consensusPubkey))">{{ consensusPubkey }}</small>
       </b-media-body>
     </b-media>
     <b-media

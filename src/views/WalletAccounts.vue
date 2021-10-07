@@ -1,5 +1,57 @@
 <template>
   <div class="text-center">
+    <b-card border-variant="primary">
+      <b-row class="mx-0">
+        <b-col
+          md="4"
+        >
+          <b-dropdown
+            :text="`Currency: ${currency2.toUpperCase()}`"
+            size="sm"
+            class="text-uppercase"
+            variant="primary"
+          >
+            <b-dropdown-item @click="setCurrency('usd')">
+              USD
+            </b-dropdown-item>
+            <b-dropdown-item @click="setCurrency('cny')">
+              CNY (人民币)
+            </b-dropdown-item>
+            <b-dropdown-item @click="setCurrency('eur')">
+              EUR (Euro)
+            </b-dropdown-item>
+            <b-dropdown-item @click="setCurrency('jpy')">
+              JPY (日本円)
+            </b-dropdown-item>
+            <b-dropdown-item @click="setCurrency('hkd')">
+              HKD (港幣)
+            </b-dropdown-item>
+            <b-dropdown-item @click="setCurrency('sgd')">
+              SGD
+            </b-dropdown-item>
+            <b-dropdown-item @click="setCurrency('krw')">
+              KRW (대한민국원)
+            </b-dropdown-item>
+          </b-dropdown>
+          <h2 class="my-1">
+            {{ currency }}{{ calculateTotal }}
+          </h2>
+          <!-- chart -->
+          <chart-component-doughnut
+            :height="235"
+            :width="235"
+            :data="calculateChartDoughnut"
+            class="mb-3"
+          />
+        </b-col>
+        <b-col md="8">
+          <chartjs-component-bar
+            :height="135.0"
+            :chart-data="calculateChartBar"
+          />
+        </b-col>
+      </b-row>
+    </b-card>
 
     <b-tabs
       v-for="item,index in accounts"
@@ -81,7 +133,7 @@
                         variant="light-primary"
                         rounded
                       />
-                      <h3>${{ formatBalance(balances[acc.addr]) }}</h3>
+                      <h3>{{ currency }}{{ formatBalance(acc.addr) }}</h3>
                     </div>
                     <small
                       class="pl-1 float-right text-muted text-overflow "
@@ -91,7 +143,7 @@
                     </small>
                   </b-col>
                 </b-row>
-                <b-row v-if="balances[acc.addr]">
+                <b-row class="d-none">
                   <b-col>
                     <b-tabs
                       active-nav-item-class="font-weight-bold text-second"
@@ -107,7 +159,7 @@
                           </div>
                           <div class="d-flex flex-column text-right">
                             <span class="font-weight-bold mb-0">{{ formatAmount(b.amount) }}</span>
-                            <span class="font-small-2 text-muted text-nowrap">${{ formatCurrency(b.amount, b.denom) }}</span>
+                            <span class="font-small-2 text-muted text-nowrap">{{ currency }}{{ formatCurrency(b.amount, b.denom) }}</span>
                           </div>
                         </div>
                       </b-tab>
@@ -118,7 +170,6 @@
             </b-card>
           </b-col>
         </b-row>
-
       </b-tab>
     </b-tabs>
 
@@ -136,18 +187,20 @@
 </template>
 
 <script>
-import chainAPI from '@/libs/fetch'
 import {
   BCard, BCardHeader, BCardTitle, BCardBody, VBModal, BRow, BCol, BTabs, BTab, BAvatar, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import {
-  formatTokenAmount, formatTokenDenom, getLocalAccounts, getLocalChains,
+  chartColors,
+  formatTokenAmount, formatTokenDenom, getLocalAccounts, getLocalChains, getUserCurrency, getUserCurrencySign, setUserCurrency,
 } from '@/libs/data'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import OperationTransferComponent from './OperationTransferComponent.vue'
 import OperationTransfer2Component from './OperationTransfer2Component.vue'
+import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
+import ChartjsComponentBar from './ChartjsComponentBar.vue'
 
 export default {
   components: {
@@ -167,6 +220,8 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
     OperationTransfer2Component,
+    ChartComponentDoughnut,
+    ChartjsComponentBar,
   },
   directives: {
     'b-modal': VBModal,
@@ -174,17 +229,127 @@ export default {
   },
   data() {
     return {
+      currency: getUserCurrencySign(),
+      currency2: getUserCurrency(),
       selectedAddress: '',
       selectedName: '',
       transferWindow: false,
       accounts: [],
       balances: {},
+      delegations: {},
       ibcDenom: {},
       quotes: {},
     }
   },
+  computed: {
+    calculateTotal() {
+      const v = Object.values(this.balances)
+      let total = 0
+      if (v) {
+        v.forEach(tokens => {
+          const subtotal = tokens.map(x => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c)
+          total += subtotal
+        })
+      }
+      const d = Object.values(this.delegations)
+      if (d) {
+        d.forEach(tokens => {
+          const subtotal = tokens.map(x => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c, 0)
+          total += subtotal
+        })
+      }
+      return parseFloat(total.toFixed(2))
+    },
+    calculateChartDoughnut() {
+      const v = Object.values(this.balances)
+      const total = {}
+      if (v) {
+        v.forEach(tokens => {
+          const subtotal = tokens.map(x => ({ denom: x.denom, sub: this.formatCurrency(x.amount, x.denom) }))
+          subtotal.forEach(x => {
+            const denom = this.formatDenom(x.denom)
+            if (total[denom]) {
+              total[denom] += x.sub
+            } else {
+              total[denom] = x.sub
+            }
+          })
+        })
+      }
+      const d = Object.values(this.delegations)
+      if (d) {
+        d.forEach(tokens => {
+          const subtotal = tokens.map(x => ({ denom: x.denom, sub: this.formatCurrency(x.amount, x.denom) }))
+          subtotal.forEach(x => {
+            const denom = this.formatDenom(x.denom)
+            if (total[denom]) {
+              total[denom] += x.sub
+            } else {
+              total[denom] = x.sub
+            }
+          })
+        })
+      }
+      return {
+        datasets: [
+          {
+            labels: Object.keys(total),
+            data: Object.values(total),
+            backgroundColor: chartColors(),
+            borderWidth: 0,
+            pointStyle: 'rectRounded',
+          },
+        ],
+      }
+    },
+    calculateChartBar() {
+      const v = Object.values(this.balances)
+      const total = {}
+      if (v) {
+        v.forEach(tokens => {
+          const subtotal = tokens.map(x => ({ denom: x.denom, sub: this.formatCurrency(x.amount, x.denom) }))
+          subtotal.forEach(x => {
+            const denom = this.formatDenom(x.denom)
+            if (total[denom]) {
+              total[denom] += x.sub
+            } else {
+              total[denom] = x.sub
+            }
+          })
+        })
+      }
+      const d = Object.values(this.delegations)
+      if (d) {
+        d.forEach(tokens => {
+          const subtotal = tokens.map(x => ({ denom: x.denom, sub: this.formatCurrency(x.amount, x.denom) }))
+          subtotal.forEach(x => {
+            const denom = this.formatDenom(x.denom)
+            if (total[denom]) {
+              total[denom] += x.sub
+            } else {
+              total[denom] = x.sub
+            }
+          })
+        })
+      }
+      return {
+        labels: Object.keys(total),
+        datasets: [
+          {
+            label: '',
+            data: Object.values(total),
+            backgroundColor: chartColors(),
+            borderWidth: 0,
+            pointStyle: 'rectRounded',
+          },
+        ],
+      }
+    },
+  },
   created() {
     this.init()
+  },
+  mounted() {
   },
   methods: {
     init() {
@@ -193,32 +358,32 @@ export default {
       if (this.accounts) {
         Object.keys(this.accounts).forEach(acc => {
           this.accounts[acc].address.forEach(add => {
-            chainAPI.getBankBalance(chains[add.chain].api, add.addr).then(res => {
+            this.$http.getBankBalances(add.addr, chains[add.chain]).then(res => {
               if (res && res.length > 0) {
                 this.$set(this.balances, add.addr, res)
                 res.forEach(token => {
-                  let symbol
                   if (token.denom.startsWith('ibc')) {
-                    chainAPI.getIBCDenomTraceText(chains[add.chain].api, token.denom).then(denom => {
+                    this.$http.getIBCDenomTrace(token.denom, chains[add.chain]).then(denom => {
                       this.$set(this.ibcDenom, token.denom, denom)
-                      symbol = formatTokenDenom(denom)
                     })
-                  } else {
-                    symbol = formatTokenDenom(token.denom)
-                  }
-                  if (symbol) {
-                    if (!this.quotes[symbol]) {
-                      chainAPI.fetchTokenQuote(symbol).then(quote => {
-                        this.$set(this.quotes, symbol, quote)
-                      })
-                    }
                   }
                 })
               }
             })
+            this.$http.getStakingDelegations(add.addr, chains[add.chain]).then(res => {
+              if (res.delegation_responses) {
+                const delegation = res.delegation_responses.map(x => x.balance)
+                this.$set(this.delegations, add.addr, delegation)
+              }
+            }).catch(() => {})
           })
         })
       }
+    },
+    setCurrency(c) {
+      setUserCurrency(c)
+      this.currency2 = c
+      this.currency = getUserCurrencySign()
     },
     transfer(addr) {
       this.selectedAddress = addr
@@ -240,20 +405,26 @@ export default {
     formatCurrency(amount, denom) {
       const qty = this.formatAmount(amount)
       const d2 = this.formatDenom(denom)
-      const userCurrency = 'USD'
-      const quote = this.quotes[d2]
-      if (quote && quote.quote) {
-        const { price } = quote.quote[userCurrency]
+      const quote = this.$store.state.chains.quotes[d2]
+      if (quote) {
+        const price = quote[this.currency2]
         return parseFloat((qty * price).toFixed(2))
       }
       return 0
     },
     formatBalance(v) {
-      if (v) {
-        const ret = v.map(x => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c)
-        return parseFloat(ret.toFixed(2))
+      let total = 0
+      const balance = this.balances[v]
+      if (balance) {
+        const ret = balance.map(x => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c)
+        total += ret
       }
-      return 0
+      const delegations = this.delegations[v]
+      if (delegations) {
+        const ret = delegations.map(x => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c, 0)
+        total += ret
+      }
+      return parseFloat(total.toFixed(2))
     },
     removeAddress(v) {
       Object.keys(this.accounts).forEach(key => {

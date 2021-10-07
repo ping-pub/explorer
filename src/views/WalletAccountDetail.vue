@@ -64,23 +64,24 @@
       <b-card-body class="pl-0 pr-0">
         <b-row>
           <b-col
-            class="border-right"
             xm="12"
             md="4"
           >
-            <chartjs-component-doughnut-chart
+            <chart-component-doughnut
               v-if="chartData"
               :height="235"
               :width="235"
               :data="chartData"
-              :chart-data="chartData"
-              :options="doughnutChart.options"
               class="mb-3"
             />
           </b-col>
           <b-col
+            class="border-left d-none d-md-block"
+            md="1"
+          />
+          <b-col
             xm="12"
-            md="8"
+            md="7"
           >
             <!-- tokens -->
             <div
@@ -104,12 +105,12 @@
               </div>
               <div class="d-flex flex-column">
                 <span class="text-right">{{ formatAmount(token.amount) }} {{ formatDenom(token.denom) }}</span>
-                <small class="text-right">${{ token.currency }}</small>
+                <small class="text-right">{{ currency }}{{ token.currency }}</small>
               </div>
             </div>
             <!--/ tokens -->
             <div class="text-right border-top pt-1">
-              <h2>Total: ${{ assetTable.currency }}</h2>
+              <h2>Total: {{ currency }}{{ assetTable.currency }}</h2>
             </div>
           </b-col>
         </b-row>
@@ -363,17 +364,16 @@ import Ripple from 'vue-ripple-directive'
 import VueQr from 'vue-qr'
 import chainAPI from '@/libs/fetch'
 import {
-  formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay, toDuration, abbrMessage, abbrAddress,
+  formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay, toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign, chartColors,
 } from '@/libs/data'
-import { $themeColors } from '@themeConfig'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
-import ChartjsComponentDoughnutChart from './ChartjsComponentDoughnutChart.vue'
 import OperationTransferComponent from './OperationTransferComponent.vue'
 import OperationWithdrawComponent from './OperationWithdrawComponent.vue'
 import OperationUnbondComponent from './OperationUnbondComponent.vue'
 import OperationDelegateComponent from './OperationDelegateComponent.vue'
 import OperationRedelegateComponent from './OperationRedelegateComponent.vue'
 import OperationTransfer2Component from './OperationTransfer2Component.vue'
+import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
 
 export default {
   components: {
@@ -398,13 +398,13 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
     ObjectFieldComponent,
-    ChartjsComponentDoughnutChart,
     OperationTransferComponent,
     OperationWithdrawComponent,
     OperationDelegateComponent,
     OperationRedelegateComponent,
     OperationUnbondComponent,
     OperationTransfer2Component,
+    ChartComponentDoughnut,
   },
   directives: {
     'b-modal': VBModal,
@@ -414,6 +414,7 @@ export default {
   data() {
     const { address } = this.$route.params
     return {
+      currency: getUserCurrencySign(),
       selectedValidator: '',
       totalCurrency: 0,
       address,
@@ -426,39 +427,6 @@ export default {
       unbonding: [],
       quotes: {},
       transactions: [],
-      doughnutChart: {
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          responsiveAnimationDuration: 500,
-          cutoutPercentage: 60,
-          legend: {
-            display: true,
-            title: {
-              display: true,
-            },
-          },
-          tooltips: {
-            callbacks: {
-              label(tooltipItem, data) {
-                const label = data.datasets[0].labels[tooltipItem.index] || ''
-                const value = data.datasets[0].data[tooltipItem.index]
-                const total = data.datasets[0].data.reduce((t, c) => t + c)
-                const output = ` ${label} : ${percent(value / total)} %`
-                return output
-              },
-            },
-            // Updated default tooltip UI
-            shadowOffsetX: 1,
-            shadowOffsetY: 1,
-            shadowBlur: 8,
-            // shadowColor: chartColors.tooltipShadow,
-            // backgroundColor: $themeColors.light,
-            // titleFontColor: $themeColors.dark,
-            // bodyFontColor: $themeColors.dark,
-          },
-        },
-      },
     }
   },
   computed: {
@@ -581,7 +549,7 @@ export default {
           {
             labels: Object.keys(data),
             data: Object.values(data),
-            backgroundColor: [$themeColors.primary, $themeColors.success, $themeColors.warning, $themeColors.danger, $themeColors.info],
+            backgroundColor: chartColors,
             borderWidth: 0,
             pointStyle: 'rectRounded',
           },
@@ -680,10 +648,10 @@ export default {
     formatCurrency(amount, denom) {
       const qty = this.formatAmount(amount)
       const d2 = this.formatDenom(denom)
-      const userCurrency = 'USD'
-      const quote = this.quotes[d2]
-      if (quote && quote.quote) {
-        const { price } = quote.quote[userCurrency]
+      const userCurrency = getUserCurrency()
+      const quote = this.$store.state.chains.quotes[d2]
+      if (quote) {
+        const price = quote[userCurrency]
         return parseFloat((qty * price).toFixed(2))
       }
       return 0
