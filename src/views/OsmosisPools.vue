@@ -73,9 +73,9 @@ export default {
   },
   created() {
     // const api = new OsmosAPI()
-    this.$http.getOsmosisIncentivesPools().then(res => {
-      console.log(res)
-    })
+    // this.$http.getOsmosisIncentivesPools().then(res => {
+    //   // console.log(res)
+    // })
     // this.$http.getGravityPools().then(res => {
     //   this.pools = res
     //   res.pools.forEach(x => {

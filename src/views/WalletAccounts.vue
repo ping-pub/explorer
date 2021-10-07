@@ -44,7 +44,10 @@
             class="mb-3"
           />
         </b-col>
-        <b-col md="8">
+        <b-col
+          md="8"
+          class="d-none d-md-block"
+        >
           <chartjs-component-bar
             :height="135.0"
             :chart-data="calculateChartBar"
