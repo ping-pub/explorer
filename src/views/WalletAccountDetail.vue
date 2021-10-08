@@ -354,6 +354,7 @@
 </template>
 
 <script>
+import { $themeColors } from '@themeConfig'
 import {
   BCard, BAvatar, BPopover, BTable, BRow, BCol, BTableSimple, BTr, BTd, BTbody, BCardHeader, BCardTitle, BButton, BCardBody, VBModal,
   BButtonGroup, VBTooltip, BPagination,
@@ -364,7 +365,8 @@ import Ripple from 'vue-ripple-directive'
 import VueQr from 'vue-qr'
 import chainAPI from '@/libs/fetch'
 import {
-  formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay, toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign, chartColors,
+  formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay,
+  toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign,
 } from '@/libs/data'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
 import OperationTransferComponent from './OperationTransferComponent.vue'
@@ -549,7 +551,7 @@ export default {
           {
             labels: Object.keys(data),
             data: Object.values(data),
-            backgroundColor: chartColors,
+            backgroundColor: [$themeColors.primary, $themeColors.success, $themeColors.warning, $themeColors.danger, $themeColors.info],
             borderWidth: 0,
             pointStyle: 'rectRounded',
           },

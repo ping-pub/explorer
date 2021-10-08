@@ -1,6 +1,9 @@
 <template>
   <div class="text-center">
-    <b-card border-variant="primary">
+    <b-card
+      v-if="calculateTotal > 0"
+      border-variant="primary"
+    >
       <b-row class="mx-0">
         <b-col
           md="4"
