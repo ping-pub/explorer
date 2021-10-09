@@ -107,6 +107,15 @@
                   </template>
                   <b-dropdown-item
                     v-if="balances[acc.addr]"
+                    :to="`/${acc.chain}/account/${acc.addr}`"
+                  >
+                    <feather-icon icon="TrelloIcon" /> Detail
+                  </b-dropdown-item>
+                  <b-dropdown-divider
+                    v-if="balances[acc.addr]"
+                  />
+                  <b-dropdown-item
+                    v-if="balances[acc.addr]"
                     v-b-modal.transfer-window
                     @click="transfer(acc.addr)"
                   >
@@ -118,12 +127,6 @@
                     @click="transfer(acc.addr)"
                   >
                     <feather-icon icon="SendIcon" /> IBC Transfer
-                  </b-dropdown-item>
-                  <b-dropdown-item
-                    v-if="balances[acc.addr]"
-                    :to="`/${acc.chain}/account/${acc.addr}`"
-                  >
-                    <feather-icon icon="TrelloIcon" /> Detail
                   </b-dropdown-item>
                   <b-dropdown-item @click="removeAddress(acc.addr)">
                     <feather-icon icon="Trash2Icon" /> Remove
@@ -168,7 +171,7 @@
                             {{ formatDenom(b.denom) }}
                           </div>
                           <div class="d-flex flex-column text-right">
-                            <span class="font-weight-bold mb-0">{{ formatAmount(b.amount) }}</span>
+                            <span class="font-weight-bold mb-0">{{ formatAmount(b.amount, b.denom) }}</span>
                             <span class="font-small-2 text-muted text-nowrap">{{ currency }}{{ formatCurrency(b.amount, b.denom) }}</span>
                           </div>
                         </div>
@@ -192,7 +195,7 @@
                             {{ formatDenom(b.denom) }}
                           </div>
                           <div class="d-flex flex-column text-right">
-                            <span class="font-weight-bold mb-0">{{ formatAmount(b.amount) }}</span>
+                            <span class="font-weight-bold mb-0">{{ formatAmount(b.amount, b.denom) }}</span>
                             <span class="font-small-2 text-muted text-nowrap">{{ currency }}{{ formatCurrency(b.amount, b.denom) }}</span>
                           </div>
                         </div>
@@ -221,9 +224,8 @@
 </template>
 
 <script>
-import { $themeColors } from '@themeConfig'
 import {
-  BCard, BCardHeader, BCardTitle, BCardBody, VBModal, BRow, BCol, BTabs, BTab, BAvatar, BDropdown, BDropdownItem,
+  BCard, BCardHeader, BCardTitle, BCardBody, VBModal, BRow, BCol, BTabs, BTab, BAvatar, BDropdown, BDropdownItem, BDropdownDivider,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
@@ -253,6 +255,7 @@ export default {
     BCardTitle,
     BDropdown,
     BDropdownItem,
+    BDropdownDivider,
     FeatherIcon,
     OperationTransferComponent,
     // eslint-disable-next-line vue/no-unused-components
@@ -403,7 +406,7 @@ export default {
           {
             label: 'Holdings',
             data: Object.values(prices),
-            backgroundColor: $themeColors.success,
+            backgroundColor: chartColors(),
             borderWidth: 0,
             pointStyle: 'rectRounded',
             yAxisID: 'y-axis-1',
@@ -470,14 +473,14 @@ export default {
       const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v)
       return formatTokenDenom(denom)
     },
-    formatAmount(v) {
-      return formatTokenAmount(v)
+    formatAmount(v, denom = 'uatom') {
+      return formatTokenAmount(v, 2, denom)
     },
     formatAddr(v) {
       return v.substring(0, 10).concat('...', v.substring(v.length - 10))
     },
     formatCurrency(amount, denom) {
-      const qty = this.formatAmount(amount)
+      const qty = this.formatAmount(amount, denom)
       const d2 = this.formatDenom(denom)
       const quote = this.$store.state.chains.quotes[d2]
       if (quote) {

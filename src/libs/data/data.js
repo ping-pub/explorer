@@ -269,10 +269,16 @@ export function formatTokenDenom(tokenDenom) {
 }
 
 export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
-  if (denom.startsWith('u')) {
-    // for special case
+  let decimals = 1000000n
+  if (denom.startsWith('rowan')) {
+    decimals = 1000000000000000000n
   }
-  const amount = tokenAmount / 1000000
+  let ta = tokenAmount
+  if (typeof tokenAmount === 'string' && tokenAmount.indexOf('.') > 1) {
+    ta = tokenAmount.substring(0, tokenAmount.indexOf('.'))
+  }
+  // eslint-disable-next-line no-undef
+  const amount = Number(BigInt(ta) / decimals)
   if (amount > 10) {
     return parseFloat(amount.toFixed(fraction))
   }

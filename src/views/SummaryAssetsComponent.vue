@@ -16,7 +16,7 @@
 
 <script>
 import { BTable, BCardTitle, BCard } from 'bootstrap-vue'
-import { formatNumber, formatTokenDenom } from '@/libs/data'
+import { formatNumber, formatTokenAmount, formatTokenDenom } from '@/libs/data'
 import chainAPI from '@/libs/fetch'
 
 export default {
@@ -53,7 +53,7 @@ export default {
         }
         const xh = x
         const amount = Number(x.amount) / 1000000
-        xh.abbr = amount > 1 ? formatNumber(amount, true) : amount
+        xh.abbr = amount > 1 ? formatNumber(formatTokenAmount(x.amount, 0, x.denom), true, 2) : amount
         return xh
       })
     })

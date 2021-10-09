@@ -1,5 +1,13 @@
 <template>
   <div>
+    <b-alert
+      variant="danger"
+      :show="syncing"
+    >
+      <div class="alert-body">
+        <span>No new block is produced since  <strong>{{ latestTime }}</strong> </span>
+      </div>
+    </b-alert>
     <b-row>
       <b-col>
         <summary-parmeters-component :data="chain" />
@@ -39,9 +47,9 @@
 </template>
 
 <script>
-import { BRow, BCol } from 'bootstrap-vue'
+import { BRow, BCol, BAlert } from 'bootstrap-vue'
 import {
-  formatNumber, isToken, percent, toDuration, tokenFormatter,
+  formatNumber, formatTokenAmount, isToken, percent, timeIn, toDay, toDuration, tokenFormatter,
 } from '@/libs/data'
 
 import SummaryParmetersComponent from './SummaryParmetersComponent.vue'
@@ -51,11 +59,14 @@ export default {
   components: {
     BRow,
     BCol,
+    BAlert,
     SummaryParmetersComponent,
     SummaryAssetsComponent,
   },
   data() {
     return {
+      syncing: false,
+      latestTime: '',
       chain: {
         title: '',
         class: 'border-primary',
@@ -165,6 +176,12 @@ export default {
 
       this.$set(this.chain, 'title', `Chain ID: ${res.block.header.chain_id}`)
       this.$set(this.chain.items[height], 'title', res.block.header.height)
+      if (timeIn(res.block.header.time, 3, 'm')) {
+        this.syncing = true
+      } else {
+        this.syncing = false
+      }
+      this.latestTime = toDay(res.block.header.time, 'long')
     })
 
     this.$http.getMintingInflation().then(res => {
@@ -176,9 +193,8 @@ export default {
       this.staking = this.normalize(res, 'Staking Parameters')
       Promise.all([this.$http.getStakingPool(), this.$http.getBankTotal(res.bond_denom)])
         .then(pool => {
-          const nano = 1000000
           const bondedAndSupply = this.chain.items.findIndex(x => x.subtitle === 'bonded_and_supply')
-          this.$set(this.chain.items[bondedAndSupply], 'title', `${formatNumber(pool[0].bondedToken / nano, true, 1)} / ${formatNumber(pool[1].amount / nano, true, 1)}`)
+          this.$set(this.chain.items[bondedAndSupply], 'title', `${formatNumber(formatTokenAmount(pool[0].bondedToken, 2, res.bond_denom), true, 2)} / ${formatNumber(formatTokenAmount(pool[1].amount, 2, res.bond_denom), true, 2)}`)
           const bondedRatio = this.chain.items.findIndex(x => x.subtitle === 'bonded_ratio')
           this.$set(this.chain.items[bondedRatio], 'title', `${percent(pool[0].bondedToken / pool[1].amount)}%`)
         })

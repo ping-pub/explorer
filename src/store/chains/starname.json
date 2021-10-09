@@ -1,0 +1,7 @@
+{
+    "chain_name": "starname",
+    "api": "http://lcd-private-iov-mainnet-2.iov.one",
+    "sdk_version": "0.42.6",
+    "addr_prefix": "star",
+    "logo": "https://dl.airtable.com/.attachments/69f75a1b45803d70d8ef69f7f83198e1/d991d407/ZUZfz7Th_400x400.jpg"
+}

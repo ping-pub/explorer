@@ -104,7 +104,7 @@
                 <span class="ml-25">{{ token.percent }}%</span>
               </div>
               <div class="d-flex flex-column">
-                <span class="text-right">{{ formatAmount(token.amount) }} {{ formatDenom(token.denom) }}</span>
+                <span class="text-right">{{ formatToken(token) }}</span>
                 <small class="text-right">{{ currency }}{{ token.currency }}</small>
               </div>
             </div>
@@ -443,7 +443,7 @@ export default {
         return this.transactions.txs.map(x => ({
           height: Number(x.height),
           txhash: x.txhash,
-          msgs: abbrMessage(x.tx.value.msg),
+          msgs: abbrMessage(x.tx.msg ? x.tx.msg : x.tx.value.msg),
           time: toDay(x.timestamp),
         }))
       }
@@ -641,14 +641,14 @@ export default {
     formatDenom(v) {
       return formatTokenDenom(this.denoms[v] ? this.denoms[v] : v)
     },
-    formatAmount(v) {
-      return formatTokenAmount(v)
+    formatAmount(v, dec, denom) {
+      return formatTokenAmount(v, dec, denom)
     },
     formatToken(v) {
       return tokenFormatter(v)
     },
     formatCurrency(amount, denom) {
-      const qty = this.formatAmount(amount)
+      const qty = this.formatAmount(amount, 2, denom)
       const d2 = this.formatDenom(denom)
       const userCurrency = getUserCurrency()
       const quote = this.$store.state.chains.quotes[d2]
