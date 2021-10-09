@@ -51,7 +51,7 @@
                 v-else-if="typeof value[key] === 'object'"
                 :tablefield="value[key]"
               />
-              <span v-else>{{ formatText(value[key]) }} </span>
+              <span v-else>{{ formatText(value[key]) }}</span>
             </b-tab>
           </b-tabs>
         </b-td>
@@ -68,7 +68,7 @@ import {
   BTableSimple, BTr, BTd, BTabs, BTab, BTbody,
 } from 'bootstrap-vue'
 import {
-  abbr, getStakingValidatorByHex, isHexAddress, isStringArray, isToken, tokenFormatter,
+  abbr, getStakingValidatorByHex, isHexAddress, isStringArray, isToken, percent, tokenFormatter,
 } from '@/libs/data'
 import ArrayFieldComponent from './ArrayFieldComponent.vue'
 
@@ -122,9 +122,14 @@ export default {
       return tokenFormatter(value)
     },
     addNewLine(value) {
+      const percentage = /^0\.\d+/
+      if (percentage.test(value)) {
+        return `${percent(value)}%`
+      }
       if (typeof value === 'string' && value.indexOf('\\n') > -1) {
         return value.replaceAll('\\n', '\n')
       }
+
       return value
     },
   },

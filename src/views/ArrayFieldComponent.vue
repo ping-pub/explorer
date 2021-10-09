@@ -26,7 +26,7 @@
 import { BTable } from 'bootstrap-vue'
 
 import {
-  getStakingValidatorByHex, isHexAddress, isToken, toDay, tokenFormatter,
+  getStakingValidatorByHex, isHexAddress, isToken, percent, toDay, tokenFormatter,
 } from '@/libs/data/data'
 
 export default {
@@ -56,8 +56,12 @@ export default {
     },
     formatText(value) {
       const reg = /^\d{4}.\d{1,2}.\d{1,2}T\d{2}:\d{2}:.+Z$/
+      const percentage = /^0\.\d+/
       if (reg.test(value)) {
         return toDay(value)
+      }
+      if (percentage.test(value)) {
+        return `${percent(value)}%`
       }
       if (value.length > 40) {
         return value.substring(0, 40).concat('...')

@@ -12,6 +12,7 @@
       :aria-controls="collapseItemID"
       role="tab"
       data-toggle="collapse"
+      class="px-0 mx-0"
       @click="updateVisible(!visible)"
     >
       <slot name="header">
@@ -25,7 +26,7 @@
       :accordion="accordion"
       role="tabpanel"
     >
-      <b-card-body>
+      <b-card-body class="px-0">
         <slot />
       </b-card-body>
     </b-collapse>

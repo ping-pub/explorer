@@ -4,7 +4,7 @@
       v-if="calculateTotal > 0"
       border-variant="primary"
     >
-      <b-row class="mx-0">
+      <b-row class="mx-0 d-flex align-items-center">
         <b-col
           md="4"
         >
@@ -54,6 +54,8 @@
           <chartjs-component-bar
             :height="135.0"
             :chart-data="calculateChartBar"
+            :options="options"
+            class="align-self-stretch"
           />
         </b-col>
       </b-row>
@@ -141,26 +143,28 @@
                       />
                       <h3>{{ currency }}{{ formatBalance(acc.addr) }}</h3>
                     </div>
-                    <small
-                      class="pl-1 float-right text-muted text-overflow "
-                      @click="copy(acc.addr)"
-                    >
-                      {{ formatAddr(acc.addr) }}
-                    </small>
-                  </b-col>
-                </b-row>
-                <b-row class="d-none">
-                  <b-col>
-                    <b-tabs
-                      active-nav-item-class="font-weight-bold text-second"
-                    >
-                      <b-tab title="Balance">
+                    <app-collapse hover>
+                      <app-collapse-item title="1">
+                        <template #header>
+                          <small class="text-muted">{{ formatAddr(acc.addr) }}</small>
+                        </template>
                         <div
                           v-for="b,i in balances[acc.addr]"
                           :key="i"
                           class="d-flex justify-content-between align-items-center"
                         >
                           <div class="ml-25 font-weight-bolder text-uppercase">
+                            <b-avatar
+                              variant="light-success"
+                              rounded
+                              title="Balance"
+                            >
+                              <feather-icon
+                                icon="CreditCardIcon"
+                                size="16"
+                                class="text-success"
+                              />
+                            </b-avatar>
                             {{ formatDenom(b.denom) }}
                           </div>
                           <div class="d-flex flex-column text-right">
@@ -168,8 +172,32 @@
                             <span class="font-small-2 text-muted text-nowrap">{{ currency }}{{ formatCurrency(b.amount, b.denom) }}</span>
                           </div>
                         </div>
-                      </b-tab>
-                    </b-tabs>
+                        <div
+                          v-for="b,i in delegations[acc.addr]"
+                          :key="`d-${i}`"
+                          class="d-flex justify-content-between align-items-center"
+                        >
+                          <div class="ml-25 font-weight-bolder text-uppercase">
+                            <b-avatar
+                              variant="light-primary"
+                              rounded
+                              title="Delegations"
+                            >
+                              <feather-icon
+                                icon="LockIcon"
+                                size="16"
+                                class="text-primary"
+                              />
+                            </b-avatar>
+                            {{ formatDenom(b.denom) }}
+                          </div>
+                          <div class="d-flex flex-column text-right">
+                            <span class="font-weight-bold mb-0">{{ formatAmount(b.amount) }}</span>
+                            <span class="font-small-2 text-muted text-nowrap">{{ currency }}{{ formatCurrency(b.amount, b.denom) }}</span>
+                          </div>
+                        </div>
+                      </app-collapse-item>
+                    </app-collapse>
                   </b-col>
                 </b-row>
               </b-card-body>
@@ -193,6 +221,7 @@
 </template>
 
 <script>
+import { $themeColors } from '@themeConfig'
 import {
   BCard, BCardHeader, BCardTitle, BCardBody, VBModal, BRow, BCol, BTabs, BTab, BAvatar, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
@@ -203,6 +232,8 @@ import {
   formatTokenAmount, formatTokenDenom, getLocalAccounts, getLocalChains, getUserCurrency, getUserCurrencySign, setUserCurrency,
 } from '@/libs/data'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import AppCollapse from '@core/components/app-collapse/AppCollapse.vue'
+import AppCollapseItem from '@core/components/app-collapse/AppCollapseItem.vue'
 import OperationTransferComponent from './OperationTransferComponent.vue'
 import OperationTransfer2Component from './OperationTransfer2Component.vue'
 import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
@@ -228,6 +259,8 @@ export default {
     OperationTransfer2Component,
     ChartComponentDoughnut,
     ChartjsComponentBar,
+    AppCollapse,
+    AppCollapseItem,
   },
   directives: {
     'b-modal': VBModal,
@@ -245,6 +278,50 @@ export default {
       delegations: {},
       ibcDenom: {},
       quotes: {},
+      options: {
+        legend: {
+          display: false,
+        },
+        // responsive: true,
+        title: {
+          display: true,
+          text: 'Token Portfolio',
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: true,
+        },
+        scales: {
+          yAxes: [{
+            // type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+            type: 'logarithmic',
+            display: true,
+            position: 'left',
+            id: 'y-axis-1',
+            ticks: {
+              // For a category axis, the val is the index so the lookup via getLabelForValue is needed
+              callback(val, index) {
+                // Hide the label of every 2nd dataset
+                return index % 5 === 0 ? `${val}` : ''
+              },
+              color: 'red',
+            },
+            offset: true,
+            gridLines: {
+              display: false,
+              offsetGridLines: false,
+            },
+          }, {
+            type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+            display: false,
+            position: 'right',
+            id: 'y-axis-2',
+            gridLines: {
+              drawOnChartArea: true,
+            },
+          }],
+        },
+      },
     }
   },
   computed: {
@@ -266,7 +343,7 @@ export default {
       }
       return parseFloat(total.toFixed(2))
     },
-    calculateChartDoughnut() {
+    calculateByDenom() {
       const v = Object.values(this.balances)
       const total = {}
       if (v) {
@@ -296,6 +373,10 @@ export default {
           })
         })
       }
+      return total
+    },
+    calculateChartDoughnut() {
+      const total = this.calculateByDenom
       return {
         datasets: [
           {
@@ -309,45 +390,31 @@ export default {
       }
     },
     calculateChartBar() {
-      const v = Object.values(this.balances)
-      const total = {}
-      if (v) {
-        v.forEach(tokens => {
-          const subtotal = tokens.map(x => ({ denom: x.denom, sub: this.formatCurrency(x.amount, x.denom) }))
-          subtotal.forEach(x => {
-            const denom = this.formatDenom(x.denom)
-            if (total[denom]) {
-              total[denom] += x.sub
-            } else {
-              total[denom] = x.sub
-            }
-          })
-        })
-      }
-      const d = Object.values(this.delegations)
-      if (d) {
-        d.forEach(tokens => {
-          const subtotal = tokens.map(x => ({ denom: x.denom, sub: this.formatCurrency(x.amount, x.denom) }))
-          subtotal.forEach(x => {
-            const denom = this.formatDenom(x.denom)
-            if (total[denom]) {
-              total[denom] += x.sub
-            } else {
-              total[denom] = x.sub
-            }
-          })
-        })
-      }
+      const prices = this.calculateByDenom
+      // const changes = Object.entries(prices).map(v => {
+      //   console.log('entries:', v[0], v[1])
+      //   const quote = this.$store.state.chains.quotes[`${v[0]}`]
+      //   return quote ? (v[1] * quote[`${this.currency2}_24h_change`]) / 100 : 0
+      // })
       return {
-        labels: Object.keys(total),
+        labels: Object.keys(prices),
         datasets: [
           {
-            label: '',
-            data: Object.values(total),
-            backgroundColor: chartColors(),
+            label: 'Holdings',
+            data: Object.values(prices),
+            backgroundColor: $themeColors.success,
             borderWidth: 0,
             pointStyle: 'rectRounded',
+            yAxisID: 'y-axis-1',
           },
+          // {
+          //   label: '24H Change',
+          //   data: Object.values(changes),
+          //   backgroundColor: $themeColors.warning,
+          //   borderWidth: 0,
+          //   pointStyle: 'rectRounded',
+          //   // yAxisID: 'y-axis-2',
+          // },
         ],
       }
     },

@@ -456,7 +456,7 @@ export default {
       total = total.concat(this.assets.map(x => {
         const xh = x
         xh.type = 'Balance'
-        xh.color = 'primary'
+        xh.color = 'success'
         xh.icon = 'CreditCardIcon'
         xh.currency = this.formatCurrency(xh.amount, xh.denom)
         sumCurrency += xh.currency
@@ -477,7 +477,7 @@ export default {
         })
         total.push({
           type: 'Delegation',
-          color: 'success',
+          color: 'primary',
           icon: 'LockIcon',
           amount: temp,
           denom: stakingDenom,
@@ -551,7 +551,7 @@ export default {
           {
             labels: Object.keys(data),
             data: Object.values(data),
-            backgroundColor: [$themeColors.primary, $themeColors.success, $themeColors.warning, $themeColors.danger, $themeColors.info],
+            backgroundColor: [$themeColors.success, $themeColors.primary, $themeColors.warning, $themeColors.danger, $themeColors.info],
             borderWidth: 0,
             pointStyle: 'rectRounded',
           },
