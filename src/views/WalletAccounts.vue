@@ -229,6 +229,7 @@ import Ripple from 'vue-ripple-directive'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import {
   chartColors,
+  formatNumber,
   formatTokenAmount, formatTokenDenom, getLocalAccounts, getLocalChains, getUserCurrency, getUserCurrencySign, setUserCurrency,
 } from '@/libs/data'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -302,7 +303,7 @@ export default {
               // For a category axis, the val is the index so the lookup via getLabelForValue is needed
               callback(val, index) {
                 // Hide the label of every 2nd dataset
-                return index % 5 === 0 ? `${val}` : ''
+                return index % 5 === 0 ? formatNumber(val, true) : ''
               },
               color: 'red',
             },
