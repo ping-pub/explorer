@@ -146,8 +146,8 @@
                       />
                       <h3>{{ currency }}{{ formatBalance(acc.addr) }}</h3>
                     </div>
-                    <app-collapse hover>
-                      <app-collapse-item title="1">
+                    <app-collapse>
+                      <app-collapse-item title="Assets">
                         <template #header>
                           <small class="text-muted">{{ formatAddr(acc.addr) }}</small>
                         </template>
@@ -306,7 +306,7 @@ export default {
               // For a category axis, the val is the index so the lookup via getLabelForValue is needed
               callback(val, index) {
                 // Hide the label of every 2nd dataset
-                return index % 5 === 0 ? formatNumber(val, true) : ''
+                return index % 5 === 0 ? formatNumber(val, true, 2) : ''
               },
               color: 'red',
             },
@@ -350,15 +350,21 @@ export default {
     calculateByDenom() {
       const v = Object.values(this.balances)
       const total = {}
+      const qty = {}
       if (v) {
         v.forEach(tokens => {
-          const subtotal = tokens.map(x => ({ denom: x.denom, sub: this.formatCurrency(x.amount, x.denom) }))
-          subtotal.forEach(x => {
+          // const subtotal = tokens.map(x => ({ denom: x.denom, sub: this.formatCurrency(x.amount, x.denom) }))
+          tokens.forEach(x => {
             const denom = this.formatDenom(x.denom)
             if (total[denom]) {
-              total[denom] += x.sub
+              total[denom] += this.formatCurrency(x.amount, x.denom)
             } else {
-              total[denom] = x.sub
+              total[denom] = this.formatCurrency(x.amount, x.denom)
+            }
+            if (qty[denom]) {
+              qty[denom] += this.formatAmount(x.amount, x.denom)
+            } else {
+              qty[denom] = this.formatAmount(x.amount, x.denom)
             }
           })
         })
@@ -366,26 +372,31 @@ export default {
       const d = Object.values(this.delegations)
       if (d) {
         d.forEach(tokens => {
-          const subtotal = tokens.map(x => ({ denom: x.denom, sub: this.formatCurrency(x.amount, x.denom) }))
-          subtotal.forEach(x => {
+          // const subtotal = tokens.map(x => ({ denom: x.denom, sub: this.formatCurrency(x.amount, x.denom) }))
+          tokens.forEach(x => {
             const denom = this.formatDenom(x.denom)
             if (total[denom]) {
-              total[denom] += x.sub
+              total[denom] += this.formatCurrency(x.amount, x.denom)
             } else {
-              total[denom] = x.sub
+              total[denom] = this.formatCurrency(x.amount, x.denom)
+            }
+            if (qty[denom]) {
+              qty[denom] += this.formatAmount(x.amount, x.denom)
+            } else {
+              qty[denom] = this.formatAmount(x.amount, x.denom)
             }
           })
         })
       }
-      return total
+      return { value: total, qty }
     },
     calculateChartDoughnut() {
       const total = this.calculateByDenom
       return {
         datasets: [
           {
-            labels: Object.keys(total),
-            data: Object.values(total),
+            labels: Object.keys(total.value),
+            data: Object.values(total.value),
             backgroundColor: chartColors(),
             borderWidth: 0,
             pointStyle: 'rectRounded',
@@ -394,31 +405,26 @@ export default {
       }
     },
     calculateChartBar() {
-      const prices = this.calculateByDenom
-      // const changes = Object.entries(prices).map(v => {
-      //   console.log('entries:', v[0], v[1])
-      //   const quote = this.$store.state.chains.quotes[`${v[0]}`]
-      //   return quote ? (v[1] * quote[`${this.currency2}_24h_change`]) / 100 : 0
-      // })
+      const total = this.calculateByDenom
       return {
-        labels: Object.keys(prices),
+        labels: Object.keys(total.value),
         datasets: [
           {
-            label: 'Holdings',
-            data: Object.values(prices),
+            label: 'Value',
+            data: Object.values(total.value),
             backgroundColor: chartColors(),
             borderWidth: 0,
             pointStyle: 'rectRounded',
             yAxisID: 'y-axis-1',
           },
-          // {
-          //   label: '24H Change',
-          //   data: Object.values(changes),
-          //   backgroundColor: $themeColors.warning,
-          //   borderWidth: 0,
-          //   pointStyle: 'rectRounded',
-          //   // yAxisID: 'y-axis-2',
-          // },
+          {
+            label: 'Qty',
+            data: Object.values(total.qty),
+            backgroundColor: chartColors(),
+            borderWidth: 0,
+            pointStyle: 'rectRounded',
+            // yAxisID: 'y-axis-2',
+          },
         ],
       }
     },
