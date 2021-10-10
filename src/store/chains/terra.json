@@ -1,7 +1,7 @@
 {
     "chain_name": "terra-luna",
     "api": "https://fcd.terra.dev",
-    "sdk_version": "0.39.2",
+    "sdk_version": "0.44.2",
     "addr_prefix": "terra",
     "logo": "https://dl.airtable.com/.attachments/275a6cbdbdc911856556e716a60d6ec4/87addd7f/terra.jpg"
 }
