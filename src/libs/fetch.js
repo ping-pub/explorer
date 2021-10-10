@@ -6,7 +6,7 @@ import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { toBase64 } from '@cosmjs/encoding'
 import {
   Proposal, ProposalTally, Proposer, StakingPool, Votes, Deposit,
-  Validator, StakingParameters, Block, ValidatorDistribution, StakingDelegation, WrapStdTx,
+  Validator, StakingParameters, Block, ValidatorDistribution, StakingDelegation, WrapStdTx, getUserCurrency,
 } from './data'
 
 function commonProcess(res) {
@@ -316,6 +316,12 @@ const chainAPI = class ChainFetch {
 
   async getGravityPools() {
     return this.get('/cosmos/liquidity/v1beta1/pools').then(data => commonProcess(data))
+  }
+
+  async getMarketChart(days = 14, coin = null) {
+    const conf = this.getSelectedConfig()
+    const currency = getUserCurrency()
+    return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin || conf.chain_name}/market_chart?vs_currency=${currency}&days=${days}`)
   }
 
   // CoinMarketCap

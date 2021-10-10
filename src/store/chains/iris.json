@@ -1,5 +1,5 @@
 {
-    "chain_name": "iris",
+    "chain_name": "iris-network",
     "api": "https://iris.api.ping.pub",
     "sdk_version": "0.42.4",
     "addr_prefix": "iaa",

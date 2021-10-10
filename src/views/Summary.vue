@@ -10,7 +10,20 @@
     </b-alert>
     <b-row>
       <b-col>
-        <summary-parmeters-component :data="chain" />
+        <summary-parmeters-component
+          :data="chain"
+        />
+      </b-col>
+    </b-row>
+    <b-row v-if="marketChartData">
+      <b-col>
+        <b-card style="min-height:60px;">
+          <summary-price-chart
+            :chart-data="marketChartData"
+            :height="60"
+            :min-height="60"
+          />
+        </b-card>
       </b-col>
     </b-row>
     <b-row>
@@ -47,26 +60,32 @@
 </template>
 
 <script>
-import { BRow, BCol, BAlert } from 'bootstrap-vue'
 import {
-  formatNumber, formatTokenAmount, isToken, percent, timeIn, toDay, toDuration, tokenFormatter,
+  BRow, BCol, BAlert, BCard,
+} from 'bootstrap-vue'
+import {
+  formatNumber, formatTokenAmount, getUserCurrency, isToken, percent, timeIn, toDay, toDuration, tokenFormatter,
 } from '@/libs/data'
 
 import SummaryParmetersComponent from './SummaryParmetersComponent.vue'
 import SummaryAssetsComponent from './SummaryAssetsComponent.vue'
+import SummaryPriceChart from './SummaryPriceChart.vue'
 
 export default {
   components: {
     BRow,
     BCol,
     BAlert,
+    BCard,
     SummaryParmetersComponent,
     SummaryAssetsComponent,
+    SummaryPriceChart,
   },
   data() {
     return {
       syncing: false,
       latestTime: '',
+      marketData: null,
       chain: {
         title: '',
         class: 'border-primary',
@@ -97,78 +116,30 @@ export default {
         title: 'Governance Parameters',
         items: [],
       },
-      aaaa: {
-        options: {
-          elements: {
-            rectangle: {
-              borderWidth: 2,
-              borderSkipped: 'top',
-            },
-          },
-          tooltips: {
-            // Updated default tooltip UI
-            shadowOffsetX: 1,
-            shadowOffsetY: 1,
-            shadowBlur: 8,
-            // shadowColor: chartColors.tooltipShadow,
-            // backgroundColor: this.$themeColors.light,
-            // titleFontColor: this.$themeColors.dark,
-            // bodyFontColor: this.$themeColors.dark,
-          },
-          responsive: true,
-          maintainAspectRatio: false,
-          responsiveAnimationDuration: 500,
-          legend: {
-            display: false,
-          },
-          scales: {
-            xAxes: [
-              {
-                display: true,
-                gridLines: {
-                  // zeroLineColor: chartColors.grid_line_color,
-                  borderColor: 'transparent',
-                  // color: chartColors.grid_line_color,
-                  drawTicks: false,
-                },
-                scaleLabel: {
-                  display: true,
-                },
-                ticks: {
-                  min: 0,
-                  // fontColor: chartColors.labelColor,
-                },
-              },
-            ],
-            yAxes: [
-              {
-                display: true,
-                gridLines: {
-                  display: false,
-                },
-                scaleLabel: {
-                  display: true,
-                },
-                ticks: {
-                  // fontColor: chartColors.labelColor,
-                },
-              },
-            ],
-          },
-        },
-        data: {
-          labels: ['MON', 'TUE', 'WED ', 'THU', 'FRI', 'SAT', 'SUN'],
+    }
+  },
+  computed: {
+    marketChartData() {
+      if (this.marketData && this.marketData.prices) {
+        const labels = this.marketData.prices.map(x => x[0])
+        const data = this.marketData.prices.map(x => x[1])
+        return {
+          labels,
           datasets: [
             {
-              data: [710, 350, 470, 580, 230, 460, 120],
-              // backgroundColor: this.$themeColors.info,
-              borderColor: 'transparent',
+              label: `Price (${getUserCurrency().toUpperCase()})`,
+              data,
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1,
+              pointStyle: 'dash',
               barThickness: 15,
             },
           ],
-        },
-      },
-    }
+        }
+      }
+      return null
+    },
   },
   created() {
     this.$http.getLatestBlock().then(res => {
@@ -182,6 +153,10 @@ export default {
         this.syncing = false
       }
       this.latestTime = toDay(res.block.header.time, 'long')
+    })
+
+    this.$http.getMarketChart().then(res => {
+      this.marketData = res
     })
 
     this.$http.getMintingInflation().then(res => {

@@ -1,5 +1,5 @@
 {
-    "chain_name": "akash",
+    "chain_name": "akash-network",
     "api": "https://akash.api.ping.pub",
     "sdk_version": "0.41.3",
     "addr_prefix": "akash",
