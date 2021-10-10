@@ -5,7 +5,6 @@
     :data="data"
     :chart-data="data"
     :options="options"
-    class="mb-3"
   />
 </template>
 

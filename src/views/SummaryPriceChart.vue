@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       options: {
+        maintainAspectRatio: false,
         scales: {
           xAxes: [{
             type: 'time',

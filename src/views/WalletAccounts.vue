@@ -7,6 +7,7 @@
       <b-row class="mx-0 d-flex align-items-center">
         <b-col
           md="4"
+          class="py-0"
         >
           <b-dropdown
             :text="`Currency: ${currency2.toUpperCase()}`"
@@ -36,26 +37,23 @@
               KRW (대한민국원)
             </b-dropdown-item>
           </b-dropdown>
-          <h2 class="my-1">
+          <h2 class="mt-1">
             {{ currency }}{{ calculateTotal }}
           </h2>
           <!-- chart -->
           <chart-component-doughnut
-            :height="235"
-            :width="235"
+            :height="160"
+            :width="160"
             :data="calculateChartDoughnut"
-            class="mb-3"
           />
         </b-col>
         <b-col
           md="8"
-          class="d-none d-md-block"
         >
           <chartjs-component-bar
-            :height="135.0"
+            :height="200"
             :chart-data="calculateChartBar"
             :options="options"
-            class="align-self-stretch"
           />
         </b-col>
       </b-row>
@@ -283,6 +281,7 @@ export default {
       ibcDenom: {},
       quotes: {},
       options: {
+        maintainAspectRatio: false,
         legend: {
           display: false,
         },
@@ -303,16 +302,18 @@ export default {
             position: 'left',
             id: 'y-axis-1',
             ticks: {
-              // For a category axis, the val is the index so the lookup via getLabelForValue is needed
-              callback(val, index) {
-                // Hide the label of every 2nd dataset
-                return index % 5 === 0 ? formatNumber(val, true, 2) : ''
+              min: 0,
+              autoskipping: true,
+              display: true,
+              maxTicksLimit: 7,
+              callback(val) {
+                return formatNumber(val, true, 0)
               },
               color: 'red',
             },
             offset: true,
             gridLines: {
-              display: false,
+              display: true,
               offsetGridLines: false,
             },
           }, {
