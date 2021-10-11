@@ -1,0 +1,7 @@
+{
+    "chain_name": "bitsong",
+    "api": "https://lcd.explorebitsong.com",
+    "addr_prefix": "bitsong",
+    "logo": "https://dl.airtable.com/.attachments/8016b71b69fb108f0ff33eb9af1c943f/f5fe4ef4/bitsong.svg",
+    "sdk_version": "0.39.2"
+}

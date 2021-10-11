@@ -411,7 +411,7 @@ export default {
         labels: Object.keys(total.value),
         datasets: [
           {
-            label: 'Value',
+            label: 'Market Cap',
             data: Object.values(total.value),
             backgroundColor: chartColors(),
             borderWidth: 0,

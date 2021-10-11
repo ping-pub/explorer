@@ -41,7 +41,7 @@
         <summary-parmeters-component :data="staking" />
       </b-col>
     </b-row>
-    <b-row>
+    <b-row v-if="gov.items.length > 0">
       <b-col>
         <summary-parmeters-component :data="gov" />
       </b-col>
@@ -159,11 +159,6 @@ export default {
       this.marketData = res
     })
 
-    this.$http.getMintingInflation().then(res => {
-      const chainIndex = this.chain.items.findIndex(x => x.subtitle === 'inflation')
-      this.$set(this.chain.items[chainIndex], 'title', `${percent(res)}%`)
-    })
-
     this.$http.getStakingParameters().then(res => {
       this.staking = this.normalize(res, 'Staking Parameters')
       Promise.all([this.$http.getStakingPool(), this.$http.getBankTotal(res.bond_denom)])
@@ -178,10 +173,14 @@ export default {
       this.slasing = this.normalize(res, 'Slashing Parameters')
     })
 
-    const selected = this.$route.params.chain
-    if (selected === 'iris') {
+    const conf = this.$http.getSelectedConfig()
+    if (conf.excludes && conf.excludes.indexOf('mint') > -1) {
       this.mint = null
     } else {
+      this.$http.getMintingInflation().then(res => {
+        const chainIndex = this.chain.items.findIndex(x => x.subtitle === 'inflation')
+        this.$set(this.chain.items[chainIndex], 'title', `${percent(res)}%`)
+      })
       this.$http.getMintParameters().then(res => {
         this.mint = this.normalize(res, 'Minting Parameters')
       })
@@ -190,19 +189,23 @@ export default {
     this.$http.getDistributionParameters().then(res => {
       this.distribution = this.normalize(res, 'Distribution Parameters')
     })
-    Promise.all([
-      this.$http.getGovernanceParameterDeposit(),
-      this.$http.getGovernanceParameterTallying(),
-      this.$http.getGovernanceParameterVoting(),
-    ]).then(data => {
-      let items = []
-      data.forEach(item => {
-        const values = this.normalize(item, '').items
-        items = items.concat(values)
+    if (conf.excludes && conf.excludes.indexOf('governance') > -1) {
+      this.gov.items = []
+    } else {
+      Promise.all([
+        this.$http.getGovernanceParameterDeposit(),
+        this.$http.getGovernanceParameterTallying(),
+        this.$http.getGovernanceParameterVoting(),
+      ]).then(data => {
+        let items = []
+        data.forEach(item => {
+          const values = this.normalize(item, '').items
+          items = items.concat(values)
+        })
+        this.gov.items = items
+        this.$set(this.gov, 'items', items)
       })
-      this.gov.items = items
-      this.$set(this.gov, 'items', items)
-    })
+    }
   },
   methods: {
     normalize(data, title) {

@@ -20,6 +20,7 @@ const modules = [
     scope: 'normal',
     title: 'governance',
     route: 'governance',
+    exclude: 'emoney',
   },
   {
     scope: 'normal',
@@ -54,14 +55,17 @@ function processMenu() {
       title: chain,
       icon: store.state.chains.config[chain].logo,
     }
+    const { excludes } = store.state.chains.config[chain]
     const children = []
     modules.forEach(m => {
-      if (m.scope.match('normal') || m.scope.match(chain)) {
-        children.push({
+      if (excludes === undefined || excludes.indexOf(m.route) === -1) {
+        if (m.scope.match('normal') || m.scope.match(chain)) {
+          children.push({
           // header: `item-${chain}-${m.route}`,
-          title: m.title,
-          route: { name: m.route, params: { chain } },
-        })
+            title: m.title,
+            route: { name: m.route, params: { chain } },
+          })
+        }
       }
     })
     menu.children = children
