@@ -83,6 +83,7 @@ export default {
   computed: {
     uptime() {
       const vals = this.query ? this.validators.filter(x => String(x.description.moniker).indexOf(this.query) > -1) : this.validators
+      vals.sort((a, b) => b.delegator_shares - a.delegator_shares)
       return vals.map(x => ({
         validator: x.description,
         address: consensusPubkeyToHexAddress(x.consensus_pubkey),
