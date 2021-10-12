@@ -274,7 +274,7 @@ export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
     decimals = 1000000000000000000n
   }
   let ta = tokenAmount
-  if (typeof tokenAmount === 'string' && tokenAmount.indexOf('.') > 1) {
+  if (typeof tokenAmount === 'string' && tokenAmount.indexOf('.') > 0) {
     ta = tokenAmount.substring(0, tokenAmount.indexOf('.'))
   }
   // eslint-disable-next-line no-undef

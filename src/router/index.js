@@ -315,6 +315,10 @@ const router = new VueRouter({
       },
     },
     {
+      path: 'index.php',
+      redirect: '/',
+    },
+    {
       path: '*',
       redirect: '/error/error-404',
     },
