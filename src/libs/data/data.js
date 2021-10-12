@@ -269,16 +269,14 @@ export function formatTokenDenom(tokenDenom) {
 }
 
 export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
-  let decimals = 1000000n
+  let amount
   if (denom.startsWith('rowan')) {
-    decimals = 1000000000000000000n
+    // eslint-disable-next-line no-undef
+    amount = Number(BigInt(Number(tokenAmount)) / 1000000000000000000n)
+    // }
+  } else {
+    amount = Number(tokenAmount) / 1000000
   }
-  let ta = tokenAmount
-  if (typeof tokenAmount === 'string' && tokenAmount.indexOf('.') > 0) {
-    ta = tokenAmount.substring(0, tokenAmount.indexOf('.'))
-  }
-  // eslint-disable-next-line no-undef
-  const amount = Number(BigInt(ta) / decimals)
   if (amount > 10) {
     return parseFloat(amount.toFixed(fraction))
   }
@@ -287,7 +285,7 @@ export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
 
 export function formatToken(token, IBCDenom = {}) {
   if (token) {
-    return `${formatTokenAmount(token.amount, 2, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`
+    return `${formatTokenAmount(token.amount, 0, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`
   }
   return token
 }

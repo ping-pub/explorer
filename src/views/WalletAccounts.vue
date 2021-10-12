@@ -170,18 +170,10 @@
                           :key="i"
                           class="d-flex justify-content-between align-items-center"
                         >
-                          <div class="ml-25 font-weight-bolder text-uppercase text-success">
-                            <b-avatar
-                              variant="light-success"
-                              rounded
-                              title="Balance"
-                            >
-                              <feather-icon
-                                icon="CreditCardIcon"
-                                size="16"
-                                class="d-none d-md-block"
-                              />
-                            </b-avatar>
+                          <div
+                            class="ml-25 font-weight-bolder text-uppercase text-success"
+                            title="Balance"
+                          >
                             {{ formatDenom(b.denom) }}
                             <small
                               :class="priceColor(b.denom)"
@@ -198,18 +190,10 @@
                           :key="`d-${i}`"
                           class="d-flex justify-content-between align-items-center"
                         >
-                          <div class="ml-25 font-weight-bolder text-uppercase text-primary">
-                            <b-avatar
-                              variant="light-primary"
-                              rounded
-                              title="Delegations"
-                            >
-                              <feather-icon
-                                icon="LockIcon"
-                                size="16"
-                                class="d-none d-md-block"
-                              />
-                            </b-avatar>
+                          <div
+                            class="ml-25 font-weight-bolder text-uppercase text-primary"
+                            title="Delegations"
+                          >
                             {{ formatDenom(b.denom) }}
                             <small
                               :class="priceColor(b.denom)"
@@ -556,7 +540,7 @@ export default {
     },
     formatChanges(denom) {
       const price = this.getChanges(denom)
-      return `${parseFloat(price.toFixed(2))}%`
+      return price === 0 ? '' : `${parseFloat(price.toFixed(2))}%`
     },
     formatBalance(v) {
       let total = 0
