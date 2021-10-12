@@ -37,9 +37,21 @@
               KRW (대한민국원)
             </b-dropdown-item>
           </b-dropdown>
-          <h2 class="mt-1">
+          <h2 class="mt-1 mb-0">
             {{ currency }}{{ calculateTotal }}
           </h2>
+          <small
+            v-if="calculateTotalChange > 0"
+            class="my-0 text-success"
+          >
+            +{{ calculateTotalChange }} (24h)
+          </small>
+          <small
+            v-else
+            class="my-0 text-danger"
+          >
+            {{ calculateTotalChange }} (24h)
+          </small>
           <!-- chart -->
           <chart-component-doughnut
             :height="160"
@@ -142,7 +154,11 @@
                         variant="light-primary"
                         rounded
                       />
-                      <h3>{{ currency }}{{ formatBalance(acc.addr) }}</h3>
+                      <div class="text-right">
+                        <h4 class="my-0">{{ currency }}{{ formatBalance(acc.addr) }}
+                        </h4>
+                        <small :class="formatBalanceChangesColor(acc.addr)"> {{ formatBalanceChanges(acc.addr) }}</small>
+                      </div>
                     </div>
                     <app-collapse>
                       <app-collapse-item title="Assets">
@@ -154,7 +170,7 @@
                           :key="i"
                           class="d-flex justify-content-between align-items-center"
                         >
-                          <div class="ml-25 font-weight-bolder text-uppercase">
+                          <div class="ml-25 font-weight-bolder text-uppercase text-success">
                             <b-avatar
                               variant="light-success"
                               rounded
@@ -163,10 +179,14 @@
                               <feather-icon
                                 icon="CreditCardIcon"
                                 size="16"
-                                class="text-success"
+                                class="d-none d-md-block"
                               />
                             </b-avatar>
                             {{ formatDenom(b.denom) }}
+                            <small
+                              :class="priceColor(b.denom)"
+                              class="py-0"
+                            >{{ formatChanges(b.denom) }}</small>
                           </div>
                           <div class="d-flex flex-column text-right">
                             <span class="font-weight-bold mb-0">{{ formatAmount(b.amount, b.denom) }}</span>
@@ -178,7 +198,7 @@
                           :key="`d-${i}`"
                           class="d-flex justify-content-between align-items-center"
                         >
-                          <div class="ml-25 font-weight-bolder text-uppercase">
+                          <div class="ml-25 font-weight-bolder text-uppercase text-primary">
                             <b-avatar
                               variant="light-primary"
                               rounded
@@ -187,10 +207,14 @@
                               <feather-icon
                                 icon="LockIcon"
                                 size="16"
-                                class="text-primary"
+                                class="d-none d-md-block"
                               />
                             </b-avatar>
                             {{ formatDenom(b.denom) }}
+                            <small
+                              :class="priceColor(b.denom)"
+                              class="py-0"
+                            >{{ formatChanges(b.denom) }}</small>
                           </div>
                           <div class="d-flex flex-column text-right">
                             <span class="font-weight-bold mb-0">{{ formatAmount(b.amount, b.denom) }}</span>
@@ -348,13 +372,30 @@ export default {
       }
       return parseFloat(total.toFixed(2))
     },
+    calculateTotalChange() {
+      const v = Object.values(this.balances)
+      let total = 0
+      if (v) {
+        v.forEach(tokens => {
+          const subtotal = tokens.map(x => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c)
+          total += subtotal
+        })
+      }
+      const d = Object.values(this.delegations)
+      if (d) {
+        d.forEach(tokens => {
+          const subtotal = tokens.map(x => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c, 0)
+          total += subtotal
+        })
+      }
+      return parseFloat(total.toFixed(2))
+    },
     calculateByDenom() {
       const v = Object.values(this.balances)
       const total = {}
       const qty = {}
       if (v) {
         v.forEach(tokens => {
-          // const subtotal = tokens.map(x => ({ denom: x.denom, sub: this.formatCurrency(x.amount, x.denom) }))
           tokens.forEach(x => {
             const denom = this.formatDenom(x.denom)
             if (total[denom]) {
@@ -373,7 +414,6 @@ export default {
       const d = Object.values(this.delegations)
       if (d) {
         d.forEach(tokens => {
-          // const subtotal = tokens.map(x => ({ denom: x.denom, sub: this.formatCurrency(x.amount, x.denom) }))
           tokens.forEach(x => {
             const denom = this.formatDenom(x.denom)
             if (total[denom]) {
@@ -496,6 +536,28 @@ export default {
       }
       return 0
     },
+    priceColor(denom) {
+      const d2 = this.formatDenom(denom)
+      const quote = this.$store.state.chains.quotes[d2]
+      if (quote) {
+        const price = quote[`${this.currency2}_24h_change`]
+        return price > 0 ? 'text-success' : 'text-danger'
+      }
+      return ''
+    },
+    getChanges(denom) {
+      const d2 = this.formatDenom(denom)
+      const quote = this.$store.state.chains.quotes[d2]
+      if (quote) {
+        const price = quote[`${this.currency2}_24h_change`]
+        return price
+      }
+      return 0
+    },
+    formatChanges(denom) {
+      const price = this.getChanges(denom)
+      return `${parseFloat(price.toFixed(2))}%`
+    },
     formatBalance(v) {
       let total = 0
       const balance = this.balances[v]
@@ -509,6 +571,24 @@ export default {
         total += ret
       }
       return parseFloat(total.toFixed(2))
+    },
+    formatBalanceChanges(v) {
+      let total = 0
+      const balance = this.balances[v]
+      if (balance) {
+        const ret = balance.map(x => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c)
+        total += ret
+      }
+      const delegations = this.delegations[v]
+      if (delegations) {
+        const ret = delegations.map(x => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c, 0)
+        total += ret
+      }
+      return parseFloat(total.toFixed(2))
+    },
+    formatBalanceChangesColor(v) {
+      const total = this.formatBalanceChanges(v)
+      return total > 0 ? 'text-success' : 'text-danger'
     },
     removeAddress(v) {
       Object.keys(this.accounts).forEach(key => {
