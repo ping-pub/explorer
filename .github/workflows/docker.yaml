@@ -3,7 +3,7 @@ name: docker
 on:
   push:
     branches:
-      - 'master'
+      - 'master-backup'
 
 jobs:
   docker:
