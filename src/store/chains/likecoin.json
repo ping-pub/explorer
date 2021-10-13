@@ -1,0 +1,7 @@
+{
+    "chain_name": "likecoin",
+    "api": "https://mainnet-node.like.co",
+    "sdk_version": "0.42.0",
+    "addr_prefix": "cosmos",
+    "logo": "https://dl.airtable.com/.attachments/d51ad30b75593517d7d79f08b9e4dad0/5603273b/likecoin.png"
+}
