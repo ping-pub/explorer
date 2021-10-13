@@ -231,7 +231,7 @@ import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  formatToken, formatTokenDenom, setLocalTxHistory, sign, timeIn,
+  formatToken, formatTokenDenom, getUnitAmount, setLocalTxHistory, sign, timeIn,
 } from '@/libs/data'
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -390,7 +390,7 @@ export default {
           delegatorAddress: this.selectedAddress,
           validatorAddress: this.selectedValidator,
           amount: {
-            amount: String((Number(this.amount) * 1000000).toFixed()),
+            amount: getUnitAmount(this.amount, this.token),
             denom: this.token,
           },
         },

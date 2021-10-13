@@ -286,7 +286,7 @@ import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  formatToken, formatTokenDenom, getLocalAccounts, getLocalChains, setLocalTxHistory, sign, timeIn,
+  formatToken, formatTokenDenom, getLocalAccounts, getLocalChains, getUnitAmount, setLocalTxHistory, sign, timeIn,
 } from '@/libs/data'
 import { Cosmos } from '@cosmostation/cosmosjs'
 import vSelect from 'vue-select'
@@ -496,7 +496,7 @@ export default {
           value: {
             sourcePort: this.destination.port_id,
             sourceChannel: this.destination.channel_id,
-            token: coin(Number(this.amount) * 1000000, this.token),
+            token: coin(Number(getUnitAmount(this.amount, this.token)), this.token),
             sender: this.address,
             receiver: this.recipient,
             // timeoutHeight: undefined, // { revisionHeight: '0', revisionNumber: '0' },

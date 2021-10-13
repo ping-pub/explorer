@@ -268,11 +268,26 @@ export function formatTokenDenom(tokenDenom) {
   return ''
 }
 
+export function getUnitAmount(amount, denom) {
+  if (denom.startsWith('basecro')) {
+    return String((Number(amount) * 100000000).toFixed())
+  }
+  if (denom.startsWith('rowan')) {
+    // eslint-disable-next-line no-undef
+    return (BigInt(amount) * 1000000000000000000n).toString()
+  }
+  return String((Number(amount) * 1000000).toFixed())
+}
+
 export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
   let amount
   if (denom.startsWith('rowan')) {
     // eslint-disable-next-line no-undef
     amount = Number(BigInt(Number(tokenAmount)) / 1000000000000000000n)
+    // }
+  } else if (denom.startsWith('basecro')) {
+    // eslint-disable-next-line no-undef
+    amount = Number(tokenAmount) / 100000000
     // }
   } else {
     amount = Number(tokenAmount) / 1000000

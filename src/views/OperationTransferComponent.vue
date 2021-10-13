@@ -255,7 +255,7 @@ import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  formatToken, formatTokenDenom, getLocalAccounts, getLocalChains, setLocalTxHistory, sign, timeIn,
+  formatToken, formatTokenDenom, getLocalAccounts, getLocalChains, getUnitAmount, setLocalTxHistory, sign, timeIn,
 } from '@/libs/data'
 import { Cosmos } from '@cosmostation/cosmosjs'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -418,7 +418,7 @@ export default {
             toAddress: this.recipient,
             amount: [
               {
-                amount: String((Number(this.amount) * 1000000).toFixed()),
+                amount: getUnitAmount(this.amount, this.token),
                 denom: this.token,
               },
             ],
