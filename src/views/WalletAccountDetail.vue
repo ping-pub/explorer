@@ -245,14 +245,19 @@
             <b-td> Public Key </b-td><b-td> <object-field-component :tablefield="account.value.public_key" /> </b-td>
           </b-tr>
         </b-tbody>
-        <b-tbody v-else-if="account.type === 'cosmos-sdk/PeriodicVestingAccount'">
+        <b-tbody
+          v-if="account.type === 'cosmos-sdk/PeriodicVestingAccount' && account.value.base_vesting_account"
+        >
           <b-tr>
             <b-td>
               Account Type
-            </b-td><b-td> {{ account.type }} </b-td>
+            </b-td>
+            <b-td>
+              {{ account.type }}
+            </b-td>
           </b-tr>
           <b-tr>
-            <b-td class="max-width:100px;">
+            <b-td>
               Account Number
             </b-td><b-td> {{ account.value.base_vesting_account.base_account.account_number }} </b-td>
           </b-tr>
@@ -289,7 +294,7 @@
             </b-td>
           </b-tr>
         </b-tbody>
-        <b-tbody v-else-if="account.type === 'cosmos-sdk/DelayedVestingAccount'">
+        <b-tbody v-else-if="account.type === 'cosmos-sdk/DelayedVestingAccount' && account.value.base_vesting_account">
           <b-tr>
             <b-td>
               Account Type
