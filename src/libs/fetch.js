@@ -260,7 +260,7 @@ const chainAPI = class ChainFetch {
   }
 
   async getStakingReward(address, config = null) {
-    if (compareVersions(config || this.config.sdk_version, '0.40') < 0) {
+    if (compareVersions(config ? config.sdk_version : this.config.sdk_version, '0.40') < 0) {
       return this.get(`/distribution/delegators/${address}/rewards`, config).then(data => commonProcess(data))
     }
     return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/rewards`).then(data => commonProcess(data))
@@ -271,7 +271,7 @@ const chainAPI = class ChainFetch {
   }
 
   async getStakingDelegations(address, config = null) {
-    if (compareVersions(config || this.config.sdk_version, '0.40') < 0) {
+    if (compareVersions(config ? config.sdk_version : this.config.sdk_version, '0.40') < 0) {
       return this.get(`/staking/delegators/${address}/delegations`, config).then(data => commonProcess(data).map(x => {
         const xh = x
         if (!xh.delegation) {
@@ -287,14 +287,14 @@ const chainAPI = class ChainFetch {
   }
 
   async getStakingRedelegations(address, config = null) {
-    if (compareVersions(config || this.config.sdk_version, '0.40') < 0) {
+    if (compareVersions(config ? config.sdk_version : this.config.sdk_version, '0.40') < 0) {
       return this.get(`/staking/redelegations?delegator=${address}`, config).then(data => commonProcess(data))
     }
     return this.get(`/cosmos/staking/v1beta1/delegators/${address}/redelegations`, config).then(data => commonProcess(data))
   }
 
   async getStakingUnbonding(address, config = null) {
-    if (compareVersions(config || this.config.sdk_version, '0.40') < 0) {
+    if (compareVersions(config ? config.sdk_version : this.config.sdk_version, '0.40') < 0) {
       return this.get(`/staking/delegators/${address}/unbonding_delegations`, config).then(data => commonProcess(data))
     }
     return this.get(`/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations`, config).then(data => commonProcess(data))

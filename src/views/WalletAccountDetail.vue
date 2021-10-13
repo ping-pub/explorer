@@ -245,9 +245,7 @@
             <b-td> Public Key </b-td><b-td> <object-field-component :tablefield="account.value.public_key" /> </b-td>
           </b-tr>
         </b-tbody>
-        <b-tbody
-          v-if="account.type === 'cosmos-sdk/PeriodicVestingAccount' && account.value.base_vesting_account"
-        >
+        <b-tbody v-else-if="account.type === 'cosmos-sdk/PeriodicVestingAccount' && account.value.base_vesting_account">
           <b-tr>
             <b-td>
               Account Type
@@ -326,7 +324,7 @@
         </b-tbody>
         <object-field-component
           v-else
-          :tablefield="account.value?account.value:account"
+          :tablefield="account.value || account"
         />
       </b-table-simple>
     </b-card>
@@ -521,6 +519,9 @@ export default {
             tmp1 += Number(e.balance)
           })
         })
+        const unbonding = this.formatCurrency(tmp1, stakingDenom)
+        sumCurrency += unbonding
+        sum += tmp1
         total.push({
           type: 'unbonding',
           color: 'danger',
@@ -528,7 +529,7 @@ export default {
           denom: stakingDenom,
           amount: tmp1,
           percent: 0,
-          currency: 0,
+          currency: unbonding,
         })
       }
       total = total.map(x => {
