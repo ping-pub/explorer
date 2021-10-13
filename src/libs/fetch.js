@@ -259,7 +259,10 @@ const chainAPI = class ChainFetch {
     return this.get('/bank/balances/'.concat(address)).then(data => commonProcess(data))
   }
 
-  async getStakingReward(address) {
+  async getStakingReward(address, config = null) {
+    if (compareVersions(config || this.config.sdk_version, '0.40') < 0) {
+      return this.get(`/distribution/delegators/${address}/rewards`, config).then(data => commonProcess(data))
+    }
     return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/rewards`).then(data => commonProcess(data))
   }
 
@@ -268,15 +271,33 @@ const chainAPI = class ChainFetch {
   }
 
   async getStakingDelegations(address, config = null) {
+    if (compareVersions(config || this.config.sdk_version, '0.40') < 0) {
+      return this.get(`/staking/delegators/${address}/delegations`, config).then(data => commonProcess(data).map(x => {
+        const xh = x
+        if (!xh.delegation) {
+          xh.delegation = {
+            validator_address: x.validator_address,
+            delegator_address: x.delegator_address,
+          }
+        }
+        return xh
+      }))
+    }
     return this.get(`/cosmos/staking/v1beta1/delegations/${address}`, config).then(data => commonProcess(data))
   }
 
   async getStakingRedelegations(address, config = null) {
+    if (compareVersions(config || this.config.sdk_version, '0.40') < 0) {
+      return this.get(`/staking/redelegations?delegator=${address}`, config).then(data => commonProcess(data))
+    }
     return this.get(`/cosmos/staking/v1beta1/delegators/${address}/redelegations`, config).then(data => commonProcess(data))
   }
 
-  async getStakingUnbonding(address) {
-    return this.get(`/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations`).then(data => commonProcess(data))
+  async getStakingUnbonding(address, config = null) {
+    if (compareVersions(config || this.config.sdk_version, '0.40') < 0) {
+      return this.get(`/staking/delegators/${address}/unbonding_delegations`, config).then(data => commonProcess(data))
+    }
+    return this.get(`/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations`, config).then(data => commonProcess(data))
   }
 
   async getBankBalances(address, config = null) {

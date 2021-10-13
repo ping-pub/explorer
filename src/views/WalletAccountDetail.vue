@@ -565,7 +565,7 @@ export default {
           const reward = this.reward.rewards.find(r => r.validator_address === e.delegation.validator_address)
           re.push({
             validator: getStakingValidatorOperator(this.$http.config.chain_name, e.delegation.validator_address, 8),
-            token: formatToken(e.balance),
+            token: formatToken(e.balance, {}, 2),
             reward: tokenFormatter(reward.reward),
             action: e.delegation.validator_address,
           })
@@ -612,13 +612,13 @@ export default {
       this.reward = res
     })
     this.$http.getStakingDelegations(this.address).then(res => {
-      this.delegations = res.delegation_responses
+      this.delegations = res.delegation_responses || res
     })
     this.$http.getStakingRedelegations(this.address).then(res => {
-      this.redelegations = res.redelegation_responses
+      this.redelegations = res.redelegation_responses || res
     })
     this.$http.getStakingUnbonding(this.address).then(res => {
-      this.unbonding = res.unbonding_responses
+      this.unbonding = res.unbonding_responses || res
     })
     this.$http.getTxsBySender(this.address).then(res => {
       this.transactions = res
@@ -641,7 +641,7 @@ export default {
     formatDenom(v) {
       return formatTokenDenom(this.denoms[v] ? this.denoms[v] : v)
     },
-    formatAmount(v, dec, denom) {
+    formatAmount(v, dec = 2, denom = 'uatom') {
       return formatTokenAmount(v, dec, denom)
     },
     formatToken(v) {

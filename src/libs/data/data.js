@@ -261,6 +261,8 @@ export function formatTokenDenom(tokenDenom) {
       denom = 'CRO'
     } else if (denom.startsWith('IBC')) {
       denom = 'IBC...'
+    } else if (denom.startsWith('NANOLIKE')) {
+      denom = 'LIKE'
     }
 
     return denom
@@ -298,9 +300,9 @@ export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
   return parseFloat(amount)
 }
 
-export function formatToken(token, IBCDenom = {}) {
+export function formatToken(token, IBCDenom = {}, decimals = 0) {
   if (token) {
-    return `${formatTokenAmount(token.amount, 0, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`
+    return `${formatTokenAmount(token.amount, decimals, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`
   }
   return token
 }

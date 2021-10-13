@@ -17,7 +17,6 @@
 <script>
 import { BTable, BCardTitle, BCard } from 'bootstrap-vue'
 import { formatNumber, formatTokenAmount, formatTokenDenom } from '@/libs/data'
-import chainAPI from '@/libs/fetch'
 
 export default {
   components: {
@@ -27,6 +26,7 @@ export default {
   },
   data() {
     return {
+      islive: true,
       assets: [],
       denoms: [],
       cfield: [
@@ -43,20 +43,31 @@ export default {
     }
   },
   created() {
+    const denoms = []
     this.$http.getBankTotals().then(res => {
       const toshow = res.sort()
       this.assets = toshow.reverse().map(x => {
         if (x.denom.startsWith('ibc/')) {
-          chainAPI.getIBCDenomTraceText(this.$http.config.api, x.denom).then(denom => {
-            this.$set(this.denoms, x.denom, denom)
-          })
+          denoms.push(x.denom)
         }
         const xh = x
         const amount = Number(x.amount) / 1000000
         xh.abbr = amount > 1 ? formatNumber(formatTokenAmount(x.amount, 0, x.denom), true, 2) : amount
         return xh
       })
+      // let promise = Promise.resolve()
+      // denoms.forEach(x => {
+      //   promise = promise.then(() => new Promise(resolve => {
+      //     chainAPI.getIBCDenomTraceText(this.$http.config.api, x).then(denom => {
+      //       if (this.islive) resolve()
+      //       this.$set(this.denoms, x, denom)
+      //     })
+      //   }))
+      // })
     })
+  },
+  beforeDestroy() {
+    this.islive = false
   },
   methods: {
     formatDenom(v) {
