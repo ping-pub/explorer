@@ -304,7 +304,7 @@ export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
   return parseFloat(amount)
 }
 
-export function formatToken(token, IBCDenom = {}, decimals = 0) {
+export function formatToken(token, IBCDenom = {}, decimals = 2) {
   if (token) {
     return `${formatTokenAmount(token.amount, decimals, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`
   }

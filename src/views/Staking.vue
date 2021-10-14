@@ -232,7 +232,7 @@ export default {
   methods: {
     percent,
     tokenFormatter(amount, denom) {
-      return formatToken({ amount, denom })
+      return formatToken({ amount, denom }, {}, 0)
     },
     rankBadge(data) {
       const { index, item } = data
