@@ -74,7 +74,6 @@
     <b-tabs
       v-for="item,index in accounts"
       :key="index"
-      pills
       active-nav-item-class="font-weight-bolder"
     >
       <b-tab>

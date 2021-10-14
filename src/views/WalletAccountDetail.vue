@@ -651,7 +651,7 @@ export default {
       return formatTokenAmount(v, dec, denom)
     },
     formatToken(v) {
-      return tokenFormatter(v)
+      return tokenFormatter(v, this.denoms)
     },
     formatCurrency(amount, denom) {
       const qty = this.formatAmount(amount, 2, denom)
