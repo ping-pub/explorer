@@ -255,7 +255,7 @@ export function isToken(value) {
 export function formatTokenDenom(tokenDenom) {
   if (tokenDenom) {
     let denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom.toUpperCase() : tokenDenom.toUpperCase()
-    if (denom.charAt(0) === 'U') {
+    if (denom.charAt(0) === 'U' && denom !== 'USDX') {
       denom = denom.substring(1)
     } else if (denom === 'BASECRO') {
       denom = 'CRO'
