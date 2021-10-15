@@ -333,10 +333,12 @@ router.beforeEach((to, from, next) => {
   // const has = Object.keys(config).findIndex(i => i === c)
   if (!config || Object.keys(config).findIndex(i => i === c) > -1) {
     next()
-  } if (c === 'index.php') {
-    next({ name: 'home' })
   } else if (c) {
-    next({ name: 'chain-404' })
+    if (c === 'index.php') {
+      next({ name: '/' })
+    } else {
+      next({ name: 'chain-404' })
+    }
   } else {
     next()
   }
