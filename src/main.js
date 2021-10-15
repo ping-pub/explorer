@@ -7,7 +7,6 @@ import VueI18n from 'vue-i18n'
 
 import ChainAPI from '@/libs/fetch'
 
-import VueGtag from 'vue-gtag'
 import router from './router'
 import store from './store'
 import App from './App.vue'
@@ -20,7 +19,7 @@ import '@/libs/portal-vue'
 import '@/libs/toastification'
 import '@/libs/clipboard'
 
-Vue.use(VueGtag, { config: { id: 'UA-238887-1' } }, router)
+// Vue.use(VueGtag, { config: { id: 'UA-238887-1' } }, router)
 
 Vue.use(VueI18n)
 
