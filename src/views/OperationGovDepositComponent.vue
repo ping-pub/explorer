@@ -421,8 +421,6 @@ export default {
           ],
         },
       }]
-      console.log(txMsgs)
-      if (this.token) return ''
 
       if (txMsgs.length === 0) {
         this.error = 'No delegation found'
@@ -459,8 +457,8 @@ export default {
         signerData,
       ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
-          setLocalTxHistory({ op: 'vote', hash: res.tx_response.txhash, time: new Date() })
-          this.$bvModal.hide('vote-window')
+          setLocalTxHistory({ op: 'deposit', hash: res.tx_response.txhash, time: new Date() })
+          this.$bvModal.hide('deposit-window')
           this.$toast({
             component: ToastificationContent,
             props: {

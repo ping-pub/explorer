@@ -354,7 +354,6 @@ export default {
     loadBalance() {
       this.account = this.computeAccount()
       if (this.account && this.account.length > 0) this.address = this.account[0].addr
-      console.log(this.account, this.address)
       if (this.address) {
         this.$http.getBankBalances(this.address, this.selectedChain).then(res => {
           if (res && res.length > 0) {
