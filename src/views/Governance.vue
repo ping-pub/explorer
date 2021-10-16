@@ -156,8 +156,17 @@
               </b-button>
             </router-link>
             <b-button
+              v-if="p.status===1"
+              v-b-modal.deposit-window
+              variant="primary"
+              class="btn float-right mg-2"
+              @click="selectProposal(p.id, p.title)"
+            >
+              {{ $t('btn_deposit') }}
+            </b-button>
+            <b-button
+              v-if="p.status===2"
               v-b-modal.vote-window
-              :disabled="p.status!=2"
               variant="primary"
               class="btn float-right mg-2"
               @click="selectProposal(p.id, p.title)"
@@ -172,6 +181,10 @@
       :proposal-id="selectedProposalId"
       :title="selectedTitle"
     />
+    <operation-gov-deposit-component
+      :proposal-id="selectedProposalId"
+      :title="selectedTitle"
+    />
   </div>
 </template>
 
@@ -182,6 +195,7 @@ import {
 import Ripple from 'vue-ripple-directive'
 import { Proposal } from '@/libs/data'
 import OperationVoteComponent from './OperationVoteComponent.vue'
+import OperationGovDepositComponent from './OperationGovDepositComponent.vue'
 
 export default {
   components: {
@@ -197,6 +211,7 @@ export default {
     BRow,
     BCol,
     OperationVoteComponent,
+    OperationGovDepositComponent,
   },
   directives: {
     'b-modal': VBModal,

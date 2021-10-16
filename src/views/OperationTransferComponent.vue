@@ -16,22 +16,23 @@
       <validation-observer ref="simpleRules">
         <b-form>
           <b-row>
-            <b-col v-if="account">
+            <b-col>
               <b-form-group
                 label="Sender"
-                label-for="Account"
+                label-for="sender"
               >
                 <b-input-group class="mb-25">
                   <b-input-group-prepend is-text>
                     <b-avatar
-                      :src="account.logo"
+                      :src="account?account.logo:''"
                       size="18"
                       variant="light-primary"
                       rounded
                     />
                   </b-input-group-prepend>
                   <b-form-input
-                    :value="account.addr"
+                    name="sender"
+                    :value="account?account.addr:address"
                     readonly
                   />
                 </b-input-group>
@@ -338,12 +339,14 @@ export default {
     computeAccount() {
       const accounts = getLocalAccounts()
       const chains = getLocalChains()
-      const values = Object.values(accounts)
-      for (let i = 0; i < values.length; i += 1) {
-        const addr = values[i].address.find(x => x.addr === this.address)
-        if (addr) {
-          this.selectedChain = chains[addr.chain]
-          return addr
+      if (accounts) {
+        const values = Object.values(accounts)
+        for (let i = 0; i < values.length; i += 1) {
+          const addr = values[i].address.find(x => x.addr === this.address)
+          if (addr) {
+            this.selectedChain = chains[addr.chain]
+            return addr
+          }
         }
       }
       return null
@@ -351,6 +354,7 @@ export default {
     loadBalance() {
       this.account = this.computeAccount()
       if (this.account && this.account.length > 0) this.address = this.account[0].addr
+      console.log(this.account, this.address)
       if (this.address) {
         this.$http.getBankBalances(this.address, this.selectedChain).then(res => {
           if (res && res.length > 0) {

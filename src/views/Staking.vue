@@ -93,15 +93,27 @@
               class="text-danger"
             >{{ data.item.changes }}</small>
           </template>
+          <template #cell(operation)="data">
+            <b-button
+              v-b-modal.delegate-window
+              :name="data.item.operator_address"
+              variant="primary"
+              size="sm"
+              @click="selectValidator(data.item.operator_address)"
+            >
+              Delegate
+            </b-button>
+          </template>
         </b-table>
       </b-card-body>
     </b-card>
+    <operation-delegate-component :validator-address="validator_address" />
   </div>
 </template>
 
 <script>
 import {
-  BTable, BMedia, BAvatar, BBadge, BCard, BCardHeader, BCardTitle, VBTooltip, BCardBody,
+  BTable, BMedia, BAvatar, BBadge, BCard, BCardHeader, BCardTitle, VBTooltip, BCardBody, BButton,
 } from 'bootstrap-vue'
 import {
   Validator, percent, StakingParameters, formatToken,
@@ -109,6 +121,7 @@ import {
 import { keybase } from '@/libs/fetch'
 // import { toHex } from '@cosmjs/encoding'
 // import fetch from 'node-fetch'
+import OperationDelegateComponent from './OperationDelegateComponent.vue'
 
 export default {
   components: {
@@ -120,6 +133,8 @@ export default {
     BCardHeader,
     BCardTitle,
     BCardBody,
+    BButton,
+    OperationDelegateComponent,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -127,6 +142,7 @@ export default {
   data() {
     return {
       islive: true,
+      validator_address: null,
       mintInflation: 0,
       stakingPool: 1,
       stakingParameters: new StakingParameters(),
@@ -156,8 +172,13 @@ export default {
         {
           key: 'commission',
           formatter: value => `${percent(value.rate)}%`,
-          tdClass: 'text-right d-none d-md-block',
-          thClass: 'text-right d-none d-md-block',
+          tdClass: 'text-right',
+          thClass: 'text-right',
+        },
+        {
+          key: 'operation',
+          tdClass: 'text-right',
+          thClass: 'text-right',
         },
       ],
     }
@@ -230,6 +251,9 @@ export default {
     this.islive = false
   },
   methods: {
+    selectValidator(da) {
+      this.validator_address = da
+    },
     percent,
     tokenFormatter(amount, denom) {
       return formatToken({ amount, denom }, {}, 0)

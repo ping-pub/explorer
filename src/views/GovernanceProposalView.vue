@@ -110,10 +110,6 @@
         </b-button>
       </b-card-footer>
     </b-card>
-    <operation-vote-component
-      :proposal-id="Number(proposal.id)"
-      :title="proposal.title"
-    />
     <b-card no-body>
       <b-card-header>
         <b-card-title>
@@ -228,14 +224,31 @@
           </b-button>
         </router-link>
         <b-button
-          :disabled="proposal.status!=2"
+          v-b-modal.deposit-window
+          :disabled="proposal.status!=1"
           variant="primary"
           class="btn float-right mg-2"
+        >
+          {{ $t('btn_deposit') }}
+        </b-button>
+        <b-button
+          v-b-modal.vote-window
+          :disabled="proposal.status!=2"
+          variant="primary"
+          class="btn float-right mg-2 mr-1"
         >
           {{ $t('btn_vote') }}
         </b-button>
       </b-card-footer>
     </b-card>
+    <operation-vote-component
+      :proposal-id="Number(proposal.id)"
+      :title="proposal.title"
+    />
+    <operation-gov-deposit-component
+      :proposal-id="Number(proposal.id)"
+      :title="proposal.title"
+    />
   </section>
 </template>
 
@@ -250,6 +263,7 @@ import { getCachedValidators, getStakingValidatorByAccount, tokenFormatter } fro
 import { Proposal, Proposer } from '@/libs/data'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
 import OperationVoteComponent from './OperationVoteComponent.vue'
+import OperationGovDepositComponent from './OperationGovDepositComponent.vue'
 // import { formatToken } from '@/libs/data/data'
 
 export default {
@@ -270,6 +284,7 @@ export default {
     BBadge,
     ObjectFieldComponent,
     OperationVoteComponent,
+    OperationGovDepositComponent,
   },
   data() {
     return {

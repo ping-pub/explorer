@@ -12,11 +12,21 @@
       @hidden="resetModal"
       @ok="handleOk"
       @show="loadBalance"
+    ><b-overlay
+      :show="channels.length === 0"
+      rounded="sm"
     >
+      <template #overlay>
+        <div class="text-center">
+          <p>
+            IBC Module is not enabled.
+          </p>
+        </div>
+      </template>
       <validation-observer ref="simpleRules">
         <b-form>
           <b-row>
-            <b-col v-if="account">
+            <b-col>
               <b-form-group
                 label="Sender"
                 label-for="Account"
@@ -24,14 +34,14 @@
                 <b-input-group class="mb-25">
                   <b-input-group-prepend is-text>
                     <b-avatar
-                      :src="account.logo"
+                      :src="account?account.logo:''"
                       size="18"
                       variant="light-primary"
                       rounded
                     />
                   </b-input-group-prepend>
                   <b-form-input
-                    :value="account.addr"
+                    :value="account?account.addr:address"
                     readonly
                   />
                 </b-input-group>
@@ -272,7 +282,7 @@
         </b-form>
       </validation-observer>
       {{ error }}
-    </b-modal>
+    </b-overlay></b-modal>
   </div>
 </template>
 
@@ -280,7 +290,7 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
   BModal, BRow, BCol, BInputGroup, BInputGroupAppend, BFormInput, BAvatar, BFormGroup, BFormSelect, BFormSelectOption,
-  BForm, BFormRadioGroup, BFormRadio, BInputGroupPrepend, BFormCheckbox,
+  BForm, BFormRadioGroup, BFormRadio, BInputGroupPrepend, BFormCheckbox, BOverlay,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
@@ -312,6 +322,7 @@ export default {
     BFormRadio,
     BFormCheckbox,
     vSelect,
+    BOverlay,
 
     ValidationProvider,
     ValidationObserver,
@@ -388,12 +399,14 @@ export default {
     computeAccount() {
       const accounts = getLocalAccounts()
       const chains = getLocalChains()
-      const values = Object.values(accounts)
-      for (let i = 0; i < values.length; i += 1) {
-        const addr = values[i].address.find(x => x.addr === this.address)
-        if (addr) {
-          this.selectedChain = chains[addr.chain]
-          return addr
+      if (accounts) {
+        const values = Object.values(accounts)
+        for (let i = 0; i < values.length; i += 1) {
+          const addr = values[i].address.find(x => x.addr === this.address)
+          if (addr) {
+            this.selectedChain = chains[addr.chain]
+            return addr
+          }
         }
       }
       return null

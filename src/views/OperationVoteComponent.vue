@@ -12,7 +12,23 @@
       @hidden="resetModal"
       @ok="handleOk"
       @show="loadBalance"
+    ><b-overlay
+      :show="!voter"
+      rounded="sm"
     >
+      <template #overlay>
+        <div class="text-center">
+          <p id="cancel-label">
+            No available account found.
+          </p>
+          <b-button
+            variant="outline-primary"
+            to="/wallet/import"
+          >
+            Connect Wallet
+          </b-button>
+        </div>
+      </template>
       <validation-observer ref="simpleRules">
         <b-form>
           <b-row>
@@ -212,7 +228,7 @@
         </b-form>
       </validation-observer>
       {{ error }}
-    </b-modal>
+    </b-overlay></b-modal>
   </div>
 </template>
 
@@ -220,7 +236,7 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
   BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormCheckbox,
-  BForm, BFormRadioGroup, BFormRadio, BInputGroupAppend,
+  BForm, BFormRadioGroup, BFormRadio, BInputGroupAppend, BOverlay, BButton,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
@@ -246,6 +262,8 @@ export default {
     BFormRadio,
     BFormCheckbox,
     BInputGroupAppend,
+    BOverlay,
+    BButton,
 
     ValidationProvider,
     ValidationObserver,
@@ -300,13 +318,15 @@ export default {
   },
   methods: {
     computeAccount() {
-      const accounts = getLocalAccounts()
-      const values = Object.values(accounts)
       let array = []
-      for (let i = 0; i < values.length; i += 1) {
-        const addrs = values[i].address.filter(x => x.chain === this.$route.params.chain)
-        if (addrs && addrs.length > 0) {
-          array = array.concat(addrs.map(x => ({ value: x.addr, label: values[i].name.concat(' - ', abbrAddress(x.addr)) })))
+      const accounts = getLocalAccounts()
+      if (accounts) {
+        const values = Object.values(accounts)
+        for (let i = 0; i < values.length; i += 1) {
+          const addrs = values[i].address.filter(x => x.chain === this.$route.params.chain)
+          if (addrs && addrs.length > 0) {
+            array = array.concat(addrs.map(x => ({ value: x.addr, label: values[i].name.concat(' - ', abbrAddress(x.addr)) })))
+          }
         }
       }
       return array

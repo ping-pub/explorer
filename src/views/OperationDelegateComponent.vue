@@ -13,242 +13,264 @@
       @ok="handleOk"
       @show="loadBalance"
     >
-      <validation-observer ref="simpleRules">
-        <b-form v-if="selectedAddress">
-          <b-row>
-            <b-col>
-              <validation-provider
-                #default="{ errors }"
-                rules="required"
-                name="Validator"
-              >
-                <b-form-group
-                  label="Validator"
-                  label-for="validator"
-                >
-                  <v-select
-                    v-model="selectedValidator"
-                    :options="valOptions"
-                    :reduce="val => val.value"
-                    placeholder="Select a validator"
-                    :readonly="validatorAddress"
-                  />
-                </b-form-group>
-                <small class="text-danger">{{ errors[0] }}</small>
-              </validation-provider>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <b-form-group
-                label="Delegator"
-                label-for="Account"
-              >
+      <b-overlay
+        :show="!selectedAddress"
+        rounded="sm"
+      >
+        <template #overlay>
+          <div class="text-center">
+            <b-icon
+              icon="stopwatch"
+              font-scale="3"
+              animation="cylon"
+            />
+            <p id="cancel-label">
+              No available account found.
+            </p>
+            <b-button
+              v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+              variant="outline-primary"
+              to="/wallet/import"
+            >
+              Connect Wallet
+            </b-button>
+          </div>
+        </template>
+        <validation-observer ref="simpleRules">
+          <b-form>
+            <b-row>
+              <b-col>
                 <validation-provider
                   #default="{ errors }"
                   rules="required"
-                  name="Delegator"
+                  name="Validator"
                 >
-                  <b-form-select
-                    v-model="selectedAddress"
-                    :options="account"
-                    text-field="label"
-                    @change="onChange"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <b-form-group
-                label="Available Token"
-                label-for="Token"
-              >
-                <validation-provider
-                  #default="{ errors }"
-                  rules="required"
-                  name="Token"
-                >
-                  <b-form-select
-                    v-model="token"
-                    text-field="label"
+                  <b-form-group
+                    label="Validator"
+                    label-for="validator"
                   >
-                    <b-form-select-option
-                      v-for="x in balance"
-                      :key="x.denom"
-                      :value="x.denom"
-                    >
-                      {{ format(x) }}
-                    </b-form-select-option>
-                  </b-form-select>
+                    <v-select
+                      v-model="selectedValidator"
+                      :options="valOptions"
+                      :reduce="val => val.value"
+                      placeholder="Select a validator"
+                      :readonly="validatorAddress"
+                    />
+                  </b-form-group>
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
-              </b-form-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <b-form-group
-                label="Amount"
-                label-for="Amount"
-              >
-                <validation-provider
-                  v-slot="{ errors }"
-                  rules="required|regex:^([0-9\.]+)$"
-                  name="amount"
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <b-form-group
+                  label="Delegator"
+                  label-for="Delegator"
                 >
-                  <b-input-group>
+                  <validation-provider
+                    #default="{ errors }"
+                    rules="required"
+                    name="Delegator"
+                  >
+                    <b-form-select
+                      v-if="account.length > 0"
+                      v-model="selectedAddress"
+                      :options="account"
+                      text-field="label"
+                      @change="onChange"
+                    />
                     <b-form-input
-                      id="Amount"
-                      v-model="amount"
-                      :state="errors.length > 0 ? false:null"
-                      placeholder="Input a number"
+                      v-else
+                      v-model="selectedAddress"
+                      readonly
+                    />
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <b-form-group
+                  label="Available Token"
+                  label-for="Token"
+                >
+                  <validation-provider
+                    #default="{ errors }"
+                    rules="required"
+                    name="Token"
+                  >
+                    <b-form-select
+                      v-model="token"
+                      text-field="label"
+                    >
+                      <b-form-select-option
+                        v-for="x in balance"
+                        :key="x.denom"
+                        :value="x.denom"
+                      >
+                        {{ format(x) }}
+                      </b-form-select-option>
+                    </b-form-select>
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <b-form-group
+                  label="Amount"
+                  label-for="Amount"
+                >
+                  <validation-provider
+                    v-slot="{ errors }"
+                    rules="required|regex:^([0-9\.]+)$"
+                    name="amount"
+                  >
+                    <b-input-group>
+                      <b-form-input
+                        id="Amount"
+                        v-model="amount"
+                        :state="errors.length > 0 ? false:null"
+                        placeholder="Input a number"
+                        type="number"
+                      />
+                      <b-input-group-append is-text>
+                        {{ printDenom() }}
+                      </b-input-group-append>
+                    </b-input-group>
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <b-form-group
+                  label="Fee"
+                  label-for="Fee"
+                >
+                  <validation-provider
+                    v-slot="{ errors }"
+                    rules="required|integer"
+                    name="fee"
+                  >
+                    <b-input-group>
+                      <b-form-input v-model="fee" />
+                      <b-input-group-append>
+                        <b-form-select
+                          v-model="feeDenom"
+                          :options="feeDenoms"
+                          value-field="denom"
+                          text-field="denom"
+                        />
+                      </b-input-group-append>
+                    </b-input-group>
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                </b-form-group>
+              </b-col>
+              <b-col cols="12">
+                <b-form-group>
+                  <b-form-checkbox
+                    v-model="advance"
+                    name="advance"
+                    value="true"
+                  >
+                    <small>Advance</small>
+                  </b-form-checkbox>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row v-if="advance">
+              <b-col cols="12">
+                <b-form-group
+                  label="Gas"
+                  label-for="gas"
+                >
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="gas"
+                  >
+                    <b-form-input
+                      id="gas"
+                      v-model="gas"
                       type="number"
                     />
-                    <b-input-group-append is-text>
-                      {{ printDenom() }}
-                    </b-input-group-append>
-                  </b-input-group>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <b-form-group
-                label="Fee"
-                label-for="Fee"
-              >
-                <validation-provider
-                  v-slot="{ errors }"
-                  rules="required|integer"
-                  name="fee"
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                </b-form-group>
+              </b-col>
+              <b-col cols="12">
+                <b-form-group
+                  label="Memo"
+                  label-for="Memo"
                 >
-                  <b-input-group>
-                    <b-form-input v-model="fee" />
-                    <b-input-group-append>
-                      <b-form-select
-                        v-model="feeDenom"
-                        :options="feeDenoms"
-                        value-field="denom"
-                        text-field="denom"
-                      />
-                    </b-input-group-append>
-                  </b-input-group>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-            <b-col cols="12">
-              <b-form-group>
-                <b-form-checkbox
-                  v-model="advance"
-                  name="advance"
-                  value="true"
-                >
-                  <small>Advance</small>
-                </b-form-checkbox>
-              </b-form-group>
-            </b-col>
-          </b-row>
-          <b-row v-if="advance">
-            <b-col cols="12">
-              <b-form-group
-                label="Gas"
-                label-for="gas"
-              >
-                <validation-provider
-                  v-slot="{ errors }"
-                  name="gas"
-                >
-                  <b-form-input
-                    id="gas"
-                    v-model="gas"
-                    type="number"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-            <b-col cols="12">
-              <b-form-group
-                label="Memo"
-                label-for="Memo"
-              >
-                <validation-provider
-                  v-slot="{ errors }"
-                  name="memo"
-                >
-                  <b-form-input
-                    id="Memo"
-                    v-model="memo"
-                    max="2"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-          </b-row>
-
-          <b-row>
-            <b-col>
-              <b-form-group
-                label="Wallet"
-                label-for="wallet"
-              >
-                <validation-provider
-                  v-slot="{ errors }"
-                  rules="required"
-                  name="wallet"
-                >
-                  <b-form-radio-group
-                    v-model="wallet"
-                    stacked
-                    class="demo-inline-spacing"
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="memo"
                   >
-                    <b-form-radio
+                    <b-form-input
+                      id="Memo"
+                      v-model="memo"
+                      max="2"
+                    />
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                </b-form-group>
+              </b-col>
+            </b-row>
+
+            <b-row>
+              <b-col>
+                <b-form-group
+                  label="Wallet"
+                  label-for="wallet"
+                >
+                  <validation-provider
+                    v-slot="{ errors }"
+                    rules="required"
+                    name="wallet"
+                  >
+                    <b-form-radio-group
                       v-model="wallet"
-                      name="wallet"
-                      value="keplr"
-                      class="d-none d-md-block"
+                      stacked
+                      class="demo-inline-spacing"
                     >
-                      Keplr
-                    </b-form-radio>
-                    <b-form-radio
-                      v-model="wallet"
-                      name="wallet"
-                      value="ledgerUSB"
-                    >
-                      <small>Ledger(USB)</small>
-                    </b-form-radio>
-                    <b-form-radio
-                      v-model="wallet"
-                      name="wallet"
-                      value="ledgerBle"
-                      class="mr-0"
-                    >
-                      <small>Ledger(Bluetooth)</small>
-                    </b-form-radio>
-                  </b-form-radio-group>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-          </b-row>
-        </b-form>
-        <b-button
-          v-else
-          to="/wallet/import"
-          variant="primary"
-        >
-          Connect Wallet
-        </b-button>
-      </validation-observer>
-      {{ error }}
-    </b-modal>
+                      <b-form-radio
+                        v-model="wallet"
+                        name="wallet"
+                        value="keplr"
+                        class="d-none d-md-block"
+                      >
+                        Keplr
+                      </b-form-radio>
+                      <b-form-radio
+                        v-model="wallet"
+                        name="wallet"
+                        value="ledgerUSB"
+                      >
+                        <small>Ledger(USB)</small>
+                      </b-form-radio>
+                      <b-form-radio
+                        v-model="wallet"
+                        name="wallet"
+                        value="ledgerBle"
+                        class="mr-0"
+                      >
+                        <small>Ledger(Bluetooth)</small>
+                      </b-form-radio>
+                    </b-form-radio-group>
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </b-form>
+        </validation-observer>
+        {{ error }}
+      </b-overlay></b-modal>
   </div>
 </template>
 
@@ -256,7 +278,7 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
   BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
-  BForm, BFormRadioGroup, BFormRadio, BButton, BInputGroupAppend, BFormCheckbox,
+  BForm, BFormRadioGroup, BFormRadio, BButton, BInputGroupAppend, BFormCheckbox, BOverlay,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
@@ -285,6 +307,7 @@ export default {
     vSelect,
     BButton,
     BInputGroupAppend,
+    BOverlay,
 
     ValidationProvider,
     ValidationObserver,
@@ -396,7 +419,7 @@ export default {
     },
     computeAccount() {
       const accounts = getLocalAccounts()
-      const values = Object.values(accounts)
+      const values = accounts ? Object.values(accounts) : []
       let array = []
       for (let i = 0; i < values.length; i += 1) {
         const addrs = values[i].address.filter(x => x.chain === this.$route.params.chain)
