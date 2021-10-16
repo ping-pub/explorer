@@ -43,7 +43,7 @@
     "node-fetch": "^2.6.1",
     "portal-vue": "2.1.7",
     "postcss-rtl": "1.7.3",
-    "prismjs": "1.24.0",
+    "prismjs": "1.25.0",
     "swiper": "6.5.1",
     "uuid": "8.3.2",
     "vee-validate": "3.4.5",
