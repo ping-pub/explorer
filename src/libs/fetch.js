@@ -8,6 +8,7 @@ import {
   Proposal, ProposalTally, Proposer, StakingPool, Votes, Deposit,
   Validator, StakingParameters, Block, ValidatorDistribution, StakingDelegation, WrapStdTx, getUserCurrency,
 } from './data'
+import OsmosAPI from './osmos'
 
 function commonProcess(res) {
   if (res && Object.keys(res).includes('result')) {
@@ -22,7 +23,11 @@ export function keybase(identity) {
     .then(res => res.json())
 }
 
-const chainAPI = class ChainFetch {
+export default class ChainFetch {
+  constructor() {
+    this.osmosis = new OsmosAPI()
+  }
+
   getSelectedConfig() {
     let chain = store.state.chains.selected
     const lschains = localStorage.getItem('chains')
@@ -393,15 +398,6 @@ const chainAPI = class ChainFetch {
     // const response = axios.post((config ? config.api : this.config.api) + url, data)
     return response.json() // parses JSON response into native JavaScript objects
   }
-
-  // Custom Module
-  async getOsmosisPools() {
-    return this.get('/osmosis/gamm/v1beta1/pools')
-  }
-
-  async getOsmosisIncentivesPools() {
-    return this.get('/osmosis/pool-incentives/v1beta1/incentivized_pools')
-  }
 }
 
-export default chainAPI
+// export default chainAPI

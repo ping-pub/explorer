@@ -28,12 +28,12 @@ const modules = [
     route: 'uptime',
   },
   {
-    scope: 'cosmos',
+    scope: 'cos-mos',
     title: 'gravity',
     route: 'gravity',
   },
   {
-    scope: 'osmosis',
+    scope: 'osm-osis',
     title: 'pools',
     route: 'osmosis-pool',
   },

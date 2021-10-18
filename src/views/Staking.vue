@@ -177,6 +177,7 @@ export default {
         },
         {
           key: 'operation',
+          label: '',
           tdClass: 'text-right',
           thClass: 'text-right',
         },

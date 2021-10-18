@@ -16,19 +16,19 @@
             <b-row>
               <b-col cols="8">
                 <b-card-title class="mb-1 text-uppercase">
-                  #{{ data.id }} {{ formatDenom(data.reserve_coin_denoms[0]) }} - {{ formatDenom(data.reserve_coin_denoms[1]) }}<small class="font-small-2"> xx</small>
+                  #{{ data.id }} {{ formatDenom(data.poolAssets[0].token.denom) }} - {{ formatDenom(data.poolAssets[1].token.denom) }}<small class="font-small-2"> xx</small>
                 </b-card-title>
                 <div class="font-small-2">
                   Height
                 </div>
                 <h5 class="mb-1">
-                  {{ data.height || '0' }}
+                  {{ data.address || '0' }}
                 </h5>
-                <b-card-text class="text-muted font-small-2">
+                <!-- <b-card-text class="text-muted font-small-2">
                   <span class="font-weight-bolder">{{ data.pool_coin_denom || '...' }}</span>
-                </b-card-text>
+                </b-card-text> -->
               </b-col>
-              <b-col
+              <!-- <b-col
                 cols="4"
               >
                 <b-avatar
@@ -39,7 +39,7 @@
                   size="82"
                   badge
                   :badge-variant="data.variant"
-                /></b-col>
+                /></b-col> -->
             </b-row>
           </b-card>
         </router-link>
@@ -73,9 +73,12 @@ export default {
   },
   created() {
     // const api = new OsmosAPI()
-    // this.$http.getOsmosisIncentivesPools().then(res => {
-    //   // console.log(res)
-    // })
+    this.$http.osmosis.getIncentivesPools().then(res => {
+      console.log(res)
+    })
+    this.$http.osmosis.getPools().then(res => {
+      this.pools = res
+    })
     // this.$http.getGravityPools().then(res => {
     //   this.pools = res
     //   res.pools.forEach(x => {
@@ -101,8 +104,8 @@ export default {
   methods: {
     formatDenom(v) {
       // console.log(v, this.ibcDenom[v])
-      const denom = (v.startsWith('ibc') ? this.ibcDenom[v].denom_trace.base_denom : v)
-      return formatTokenDenom(denom)
+      // const denom = (v.startsWith('ibc') ? this.ibcDenom[v].denom_trace.base_denom : v)
+      return formatTokenDenom(v)
     },
     length: v => (Array.isArray(v) ? v.length : 0),
   },
