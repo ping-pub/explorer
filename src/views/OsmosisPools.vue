@@ -73,9 +73,8 @@ export default {
   },
   created() {
     // const api = new OsmosAPI()
-    this.$http.osmosis.getIncentivesPools().then(res => {
-      console.log(res)
-    })
+    // this.$http.osmosis.getIncentivesPools().then(res => {
+    // })
     this.$http.osmosis.getPools().then(res => {
       this.pools = res
     })
