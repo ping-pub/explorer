@@ -1,0 +1,7 @@
+{
+    "chain_name": "stargaze",
+    "api": "https://rest.stargaze.publicawesome.dev",
+    "sdk_version": "0.44.3",
+    "addr_prefix": "stars",
+    "logo": "https://dl.airtable.com/.attachments/79f2b74422c63b3fdb0310407d9cc990/5f4f1dd8/RGw3ZaVT_400x400.png"
+}
