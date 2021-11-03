@@ -163,7 +163,7 @@ const router = new VueRouter({
       name: 'staking-valiator',
       component: () => import('@/views/StakingValidator.vue'),
       meta: {
-        pageTitle: 'Staking Valdiator',
+        pageTitle: 'Staking Validator',
         breadcrumb: [
           {
             text: 'Staking',
