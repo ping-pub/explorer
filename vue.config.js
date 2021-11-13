@@ -48,7 +48,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'https://lcd-cosmos.cosmostation.io/',
+        target: 'https://cosmos.api.ping.pub/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '',

@@ -1,6 +1,9 @@
 <template>
-  <div class="container-md px-0">
+  <div class="px-0">
     <b-card>
+      <b-card-title class="text-uppercase">
+        {{ chain }}
+      </b-card-title>
       <b-alert
         variant="danger"
         :show="syncing"
@@ -9,27 +12,11 @@
           <span>No new block is produced since  <strong>{{ latestTime }}</strong> </span>
         </div>
       </b-alert>
-      <b-card
-        no-body
-        class="mb-1"
-      >
-        <b-button
-          :href="`./uptime/my`"
-          variant="primary"
-        >
-          Browse favourate only
-        </b-button>
-        <b-form-input
-          v-model="query"
-          placeholder="Keywords to filter validators"
-        />
-      </b-card>
       <b-row>
         <b-col
           v-for="(x,index) in uptime"
           :key="index"
           sm="12"
-          md="4"
           class="text-truncate"
         >
           <b-form-checkbox
@@ -37,7 +24,8 @@
             :value="`${chain}#${x.address}`"
             class="custom-control-warning"
             @change="pinValidator(`${chain}#${x.address}`)"
-          ><span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
+          >
+            <span class="d-inline-block text-truncate font-weight-bold align-bottom"> {{ x.validator.moniker }}</span>
           </b-form-checkbox>
           <div class="d-flex justify-content-between align-self-stretch flex-wrap">
             <div
@@ -62,34 +50,42 @@
 
 <script>
 import {
-  BRow, BCol, VBTooltip, BFormInput, BCard, BAlert, BFormCheckbox, BButton,
+  BRow, BCol, VBTooltip, BCard, BAlert, BCardTitle, BFormCheckbox,
 } from 'bootstrap-vue'
 
 import {
-  consensusPubkeyToHexAddress, getCachedValidators, timeIn, toDay,
+  getLocalChains, timeIn, toDay,
 } from '@/libs/data'
 
 export default {
+  name: 'Blocks',
   components: {
     BRow,
     BCol,
-    BFormInput,
     BCard,
     BAlert,
-    BButton,
+    BCardTitle,
     BFormCheckbox,
   },
   directives: {
     'b-tooltip': VBTooltip,
   },
+  props: {
+    chain: {
+      type: String,
+      default: null,
+    },
+    validators: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
-    const { chain } = this.$route.params
+    const chains = getLocalChains()
     const pinned = localStorage.getItem('pinned') ? localStorage.getItem('pinned').split(',') : ''
     return {
       pinned,
-      chain,
-      query: '',
-      validators: [],
+      config: chains[this.chain],
       missing: {},
       blocks: Array.from('0'.repeat(50)).map(x => ({ sigs: {}, height: Number(x) })),
       syncing: false,
@@ -98,24 +94,11 @@ export default {
   },
   computed: {
     uptime() {
-      const vals = this.query ? this.validators.filter(x => String(x.description.moniker).indexOf(this.query) > -1) : this.validators
-      vals.sort((a, b) => b.delegator_shares - a.delegator_shares)
-      return vals.map(x => ({
-        validator: x.description,
-        address: consensusPubkeyToHexAddress(x.consensus_pubkey),
-      }))
+      const vals = this.validators
+      return vals
     },
   },
   created() {
-    const cached = JSON.parse(getCachedValidators(this.$route.params.chain))
-
-    if (cached) {
-      this.validators = cached
-    } else {
-      this.$http.getValidatorList().then(res => {
-        this.validators = res
-      })
-    }
     this.initBlocks()
   },
   beforeDestroy() {
@@ -128,7 +111,7 @@ export default {
       localStorage.setItem('pinned', this.pinned)
     },
     initBlocks() {
-      this.$http.getLatestBlock().then(d => {
+      this.$http.getLatestBlock(this.config).then(d => {
         const { height } = d.block.last_commit
         if (timeIn(d.block.header.time, 3, 'm')) {
           this.syncing = true
@@ -161,14 +144,14 @@ export default {
     initColor() {
       const sigs = {}
       this.validators.forEach(x => {
-        sigs[consensusPubkeyToHexAddress(x.consensus_pubkey)] = 'bg-danger'
+        sigs[x.address] = 'bg-danger'
       })
       return sigs
     },
     fetch_status(height, resolve) {
       const block = this.blocks.find(b => b.height === height)
       if (block) {
-        this.$http.getBlockByHeight(height).then(res => {
+        this.$http.getBlockByHeight(height, this.config).then(res => {
           resolve()
           const sigs = this.initColor()
           res.block.last_commit.signatures.forEach(x => {
@@ -179,7 +162,7 @@ export default {
       }
     },
     fetch_latest() {
-      this.$http.getLatestBlock().then(res => {
+      this.$http.getLatestBlock(this.config).then(res => {
         const sigs = this.initColor()
         res.block.last_commit.signatures.forEach(x => {
           if (x.validator_address) sigs[x.validator_address] = 'bg-success'

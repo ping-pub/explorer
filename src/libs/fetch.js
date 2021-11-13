@@ -52,8 +52,8 @@ export default class ChainFetch {
     return this.get('/blocks/latest', config).then(data => Block.create(data))
   }
 
-  async getBlockByHeight(height) {
-    return this.get(`/blocks/${height}`).then(data => Block.create(data))
+  async getBlockByHeight(height, config = null) {
+    return this.get(`/blocks/${height}`, config).then(data => Block.create(data))
   }
 
   async getSlashingSigningInfo() {
