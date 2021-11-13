@@ -1,8 +1,8 @@
 <template>
   <div class="px-0">
     <b-card>
-      <b-card-title class="text-uppercase">
-        {{ chain }}
+      <b-card-title class="d-flex justify-content-between">
+        <span class="text-uppercase"> {{ chain }} </span><small class="text-right"> Height: {{ height }} </small>
       </b-card-title>
       <b-alert
         variant="danger"
@@ -25,7 +25,7 @@
             class="custom-control-warning"
             @change="pinValidator(`${chain}#${x.address}`)"
           >
-            <span class="d-inline-block text-truncate font-weight-bold align-bottom"> {{ x.validator.moniker }}</span>
+            <span class="d-inline-block text-truncate font-weight-bold align-bottom"> {{ x.validator.moniker }} </span>
           </b-form-checkbox>
           <div class="d-flex justify-content-between align-self-stretch flex-wrap">
             <div
@@ -90,6 +90,7 @@ export default {
       blocks: Array.from('0'.repeat(50)).map(x => ({ sigs: {}, height: Number(x) })),
       syncing: false,
       latestTime: '',
+      height: '-',
     }
   },
   computed: {
@@ -113,6 +114,7 @@ export default {
     initBlocks() {
       this.$http.getLatestBlock(this.config).then(d => {
         const { height } = d.block.last_commit
+        this.height = height
         if (timeIn(d.block.header.time, 3, 'm')) {
           this.syncing = true
         } else {
@@ -167,6 +169,7 @@ export default {
         res.block.last_commit.signatures.forEach(x => {
           if (x.validator_address) sigs[x.validator_address] = 'bg-success'
         })
+        this.height = res.block.last_commit.height
         const block = this.blocks.find(b => b[1] === res.block.last_commit.height)
         if (typeof block === 'undefined') { // mei
           // this.$set(block, 0, typeof sigs !== 'undefined')
