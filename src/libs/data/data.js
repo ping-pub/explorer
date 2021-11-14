@@ -224,7 +224,20 @@ export function abbrRight(string, length = 6, suffix = '...') {
 
 export function abbrMessage(msg) {
   if (Array.isArray(msg)) {
-    return msg.map(x => abbrMessage(x)).join(', ')
+    const sum = msg.map(x => abbrMessage(x)).reduce((s, c) => {
+      const sh = s
+      if (sh[c]) {
+        sh[c] += 1
+      } else {
+        sh[c] = 1
+      }
+      return sh
+    }, {})
+    const output = []
+    Object.keys(sum).forEach(k => {
+      output.push(`${k}×${sum[k]}`)
+    })
+    return output.join(', ')
   }
   if (msg.typeUrl) {
     return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1).replace('Msg', '')
