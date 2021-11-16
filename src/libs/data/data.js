@@ -300,7 +300,11 @@ export function getUnitAmount(amount, denom) {
 
 export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
   let amount
-  if (denom.startsWith('rowan')) {
+  if (denom.startsWith('inj')) {
+    // eslint-disable-next-line no-undef
+    amount = Number(BigInt(Number(tokenAmount)) / 1000000000000000000n)
+    // }
+  } else if (denom.startsWith('rowan')) {
     // eslint-disable-next-line no-undef
     amount = Number(BigInt(Number(tokenAmount)) / 1000000000000000000n)
     // }

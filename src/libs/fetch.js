@@ -49,10 +49,19 @@ export default class ChainFetch {
   }
 
   async getLatestBlock(config = null) {
+    const conf = config || this.getSelectedConfig()
+    console.log('config: ', conf)
+    if (conf.chain_name === 'injective') {
+      return ChainFetch.fetch('https://tm.injective.network', '/block').then(data => Block.create(commonProcess(data)))
+    }
     return this.get('/blocks/latest', config).then(data => Block.create(data))
   }
 
   async getBlockByHeight(height, config = null) {
+    const conf = config || this.getSelectedConfig()
+    if (conf.chain_name === 'injective') {
+      return ChainFetch.fetch('https://tm.injective.network', `/block?height=${height}`).then(data => Block.create(commonProcess(data)))
+    }
     return this.get(`/blocks/${height}`, config).then(data => Block.create(data))
   }
 
