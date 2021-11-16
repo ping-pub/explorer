@@ -50,7 +50,6 @@ export default class ChainFetch {
 
   async getLatestBlock(config = null) {
     const conf = config || this.getSelectedConfig()
-    console.log('config: ', conf)
     if (conf.chain_name === 'injective') {
       return ChainFetch.fetch('https://tm.injective.network', '/block').then(data => Block.create(commonProcess(data)))
     }
