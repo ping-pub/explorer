@@ -33,7 +33,7 @@ const modules = [
     route: 'gravity',
   },
   {
-    scope: 'osm-osis',
+    scope: 'osmosis',
     title: 'trade',
     route: 'osmosis-trade',
   },
