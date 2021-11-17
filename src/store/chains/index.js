@@ -1,7 +1,7 @@
 let chains = {}
 
 let configs = require.context('../../chains/mainnet', false, /\.json$/)
-if (window.location.hostname.startsWith('testnet') || window.location.search.indexOf('testnet')) {
+if (window.location.hostname.startsWith('testnet') || window.location.search.indexOf('testnet') > -1) {
   configs = require.context('../../chains/testnet', false, /\.json$/)
 }
 
