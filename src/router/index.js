@@ -279,7 +279,7 @@ const router = new VueRouter({
     // custom modules for specified chains
     // 1. cosmos
     {
-      path: '/:chain/cosmos/pools',
+      path: '/:chain/cosmos/trade',
       name: 'gravity',
       component: () => import('@/views/GravityPool.vue'),
       meta: {
@@ -294,14 +294,14 @@ const router = new VueRouter({
     },
     // 2. OSMOSIS
     {
-      path: '/:chain/osmosis/pools',
-      name: 'osmosis-pool',
-      component: () => import('@/views/OsmosisPools.vue'),
+      path: '/:chain/osmosis/trade',
+      name: 'osmosis-trade',
+      component: () => import('@/views/OsmosisTrade.vue'),
       meta: {
-        pageTitle: 'Pools',
+        pageTitle: 'Trade',
         breadcrumb: [
           {
-            text: 'Pools',
+            text: 'Trade',
             active: true,
           },
         ],

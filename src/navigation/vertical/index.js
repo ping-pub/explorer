@@ -34,8 +34,8 @@ const modules = [
   },
   {
     scope: 'osm-osis',
-    title: 'pools',
-    route: 'osmosis-pool',
+    title: 'trade',
+    route: 'osmosis-trade',
   },
 ]
 
