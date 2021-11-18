@@ -10,7 +10,7 @@ on:
 jobs:
   deploy:
     name: Ping deploy
-    runs-on: ${GITHUB_REF_NAME} 
+    runs-on: ${{ GITHUB_REF_NAME }} 
     steps:
     - name: print
       run: echo ${GITHUB_REF#refs/heads/}
