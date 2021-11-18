@@ -3,14 +3,14 @@ name: Ping Deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, testnet ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, testnet ]
 
 jobs:
   deploy:
     name: Ping deploy
-    runs-on: self-hosted
+    runs-on: ${GITHUB_REF#refs/heads/}
     steps:
     - name: Git Checkout Latest
       uses: actions/checkout@v2
