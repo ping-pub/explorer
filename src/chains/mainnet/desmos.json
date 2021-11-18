@@ -1,5 +1,6 @@
 {
     "chain_name": "desmos",
+    "coingecko": "",
     "api": "https://api.mainnet.desmos.network",
     "sdk_version": "0.42.0",
     "addr_prefix": "desmos",

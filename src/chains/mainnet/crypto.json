@@ -1,6 +1,7 @@
 
 {
     "chain_name": "crypto-com-chain",
+    "coingecko": "crypto-com-chain",
     "api": "https://mainnet.crypto.org:1317",
     "sdk_version": "0.39.2",
     "addr_prefix": "cro",
