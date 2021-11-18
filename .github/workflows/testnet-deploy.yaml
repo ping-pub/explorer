@@ -3,14 +3,14 @@ name: Ping Deploy
 
 on:
   push:
-    branches: [ master, testnet ]
+    branches: [ testnet ]
   pull_request:
-    branches: [ master, testnet ]
+    branches: [ testnet ]
 
 jobs:
   deploy:
     name: Ping deploy
-    runs-on: ${{ GITHUB_REF#refs/heads/ }} 
+    runs-on: testnet 
     steps:
     - name: print
       run: echo ${GITHUB_REF#refs/heads/}
