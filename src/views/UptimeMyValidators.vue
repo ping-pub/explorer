@@ -51,7 +51,7 @@ export default {
       const validators = []
       pinned[x].forEach(address => {
         const val = cached.find(v => address === consensusPubkeyToHexAddress(v.consensus_pubkey))
-        validators.push({ address, validator: val.description })
+        if (val) validators.push({ address, validator: val.description })
       })
       chainVals[x] = validators
     })

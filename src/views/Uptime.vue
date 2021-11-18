@@ -14,7 +14,7 @@
         class="mb-1"
       >
         <b-button
-          :href="`./uptime/my`"
+          to="./uptime/my"
           variant="primary"
         >
           Browse favourate only
