@@ -10,8 +10,10 @@ on:
 jobs:
   deploy:
     name: Ping deploy
-    runs-on: ${GITHUB_REF#refs/heads/}
+    runs-on: self-hosted 
     steps:
+    - name: print
+      run: echo ${GITHUB_REF#refs/heads/}
     - name: Git Checkout Latest
       uses: actions/checkout@v2
       
