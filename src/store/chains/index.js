@@ -1,7 +1,9 @@
+import { isTestnet } from '@/libs/data/data'
+
 let chains = {}
 
 let configs = require.context('../../chains/mainnet', false, /\.json$/)
-if (window.location.hostname.startsWith('testnet') || window.location.search.indexOf('testnet') > -1) {
+if (isTestnet()) {
   configs = require.context('../../chains/testnet', false, /\.json$/)
 }
 

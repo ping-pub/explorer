@@ -1,4 +1,5 @@
 import store from '@/store'
+import { isTestnet } from '../../libs/data/data'
 
 const modules = [
   {
@@ -71,6 +72,36 @@ function processMenu() {
     menu.children = children
     chainMenus.push(menu)
   })
+  chainMenus.push({ header: 'LINKS' })
+  if (isTestnet()) {
+    chainMenus.push({
+      title: 'Mainnet Explorer',
+      href: 'https://ping.pub',
+      icon: 'ChromeIcon',
+    })
+  } else {
+    chainMenus.push({
+      title: 'Testnet Explorer',
+      href: 'http://testnet.ping.pub',
+      icon: 'LifeBuoyIcon',
+    })
+  }
+  chainMenus.push({
+    title: 'Discord',
+    href: 'https://discord.gg/CmjYVSr6GW',
+    icon: 'EyeIcon',
+  })
+  chainMenus.push({
+    title: 'Twitter',
+    href: 'https://twitter.com/ping_pub',
+    icon: 'TwitterIcon',
+  })
+  chainMenus.push({
+    title: 'Github',
+    href: 'https://github.com/ping-pub/explorer',
+    icon: 'GithubIcon',
+  })
+
   return chainMenus
 }
 
