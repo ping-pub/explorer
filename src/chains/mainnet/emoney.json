@@ -1,5 +1,6 @@
 {
     "chain_name": "e-money",
+    "coingecko": "e-money",
     "api": "https://emoney.validator.network/api",
     "addr_prefix": "emoney",
     "logo": "https://dl.airtable.com/.attachments/276e4d6de567b073a5e400240d7d83e9/9bb49806/yoR2r25W_400x400.jpg",

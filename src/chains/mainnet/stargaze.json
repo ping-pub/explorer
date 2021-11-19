@@ -1,5 +1,6 @@
 {
     "chain_name": "stargaze",
+    "coingecko": "stargaze-protocol",
     "api": "https://rest.stargaze.publicawesome.dev",
     "sdk_version": "0.44.3",
     "addr_prefix": "stars",

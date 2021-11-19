@@ -321,6 +321,11 @@ export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
   return parseFloat(amount)
 }
 
+export function isTestnet() {
+  return (window.location.hostname.startsWith('testnet')
+   || window.location.search.indexOf('testnet') > -1)
+}
+
 export function formatToken(token, IBCDenom = {}, decimals = 2) {
   if (token) {
     return `${formatTokenAmount(token.amount, decimals, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`

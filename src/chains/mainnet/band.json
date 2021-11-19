@@ -1,5 +1,6 @@
 {
     "chain_name": "band-protocol",
+    "coingecko": "band-protocol",
     "api": "https://laozi1.bandchain.org/api",
     "addr_prefix": "band",
     "logo": "https://dl.airtable.com/.attachments/472ae99a508e32b4439b416beddd4eb9/c5166f62/band-symbol-blue-bg.75a3ad91.svg",
