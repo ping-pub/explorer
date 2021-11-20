@@ -1,5 +1,6 @@
 {
     "chain_name": "terra-luna",
+    "coingecko": "terra-luna",
     "api": "https://fcd.terra.dev",
     "sdk_version": "0.44.2",
     "addr_prefix": "terra",

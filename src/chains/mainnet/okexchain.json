@@ -1,5 +1,6 @@
 {
     "chain_name": "okexchain",
+    "coingecko": "okexchain",
     "api": "https://exchainrpc.okex.org/okexchain/v1",
     "sdk_version": "0.39.2",
     "addr_prefix": "ex",
