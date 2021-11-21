@@ -53,7 +53,7 @@ export default {
   background: #283046;
   border-radius: 0.428rem;
   padding: 1rem 1.5rem 1.5rem 1.5rem;
-  min-height: 50rem;
+  min-height: 44.5rem;
 }
 .place-percent {
   display: flex;

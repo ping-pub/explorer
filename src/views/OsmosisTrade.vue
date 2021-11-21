@@ -36,6 +36,6 @@ export default {
 .trade-left {
   background: #283046;
   border-radius: 0.428rem;
-  padding: 1rem 1.5rem 2rem 1.5rem;
+  padding: 0.5rem 1.5rem 2rem 1.5rem;
 }
 </style>
