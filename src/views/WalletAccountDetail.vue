@@ -143,7 +143,7 @@
             <feather-icon
               icon="MinusIcon"
               class="d-md-none"
-            /><small class="d-none d-md-block"> Withdraw</small>
+            /><small class="d-none d-md-block"> Withdraw Rewards</small>
           </b-button>
         </div>
       </b-card-header>
@@ -514,11 +514,11 @@ export default {
             tmp1 += Number(e.balance)
           })
         })
-        this.redelegations.forEach(x => {
-          x.entries.forEach(e => {
-            tmp1 += Number(e.balance)
-          })
-        })
+        // this.redelegations.forEach(x => {
+        //   x.entries.forEach(e => {
+        //     tmp1 += Number(e.balance)
+        //   })
+        // })
         const unbonding = this.formatCurrency(tmp1, stakingDenom)
         sumCurrency += unbonding
         sum += tmp1
@@ -620,9 +620,9 @@ export default {
     this.$http.getStakingDelegations(this.address).then(res => {
       this.delegations = res.delegation_responses || res
     })
-    this.$http.getStakingRedelegations(this.address).then(res => {
-      this.redelegations = res.redelegation_responses || res
-    })
+    // this.$http.getStakingRedelegations(this.address).then(res => {
+    //   this.redelegations = res.redelegation_responses || res
+    // })
     this.$http.getStakingUnbonding(this.address).then(res => {
       this.unbonding = res.unbonding_responses || res
     })
