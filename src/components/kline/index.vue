@@ -1,7 +1,8 @@
 <template>
-  <div className="container">
-    <div id="chart-container-id" />
-  </div>
+  <div
+    id="chart-container-id"
+    class="kline-chart"
+  />
 </template>
 
 <script>
@@ -53,7 +54,6 @@ export default {
         }
 
         if (res.tick) {
-          console.log(res)
           const data = res.tick
 
           store.onRealTimeCallback({
@@ -71,8 +71,8 @@ export default {
     }
 
     const tv = new widget({
-      debug: true,
-      symbol: 'btcusdt',
+      debug: false,
+      symbol: 'BTCUSDT',
       timezone: 'Asia/Shanghai',
       fullscreen: true,
       interval: '5',
@@ -130,3 +130,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.kline-chart {
+  border-radius: 0.428rem;
+  overflow: hidden;
+}
+</style>

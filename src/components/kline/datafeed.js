@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 const resolutionFormat = (resolution, name, to) => {
+  name = name.toLocaleLowerCase()
   let req = `market.${name}.kline.${resolution}min`
   let minutes = resolution
 
