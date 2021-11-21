@@ -1,61 +1,33 @@
 <template>
-  <div class="container-md">
-    -------
-    <b-row class="match-height">
+  <div className="container-md">
+    <b-row>
       <b-col
-        md="4"
-        sm="6"
+        cols="8"
+        class="trade-left"
       >
-        <router-link to="">
-          <b-card
-            class="earnings-card text-left"
-          >
-            <b-row>
-              <b-col cols="8">
-                x
-              </b-col>
-            </b-row>
-          </b-card>
-        </router-link>
+        <Ticker />
+        <Kline />
+      </b-col>
+      <b-col cols="4">
+        <Place />
       </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
-import {
-  BCard, VBTooltip, BRow, BCol,
-} from 'bootstrap-vue'
-import { formatTokenDenom } from '@/libs/data'
+import { BRow, BCol } from 'bootstrap-vue'
+import Ticker from '@/components/KlineTrade/Ticker.vue'
+import Place from '@/components/KlineTrade/Place.vue'
+import Kline from '@/components/kline/index.vue'
 
 export default {
   components: {
     BRow,
     BCol,
-    BCard,
-  },
-  directives: {
-    'b-tooltip': VBTooltip,
-  },
-  data() {
-    return {
-      trade_pairs: [
-        {
-          from: {
-            denom: 'atom',
-            origin_denom: 'atom',
-            coingecko_id: 'cosmos',
-          },
-          to: {
-            denom: 'osmo',
-            origin_denom: 'osmos',
-            coingecko_id: 'osmosis',
-          },
-        },
-      ],
-      pools: [],
-      ibcDenom: {},
-    }
+    Kline,
+    Ticker,
+    Place,
   },
   created() {
     // 所有方法添加到 $http.osmosis
@@ -66,15 +38,13 @@ export default {
     //   this.pools = res
     // })
   },
-  beforeDestroy() {
-    this.islive = false
-    clearInterval(this.timer)
-  },
-  methods: {
-    formatDenom(v) {
-      return formatTokenDenom(v)
-    },
-    length: v => (Array.isArray(v) ? v.length : 0),
-  },
 }
 </script>
+
+<style scoped>
+.trade-left {
+  background: #283046;
+  border-radius: 0.428rem;
+  padding: 0.5rem 1.5rem 2rem 1.5rem;
+}
+</style>
