@@ -29,6 +29,15 @@ export default {
     Ticker,
     Place,
   },
+  created() {
+    // 所有方法添加到 $http.osmosis
+    this.$http.osmosis.getOHCL4Pairs('cosmos', 'osmosis').then(data => {
+      console.log(data)
+    })
+    // this.$http.osmosis.getPools().then(res => {
+    //   this.pools = res
+    // })
+  },
 }
 </script>
 
