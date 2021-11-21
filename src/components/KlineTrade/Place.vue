@@ -1,49 +1,62 @@
 <template>
   <div class="ticker-place">
-    <div class="place-market">
-      <div>Limit</div>
-      <div>Market</div>
-    </div>
+    <b-tabs small class="nav-fill">
+      <b-tab title="BUY">
+        BUY
+      </b-tab>
+      <b-tab title="SELL">
+        SELL
+      </b-tab>
+    </b-tabs>
     <div class="place-able">
       <div>Available:</div>
       <div>-- USDT</div>
     </div>
     <div class="place-input">
-      <div class="place-input-title">Price</div>
+      <div class="place-input-title">
+        Price
+      </div>
       <b-form-input type="text" />
-      <div class="place-input-unit">USDT</div>
+      <div class="place-input-unit">
+        USDT
+      </div>
     </div>
     <div class="place-input">
-      <div class="place-input-title">Amount</div>
+      <div class="place-input-title">
+        Amount
+      </div>
       <b-form-input type="text" />
-      <div class="place-input-unit">BTC</div>
+      <div class="place-input-unit">
+        BTC
+      </div>
+    </div>
+    <div>
+      Slippage tolerance
     </div>
     <div class="place-percent">
-      <div>25%</div>
-      <div>50%</div>
-      <div>75%</div>
-      <div>100%</div>
+      <div>1%</div>
+      <div>3%</div>
+      <div>5%</div>
     </div>
     <div class="place-btn">
       <BButton variant="success">
         BUY
       </BButton>
     </div>
-    <div class="place-btn">
-      <BButton variant="danger">
-        SELL
-      </BButton>
-    </div>
   </div>
 </template>
 
 <script>
-import { BFormInput, BButton } from 'bootstrap-vue'
+import {
+  BFormInput, BButton, BTabs, BTab,
+} from 'bootstrap-vue'
 
 export default {
   components: {
     BButton,
     BFormInput,
+    BTab,
+    BTabs,
   },
 }
 </script>
