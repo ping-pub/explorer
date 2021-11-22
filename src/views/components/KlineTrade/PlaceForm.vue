@@ -122,21 +122,34 @@ export default {
   },
   props: {
     type: {
+      type: Number,
+      required: true,
+    },
+    base: {
+      type: String,
+      required: true,
+    },
+    target: {
       type: String,
       required: true,
     },
   },
   data() {
     return {
-      base: 'ATOM',
-      target: 'OSMO',
       available: 0,
       amount: 0,
       total: 0,
-      price: 50000,
+      // price: 50000,
       slippage: 0.05,
       marks: [0, 0.01, 0.025, 0.05],
     }
+  },
+  computed: {
+    price() {
+      const p1 = this.$store.state.chains.quotes[this.base]
+      const p2 = this.$store.state.chains.quotes[this.target]
+      return p1 && p2 ? (p1.usd / p2.usd).toFixed(4) : '-'
+    },
   },
   methods: {
     changeAmount() {

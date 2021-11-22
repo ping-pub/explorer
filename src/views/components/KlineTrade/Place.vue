@@ -16,7 +16,11 @@
         no-body
       />
     </b-tabs>
-    <PlaceForm :type="tabIndex" />
+    <PlaceForm
+      :type="tabIndex"
+      :base="base"
+      :target="target"
+    />
   </div>
 </template>
 
@@ -31,6 +35,16 @@ export default {
     BTab,
     BTabs,
     PlaceForm,
+  },
+  props: {
+    base: {
+      type: String,
+      required: true,
+    },
+    target: {
+      type: String,
+      required: true,
+    },
   },
   data: () => ({
     tabIndex: 0,

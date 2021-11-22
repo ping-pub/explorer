@@ -14,21 +14,42 @@ export default class OsmosAPI {
 
   async getOHCL4Pairs(from, to) {
     this.exe_time = ''
-    const ohlc = await Promise.all(
+    return Promise.all(
       [fetch(`https://api.coingecko.com/api/v3/coins/${from}/ohlc?vs_currency=usd&days=7`).then(res => res.json()),
         fetch(`https://api.coingecko.com/api/v3/coins/${to}/ohlc?vs_currency=usd&days=7`).then(res => res.json())],
-    )
-    const output = []
-    ohlc[0].forEach((e, i) => {
-      console.log(e, i, ohlc[1][i])
-      const price = [e[0]]
-      for (let j = 1; j <= 4; j += 1) {
-        price.push(e[j] / ohlc[1][i][j])
-      }
-      output.push(price)
+    ).then(ohlc => {
+      const output = []
+      console.log(ohlc)
+      ohlc[0].forEach((e, i) => {
+        console.log(e, i, ohlc[1][i])
+        const price = [e[0]]
+        for (let j = 1; j <= 4; j += 1) {
+          price.push(e[j] / ohlc[1][i][j])
+        }
+        output.push(price)
+      })
+      return output
     })
+  }
 
-    return output
+  getCoinGeckoId(symbol) {
+    this.pairs = {
+      ATOM: 'cosmos',
+      OSMO: 'osmosis',
+      IRIS: 'iris-network',
+      AKT: 'akash-network',
+    }
+    return this.pairs[symbol]
+  }
+
+  getIBCDenomHash(symbol) {
+    this.IBChash = {
+      ATOM: 'cosmos',
+      OSMO: 'uosmo',
+      IRIS: 'iris-network',
+      AKT: 'akash-network',
+    }
+    return this.IBChash[symbol]
   }
 
   // Custom Module

@@ -9,7 +9,6 @@
           <div class="d-flex justify-content-begin align-items-center mb-1">
             <b-button
               id="popover-button-3"
-              v-ripple.400="'rgba(113, 102, 240, 0.15)'"
               variant="flat-primary"
               class="mr-3"
               @click="show = !show"
@@ -45,11 +44,11 @@
               </b-table>
             </b-popover>
             <div class="mr-3">
-              59300
+              {{ latestPrice }}
             </div>
             <div class="mr-3">
               <small>24h Change</small>
-              <div>460 +0.78%</div>
+              <div>{{ changesIn24H }}%</div>
             </div>
             <div class="mr-3">
               <small>24h High</small>
@@ -68,7 +67,10 @@
         sm="12"
       >
         <b-card>
-          <Place />
+          <Place
+            :base="base"
+            :target="target"
+          />
         </b-card>
       </b-col>
     </b-row>
@@ -107,11 +109,23 @@ export default {
       ],
     }
   },
+  computed: {
+    latestPrice() {
+      const p1 = this.$store.state.chains.quotes[this.base]
+      const p2 = this.$store.state.chains.quotes[this.target]
+      return p1 && p2 ? (p1.usd / p2.usd).toFixed(4) : '-'
+    },
+    changesIn24H() {
+      const p1 = this.$store.state.chains.quotes[this.base]
+      const p2 = this.$store.state.chains.quotes[this.target]
+      return p1 && p2 ? (p1.usd_24h_change / p2.usd_24h_change).toFixed(2) : '-'
+    },
+  },
   created() {
     const { base, target } = this.$route.params
     this.init(base, target)
     // 所有方法添加到 $http.osmosis
-    this.$http.osmosis.getOHCL4Pairs('cosmos', 'osmosis').then(data => {
+    this.$http.osmosis.getOHCL4Pairs(this.$http.osmosis.getCoinGeckoId(this.base), this.$http.osmosis.getCoinGeckoId(this.target)).then(data => {
       console.log(data)
     })
   },
