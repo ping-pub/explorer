@@ -43,7 +43,7 @@
                 </template>
               </b-table>
             </b-popover>
-            <div class="mr-3">
+            <div class="mr-3 text-success font-weight-bolder">
               {{ latestPrice }}
             </div>
             <div class="mr-3">

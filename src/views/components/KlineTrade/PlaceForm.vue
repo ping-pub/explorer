@@ -96,7 +96,7 @@
         Note
       </div>
       <div class="alert-body">
-        If the execution price exceeds the 5% slippage protection, your order will be automatically cancelled
+        If the execution price exceeds the {{ slippage * 100 }}% slippage protection, your order will be automatically cancelled
       </div>
     </b-alert>
 
