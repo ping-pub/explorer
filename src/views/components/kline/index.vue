@@ -77,6 +77,7 @@ export default {
       fullscreen: false,
       autosize: false,
       interval: '5',
+      width: '100%',
       height: 520,
       container_id: 'chart-container-id',
       library_path: '/charting_library/',
@@ -133,8 +134,5 @@ export default {
 </script>
 
 <style scoped>
-.kline-chart {
-  border-radius: 0.428rem;
-  overflow: hidden;
-}
+
 </style>

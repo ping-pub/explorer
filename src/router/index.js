@@ -56,6 +56,7 @@ const router = new VueRouter({
     },
     {
       path: '/wallet/accounts',
+      alias: '/wallet',
       name: 'accounts',
       component: () => import('@/views/WalletAccounts.vue'),
       meta: {
@@ -294,7 +295,7 @@ const router = new VueRouter({
     },
     // 2. OSMOSIS
     {
-      path: '/:chain/osmosis/trade',
+      path: '/:chain/osmosis/trade/:base?/:target?',
       name: 'osmosis-trade',
       component: () => import('@/views/OsmosisTrade.vue'),
       meta: {

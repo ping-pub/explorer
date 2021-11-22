@@ -1,5 +1,5 @@
 <template>
-  <div class="ticker-place">
+  <div>
     <b-tabs
       v-model="tabIndex"
       small
@@ -39,10 +39,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ticker-place {
-  background: #283046;
-  border-radius: 0.428rem;
-  padding: 1rem 1.5rem 1.5rem 1.5rem;
-  min-height: 44.5rem;
-}
+
 </style>

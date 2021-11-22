@@ -215,7 +215,7 @@
       </b-tab>
     </b-tabs>
 
-    <router-link to="./import">
+    <router-link to="/wallet/import">
       <b-card class="addzone">
         <feather-icon icon="PlusIcon" />
         Connect Wallet
