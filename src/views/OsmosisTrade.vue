@@ -48,15 +48,17 @@
             </div>
             <div class="mr-3">
               <small>24h Change</small>
-              <div>{{ changesIn24H }}%</div>
+              <div :class="changesIn24H > 0 ? 'text-success': 'text-danger'">
+                {{ changesIn24H }}%
+              </div>
             </div>
             <div class="mr-3">
               <small>24h High</small>
-              <div>59000</div>
+              <div>-</div>
             </div>
             <div>
               <small>24h Low</small>
-              <div>58000</div>
+              <div>-</div>
             </div>
           </div>
           <Kline />
