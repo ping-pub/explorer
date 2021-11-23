@@ -58,21 +58,21 @@ export default {
             })
           }
           console.log(this.list);
-          store.onDataCallback(datas, { noData: !datas.length })
+          store.onDataCallback(this.list, { noData: !this.list.length })
         }
 
-        if (res.tick) {
-          const data = res.tick
+        // if (res.tick) {
+        //   const data = res.tick
 
-          store.onRealTimeCallback({
-            time: data.id * 1000,
-            volume: data.amount,
-            close: data.close,
-            open: data.open,
-            high: data.high,
-            low: data.low,
-          })
-        }
+        //   store.onRealTimeCallback({
+        //     time: data.id * 1000,
+        //     volume: data.amount,
+        //     close: data.close,
+        //     open: data.open,
+        //     high: data.high,
+        //     low: data.low,
+        //   })
+        // }
       }
 
       reader.readAsArrayBuffer(e.data)

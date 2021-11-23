@@ -129,8 +129,8 @@ export default {
     this.init(base, target)
     // 所有方法添加到 $http.osmosis
     this.$http.osmosis.getOHCL4Pairs(
-      this.$http.osmosis.getCoinGeckoId(this.base),
-      this.$http.osmosis.getCoinGeckoId(this.target),
+      this.$http.osmosis.getCoinGeckoId(base),
+      this.$http.osmosis.getCoinGeckoId(target),
     )
       .then(data => {
         this.klineData = data
