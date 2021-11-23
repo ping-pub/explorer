@@ -61,7 +61,7 @@
               <div>-</div>
             </div>
           </div>
-          <Kline />
+          <Kline :list="klineData" />
         </b-card>
       </b-col>
       <b-col
@@ -109,6 +109,7 @@ export default {
         { pair: 'ATOM/OSMO' },
         { pair: 'ATOM/OSMO' },
       ],
+      klineData: [],
     }
   },
   computed: {
@@ -127,9 +128,13 @@ export default {
     const { base, target } = this.$route.params
     this.init(base, target)
     // 所有方法添加到 $http.osmosis
-    this.$http.osmosis.getOHCL4Pairs(this.$http.osmosis.getCoinGeckoId(this.base), this.$http.osmosis.getCoinGeckoId(this.target)).then(data => {
-      console.log(data)
-    })
+    this.$http.osmosis.getOHCL4Pairs(
+      this.$http.osmosis.getCoinGeckoId(base),
+      this.$http.osmosis.getCoinGeckoId(target),
+    )
+      .then(data => {
+        this.klineData = data
+      })
   },
   beforeRouteUpdate(to, from, next) {
     const { base, target } = to.params
