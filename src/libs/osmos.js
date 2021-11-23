@@ -1,3 +1,10 @@
+/*
+ * @Description: file
+ * @Autor: dingyiming
+ * @Date: 2021-11-22 21:20:10
+ * @LastEditors: dingyiming
+ * @LastEditTime: 2021-11-23 10:25:41
+ */
 import fetch from 'node-fetch'
 import { getLocalChains } from './data/data'
 
@@ -19,15 +26,21 @@ export default class OsmosAPI {
         fetch(`https://api.coingecko.com/api/v3/coins/${to}/ohlc?vs_currency=usd&days=7`).then(res => res.json())],
     ).then(ohlc => {
       const output = []
-      console.log(ohlc)
       ohlc[0].forEach((e, i) => {
-        console.log(e, i, ohlc[1][i])
         const price = [e[0]]
         for (let j = 1; j <= 4; j += 1) {
           price.push(e[j] / ohlc[1][i][j])
         }
         output.push(price)
       })
+      const result = []
+      for (let i = 0; i < output.length; i += 1) {
+        const itemArr = output[i]
+        result.push({
+          time: itemArr[0],
+          volume: 0,
+        })
+      }
       return output
     })
   }

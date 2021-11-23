@@ -18,13 +18,15 @@ const toDouble = time => {
 }
 
 export default {
+  props: {
+    list: [],
+  },
   data() {
     return {
       themeLocal: 'dark'
     }
   },
   mounted() {
-    console.log(version())
 
     const store = {
       ws: new WebSocket('wss://api.huobipro.com/ws'),
@@ -55,7 +57,7 @@ export default {
               volume: data.amount,
             })
           }
-
+          console.log(this.list);
           store.onDataCallback(datas, { noData: !datas.length })
         }
 

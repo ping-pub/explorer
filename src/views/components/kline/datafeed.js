@@ -46,7 +46,7 @@ class DataFeeds {
   onReady(callback) {
     const defaultConfiguration = {
       symbols_type: [],
-      supported_resolutions: ['1', '5', '15', '30', '60', '240', '1D', '1M'],
+      supported_resolutions: ['30', '240', '1D'],
       supports_marks: true,
       supports_timescale_marks: false,
       supports_time: false,
@@ -121,7 +121,7 @@ class DataFeeds {
       has_empty_bars: true,
       description: '',
       has_intraday: true,
-      supported_resolutions: ['1', '5', '15', '30', '60', '120', '240', '360', '1D'],
+      supported_resolutions: ['30','240', '1D'],
       pricescale: 100000000, // 价格精度
       volume_precision: 3, // 数量精度
       symbol: symbolName,
