@@ -28,6 +28,14 @@
           {{ type === 0 ? target: base }}
         </b-input-group-append>
       </b-input-group>
+      <b-alert
+        variant="danger"
+        :show="type === 1 && amount > available"
+      >
+        <div class="alert-body">
+          Insufficient available amount
+        </div>
+      </b-alert>
     </b-form-group>
     <b-form-group>
       <label for="total">
@@ -47,7 +55,7 @@
       </b-input-group>
       <b-alert
         variant="danger"
-        :show="total > available"
+        :show="type === 0 && total > available"
       >
         <div class="alert-body">
           Insufficient available amount
