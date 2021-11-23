@@ -92,7 +92,7 @@
         block
         :variant="type === 0 ? 'success': 'danger'"
       >
-        {{ type === 0 ? 'Buy' : 'Sell' }}
+        {{ type === 0 ? `Buy ${ base }` : `Sell ${ base }` }}
       </BButton>
     </b-form-group>
     <b-alert
@@ -116,6 +116,7 @@ import {
   BFormInput, BButton, BAlert, BFormGroup, BInputGroup, BInputGroupAppend, BFormRadio,
 } from 'bootstrap-vue'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
+import { abbrAddress, getLocalAccounts } from '@/libs/data'
 
 export default {
   components: {
@@ -144,6 +145,7 @@ export default {
   },
   data() {
     return {
+      selectedAddress: this.computeAccounts()[0],
       available: 0,
       amount: 0,
       total: 0,
@@ -157,6 +159,18 @@ export default {
       const p1 = this.$store.state.chains.quotes[this.base]
       const p2 = this.$store.state.chains.quotes[this.target]
       return p1 && p2 ? (p1.usd / p2.usd).toFixed(4) : '-'
+    },
+    computeAccounts() {
+      const accounts = getLocalAccounts()
+      const values = accounts ? Object.values(accounts) : []
+      let array = []
+      for (let i = 0; i < values.length; i += 1) {
+        const addrs = values[i].address.filter(x => x.chain === this.$route.params.chain)
+        if (addrs && addrs.length > 0) {
+          array = array.concat(addrs.map(x => ({ value: x.addr, label: values[i].name.concat(' - ', abbrAddress(x.addr)) })))
+        }
+      }
+      return array
     },
   },
   methods: {
