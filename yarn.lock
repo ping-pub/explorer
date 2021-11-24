@@ -2005,7 +2005,7 @@
   optionalDependencies:
     "prettier" "^1.18.2"
 
-"@vue/composition-api@^1.0.0-rc.1", "@vue/composition-api@1.0.0-beta.22":
+"@vue/composition-api@^1.0.0-beta.22", "@vue/composition-api@^1.0.0-rc.1":
   "integrity" "sha512-KkTeHVWgsJbtoA5t6pUien/ARw7JhVM7QZh05ko/UdgzALYMGwJsBf4WlcvbpMKE5eAu4ONYJypQ+r8LwBIOhA=="
   "resolved" "https://registry.npmjs.org/@vue/composition-api/-/composition-api-1.0.0-beta.22.tgz"
   "version" "1.0.0-beta.22"
