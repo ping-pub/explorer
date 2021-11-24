@@ -9,6 +9,15 @@ import fetch from 'node-fetch'
 import { getLocalChains } from './data/data'
 
 export default class OsmosAPI {
+  constructor() {
+    this.pairs = {
+      ATOM: { coingecko: 'cosmos', minDenom: 'uatom', ibcDenomHash: 'ibc/1480B8FD20AD5FCAE81EA87584D269547DD4D436843C1D20F15E00EB64743EF4' },
+      OSMO: { coingecko: 'osmosis', minDenom: 'uosmo', ibcDenomHash: 'uosmo' },
+      IRIS: { coingecko: 'iris-network', minDenom: 'uiris', ibcDenomHash: 'ibc/7C4D60AA95E5A7558B0A364860979CA34B7FF8AAF255B87AF9E879374470CEC0' },
+      AKT: { coingecko: 'akash-network', minDenom: 'uakt', ibcDenomHash: 'ibc/7C4D60AA95E5A7558B0A364860979CA34B7FF8AAF255B87AF9E879374470CEC0' },
+    }
+  }
+
   preHandler() {
     this.version = ''
   }
@@ -20,54 +29,49 @@ export default class OsmosAPI {
   }
 
   async getOHCL4Pairs(from, to) {
-    this.exe_time = ''
-    return Promise.all(
-      [fetch(`https://api.coingecko.com/api/v3/coins/${from}/ohlc?vs_currency=usd&days=1`).then(res => res.json()),
-        fetch(`https://api.coingecko.com/api/v3/coins/${to}/ohlc?vs_currency=usd&days=1`).then(res => res.json())],
-    ).then(ohlc => {
-      console.log(ohlc)
-      const output = []
-      ohlc[0].forEach((e, i) => {
-        const price = [e[0]]
-        for (let j = 1; j <= 4; j += 1) {
-          price.push(e[j] / ohlc?.[1]?.[i]?.[j])
-        }
-        output.push(price)
-      })
-      const result = []
-      for (let i = 0; i < output.length; i += 1) {
-        const itemArr = output[i]
-        result.push({
-          time: itemArr[0],
-          volume: 0,
-          open: itemArr[1],
-          high: itemArr[2],
-          low: itemArr[3],
-          close: itemArr[4],
+    if (from && to) {
+      this.exe_time = ''
+      return Promise.all(
+        [fetch(`https://api.coingecko.com/api/v3/coins/${from}/ohlc?vs_currency=usd&days=1`).then(res => res.json()),
+          fetch(`https://api.coingecko.com/api/v3/coins/${to}/ohlc?vs_currency=usd&days=1`).then(res => res.json())],
+      ).then(ohlc => {
+        console.log(ohlc)
+        const output = []
+        ohlc[0].forEach((e, i) => {
+          const price = [e[0]]
+          for (let j = 1; j <= 4; j += 1) {
+            price.push(e[j] / ohlc?.[1]?.[i]?.[j])
+          }
+          output.push(price)
         })
-      }
-      return result
-    })
+        const result = []
+        for (let i = 0; i < output.length; i += 1) {
+          const itemArr = output[i]
+          result.push({
+            time: itemArr[0],
+            volume: 0,
+            open: itemArr[1],
+            high: itemArr[2],
+            low: itemArr[3],
+            close: itemArr[4],
+          })
+        }
+        return result
+      })
+    }
+    return null
   }
 
   getCoinGeckoId(symbol) {
-    this.pairs = {
-      ATOM: 'cosmos',
-      OSMO: 'osmosis',
-      IRIS: 'iris-network',
-      AKT: 'akash-network',
-    }
-    return this.pairs[symbol]
+    return symbol ? this.pairs[symbol.toUpperCase()].coingecko : ''
   }
 
   getIBCDenomHash(symbol) {
-    this.IBChash = {
-      ATOM: 'cosmos',
-      OSMO: 'uosmo',
-      IRIS: 'iris-network',
-      AKT: 'akash-network',
-    }
-    return this.IBChash[symbol]
+    return symbol ? this.pairs[symbol.toUpperCase()].ibcDenomHash : ''
+  }
+
+  getMinDenom(symbol) {
+    return symbol ? this.pairs[symbol.toUpperCase()].minDenom : ''
   }
 
   // Custom Module

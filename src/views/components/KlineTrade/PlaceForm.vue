@@ -1,9 +1,13 @@
 <template>
   <div>
     <dl>
-      <dt>Available</dt>
+      <dt>Available {{ computeAccounts }}</dt>
       <dd class="d-flex justify-content-between mt-1">
-        <feather-icon icon="PlusSquareIcon" /> <span> {{ 0 }} {{ type === 0 ? target: base }} </span>
+        <feather-icon
+          v-b-modal.trading-deposte-window
+          icon="PlusSquareIcon"
+        />
+        <span> {{ available }} {{ type === 0 ? target: base }} </span>
       </dd>
     </dl>
     <dl>
@@ -66,34 +70,52 @@
       <label>
         Slippage tolerance
       </label>
-      <div class="demo-inline-spacing">
+      <div>
         <b-form-radio
           v-model="slippage"
           value="0.01"
+          button
+          button-variant="outline-secondary"
         >
           1%
         </b-form-radio>
         <b-form-radio
           v-model="slippage"
           value="0.025"
+          button
+          block
+          class="px-1"
+          button-variant="outline-secondary"
         >
           2.5%
         </b-form-radio>
         <b-form-radio
           v-model="slippage"
           value="0.05"
+          button
+          button-variant="outline-secondary"
         >
           5%
         </b-form-radio>
       </div>
     </b-form-group>
     <b-form-group>
-      <BButton
+      <b-button
+        v-if="address"
         block
         :variant="type === 0 ? 'success': 'danger'"
       >
         {{ type === 0 ? `Buy ${ base }` : `Sell ${ base }` }}
-      </BButton>
+      </b-button>
+      <b-button
+        v-else
+        to="/wallet/import"
+        block
+        variant="primary"
+      >
+        Connect Wallet
+      </b-button>
+
     </b-form-group>
     <b-alert
       class="mt-2"
@@ -108,6 +130,8 @@
       </div>
     </b-alert>
 
+    <deposite-window />
+
   </div>
 </template>
 
@@ -116,7 +140,8 @@ import {
   BFormInput, BButton, BAlert, BFormGroup, BInputGroup, BInputGroupAppend, BFormRadio,
 } from 'bootstrap-vue'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
-import { abbrAddress, getLocalAccounts } from '@/libs/data'
+import { /* abbrAddress, */ formatTokenAmount, getLocalAccounts } from '@/libs/data'
+import DepositeWindow from './DepositeWindow.vue'
 
 export default {
   components: {
@@ -128,6 +153,7 @@ export default {
     BInputGroup,
     BInputGroupAppend,
     FeatherIcon,
+    DepositeWindow,
   },
   props: {
     type: {
@@ -145,13 +171,13 @@ export default {
   },
   data() {
     return {
-      selectedAddress: this.computeAccounts()[0],
-      available: 0,
+      address: '',
       amount: 0,
       total: 0,
-      // price: 50000,
       slippage: 0.05,
       marks: [0, 0.01, 0.025, 0.05],
+      baseAmount: 0,
+      targetAmount: 0,
     }
   },
   computed: {
@@ -161,19 +187,47 @@ export default {
       return p1 && p2 ? (p1.usd / p2.usd).toFixed(4) : '-'
     },
     computeAccounts() {
-      const accounts = getLocalAccounts()
-      const values = accounts ? Object.values(accounts) : []
-      let array = []
-      for (let i = 0; i < values.length; i += 1) {
-        const addrs = values[i].address.filter(x => x.chain === this.$route.params.chain)
-        if (addrs && addrs.length > 0) {
-          array = array.concat(addrs.map(x => ({ value: x.addr, label: values[i].name.concat(' - ', abbrAddress(x.addr)) })))
-        }
-      }
-      return array
+      return ''
+    },
+    available() {
+      const denom = this.$http.osmosis.getMinDenom(this.type === 0 ? this.base : this.target)
+      return formatTokenAmount(this.type === 0 ? this.targetAmount : this.baseAmount, 2, denom)
     },
   },
+  created() {
+    this.initialAddress()
+    console.log('address', this.address)
+    this.$http.getBankBalances(this.address).then(res => {
+      console.log(res, this.base, this.target)
+      if (res && res.length > 0) {
+        const baseHash = this.$http.osmosis.getIBCDenomHash(this.base)
+        const targetHash = this.$http.osmosis.getIBCDenomHash(this.target)
+        res.forEach(token => {
+          console.log('token:', token)
+          if (token.denom === baseHash) {
+            this.baseAmount = token.amount
+          }
+          if (token.denom === targetHash) {
+            this.targetAmount = token.amount
+          }
+        })
+        console.log(this.baseAmount, this.targetAmount)
+      }
+    })
+  },
   methods: {
+    initialAddress() {
+      const accounts = getLocalAccounts()
+      const current = this.$store.state.chains.defaultWallet
+      if (accounts && accounts[current]) {
+        const acc = accounts[current].address.find(x => x.chain === 'osmosis')
+        if (acc) {
+          this.address = acc.addr
+        }
+      }
+    },
+    formatAvailable() {
+    },
     changeAmount() {
       this.total = this.amount * this.price
     },
