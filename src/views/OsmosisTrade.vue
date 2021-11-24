@@ -6,7 +6,10 @@
         sm="12"
       >
         <b-card>
-          <div class="d-flex justify-content-begin align-items-center mb-1">
+          <div
+            id="kline-area"
+            class="d-flex justify-content-begin align-items-center mb-1"
+          >
             <b-button
               id="popover-button-3"
               variant="flat-primary"
@@ -61,7 +64,9 @@
               <div>-</div>
             </div>
           </div>
-          <Kline :list="klineData" />
+          <div id="kline-wrap">
+            <Kline :list="klineData" />
+          </div>
         </b-card>
       </b-col>
       <b-col
@@ -84,7 +89,8 @@ import {
   BRow, BCol, BCard, BButton, BPopover, BTable,
 } from 'bootstrap-vue'
 import Place from './components/KlineTrade/Place.vue'
-import Kline from './components/kline/index.vue'
+// import Kline from './components/kline/index.vue'
+import Kline from './components/tvjs/index.vue'
 
 export default {
   components: {
