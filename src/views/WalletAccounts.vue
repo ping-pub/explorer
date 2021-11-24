@@ -71,16 +71,40 @@
       </b-row>
     </b-card>
 
-    <b-tabs
+    <div
       v-for="item,index in accounts"
       :key="index"
-      active-nav-item-class="font-weight-bolder"
     >
-      <b-tab>
-        <template #title>
-          <feather-icon icon="UserIcon" />
-          <span>{{ item.name }}</span>
-        </template>
+      <div>
+        <div class="d-flex justify-content-between align-items-end mb-1">
+          <b-button
+            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+            variant="warning"
+            :to="`/wallet/import?name=${item.name}`"
+          >
+            <feather-icon
+              icon="EditIcon"
+              class="mr-50"
+            />
+            <span class="align-middle">{{ item.name }}</span>
+          </b-button>
+          <b-form-checkbox
+            v-model="defaultWallet"
+            v-b-tooltip.hover.v-primary
+            :value="item.name"
+            title="Set as default wallet"
+            variant="outline-warning"
+            :readonly="item.name===defaultWallet"
+          >
+            <span
+              :class="item.name===defaultWallet ? 'text-primary' : ''"
+              class="font-weight-bolder pb-0"
+              style="font-size:16px"
+            >
+              Set as default
+            </span>
+          </b-form-checkbox>
+        </div>
 
         <b-row>
           <b-col
@@ -212,8 +236,8 @@
             </b-card>
           </b-col>
         </b-row>
-      </b-tab>
-    </b-tabs>
+      </div>
+    </div>
 
     <router-link to="/wallet/import">
       <b-card class="addzone">
@@ -230,7 +254,8 @@
 
 <script>
 import {
-  BCard, BCardHeader, BCardTitle, BCardBody, VBModal, BRow, BCol, BTabs, BTab, BAvatar, BDropdown, BDropdownItem, BDropdownDivider,
+  BCard, BCardHeader, BCardTitle, BCardBody, VBModal, BRow, BCol, BAvatar, BButton,
+  BDropdown, BDropdownItem, BDropdownDivider, BFormCheckbox, VBTooltip,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
@@ -252,15 +277,17 @@ export default {
     BAvatar,
     BCard,
     BRow,
+    BButton,
     BCol,
-    BTabs,
-    BTab,
     BCardHeader,
     BCardBody,
     BCardTitle,
     BDropdown,
     BDropdownItem,
     BDropdownDivider,
+    BFormCheckbox,
+    // eslint-disable-next-line vue/no-unused-components
+    VBTooltip,
     FeatherIcon,
     OperationTransferComponent,
     // eslint-disable-next-line vue/no-unused-components
@@ -272,6 +299,7 @@ export default {
     AppCollapseItem,
   },
   directives: {
+    'b-tooltip': VBTooltip,
     'b-modal': VBModal,
     Ripple,
   },
@@ -337,6 +365,14 @@ export default {
     }
   },
   computed: {
+    defaultWallet: {
+      get() {
+        return this.$store.state.chains.defaultWallet
+      },
+      set(value) {
+        this.$store.commit('setDefaultWallet', value)
+      },
+    },
     calculateTotal() {
       const v = Object.values(this.balances)
       let total = 0

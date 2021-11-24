@@ -1,6 +1,7 @@
 <template>
   <div>
     <form-wizard
+      ref="wizard"
       color="#7367F0"
       :title="null"
       :subtitle="null"
@@ -131,6 +132,7 @@
                     v-model="name"
                     :state="errors.length > 0 ? false:null"
                     placeholder="Ping Nano X"
+                    :readonly="edit"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -261,7 +263,9 @@ import {
 } from 'bootstrap-vue'
 import { required } from '@validations'
 import store from '@/store'
-import { addressDecode, addressEnCode, getLedgerAddress } from '@/libs/data'
+import {
+  addressDecode, addressEnCode, getLedgerAddress, getLocalAccounts,
+} from '@/libs/data'
 import { toHex } from '@cosmjs/encoding'
 
 export default {
@@ -295,6 +299,7 @@ export default {
       selected: [],
       accounts: null,
       exludes: [], // HD Path is NOT supported,
+      edit: false,
     }
   },
   computed: {
@@ -309,20 +314,42 @@ export default {
       if (this.accounts && this.accounts.address) {
         const { data } = addressDecode(this.accounts.address)
         return this.selected.map(x => {
-          const { logo, addr_prefix } = this.chains[x]
-          const addr = addressEnCode(addr_prefix, data)
-          return {
-            chain: x, addr, logo, hdpath: this.hdpath,
+          if (this.chains[x]) {
+            const { logo, addr_prefix } = this.chains[x]
+            const addr = addressEnCode(addr_prefix, data)
+            return {
+              chain: x, addr, logo, hdpath: this.hdpath,
+            }
           }
-        })
+          return null
+        }).filter(x => x != null)
       }
       return []
     },
   },
-  created() {
+  mounted() {
     const { selected } = store.state.chains
     if (selected && selected.chain_name && !this.exludes.includes(selected.chain_name)) {
       this.selected.push(selected.chain_name)
+    }
+    const name = new URLSearchParams(window.location.search).get('name')
+    const wallets = getLocalAccounts()
+    if (name && wallets && wallets[name]) {
+      const wallet = wallets[name]
+      this.device = wallet.device
+      this.name = wallet.name
+      this.edit = true
+      if (wallet.address) {
+        wallet.address.forEach(a => {
+          if (!this.selected.includes(a.chain)) {
+            this.selected.push(a.chain)
+          }
+        })
+        this.address = wallet.address[0].addr
+        if (this.localAddress()) {
+          this.$refs.wizard.nextTab()
+        }
+      }
     }
   },
   methods: {
@@ -373,6 +400,9 @@ export default {
         address: this.addresses,
       }
       localStorage.setItem('accounts', JSON.stringify(accounts))
+      if (!this.$store.state.chains.defaultWallet) {
+        this.$store.commit('setDefaultWallet', this.name)
+      }
 
       this.$toast({
         component: ToastificationContent,
@@ -386,31 +416,34 @@ export default {
       this.$router.push('./accounts')
     },
     async validationFormDevice() {
-      let ok = false
-      switch (this.device) {
-        case 'keplr':
-          await this.cennectKeplr().then(accounts => {
-            if (accounts) {
+      let ok = String(this.name).length > 0
+
+      if (!ok) { // new import, otherwise it's edit mode.
+        switch (this.device) {
+          case 'keplr':
+            await this.cennectKeplr().then(accounts => {
+              if (accounts) {
               // eslint-disable-next-line prefer-destructuring
-              this.accounts = accounts[0]
-              ok = true
-            }
-          })
-          break
-        case 'ledger':
-        case 'ledger2':
-          await this.connect().then(accounts => {
-            if (accounts) {
+                this.accounts = accounts[0]
+                ok = true
+              }
+            })
+            break
+          case 'ledger':
+          case 'ledger2':
+            await this.connect().then(accounts => {
+              if (accounts) {
               // eslint-disable-next-line prefer-destructuring
-              this.accounts = accounts[0]
-              ok = true
-            }
-          }).catch(e => {
-            this.debug = e
-          })
-          break
-        default:
-          ok = this.localAddress()
+                this.accounts = accounts[0]
+                ok = true
+              }
+            }).catch(e => {
+              this.debug = e
+            })
+            break
+          default:
+            ok = this.localAddress()
+        }
       }
 
       return new Promise((resolve, reject) => {
@@ -438,5 +471,6 @@ export default {
 </script>
 
 <style lang="scss">
+  // @import '@core/assets/fonts/feather/iconfont.css';
   @import '@core/scss/vue/libs/vue-wizard.scss';
 </style>

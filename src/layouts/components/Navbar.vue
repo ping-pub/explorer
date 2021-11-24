@@ -69,7 +69,7 @@
         :to="{ name: 'accounts' }"
       >
         <feather-icon icon="KeyIcon" />
-        <span class="align-middle ml-25">Wallet</span>
+        <span class="align-middle ml-25">{{ walletName }}</span>
       </b-button>
       <!-- <b-dropdown
         class="ml-1"
@@ -135,7 +135,7 @@ import Locale from '@core/layouts/components/app-navbar/components/Locale.vue'
 import SearchBar from '@core/layouts/components/app-navbar/components/SearchBar.vue'
 // import CartDropdown from '@core/layouts/components/app-navbar/components/CartDropdown.vue'
 import store from '@/store'
-import { timeIn, toDay } from '@/libs/data'
+import { getLocalAccounts, timeIn, toDay } from '@/libs/data'
 // import UserDropdown from '@core/layouts/components/app-navbar/components/UserDropdown.vue'
 
 export default {
@@ -172,6 +172,10 @@ export default {
     }
   },
   computed: {
+    walletName() {
+      const key = this.$store.state.chains.defaultWallet
+      return key || 'Wallet'
+    },
     selected_chain() {
       this.block()
       return store.state.chains.selected
@@ -179,6 +183,12 @@ export default {
     chainVariant() {
       return this.variant
     },
+  },
+  mounted() {
+    const accounts = Object.keys(getLocalAccounts())
+    if (!this.$store.state.chains.defaultWallet && accounts.length > 0) {
+      this.$store.commit('setDefaultWallet', accounts[0])
+    }
   },
   methods: {
     block() {
