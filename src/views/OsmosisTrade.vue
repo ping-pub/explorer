@@ -64,8 +64,10 @@
               <div>-</div>
             </div>
           </div>
-          <div id="kline-wrap">
-            <Kline :list="klineData" />
+          <div
+            id="kline-wrap"
+          >
+            <Kline :list="klineData || []" />
           </div>
         </b-card>
       </b-col>
@@ -131,7 +133,8 @@ export default {
     },
   },
   created() {
-    const { base, target } = this.$route.params
+    const base = this.$route.params?.base || 'ATOM'
+    const target = this.$route.params?.target || 'OSMO'
     this.init(base, target)
     // 所有方法添加到 $http.osmosis
     this.$http.osmosis.getOHCL4Pairs(
@@ -139,6 +142,7 @@ export default {
       this.$http.osmosis.getCoinGeckoId(target),
     )
       .then(data => {
+        console.log(data)
         this.klineData = data
       })
   },

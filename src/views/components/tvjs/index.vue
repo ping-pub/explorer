@@ -3,6 +3,7 @@
     :data="chart"
     :width="width"
     :height="height"
+    :toolbar="false"
     :color-back="colors.colorBack"
     :color-grid="colors.colorGrid"
     :color-text="colors.colorText"
@@ -16,24 +17,35 @@ import Data from './data.json'
 export default {
   name: 'App',
   components: { TradingVue },
+  props: {
+    list: {
+      required: true,
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       chart: Data,
-      width: document.getElementById('kline-area')?.offsetWidth,
-      height: window.innerHeight,
+      width: 700,
+      height: 600,
       colors: {
-        colorBack: '#fff',
-        colorGrid: '#eee',
-        colorText: '#333',
+        colorBack: '#283046', // '#fff',
+        colorGrid: '#333', // '#eee',
+        colorText: '#fff',
       },
     }
   },
   mounted() {
-    window.addEventListener('resize', this.onResize)
+    Data.chart.data = this.list
+    this.chart = Data
   },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.onResize)
-  },
+  // mounted() {
+  //   window.addEventListener('resize', this.onResize)
+  // },
+  // beforeDestroy() {
+  //   window.removeEventListener('resize', this.onResize)
+  // },
   methods: {
     onResize() {
       this.width = document.getElementById('kline-area')?.offsetWidth

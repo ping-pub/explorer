@@ -426,7 +426,7 @@
         "grid": {}
     },
     "onchart": [{
-        "name": "TestOverlay, 50",
+        "name": "ATOM / OSMO",
         "type": "TestOverlay",
         "data": [
             [1587272400000, 7131],
