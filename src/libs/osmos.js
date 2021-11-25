@@ -5,8 +5,45 @@
  * @LastEditors: dingyiming
  * @LastEditTime: 2021-11-23 11:19:51
  */
+import { sha256 } from '@cosmjs/crypto'
+import { toHex } from '@cosmjs/encoding'
 import fetch from 'node-fetch'
-import { getLocalChains } from './data/data'
+import { formatTokenDenom, getLocalChains } from './data/data'
+
+export const poolIds = {
+  1: true,
+  2: true,
+  3: true,
+  4: true,
+  5: true,
+  6: true,
+  7: true,
+  8: true,
+  9: true,
+  10: true,
+  13: true,
+  15: true,
+  461: true,
+  482: true,
+  497: true,
+  498: true,
+  548: true,
+  557: true,
+  558: true,
+  571: true,
+  572: true,
+}
+
+export function getPairName(pool, denomTrace, type = 'base') {
+  const index = type === 'base' ? 0 : 1
+  if (pool && pool.poolAssets) {
+    if (pool.poolAssets[index].token.denom.startsWith('ibc')) {
+      return formatTokenDenom(denomTrace[pool.poolAssets[index].token.denom].base_denom)
+    }
+    return formatTokenDenom(pool.poolAssets[index].token.denom)
+  }
+  return '-'
+}
 
 export default class OsmosAPI {
   constructor() {
@@ -76,7 +113,27 @@ export default class OsmosAPI {
 
   // Custom Module
   async getPools() {
-    return this.get('/osmosis/gamm/v1beta1/pools?pagination.limit=700')
+    const tradeable = []
+    Object.keys(poolIds).forEach(k => {
+      if (poolIds[k]) {
+        tradeable.push(k)
+      }
+    })
+    return this.get('/osmosis/gamm/v1beta1/pools?pagination.limit=700').then(res => {
+      const output = res.pools.filter(x => tradeable.includes(x.id))
+      return output
+    })
+  }
+
+  async getDenomTraces() {
+    return this.get('/ibc/applications/transfer/v1beta1/denom_traces?pagination.limit=300').then(x => {
+      const combined = {}
+      x.denom_traces.forEach(item => {
+        const k = 'ibc/'.concat(toHex(sha256(new TextEncoder('utf-8').encode(`${item.path}/${item.base_denom}`))).toUpperCase())
+        combined[k] = item
+      })
+      return combined
+    })
   }
 
   async getIncentivesPools() {

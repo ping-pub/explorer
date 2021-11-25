@@ -36,9 +36,9 @@
 
                 <template #cell(pair)="data">
                   <router-link
-                    :to="`/osmosis/osmosis/trade/${data.item.pair}`"
+                    :to="`/osmosis/osmosis/trade/${data.item.id}`"
                   >
-                    {{ data.item.pair }}
+                    {{ data.item.pair[0] }} / {{ data.item.pair[1] }}
                   </router-link>
                 </template>
               </b-table>
@@ -70,8 +70,8 @@
       >
         <b-card>
           <Place
-            :base="base"
-            :target="target"
+            :pool.sync="current"
+            :denom-trace="denomTrace"
           />
         </b-card>
       </b-col>
@@ -83,6 +83,7 @@
 import {
   BRow, BCol, BCard, BButton, BPopover, BTable,
 } from 'bootstrap-vue'
+import { getPairName } from '@/libs/osmos'
 import Place from './components/KlineTrade/Place.vue'
 import Kline from './components/kline/index.vue'
 
@@ -100,19 +101,41 @@ export default {
   data() {
     return {
       show: false,
-      base: 'ATOM',
-      target: 'OSMO',
-      pairs: [
-        { pair: 'ATOM/OSMO' },
-        { pair: 'IRIS/OSMO' },
-        { pair: 'AKT/OSMO' },
-        { pair: 'ATOM/OSMO' },
-        { pair: 'ATOM/OSMO' },
-      ],
+      // pairs: [
+      //   { pair: 'ATOM/OSMO' },
+      //   { pair: 'IRIS/OSMO' },
+      //   { pair: 'AKT/OSMO' },
+      //   { pair: 'ATOM/OSMO' },
+      //   { pair: 'ATOM/OSMO' },
+      // ],
+      pools: [],
+      current: {},
+      denomTrace: [],
       klineData: [],
     }
   },
   computed: {
+    base() {
+      return getPairName(this.current, this.denomTrace, 'base')
+    },
+    target() {
+      return getPairName(this.current, this.denomTrace, 'target')
+    },
+    pairs() {
+      const pairs = this.pools.map(x => {
+        const x2 = {
+          id: x.id,
+          pair: x.poolAssets.map(t => {
+            if (t.token.denom.startsWith('ibc/')) {
+              return (this.denomTrace[t.token.denom] ? this.denomTrace[t.token.denom].base_denom : ' ')
+            }
+            return t.token.denom
+          }),
+        }
+        return x2
+      })
+      return pairs
+    },
     latestPrice() {
       const p1 = this.$store.state.chains.quotes[this.base]
       const p2 = this.$store.state.chains.quotes[this.target]
@@ -131,22 +154,27 @@ export default {
     this.$http.osmosis.getOHCL4Pairs(
       this.$http.osmosis.getCoinGeckoId(base),
       this.$http.osmosis.getCoinGeckoId(target),
-    )
-      .then(data => {
-        this.klineData = data
-      })
+    ).then(data => {
+      this.klineData = data
+    })
+    this.$http.osmosis.getDenomTraces().then(x => {
+      this.denomTrace = x
+    })
+    this.$http.osmosis.getPools().then(x => {
+      this.pools = x
+      const id = this.$route.params.poolid || '1'
+      this.current = this.pools.find(p => p.id === id) || this.pools[0]
+    })
   },
   beforeRouteUpdate(to, from, next) {
-    const { base, target } = to.params
-    this.init(base, target)
-    console.log(base, target)
+    const { poolid } = to.params
+    this.init(poolid)
     next()
     // }
   },
   methods: {
-    init(base, target) {
-      this.base = base || 'ATOM'
-      this.target = target || 'OSMO'
+    init(poolid) {
+      this.current = this.pools.find(p => p.id === poolid) || this.pools[0]
     },
   },
 }

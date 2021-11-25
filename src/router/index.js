@@ -295,14 +295,18 @@ const router = new VueRouter({
     },
     // 2. OSMOSIS
     {
-      path: '/:chain/osmosis/trade/:base?/:target?',
+      path: '/:chain/osmosis/trade/:poolid?',
       name: 'osmosis-trade',
       component: () => import('@/views/OsmosisTrade.vue'),
       meta: {
-        pageTitle: 'Trade',
+        pageTitle: 'Classic Trade',
         breadcrumb: [
           {
-            text: 'Trade',
+            text: 'DEX',
+            active: true,
+          },
+          {
+            text: 'Classic Trade',
             active: true,
           },
         ],

@@ -18,8 +18,8 @@
     </b-tabs>
     <PlaceForm
       :type="tabIndex"
-      :base="base"
-      :target="target"
+      :pool.sync="pool"
+      :denom-trace="denomTrace"
     />
   </div>
 </template>
@@ -37,13 +37,13 @@ export default {
     PlaceForm,
   },
   props: {
-    base: {
-      type: String,
-      required: true,
+    pool: {
+      type: Object,
+      default: () => {},
     },
-    target: {
-      type: String,
-      required: true,
+    denomTrace: {
+      type: [Array, Object],
+      default: () => [],
     },
   },
   data: () => ({
