@@ -3,7 +3,7 @@
  * @Autor: dingyiming
  * @Date: 2021-11-22 21:20:10
  * @LastEditors: dingyiming
- * @LastEditTime: 2021-11-23 11:19:51
+ * @LastEditTime: 2021-11-25 00:45:16
  */
 import { sha256 } from '@cosmjs/crypto'
 import { toHex } from '@cosmjs/encoding'
@@ -84,14 +84,14 @@ export default class OsmosAPI {
         const result = []
         for (let i = 0; i < output.length; i += 1) {
           const itemArr = output[i]
-          result.push({
-            time: itemArr[0],
-            volume: 0,
-            open: itemArr[1],
-            high: itemArr[2],
-            low: itemArr[3],
-            close: itemArr[4],
-          })
+          result.push([
+            itemArr[0],
+            itemArr[1], // open
+            itemArr[2], // high
+            itemArr[3], // low
+            itemArr[4], // close
+            0, // volume
+          ])
         }
         return result
       })

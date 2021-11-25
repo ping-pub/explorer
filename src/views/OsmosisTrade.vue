@@ -6,7 +6,10 @@
         sm="12"
       >
         <b-card>
-          <div class="d-flex justify-content-begin align-items-center mb-1">
+          <div
+            id="kline-area"
+            class="d-flex justify-content-begin align-items-center mb-1"
+          >
             <b-button
               id="popover-trading-pairs"
               variant="flat-primary"
@@ -69,7 +72,11 @@
               <div>-</div>
             </div>
           </div>
-          <Kline :list="klineData" />
+          <div
+            id="kline-wrap"
+          >
+            <Kline :list="klineData || []" />
+          </div>
         </b-card>
       </b-col>
       <b-col
@@ -94,7 +101,8 @@ import {
 import { getPairName } from '@/libs/osmos'
 import { formatTokenDenom } from '@/libs/data'
 import Place from './components/KlineTrade/Place.vue'
-import Kline from './components/kline/index.vue'
+// import Kline from './components/kline/index.vue'
+import Kline from './components/tvjs/index.vue'
 
 export default {
   components: {
@@ -148,7 +156,8 @@ export default {
     },
   },
   created() {
-    const { base, target } = this.$route.params
+    const base = this.$route.params?.base || 'ATOM'
+    const target = this.$route.params?.target || 'OSMO'
     this.init(base, target)
     // 所有方法添加到 $http.osmosis
     this.$http.osmosis.getOHCL4Pairs(

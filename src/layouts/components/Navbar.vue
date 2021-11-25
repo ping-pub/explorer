@@ -173,7 +173,7 @@ export default {
   },
   computed: {
     walletName() {
-      const key = this.$store.state.chains.defaultWallet
+      const key = this.$store?.state?.chains?.defaultWallet
       return key || 'Wallet'
     },
     selected_chain() {
@@ -185,7 +185,7 @@ export default {
     },
   },
   mounted() {
-    const accounts = Object.keys(getLocalAccounts())
+    const accounts = Object.keys(getLocalAccounts() || {})
     if (!this.$store.state.chains.defaultWallet && accounts.length > 0) {
       this.$store.commit('setDefaultWallet', accounts[0])
     }
