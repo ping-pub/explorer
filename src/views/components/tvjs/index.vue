@@ -1,6 +1,6 @@
 <template>
   <trading-vue
-    :data="chart"
+    :data="tvData"
     :width="width"
     :height="height"
     :toolbar="false"
@@ -9,24 +9,18 @@
     :color-text="colors.colorText"
   />
 </template>
-
 <script>
+
 import TradingVue from 'trading-vue-js'
-import Data from './data.json'
 
 export default {
   name: 'App',
   components: { TradingVue },
   props: {
-    list: {
-      required: true,
-      type: Array,
-      default: () => [],
-    },
+    list: [],
   },
   data() {
     return {
-      chart: Data,
       width: 700,
       height: 600,
       colors: {
@@ -36,21 +30,14 @@ export default {
       },
     }
   },
-  mounted() {
-    Data.chart.data = this.list
-    this.chart = Data
-  },
-  // mounted() {
-  //   window.addEventListener('resize', this.onResize)
-  // },
-  // beforeDestroy() {
-  //   window.removeEventListener('resize', this.onResize)
-  // },
-  methods: {
-    onResize() {
-      this.width = document.getElementById('kline-area')?.offsetWidth
-      this.height = window.innerHeight
+
+  computed: {
+    tvData() {
+      return {
+        ohlcv: this.list,
+      }
     },
   },
 }
+
 </script>
