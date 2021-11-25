@@ -11,7 +11,7 @@
             class="d-flex justify-content-begin align-items-center mb-1"
           >
             <b-button
-              id="popover-button-3"
+              id="popover-trading-pairs"
               variant="flat-primary"
               class="mr-3"
               @click="show = !show"
@@ -21,28 +21,36 @@
 
             <b-popover
               :show.sync="show"
-              target="popover-button-3"
+              target="popover-trading-pairs"
               placement="bottom"
-              triggers="click"
-              style="width:300px;"
+              triggers="hover"
+              boundary="scrollParent"
+              boundary-padding="0"
             >
-              <template #title>
-                Pairs
-              </template>
               <b-table
                 striped
                 hover
                 :small="true"
                 :items="pairs"
-                class="m-0"
+                class="m-0 p-0"
               >
 
                 <template #cell(pair)="data">
                   <router-link
-                    :to="`/osmosis/osmosis/trade/${data.item.pair}`"
+                    :to="`/osmosis/osmosis/trade/${data.item.id}`"
                   >
-                    {{ data.item.pair }}
+                    {{ data.item.pair[0] }}/{{ data.item.pair[1] }}
                   </router-link>
+                </template>
+                <template #cell(price)="data">
+                  <div class="text-right">
+                    <small class="">{{ data.item.price }}</small>
+                  </div>
+                </template>
+                <template #cell(change)="data">
+                  <div class="text-right">
+                    <small :class="data.item.change > 0 ? 'text-success': 'text-danger'">{{ data.item.change }}%</small>
+                  </div>
                 </template>
               </b-table>
             </b-popover>
@@ -77,8 +85,8 @@
       >
         <b-card>
           <Place
-            :base="base"
-            :target="target"
+            :pool.sync="current"
+            :denom-trace="denomTrace"
           />
         </b-card>
       </b-col>
@@ -90,6 +98,8 @@
 import {
   BRow, BCol, BCard, BButton, BPopover, BTable,
 } from 'bootstrap-vue'
+import { getPairName } from '@/libs/osmos'
+import { formatTokenDenom } from '@/libs/data'
 import Place from './components/KlineTrade/Place.vue'
 // import Kline from './components/kline/index.vue'
 import Kline from './components/tvjs/index.vue'
@@ -108,28 +118,41 @@ export default {
   data() {
     return {
       show: false,
-      base: 'ATOM',
-      target: 'OSMO',
-      pairs: [
-        { pair: 'ATOM/OSMO' },
-        { pair: 'IRIS/OSMO' },
-        { pair: 'AKT/OSMO' },
-        { pair: 'ATOM/OSMO' },
-        { pair: 'ATOM/OSMO' },
-      ],
+      pools: [],
+      current: {},
+      denomTrace: [],
       klineData: [],
     }
   },
   computed: {
+    base() {
+      return getPairName(this.current, this.denomTrace, 'base')
+    },
+    target() {
+      return getPairName(this.current, this.denomTrace, 'target')
+    },
+    pairs() {
+      const pairs = this.pools.map(x => {
+        const pair = x.poolAssets.map(t => {
+          if (t.token.denom.startsWith('ibc/')) {
+            return formatTokenDenom(this.denomTrace[t.token.denom] ? this.denomTrace[t.token.denom].base_denom : ' ')
+          }
+          return formatTokenDenom(t.token.denom)
+        })
+        return {
+          id: x.id,
+          pair,
+          price: this.getPrice(pair),
+          change: this.getChanges(pair),
+        }
+      })
+      return pairs
+    },
     latestPrice() {
-      const p1 = this.$store.state.chains.quotes[this.base]
-      const p2 = this.$store.state.chains.quotes[this.target]
-      return p1 && p2 ? (p1.usd / p2.usd).toFixed(4) : '-'
+      return this.getPrice([this.base, this.target])
     },
     changesIn24H() {
-      const p1 = this.$store.state.chains.quotes[this.base]
-      const p2 = this.$store.state.chains.quotes[this.target]
-      return p1 && p2 ? (p1.usd_24h_change / p2.usd_24h_change).toFixed(2) : '-'
+      return this.getChanges([this.base, this.target])
     },
   },
   created() {
@@ -140,23 +163,37 @@ export default {
     this.$http.osmosis.getOHCL4Pairs(
       this.$http.osmosis.getCoinGeckoId(base),
       this.$http.osmosis.getCoinGeckoId(target),
-    )
-      .then(data => {
-        console.log(data)
-        this.klineData = data
-      })
+    ).then(data => {
+      this.klineData = data
+    })
+    this.$http.osmosis.getDenomTraces().then(x => {
+      this.denomTrace = x
+    })
+    this.$http.osmosis.getPools().then(x => {
+      this.pools = x
+      const id = this.$route.params.poolid || '1'
+      this.current = this.pools.find(p => p.id === id) || this.pools[0]
+    })
   },
   beforeRouteUpdate(to, from, next) {
-    const { base, target } = to.params
-    this.init(base, target)
-    console.log(base, target)
+    const { poolid } = to.params
+    this.init(poolid)
     next()
     // }
   },
   methods: {
-    init(base, target) {
-      this.base = base || 'ATOM'
-      this.target = target || 'OSMO'
+    getPrice(symbol) {
+      const p1 = this.$store.state.chains.quotes[symbol[0]]
+      const p2 = this.$store.state.chains.quotes[symbol[1]]
+      return p1 && p2 ? (p1.usd / p2.usd).toFixed(4) : '-'
+    },
+    getChanges(symbol) {
+      const p1 = this.$store.state.chains.quotes[symbol[0]]
+      const p2 = this.$store.state.chains.quotes[symbol[1]]
+      return p1 && p2 ? (p1.usd_24h_change / p2.usd_24h_change).toFixed(2) : '-'
+    },
+    init(poolid) {
+      this.current = this.pools.find(p => p.id === poolid) || this.pools[0]
     },
   },
 }

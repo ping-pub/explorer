@@ -141,6 +141,7 @@ import {
 } from 'bootstrap-vue'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import { /* abbrAddress, */ formatTokenAmount, getLocalAccounts } from '@/libs/data'
+import { getPairName } from '@/libs/osmos'
 import DepositeWindow from './DepositeWindow.vue'
 
 export default {
@@ -160,13 +161,13 @@ export default {
       type: Number,
       required: true,
     },
-    base: {
-      type: String,
-      required: true,
+    pool: {
+      type: Object,
+      default: () => {},
     },
-    target: {
-      type: String,
-      required: true,
+    denomTrace: {
+      type: [Array, Object],
+      default: () => [],
     },
   },
   data() {
@@ -176,11 +177,18 @@ export default {
       total: 0,
       slippage: 0.05,
       marks: [0, 0.01, 0.025, 0.05],
-      baseAmount: 0,
-      targetAmount: 0,
+      balance: {},
+      // base: '',
+      // target: '',
     }
   },
   computed: {
+    base() {
+      return getPairName(this.pool, this.denomTrace, 'base')
+    },
+    target() {
+      return getPairName(this.pool, this.denomTrace, 'target')
+    },
     price() {
       const p1 = this.$store.state.chains.quotes[this.base]
       const p2 = this.$store.state.chains.quotes[this.target]
@@ -190,28 +198,25 @@ export default {
       return ''
     },
     available() {
-      const denom = this.$http.osmosis.getMinDenom(this.type === 0 ? this.base : this.target)
-      return formatTokenAmount(this.type === 0 ? this.targetAmount : this.baseAmount, 2, denom)
+      if (this.pool && this.pool.poolAssets) {
+        const mode = this.type === 1 ? 0 : 1
+        const { denom } = this.pool.poolAssets[mode].token
+        let amount = 0
+        this.balance.forEach(x => {
+          if (x.denom === denom) {
+            amount = x.amount
+          }
+        })
+        return formatTokenAmount(amount, 6, denom)
+      }
+      return 0
     },
   },
   created() {
     this.initialAddress()
-    console.log('address', this.address)
     this.$http.getBankBalances(this.address).then(res => {
-      console.log(res, this.base, this.target)
       if (res && res.length > 0) {
-        const baseHash = this.$http.osmosis.getIBCDenomHash(this.base)
-        const targetHash = this.$http.osmosis.getIBCDenomHash(this.target)
-        res.forEach(token => {
-          console.log('token:', token)
-          if (token.denom === baseHash) {
-            this.baseAmount = token.amount
-          }
-          if (token.denom === targetHash) {
-            this.targetAmount = token.amount
-          }
-        })
-        console.log(this.baseAmount, this.targetAmount)
+        this.balance = res
       }
     })
   },
