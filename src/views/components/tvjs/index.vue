@@ -1,6 +1,6 @@
 <template>
   <trading-vue
-    :data="tvData"
+    :data="data"
     :width="width"
     :height="height"
     :toolbar="false"
@@ -17,10 +17,14 @@ export default {
   name: 'App',
   components: { TradingVue },
   props: {
-    list: [],
+    list: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
+      data: {},
       width: 700,
       height: 600,
       colors: {
@@ -30,13 +34,30 @@ export default {
       },
     }
   },
-
   computed: {
     tvData() {
       return {
         ohlcv: this.list,
       }
     },
+  },
+  created() {
+    this.$http.getMarketChart(14, 'cosmos').then(res => {
+      console.log('market chart', res)
+      const ohlcv = res.prices.map((v, i) => {
+        // const v2 = v
+        console.log('item:', i, v, res.total_volumes[i][1])
+        v.push(v[1])
+        v.push(v[1])
+        v.push(v[1])
+        v.push(res.total_volumes[i][1])
+        return v
+      })
+      console.log(ohlcv)
+      this.data = {
+        ohlcv,
+      }
+    })
   },
 }
 

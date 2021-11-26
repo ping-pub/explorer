@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dl>
+    <dl class="d-none">
       <dt>Available {{ computeAccounts }}</dt>
       <dd class="d-flex justify-content-between mt-1">
         <feather-icon
@@ -12,20 +12,25 @@
     </dl>
     <dl>
       <dt>Price</dt>
-      <dd class="d-flex justify-content-end mt-1">
-        {{ price }} {{ target }}
+      <dd class="d-flex justify-content-end mt-1 align-items-end font-weight-bolder">
+        1&nbsp;<small class="text-muted mx-10"> {{ base }} ≈</small>&nbsp;{{ price }}&nbsp;<small class="text-muted mx-10">{{ target }}</small>
       </dd>
     </dl>
     <dl>
-      <dt>Fee</dt>
-      <dd class="d-flex justify-content-end mt-1">
+      <dt>Swap Fee</dt>
+      <dd class="d-flex justify-content-end mt-1 font-weight-bolder">
         {{ fee }}%
       </dd>
     </dl>
     <b-form-group>
-      <label for="amount">
-        Amount
-      </label>
+      <div class="d-flex justify-content-between">
+        <span>Amount</span>
+        <small class="text-muted">Available {{ available }} {{ type === 0 ? target: base }}
+          <feather-icon
+            v-b-modal.trading-deposte-window
+            icon="PlusSquareIcon"
+          /></small>
+      </div>
       <b-input-group class="input-group-merge">
         <b-form-input
           id="amount"
@@ -48,9 +53,10 @@
       </b-alert>
     </b-form-group>
     <b-form-group>
-      <label for="total">
-        Total
-      </label>
+      <div class="d-flex justify-content-between">
+        <span>Total</span>
+        <small class="text-muted">≈${{ localPrice }}</small>
+      </div>
       <b-input-group class="input-group-merge">
         <b-form-input
           id="total"
@@ -72,7 +78,7 @@
         </div>
       </b-alert>
     </b-form-group>
-    <b-form-group>
+    <b-form-group class="d-none">
       <label>
         Slippage Tolerance
       </label>
@@ -105,11 +111,44 @@
         </b-form-radio>
       </div>
     </b-form-group>
+    <b-form-group
+      label="Signer"
+      label-for="wallet"
+    >
+      <b-form-radio-group
+        v-model="wallet"
+        inline
+      >
+        <b-form-radio
+          v-model="wallet"
+          name="wallet"
+          value="keplr"
+        >
+          <small>Keplr</small>
+        </b-form-radio>
+        <b-form-radio
+          v-model="wallet"
+          name="wallet"
+          value="ledgerUSB"
+        >
+          <small>Ledger(USB)</small>
+        </b-form-radio>
+        <b-form-radio
+          v-model="wallet"
+          name="wallet"
+          value="ledgerBle"
+          class="mr-0"
+        >
+          <small>Ledger(BLE)</small>
+        </b-form-radio>
+      </b-form-radio-group>
+    </b-form-group>
     <b-form-group>
       <b-button
         v-if="address"
         block
         :variant="type === 0 ? 'success': 'danger'"
+        @click="sendTx()"
       >
         {{ type === 0 ? `Buy ${ base }` : `Sell ${ base }` }}
       </b-button>
@@ -124,9 +163,16 @@
 
     </b-form-group>
     <b-alert
+      variant="danger"
+      show
+    >
+      <div class="alert-body">
+        {{ error }}
+      </div>
+    </b-alert>
+    <b-alert
       class="mt-2"
       variant="secondary"
-      show
     >
       <div class="alert-heading">
         Note
@@ -143,11 +189,14 @@
 
 <script>
 import {
-  BFormInput, BButton, BAlert, BFormGroup, BInputGroup, BInputGroupAppend, BFormRadio,
+  BFormInput, BButton, BAlert, BFormGroup, BInputGroup, BInputGroupAppend, BFormRadio, BFormRadioGroup,
 } from 'bootstrap-vue'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
-import { /* abbrAddress, */ formatTokenAmount, getLocalAccounts, percent } from '@/libs/data'
+import {
+  formatTokenAmount, getLocalAccounts, percent, sign,
+} from '@/libs/data'
 import { getPairName } from '@/libs/osmos'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import DepositeWindow from './DepositeWindow.vue'
 
 export default {
@@ -156,11 +205,14 @@ export default {
     BButton,
     BFormInput,
     BFormRadio,
+    BFormRadioGroup,
     BFormGroup,
     BInputGroup,
     BInputGroupAppend,
     FeatherIcon,
     DepositeWindow,
+    // eslint-disable-next-line vue/no-unused-components
+    ToastificationContent,
   },
   props: {
     type: {
@@ -179,11 +231,14 @@ export default {
   data() {
     return {
       address: '',
-      amount: 0,
-      total: 0,
+      amount: '',
+      total: '',
       slippage: 0.05,
       marks: [0, 0.01, 0.025, 0.05],
       balance: {},
+      error: null,
+      chainId: 'osmosis-1',
+      wallet: 'keplr',
       // base: '',
       // target: '',
     }
@@ -199,6 +254,10 @@ export default {
       const p1 = this.$store.state.chains.quotes[this.base]
       const p2 = this.$store.state.chains.quotes[this.target]
       return p1 && p2 ? (p1.usd / p2.usd).toFixed(4) : '-'
+    },
+    localPrice() {
+      const p1 = this.$store.state.chains.quotes[this.type === 1 ? this.target : this.base]
+      return p1 && this.total > 0 ? (p1.usd * this.total).toFixed(2) : '-'
     },
     computeAccounts() {
       return ''
@@ -259,13 +318,98 @@ export default {
     formatAvailable() {
     },
     changeAmount() {
-      this.total = this.amount * this.price
+      if (this.type === 0) {
+        this.total = this.amount / this.price
+      } else {
+        this.total = this.amount * this.price
+      }
     },
     changeTotal() {
-      this.amount = this.total / this.price
+      if (this.type === 0) {
+        this.amount = this.total * this.price
+      } else {
+        this.amount = this.total / this.price
+      }
     },
-    submitTrade() {
+    async sendTx() {
+      const tokenOutDenom = this.pool.poolAssets[this.type === 0 ? 0 : 1].token.denom
+      const { denom } = this.pool.poolAssets[this.type === 0 ? 1 : 0].token
+      const txMsgs = [
+        {
+          type: 'osmosis/gamm/swap-exact-amount-in',
+          value: {
+            sender: this.address,
+            routes: [
+              {
+                poolId: this.pool.id,
+                tokenOutDenom,
+              },
+            ],
+            tokenIn: {
+              denom,
+              amount: String(this.amount),
+            },
+            tokenOutMinAmount: String(this.total),
+          },
+        },
+      ]
 
+      if (txMsgs.length === 0) {
+        this.error = 'No delegation found'
+        return ''
+      }
+      if (!this.accountNumber) {
+        this.error = 'Account number should not be empty!'
+        return ''
+      }
+
+      const txFee = {
+        amount: [
+          {
+            amount: '800', // this.fee,
+            denom: 'uomos', // this.feeDenom,
+          },
+        ],
+        gas: '200000', // this.gas,
+      }
+
+      const signerData = {
+        accountNumber: this.accountNumber,
+        sequence: this.sequence,
+        chainId: this.chainId,
+      }
+
+      console.log('trade: ', this.wallet, this.chainId, this.address, txMsgs, txFee, signerData)
+
+      sign(
+        this.wallet,
+        this.chainId,
+        this.address,
+        txMsgs,
+        txFee,
+        'Sent Via https://ping.pub',
+        signerData,
+      ).then(bodyBytes => {
+        console.log('signed:', bodyBytes)
+        // this.$http.broadcastTx(bodyBytes).then(res => {
+        //   setLocalTxHistory({ op: 'swap', hash: res.tx_response.txhash, time: new Date() })
+        //   this.$toast({
+        //     component: ToastificationContent,
+        //     props: {
+        //       title: 'Transaction sent!',
+        //       icon: 'EditIcon',
+        //       variant: 'success',
+        //     },
+        //   })
+        // }).catch(e => {
+        //   this.error = e
+        // })
+      }).catch(e => {
+        this.error = e
+      })
+      // Send tokens
+      // return client.sendTokens(this.address, this.recipient, sendCoins, this.memo)
+      return ''
     },
   },
 }

@@ -72,11 +72,10 @@
               <div>-</div>
             </div>
           </div>
-          <div
-            id="kline-wrap"
-          >
-            <Kline :list="klineData || []" />
-          </div>
+          <summary-price-chart
+            :chart-data="marketChartData"
+            :min-height="150"
+          />
         </b-card>
       </b-col>
       <b-col
@@ -102,7 +101,7 @@ import { getPairName } from '@/libs/osmos'
 import { formatTokenDenom } from '@/libs/data'
 import Place from './components/KlineTrade/Place.vue'
 // import Kline from './components/kline/index.vue'
-import Kline from './components/tvjs/index.vue'
+import SummaryPriceChart from './SummaryPriceChart.vue'
 
 export default {
   components: {
@@ -111,9 +110,9 @@ export default {
     BButton,
     BPopover,
     BTable,
-    Kline,
     Place,
     BCard,
+    SummaryPriceChart,
   },
   data() {
     return {
@@ -122,6 +121,7 @@ export default {
       current: {},
       denomTrace: [],
       klineData: [],
+      marketData: {},
     }
   },
   computed: {
@@ -154,17 +154,44 @@ export default {
     changesIn24H() {
       return this.getChanges([this.base, this.target])
     },
+    marketChartData() {
+      console.log(this.marketData)
+      if (this.marketData && this.marketData.prices) {
+        const labels = this.marketData.prices.map(x => x[0])
+        const data = this.marketData.prices.map(x => x[1])
+        console.log('chart data:', data)
+        return {
+          labels,
+          datasets: [
+            {
+              label: 'Price',
+              data,
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1,
+              pointStyle: 'dash',
+              barThickness: 15,
+            },
+          ],
+        }
+      }
+      return { labels: [], datasets: [] }
+    },
   },
   created() {
     const base = this.$route.params?.base || 'ATOM'
     const target = this.$route.params?.target || 'OSMO'
     this.init(base, target)
     // 所有方法添加到 $http.osmosis
-    this.$http.osmosis.getOHCL4Pairs(
-      this.$http.osmosis.getCoinGeckoId(base),
-      this.$http.osmosis.getCoinGeckoId(target),
-    ).then(data => {
-      this.klineData = data
+    // this.$http.osmosis.getOHCL4Pairs(
+    //   this.$http.osmosis.getCoinGeckoId(base),
+    //   this.$http.osmosis.getCoinGeckoId(target),
+    // ).then(data => {
+    //   this.klineData = data
+    // })
+    this.$http.getMarketChart(14, 'cosmos').then(res => {
+      console.log('market data', res)
+      this.marketData = res
     })
     this.$http.osmosis.getDenomTraces().then(x => {
       this.denomTrace = x

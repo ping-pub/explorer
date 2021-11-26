@@ -142,6 +142,7 @@ function getHdPath(address) {
 }
 
 export async function sign(device, chainId, signerAddress, messages, fee, memo, signerData) {
+  console.log(device, signerData)
   let transport
   let signer
   switch (device) {
@@ -159,13 +160,13 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
         throw new Error('Please install keplr extension')
       }
       await window.keplr.enable(chainId)
-      // signer = window.getOfflineSigner(chainId)
-      signer = window.getOfflineSignerOnlyAmino(chainId)
+      signer = window.getOfflineSigner(chainId)
+      // signer = window.getOfflineSignerOnlyAmino(chainId)
   }
 
   // Ensure the address has some tokens to spend
   const client = await SigningStargateClient.offline(signer)
-  return client.signAmino(device === 'keplr' ? signerAddress : toSignAddress(signerAddress), messages, fee, memo, signerData)
+  return client.sign(device === 'keplr' ? signerAddress : toSignAddress(signerAddress), messages, fee, memo, signerData)
   // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
 }
 
