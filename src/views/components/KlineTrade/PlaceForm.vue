@@ -16,6 +16,12 @@
         {{ price }} {{ target }}
       </dd>
     </dl>
+    <dl>
+      <dt>Fee</dt>
+      <dd class="d-flex justify-content-end mt-1">
+        {{ fee }}%
+      </dd>
+    </dl>
     <b-form-group>
       <label for="amount">
         Amount
@@ -68,7 +74,7 @@
     </b-form-group>
     <b-form-group>
       <label>
-        Slippage tolerance
+        Slippage Tolerance
       </label>
       <div>
         <b-form-radio
@@ -140,7 +146,7 @@ import {
   BFormInput, BButton, BAlert, BFormGroup, BInputGroup, BInputGroupAppend, BFormRadio,
 } from 'bootstrap-vue'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
-import { /* abbrAddress, */ formatTokenAmount, getLocalAccounts } from '@/libs/data'
+import { /* abbrAddress, */ formatTokenAmount, getLocalAccounts, percent } from '@/libs/data'
 import { getPairName } from '@/libs/osmos'
 import DepositeWindow from './DepositeWindow.vue'
 
@@ -202,14 +208,23 @@ export default {
         const mode = this.type === 1 ? 0 : 1
         const { denom } = this.pool.poolAssets[mode].token
         let amount = 0
-        this.balance.forEach(x => {
-          if (x.denom === denom) {
-            amount = x.amount
-          }
-        })
+        if (Array.isArray(this.balance)) {
+          console.log('balance', this.balance)
+          this.balance.forEach(x => {
+            if (x.denom === denom) {
+              amount = x.amount
+            }
+          })
+        }
         return formatTokenAmount(amount, 6, denom)
       }
       return 0
+    },
+    fee() {
+      if (this.pool) {
+        return percent(this.pool.poolParams.swapFee)
+      }
+      return '-'
     },
   },
   created() {
@@ -217,6 +232,16 @@ export default {
     this.$http.getBankBalances(this.address).then(res => {
       if (res && res.length > 0) {
         this.balance = res
+      }
+    })
+    this.$http.getAuthAccount(this.address, this.selectedChain).then(ret => {
+      if (ret.value.base_vesting_account) {
+        this.accountNumber = ret.value.base_vesting_account.base_account.account_number
+        this.sequence = ret.value.base_vesting_account.base_account.sequence
+        if (!this.sequence) this.sequence = 0
+      } else {
+        this.accountNumber = ret.value.account_number
+        this.sequence = ret.value.sequence ? ret.value.sequence : 0
       }
     })
   },
@@ -238,6 +263,9 @@ export default {
     },
     changeTotal() {
       this.amount = this.total / this.price
+    },
+    submitTrade() {
+
     },
   },
 }

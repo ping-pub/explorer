@@ -38,7 +38,7 @@ export function getPairName(pool, denomTrace, type = 'base') {
   const index = type === 'base' ? 0 : 1
   if (pool && pool.poolAssets) {
     if (pool.poolAssets[index].token.denom.startsWith('ibc')) {
-      return formatTokenDenom(denomTrace[pool.poolAssets[index].token.denom].base_denom)
+      return formatTokenDenom(denomTrace[pool.poolAssets[index].token.denom]?.base_denom) || '-'
     }
     return formatTokenDenom(pool.poolAssets[index].token.denom)
   }

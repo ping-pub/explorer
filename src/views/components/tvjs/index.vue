@@ -24,9 +24,9 @@ export default {
       width: 700,
       height: 600,
       colors: {
-        colorBack: '#283046', // '#fff',
+        colorBack: '#00000000', // '#fff',
         colorGrid: '#333', // '#eee',
-        colorText: '#fff',
+        colorText: '#aaa',
       },
     }
   },
