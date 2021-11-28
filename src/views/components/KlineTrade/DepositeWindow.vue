@@ -14,277 +14,266 @@
       @show="loadBalance"
     >
       <template #modal-header="" />
-      <b-overlay
-        :show="channels.length === 0"
-        rounded="sm"
-      >
-        <template #overlay>
-          <div class="text-center">
-            <p>
-              IBC Module is not enabled.
-            </p>
-          </div>
-        </template>
-        <validation-observer ref="simpleRules">
-          <b-form>
-            <b-row>
-              <b-col>
-                <b-form-group
-                  label="Sender"
-                  label-for="Account"
+      <validation-observer ref="simpleRules">
+        <b-form>
+          <b-row>
+            <b-col>
+              <b-form-group
+                label="Sender"
+                label-for="Account"
+              >
+                <b-input-group class="mb-25">
+                  <b-input-group-prepend is-text>
+                    <b-avatar
+                      :src="account?account.logo:''"
+                      size="18"
+                      variant="light-primary"
+                      rounded
+                    />
+                  </b-input-group-prepend>
+                  <b-form-input
+                    :value="account?account.addr:address"
+                    readonly
+                  />
+                </b-input-group>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-form-group
+                label="Available Token"
+                label-for="Token"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="Token"
+                >
+                  <b-form-select
+                    v-model="token"
+                    @change="tokenChange"
+                  >
+                    <template #first>
+                      <b-form-select-option
+                        value=""
+                      >
+                        -- Please select a token --
+                      </b-form-select-option>
+                    </template>
+                    <b-form-select-option
+                      v-for="item in balance"
+                      :key="item.denom"
+                      :value="item.denom"
+                    >
+                      {{ format(item) }}
+                    </b-form-select-option>
+                  </b-form-select>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-form-group
+                label="Amount"
+                label-for="Amount"
+              >
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="required|regex:^([0-9\.]+)$"
+                  name="amount"
                 >
                   <b-input-group class="mb-25">
-                    <b-input-group-prepend is-text>
-                      <b-avatar
-                        :src="account?account.logo:''"
-                        size="18"
-                        variant="light-primary"
-                        rounded
-                      />
-                    </b-input-group-prepend>
                     <b-form-input
-                      :value="account?account.addr:address"
-                      readonly
-                    />
-                  </b-input-group>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col>
-                <b-form-group
-                  label="Available Token"
-                  label-for="Token"
-                >
-                  <validation-provider
-                    #default="{ errors }"
-                    rules="required"
-                    name="Token"
-                  >
-                    <b-form-select
-                      v-model="token"
-                      @change="tokenChange"
-                    >
-                      <template #first>
-                        <b-form-select-option
-                          value=""
-                        >
-                          -- Please select a token --
-                        </b-form-select-option>
-                      </template>
-                      <b-form-select-option
-                        v-for="item in balance"
-                        :key="item.denom"
-                        :value="item.denom"
-                      >
-                        {{ format(item) }}
-                      </b-form-select-option>
-                    </b-form-select>
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col>
-                <b-form-group
-                  label="Amount"
-                  label-for="Amount"
-                >
-                  <validation-provider
-                    v-slot="{ errors }"
-                    rules="required|regex:^([0-9\.]+)$"
-                    name="amount"
-                  >
-                    <b-input-group class="mb-25">
-                      <b-form-input
-                        id="Amount"
-                        v-model="amount"
-                        :state="errors.length > 0 ? false:null"
-                        placeholder="Input a number"
-                        type="number"
-                      />
-                      <b-input-group-append is-text>
-                        {{ printDenom() }}
-                      </b-input-group-append>
-                    </b-input-group>
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col>
-                <b-form-group
-                  label="Destination"
-                  label-for="destination"
-                >
-                  <validation-provider
-                    #default="{ errors }"
-                    rules="required"
-                    name="destination"
-                  >
-                    <v-select
-                      v-model="destination"
-                      name="destination"
-                      :options="destinationOptions"
-                      placeholder="Select a channel"
-                    />
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col>
-                <b-form-group
-                  label="Recipient"
-                  label-for="Recipient"
-                >
-                  <validation-provider
-                    #default="{ errors }"
-                    rules="required"
-                    name="recipient"
-                  >
-                    <b-input-group class="mb-25">
-                      <b-form-input
-                        id="Recipient"
-                        v-model="recipient"
-                        :state="errors.length > 0 ? false:null"
-                        :placeholder="placeholder"
-                      />
-                    </b-input-group>
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col>
-                <b-form-group
-                  label="Fee"
-                  label-for="Fee"
-                >
-                  <validation-provider
-                    v-slot="{ errors }"
-                    rules="required|integer"
-                    name="fee"
-                  >
-                    <b-input-group>
-                      <b-form-input v-model="fee" />
-                      <b-input-group-append>
-                        <b-form-select
-                          v-model="feeDenom"
-                          :options="feeDenoms"
-                          value-field="denom"
-                          text-field="denom"
-                        />
-                      </b-input-group-append>
-                    </b-input-group>
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-form-group>
-              </b-col>
-              <b-col cols="12">
-                <b-form-group>
-                  <b-form-checkbox
-                    v-model="advance"
-                    name="advance"
-                    value="true"
-                  >
-                    <small>Advance</small>
-                  </b-form-checkbox>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row v-if="advance">
-              <b-col cols="12">
-                <b-form-group
-                  label="Gas"
-                  label-for="gas"
-                >
-                  <validation-provider
-                    v-slot="{ errors }"
-                    name="gas"
-                  >
-                    <b-form-input
-                      id="gas"
-                      v-model="gas"
+                      id="Amount"
+                      v-model="amount"
+                      :state="errors.length > 0 ? false:null"
+                      placeholder="Input a number"
                       type="number"
                     />
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-form-group>
-              </b-col>
-              <b-col cols="12">
-                <b-form-group
-                  label="Memo"
-                  label-for="Memo"
+                    <b-input-group-append is-text>
+                      {{ printDenom() }}
+                    </b-input-group-append>
+                  </b-input-group>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-form-group
+                label="Destination"
+                label-for="destination"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="destination"
                 >
-                  <validation-provider
-                    v-slot="{ errors }"
-                    name="memo"
-                  >
+                  <v-select
+                    v-model="destination"
+                    name="destination"
+                    :options="destinationOptions"
+                    placeholder="Select a channel"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-form-group
+                label="Recipient"
+                label-for="Recipient"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="recipient"
+                >
+                  <b-input-group class="mb-25">
                     <b-form-input
-                      id="Memo"
-                      v-model="memo"
-                      max="2"
+                      id="Recipient"
+                      v-model="recipient"
+                      :state="errors.length > 0 ? false:null"
+                      :placeholder="placeholder"
                     />
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-form-group>
-              </b-col>
-            </b-row>
-
-            <b-row>
-              <b-col>
-                <b-form-group
-                  label="Wallet"
-                  label-for="wallet"
+                  </b-input-group>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-form-group
+                label="Fee"
+                label-for="Fee"
+              >
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="required|integer"
+                  name="fee"
                 >
-                  <validation-provider
-                    v-slot="{ errors }"
-                    rules="required"
-                    name="wallet"
+                  <b-input-group>
+                    <b-form-input v-model="fee" />
+                    <b-input-group-append>
+                      <b-form-select
+                        v-model="feeDenom"
+                        :options="feeDenoms"
+                        value-field="denom"
+                        text-field="denom"
+                      />
+                    </b-input-group-append>
+                  </b-input-group>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col cols="12">
+              <b-form-group>
+                <b-form-checkbox
+                  v-model="advance"
+                  name="advance"
+                  value="true"
+                >
+                  <small>Advance</small>
+                </b-form-checkbox>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row v-if="advance">
+            <b-col cols="12">
+              <b-form-group
+                label="Gas"
+                label-for="gas"
+              >
+                <validation-provider
+                  v-slot="{ errors }"
+                  name="gas"
+                >
+                  <b-form-input
+                    id="gas"
+                    v-model="gas"
+                    type="number"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col cols="12">
+              <b-form-group
+                label="Memo"
+                label-for="Memo"
+              >
+                <validation-provider
+                  v-slot="{ errors }"
+                  name="memo"
+                >
+                  <b-form-input
+                    id="Memo"
+                    v-model="memo"
+                    max="2"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+          </b-row>
+
+          <b-row>
+            <b-col>
+              <b-form-group
+                label="Wallet"
+                label-for="wallet"
+              >
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="required"
+                  name="wallet"
+                >
+                  <b-form-radio-group
+                    v-model="wallet"
+                    stacked
+                    class="demo-inline-spacing"
                   >
-                    <b-form-radio-group
+                    <b-form-radio
                       v-model="wallet"
-                      stacked
-                      class="demo-inline-spacing"
+                      name="wallet"
+                      value="keplr"
+                      class="d-none d-md-block"
                     >
-                      <b-form-radio
-                        v-model="wallet"
-                        name="wallet"
-                        value="keplr"
-                        class="d-none d-md-block"
-                      >
-                        Keplr
-                      </b-form-radio>
-                      <b-form-radio
-                        v-model="wallet"
-                        name="wallet"
-                        value="ledgerUSB"
-                      >
-                        <small>Ledger(USB)</small>
-                      </b-form-radio>
-                      <b-form-radio
-                        v-model="wallet"
-                        name="wallet"
-                        value="ledgerBle"
-                        class="mr-0"
-                      >
-                        <small>Ledger(Bluetooth)</small>
-                      </b-form-radio>
-                    </b-form-radio-group>
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-form-group>
-              </b-col>
-            </b-row>
-          </b-form>
-        </validation-observer>
-        {{ error }}
-      </b-overlay></b-modal>
+                      Keplr
+                    </b-form-radio>
+                    <b-form-radio
+                      v-model="wallet"
+                      name="wallet"
+                      value="ledgerUSB"
+                    >
+                      <small>Ledger(USB)</small>
+                    </b-form-radio>
+                    <b-form-radio
+                      v-model="wallet"
+                      name="wallet"
+                      value="ledgerBle"
+                      class="mr-0"
+                    >
+                      <small>Ledger(Bluetooth)</small>
+                    </b-form-radio>
+                  </b-form-radio-group>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </b-form>
+      </validation-observer>
+      {{ error }}
+    </b-modal>
   </div>
 </template>
 
@@ -292,7 +281,7 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
   BModal, BRow, BCol, BInputGroup, BInputGroupAppend, BFormInput, BAvatar, BFormGroup, BFormSelect, BFormSelectOption,
-  BForm, BFormRadioGroup, BFormRadio, BInputGroupPrepend, BFormCheckbox, BOverlay,
+  BForm, BFormRadioGroup, BFormRadio, BInputGroupPrepend, BFormCheckbox,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
@@ -324,7 +313,6 @@ export default {
     BFormRadio,
     BFormCheckbox,
     vSelect,
-    BOverlay,
 
     ValidationProvider,
     ValidationObserver,

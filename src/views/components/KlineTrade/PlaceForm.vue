@@ -1,46 +1,43 @@
 <template>
   <div>
-    <dl class="d-none">
-      <dt>Available {{ computeAccounts }}</dt>
-      <dd class="d-flex justify-content-between mt-1">
-        <feather-icon
-          v-b-modal.trading-deposte-window
-          icon="PlusSquareIcon"
-        />
-        <span> {{ available }} {{ type === 0 ? target: base }} </span>
-      </dd>
-    </dl>
-    <dl>
-      <dt>Price</dt>
-      <dd class="d-flex justify-content-end mt-1 align-items-end font-weight-bolder">
-        1&nbsp;<small class="text-muted mx-10"> {{ base }} ≈</small>&nbsp;{{ price }}&nbsp;<small class="text-muted mx-10">{{ target }}</small>
-      </dd>
-    </dl>
-    <dl>
-      <dt>Swap Fee</dt>
-      <dd class="d-flex justify-content-end mt-1 font-weight-bolder">
-        {{ fee }}%
-      </dd>
-    </dl>
-    <b-form-group>
+    <b-card
+      bg-variant="light-secondary"
+      text-variant="black"
+    >
       <div class="d-flex justify-content-between">
-        <span>Amount</span>
-        <small class="text-muted">Available {{ available }} {{ type === 0 ? target: base }}
+        <span class="font-weight-bolder">Balance </span>
+        <span>
           <feather-icon
             v-b-modal.trading-deposte-window
             icon="PlusSquareIcon"
-          /></small>
+            class="text-primary"
+          />
+          <small> {{ available }} {{ type === 0 ? target: base }} </small>
+        </span>
+      </div>
+      <div class="d-flex justify-content-between mt-1">
+        <span class="font-weight-bolder">Price</span>
+        <span>{{ price }}&nbsp;<small class="text-muted mx-10">{{ target }} ≈</small>&nbsp;1&nbsp;<small class="text-muted mx-10"> {{ base }}</small>&nbsp;</span>
+      </div>
+      <div class="d-flex justify-content-between mt-1">
+        <span class="font-weight-bolder">Swap Fee</span>
+        <span>{{ fee }}%</span>
+      </div>
+    </b-card>
+    <b-form-group>
+      <div>
+        <span>Quantity</span>
       </div>
       <b-input-group class="input-group-merge">
         <b-form-input
           id="amount"
           v-model="amount"
           type="number"
-          placeholder="Amount"
+          placeholder="Quantity"
           @change="changeAmount()"
         />
         <b-input-group-append is-text>
-          {{ type === 0 ? target: base }}
+          {{ base }}
         </b-input-group-append>
       </b-input-group>
       <b-alert
@@ -54,19 +51,29 @@
     </b-form-group>
     <b-form-group>
       <div class="d-flex justify-content-between">
-        <span>Total</span>
-        <small class="text-muted">≈${{ localPrice }}</small>
+        <span>Volume</span>
+        <span>
+          <small
+            v-if="localPrice > 0"
+            class="text-muted mr-1"
+          >≈${{ localPrice }}</small>
+          <feather-icon
+            id="popover-trading-setting"
+            icon="SettingsIcon"
+            class="text-primary"
+          />
+        </span>
       </div>
       <b-input-group class="input-group-merge">
         <b-form-input
           id="total"
           v-model="total"
           type="number"
-          placeholder="Total"
+          placeholder="Volume"
           @change="changeTotal()"
         />
         <b-input-group-append is-text>
-          {{ type === 1 ? target: base }}
+          {{ target }}
         </b-input-group-append>
       </b-input-group>
       <b-alert
@@ -78,39 +85,48 @@
         </div>
       </b-alert>
     </b-form-group>
-    <b-form-group class="d-none">
-      <label>
-        Slippage Tolerance
-      </label>
-      <div>
-        <b-form-radio
-          v-model="slippage"
-          value="0.01"
-          button
-          button-variant="outline-secondary"
-        >
-          1%
-        </b-form-radio>
-        <b-form-radio
-          v-model="slippage"
-          value="0.025"
-          button
-          block
-          class="px-1"
-          button-variant="outline-secondary"
-        >
-          2.5%
-        </b-form-radio>
-        <b-form-radio
-          v-model="slippage"
-          value="0.05"
-          button
-          button-variant="outline-secondary"
-        >
-          5%
-        </b-form-radio>
-      </div>
-    </b-form-group>
+    <b-popover
+      target="popover-trading-setting"
+      placement="left"
+      triggers="hover"
+      boundary="scrollParent"
+      boundary-padding="0"
+      class="px-0"
+    >
+      <b-form-group>
+        <label>
+          Slippage Tolerance
+        </label>
+        <div>
+          <b-form-radio
+            v-model="slippage"
+            value="0.01"
+            button
+            button-variant="outline-secondary"
+          >
+            1%
+          </b-form-radio>
+          <b-form-radio
+            v-model="slippage"
+            value="0.025"
+            button
+            block
+            class="px-1"
+            button-variant="outline-secondary"
+          >
+            2.5%
+          </b-form-radio>
+          <b-form-radio
+            v-model="slippage"
+            value="0.05"
+            button
+            button-variant="outline-secondary"
+          >
+            5%
+          </b-form-radio>
+        </div>
+      </b-form-group>
+    </b-popover>
     <b-form-group
       label="Signer"
       label-for="wallet"
@@ -147,6 +163,7 @@
       <b-button
         v-if="address"
         block
+        :disabled="type === 0? total > available : amount > available"
         :variant="type === 0 ? 'success': 'danger'"
         @click="sendTx()"
       >
@@ -164,7 +181,10 @@
     </b-form-group>
     <b-alert
       variant="danger"
-      show
+      :show="dismissCountDown"
+      dismissible
+      @dismissed="dismissCountDown=0"
+      @dismiss-count-down="countDownChanged"
     >
       <div class="alert-body">
         {{ error }}
@@ -189,7 +209,7 @@
 
 <script>
 import {
-  BFormInput, BButton, BAlert, BFormGroup, BInputGroup, BInputGroupAppend, BFormRadio, BFormRadioGroup,
+  BFormInput, BButton, BAlert, BFormGroup, BInputGroup, BInputGroupAppend, BFormRadio, BFormRadioGroup, BCard, BPopover,
 } from 'bootstrap-vue'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import {
@@ -203,10 +223,12 @@ export default {
   components: {
     BAlert,
     BButton,
+    BCard,
     BFormInput,
     BFormRadio,
     BFormRadioGroup,
     BFormGroup,
+    BPopover,
     BInputGroup,
     BInputGroupAppend,
     FeatherIcon,
@@ -241,6 +263,8 @@ export default {
       wallet: 'keplr',
       // base: '',
       // target: '',
+      dismissSecs: 15,
+      dismissCountDown: 0,
     }
   },
   computed: {
@@ -256,7 +280,7 @@ export default {
       return p1 && p2 ? (p1.usd / p2.usd).toFixed(4) : '-'
     },
     localPrice() {
-      const p1 = this.$store.state.chains.quotes[this.type === 1 ? this.target : this.base]
+      const p1 = this.$store.state.chains.quotes[this.target]
       return p1 && this.total > 0 ? (p1.usd * this.total).toFixed(2) : '-'
     },
     computeAccounts() {
@@ -280,10 +304,7 @@ export default {
       return 0
     },
     fee() {
-      if (this.pool) {
-        return percent(this.pool.poolParams.swapFee)
-      }
-      return '-'
+      return percent(this.pool?.poolParams?.swapFee || '')
     },
   },
   created() {
@@ -318,18 +339,10 @@ export default {
     formatAvailable() {
     },
     changeAmount() {
-      if (this.type === 0) {
-        this.total = this.amount / this.price
-      } else {
-        this.total = this.amount * this.price
-      }
+      this.total = parseFloat((this.amount * this.price).toFixed(6))
     },
     changeTotal() {
-      if (this.type === 0) {
-        this.amount = this.total * this.price
-      } else {
-        this.amount = this.total / this.price
-      }
+      this.amount = parseFloat((this.total / this.price).toFixed(6))
     },
     async sendTx() {
       const tokenOutDenom = this.pool.poolAssets[this.type === 0 ? 0 : 1].token.denom
@@ -356,10 +369,12 @@ export default {
 
       if (txMsgs.length === 0) {
         this.error = 'No delegation found'
+        this.dismissCountDown = this.dismissSecs
         return ''
       }
       if (!this.accountNumber) {
         this.error = 'Account number should not be empty!'
+        this.dismissCountDown = this.dismissSecs
         return ''
       }
 
@@ -406,10 +421,14 @@ export default {
         // })
       }).catch(e => {
         this.error = e
+        this.dismissCountDown = this.dismissSecs
       })
       // Send tokens
       // return client.sendTokens(this.address, this.recipient, sendCoins, this.memo)
       return ''
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
     },
   },
 }

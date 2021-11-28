@@ -6,72 +6,83 @@
         sm="12"
       >
         <b-card>
-          <div
-            id="kline-area"
-            class="d-flex justify-content-begin align-items-center mb-1"
-          >
-            <b-button
-              id="popover-trading-pairs"
-              variant="flat-primary"
-              class="mr-3"
-              @click="show = !show"
+          <b-row class="mb-1">
+            <b-col
+              lg="4"
+              md="6"
+              sm="12"
+              class="d-flex justify-content-begin align-items-center"
             >
-              {{ base }} / {{ target }}
-            </b-button>
-
-            <b-popover
-              :show.sync="show"
-              target="popover-trading-pairs"
-              placement="bottom"
-              triggers="hover"
-              boundary="scrollParent"
-              boundary-padding="0"
-            >
-              <b-table
-                striped
-                hover
-                :small="true"
-                :items="pairs"
-                class="m-0 p-0"
+              <b-button
+                id="popover-trading-pairs"
+                variant="gradient-primary"
+                @click="show = !show"
               >
+                <feather-icon
+                  icon="ListIcon"
+                />
+              </b-button>
+              <h4 class="text-primary font-weight-bolder text-nowrap ml-1">
+                {{ base }} / {{ target }}
+              </h4>
+              <b-popover
+                :show.sync="show"
+                target="popover-trading-pairs"
+                placement="rightbottom"
+                triggers="hover"
+                boundary="scrollParent"
+                boundary-padding="0"
+                class="px-0"
+              >
+                <b-table
+                  striped
+                  hover
+                  :fields="fields"
+                  :small="true"
+                  :items="pairs"
+                  class="ml-0 pl-0"
+                >
 
-                <template #cell(pair)="data">
-                  <router-link
-                    :to="`/osmosis/osmosis/trade/${data.item.id}`"
-                  >
-                    {{ data.item.pair[0] }}/{{ data.item.pair[1] }}
-                  </router-link>
-                </template>
-                <template #cell(price)="data">
-                  <div class="text-right">
-                    <small class="">{{ data.item.price }}</small>
-                  </div>
-                </template>
-                <template #cell(change)="data">
-                  <div class="text-right">
-                    <small :class="data.item.change > 0 ? 'text-success': 'text-danger'">{{ data.item.change }}%</small>
-                  </div>
-                </template>
-              </b-table>
-            </b-popover>
-            <div class="mr-3 text-success font-weight-bolder">
-              {{ latestPrice }}
-            </div>
-            <div class="mr-3">
-              <small>24h Change</small>
-              <div :class="changesIn24H > 0 ? 'text-success': 'text-danger'">
-                {{ changesIn24H }}%
+                  <template #cell(pair)="data">
+                    <router-link
+                      :to="`/osmosis/osmosis/trade/${data.item.id}`"
+                    >
+                      {{ data.item.pair[0] }}/{{ data.item.pair[1] }}
+                    </router-link>
+                  </template>
+                  <template #cell(price)="data">
+                    <div class="text-right">
+                      <small class="">{{ data.item.price }}</small>
+                    </div>
+                  </template>
+                  <template #cell(change)="data">
+                    <div class="text-right">
+                      <small :class="data.item.change > 0 ? 'text-success': 'text-danger'">{{ data.item.change }}%</small>
+                    </div>
+                  </template>
+                </b-table>
+              </b-popover>
+            </b-col>
+            <b-col class="d-flex justify-content-begin align-items-center">
+              <div class="mr-3 text-success font-weight-bolder">
+                {{ latestPrice }}
               </div>
-            </div>
-            <div class="mr-3">
-              <small>24h High</small>
-              <div>-</div>
-            </div>
-            <div>
-              <small>24h Low</small>
-              <div>-</div>
-            </div>
-          </div>
+              <div class="mr-3">
+                <small>24h Change</small>
+                <div :class="changesIn24H > 0 ? 'text-success': 'text-danger'">
+                  {{ changesIn24H }}%
+                </div>
+              </div>
+              <div class="mr-3">
+                <small>24h High</small>
+                <div>{{ high24 }}</div>
+              </div>
+              <div>
+                <small>24h Low</small>
+                <div>{{ low24 }}</div>
+              </div>
+            </b-col>
+          </b-row>
           <summary-price-chart
             :chart-data="marketChartData"
             :min-height="150"
@@ -97,8 +108,9 @@
 import {
   BRow, BCol, BCard, BButton, BPopover, BTable,
 } from 'bootstrap-vue'
-import { getPairName } from '@/libs/osmos'
+import { CoinGeckoMap, getPairName } from '@/libs/osmos'
 import { formatTokenDenom } from '@/libs/data'
+import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import Place from './components/KlineTrade/Place.vue'
 // import Kline from './components/kline/index.vue'
 import SummaryPriceChart from './SummaryPriceChart.vue'
@@ -113,24 +125,24 @@ export default {
     Place,
     BCard,
     SummaryPriceChart,
+    FeatherIcon,
   },
   data() {
     return {
+      base: '',
+      target: '',
+      fields: ['pair', 'price', 'change'],
       show: false,
       pools: [],
       current: {},
       denomTrace: [],
       klineData: [],
       marketData: {},
+      high24: 0,
+      low24: 0,
     }
   },
   computed: {
-    base() {
-      return getPairName(this.current, this.denomTrace, 'base')
-    },
-    target() {
-      return getPairName(this.current, this.denomTrace, 'target')
-    },
     pairs() {
       const pairs = this.pools.map(x => {
         const pair = x.poolAssets.map(t => {
@@ -155,11 +167,9 @@ export default {
       return this.getChanges([this.base, this.target])
     },
     marketChartData() {
-      console.log(this.marketData)
       if (this.marketData && this.marketData.prices) {
         const labels = this.marketData.prices.map(x => x[0])
         const data = this.marketData.prices.map(x => x[1])
-        console.log('chart data:', data)
         return {
           labels,
           datasets: [
@@ -179,27 +189,13 @@ export default {
     },
   },
   created() {
-    const base = this.$route.params?.base || 'ATOM'
-    const target = this.$route.params?.target || 'OSMO'
-    this.init(base, target)
-    // 所有方法添加到 $http.osmosis
-    // this.$http.osmosis.getOHCL4Pairs(
-    //   this.$http.osmosis.getCoinGeckoId(base),
-    //   this.$http.osmosis.getCoinGeckoId(target),
-    // ).then(data => {
-    //   this.klineData = data
-    // })
-    this.$http.getMarketChart(14, 'cosmos').then(res => {
-      console.log('market data', res)
-      this.marketData = res
-    })
+    const { poolid } = this.$route.params
     this.$http.osmosis.getDenomTraces().then(x => {
       this.denomTrace = x
     })
     this.$http.osmosis.getPools().then(x => {
       this.pools = x
-      const id = this.$route.params.poolid || '1'
-      this.current = this.pools.find(p => p.id === id) || this.pools[0]
+      this.init(poolid)
     })
   },
   beforeRouteUpdate(to, from, next) {
@@ -220,7 +216,27 @@ export default {
       return p1 && p2 ? (p1.usd_24h_change / p2.usd_24h_change).toFixed(2) : '-'
     },
     init(poolid) {
+      this.high24 = 0
+      this.low24 = 0
       this.current = this.pools.find(p => p.id === poolid) || this.pools[0]
+      this.base = getPairName(this.current, this.denomTrace, 'base')
+      this.target = getPairName(this.current, this.denomTrace, 'target')
+      this.$http.osmosis.getMarketData(CoinGeckoMap[this.base], CoinGeckoMap[this.target]).then(res => {
+        this.marketData = res
+        const start = Date.now() - 8.64e+7
+        res.prices.forEach(x => {
+          if (x[0] > start) {
+            if (x[1] > this.high24) {
+              // eslint-disable-next-line prefer-destructuring
+              this.high24 = x[1]
+            }
+            if (x[1] < this.low24 || this.low24 === 0) {
+              // eslint-disable-next-line prefer-destructuring
+              this.low24 = x[1]
+            }
+          }
+        })
+      })
     },
   },
 }

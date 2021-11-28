@@ -28,33 +28,54 @@ export const poolIds = {
   497: true,
   498: true,
   548: true,
-  557: true,
-  558: true,
-  571: true,
-  572: true,
+  // 557: true,
+  // 558: true,
+  // 571: true,
+  // 572: true,
 }
 
-export function getPairName(pool, denomTrace, type = 'base') {
+export const CoinGeckoMap = {
+  ATOM: 'cosmos',
+  OSMO: 'osmosis',
+  IRIS: 'iris-network',
+  AKT: 'akash-network',
+  LUNA: 'terra-luna',
+  UST: 'terrausd',
+  KRT: 'terra-krw',
+  BAND: 'band-protocol',
+  CRO: 'crypto-com-chain',
+  KAVA: 'kava',
+  OKT: 'okexchain',
+  CTK: 'certik',
+  XPRT: 'persistence',
+  REGEN: 'regen',
+  SCRT: 'secret',
+  DVPN: 'sentinel',
+  ION: 'ion',
+  ROWAN: 'sifchain',
+  IOV: 'starname',
+  BTSG: 'bitsong',
+  NGM: 'e-money',
+  EEUR: 'e-money-eur',
+  LIKE: 'likecoin',
+  JUNO: 'juno-network',
+  STGZ: 'stargaze-protocol',
+  VDL: 'vidulum',
+  XKI: 'ki',
+  INJ: 'injective-protocol',
+}
+
+export function getPairName(pool, denomTrace, type = 'base', isFormat = true) {
   const index = type === 'base' ? 0 : 1
   if (pool && pool.poolAssets) {
-    if (pool.poolAssets[index].token.denom.startsWith('ibc')) {
-      return formatTokenDenom(denomTrace[pool.poolAssets[index].token.denom]?.base_denom) || '-'
-    }
-    return formatTokenDenom(pool.poolAssets[index].token.denom)
+    const denom = pool.poolAssets[index].token.denom.startsWith('ibc')
+      ? denomTrace[pool.poolAssets[index].token.denom]?.base_denom : pool.poolAssets[index].token.denom
+    return isFormat ? formatTokenDenom(denom) : denom
   }
   return '-'
 }
 
 export default class OsmosAPI {
-  constructor() {
-    this.pairs = {
-      ATOM: { coingecko: 'cosmos', minDenom: 'uatom', ibcDenomHash: 'ibc/1480B8FD20AD5FCAE81EA87584D269547DD4D436843C1D20F15E00EB64743EF4' },
-      OSMO: { coingecko: 'osmosis', minDenom: 'uosmo', ibcDenomHash: 'uosmo' },
-      IRIS: { coingecko: 'iris-network', minDenom: 'uiris', ibcDenomHash: 'ibc/7C4D60AA95E5A7558B0A364860979CA34B7FF8AAF255B87AF9E879374470CEC0' },
-      AKT: { coingecko: 'akash-network', minDenom: 'uakt', ibcDenomHash: 'ibc/7C4D60AA95E5A7558B0A364860979CA34B7FF8AAF255B87AF9E879374470CEC0' },
-    }
-  }
-
   preHandler() {
     this.version = ''
   }
@@ -65,6 +86,27 @@ export default class OsmosAPI {
     return fetch(`${this.host}${url}`).then(res => res.json())
   }
 
+  async getMarketData(from, to, days = 14) {
+    if (from && to) {
+      this.exe_time = ''
+      return Promise.all(
+        [fetch(`https://api.coingecko.com/api/v3/coins/${from}/market_chart?vs_currency=usd&days=${days}`).then(res => res.json()),
+          fetch(`https://api.coingecko.com/api/v3/coins/${to}/market_chart?vs_currency=usd&days=${days}`).then(res => res.json())],
+      ).then(data => {
+        const output = []
+        if (data.length >= 2) {
+          data[0].prices.forEach((x, i) => {
+            if (data[1].prices[i]) {
+              output.push([x[0], (x[1] / data[1].prices[i][1]).toFixed(6)])
+            }
+          })
+        }
+        return { prices: output }
+      })
+    }
+    return { prices: [] }
+  }
+
   async getOHCL4Pairs(from, to) {
     if (from && to) {
       this.exe_time = ''
@@ -72,7 +114,6 @@ export default class OsmosAPI {
         [fetch(`https://api.coingecko.com/api/v3/coins/${from}/ohlc?vs_currency=usd&days=1`).then(res => res.json()),
           fetch(`https://api.coingecko.com/api/v3/coins/${to}/ohlc?vs_currency=usd&days=1`).then(res => res.json())],
       ).then(ohlc => {
-        console.log(ohlc)
         const output = []
         ohlc[0].forEach((e, i) => {
           const price = [e[0]]
@@ -97,18 +138,6 @@ export default class OsmosAPI {
       })
     }
     return null
-  }
-
-  getCoinGeckoId(symbol) {
-    return symbol ? this.pairs[symbol.toUpperCase()].coingecko : ''
-  }
-
-  getIBCDenomHash(symbol) {
-    return symbol ? this.pairs[symbol.toUpperCase()].ibcDenomHash : ''
-  }
-
-  getMinDenom(symbol) {
-    return symbol ? this.pairs[symbol.toUpperCase()].minDenom : ''
   }
 
   // Custom Module
