@@ -16,7 +16,6 @@
               <b-button
                 id="popover-trading-pairs"
                 variant="gradient-primary"
-                @click="show = !show"
               >
                 <feather-icon
                   icon="ListIcon"
@@ -26,7 +25,6 @@
                 {{ base }} / {{ target }}
               </h4>
               <b-popover
-                :show.sync="show"
                 target="popover-trading-pairs"
                 placement="rightbottom"
                 triggers="hover"
@@ -84,9 +82,16 @@
             </b-col>
           </b-row>
           <summary-price-chart
+            v-if="!loading"
             :chart-data="marketChartData"
             :min-height="150"
           />
+          <div
+            v-else
+            class="d-flex justify-content-center mt-3"
+          >
+            <b-spinner label="Loading..." /> {{ error }}
+          </div>
         </b-card>
       </b-col>
       <b-col
@@ -106,7 +111,7 @@
 
 <script>
 import {
-  BRow, BCol, BCard, BButton, BPopover, BTable,
+  BRow, BCol, BCard, BButton, BPopover, BTable, BSpinner,
 } from 'bootstrap-vue'
 import { CoinGeckoMap, getPairName } from '@/libs/osmos'
 import { formatTokenDenom } from '@/libs/data'
@@ -122,6 +127,7 @@ export default {
     BButton,
     BPopover,
     BTable,
+    BSpinner,
     Place,
     BCard,
     SummaryPriceChart,
@@ -129,6 +135,8 @@ export default {
   },
   data() {
     return {
+      loading: true,
+      error: '',
       base: '',
       target: '',
       fields: ['pair', 'price', 'change'],
@@ -192,10 +200,10 @@ export default {
     const { poolid } = this.$route.params
     this.$http.osmosis.getDenomTraces().then(x => {
       this.denomTrace = x
-    })
-    this.$http.osmosis.getPools().then(x => {
-      this.pools = x
-      this.init(poolid)
+      this.$http.osmosis.getPools().then(pools => {
+        this.pools = pools
+        this.init(poolid)
+      })
     })
   },
   beforeRouteUpdate(to, from, next) {
@@ -223,6 +231,7 @@ export default {
       this.target = getPairName(this.current, this.denomTrace, 'target')
       this.$http.osmosis.getMarketData(CoinGeckoMap[this.base], CoinGeckoMap[this.target]).then(res => {
         this.marketData = res
+        this.loading = false
         const start = Date.now() - 8.64e+7
         res.prices.forEach(x => {
           if (x[0] > start) {
@@ -236,6 +245,8 @@ export default {
             }
           }
         })
+      }).catch(e => {
+        this.error = `This feature is not avalable in your country. 这个功能尚未对你的国家开放。${e}`
       })
     },
   },
