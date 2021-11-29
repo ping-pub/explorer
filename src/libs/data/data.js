@@ -327,9 +327,12 @@ export function isTestnet() {
    || window.location.search.indexOf('testnet') > -1)
 }
 
-export function formatToken(token, IBCDenom = {}, decimals = 2) {
+export function formatToken(token, IBCDenom = {}, decimals = 2, withDenom = true) {
   if (token) {
-    return `${formatTokenAmount(token.amount, decimals, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`
+    if (withDenom) {
+      return `${formatTokenAmount(token.amount, decimals, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`
+    }
+    return formatTokenAmount(token.amount, decimals, token.denom)
   }
   return token
 }

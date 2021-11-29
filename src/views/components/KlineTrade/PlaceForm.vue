@@ -202,7 +202,10 @@
       </div>
     </b-alert>
 
-    <deposite-window />
+    <deposite-window
+      :symbol="type === 0 ? target: base"
+      :denom-trace="denomTrace[currentDenom]"
+    />
 
   </div>
 </template>
@@ -283,23 +286,25 @@ export default {
       const p1 = this.$store.state.chains.quotes[this.target]
       return p1 && this.total > 0 ? (p1.usd * this.total).toFixed(2) : '-'
     },
-    computeAccounts() {
+    currentDenom() {
+      if (this.pool && this.pool.poolAssets) {
+        const mode = this.type === 1 ? 0 : 1
+        const { denom } = this.pool.poolAssets[mode].token
+        return denom
+      }
       return ''
     },
     available() {
       if (this.pool && this.pool.poolAssets) {
-        const mode = this.type === 1 ? 0 : 1
-        const { denom } = this.pool.poolAssets[mode].token
         let amount = 0
         if (Array.isArray(this.balance)) {
-          console.log('balance', this.balance)
           this.balance.forEach(x => {
-            if (x.denom === denom) {
+            if (x.denom === this.currentDenom) {
               amount = x.amount
             }
           })
         }
-        return formatTokenAmount(amount, 6, denom)
+        return formatTokenAmount(amount, 6, this.currentDenom)
       }
       return 0
     },
@@ -327,10 +332,11 @@ export default {
   },
   methods: {
     initialAddress() {
+      const { chain } = this.$route.params
       const accounts = getLocalAccounts()
       const current = this.$store.state.chains.defaultWallet
       if (accounts && accounts[current]) {
-        const acc = accounts[current].address.find(x => x.chain === 'osmosis')
+        const acc = accounts[current].address.find(x => x.chain === chain)
         if (acc) {
           this.address = acc.addr
         }
