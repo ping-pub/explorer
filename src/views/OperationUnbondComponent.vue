@@ -387,8 +387,8 @@ export default {
       const txMsgs = [{
         typeUrl: '/cosmos.staking.v1beta1.MsgUndelegate',
         value: {
-          delegatorAddress: this.selectedAddress,
-          validatorAddress: this.selectedValidator,
+          delegatorAddress: this.address,
+          validatorAddress: this.validatorAddress,
           amount: {
             amount: getUnitAmount(this.amount, this.token),
             denom: this.token,
