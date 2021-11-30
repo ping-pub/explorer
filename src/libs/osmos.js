@@ -69,10 +69,7 @@ export function getChainConfigForSymbol(symbol) {
   const key = CoinGeckoMap[symbol]
   if (key) {
     const confs = getLocalChains()
-    return Object.values(confs).find(x => {
-      console.log(x.coingecko, key)
-      return x.coingecko === key[0]
-    })
+    return Object.values(confs).find(x => x.coingecko === key[0])
   }
   return null
 }

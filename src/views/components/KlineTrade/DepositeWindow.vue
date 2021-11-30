@@ -302,6 +302,7 @@ export default {
       paths: {},
       destination: {},
       channels: [],
+      timeoutHeight: {},
 
       required,
       password,
@@ -328,7 +329,6 @@ export default {
         }
       }
       this.selectedChain = getChainConfigForSymbol(this.symbol)
-      console.log('selected chain: ', this.selectedChain)
     },
     computeAccount() {
       this.recipientAddress()
@@ -351,11 +351,12 @@ export default {
       this.token = ''
       this.computeAccount()
       this.loadBalance()
-      console.log('denom trace:', this.denomTrace)
       if (this.denomTrace) {
         const part = this.denomTrace.path.split('/')
-        this.destination = { sourcePort: part[0], sourceChannel: part[1] }
-        console.log(this.destination)
+        this.$http.getIBCChannel(part[1], part[0]).then(data => {
+          this.destination = data.channel.counterparty
+          this.timeoutHeight = data.proof_height
+        })
       }
     },
     loadBalance() {
@@ -415,13 +416,13 @@ export default {
         {
           typeUrl: '/ibc.applications.transfer.v1.MsgTransfer',
           value: {
-            sourcePort: this.destination.sourcePort,
-            sourceChannel: 'channel-141', // this.destination.sourceChannel,
+            sourcePort: this.destination.port_id,
+            sourceChannel: this.destination.channel_id,
             token: coin(Number(getUnitAmount(this.amount, this.denomTrace.base_denom)), this.denomTrace.base_denom),
             sender: this.address,
             receiver: this.recipient,
-            // timeoutHeight: undefined, // { revisionHeight: '0', revisionNumber: '0' },
-            timeoutTimestamp: String((Math.floor(Date.now() / 1000) + 10) * 1_000_000_000),
+            timeoutHeight: this.timeoutHeight,
+            // timeoutTimestamp: '0',
           },
         },
       ]
@@ -454,8 +455,8 @@ export default {
         signerData,
       ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
-          setLocalTxHistory({ op: 'send', hash: res.txhash, time: new Date() })
-          this.$bvModal.hide('ibc-transfer-window')
+          setLocalTxHistory({ op: 'ibc_sender', hash: res.txhash, time: new Date() })
+          this.$bvModal.hide('trading-deposte-window')
           this.$toast({
             component: ToastificationContent,
             props: {
