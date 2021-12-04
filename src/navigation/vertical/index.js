@@ -34,9 +34,9 @@ const modules = [
     route: 'gravity',
   },
   {
-    scope: 'osm-osis',
-    title: 'pools',
-    route: 'osmosis-pool',
+    scope: 'osmosis',
+    title: 'trade',
+    route: 'osmosis-trade',
   },
 ]
 

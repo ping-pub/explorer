@@ -1,3 +1,10 @@
+/*
+ * @Description: file
+ * @Autor: dingyiming
+ * @Date: 2021-11-20 15:26:27
+ * @LastEditors: dingyiming
+ * @LastEditTime: 2021-11-20 15:33:07
+ */
 import { isTestnet } from '@/libs/data/data'
 
 let chains = {}

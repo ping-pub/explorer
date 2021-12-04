@@ -56,6 +56,7 @@ const router = new VueRouter({
     },
     {
       path: '/wallet/accounts',
+      alias: '/wallet',
       name: 'accounts',
       component: () => import('@/views/WalletAccounts.vue'),
       meta: {
@@ -279,7 +280,7 @@ const router = new VueRouter({
     // custom modules for specified chains
     // 1. cosmos
     {
-      path: '/:chain/cosmos/pools',
+      path: '/:chain/cosmos/trade',
       name: 'gravity',
       component: () => import('@/views/GravityPool.vue'),
       meta: {
@@ -294,14 +295,18 @@ const router = new VueRouter({
     },
     // 2. OSMOSIS
     {
-      path: '/:chain/osmosis/pools',
-      name: 'osmosis-pool',
-      component: () => import('@/views/OsmosisPools.vue'),
+      path: '/:chain/osmosis/trade/:poolid?',
+      name: 'osmosis-trade',
+      component: () => import('@/views/OsmosisTrade.vue'),
       meta: {
-        pageTitle: 'Pools',
+        pageTitle: 'Classic Trade',
         breadcrumb: [
           {
-            text: 'Pools',
+            text: 'DEX',
+            active: true,
+          },
+          {
+            text: 'Classic Trade',
             active: true,
           },
         ],

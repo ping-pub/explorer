@@ -5,19 +5,21 @@ import { sha256, stringToPath } from '@cosmjs/crypto'
 // ledger
 import TransportWebBLE from '@ledgerhq/hw-transport-web-ble'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
-import { SigningStargateClient } from '@cosmjs/stargate'
 import CosmosApp from 'ledger-cosmos-js'
 import { LedgerSigner } from '@cosmjs/ledger-amino'
 
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import utc from 'dayjs/plugin/utc'
 import localeData from 'dayjs/plugin/localeData'
 import { $themeColors } from '@themeConfig'
+import PingWalletClient from './signing'
 
 dayjs.extend(localeData)
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
+dayjs.extend(utc)
 
 export function getLocalObject(name) {
   const text = localStorage.getItem(name)
@@ -159,12 +161,14 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
         throw new Error('Please install keplr extension')
       }
       await window.keplr.enable(chainId)
-      // signer = window.getOfflineSigner(chainId)
-      signer = window.getOfflineSignerOnlyAmino(chainId)
+      signer = window.getOfflineSigner(chainId)
+      // signer = window.getOfflineSignerOnlyAmino(chainId)
   }
 
+  // if (signer) return signAmino(signer, signerAddress, messages, fee, memo, signerData)
+
   // Ensure the address has some tokens to spend
-  const client = await SigningStargateClient.offline(signer)
+  const client = await PingWalletClient.offline(signer)
   return client.signAmino(device === 'keplr' ? signerAddress : toSignAddress(signerAddress), messages, fee, memo, signerData)
   // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
 }
@@ -326,9 +330,12 @@ export function isTestnet() {
    || window.location.search.indexOf('testnet') > -1)
 }
 
-export function formatToken(token, IBCDenom = {}, decimals = 2) {
+export function formatToken(token, IBCDenom = {}, decimals = 2, withDenom = true) {
   if (token) {
-    return `${formatTokenAmount(token.amount, decimals, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`
+    if (withDenom) {
+      return `${formatTokenAmount(token.amount, decimals, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`
+    }
+    return formatTokenAmount(token.amount, decimals, token.denom)
   }
   return token
 }
