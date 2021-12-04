@@ -244,6 +244,7 @@ import {
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { coin } from '@cosmjs/amino'
 import { getChainConfigForSymbol } from '@/libs/osmos'
+import dayjs from 'dayjs'
 
 export default {
   name: 'TransforDialogue',
@@ -412,6 +413,7 @@ export default {
         this.error = 'You have to select a destination'
         return
       }
+      const timeout = dayjs().add(4, 'hour')
       const txMsgs = [
         {
           typeUrl: '/ibc.applications.transfer.v1.MsgTransfer',
@@ -421,10 +423,28 @@ export default {
             token: coin(Number(getUnitAmount(this.amount, this.denomTrace.base_denom)), this.denomTrace.base_denom),
             sender: this.address,
             receiver: this.recipient,
-            timeoutHeight: this.timeoutHeight,
-            // timeoutTimestamp: '0',
+            // timeoutHeight: {
+            //   revisionNumber: '0',
+            //   revisionHeight: '0',
+            // },
+            timeoutTimestamp: String(timeout.utc().valueOf() * 1000000),
           },
         },
+        // {
+        //   type: 'cosmos-sdk/MsgTransfer',
+        //   value: {
+        //     source_port: this.destination.port_id,
+        //     source_channel: this.destination.channel_id,
+        //     token: coin(Number(getUnitAmount(this.amount, this.denomTrace.base_denom)), this.denomTrace.base_denom),
+        //     sender: this.address,
+        //     receiver: this.recipient,
+        //     timeout_height: {
+        //       revision_number: String(this.timeoutHeight.revision_number),
+        //       revision_height: String(200 + parseInt(this.timeoutHeight.revision_height, 10)),
+        //     },
+        //     timeout_timestamp: '0',
+        //   },
+        // },
       ]
 
       const txFee = {
@@ -442,8 +462,6 @@ export default {
         sequence: this.sequence,
         chainId: this.chainId,
       }
-
-      console.log(txMsgs, signerData, txFee)
 
       sign(
         this.wallet,

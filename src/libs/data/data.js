@@ -5,19 +5,21 @@ import { sha256, stringToPath } from '@cosmjs/crypto'
 // ledger
 import TransportWebBLE from '@ledgerhq/hw-transport-web-ble'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
-import { SigningStargateClient } from '@cosmjs/stargate'
 import CosmosApp from 'ledger-cosmos-js'
 import { LedgerSigner } from '@cosmjs/ledger-amino'
 
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import utc from 'dayjs/plugin/utc'
 import localeData from 'dayjs/plugin/localeData'
 import { $themeColors } from '@themeConfig'
+import PingWalletClient from './signing'
 
 dayjs.extend(localeData)
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
+dayjs.extend(utc)
 
 export function getLocalObject(name) {
   const text = localStorage.getItem(name)
@@ -142,7 +144,6 @@ function getHdPath(address) {
 }
 
 export async function sign(device, chainId, signerAddress, messages, fee, memo, signerData) {
-  console.log(device, signerData)
   let transport
   let signer
   switch (device) {
@@ -164,9 +165,11 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
       // signer = window.getOfflineSignerOnlyAmino(chainId)
   }
 
+  // if (signer) return signAmino(signer, signerAddress, messages, fee, memo, signerData)
+
   // Ensure the address has some tokens to spend
-  const client = await SigningStargateClient.offline(signer)
-  return client.sign(device === 'keplr' ? signerAddress : toSignAddress(signerAddress), messages, fee, memo, signerData)
+  const client = await PingWalletClient.offline(signer)
+  return client.signAmino(device === 'keplr' ? signerAddress : toSignAddress(signerAddress), messages, fee, memo, signerData)
   // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
 }
 

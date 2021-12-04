@@ -246,7 +246,7 @@ export default {
           }
         })
       }).catch(e => {
-        this.error = `This feature is not avalable in your country. 这个功能尚未对你的国家开放。${e}`
+        this.error = `This feature is not avalable in your country. \n这个功能尚未对你的国家开放。${e}`
       })
     },
   },

@@ -10,7 +10,7 @@
           <feather-icon
             v-b-modal.trading-deposte-window
             icon="PlusSquareIcon"
-            class="text-primary"
+            class="text-primary d-none"
           />
           <small> {{ available }} {{ type === 0 ? target: base }} </small>
         </span>
@@ -192,13 +192,17 @@
     </b-alert>
     <b-alert
       class="mt-2"
-      variant="secondary"
+      variant="danger"
+      show
     >
       <div class="alert-heading">
         Note
       </div>
       <div class="alert-body">
-        If the execution price exceeds the {{ slippage * 100 }}% slippage protection, your order will be automatically cancelled
+        Trading is not available. will open soon.
+        <div class="d-none">
+          If the execution price exceeds the {{ slippage * 100 }}% slippage protection, your order will be automatically cancelled
+        </div>
       </div>
     </b-alert>
 
@@ -214,9 +218,9 @@
 import {
   BFormInput, BButton, BAlert, BFormGroup, BInputGroup, BInputGroupAppend, BFormRadio, BFormRadioGroup, BCard, BPopover,
 } from 'bootstrap-vue'
-import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
+import FeatherIcon from '@core/components/feather-icon/FeatherIcon.vue'
 import {
-  formatTokenAmount, getLocalAccounts, percent, sign,
+  formatTokenAmount, getLocalAccounts, percent, setLocalTxHistory, sign,
 } from '@/libs/data'
 import { getPairName } from '@/libs/osmos'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -355,7 +359,7 @@ export default {
       const { denom } = this.pool.poolAssets[this.type === 0 ? 1 : 0].token
       const txMsgs = [
         {
-          type: 'osmosis/gamm/swap-exact-amount-in',
+          type: '/osmosis.gamm.v1beta1.MsgSwapExactAmountIn',
           value: {
             sender: this.address,
             routes: [
@@ -400,8 +404,6 @@ export default {
         chainId: this.chainId,
       }
 
-      console.log('trade: ', this.wallet, this.chainId, this.address, txMsgs, txFee, signerData)
-
       sign(
         this.wallet,
         this.chainId,
@@ -411,20 +413,19 @@ export default {
         'Sent Via https://ping.pub',
         signerData,
       ).then(bodyBytes => {
-        console.log('signed:', bodyBytes)
-        // this.$http.broadcastTx(bodyBytes).then(res => {
-        //   setLocalTxHistory({ op: 'swap', hash: res.tx_response.txhash, time: new Date() })
-        //   this.$toast({
-        //     component: ToastificationContent,
-        //     props: {
-        //       title: 'Transaction sent!',
-        //       icon: 'EditIcon',
-        //       variant: 'success',
-        //     },
-        //   })
-        // }).catch(e => {
-        //   this.error = e
-        // })
+        this.$http.broadcastTx(bodyBytes).then(res => {
+          setLocalTxHistory({ op: 'swap', hash: res.tx_response.txhash, time: new Date() })
+          this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Transaction sent!',
+              icon: 'EditIcon',
+              variant: 'success',
+            },
+          })
+        }).catch(e => {
+          this.error = e
+        })
       }).catch(e => {
         this.error = e
         this.dismissCountDown = this.dismissSecs
