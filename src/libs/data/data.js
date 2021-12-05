@@ -241,7 +241,7 @@ export function abbrMessage(msg) {
     }, {})
     const output = []
     Object.keys(sum).forEach(k => {
-      output.push(`${k}×${sum[k]}`)
+      output.push(sum[k] > 1 ? `${k}×${sum[k]}` : k)
     })
     return output.join(', ')
   }

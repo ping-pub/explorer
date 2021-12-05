@@ -133,7 +133,7 @@
                 >
                   <template #button-content>
                     <feather-icon
-                      icon="MoreVerticalIcon"
+                      icon="AlignJustifyIcon"
                       size="18"
                       class="cursor-pointer"
                     />
@@ -186,7 +186,13 @@
                     <app-collapse>
                       <app-collapse-item title="Assets">
                         <template #header>
-                          <small class="text-muted">{{ formatAddr(acc.addr) }}</small>
+                          <div>
+                            <feather-icon
+                              icon="CopyIcon"
+                              @click="copy(acc.addr)"
+                            />&nbsp;
+                            <small class="text-muted">{{ formatAddr(acc.addr) }}</small>
+                          </div>
                         </template>
                         <div
                           v-for="b,i in balances[acc.addr]"
@@ -228,6 +234,16 @@
                             >{{ formatChanges(b.denom) }}</small>
                           </div>
                         </div>
+                        <b-button
+                          v-if="balances[acc.addr]"
+                          block
+                          size="sm"
+                          variant="outline-primary"
+                          :to="`/${acc.chain}/account/${acc.addr}`"
+                          class="mt-1 mb-0"
+                        >
+                          <feather-icon icon="TrelloIcon" /> Detail
+                        </b-button>
                       </app-collapse-item>
                     </app-collapse>
                   </b-col>
