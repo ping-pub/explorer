@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
 import { SigningStargateClient } from '@cosmjs/stargate'
-import { MsgTransfer } from './msg-transfer'
+// import { MsgTransfer } from './msg-transfer'
 // import { AminoTypes } from './aminotypes'
 
 const amino_1 = require('@cosmjs/amino')
@@ -15,7 +15,7 @@ export default class PingWalletClient extends SigningStargateClient {
   static async offline(signer, options = {}) {
     const instance = new PingWalletClient(undefined, signer, options)
 
-    instance.registry.register('/ibc.applications.transfer.v1.MsgTransfer', MsgTransfer)
+    // instance.registry.register('/ibc.applications.transfer.v1.MsgTransfer', MsgTransfer)
 
     // console.log('registory:', instance.registry, AminoTypes)
     // const { aminoTypes = new AminoTypes({ prefix: options.prefix }) } = options

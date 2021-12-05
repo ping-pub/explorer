@@ -927,7 +927,7 @@
 
 "@cosmjs/amino@0.26.5", "@cosmjs/amino@^0.26.5":
   version "0.26.5"
-  resolved "https://registry.npmjs.org/@cosmjs/amino/-/amino-0.26.5.tgz"
+  resolved "https://registry.yarnpkg.com/@cosmjs/amino/-/amino-0.26.5.tgz#69db28610577a2cb647f0bfc1d2226e865d50455"
   integrity sha512-RFf9P1eb7O60JEWaZ5jbQA0wVbwU4SiBJINEjZkhkB1vUrAxCkfSHBZdJrVg8+IIRSWxPUUVr8PMuIyWlORV3A==
   dependencies:
     "@cosmjs/crypto" "0.26.5"
@@ -962,7 +962,7 @@
 
 "@cosmjs/json-rpc@0.26.5":
   version "0.26.5"
-  resolved "https://registry.npmjs.org/@cosmjs/json-rpc/-/json-rpc-0.26.5.tgz"
+  resolved "https://registry.yarnpkg.com/@cosmjs/json-rpc/-/json-rpc-0.26.5.tgz#c7c35d7ec6ab537f37dd24cd90f838f80d18c8f9"
   integrity sha512-SFGm5MlY54v3I26hXThwVteh91U+/DKS+KGqFL5lPLHZ2EHxggASqhKMiTJBMJVUDWvnmv1ikjFndkWNhpTPNw==
   dependencies:
     "@cosmjs/stream" "0.26.5"
@@ -970,7 +970,7 @@
 
 "@cosmjs/launchpad@^0.26.5":
   version "0.26.5"
-  resolved "https://registry.npmjs.org/@cosmjs/launchpad/-/launchpad-0.26.5.tgz"
+  resolved "https://registry.yarnpkg.com/@cosmjs/launchpad/-/launchpad-0.26.5.tgz#76b68fe4c860595256d8ea47101b90b4a85a3de0"
   integrity sha512-V+9bLlvlybm9TeqXAoD10KxFHK5exoUYHIoKdj03g78E2oOn82bLRMNs9ti5UtWWOzIe9suyv5/OvunTSlvA7Q==
   dependencies:
     "@cosmjs/amino" "0.26.5"
@@ -983,7 +983,7 @@
 
 "@cosmjs/ledger-amino@^0.26.5":
   version "0.26.5"
-  resolved "https://registry.npmjs.org/@cosmjs/ledger-amino/-/ledger-amino-0.26.5.tgz"
+  resolved "https://registry.yarnpkg.com/@cosmjs/ledger-amino/-/ledger-amino-0.26.5.tgz#ff53420e230839197b74cf4d589de562b04635e0"
   integrity sha512-UY3OsohGamLXp1P3M7hIW/Wk7Jj04xfFipyw+n4JQ0KSFrniju5idM89kqLELTimXptdI15TaivfHb4MJqfh7g==
   dependencies:
     "@cosmjs/amino" "0.26.5"
@@ -1003,7 +1003,7 @@
 
 "@cosmjs/proto-signing@0.26.5", "@cosmjs/proto-signing@^0.26.5":
   version "0.26.5"
-  resolved "https://registry.npmjs.org/@cosmjs/proto-signing/-/proto-signing-0.26.5.tgz"
+  resolved "https://registry.yarnpkg.com/@cosmjs/proto-signing/-/proto-signing-0.26.5.tgz#5a5029976c696c2d57c48b5d6867808b2b474bb2"
   integrity sha512-F94Uh+PX9nF5zGzUHMdEGgys+YCOudaWQehiHBfOjbHUIv0khufcRXs3l9/5dKzizz9ouQ5DHQAiWq/nYKZKqA==
   dependencies:
     "@cosmjs/amino" "0.26.5"
@@ -1015,7 +1015,7 @@
 
 "@cosmjs/socket@0.26.5":
   version "0.26.5"
-  resolved "https://registry.npmjs.org/@cosmjs/socket/-/socket-0.26.5.tgz"
+  resolved "https://registry.yarnpkg.com/@cosmjs/socket/-/socket-0.26.5.tgz#c71e0fa1329ca8e412cc13c1a1e2eb96c0d53a9e"
   integrity sha512-kBpXw9wuNHkO1AGuKgDA4/DOA+jZ6Lt0GVJVJIJ6bfjGbsewsNVocktAiH+1dGb47xXg2oH7OwGJL+B/PB3qPQ==
   dependencies:
     "@cosmjs/stream" "0.26.5"
@@ -1025,7 +1025,7 @@
 
 "@cosmjs/stargate@0.26.5":
   version "0.26.5"
-  resolved "https://registry.npmjs.org/@cosmjs/stargate/-/stargate-0.26.5.tgz"
+  resolved "https://registry.yarnpkg.com/@cosmjs/stargate/-/stargate-0.26.5.tgz#0c0df8cabd9486a8816cc72dc50dad724d9e37df"
   integrity sha512-rnRptbn01zXAa29272XZgxvH6zemPAvlE9/qGouRXpUm3ilHU+PscAq2k1pD17qtOKWRBLY2+x4feXYHwJg9VA==
   dependencies:
     "@confio/ics23" "^0.6.3"
@@ -1043,14 +1043,14 @@
 
 "@cosmjs/stream@0.26.5":
   version "0.26.5"
-  resolved "https://registry.npmjs.org/@cosmjs/stream/-/stream-0.26.5.tgz"
+  resolved "https://registry.yarnpkg.com/@cosmjs/stream/-/stream-0.26.5.tgz#600383cb494d5e29148eb2a4615c002298c4d9b5"
   integrity sha512-CIr/8bkRlLl36LAtbapsKxA7cMVhmPPWTihAcXgBXik1FM/0XCVNETPTQ64HX47eNQuP5AhWwaMoO553Sf9T2w==
   dependencies:
     xstream "^11.14.0"
 
 "@cosmjs/tendermint-rpc@0.26.5":
   version "0.26.5"
-  resolved "https://registry.npmjs.org/@cosmjs/tendermint-rpc/-/tendermint-rpc-0.26.5.tgz"
+  resolved "https://registry.yarnpkg.com/@cosmjs/tendermint-rpc/-/tendermint-rpc-0.26.5.tgz#31502f64b7c61455ad70a38dd146e7c96608072d"
   integrity sha512-bBcFgpTHEP15m8n/bG3cx/LO110sScpEvYvurZDewfy7MW8WETF6sYZaPCGfVDGWde1EPjFLwKKxQ1Da/XoK0A==
   dependencies:
     "@cosmjs/crypto" "0.26.5"

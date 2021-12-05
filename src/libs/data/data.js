@@ -14,6 +14,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
 import localeData from 'dayjs/plugin/localeData'
 import { $themeColors } from '@themeConfig'
+// import { SigningStargateClient } from '@cosmjs/stargate'
 import PingWalletClient from './signing'
 
 dayjs.extend(localeData)
@@ -161,14 +162,15 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
         throw new Error('Please install keplr extension')
       }
       await window.keplr.enable(chainId)
-      signer = window.getOfflineSigner(chainId)
-      // signer = window.getOfflineSignerOnlyAmino(chainId)
+      // signer = window.getOfflineSigner(chainId)
+      signer = window.getOfflineSignerOnlyAmino(chainId)
   }
 
   // if (signer) return signAmino(signer, signerAddress, messages, fee, memo, signerData)
 
   // Ensure the address has some tokens to spend
   const client = await PingWalletClient.offline(signer)
+  // const client = await SigningStargateClient.offline(signer)
   return client.signAmino(device === 'keplr' ? signerAddress : toSignAddress(signerAddress), messages, fee, memo, signerData)
   // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
 }
