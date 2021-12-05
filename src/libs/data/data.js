@@ -280,6 +280,8 @@ export function formatTokenDenom(tokenDenom) {
       denom = 'IBC...'
     } else if (denom.startsWith('NANOLIKE')) {
       denom = 'LIKE'
+    } else if (denom.startsWith('APHOTON')) {
+      denom = 'PHOTON'
     }
 
     return denom
@@ -291,7 +293,7 @@ export function getUnitAmount(amount, denom) {
   if (denom.startsWith('basecro')) {
     return String((Number(amount) * 100000000).toFixed())
   }
-  if (denom.startsWith('rowan')) {
+  if (denom.startsWith('rowan') || denom.startsWith('aphoton')) {
     // eslint-disable-next-line no-undef
     return (BigInt(amount) * 1000000000000000000n).toString()
   }
@@ -308,7 +310,7 @@ export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
     // eslint-disable-next-line no-undef
     amount = Number(BigInt(Number(tokenAmount)) / 1000000000000000000n)
     // }
-  } else if (denom.startsWith('rowan')) {
+  } else if (denom === 'rowan' || denom === 'aphoton') {
     // eslint-disable-next-line no-undef
     amount = Number(BigInt(Number(tokenAmount)) / 1000000000000000000n)
     // }
