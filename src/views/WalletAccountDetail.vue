@@ -51,7 +51,7 @@
           </b-button>
           <b-button
             v-b-modal.ibc-transfer-window
-            variant="success"
+            variant="danger"
             size="sm"
           ><feather-icon
              icon="SendIcon"

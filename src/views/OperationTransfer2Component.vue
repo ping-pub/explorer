@@ -8,7 +8,7 @@
       ok-title="Send"
       hide-header-close
       scrollable
-      :ok-disabled="!address"
+      :ok-disabled="!address || channels.length === 0"
       @hidden="resetModal"
       @ok="handleOk"
       @show="loadBalance"
@@ -18,8 +18,12 @@
     >
       <template #overlay>
         <div class="text-center">
+          <b-spinner
+            type="grow"
+            variant="danger"
+          />
           <p>
-            IBC Module is not enabled.
+            This feature is only for experts
           </p>
         </div>
       </template>
@@ -290,7 +294,7 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
   BModal, BRow, BCol, BInputGroup, BInputGroupAppend, BFormInput, BAvatar, BFormGroup, BFormSelect, BFormSelectOption,
-  BForm, BFormRadioGroup, BFormRadio, BInputGroupPrepend, BFormCheckbox, BOverlay,
+  BForm, BFormRadioGroup, BFormRadio, BInputGroupPrepend, BFormCheckbox, BOverlay, BSpinner,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
@@ -321,6 +325,7 @@ export default {
     BFormRadioGroup,
     BFormRadio,
     BFormCheckbox,
+    BSpinner,
     vSelect,
     BOverlay,
 
@@ -413,6 +418,7 @@ export default {
     },
     loadBalance() {
       this.destination = null
+      this.channels = []
       this.token = ''
       this.account = this.computeAccount()
       if (this.account && this.account.length > 0) this.address = this.account[0].addr
