@@ -130,7 +130,7 @@
             class="mr-25"
           >
             <feather-icon
-              icon="PlusIcon"
+              icon="LogInIcon"
               class="d-md-none"
             /><small class="d-none d-md-block">Delegate</small>
           </b-button>
@@ -141,7 +141,7 @@
             size="sm"
           >
             <feather-icon
-              icon="MinusIcon"
+              icon="ShareIcon"
               class="d-md-none"
             /><small class="d-none d-md-block"> Withdraw Rewards</small>
           </b-button>

@@ -191,21 +191,21 @@
                         <div
                           v-for="b,i in balances[acc.addr]"
                           :key="i"
-                          class="d-flex justify-content-between align-items-center"
+                          class="d-flex justify-content-between"
                         >
                           <div
-                            class="ml-25 font-weight-bolder text-uppercase text-success"
+                            class="ml-25 font-weight-bolder text-uppercase text-success d-flex flex-column text-left"
                             title="Balance"
                           >
-                            {{ formatDenom(b.denom) }}
+                            {{ formatAmount(b.amount, b.denom) }} {{ formatDenom(b.denom) }}
+                            <span class="font-small-2 text-muted text-nowrap">{{ currency }}{{ formatCurrency(b.amount, b.denom) }}</span>
+                          </div>
+                          <div class="d-flex flex-column text-right">
+                            <span class="font-weight-bold mb-0">{{ currency }}{{ formatPrice(b.denom) }}</span>
                             <small
                               :class="priceColor(b.denom)"
                               class="py-0"
                             >{{ formatChanges(b.denom) }}</small>
-                          </div>
-                          <div class="d-flex flex-column text-right">
-                            <span class="font-weight-bold mb-0">{{ formatAmount(b.amount, b.denom) }}</span>
-                            <span class="font-small-2 text-muted text-nowrap">{{ currency }}{{ formatCurrency(b.amount, b.denom) }}</span>
                           </div>
                         </div>
                         <div
@@ -214,18 +214,18 @@
                           class="d-flex justify-content-between align-items-center"
                         >
                           <div
-                            class="ml-25 font-weight-bolder text-uppercase text-primary"
-                            title="Delegations"
+                            class="ml-25 font-weight-bolder text-uppercase text-primary d-flex flex-column text-left"
+                            title="Balance"
                           >
-                            {{ formatDenom(b.denom) }}
+                            {{ formatAmount(b.amount, b.denom) }} {{ formatDenom(b.denom) }}
+                            <span class="font-small-2 text-muted text-nowrap">{{ currency }}{{ formatCurrency(b.amount, b.denom) }}</span>
+                          </div>
+                          <div class="d-flex flex-column text-right">
+                            <span class="font-weight-bold mb-0">{{ currency }}{{ formatPrice(b.denom) }}</span>
                             <small
                               :class="priceColor(b.denom)"
                               class="py-0"
                             >{{ formatChanges(b.denom) }}</small>
-                          </div>
-                          <div class="d-flex flex-column text-right">
-                            <span class="font-weight-bold mb-0">{{ formatAmount(b.amount, b.denom) }}</span>
-                            <span class="font-small-2 text-muted text-nowrap">{{ currency }}{{ formatCurrency(b.amount, b.denom) }}</span>
                           </div>
                         </div>
                       </app-collapse-item>
@@ -515,8 +515,16 @@ export default {
             })
             this.$http.getStakingDelegations(add.addr, chains[add.chain]).then(res => {
               if (res.delegation_responses) {
-                const delegation = res.delegation_responses.map(x => x.balance)
-                this.$set(this.delegations, add.addr, delegation)
+                const delegation = res.delegation_responses.map(x => x.balance).reduce((t, c) => {
+                  const t1 = t
+                  if (t1[c.denom]) {
+                    t1[c.denom] += Number(c.amount)
+                  } else {
+                    t1[c.denom] = Number(c.amount)
+                  }
+                  return t1
+                }, {})
+                this.$set(this.delegations, add.addr, Object.keys(delegation).map(x => ({ amount: String(delegation[x]), denom: x })))
               }
             }).catch(() => {})
           })
@@ -536,10 +544,12 @@ export default {
       this.$bvModal.hide('add-account')
     },
     formatDenom(v) {
+      if (!v) return ''
       const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v)
       return formatTokenDenom(denom)
     },
     formatAmount(v, denom = 'uatom') {
+      if (!v) return ''
       return formatTokenAmount(v, 2, denom)
     },
     formatAddr(v) {
@@ -576,6 +586,15 @@ export default {
     formatChanges(denom) {
       const price = this.getChanges(denom)
       return price === 0 ? '' : `${parseFloat(price.toFixed(2))}%`
+    },
+    formatPrice(denom) {
+      const d2 = this.formatDenom(denom)
+      const quote = this.$store.state.chains.quotes[d2]
+      if (quote) {
+        const price = quote[this.currency2]
+        return price
+      }
+      return 0
     },
     formatBalance(v) {
       let total = 0

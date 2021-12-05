@@ -111,11 +111,10 @@ export default {
 
     if (cached) {
       this.validators = cached
-    } else {
-      this.$http.getValidatorList().then(res => {
-        this.validators = res
-      })
     }
+    this.$http.getValidatorList().then(res => {
+      this.validators = res
+    })
     this.initBlocks()
   },
   beforeDestroy() {

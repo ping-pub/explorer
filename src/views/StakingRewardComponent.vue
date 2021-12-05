@@ -75,6 +75,16 @@
         </small>
       </div>
     </b-card-body>
+    <b-card-body class="pt-0">
+      <b-button
+        v-b-modal.withdraw-commission-window
+        block
+        size="sm"
+        variant="primary"
+      >
+        Withdraw Commission
+      </b-button>
+    </b-card-body>
     <operation-withdraw-commission-component
       :validator-address="validator"
       :address="address"
@@ -84,12 +94,13 @@
 
 <script>
 import {
-  BCard, BCardHeader, BCardTitle, BCardBody, BMediaBody, BMedia, BMediaAside, BAvatar,
+  BCard, BCardHeader, BCardTitle, BCardBody, BMediaBody, BMedia, BMediaAside, BAvatar, BButton,
 } from 'bootstrap-vue'
 import OperationWithdrawCommissionComponent from './OperationWithdrawCommissionComponent.vue'
 
 export default {
   components: {
+    BButton,
     BCard,
     BCardHeader,
     BCardTitle,
