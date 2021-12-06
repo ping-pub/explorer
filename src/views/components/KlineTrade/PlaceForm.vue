@@ -10,7 +10,7 @@
           <feather-icon
             v-b-modal.trading-deposte-window
             icon="PlusSquareIcon"
-            class="text-primary d-none"
+            class="text-primary"
           />
           <small> {{ available }} {{ type === 0 ? target: base }} </small>
         </span>
