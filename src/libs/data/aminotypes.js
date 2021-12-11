@@ -338,7 +338,6 @@ function createDefaultTypes(prefix) {
         "/ibc.applications.transfer.v1.MsgTransfer": {
             aminoType: "cosmos-sdk/MsgTransfer",
             toAmino: ({ sourcePort, sourceChannel, token, sender, receiver, timeoutHeight, timeoutTimestamp, }) => {
-                console.log('toAmino', sourceChannel, sourcePort)
                 var _a, _b, _c;
                 return ({
                     source_port: sourcePort,
@@ -370,6 +369,31 @@ function createDefaultTypes(prefix) {
                 timeoutTimestamp: long_1.default.fromString(timeout_timestamp || "0", true),
             }),
         },
+        // osmosis
+        "/osmosis.gamm.v1beta1.MsgSwapExactAmountIn": {
+            aminoType: "cosmos-sdk/MsgSwapExactAmountIn",
+            toAmino: ({ sender, routes, tokenIn, tokenOutMinAmount}) => {
+                utils_1.assertDefinedAndNotNull(tokenIn.amount, "missing amount");
+                return {
+                    sender,
+                    routes: routes.map(({poolId, tokenOutDenom}) => ({pool_id: poolId, token_out_denom: tokenOutDenom})),
+                    token_in: {
+                      amount: tokenIn.amount,
+                      denom: tokenIn.denom,
+                    },
+                    token_out_min_amount: tokenOutMinAmount,
+                };
+            },
+            fromAmino: ({ sender, routes, token_in, token_out_min_amount }) => ({
+                sender,
+                routes: routes.map(({pool_id, token_out_denom})=>({poolId: long_1.default.fromString(pool_id), tokenOutDenom: token_out_denom})),
+                tokenIn: {
+                  amount: long_1.default.fromString(token_in.amount),
+                  denom: token_in.denom,
+                },
+                tokenOutMinAmount: long_1.default.fromString(token_out_min_amount),
+            }),
+        },
     };
 }
 /**
@@ -385,6 +409,7 @@ class AminoTypes {
         this.register = Object.assign(Object.assign({}, filteredDefaultTypes), additions);
     }
     toAmino({ typeUrl, value }) {
+        console.log('typeurl:', typeUrl, value)
         const converter = this.register[typeUrl];
         if (!converter) {
             throw new Error("Type URL does not exist in the Amino message type register. " +

@@ -8,6 +8,7 @@
         <span class="font-weight-bolder">Balance </span>
         <span>
           <feather-icon
+            v-if="currentDenom.startsWith('ibc/')"
             v-b-modal.trading-deposte-window
             icon="PlusSquareIcon"
             class="text-primary"
@@ -215,6 +216,11 @@
 </template>
 
 <script>
+/* eslint-disable */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+const long_1 = __importDefault(require("long"));
 import {
   BFormInput, BButton, BAlert, BFormGroup, BInputGroup, BInputGroupAppend, BFormRadio, BFormRadioGroup, BCard, BPopover,
 } from 'bootstrap-vue'
@@ -359,20 +365,20 @@ export default {
       const { denom } = this.pool.poolAssets[this.type === 0 ? 1 : 0].token
       const txMsgs = [
         {
-          type: '/osmosis.gamm.v1beta1.MsgSwapExactAmountIn',
+          typeUrl: '/osmosis.gamm.v1beta1.MsgSwapExactAmountIn',
           value: {
             sender: this.address,
             routes: [
               {
-                poolId: this.pool.id,
+                poolId: long_1.default.fromString(this.pool.id),
                 tokenOutDenom,
               },
             ],
             tokenIn: {
               denom,
-              amount: String(this.amount),
+              amount: long_1.default.fromNumber(parseInt(this.amount * 1000000, 10)),
             },
-            tokenOutMinAmount: String(this.total),
+            tokenOutMinAmount: long_1.default.fromNumber(parseInt(this.total * 1000000, 10)),
           },
         },
       ]

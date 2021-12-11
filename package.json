@@ -41,6 +41,7 @@
     "echarts": "4.8.0",
     "leaflet": "1.6.0",
     "ledger-cosmos-js": "2.1.8",
+    "long": "^5.2.0",
     "node-fetch": "^2.6.1",
     "pako": "^1.0.11",
     "portal-vue": "2.1.7",
