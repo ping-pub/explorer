@@ -62,16 +62,7 @@
       <dark-Toggler class="d-none d-lg-block" />
       <search-bar />
       <locale />
-      <b-button
-        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-        variant="primary"
-        class="btn-icon"
-        :to="{ name: 'accounts' }"
-      >
-        <feather-icon icon="KeyIcon" />
-        <span class="align-middle ml-25">{{ walletName }}</span>
-      </b-button>
-      <!-- <b-dropdown
+      <b-dropdown
         class="ml-1"
         variant="link"
         no-caret
@@ -85,11 +76,15 @@
             variant="primary"
             class="btn-icon"
           >
-            <feather-icon icon="UserIcon" />
+            <feather-icon icon="KeyIcon" />
+            {{ walletName }}
           </b-button>
         </template>
 
-        <b-dropdown-item :to="{ name: 'portfolio' }">
+        <b-dropdown-item
+          :to="{ name: 'portfolio' }"
+          class="d-none"
+        >
           <feather-icon
             icon="PieChartIcon"
             size="16"
@@ -105,22 +100,22 @@
           <span class="align-middle ml-50">Accounts</span>
         </b-dropdown-item>
 
-        <b-dropdown-item :to="{ name: 'addresses' }">
+        <b-dropdown-item :to="{ name: 'delegations' }">
           <feather-icon
             icon="BookOpenIcon"
             size="16"
           />
-          <span class="align-middle ml-50">Address Book</span>
+          <span class="align-middle ml-50">My Delegations</span>
         </b-dropdown-item>
 
-        <b-dropdown-item :to="{ name: 'setting' }">
+        <b-dropdown-item :to="`/${selected_chain.chain_name}/uptime/my`">
           <feather-icon
             icon="SettingsIcon"
             size="16"
           />
-          <span class="align-middle ml-50">Setting</span>
+          <span class="align-middle ml-50">My Validators</span>
         </b-dropdown-item>
-      </b-dropdown> -->
+      </b-dropdown>
     </b-navbar-nav>
   </div>
 </template>
@@ -128,6 +123,7 @@
 <script>
 import {
   BLink, BNavbarNav, BMedia, BMediaAside, BAvatar, BMediaBody, VBTooltip, BButton,
+  BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import DarkToggler from '@core/layouts/components/app-navbar/components/DarkToggler.vue'
@@ -147,6 +143,8 @@ export default {
     BMediaAside,
     BMediaBody,
     BButton,
+    BDropdown,
+    BDropdownItem,
 
     // Navbar Components
     DarkToggler,

@@ -97,6 +97,38 @@ const router = new VueRouter({
         ],
       },
     },
+    {
+      path: '/wallet/delegations',
+      name: 'delegations',
+      component: () => import('@/views/WalletDelegations.vue'),
+      meta: {
+        pageTitle: 'My Delegations',
+        breadcrumb: [
+          {
+            text: 'Wallet',
+          },
+          {
+            text: 'My Delegations',
+          },
+        ],
+      },
+    },
+    {
+      path: '/wallet/helping',
+      name: 'helping',
+      component: () => import('@/views/WalletHelping.vue'),
+      meta: {
+        pageTitle: 'Help Ping.pub',
+        breadcrumb: [
+          {
+            text: 'Wallet',
+          },
+          {
+            text: 'Help Ping.pub',
+          },
+        ],
+      },
+    },
     // chain modules
     {
       path: '/:chain/',
@@ -129,7 +161,7 @@ const router = new VueRouter({
     },
     {
       path: '/:chain/uptime/my',
-      name: 'uptime',
+      name: 'myuptime',
       component: () => import('@/views/UptimeMyValidators.vue'),
       meta: {
         pageTitle: 'Uptime',
