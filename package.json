@@ -46,7 +46,7 @@
     "pako": "^1.0.11",
     "portal-vue": "2.1.7",
     "postcss-rtl": "1.7.3",
-    "prismjs": "1.24.0",
+    "prismjs": "1.25.0",
     "protobufjs-cli-dbx": "^7.0.7",
     "protobufjs-dbx": "^7.0.0",
     "ripemd160": "^2.0.2",
