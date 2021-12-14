@@ -11896,6 +11896,13 @@ vue-tree-halower@1.8.3:
   dependencies:
     vue "^2.4.4"
 
+vue2-flip-countdown@^0.12.1:
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/vue2-flip-countdown/-/vue2-flip-countdown-0.12.1.tgz#67d115634df1fbcf789be07e2674b1a6aefb4e7f"
+  integrity sha512-kS3A86VMUjsG2FGnqv/AO4UTLKAAwutqh1dOTPfjSRiUfsgLO+9gmhLSeo+qSBoQYpCxccq44G/IsoRef8kywQ==
+  dependencies:
+    uuid "^3.3.2"
+
 vue2-leaflet@2.5.2:
   version "2.5.2"
   resolved "https://registry.npmjs.org/vue2-leaflet/-/vue2-leaflet-2.5.2.tgz"

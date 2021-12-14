@@ -53,6 +53,7 @@
   "proposal_content": "Content",
   "proposal_total_deposit": "Total Deposit",
   "voting_time": "Voting Time",
+  "upgrade_time": "Estimated Upgrade Time:",
 
   "btn_vote": "Vote",
   "btn_deposit": "Deposit",

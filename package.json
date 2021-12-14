@@ -80,6 +80,7 @@
     "vue-toastification": "1.7.8",
     "vue-tour": "1.5.0",
     "vue-tree-halower": "1.8.3",
+    "vue2-flip-countdown": "^0.12.1",
     "vue2-leaflet": "2.5.2",
     "vuedraggable": "2.24.3",
     "vuex": "3.6.0"

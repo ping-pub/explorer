@@ -77,6 +77,11 @@
                 {{ $t('voting_time') }}
               </b-td><b-td>{{ proposal.voting_start_time }} - {{ proposal.voting_end_time }}</b-td>
             </b-tr>
+            <b-tr v-if="proposal.type === 'cosmos-sdk/SoftwareUpgradeProposal'">
+              <b-td>
+                {{ $t('upgrade_time') }}
+              </b-td><b-td><flip-countdown :deadline="upgradeTime" /></b-td>
+            </b-tr>
             <b-tr>
               <b-td>
                 {{ $t('proposal_type') }}
@@ -257,10 +262,12 @@ import {
   BCard, BCardBody, BCardFooter, BButton, BTable, BTableSimple, BTr, BTd, BCardTitle, BCardHeader,
   BProgressBar, BProgress, BTooltip, BBadge,
 } from 'bootstrap-vue'
+import FlipCountdown from 'vue2-flip-countdown'
 // import fetch from 'node-fetch'
 
 import { getCachedValidators, getStakingValidatorByAccount, tokenFormatter } from '@/libs/data/data'
 import { Proposal, Proposer } from '@/libs/data'
+import dayjs from 'dayjs'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
 import OperationVoteComponent from './OperationVoteComponent.vue'
 import OperationGovDepositComponent from './OperationGovDepositComponent.vue'
@@ -285,9 +292,11 @@ export default {
     ObjectFieldComponent,
     OperationVoteComponent,
     OperationGovDepositComponent,
+    FlipCountdown,
   },
   data() {
     return {
+      latest: {},
       next: null,
       proposal: new Proposal(),
       proposer: new Proposer(),
@@ -335,9 +344,27 @@ export default {
       ],
     }
   },
-
+  computed: {
+    upgradeTime() {
+      if (this.proposal.type === 'cosmos-sdk/SoftwareUpgradeProposal') {
+        if (Number(this.proposal?.contents.plan.height || 0) > 0 && this.latest) {
+          const blocks = Number(this.proposal.contents.plan.height) - Number(this.latest.block?.header?.height || 0)
+          if (blocks > 0) {
+            const endtime = dayjs().add(blocks * 6, 'second').format('YYYY-MM-DD HH:mm:ss')
+            return endtime
+          }
+        }
+        return dayjs(this.proposal.contents.plan.time).format('YYYY-MM-DD HH:mm:ss')
+      }
+      return '0001-01-01 00:00:00'
+    },
+  },
   created() {
     const pid = this.$route.params.proposalid
+
+    this.$http.getLatestBlock().then(res => {
+      this.latest = res
+    })
 
     this.$http.getGovernance(pid).then(p => {
       if (p.status === 2) {
