@@ -12,6 +12,7 @@ import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
+import RIPEMD160 from 'ripemd160'
 import localeData from 'dayjs/plugin/localeData'
 import { $themeColors } from '@themeConfig'
 // import { SigningStargateClient } from '@cosmjs/stargate'
@@ -118,11 +119,15 @@ export function getUserCurrencySign() {
 export function consensusPubkeyToHexAddress(consensusPubkey) {
   let raw = null
   if (typeof consensusPubkey === 'object') {
-    raw = toHex(fromBase64(consensusPubkey.value))
+    if (consensusPubkey.type === 'tendermint/PubKeySecp256k1') {
+      raw = new RIPEMD160().update(Buffer.from(sha256(fromBase64(consensusPubkey.value)))).digest('hex').toUpperCase()
+      return raw
+    }
+    raw = sha256(fromBase64(consensusPubkey.value))
   } else {
-    raw = toHex(Bech32.decode(consensusPubkey).data).toUpperCase().replace('1624DE6420', '')
+    raw = sha256(fromHex(toHex(Bech32.decode(consensusPubkey).data).toUpperCase().replace('1624DE6420', '')))
   }
-  const address = toHex(sha256(fromHex(raw))).slice(0, 40).toUpperCase()
+  const address = toHex(raw).slice(0, 40).toUpperCase()
   return address
 }
 
