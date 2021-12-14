@@ -4,5 +4,5 @@
     "api": "https://odinapi.chillvalidation.com",
     "sdk_version": "0.33.8",
     "addr_prefix": "odin",
-    "logo": "https://raw.githubusercontent.com/chillyvee/look/odin/public/odin.png"
+    "logo": "/logos/odin.png"
 }
