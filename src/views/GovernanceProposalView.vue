@@ -77,11 +77,6 @@
                 {{ $t('voting_time') }}
               </b-td><b-td>{{ proposal.voting_start_time }} - {{ proposal.voting_end_time }}</b-td>
             </b-tr>
-            <b-tr v-if="proposal.type === 'cosmos-sdk/SoftwareUpgradeProposal'">
-              <b-td>
-                {{ $t('upgrade_time') }}
-              </b-td><b-td><flip-countdown :deadline="upgradeTime" /></b-td>
-            </b-tr>
             <b-tr>
               <b-td>
                 {{ $t('proposal_type') }}
@@ -96,6 +91,14 @@
             :tablefield="proposal.contents"
             :small="false"
           /></div>
+        <b-table-simple v-if="proposal.type === 'cosmos-sdk/SoftwareUpgradeProposal'">
+          <b-tr>
+            <b-td class="text-center">
+              {{ $t('upgrade_time') }} {{ upgradeTime }}
+              <flip-countdown :deadline="upgradeTime" />
+            </b-td>
+          </b-tr>
+        </b-table-simple>
       </b-card-body>
       <b-card-footer>
         <router-link :to="`../gov`">
@@ -347,7 +350,7 @@ export default {
   computed: {
     upgradeTime() {
       if (this.proposal.type === 'cosmos-sdk/SoftwareUpgradeProposal') {
-        if (Number(this.proposal?.contents.plan.height || 0) > 0 && this.latest) {
+        if (Number(this.proposal?.contents.plan.height || 0) > 0 && this.latest?.block) {
           const blocks = Number(this.proposal.contents.plan.height) - Number(this.latest.block?.header?.height || 0)
           if (blocks > 0) {
             const endtime = dayjs().add(blocks * 6, 'second').format('YYYY-MM-DD HH:mm:ss')

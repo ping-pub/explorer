@@ -51,7 +51,11 @@
                 v-else-if="typeof value[key] === 'object'"
                 :tablefield="value[key]"
               />
-              <span v-else>{{ formatText(value[key]) }}</span>
+              <object-field-component
+                v-else-if="isObjectText(value[key])"
+                :tablefield="toObject(value[key])"
+              />
+              <span v-else>{{ value[key] }}</span>
             </b-tab>
           </b-tabs>
         </b-td>
@@ -101,6 +105,12 @@ export default {
       //   return value[Object.keys(value)[0]]
       // }
       return value
+    },
+    isObjectText(v) {
+      return String(v).startsWith('{') && String(v).endsWith('}')
+    },
+    toObject(v) {
+      return JSON.parse(v)
     },
     formatText: v => abbr(v, 60),
     eval_value(value) {
