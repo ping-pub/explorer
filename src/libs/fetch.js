@@ -276,7 +276,7 @@ export default class ChainFetch {
     if (compareVersions(config ? config.sdk_version : this.config.sdk_version, '0.40') < 0) {
       return this.get(`/distribution/delegators/${address}/rewards`, config).then(data => commonProcess(data))
     }
-    return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/rewards`).then(data => commonProcess(data))
+    return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/rewards`, config).then(data => commonProcess(data))
   }
 
   async getStakingValidators(address) {

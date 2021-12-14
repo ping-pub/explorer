@@ -1,9 +1,19 @@
 <template>
   <div>
-    <b-card>
+    <router-link
+      v-if="delegations.length === 0"
+      to="/wallet/import"
+    >
+      <b-card class="addzone text-center">
+        <feather-icon icon="PlusIcon" />
+        Connect Wallet
+      </b-card>
+    </router-link>
+    <b-card v-else>
       <b-table
-        :items="formatedDelegations(delegations)"
+        :items="formatedDelegations"
         stacked="sm"
+        :fields="fields"
       >
 
         <template #cell(validator)="data">
@@ -17,6 +27,12 @@
             {{ data.item.validator.moniker }}
           </router-link>
         </template>
+        <template #cell(delegator)="data">
+          <router-link :to="`/${data.item.validator.chain}/account/${data.item.delegator_address}`">
+            {{ data.value }}<br>
+            <small>{{ data.item.delegator_address }}</small>
+          </router-link>
+        </template>
         <template #cell(action)="data">
           <!-- size -->
           <b-button-group
@@ -27,7 +43,7 @@
               v-ripple.400="'rgba(113, 102, 240, 0.15)'"
               v-b-tooltip.hover.top="'Delegate'"
               variant="outline-primary"
-              @click="selectValue(data.value)"
+              @click="selectValue(data.item)"
             >
               <feather-icon icon="LogInIcon" />
             </b-button>
@@ -36,7 +52,7 @@
               v-ripple.400="'rgba(113, 102, 240, 0.15)'"
               v-b-tooltip.hover.top="'Redelegate'"
               variant="outline-primary"
-              @click="selectValue(data.value)"
+              @click="selectValue(data.item)"
             >
               <feather-icon icon="ShuffleIcon" />
             </b-button>
@@ -45,7 +61,7 @@
               v-ripple.400="'rgba(113, 102, 240, 0.15)'"
               v-b-tooltip.hover.top="'Unbond'"
               variant="outline-primary"
-              @click="selectValue(data.value)"
+              @click="selectValue(data.item)"
             >
               <feather-icon icon="LogOutIcon" />
             </b-button>
@@ -53,6 +69,19 @@
         </template>
       </b-table>
     </b-card>
+    <operation-withdraw-component :address="address" />
+    <operation-unbond-component
+      :address="address"
+      :validator-address.sync="selectedValidator"
+    />
+    <operation-delegate-component
+      :address="address"
+      :validator-address.sync="selectedValidator"
+    />
+    <operation-redelegate-component
+      :address="address"
+      :validator-address.sync="selectedValidator"
+    />
   </div>
 </template>
 
@@ -62,9 +91,14 @@ import {
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import {
-  formatToken, getCachedValidators, getLocalAccounts, getLocalChains,
+  formatToken, getCachedValidators, getLocalAccounts, getLocalChains, tokenFormatter,
 } from '@/libs/data'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
+
+import OperationWithdrawComponent from './OperationWithdrawComponent.vue'
+import OperationUnbondComponent from './OperationUnbondComponent.vue'
+import OperationDelegateComponent from './OperationDelegateComponent.vue'
+import OperationRedelegateComponent from './OperationRedelegateComponent.vue'
 
 export default {
   components: {
@@ -74,6 +108,11 @@ export default {
     BTable,
     BCard,
     FeatherIcon,
+
+    OperationWithdrawComponent,
+    OperationDelegateComponent,
+    OperationRedelegateComponent,
+    OperationUnbondComponent,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -81,23 +120,38 @@ export default {
   },
   data() {
     return {
+      fields: [
+        {
+          key: 'validator',
+          sortable: true,
+          // sortByFormatted: true,
+        },
+        {
+          key: 'delegator',
+          sortable: true,
+          // sortByFormatted: true,
+        },
+        {
+          key: 'delegation',
+          sortable: true,
+          // sortByFormatted: true,
+        },
+        {
+          key: 'reward',
+          sortable: true,
+          // sortByFormatted: true,
+        },
+      ],
+      address: '',
+      selectedValidator: '',
       accounts: [],
       delegations: [],
+      rewards: {},
     }
   },
   computed: {
-
-  },
-  created() {
-    this.init()
-  },
-  methods: {
-    selectValue(v) {
-      return v
-    },
-    formatedDelegations(v) {
-      // console.log('v', v)
-      return v.map(x => ({
+    formatedDelegations() {
+      return this.delegations.map(x => ({
         validator: {
           logo: x.chain.logo,
           validator: x.delegation.validator_address,
@@ -105,9 +159,22 @@ export default {
           chain: x.chain.chain_name,
         },
         delegator: x.keyname,
+        delegator_address: x.delegation.delegator_address,
         delegation: formatToken(x.balance),
+        reward: this.findReward(x.delegation.delegator_address, x.delegation.validator_address),
         // action: '',
       }))
+    },
+  },
+  created() {
+    this.init()
+  },
+  methods: {
+    selectValue(v) {
+      this.address = v.delegator_address
+      this.selectedValidator = v.validator.validator
+      console.log(v, this.address, this.selectedValidator)
+      return v
     },
     findMoniker(chain, addr) {
       const vals = JSON.parse(getCachedValidators(chain))
@@ -117,18 +184,30 @@ export default {
       }
       return addr
     },
+    findReward(delegator, validator) {
+      const reward = this.rewards[delegator]?.rewards.find(x => x.validator_address === validator) || null
+      console.log(reward, delegator, validator)
+      if (reward) {
+        return tokenFormatter(reward.reward)
+      }
+      return '-'
+    },
     init() {
       this.accounts = getLocalAccounts()
       const chains = getLocalChains()
       if (this.accounts) {
         Object.keys(this.accounts).forEach(acc => {
           this.accounts[acc].address.forEach(add => {
-            this.$http.getStakingDelegations(add.addr, chains[add.chain]).then(res => {
+            const chain = chains[add.chain]
+            this.$http.getStakingReward(add.addr, chain).then(res => {
+              this.rewards[add.addr] = res
+            })
+            this.$http.getStakingDelegations(add.addr, chain).then(res => {
               if (res.delegation_responses && res.delegation_responses.length > 0) {
                 const delegation = res.delegation_responses.map(x => {
                   const x2 = x
                   x2.keyname = acc
-                  x2.chain = chains[add.chain]
+                  x2.chain = chain
                   return x2
                 })
                 this.delegations = this.delegations.concat(delegation)
@@ -141,3 +220,17 @@ export default {
   },
 }
 </script>
+
+<style lang="css">
+.addzone {
+    border: 2px dashed #ced4da;
+    background: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: none;
+}
+.addzone :hover {
+    border: 2px dashed #7367F0;
+}
+
+</style>

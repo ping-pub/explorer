@@ -501,24 +501,12 @@ export default {
         }))
       }
       if (this.unbonding) {
-        // total = total.concat(this.unbonding.map(x => {
-        //   const xh = x.entries[0]
-        //   xh.type = 'unbonding'
-        //   xh.color = 'text-warning'
-        //   xh.icon = 'TrendingUpIcon'
-        //   return xh
-        // }))
         let tmp1 = 0
         this.unbonding.forEach(x => {
           x.entries.forEach(e => {
             tmp1 += Number(e.balance)
           })
         })
-        // this.redelegations.forEach(x => {
-        //   x.entries.forEach(e => {
-        //     tmp1 += Number(e.balance)
-        //   })
-        // })
         const unbonding = this.formatCurrency(tmp1, stakingDenom)
         sumCurrency += unbonding
         sum += tmp1
@@ -620,19 +608,12 @@ export default {
     this.$http.getStakingDelegations(this.address).then(res => {
       this.delegations = res.delegation_responses || res
     })
-    // this.$http.getStakingRedelegations(this.address).then(res => {
-    //   this.redelegations = res.redelegation_responses || res
-    // })
     this.$http.getStakingUnbonding(this.address).then(res => {
       this.unbonding = res.unbonding_responses || res
     })
     this.$http.getTxsBySender(this.address).then(res => {
       this.transactions = res
     })
-
-    // this.$http.getStakingValidators(this.address).then(res => {
-    //   console.log(res)
-    // })
   },
   methods: {
     pageload(v) {

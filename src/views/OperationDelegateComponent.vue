@@ -19,7 +19,7 @@
       >
         <template #overlay>
           <div class="text-center">
-            <b-icon
+            <b-avatar
               icon="stopwatch"
               font-scale="3"
               animation="cylon"
@@ -277,9 +277,10 @@
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
-  BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
+  BAvatar, BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
   BForm, BFormRadioGroup, BFormRadio, BButton, BInputGroupAppend, BFormCheckbox, BOverlay,
 } from 'bootstrap-vue'
+import Ripple from 'vue-ripple-directive'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
@@ -292,6 +293,7 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 export default {
   name: 'DelegateDialogue',
   components: {
+    BAvatar,
     BModal,
     BRow,
     BCol,
@@ -313,6 +315,9 @@ export default {
     ValidationObserver,
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
+  },
+  directives: {
+    Ripple,
   },
   props: {
     validatorAddress: {
@@ -527,8 +532,6 @@ export default {
       }).catch(e => {
         this.error = e
       })
-      // Send tokens
-      // return client.sendTokens(this.address, this.recipient, sendCoins, this.memo)
       return ''
     },
   },
