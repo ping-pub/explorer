@@ -173,7 +173,6 @@ export default {
     selectValue(v) {
       this.address = v.delegator_address
       this.selectedValidator = v.validator.validator
-      console.log(v, this.address, this.selectedValidator)
       return v
     },
     findMoniker(chain, addr) {
@@ -186,7 +185,6 @@ export default {
     },
     findReward(delegator, validator) {
       const reward = this.rewards[delegator]?.rewards.find(x => x.validator_address === validator) || null
-      console.log(reward, delegator, validator)
       if (reward) {
         return tokenFormatter(reward.reward)
       }
