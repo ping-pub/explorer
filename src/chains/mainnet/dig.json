@@ -1,8 +1,8 @@
 {
     "chain_name": "dig",
     "coingecko": "",
-    "api": "https://api.chihuahua.wtf",
+    "api": "https://65.21.202.37:8003",
     "sdk_version": "0.44.5",
     "addr_prefix": "dig",
-    "logo": "https://ipfs.infura.io/ipfs/QmUABSbsBEtp8Xb73uz4RaePsC6K2RHxnir9S57brLsfXU"
+    "logo": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/facebook/304/pick_26cf-fe0f.pn"
 }
