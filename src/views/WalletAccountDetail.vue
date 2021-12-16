@@ -469,7 +469,7 @@ export default {
 
       let stakingDenom = ''
 
-      if (this.delegations) {
+      if (this.delegations && this.delegations.length > 0) {
         let temp = 0
         this.delegations.forEach(x => {
           const xh = x.balance
@@ -554,7 +554,7 @@ export default {
     },
     deleTable() {
       const re = []
-      if (this.reward.rewards && this.delegations) {
+      if (this.reward.rewards && this.delegations && this.delegations.length > 0) {
         this.delegations.forEach(e => {
           const reward = this.reward.rewards.find(r => r.validator_address === e.delegation.validator_address)
           re.push({
