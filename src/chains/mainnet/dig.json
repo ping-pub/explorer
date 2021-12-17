@@ -1,7 +1,7 @@
 {
     "chain_name": "dig",
     "coingecko": "",
-    "api": "http://65.21.202.37:8003",
+    "api": "http://65.21.202.37:2223",
     "sdk_version": "0.44.5",
     "addr_prefix": "dig",
     "logo": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/facebook/304/pick_26cf-fe0f.png"
