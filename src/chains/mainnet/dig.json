@@ -1,0 +1,8 @@
+{
+    "chain_name": "dig",
+    "coingecko": "",
+    "api": "https://digapi.chillvalidation.com",
+    "sdk_version": "0.44.5",
+    "addr_prefix": "dig",
+    "logo": "/logos/DIG.png"
+}
