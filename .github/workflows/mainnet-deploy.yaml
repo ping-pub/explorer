@@ -1,11 +1,11 @@
 
-name: Ping Deploy
+name: Deploy to ping.pub
 
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  # pull_request:
+  #   branches: [ master ]
 
 jobs:
   deploy:
