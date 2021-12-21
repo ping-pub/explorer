@@ -1,7 +1,7 @@
 {
     "chain_name": "microtick",
-    "api": "https://lcd.microtick.zone/",
-    "sdk_version": "0.42.0",
+    "api": "https://lcd.microtick.zone",
+    "sdk_version": "0.42.9",
     "addr_prefix": "micro",
     "logo": "https://dl.airtable.com/.attachments/229a8d771fccc46b6730a7bc75d46e15/a3cf3543/microtick.png"
 }
