@@ -1,0 +1,8 @@
+{
+    "chain_name": "comdex",
+    "coingecko": "comdex", 
+    "api":"https://rest.comdex.one/",
+    "sdk_version": "0.44.3",
+    "addr_prefix": "comdex",
+    "logo": "https://raw.githubusercontent.com/comdex-official/logos/main/Comdex-Blue.svg"
+}
