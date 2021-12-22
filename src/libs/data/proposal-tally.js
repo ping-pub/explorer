@@ -1,5 +1,3 @@
-import { percent } from '../utils'
-
 export default class ProposalTally {
   constructor() {
     this.total = 0
@@ -17,11 +15,11 @@ export default class ProposalTally {
     } else {
       this.total = total
     }
-    this.yes = percent(Number(element.yes) / this.total)
-    this.no = percent(Number(element.no) / this.total)
-    this.veto = percent(Number(element.no_with_veto) / this.total)
-    this.abstain = percent(Number(element.abstain) / this.total)
-    this.turnout = percent(subtotal / this.total)
+    this.yes = Number(element.yes) / this.total
+    this.no = Number(element.no) / this.total
+    this.veto = Number(element.no_with_veto) / this.total
+    this.abstain = Number(element.abstain) / this.total
+    this.turnout = subtotal / this.total
     return this
   }
 

@@ -56,7 +56,7 @@
                   Start Date
                 </p>
                 <h6 class="mb-0">
-                  {{ p.voting_start_time }}
+                  {{ formatDate(p.voting_start_time) }}
                 </h6>
               </div>
               <div class="gov">
@@ -64,7 +64,7 @@
                   End Date
                 </p>
                 <h6 class="mb-0">
-                  {{ p.voting_end_time }}
+                  {{ formatDate(p.voting_end_time) }}
                 </h6>
               </div>
               <div class="gov">
@@ -72,7 +72,7 @@
                   Deposit
                 </p>
                 <h6 class="mb-0">
-                  {{ p.total_deposit || '-' }}
+                  {{ formatToken(p.total_deposit) || '-' }}
                 </h6>
               </div>
               <div class="gov">
@@ -80,7 +80,7 @@
                   Turnout
                 </p>
                 <h6 class="mb-0">
-                  {{ p.tally.turnout }}%
+                  {{ percent(p.tally.turnout) }}%
                 </h6>
               </div>
             </div>
@@ -95,51 +95,51 @@
             <b-progress-bar
               :id="'vote-yes'+p.id"
               variant="success"
-              :value="p.tally.yes"
+              :value="percent(p.tally.yes)"
               show-progress
-              :label="`${p.tally.yes.toFixed()}%`"
+              :label="`${percent(p.tally.yes).toFixed()}%`"
             />
             <b-progress-bar
               :id="'vote-no'+p.id"
               variant="warning"
-              :value="p.tally.no"
-              :label="`${p.tally.no.toFixed()}%`"
+              :value="percent(p.tally.no)"
+              :label="`${percent(p.tally.no).toFixed()}%`"
               show-progress
             />
             <b-progress-bar
               :id="'vote-veto'+p.id"
               variant="danger"
-              :value="p.tally.veto"
-              :label="`${p.tally.veto.toFixed()}%`"
+              :value="percent(p.tally.veto)"
+              :label="`${percent(p.tally.veto).toFixed()}%`"
               show-progress
             />
             <b-progress-bar
               :id="'vote-abstain'+p.id"
               variant="info"
-              :value="p.tally.abstain"
-              :label="`${p.tally.abstain.toFixed()}%`"
+              :value="percent(p.tally.abstain)"
+              :label="`${percent(p.tally.abstain).toFixed()}%`"
               show-progress
             />
           </b-progress>
           <b-tooltip
             :target="'vote-yes'+p.id"
           >
-            {{ p.tally.yes }}% voted Yes
+            {{ percent(p.tally.yes) }}% voted Yes
           </b-tooltip>
           <b-tooltip
             :target="'vote-no'+p.id"
           >
-            {{ p.tally.no }}% voted No
+            {{ percent(p.tally.no) }}% voted No
           </b-tooltip>
           <b-tooltip
             :target="'vote-veto'+p.id"
           >
-            {{ p.tally.veto }}% voted No With Veta
+            {{ percent(p.tally.veto) }}% voted No With Veta
           </b-tooltip>
           <b-tooltip
             :target="'vote-abstain'+p.id"
           >
-            {{ p.tally.abstain }}% voted Abstain
+            {{ percent(p.tally.abstain) }}% voted Abstain
           </b-tooltip>
           <b-card-footer class="pb-0">
             <router-link
@@ -194,6 +194,8 @@ import {
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import { Proposal } from '@/libs/data'
+import { percent, tokenFormatter } from '@/libs/utils'
+import dayjs from 'dayjs'
 import OperationVoteComponent from './OperationVoteComponent.vue'
 import OperationGovDepositComponent from './OperationGovDepositComponent.vue'
 
@@ -229,6 +231,9 @@ export default {
     this.getList()
   },
   methods: {
+    percent: v => percent(v),
+    formatDate: v => dayjs(v).format('YYYY-MM-DD'),
+    formatToken: v => tokenFormatter(v, {}),
     selectProposal(pid, title) {
       this.selectedProposalId = Number(pid)
       this.selectedTitle = title

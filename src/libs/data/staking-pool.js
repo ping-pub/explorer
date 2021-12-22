@@ -1,5 +1,3 @@
-import { percent } from '../utils'
-
 export default class StakingPool {
   constructor() {
     this.element = null
@@ -19,6 +17,6 @@ export default class StakingPool {
   }
 
   bondedRatio() {
-    return percent((this.bondedToken * 100) / this.total())
+    return (this.bondedToken * 100) / this.total()
   }
 }

@@ -65,17 +65,17 @@
             <b-tr>
               <b-td>
                 {{ $t('proposal_total_deposit') }}
-              </b-td><b-td>{{ proposal.total_deposit }} </b-td>
+              </b-td><b-td>{{ formatToken(proposal.total_deposit) }} </b-td>
             </b-tr>
             <b-tr>
               <b-td>
                 {{ $t('proposal_submit_time') }}
-              </b-td><b-td>{{ proposal.submit_time }}</b-td>
+              </b-td><b-td>{{ formatDate(proposal.submit_time) }}</b-td>
             </b-tr>
             <b-tr>
               <b-td>
                 {{ $t('voting_time') }}
-              </b-td><b-td>{{ proposal.voting_start_time }} - {{ proposal.voting_end_time }}</b-td>
+              </b-td><b-td>{{ formatDate(proposal.voting_start_time) }} - {{ formatDate(proposal.voting_end_time) }}</b-td>
             </b-tr>
             <b-tr>
               <b-td>
@@ -134,51 +134,51 @@
           <b-progress-bar
             :id="'vote-yes'+proposal.id"
             variant="success"
-            :value="proposal.tally.yes"
-            :label="`${proposal.tally.yes.toFixed()}%`"
+            :value="percent(proposal.tally.yes)"
+            :label="`${percent(proposal.tally.yes).toFixed()}%`"
             show-progress
           />
           <b-progress-bar
             :id="'vote-no'+proposal.id"
             variant="warning"
-            :value="proposal.tally.no"
-            :label="`${proposal.tally.no.toFixed()}%`"
+            :value="percent(proposal.tally.no)"
+            :label="`${percent(proposal.tally.no).toFixed()}%`"
             show-progress
           />
           <b-progress-bar
             :id="'vote-veto'+proposal.id"
             variant="danger"
-            :value="proposal.tally.veto"
-            :label="`${proposal.tally.veto.toFixed()}%`"
+            :value="percent(proposal.tally.veto)"
+            :label="`${percent(proposal.tally.veto).toFixed()}%`"
             show-progress
           />
           <b-progress-bar
             :id="'vote-abstain'+proposal.id"
             variant="info"
-            :value="proposal.tally.abstain"
-            :label="`${proposal.tally.abstain.toFixed()}%`"
+            :value="percent(proposal.tally.abstain)"
+            :label="`${percent(proposal.tally.abstain).toFixed()}%`"
             show-progress
           />
         </b-progress>
         <b-tooltip
           :target="'vote-yes'+proposal.id"
         >
-          {{ proposal.tally.yes }}% voted Yes
+          {{ percent(proposal.tally.yes) }}% voted Yes
         </b-tooltip>
         <b-tooltip
           :target="'vote-no'+proposal.id"
         >
-          {{ proposal.tally.no }}% voted No
+          {{ percent(proposal.tally.no) }}% voted No
         </b-tooltip>
         <b-tooltip
           :target="'vote-veto'+proposal.id"
         >
-          {{ proposal.tally.veto }}% voted No With Veta
+          {{ percent(proposal.tally.veto) }}% voted No With Veta
         </b-tooltip>
         <b-tooltip
           :target="'vote-abstain'+proposal.id"
         >
-          {{ proposal.tally.abstain }}% voted Abstain
+          {{ percent(proposal.tally.abstain) }}% voted Abstain
         </b-tooltip>
         <b-table
           v-if="votes.votes && votes.votes.length > 0"
@@ -206,7 +206,7 @@
     <b-card no-body>
       <b-card-header>
         <b-card-title>
-          Deposits ({{ proposal.total_deposit }})
+          Deposits ({{ formatToken(proposal.total_deposit) }})
         </b-card-title>
       </b-card-header>
       <b-card-body>
@@ -268,7 +268,9 @@ import {
 import FlipCountdown from 'vue2-flip-countdown'
 // import fetch from 'node-fetch'
 
-import { getCachedValidators, getStakingValidatorByAccount, tokenFormatter } from '@/libs/utils'
+import {
+  getCachedValidators, getStakingValidatorByAccount, percent, tokenFormatter,
+} from '@/libs/utils'
 import { Proposal, Proposer } from '@/libs/data'
 import dayjs from 'dayjs'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
@@ -392,6 +394,9 @@ export default {
     })
   },
   methods: {
+    percent: v => percent(v),
+    formatDate: v => dayjs(v).format('YYYY-MM-DD HH:mm'),
+    formatToken: v => tokenFormatter(v, {}),
     loadVotes() {
       if (this.next) {
         const pid = this.$route.params.proposalid

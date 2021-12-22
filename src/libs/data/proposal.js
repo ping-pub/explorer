@@ -1,5 +1,4 @@
 import compareVersions from 'compare-versions'
-import { toDay, formatToken } from '../utils'
 import ProposalTally from './proposal-tally'
 
 export default class Proposal {
@@ -28,10 +27,11 @@ export default class Proposal {
     this.title = element.content.value.title
     this.description = element.content.value.description
     this.tally = new ProposalTally().init(element.final_tally_result, total)
-    this.submit_time = toDay(element.submit_time, 'date')
-    this.voting_end_time = toDay(element.voting_end_time, 'date')
-    this.voting_start_time = toDay(element.voting_start_time, 'date')
-    this.total_deposit = formatToken(element.total_deposit[0])
+    this.submit_time = element.submit_time
+    this.voting_end_time = element.voting_end_time
+    this.voting_start_time = element.voting_start_time
+    // eslint-disable-next-line prefer-destructuring
+    this.total_deposit = element.total_deposit[0]
     this.contents = element.content.value
     return this
   }
