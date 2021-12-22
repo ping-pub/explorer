@@ -1,0 +1,8 @@
+{
+    "chain_name": "bostrom",
+    "coingecko": "",
+    "api": "https://lcd.bostrom.cybernode.ai",
+    "sdk_version": "0.44.3",
+    "addr_prefix": "bostrom",
+    "logo": "https://ipfs.infura.io/ipfs/QmSVz41kA5aXttxT1rAXnuJecfazij3wh95X8ewd7Kdc2F"
+}
