@@ -1,6 +1,95 @@
 <template>
   <div>
     <b-card
+      v-if="pingVals && pingVals.length > 0"
+      title="❤️ Helping Ping.pub By Staking ❤️"
+    >
+      <b-table
+        :items="pingVals"
+        :fields="validator_fields"
+        :sort-desc="true"
+        sort-by="tokens"
+        striped
+        hover
+        responsive="sm"
+      >
+        <!-- A virtual column -->
+        <template #cell(index)="data">
+          {{ data.index + 1 }}
+        </template>
+        <!-- Column: Validator -->
+        <template #cell(description)="data">
+          <b-media
+            vertical-align="center"
+            class="text-truncate"
+            style="max-width:320px;"
+          >
+            <template #aside>
+              <b-avatar
+                v-if="data.item.avatar"
+                v-b-tooltip.hover.v-primary
+                v-b-tooltip.hover.right="data.item.description.details"
+                size="32"
+                variant="light-primary"
+                :src="data.item.avatar"
+              />
+              <b-avatar
+                v-if="!data.item.avatar"
+                v-b-tooltip.hover.v-primary
+                v-b-tooltip.hover.right="data.item.description.details"
+              >
+                <feather-icon icon="ServerIcon" />
+              </b-avatar>
+            </template>
+            <span class="font-weight-bolder d-block text-nowrap">
+              <router-link
+                :to="`./staking/${data.item.operator_address}`"
+              >
+                {{ data.item.description.moniker }}
+              </router-link>
+            </span>
+            <small
+              class="text-muted"
+            >{{ data.item.description.website || data.item.description.identity }}</small>
+          </b-media>
+        </template>
+        <!-- Token -->
+        <template #cell(tokens)="data">
+          <div
+            v-if="data.item.tokens > 0"
+            class="d-flex flex-column"
+          >
+            <span class="font-weight-bold mb-0">{{ tokenFormatter(data.item.tokens, stakingParameters.bond_denom) }}</span>
+            <span class="font-small-2 text-muted text-nowrap d-none d-lg-block">{{ percent(data.item.tokens/stakingPool) }}%</span>
+          </div>
+          <span v-else>{{ data.item.delegator_shares }}</span>
+        </template>
+        <!-- Token -->
+        <template #cell(changes)="data">
+          <small
+            v-if="data.item.changes>0"
+            class="text-success"
+          >+{{ data.item.changes }}</small>
+          <small v-else-if="data.item.changes===0">-</small>
+          <small
+            v-else
+            class="text-danger"
+          >{{ data.item.changes }}</small>
+        </template>
+        <template #cell(operation)="data">
+          <b-button
+            v-b-modal.delegate-window
+            :name="data.item.operator_address"
+            variant="primary"
+            size="sm"
+            @click="selectValidator(data.item.operator_address)"
+          >
+            Delegate
+          </b-button>
+        </template>
+      </b-table>
+    </b-card>
+    <b-card
       no-body
     >
       <b-card-header class="d-flex justify-content-between">
@@ -141,6 +230,19 @@ export default {
   },
   data() {
     return {
+      keys: [
+        'bitsongvaloper1jxv0u20scum4trha72c7ltfgfqef6nscl86wxa',
+        'akashvaloper1vgstlgtsx4w80gphwgre0fcvc04lcnaelukvll',
+        'certikvaloper1jxv0u20scum4trha72c7ltfgfqef6nsczkvcu7',
+        'cosmosvaloper1jxv0u20scum4trha72c7ltfgfqef6nsch7q6cu',
+        'iva16plp8cmfkjssp222taq6pv6mkm8c5pa9lcktta',
+        'junovaloper1jxv0u20scum4trha72c7ltfgfqef6nscm9pmg2',
+        'kavavaloper1xftqdxvq0xkv2mu8c5y0jrsc578tak4m9u0s44',
+        'kivaloper1jxv0u20scum4trha72c7ltfgfqef6nschqtan9',
+        'osmovaloper1jxv0u20scum4trha72c7ltfgfqef6nscqx0u46',
+        'persistencevaloper1jxv0u20scum4trha72c7ltfgfqef6nsc4zjpnj',
+        'starsvaloper1jxv0u20scum4trha72c7ltfgfqef6nscdghxyx',
+      ],
       islive: true,
       validator_address: null,
       mintInflation: 0,
@@ -185,6 +287,9 @@ export default {
     }
   },
   computed: {
+    pingVals() {
+      return this.list.filter(x => this.keys.includes(x.operator_address))
+    },
     list() {
       return this.validators.map(x => {
         const xh = x
