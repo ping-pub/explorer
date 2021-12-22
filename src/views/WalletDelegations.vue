@@ -92,7 +92,7 @@ import {
 import Ripple from 'vue-ripple-directive'
 import {
   formatToken, getCachedValidators, getLocalAccounts, getLocalChains, tokenFormatter,
-} from '@/libs/data'
+} from '@/libs/utils'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 
 import OperationWithdrawComponent from './OperationWithdrawComponent.vue'

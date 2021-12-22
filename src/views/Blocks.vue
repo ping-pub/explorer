@@ -50,7 +50,7 @@ import {
   getCachedValidators,
   getStakingValidatorByHex,
   toDay,
-} from '@/libs/data'
+} from '@/libs/utils'
 // import fetch from 'node-fetch'
 
 export default {

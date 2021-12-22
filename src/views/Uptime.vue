@@ -67,7 +67,7 @@ import {
 
 import {
   consensusPubkeyToHexAddress, getCachedValidators, timeIn, toDay,
-} from '@/libs/data'
+} from '@/libs/utils'
 
 export default {
   components: {

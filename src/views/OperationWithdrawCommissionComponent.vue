@@ -169,7 +169,7 @@ import {
 } from '@validations'
 import {
   formatToken, setLocalTxHistory, sign, timeIn,
-} from '@/libs/data'
+} from '@/libs/utils'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {

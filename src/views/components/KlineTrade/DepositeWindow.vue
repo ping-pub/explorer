@@ -240,7 +240,7 @@ import {
 } from '@validations'
 import {
   formatToken, formatTokenDenom, getLocalAccounts, getUnitAmount, setLocalTxHistory, sign, timeIn,
-} from '@/libs/data'
+} from '@/libs/utils'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { coin } from '@cosmjs/amino'
 import { getChainConfigForSymbol } from '@/libs/osmos'

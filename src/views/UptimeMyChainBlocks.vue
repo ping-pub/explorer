@@ -59,7 +59,7 @@ import {
 
 import {
   getLocalChains, timeIn, toDay,
-} from '@/libs/data'
+} from '@/libs/utils'
 
 export default {
   name: 'Blocks',

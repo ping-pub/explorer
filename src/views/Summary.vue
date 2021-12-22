@@ -65,7 +65,7 @@ import {
 } from 'bootstrap-vue'
 import {
   formatNumber, formatTokenAmount, getUserCurrency, isToken, percent, timeIn, toDay, toDuration, tokenFormatter,
-} from '@/libs/data'
+} from '@/libs/utils'
 
 import SummaryParmetersComponent from './SummaryParmetersComponent.vue'
 import SummaryAssetsComponent from './SummaryAssetsComponent.vue'

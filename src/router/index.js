@@ -114,17 +114,17 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/wallet/helping',
-      name: 'helping',
-      component: () => import('@/views/WalletHelping.vue'),
+      path: '/wallet/transactions',
+      name: 'mytransactions',
+      component: () => import('@/views/WalletTransactions.vue'),
       meta: {
-        pageTitle: 'Help Ping.pub',
+        pageTitle: 'Transaction History',
         breadcrumb: [
           {
             text: 'Wallet',
           },
           {
-            text: 'Help Ping.pub',
+            text: 'Transaction History',
           },
         ],
       },

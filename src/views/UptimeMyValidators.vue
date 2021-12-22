@@ -22,7 +22,7 @@
 import {
   BRow, BCol, VBTooltip,
 } from 'bootstrap-vue'
-import { consensusPubkeyToHexAddress, getCachedValidators } from '@/libs/data'
+import { consensusPubkeyToHexAddress, getCachedValidators } from '@/libs/utils'
 import UptimeMyChainBlocks from './UptimeMyChainBlocks.vue'
 
 export default {

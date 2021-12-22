@@ -16,7 +16,7 @@
 
 <script>
 import { BTable, BCardTitle, BCard } from 'bootstrap-vue'
-import { formatNumber, formatTokenAmount, formatTokenDenom } from '@/libs/data'
+import { formatNumber, formatTokenAmount, formatTokenDenom } from '@/libs/utils'
 
 export default {
   components: {

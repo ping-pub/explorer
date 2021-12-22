@@ -268,7 +268,7 @@ import {
 import FlipCountdown from 'vue2-flip-countdown'
 // import fetch from 'node-fetch'
 
-import { getCachedValidators, getStakingValidatorByAccount, tokenFormatter } from '@/libs/data/data'
+import { getCachedValidators, getStakingValidatorByAccount, tokenFormatter } from '@/libs/utils'
 import { Proposal, Proposer } from '@/libs/data'
 import dayjs from 'dayjs'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'

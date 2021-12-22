@@ -227,7 +227,7 @@ import {
 import FeatherIcon from '@core/components/feather-icon/FeatherIcon.vue'
 import {
   formatTokenAmount, getLocalAccounts, percent, setLocalTxHistory, sign,
-} from '@/libs/data'
+} from '@/libs/utils'
 import { getPairName } from '@/libs/osmos'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import DepositeWindow from './DepositeWindow.vue'

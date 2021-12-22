@@ -232,7 +232,7 @@ import {
 } from '@validations'
 import {
   formatToken, formatTokenDenom, getUnitAmount, setLocalTxHistory, sign, timeIn,
-} from '@/libs/data'
+} from '@/libs/utils'
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 

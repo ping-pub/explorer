@@ -55,5 +55,8 @@ export default {
   directives: {
     'b-tooltip': VBTooltip,
   },
+  created() {
+    
+  },
 }
 </script>

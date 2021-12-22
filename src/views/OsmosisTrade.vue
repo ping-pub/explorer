@@ -114,7 +114,7 @@ import {
   BRow, BCol, BCard, BButton, BPopover, BTable, BSpinner,
 } from 'bootstrap-vue'
 import { CoinGeckoMap, getPairName } from '@/libs/osmos'
-import { formatTokenDenom } from '@/libs/data'
+import { formatTokenDenom } from '@/libs/utils'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import Place from './components/KlineTrade/Place.vue'
 // import Kline from './components/kline/index.vue'

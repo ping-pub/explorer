@@ -94,7 +94,7 @@
 import {
   BCard, BTableSimple, BTr, BTd, BBadge, BCardBody,
 } from 'bootstrap-vue'
-import { toDay, tokenFormatter } from '@/libs/data'
+import { toDay, tokenFormatter } from '@/libs/utils'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
 
 export default {

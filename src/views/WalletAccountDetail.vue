@@ -370,7 +370,7 @@ import chainAPI from '@/libs/fetch'
 import {
   formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay,
   toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign,
-} from '@/libs/data'
+} from '@/libs/utils'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
 import OperationTransferComponent from './OperationTransferComponent.vue'
 import OperationWithdrawComponent from './OperationWithdrawComponent.vue'

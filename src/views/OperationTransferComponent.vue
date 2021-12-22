@@ -257,7 +257,7 @@ import {
 } from '@validations'
 import {
   formatToken, formatTokenDenom, getLocalAccounts, getLocalChains, getUnitAmount, setLocalTxHistory, sign, timeIn,
-} from '@/libs/data'
+} from '@/libs/utils'
 import { Cosmos } from '@cosmostation/cosmosjs'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 

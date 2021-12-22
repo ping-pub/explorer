@@ -1,5 +1,5 @@
 import compareVersions from 'compare-versions'
-import { toDay, formatToken } from './data'
+import { toDay, formatToken } from '../utils'
 import ProposalTally from './proposal-tally'
 
 export default class Proposal {

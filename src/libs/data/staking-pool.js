@@ -1,4 +1,4 @@
-import { percent } from './data'
+import { percent } from '../utils'
 
 export default class StakingPool {
   constructor() {

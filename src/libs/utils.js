@@ -16,7 +16,7 @@ import RIPEMD160 from 'ripemd160'
 import localeData from 'dayjs/plugin/localeData'
 import { $themeColors } from '@themeConfig'
 // import { SigningStargateClient } from '@cosmjs/stargate'
-import PingWalletClient from './signing'
+import PingWalletClient from './data/signing'
 
 dayjs.extend(localeData)
 dayjs.extend(duration)
@@ -415,6 +415,7 @@ export function getStakingValidatorOperator(chainName, addr, length = -1) {
 
 export * from 'compare-versions'
 
+export * from './data'
 export class Data {
 
 }

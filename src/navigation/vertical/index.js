@@ -1,5 +1,5 @@
 import store from '@/store'
-import { isTestnet } from '../../libs/data/data'
+import { isTestnet } from '../../libs/utils'
 
 const modules = [
   {

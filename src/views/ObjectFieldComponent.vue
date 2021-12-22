@@ -73,7 +73,7 @@ import {
 } from 'bootstrap-vue'
 import {
   abbr, getStakingValidatorByHex, isHexAddress, isStringArray, isToken, percent, tokenFormatter,
-} from '@/libs/data'
+} from '@/libs/utils'
 import ArrayFieldComponent from './ArrayFieldComponent.vue'
 
 export default {

@@ -110,10 +110,17 @@
 
         <b-dropdown-item :to="`/${selected_chain.chain_name}/uptime/my`">
           <feather-icon
-            icon="SettingsIcon"
+            icon="AirplayIcon"
             size="16"
           />
           <span class="align-middle ml-50">My Validators</span>
+        </b-dropdown-item>
+        <b-dropdown-item :to="`/wallet/transactions`">
+          <feather-icon
+            icon="LayersIcon"
+            size="16"
+          />
+          <span class="align-middle ml-50">My Transactions</span>
         </b-dropdown-item>
       </b-dropdown>
     </b-navbar-nav>
@@ -131,7 +138,7 @@ import Locale from '@core/layouts/components/app-navbar/components/Locale.vue'
 import SearchBar from '@core/layouts/components/app-navbar/components/SearchBar.vue'
 // import CartDropdown from '@core/layouts/components/app-navbar/components/CartDropdown.vue'
 import store from '@/store'
-import { getLocalAccounts, timeIn, toDay } from '@/libs/data'
+import { getLocalAccounts, timeIn, toDay } from '@/libs/utils'
 // import UserDropdown from '@core/layouts/components/app-navbar/components/UserDropdown.vue'
 
 export default {

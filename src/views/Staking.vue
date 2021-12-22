@@ -117,7 +117,7 @@ import {
 } from 'bootstrap-vue'
 import {
   Validator, percent, StakingParameters, formatToken,
-} from '@/libs/data'
+} from '@/libs/utils'
 import { keybase } from '@/libs/fetch'
 // import { toHex } from '@cosmjs/encoding'
 // import fetch from 'node-fetch'

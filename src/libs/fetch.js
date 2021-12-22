@@ -7,7 +7,7 @@ import { toBase64 } from '@cosmjs/encoding'
 import {
   Proposal, ProposalTally, Proposer, StakingPool, Votes, Deposit,
   Validator, StakingParameters, Block, ValidatorDistribution, StakingDelegation, WrapStdTx, getUserCurrency,
-} from './data'
+} from './utils'
 import OsmosAPI from './osmos'
 
 function commonProcess(res) {
