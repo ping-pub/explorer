@@ -22,4 +22,15 @@
 - **coingecko**  the id of the token on chain. if there multi-tokens, using `["tokenA","tokenB"]
 - **api** the rest api endpoint. make sure CORS is enabled: `Allow-Control-Allow-Origin: *`
 
+# Test 
 
+please add these check points in comments with your PR, and adding your test result by clicking the checkbox of each line
+```
+Test Result:
+- [ ] Connect wallet, check if address is correct? 
+- [ ] Transfer
+- [ ] delegate/redelegate/unbond
+- [ ] withdraw Validator's Commission
+- [ ] withdraw Rewards
+```
+Test is very important for us and our users. 
