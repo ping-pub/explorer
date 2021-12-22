@@ -17,7 +17,7 @@
           to="./uptime/my"
           variant="primary"
         >
-          Browse favourate only
+          Browse favorite only
         </b-button>
         <b-form-input
           v-model="query"
