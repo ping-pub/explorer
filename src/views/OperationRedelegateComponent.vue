@@ -453,7 +453,12 @@ export default {
         signerData,
       ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes).then(res => {
-          setLocalTxHistory({ op: 'redelegate', hash: res.tx_response.txhash, time: new Date() })
+          setLocalTxHistory({
+            chain: this.$store.state.chains.selected,
+            op: 'redelegate',
+            hash: res.tx_response.txhash,
+            time: new Date(),
+          })
           this.$bvModal.hide('redelegate-window')
           this.$toast({
             component: ToastificationContent,

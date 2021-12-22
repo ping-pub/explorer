@@ -43,7 +43,8 @@ export function getLocalTxHistory() {
   return getLocalObject('txHistory')
 }
 
-export function setLocalTxHistory(newTx) {
+export function setLocalTxHistory(tx) {
+  const newTx = tx
   const txs = getLocalTxHistory()
   if (txs) {
     txs.push(newTx)

@@ -457,7 +457,12 @@ export default {
         signerData,
       ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
-          setLocalTxHistory({ op: 'deposit', hash: res.tx_response.txhash, time: new Date() })
+          setLocalTxHistory({
+            chain: this.$store.state.chains.selected,
+            op: 'deposit',
+            hash: res.tx_response.txhash,
+            time: new Date(),
+          })
           this.$bvModal.hide('deposit-window')
           this.$toast({
             component: ToastificationContent,

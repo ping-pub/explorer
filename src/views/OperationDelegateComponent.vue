@@ -516,7 +516,12 @@ export default {
         signerData,
       ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes).then(res => {
-          setLocalTxHistory({ op: 'delegate', hash: res.tx_response.txhash, time: new Date() })
+          setLocalTxHistory({
+            chain: this.$store.state.chains.selected,
+            op: 'delegate',
+            hash: res.tx_response.txhash,
+            time: new Date(),
+          })
           this.$bvModal.hide('delegate-window')
           this.$toast({
             component: ToastificationContent,

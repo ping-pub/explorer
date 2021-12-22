@@ -1,62 +1,62 @@
 <template>
   <div>
     <b-table
-      :items="deleTable"
+      :items="history"
+      :fields="fields"
       stacked="sm"
     >
-      <template #cell(action)="data">
-        <!-- size -->
-        <b-button-group
+      <template #cell(chain)="data">
+        <b-avatar
           size="sm"
-        >
-          <b-button
-            v-b-modal.delegate-window
-            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            v-b-tooltip.hover.top="'Delegate'"
-            variant="outline-primary"
-            @click="selectValue(data.value)"
-          >
-            <feather-icon icon="LogInIcon" />
-          </b-button>
-          <b-button
-            v-b-modal.redelegate-window
-            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            v-b-tooltip.hover.top="'Redelegate'"
-            variant="outline-primary"
-            @click="selectValue(data.value)"
-          >
-            <feather-icon icon="ShuffleIcon" />
-          </b-button>
-          <b-button
-            v-b-modal.unbond-window
-            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            v-b-tooltip.hover.top="'Unbond'"
-            variant="outline-primary"
-            @click="selectValue(data.value)"
-          >
-            <feather-icon icon="LogOutIcon" />
-          </b-button>
-        </b-button-group>
+          :src="data.item.chain.logo"
+        /> {{ data.item.chain.chain_name }}
+      </template>
+      <template #cell(hash)="data">
+        <router-link :to="`/${data.item.chain.chain_name}/tx/${data.value}`">
+          {{ data.value }}
+        </router-link>
       </template>
     </b-table>
+    <div class="text-center">
+      <b-button @click="clear()">
+        Clear History
+      </b-button>
+    </div>
   </div>
 </template>
 
 <script>
 import {
-  BButton, VBTooltip, BTable,
+  VBTooltip, BTable, BAvatar, BButton,
 } from 'bootstrap-vue'
+import { getLocalTxHistory } from '@/libs/utils'
 
 export default {
   components: {
-    BButton,
-    BTable,
+    BTable, BAvatar, BButton,
   },
   directives: {
     'b-tooltip': VBTooltip,
   },
+  data() {
+    return {
+      fields: [
+        { key: 'chain', label: 'BLOCKCHAIN' },
+        { key: 'op', label: 'ACTION' },
+        { key: 'hash', label: 'TX HASH' },
+        { key: 'time', label: 'TIME' },
+      ],
+      history: [],
+    }
+  },
   created() {
-    
+    this.history = getLocalTxHistory()
+  },
+  methods: {
+    clear() {
+      this.history = []
+      localStorage.setItem('txHistory', [])
+    },
   },
 }
 </script>

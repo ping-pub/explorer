@@ -9,9 +9,13 @@
         Connect Wallet
       </b-card>
     </router-link>
-    <b-card v-else>
+    <b-card
+      v-for="(items,k) in groupedDelegations"
+      :key="k"
+      :title="k"
+    >
       <b-table
-        :items="formatedDelegations"
+        :items="items"
         stacked="sm"
         :fields="fields"
       >
@@ -29,8 +33,7 @@
         </template>
         <template #cell(delegator)="data">
           <router-link :to="`/${data.item.validator.chain}/account/${data.item.delegator_address}`">
-            {{ data.value }}<br>
-            <small>{{ data.item.delegator_address }}</small>
+            Withdraw
           </router-link>
         </template>
         <template #cell(action)="data">
@@ -69,6 +72,8 @@
         </template>
       </b-table>
     </b-card>
+
+    <!--- not completed--->
     <operation-withdraw-component :address="address" />
     <operation-unbond-component
       :address="address"
@@ -127,17 +132,18 @@ export default {
           // sortByFormatted: true,
         },
         {
-          key: 'delegator',
-          sortable: true,
-          // sortByFormatted: true,
-        },
-        {
           key: 'delegation',
           sortable: true,
           // sortByFormatted: true,
         },
         {
           key: 'reward',
+          sortable: true,
+          // sortByFormatted: true,
+        },
+        {
+          key: 'delegator',
+          label: '',
           sortable: true,
           // sortByFormatted: true,
         },
@@ -164,6 +170,30 @@ export default {
         reward: this.findReward(x.delegation.delegator_address, x.delegation.validator_address),
         // action: '',
       }))
+    },
+    groupedDelegations() {
+      const group = {}
+      this.delegations.forEach(x => {
+        const d = {
+          validator: {
+            logo: x.chain.logo,
+            validator: x.delegation.validator_address,
+            moniker: this.findMoniker(x.chain.chain_name, x.delegation.validator_address),
+            chain: x.chain.chain_name,
+          },
+          delegator: x.keyname,
+          delegator_address: x.delegation.delegator_address,
+          delegation: formatToken(x.balance),
+          reward: this.findReward(x.delegation.delegator_address, x.delegation.validator_address),
+          // action: '',
+        }
+        if (group[x.keyname]) {
+          group[x.keyname].push(d)
+        } else {
+          group[x.keyname] = [d]
+        }
+      })
+      return group
     },
   },
   created() {
