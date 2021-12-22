@@ -89,7 +89,7 @@
                     value="4"
                     class="custom-control-danger"
                   >
-                    No with Veto
+                    No With Veto
                   </b-form-radio>
                   <b-form-radio
                     v-model="option"
@@ -136,7 +136,7 @@
                   name="advance"
                   value="true"
                 >
-                  <small>Advance</small>
+                  <small>Advanced</small>
                 </b-form-checkbox>
               </b-form-group>
             </b-col>

@@ -14,7 +14,7 @@
           Sorry, The chain is not found
         </h2>
         <p class="mb-2">
-          Be free to contact us if you want to add your chain.
+          Feel free to contact us if you want to add your chain.
         </p>
 
         <b-button

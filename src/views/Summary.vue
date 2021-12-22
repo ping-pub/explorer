@@ -5,7 +5,7 @@
       :show="syncing"
     >
       <div class="alert-body">
-        <span>No new block is produced since  <strong>{{ latestTime }}</strong> </span>
+        <span>No new blocks have been produced since  <strong>{{ latestTime }}</strong> </span>
       </div>
     </b-alert>
     <b-row>
@@ -53,7 +53,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <summary-parmeters-component :data="slasing" />
+        <summary-parmeters-component :data="slashing" />
       </b-col>
     </b-row>
   </div>
@@ -104,8 +104,8 @@ export default {
         title: 'Distribution Parameters',
         items: [],
       },
-      slasing: {
-        title: 'Slasing Parameters',
+      slashing: {
+        title: 'Slashing Parameters',
         items: null,
       },
       mint: {
@@ -170,7 +170,7 @@ export default {
         })
     })
     this.$http.getSlashingParameters().then(res => {
-      this.slasing = this.normalize(res, 'Slashing Parameters')
+      this.slashing = this.normalize(res, 'Slashing Parameters')
     })
 
     const conf = this.$http.getSelectedConfig()

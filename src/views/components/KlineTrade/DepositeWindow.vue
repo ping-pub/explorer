@@ -134,7 +134,7 @@
                   name="advance"
                   value="true"
                 >
-                  <small>Advance</small>
+                  <small>Advanced</small>
                 </b-form-checkbox>
               </b-form-group>
             </b-col>
