@@ -2,7 +2,7 @@
     "chain_name": "chihuahua",
     "coingecko": "",
     "api": "https://api.chihuahua.wtf",
-    "sdk_version": "0.42.0",
+    "sdk_version": "0.44.3",
     "addr_prefix": "chihuahua",
     "logo": "https://ipfs.infura.io/ipfs/QmUABSbsBEtp8Xb73uz4RaePsC6K2RHxnir9S57brLsfXU"
 }
