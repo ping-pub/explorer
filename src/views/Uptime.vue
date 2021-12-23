@@ -6,7 +6,7 @@
         :show="syncing"
       >
         <div class="alert-body">
-          <span>No new block is produced since  <strong>{{ latestTime }}</strong> </span>
+          <span>No new blocks have been produced since  <strong>{{ latestTime }}</strong> </span>
         </div>
       </b-alert>
       <b-card

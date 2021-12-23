@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card
-      title="Baisc"
+      title="Basic"
       class="text-truncate"
     >
       <object-field-component

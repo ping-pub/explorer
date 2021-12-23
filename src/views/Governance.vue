@@ -134,7 +134,7 @@
           <b-tooltip
             :target="'vote-veto'+p.id"
           >
-            {{ percent(p.tally.veto) }}% voted No With Veta
+            {{ percent(p.tally.veto) }}% voted No With Veto
           </b-tooltip>
           <b-tooltip
             :target="'vote-abstain'+p.id"
