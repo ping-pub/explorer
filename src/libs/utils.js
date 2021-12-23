@@ -298,6 +298,9 @@ export function formatTokenDenom(tokenDenom) {
 }
 
 export function getUnitAmount(amount, denom) {
+  if (denom === 'boot') {
+    return String(amount)
+  }
   if (denom.startsWith('basecro')) {
     return String((Number(amount) * 100000000).toFixed())
   }
@@ -314,7 +317,9 @@ export function getUnitAmount(amount, denom) {
 
 export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
   let amount
-  if (denom.startsWith('inj')) {
+  if (denom === 'boot') {
+    amount = Number(tokenAmount)
+  } else if (denom.startsWith('inj')) {
     // eslint-disable-next-line no-undef
     amount = Number(BigInt(Number(tokenAmount)) / 1000000000000000000n)
     // }
