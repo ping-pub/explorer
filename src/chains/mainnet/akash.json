@@ -3,6 +3,8 @@
     "coingecko": "akash-network",
     "api": "https://akash.api.ping.pub",
     "sdk_version": "0.41.3",
+    "coin_type": "118",
+    "min_tx_fee": "800",
     "addr_prefix": "akash",
     "logo": "https://dl.airtable.com/.attachments/52586702dd8352d97834fce5c2d83614/969b4d53/akash-network.png"
 }

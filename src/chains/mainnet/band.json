@@ -3,6 +3,8 @@
     "coingecko": "band-protocol",
     "api": "https://laozi1.bandchain.org/api",
     "addr_prefix": "band",
+    "coin_type": "494",
+    "min_tx_fee": "800",
     "logo": "https://dl.airtable.com/.attachments/472ae99a508e32b4439b416beddd4eb9/c5166f62/band-symbol-blue-bg.75a3ad91.svg",
     "sdk_version": "0.44.0"
 }
