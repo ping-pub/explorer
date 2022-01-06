@@ -1,8 +1,0 @@
-{
-    "chain_name": "odin",
-    "coingecko": "odin-protocol",
-    "api": "https://odinapi.chillvalidation.com",
-    "sdk_version": "0.33.8",
-    "addr_prefix": "odin",
-    "logo": "/logos/odin.png"
-}
