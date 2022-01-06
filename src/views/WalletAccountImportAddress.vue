@@ -239,7 +239,20 @@
         </b-row>
       </tab-content>
     </form-wizard>
-
+    <b-alert
+      show
+      variant="danger"
+    >
+      <div class="alert-heading">
+        IMPORTANT
+      </div>
+      <div class="alert-body">
+        <div>
+          Ping Wallet only support 'm/44'/118/0'/0/0', The imported addresses will be different for chains which don't use 118, like Desmos.
+          Do NOT use these addresses.
+        </div>
+      </div>
+    </b-alert>
   </div>
 </template>
 
@@ -250,6 +263,7 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 // import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import {
+  BAlert,
   BRow,
   BCol,
   BFormGroup,
@@ -270,6 +284,7 @@ import { toHex } from '@cosmjs/encoding'
 
 export default {
   components: {
+    BAlert,
     ValidationProvider,
     ValidationObserver,
     FormWizard,
