@@ -290,6 +290,10 @@ export default {
       type: String,
       default: '',
     },
+    recipientAddress: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -299,7 +303,7 @@ export default {
       token: '',
       amount: null,
       memo: '',
-      recipient: null,
+      recipient: this.recipientAddress,
       fee: '800',
       feeDenom: '',
       wallet: 'ledgerUSB',
