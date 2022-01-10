@@ -6,5 +6,12 @@
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "persistence",
-    "logo": "https://dl.airtable.com/.attachments/23178be773dc4de133ca4c07056aba1c/6e855850/persistence.png"
+    "logo": "https://dl.airtable.com/.attachments/23178be773dc4de133ca4c07056aba1c/6e855850/persistence.png",
+    "assets": [{
+        "base": "uxprt",
+        "symbol": "XPRT",
+        "exponent": "6",
+        "coingecko_id": "persistence", 
+        "logo": "https://dl.airtable.com/.attachments/23178be773dc4de133ca4c07056aba1c/6e855850/persistence.png"
+    }]
 }

@@ -11,11 +11,17 @@
 ```json
 {
     "chain_name": "cosmos",
-    "coingecko": "cosmos", 
-    "api":"https://cosmos.api.ping.pub", 
+    "api": ["https://cosmos.api.ping.pub"], 
     "sdk_version": "0.42.6",
     "coin_type": "118",
     "min_tx_fee": "800",
+    "assets": [{
+        "base": "uatom",
+        "symbol": "ATOM",
+        "exponent": "6",
+        "coingecko_id": "cosmos", 
+        "logo": "https://dl.airtable.com/.attachments/e54f814bba8c0f9af8a3056020210de0/2d1155fb/cosmos-hub.svg"
+    }],
     "addr_prefix": "cosmos",
     "logo": "https://dl.airtable.com/.attachments/e54f814bba8c0f9af8a3056020210de0/2d1155fb/cosmos-hub.svg"
 }

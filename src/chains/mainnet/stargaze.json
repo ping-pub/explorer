@@ -6,5 +6,12 @@
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "stars",
-    "logo": "https://dl.airtable.com/.attachments/79f2b74422c63b3fdb0310407d9cc990/5f4f1dd8/RGw3ZaVT_400x400.png"
+    "logo": "https://dl.airtable.com/.attachments/79f2b74422c63b3fdb0310407d9cc990/5f4f1dd8/RGw3ZaVT_400x400.png",
+    "assets": [{
+        "base": "ustars",
+        "symbol": "STARS",
+        "exponent": "6",
+        "coingecko_id": "stargaze-protocol", 
+        "logo": "https://dl.airtable.com/.attachments/79f2b74422c63b3fdb0310407d9cc990/5f4f1dd8/RGw3ZaVT_400x400.png"
+    }]
 }

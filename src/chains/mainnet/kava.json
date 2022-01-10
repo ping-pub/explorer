@@ -6,5 +6,12 @@
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "kava",
-    "logo": "https://dl.airtable.com/.attachments/f25737491bd0034240093a7b4e039b15/afec77ff/logo.png"
+    "logo": "https://dl.airtable.com/.attachments/f25737491bd0034240093a7b4e039b15/afec77ff/logo.png",
+    "assets": [{
+        "base": "ukava",
+        "symbol": "KAVA",
+        "exponent": "6",
+        "coingecko_id": "kava", 
+        "logo": "https://dl.airtable.com/.attachments/f25737491bd0034240093a7b4e039b15/afec77ff/logo.png"
+    }]
 }

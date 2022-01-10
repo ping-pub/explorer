@@ -6,5 +6,12 @@
     "coin_type": "330",
     "min_tx_fee": "800",
     "addr_prefix": "terra",
-    "logo": "https://dl.airtable.com/.attachments/275a6cbdbdc911856556e716a60d6ec4/87addd7f/terra.jpg"
+    "logo": "https://dl.airtable.com/.attachments/275a6cbdbdc911856556e716a60d6ec4/87addd7f/terra.jpg",
+    "assets": [{
+        "base": "uluna",
+        "symbol": "LUNA",
+        "exponent": "6",
+        "coingecko_id": "terra-luna", 
+        "logo": "https://dl.airtable.com/.attachments/275a6cbdbdc911856556e716a60d6ec4/87addd7f/terra.jpg"
+    }]
 }

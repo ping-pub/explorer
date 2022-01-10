@@ -6,5 +6,12 @@
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "sent",
-    "logo": "https://dl.airtable.com/.attachments/321491a9da1680faa670fa81569b02b0/37621c88/unnamed.png"
+    "logo": "https://dl.airtable.com/.attachments/321491a9da1680faa670fa81569b02b0/37621c88/unnamed.png",
+    "assets": [{
+        "base": "udvpn",
+        "symbol": "DVPN",
+        "exponent": "6",
+        "coingecko_id": "sentinel", 
+        "logo": "https://dl.airtable.com/.attachments/321491a9da1680faa670fa81569b02b0/37621c88/unnamed.png"
+    }]
 }

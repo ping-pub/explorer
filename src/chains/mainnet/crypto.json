@@ -7,5 +7,12 @@
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "cro",
-    "logo": "https://dl.airtable.com/.attachments/b2e638424ea09dccd4f11b04dc53872a/844d11dc/LOGO.png"
+    "logo": "https://dl.airtable.com/.attachments/b2e638424ea09dccd4f11b04dc53872a/844d11dc/LOGO.png",
+    "assets": [{
+        "base": "basecro",
+        "symbol": "CRO",
+        "exponent": "18",
+        "coingecko_id": "crypto-com-chain", 
+        "logo": "https://dl.airtable.com/.attachments/b2e638424ea09dccd4f11b04dc53872a/844d11dc/LOGO.png"
+    }]
 }

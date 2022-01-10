@@ -6,5 +6,12 @@
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "lum",
-    "logo": "https://ipfs.infura.io/ipfs/QmWwKRnkHantvhoFx9serWaWKBUG6gfhSYN3SHdAv1jmKY"
+    "logo": "https://ipfs.infura.io/ipfs/QmWwKRnkHantvhoFx9serWaWKBUG6gfhSYN3SHdAv1jmKY",
+    "assets": [{
+        "base": "ulum",
+        "symbol": "LUM",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "https://ipfs.infura.io/ipfs/QmWwKRnkHantvhoFx9serWaWKBUG6gfhSYN3SHdAv1jmKY"
+    }]
 }

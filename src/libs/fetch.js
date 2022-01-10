@@ -244,10 +244,12 @@ export default class ChainFetch {
   }
 
   async get(url, config = null) {
+    let host = ''
     if (!config) {
       this.getSelectedConfig()
     }
-    const ret = await fetch((config ? config.api : this.config.api) + url).then(response => response.json())
+    host = (config ? config.api : this.config.api)
+    const ret = await fetch((Array.isArray(host) ? host[0] : host) + url).then(response => response.json())
     return ret
   }
 
@@ -257,7 +259,7 @@ export default class ChainFetch {
   }
 
   static fetch(host, url) {
-    const ret = fetch(host + url).then(response => response.json())
+    const ret = fetch((Array.isArray(host) ? host[0] : host) + url).then(response => response.json())
     return ret
   }
 

@@ -279,61 +279,79 @@ export function isToken(value) {
 
 export function formatTokenDenom(tokenDenom) {
   if (tokenDenom && tokenDenom.code === undefined) {
-    let denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom.toUpperCase() : tokenDenom.toUpperCase()
-    if (denom.charAt(0) === 'U' && denom !== 'USDX') {
-      denom = denom.substring(1)
-    } else if (denom === 'BASECRO') {
-      denom = 'CRO'
-    } else if (denom.startsWith('IBC')) {
-      denom = 'IBC...'
-    } else if (denom.startsWith('NANOLIKE')) {
-      denom = 'LIKE'
-    } else if (denom.startsWith('APHOTON')) {
-      denom = 'PHOTON'
-    }
+    let denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
+    const config = Object.values(getLocalChains())
 
-    return denom
+    config.forEach(x => {
+      if (x.assets) {
+        const asset = x.assets.find(a => (a.base === denom))
+        if (asset) denom = asset.symbol
+      }
+    })
+
+    return denom.toUpperCase()
   }
   return ''
 }
 
 export function getUnitAmount(amount, denom) {
-  if (denom === 'boot') {
-    return String(amount)
-  }
-  if (denom.startsWith('basecro')) {
-    return String((Number(amount) * 100000000).toFixed())
-  }
-  if (denom.startsWith('rowan') || denom.startsWith('aphoton')) {
-    // eslint-disable-next-line no-undef
-    return (BigInt(amount) * 1000000000000000000n).toString()
-  }
-  if (denom.startsWith('nanolike')) {
-    // eslint-disable-next-line no-undef
-    return String((Number(amount) * 1000000000).toFixed())
-  }
-  return String((Number(amount) * 1000000).toFixed())
+  let exp = 1
+  const config = Object.values(getLocalChains())
+
+  config.forEach(x => {
+    if (x.assets) {
+      const asset = x.assets.find(a => (a.base === denom))
+      if (asset) exp = asset.exponent
+    }
+  })
+  // if (denom === 'boot') {
+  //   return String(amount)
+  // }
+  // if (denom.startsWith('basecro')) {
+  //   return String((Number(amount) * 100000000).toFixed())
+  // }
+  // if (denom.startsWith('rowan') || denom.startsWith('aphoton')) {
+  //   // eslint-disable-next-line no-undef
+  //   return (BigInt(amount) * 1000000000000000000n).toString()
+  // }
+  // if (denom.startsWith('nanolike')) {
+  //   // eslint-disable-next-line no-undef
+  //   return String((Number(amount) * 1000000000).toFixed())
+  // }
+  return String((Number(amount) * (10 ** exp)).toFixed())
 }
 
 export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
-  let amount
-  if (denom === 'boot') {
-    amount = Number(tokenAmount)
-  } else if (denom.startsWith('inj')) {
-    // eslint-disable-next-line no-undef
-    amount = Number(BigInt(Number(tokenAmount)) / 1000000000000000000n)
-    // }
-  } else if (denom === 'rowan' || denom === 'aphoton') {
-    // eslint-disable-next-line no-undef
-    amount = Number(BigInt(Number(tokenAmount)) / 1000000000000000000n)
-    // }
-  } else if (denom.startsWith('basecro')) {
-    amount = Number(tokenAmount) / 100000000
-  } else if (denom.startsWith('nanolike')) {
-    amount = Number(tokenAmount) / 1000000000
-  } else {
-    amount = Number(tokenAmount) / 1000000
-  }
+  let amount = 0
+
+  let exp = 1
+  const config = Object.values(getLocalChains())
+
+  config.forEach(x => {
+    if (x.assets) {
+      const asset = x.assets.find(a => (a.base === denom))
+      if (asset) exp = asset.exponent
+    }
+  })
+  amount = Number(Number(tokenAmount)) / (10 ** exp)
+
+  // if (denom === 'boot') {
+  //   amount = Number(tokenAmount)
+  // } else if (denom.startsWith('inj')) {
+  //   // eslint-disable-next-line no-undef
+  //   amount = Number(BigInt(Number(tokenAmount)) / 1000000000000000000n)
+  //   // }
+  // } else if (denom === 'rowan' || denom === 'aphoton') {
+  //   // eslint-disable-next-line no-undef
+  //   amount = Number(BigInt(Number(tokenAmount)) / 1000000000000000000n)
+  //   // }
+  // } else if (denom.startsWith('basecro')) {
+  //   amount = Number(tokenAmount) / 100000000
+  // } else if (denom.startsWith('nanolike')) {
+  //   amount = Number(tokenAmount) / 1000000000
+  // } else {
+  //   amount = Number(tokenAmount) / 1000000
+  // }
   if (amount > 10) {
     return parseFloat(amount.toFixed(fraction))
   }
