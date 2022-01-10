@@ -566,7 +566,8 @@ export default {
     },
     formatAmount(v, denom = 'uatom') {
       if (!v) return ''
-      return formatTokenAmount(v, 2, denom)
+      const denom2 = (denom.startsWith('ibc') ? this.ibcDenom[denom] : denom)
+      return formatTokenAmount(v, 2, denom2)
     },
     formatAddr(v) {
       return v.substring(0, 10).concat('...', v.substring(v.length - 10))

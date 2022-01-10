@@ -294,8 +294,9 @@ export function formatTokenDenom(tokenDenom) {
   return ''
 }
 
-export function getUnitAmount(amount, denom) {
-  let exp = 1
+export function getUnitAmount(amount, tokenDenom) {
+  const denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
+  let exp = 6
   const config = Object.values(getLocalChains())
 
   config.forEach(x => {
@@ -304,27 +305,14 @@ export function getUnitAmount(amount, denom) {
       if (asset) exp = asset.exponent
     }
   })
-  // if (denom === 'boot') {
-  //   return String(amount)
-  // }
-  // if (denom.startsWith('basecro')) {
-  //   return String((Number(amount) * 100000000).toFixed())
-  // }
-  // if (denom.startsWith('rowan') || denom.startsWith('aphoton')) {
-  //   // eslint-disable-next-line no-undef
-  //   return (BigInt(amount) * 1000000000000000000n).toString()
-  // }
-  // if (denom.startsWith('nanolike')) {
-  //   // eslint-disable-next-line no-undef
-  //   return String((Number(amount) * 1000000000).toFixed())
-  // }
   return String((Number(amount) * (10 ** exp)).toFixed())
 }
 
-export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
+export function formatTokenAmount(tokenAmount, fraction = 2, tokenDenom = 'uatom') {
+  const denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
   let amount = 0
 
-  let exp = 1
+  let exp = 6
   const config = Object.values(getLocalChains())
 
   config.forEach(x => {
@@ -334,24 +322,6 @@ export function formatTokenAmount(tokenAmount, fraction = 2, denom = 'uatom') {
     }
   })
   amount = Number(Number(tokenAmount)) / (10 ** exp)
-
-  // if (denom === 'boot') {
-  //   amount = Number(tokenAmount)
-  // } else if (denom.startsWith('inj')) {
-  //   // eslint-disable-next-line no-undef
-  //   amount = Number(BigInt(Number(tokenAmount)) / 1000000000000000000n)
-  //   // }
-  // } else if (denom === 'rowan' || denom === 'aphoton') {
-  //   // eslint-disable-next-line no-undef
-  //   amount = Number(BigInt(Number(tokenAmount)) / 1000000000000000000n)
-  //   // }
-  // } else if (denom.startsWith('basecro')) {
-  //   amount = Number(tokenAmount) / 100000000
-  // } else if (denom.startsWith('nanolike')) {
-  //   amount = Number(tokenAmount) / 1000000000
-  // } else {
-  //   amount = Number(tokenAmount) / 1000000
-  // }
   if (amount > 10) {
     return parseFloat(amount.toFixed(fraction))
   }

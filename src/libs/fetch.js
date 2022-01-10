@@ -321,7 +321,10 @@ export default class ChainFetch {
 
   async getIBCDenomTrace(hash, config = null) {
     const h = hash.substring(hash.indexOf('/') + 1)
-    return this.get('/ibc/applications/transfer/v1beta1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
+    if (compareVersions(this.config.sdk_version, '0.42.6') < 0) {
+      return this.get('/ibc/applications/transfer/v1beta1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
+    }
+    return this.get('/ibc/apps/transfer/v1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
   }
 
   async getIBCChannels(config = null, key = null) {
@@ -401,8 +404,9 @@ export default class ChainFetch {
     if (!config) {
       this.getSelectedConfig()
     }
+    const host = (config ? config.api : this.config.api)
     // Default options are marked with *
-    const response = await fetch((config ? config.api : this.config.api) + url, {
+    const response = await fetch((Array.isArray(host) ? host[0] : host) + url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       // mode: 'cors', // no-cors, *cors, same-origin
       // credentials: 'same-origin', // redirect: 'follow', // manual, *follow, error
