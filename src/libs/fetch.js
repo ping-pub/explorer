@@ -321,7 +321,8 @@ export default class ChainFetch {
 
   async getIBCDenomTrace(hash, config = null) {
     const h = hash.substring(hash.indexOf('/') + 1)
-    if (compareVersions(this.config.sdk_version, '0.42.6') < 0) {
+    const sdkVersion = config ? config.sdk_version : this.config.sdk_version
+    if (compareVersions(sdkVersion, '0.42.4') < 0) {
       return this.get('/ibc/applications/transfer/v1beta1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
     }
     return this.get('/ibc/apps/transfer/v1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
@@ -348,15 +349,6 @@ export default class ChainFetch {
 
   static async getBankBalance(baseurl, address) {
     return ChainFetch.fetch(baseurl, '/bank/balances/'.concat(address)).then(data => commonProcess(data))
-  }
-
-  static async getIBCDenomTrace(baseurl, hash) {
-    const h = hash.substring(hash.indexOf('/'))
-    return ChainFetch.fetch(baseurl, '/ibc/applications/transfer/v1beta1/denom_traces/'.concat(h)).then(data => commonProcess(data))
-  }
-
-  static async getIBCDenomTraceText(baseurl, hash) {
-    return ChainFetch.getIBCDenomTrace(baseurl, hash).then(res => res.denom_trace.base_denom)
   }
 
   async getGravityPools() {

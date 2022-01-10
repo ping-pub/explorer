@@ -583,7 +583,7 @@ export default {
       this.assets = bal
       bal.forEach(x => {
         if (x.denom.startsWith('ibc/')) {
-          chainAPI.getIBCDenomTraceText(this.$http.config.api, x.denom).then(denom => {
+          this.$http.getIBCDenomTrace(x.denom).then(denom => {
             this.$set(this.denoms, x.denom, denom)
             const symbol = formatTokenDenom(denom)
             if (!this.quotes[symbol] && symbol.indexOf('/') === -1) {
