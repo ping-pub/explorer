@@ -72,7 +72,6 @@ export default {
     transfer(addr) {
       this.selectedAddress = addr
       this.$bvModal.show('transfer-window')
-      console.log(this.selectedAddress)
     },
   },
 }
