@@ -366,8 +366,8 @@ export default class ChainFetch {
   async getMarketChart(days = 14, coin = null) {
     const conf = this.getSelectedConfig()
     const currency = getUserCurrency()
-    if (conf.coingecko && conf.coingecko.length > 0) {
-      return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin || conf.coingecko}/market_chart?vs_currency=${currency}&days=${days}`)
+    if (conf.assets[0] && conf.assets[0].coingecko_id) {
+      return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin || conf.assets[0].coingecko_id}/market_chart?vs_currency=${currency}&days=${days}`)
     }
     return null
   }
