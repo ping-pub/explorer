@@ -482,12 +482,14 @@ export default {
     },
     calculateChartBar() {
       const total = this.calculateByDenom
+      // Object.entries(total.value).sort((a, b) => b[0].localeCompare(a[0]));
+      const data = Object.entries(total.value).sort((a, b) => b[1] - a[1]).slice(0, 15)
       return {
-        labels: Object.keys(total.value),
+        labels: data.map(x => x[0]),
         datasets: [
           {
             label: 'Market Cap',
-            data: Object.values(total.value),
+            data: data.map(x => x[1]),
             backgroundColor: chartColors(),
             borderWidth: 0,
             pointStyle: 'rectRounded',
@@ -495,11 +497,11 @@ export default {
           },
           {
             label: 'Qty',
-            data: Object.values(total.qty),
+            data: data.map(x => total.qty[x[0]]), // Object.values(total.qty),
             backgroundColor: chartColors(),
             borderWidth: 0,
             pointStyle: 'rectRounded',
-            // yAxisID: 'y-axis-2',
+            yAxisID: 'y-axis-2',
           },
         ],
       }
