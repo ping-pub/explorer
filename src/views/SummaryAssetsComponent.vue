@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import { sha256 } from '@cosmjs/crypto'
+import { toHex } from '@cosmjs/encoding'
 import { BTable, BCardTitle, BCard } from 'bootstrap-vue'
 import { formatNumber, formatTokenAmount, formatTokenDenom } from '@/libs/utils'
 
@@ -28,7 +30,7 @@ export default {
     return {
       islive: true,
       assets: [],
-      denoms: [],
+      denoms: {},
       cfield: [
         {
           key: 'denom',
@@ -43,27 +45,19 @@ export default {
     }
   },
   created() {
-    const denoms = []
+    this.$http.getAllIBCDenoms().then(x => {
+      x.denom_traces.forEach(trace => {
+        const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
+        this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace.base_denom)
+      })
+    })
     this.$http.getBankTotals().then(res => {
       const toshow = res.sort()
       this.assets = toshow.reverse().map(x => {
-        if (x.denom.startsWith('ibc/')) {
-          denoms.push(x.denom)
-        }
         const xh = x
-        const amount = Number(x.amount) / 1000000
-        xh.abbr = amount > 1 ? formatNumber(formatTokenAmount(x.amount, 0, x.denom), true, 2) : amount
+        xh.abbr = x.amount > 1 ? formatNumber(formatTokenAmount(x.amount, 0, x.denom), true, 2) : x.amount
         return xh
       })
-      // let promise = Promise.resolve()
-      // denoms.forEach(x => {
-      //   promise = promise.then(() => new Promise(resolve => {
-      //     chainAPI.getIBCDenomTraceText(this.$http.config.api, x).then(denom => {
-      //       if (this.islive) resolve()
-      //       this.$set(this.denoms, x, denom)
-      //     })
-      //   }))
-      // })
     })
   },
   beforeDestroy() {

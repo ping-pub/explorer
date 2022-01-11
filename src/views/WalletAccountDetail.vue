@@ -371,6 +371,8 @@ import {
   formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay,
   toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign,
 } from '@/libs/utils'
+import { sha256 } from '@cosmjs/crypto'
+import { toHex } from '@cosmjs/encoding'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
 import OperationTransferComponent from './OperationTransferComponent.vue'
 import OperationWithdrawComponent from './OperationWithdrawComponent.vue'
@@ -560,7 +562,7 @@ export default {
           re.push({
             validator: getStakingValidatorOperator(this.$http.config.chain_name, e.delegation.validator_address, 8),
             token: formatToken(e.balance, {}, 2),
-            reward: tokenFormatter(reward.reward),
+            reward: tokenFormatter(reward.reward, this.denoms),
             action: e.delegation.validator_address,
           })
         })
@@ -576,29 +578,23 @@ export default {
     },
   },
   created() {
+    this.$http.getAllIBCDenoms().then(x => {
+      x.denom_traces.forEach(trace => {
+        const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
+        this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace.base_denom)
+      })
+    })
     this.$http.getAuthAccount(this.address).then(acc => {
       this.account = acc
     })
     this.$http.getBankAccountBalance(this.address).then(bal => {
       this.assets = bal
       bal.forEach(x => {
-        if (x.denom.startsWith('ibc/')) {
-          this.$http.getIBCDenomTrace(x.denom).then(denom => {
-            this.$set(this.denoms, x.denom, denom)
-            const symbol = formatTokenDenom(denom)
-            if (!this.quotes[symbol] && symbol.indexOf('/') === -1) {
-              chainAPI.fetchTokenQuote(symbol).then(quote => {
-                this.$set(this.quotes, symbol, quote)
-              })
-            }
+        const symbol = formatTokenDenom(x.denom)
+        if (!this.quotes[symbol] && symbol.indexOf('/') === -1) {
+          chainAPI.fetchTokenQuote(symbol).then(quote => {
+            this.$set(this.quotes, symbol, quote)
           })
-        } else {
-          const symbol = formatTokenDenom(x.denom)
-          if (!this.quotes[symbol] && symbol.indexOf('/') === -1) {
-            chainAPI.fetchTokenQuote(symbol).then(quote => {
-              this.$set(this.quotes, symbol, quote)
-            })
-          }
         }
       })
     })

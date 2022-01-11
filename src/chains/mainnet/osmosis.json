@@ -13,5 +13,11 @@
         "exponent": "6",
         "coingecko_id": "osmosis", 
         "logo": "https://dl.airtable.com/.attachments/4ef30ec4008bc86cc3c0f74a6bb84050/0eeb4d64/aQ5W3zaT_400x400.jpg"
+    },{
+        "base": "uion",
+        "symbol": "ION",
+        "exponent": "6",
+        "coingecko_id": "ion", 
+        "logo": "https://dl.airtable.com/.attachments/4ef30ec4008bc86cc3c0f74a6bb84050/0eeb4d64/aQ5W3zaT_400x400.jpg"
     }]
 }

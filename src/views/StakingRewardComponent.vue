@@ -34,7 +34,7 @@
             <h6 class="transaction-title">
               {{ formatNumber(d.amount) }}
             </h6>
-            <small>{{ d.denom }} </small>
+            <small>{{ formatDenom(d.denom) }} </small>
           </b-media-body>
         </b-media>
         <small
@@ -65,7 +65,7 @@
             <h6 class="transaction-title">
               {{ formatNumber(d.amount) }}
             </h6>
-            <small>{{ d.denom }}</small>
+            <small>{{ formatDenom(d.denom) }}</small>
           </b-media-body>
         </b-media>
         <small
@@ -96,6 +96,8 @@
 import {
   BCard, BCardHeader, BCardTitle, BCardBody, BMediaBody, BMedia, BMediaAside, BAvatar, BButton,
 } from 'bootstrap-vue'
+import { sha256 } from '@cosmjs/crypto'
+import { toHex } from '@cosmjs/encoding'
 import OperationWithdrawCommissionComponent from './OperationWithdrawCommissionComponent.vue'
 
 export default {
@@ -127,11 +129,23 @@ export default {
   },
   data() {
     return {
+      denoms: {},
     }
+  },
+  created() {
+    this.$http.getAllIBCDenoms().then(x => {
+      x.denom_traces.forEach(trace => {
+        const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
+        this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace.base_denom)
+      })
+    })
   },
   methods: {
     formatNumber(value) {
       return Number(value).toFixed(2)
+    },
+    formatDenom(value) {
+      return value.startsWith('ibc') ? this.denoms[value] : value
     },
   },
 }
