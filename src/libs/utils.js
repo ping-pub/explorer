@@ -92,9 +92,36 @@ export function setUserCurrency(currency) {
 }
 
 export function chartColors() {
-  const colors = ['#6610f2', '#20c997', '#000000', '#FF0000',
-    '#800000', '#FFFF00', '#808000', '#00FF00', '#008000', '#00FFFF',
-    '#008080', '#0000FF', '#000080', '#FF00FF', '#800080']
+  const colors = [
+    '#8A2BE2', '#9ACD32', '#000080', '#008080', '#DC143C',
+    '#7FFFD4', '#B8860B', '#EEE8AA', '#FFFAFA', '#FDF5E6',
+    '#C0C0C0', '#E6E6FA', '#FFFAF0', '#2E8B57', '#DCDCDC',
+    '#FF1493', '#4682B4', '#191970', '#FF8C00', '#FFFFE0',
+    '#696969', '#FFFACD', '#DEB887', '#4169E1', '#9932CC',
+    '#B0C4DE', '#556B2F', '#FFE4E1', '#F5FFFA', '#8FBC8F',
+    '#B22222', '#90EE90', '#FFFF00', '#4B0082', '#DB7093',
+    '#F8F8FF', '#006400', '#6610f2', '#FFA500', '#7FFF00',
+    '#87CEFA', '#5F9EA0', '#483D8B', '#CD5C5C', '#ADFF2F',
+    '#2F4F4F', '#00FF7F', '#FFF5EE', '#F4A460', '#808000',
+    '#000000', '#00FA9A', '#000000', '#EE82EE', '#F5DEB3',
+    '#0000FF', '#BA55D3', '#FFF0F5', '#F5F5DC', '#0000CD',
+    '#FFD700', '#708090', '#6B8E23', '#800000', '#7B68EE',
+    '#FFA07A', '#800080', '#B0E0E6', '#00FFFF', '#00BFFF',
+    '#7CFC00', '#778899', '#FF7F50', '#E0FFFF', '#6495ED',
+    '#008B8B', '#DDA0DD', '#CD853F', '#FFFFF0', '#98FB98',
+    '#9400D3', '#D2691E', '#FF0000', '#008000', '#00008B',
+    '#C71585', '#FFB6C1', '#8B4513', '#20c997', '#FAEBD7',
+    '#E9967A', '#FFEFD5', '#FFE4C4', '#D8BFD8', '#A52A2A',
+    '#8B0000', '#32CD32', '#BDB76B', '#FF0000', '#DAA520',
+    '#800000', '#9370DB', '#F08080', '#FAF0E6', '#FF6347',
+    '#FF4500', '#FFFF00', '#808080', '#00CED1', '#FFC0CB',
+    '#FF00FF', '#F0FFFF', '#A9A9A9', '#F0E68C', '#1E90FF',
+    '#FFDAB9', '#228B22', '#F0FFF0', '#66CDAA', '#ADD8E6',
+    '#DA70D6', '#A0522D', '#FFE4B5', '#48D1CC', '#D2B48C',
+    '#FFEBCD', '#8B008B', '#3CB371', '#87CEEB', '#6A5ACD',
+    '#FFDEAD', '#FF69B4', '#BC8F8F', '#D3D3D3', '#00FF00',
+    '#FAFAD2', '#AFEEEE', '#40E0D0', '#FFF8DC', '#20B2AA',
+    '#00FFFF', '#FA8072', '#F0F8FF']
   return Object.values($themeColors).concat(colors)
 }
 
@@ -329,7 +356,7 @@ export function formatTokenAmount(tokenAmount, fraction = 2, tokenDenom = 'uatom
 
 export function isTestnet() {
   return (window.location.hostname.startsWith('testnet')
-   || window.location.search.indexOf('testnet') > -1)
+    || window.location.search.indexOf('testnet') > -1)
 }
 
 export function formatToken(token, IBCDenom = {}, decimals = 2, withDenom = true) {

@@ -51,7 +51,33 @@
           <h6 class="mb-0 text-uppercase">
             {{ selected_chain.chain_name }}
           </h6>
-          <small v-b-tooltip.hover.bottom="'Data Provider'">{{ selected_chain.api }} ({{ selected_chain.sdk_version || '-' }})</small>
+          <small id="data-provider">
+            {{ currentApi }} ({{ selected_chain.sdk_version || '-' }})
+            <b-dropdown
+              v-if="apiOptions.length > 1"
+              class="ml-0"
+              variant="flat-primary"
+              no-caret
+              toggle-class="p-0"
+              right
+              sm
+            >
+              <template #button-content>
+                <feather-icon
+                  icon="RepeatIcon"
+                  size="12"
+                  class="cursor-pointer"
+                />
+              </template>
+              <b-dropdown-item
+                v-for="(item, i) in apiOptions"
+                :key="item"
+                @click="change(i)"
+              >
+                {{ item }}
+              </b-dropdown-item>
+            </b-dropdown>
+          </small>
         </b-media-body>
       </b-media>
     </div>
@@ -171,9 +197,12 @@ export default {
     },
   },
   data() {
+    const conf = store.state.chains.selected
+    const s = localStorage.getItem(`${conf.chain_name}-api-index`)
     return {
       variant: 'success',
       tips: 'Synced',
+      index: s || 0,
     }
   },
   computed: {
@@ -188,6 +217,16 @@ export default {
     chainVariant() {
       return this.variant
     },
+    currentApi() {
+      return this.apiOptions[Number(this.index)]
+    },
+    apiOptions() {
+      const conf = store.state.chains.selected
+      if (Array.isArray(conf.api)) {
+        return conf.api
+      }
+      return [conf.api]
+    },
   },
   mounted() {
     const accounts = Object.keys(getLocalAccounts() || {})
@@ -196,6 +235,11 @@ export default {
     }
   },
   methods: {
+    change(v) {
+      this.index = v
+      const conf = store.state.chains.selected
+      localStorage.setItem(`${conf.chain_name}-api-index`, v)
+    },
     block() {
       store.commit('setHeight', 0)
       this.$http.getLatestBlock().then(block => {

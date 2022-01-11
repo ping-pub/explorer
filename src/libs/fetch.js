@@ -249,8 +249,13 @@ export default class ChainFetch {
       this.getSelectedConfig()
     }
     host = (config ? config.api : this.config.api)
-    const ret = await fetch((Array.isArray(host) ? host[0] : host) + url).then(response => response.json())
+    const ret = await fetch((Array.isArray(host) ? host[this.getApiIndex(config)] : host) + url).then(response => response.json())
     return ret
+  }
+
+  getApiIndex(config = null) {
+    const conf = config || this.config
+    return localStorage.getItem(`${conf.chain_name}-api-index`) || 0
   }
 
   async getUrl(url) {
@@ -404,9 +409,10 @@ export default class ChainFetch {
     if (!config) {
       this.getSelectedConfig()
     }
-    const host = (config ? config.api : this.config.api)
+    const conf = config || this.config
+    const index = localStorage.getItem(`${conf.chain_name}-api-index`) || 0
     // Default options are marked with *
-    const response = await fetch((Array.isArray(host) ? host[0] : host) + url, {
+    const response = await fetch((Array.isArray(conf.api) ? conf.api[Number(index)] : conf.api) + url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       // mode: 'cors', // no-cors, *cors, same-origin
       // credentials: 'same-origin', // redirect: 'follow', // manual, *follow, error
