@@ -384,10 +384,13 @@ export default {
           }
         })
         this.address = wallet.address[0].addr
+        this.hdpath = wallet.address[0].hdpath
         if (this.localAddress()) {
           this.$refs.wizard.nextTab()
         }
       }
+    } else {
+      this.hdpath = `m/44'/${selected.coin_type}/0'/0/0`
     }
   },
   methods: {
