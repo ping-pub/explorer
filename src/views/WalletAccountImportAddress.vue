@@ -139,6 +139,21 @@
               </b-form-group>
             </b-col>
             <b-col
+              v-if="hdpath"
+              md="12"
+            >
+              <b-form-group
+                label="HD Path"
+                label-for="ir"
+              >
+                <b-form-input
+                  id="ir"
+                  :value="hdpath"
+                  readonly
+                />
+              </b-form-group>
+            </b-col>
+            <b-col
               v-if="accounts"
               md="12"
             >
@@ -191,12 +206,16 @@
                             variant="light-primary"
                             rounded=""
                           />
-                          {{ item.chain_name }}
+                          <span
+                            v-b-tooltip.hover.v-primary
+                            :title="`Coin Type: ${item.coin_type}`"
+                            :class="hdpath.startsWith(`m/44'/${item.coin_type}`)?'text-success':'text-danger'"
+                          > {{ item.chain_name }}</span>
                         </b-form-checkbox>
                       </b-col>
                     </b-row>
                   </div>
-                  <small class="text-danger">{{ errors[0] }}</small>
+                  <small class="text-success">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
             </b-col>
@@ -214,7 +233,7 @@
             class="mb-50"
           />
           <h4 class="mb-0 ml-50">
-            {{ name }}
+            {{ name }} <small> {{ hdpath }}</small>
           </h4>
         </div>
 
@@ -274,6 +293,7 @@ import {
   BInputGroup,
   BInputGroupPrepend,
   BFormRadioGroup,
+  VBTooltip,
 } from 'bootstrap-vue'
 import { required } from '@validations'
 import store from '@/store'
@@ -301,6 +321,9 @@ export default {
     BFormRadioGroup,
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
+  },
+  directives: {
+    'b-tooltip': VBTooltip,
   },
   data() {
     return {
