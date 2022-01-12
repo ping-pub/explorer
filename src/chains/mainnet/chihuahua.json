@@ -4,7 +4,7 @@
     "api": "https://api.chihuahua.wtf",
     "sdk_version": "0.44.3",
     "coin_type": "118",
-    "min_tx_fee": "800",
+    "min_tx_fee": "5000",
     "addr_prefix": "chihuahua",
     "logo": "https://github.com/ChihuahuaChain/resources/raw/main/logo/logo_transparent_notext.png",
     "assets": [{

@@ -4,7 +4,7 @@
     "api": "https://api.data.kava.io",
     "sdk_version": "0.39.2",
     "coin_type": "118",
-    "min_tx_fee": "800",
+    "min_tx_fee": "5000",
     "addr_prefix": "kava",
     "logo": "https://dl.airtable.com/.attachments/f25737491bd0034240093a7b4e039b15/afec77ff/logo.png",
     "assets": [{

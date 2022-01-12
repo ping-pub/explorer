@@ -3,7 +3,7 @@
     "api": "https://laozi1.bandchain.org/api",
     "addr_prefix": "band",
     "coin_type": "494",
-    "min_tx_fee": "800",
+    "min_tx_fee": "8000",
     "assets": [{
         "base": "uband",
         "symbol": "BAND",

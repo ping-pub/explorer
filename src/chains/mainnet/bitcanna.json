@@ -4,7 +4,7 @@
     "api":"https://lcd.bitcanna.io", 
     "sdk_version": "0.44.2",
     "coin_type": "118",
-    "min_tx_fee": "800",
+    "min_tx_fee": "8000",
     "assets": [{
         "base": "ubcna",
         "symbol": "BCNA",

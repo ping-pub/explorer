@@ -3,7 +3,7 @@
     "api": ["https://akash.api.ping.pub"],
     "sdk_version": "0.41.3",
     "coin_type": "118",
-    "min_tx_fee": "800",
+    "min_tx_fee": "8000",
     "assets": [{
         "base": "uakt",
         "symbol": "AKT",

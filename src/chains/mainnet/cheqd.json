@@ -3,7 +3,7 @@
     "api": "https://api.cheqd.net",
     "sdk_version": "0.44.3",
     "coin_type": "118",
-    "min_tx_fee": "800",
+    "min_tx_fee": "5000",
     "addr_prefix": "cheqd",
     "logo": "https://raw.githubusercontent.com/osmosis-labs/assetlists/main/images/cheq.png",
     "assets": [{

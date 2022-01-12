@@ -4,7 +4,7 @@
     "api": "https://regen.api.ping.pub",
     "sdk_version": "0.42.4",
     "coin_type": "118",
-    "min_tx_fee": "800",
+    "min_tx_fee": "3000",
     "addr_prefix": "regen",
     "logo": "https://dl.airtable.com/.attachments/0c988f2cd6a7d4fec95f0a3bc87b45da/c7a9f8ba/regen-brandmark-48.svg",
     "assets": [{
