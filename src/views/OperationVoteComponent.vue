@@ -243,6 +243,7 @@ import {
 } from '@validations'
 import {
   abbrAddress,
+  extractAccountNumberAndSequence,
   formatToken, getLocalAccounts, setLocalTxHistory, sign, timeIn,
 } from '@/libs/utils'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -350,15 +351,12 @@ export default {
           }
         })
         this.$http.getAuthAccount(this.voter).then(ret => {
-          if (ret.value.base_vesting_account) {
-            this.accountNumber = ret.value.base_vesting_account.base_account.account_number
-            this.sequence = ret.value.base_vesting_account.base_account.sequence
-            if (!this.sequence) this.sequence = 0
-          } else {
-            this.accountNumber = ret.value.account_number
-            this.sequence = ret.value.sequence ? ret.value.sequence : 0
-          }
+          const account = extractAccountNumberAndSequence(ret)
+          this.accountNumber = account.accountNumber
+          this.sequence = account.sequence
         })
+        this.fee = this.$store.state.chains.selected?.min_tx_fee || '1000'
+        this.feeDenom = this.$store.state.chains.selected?.assets[0]?.base || ''
       }
     },
     loadBalance() {

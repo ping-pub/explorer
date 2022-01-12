@@ -300,6 +300,7 @@ import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
+  extractAccountNumberAndSequence,
   formatToken, formatTokenDenom, getLocalAccounts, getLocalChains, getUnitAmount, setLocalTxHistory, sign, timeIn,
 } from '@/libs/utils'
 import { Cosmos } from '@cosmostation/cosmosjs'
@@ -456,15 +457,12 @@ export default {
           }
         })
         this.$http.getAuthAccount(this.address, this.selectedChain).then(ret => {
-          if (ret.value.base_vesting_account) {
-            this.accountNumber = ret.value.base_vesting_account.base_account.account_number
-            this.sequence = ret.value.base_vesting_account.base_account.sequence
-            if (!this.sequence) this.sequence = 0
-          } else {
-            this.accountNumber = ret.value.account_number
-            this.sequence = ret.value.sequence ? ret.value.sequence : 0
-          }
+          const account = extractAccountNumberAndSequence(ret)
+          this.accountNumber = account.accountNumber
+          this.sequence = account.sequence
         })
+        this.fee = this.selectedChain?.min_tx_fee || '1000'
+        this.feeDenom = this.selectedChain?.assets[0]?.base || ''
 
         const channels = this.$store.state.chains.ibcChannels[this.selectedChain.chain_name]
         if (!channels) {

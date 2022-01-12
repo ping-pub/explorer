@@ -125,6 +125,22 @@ export function chartColors() {
   return Object.values($themeColors).concat(colors)
 }
 
+export function extractAccountNumberAndSequence(ret) {
+  let account = ret.value
+  if (ret.value && ret.value.base_vesting_account) { // vesting account
+    account = ret.value.base_vesting_account?.base_account
+  } else if (ret.value && ret.value.base_account) { // evmos based account
+    account = ret.value.base_account
+  }
+  const accountNumber = account.account_number
+  const sequence = account?.sequence || 0
+
+  return {
+    accountNumber,
+    sequence,
+  }
+}
+
 export function getUserCurrencySign() {
   let s = ''
   switch (getUserCurrency()) {
