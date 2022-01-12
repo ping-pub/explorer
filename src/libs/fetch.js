@@ -343,21 +343,21 @@ export default class ChainFetch {
 
   async getIBCChannels(config = null, key = null) {
     if (key) {
-      return this.get('/ibc/core/channel/v1beta1/channels?pagination.key='.concat(key), config).then(data => commonProcess(data))
+      return this.get('/ibc/core/channel/v1/channels?pagination.key='.concat(key), config).then(data => commonProcess(data))
     }
-    return this.get('/ibc/core/channel/v1beta1/channels', config).then(data => commonProcess(data))
+    return this.get('/ibc/core/channel/v1/channels', config).then(data => commonProcess(data))
   }
 
   // eslint-disable-next-line camelcase
   async getIBCChannelClientState(channel_id, port_id, config = null) {
     // eslint-disable-next-line camelcase
-    return this.get(`/ibc/core/channel/v1beta1/channels/${channel_id}/ports/${port_id}/client_state`, config).then(data => commonProcess(data))
+    return this.get(`/ibc/core/channel/v1/channels/${channel_id}/ports/${port_id}/client_state`, config).then(data => commonProcess(data))
   }
 
   // eslint-disable-next-line camelcase
   async getIBCChannel(channel_id, port_id, config = null) {
     // eslint-disable-next-line camelcase
-    return this.get(`/ibc/core/channel/v1beta1/channels/${channel_id}/ports/${port_id}`, config).then(data => commonProcess(data))
+    return this.get(`/ibc/core/channel/v1/channels/${channel_id}/ports/${port_id}`, config).then(data => commonProcess(data))
   }
 
   static async getBankBalance(baseurl, address) {
