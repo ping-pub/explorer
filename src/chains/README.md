@@ -27,9 +27,8 @@
 }
 ```
 - **chain_name** the name to identify the chain on ping.pub
-- **coingecko**  the id of the token on chain. if there multi-tokens, using `["tokenA","tokenB"]
-- **api** the rest api endpoint. make sure CORS is enabled: `Allow-Control-Allow-Origin: *`
-
+- **api** the rest api endpoint.(make sure that CORS is enabled: `Allow-Control-Allow-Origin: *`)
+- **assets** Native Assets on blockchain. 
 # Test 
 
 please add these check points in comments with your PR, and adding your test result by clicking the checkbox of each line
@@ -37,7 +36,9 @@ please add these check points in comments with your PR, and adding your test res
 Test Result:
 - [ ] Connect wallet, check if address is correct? 
 - [ ] Transfer
-- [ ] delegate/redelegate/unbond
+- [ ] Delegate
+- [ ] Redelegate
+- [ ] Unbond
 - [ ] withdraw Validator's Commission
 - [ ] withdraw Rewards
 ```
