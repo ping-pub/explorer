@@ -347,7 +347,8 @@ export function getUnitAmount(amount, tokenDenom) {
       if (asset) exp = asset.exponent
     }
   })
-  return String((Number(amount) * (10 ** exp)).toFixed())
+  // eslint-disable-next-line no-undef
+  return String(BigInt(Number(amount) * (10 ** exp)))
 }
 
 export function formatTokenAmount(tokenAmount, fraction = 2, tokenDenom = 'uatom') {
