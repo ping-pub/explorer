@@ -118,7 +118,7 @@
           <b-row>
             <b-col>
               <b-form-group
-                label="Destination"
+                :label="`Destination: ${targetChainId}`"
                 label-for="destination"
               >
                 <validation-provider
@@ -131,6 +131,7 @@
                     name="destination"
                     :options="destinationOptions"
                     placeholder="Select a channel"
+                    @input="onChannelChange()"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -303,11 +304,12 @@ import {
   extractAccountNumberAndSequence,
   formatToken, formatTokenDenom, getLocalAccounts, getLocalChains, getUnitAmount, setLocalTxHistory, sign, timeIn,
 } from '@/libs/utils'
-import { Cosmos } from '@cosmostation/cosmosjs'
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { coin } from '@cosmjs/amino'
 import dayjs from 'dayjs'
+import { toHex } from '@cosmjs/encoding'
+import { sha256 } from '@cosmjs/crypto'
 
 export default {
   name: 'TransforDialogue',
@@ -345,6 +347,7 @@ export default {
   data() {
     return {
       chainId: '',
+      targetChainId: '',
       selectedChain: '',
       balance: [],
       token: '',
@@ -385,8 +388,11 @@ export default {
     destinationOptions() {
       if (!this.token && this.token === '') return []
       const options = this.channels.map(x => ({ port_id: x.port_id, channel_id: x.channel_id, label: `${x.chain_id ? x.chain_id : ''} ${x.port_id}/${x.channel_id}` }))
-      const query = this.paths[this.token]
-      return query && String(this.token).startsWith('ibc/') ? options.filter(x => x.channel_id === query.channel_id) : options
+      if (this.token.startsWith('ibc/')) {
+        const query = this.paths[this.token]
+        return query ? options.filter(x => x.channel_id === query.channel_id) : options
+      }
+      return options
     },
     placeholder() {
       return 'Input a destination address'
@@ -400,8 +406,10 @@ export default {
   },
   methods: {
     tokenChange() {
-      this.destination = null
+      // eslint-disable-next-line prefer-destructuring
+      this.destination = this.destinationOptions[0]
       this.recipient = null
+      this.onChannelChange()
     },
     printDenom() {
       return formatTokenDenom(this.IBCDenom[this.token] || this.token)
@@ -425,29 +433,29 @@ export default {
       this.destination = null
       this.channels = []
       this.token = ''
+      this.targetChainId = ''
       this.account = this.computeAccount()
       if (this.account && this.account.length > 0) this.address = this.account[0].addr
       if (this.address) {
+        this.$http.getAllIBCDenoms(this.selectedChain).then(x => {
+          x.denom_traces.forEach(trace => {
+            const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
+            const ibcDenom = `ibc/${hash.toUpperCase()}`
+            // add base_denom to cache
+            this.$set(this.IBCDenom, ibcDenom, trace.base_denom)
+            // store channel/part for ibc denoms
+            const path = trace.path.split('/')
+            if (path.length >= 2) {
+              this.paths[ibcDenom] = {
+                channel_id: path[path.length - 1],
+                port_id: path[path.length - 2],
+              }
+            }
+          })
+        })
         this.$http.getBankBalances(this.address, this.selectedChain).then(res => {
           if (res && res.length > 0) {
             this.balance = res.reverse()
-            // this.token = this.balance[0].denom
-            this.feeDenom = this.balance.find(x => !x.denom.startsWith('ibc')).denom
-            this.balance.filter(i => i.denom.startsWith('ibc')).forEach(x => {
-              if (!this.IBCDenom[x.denom]) {
-                this.$http.getIBCDenomTrace(x.denom, this.selectedChain).then(denom => {
-                  this.IBCDenom[x.denom] = denom.denom_trace.base_denom
-                  // console.log(denom.denom_trace)
-                  const path = denom.denom_trace.path.split('/')
-                  if (path.length >= 2) {
-                    this.paths[x.denom] = {
-                      channel_id: path[path.length - 1],
-                      port_id: path[path.length - 2],
-                    }
-                  }
-                })
-              }
-            })
           }
         })
         this.$http.getLatestBlock(this.selectedChain).then(ret => {
@@ -470,12 +478,6 @@ export default {
         this.$http.getIBCChannels(this.selectedChain, null).then(ret => {
           const chans = ret.channels.filter(x => x.state === 'STATE_OPEN').map(x => ({ channel_id: x.channel_id, port_id: x.port_id }))
           this.$set(this, 'channels', chans)
-          // chans.forEach((x, i) => {
-          //   this.$http.getIBCChannelClientState(x.channel_id, x.port_id, this.selectedChain).then(cs => {
-          //     chans[i].chain_id = cs.identified_client_state.client_state.chain_id
-          //     this.$store.commit('setChannels', { chain: this.selectedChain.chain_name, channels: chans })
-          //   })
-          // })
         })
       }
     },
@@ -497,9 +499,11 @@ export default {
     format(v) {
       return formatToken(v, this.IBCDenom)
     },
-    async sendCosmos() {
-      const cosmos = new Cosmos(this.selectedChain.api, this.chainId)
-      cosmos.getAccounts()
+    onChannelChange() {
+      this.$http.getIBCChannelClientState(this.destination.channel_id, this.destination.port_id, this.selectedChain).then(cs => {
+        this.targetChainId = cs.identified_client_state.client_state.chain_id
+        // this.$store.commit('setChannels', { chain: this.selectedChain.chain_name, channels: chans })
+      })
     },
     async send() {
       if (!this.destination) {
