@@ -2,7 +2,7 @@
     "chain_name": "osmosis",
     "coingecko": "osmosis",
     "api": "https://lcd-osmosis.keplr.app",
-    "sdk_version": "0.42.5",
+    "sdk_version": "0.44.5",
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "osmo",

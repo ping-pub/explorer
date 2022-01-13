@@ -326,7 +326,7 @@ export default class ChainFetch {
 
   async getAllIBCDenoms(config = null) {
     const sdkVersion = config ? config.sdk_version : this.config.sdk_version
-    if (compareVersions(sdkVersion, '0.42.4') < 0) {
+    if (compareVersions(sdkVersion, '0.44.2') < 0) {
       return this.get('/ibc/applications/transfer/v1beta1/denom_traces?pagination.limit=500', config).then(data => commonProcess(data))
     }
     return this.get('/ibc/apps/transfer/v1/denom_traces?pagination.limit=500', config).then(data => commonProcess(data))
@@ -335,7 +335,7 @@ export default class ChainFetch {
   async getIBCDenomTrace(hash, config = null) {
     const h = hash.substring(hash.indexOf('/') + 1)
     const sdkVersion = config ? config.sdk_version : this.config.sdk_version
-    if (compareVersions(sdkVersion, '0.42.4') < 0) {
+    if (compareVersions(sdkVersion, '0.44.2') < 0) {
       return this.get('/ibc/applications/transfer/v1beta1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
     }
     return this.get('/ibc/apps/transfer/v1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
