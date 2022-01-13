@@ -14,5 +14,11 @@
         "exponent": "6",
         "coingecko_id": "emoney", 
         "logo": "https://dl.airtable.com/.attachments/276e4d6de567b073a5e400240d7d83e9/9bb49806/yoR2r25W_400x400.jpg"
+    },{
+        "base": "eeur",
+        "symbol": "EEUR",
+        "exponent": "6",
+        "coingecko_id": "e-money-eur", 
+        "logo": "https://dl.airtable.com/.attachments/276e4d6de567b073a5e400240d7d83e9/9bb49806/yoR2r25W_400x400.jpg"
     }]
 }
