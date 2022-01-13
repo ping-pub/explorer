@@ -345,7 +345,7 @@ export default class ChainFetch {
     if (key) {
       return this.get('/ibc/core/channel/v1/channels?pagination.key='.concat(key), config).then(data => commonProcess(data))
     }
-    return this.get('/ibc/core/channel/v1/channels', config).then(data => commonProcess(data))
+    return this.get('/ibc/core/channel/v1/channels?pagination.limit=1000', config).then(data => commonProcess(data))
   }
 
   // eslint-disable-next-line camelcase

@@ -5,7 +5,7 @@
       centered
       size="md"
       title="IBC Transfer Tokens"
-      ok-title="Send"
+      :ok-title="actionName"
       hide-header-close
       scrollable
       :ok-disabled="!address || channels.length === 0"
@@ -391,6 +391,9 @@ export default {
     placeholder() {
       return 'Input a destination address'
     },
+    actionName() {
+      return this.token.startsWith('ibc') ? 'Withdraw' : 'Deposit'
+    },
   },
   created() {
     // console.log('address: ', this.address)
@@ -464,21 +467,16 @@ export default {
         this.fee = this.selectedChain?.min_tx_fee || '1000'
         this.feeDenom = this.selectedChain?.assets[0]?.base || ''
 
-        const channels = this.$store.state.chains.ibcChannels[this.selectedChain.chain_name]
-        if (!channels) {
-          this.$http.getIBCChannels(this.selectedChain, null).then(ret => {
-            const chans = ret.channels.filter(x => x.state === 'STATE_OPEN').map(x => ({ channel_id: x.channel_id, port_id: x.port_id }))
-            chans.forEach((x, i) => {
-              this.$http.getIBCChannelClientState(x.channel_id, x.port_id, this.selectedChain).then(cs => {
-                chans[i].chain_id = cs.identified_client_state.client_state.chain_id
-                this.$store.commit('setChannels', { chain: this.selectedChain.chain_name, channels: chans })
-                this.$set(this, 'channels', chans)
-              })
-            })
-          })
-        } else {
-          this.channels = channels
-        }
+        this.$http.getIBCChannels(this.selectedChain, null).then(ret => {
+          const chans = ret.channels.filter(x => x.state === 'STATE_OPEN').map(x => ({ channel_id: x.channel_id, port_id: x.port_id }))
+          this.$set(this, 'channels', chans)
+          // chans.forEach((x, i) => {
+          //   this.$http.getIBCChannelClientState(x.channel_id, x.port_id, this.selectedChain).then(cs => {
+          //     chans[i].chain_id = cs.identified_client_state.client_state.chain_id
+          //     this.$store.commit('setChannels', { chain: this.selectedChain.chain_name, channels: chans })
+          //   })
+          // })
+        })
       }
     },
     handleOk(bvModalEvt) {
