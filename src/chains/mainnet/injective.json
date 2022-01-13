@@ -1,7 +1,7 @@
 {
     "chain_name": "injective",
     "api": "https://lcd.injective.network",
-    "sdk_version": "0.42.4",
+    "sdk_version": "v0.44.5",
     "coin_type": "118",
     "min_tx_fee": "5000",
     "addr_prefix": "inj",
