@@ -218,6 +218,19 @@
                   <small class="text-success">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
+              <b-alert
+                show
+                variant="info"
+              >
+                <div class="alert-heading">
+                  IMPORTANT
+                </div>
+                <div class="alert-body">
+                  <div>
+                    If you don't have Ledger, Do not import those addresses with <b class="text-danger">RED</b>. Because these addresses are derived from different coin_type which may not as same as the offical one
+                  </div>
+                </div>
+              </b-alert>
             </b-col>
           </b-row>
         </validation-observer>
@@ -258,20 +271,6 @@
         </b-row>
       </tab-content>
     </form-wizard>
-    <b-alert
-      show
-      variant="danger"
-    >
-      <div class="alert-heading">
-        IMPORTANT
-      </div>
-      <div class="alert-body">
-        <div>
-          Ping Wallet only support 'm/44'/118/0'/0/0', The imported addresses will be different for chains which don't use 118, like Desmos.
-          Do NOT use these addresses.
-        </div>
-      </div>
-    </b-alert>
   </div>
 </template>
 
