@@ -412,7 +412,8 @@ export default {
         this.debug = 'Please install keplr extension'
         return null
       }
-      const chainId = 'cosmoshub'
+      // const chainId = 'cosmoshub'
+      const chainId = await this.$http.getLatestBlock().then(ret => ret.block.header.chain_id)
       await window.keplr.enable(chainId)
       const offlineSigner = window.getOfflineSigner(chainId)
       return offlineSigner.getAccounts()
