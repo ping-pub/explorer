@@ -9,7 +9,7 @@
     "assets": [{
         "base": "ncheq",
         "symbol": "CHEQ",
-        "exponent": "6",
+        "exponent": "9",
         "coingecko_id": "cheqd-network", 
         "logo": "https://raw.githubusercontent.com/osmosis-labs/assetlists/main/images/cheq.png"
     }]
