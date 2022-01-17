@@ -227,7 +227,7 @@
                 </div>
                 <div class="alert-body">
                   <div>
-                    If you don't have Ledger, Do not import those addresses in <b class="text-danger">RED</b>. Because these addresses are derived from different coin_type which may not as same as the offical one
+                    If you don't have Ledger, Do not import those addresses in <b class="text-danger">RED</b>. Because these addresses are derived from different coin_type which is not as same as the official one
                   </div>
                 </div>
               </b-alert>
