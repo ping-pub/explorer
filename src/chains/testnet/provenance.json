@@ -1,7 +1,0 @@
-{
-    "chain_name": "provenance",
-    "api": "https://api.test.provenance.io",
-    "sdk_version": "0.44.3",
-    "addr_prefix": "tp",
-    "logo": "https://raw.githubusercontent.com/provenance-io/provenance/main/docs/pio.svg"
-}

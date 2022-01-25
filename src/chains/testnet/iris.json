@@ -1,8 +1,0 @@
-{
-    "chain_name": "iris-network",
-    "api": "http://35.234.10.84:1317",
-    "sdk_version": "0.42.4",
-    "addr_prefix": "iaa",
-    "excludes": "mint",
-    "logo": "https://dl.airtable.com/.attachments/2d6d51b1b262db00ecc51616ffc3bdf5/90ff00d0/IRISnet.svg"
-}
