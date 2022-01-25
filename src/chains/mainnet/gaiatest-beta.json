@@ -1,5 +1,5 @@
 {
-    "chain_name": "cosmos-vega",
+    "chain_name": "gaiatest-beta",
     "api":"https://rpc.earl.gaiatest-beta.network.umee.cc",
     "sdk_version": "0.42.9",
     "addr_prefix": "cosmos",
