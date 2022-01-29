@@ -29,6 +29,62 @@ Pull your request [here](./src/chains), We will add your chains as soon as possi
 
 We have two considerations: 1, Trust, In decentralize system, everything controlled by one single team/organization could be risks. So we decided to co-build with the community. 2. We will list hundreds cosmos-based blockchains in the future, it's impossible for our team to run validators or fullnodes for all of those chains.
 
+# Installation:
+
+1. Running with yarn
+```
+yarn && yarn serve
+```
+
+2. Building for web servers, like nginx 
+```
+yarn && yarn build
+cp -r ./dist/* <ROOT_OF_WEB_SERVER>
+```
+
+# Enable LCD for Ping.pub
+
+1. Set `enable = true` in `./config/app.toml`
+```
+###############################################################################
+###                           API Configuration                             ###
+###############################################################################
+
+[api]
+
+# Enable defines if the API server should be enabled.
+enable = true
+
+# Swagger defines if swagger documentation should automatically be registered.
+swagger = false
+
+# Address defines the API server to listen on.
+address = "tcp://0.0.0.0:1317"
+
+# MaxOpenConnections defines the number of maximum open connections.
+max-open-connections = 1000
+```
+
+2. add proxy server and enable CORS. 
+
+```
+server {
+    server_name juno.api.ping.pub;
+    listen 80;
+    location / {
+        add_header Access-Control-Allow-Origin *;
+        add_header Access-Control-Max-Age 3600;
+        add_header Access-Control-Expose-Headers Content-Length;
+
+        proxy_pass http://<HOST>:1317;
+
+    }
+}
+```
+
+
+
+
 ## Contributors
 
 Developers: @liangping @dingyiming
