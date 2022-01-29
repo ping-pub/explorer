@@ -5,9 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "tauri:build": "vue-cli-service tauri:build",
-    "tauri:serve": "vue-cli-service tauri:serve"
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@casl/ability": "4.1.6",
@@ -42,7 +40,7 @@
     "leaflet": "1.6.0",
     "ledger-cosmos-js": "2.1.8",
     "long": "^5.2.0",
-    "node-fetch": "^3.1.1",
+    "node-fetch": "^2.6.5",
     "pako": "^1.0.11",
     "portal-vue": "2.1.7",
     "postcss-rtl": "1.7.3",
@@ -99,7 +97,6 @@
     "eslint-plugin-vue": "6.2.2",
     "sass": "1.32.*",
     "sass-loader": "^10.1.0",
-    "vue-cli-plugin-tauri": "~1.0.0-beta.6",
     "vue-template-compiler": "2.x"
   }
 }
