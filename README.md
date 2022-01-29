@@ -36,7 +36,7 @@ We have two considerations: 1, Trust, In decentralize system, everything control
 yarn && yarn serve
 ```
 
-2. Building for web servers, like nginx 
+2. Building for web servers, like nginx, apache
 ```
 yarn && yarn build
 cp -r ./dist/* <ROOT_OF_WEB_SERVER>
@@ -65,12 +65,12 @@ address = "tcp://0.0.0.0:1317"
 max-open-connections = 1000
 ```
 
-2. add proxy server and enable CORS. 
+2. add proxy server and enable CORS. NOTE: You must enable https as well.
 
 ```
 server {
     server_name juno.api.ping.pub;
-    listen 80;
+    listen 443;
     location / {
         add_header Access-Control-Allow-Origin *;
         add_header Access-Control-Max-Age 3600;
@@ -81,6 +81,7 @@ server {
     }
 }
 ```
+3. config your blockchain in [](./src/chains)
 
 
 
