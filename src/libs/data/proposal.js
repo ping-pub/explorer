@@ -11,9 +11,9 @@ export default class Proposal {
     this.title = '-'
     this.description = '-'
     this.tally = new ProposalTally()
-    this.submit_time = ' - '
+    this.submit_time = '0000-00-00'
     this.voting_end_time = '0000-00-00'
-    this.voting_start_time = '-'
+    this.voting_start_time = '0000-00-00'
     this.total_deposit = '-'
     this.contents = null
   }
@@ -66,6 +66,12 @@ export default class Proposal {
     }
     if (String(this.status).indexOf('PASSED') > -1) {
       this.status = 3
+    } else if (String(this.status).indexOf('VOTING') > -1) {
+      this.status = 2
+    } else if (String(this.status).indexOf('REJECTED') > -1) {
+      this.status = 4
+    } else if (String(this.status).indexOf('DEPOSIT') > -1) {
+      this.status = 1
     }
   }
 }

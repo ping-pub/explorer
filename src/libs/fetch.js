@@ -26,6 +26,13 @@ export function keybase(identity) {
 export default class ChainFetch {
   constructor() {
     this.osmosis = new OsmosAPI()
+    this.EndpointVersion = {
+      certik: 'v1alpha1',
+    }
+  }
+
+  getEndpointVersion() {
+    return this.EndpointVersion[this.config.chain_name] || 'v1beta1'
   }
 
   getSelectedConfig() {
@@ -225,7 +232,8 @@ export default class ChainFetch {
   }
 
   async getGovernanceList() {
-    return Promise.all([this.get('/cosmos/gov/v1beta1/proposals?pagination.limit=500'), this.get('/staking/pool')]).then(data => {
+    const url = this.config.chain_name === 'certik' ? '/shentu/gov/v1alpha1/proposals?pagination.limit=500' : '/cosmos/gov/v1beta1/proposals?pagination.limit=500'
+    return Promise.all([this.get(url), this.get('/staking/pool')]).then(data => {
       const pool = new StakingPool().init(commonProcess(data[1]))
       let proposals = commonProcess(data[0])
       if (Array.isArray(proposals.proposals)) {
@@ -249,7 +257,9 @@ export default class ChainFetch {
       this.getSelectedConfig()
     }
     host = (config ? config.api : this.config.api)
-    const ret = await fetch((Array.isArray(host) ? host[this.getApiIndex(config)] : host) + url).then(response => response.json())
+    let finalurl = (Array.isArray(host) ? host[this.getApiIndex(config)] : host) + url
+    finalurl = finalurl.replaceAll('v1beta1', this.getEndpointVersion())
+    const ret = await fetch(finalurl).then(response => response.json())
     return ret
   }
 
