@@ -225,7 +225,7 @@ export default class ChainFetch {
   }
 
   async getGovernanceList() {
-    return Promise.all([this.get('/gov/proposals'), this.get('/staking/pool')]).then(data => {
+    return Promise.all([this.get('/cosmos/gov/v1beta1/proposals?pagination.limit=500'), this.get('/staking/pool')]).then(data => {
       const pool = new StakingPool().init(commonProcess(data[1]))
       let proposals = commonProcess(data[0])
       if (Array.isArray(proposals.proposals)) {

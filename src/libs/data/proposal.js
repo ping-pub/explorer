@@ -21,20 +21,20 @@ export default class Proposal {
   init(element, total) {
     this.element = element
 
-    this.id = element.id
+    this.id = element.proposal_id || element.id
     this.status = element.status
     this.type = element.content.type
-    if (element.content.value) {
-      this.title = element.content.value.title
-      this.description = element.content.value.description
-    }
     this.tally = new ProposalTally().init(element.final_tally_result, total)
     this.submit_time = element.submit_time
     this.voting_end_time = element.voting_end_time
     this.voting_start_time = element.voting_start_time
     // eslint-disable-next-line prefer-destructuring
     this.total_deposit = element.total_deposit[0]
-    this.contents = element.content.value
+    this.contents = element.content.value || element.content
+    if (this.contents) {
+      this.title = this.contents.title
+      this.description = this.contents.description
+    }
     return this
   }
 
