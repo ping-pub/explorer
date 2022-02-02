@@ -1,5 +1,5 @@
 {
-    "chain_name": "umeeverse-party-1",
+    "chain_name": "umee",
     "api": ["https://api.biplosion.umeeverse-party-1.network.umee.cc", "https://api.coppicing.umeeverse-party-1.network.umee.cc", "https://api.scurrility.umeeverse-party-1.network.umee.cc"],
     "sdk_version": "0.45.0",
     "addr_prefix": "umee",
