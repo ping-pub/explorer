@@ -1,5 +1,5 @@
 {
-    "chain_name": "umeeverse",
+    "chain_name": "umeeverse-1",
     "coin_type": "118",
     "api": ["https://api.biplosion.umeeverse-party-1.network.umee.cc", "https://api.coppicing.umeeverse-party-1.network.umee.cc", "https://api.scurrility.umeeverse-party-1.network.umee.cc"],
     "sdk_version": "0.45.0",
