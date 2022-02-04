@@ -1,6 +1,6 @@
 {
     "chain_name": "gravity-bridge",
-    "api": "https://gravity.api.ping.pub",
+    "api": "https://gravitychain.io:1317",
     "sdk_version": "0.44.5",
     "coin_type": "60",
     "min_tx_fee": "5000",
