@@ -164,7 +164,7 @@ export default class OsmosAPI {
   }
 
   async getDenomTraces() {
-    return this.get('/ibc/applications/transfer/v1beta1/denom_traces?pagination.limit=300').then(x => {
+    return this.get('/ibc/apps/transfer/v1/denom_traces?pagination.limit=500').then(x => {
       const combined = {}
       x.denom_traces.forEach(item => {
         const k = 'ibc/'.concat(toHex(sha256(new TextEncoder('utf-8').encode(`${item.path}/${item.base_denom}`))).toUpperCase())
