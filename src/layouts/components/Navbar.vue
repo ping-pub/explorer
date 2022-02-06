@@ -54,7 +54,6 @@
           <small id="data-provider">
             {{ currentApi }} ({{ selected_chain.sdk_version || '-' }})
             <b-dropdown
-              v-if="apiOptions.length > 1"
               class="ml-0"
               variant="flat-primary"
               no-caret
@@ -163,7 +162,6 @@ import DarkToggler from '@core/layouts/components/app-navbar/components/DarkTogg
 import Locale from '@core/layouts/components/app-navbar/components/Locale.vue'
 import SearchBar from '@core/layouts/components/app-navbar/components/SearchBar.vue'
 // import CartDropdown from '@core/layouts/components/app-navbar/components/CartDropdown.vue'
-import store from '@/store'
 import { getLocalAccounts, timeIn, toDay } from '@/libs/utils'
 // import UserDropdown from '@core/layouts/components/app-navbar/components/UserDropdown.vue'
 
@@ -197,12 +195,10 @@ export default {
     },
   },
   data() {
-    const conf = store.state.chains.selected
-    const s = localStorage.getItem(`${conf.chain_name}-api-index`)
     return {
       variant: 'success',
       tips: 'Synced',
-      index: s || 0,
+      index: 0,
     }
   },
   computed: {
@@ -212,16 +208,16 @@ export default {
     },
     selected_chain() {
       this.block()
-      return store.state.chains.selected
+      return this.$store.state.chains.selected
     },
     chainVariant() {
       return this.variant
     },
     currentApi() {
-      return this.apiOptions[Number(this.index)]
+      return this.index + 1 > this.apiOptions.length ? this.apiOptions[0] : this.apiOptions[this.index]
     },
     apiOptions() {
-      const conf = store.state.chains.selected
+      const conf = this.$store.state.chains.selected
       if (Array.isArray(conf.api)) {
         return conf.api
       }
@@ -237,16 +233,19 @@ export default {
   methods: {
     change(v) {
       this.index = v
-      const conf = store.state.chains.selected
+      const conf = this.$store.state.chains.selected
       localStorage.setItem(`${conf.chain_name}-api-index`, v)
     },
     block() {
-      store.commit('setHeight', 0)
+      const conf = this.$store.state.chains.selected
+      const s = localStorage.getItem(`${conf.chain_name}-api-index`) || 0
+      this.index = Number(s)
+      this.$store.commit('setHeight', 0)
       this.$http.getLatestBlock().then(block => {
-        store.commit('setHeight', Number(block.block.header.height))
+        this.$store.commit('setHeight', Number(block.block.header.height))
         if (timeIn(block.block.header.time, 1, 'm')) {
           this.variant = 'danger'
-          this.tips = `Halted ${toDay(block.block.header.time, 'from')}, Height: ${store.state.chains.height} `
+          this.tips = `Halted ${toDay(block.block.header.time, 'from')}, Height: ${this.$store.state.chains.height} `
         } else {
           this.variant = 'success'
           this.tips = 'Synced'
