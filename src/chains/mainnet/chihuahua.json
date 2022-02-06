@@ -1,7 +1,7 @@
 {
     "chain_name": "chihuahua",
     "coingecko": "",
-    "api": "https://api.chihuahua.wtf",
+    "api": ["https://api.chihuahua.wtf", "https://chihuahua-api.mercury-nodes.net"],
     "sdk_version": "0.44.3",
     "coin_type": "118",
     "min_tx_fee": "5000",
