@@ -294,6 +294,7 @@ export default {
       selectedAddress: this.address,
       availableAddress: [],
       validators: [],
+      unbundValidators: [],
       selectedValidator: null,
       token: '',
       amount: null,
@@ -327,7 +328,9 @@ export default {
   },
   computed: {
     valOptions() {
-      return this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      const vals = this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      const unbunded = this.unbundValidators.map(x => ({ value: x.operator_address, label: `* ${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      return vals.concat(unbunded)
     },
     feeDenoms() {
       if (!this.balance) return []
@@ -400,6 +403,9 @@ export default {
       // if (this.account && this.account.length > 0) this.selectedAddress
       this.$http.getValidatorList().then(v => {
         this.validators = v
+      })
+      this.$http.getValidatorUnbondedList().then(v => {
+        this.unbundValidators = v
       })
       this.onChange()
     },

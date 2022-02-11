@@ -256,6 +256,7 @@ export default {
     return {
       selectedAddress: this.address,
       availableAddress: [],
+      unbundValidators: [],
       validators: [],
       toValidator: null,
       token: '',
@@ -290,7 +291,9 @@ export default {
   },
   computed: {
     valOptions() {
-      return this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      const vals = this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      const unbunded = this.unbundValidators.map(x => ({ value: x.operator_address, label: `* ${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      return vals.concat(unbunded)
     },
     tokenOptions() {
       if (!this.delegations) return []
@@ -311,6 +314,9 @@ export default {
     loadBalance() {
       this.$http.getValidatorList().then(v => {
         this.validators = v
+      })
+      this.$http.getValidatorUnbondedList().then(v => {
+        this.unbundValidators = v
       })
       this.$http.getBankBalances(this.address).then(res => {
         if (res && res.length > 0) {
