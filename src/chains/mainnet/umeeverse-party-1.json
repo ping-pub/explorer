@@ -4,11 +4,11 @@
     "api": ["https://api.biplosion.umeeverse-party-1.network.umee.cc", "https://api.coppicing.umeeverse-party-1.network.umee.cc", "https://api.scurrility.umeeverse-party-1.network.umee.cc"],
     "sdk_version": "0.45.0",
     "addr_prefix": "umee",
-    "logo": "https://icodrops.com/wp-content/uploads/2021/06/Umee_logo.jpeg",
+    "logo": "https://i.imgur.com/a4FaFYV.png",
     "assets": [{
         "base": "uumee",
         "symbol": "UMEE",
         "exponent": "6",
-        "logo": "https://icodrops.com/wp-content/uploads/2021/06/Umee_logo.jpeg"
+        "logo": "https://i.imgur.com/a4FaFYV.png"
     }]
 }
