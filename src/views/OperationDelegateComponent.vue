@@ -224,47 +224,7 @@
 
             <b-row>
               <b-col>
-                <b-form-group
-                  label="Wallet"
-                  label-for="wallet"
-                >
-                  <validation-provider
-                    v-slot="{ errors }"
-                    rules="required"
-                    name="wallet"
-                  >
-                    <b-form-radio-group
-                      v-model="wallet"
-                      stacked
-                      class="demo-inline-spacing"
-                    >
-                      <b-form-radio
-                        v-model="wallet"
-                        name="wallet"
-                        value="keplr"
-                        class="d-none d-md-block"
-                      >
-                        Keplr
-                      </b-form-radio>
-                      <b-form-radio
-                        v-model="wallet"
-                        name="wallet"
-                        value="ledgerUSB"
-                      >
-                        <small>Ledger(USB)</small>
-                      </b-form-radio>
-                      <b-form-radio
-                        v-model="wallet"
-                        name="wallet"
-                        value="ledgerBle"
-                        class="mr-0"
-                      >
-                        <small>Ledger(Bluetooth)</small>
-                      </b-form-radio>
-                    </b-form-radio-group>
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-form-group>
+                <wallet-input-vue v-model="wallet" />
               </b-col>
             </b-row>
           </b-form>
@@ -278,7 +238,7 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
   BAvatar, BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
-  BForm, BFormRadioGroup, BFormRadio, BButton, BInputGroupAppend, BFormCheckbox, BOverlay,
+  BForm, BButton, BInputGroupAppend, BFormCheckbox, BOverlay,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import {
@@ -289,6 +249,7 @@ import {
 } from '@/libs/utils'
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import WalletInputVue from './components/WalletInput.vue'
 
 export default {
   name: 'DelegateDialogue',
@@ -303,13 +264,12 @@ export default {
     BFormGroup,
     BFormSelect,
     BFormSelectOption,
-    BFormRadioGroup,
-    BFormRadio,
     BFormCheckbox,
     vSelect,
     BButton,
     BInputGroupAppend,
     BOverlay,
+    WalletInputVue,
 
     ValidationProvider,
     ValidationObserver,

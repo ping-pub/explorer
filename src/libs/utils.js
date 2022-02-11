@@ -205,6 +205,12 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
       transport = await TransportWebUSB.create()
       signer = new LedgerSigner(transport, { hdPaths: [getHdPath(signerAddress)] })
       break
+    case 'pingKMS':
+      if (!window.PingSigner) {
+        throw new Error('Please install Ping KMS extension')
+      }
+      signer = window.PingSigner
+      break
     case 'keplr':
     default:
       if (!window.getOfflineSigner || !window.keplr) {
@@ -220,7 +226,7 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
   // Ensure the address has some tokens to spend
   const client = await PingWalletClient.offline(signer)
   // const client = await SigningStargateClient.offline(signer)
-  return client.signAmino2(device === 'keplr' ? signerAddress : toSignAddress(signerAddress), messages, fee, memo, signerData)
+  return client.signAmino2(device.startsWith('ledger') ? toSignAddress(signerAddress) : signerAddress, messages, fee, memo, signerData)
   // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
 }
 
