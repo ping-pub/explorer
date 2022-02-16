@@ -1,7 +1,6 @@
 <template>
   <div class="text-center">
     <b-card
-      v-if="calculateTotal > 0"
       border-variant="primary"
     >
       <b-row class="mx-0 d-flex align-items-center">
@@ -31,14 +30,14 @@
               HKD (港幣)
             </b-dropdown-item>
             <b-dropdown-item @click="setCurrency('sgd')">
-              SGD
+              SGD (新加坡元)
             </b-dropdown-item>
             <b-dropdown-item @click="setCurrency('krw')">
               KRW (대한민국원)
             </b-dropdown-item>
           </b-dropdown>
           <h2 class="mt-1 mb-0">
-            {{ currency }}{{ calculateTotal }}
+            {{ currency }}{{ (calculateTotal) }}
           </h2>
           <small
             v-if="calculateTotalChange > 0"
@@ -278,7 +277,7 @@ import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import {
   chartColors,
   formatNumber,
-  formatTokenAmount, formatTokenDenom, getLocalAccounts, getLocalChains, getUserCurrency, getUserCurrencySign, setUserCurrency,
+  formatTokenAmount, formatTokenDenom, getLocalAccounts, getLocalChains, getUserCurrency, getUserCurrencySign, numberWithCommas, setUserCurrency,
 } from '@/libs/utils'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import AppCollapse from '@core/components/app-collapse/AppCollapse.vue'
@@ -405,7 +404,7 @@ export default {
           total += subtotal
         })
       }
-      return parseFloat(total.toFixed(2))
+      return numberWithCommas(parseFloat(total.toFixed(2)))
     },
     calculateTotalChange() {
       const v = Object.values(this.balances)
@@ -423,7 +422,7 @@ export default {
           total += subtotal
         })
       }
-      return parseFloat(total.toFixed(2))
+      return numberWithCommas(parseFloat(total.toFixed(2)))
     },
     calculateByDenom() {
       const v = Object.values(this.balances)
@@ -566,16 +565,16 @@ export default {
       const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v)
       return formatTokenDenom(denom)
     },
-    formatAmount(v, denom = 'uatom') {
+    formatAmount(v, denom = 'uatom', format = true) {
       if (!v) return ''
       const denom2 = (denom.startsWith('ibc') ? this.ibcDenom[denom] : denom)
-      return formatTokenAmount(v, 2, denom2)
+      return formatTokenAmount(v, 2, denom2, format)
     },
     formatAddr(v) {
       return v.substring(0, 10).concat('...', v.substring(v.length - 10))
     },
     formatCurrency(amount, denom) {
-      const qty = this.formatAmount(amount, denom)
+      const qty = this.formatAmount(amount, denom, false)
       const d2 = this.formatDenom(denom)
       const quote = this.$store.state.chains.quotes[d2]
       if (quote) {
@@ -627,7 +626,7 @@ export default {
         const ret = delegations.map(x => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c, 0)
         total += ret
       }
-      return parseFloat(total.toFixed(2))
+      return numberWithCommas(parseFloat(total.toFixed(2)))
     },
     formatBalanceChanges(v) {
       let total = 0

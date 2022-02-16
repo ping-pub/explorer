@@ -25,20 +25,20 @@
           value="pingKMS"
           class="d-none d-md-block"
         >
-          Ping KMS
+          Ping Signer
         </b-form-radio>
         <b-form-radio
           name="wallet"
           value="ledgerUSB"
         >
-          <small>Ledger(USB)</small>
+          Ledger (USB)
         </b-form-radio>
         <b-form-radio
           name="wallet"
           value="ledgerBle"
           class="mr-0"
         >
-          <small>Ledger(Bluetooth)</small>
+          Ledger (Bluetooth)
         </b-form-radio>
       </b-form-radio-group>
       <small class="text-danger">{{ errors[0] }}</small>
