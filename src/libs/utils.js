@@ -357,6 +357,12 @@ export function getUnitAmount(amount, tokenDenom) {
   return String(BigInt(Number(amount) * (10 ** exp)))
 }
 
+export function numberWithCommas(x) {
+  const parts = x.toString().split('.')
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return parts.join('.')
+}
+
 export function formatTokenAmount(tokenAmount, fraction = 2, tokenDenom = 'uatom') {
   const denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
   let amount = 0
@@ -372,9 +378,9 @@ export function formatTokenAmount(tokenAmount, fraction = 2, tokenDenom = 'uatom
   })
   amount = Number(Number(tokenAmount)) / (10 ** exp)
   if (amount > 10) {
-    return parseFloat(amount.toFixed(fraction))
+    return numberWithCommas(parseFloat(amount.toFixed(fraction)))
   }
-  return parseFloat(amount)
+  return parseFloat(amount.toFixed(fraction))
 }
 
 export function isTestnet() {
@@ -405,7 +411,7 @@ export function formatNumber(count, withAbbr = false, decimals = 2) {
 
 export function tokenFormatter(tokens, denoms = {}) {
   if (Array.isArray(tokens)) {
-    return tokens.map(t => formatToken(t, denoms, 2)).join()
+    return tokens.map(t => formatToken(t, denoms, 2)).join(', ')
   }
   return formatToken(tokens, denoms, 2)
 }
