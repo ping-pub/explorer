@@ -164,7 +164,7 @@ export default {
       Promise.all([this.$http.getStakingPool(), this.$http.getBankTotal(res.bond_denom)])
         .then(pool => {
           const bondedAndSupply = this.chain.items.findIndex(x => x.subtitle === 'bonded_and_supply')
-          this.$set(this.chain.items[bondedAndSupply], 'title', `${formatNumber(formatTokenAmount(pool[0].bondedToken, 2, res.bond_denom), true, 0)}/${formatNumber(formatTokenAmount(pool[1].amount, 2, res.bond_denom), true, 0)}`)
+          this.$set(this.chain.items[bondedAndSupply], 'title', `${formatNumber(formatTokenAmount(pool[0].bondedToken, 2, res.bond_denom, false), true, 0)}/${formatNumber(formatTokenAmount(pool[1].amount, 2, res.bond_denom, false), true, 0)}`)
           const bondedRatio = this.chain.items.findIndex(x => x.subtitle === 'bonded_ratio')
           this.$set(this.chain.items[bondedRatio], 'title', `${percent(pool[0].bondedToken / pool[1].amount)}%`)
         })

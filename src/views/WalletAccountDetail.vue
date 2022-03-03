@@ -105,12 +105,12 @@
               </div>
               <div class="d-flex flex-column">
                 <span class="text-right">{{ formatToken(token) }}</span>
-                <small class="text-right">{{ currency }}{{ token.currency }}</small>
+                <small class="text-right">{{ currency }}{{ formatNumber(token.currency) }}</small>
               </div>
             </div>
             <!--/ tokens -->
             <div class="text-right border-top pt-1">
-              <h2>Total: {{ currency }}{{ assetTable.currency }}</h2>
+              <h2>Total: {{ currency }}{{ formatNumber(assetTable.currency) }}</h2>
             </div>
           </b-col>
         </b-row>
@@ -369,7 +369,7 @@ import VueQr from 'vue-qr'
 import chainAPI from '@/libs/fetch'
 import {
   formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay,
-  toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign,
+  toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign, numberWithCommas,
 } from '@/libs/utils'
 import { sha256 } from '@cosmjs/crypto'
 import { toHex } from '@cosmjs/encoding'
@@ -612,6 +612,9 @@ export default {
     })
   },
   methods: {
+    formatNumber(v) {
+      return numberWithCommas(v)
+    },
     pageload(v) {
       this.$http.getTxsBySender(this.address, v).then(res => {
         this.transactions = res
@@ -624,14 +627,14 @@ export default {
     formatDenom(v) {
       return formatTokenDenom(this.denoms[v] ? this.denoms[v] : v)
     },
-    formatAmount(v, dec = 2, denom = 'uatom') {
-      return formatTokenAmount(v, dec, denom)
+    formatAmount(v, dec = 2, denom = 'uatom', format = true) {
+      return formatTokenAmount(v, dec, denom, format)
     },
     formatToken(v) {
       return tokenFormatter(v, this.denoms)
     },
     formatCurrency(amount, denom) {
-      const qty = this.formatAmount(amount, 2, denom)
+      const qty = this.formatAmount(amount, 2, denom, false)
       const d2 = this.formatDenom(denom)
       const userCurrency = getUserCurrency()
       const quote = this.$store.state.chains.quotes[d2]

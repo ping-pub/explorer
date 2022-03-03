@@ -193,47 +193,7 @@
           </b-row>
           <b-row>
             <b-col>
-              <b-form-group
-                label="Wallet"
-                label-for="wallet"
-              >
-                <validation-provider
-                  v-slot="{ errors }"
-                  rules="required"
-                  name="wallet"
-                >
-                  <b-form-radio-group
-                    v-model="wallet"
-                    stacked
-                    class="demo-inline-spacing"
-                  >
-                    <b-form-radio
-                      v-model="wallet"
-                      name="wallet"
-                      value="keplr"
-                      class="d-none d-md-block"
-                    >
-                      Keplr
-                    </b-form-radio>
-                    <b-form-radio
-                      v-model="wallet"
-                      name="wallet"
-                      value="ledgerUSB"
-                    >
-                      <small>Ledger(USB)</small>
-                    </b-form-radio>
-                    <b-form-radio
-                      v-model="wallet"
-                      name="wallet"
-                      value="ledgerBle"
-                      class="mr-0"
-                    >
-                      <small>Ledger(Bluetooth)</small>
-                    </b-form-radio>
-                  </b-form-radio-group>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
+              <wallet-input-vue v-model="wallet" />
             </b-col>
           </b-row>
         </b-form>
@@ -247,7 +207,7 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
   BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect,
-  BForm, BFormRadioGroup, BFormRadio, BFormCheckbox, BInputGroupAppend,
+  BForm, BFormCheckbox, BInputGroupAppend,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
@@ -258,6 +218,7 @@ import {
 } from '@/libs/utils'
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import WalletInputVue from './components/WalletInput.vue'
 
 export default {
   name: 'UnbondDialogue',
@@ -270,14 +231,14 @@ export default {
     BFormInput,
     BFormGroup,
     BFormSelect,
-    BFormRadioGroup,
-    BFormRadio,
     vSelect,
     BFormCheckbox,
     BInputGroupAppend,
 
     ValidationProvider,
     ValidationObserver,
+
+    WalletInputVue,
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
   },
@@ -295,6 +256,7 @@ export default {
     return {
       selectedAddress: this.address,
       availableAddress: [],
+      unbundValidators: [],
       validators: [],
       toValidator: null,
       token: '',
@@ -329,7 +291,9 @@ export default {
   },
   computed: {
     valOptions() {
-      return this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      const vals = this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      const unbunded = this.unbundValidators.map(x => ({ value: x.operator_address, label: `* ${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      return vals.concat(unbunded)
     },
     tokenOptions() {
       if (!this.delegations) return []
@@ -350,6 +314,9 @@ export default {
     loadBalance() {
       this.$http.getValidatorList().then(v => {
         this.validators = v
+      })
+      this.$http.getValidatorUnbondedList().then(v => {
+        this.unbundValidators = v
       })
       this.$http.getBankBalances(this.address).then(res => {
         if (res && res.length > 0) {

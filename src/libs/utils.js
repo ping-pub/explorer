@@ -205,6 +205,12 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
       transport = await TransportWebUSB.create()
       signer = new LedgerSigner(transport, { hdPaths: [getHdPath(signerAddress)] })
       break
+    case 'pingKMS':
+      if (!window.PingSigner) {
+        throw new Error('Please install Ping KMS extension')
+      }
+      signer = window.PingSigner
+      break
     case 'keplr':
     default:
       if (!window.getOfflineSigner || !window.keplr) {
@@ -220,7 +226,7 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
   // Ensure the address has some tokens to spend
   const client = await PingWalletClient.offline(signer)
   // const client = await SigningStargateClient.offline(signer)
-  return client.signAmino2(device === 'keplr' ? signerAddress : toSignAddress(signerAddress), messages, fee, memo, signerData)
+  return client.signAmino2(device.startsWith('ledger') ? toSignAddress(signerAddress) : signerAddress, messages, fee, memo, signerData)
   // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
 }
 
@@ -351,7 +357,13 @@ export function getUnitAmount(amount, tokenDenom) {
   return String(BigInt(Number(amount) * (10 ** exp)))
 }
 
-export function formatTokenAmount(tokenAmount, fraction = 2, tokenDenom = 'uatom') {
+export function numberWithCommas(x) {
+  const parts = x.toString().split('.')
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return parts.join('.')
+}
+
+export function formatTokenAmount(tokenAmount, fraction = 2, tokenDenom = 'uatom', format = true) {
   const denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
   let amount = 0
 
@@ -366,9 +378,10 @@ export function formatTokenAmount(tokenAmount, fraction = 2, tokenDenom = 'uatom
   })
   amount = Number(Number(tokenAmount)) / (10 ** exp)
   if (amount > 10) {
+    if (format) { return numberWithCommas(parseFloat(amount.toFixed(fraction))) }
     return parseFloat(amount.toFixed(fraction))
   }
-  return parseFloat(amount)
+  return parseFloat(amount.toFixed(fraction))
 }
 
 export function isTestnet() {
@@ -399,7 +412,7 @@ export function formatNumber(count, withAbbr = false, decimals = 2) {
 
 export function tokenFormatter(tokens, denoms = {}) {
   if (Array.isArray(tokens)) {
-    return tokens.map(t => formatToken(t, denoms, 2)).join()
+    return tokens.map(t => formatToken(t, denoms, 2)).join(', ')
   }
   return formatToken(tokens, denoms, 2)
 }

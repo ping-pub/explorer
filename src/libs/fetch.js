@@ -148,6 +148,14 @@ export default class ChainFetch {
     })
   }
 
+  async getValidatorUnbondedList() {
+    return this.get('/cosmos/staking/v1beta1/validators?status=BOND_STATUS_UNBONDED').then(data => {
+      const result = commonProcess(data)
+      const vals = result.validators ? result.validators : result
+      return vals.map(i => new Validator().init(i))
+    })
+  }
+
   async getValidatorListByHeight(height) {
     return this.get(`/validatorsets/${height}`).then(data => commonProcess(data))
   }
@@ -249,33 +257,6 @@ export default class ChainFetch {
       }
       return ret
     })
-  }
-
-  async get(url, config = null) {
-    let host = ''
-    if (!config) {
-      this.getSelectedConfig()
-    }
-    host = (config ? config.api : this.config.api)
-    const finalurl = (Array.isArray(host) ? host[this.getApiIndex(config)] : host) + url
-    // finalurl = finalurl.replaceAll('v1beta1', this.getEndpointVersion())
-    const ret = await fetch(finalurl).then(response => response.json())
-    return ret
-  }
-
-  getApiIndex(config = null) {
-    const conf = config || this.config
-    return localStorage.getItem(`${conf.chain_name}-api-index`) || 0
-  }
-
-  async getUrl(url) {
-    this.getSelectedConfig()
-    return fetch(url).then(res => res.json())
-  }
-
-  static fetch(host, url) {
-    const ret = fetch((Array.isArray(host) ? host[0] : host) + url).then(response => response.json())
-    return ret
   }
 
   async getAuthAccount(address, config = null) {
@@ -420,9 +401,9 @@ export default class ChainFetch {
       this.getSelectedConfig()
     }
     const conf = config || this.config
-    const index = localStorage.getItem(`${conf.chain_name}-api-index`) || 0
+    const index = this.getApiIndex(config)
     // Default options are marked with *
-    const response = await fetch((Array.isArray(conf.api) ? conf.api[Number(index)] : conf.api) + url, {
+    const response = await fetch((Array.isArray(conf.api) ? conf.api[index] : conf.api) + url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       // mode: 'cors', // no-cors, *cors, same-origin
       // credentials: 'same-origin', // redirect: 'follow', // manual, *follow, error
@@ -436,6 +417,33 @@ export default class ChainFetch {
     })
     // const response = axios.post((config ? config.api : this.config.api) + url, data)
     return response.json() // parses JSON response into native JavaScript objects
+  }
+
+  async get(url, config = null) {
+    if (!config) {
+      this.getSelectedConfig()
+    }
+    const conf = config || this.config
+    const finalurl = (Array.isArray(conf.api) ? conf.api[this.getApiIndex(config)] : conf.api) + url
+    // finalurl = finalurl.replaceAll('v1beta1', this.getEndpointVersion())
+    const ret = await fetch(finalurl).then(response => response.json())
+    return ret
+  }
+
+  getApiIndex(config = null) {
+    const conf = config || this.config
+    const index = Number(localStorage.getItem(`${conf.chain_name}-api-index`) || 0)
+    return index < conf.api.length ? index : 0
+  }
+
+  async getUrl(url) {
+    this.getSelectedConfig()
+    return fetch(url).then(res => res.json())
+  }
+
+  static fetch(host, url) {
+    const ret = fetch((Array.isArray(host) ? host[0] : host) + url).then(response => response.json())
+    return ret
   }
 }
 

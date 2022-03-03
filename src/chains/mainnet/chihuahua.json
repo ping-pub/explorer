@@ -1,0 +1,17 @@
+{
+    "chain_name": "chihuahua",
+    "coingecko": "",
+    "api": ["https://api.chihuahua.wtf", "https://chihuahua-api.mercury-nodes.net"],
+    "sdk_version": "0.44.3",
+    "coin_type": "118",
+    "min_tx_fee": "5000",
+    "addr_prefix": "chihuahua",
+    "logo": "https://github.com/ChihuahuaChain/resources/raw/main/logo/logo_transparent_notext.png",
+    "assets": [{
+        "base": "uhuahua",
+        "symbol": "HUAHUA",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "https://github.com/ChihuahuaChain/resources/raw/main/logo/logo_transparent_notext.png"
+    }]
+}
