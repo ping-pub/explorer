@@ -1,6 +1,7 @@
 <template>
   <div class="text-center">
     <b-card
+      v-if="calculateTotalChange !== 0"
       border-variant="primary"
     >
       <b-row class="mx-0 d-flex align-items-center">
@@ -43,13 +44,13 @@
             v-if="calculateTotalChange > 0"
             class="my-0 text-success"
           >
-            +{{ calculateTotalChange }} (24h)
+            +{{ formatTotalChange(calculateTotalChange) }} (24h)
           </small>
           <small
             v-else
             class="my-0 text-danger"
           >
-            {{ calculateTotalChange }} (24h)
+            {{ formatTotalChange(calculateTotalChange) }} (24h)
           </small>
           <!-- chart -->
           <chart-component-doughnut
@@ -422,7 +423,7 @@ export default {
           total += subtotal
         })
       }
-      return numberWithCommas(parseFloat(total.toFixed(2)))
+      return parseFloat(total.toFixed(2))
     },
     calculateByDenom() {
       const v = Object.values(this.balances)
@@ -438,9 +439,9 @@ export default {
               total[denom] = this.formatCurrency(x.amount, x.denom)
             }
             if (qty[denom]) {
-              qty[denom] += this.formatAmount(x.amount, x.denom)
+              qty[denom] += this.formatAmount(x.amount, x.denom, false)
             } else {
-              qty[denom] = this.formatAmount(x.amount, x.denom)
+              qty[denom] = this.formatAmount(x.amount, x.denom, false)
             }
           })
         })
@@ -456,9 +457,9 @@ export default {
               total[denom] = this.formatCurrency(x.amount, x.denom)
             }
             if (qty[denom]) {
-              qty[denom] += this.formatAmount(x.amount, x.denom)
+              qty[denom] += this.formatAmount(x.amount, x.denom, false)
             } else {
-              qty[denom] = this.formatAmount(x.amount, x.denom)
+              qty[denom] = this.formatAmount(x.amount, x.denom, false)
             }
           })
         })
@@ -564,6 +565,9 @@ export default {
       if (!v) return ''
       const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v)
       return formatTokenDenom(denom)
+    },
+    formatTotalChange(v) {
+      return numberWithCommas(v)
     },
     formatAmount(v, denom = 'uatom', format = true) {
       if (!v) return ''
