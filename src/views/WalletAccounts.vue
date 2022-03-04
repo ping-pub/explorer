@@ -439,9 +439,9 @@ export default {
               total[denom] = this.formatCurrency(x.amount, x.denom)
             }
             if (qty[denom]) {
-              qty[denom] += this.formatAmount(x.amount, x.denom)
+              qty[denom] += this.formatAmount(x.amount, x.denom, false)
             } else {
-              qty[denom] = this.formatAmount(x.amount, x.denom)
+              qty[denom] = this.formatAmount(x.amount, x.denom, false)
             }
           })
         })
@@ -457,9 +457,9 @@ export default {
               total[denom] = this.formatCurrency(x.amount, x.denom)
             }
             if (qty[denom]) {
-              qty[denom] += this.formatAmount(x.amount, x.denom)
+              qty[denom] += this.formatAmount(x.amount, x.denom, false)
             } else {
-              qty[denom] = this.formatAmount(x.amount, x.denom)
+              qty[denom] = this.formatAmount(x.amount, x.denom, false)
             }
           })
         })
