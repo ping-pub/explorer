@@ -1,7 +1,7 @@
 {
     "chain_name": "cosmos",
     "coingecko": "cosmos",
-    "api": ["https://cosmos.api.ping.pub", "https://cosmoshub.stakesystems.io"],
+    "api": ["https://lcd-cosmoshub.blockapsis.com", "https://cosmos.api.ping.pub", "https://cosmoshub.stakesystems.io"],
     "sdk_version": "0.44.3",
     "coin_type": "118",
     "min_tx_fee": "800",
