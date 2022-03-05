@@ -67,10 +67,9 @@
         <b-col
           md="8"
         >
-          <chartjs-component-bar
-            :height="200"
-            :chart-data="calculateChartBar"
-            :options="options"
+          <echart-scatter
+            :items.sync="scatters"
+            auto-resize
           />
         </b-col>
       </b-row>
@@ -291,7 +290,7 @@ import AppCollapseItem from '@core/components/app-collapse/AppCollapseItem.vue'
 import OperationTransferComponent from './OperationTransferComponent.vue'
 import OperationTransfer2Component from './OperationTransfer2Component.vue'
 import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
-import ChartjsComponentBar from './ChartjsComponentBar.vue'
+import EchartScatter from './components/charts/EchartScatter.vue'
 
 export default {
   components: {
@@ -315,9 +314,9 @@ export default {
     ToastificationContent,
     OperationTransfer2Component,
     ChartComponentDoughnut,
-    ChartjsComponentBar,
     AppCollapse,
     AppCollapseItem,
+    EchartScatter,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -395,37 +394,29 @@ export default {
       },
     },
     calculateTotal() {
-      const v = Object.values(this.balances)
       let total = 0
-      if (v) {
-        v.forEach(tokens => {
-          const subtotal = tokens.map(x => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c)
-          total += subtotal
-        })
-      }
-      const d = Object.values(this.delegations)
-      if (d) {
-        d.forEach(tokens => {
-          const subtotal = tokens.map(x => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c, 0)
-          total += subtotal
+      if (this.calculateByDenom.value) {
+        Object.values(this.calculateByDenom.value).forEach(i => {
+          total += i
         })
       }
       return numberWithCommas(parseFloat(total.toFixed(2)))
     },
-    calculateTotalChange() {
-      const v = Object.values(this.balances)
-      let total = 0
-      if (v) {
-        v.forEach(tokens => {
-          const subtotal = tokens.map(x => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c)
-          total += subtotal
+    scatters() {
+      const total = []
+      if (this.calculateByDenom.qty) {
+        Object.entries(this.calculateByDenom.qty).forEach(i => {
+          const price = this.getPrice(i[0])
+          total.push([i[1], i[1] * price, price, i[0]])
         })
       }
-      const d = Object.values(this.delegations)
-      if (d) {
-        d.forEach(tokens => {
-          const subtotal = tokens.map(x => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c, 0)
-          total += subtotal
+      return total
+    },
+    calculateTotalChange() {
+      let total = 0
+      if (this.calculateByDenom.value) {
+        Object.entries(this.calculateByDenom.value).forEach(i => {
+          total += i[1] * this.getChanges(i[0]) * 0.01
         })
       }
       return parseFloat(total.toFixed(2))
@@ -487,32 +478,6 @@ export default {
             backgroundColor: chartColors(),
             borderWidth: 0,
             pointStyle: 'rectRounded',
-          },
-        ],
-      }
-    },
-    calculateChartBar() {
-      const total = this.calculateByDenom
-      // Object.entries(total.value).sort((a, b) => b[0].localeCompare(a[0]));
-      const data = Object.entries(total.value).sort((a, b) => b[1] - a[1]).slice(0, 15)
-      return {
-        labels: data.map(x => x[0]),
-        datasets: [
-          {
-            label: 'Market Cap',
-            data: data.map(x => x[1]),
-            backgroundColor: chartColors(),
-            borderWidth: 0,
-            pointStyle: 'rectRounded',
-            yAxisID: 'y-axis-1',
-          },
-          {
-            label: 'Qty',
-            data: data.map(x => total.qty[x[0]]), // Object.values(total.qty),
-            backgroundColor: chartColors(),
-            borderWidth: 0,
-            pointStyle: 'rectRounded',
-            yAxisID: 'y-axis-2',
           },
         ],
       }
@@ -593,13 +558,7 @@ export default {
     },
     formatCurrency(amount, denom) {
       const qty = this.formatAmount(amount, denom, false)
-      const d2 = this.formatDenom(denom)
-      const quote = this.$store.state.chains.quotes[d2]
-      if (quote) {
-        const price = quote[this.currency2]
-        return parseFloat((qty * price).toFixed(2))
-      }
-      return 0
+      return qty * this.getPrice(denom)
     },
     priceColor(denom) {
       const d2 = this.formatDenom(denom)
@@ -609,6 +568,11 @@ export default {
         return price > 0 ? 'text-success' : 'text-danger'
       }
       return ''
+    },
+    getPrice(denom) {
+      const d2 = this.formatDenom(denom)
+      const quote = this.$store.state.chains.quotes[d2]
+      return quote ? quote[this.currency2] : 0
     },
     getChanges(denom) {
       const d2 = this.formatDenom(denom)
