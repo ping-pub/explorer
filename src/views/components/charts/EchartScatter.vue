@@ -72,8 +72,9 @@ export default {
           },
         },
         yAxis: {
-          name: 'Value',
+          name: 'Price',
           axisLabel: {
+            show: false,
             formatter(param) {
               return formatNumber(param, true, 0)
             },
@@ -91,21 +92,15 @@ export default {
             data: this.items,
             type: 'scatter',
             symbolSize(data) {
-              const r = Math.log(data[2]) * 5
-              if (r > 50) {
-                return 50
-              }
-              if (r < 10) {
-                return 10
-              }
-              return r
+              const r = Math.log(data[2])
+              return r > 50 ? 50 : r
             },
             emphasis: {
               focus: 'series',
               label: {
                 show: true,
                 formatter(param) {
-                  return param.data[3]
+                  return `${param.data[3]}, ${formatNumber(param.data[2], true, 0)}`
                 },
                 position: 'top',
               },
@@ -114,7 +109,7 @@ export default {
               shadowBlur: 10,
               shadowColor: 'rgba(120, 36, 50, 0.5)',
               shadowOffsetY: 5,
-              color: '#7367F0',
+              color: '#28c76f',
             },
           },
         ],

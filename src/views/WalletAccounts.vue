@@ -407,7 +407,7 @@ export default {
       if (this.calculateByDenom.qty) {
         Object.entries(this.calculateByDenom.qty).forEach(i => {
           const price = this.getPrice(i[0])
-          total.push([i[1], i[1] * price, price, i[0]])
+          total.push([i[1], Math.sqrt(price), i[1] * price, i[0]])
         })
       }
       return total
