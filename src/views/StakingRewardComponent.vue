@@ -28,6 +28,8 @@
               rounded
               size="42"
               variant="light-success"
+              text="R"
+              title="Rewards"
             />
           </b-media-aside>
           <b-media-body>
@@ -54,12 +56,9 @@
               rounded
               size="42"
               variant="light-primary"
-            >
-              <feather-icon
-                size="18"
-                icon="ServerIcon"
-              />
-            </b-avatar>
+              text="C"
+              title="Commission"
+            />
           </b-media-aside>
           <b-media-body>
             <h6 class="transaction-title">

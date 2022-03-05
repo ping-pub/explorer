@@ -72,7 +72,7 @@
       @ps-scroll-y="evt => { shallShadowBottom = evt.srcElement.scrollTop > 0 }"
     >
       <vertical-nav-menu-items
-        :items="navMenuItems"
+        :items.sync="leftMenu"
         class="navigation navigation-main"
       />
     </vue-perfect-scrollbar>
@@ -153,6 +153,16 @@ export default {
       appName,
       appLogoImage,
     }
+  },
+  computed: {
+    leftMenu() {
+      const preload = []
+      const { selected } = this.$store.state.chains
+      const current = navMenuItems.find(x => (x.title === selected.chain_name))
+      preload.push({ header: 'current' })
+      preload.push(current)
+      return preload.concat(navMenuItems.filter(x => x.title !== selected.chain_name))
+    },
   },
 }
 </script>
