@@ -52,6 +52,11 @@
           >
             {{ formatTotalChange(calculateTotalChange) }} (24h)
           </small>
+          <span @click="refreshPrice()">
+            <feather-icon
+              icon="RefreshCwIcon"
+              size="12"
+            /></span>
           <!-- chart -->
           <chart-component-doughnut
             :height="160"
@@ -468,11 +473,17 @@ export default {
     },
     calculateChartDoughnut() {
       const total = this.calculateByDenom
+      const labels = []
+      const data = []
+      Object.entries(total.value).sort((a, b) => b[1] - a[1]).forEach(i => {
+        labels.push(i[0])
+        data.push(i[1])
+      })
       return {
         datasets: [
           {
-            labels: Object.keys(total.value),
-            data: Object.values(total.value),
+            labels,
+            data,
             backgroundColor: chartColors(),
             borderWidth: 0,
             pointStyle: 'rectRounded',
@@ -513,6 +524,9 @@ export default {
   mounted() {
   },
   methods: {
+    refreshPrice() {
+      this.$store.dispatch('chains/getQuotes')
+    },
     init() {
       this.accounts = getLocalAccounts()
       const chains = getLocalChains()
