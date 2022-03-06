@@ -1,0 +1,19 @@
+{
+  "chain_name": "cerberus",
+  "coingecko": "",
+  "api": "https://api.test.cerberus.zone:1317",
+  "sdk_version": "0.44.4",
+  "coin_type": "118",
+  "min_tx_fee": "5000",
+  "addr_prefix": "cerberus",
+  "logo": "https://cerberus-chain.s3.us-east-2.amazonaws.com/logo_no_text_1024.png",
+  "assets": [
+    {
+      "base": "ucrbrus",
+      "symbol": "CRBRUS",
+      "exponent": "6",
+      "coingecko_id": "",
+      "logo": "https://cerberus-chain.s3.us-east-2.amazonaws.com/logo_no_text_1024.png"
+    }
+  ]
+}
