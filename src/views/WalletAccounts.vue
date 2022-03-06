@@ -558,7 +558,7 @@ export default {
     },
     formatCurrency(amount, denom) {
       const qty = this.formatAmount(amount, denom, false)
-      return qty * this.getPrice(denom)
+      return parseFloat((qty * this.getPrice(denom)).toFixed(2))
     },
     priceColor(denom) {
       const d2 = this.formatDenom(denom)
@@ -585,6 +585,9 @@ export default {
     },
     formatChanges(denom) {
       const price = this.getChanges(denom)
+      if (price > 0) {
+        return `+${parseFloat(price.toFixed(2))}%`
+      }
       return price === 0 ? '' : `${parseFloat(price.toFixed(2))}%`
     },
     formatPrice(denom) {
@@ -622,7 +625,7 @@ export default {
         const ret = delegations.map(x => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c, 0)
         total += ret
       }
-      return parseFloat(total.toFixed(2))
+      return total > 0 ? `+${parseFloat(total.toFixed(2))}` : parseFloat(total.toFixed(2))
     },
     formatBalanceChangesColor(v) {
       const total = this.formatBalanceChanges(v)

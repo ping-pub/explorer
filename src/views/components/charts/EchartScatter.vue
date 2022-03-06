@@ -89,7 +89,7 @@ export default {
         series: [
           {
             name: '',
-            data: this.items,
+            data: this.items.filter(x => x[1] > 0),
             type: 'scatter',
             symbolSize(data) {
               const r = Math.log(data[2])
