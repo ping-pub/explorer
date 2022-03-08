@@ -94,11 +94,11 @@
 <script>
 import {
   BCard, BCardHeader, BCardTitle, BCardBody, BMediaBody, BMedia, BMediaAside, BAvatar, BButton,
-} from 'bootstrap-vue'
-import { sha256 } from '@cosmjs/crypto'
-import { toHex } from '@cosmjs/encoding'
-import { formatToken, numberWithCommas } from '@/libs/utils'
-import OperationWithdrawCommissionComponent from './OperationWithdrawCommissionComponent.vue'
+} from 'bootstrap-vue';
+import { sha256 } from '@cosmjs/crypto';
+import { toHex } from '@cosmjs/encoding';
+import { formatToken, numberWithCommas } from '@/libs/utils';
+import OperationWithdrawCommissionComponent from './OperationWithdrawCommissionComponent.vue';
 
 export default {
   components: {
@@ -130,25 +130,25 @@ export default {
   data() {
     return {
       denoms: {},
-    }
+    };
   },
   created() {
-    this.$http.getAllIBCDenoms().then(x => {
-      x.denom_traces.forEach(trace => {
-        const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
-        this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace.base_denom)
-      })
-    })
+    this.$http.getAllIBCDenoms().then((x) => {
+      x.denom_traces.forEach((trace) => {
+        const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)));
+        this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace.base_denom);
+      });
+    });
   },
   methods: {
     formatNumber(value) {
-      if (value < 1) return value
+      if (value < 1) return value;
       // eslint-disable-next-line no-undef
-      return numberWithCommas(BigInt(Number(value).toFixed(0)))
+      return numberWithCommas(BigInt(Number(value).toFixed(0)));
     },
     formatDenom(value) {
-      return formatToken(value, this.denoms, 2)
+      return formatToken(value, this.denoms, 2);
     },
   },
-}
+};
 </script>

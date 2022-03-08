@@ -275,16 +275,16 @@
 <script>
 import {
   BCard, BButton, BAvatar, BRow, BCol, BTable, BCardFooter, VBTooltip, VBModal, BBadge, BPagination,
-} from 'bootstrap-vue'
+} from 'bootstrap-vue';
 
 import {
   percent, formatToken, StakingParameters, Validator, operatorAddressToAccount, consensusPubkeyToHexAddress, toDay, abbrMessage, abbrAddress,
-} from '@/libs/utils'
-import { keybase } from '@/libs/fetch'
-import StakingAddressComponent from './StakingAddressComponent.vue'
-import StakingCommissionComponent from './StakingCommissionComponent.vue'
-import StakingRewardComponent from './StakingRewardComponent.vue'
-import OperationDelegateComponent from './OperationDelegateComponent.vue'
+} from '@/libs/utils';
+import { keybase } from '@/libs/fetch';
+import StakingAddressComponent from './StakingAddressComponent.vue';
+import StakingCommissionComponent from './StakingCommissionComponent.vue';
+import StakingRewardComponent from './StakingRewardComponent.vue';
+import OperationDelegateComponent from './OperationDelegateComponent.vue';
 
 export default {
   components: {
@@ -324,97 +324,97 @@ export default {
       stakingParameter: new StakingParameters(),
       validator: new Validator(),
       userData: {},
-      blocks: Array.from('0'.repeat(100)).map(x => [Boolean(x), Number(x)]),
+      blocks: Array.from('0'.repeat(100)).map((x) => [Boolean(x), Number(x)]),
       distribution: {},
       transactions: {},
-    }
+    };
   },
   computed: {
     txs() {
       if (this.transactions.txs) {
-        return this.transactions.txs.map(x => ({
+        return this.transactions.txs.map((x) => ({
           height: Number(x.height),
           txhash: x.txhash,
           msgs: abbrMessage(x.tx.value ? x.tx.value.msg : x.tx.msg),
           time: toDay(x.timestamp),
-        }))
+        }));
       }
-      return []
+      return [];
     },
   },
   created() {
-    this.$http.getStakingPool().then(res => { this.stakingPool = res })
-    this.$http.getStakingParameters().then(res => { this.stakingParameter = res })
-    this.$http.getMintingInflation().then(res => { this.mintInflation = res })
-    const { address } = this.$route.params
-    this.$http.getValidatorDistribution(address).then(res => { this.distribution = res })
-    this.$http.getStakingValidator(address).then(data => {
-      this.validator = data
+    this.$http.getStakingPool().then((res) => { this.stakingPool = res; });
+    this.$http.getStakingParameters().then((res) => { this.stakingParameter = res; });
+    this.$http.getMintingInflation().then((res) => { this.mintInflation = res; });
+    const { address } = this.$route.params;
+    this.$http.getValidatorDistribution(address).then((res) => { this.distribution = res; });
+    this.$http.getStakingValidator(address).then((data) => {
+      this.validator = data;
 
-      this.processAddress(data.operator_address, data.consensus_pubkey)
-      this.$http.getTxsBySender(this.accountAddress).then(res => {
-        this.transactions = res
-      })
+      this.processAddress(data.operator_address, data.consensus_pubkey);
+      this.$http.getTxsBySender(this.accountAddress).then((res) => {
+        this.transactions = res;
+      });
 
-      const { identity } = data.description
-      keybase(identity).then(d => {
+      const { identity } = data.description;
+      keybase(identity).then((d) => {
         if (Array.isArray(d.them) && d.them.length > 0) {
-          this.$set(this.validator, 'avatar', d.them[0].pictures.primary.url)
-          this.$store.commit('cacheAvatar', { identity, url: d.them[0].pictures.primary.url })
+          this.$set(this.validator, 'avatar', d.them[0].pictures.primary.url);
+          this.$store.commit('cacheAvatar', { identity, url: d.them[0].pictures.primary.url });
         }
-      })
-    })
+      });
+    });
   },
   methods: {
     pageload(v) {
-      this.$http.getTxsBySender(this.accountAddress, v).then(res => {
-        this.transactions = res
-      })
+      this.$http.getTxsBySender(this.accountAddress, v).then((res) => {
+        this.transactions = res;
+      });
     },
     formatHash: abbrAddress,
     timeFormat(value) {
-      return toDay(value)
+      return toDay(value);
     },
     percentFormat(value) {
-      return percent(value)
+      return percent(value);
     },
     processAddress(operAddress, consensusPubkey) {
-      this.accountAddress = operatorAddressToAccount(operAddress)
-      this.hexAddress = consensusPubkeyToHexAddress(consensusPubkey)
-      this.$http.getStakingDelegatorDelegation(this.accountAddress, operAddress).then(d => {
-        this.selfDelegation = d
-      })
+      this.accountAddress = operatorAddressToAccount(operAddress);
+      this.hexAddress = consensusPubkeyToHexAddress(consensusPubkey);
+      this.$http.getStakingDelegatorDelegation(this.accountAddress, operAddress).then((d) => {
+        this.selfDelegation = d;
+      });
     },
     tokenFormatter(token) {
-      return formatToken({ amount: token, denom: this.stakingParameter.bond_denom })
+      return formatToken({ amount: token, denom: this.stakingParameter.bond_denom });
     },
     apr(rate) {
-      return `${percent((1 - rate) * this.mintInflation)} %`
+      return `${percent((1 - rate) * this.mintInflation)} %`;
     },
     fetch_status(item, lastHeight) {
-      return this.$http.getBlockByHeight(item[1]).then(res => {
+      return this.$http.getBlockByHeight(item[1]).then((res) => {
         if (item[1] !== lastHeight) {
-          const sigs = res.block.last_commit.signatures.find(s => s.validator_address === this.hexAddress)
-          const block = this.blocks.find(b => b[1] === item[1])
+          const sigs = res.block.last_commit.signatures.find((s) => s.validator_address === this.hexAddress);
+          const block = this.blocks.find((b) => b[1] === item[1]);
           if (typeof block !== 'undefined') {
-            this.$set(block, 0, typeof sigs !== 'undefined')
+            this.$set(block, 0, typeof sigs !== 'undefined');
           }
         }
-      })
+      });
     },
     fetch_latest() {
-      this.$http.getLatestBlock().then(res => {
-        const sigs = res.block.last_commit.signatures.find(s => s.validator_address === this.hexAddress)
-        const block = this.blocks.find(b => b[1] === res.block.last_commit.height)
+      this.$http.getLatestBlock().then((res) => {
+        const sigs = res.block.last_commit.signatures.find((s) => s.validator_address === this.hexAddress);
+        const block = this.blocks.find((b) => b[1] === res.block.last_commit.height);
         if (typeof block === 'undefined') { // mei
           // this.$set(block, 0, typeof sigs !== 'undefined')
-          if (this.blocks.length > 999) this.blocks.shift()
-          this.blocks.push([typeof sigs !== 'undefined', res.block.last_commit.height])
+          if (this.blocks.length > 999) this.blocks.shift();
+          this.blocks.push([typeof sigs !== 'undefined', res.block.last_commit.height]);
         }
-      })
+      });
     },
   },
-}
+};
 </script>
 
 <style></style>

@@ -230,26 +230,27 @@
           </b-form>
         </validation-observer>
         {{ error }}
-      </b-overlay></b-modal>
+      </b-overlay>
+    </b-modal>
   </div>
 </template>
 
 <script>
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
 import {
   BAvatar, BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
   BForm, BButton, BInputGroupAppend, BFormCheckbox, BOverlay,
-} from 'bootstrap-vue'
-import Ripple from 'vue-ripple-directive'
+} from 'bootstrap-vue';
+import Ripple from 'vue-ripple-directive';
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
-} from '@validations'
+} from '@validations';
 import {
   abbrAddress, extractAccountNumberAndSequence, formatToken, formatTokenDenom, getLocalAccounts, getUnitAmount, setLocalTxHistory, sign, timeIn,
-} from '@/libs/utils'
-import vSelect from 'vue-select'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import WalletInputVue from './components/WalletInput.vue'
+} from '@/libs/utils';
+import vSelect from 'vue-select';
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue';
+import WalletInputVue from './components/WalletInput.vue';
 
 export default {
   name: 'DelegateDialogue',
@@ -324,17 +325,17 @@ export default {
       digits,
       length,
       alphaDash,
-    }
+    };
   },
   computed: {
     valOptions() {
-      const vals = this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
-      const unbunded = this.unbundValidators.map(x => ({ value: x.operator_address, label: `* ${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
-      return vals.concat(unbunded)
+      const vals = this.validators.map((x) => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }));
+      const unbunded = this.unbundValidators.map((x) => ({ value: x.operator_address, label: `* ${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }));
+      return vals.concat(unbunded);
     },
     feeDenoms() {
-      if (!this.balance) return []
-      return this.balance.filter(item => !item.denom.startsWith('ibc'))
+      if (!this.balance) return [];
+      return this.balance.filter((item) => !item.denom.startsWith('ibc'));
     },
   },
   created() {
@@ -342,94 +343,94 @@ export default {
   },
   methods: {
     printDenom() {
-      return formatTokenDenom(this.IBCDenom[this.token] || this.token)
+      return formatTokenDenom(this.IBCDenom[this.token] || this.token);
     },
     onChange() {
       if (this.selectedAddress) {
-        this.$http.getBankBalances(this.selectedAddress).then(res => {
+        this.$http.getBankBalances(this.selectedAddress).then((res) => {
           if (res && res.length > 0) {
-            this.balance = res.reverse()
-            const token = this.balance.find(i => !i.denom.startsWith('ibc'))
-            this.token = token.denom
-            if (token) this.feeDenom = token.denom
-            this.balance.filter(i => i.denom.startsWith('ibc')).forEach(x => {
+            this.balance = res.reverse();
+            const token = this.balance.find((i) => !i.denom.startsWith('ibc'));
+            this.token = token.denom;
+            if (token) this.feeDenom = token.denom;
+            this.balance.filter((i) => i.denom.startsWith('ibc')).forEach((x) => {
               if (!this.IBCDenom[x.denom]) {
-                this.$http.getIBCDenomTrace(x.denom).then(denom => {
-                  this.IBCDenom[x.denom] = denom.denom_trace.base_denom
-                })
+                this.$http.getIBCDenomTrace(x.denom).then((denom) => {
+                  this.IBCDenom[x.denom] = denom.denom_trace.base_denom;
+                });
               }
-            })
+            });
           }
-        })
-        this.$http.getLatestBlock().then(ret => {
-          this.chainId = ret.block.header.chain_id
-          const notSynced = timeIn(ret.block.header.time, 10, 'm')
+        });
+        this.$http.getLatestBlock().then((ret) => {
+          this.chainId = ret.block.header.chain_id;
+          const notSynced = timeIn(ret.block.header.time, 10, 'm');
           if (notSynced) {
-            this.error = 'Client is not synced or blockchain is halted'
+            this.error = 'Client is not synced or blockchain is halted';
           } else {
-            this.error = null
+            this.error = null;
           }
-        })
-        this.$http.getAuthAccount(this.selectedAddress).then(ret => {
-          const account = extractAccountNumberAndSequence(ret)
-          this.accountNumber = account.accountNumber
-          this.sequence = account.sequence
-        })
-        this.fee = this.$store.state.chains.selected?.min_tx_fee || '1000'
-        this.feeDenom = this.$store.state.chains.selected?.assets[0]?.base || ''
+        });
+        this.$http.getAuthAccount(this.selectedAddress).then((ret) => {
+          const account = extractAccountNumberAndSequence(ret);
+          this.accountNumber = account.accountNumber;
+          this.sequence = account.sequence;
+        });
+        this.fee = this.$store.state.chains.selected?.min_tx_fee || '1000';
+        this.feeDenom = this.$store.state.chains.selected?.assets[0]?.base || '';
       }
       // this.$http.getStakingDelegations(this.selectedAddress).then(res => {
       //   this.delegations = res.delegation_responses
       // })
     },
     computeAccount() {
-      const accounts = getLocalAccounts()
-      const values = accounts ? Object.values(accounts) : []
-      let array = []
+      const accounts = getLocalAccounts();
+      const values = accounts ? Object.values(accounts) : [];
+      let array = [];
       for (let i = 0; i < values.length; i += 1) {
-        const addrs = values[i].address.filter(x => x.chain === this.$route.params.chain)
+        const addrs = values[i].address.filter((x) => x.chain === this.$route.params.chain);
         if (addrs && addrs.length > 0) {
-          array = array.concat(addrs.map(x => ({ value: x.addr, label: values[i].name.concat(' - ', abbrAddress(x.addr)) })))
+          array = array.concat(addrs.map((x) => ({ value: x.addr, label: values[i].name.concat(' - ', abbrAddress(x.addr)) })));
           if (!this.selectedAddress) {
-            this.selectedAddress = addrs[0].addr
+            this.selectedAddress = addrs[0].addr;
           }
         }
       }
-      this.selectedValidator = this.validatorAddress
-      return array
+      this.selectedValidator = this.validatorAddress;
+      return array;
     },
     loadBalance() {
-      this.account = this.computeAccount()
+      this.account = this.computeAccount();
       // if (this.account && this.account.length > 0) this.selectedAddress
-      this.$http.getValidatorList().then(v => {
-        this.validators = v
-      })
-      this.$http.getValidatorUnbondedList().then(v => {
-        this.unbundValidators = v
-      })
-      this.onChange()
+      this.$http.getValidatorList().then((v) => {
+        this.validators = v;
+      });
+      this.$http.getValidatorUnbondedList().then((v) => {
+        this.unbundValidators = v;
+      });
+      this.onChange();
     },
     handleOk(bvModalEvt) {
       // console.log('send')
       // Prevent modal from closing
-      bvModalEvt.preventDefault()
+      bvModalEvt.preventDefault();
       // Trigger submit handler
       // this.handleSubmit()
-      this.$refs.simpleRules.validate().then(ok => {
+      this.$refs.simpleRules.validate().then((ok) => {
         if (ok) {
-          this.sendTx().then(ret => {
+          this.sendTx().then((ret) => {
             // console.log(ret)
-            this.error = ret
-          })
+            this.error = ret;
+          });
         }
-      })
+      });
     },
     resetModal() {
-      this.feeDenom = ''
-      this.error = null
+      this.feeDenom = '';
+      this.error = null;
     },
     format(v) {
-      return formatToken(v, this.IBCDenom)
+      return formatToken(v, this.IBCDenom);
     },
     async sendTx() {
       const txMsgs = [{
@@ -442,15 +443,15 @@ export default {
             denom: this.token,
           },
         },
-      }]
+      }];
 
       if (txMsgs.length === 0) {
-        this.error = 'No delegation found'
-        return ''
+        this.error = 'No delegation found';
+        return '';
       }
       if (!this.accountNumber) {
-        this.error = 'Account number should not be empty!'
-        return ''
+        this.error = 'Account number should not be empty!';
+        return '';
       }
 
       const txFee = {
@@ -461,13 +462,13 @@ export default {
           },
         ],
         gas: this.gas,
-      }
+      };
 
       const signerData = {
         accountNumber: this.accountNumber,
         sequence: this.sequence,
         chainId: this.chainId,
-      }
+      };
 
       sign(
         this.wallet,
@@ -477,15 +478,15 @@ export default {
         txFee,
         this.memo,
         signerData,
-      ).then(bodyBytes => {
-        this.$http.broadcastTx(bodyBytes).then(res => {
+      ).then((bodyBytes) => {
+        this.$http.broadcastTx(bodyBytes).then((res) => {
           setLocalTxHistory({
             chain: this.$store.state.chains.selected,
             op: 'delegate',
             hash: res.tx_response.txhash,
             time: new Date(),
-          })
-          this.$bvModal.hide('delegate-window')
+          });
+          this.$bvModal.hide('delegate-window');
           this.$toast({
             component: ToastificationContent,
             props: {
@@ -493,17 +494,17 @@ export default {
               icon: 'EditIcon',
               variant: 'success',
             },
-          })
-        }).catch(e => {
-          this.error = e
-        })
-      }).catch(e => {
-        this.error = e
-      })
-      return ''
+          });
+        }).catch((e) => {
+          this.error = e;
+        });
+      }).catch((e) => {
+        this.error = e;
+      });
+      return '';
     },
   },
-}
+};
 </script>
 <style lang="scss">
 @import '@core/scss/vue/libs/vue-select.scss';

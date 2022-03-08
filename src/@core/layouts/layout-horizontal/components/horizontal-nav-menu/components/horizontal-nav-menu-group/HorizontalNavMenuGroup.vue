@@ -36,15 +36,15 @@
 </template>
 
 <script>
-import { BLink } from 'bootstrap-vue'
-import { resolveHorizontalNavMenuItemComponent as resolveNavItemComponent } from '@core/layouts/utils'
-import { useUtils as useI18nUtils } from '@core/libs/i18n'
-import { useUtils as useAclUtils } from '@core/libs/acl'
-import HorizontalNavMenuLink from '../horizontal-nav-menu-link/HorizontalNavMenuLink.vue'
+import { BLink } from 'bootstrap-vue';
+import { resolveHorizontalNavMenuItemComponent as resolveNavItemComponent } from '@core/layouts/utils';
+import { useUtils as useI18nUtils } from '@core/libs/i18n';
+import { useUtils as useAclUtils } from '@core/libs/acl';
+import HorizontalNavMenuLink from '../horizontal-nav-menu-link/HorizontalNavMenuLink.vue';
 
 // Composition Function
-import useHorizontalNavMenuGroup from './useHorizontalNavMenuGroup'
-import mixinHorizontalNavMenuGroup from './mixinHorizontalNavMenuGroup'
+import useHorizontalNavMenuGroup from './useHorizontalNavMenuGroup';
+import mixinHorizontalNavMenuGroup from './mixinHorizontalNavMenuGroup';
 
 export default {
   name: 'HorizontalNavMenuGroup',
@@ -67,10 +67,10 @@ export default {
       updateGroupOpen,
       updateIsActive,
       openChildDropdownOnLeft,
-    } = useHorizontalNavMenuGroup(props.item)
+    } = useHorizontalNavMenuGroup(props.item);
 
-    const { t } = useI18nUtils()
-    const { canViewVerticalNavMenuGroup } = useAclUtils()
+    const { t } = useI18nUtils();
+    const { canViewVerticalNavMenuGroup } = useAclUtils();
 
     return {
       refChildDropdown,
@@ -86,9 +86,9 @@ export default {
 
       // i18n
       t,
-    }
+    };
   },
-}
+};
 </script>
 
 <style>

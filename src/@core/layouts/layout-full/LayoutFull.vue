@@ -5,12 +5,12 @@
 </template>
 
 <script>
-import useAppConfig from '@core/app-config/useAppConfig'
+import useAppConfig from '@core/app-config/useAppConfig';
 
 export default {
   setup() {
-    const { contentWidth } = useAppConfig()
-    return { contentWidth }
+    const { contentWidth } = useAppConfig();
+    return { contentWidth };
   },
-}
+};
 </script>

@@ -203,14 +203,14 @@
 <script>
 import {
   BTable, BMedia, BAvatar, BBadge, BCard, BCardHeader, BCardTitle, VBTooltip, BCardBody, BButton,
-} from 'bootstrap-vue'
+} from 'bootstrap-vue';
 import {
   Validator, percent, StakingParameters, formatToken,
-} from '@/libs/utils'
-import { keybase } from '@/libs/fetch'
+} from '@/libs/utils';
+import { keybase } from '@/libs/fetch';
 // import { toHex } from '@cosmjs/encoding'
 // import fetch from 'node-fetch'
-import OperationDelegateComponent from './OperationDelegateComponent.vue'
+import OperationDelegateComponent from './OperationDelegateComponent.vue';
 
 export default {
   components: {
@@ -277,7 +277,7 @@ export default {
         },
         {
           key: 'commission',
-          formatter: value => `${percent(value.rate)}%`,
+          formatter: (value) => `${percent(value.rate)}%`,
           tdClass: 'text-right',
           thClass: 'text-right',
         },
@@ -288,117 +288,117 @@ export default {
           thClass: 'text-right',
         },
       ],
-    }
+    };
   },
   computed: {
     pingVals() {
-      return this.list.filter(x => this.keys.includes(x.operator_address))
+      return this.list.filter((x) => this.keys.includes(x.operator_address));
     },
     list() {
-      return this.validators.map(x => {
-        const xh = x
-        const change = this.changes[x.consensus_pubkey.value]
+      return this.validators.map((x) => {
+        const xh = x;
+        const change = this.changes[x.consensus_pubkey.value];
         if (change) {
-          xh.changes = change.latest - change.previous
+          xh.changes = change.latest - change.previous;
         }
-        return xh
-      })
+        return xh;
+      });
     },
   },
   created() {
-    this.$http.getValidatorListByHeight('latest').then(data => {
-      let height = Number(data.block_height)
+    this.$http.getValidatorListByHeight('latest').then((data) => {
+      let height = Number(data.block_height);
       if (height > 14400) {
-        height -= 14400
+        height -= 14400;
       } else {
-        height = 1
+        height = 1;
       }
-      const changes = []
-      data.validators.forEach(x => {
-        changes[x.pub_key.value] = { latest: Number(x.voting_power), previous: 0 }
-      })
-      this.$http.getValidatorListByHeight(height).then(previous => {
-        previous.validators.forEach(x => {
+      const changes = [];
+      data.validators.forEach((x) => {
+        changes[x.pub_key.value] = { latest: Number(x.voting_power), previous: 0 };
+      });
+      this.$http.getValidatorListByHeight(height).then((previous) => {
+        previous.validators.forEach((x) => {
           if (changes[x.pub_key.value]) {
-            changes[x.pub_key.value].previous = Number(x.voting_power)
+            changes[x.pub_key.value].previous = Number(x.voting_power);
           } else {
-            changes[x.pub_key.value] = { latest: 0, previous: Number(x.voting_power) }
+            changes[x.pub_key.value] = { latest: 0, previous: Number(x.voting_power) };
           }
-        })
-        this.$set(this, 'changes', changes)
-      })
-    })
-    this.$http.getStakingParameters().then(res => {
-      this.stakingParameters = res
-    })
-    this.$http.getValidatorList().then(res => {
-      const identities = []
-      const temp = res
-      let total = 0
+        });
+        this.$set(this, 'changes', changes);
+      });
+    });
+    this.$http.getStakingParameters().then((res) => {
+      this.stakingParameters = res;
+    });
+    this.$http.getValidatorList().then((res) => {
+      const identities = [];
+      const temp = res;
+      let total = 0;
       for (let i = 0; i < temp.length; i += 1) {
-        total += temp[i].tokens
-        const { identity } = temp[i].description
-        const url = this.$store.getters['chains/getAvatarById'](identity)
+        total += temp[i].tokens;
+        const { identity } = temp[i].description;
+        const url = this.$store.getters['chains/getAvatarById'](identity);
         if (url) {
-          temp[i].avatar = url
+          temp[i].avatar = url;
         } else if (identity && identity !== '') {
-          identities.push(identity)
+          identities.push(identity);
         }
       }
-      this.stakingPool = total
-      this.validators = temp
+      this.stakingPool = total;
+      this.validators = temp;
 
       // fetch avatar from keybase
-      let promise = Promise.resolve()
-      identities.forEach(item => {
-        promise = promise.then(() => new Promise(resolve => {
-          this.avatar(item, resolve)
-        }))
-      })
-    })
+      let promise = Promise.resolve();
+      identities.forEach((item) => {
+        promise = promise.then(() => new Promise((resolve) => {
+          this.avatar(item, resolve);
+        }));
+      });
+    });
   },
   beforeDestroy() {
-    this.islive = false
+    this.islive = false;
   },
   methods: {
     selectValidator(da) {
-      this.validator_address = da
+      this.validator_address = da;
     },
     percent,
     tokenFormatter(amount, denom) {
-      return formatToken({ amount, denom }, {}, 0)
+      return formatToken({ amount, denom }, {}, 0);
     },
     rankBadge(data) {
-      const { index, item } = data
+      const { index, item } = data;
       if (index === 0) {
-        window.sum = item.tokens
+        window.sum = item.tokens;
       } else {
-        window.sum += item.tokens
+        window.sum += item.tokens;
       }
-      const rank = window.sum / this.stakingPool
+      const rank = window.sum / this.stakingPool;
       if (rank < 0.333) {
-        return 'danger'
+        return 'danger';
       }
       if (rank < 0.67) {
-        return 'warning'
+        return 'warning';
       }
-      return 'primary'
+      return 'primary';
     },
     avatar(identity, resolve) {
       if (this.islive) {
-        keybase(identity).then(d => {
-          resolve()
+        keybase(identity).then((d) => {
+          resolve();
           if (Array.isArray(d.them) && d.them.length > 0) {
-            const pic = d.them[0].pictures
+            const pic = d.them[0].pictures;
             if (pic) {
-              const validator = this.validators.find(u => u.description.identity === identity)
-              this.$set(validator, 'avatar', pic.primary.url)
-              this.$store.commit('cacheAvatar', { identity, url: pic.primary.url })
+              const validator = this.validators.find((u) => u.description.identity === identity);
+              this.$set(validator, 'avatar', pic.primary.url);
+              this.$store.commit('cacheAvatar', { identity, url: pic.primary.url });
             }
           }
-        })
+        });
       }
     },
   },
-}
+};
 </script>

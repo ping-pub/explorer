@@ -1,4 +1,4 @@
-import { $themeColors } from '@themeConfig'
+import { $themeColors } from '@themeConfig';
 
 export const areaChartOptions = {
   grid: {
@@ -64,7 +64,7 @@ export const areaChartOptions = {
       shadeIntensity: 0.65,
     },
   },
-}
+};
 
 export const lineChartOptions = {
   grid: {
@@ -119,4 +119,4 @@ export const lineChartOptions = {
   tooltip: {
     x: { show: false },
   },
-}
+};

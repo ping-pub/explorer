@@ -84,9 +84,9 @@
 <script>
 import {
   BCard, BCardHeader, BCardTitle, BCardText, BCardBody, BRow, BCol, BMedia, BMediaAside, BAvatar, BMediaBody, BPopover, BButton,
-} from 'bootstrap-vue'
-import ObjectFieldComponent from './ObjectFieldComponent.vue'
-import ArrayFieldComponent from './ArrayFieldComponent.vue'
+} from 'bootstrap-vue';
+import ObjectFieldComponent from './ObjectFieldComponent.vue';
+import ArrayFieldComponent from './ArrayFieldComponent.vue';
 
 export default {
   components: {
@@ -112,5 +112,5 @@ export default {
       default: () => {},
     },
   },
-}
+};
 </script>

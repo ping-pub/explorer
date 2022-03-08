@@ -1,11 +1,11 @@
 export default class BlockData {
   constructor() {
-    this.txs = []
+    this.txs = [];
   }
 
   static create(element) {
-    const self = new BlockData()
-    self.txs = element.txs
-    return self
+    const self = new BlockData();
+    self.txs = element.txs;
+    return self;
   }
 }

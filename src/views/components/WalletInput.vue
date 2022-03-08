@@ -47,10 +47,10 @@
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate'
+import { ValidationProvider } from 'vee-validate';
 import {
   BFormRadioGroup, BFormRadio, BFormGroup,
-} from 'bootstrap-vue'
+} from 'bootstrap-vue';
 
 export default {
   name: 'WalletInput',
@@ -69,12 +69,12 @@ export default {
   data() {
     return {
       content: this.value,
-    }
+    };
   },
   methods: {
     handleInput() {
-      this.$emit('input', this.content)
+      this.$emit('input', this.content);
     },
   },
-}
+};
 </script>

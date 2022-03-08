@@ -1,7 +1,7 @@
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch } from '@vue/composition-api';
 
 export default function useAutoSuggest(props) {
-  const filteredData = ref({})
+  const filteredData = ref({});
 
   /**
    * Filter group against provided query
@@ -17,39 +17,39 @@ export default function useAutoSuggest(props) {
    * @param {String} query Query string to filter
    */
   const filterGrp = (grp, query) => {
-    const exactEle = grp.data.filter(item => item[grp.key].toLowerCase().startsWith(query.toLowerCase()))
+    const exactEle = grp.data.filter((item) => item[grp.key].toLowerCase().startsWith(query.toLowerCase()));
     const containEle = grp.data.filter(
       // prettier-ignore
-      item => !item[grp.key].toLowerCase().startsWith(query.toLowerCase()) && item[grp.key].toLowerCase().indexOf(query.toLowerCase()) > -1,
-    )
-    return exactEle.concat(containEle).slice(0, props.searchLimit)
-  }
+      (item) => !item[grp.key].toLowerCase().startsWith(query.toLowerCase()) && item[grp.key].toLowerCase().indexOf(query.toLowerCase()) > -1,
+    );
+    return exactEle.concat(containEle).slice(0, props.searchLimit);
+  };
 
-  const searchQuery = ref('')
+  const searchQuery = ref('');
   const resetsearchQuery = () => {
-    searchQuery.value = ''
-  }
+    searchQuery.value = '';
+  };
 
-  const handleSearchQueryUpdate = val => {
+  const handleSearchQueryUpdate = (val) => {
     if (val === '') {
-      filteredData.value = {}
+      filteredData.value = {};
     } else {
-      const queriedData = {}
-      const dataGrps = Object.keys(props.data)
+      const queriedData = {};
+      const dataGrps = Object.keys(props.data);
 
       dataGrps.forEach((grp, i) => {
-        queriedData[dataGrps[i]] = filterGrp(props.data[grp], val)
-      })
+        queriedData[dataGrps[i]] = filterGrp(props.data[grp], val);
+      });
 
-      filteredData.value = queriedData
+      filteredData.value = queriedData;
     }
-  }
+  };
 
-  watch(searchQuery, val => handleSearchQueryUpdate(val))
+  watch(searchQuery, (val) => handleSearchQueryUpdate(val));
 
   return {
     searchQuery,
     resetsearchQuery,
     filteredData,
-  }
+  };
 }

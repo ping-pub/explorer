@@ -48,7 +48,8 @@
               :to="`./gov/${p.id}`"
             >
               {{ p.title }}
-            </router-link></b-card-title>
+            </router-link>
+          </b-card-title>
           <b-card-body md="12">
             <div class="gov-wrapper d-flex flex-wrap">
               <div class="gov">
@@ -191,13 +192,13 @@
 <script>
 import {
   BCard, BCardTitle, BCardBody, BCardFooter, BButton, BProgressBar, BProgress, BBadge, BTooltip, BRow, BCol, VBModal,
-} from 'bootstrap-vue'
-import Ripple from 'vue-ripple-directive'
-import { Proposal } from '@/libs/data'
-import { percent, tokenFormatter } from '@/libs/utils'
-import dayjs from 'dayjs'
-import OperationVoteComponent from './OperationVoteComponent.vue'
-import OperationGovDepositComponent from './OperationGovDepositComponent.vue'
+} from 'bootstrap-vue';
+import Ripple from 'vue-ripple-directive';
+import { Proposal } from '@/libs/data';
+import { percent, tokenFormatter } from '@/libs/utils';
+import dayjs from 'dayjs';
+import OperationVoteComponent from './OperationVoteComponent.vue';
+import OperationGovDepositComponent from './OperationGovDepositComponent.vue';
 
 export default {
   components: {
@@ -225,41 +226,41 @@ export default {
       selectedTitle: '',
       proposals: [new Proposal()],
       max: 1,
-    }
+    };
   },
   mounted() {
-    this.getList()
+    this.getList();
   },
   methods: {
-    percent: v => percent(v),
-    formatDate: v => dayjs(v).format('YYYY-MM-DD'),
-    formatToken: v => tokenFormatter(v, {}),
+    percent: (v) => percent(v),
+    formatDate: (v) => dayjs(v).format('YYYY-MM-DD'),
+    formatToken: (v) => tokenFormatter(v, {}),
     selectProposal(pid, title) {
-      this.selectedProposalId = Number(pid)
-      this.selectedTitle = title
+      this.selectedProposalId = Number(pid);
+      this.selectedTitle = title;
     },
     getList() {
-      this.$http.getGovernanceList().then(res => {
-        const voting = res.filter(i => i.status === 2)
+      this.$http.getGovernanceList().then((res) => {
+        const voting = res.filter((i) => i.status === 2);
         if (voting.length > 0) {
-          let i = 0
-          Promise.all(voting.reverse().map(p => this.$http.getGovernanceTally(p.id, p.tally.total))).then(update => {
-            this.proposals.map(x => {
+          let i = 0;
+          Promise.all(voting.reverse().map((p) => this.$http.getGovernanceTally(p.id, p.tally.total))).then((update) => {
+            this.proposals.map((x) => {
               if (x.status === 2) {
-                const xh = x
-                xh.tally = update[i]
-                i += 1
-                return xh
+                const xh = x;
+                xh.tally = update[i];
+                i += 1;
+                return xh;
               }
-              return x
-            })
-          })
+              return x;
+            });
+          });
         }
-        this.proposals = res.reverse()
-      })
+        this.proposals = res.reverse();
+      });
     },
   },
-}
+};
 </script>
 
 <style scoped>

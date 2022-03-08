@@ -1,94 +1,94 @@
 import {
   Bech32, fromBase64, fromHex, toHex,
-} from '@cosmjs/encoding'
-import { sha256, stringToPath } from '@cosmjs/crypto'
+} from '@cosmjs/encoding';
+import { sha256, stringToPath } from '@cosmjs/crypto';
 // ledger
-import TransportWebBLE from '@ledgerhq/hw-transport-web-ble'
-import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
-import CosmosApp from 'ledger-cosmos-js'
-import { LedgerSigner } from '@cosmjs/ledger-amino'
+import TransportWebBLE from '@ledgerhq/hw-transport-web-ble';
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
+import CosmosApp from 'ledger-cosmos-js';
+import { LedgerSigner } from '@cosmjs/ledger-amino';
 
-import dayjs from 'dayjs'
-import duration from 'dayjs/plugin/duration'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import utc from 'dayjs/plugin/utc'
-import RIPEMD160 from 'ripemd160'
-import localeData from 'dayjs/plugin/localeData'
-import { $themeColors } from '@themeConfig'
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import utc from 'dayjs/plugin/utc';
+import RIPEMD160 from 'ripemd160';
+import localeData from 'dayjs/plugin/localeData';
+import { $themeColors } from '@themeConfig';
 // import { SigningStargateClient } from '@cosmjs/stargate'
-import PingWalletClient from './data/signing'
+import PingWalletClient from './data/signing';
 
-dayjs.extend(localeData)
-dayjs.extend(duration)
-dayjs.extend(relativeTime)
-dayjs.extend(utc)
+dayjs.extend(localeData);
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
 
 export function getLocalObject(name) {
-  const text = localStorage.getItem(name)
+  const text = localStorage.getItem(name);
   if (text) {
-    return JSON.parse(text)
+    return JSON.parse(text);
   }
-  return null
+  return null;
 }
 
 export function getLocalChains() {
-  return getLocalObject('chains')
+  return getLocalObject('chains');
 }
 
 export function getLocalAccounts() {
-  return getLocalObject('accounts')
+  return getLocalObject('accounts');
 }
 
 export function getLocalTxHistory() {
-  return getLocalObject('txHistory')
+  return getLocalObject('txHistory');
 }
 
 export function setLocalTxHistory(tx) {
-  const newTx = tx
-  const txs = getLocalTxHistory()
+  const newTx = tx;
+  const txs = getLocalTxHistory();
   if (txs) {
-    txs.push(newTx)
-    return localStorage.setItem('txHistory', JSON.stringify(txs))
+    txs.push(newTx);
+    return localStorage.setItem('txHistory', JSON.stringify(txs));
   }
-  return localStorage.setItem('txHistory', JSON.stringify([newTx]))
+  return localStorage.setItem('txHistory', JSON.stringify([newTx]));
 }
 
 export async function connectLedger(transport = 'usb') {
-  const trans = await transport === 'usb' ? TransportWebUSB.create() : TransportWebBLE.create()
-  return new CosmosApp(trans)
+  const trans = await transport === 'usb' ? TransportWebUSB.create() : TransportWebBLE.create();
+  return new CosmosApp(trans);
 }
 
 export function operatorAddressToAccount(operAddress) {
-  const { prefix, data } = Bech32.decode(operAddress)
+  const { prefix, data } = Bech32.decode(operAddress);
   if (prefix === 'iva') { // handle special cases
-    return Bech32.encode('iaa', data)
+    return Bech32.encode('iaa', data);
   }
   if (prefix === 'crocncl') { // handle special cases
-    return Bech32.encode('cro', data)
+    return Bech32.encode('cro', data);
   }
-  return Bech32.encode(prefix.replace('valoper', ''), data)
+  return Bech32.encode(prefix.replace('valoper', ''), data);
 }
 
 // TODO, not tested
 export function pubkeyToAccountAddress(pubkey, prefix) {
-  return Bech32.encode(prefix, pubkey, 40)
+  return Bech32.encode(prefix, pubkey, 40);
 }
 
 export function addressDecode(address) {
-  return Bech32.decode(address)
+  return Bech32.decode(address);
 }
 
 export function addressEnCode(prefix, pubkey) {
-  return Bech32.encode(prefix, pubkey)
+  return Bech32.encode(prefix, pubkey);
 }
 
 export function getUserCurrency() {
-  const currency = localStorage.getItem('currency')
-  return currency || 'usd'
+  const currency = localStorage.getItem('currency');
+  return currency || 'usd';
 }
 
 export function setUserCurrency(currency) {
-  localStorage.setItem('currency', currency)
+  localStorage.setItem('currency', currency);
 }
 
 export function chartColors() {
@@ -121,351 +121,351 @@ export function chartColors() {
     '#FFEBCD', '#8B008B', '#3CB371', '#87CEEB', '#6A5ACD',
     '#FFDEAD', '#FF69B4', '#BC8F8F', '#D3D3D3', '#00FF00',
     '#FAFAD2', '#AFEEEE', '#40E0D0', '#FFF8DC', '#20B2AA',
-    '#00FFFF', '#FA8072', '#F0F8FF']
-  return Object.values($themeColors).concat(colors)
+    '#00FFFF', '#FA8072', '#F0F8FF'];
+  return Object.values($themeColors).concat(colors);
 }
 
 export function extractAccountNumberAndSequence(ret) {
-  let account = ret.value
+  let account = ret.value;
   if (ret.value && ret.value.base_vesting_account) { // vesting account
-    account = ret.value.base_vesting_account?.base_account
+    account = ret.value.base_vesting_account?.base_account;
   } else if (ret.value && ret.value.base_account) { // evmos based account
-    account = ret.value.base_account
+    account = ret.value.base_account;
   }
-  const accountNumber = account.account_number
-  const sequence = account?.sequence || 0
+  const accountNumber = account.account_number;
+  const sequence = account?.sequence || 0;
 
   return {
     accountNumber,
     sequence,
-  }
+  };
 }
 
 export function getUserCurrencySign() {
-  let s = ''
+  let s = '';
   switch (getUserCurrency()) {
     case 'cny':
     case 'jpy':
-      s = '¥'
-      break
+      s = '¥';
+      break;
     case 'krw':
-      s = '₩'
-      break
+      s = '₩';
+      break;
     case 'eur':
-      s = '€'
-      break
+      s = '€';
+      break;
     default:
-      s = '$'
+      s = '$';
   }
-  return s
+  return s;
 }
 
 export function consensusPubkeyToHexAddress(consensusPubkey) {
-  let raw = null
+  let raw = null;
   if (typeof consensusPubkey === 'object') {
     if (consensusPubkey.type === 'tendermint/PubKeySecp256k1') {
-      raw = new RIPEMD160().update(Buffer.from(sha256(fromBase64(consensusPubkey.value)))).digest('hex').toUpperCase()
-      return raw
+      raw = new RIPEMD160().update(Buffer.from(sha256(fromBase64(consensusPubkey.value)))).digest('hex').toUpperCase();
+      return raw;
     }
-    raw = sha256(fromBase64(consensusPubkey.value))
+    raw = sha256(fromBase64(consensusPubkey.value));
   } else {
-    raw = sha256(fromHex(toHex(Bech32.decode(consensusPubkey).data).toUpperCase().replace('1624DE6420', '')))
+    raw = sha256(fromHex(toHex(Bech32.decode(consensusPubkey).data).toUpperCase().replace('1624DE6420', '')));
   }
-  const address = toHex(raw).slice(0, 40).toUpperCase()
-  return address
+  const address = toHex(raw).slice(0, 40).toUpperCase();
+  return address;
 }
 
 function toSignAddress(addr) {
-  const { data } = addressDecode(addr)
-  return addressEnCode('cosmos', data)
+  const { data } = addressDecode(addr);
+  return addressEnCode('cosmos', data);
 }
 
 function getHdPath(address) {
-  let hdPath = "m/44'/118/0'/0/0"
-  Object.values(getLocalAccounts()).forEach(item => {
-    const curr = item.address.find(i => i.addr === address)
+  let hdPath = "m/44'/118/0'/0/0";
+  Object.values(getLocalAccounts()).forEach((item) => {
+    const curr = item.address.find((i) => i.addr === address);
     if (curr && curr.hdpath) {
-      hdPath = curr.hdpath
+      hdPath = curr.hdpath;
     }
-  })
+  });
   // return [44, 118, 0, 0, 0]
   //  m/0'/1/2'/2/1000000000
-  return stringToPath(hdPath)
+  return stringToPath(hdPath);
 }
 
 export async function sign(device, chainId, signerAddress, messages, fee, memo, signerData) {
-  let transport
-  let signer
+  let transport;
+  let signer;
   switch (device) {
     case 'ledgerBle':
-      transport = await TransportWebBLE.create()
-      signer = new LedgerSigner(transport, { hdPaths: [getHdPath(signerAddress)] })
-      break
+      transport = await TransportWebBLE.create();
+      signer = new LedgerSigner(transport, { hdPaths: [getHdPath(signerAddress)] });
+      break;
     case 'ledgerUSB':
-      transport = await TransportWebUSB.create()
-      signer = new LedgerSigner(transport, { hdPaths: [getHdPath(signerAddress)] })
-      break
+      transport = await TransportWebUSB.create();
+      signer = new LedgerSigner(transport, { hdPaths: [getHdPath(signerAddress)] });
+      break;
     case 'pingKMS':
       if (!window.PingSigner) {
-        throw new Error('Please install Ping KMS extension')
+        throw new Error('Please install Ping KMS extension');
       }
-      signer = window.PingSigner
-      break
+      signer = window.PingSigner;
+      break;
     case 'keplr':
     default:
       if (!window.getOfflineSigner || !window.keplr) {
-        throw new Error('Please install keplr extension')
+        throw new Error('Please install keplr extension');
       }
-      await window.keplr.enable(chainId)
+      await window.keplr.enable(chainId);
       // signer = window.getOfflineSigner(chainId)
-      signer = window.getOfflineSignerOnlyAmino(chainId)
+      signer = window.getOfflineSignerOnlyAmino(chainId);
   }
 
   // if (signer) return signAmino(signer, signerAddress, messages, fee, memo, signerData)
 
   // Ensure the address has some tokens to spend
-  const client = await PingWalletClient.offline(signer)
+  const client = await PingWalletClient.offline(signer);
   // const client = await SigningStargateClient.offline(signer)
-  return client.signAmino2(device.startsWith('ledger') ? toSignAddress(signerAddress) : signerAddress, messages, fee, memo, signerData)
+  return client.signAmino2(device.startsWith('ledger') ? toSignAddress(signerAddress) : signerAddress, messages, fee, memo, signerData);
   // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
 }
 
 export async function getLedgerAddress(transport = 'blu', hdPath = "m/44'/118/0'/0/0") {
-  const trans = transport === 'usb' ? await TransportWebUSB.create() : await TransportWebBLE.create()
-  const signer = new LedgerSigner(trans, { hdPaths: [stringToPath(hdPath)] })
-  return signer.getAccounts()
+  const trans = transport === 'usb' ? await TransportWebUSB.create() : await TransportWebBLE.create();
+  const signer = new LedgerSigner(trans, { hdPaths: [stringToPath(hdPath)] });
+  return signer.getAccounts();
 }
 
 export function toDuration(value) {
-  return dayjs.duration(value).humanize()
+  return dayjs.duration(value).humanize();
 }
 
 // unit(y M d h m s ms)
 export function timeIn(time, amount, unit = 's') {
-  const input = dayjs(time).add(amount, unit)
-  return dayjs().unix() > input.unix()
+  const input = dayjs(time).add(amount, unit);
+  return dayjs().unix() > input.unix();
 }
 
 export function toDay(time, format = 'long') {
   if (format === 'long') {
-    return dayjs(time).format('YYYY-MM-DD HH:mm')
+    return dayjs(time).format('YYYY-MM-DD HH:mm');
   }
   if (format === 'date') {
-    return dayjs(time).format('YYYY-MM-DD')
+    return dayjs(time).format('YYYY-MM-DD');
   }
   if (format === 'time') {
-    return dayjs(time).format('HH:mm:ss')
+    return dayjs(time).format('HH:mm:ss');
   }
   if (format === 'from') {
-    return dayjs(time).fromNow()
+    return dayjs(time).fromNow();
   }
   if (format === 'to') {
-    return dayjs(time).toNow()
+    return dayjs(time).toNow();
   }
-  return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
+  return dayjs(time).format('YYYY-MM-DD HH:mm:ss');
 }
 
 export function percent(num) {
-  return parseFloat((num * 100).toFixed(2))
+  return parseFloat((num * 100).toFixed(2));
 }
 
 export function abbr(string, length = 6, suffix = '...') {
   if (string && string.length > length) {
-    return `${string.substring(0, length)}${suffix}`
+    return `${string.substring(0, length)}${suffix}`;
   }
-  return string
+  return string;
 }
 
 export function abbrRight(string, length = 6, suffix = '...') {
   if (string && string.length > length) {
-    return `${string.substring(string.length - length)}${suffix}`
+    return `${string.substring(string.length - length)}${suffix}`;
   }
-  return string
+  return string;
 }
 
 export function abbrMessage(msg) {
   if (Array.isArray(msg)) {
-    const sum = msg.map(x => abbrMessage(x)).reduce((s, c) => {
-      const sh = s
+    const sum = msg.map((x) => abbrMessage(x)).reduce((s, c) => {
+      const sh = s;
       if (sh[c]) {
-        sh[c] += 1
+        sh[c] += 1;
       } else {
-        sh[c] = 1
+        sh[c] = 1;
       }
-      return sh
-    }, {})
-    const output = []
-    Object.keys(sum).forEach(k => {
-      output.push(sum[k] > 1 ? `${k}×${sum[k]}` : k)
-    })
-    return output.join(', ')
+      return sh;
+    }, {});
+    const output = [];
+    Object.keys(sum).forEach((k) => {
+      output.push(sum[k] > 1 ? `${k}×${sum[k]}` : k);
+    });
+    return output.join(', ');
   }
   if (msg.typeUrl) {
-    return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1).replace('Msg', '')
+    return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1).replace('Msg', '');
   }
-  return msg.type.substring(msg.type.lastIndexOf('/') + 1).replace('Msg', '')
+  return msg.type.substring(msg.type.lastIndexOf('/') + 1).replace('Msg', '');
 }
 
 export function abbrAddress(address, length = 10) {
-  return address.substring(0, length).concat('...', address.substring(address.length - length))
+  return address.substring(0, length).concat('...', address.substring(address.length - length));
 }
 
 export function isStringArray(value) {
-  let is = false
+  let is = false;
   if (Array.isArray(value)) {
-    is = value.findIndex(x => typeof x === 'string') > -1
+    is = value.findIndex((x) => typeof x === 'string') > -1;
   }
-  return is
+  return is;
 }
 
 export function isToken(value) {
-  let is = false
+  let is = false;
   if (Array.isArray(value)) {
-    is = value.findIndex(x => Object.keys(x).includes('denom')) > -1
+    is = value.findIndex((x) => Object.keys(x).includes('denom')) > -1;
   }
-  return is
+  return is;
 }
 
 export function formatTokenDenom(tokenDenom) {
   if (tokenDenom && tokenDenom.code === undefined) {
-    let denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
-    const config = Object.values(getLocalChains())
+    let denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom;
+    const config = Object.values(getLocalChains());
 
-    config.forEach(x => {
+    config.forEach((x) => {
       if (x.assets) {
-        const asset = x.assets.find(a => (a.base === denom))
-        if (asset) denom = asset.symbol
+        const asset = x.assets.find((a) => (a.base === denom));
+        if (asset) denom = asset.symbol;
       }
-    })
-    return denom.startsWith('ibc') ? `IBC...${denom.substring(denom.length - 3)}` : denom.toUpperCase()
+    });
+    return denom.startsWith('ibc') ? `IBC...${denom.substring(denom.length - 3)}` : denom.toUpperCase();
   }
-  return ''
+  return '';
 }
 
 export function getUnitAmount(amount, tokenDenom) {
-  const denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
-  let exp = 6
-  const config = Object.values(getLocalChains())
+  const denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom;
+  let exp = 6;
+  const config = Object.values(getLocalChains());
 
-  config.forEach(x => {
+  config.forEach((x) => {
     if (x.assets) {
-      const asset = x.assets.find(a => (a.base === denom))
-      if (asset) exp = asset.exponent
+      const asset = x.assets.find((a) => (a.base === denom));
+      if (asset) exp = asset.exponent;
     }
-  })
+  });
   // eslint-disable-next-line no-undef
-  return String(BigInt(Number(amount) * (10 ** exp)))
+  return String(BigInt(Number(amount) * (10 ** exp)));
 }
 
 export function numberWithCommas(x) {
-  const parts = x.toString().split('.')
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  return parts.join('.')
+  const parts = x.toString().split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return parts.join('.');
 }
 
 export function formatTokenAmount(tokenAmount, fraction = 2, tokenDenom = 'uatom', format = true) {
-  const denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
-  let amount = 0
+  const denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom;
+  let amount = 0;
 
-  let exp = 6
-  const config = Object.values(getLocalChains())
+  let exp = 6;
+  const config = Object.values(getLocalChains());
 
-  config.forEach(x => {
+  config.forEach((x) => {
     if (x.assets) {
-      const asset = x.assets.find(a => (a.base === denom))
-      if (asset) exp = asset.exponent
+      const asset = x.assets.find((a) => (a.base === denom));
+      if (asset) exp = asset.exponent;
     }
-  })
-  amount = Number(Number(tokenAmount)) / (10 ** exp)
+  });
+  amount = Number(Number(tokenAmount)) / (10 ** exp);
   if (amount > 10) {
-    if (format) { return numberWithCommas(parseFloat(amount.toFixed(fraction))) }
-    return parseFloat(amount.toFixed(fraction))
+    if (format) { return numberWithCommas(parseFloat(amount.toFixed(fraction))); }
+    return parseFloat(amount.toFixed(fraction));
   }
-  return parseFloat(amount.toFixed(fraction))
+  return parseFloat(amount.toFixed(fraction));
 }
 
 export function isTestnet() {
   return (window.location.hostname.startsWith('testnet')
-    || window.location.search.indexOf('testnet') > -1)
+    || window.location.search.indexOf('testnet') > -1);
 }
 
 export function formatToken(token, IBCDenom = {}, decimals = 2, withDenom = true) {
   if (token) {
     if (withDenom) {
-      return `${formatTokenAmount(token.amount, decimals, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`
+      return `${formatTokenAmount(token.amount, decimals, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`;
     }
-    return formatTokenAmount(token.amount, decimals, token.denom)
+    return formatTokenAmount(token.amount, decimals, token.denom);
   }
-  return token
+  return token;
 }
 
-const COUNT_ABBRS = ['', 'K', 'M', 'B', 't', 'q', 's', 'S', 'o', 'n', 'd', 'U', 'D', 'T', 'Qt', 'Qd', 'Sd', 'St']
+const COUNT_ABBRS = ['', 'K', 'M', 'B', 't', 'q', 's', 'S', 'o', 'n', 'd', 'U', 'D', 'T', 'Qt', 'Qd', 'Sd', 'St'];
 
 export function formatNumber(count, withAbbr = false, decimals = 2) {
-  const i = count === 0 ? count : Math.floor(Math.log(count) / Math.log(1000))
-  let result = parseFloat((count / (1000 ** i)).toFixed(decimals))
+  const i = count === 0 ? count : Math.floor(Math.log(count) / Math.log(1000));
+  let result = parseFloat((count / (1000 ** i)).toFixed(decimals));
   if (withAbbr && COUNT_ABBRS[i]) {
-    result += `${COUNT_ABBRS[i]}`
+    result += `${COUNT_ABBRS[i]}`;
   }
-  return result
+  return result;
 }
 
 export function tokenFormatter(tokens, denoms = {}) {
   if (Array.isArray(tokens)) {
-    return tokens.map(t => formatToken(t, denoms, 2)).join(', ')
+    return tokens.map((t) => formatToken(t, denoms, 2)).join(', ');
   }
-  return formatToken(tokens, denoms, 2)
+  return formatToken(tokens, denoms, 2);
 }
 
 export function getCachedValidators(chainName) {
-  const locals = localStorage.getItem(`validators-${chainName}`)
-  return locals
+  const locals = localStorage.getItem(`validators-${chainName}`);
+  return locals;
 }
 
 export function isHexAddress(v) {
-  const re = /^[A-Z\d]{40}$/
-  return re.test(v)
+  const re = /^[A-Z\d]{40}$/;
+  return re.test(v);
 }
 
 export function getStakingValidatorByHex(chainName, hex) {
-  const locals = localStorage.getItem(`validators-${chainName}`)
+  const locals = localStorage.getItem(`validators-${chainName}`);
   if (locals) {
-    const val = JSON.parse(locals).find(x => consensusPubkeyToHexAddress(x.consensus_pubkey) === hex)
+    const val = JSON.parse(locals).find((x) => consensusPubkeyToHexAddress(x.consensus_pubkey) === hex);
     if (val) {
-      return val.description.moniker
+      return val.description.moniker;
     }
   }
-  return abbr(hex)
+  return abbr(hex);
 }
 
 export function getStakingValidatorByAccount(chainName, addr) {
-  const locals = localStorage.getItem(`validators-${chainName}`)
+  const locals = localStorage.getItem(`validators-${chainName}`);
   if (locals) {
-    const val = JSON.parse(locals).find(x => operatorAddressToAccount(x.operator_address) === addr)
+    const val = JSON.parse(locals).find((x) => operatorAddressToAccount(x.operator_address) === addr);
     if (val) {
-      return val.description.moniker
+      return val.description.moniker;
     }
   }
-  return addr
+  return addr;
 }
 
 export function getStakingValidatorOperator(chainName, addr, length = -1) {
-  const locals = localStorage.getItem(`validators-${chainName}`)
+  const locals = localStorage.getItem(`validators-${chainName}`);
   if (locals) {
-    const val = JSON.parse(locals).find(x => x.operator_address === addr)
+    const val = JSON.parse(locals).find((x) => x.operator_address === addr);
     if (val) {
-      return val.description.moniker
+      return val.description.moniker;
     }
   }
   if (length > 0) {
-    return addr.substring(addr.length - length)
+    return addr.substring(addr.length - length);
   }
-  return addr
+  return addr;
 }
 
-export * from 'compare-versions'
+export * from 'compare-versions';
 
-export * from './data'
+export * from './data';
 export class Data {
 
 }

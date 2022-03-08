@@ -1,25 +1,25 @@
-import { isToday } from './utils'
+import { isToday } from './utils';
 
-export const kFormatter = num => (num > 999 ? `${(num / 1000).toFixed(1)}k` : num)
+export const kFormatter = (num) => (num > 999 ? `${(num / 1000).toFixed(1)}k` : num);
 
 export const title = (value, replacer = ' ') => {
-  if (!value) return ''
-  const str = value.toString()
+  if (!value) return '';
+  const str = value.toString();
 
-  const arr = str.split(replacer)
-  const capitalizedArray = []
-  arr.forEach(word => {
-    const capitalized = word.charAt(0).toUpperCase() + word.slice(1)
-    capitalizedArray.push(capitalized)
-  })
-  return capitalizedArray.join(' ')
-}
+  const arr = str.split(replacer);
+  const capitalizedArray = [];
+  arr.forEach((word) => {
+    const capitalized = word.charAt(0).toUpperCase() + word.slice(1);
+    capitalizedArray.push(capitalized);
+  });
+  return capitalizedArray.join(' ');
+};
 
-export const avatarText = value => {
-  if (!value) return ''
-  const nameArray = value.split(' ')
-  return nameArray.map(word => word.charAt(0).toUpperCase()).join('')
-}
+export const avatarText = (value) => {
+  if (!value) return '';
+  const nameArray = value.split(' ');
+  return nameArray.map((word) => word.charAt(0).toUpperCase()).join('');
+};
 
 /**
  * Format and return date in Humanize format
@@ -29,9 +29,9 @@ export const avatarText = value => {
  * @param {Object} formatting Intl object to format with
  */
 export const formatDate = (value, formatting = { month: 'short', day: 'numeric', year: 'numeric' }) => {
-  if (!value) return value
-  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
-}
+  if (!value) return value;
+  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value));
+};
 
 /**
  * Return short human friendly month representation of date
@@ -40,15 +40,15 @@ export const formatDate = (value, formatting = { month: 'short', day: 'numeric',
  * @param {Boolean} toTimeForCurrentDay Shall convert to time if day is today/current
  */
 export const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
-  const date = new Date(value)
-  let formatting = { month: 'short', day: 'numeric' }
+  const date = new Date(value);
+  let formatting = { month: 'short', day: 'numeric' };
 
   if (toTimeForCurrentDay && isToday(date)) {
-    formatting = { hour: 'numeric', minute: 'numeric' }
+    formatting = { hour: 'numeric', minute: 'numeric' };
   }
 
-  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
-}
+  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value));
+};
 
 // Strip all the tags from markup and return plain text
-export const filterTags = value => value.replace(/<\/?[^>]+(>|$)/g, '')
+export const filterTags = (value) => value.replace(/<\/?[^>]+(>|$)/g, '');

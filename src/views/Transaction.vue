@@ -19,22 +19,26 @@
               {{ 'txhash' }}
             </b-td><b-td
               class="text-truncate"
-            >{{ tx.txhash }}</b-td>
+            >
+              {{ tx.txhash }}
+            </b-td>
           </b-tr>
           <b-tr>
             <b-td>
               {{ 'status' }}
-            </b-td><b-td class="text-wrap"> <b-badge
-              v-if="tx.code===0"
-              variant="light-success"
-            >
-              Success
-            </b-badge><b-badge
-              v-else
-              variant="light-danger"
-            >
-              Failed
-            </b-badge><b v-if="tx.code > 0"> {{ tx.raw_log }}</b> </b-td>
+            </b-td><b-td class="text-wrap">
+              <b-badge
+                v-if="tx.code===0"
+                variant="light-success"
+              >
+                Success
+              </b-badge><b-badge
+                v-else
+                variant="light-danger"
+              >
+                Failed
+              </b-badge><b v-if="tx.code > 0"> {{ tx.raw_log }}</b>
+            </b-td>
           </b-tr>
           <b-tr>
             <b-td>
@@ -42,7 +46,8 @@
             </b-td><b-td>
               <router-link :to="`../blocks/${tx.height}`">
                 {{ tx.height }}
-              </router-link></b-td>
+              </router-link>
+            </b-td>
           </b-tr>
           <b-tr>
             <b-td>
@@ -93,9 +98,9 @@
 <script>
 import {
   BCard, BTableSimple, BTr, BTd, BBadge, BCardBody,
-} from 'bootstrap-vue'
-import { toDay, tokenFormatter } from '@/libs/utils'
-import ObjectFieldComponent from './ObjectFieldComponent.vue'
+} from 'bootstrap-vue';
+import { toDay, tokenFormatter } from '@/libs/utils';
+import ObjectFieldComponent from './ObjectFieldComponent.vue';
 
 export default {
   components: {
@@ -110,28 +115,28 @@ export default {
   data() {
     return {
       tx: { tx: {} },
-    }
+    };
   },
   beforeRouteUpdate(to, from, next) {
-    const { hash } = to.params
+    const { hash } = to.params;
     if (hash !== from.params.hash) {
-      this.$http.getTxs(hash).then(res => {
-        this.tx = res
-      })
-      next()
+      this.$http.getTxs(hash).then((res) => {
+        this.tx = res;
+      });
+      next();
     }
   },
   created() {
-    const { hash } = this.$route.params
-    this.$http.getTxs(hash).then(res => {
-      this.tx = res
-    })
+    const { hash } = this.$route.params;
+    this.$http.getTxs(hash).then((res) => {
+      this.tx = res;
+    });
   },
   methods: {
-    formattoken: v => tokenFormatter(v),
-    formatTime: v => toDay(v),
+    formattoken: (v) => tokenFormatter(v),
+    formatTime: (v) => toDay(v),
   },
-}
+};
 </script>
 
 <style>

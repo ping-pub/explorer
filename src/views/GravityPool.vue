@@ -38,7 +38,8 @@
                   size="82"
                   badge
                   :badge-variant="data.variant"
-                /></b-col>
+                />
+              </b-col>
             </b-row>
           </b-card>
         </router-link>
@@ -62,8 +63,8 @@
 <script>
 import {
   BCard, BCardTitle, VBTooltip,
-} from 'bootstrap-vue'
-import { formatTokenDenom } from '@/libs/utils'
+} from 'bootstrap-vue';
+import { formatTokenDenom } from '@/libs/utils';
 // import fetch from 'node-fetch'
 
 export default {
@@ -78,38 +79,38 @@ export default {
     return {
       pools: [],
       ibcDenom: {},
-    }
+    };
   },
   created() {
-    this.$http.getGravityPools().then(res => {
-      this.pools = res
-      res.pools.forEach(x => {
-        const denom1 = x.reserve_coin_denoms[0]
-        const denom2 = x.reserve_coin_denoms[1]
+    this.$http.getGravityPools().then((res) => {
+      this.pools = res;
+      res.pools.forEach((x) => {
+        const denom1 = x.reserve_coin_denoms[0];
+        const denom2 = x.reserve_coin_denoms[1];
         if (denom1.startsWith('ibc')) {
-          this.$http.getIBCDenomTrace(denom1).then(denom => {
-            this.$set(this.ibcDenom, denom1, denom)
-          })
+          this.$http.getIBCDenomTrace(denom1).then((denom) => {
+            this.$set(this.ibcDenom, denom1, denom);
+          });
         }
         if (denom2.startsWith('ibc')) {
-          this.$http.getIBCDenomTrace(denom2).then(denom => {
-            this.$set(this.ibcDenom, denom2, denom)
-          })
+          this.$http.getIBCDenomTrace(denom2).then((denom) => {
+            this.$set(this.ibcDenom, denom2, denom);
+          });
         }
-      })
-    })
+      });
+    });
   },
   beforeDestroy() {
-    this.islive = false
-    clearInterval(this.timer)
+    this.islive = false;
+    clearInterval(this.timer);
   },
   methods: {
     formatDenom(v) {
       // console.log(v, this.ibcDenom[v])
-      const denom = (v.startsWith('ibc') ? this.ibcDenom[v].denom_trace.base_denom : v)
-      return formatTokenDenom(denom)
+      const denom = (v.startsWith('ibc') ? this.ibcDenom[v].denom_trace.base_denom : v);
+      return formatTokenDenom(denom);
     },
-    length: v => (Array.isArray(v) ? v.length : 0),
+    length: (v) => (Array.isArray(v) ? v.length : 0),
   },
-}
+};
 </script>

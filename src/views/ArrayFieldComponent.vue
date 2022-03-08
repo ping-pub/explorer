@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import { BTable } from 'bootstrap-vue'
+import { BTable } from 'bootstrap-vue';
 
 import {
   getStakingValidatorByHex, isHexAddress, isToken, percent, toDay, tokenFormatter,
-} from '@/libs/utils'
+} from '@/libs/utils';
 
 export default {
   name: 'ArrayFieldComponent',
@@ -43,40 +43,40 @@ export default {
   methods: {
     eval_value(value) {
       if (typeof (value) === 'string') {
-        return JSON.parse(value)
+        return JSON.parse(value);
       }
-      return value
+      return value;
     },
     isTokenField(value) {
-      return isToken(value)
+      return isToken(value);
     },
     isArrayText(value) {
-      const has = String(value).startsWith('[') && String(value).endsWith(']')
-      return has
+      const has = String(value).startsWith('[') && String(value).endsWith(']');
+      return has;
     },
     formatText(value) {
-      const reg = /^\d{4}.\d{1,2}.\d{1,2}T\d{2}:\d{2}:.+Z$/
-      const percentage = /^0\.\d+/
+      const reg = /^\d{4}.\d{1,2}.\d{1,2}T\d{2}:\d{2}:.+Z$/;
+      const percentage = /^0\.\d+/;
       if (reg.test(value)) {
-        return toDay(value)
+        return toDay(value);
       }
       if (percentage.test(value)) {
-        return `${percent(value)}%`
+        return `${percent(value)}%`;
       }
       if (value.length > 40) {
-        return value.substring(0, 40).concat('...')
+        return value.substring(0, 40).concat('...');
       }
-      return value
+      return value;
     },
     formatTokens(value) {
-      return tokenFormatter(value)
+      return tokenFormatter(value);
     },
     isHex(value) {
-      return isHexAddress(value)
+      return isHexAddress(value);
     },
     formatHexAddress(v) {
-      return getStakingValidatorByHex(this.$http.config.chain_name, v)
+      return getStakingValidatorByHex(this.$http.config.chain_name, v);
     },
   },
-}
+};
 </script>

@@ -1,4 +1,4 @@
-import { $themeConfig } from '@themeConfig'
+import { $themeConfig } from '@themeConfig';
 
 export default {
   namespaced: true,
@@ -8,8 +8,8 @@ export default {
   getters: {},
   mutations: {
     UPDATE_VERTICAL_MENU_COLLAPSED(state, val) {
-      state.isVerticalMenuCollapsed = val
+      state.isVerticalMenuCollapsed = val;
     },
   },
   actions: {},
-}
+};

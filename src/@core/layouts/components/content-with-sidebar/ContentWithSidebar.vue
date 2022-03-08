@@ -1,6 +1,5 @@
 <template>
   <div class="cws-container cws-sidebar-right">
-
     <!-- content -->
     <div class="cws-content">
       <slot />
@@ -16,7 +15,7 @@
 <script>
 export default {
 
-}
+};
 </script>
 
 <style lang="scss">

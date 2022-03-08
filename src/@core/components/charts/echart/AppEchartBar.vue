@@ -9,13 +9,13 @@
 </template>
 
 <script>
-import ECharts from 'vue-echarts'
-import 'echarts/lib/component/tooltip'
-import 'echarts/lib/component/legend'
-import 'echarts/lib/chart/bar'
-import theme from './theme.json'
+import ECharts from 'vue-echarts';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
+import 'echarts/lib/chart/bar';
+import theme from './theme.json';
 
-ECharts.registerTheme('theme-color', theme)
+ECharts.registerTheme('theme-color', theme);
 
 export default {
   components: {
@@ -44,7 +44,7 @@ export default {
         yAxis: this.optionData.yAxis,
         series: this.optionData.series,
       },
-    }
+    };
   },
-}
+};
 </script>

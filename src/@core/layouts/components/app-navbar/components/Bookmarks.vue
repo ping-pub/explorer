@@ -45,7 +45,6 @@
           :class="{'show': filteredData.pages && filteredData.pages.length }"
           tagname="ul"
         >
-
           <b-dropdown-item
             v-for="(suggestion, index) in filteredData.pages || bookmarks"
             :key="index"
@@ -67,78 +66,77 @@
               :class="{'text-warning': suggestion.isBookmarked}"
               @click.stop.prevent="toggleBookmarked(suggestion)"
             />
-
           </b-dropdown-item>
           <b-dropdown-item
             v-show="!(filteredData.pages && filteredData.pages.length) && searchQuery"
             disabled
           >
             No Results Found.
-          </b-dropdown-item></vue-perfect-scrollbar>
+          </b-dropdown-item>
+        </vue-perfect-scrollbar>
       </li>
     </b-nav-item-dropdown>
-
   </b-navbar-nav>
 </template>
 
 <script>
 import {
   BNavbarNav, BNavItem, BTooltip, BNavItemDropdown, BFormInput, BDropdownItem,
-} from 'bootstrap-vue'
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import useAutoSuggest from '@core/components/app-auto-suggest/useAutoSuggest'
-import { ref, watch } from '@vue/composition-api'
-import router from '@/router'
-import store from '@/store'
-import searchAndBookmarkData from '../search-and-bookmark-data'
+} from 'bootstrap-vue';
+import VuePerfectScrollbar from 'vue-perfect-scrollbar';
+import useAutoSuggest from '@core/components/app-auto-suggest/useAutoSuggest';
+import { ref, watch } from '@vue/composition-api';
+import router from '@/router';
+import store from '@/store';
+import searchAndBookmarkData from '../search-and-bookmark-data';
 
 export default {
   components: {
     BNavbarNav, BNavItem, BTooltip, BNavItemDropdown, BFormInput, VuePerfectScrollbar, BDropdownItem,
   },
   setup() {
-    const searchAndBookmarkDataPages = ref(searchAndBookmarkData.pages)
-    const bookmarks = ref(searchAndBookmarkData.pages.data.filter(page => page.isBookmarked))
-    const currentSelected = ref(-1)
+    const searchAndBookmarkDataPages = ref(searchAndBookmarkData.pages);
+    const bookmarks = ref(searchAndBookmarkData.pages.data.filter((page) => page.isBookmarked));
+    const currentSelected = ref(-1);
 
     const perfectScrollbarSettings = {
       maxScrollbarLength: 60,
-    }
+    };
 
     const {
       searchQuery,
       resetsearchQuery,
       filteredData,
-    } = useAutoSuggest({ data: { pages: searchAndBookmarkDataPages.value }, searchLimit: 6 })
+    } = useAutoSuggest({ data: { pages: searchAndBookmarkDataPages.value }, searchLimit: 6 });
 
-    watch(searchQuery, val => {
-      store.commit('app/TOGGLE_OVERLAY', Boolean(val))
-    })
+    watch(searchQuery, (val) => {
+      store.commit('app/TOGGLE_OVERLAY', Boolean(val));
+    });
 
-    watch(filteredData, val => {
-      currentSelected.value = val.pages && !val.pages.length ? -1 : 0
-    })
+    watch(filteredData, (val) => {
+      currentSelected.value = val.pages && !val.pages.length ? -1 : 0;
+    });
 
     const suggestionSelected = () => {
-      const suggestion = filteredData.value.pages[currentSelected.value]
-      router.push(suggestion.route).catch(() => {})
-      resetsearchQuery()
-    }
+      const suggestion = filteredData.value.pages[currentSelected.value];
+      router.push(suggestion.route).catch(() => {});
+      resetsearchQuery();
+    };
 
-    const toggleBookmarked = item => {
+    const toggleBookmarked = (item) => {
       // Find Index of item/page in bookmarks' array
-      const pageIndexInBookmarks = bookmarks.value.findIndex(i => i.route === item.route)
+      const pageIndexInBookmarks = bookmarks.value.findIndex((i) => i.route === item.route);
 
       // If index is > -1 => Item is bookmarked => Remove item from bookmarks array using index
       // Else => Item is not bookmarked => Add item to bookmarks' array
       if (pageIndexInBookmarks > -1) {
-        bookmarks.value[pageIndexInBookmarks].isBookmarked = false
-        bookmarks.value.splice(pageIndexInBookmarks, 1)
+        bookmarks.value[pageIndexInBookmarks].isBookmarked = false;
+        bookmarks.value.splice(pageIndexInBookmarks, 1);
       } else {
-        bookmarks.value.push(item)
-        bookmarks.value[bookmarks.value.length - 1].isBookmarked = true
+        bookmarks.value.push(item);
+        bookmarks.value[bookmarks.value.length - 1].isBookmarked = true;
       }
-    }
+    };
 
     return {
       bookmarks,
@@ -151,9 +149,9 @@ export default {
       searchQuery,
       resetsearchQuery,
       filteredData,
-    }
+    };
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

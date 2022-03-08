@@ -31,12 +31,12 @@
 import {
   BRow, BCol,
   BAvatar, BFormInput, BInputGroupPrepend, BInputGroup,
-} from 'bootstrap-vue'
-import Ripple from 'vue-ripple-directive'
+} from 'bootstrap-vue';
+import Ripple from 'vue-ripple-directive';
 import {
   addressEnCode, addressDecode,
-} from '@/libs/utils'
-import OperationTransferComponent from '@/views/OperationTransferComponent.vue'
+} from '@/libs/utils';
+import OperationTransferComponent from '@/views/OperationTransferComponent.vue';
 
 export default {
   name: 'AppFooter',
@@ -55,24 +55,24 @@ export default {
   data() {
     return {
       selectedAddress: 'cosmos1ev0vtddkl7jlwfawlk06yzncapw2x9quyxx75u',
-    }
+    };
   },
   computed: {
     chains() {
-      const { data } = addressDecode('cosmos1ev0vtddkl7jlwfawlk06yzncapw2x9quyxx75u')
+      const { data } = addressDecode('cosmos1ev0vtddkl7jlwfawlk06yzncapw2x9quyxx75u');
       const config = Object.values(JSON.parse(localStorage.getItem('chains')))
-        .map(x => ({
+        .map((x) => ({
           addr: addressEnCode(x.addr_prefix, data),
           icon: x.logo,
-        }))
-      return config
+        }));
+      return config;
     },
   },
   methods: {
     transfer(addr) {
-      this.selectedAddress = addr
-      this.$bvModal.show('transfer-window')
+      this.selectedAddress = addr;
+      this.$bvModal.show('transfer-window');
     },
   },
-}
+};
 </script>

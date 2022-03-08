@@ -27,8 +27,8 @@
 <script>
 import {
   BTabs, BTab,
-} from 'bootstrap-vue'
-import PlaceForm from './PlaceForm.vue'
+} from 'bootstrap-vue';
+import PlaceForm from './PlaceForm.vue';
 
 export default {
   components: {
@@ -49,7 +49,7 @@ export default {
   data: () => ({
     tabIndex: 0,
   }),
-}
+};
 </script>
 
 <style lang="scss" scoped>

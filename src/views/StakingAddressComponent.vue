@@ -104,9 +104,9 @@
 <script>
 import {
   BCard, BAvatar, BMedia, BMediaAside, BMediaBody, VBTooltip,
-} from 'bootstrap-vue'
+} from 'bootstrap-vue';
 
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue';
 
 export default {
   components: {
@@ -148,8 +148,8 @@ export default {
             title: 'Address copied',
             icon: 'BellIcon',
           },
-        })
-      }, e => {
+        });
+      }, (e) => {
         this.$toast({
           component: ToastificationContent,
           props: {
@@ -157,11 +157,11 @@ export default {
             icon: 'BellIcon',
             variant: 'danger',
           },
-        })
-      })
+        });
+      });
     },
   },
-}
+};
 </script>
 
 <style scoped>

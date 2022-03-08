@@ -119,7 +119,6 @@
             xl="4"
             :class="(balances[acc.addr])? 'order-1' : 'order-9' "
           >
-
             <b-card
               no-body
               class="card-browser-states"
@@ -169,7 +168,6 @@
                     <feather-icon icon="Trash2Icon" /> Remove
                   </b-dropdown-item>
                 </b-dropdown>
-
               </b-card-header>
               <b-card-body class="text-truncate">
                 <b-row>
@@ -182,7 +180,8 @@
                         rounded
                       />
                       <div class="text-right">
-                        <h4 class="my-0">{{ currency }}{{ formatBalance(acc.addr) }}
+                        <h4 class="my-0">
+                          {{ currency }}{{ formatBalance(acc.addr) }}
                         </h4>
                         <small :class="formatBalanceChangesColor(acc.addr)"> {{ formatBalanceChanges(acc.addr) }}</small>
                       </div>
@@ -276,21 +275,21 @@
 import {
   BCard, BCardHeader, BCardTitle, BCardBody, VBModal, BRow, BCol, BAvatar, BButton,
   BDropdown, BDropdownItem, BDropdownDivider, BFormCheckbox, VBTooltip,
-} from 'bootstrap-vue'
-import Ripple from 'vue-ripple-directive'
-import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
+} from 'bootstrap-vue';
+import Ripple from 'vue-ripple-directive';
+import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue';
 import {
   chartColors,
   formatNumber,
   formatTokenAmount, formatTokenDenom, getLocalAccounts, getLocalChains, getUserCurrency, getUserCurrencySign, numberWithCommas, setUserCurrency,
-} from '@/libs/utils'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import AppCollapse from '@core/components/app-collapse/AppCollapse.vue'
-import AppCollapseItem from '@core/components/app-collapse/AppCollapseItem.vue'
-import OperationTransferComponent from './OperationTransferComponent.vue'
-import OperationTransfer2Component from './OperationTransfer2Component.vue'
-import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
-import EchartScatter from './components/charts/EchartScatter.vue'
+} from '@/libs/utils';
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue';
+import AppCollapse from '@core/components/app-collapse/AppCollapse.vue';
+import AppCollapseItem from '@core/components/app-collapse/AppCollapseItem.vue';
+import OperationTransferComponent from './OperationTransferComponent.vue';
+import OperationTransfer2Component from './OperationTransfer2Component.vue';
+import ChartComponentDoughnut from './ChartComponentDoughnut.vue';
+import EchartScatter from './components/charts/EchartScatter.vue';
 
 export default {
   components: {
@@ -362,7 +361,7 @@ export default {
               display: true,
               maxTicksLimit: 7,
               callback(val) {
-                return formatNumber(val, true, 0)
+                return formatNumber(val, true, 0);
               },
               color: 'red',
             },
@@ -382,94 +381,94 @@ export default {
           }],
         },
       },
-    }
+    };
   },
   computed: {
     defaultWallet: {
       get() {
-        return this.$store.state.chains.defaultWallet
+        return this.$store.state.chains.defaultWallet;
       },
       set(value) {
-        this.$store.commit('setDefaultWallet', value)
+        this.$store.commit('setDefaultWallet', value);
       },
     },
     calculateTotal() {
-      let total = 0
+      let total = 0;
       if (this.calculateByDenom.value) {
-        Object.values(this.calculateByDenom.value).forEach(i => {
-          total += i
-        })
+        Object.values(this.calculateByDenom.value).forEach((i) => {
+          total += i;
+        });
       }
-      return numberWithCommas(parseFloat(total.toFixed(2)))
+      return numberWithCommas(parseFloat(total.toFixed(2)));
     },
     scatters() {
-      const total = []
+      const total = [];
       if (this.calculateByDenom.qty) {
-        Object.entries(this.calculateByDenom.qty).forEach(i => {
-          const price = this.getPrice(i[0])
-          total.push([i[1], Math.sqrt(price), i[1] * price, i[0]])
-        })
+        Object.entries(this.calculateByDenom.qty).forEach((i) => {
+          const price = this.getPrice(i[0]);
+          total.push([i[1], Math.sqrt(price), i[1] * price, i[0]]);
+        });
       }
-      return total
+      return total;
     },
     calculateTotalChange() {
-      let total = 0
+      let total = 0;
       if (this.calculateByDenom.value) {
-        Object.entries(this.calculateByDenom.value).forEach(i => {
-          total += i[1] * this.getChanges(i[0]) * 0.01
-        })
+        Object.entries(this.calculateByDenom.value).forEach((i) => {
+          total += i[1] * this.getChanges(i[0]) * 0.01;
+        });
       }
-      return parseFloat(total.toFixed(2))
+      return parseFloat(total.toFixed(2));
     },
     calculateByDenom() {
-      const v = Object.values(this.balances)
-      const total = {}
-      const qty = {}
+      const v = Object.values(this.balances);
+      const total = {};
+      const qty = {};
       if (v) {
-        v.forEach(tokens => {
-          tokens.forEach(x => {
-            const denom = this.formatDenom(x.denom)
+        v.forEach((tokens) => {
+          tokens.forEach((x) => {
+            const denom = this.formatDenom(x.denom);
             if (total[denom]) {
-              total[denom] += this.formatCurrency(x.amount, x.denom)
+              total[denom] += this.formatCurrency(x.amount, x.denom);
             } else {
-              total[denom] = this.formatCurrency(x.amount, x.denom)
+              total[denom] = this.formatCurrency(x.amount, x.denom);
             }
             if (qty[denom]) {
-              qty[denom] += this.formatAmount(x.amount, x.denom, false)
+              qty[denom] += this.formatAmount(x.amount, x.denom, false);
             } else {
-              qty[denom] = this.formatAmount(x.amount, x.denom, false)
+              qty[denom] = this.formatAmount(x.amount, x.denom, false);
             }
-          })
-        })
+          });
+        });
       }
-      const d = Object.values(this.delegations)
+      const d = Object.values(this.delegations);
       if (d) {
-        d.forEach(tokens => {
-          tokens.forEach(x => {
-            const denom = this.formatDenom(x.denom)
+        d.forEach((tokens) => {
+          tokens.forEach((x) => {
+            const denom = this.formatDenom(x.denom);
             if (total[denom]) {
-              total[denom] += this.formatCurrency(x.amount, x.denom)
+              total[denom] += this.formatCurrency(x.amount, x.denom);
             } else {
-              total[denom] = this.formatCurrency(x.amount, x.denom)
+              total[denom] = this.formatCurrency(x.amount, x.denom);
             }
             if (qty[denom]) {
-              qty[denom] += this.formatAmount(x.amount, x.denom, false)
+              qty[denom] += this.formatAmount(x.amount, x.denom, false);
             } else {
-              qty[denom] = this.formatAmount(x.amount, x.denom, false)
+              qty[denom] = this.formatAmount(x.amount, x.denom, false);
             }
-          })
-        })
+          });
+        });
       }
-      return { value: total, qty }
+      return { value: total, qty };
     },
     calculateChartDoughnut() {
-      const total = this.calculateByDenom
-      const labels = []
-      const data = []
-      Object.entries(total.value).sort((a, b) => b[1] - a[1]).forEach(i => {
-        labels.push(i[0])
-        data.push(i[1])
-      })
+      const total = this.calculateByDenom;
+      const labels = [];
+      const data = [];
+      Object.entries(total.value).sort((a, b) => b[1] - a[1]).forEach((i) => {
+        labels.push(i[0]);
+        data.push(i[1]);
+      });
       return {
         datasets: [
           {
@@ -480,168 +479,168 @@ export default {
             pointStyle: 'rectRounded',
           },
         ],
-      }
+      };
     },
   },
   created() {
-    this.init()
+    this.init();
   },
   mounted() {
   },
   methods: {
     refreshPrice() {
-      this.$store.dispatch('chains/getQuotes')
+      this.$store.dispatch('chains/getQuotes');
     },
     init() {
-      this.accounts = getLocalAccounts()
-      const chains = getLocalChains()
+      this.accounts = getLocalAccounts();
+      const chains = getLocalChains();
       if (this.accounts) {
-        Object.keys(this.accounts).forEach(acc => {
-          this.accounts[acc].address.forEach(add => {
-            this.$http.getBankBalances(add.addr, chains[add.chain]).then(res => {
+        Object.keys(this.accounts).forEach((acc) => {
+          this.accounts[acc].address.forEach((add) => {
+            this.$http.getBankBalances(add.addr, chains[add.chain]).then((res) => {
               if (res && res.length > 0) {
-                this.$set(this.balances, add.addr, res)
-                res.forEach(token => {
+                this.$set(this.balances, add.addr, res);
+                res.forEach((token) => {
                   if (token.denom.startsWith('ibc')) {
-                    this.$http.getIBCDenomTrace(token.denom, chains[add.chain]).then(denom => {
-                      this.$set(this.ibcDenom, token.denom, denom)
-                    })
+                    this.$http.getIBCDenomTrace(token.denom, chains[add.chain]).then((denom) => {
+                      this.$set(this.ibcDenom, token.denom, denom);
+                    });
                   }
-                })
+                });
               }
-            })
-            this.$http.getStakingDelegations(add.addr, chains[add.chain]).then(res => {
+            });
+            this.$http.getStakingDelegations(add.addr, chains[add.chain]).then((res) => {
               if (res.delegation_responses) {
-                const delegation = res.delegation_responses.map(x => x.balance).reduce((t, c) => {
-                  const t1 = t
+                const delegation = res.delegation_responses.map((x) => x.balance).reduce((t, c) => {
+                  const t1 = t;
                   if (t1[c.denom]) {
-                    t1[c.denom] += Number(c.amount)
+                    t1[c.denom] += Number(c.amount);
                   } else {
-                    t1[c.denom] = Number(c.amount)
+                    t1[c.denom] = Number(c.amount);
                   }
-                  return t1
-                }, {})
-                this.$set(this.delegations, add.addr, Object.keys(delegation).map(x => ({ amount: String(delegation[x]), denom: x })))
+                  return t1;
+                }, {});
+                this.$set(this.delegations, add.addr, Object.keys(delegation).map((x) => ({ amount: String(delegation[x]), denom: x })));
               }
-            }).catch(() => {})
-          })
-        })
+            }).catch(() => {});
+          });
+        });
       }
     },
     setCurrency(c) {
-      setUserCurrency(c)
-      this.currency2 = c
-      this.currency = getUserCurrencySign()
+      setUserCurrency(c);
+      this.currency2 = c;
+      this.currency = getUserCurrencySign();
     },
     transfer(addr) {
-      this.selectedAddress = addr
+      this.selectedAddress = addr;
     },
     completeAdd() {
-      this.init()
-      this.$bvModal.hide('add-account')
+      this.init();
+      this.$bvModal.hide('add-account');
     },
     formatDenom(v) {
-      if (!v) return ''
-      const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v)
-      return formatTokenDenom(denom)
+      if (!v) return '';
+      const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v);
+      return formatTokenDenom(denom);
     },
     formatTotalChange(v) {
-      return numberWithCommas(v)
+      return numberWithCommas(v);
     },
     formatAmount(v, denom = 'uatom', format = true) {
-      if (!v) return ''
-      const denom2 = (denom.startsWith('ibc') ? this.ibcDenom[denom] : denom)
-      return formatTokenAmount(v, 2, denom2, format)
+      if (!v) return '';
+      const denom2 = (denom.startsWith('ibc') ? this.ibcDenom[denom] : denom);
+      return formatTokenAmount(v, 2, denom2, format);
     },
     formatAddr(v) {
-      return v.substring(0, 10).concat('...', v.substring(v.length - 10))
+      return v.substring(0, 10).concat('...', v.substring(v.length - 10));
     },
     formatCurrency(amount, denom) {
-      const qty = this.formatAmount(amount, denom, false)
-      return parseFloat((qty * this.getPrice(denom)).toFixed(2))
+      const qty = this.formatAmount(amount, denom, false);
+      return parseFloat((qty * this.getPrice(denom)).toFixed(2));
     },
     priceColor(denom) {
-      const d2 = this.formatDenom(denom)
-      const quote = this.$store.state.chains.quotes[d2]
+      const d2 = this.formatDenom(denom);
+      const quote = this.$store.state.chains.quotes[d2];
       if (quote) {
-        const price = quote[`${this.currency2}_24h_change`]
-        return price > 0 ? 'text-success' : 'text-danger'
+        const price = quote[`${this.currency2}_24h_change`];
+        return price > 0 ? 'text-success' : 'text-danger';
       }
-      return ''
+      return '';
     },
     getPrice(denom) {
-      const d2 = this.formatDenom(denom)
-      const quote = this.$store.state.chains.quotes[d2]
-      return quote ? quote[this.currency2] : 0
+      const d2 = this.formatDenom(denom);
+      const quote = this.$store.state.chains.quotes[d2];
+      return quote ? quote[this.currency2] : 0;
     },
     getChanges(denom) {
-      const d2 = this.formatDenom(denom)
-      const quote = this.$store.state.chains.quotes[d2]
+      const d2 = this.formatDenom(denom);
+      const quote = this.$store.state.chains.quotes[d2];
       if (quote) {
-        const price = quote[`${this.currency2}_24h_change`]
-        return price
+        const price = quote[`${this.currency2}_24h_change`];
+        return price;
       }
-      return 0
+      return 0;
     },
     formatChanges(denom) {
-      const price = this.getChanges(denom)
+      const price = this.getChanges(denom);
       if (price > 0) {
-        return `+${parseFloat(price.toFixed(2))}%`
+        return `+${parseFloat(price.toFixed(2))}%`;
       }
-      return price === 0 ? '' : `${parseFloat(price.toFixed(2))}%`
+      return price === 0 ? '' : `${parseFloat(price.toFixed(2))}%`;
     },
     formatPrice(denom) {
-      const d2 = this.formatDenom(denom)
-      const quote = this.$store.state.chains.quotes[d2]
+      const d2 = this.formatDenom(denom);
+      const quote = this.$store.state.chains.quotes[d2];
       if (quote) {
-        const price = quote[this.currency2]
-        return price
+        const price = quote[this.currency2];
+        return price;
       }
-      return 0
+      return 0;
     },
     formatBalance(v) {
-      let total = 0
-      const balance = this.balances[v]
+      let total = 0;
+      const balance = this.balances[v];
       if (balance) {
-        const ret = balance.map(x => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c)
-        total += ret
+        const ret = balance.map((x) => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c);
+        total += ret;
       }
-      const delegations = this.delegations[v]
+      const delegations = this.delegations[v];
       if (delegations) {
-        const ret = delegations.map(x => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c, 0)
-        total += ret
+        const ret = delegations.map((x) => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c, 0);
+        total += ret;
       }
-      return numberWithCommas(parseFloat(total.toFixed(2)))
+      return numberWithCommas(parseFloat(total.toFixed(2)));
     },
     formatBalanceChanges(v) {
-      let total = 0
-      const balance = this.balances[v]
+      let total = 0;
+      const balance = this.balances[v];
       if (balance) {
-        const ret = balance.map(x => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c)
-        total += ret
+        const ret = balance.map((x) => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c);
+        total += ret;
       }
-      const delegations = this.delegations[v]
+      const delegations = this.delegations[v];
       if (delegations) {
-        const ret = delegations.map(x => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c, 0)
-        total += ret
+        const ret = delegations.map((x) => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c, 0);
+        total += ret;
       }
-      return total > 0 ? `+${parseFloat(total.toFixed(2))}` : parseFloat(total.toFixed(2))
+      return total > 0 ? `+${parseFloat(total.toFixed(2))}` : parseFloat(total.toFixed(2));
     },
     formatBalanceChangesColor(v) {
-      const total = this.formatBalanceChanges(v)
-      return total > 0 ? 'text-success' : 'text-danger'
+      const total = this.formatBalanceChanges(v);
+      return total > 0 ? 'text-success' : 'text-danger';
     },
     removeAddress(v) {
-      Object.keys(this.accounts).forEach(key => {
-        const item = this.accounts[key]
-        const newAddrs = item.address.filter(a => a.addr !== v)
+      Object.keys(this.accounts).forEach((key) => {
+        const item = this.accounts[key];
+        const newAddrs = item.address.filter((a) => a.addr !== v);
         if (newAddrs.length > 0) {
-          this.$set(item, 'address', newAddrs)
+          this.$set(item, 'address', newAddrs);
         } else {
-          delete this.accounts[key]
+          delete this.accounts[key];
         }
-      })
-      localStorage.setItem('accounts', JSON.stringify(this.accounts))
+      });
+      localStorage.setItem('accounts', JSON.stringify(this.accounts));
     },
     copy(v) {
       this.$copyText(v).then(() => {
@@ -651,8 +650,8 @@ export default {
             title: 'Address copied',
             icon: 'BellIcon',
           },
-        })
-      }, e => {
+        });
+      }, (e) => {
         this.$toast({
           component: ToastificationContent,
           props: {
@@ -660,11 +659,11 @@ export default {
             icon: 'BellIcon',
             variant: 'danger',
           },
-        })
-      })
+        });
+      });
     },
   },
-}
+};
 </script>
 
 <style lang="css">

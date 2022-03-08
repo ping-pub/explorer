@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
   props: {
@@ -29,11 +29,11 @@ export default {
   data() {
     return {
       collapseID: '',
-    }
+    };
   },
   computed: {
     collapseClasses() {
-      const classes = []
+      const classes = [];
 
       // Collapse Type
       const collapseVariants = {
@@ -41,14 +41,14 @@ export default {
         border: 'collapse-border',
         shadow: 'collapse-shadow',
         margin: 'collapse-margin',
-      }
-      classes.push(collapseVariants[this.type])
+      };
+      classes.push(collapseVariants[this.type]);
 
-      return classes
+      return classes;
     },
   },
   created() {
-    this.collapseID = uuidv4()
+    this.collapseID = uuidv4();
   },
-}
+};
 </script>

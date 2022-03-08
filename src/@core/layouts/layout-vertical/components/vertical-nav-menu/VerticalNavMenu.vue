@@ -17,7 +17,6 @@
         :collapseTogglerIcon="collapseTogglerIcon"
       >
         <ul class="nav navbar-nav flex-row">
-
           <!-- Logo & Text -->
           <li class="nav-item mr-auto">
             <b-link
@@ -81,14 +80,14 @@
 </template>
 
 <script>
-import navMenuItems from '@/navigation/vertical'
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import { BLink, BImg } from 'bootstrap-vue'
-import { provide, computed, ref } from '@vue/composition-api'
-import useAppConfig from '@core/app-config/useAppConfig'
-import { $themeConfig } from '@themeConfig'
-import VerticalNavMenuItems from './components/vertical-nav-menu-items/VerticalNavMenuItems.vue'
-import useVerticalNavMenu from './useVerticalNavMenu'
+import navMenuItems from '@/navigation/vertical';
+import VuePerfectScrollbar from 'vue-perfect-scrollbar';
+import { BLink, BImg } from 'bootstrap-vue';
+import { provide, computed, ref } from '@vue/composition-api';
+import useAppConfig from '@core/app-config/useAppConfig';
+import { $themeConfig } from '@themeConfig';
+import VerticalNavMenuItems from './components/vertical-nav-menu-items/VerticalNavMenuItems.vue';
+import useVerticalNavMenu from './useVerticalNavMenu';
 
 export default {
   components: {
@@ -114,24 +113,24 @@ export default {
       collapseTogglerIcon,
       toggleCollapsed,
       updateMouseHovered,
-    } = useVerticalNavMenu(props)
+    } = useVerticalNavMenu(props);
 
-    const { skin } = useAppConfig()
+    const { skin } = useAppConfig();
 
     // Shadow bottom is UI specific and can be removed by user => It's not in `useVerticalNavMenu`
-    const shallShadowBottom = ref(false)
+    const shallShadowBottom = ref(false);
 
-    provide('isMouseHovered', isMouseHovered)
+    provide('isMouseHovered', isMouseHovered);
 
     const perfectScrollbarSettings = {
       maxScrollbarLength: 60,
       wheelPropagation: false,
-    }
+    };
 
-    const collapseTogglerIconFeather = computed(() => (collapseTogglerIcon.value === 'unpinned' ? 'CircleIcon' : 'DiscIcon'))
+    const collapseTogglerIconFeather = computed(() => (collapseTogglerIcon.value === 'unpinned' ? 'CircleIcon' : 'DiscIcon'));
 
     // App Name
-    const { appName, appLogoImage } = $themeConfig.app
+    const { appName, appLogoImage } = $themeConfig.app;
 
     return {
       navMenuItems,
@@ -152,19 +151,19 @@ export default {
       // App Name
       appName,
       appLogoImage,
-    }
+    };
   },
   computed: {
     leftMenu() {
-      const preload = []
-      const { selected } = this.$store.state.chains
-      const current = navMenuItems.find(x => (x.title === selected.chain_name))
-      preload.push({ header: 'current' })
-      preload.push(current)
-      return preload.concat(navMenuItems.filter(x => x.title !== selected.chain_name))
+      const preload = [];
+      const { selected } = this.$store.state.chains;
+      const current = navMenuItems.find((x) => (x.title === selected.chain_name));
+      preload.push({ header: 'current' });
+      preload.push(current);
+      return preload.concat(navMenuItems.filter((x) => x.title !== selected.chain_name));
     },
   },
-}
+};
 </script>
 
 <style lang="scss">

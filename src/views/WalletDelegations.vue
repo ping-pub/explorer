@@ -19,7 +19,6 @@
         stacked="sm"
         :fields="fields"
       >
-
         <template #cell(validator)="data">
           <router-link :to="`/${data.item.validator.chain}/staking/${data.item.validator.validator}`">
             <b-avatar
@@ -93,17 +92,17 @@
 <script>
 import {
   BButton, VBTooltip, BTable, BCard, BButtonGroup, BAvatar,
-} from 'bootstrap-vue'
-import Ripple from 'vue-ripple-directive'
+} from 'bootstrap-vue';
+import Ripple from 'vue-ripple-directive';
 import {
   formatToken, getCachedValidators, getLocalAccounts, getLocalChains, tokenFormatter,
-} from '@/libs/utils'
-import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
+} from '@/libs/utils';
+import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue';
 
-import OperationWithdrawComponent from './OperationWithdrawComponent.vue'
-import OperationUnbondComponent from './OperationUnbondComponent.vue'
-import OperationDelegateComponent from './OperationDelegateComponent.vue'
-import OperationRedelegateComponent from './OperationRedelegateComponent.vue'
+import OperationWithdrawComponent from './OperationWithdrawComponent.vue';
+import OperationUnbondComponent from './OperationUnbondComponent.vue';
+import OperationDelegateComponent from './OperationDelegateComponent.vue';
+import OperationRedelegateComponent from './OperationRedelegateComponent.vue';
 
 export default {
   components: {
@@ -153,11 +152,11 @@ export default {
       accounts: [],
       delegations: [],
       rewards: {},
-    }
+    };
   },
   computed: {
     formatedDelegations() {
-      return this.delegations.map(x => ({
+      return this.delegations.map((x) => ({
         validator: {
           logo: x.chain.logo,
           validator: x.delegation.validator_address,
@@ -169,11 +168,11 @@ export default {
         delegation: formatToken(x.balance),
         reward: this.findReward(x.delegation.delegator_address, x.delegation.validator_address),
         // action: '',
-      }))
+      }));
     },
     groupedDelegations() {
-      const group = {}
-      this.delegations.forEach(x => {
+      const group = {};
+      this.delegations.forEach((x) => {
         const d = {
           validator: {
             logo: x.chain.logo,
@@ -186,67 +185,67 @@ export default {
           delegation: formatToken(x.balance),
           reward: this.findReward(x.delegation.delegator_address, x.delegation.validator_address),
           // action: '',
-        }
+        };
         if (group[x.keyname]) {
-          group[x.keyname].push(d)
+          group[x.keyname].push(d);
         } else {
-          group[x.keyname] = [d]
+          group[x.keyname] = [d];
         }
-      })
-      return group
+      });
+      return group;
     },
   },
   created() {
-    this.init()
+    this.init();
   },
   methods: {
     selectValue(v) {
-      this.address = v.delegator_address
-      this.selectedValidator = v.validator.validator
-      return v
+      this.address = v.delegator_address;
+      this.selectedValidator = v.validator.validator;
+      return v;
     },
     findMoniker(chain, addr) {
-      const vals = JSON.parse(getCachedValidators(chain))
-      const val = vals.find(x => x.operator_address === addr)
+      const vals = JSON.parse(getCachedValidators(chain));
+      const val = vals.find((x) => x.operator_address === addr);
       if (val) {
-        return val.description.moniker
+        return val.description.moniker;
       }
-      return addr
+      return addr;
     },
     findReward(delegator, validator) {
-      const reward = this.rewards[delegator]?.rewards.find(x => x.validator_address === validator) || null
+      const reward = this.rewards[delegator]?.rewards.find((x) => x.validator_address === validator) || null;
       if (reward) {
-        return tokenFormatter(reward.reward)
+        return tokenFormatter(reward.reward);
       }
-      return '-'
+      return '-';
     },
     init() {
-      this.accounts = getLocalAccounts()
-      const chains = getLocalChains()
+      this.accounts = getLocalAccounts();
+      const chains = getLocalChains();
       if (this.accounts) {
-        Object.keys(this.accounts).forEach(acc => {
-          this.accounts[acc].address.forEach(add => {
-            const chain = chains[add.chain]
-            this.$http.getStakingReward(add.addr, chain).then(res => {
-              this.rewards[add.addr] = res
-            })
-            this.$http.getStakingDelegations(add.addr, chain).then(res => {
+        Object.keys(this.accounts).forEach((acc) => {
+          this.accounts[acc].address.forEach((add) => {
+            const chain = chains[add.chain];
+            this.$http.getStakingReward(add.addr, chain).then((res) => {
+              this.rewards[add.addr] = res;
+            });
+            this.$http.getStakingDelegations(add.addr, chain).then((res) => {
               if (res.delegation_responses && res.delegation_responses.length > 0) {
-                const delegation = res.delegation_responses.map(x => {
-                  const x2 = x
-                  x2.keyname = acc
-                  x2.chain = chain
-                  return x2
-                })
-                this.delegations = this.delegations.concat(delegation)
+                const delegation = res.delegation_responses.map((x) => {
+                  const x2 = x;
+                  x2.keyname = acc;
+                  x2.chain = chain;
+                  return x2;
+                });
+                this.delegations = this.delegations.concat(delegation);
               }
-            }).catch(() => {})
-          })
-        })
+            }).catch(() => {});
+          });
+        });
       }
     },
   },
-}
+};
 </script>
 
 <style lang="css">

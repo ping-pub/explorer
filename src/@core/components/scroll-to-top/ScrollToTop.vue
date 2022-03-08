@@ -20,9 +20,9 @@
 </template>
 
 <script>
-import { useWindowScroll } from '@vueuse/core'
-import { BButton } from 'bootstrap-vue'
-import Ripple from 'vue-ripple-directive'
+import { useWindowScroll } from '@vueuse/core';
+import { BButton } from 'bootstrap-vue';
+import Ripple from 'vue-ripple-directive';
 
 export default {
   directives: {
@@ -32,20 +32,20 @@ export default {
     BButton,
   },
   setup() {
-    const { y } = useWindowScroll()
+    const { y } = useWindowScroll();
 
     const scrollToTop = () => {
-      const rootEle = document.documentElement
+      const rootEle = document.documentElement;
       rootEle.scrollTo({
         top: 0,
         behavior: 'smooth',
-      })
-    }
+      });
+    };
 
-    return { y, scrollToTop }
+    return { y, scrollToTop };
   },
 
-}
+};
 </script>
 
 <style lang="scss" scoped>

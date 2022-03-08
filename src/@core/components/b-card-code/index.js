@@ -1,3 +1,3 @@
-import BCardCode from './BCardCode.vue'
+import BCardCode from './BCardCode.vue';
 
-export default BCardCode
+export default BCardCode;

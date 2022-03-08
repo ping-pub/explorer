@@ -50,14 +50,14 @@
 <script>
 import {
   BCard, BCardHeader, BRow, BCol, BCardText,
-} from 'bootstrap-vue'
-import VueApexCharts from 'vue-apexcharts'
-import { $themeColors } from '@themeConfig'
-import { percent, toDay } from '@/libs/utils'
+} from 'bootstrap-vue';
+import VueApexCharts from 'vue-apexcharts';
+import { $themeColors } from '@themeConfig';
+import { percent, toDay } from '@/libs/utils';
 
-const $strokeColor = '#ebe9f1'
-const $textHeadingColor = '#5e5873'
-const $goalStrokeColor2 = '#51e5a8'
+const $strokeColor = '#ebe9f1';
+const $textHeadingColor = '#5e5873';
+const $goalStrokeColor2 = '#51e5a8';
 export default {
   components: {
     VueApexCharts,
@@ -137,15 +137,15 @@ export default {
           },
         },
       },
-    }
+    };
   },
   methods: {
     dateFormat(value) {
-      return toDay(value)
+      return toDay(value);
     },
     percentFormat(value) {
-      return percent(value)
+      return percent(value);
     },
   },
-}
+};
 </script>

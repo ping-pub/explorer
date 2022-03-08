@@ -42,13 +42,13 @@
 </template>
 
 <script>
-import { BCard, BTable } from 'bootstrap-vue'
-import { fromBase64 } from '@cosmjs/encoding'
-import { decodeTxRaw } from '@cosmjs/proto-signing'
-import Tx from '@/libs/data/tx'
-import { abbrMessage, tokenFormatter } from '@/libs/utils'
-import ObjectFieldComponent from './ObjectFieldComponent.vue'
-import ArrayFieldComponent from './ArrayFieldComponent.vue'
+import { BCard, BTable } from 'bootstrap-vue';
+import { fromBase64 } from '@cosmjs/encoding';
+import { decodeTxRaw } from '@cosmjs/proto-signing';
+import Tx from '@/libs/data/tx';
+import { abbrMessage, tokenFormatter } from '@/libs/utils';
+import ObjectFieldComponent from './ObjectFieldComponent.vue';
+import ArrayFieldComponent from './ArrayFieldComponent.vue';
 
 export default {
   components: {
@@ -63,44 +63,44 @@ export default {
       txs: null,
       fields: [
         { key: 'hash' },
-        { key: 'fee', formatter: v => tokenFormatter(v) },
-        { key: 'messages', formatter: v => abbrMessage(v) },
+        { key: 'fee', formatter: (v) => tokenFormatter(v) },
+        { key: 'messages', formatter: (v) => abbrMessage(v) },
         { key: 'memo' },
       ],
-    }
+    };
   },
   beforeRouteUpdate(to, from, next) {
-    const { height } = to.params
+    const { height } = to.params;
     if (height > 0 && height !== from.params.height) {
-      this.initData(height)
-      next()
+      this.initData(height);
+      next();
     }
   },
   created() {
-    const { height } = this.$route.params
-    this.initData(height)
+    const { height } = this.$route.params;
+    this.initData(height);
   },
   methods: {
     initData(height) {
-      this.$http.getBlockByHeight(height).then(res => {
-        this.block = res
-        const { txs } = res.block.data
-        if (txs === null) return
-        const array = []
+      this.$http.getBlockByHeight(height).then((res) => {
+        this.block = res;
+        const { txs } = res.block.data;
+        if (txs === null) return;
+        const array = [];
         for (let i = 0; i < txs.length; i += 1) {
-          let tx = new Tx()
+          let tx = new Tx();
           try {
-            const origin = decodeTxRaw(fromBase64(txs[i]))
-            tx = Tx.create(origin)
+            const origin = decodeTxRaw(fromBase64(txs[i]));
+            tx = Tx.create(origin);
           } catch (e) {
             // catch errors
           }
-          tx.setHash(txs[i])
-          array.push(tx)
+          tx.setHash(txs[i]);
+          array.push(tx);
         }
-        if (array.length > 0) this.txs = array
-      })
+        if (array.length > 0) this.txs = array;
+      });
     },
   },
-}
+};
 </script>

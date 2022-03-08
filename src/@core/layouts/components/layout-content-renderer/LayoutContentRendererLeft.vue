@@ -33,21 +33,21 @@
 </template>
 
 <script>
-import AppBreadcrumb from '@core/layouts/components/AppBreadcrumb.vue'
-import useAppConfig from '@core/app-config/useAppConfig'
+import AppBreadcrumb from '@core/layouts/components/AppBreadcrumb.vue';
+import useAppConfig from '@core/app-config/useAppConfig';
 
 export default {
   components: {
     AppBreadcrumb,
   },
   setup() {
-    const { routerTransition, contentWidth } = useAppConfig()
+    const { routerTransition, contentWidth } = useAppConfig();
 
     return {
       routerTransition, contentWidth,
-    }
+    };
   },
-}
+};
 </script>
 
 <style>

@@ -11,7 +11,7 @@
 </template>
 <script>
 
-import TradingVue from 'trading-vue-js'
+import TradingVue from 'trading-vue-js';
 
 export default {
   name: 'App',
@@ -32,33 +32,33 @@ export default {
         colorGrid: '#333', // '#eee',
         colorText: '#aaa',
       },
-    }
+    };
   },
   computed: {
     tvData() {
       return {
         ohlcv: this.list,
-      }
+      };
     },
   },
   created() {
-    this.$http.getMarketChart(14, 'cosmos').then(res => {
-      console.log('market chart', res)
+    this.$http.getMarketChart(14, 'cosmos').then((res) => {
+      console.log('market chart', res);
       const ohlcv = res.prices.map((v, i) => {
         // const v2 = v
-        console.log('item:', i, v, res.total_volumes[i][1])
-        v.push(v[1])
-        v.push(v[1])
-        v.push(v[1])
-        v.push(res.total_volumes[i][1])
-        return v
-      })
-      console.log(ohlcv)
+        console.log('item:', i, v, res.total_volumes[i][1]);
+        v.push(v[1]);
+        v.push(v[1]);
+        v.push(v[1]);
+        v.push(res.total_volumes[i][1]);
+        return v;
+      });
+      console.log(ohlcv);
       this.data = {
         ohlcv,
-      }
-    })
+      };
+    });
   },
-}
+};
 
 </script>

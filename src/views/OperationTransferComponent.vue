@@ -207,21 +207,21 @@
 </template>
 
 <script>
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
 import {
   BModal, BRow, BCol, BInputGroup, BInputGroupAppend, BFormInput, BAvatar, BFormGroup, BFormSelect, BFormSelectOption,
   BForm, BInputGroupPrepend, BFormCheckbox,
-} from 'bootstrap-vue'
+} from 'bootstrap-vue';
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
-} from '@validations'
+} from '@validations';
 import {
   extractAccountNumberAndSequence,
   formatToken, formatTokenDenom, getLocalAccounts, getLocalChains, getUnitAmount, setLocalTxHistory, sign, timeIn,
-} from '@/libs/utils'
-import { Cosmos } from '@cosmostation/cosmosjs'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import WalletInputVue from './components/WalletInput.vue'
+} from '@/libs/utils';
+import { Cosmos } from '@cosmostation/cosmosjs';
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue';
+import WalletInputVue from './components/WalletInput.vue';
 
 export default {
   name: 'TransforDialogue',
@@ -288,11 +288,11 @@ export default {
       digits,
       length,
       alphaDash,
-    }
+    };
   },
   computed: {
     feeDenoms() {
-      return this.balance.filter(item => !item.denom.startsWith('ibc'))
+      return this.balance.filter((item) => !item.denom.startsWith('ibc'));
     },
   },
   created() {
@@ -300,80 +300,80 @@ export default {
   },
   methods: {
     printDenom() {
-      return formatTokenDenom(this.IBCDenom[this.token] || this.token)
+      return formatTokenDenom(this.IBCDenom[this.token] || this.token);
     },
     computeAccount() {
-      const accounts = getLocalAccounts()
-      const chains = getLocalChains()
+      const accounts = getLocalAccounts();
+      const chains = getLocalChains();
       if (accounts) {
-        const values = Object.values(accounts)
+        const values = Object.values(accounts);
         for (let i = 0; i < values.length; i += 1) {
-          const addr = values[i].address.find(x => x.addr === this.address)
+          const addr = values[i].address.find((x) => x.addr === this.address);
           if (addr) {
-            this.selectedChain = chains[addr.chain]
-            return addr
+            this.selectedChain = chains[addr.chain];
+            return addr;
           }
         }
       }
-      return null
+      return null;
     },
     loadBalance() {
-      this.account = this.computeAccount()
-      if (this.account && this.account.length > 0) this.address = this.account[0].addr
+      this.account = this.computeAccount();
+      if (this.account && this.account.length > 0) this.address = this.account[0].addr;
       if (this.address) {
-        this.$http.getBankBalances(this.address, this.selectedChain).then(res => {
+        this.$http.getBankBalances(this.address, this.selectedChain).then((res) => {
           if (res && res.length > 0) {
-            this.balance = res.reverse()
-            this.token = this.balance[0].denom
-            this.feeDenom = this.balance.find(x => !x.denom.startsWith('ibc')).denom
-            this.balance.filter(i => i.denom.startsWith('ibc')).forEach(x => {
+            this.balance = res.reverse();
+            this.token = this.balance[0].denom;
+            this.feeDenom = this.balance.find((x) => !x.denom.startsWith('ibc')).denom;
+            this.balance.filter((i) => i.denom.startsWith('ibc')).forEach((x) => {
               if (!this.IBCDenom[x.denom]) {
-                this.$http.getIBCDenomTrace(x.denom, this.selectedChain).then(denom => {
-                  this.IBCDenom[x.denom] = denom.denom_trace.base_denom
-                })
+                this.$http.getIBCDenomTrace(x.denom, this.selectedChain).then((denom) => {
+                  this.IBCDenom[x.denom] = denom.denom_trace.base_denom;
+                });
               }
-            })
+            });
           }
-        })
-        this.$http.getLatestBlock(this.selectedChain).then(ret => {
-          this.chainId = ret.block.header.chain_id
-          const notSynced = timeIn(ret.block.header.time, 10, 'm')
+        });
+        this.$http.getLatestBlock(this.selectedChain).then((ret) => {
+          this.chainId = ret.block.header.chain_id;
+          const notSynced = timeIn(ret.block.header.time, 10, 'm');
           if (notSynced) {
-            this.error = 'Client is not synced or blockchain is halted'
+            this.error = 'Client is not synced or blockchain is halted';
           } else {
-            this.error = null
+            this.error = null;
           }
-        })
-        this.$http.getAuthAccount(this.address, this.selectedChain).then(ret => {
-          const account = extractAccountNumberAndSequence(ret)
-          this.accountNumber = account.accountNumber
-          this.sequence = account.sequence
-        })
-        this.fee = this.selectedChain?.min_tx_fee || '1000'
-        this.feeDenom = this.selectedChain?.assets[0]?.base || ''
+        });
+        this.$http.getAuthAccount(this.address, this.selectedChain).then((ret) => {
+          const account = extractAccountNumberAndSequence(ret);
+          this.accountNumber = account.accountNumber;
+          this.sequence = account.sequence;
+        });
+        this.fee = this.selectedChain?.min_tx_fee || '1000';
+        this.feeDenom = this.selectedChain?.assets[0]?.base || '';
       }
     },
     handleOk(bvModalEvt) {
       // console.log('send')
       // Prevent modal from closing
-      bvModalEvt.preventDefault()
+      bvModalEvt.preventDefault();
       // Trigger submit handler
       // this.handleSubmit()
-      this.send().then(ret => {
+      this.send().then((ret) => {
         // console.log(ret)
-        this.error = ret
-      })
+        this.error = ret;
+      });
     },
     resetModal() {
-      this.feeDenom = ''
-      this.error = null
+      this.feeDenom = '';
+      this.error = null;
     },
     format(v) {
-      return formatToken(v, this.IBCDenom)
+      return formatToken(v, this.IBCDenom);
     },
     async sendCosmos() {
-      const cosmos = new Cosmos(this.selectedChain.api, this.chainId)
-      cosmos.getAccounts()
+      const cosmos = new Cosmos(this.selectedChain.api, this.chainId);
+      cosmos.getAccounts();
     },
     async send() {
       const txMsgs = [
@@ -390,7 +390,7 @@ export default {
             ],
           },
         },
-      ]
+      ];
 
       const txFee = {
         amount: [
@@ -400,13 +400,13 @@ export default {
           },
         ],
         gas: this.gas,
-      }
+      };
 
       const signerData = {
         accountNumber: this.accountNumber,
         sequence: this.sequence,
         chainId: this.chainId,
-      }
+      };
 
       sign(
         this.wallet,
@@ -416,15 +416,15 @@ export default {
         txFee,
         this.memo,
         signerData,
-      ).then(bodyBytes => {
-        this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
+      ).then((bodyBytes) => {
+        this.$http.broadcastTx(bodyBytes, this.selectedChain).then((res) => {
           setLocalTxHistory({
             chain: this.$store.state.chains.selected,
             op: 'send',
             hash: res.tx_response.txhash,
             time: new Date(),
-          })
-          this.$bvModal.hide('transfer-window')
+          });
+          this.$bvModal.hide('transfer-window');
           this.$toast({
             component: ToastificationContent,
             props: {
@@ -432,17 +432,17 @@ export default {
               icon: 'EditIcon',
               variant: 'success',
             },
-          })
-        }).catch(e => {
-          this.error = e
-        })
-      }).catch(e => {
-        this.error = e
-      })
+          });
+        }).catch((e) => {
+          this.error = e;
+        });
+      }).catch((e) => {
+        this.error = e;
+      });
       // Send tokens
       // return client.sendTokens(this.address, this.recipient, sendCoins, this.memo)
-      return ''
+      return '';
     },
   },
-}
+};
 </script>

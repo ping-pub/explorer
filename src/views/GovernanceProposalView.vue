@@ -58,9 +58,11 @@
             <b-tr>
               <b-td>
                 {{ $t('proposal_proposer') }}
-              </b-td><b-td><router-link :to="`../account/${proposer.proposer}`">
-                {{ formatAddress(proposer.proposer) }}
-              </router-link> </b-td>
+              </b-td><b-td>
+                <router-link :to="`../account/${proposer.proposer}`">
+                  {{ formatAddress(proposer.proposer) }}
+                </router-link>
+              </b-td>
             </b-tr>
             <b-tr>
               <b-td>
@@ -90,7 +92,8 @@
           <object-field-component
             :tablefield="proposal.contents"
             :small="false"
-          /></div>
+          />
+        </div>
         <b-table-simple v-if="proposal.type === 'cosmos-sdk/SoftwareUpgradeProposal'">
           <b-tr>
             <b-td class="text-center">
@@ -264,18 +267,18 @@
 import {
   BCard, BCardBody, BCardFooter, BButton, BTable, BTableSimple, BTr, BTd, BCardTitle, BCardHeader,
   BProgressBar, BProgress, BTooltip, BBadge,
-} from 'bootstrap-vue'
-import FlipCountdown from 'vue2-flip-countdown'
+} from 'bootstrap-vue';
+import FlipCountdown from 'vue2-flip-countdown';
 // import fetch from 'node-fetch'
 
 import {
   getCachedValidators, getStakingValidatorByAccount, percent, tokenFormatter,
-} from '@/libs/utils'
-import { Proposal, Proposer } from '@/libs/data'
-import dayjs from 'dayjs'
-import ObjectFieldComponent from './ObjectFieldComponent.vue'
-import OperationVoteComponent from './OperationVoteComponent.vue'
-import OperationGovDepositComponent from './OperationGovDepositComponent.vue'
+} from '@/libs/utils';
+import { Proposal, Proposer } from '@/libs/data';
+import dayjs from 'dayjs';
+import ObjectFieldComponent from './ObjectFieldComponent.vue';
+import OperationVoteComponent from './OperationVoteComponent.vue';
+import OperationGovDepositComponent from './OperationGovDepositComponent.vue';
 // import { formatToken } from '@/libs/data/data'
 
 export default {
@@ -311,27 +314,27 @@ export default {
         {
           key: 'voter',
           sortable: true,
-          formatter: v => this.formatAddress(v),
+          formatter: (v) => this.formatAddress(v),
         },
         {
           key: 'option',
           sortable: true,
-          formatter: value => {
+          formatter: (value) => {
             switch (value) {
               case 1:
               case 'VOTE_OPTION_YES':
-                return 'Yes'
+                return 'Yes';
               case 2:
               case 'VOTE_OPTION_ABSTAIN':
-                return 'Abstain'
+                return 'Abstain';
               case 3:
               case 'VOTE_OPTION_NO':
-                return 'No'
+                return 'No';
               case 4:
               case 'VOTE_OPTION_NO_WITH_VETO':
-                return 'No With Veto'
+                return 'No With Veto';
               default:
-                return value
+                return value;
             }
           },
         },
@@ -339,7 +342,7 @@ export default {
       deposit_fields: [
         {
           key: 'depositor',
-          formatter: v => this.formatAddress(v),
+          formatter: (v) => this.formatAddress(v),
         },
         {
           key: 'amount',
@@ -347,72 +350,72 @@ export default {
           formatter: tokenFormatter,
         },
       ],
-    }
+    };
   },
   computed: {
     upgradeTime() {
       if (this.proposal.type === 'cosmos-sdk/SoftwareUpgradeProposal') {
         if (Number(this.proposal?.contents.plan.height || 0) > 0 && this.latest?.block) {
-          const blocks = Number(this.proposal.contents.plan.height) - Number(this.latest.block?.header?.height || 0)
+          const blocks = Number(this.proposal.contents.plan.height) - Number(this.latest.block?.header?.height || 0);
           if (blocks > 0) {
-            const endtime = dayjs().add(blocks * 6, 'second').format('YYYY-MM-DD HH:mm:ss')
-            return endtime
+            const endtime = dayjs().add(blocks * 6, 'second').format('YYYY-MM-DD HH:mm:ss');
+            return endtime;
           }
         }
-        return dayjs(this.proposal.contents.plan.time).format('YYYY-MM-DD HH:mm:ss')
+        return dayjs(this.proposal.contents.plan.time).format('YYYY-MM-DD HH:mm:ss');
       }
-      return '0001-01-01 00:00:00'
+      return '0001-01-01 00:00:00';
     },
   },
   created() {
-    const pid = this.$route.params.proposalid
+    const pid = this.$route.params.proposalid;
 
-    this.$http.getLatestBlock().then(res => {
-      this.latest = res
-    })
+    this.$http.getLatestBlock().then((res) => {
+      this.latest = res;
+    });
 
-    this.$http.getGovernance(pid).then(p => {
+    this.$http.getGovernance(pid).then((p) => {
       if (p.status === 2) {
-        this.$http.getGovernanceTally(pid, 0).then(t => p.updateTally(t))
+        this.$http.getGovernanceTally(pid, 0).then((t) => p.updateTally(t));
       }
-      this.proposal = p
-    })
+      this.proposal = p;
+    });
 
     if (!getCachedValidators()) {
-      this.$http.getValidatorList()
+      this.$http.getValidatorList();
     }
 
-    this.$http.getGovernanceProposer(pid).then(res => {
-      this.proposer = res
-    })
-    this.$http.getGovernanceDeposits(pid).then(res => {
-      this.deposits = res
-    })
-    this.$http.getGovernanceVotes(pid).then(res => {
-      this.votes = res
-      this.next = res.pagination ? res.pagination.next_key : null
-    })
+    this.$http.getGovernanceProposer(pid).then((res) => {
+      this.proposer = res;
+    });
+    this.$http.getGovernanceDeposits(pid).then((res) => {
+      this.deposits = res;
+    });
+    this.$http.getGovernanceVotes(pid).then((res) => {
+      this.votes = res;
+      this.next = res.pagination ? res.pagination.next_key : null;
+    });
   },
   methods: {
-    percent: v => percent(v),
-    formatDate: v => dayjs(v).format('YYYY-MM-DD HH:mm'),
-    formatToken: v => tokenFormatter(v, {}),
+    percent: (v) => percent(v),
+    formatDate: (v) => dayjs(v).format('YYYY-MM-DD HH:mm'),
+    formatToken: (v) => tokenFormatter(v, {}),
     loadVotes() {
       if (this.next) {
-        const pid = this.$route.params.proposalid
-        const { next } = this
-        this.next = null
-        this.$http.getGovernanceVotes(pid, next).then(res => {
-          this.$set(this.votes, 'votes', this.votes.votes.concat(res.votes))
-          this.next = res.pagination ? res.pagination.next_key : null
-        })
+        const pid = this.$route.params.proposalid;
+        const { next } = this;
+        this.next = null;
+        this.$http.getGovernanceVotes(pid, next).then((res) => {
+          this.$set(this.votes, 'votes', this.votes.votes.concat(res.votes));
+          this.next = res.pagination ? res.pagination.next_key : null;
+        });
       }
     },
     formatAddress(v) {
-      return getStakingValidatorByAccount(this.$http.config.chain_name, v)
+      return getStakingValidatorByAccount(this.$http.config.chain_name, v);
     },
   },
-}
+};
 </script>
 
 <style lang="css">

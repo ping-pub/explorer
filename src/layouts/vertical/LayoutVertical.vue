@@ -1,6 +1,5 @@
 <template>
   <layout-vertical>
-
     <router-view :key="$route.params.chain" />
 
     <template #navbar="{ toggleVerticalMenuActive }">
@@ -15,10 +14,10 @@
 </template>
 
 <script>
-import LayoutVertical from '@core/layouts/layout-vertical/LayoutVertical.vue'
+import LayoutVertical from '@core/layouts/layout-vertical/LayoutVertical.vue';
 // import AppCustomizer from '@core/layouts/components/app-customizer/AppCustomizer.vue'
 // import { $themeConfig } from '@themeConfig'
-import Navbar from '../components/Navbar.vue'
+import Navbar from '../components/Navbar.vue';
 
 export default {
   components: {
@@ -29,7 +28,7 @@ export default {
   data() {
     return {
       // showCustomizer: $themeConfig.layout.customizer,
-    }
+    };
   },
-}
+};
 </script>

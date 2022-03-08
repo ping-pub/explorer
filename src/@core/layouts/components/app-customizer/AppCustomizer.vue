@@ -39,7 +39,6 @@
     >
       <!-- Skin, RTL, Router Animation -->
       <div class="customizer-section">
-
         <!-- Skin -->
         <b-form-group label="Skin">
           <b-form-radio-group
@@ -93,7 +92,6 @@
 
       <!-- SECTION: Menu -->
       <div class="customizer-section">
-
         <!-- Layout Type -->
         <b-form-group
           label="Menu Layout"
@@ -131,12 +129,10 @@
             inline
           />
         </div>
-
       </div>
 
       <!-- SECTION: Navbar -->
       <div class="customizer-section">
-
         <!-- Navbar Color -->
         <b-form-group
           v-show="layoutType === 'vertical'"
@@ -163,7 +159,6 @@
 
       <!-- SECTION: Footer -->
       <div class="customizer-section">
-
         <!-- Footer Type -->
         <b-form-group label="Footer Type">
           <b-form-radio-group
@@ -180,10 +175,10 @@
 <script>
 import {
   BLink, BFormRadioGroup, BFormGroup, BFormCheckbox,
-} from 'bootstrap-vue'
-import vSelect from 'vue-select'
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import useAppCustomizer from './useAppCustomizer'
+} from 'bootstrap-vue';
+import vSelect from 'vue-select';
+import VuePerfectScrollbar from 'vue-perfect-scrollbar';
+import useAppCustomizer from './useAppCustomizer';
 
 export default {
   components: {
@@ -237,23 +232,23 @@ export default {
       // Footer
       footerTypes,
       footerType,
-    } = useAppCustomizer()
+    } = useAppCustomizer();
 
     if (layoutType.value === 'horizontal') {
       // Remove semi-dark skin option in horizontal layout
-      const skinSemiDarkIndex = skinOptions.findIndex(s => s.value === 'semi-dark')
-      delete skinOptions[skinSemiDarkIndex]
+      const skinSemiDarkIndex = skinOptions.findIndex((s) => s.value === 'semi-dark');
+      delete skinOptions[skinSemiDarkIndex];
 
       // Remove menu hidden radio in horizontal layout => As we already have switch for it
-      const menuHiddneIndex = navbarTypes.findIndex(t => t.value === 'hidden')
-      delete navbarTypes[menuHiddneIndex]
+      const menuHiddneIndex = navbarTypes.findIndex((t) => t.value === 'hidden');
+      delete navbarTypes[menuHiddneIndex];
     }
 
     // Perfect Scrollbar
     const perfectScrollbarSettings = {
       maxScrollbarLength: 60,
       wheelPropagation: false,
-    }
+    };
 
     return {
       // Vertical Menu
@@ -296,9 +291,9 @@ export default {
 
       // Perfect Scrollbar
       perfectScrollbarSettings,
-    }
+    };
   },
-}
+};
 </script>
 
 <style lang="scss">

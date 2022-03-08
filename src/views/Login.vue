@@ -1,7 +1,6 @@
 <template>
   <div class="auth-wrapper auth-v2">
     <b-row class="auth-inner m-0">
-
       <!-- Brand logo-->
       <b-link class="brand-logo">
         <vuexy-logo />
@@ -185,15 +184,15 @@
 
 <script>
 /* eslint-disable global-require */
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import VuexyLogo from '@core/layouts/components/Logo.vue'
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
+import VuexyLogo from '@core/layouts/components/Logo.vue';
 import {
   BRow, BCol, BLink, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, BFormCheckbox, BCardText, BCardTitle, BImg, BForm, BButton,
-} from 'bootstrap-vue'
-import { required, email } from '@validations'
-import { togglePasswordVisibility } from '@core/mixins/ui/forms'
-import store from '@/store/index'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+} from 'bootstrap-vue';
+import { required, email } from '@validations';
+import { togglePasswordVisibility } from '@core/mixins/ui/forms';
+import store from '@/store/index';
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue';
 
 export default {
   components: {
@@ -224,24 +223,24 @@ export default {
       // validation rulesimport store from '@/store/index'
       required,
       email,
-    }
+    };
   },
   computed: {
     passwordToggleIcon() {
-      return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'
+      return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon';
     },
     imgUrl() {
       if (store.state.appConfig.layout.skin === 'dark') {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.sideImg = require('@/assets/images/pages/login-v2-dark.svg')
-        return this.sideImg
+        this.sideImg = require('@/assets/images/pages/login-v2-dark.svg');
+        return this.sideImg;
       }
-      return this.sideImg
+      return this.sideImg;
     },
   },
   methods: {
     validationForm() {
-      this.$refs.loginValidation.validate().then(success => {
+      this.$refs.loginValidation.validate().then((success) => {
         if (success) {
           this.$toast({
             component: ToastificationContent,
@@ -250,12 +249,12 @@ export default {
               icon: 'EditIcon',
               variant: 'success',
             },
-          })
+          });
         }
-      })
+      });
     },
   },
-}
+};
 </script>
 
 <style lang="scss">

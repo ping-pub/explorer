@@ -20,11 +20,11 @@
 </template>
 
 <script>
-import { BLink } from 'bootstrap-vue'
-import { useUtils as useI18nUtils } from '@core/libs/i18n'
-import { useUtils as useAclUtils } from '@core/libs/acl'
-import useHorizontalNavMenuLink from './useHorizontalNavMenuLink'
-import mixinHorizontalNavMenuLink from './mixinHorizontalNavMenuLink'
+import { BLink } from 'bootstrap-vue';
+import { useUtils as useI18nUtils } from '@core/libs/i18n';
+import { useUtils as useAclUtils } from '@core/libs/acl';
+import useHorizontalNavMenuLink from './useHorizontalNavMenuLink';
+import mixinHorizontalNavMenuLink from './mixinHorizontalNavMenuLink';
 
 export default {
   components: {
@@ -38,10 +38,10 @@ export default {
     },
   },
   setup(props) {
-    const { isActive, linkProps, updateIsActive } = useHorizontalNavMenuLink(props.item)
+    const { isActive, linkProps, updateIsActive } = useHorizontalNavMenuLink(props.item);
 
-    const { t } = useI18nUtils()
-    const { canViewHorizontalNavMenuLink } = useAclUtils()
+    const { t } = useI18nUtils();
+    const { canViewHorizontalNavMenuLink } = useAclUtils();
 
     return {
       isActive,
@@ -53,8 +53,8 @@ export default {
 
       // i18n
       t,
-    }
+    };
   },
 
-}
+};
 </script>

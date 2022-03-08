@@ -62,10 +62,10 @@
 <script>
 import {
   BCard, BCardTitle, BCardSubTitle, BCardBody, BCollapse,
-} from 'bootstrap-vue'
-import 'prismjs'
-import 'prismjs/themes/prism-tomorrow.css'
-import Prism from 'vue-prism-component'
+} from 'bootstrap-vue';
+import 'prismjs';
+import 'prismjs/themes/prism-tomorrow.css';
+import Prism from 'vue-prism-component';
 
 export default {
   components: {
@@ -87,20 +87,20 @@ export default {
     return {
       parentID: '',
       code_visible: false,
-    }
+    };
   },
   computed: {
     cardAttrs() {
-      const cardAttrs = JSON.parse(JSON.stringify(this.$attrs))
-      delete cardAttrs.title
-      delete cardAttrs['sub-title']
-      return cardAttrs
+      const cardAttrs = JSON.parse(JSON.stringify(this.$attrs));
+      delete cardAttrs.title;
+      delete cardAttrs['sub-title'];
+      return cardAttrs;
     },
   },
   created() {
-    this.parentID = String(Math.floor(Math.random() * 10) + 1)
+    this.parentID = String(Math.floor(Math.random() * 10) + 1);
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

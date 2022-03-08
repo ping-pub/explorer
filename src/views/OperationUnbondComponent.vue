@@ -182,21 +182,21 @@
 </template>
 
 <script>
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
 import {
   BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BInputGroupAppend,
   BForm, BFormCheckbox,
-} from 'bootstrap-vue'
+} from 'bootstrap-vue';
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
-} from '@validations'
+} from '@validations';
 import {
   extractAccountNumberAndSequence,
   formatToken, formatTokenDenom, getUnitAmount, setLocalTxHistory, sign, timeIn,
-} from '@/libs/utils'
-import vSelect from 'vue-select'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import WalletInputVue from './components/WalletInput.vue'
+} from '@/libs/utils';
+import vSelect from 'vue-select';
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue';
+import WalletInputVue from './components/WalletInput.vue';
 
 export default {
   name: 'UnbondDialogue',
@@ -263,19 +263,19 @@ export default {
       digits,
       length,
       alphaDash,
-    }
+    };
   },
   computed: {
     valOptions() {
-      return this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      return this.validators.map((x) => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }));
     },
     tokenOptions() {
-      if (!this.delegations) return []
-      return this.delegations.filter(x => x.delegation.validator_address === this.validatorAddress).map(x => ({ value: x.balance.denom, label: formatToken(x.balance) }))
+      if (!this.delegations) return [];
+      return this.delegations.filter((x) => x.delegation.validator_address === this.validatorAddress).map((x) => ({ value: x.balance.denom, label: formatToken(x.balance) }));
     },
     feeDenoms() {
-      if (!this.balance) return []
-      return this.balance.filter(item => !item.denom.startsWith('ibc'))
+      if (!this.balance) return [];
+      return this.balance.filter((item) => !item.denom.startsWith('ibc'));
     },
   },
   created() {
@@ -283,64 +283,64 @@ export default {
   },
   methods: {
     printDenom() {
-      return formatTokenDenom(this.token)
+      return formatTokenDenom(this.token);
     },
     loadBalance() {
       if (this.address) {
-        this.$http.getValidatorList().then(v => {
-          this.validators = v
-        })
+        this.$http.getValidatorList().then((v) => {
+          this.validators = v;
+        });
       }
-      this.$http.getBankBalances(this.address).then(res => {
+      this.$http.getBankBalances(this.address).then((res) => {
         if (res && res.length > 0) {
-          this.balance = res.reverse()
+          this.balance = res.reverse();
         }
-      })
-      this.$http.getLatestBlock().then(ret => {
-        this.chainId = ret.block.header.chain_id
-        const notSynced = timeIn(ret.block.header.time, 10, 'm')
+      });
+      this.$http.getLatestBlock().then((ret) => {
+        this.chainId = ret.block.header.chain_id;
+        const notSynced = timeIn(ret.block.header.time, 10, 'm');
         if (notSynced) {
-          this.error = 'Client is not synced or blockchain is halted'
+          this.error = 'Client is not synced or blockchain is halted';
         } else {
-          this.error = null
+          this.error = null;
         }
-      })
-      this.$http.getAuthAccount(this.address).then(ret => {
-        const account = extractAccountNumberAndSequence(ret)
-        this.accountNumber = account.accountNumber
-        this.sequence = account.sequence
-      })
-      this.fee = this.$store.state.chains.selected?.min_tx_fee || '1000'
-      this.feeDenom = this.$store.state.chains.selected?.assets[0]?.base || ''
-      this.$http.getStakingDelegations(this.address).then(res => {
-        this.delegations = res.delegation_responses
-        this.delegations.forEach(x => {
+      });
+      this.$http.getAuthAccount(this.address).then((ret) => {
+        const account = extractAccountNumberAndSequence(ret);
+        this.accountNumber = account.accountNumber;
+        this.sequence = account.sequence;
+      });
+      this.fee = this.$store.state.chains.selected?.min_tx_fee || '1000';
+      this.feeDenom = this.$store.state.chains.selected?.assets[0]?.base || '';
+      this.$http.getStakingDelegations(this.address).then((res) => {
+        this.delegations = res.delegation_responses;
+        this.delegations.forEach((x) => {
           if (x.delegation.validator_address === this.validatorAddress) {
-            this.token = x.balance.denom
-            this.feeDenom = x.balance.denom
+            this.token = x.balance.denom;
+            this.feeDenom = x.balance.denom;
           }
-        })
-      })
+        });
+      });
     },
     handleOk(bvModalEvt) {
       // console.log('send')
       // Prevent modal from closing
-      bvModalEvt.preventDefault()
-      this.$refs.simpleRules.validate().then(ok => {
+      bvModalEvt.preventDefault();
+      this.$refs.simpleRules.validate().then((ok) => {
         if (ok) {
-          this.sendTx().then(ret => {
+          this.sendTx().then((ret) => {
             // console.log(ret)
-            this.error = ret
-          })
+            this.error = ret;
+          });
         }
-      })
+      });
     },
     resetModal() {
-      this.feeDenom = ''
-      this.error = null
+      this.feeDenom = '';
+      this.error = null;
     },
     format(v) {
-      return formatToken(v)
+      return formatToken(v);
     },
     async sendTx() {
       const txMsgs = [{
@@ -353,15 +353,15 @@ export default {
             denom: this.token,
           },
         },
-      }]
+      }];
 
       if (txMsgs.length === 0) {
-        this.error = 'No delegation found'
-        return ''
+        this.error = 'No delegation found';
+        return '';
       }
       if (!this.accountNumber) {
-        this.error = 'Account number should not be empty!'
-        return ''
+        this.error = 'Account number should not be empty!';
+        return '';
       }
 
       const txFee = {
@@ -372,13 +372,13 @@ export default {
           },
         ],
         gas: this.gas,
-      }
+      };
 
       const signerData = {
         accountNumber: this.accountNumber,
         sequence: this.sequence,
         chainId: this.chainId,
-      }
+      };
 
       sign(
         this.wallet,
@@ -388,15 +388,15 @@ export default {
         txFee,
         this.memo,
         signerData,
-      ).then(bodyBytes => {
-        this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
+      ).then((bodyBytes) => {
+        this.$http.broadcastTx(bodyBytes, this.selectedChain).then((res) => {
           setLocalTxHistory({
             chain: this.$store.state.chains.selected,
             op: 'unbond',
             hash: res.tx_response.txhash,
             time: new Date(),
-          })
-          this.$bvModal.hide('unbond-window')
+          });
+          this.$bvModal.hide('unbond-window');
           this.$toast({
             component: ToastificationContent,
             props: {
@@ -404,19 +404,19 @@ export default {
               icon: 'EditIcon',
               variant: 'success',
             },
-          })
-        }).catch(e => {
-          this.error = e
-        })
-      }).catch(e => {
-        this.error = e
-      })
+          });
+        }).catch((e) => {
+          this.error = e;
+        });
+      }).catch((e) => {
+        this.error = e;
+      });
       // Send tokens
       // return client.sendTokens(this.address, this.recipient, sendCoins, this.memo)
-      return ''
+      return '';
     },
   },
-}
+};
 </script>
 <style lang="scss">
 @import '@core/scss/vue/libs/vue-select.scss';

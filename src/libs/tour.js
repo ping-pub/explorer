@@ -1,4 +1,4 @@
-import Vue from 'vue'
-import VueTour from 'vue-tour'
+import Vue from 'vue';
+import VueTour from 'vue-tour';
 
-Vue.use(VueTour)
+Vue.use(VueTour);

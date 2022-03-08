@@ -70,11 +70,11 @@
 <script>
 import {
   BTableSimple, BTr, BTd, BTabs, BTab, BTbody,
-} from 'bootstrap-vue'
+} from 'bootstrap-vue';
 import {
   abbr, getStakingValidatorByHex, isHexAddress, isStringArray, isToken, percent, tokenFormatter,
-} from '@/libs/utils'
-import ArrayFieldComponent from './ArrayFieldComponent.vue'
+} from '@/libs/utils';
+import ArrayFieldComponent from './ArrayFieldComponent.vue';
 
 export default {
   name: 'ObjectFieldComponent',
@@ -104,46 +104,46 @@ export default {
       //   console.log(value)
       //   return value[Object.keys(value)[0]]
       // }
-      return value
+      return value;
     },
     isObjectText(v) {
-      return String(v).startsWith('{') && String(v).endsWith('}')
+      return String(v).startsWith('{') && String(v).endsWith('}');
     },
     toObject(v) {
-      return JSON.parse(v)
+      return JSON.parse(v);
     },
-    formatText: v => abbr(v, 60),
+    formatText: (v) => abbr(v, 60),
     eval_value(value) {
-      return Array.from(value)
+      return Array.from(value);
     },
     isTokenField(value) {
-      return isToken(value)
+      return isToken(value);
     },
     isHex(value) {
-      return isHexAddress(value)
+      return isHexAddress(value);
     },
     formatHexAddress(v) {
-      return getStakingValidatorByHex(this.$http.config.chain_name, v)
+      return getStakingValidatorByHex(this.$http.config.chain_name, v);
     },
     isArrayText(value) {
-      return isStringArray(value)
+      return isStringArray(value);
     },
     formatTokens(value) {
-      return tokenFormatter(value)
+      return tokenFormatter(value);
     },
     addNewLine(value) {
-      const percentage = /^0\.\d+/
+      const percentage = /^0\.\d+/;
       if (percentage.test(value)) {
-        return `${percent(value)}%`
+        return `${percent(value)}%`;
       }
       if (typeof value === 'string' && value.indexOf('\\n') > -1) {
-        return value.replaceAll('\\n', '\n')
+        return value.replaceAll('\\n', '\n');
       }
 
-      return value
+      return value;
     },
   },
-}
+};
 </script>
 
 <style lang='css' scoped>

@@ -65,7 +65,7 @@ export default {
   },
 }
 </script>
-`
+`;
 
 export const codeWithoutDirective = `
 <template>
@@ -134,4 +134,4 @@ export default {
   },
 }
 </script>
-`
+`;

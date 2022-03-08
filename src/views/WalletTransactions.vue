@@ -28,8 +28,8 @@
 <script>
 import {
   VBTooltip, BTable, BAvatar, BButton,
-} from 'bootstrap-vue'
-import { getLocalTxHistory } from '@/libs/utils'
+} from 'bootstrap-vue';
+import { getLocalTxHistory } from '@/libs/utils';
 
 export default {
   components: {
@@ -47,16 +47,16 @@ export default {
         { key: 'time', label: 'TIME' },
       ],
       history: [],
-    }
+    };
   },
   created() {
-    this.history = getLocalTxHistory()
+    this.history = getLocalTxHistory();
   },
   methods: {
     clear() {
-      this.history = []
-      localStorage.setItem('txHistory', [])
+      this.history = [];
+      localStorage.setItem('txHistory', []);
     },
   },
-}
+};
 </script>

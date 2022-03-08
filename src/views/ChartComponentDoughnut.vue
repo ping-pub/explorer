@@ -9,10 +9,10 @@
 </template>
 
 <script>
-import { percent } from '@/libs/utils'
-import { $themeColors } from '@themeConfig'
+import { percent } from '@/libs/utils';
+import { $themeColors } from '@themeConfig';
 
-import ChartjsComponentDoughnutChart from './ChartjsComponentDoughnutChart.vue'
+import ChartjsComponentDoughnutChart from './ChartjsComponentDoughnutChart.vue';
 
 export default {
   name: 'ChartDoughnut',
@@ -49,11 +49,11 @@ export default {
         tooltips: {
           callbacks: {
             label(tooltipItem, data) {
-              const label = data.datasets[0].labels[tooltipItem.index] || ''
-              const value = data.datasets[0].data[tooltipItem.index]
-              const total = data.datasets[0].data.reduce((t, c) => t + c)
-              const output = ` ${label} : ${percent(value / total)} %`
-              return output
+              const label = data.datasets[0].labels[tooltipItem.index] || '';
+              const value = data.datasets[0].data[tooltipItem.index];
+              const total = data.datasets[0].data.reduce((t, c) => t + c);
+              const output = ` ${label} : ${percent(value / total)} %`;
+              return output;
             },
           },
           // Updated default tooltip UI
@@ -66,7 +66,7 @@ export default {
           bodyFontColor: $themeColors.dark,
         },
       },
-    }
+    };
   },
-}
+};
 </script>

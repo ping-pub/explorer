@@ -1,6 +1,5 @@
 <template>
   <div class="navbar-container d-flex content align-items-center">
-
     <!-- Nav Menu Toggler -->
     <ul class="nav navbar-nav d-xl-none">
       <li class="nav-item">
@@ -42,12 +41,12 @@
 <script>
 import {
   BLink, BNavbarNav, BButton,
-} from 'bootstrap-vue'
-import Bookmarks from './components/Bookmarks.vue'
+} from 'bootstrap-vue';
+import Bookmarks from './components/Bookmarks.vue';
 // import Locale from './components/Locale.vue'
-import DarkToggler from './components/DarkToggler.vue'
-import SearchBar from './components/SearchBar.vue'
-import NotificationDropdown from './components/NotificationDropdown.vue'
+import DarkToggler from './components/DarkToggler.vue';
+import SearchBar from './components/SearchBar.vue';
+import NotificationDropdown from './components/NotificationDropdown.vue';
 
 export default {
   components: {
@@ -68,5 +67,5 @@ export default {
     },
   },
 
-}
+};
 </script>

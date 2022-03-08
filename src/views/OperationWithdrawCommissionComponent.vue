@@ -119,20 +119,20 @@
 </template>
 
 <script>
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
 import {
   BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormCheckbox,
   BForm, BInputGroupAppend,
-} from 'bootstrap-vue'
+} from 'bootstrap-vue';
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
-} from '@validations'
+} from '@validations';
 import {
   extractAccountNumberAndSequence,
   formatToken, setLocalTxHistory, sign, timeIn,
-} from '@/libs/utils'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import WalletInputVue from './components/WalletInput.vue'
+} from '@/libs/utils';
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue';
+import WalletInputVue from './components/WalletInput.vue';
 
 export default {
   name: 'WithdrawCommissionDialogue',
@@ -193,11 +193,11 @@ export default {
       digits,
       length,
       alphaDash,
-    }
+    };
   },
   computed: {
     feeDenoms() {
-      return this.balance.filter(item => !item.denom.startsWith('ibc'))
+      return this.balance.filter((item) => !item.denom.startsWith('ibc'));
     },
   },
   created() {
@@ -206,45 +206,45 @@ export default {
   methods: {
 
     loadBalance() {
-      this.$http.getBankBalances(this.address).then(res => {
+      this.$http.getBankBalances(this.address).then((res) => {
         if (res && res.length > 0) {
-          this.balance = res.reverse()
-          const token = this.balance.find(i => !i.denom.startsWith('ibc'))
-          if (token) this.feeDenom = token.denom
+          this.balance = res.reverse();
+          const token = this.balance.find((i) => !i.denom.startsWith('ibc'));
+          if (token) this.feeDenom = token.denom;
         }
-      })
-      this.$http.getLatestBlock().then(ret => {
-        this.chainId = ret.block.header.chain_id
-        const notSynced = timeIn(ret.block.header.time, 10, 'm')
+      });
+      this.$http.getLatestBlock().then((ret) => {
+        this.chainId = ret.block.header.chain_id;
+        const notSynced = timeIn(ret.block.header.time, 10, 'm');
         if (notSynced) {
-          this.error = 'Client is not synced or blockchain is halted'
+          this.error = 'Client is not synced or blockchain is halted';
         }
-      })
-      this.$http.getAuthAccount(this.address).then(ret => {
-        const account = extractAccountNumberAndSequence(ret)
-        this.accountNumber = account.accountNumber
-        this.sequence = account.sequence
-      })
-      this.fee = this.$store.state.chains.selected?.min_tx_fee || '1000'
-      this.feeDenom = this.$store.state.chains.selected?.assets[0]?.base || ''
+      });
+      this.$http.getAuthAccount(this.address).then((ret) => {
+        const account = extractAccountNumberAndSequence(ret);
+        this.accountNumber = account.accountNumber;
+        this.sequence = account.sequence;
+      });
+      this.fee = this.$store.state.chains.selected?.min_tx_fee || '1000';
+      this.feeDenom = this.$store.state.chains.selected?.assets[0]?.base || '';
     },
     handleOk(bvModalEvt) {
       // console.log('send')
       // Prevent modal from closing
-      bvModalEvt.preventDefault()
+      bvModalEvt.preventDefault();
       // Trigger submit handler
       // this.handleSubmit()
-      this.sendTx().then(ret => {
+      this.sendTx().then((ret) => {
         // console.log(ret)
-        this.error = ret
-      })
+        this.error = ret;
+      });
     },
     resetModal() {
-      this.feeDenom = ''
-      this.error = null
+      this.feeDenom = '';
+      this.error = null;
     },
     format(v) {
-      return formatToken(v)
+      return formatToken(v);
     },
     async sendTx() {
       const txMsgs = [
@@ -260,15 +260,15 @@ export default {
             validatorAddress: this.validatorAddress,
           },
         },
-      ]
+      ];
 
       if (txMsgs.length === 0) {
-        this.error = 'No delegation found'
-        return ''
+        this.error = 'No delegation found';
+        return '';
       }
       if (!this.accountNumber) {
-        this.error = 'Account number should not be empty!'
-        return ''
+        this.error = 'Account number should not be empty!';
+        return '';
       }
 
       const txFee = {
@@ -279,13 +279,13 @@ export default {
           },
         ],
         gas: this.gas,
-      }
+      };
 
       const signerData = {
         accountNumber: this.accountNumber,
         sequence: this.sequence,
         chainId: this.chainId,
-      }
+      };
 
       sign(
         this.wallet,
@@ -295,15 +295,15 @@ export default {
         txFee,
         this.memo,
         signerData,
-      ).then(bodyBytes => {
-        this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
+      ).then((bodyBytes) => {
+        this.$http.broadcastTx(bodyBytes, this.selectedChain).then((res) => {
           setLocalTxHistory({
             chain: this.$store.state.chains.selected,
             op: 'withdraw',
             hash: res.tx_response.txhash,
             time: new Date(),
-          })
-          this.$bvModal.hide('withdraw-commission-window')
+          });
+          this.$bvModal.hide('withdraw-commission-window');
           this.$toast({
             component: ToastificationContent,
             props: {
@@ -311,17 +311,17 @@ export default {
               icon: 'EditIcon',
               variant: 'success',
             },
-          })
-        }).catch(e => {
-          this.error = e
-        })
-      }).catch(e => {
-        this.error = e
-      })
+          });
+        }).catch((e) => {
+          this.error = e;
+        });
+      }).catch((e) => {
+        this.error = e;
+      });
       // Send tokens
       // return client.sendTokens(this.address, this.recipient, sendCoins, this.memo)
-      return ''
+      return '';
     },
   },
-}
+};
 </script>

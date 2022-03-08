@@ -1,14 +1,14 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import store from '../store'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import store from '../store';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   scrollBehavior() {
-    return { x: 0, y: 0 }
+    return { x: 0, y: 0 };
   },
   routes: [
     {
@@ -392,35 +392,35 @@ const router = new VueRouter({
       redirect: '/error/error-404',
     },
   ],
-})
+});
 
 router.beforeEach((to, from, next) => {
-  const c = to.params.chain
-  if (c) store.commit('select', { chain_name: c })
+  const c = to.params.chain;
+  if (c) store.commit('select', { chain_name: c });
 
-  const config = JSON.parse(localStorage.getItem('chains'))
+  const config = JSON.parse(localStorage.getItem('chains'));
   // const has = Object.keys(config).findIndex(i => i === c)
-  if (!config || Object.keys(config).findIndex(i => i === c) > -1) {
-    next()
+  if (!config || Object.keys(config).findIndex((i) => i === c) > -1) {
+    next();
   } else if (c) {
     if (c === 'index.php') {
-      next({ name: '/' })
+      next({ name: '/' });
     } else {
-      next({ name: 'chain-404' })
+      next({ name: 'chain-404' });
     }
   } else {
-    next()
+    next();
   }
-})
+});
 
 // ? For splash screen
 // Remove afterEach hook if you are not using splash screen
 router.afterEach(() => {
   // Remove initial loading
-  const appLoading = document.getElementById('loading-bg')
+  const appLoading = document.getElementById('loading-bg');
   if (appLoading) {
-    appLoading.style.display = 'none'
+    appLoading.style.display = 'none';
   }
-})
+});
 
-export default router
+export default router;

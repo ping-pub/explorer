@@ -3,8 +3,8 @@ export default {
     $route: {
       immediate: true,
       handler() {
-        this.updateIsActive()
+        this.updateIsActive();
       },
     },
   },
-}
+};

@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { BAvatar } from 'bootstrap-vue'
+import { BAvatar } from 'bootstrap-vue';
 
 export default {
   components: {
@@ -69,7 +69,7 @@ export default {
       default: false,
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

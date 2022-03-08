@@ -40,7 +40,6 @@
                   :items="pairs"
                   class="ml-0 pl-0"
                 >
-
                   <template #cell(pair)="data">
                     <router-link
                       :to="`/osmosis/osmosis/trade/${data.item.id}`"
@@ -112,13 +111,13 @@
 <script>
 import {
   BRow, BCol, BCard, BButton, BPopover, BTable, BSpinner,
-} from 'bootstrap-vue'
-import { CoinGeckoMap, getPairName } from '@/libs/osmos'
-import { formatTokenDenom } from '@/libs/utils'
-import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
-import Place from './components/KlineTrade/Place.vue'
+} from 'bootstrap-vue';
+import { CoinGeckoMap, getPairName } from '@/libs/osmos';
+import { formatTokenDenom } from '@/libs/utils';
+import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue';
+import Place from './components/KlineTrade/Place.vue';
 // import Kline from './components/kline/index.vue'
-import SummaryPriceChart from './SummaryPriceChart.vue'
+import SummaryPriceChart from './SummaryPriceChart.vue';
 
 export default {
   components: {
@@ -148,36 +147,36 @@ export default {
       marketData: {},
       high24: 0,
       low24: 0,
-    }
+    };
   },
   computed: {
     pairs() {
-      const pairs = this.pools.map(x => {
-        const pair = x.poolAssets.map(t => {
+      const pairs = this.pools.map((x) => {
+        const pair = x.poolAssets.map((t) => {
           if (t.token.denom.startsWith('ibc/')) {
-            return formatTokenDenom(this.denomTrace[t.token.denom] ? this.denomTrace[t.token.denom].base_denom : ' ')
+            return formatTokenDenom(this.denomTrace[t.token.denom] ? this.denomTrace[t.token.denom].base_denom : ' ');
           }
-          return formatTokenDenom(t.token.denom)
-        })
+          return formatTokenDenom(t.token.denom);
+        });
         return {
           id: x.id,
           pair,
           price: this.getPrice(pair),
           change: this.getChanges(pair),
-        }
-      })
-      return pairs
+        };
+      });
+      return pairs;
     },
     latestPrice() {
-      return this.getPrice([this.base, this.target])
+      return this.getPrice([this.base, this.target]);
     },
     changesIn24H() {
-      return this.getChanges([this.base, this.target])
+      return this.getChanges([this.base, this.target]);
     },
     marketChartData() {
       if (this.marketData && this.marketData.prices) {
-        const labels = this.marketData.prices.map(x => x[0])
-        const data = this.marketData.prices.map(x => x[1])
+        const labels = this.marketData.prices.map((x) => x[0]);
+        const data = this.marketData.prices.map((x) => x[1]);
         return {
           labels,
           datasets: [
@@ -191,66 +190,66 @@ export default {
               barThickness: 15,
             },
           ],
-        }
+        };
       }
-      return { labels: [], datasets: [] }
+      return { labels: [], datasets: [] };
     },
   },
   created() {
-    const { poolid } = this.$route.params
-    this.$http.osmosis.getDenomTraces().then(x => {
-      this.denomTrace = x
-      this.$http.osmosis.getPools().then(pools => {
-        this.pools = pools
-        this.init(poolid)
-      })
-    })
+    const { poolid } = this.$route.params;
+    this.$http.osmosis.getDenomTraces().then((x) => {
+      this.denomTrace = x;
+      this.$http.osmosis.getPools().then((pools) => {
+        this.pools = pools;
+        this.init(poolid);
+      });
+    });
   },
   beforeRouteUpdate(to, from, next) {
-    const { poolid } = to.params
-    this.init(poolid)
-    next()
+    const { poolid } = to.params;
+    this.init(poolid);
+    next();
     // }
   },
   methods: {
     getPrice(symbol) {
-      const p1 = this.$store.state.chains.quotes[symbol[0]]
-      const p2 = this.$store.state.chains.quotes[symbol[1]]
-      return p1 && p2 ? (p1.usd / p2.usd).toFixed(4) : '-'
+      const p1 = this.$store.state.chains.quotes[symbol[0]];
+      const p2 = this.$store.state.chains.quotes[symbol[1]];
+      return p1 && p2 ? (p1.usd / p2.usd).toFixed(4) : '-';
     },
     getChanges(symbol) {
-      const p1 = this.$store.state.chains.quotes[symbol[0]]
-      const p2 = this.$store.state.chains.quotes[symbol[1]]
-      return p1 && p2 ? (p1.usd_24h_change / p2.usd_24h_change).toFixed(2) : '-'
+      const p1 = this.$store.state.chains.quotes[symbol[0]];
+      const p2 = this.$store.state.chains.quotes[symbol[1]];
+      return p1 && p2 ? (p1.usd_24h_change / p2.usd_24h_change).toFixed(2) : '-';
     },
     init(poolid) {
-      this.high24 = 0
-      this.low24 = 0
-      this.current = this.pools.find(p => p.id === poolid) || this.pools[0]
-      this.base = getPairName(this.current, this.denomTrace, 'base')
-      this.target = getPairName(this.current, this.denomTrace, 'target')
-      this.$http.osmosis.getMarketData(CoinGeckoMap[this.base], CoinGeckoMap[this.target]).then(res => {
-        this.marketData = res
-        this.loading = false
-        const start = Date.now() - 8.64e+7
-        res.prices.forEach(x => {
+      this.high24 = 0;
+      this.low24 = 0;
+      this.current = this.pools.find((p) => p.id === poolid) || this.pools[0];
+      this.base = getPairName(this.current, this.denomTrace, 'base');
+      this.target = getPairName(this.current, this.denomTrace, 'target');
+      this.$http.osmosis.getMarketData(CoinGeckoMap[this.base], CoinGeckoMap[this.target]).then((res) => {
+        this.marketData = res;
+        this.loading = false;
+        const start = Date.now() - 8.64e+7;
+        res.prices.forEach((x) => {
           if (x[0] > start) {
             if (x[1] > this.high24) {
               // eslint-disable-next-line prefer-destructuring
-              this.high24 = x[1]
+              this.high24 = x[1];
             }
             if (x[1] < this.low24 || this.low24 === 0) {
               // eslint-disable-next-line prefer-destructuring
-              this.low24 = x[1]
+              this.low24 = x[1];
             }
           }
-        })
-      }).catch(e => {
-        this.error = `This feature is not avalable in your country. \n这个功能尚未对你的国家开放。${e}`
-      })
+        });
+      }).catch((e) => {
+        this.error = `This feature is not avalable in your country. \n这个功能尚未对你的国家开放。${e}`;
+      });
     },
   },
-}
+};
 </script>
 
 <style scoped>

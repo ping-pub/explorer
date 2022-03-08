@@ -1,5 +1,5 @@
 <script>
-import { Bar, mixins } from 'vue-chartjs'
+import { Bar, mixins } from 'vue-chartjs';
 
 export default {
   extends: Bar,
@@ -22,10 +22,10 @@ export default {
       //     },
       //   },
       // },
-    }
+    };
   },
   mounted() {
-    this.renderChart(this.chartData, this.options)
+    this.renderChart(this.chartData, this.options);
   },
-}
+};
 </script>

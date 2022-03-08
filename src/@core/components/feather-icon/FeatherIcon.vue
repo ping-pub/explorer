@@ -1,5 +1,5 @@
 <script>
-import * as icons from 'vue-feather-icons'
+import * as icons from 'vue-feather-icons';
 
 export default {
   name: 'FeatherIcon',
@@ -24,18 +24,18 @@ export default {
   },
   render(h, { props, data }) {
     // Create Feather Icon
-    const svg = h(icons[props.icon], { props: { size: props.size }, ...data })
+    const svg = h(icons[props.icon], { props: { size: props.size }, ...data });
 
     // If no badge is provided => Render just SVG
-    if (!props.badge) return svg
+    if (!props.badge) return svg;
 
     // Badge
-    const badgeEl = h('span', { staticClass: 'badge badge-up badge-pill', class: props.badgeClasses }, [props.badge])
+    const badgeEl = h('span', { staticClass: 'badge badge-up badge-pill', class: props.badgeClasses }, [props.badge]);
 
     // Return span with children
-    return h('span', { staticClass: 'feather-icon position-relative' }, [svg, badgeEl])
+    return h('span', { staticClass: 'feather-icon position-relative' }, [svg, badgeEl]);
   },
-}
+};
 </script>
 
 <style lang="scss">

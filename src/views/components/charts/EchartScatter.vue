@@ -4,20 +4,21 @@
       class="chart"
       autoresize
       :option="option"
-    /></div>
+    />
+  </div>
 </template>
 
 <script>
-import { use } from 'echarts/core'
-import { CanvasRenderer } from 'echarts/renderers'
-import { ScatterChart } from 'echarts/charts'
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { ScatterChart } from 'echarts/charts';
 import {
   TitleComponent,
   TooltipComponent,
   LegendComponent,
-} from 'echarts/components'
-import VChart, { THEME_KEY } from 'vue-echarts'
-import { formatNumber } from '@/libs/utils'
+} from 'echarts/components';
+import VChart, { THEME_KEY } from 'vue-echarts';
+import { formatNumber } from '@/libs/utils';
 
 use([
   CanvasRenderer,
@@ -25,7 +26,7 @@ use([
   TitleComponent,
   TooltipComponent,
   LegendComponent,
-])
+]);
 
 export default {
   name: 'AssetScatter',
@@ -67,7 +68,7 @@ export default {
           },
           axisLabel: {
             formatter(param) {
-              return formatNumber(param, true, 0)
+              return formatNumber(param, true, 0);
             },
           },
         },
@@ -76,7 +77,7 @@ export default {
           axisLabel: {
             show: false,
             formatter(param) {
-              return formatNumber(param, true, 0)
+              return formatNumber(param, true, 0);
             },
           },
           splitLine: {
@@ -89,18 +90,18 @@ export default {
         series: [
           {
             name: '',
-            data: this.items.filter(x => x[1] > 0),
+            data: this.items.filter((x) => x[1] > 0),
             type: 'scatter',
             symbolSize(data) {
-              const r = Math.log(data[2])
-              return r > 50 ? 50 : r
+              const r = Math.log(data[2]);
+              return r > 50 ? 50 : r;
             },
             emphasis: {
               focus: 'series',
               label: {
                 show: true,
                 formatter(param) {
-                  return `${param.data[3]}, ${formatNumber(param.data[2], true, 0)}`
+                  return `${param.data[3]}, ${formatNumber(param.data[2], true, 0)}`;
                 },
                 position: 'top',
               },
@@ -113,10 +114,10 @@ export default {
             },
           },
         ],
-      }
+      };
     },
   },
-}
+};
 </script>
 
 <style scoped>

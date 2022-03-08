@@ -1,9 +1,9 @@
-import { ref } from '@vue/composition-api'
-import useAppConfig from '@core/app-config/useAppConfig'
+import { ref } from '@vue/composition-api';
+import useAppConfig from '@core/app-config/useAppConfig';
 
 export default function useAppCustomizer() {
   // Customizer
-  const isCustomizerOpen = ref(false)
+  const isCustomizerOpen = ref(false);
 
   // Skin
   const skinOptions = [
@@ -11,13 +11,13 @@ export default function useAppCustomizer() {
     { text: 'Bordered', value: 'bordered' },
     { text: 'Dark', value: 'dark' },
     { text: 'Semi Dark', value: 'semi-dark' },
-  ]
+  ];
 
   // Content Width Options
   const contentWidthOptions = [
     { text: 'Full  Width', value: 'full' },
     { text: 'Boxed', value: 'boxed' },
-  ]
+  ];
 
   // Router Transition
   const routerTransitionOptions = [
@@ -27,16 +27,16 @@ export default function useAppCustomizer() {
     { title: 'Slide Fade', value: 'slide-fade' },
     { title: 'Zoom Out', value: 'zoom-out' },
     { title: 'None', value: 'none' },
-  ]
+  ];
 
   // Router Transition
   const layoutTypeOptions = [
     { text: 'Vertical', value: 'vertical' },
     { text: 'Horizontal', value: 'horizontal' },
-  ]
+  ];
 
   // Navbar
-  const navbarColors = ['', 'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark']
+  const navbarColors = ['', 'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark'];
 
   // Navbar Types
   const navbarTypes = [
@@ -44,14 +44,14 @@ export default function useAppCustomizer() {
     { text: 'Sticky', value: 'sticky' },
     { text: 'Static', value: 'static' },
     { text: 'Hidden', value: 'hidden' },
-  ]
+  ];
 
   // Footer Types
   const footerTypes = [
     { text: 'Sticky', value: 'sticky' },
     { text: 'Static', value: 'static' },
     { text: 'Hidden', value: 'hidden' },
-  ]
+  ];
 
   // eslint-disable-next-line object-curly-newline
   const {
@@ -65,7 +65,7 @@ export default function useAppCustomizer() {
     navbarBackgroundColor,
     navbarType,
     footerType,
-  } = useAppConfig()
+  } = useAppConfig();
 
   return {
     // Customizer
@@ -105,5 +105,5 @@ export default function useAppCustomizer() {
     // Footer
     footerTypes,
     footerType,
-  }
+  };
 }

@@ -43,22 +43,25 @@
             variant="primary"
             size="sm"
             class="mr-25"
-          ><feather-icon
-             icon="SendIcon"
-             class="d-md-none"
-           />
+          >
+            <feather-icon
+              icon="SendIcon"
+              class="d-md-none"
+            />
             <span class="d-none d-md-block">Transfer</span>
           </b-button>
           <b-button
             v-b-modal.ibc-transfer-window
             variant="danger"
             size="sm"
-          ><feather-icon
-             icon="SendIcon"
-             class="d-md-none"
-           />
+          >
+            <feather-icon
+              icon="SendIcon"
+              class="d-md-none"
+            />
             <span class="d-none d-md-block">IBC Transfer
-            </span></b-button>
+            </span>
+          </b-button>
         </div>
       </b-card-header>
       <b-card-body class="pl-0 pr-0">
@@ -357,30 +360,30 @@
 </template>
 
 <script>
-import { $themeColors } from '@themeConfig'
+import { $themeColors } from '@themeConfig';
 import {
   BCard, BAvatar, BPopover, BTable, BRow, BCol, BTableSimple, BTr, BTd, BTbody, BCardHeader, BCardTitle, BButton, BCardBody, VBModal,
   BButtonGroup, VBTooltip, BPagination,
-} from 'bootstrap-vue'
-import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import Ripple from 'vue-ripple-directive'
-import VueQr from 'vue-qr'
-import chainAPI from '@/libs/fetch'
+} from 'bootstrap-vue';
+import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue';
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue';
+import Ripple from 'vue-ripple-directive';
+import VueQr from 'vue-qr';
+import chainAPI from '@/libs/fetch';
 import {
   formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay,
   toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign, numberWithCommas,
-} from '@/libs/utils'
-import { sha256 } from '@cosmjs/crypto'
-import { toHex } from '@cosmjs/encoding'
-import ObjectFieldComponent from './ObjectFieldComponent.vue'
-import OperationTransferComponent from './OperationTransferComponent.vue'
-import OperationWithdrawComponent from './OperationWithdrawComponent.vue'
-import OperationUnbondComponent from './OperationUnbondComponent.vue'
-import OperationDelegateComponent from './OperationDelegateComponent.vue'
-import OperationRedelegateComponent from './OperationRedelegateComponent.vue'
-import OperationTransfer2Component from './OperationTransfer2Component.vue'
-import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
+} from '@/libs/utils';
+import { sha256 } from '@cosmjs/crypto';
+import { toHex } from '@cosmjs/encoding';
+import ObjectFieldComponent from './ObjectFieldComponent.vue';
+import OperationTransferComponent from './OperationTransferComponent.vue';
+import OperationWithdrawComponent from './OperationWithdrawComponent.vue';
+import OperationUnbondComponent from './OperationUnbondComponent.vue';
+import OperationDelegateComponent from './OperationDelegateComponent.vue';
+import OperationRedelegateComponent from './OperationRedelegateComponent.vue';
+import OperationTransfer2Component from './OperationTransfer2Component.vue';
+import ChartComponentDoughnut from './ChartComponentDoughnut.vue';
 
 export default {
   components: {
@@ -419,7 +422,7 @@ export default {
     Ripple,
   },
   data() {
-    const { address } = this.$route.params
+    const { address } = this.$route.params;
     return {
       currency: getUserCurrencySign(),
       selectedValidator: '',
@@ -434,52 +437,52 @@ export default {
       unbonding: [],
       quotes: {},
       transactions: [],
-    }
+    };
   },
   computed: {
     accountTitle() {
       if (this.account && this.account.type) {
-        return this.account.type.substring(this.account.type.indexOf('/') + 1)
+        return this.account.type.substring(this.account.type.indexOf('/') + 1);
       }
-      return 'Profile'
+      return 'Profile';
     },
     txs() {
       if (this.transactions.txs) {
-        return this.transactions.txs.map(x => ({
+        return this.transactions.txs.map((x) => ({
           height: Number(x.height),
           txhash: x.txhash,
           msgs: abbrMessage(x.tx.msg ? x.tx.msg : x.tx.value.msg),
           time: toDay(x.timestamp),
-        }))
+        }));
       }
-      return []
+      return [];
     },
     assetTable() {
-      let total = []
-      let sum = 0
-      let sumCurrency = 0
-      total = total.concat(this.assets.map(x => {
-        const xh = x
-        xh.type = 'Balance'
-        xh.color = 'success'
-        xh.icon = 'CreditCardIcon'
-        xh.currency = this.formatCurrency(xh.amount, xh.denom)
-        sumCurrency += xh.currency
-        sum += Number(xh.amount)
-        return xh
-      }))
+      let total = [];
+      let sum = 0;
+      let sumCurrency = 0;
+      total = total.concat(this.assets.map((x) => {
+        const xh = x;
+        xh.type = 'Balance';
+        xh.color = 'success';
+        xh.icon = 'CreditCardIcon';
+        xh.currency = this.formatCurrency(xh.amount, xh.denom);
+        sumCurrency += xh.currency;
+        sum += Number(xh.amount);
+        return xh;
+      }));
 
-      let stakingDenom = ''
+      let stakingDenom = '';
 
       if (this.delegations && this.delegations.length > 0) {
-        let temp = 0
-        this.delegations.forEach(x => {
-          const xh = x.balance
-          temp += Number(xh.amount)
-          sumCurrency += this.formatCurrency(xh.amount, xh.denom)
-          sum += Number(xh.amount)
-          stakingDenom = xh.denom
-        })
+        let temp = 0;
+        this.delegations.forEach((x) => {
+          const xh = x.balance;
+          temp += Number(xh.amount);
+          sumCurrency += this.formatCurrency(xh.amount, xh.denom);
+          sum += Number(xh.amount);
+          stakingDenom = xh.denom;
+        });
         total.push({
           type: 'Delegation',
           color: 'primary',
@@ -487,31 +490,31 @@ export default {
           amount: temp,
           denom: stakingDenom,
           currency: this.formatCurrency(temp, stakingDenom),
-        })
+        });
       }
 
       if (this.reward.total) {
-        total = total.concat(this.reward.total.map(x => {
-          const xh = x
-          xh.type = 'Reward'
-          xh.color = 'warning'
-          xh.icon = 'TrendingUpIcon'
-          xh.currency = this.formatCurrency(xh.amount, xh.denom)
-          sumCurrency += xh.currency
-          sum += Number(xh.amount)
-          return xh
-        }))
+        total = total.concat(this.reward.total.map((x) => {
+          const xh = x;
+          xh.type = 'Reward';
+          xh.color = 'warning';
+          xh.icon = 'TrendingUpIcon';
+          xh.currency = this.formatCurrency(xh.amount, xh.denom);
+          sumCurrency += xh.currency;
+          sum += Number(xh.amount);
+          return xh;
+        }));
       }
       if (this.unbonding) {
-        let tmp1 = 0
-        this.unbonding.forEach(x => {
-          x.entries.forEach(e => {
-            tmp1 += Number(e.balance)
-          })
-        })
-        const unbonding = this.formatCurrency(tmp1, stakingDenom)
-        sumCurrency += unbonding
-        sum += tmp1
+        let tmp1 = 0;
+        this.unbonding.forEach((x) => {
+          x.entries.forEach((e) => {
+            tmp1 += Number(e.balance);
+          });
+        });
+        const unbonding = this.formatCurrency(tmp1, stakingDenom);
+        sumCurrency += unbonding;
+        sum += tmp1;
         total.push({
           type: 'unbonding',
           color: 'danger',
@@ -520,28 +523,28 @@ export default {
           amount: tmp1,
           percent: 0,
           currency: unbonding,
-        })
+        });
       }
-      total = total.map(x => {
-        const xh = x
-        xh.percent = percent(Number(x.amount) / sum)
-        return xh
-      })
+      total = total.map((x) => {
+        const xh = x;
+        xh.percent = percent(Number(x.amount) / sum);
+        return xh;
+      });
       return {
         items: total,
         currency: parseFloat(sumCurrency.toFixed(2)),
-      }
+      };
     },
     chartData() {
       const data = this.assetTable.items.reduce((t, c) => {
-        const th = t
+        const th = t;
         if (t[c.type]) {
-          th[c.type] += Number(c.amount)
+          th[c.type] += Number(c.amount);
         } else {
-          th[c.type] = Number(c.amount)
+          th[c.type] = Number(c.amount);
         }
-        return th
-      }, [])
+        return th;
+      }, []);
       return {
         datasets: [
           {
@@ -552,100 +555,100 @@ export default {
             pointStyle: 'rectRounded',
           },
         ],
-      }
+      };
     },
     deleTable() {
-      const re = []
+      const re = [];
       if (this.reward.rewards && this.delegations && this.delegations.length > 0) {
-        this.delegations.forEach(e => {
-          const reward = this.reward.rewards.find(r => r.validator_address === e.delegation.validator_address)
+        this.delegations.forEach((e) => {
+          const reward = this.reward.rewards.find((r) => r.validator_address === e.delegation.validator_address);
           re.push({
             validator: getStakingValidatorOperator(this.$http.config.chain_name, e.delegation.validator_address, 8),
             token: formatToken(e.balance, {}, 2),
             reward: tokenFormatter(reward.reward, this.denoms),
             action: e.delegation.validator_address,
-          })
-        })
+          });
+        });
       }
-      return re
+      return re;
     },
     accTable() {
-      let table = {}
+      let table = {};
       if (this.account && this.account.type === 'cosmos-sdk/PeriodicVestingAccount') {
-        table = this.account.value
+        table = this.account.value;
       }
-      return table
+      return table;
     },
   },
   created() {
-    this.$http.getAllIBCDenoms().then(x => {
-      x.denom_traces.forEach(trace => {
-        const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
-        this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace.base_denom)
-      })
-    })
-    this.$http.getAuthAccount(this.address).then(acc => {
-      this.account = acc
-    })
-    this.$http.getBankAccountBalance(this.address).then(bal => {
-      this.assets = bal
-      bal.forEach(x => {
-        const symbol = formatTokenDenom(x.denom)
+    this.$http.getAllIBCDenoms().then((x) => {
+      x.denom_traces.forEach((trace) => {
+        const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)));
+        this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace.base_denom);
+      });
+    });
+    this.$http.getAuthAccount(this.address).then((acc) => {
+      this.account = acc;
+    });
+    this.$http.getBankAccountBalance(this.address).then((bal) => {
+      this.assets = bal;
+      bal.forEach((x) => {
+        const symbol = formatTokenDenom(x.denom);
         if (!this.quotes[symbol] && symbol.indexOf('/') === -1) {
-          chainAPI.fetchTokenQuote(symbol).then(quote => {
-            this.$set(this.quotes, symbol, quote)
-          })
+          chainAPI.fetchTokenQuote(symbol).then((quote) => {
+            this.$set(this.quotes, symbol, quote);
+          });
         }
-      })
-    })
-    this.$http.getStakingReward(this.address).then(res => {
-      this.reward = res
-    })
-    this.$http.getStakingDelegations(this.address).then(res => {
-      this.delegations = res.delegation_responses || res
-    })
-    this.$http.getStakingUnbonding(this.address).then(res => {
-      this.unbonding = res.unbonding_responses || res
-    })
-    this.$http.getTxsBySender(this.address).then(res => {
-      this.transactions = res
-    })
+      });
+    });
+    this.$http.getStakingReward(this.address).then((res) => {
+      this.reward = res;
+    });
+    this.$http.getStakingDelegations(this.address).then((res) => {
+      this.delegations = res.delegation_responses || res;
+    });
+    this.$http.getStakingUnbonding(this.address).then((res) => {
+      this.unbonding = res.unbonding_responses || res;
+    });
+    this.$http.getTxsBySender(this.address).then((res) => {
+      this.transactions = res;
+    });
   },
   methods: {
     formatNumber(v) {
-      return numberWithCommas(v)
+      return numberWithCommas(v);
     },
     pageload(v) {
-      this.$http.getTxsBySender(this.address, v).then(res => {
-        this.transactions = res
-      })
+      this.$http.getTxsBySender(this.address, v).then((res) => {
+        this.transactions = res;
+      });
     },
     selectValue(v) {
-      this.selectedValidator = v
+      this.selectedValidator = v;
     },
     formatHash: abbrAddress,
     formatDenom(v) {
-      return formatTokenDenom(this.denoms[v] ? this.denoms[v] : v)
+      return formatTokenDenom(this.denoms[v] ? this.denoms[v] : v);
     },
     formatAmount(v, dec = 2, denom = 'uatom', format = true) {
-      return formatTokenAmount(v, dec, denom, format)
+      return formatTokenAmount(v, dec, denom, format);
     },
     formatToken(v) {
-      return tokenFormatter(v, this.denoms)
+      return tokenFormatter(v, this.denoms);
     },
     formatCurrency(amount, denom) {
-      const qty = this.formatAmount(amount, 2, denom, false)
-      const d2 = this.formatDenom(denom)
-      const userCurrency = getUserCurrency()
-      const quote = this.$store.state.chains.quotes[d2]
+      const qty = this.formatAmount(amount, 2, denom, false);
+      const d2 = this.formatDenom(denom);
+      const userCurrency = getUserCurrency();
+      const quote = this.$store.state.chains.quotes[d2];
       if (quote) {
-        const price = quote[userCurrency]
-        return parseFloat((qty * price).toFixed(2))
+        const price = quote[userCurrency];
+        return parseFloat((qty * price).toFixed(2));
       }
-      return 0
+      return 0;
     },
-    formatTime: v => toDay(Number(v) * 1000),
-    formatLength: v => toDuration(Number(v) * 1000),
+    formatTime: (v) => toDay(Number(v) * 1000),
+    formatLength: (v) => toDuration(Number(v) * 1000),
     copy() {
       this.$copyText(this.address).then(() => {
         this.$toast({
@@ -654,8 +657,8 @@ export default {
             title: 'Address copied',
             icon: 'BellIcon',
           },
-        })
-      }, e => {
+        });
+      }, (e) => {
         this.$toast({
           component: ToastificationContent,
           props: {
@@ -663,9 +666,9 @@ export default {
             icon: 'BellIcon',
             variant: 'danger',
           },
-        })
-      })
+        });
+      });
     },
   },
-}
+};
 </script>

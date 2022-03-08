@@ -178,7 +178,6 @@
       >
         Connect Wallet
       </b-button>
-
     </b-form-group>
     <b-alert
       variant="danger"
@@ -211,7 +210,6 @@
       :symbol="type === 0 ? target: base"
       :denom-trace="denomTrace[currentDenom]"
     />
-
   </div>
 </template>
 
