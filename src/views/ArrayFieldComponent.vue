@@ -27,7 +27,7 @@ import { BTable } from 'bootstrap-vue'
 
 import {
   getStakingValidatorByHex, isHexAddress, isToken, percent, toDay, tokenFormatter,
-} from '@/libs/data/data'
+} from '@/libs/utils'
 
 export default {
   name: 'ArrayFieldComponent',

@@ -51,7 +51,7 @@
           </b-button>
           <b-button
             v-b-modal.ibc-transfer-window
-            variant="success"
+            variant="danger"
             size="sm"
           ><feather-icon
              icon="SendIcon"
@@ -105,12 +105,12 @@
               </div>
               <div class="d-flex flex-column">
                 <span class="text-right">{{ formatToken(token) }}</span>
-                <small class="text-right">{{ currency }}{{ token.currency }}</small>
+                <small class="text-right">{{ currency }}{{ formatNumber(token.currency) }}</small>
               </div>
             </div>
             <!--/ tokens -->
             <div class="text-right border-top pt-1">
-              <h2>Total: {{ currency }}{{ assetTable.currency }}</h2>
+              <h2>Total: {{ currency }}{{ formatNumber(assetTable.currency) }}</h2>
             </div>
           </b-col>
         </b-row>
@@ -130,7 +130,7 @@
             class="mr-25"
           >
             <feather-icon
-              icon="PlusIcon"
+              icon="LogInIcon"
               class="d-md-none"
             /><small class="d-none d-md-block">Delegate</small>
           </b-button>
@@ -141,9 +141,9 @@
             size="sm"
           >
             <feather-icon
-              icon="MinusIcon"
+              icon="ShareIcon"
               class="d-md-none"
-            /><small class="d-none d-md-block"> Withdraw</small>
+            /><small class="d-none d-md-block"> Withdraw Rewards</small>
           </b-button>
         </div>
       </b-card-header>
@@ -369,8 +369,10 @@ import VueQr from 'vue-qr'
 import chainAPI from '@/libs/fetch'
 import {
   formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay,
-  toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign,
-} from '@/libs/data'
+  toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign, numberWithCommas,
+} from '@/libs/utils'
+import { sha256 } from '@cosmjs/crypto'
+import { toHex } from '@cosmjs/encoding'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
 import OperationTransferComponent from './OperationTransferComponent.vue'
 import OperationWithdrawComponent from './OperationWithdrawComponent.vue'
@@ -469,7 +471,7 @@ export default {
 
       let stakingDenom = ''
 
-      if (this.delegations) {
+      if (this.delegations && this.delegations.length > 0) {
         let temp = 0
         this.delegations.forEach(x => {
           const xh = x.balance
@@ -501,20 +503,8 @@ export default {
         }))
       }
       if (this.unbonding) {
-        // total = total.concat(this.unbonding.map(x => {
-        //   const xh = x.entries[0]
-        //   xh.type = 'unbonding'
-        //   xh.color = 'text-warning'
-        //   xh.icon = 'TrendingUpIcon'
-        //   return xh
-        // }))
         let tmp1 = 0
         this.unbonding.forEach(x => {
-          x.entries.forEach(e => {
-            tmp1 += Number(e.balance)
-          })
-        })
-        this.redelegations.forEach(x => {
           x.entries.forEach(e => {
             tmp1 += Number(e.balance)
           })
@@ -566,13 +556,13 @@ export default {
     },
     deleTable() {
       const re = []
-      if (this.reward.rewards && this.delegations) {
+      if (this.reward.rewards && this.delegations && this.delegations.length > 0) {
         this.delegations.forEach(e => {
           const reward = this.reward.rewards.find(r => r.validator_address === e.delegation.validator_address)
           re.push({
             validator: getStakingValidatorOperator(this.$http.config.chain_name, e.delegation.validator_address, 8),
             token: formatToken(e.balance, {}, 2),
-            reward: tokenFormatter(reward.reward),
+            reward: tokenFormatter(reward.reward, this.denoms),
             action: e.delegation.validator_address,
           })
         })
@@ -588,29 +578,23 @@ export default {
     },
   },
   created() {
+    this.$http.getAllIBCDenoms().then(x => {
+      x.denom_traces.forEach(trace => {
+        const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
+        this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace.base_denom)
+      })
+    })
     this.$http.getAuthAccount(this.address).then(acc => {
       this.account = acc
     })
     this.$http.getBankAccountBalance(this.address).then(bal => {
       this.assets = bal
       bal.forEach(x => {
-        if (x.denom.startsWith('ibc/')) {
-          chainAPI.getIBCDenomTraceText(this.$http.config.api, x.denom).then(denom => {
-            this.$set(this.denoms, x.denom, denom)
-            const symbol = formatTokenDenom(denom)
-            if (!this.quotes[symbol] && symbol.indexOf('/') === -1) {
-              chainAPI.fetchTokenQuote(symbol).then(quote => {
-                this.$set(this.quotes, symbol, quote)
-              })
-            }
+        const symbol = formatTokenDenom(x.denom)
+        if (!this.quotes[symbol] && symbol.indexOf('/') === -1) {
+          chainAPI.fetchTokenQuote(symbol).then(quote => {
+            this.$set(this.quotes, symbol, quote)
           })
-        } else {
-          const symbol = formatTokenDenom(x.denom)
-          if (!this.quotes[symbol] && symbol.indexOf('/') === -1) {
-            chainAPI.fetchTokenQuote(symbol).then(quote => {
-              this.$set(this.quotes, symbol, quote)
-            })
-          }
         }
       })
     })
@@ -620,21 +604,17 @@ export default {
     this.$http.getStakingDelegations(this.address).then(res => {
       this.delegations = res.delegation_responses || res
     })
-    this.$http.getStakingRedelegations(this.address).then(res => {
-      this.redelegations = res.redelegation_responses || res
-    })
     this.$http.getStakingUnbonding(this.address).then(res => {
       this.unbonding = res.unbonding_responses || res
     })
     this.$http.getTxsBySender(this.address).then(res => {
       this.transactions = res
     })
-
-    // this.$http.getStakingValidators(this.address).then(res => {
-    //   console.log(res)
-    // })
   },
   methods: {
+    formatNumber(v) {
+      return numberWithCommas(v)
+    },
     pageload(v) {
       this.$http.getTxsBySender(this.address, v).then(res => {
         this.transactions = res
@@ -647,14 +627,14 @@ export default {
     formatDenom(v) {
       return formatTokenDenom(this.denoms[v] ? this.denoms[v] : v)
     },
-    formatAmount(v, dec = 2, denom = 'uatom') {
-      return formatTokenAmount(v, dec, denom)
+    formatAmount(v, dec = 2, denom = 'uatom', format = true) {
+      return formatTokenAmount(v, dec, denom, format)
     },
     formatToken(v) {
       return tokenFormatter(v, this.denoms)
     },
     formatCurrency(amount, denom) {
-      const qty = this.formatAmount(amount, 2, denom)
+      const qty = this.formatAmount(amount, 2, denom, false)
       const d2 = this.formatDenom(denom)
       const userCurrency = getUserCurrency()
       const quote = this.$store.state.chains.quotes[d2]

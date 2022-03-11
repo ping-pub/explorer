@@ -53,7 +53,7 @@ import {
 } from 'bootstrap-vue'
 import VueApexCharts from 'vue-apexcharts'
 import { $themeColors } from '@themeConfig'
-import { percent, toDay } from '@/libs/data'
+import { percent, toDay } from '@/libs/utils'
 
 const $strokeColor = '#ebe9f1'
 const $textHeadingColor = '#5e5873'

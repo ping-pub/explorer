@@ -55,7 +55,22 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/coffee',
+      name: 'coffee',
+      component: () => import('@core/layouts/components/Coffee.vue'),
+      meta: {
+        pageTitle: 'Donation',
+        breadcrumb: [
+          {
+            text: 'Buy me a cup of coffee!',
+            active: false,
+          },
+        ],
+      },
+    },
+    {
       path: '/wallet/accounts',
+      alias: '/wallet',
       name: 'accounts',
       component: () => import('@/views/WalletAccounts.vue'),
       meta: {
@@ -96,6 +111,38 @@ const router = new VueRouter({
         ],
       },
     },
+    {
+      path: '/wallet/delegations',
+      name: 'delegations',
+      component: () => import('@/views/WalletDelegations.vue'),
+      meta: {
+        pageTitle: 'My Delegations',
+        breadcrumb: [
+          {
+            text: 'Wallet',
+          },
+          {
+            text: 'My Delegations',
+          },
+        ],
+      },
+    },
+    {
+      path: '/wallet/transactions',
+      name: 'mytransactions',
+      component: () => import('@/views/WalletTransactions.vue'),
+      meta: {
+        pageTitle: 'Transaction History',
+        breadcrumb: [
+          {
+            text: 'Wallet',
+          },
+          {
+            text: 'Transaction History',
+          },
+        ],
+      },
+    },
     // chain modules
     {
       path: '/:chain/',
@@ -128,7 +175,7 @@ const router = new VueRouter({
     },
     {
       path: '/:chain/uptime/my',
-      name: 'uptime',
+      name: 'myuptime',
       component: () => import('@/views/UptimeMyValidators.vue'),
       meta: {
         pageTitle: 'Uptime',
@@ -279,7 +326,7 @@ const router = new VueRouter({
     // custom modules for specified chains
     // 1. cosmos
     {
-      path: '/:chain/cosmos/pools',
+      path: '/:chain/cosmos/trade',
       name: 'gravity',
       component: () => import('@/views/GravityPool.vue'),
       meta: {
@@ -294,14 +341,18 @@ const router = new VueRouter({
     },
     // 2. OSMOSIS
     {
-      path: '/:chain/osmosis/pools',
-      name: 'osmosis-pool',
-      component: () => import('@/views/OsmosisPools.vue'),
+      path: '/:chain/osmosis/trade/:poolid?',
+      name: 'osmosis-trade',
+      component: () => import('@/views/OsmosisTrade.vue'),
       meta: {
-        pageTitle: 'Pools',
+        pageTitle: 'Classic Trade',
         breadcrumb: [
           {
-            text: 'Pools',
+            text: 'DEX',
+            active: true,
+          },
+          {
+            text: 'Classic Trade',
             active: true,
           },
         ],

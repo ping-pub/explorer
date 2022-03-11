@@ -28,6 +28,10 @@
   "injective": "Injective Protocal",
   "vidulum": "Vidulum",
   "kichain": "KI Chain",
+  "genesisL1": "Genesis L1",
+  "microtick": "Microtick",
+  "odin": "ODIN",
+  "chihuahua": "CHIHUAHUA",
   
   "staking": "Staking",
   "governance": "Governance",
@@ -35,6 +39,7 @@
   "blocks": "Blocks",
   "blockchains": "Blockchains",
   "uptime": "Uptime",
+  "trade": "Trade",
 
   "gravity": "Gravity(WIP)",
   "pools": "Pools(WIP)",
@@ -49,6 +54,7 @@
   "proposal_content": "Content",
   "proposal_total_deposit": "Total Deposit",
   "voting_time": "Voting Time",
+  "upgrade_time": "Estimated Upgrade Time:",
 
   "btn_vote": "Vote",
   "btn_deposit": "Deposit",

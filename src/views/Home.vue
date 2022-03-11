@@ -105,7 +105,7 @@ import {
 import Ripple from 'vue-ripple-directive'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import store from '@/store/index'
-import { timeIn, toDay } from '@/libs/data'
+import { timeIn, toDay } from '@/libs/utils'
 import DarkToggler from '@/@core/layouts/components/app-navbar/components/DarkToggler.vue'
 import Locale from '@/@core/layouts/components/app-navbar/components/Locale.vue'
 import AppFooter from '@/@core/layouts/components/AppFooter.vue'
@@ -159,8 +159,10 @@ export default {
     fetch() {
       Object.keys(this.chains).forEach(k => {
         const chain = this.chains[k]
+        const index = localStorage.getItem(`${chain.chain_name}-api-index`) || 0
         if (chain.api) {
-          fetch(`${chain.api}/blocks/latest`).then(res => res.json()).then(b => {
+          const host = Array.isArray(chain.api) ? chain.api[index] : chain.api
+          fetch(`${host}/blocks/latest`).then(res => res.json()).then(b => {
           // console.log(b.block.header)
             const { header } = b.block
             this.$set(chain, 'height', header.height)

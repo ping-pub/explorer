@@ -63,7 +63,7 @@
 import {
   BCard, BCardTitle, VBTooltip,
 } from 'bootstrap-vue'
-import { formatTokenDenom } from '@/libs/data'
+import { formatTokenDenom } from '@/libs/utils'
 // import fetch from 'node-fetch'
 
 export default {

@@ -46,7 +46,7 @@ import { BCard, BTable } from 'bootstrap-vue'
 import { fromBase64 } from '@cosmjs/encoding'
 import { decodeTxRaw } from '@cosmjs/proto-signing'
 import Tx from '@/libs/data/tx'
-import { abbrMessage, tokenFormatter } from '@/libs/data'
+import { abbrMessage, tokenFormatter } from '@/libs/utils'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
 import ArrayFieldComponent from './ArrayFieldComponent.vue'
 

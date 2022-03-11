@@ -1,6 +1,7 @@
 <template>
   <div>
     <form-wizard
+      ref="wizard"
       color="#7367F0"
       :title="null"
       :subtitle="null"
@@ -131,9 +132,25 @@
                     v-model="name"
                     :state="errors.length > 0 ? false:null"
                     placeholder="Ping Nano X"
+                    :readonly="edit"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col
+              v-if="hdpath"
+              md="12"
+            >
+              <b-form-group
+                label="HD Path"
+                label-for="ir"
+              >
+                <b-form-input
+                  id="ir"
+                  :value="hdpath"
+                  readonly
+                />
               </b-form-group>
             </b-col>
             <b-col
@@ -189,14 +206,31 @@
                             variant="light-primary"
                             rounded=""
                           />
-                          {{ item.chain_name }}
+                          <span
+                            v-b-tooltip.hover.v-primary
+                            :title="`Coin Type: ${item.coin_type}`"
+                            :class="hdpath.startsWith(`m/44'/${item.coin_type}`)?'text-success':'text-danger'"
+                          > {{ item.chain_name }}</span>
                         </b-form-checkbox>
                       </b-col>
                     </b-row>
                   </div>
-                  <small class="text-danger">{{ errors[0] }}</small>
+                  <small class="text-success">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
+              <b-alert
+                show
+                variant="info"
+              >
+                <div class="alert-heading">
+                  IMPORTANT
+                </div>
+                <div class="alert-body">
+                  <div>
+                    If you don't have Ledger, Do not import those addresses in <b class="text-danger">RED</b>. Because these addresses are derived from different coin_type which is not as same as the official one
+                  </div>
+                </div>
+              </b-alert>
             </b-col>
           </b-row>
         </validation-observer>
@@ -212,7 +246,7 @@
             class="mb-50"
           />
           <h4 class="mb-0 ml-50">
-            {{ name }}
+            {{ name }} <small> {{ hdpath }}</small>
           </h4>
         </div>
 
@@ -237,7 +271,6 @@
         </b-row>
       </tab-content>
     </form-wizard>
-
   </div>
 </template>
 
@@ -248,6 +281,7 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 // import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import {
+  BAlert,
   BRow,
   BCol,
   BFormGroup,
@@ -258,14 +292,18 @@ import {
   BInputGroup,
   BInputGroupPrepend,
   BFormRadioGroup,
+  VBTooltip,
 } from 'bootstrap-vue'
 import { required } from '@validations'
 import store from '@/store'
-import { addressDecode, addressEnCode, getLedgerAddress } from '@/libs/data'
+import {
+  addressDecode, addressEnCode, getLedgerAddress, getLocalAccounts,
+} from '@/libs/utils'
 import { toHex } from '@cosmjs/encoding'
 
 export default {
   components: {
+    BAlert,
     ValidationProvider,
     ValidationObserver,
     FormWizard,
@@ -283,6 +321,9 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
   },
+  directives: {
+    'b-tooltip': VBTooltip,
+  },
   data() {
     return {
       debug: '',
@@ -295,6 +336,7 @@ export default {
       selected: [],
       accounts: null,
       exludes: [], // HD Path is NOT supported,
+      edit: false,
     }
   },
   computed: {
@@ -309,20 +351,45 @@ export default {
       if (this.accounts && this.accounts.address) {
         const { data } = addressDecode(this.accounts.address)
         return this.selected.map(x => {
-          const { logo, addr_prefix } = this.chains[x]
-          const addr = addressEnCode(addr_prefix, data)
-          return {
-            chain: x, addr, logo, hdpath: this.hdpath,
+          if (this.chains[x]) {
+            const { logo, addr_prefix } = this.chains[x]
+            const addr = addressEnCode(addr_prefix, data)
+            return {
+              chain: x, addr, logo, hdpath: this.hdpath,
+            }
           }
-        })
+          return null
+        }).filter(x => x != null)
       }
       return []
     },
   },
-  created() {
+  mounted() {
     const { selected } = store.state.chains
     if (selected && selected.chain_name && !this.exludes.includes(selected.chain_name)) {
       this.selected.push(selected.chain_name)
+    }
+    const name = new URLSearchParams(window.location.search).get('name')
+    const wallets = getLocalAccounts()
+    if (name && wallets && wallets[name]) {
+      const wallet = wallets[name]
+      this.device = wallet.device
+      this.name = wallet.name
+      this.edit = true
+      if (wallet.address) {
+        wallet.address.forEach(a => {
+          if (!this.selected.includes(a.chain)) {
+            this.selected.push(a.chain)
+          }
+        })
+        this.address = wallet.address[0].addr
+        this.hdpath = wallet.address[0].hdpath
+        if (this.localAddress()) {
+          this.$refs.wizard.nextTab()
+        }
+      }
+    } else {
+      this.hdpath = `m/44'/${selected.coin_type}/0'/0/0`
     }
   },
   methods: {
@@ -344,7 +411,8 @@ export default {
         this.debug = 'Please install keplr extension'
         return null
       }
-      const chainId = 'cosmoshub'
+      // const chainId = 'cosmoshub'
+      const chainId = await this.$http.getLatestBlock().then(ret => ret.block.header.chain_id)
       await window.keplr.enable(chainId)
       const offlineSigner = window.getOfflineSigner(chainId)
       return offlineSigner.getAccounts()
@@ -373,6 +441,9 @@ export default {
         address: this.addresses,
       }
       localStorage.setItem('accounts', JSON.stringify(accounts))
+      if (!this.$store.state.chains.defaultWallet) {
+        this.$store.commit('setDefaultWallet', this.name)
+      }
 
       this.$toast({
         component: ToastificationContent,
@@ -386,31 +457,34 @@ export default {
       this.$router.push('./accounts')
     },
     async validationFormDevice() {
-      let ok = false
-      switch (this.device) {
-        case 'keplr':
-          await this.cennectKeplr().then(accounts => {
-            if (accounts) {
+      let ok = String(this.name).length > 0
+
+      if (!ok) { // new import, otherwise it's edit mode.
+        switch (this.device) {
+          case 'keplr':
+            await this.cennectKeplr().then(accounts => {
+              if (accounts) {
               // eslint-disable-next-line prefer-destructuring
-              this.accounts = accounts[0]
-              ok = true
-            }
-          })
-          break
-        case 'ledger':
-        case 'ledger2':
-          await this.connect().then(accounts => {
-            if (accounts) {
+                this.accounts = accounts[0]
+                ok = true
+              }
+            })
+            break
+          case 'ledger':
+          case 'ledger2':
+            await this.connect().then(accounts => {
+              if (accounts) {
               // eslint-disable-next-line prefer-destructuring
-              this.accounts = accounts[0]
-              ok = true
-            }
-          }).catch(e => {
-            this.debug = e
-          })
-          break
-        default:
-          ok = this.localAddress()
+                this.accounts = accounts[0]
+                ok = true
+              }
+            }).catch(e => {
+              this.debug = e
+            })
+            break
+          default:
+            ok = this.localAddress()
+        }
       }
 
       return new Promise((resolve, reject) => {
@@ -438,5 +512,6 @@ export default {
 </script>
 
 <style lang="scss">
+  // @import '@core/assets/fonts/feather/iconfont.css';
   @import '@core/scss/vue/libs/vue-wizard.scss';
 </style>

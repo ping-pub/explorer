@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { percent } from '@/libs/data'
+import { percent } from '@/libs/utils'
 import { $themeColors } from '@themeConfig'
 
 import ChartjsComponentDoughnutChart from './ChartjsComponentDoughnutChart.vue'

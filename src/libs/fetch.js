@@ -7,7 +7,7 @@ import { toBase64 } from '@cosmjs/encoding'
 import {
   Proposal, ProposalTally, Proposer, StakingPool, Votes, Deposit,
   Validator, StakingParameters, Block, ValidatorDistribution, StakingDelegation, WrapStdTx, getUserCurrency,
-} from './data'
+} from './utils'
 import OsmosAPI from './osmos'
 
 function commonProcess(res) {
@@ -26,6 +26,13 @@ export function keybase(identity) {
 export default class ChainFetch {
   constructor() {
     this.osmosis = new OsmosAPI()
+    this.EndpointVersion = {
+      certik: 'v1alpha1',
+    }
+  }
+
+  getEndpointVersion() {
+    return this.EndpointVersion[this.config.chain_name] || 'v1beta1'
   }
 
   getSelectedConfig() {
@@ -141,6 +148,14 @@ export default class ChainFetch {
     })
   }
 
+  async getValidatorUnbondedList() {
+    return this.get('/cosmos/staking/v1beta1/validators?status=BOND_STATUS_UNBONDED').then(data => {
+      const result = commonProcess(data)
+      const vals = result.validators ? result.validators : result
+      return vals.map(i => new Validator().init(i))
+    })
+  }
+
   async getValidatorListByHeight(height) {
     return this.get(`/validatorsets/${height}`).then(data => commonProcess(data))
   }
@@ -225,7 +240,8 @@ export default class ChainFetch {
   }
 
   async getGovernanceList() {
-    return Promise.all([this.get('/gov/proposals'), this.get('/staking/pool')]).then(data => {
+    const url = this.config.chain_name === 'certik' ? '/shentu/gov/v1alpha1/proposals?pagination.limit=500' : '/cosmos/gov/v1beta1/proposals?pagination.limit=500'
+    return Promise.all([this.get(url), this.get('/staking/pool')]).then(data => {
       const pool = new StakingPool().init(commonProcess(data[1]))
       let proposals = commonProcess(data[0])
       if (Array.isArray(proposals.proposals)) {
@@ -243,24 +259,6 @@ export default class ChainFetch {
     })
   }
 
-  async get(url, config = null) {
-    if (!config) {
-      this.getSelectedConfig()
-    }
-    const ret = await fetch((config ? config.api : this.config.api) + url).then(response => response.json())
-    return ret
-  }
-
-  async getUrl(url) {
-    this.getSelectedConfig()
-    return fetch(url).then(res => res.json())
-  }
-
-  static fetch(host, url) {
-    const ret = fetch(host + url).then(response => response.json())
-    return ret
-  }
-
   async getAuthAccount(address, config = null) {
     return this.get('/auth/accounts/'.concat(address), config).then(data => {
       const result = commonProcess(data)
@@ -276,7 +274,7 @@ export default class ChainFetch {
     if (compareVersions(config ? config.sdk_version : this.config.sdk_version, '0.40') < 0) {
       return this.get(`/distribution/delegators/${address}/rewards`, config).then(data => commonProcess(data))
     }
-    return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/rewards`).then(data => commonProcess(data))
+    return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/rewards`, config).then(data => commonProcess(data))
   }
 
   async getStakingValidators(address) {
@@ -317,35 +315,44 @@ export default class ChainFetch {
     return this.get('/bank/balances/'.concat(address), config).then(data => commonProcess(data))
   }
 
+  async getAllIBCDenoms(config = null) {
+    const sdkVersion = config ? config.sdk_version : this.config.sdk_version
+    if (compareVersions(sdkVersion, '0.44.2') < 0) {
+      return this.get('/ibc/applications/transfer/v1beta1/denom_traces?pagination.limit=500', config).then(data => commonProcess(data))
+    }
+    return this.get('/ibc/apps/transfer/v1/denom_traces?pagination.limit=500', config).then(data => commonProcess(data))
+  }
+
   async getIBCDenomTrace(hash, config = null) {
     const h = hash.substring(hash.indexOf('/') + 1)
-    return this.get('/ibc/applications/transfer/v1beta1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
+    const sdkVersion = config ? config.sdk_version : this.config.sdk_version
+    if (compareVersions(sdkVersion, '0.44.2') < 0) {
+      return this.get('/ibc/applications/transfer/v1beta1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
+    }
+    return this.get('/ibc/apps/transfer/v1/denom_traces/'.concat(h), config).then(data => commonProcess(data))
   }
 
   async getIBCChannels(config = null, key = null) {
     if (key) {
-      return this.get('/ibc/core/channel/v1beta1/channels?pagination.key='.concat(key), config).then(data => commonProcess(data))
+      return this.get('/ibc/core/channel/v1/channels?pagination.key='.concat(key), config).then(data => commonProcess(data))
     }
-    return this.get('/ibc/core/channel/v1beta1/channels', config).then(data => commonProcess(data))
+    return this.get('/ibc/core/channel/v1/channels?pagination.limit=1000', config).then(data => commonProcess(data))
   }
 
   // eslint-disable-next-line camelcase
   async getIBCChannelClientState(channel_id, port_id, config = null) {
     // eslint-disable-next-line camelcase
-    return this.get(`/ibc/core/channel/v1beta1/channels/${channel_id}/ports/${port_id}/client_state`, config).then(data => commonProcess(data))
+    return this.get(`/ibc/core/channel/v1/channels/${channel_id}/ports/${port_id}/client_state`, config).then(data => commonProcess(data))
+  }
+
+  // eslint-disable-next-line camelcase
+  async getIBCChannel(channel_id, port_id, config = null) {
+    // eslint-disable-next-line camelcase
+    return this.get(`/ibc/core/channel/v1/channels/${channel_id}/ports/${port_id}`, config).then(data => commonProcess(data))
   }
 
   static async getBankBalance(baseurl, address) {
     return ChainFetch.fetch(baseurl, '/bank/balances/'.concat(address)).then(data => commonProcess(data))
-  }
-
-  static async getIBCDenomTrace(baseurl, hash) {
-    const h = hash.substring(hash.indexOf('/'))
-    return ChainFetch.fetch(baseurl, '/ibc/applications/transfer/v1beta1/denom_traces/'.concat(h)).then(data => commonProcess(data))
-  }
-
-  static async getIBCDenomTraceText(baseurl, hash) {
-    return ChainFetch.getIBCDenomTrace(baseurl, hash).then(res => res.denom_trace.base_denom)
   }
 
   async getGravityPools() {
@@ -355,8 +362,8 @@ export default class ChainFetch {
   async getMarketChart(days = 14, coin = null) {
     const conf = this.getSelectedConfig()
     const currency = getUserCurrency()
-    if (conf.coingecko && conf.coingecko.length > 0) {
-      return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin || conf.coingecko}/market_chart?vs_currency=${currency}&days=${days}`)
+    if (conf.assets[0] && conf.assets[0].coingecko_id) {
+      return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin || conf.assets[0].coingecko_id}/market_chart?vs_currency=${currency}&days=${days}`)
     }
     return null
   }
@@ -393,8 +400,10 @@ export default class ChainFetch {
     if (!config) {
       this.getSelectedConfig()
     }
+    const conf = config || this.config
+    const index = this.getApiIndex(config)
     // Default options are marked with *
-    const response = await fetch((config ? config.api : this.config.api) + url, {
+    const response = await fetch((Array.isArray(conf.api) ? conf.api[index] : conf.api) + url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       // mode: 'cors', // no-cors, *cors, same-origin
       // credentials: 'same-origin', // redirect: 'follow', // manual, *follow, error
@@ -408,6 +417,33 @@ export default class ChainFetch {
     })
     // const response = axios.post((config ? config.api : this.config.api) + url, data)
     return response.json() // parses JSON response into native JavaScript objects
+  }
+
+  async get(url, config = null) {
+    if (!config) {
+      this.getSelectedConfig()
+    }
+    const conf = config || this.config
+    const finalurl = (Array.isArray(conf.api) ? conf.api[this.getApiIndex(config)] : conf.api) + url
+    // finalurl = finalurl.replaceAll('v1beta1', this.getEndpointVersion())
+    const ret = await fetch(finalurl).then(response => response.json())
+    return ret
+  }
+
+  getApiIndex(config = null) {
+    const conf = config || this.config
+    const index = Number(localStorage.getItem(`${conf.chain_name}-api-index`) || 0)
+    return index < conf.api.length ? index : 0
+  }
+
+  async getUrl(url) {
+    this.getSelectedConfig()
+    return fetch(url).then(res => res.json())
+  }
+
+  static fetch(host, url) {
+    const ret = fetch((Array.isArray(host) ? host[0] : host) + url).then(response => response.json())
+    return ret
   }
 }
 

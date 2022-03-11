@@ -9,10 +9,14 @@
         :show="syncing"
       >
         <div class="alert-body">
-          <span>No new block is produced since  <strong>{{ latestTime }}</strong> </span>
+          <span>No new blocks have been produced since  <strong>{{ latestTime }}</strong> </span>
         </div>
       </b-alert>
       <b-row>
+        <span
+          v-if="uptime.length===0"
+          class="text-danger"
+        > Your node is out of active validator set</span>
         <b-col
           v-for="(x,index) in uptime"
           :key="index"
@@ -55,7 +59,7 @@ import {
 
 import {
   getLocalChains, timeIn, toDay,
-} from '@/libs/data'
+} from '@/libs/utils'
 
 export default {
   name: 'Blocks',

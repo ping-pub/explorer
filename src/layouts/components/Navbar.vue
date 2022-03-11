@@ -48,10 +48,35 @@
             /></b-link>
         </b-media-aside>
         <b-media-body class="my-auto">
-          <h6 class="mb-0 text-uppercase">
-            {{ selected_chain.chain_name }}
+          <h6 class="mb-0 ">
+            <span class="text-uppercase">{{ chainid || selected_chain.chain_name }}</span>
           </h6>
-          <small v-b-tooltip.hover.bottom="'Data Provider'">{{ selected_chain.api }} ({{ selected_chain.sdk_version || '-' }})</small>
+          <small id="data-provider">
+            {{ currentApi }} ({{ selected_chain.sdk_version || '-' }})
+            <b-dropdown
+              class="ml-0"
+              variant="flat-primary"
+              no-caret
+              toggle-class="p-0"
+              right
+              sm
+            >
+              <template #button-content>
+                <feather-icon
+                  icon="RepeatIcon"
+                  size="12"
+                  class="cursor-pointer"
+                />
+              </template>
+              <b-dropdown-item
+                v-for="(item, i) in apiOptions"
+                :key="item"
+                @click="change(i)"
+              >
+                {{ item }}
+              </b-dropdown-item>
+            </b-dropdown>
+          </small>
         </b-media-body>
       </b-media>
     </div>
@@ -62,16 +87,7 @@
       <dark-Toggler class="d-none d-lg-block" />
       <search-bar />
       <locale />
-      <b-button
-        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-        variant="primary"
-        class="btn-icon"
-        :to="{ name: 'accounts' }"
-      >
-        <feather-icon icon="KeyIcon" />
-        <span class="align-middle ml-25">Wallet</span>
-      </b-button>
-      <!-- <b-dropdown
+      <b-dropdown
         class="ml-1"
         variant="link"
         no-caret
@@ -85,11 +101,15 @@
             variant="primary"
             class="btn-icon"
           >
-            <feather-icon icon="UserIcon" />
+            <feather-icon icon="KeyIcon" />
+            {{ walletName }}
           </b-button>
         </template>
 
-        <b-dropdown-item :to="{ name: 'portfolio' }">
+        <b-dropdown-item
+          :to="{ name: 'portfolio' }"
+          class="d-none"
+        >
           <feather-icon
             icon="PieChartIcon"
             size="16"
@@ -105,22 +125,29 @@
           <span class="align-middle ml-50">Accounts</span>
         </b-dropdown-item>
 
-        <b-dropdown-item :to="{ name: 'addresses' }">
+        <b-dropdown-item :to="{ name: 'delegations' }">
           <feather-icon
             icon="BookOpenIcon"
             size="16"
           />
-          <span class="align-middle ml-50">Address Book</span>
+          <span class="align-middle ml-50">My Delegations</span>
         </b-dropdown-item>
 
-        <b-dropdown-item :to="{ name: 'setting' }">
+        <b-dropdown-item :to="`/${selected_chain.chain_name}/uptime/my`">
           <feather-icon
-            icon="SettingsIcon"
+            icon="AirplayIcon"
             size="16"
           />
-          <span class="align-middle ml-50">Setting</span>
+          <span class="align-middle ml-50">My Validators</span>
         </b-dropdown-item>
-      </b-dropdown> -->
+        <b-dropdown-item :to="`/wallet/transactions`">
+          <feather-icon
+            icon="LayersIcon"
+            size="16"
+          />
+          <span class="align-middle ml-50">My Transactions</span>
+        </b-dropdown-item>
+      </b-dropdown>
     </b-navbar-nav>
   </div>
 </template>
@@ -128,14 +155,14 @@
 <script>
 import {
   BLink, BNavbarNav, BMedia, BMediaAside, BAvatar, BMediaBody, VBTooltip, BButton,
+  BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import DarkToggler from '@core/layouts/components/app-navbar/components/DarkToggler.vue'
 import Locale from '@core/layouts/components/app-navbar/components/Locale.vue'
 import SearchBar from '@core/layouts/components/app-navbar/components/SearchBar.vue'
 // import CartDropdown from '@core/layouts/components/app-navbar/components/CartDropdown.vue'
-import store from '@/store'
-import { timeIn, toDay } from '@/libs/data'
+import { getLocalAccounts, timeIn, toDay } from '@/libs/utils'
 // import UserDropdown from '@core/layouts/components/app-navbar/components/UserDropdown.vue'
 
 export default {
@@ -147,6 +174,8 @@ export default {
     BMediaAside,
     BMediaBody,
     BButton,
+    BDropdown,
+    BDropdownItem,
 
     // Navbar Components
     DarkToggler,
@@ -169,25 +198,56 @@ export default {
     return {
       variant: 'success',
       tips: 'Synced',
+      index: 0,
+      chainid: '',
     }
   },
   computed: {
+    walletName() {
+      const key = this.$store?.state?.chains?.defaultWallet
+      return key || 'Wallet'
+    },
     selected_chain() {
       this.block()
-      return store.state.chains.selected
+      return this.$store.state.chains.selected
     },
     chainVariant() {
       return this.variant
     },
+    currentApi() {
+      return this.index + 1 > this.apiOptions.length ? this.apiOptions[0] : this.apiOptions[this.index]
+    },
+    apiOptions() {
+      const conf = this.$store.state.chains.selected
+      if (Array.isArray(conf.api)) {
+        return conf.api
+      }
+      return [conf.api]
+    },
+  },
+  mounted() {
+    const accounts = Object.keys(getLocalAccounts() || {})
+    if (!this.$store.state.chains.defaultWallet && accounts.length > 0) {
+      this.$store.commit('setDefaultWallet', accounts[0])
+    }
   },
   methods: {
+    change(v) {
+      this.index = v
+      const conf = this.$store.state.chains.selected
+      localStorage.setItem(`${conf.chain_name}-api-index`, v)
+    },
     block() {
-      store.commit('setHeight', 0)
+      const conf = this.$store.state.chains.selected
+      const s = localStorage.getItem(`${conf.chain_name}-api-index`) || 0
+      this.index = Number(s)
+      this.$store.commit('setHeight', 0)
       this.$http.getLatestBlock().then(block => {
-        store.commit('setHeight', Number(block.block.header.height))
+        this.chainid = block.block.header.chain_id
+        this.$store.commit('setHeight', Number(block.block.header.height))
         if (timeIn(block.block.header.time, 1, 'm')) {
           this.variant = 'danger'
-          this.tips = `Halted ${toDay(block.block.header.time, 'from')}, Height: ${store.state.chains.height} `
+          this.tips = `Halted ${toDay(block.block.header.time, 'from')}, Height: ${this.$store.state.chains.height} `
         } else {
           this.variant = 'success'
           this.tips = 'Synced'

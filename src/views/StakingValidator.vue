@@ -279,7 +279,7 @@ import {
 
 import {
   percent, formatToken, StakingParameters, Validator, operatorAddressToAccount, consensusPubkeyToHexAddress, toDay, abbrMessage, abbrAddress,
-} from '@/libs/data'
+} from '@/libs/utils'
 import { keybase } from '@/libs/fetch'
 import StakingAddressComponent from './StakingAddressComponent.vue'
 import StakingCommissionComponent from './StakingCommissionComponent.vue'

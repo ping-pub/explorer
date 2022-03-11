@@ -5,7 +5,7 @@
       :show="syncing"
     >
       <div class="alert-body">
-        <span>No new block is produced since  <strong>{{ latestTime }}</strong> </span>
+        <span>No new blocks have been produced since  <strong>{{ latestTime }}</strong> </span>
       </div>
     </b-alert>
     <b-row>
@@ -53,7 +53,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <summary-parmeters-component :data="slasing" />
+        <summary-parmeters-component :data="slashing" />
       </b-col>
     </b-row>
   </div>
@@ -65,7 +65,7 @@ import {
 } from 'bootstrap-vue'
 import {
   formatNumber, formatTokenAmount, getUserCurrency, isToken, percent, timeIn, toDay, toDuration, tokenFormatter,
-} from '@/libs/data'
+} from '@/libs/utils'
 
 import SummaryParmetersComponent from './SummaryParmetersComponent.vue'
 import SummaryAssetsComponent from './SummaryAssetsComponent.vue'
@@ -104,8 +104,8 @@ export default {
         title: 'Distribution Parameters',
         items: [],
       },
-      slasing: {
-        title: 'Slasing Parameters',
+      slashing: {
+        title: 'Slashing Parameters',
         items: null,
       },
       mint: {
@@ -164,13 +164,13 @@ export default {
       Promise.all([this.$http.getStakingPool(), this.$http.getBankTotal(res.bond_denom)])
         .then(pool => {
           const bondedAndSupply = this.chain.items.findIndex(x => x.subtitle === 'bonded_and_supply')
-          this.$set(this.chain.items[bondedAndSupply], 'title', `${formatNumber(formatTokenAmount(pool[0].bondedToken, 2, res.bond_denom), true, 0)}/${formatNumber(formatTokenAmount(pool[1].amount, 2, res.bond_denom), true, 0)}`)
+          this.$set(this.chain.items[bondedAndSupply], 'title', `${formatNumber(formatTokenAmount(pool[0].bondedToken, 2, res.bond_denom, false), true, 0)}/${formatNumber(formatTokenAmount(pool[1].amount, 2, res.bond_denom, false), true, 0)}`)
           const bondedRatio = this.chain.items.findIndex(x => x.subtitle === 'bonded_ratio')
           this.$set(this.chain.items[bondedRatio], 'title', `${percent(pool[0].bondedToken / pool[1].amount)}%`)
         })
     })
     this.$http.getSlashingParameters().then(res => {
-      this.slasing = this.normalize(res, 'Slashing Parameters')
+      this.slashing = this.normalize(res, 'Slashing Parameters')
     })
 
     const conf = this.$http.getSelectedConfig()

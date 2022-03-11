@@ -19,7 +19,7 @@
       >
         <template #overlay>
           <div class="text-center">
-            <b-icon
+            <b-avatar
               icon="stopwatch"
               font-scale="3"
               animation="cylon"
@@ -178,7 +178,7 @@
                     name="advance"
                     value="true"
                   >
-                    <small>Advance</small>
+                    <small>Advanced</small>
                   </b-form-checkbox>
                 </b-form-group>
               </b-col>
@@ -224,47 +224,7 @@
 
             <b-row>
               <b-col>
-                <b-form-group
-                  label="Wallet"
-                  label-for="wallet"
-                >
-                  <validation-provider
-                    v-slot="{ errors }"
-                    rules="required"
-                    name="wallet"
-                  >
-                    <b-form-radio-group
-                      v-model="wallet"
-                      stacked
-                      class="demo-inline-spacing"
-                    >
-                      <b-form-radio
-                        v-model="wallet"
-                        name="wallet"
-                        value="keplr"
-                        class="d-none d-md-block"
-                      >
-                        Keplr
-                      </b-form-radio>
-                      <b-form-radio
-                        v-model="wallet"
-                        name="wallet"
-                        value="ledgerUSB"
-                      >
-                        <small>Ledger(USB)</small>
-                      </b-form-radio>
-                      <b-form-radio
-                        v-model="wallet"
-                        name="wallet"
-                        value="ledgerBle"
-                        class="mr-0"
-                      >
-                        <small>Ledger(Bluetooth)</small>
-                      </b-form-radio>
-                    </b-form-radio-group>
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-form-group>
+                <wallet-input-vue v-model="wallet" />
               </b-col>
             </b-row>
           </b-form>
@@ -277,21 +237,24 @@
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
-  BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
-  BForm, BFormRadioGroup, BFormRadio, BButton, BInputGroupAppend, BFormCheckbox, BOverlay,
+  BAvatar, BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
+  BForm, BButton, BInputGroupAppend, BFormCheckbox, BOverlay,
 } from 'bootstrap-vue'
+import Ripple from 'vue-ripple-directive'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  abbrAddress, formatToken, formatTokenDenom, getLocalAccounts, getUnitAmount, setLocalTxHistory, sign, timeIn,
-} from '@/libs/data'
+  abbrAddress, extractAccountNumberAndSequence, formatToken, formatTokenDenom, getLocalAccounts, getUnitAmount, setLocalTxHistory, sign, timeIn,
+} from '@/libs/utils'
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import WalletInputVue from './components/WalletInput.vue'
 
 export default {
   name: 'DelegateDialogue',
   components: {
+    BAvatar,
     BModal,
     BRow,
     BCol,
@@ -301,18 +264,20 @@ export default {
     BFormGroup,
     BFormSelect,
     BFormSelectOption,
-    BFormRadioGroup,
-    BFormRadio,
     BFormCheckbox,
     vSelect,
     BButton,
     BInputGroupAppend,
     BOverlay,
+    WalletInputVue,
 
     ValidationProvider,
     ValidationObserver,
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
+  },
+  directives: {
+    Ripple,
   },
   props: {
     validatorAddress: {
@@ -329,6 +294,7 @@ export default {
       selectedAddress: this.address,
       availableAddress: [],
       validators: [],
+      unbundValidators: [],
       selectedValidator: null,
       token: '',
       amount: null,
@@ -338,7 +304,7 @@ export default {
       delegations: [],
       IBCDenom: {},
       memo: '',
-      fee: '800',
+      fee: '900',
       feeDenom: '',
       wallet: 'ledgerUSB',
       error: null,
@@ -362,7 +328,9 @@ export default {
   },
   computed: {
     valOptions() {
-      return this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      const vals = this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      const unbunded = this.unbundValidators.map(x => ({ value: x.operator_address, label: `* ${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      return vals.concat(unbunded)
     },
     feeDenoms() {
       if (!this.balance) return []
@@ -403,15 +371,12 @@ export default {
           }
         })
         this.$http.getAuthAccount(this.selectedAddress).then(ret => {
-          if (ret.value.base_vesting_account) {
-            this.accountNumber = ret.value.base_vesting_account.base_account.account_number
-            this.sequence = ret.value.base_vesting_account.base_account.sequence
-            if (!this.sequence) this.sequence = 0
-          } else {
-            this.accountNumber = ret.value.account_number
-            this.sequence = ret.value.sequence ? ret.value.sequence : 0
-          }
+          const account = extractAccountNumberAndSequence(ret)
+          this.accountNumber = account.accountNumber
+          this.sequence = account.sequence
         })
+        this.fee = this.$store.state.chains.selected?.min_tx_fee || '1000'
+        this.feeDenom = this.$store.state.chains.selected?.assets[0]?.base || ''
       }
       // this.$http.getStakingDelegations(this.selectedAddress).then(res => {
       //   this.delegations = res.delegation_responses
@@ -438,6 +403,9 @@ export default {
       // if (this.account && this.account.length > 0) this.selectedAddress
       this.$http.getValidatorList().then(v => {
         this.validators = v
+      })
+      this.$http.getValidatorUnbondedList().then(v => {
+        this.unbundValidators = v
       })
       this.onChange()
     },
@@ -511,7 +479,12 @@ export default {
         signerData,
       ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes).then(res => {
-          setLocalTxHistory({ op: 'delegate', hash: res.tx_response.txhash, time: new Date() })
+          setLocalTxHistory({
+            chain: this.$store.state.chains.selected,
+            op: 'delegate',
+            hash: res.tx_response.txhash,
+            time: new Date(),
+          })
           this.$bvModal.hide('delegate-window')
           this.$toast({
             component: ToastificationContent,
@@ -527,8 +500,6 @@ export default {
       }).catch(e => {
         this.error = e
       })
-      // Send tokens
-      // return client.sendTokens(this.address, this.recipient, sendCoins, this.memo)
       return ''
     },
   },

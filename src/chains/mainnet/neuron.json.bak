@@ -1,7 +1,0 @@
-{
-    "chain_name": "neuron",
-    "api": "https://neuron-1.api.ping.pub",
-    "sdk_version": "0.42.0",
-    "addr_prefix": "game",
-    "logo": "https://dl.airtable.com/.attachments/47116e2e2234b2dd979d7ed9f9df22c9/0c507d61/cosmos-game.png"
-}

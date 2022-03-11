@@ -1,4 +1,11 @@
-import { isTestnet } from '@/libs/data/data'
+/*
+ * @Description: file
+ * @Autor: dingyiming
+ * @Date: 2021-11-20 15:26:27
+ * @LastEditors: dingyiming
+ * @LastEditTime: 2021-11-20 15:33:07
+ */
+import { isTestnet } from '@/libs/utils'
 
 let chains = {}
 
@@ -26,6 +33,7 @@ export default {
     height: 0,
     ibcChannels: {},
     quotes: {},
+    defaultWallet: localStorage.getItem('default-wallet'),
   },
   getters: {
     getchains: state => state.chains,
@@ -49,6 +57,12 @@ export default {
     },
     setQuotes(state, quotes) {
       state.quotes = quotes
+    },
+    setDefaultWallet(state, defaultWallet) {
+      if (defaultWallet && defaultWallet.length > 0) {
+        localStorage.setItem('default-wallet', defaultWallet)
+        state.chains.defaultWallet = defaultWallet
+      }
     },
   },
   actions: {

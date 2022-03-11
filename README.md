@@ -1,71 +1,92 @@
-# Ping Explorer
+<div align="center">
 
-Look is a light explorer for Cosmos-based Blockchains.  https://ping.pub .
+![Ping Wallet](./public/logo.svg)
 
-## What is the difference between Look and other explorers? 
+<h1>Ping Explorer</h1>
 
-Look is designed to explore blockchain data as real as possible, therefore there is no cache, no analysis. Look does not cache/save blockchain data on its server. Look only fetch data from Cosmos full node via LCD/RPC endpoints. We call it "Light Explorer".
+**Ping explorer is not only an explorer but also a wallet and more ... 🛠**
 
-## Do you want Look to explore your blockchain?
+[![version](https://img.shields.io/github/tag/ping-pub/explorer.svg)](https://github.com/ping-pub/explorer/releases/latest)
+[![GitHub](https://img.shields.io/github/license/ping-pub/explorer.svg)](https://github.com/ping-pub/explorer/blob/master/LICENSE)
+[![Ping Deploy](https://github.com/ping-pub/explorer/actions/workflows/mainnet-deploy.yaml/badge.svg)](https://github.com/ping-pub/explorer/actions/workflows/mainnet-deploy.yaml)
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/bukotsunikki.svg?style=social&label=Follow%20%40ping_pub)](https://twitter.com/ping_pub)
+[![https://discord.gg/CmjYVSr6GW](https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat)](https://discord.gg/CmjYVSr6GW)
 
-If you want Look to explore your blockchain, pull a request [here](https://github.com/liangping/look/issues), We will explore your chains as soon as possibe. And the most important thing is that Look is free for all public cosmos-based blockchains.
 
-## Why LOOK explorer use official/trusted third party public LCD/rpc server? 
+</div>
 
-We have two considerations: 1, Trust, In decentralize system, everything controled by one single team/orgnization could be risks. So we decided to co-build LOOK explorer with the community. 2. Look explorer will explose handreds and thousands cosmos-based blockchains in the future, it's impossible for our team to run validators or fullnodes for all of those chains.
+Ping Explorer is a light explorer for Cosmos-based Blockchains.  https://ping.pub .
+
+## What is the difference between Ping explorer and other explorers? 
+
+Ping Explorer is designed to explore blockchain data as real as possible, therefore there is no cache, no pre-processing. Ping Explorer does not cache/save blockchain data on its server. Ping Explorer only fetch data from Cosmos full node via LCD/RPC endpoints. We call it "Light Explorer".
+
+## Do you want to list your blockchain on ping.pub?
+
+Pull your request [here](./src/chains), We will add your chains as soon as possible. It is **FREE** (You must have 10+ independent validators on your chain).
+
+## Why Ping explorer use official/trusted third party public LCD/rpc server? 
+
+We have two considerations: 1, Trust, In decentralize system, everything controlled by one single team/organization could be risks. So we decided to co-build with the community. 2. We will list hundreds cosmos-based blockchains in the future, it's impossible for our team to run validators or fullnodes for all of those chains.
+
+# Installation:
+
+1. Running with yarn
+```
+yarn && yarn serve
+```
+
+2. Building for web servers, like nginx, apache
+```
+yarn && yarn build
+cp -r ./dist/* <ROOT_OF_WEB_SERVER>
+```
+
+# Enable LCD for Ping.pub
+
+1. Set `enable = true` in `./config/app.toml`
+```
+###############################################################################
+###                           API Configuration                             ###
+###############################################################################
+
+[api]
+
+# Enable defines if the API server should be enabled.
+enable = true
+
+# Swagger defines if swagger documentation should automatically be registered.
+swagger = false
+
+# Address defines the API server to listen on.
+address = "tcp://0.0.0.0:1317"
+
+# MaxOpenConnections defines the number of maximum open connections.
+max-open-connections = 1000
+```
+
+2. add proxy server and enable CORS. NOTE: You must enable https as well.
+
+```
+server {
+    server_name juno.api.ping.pub;
+    listen 443;
+    location / {
+        add_header Access-Control-Allow-Origin *;
+        add_header Access-Control-Max-Age 3600;
+        add_header Access-Control-Expose-Headers Content-Length;
+
+        proxy_pass http://<HOST>:1317;
+
+    }
+}
+```
+3. config your blockchain in [./src/chains]()
+
+
+
 
 ## Contributors
 
 Developers: @liangping @dingyiming
 
-Data providers: [full list](https://github.com/ping-pub/look/blob/master/hosts.json)
-
-* irisnet.org, 
-* nylira.net, 
-* kava.io
-
-*If you don't want to provide data services for LOOK exporer, let us know.*
-
-## Blockchains on LOOK explorer:
-* https://ping.pub/cosmos
-* https://ping.pub/iris
-* https://ping.pub/akash
-* https://ping.pub/kava
-
-# LOOK 浏览器
-
-Look是一个轻浏览器，免费为所有的基于Cosmos-SDK开发的区块链提供浏览服务
-
-## Look 和其他区块链浏览器有什么不同？
-
-Look的设计理念是尽可能的保持数据的真实性，所以，他不会在服务器端缓存或者保存任何数据，也不会增加任何分析处理。它仅仅通过LCD/RPC来获取他所需要的所有数据。因此我们叫它“轻浏览器”。
-
-## 你希望Look来浏览你的区块链吗？
-
-如果你需要Look来浏览你的区块链，请在[这里](https://github.com/liangping/look/issues) 提交申请，我们会尽快开通。而且是免费的。
-
-## 为什么LOOK要使用官方或者可信赖的第三方的LCD/RPC服务器? 
-
-我们主要是基于以下两个考虑：1，可信，在去中心化的系统里，任何有一个由单个团队或者实体控制的事情都是有风险的，所以我们选择和社区一起来共建LOOK浏览器。2，LOOK浏览器计划在未来支持成百上千条区块链，因此对我们团队来说，不可能为所有这些链去提供一个验证人节点或者全节点。
-
-## 项目贡献者
-
-开发者: @liangping @dingyiming
-
-数据服务方: [列表](https://github.com/ping-pub/look/blob/master/hosts.json)
-
-* irisnet.org, 
-* nylira.net, 
-* 01node.com, 
-* kava.io
-
-*如果你觉得我们滥用了你的服务器资源，请告知我们。*
-
-## LOOK explorer 上的区块链:
-* https://ping.pub/cosmos
-* https://ping.pub/iris
-* https://ping.pub/akash
-* https://ping.pub/kava
-
-# Contact Us
-Email：18786721#qq.com

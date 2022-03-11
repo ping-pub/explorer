@@ -1,5 +1,5 @@
 import store from '@/store'
-import { isTestnet } from '../../libs/data/data'
+import { isTestnet } from '../../libs/utils'
 
 const modules = [
   {
@@ -34,19 +34,14 @@ const modules = [
     route: 'gravity',
   },
   {
-    scope: 'osm-osis',
-    title: 'pools',
-    route: 'osmosis-pool',
+    scope: 'osmosis',
+    title: 'trade',
+    route: 'osmosis-trade',
   },
 ]
 
 function processMenu() {
   const chainMenus = [
-    // {
-    //   title: 'Home',
-    //   route: 'home',
-    //   icon: 'HomeIcon',
-    // },
     {
       header: 'blockchains',
     },

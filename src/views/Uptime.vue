@@ -6,7 +6,7 @@
         :show="syncing"
       >
         <div class="alert-body">
-          <span>No new block is produced since  <strong>{{ latestTime }}</strong> </span>
+          <span>No new blocks have been produced since  <strong>{{ latestTime }}</strong> </span>
         </div>
       </b-alert>
       <b-card
@@ -17,7 +17,7 @@
           to="./uptime/my"
           variant="primary"
         >
-          Browse favourate only
+          Browse favorite only
         </b-button>
         <b-form-input
           v-model="query"
@@ -67,7 +67,7 @@ import {
 
 import {
   consensusPubkeyToHexAddress, getCachedValidators, timeIn, toDay,
-} from '@/libs/data'
+} from '@/libs/utils'
 
 export default {
   components: {
@@ -111,11 +111,10 @@ export default {
 
     if (cached) {
       this.validators = cached
-    } else {
-      this.$http.getValidatorList().then(res => {
-        this.validators = res
-      })
     }
+    this.$http.getValidatorList().then(res => {
+      this.validators = res
+    })
     this.initBlocks()
   },
   beforeDestroy() {

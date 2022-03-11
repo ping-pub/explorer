@@ -1,0 +1,16 @@
+{
+    "chain_name": "rizon",
+    "api": ["https://rizon.api.ping.pub"],
+    "sdk_version": "v0.42.9",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "assets": [{
+        "base": "uatolo",
+        "symbol": "ATOLO",
+        "exponent": "6",
+        "coingecko_id": "rizon", 
+        "logo": "https://ping.pub/logos/rizon.svg"
+    }],
+    "addr_prefix": "rizon",
+    "logo": "https://ping.pub/logos/rizon.svg"
+}

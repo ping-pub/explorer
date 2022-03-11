@@ -5,10 +5,10 @@
       centered
       size="md"
       title="IBC Transfer Tokens"
-      ok-title="Send"
+      :ok-title="actionName"
       hide-header-close
       scrollable
-      :ok-disabled="!address"
+      :ok-disabled="!address || channels.length === 0"
       @hidden="resetModal"
       @ok="handleOk"
       @show="loadBalance"
@@ -18,8 +18,12 @@
     >
       <template #overlay>
         <div class="text-center">
+          <b-spinner
+            type="grow"
+            variant="danger"
+          />
           <p>
-            IBC Module is not enabled.
+            This feature is only for experts
           </p>
         </div>
       </template>
@@ -114,7 +118,7 @@
           <b-row>
             <b-col>
               <b-form-group
-                label="Destination"
+                :label="`Destination: ${targetChainId}`"
                 label-for="destination"
               >
                 <validation-provider
@@ -127,6 +131,7 @@
                     name="destination"
                     :options="destinationOptions"
                     placeholder="Select a channel"
+                    @input="onChannelChange()"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -190,7 +195,7 @@
                   name="advance"
                   value="true"
                 >
-                  <small>Advance</small>
+                  <small>Advanced</small>
                 </b-form-checkbox>
               </b-form-group>
             </b-col>
@@ -236,47 +241,7 @@
 
           <b-row>
             <b-col>
-              <b-form-group
-                label="Wallet"
-                label-for="wallet"
-              >
-                <validation-provider
-                  v-slot="{ errors }"
-                  rules="required"
-                  name="wallet"
-                >
-                  <b-form-radio-group
-                    v-model="wallet"
-                    stacked
-                    class="demo-inline-spacing"
-                  >
-                    <b-form-radio
-                      v-model="wallet"
-                      name="wallet"
-                      value="keplr"
-                      class="d-none d-md-block"
-                    >
-                      Keplr
-                    </b-form-radio>
-                    <b-form-radio
-                      v-model="wallet"
-                      name="wallet"
-                      value="ledgerUSB"
-                    >
-                      <small>Ledger(USB)</small>
-                    </b-form-radio>
-                    <b-form-radio
-                      v-model="wallet"
-                      name="wallet"
-                      value="ledgerBle"
-                      class="mr-0"
-                    >
-                      <small>Ledger(Bluetooth)</small>
-                    </b-form-radio>
-                  </b-form-radio-group>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
+              <wallet-input-vue v-model="wallet" />
             </b-col>
           </b-row>
         </b-form>
@@ -290,18 +255,22 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
   BModal, BRow, BCol, BInputGroup, BInputGroupAppend, BFormInput, BAvatar, BFormGroup, BFormSelect, BFormSelectOption,
-  BForm, BFormRadioGroup, BFormRadio, BInputGroupPrepend, BFormCheckbox, BOverlay,
+  BForm, BInputGroupPrepend, BFormCheckbox, BOverlay, BSpinner,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
+  extractAccountNumberAndSequence,
   formatToken, formatTokenDenom, getLocalAccounts, getLocalChains, getUnitAmount, setLocalTxHistory, sign, timeIn,
-} from '@/libs/data'
-import { Cosmos } from '@cosmostation/cosmosjs'
+} from '@/libs/utils'
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { coin } from '@cosmjs/amino'
+import dayjs from 'dayjs'
+import { toHex } from '@cosmjs/encoding'
+import { sha256 } from '@cosmjs/crypto'
+import WalletInputVue from './components/WalletInput.vue'
 
 export default {
   name: 'TransforDialogue',
@@ -318,14 +287,15 @@ export default {
     BFormGroup,
     BFormSelect,
     BFormSelectOption,
-    BFormRadioGroup,
-    BFormRadio,
     BFormCheckbox,
+    BSpinner,
     vSelect,
     BOverlay,
 
     ValidationProvider,
     ValidationObserver,
+
+    WalletInputVue,
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
   },
@@ -338,6 +308,7 @@ export default {
   data() {
     return {
       chainId: '',
+      targetChainId: '',
       selectedChain: '',
       balance: [],
       token: '',
@@ -378,11 +349,17 @@ export default {
     destinationOptions() {
       if (!this.token && this.token === '') return []
       const options = this.channels.map(x => ({ port_id: x.port_id, channel_id: x.channel_id, label: `${x.chain_id ? x.chain_id : ''} ${x.port_id}/${x.channel_id}` }))
-      const query = this.paths[this.token]
-      return query && String(this.token).startsWith('ibc/') ? options.filter(x => x.channel_id === query.channel_id) : options
+      if (this.token.startsWith('ibc/')) {
+        const query = this.paths[this.token]
+        return query ? options.filter(x => x.channel_id === query.channel_id) : options
+      }
+      return options
     },
     placeholder() {
       return 'Input a destination address'
+    },
+    actionName() {
+      return this.token.startsWith('ibc') ? 'Withdraw' : 'Deposit'
     },
   },
   created() {
@@ -390,8 +367,10 @@ export default {
   },
   methods: {
     tokenChange() {
-      this.destination = null
+      // eslint-disable-next-line prefer-destructuring
+      this.destination = this.destinationOptions[0]
       this.recipient = null
+      this.onChannelChange()
     },
     printDenom() {
       return formatTokenDenom(this.IBCDenom[this.token] || this.token)
@@ -413,30 +392,31 @@ export default {
     },
     loadBalance() {
       this.destination = null
+      this.channels = []
       this.token = ''
+      this.targetChainId = ''
       this.account = this.computeAccount()
       if (this.account && this.account.length > 0) this.address = this.account[0].addr
       if (this.address) {
+        this.$http.getAllIBCDenoms(this.selectedChain).then(x => {
+          x.denom_traces.forEach(trace => {
+            const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
+            const ibcDenom = `ibc/${hash.toUpperCase()}`
+            // add base_denom to cache
+            this.$set(this.IBCDenom, ibcDenom, trace.base_denom)
+            // store channel/part for ibc denoms
+            const path = trace.path.split('/')
+            if (path.length >= 2) {
+              this.paths[ibcDenom] = {
+                channel_id: path[path.length - 1],
+                port_id: path[path.length - 2],
+              }
+            }
+          })
+        })
         this.$http.getBankBalances(this.address, this.selectedChain).then(res => {
           if (res && res.length > 0) {
             this.balance = res.reverse()
-            // this.token = this.balance[0].denom
-            this.feeDenom = this.balance.find(x => !x.denom.startsWith('ibc')).denom
-            this.balance.filter(i => i.denom.startsWith('ibc')).forEach(x => {
-              if (!this.IBCDenom[x.denom]) {
-                this.$http.getIBCDenomTrace(x.denom, this.selectedChain).then(denom => {
-                  this.IBCDenom[x.denom] = denom.denom_trace.base_denom
-                  // console.log(denom.denom_trace)
-                  const path = denom.denom_trace.path.split('/')
-                  if (path.length >= 2) {
-                    this.paths[x.denom] = {
-                      channel_id: path[path.length - 1],
-                      port_id: path[path.length - 2],
-                    }
-                  }
-                })
-              }
-            })
           }
         })
         this.$http.getLatestBlock(this.selectedChain).then(ret => {
@@ -449,31 +429,17 @@ export default {
           }
         })
         this.$http.getAuthAccount(this.address, this.selectedChain).then(ret => {
-          if (ret.value.base_vesting_account) {
-            this.accountNumber = ret.value.base_vesting_account.base_account.account_number
-            this.sequence = ret.value.base_vesting_account.base_account.sequence
-            if (!this.sequence) this.sequence = 0
-          } else {
-            this.accountNumber = ret.value.account_number
-            this.sequence = ret.value.sequence ? ret.value.sequence : 0
-          }
+          const account = extractAccountNumberAndSequence(ret)
+          this.accountNumber = account.accountNumber
+          this.sequence = account.sequence
         })
+        this.fee = this.selectedChain?.min_tx_fee || '1000'
+        this.feeDenom = this.selectedChain?.assets[0]?.base || ''
 
-        const channels = this.$store.state.chains.ibcChannels[this.selectedChain.chain_name]
-        if (!channels) {
-          this.$http.getIBCChannels(this.selectedChain, null).then(ret => {
-            const chans = ret.channels.filter(x => x.state === 'STATE_OPEN').map(x => ({ channel_id: x.channel_id, port_id: x.port_id }))
-            chans.forEach((x, i) => {
-              this.$http.getIBCChannelClientState(x.channel_id, x.port_id, this.selectedChain).then(cs => {
-                chans[i].chain_id = cs.identified_client_state.client_state.chain_id
-                this.$store.commit('setChannels', { chain: this.selectedChain.chain_name, channels: chans })
-                this.$set(this, 'channels', chans)
-              })
-            })
-          })
-        } else {
-          this.channels = channels
-        }
+        this.$http.getIBCChannels(this.selectedChain, null).then(ret => {
+          const chans = ret.channels.filter(x => x.state === 'STATE_OPEN').map(x => ({ channel_id: x.channel_id, port_id: x.port_id }))
+          this.$set(this, 'channels', chans)
+        })
       }
     },
     handleOk(bvModalEvt) {
@@ -494,15 +460,18 @@ export default {
     format(v) {
       return formatToken(v, this.IBCDenom)
     },
-    async sendCosmos() {
-      const cosmos = new Cosmos(this.selectedChain.api, this.chainId)
-      cosmos.getAccounts()
+    onChannelChange() {
+      this.$http.getIBCChannelClientState(this.destination.channel_id, this.destination.port_id, this.selectedChain).then(cs => {
+        this.targetChainId = cs.identified_client_state.client_state.chain_id
+        // this.$store.commit('setChannels', { chain: this.selectedChain.chain_name, channels: chans })
+      })
     },
     async send() {
       if (!this.destination) {
         this.error = 'You have to select a destination'
         return
       }
+      const timeout = dayjs().add(4, 'hour')
       const txMsgs = [
         {
           typeUrl: '/ibc.applications.transfer.v1.MsgTransfer',
@@ -513,7 +482,7 @@ export default {
             sender: this.address,
             receiver: this.recipient,
             // timeoutHeight: undefined, // { revisionHeight: '0', revisionNumber: '0' },
-            timeoutTimestamp: String((Math.floor(Date.now() / 1000) + 60) * 1_000_000_000),
+            timeoutTimestamp: String(timeout.utc().valueOf() * 1000000),
           },
         },
       ]
@@ -544,7 +513,12 @@ export default {
         signerData,
       ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
-          setLocalTxHistory({ op: 'send', hash: res.txhash, time: new Date() })
+          setLocalTxHistory({
+            chain: this.$store.state.chains.selected,
+            op: 'transfer',
+            hash: res.tx_response.txhash,
+            time: new Date(),
+          })
           this.$bvModal.hide('ibc-transfer-window')
           this.$toast({
             component: ToastificationContent,
