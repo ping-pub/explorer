@@ -1,5 +1,5 @@
 {
-    "chain_name": "LUM Network",
+    "chain_name": "lum-network",
     "coingecko": "",
     "api": "https://node0.mainnet.lum.network/rest",
     "sdk_version": "0.44.5",
