@@ -80,6 +80,9 @@ export default {
           right: '10%',
           top: '3%',
           data: assets,
+          textStyle: {
+            color: '#aaa',
+          },
         },
         xAxis: {
           name: 'Qty',
