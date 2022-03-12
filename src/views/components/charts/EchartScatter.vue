@@ -73,25 +73,19 @@ export default {
       return {
         title: {
           text: '',
-          left: '5%',
-          top: '3%',
         },
         legend: {
-          right: '10%',
-          top: '3%',
+          scroll: 'scroll',
           data: assets,
           textStyle: {
             color: '#aaa',
           },
+          top: 'top',
         },
+        grid: { top: `${assets.length > 30 ? 30 : assets.length + 20}%` }, // */
         xAxis: {
           name: 'Qty',
           nameLocation: 'center',
-          splitLine: {
-            lineStyle: {
-              type: 'dashed',
-            },
-          },
           axisLabel: {
             show: false,
             formatter(param) {
@@ -108,41 +102,9 @@ export default {
               return formatNumber(param, true, 0)
             },
           },
-          splitLine: {
-            lineStyle: {
-              type: 'dashed',
-            },
-          },
           scale: true,
         },
         series,
-        // series: [
-        //   {
-        //     name: '',
-        //     data: this.items.filter(x => x[1] > 0),
-        //     type: 'scatter',
-        //     symbolSize(data) {
-        //       const r = Math.log10(data[2])
-        //       return r * 5
-        //     },
-        //     emphasis: {
-        //       focus: 'series',
-        //       label: {
-        //         show: true,
-        //         formatter(param) {
-        //           return `${param.data[3]}, ${formatNumber(param.data[2], true, 0)}`
-        //         },
-        //         position: 'top',
-        //       },
-        //     },
-        //     itemStyle: {
-        //       shadowBlur: 10,
-        //       shadowColor: 'rgba(120, 36, 50, 0.5)',
-        //       shadowOffsetY: 5,
-        //       color: '#28c76f',
-        //     },
-        //   },
-        // ],
       }
     },
   },
@@ -151,7 +113,7 @@ export default {
 
 <style scoped>
 .chart {
-  height: 300px;
+  min-height: 300px;
   width: 100%;
 }
 </style>
