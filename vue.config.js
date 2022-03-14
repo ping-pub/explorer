@@ -1,4 +1,5 @@
 const path = require('path')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 module.exports = {
   publicPath: '/',
@@ -21,6 +22,7 @@ module.exports = {
         '@axios': path.resolve(__dirname, 'src/libs/axios'),
       },
     },
+    plugins: [new BundleAnalyzerPlugin()],
   },
   chainWebpack: config => {
     config.module

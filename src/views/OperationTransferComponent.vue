@@ -219,7 +219,6 @@ import {
   extractAccountNumberAndSequence,
   formatToken, formatTokenDenom, getLocalAccounts, getLocalChains, getUnitAmount, setLocalTxHistory, sign, timeIn,
 } from '@/libs/utils'
-import { Cosmos } from '@cosmostation/cosmosjs'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import WalletInputVue from './components/WalletInput.vue'
 
@@ -371,10 +370,7 @@ export default {
     format(v) {
       return formatToken(v, this.IBCDenom)
     },
-    async sendCosmos() {
-      const cosmos = new Cosmos(this.selectedChain.api, this.chainId)
-      cosmos.getAccounts()
-    },
+
     async send() {
       const txMsgs = [
         {
