@@ -17,7 +17,7 @@
 
 Ping Explorer is a light explorer for Cosmos-based Blockchains.  https://ping.pub .
 
-## What is the difference between Ping explorer and other explorers? 
+## What is the difference between Ping explorer and other explorers?
 
 Ping Explorer is designed to explore blockchain data as real as possible, therefore there is no cache, no pre-processing. Ping Explorer does not cache/save blockchain data on its server. Ping Explorer only fetch data from Cosmos full node via LCD/RPC endpoints. We call it "Light Explorer".
 
@@ -25,7 +25,7 @@ Ping Explorer is designed to explore blockchain data as real as possible, theref
 
 Pull your request [here](./src/chains), We will add your chains as soon as possible. It is **FREE** (You must have 10+ independent validators on your chain).
 
-## Why Ping explorer use official/trusted third party public LCD/rpc server? 
+## Why Ping explorer use official/trusted third party public LCD/rpc server?
 
 We have two considerations: 1, Trust, In decentralize system, everything controlled by one single team/organization could be risks. So we decided to co-build with the community. 2. We will list hundreds cosmos-based blockchains in the future, it's impossible for our team to run validators or fullnodes for all of those chains.
 
@@ -90,3 +90,4 @@ server {
 
 Developers: @liangping @dingyiming
 
+Thanks!
