@@ -28,6 +28,7 @@ module.exports = {
     plugins: [
       new BundleAnalyzerPlugin({
         analyzerMode: 'static',
+        openAnalyzer: false,
       }),
       new CompressionWebpackPlugin({
         test: new RegExp(`\\.(${productionGzipExtensions.join('|')})$`),
