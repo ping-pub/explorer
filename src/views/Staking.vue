@@ -93,17 +93,18 @@
       no-body
     >
       <b-card-header class="d-flex justify-content-between">
-        <small class="d-none d-md-block">
-          <b-badge variant="danger">
-              &nbsp;
-          </b-badge>
-          Top 33%
-          <b-badge variant="warning">
-              &nbsp;
-          </b-badge>
-          Top 67% of Voting Power
-        </small>
-        <b-card-title>
+        <b-form-group>
+          <b-form-radio-group
+            id="btn-radios-1"
+            v-model="selectedStatus"
+            button-variant="outline-primary"
+            :options="statusOptions"
+            buttons
+            name="radios-btn-default"
+            @change="getValidatorListByStatus"
+          />
+        </b-form-group>
+        <b-card-title class="d-none d-sm-block">
           <span>Validators {{ validators.length }}/{{ stakingParameters.max_validators }} </span>
         </b-card-title>
       </b-card-header>
@@ -195,6 +196,18 @@
           </template>
         </b-table>
       </b-card-body>
+      <template #footer>
+        <small class="d-none d-md-block">
+          <b-badge variant="danger">
+              &nbsp;
+          </b-badge>
+          Top 33%
+          <b-badge variant="warning">
+              &nbsp;
+          </b-badge>
+          Top 67% of Voting Power
+        </small>
+      </template>
     </b-card>
     <operation-delegate-component :validator-address="validator_address" />
   </div>
@@ -202,10 +215,10 @@
 
 <script>
 import {
-  BTable, BMedia, BAvatar, BBadge, BCard, BCardHeader, BCardTitle, VBTooltip, BCardBody, BButton,
+  BTable, BMedia, BAvatar, BBadge, BCard, BCardHeader, BCardTitle, VBTooltip, BCardBody, BButton, BFormRadioGroup, BFormGroup,
 } from 'bootstrap-vue'
 import {
-  Validator, percent, StakingParameters, formatToken,
+  percent, StakingParameters, formatToken,
 } from '@/libs/utils'
 import { keybase } from '@/libs/fetch'
 // import { toHex } from '@cosmjs/encoding'
@@ -224,6 +237,8 @@ export default {
     BCardBody,
     BButton,
     OperationDelegateComponent,
+    BFormRadioGroup,
+    BFormGroup,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -252,8 +267,8 @@ export default {
       mintInflation: 0,
       stakingPool: 1,
       stakingParameters: new StakingParameters(),
-      validators: [new Validator()],
-      delegations: [new Validator()],
+      validators: [],
+      delegations: [],
       changes: {},
       validator_fields: [
         {
@@ -288,6 +303,11 @@ export default {
           thClass: 'text-right',
         },
       ],
+      statusOptions: [
+        { text: 'Active', value: ['BOND_STATUS_BONDED'] },
+        { text: 'Inactive', value: ['BOND_STATUS_UNBONDED', 'BOND_STATUS_UNBONDING'] },
+      ],
+      selectedStatus: ['BOND_STATUS_BONDED'],
     }
   },
   computed: {
@@ -331,36 +351,42 @@ export default {
     this.$http.getStakingParameters().then(res => {
       this.stakingParameters = res
     })
-    this.$http.getValidatorList().then(res => {
-      const identities = []
-      const temp = res
-      let total = 0
-      for (let i = 0; i < temp.length; i += 1) {
-        total += temp[i].tokens
-        const { identity } = temp[i].description
-        const url = this.$store.getters['chains/getAvatarById'](identity)
-        if (url) {
-          temp[i].avatar = url
-        } else if (identity && identity !== '') {
-          identities.push(identity)
-        }
-      }
-      this.stakingPool = total
-      this.validators = temp
-
-      // fetch avatar from keybase
-      let promise = Promise.resolve()
-      identities.forEach(item => {
-        promise = promise.then(() => new Promise(resolve => {
-          this.avatar(item, resolve)
-        }))
-      })
-    })
+    this.getValidatorListByStatus(this.selectedStatus)
   },
   beforeDestroy() {
     this.islive = false
   },
   methods: {
+    getValidatorListByStatus(statusList) {
+      this.validators = []
+      statusList.forEach(status => {
+        this.$http.getValidatorListByStatus(status).then(res => {
+          const identities = []
+          const temp = res
+          let total = 0
+          for (let i = 0; i < temp.length; i += 1) {
+            total += temp[i].tokens
+            const { identity } = temp[i].description
+            const url = this.$store.getters['chains/getAvatarById'](identity)
+            if (url) {
+              temp[i].avatar = url
+            } else if (identity && identity !== '') {
+              identities.push(identity)
+            }
+          }
+          this.stakingPool = total
+          this.validators.push(...temp)
+
+          // fetch avatar from keybase
+          let promise = Promise.resolve()
+          identities.forEach(item => {
+            promise = promise.then(() => new Promise(resolve => {
+              this.avatar(item, resolve)
+            }))
+          })
+        })
+      })
+    },
     selectValidator(da) {
       this.validator_address = da
     },

@@ -156,6 +156,14 @@ export default class ChainFetch {
     })
   }
 
+  async getValidatorListByStatus(status) {
+    return this.get(`/cosmos/staking/v1beta1/validators?status=${status}`).then(data => {
+      const result = commonProcess(data)
+      const vals = result.validators ? result.validators : result
+      return vals.map(i => new Validator().init(i))
+    })
+  }
+
   async getValidatorListByHeight(height) {
     return this.get(`/validatorsets/${height}`).then(data => commonProcess(data))
   }
