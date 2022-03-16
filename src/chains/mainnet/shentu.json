@@ -1,6 +1,6 @@
 
 {
-    "chain_name": "certik",
+    "chain_name": "shentu",
     "api":"https://azuredragon.noopsbycertik.com",
     "sdk_version": "0.42.9",
     "coin_type": "118",
