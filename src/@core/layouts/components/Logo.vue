@@ -17,7 +17,7 @@
     height="150"
     x="0"
     y="0"
-    href="https://raw.githubusercontent.com/kuraassh/explorer/a2d76e530d218692d60735bf4a7301c270f87280/public/logo.svg"
+    href="https://raw.githubusercontent.com/kuraassh/explorer/master/public/logo.svg"
   />
   </svg>
 </template>
