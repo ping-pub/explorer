@@ -9,7 +9,7 @@
 
 // Color system
 
-$white: #fff !default;
+$white: #efedfb !default;
 $gray-50: #f6f6f6 !default;
 $gray-100: #babfc7 !default; // $gray-lightest
 $gray-200: #ededed !default; // $gray-lighter
@@ -37,6 +37,7 @@ $dark: #4b4b4b !default;
 
 $main: #efedfb !default;
 $second: #dad5fb !default;
+
 
 // Spacing
 //
@@ -92,8 +93,8 @@ $spacers: map-merge(
 // Body
 //
 // Settings for the `<body>` element.
-$body-bg: #f8f8f8 !default;
-$body-color: #6e6b7b !default;
+$body-bg: #dad5fb !default;
+$body-color: #2a2e30 !default;
 
 // Links
 //
