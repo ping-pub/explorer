@@ -9,7 +9,8 @@
     width="150px"
     height="150px"
     viewBox="0 0 150 150"
-    enable-background="new 0 0 150 150"
+    enable-background="0"
+    fill-opacity="0"
     xml:space="preserve"
   >  <image
     id="image0"
@@ -17,7 +18,7 @@
     height="150"
     x="0"
     y="0"
-    href="https://github.com/kuraassh/explorer/blob/master/public/logo.png"
+    href="https://github.com/kuraassh/explorer/blob/master/public/logo.svg"
   />
   </svg>
 </template>
