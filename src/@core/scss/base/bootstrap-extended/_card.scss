@@ -124,10 +124,10 @@
   .heading-elements {
     i,
     svg {
-      color: $white;
+      color: $second;
     }
   }
-  color: $white;
+  color: $second;
 }
 .card-transparent {
   background-color: transparent;
@@ -140,7 +140,7 @@
     }
   }
   code {
-    background-color: rgba($white, 1);
+    background-color: rgba($main, 1);
   }
   .heading-elements {
     i,
