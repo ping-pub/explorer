@@ -93,7 +93,7 @@
       no-body
     >
       <b-card-header class="d-flex justify-content-between">
-        <b-form-group>
+        <b-form-group class="mb-0">
           <b-form-radio-group
             id="btn-radios-1"
             v-model="selectedStatus"
@@ -108,8 +108,9 @@
           <span>Validators {{ validators.length }}/{{ stakingParameters.max_validators }} </span>
         </b-card-title>
       </b-card-header>
-      <b-card-body class="pl-0 pr-0">
+      <b-card-body class="pl-0 pr-0 pb-0">
         <b-table
+          class="mb-0"
           :items="list"
           :fields="validator_fields"
           :sort-desc="true"
