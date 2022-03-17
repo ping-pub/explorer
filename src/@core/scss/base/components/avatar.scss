@@ -18,7 +18,7 @@
   border-radius: 50%;
   position: relative;
   cursor: pointer;
-  color: $white;
+  color: $main;
   display: inline-flex;
   font-size: 1rem;
   text-align: center;
@@ -46,7 +46,7 @@
     position: absolute;
     right: 0;
     bottom: 0;
-    border: 1px solid $white;
+    border: 1px solid $main;
     &.avatar-status-lg,
     &.avatar-status-xl {
       width: $avatar-status-size-lg;

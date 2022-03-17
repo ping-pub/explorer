@@ -71,7 +71,7 @@
   tbody {
     tr {
       transition: all 0.25s ease;
-      background-color: $white;
+      background-color: $main;
       &:hover {
         transform: translateY(-4px);
       }

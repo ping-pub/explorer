@@ -413,10 +413,10 @@
 
 // Navbar colors
 .navbar-light {
-  background: $white;
+  background: $main;
 
   &.navbar-horizontal {
-    background: $white;
+    background: $main;
   }
 
   .navbar-nav {
@@ -460,7 +460,7 @@
 
     .active {
       &.nav-link {
-        background-color: rgba($white, 0.05);
+        background-color: rgba($main, 0.05);
       }
     }
 

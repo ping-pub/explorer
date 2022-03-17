@@ -28,7 +28,7 @@
       &.open:not(.menu-item-closing),
       &.sidebar-group-active {
         > a {
-          background: darken($white, 7%);
+          background: darken($main, 7%);
         }
       }
     }
