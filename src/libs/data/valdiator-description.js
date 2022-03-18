@@ -1,8 +1,8 @@
 export default class ValidatorDescription {
   constructor() {
     this.moniker = 'Ping'
-    this.identity = 'string'
-    this.website = 'https://ping.pub'
+    this.identity = '0DD21F2C7157838C'
+    this.website = 'https://doubletop.io'
     this.security_contact = 'string'
     this.details = 'string'
   }
