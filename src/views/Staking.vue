@@ -233,7 +233,6 @@ export default {
       keys: [
         'bostromvaloper1zaefvwrgk2g45k68a3ngahgq0xky5zgeluu86f',
         'desmosvaloper1426d5fh2jvvr8gervp523698lqsxlwuhyl704z',
-        'regenvaloper1d92tfnkge6qcvt3jy42j0dx6vvt4tjmfldmhue',
         'fetchvaloper14q3mtnec6wjyhyfxcjdgqmx3kqk52gwdryt4vz',
       ],
       islive: true,
