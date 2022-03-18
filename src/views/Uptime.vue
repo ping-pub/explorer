@@ -32,13 +32,23 @@
           md="4"
           class="text-truncate"
         >
-          <b-form-checkbox
-            v-model="pinned"
-            :value="`${chain}#${x.address}`"
-            class="custom-control-warning"
-            @change="pinValidator(`${chain}#${x.address}`)"
-          ><span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
-          </b-form-checkbox>
+          <div class="d-flex justify-content-between">
+            <b-form-checkbox
+              v-model="pinned"
+              :value="`${chain}#${x.address}`"
+              class="custom-control-warning text-truncate"
+              @change="pinValidator(`${chain}#${x.address}`)"
+            ><span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
+            </b-form-checkbox>
+            <span
+              v-if="missing[x.address] && missing[x.address].missed_blocks_counter > 0"
+              v-b-tooltip.hover.v-danger
+              :title="`missed blocks:${missing[x.address].missed_blocks_counter}`"
+              class="text-danger text-bolder"
+            >
+              {{ missing[x.address].missed_blocks_counter }}
+            </span>
+          </div>
           <div class="d-flex justify-content-between align-self-stretch flex-wrap">
             <div
               v-for="(b,i) in blocks"
@@ -68,6 +78,7 @@ import {
 import {
   consensusPubkeyToHexAddress, getCachedValidators, timeIn, toDay,
 } from '@/libs/utils'
+import { Bech32, toHex } from '@cosmjs/encoding'
 
 export default {
   components: {
@@ -114,6 +125,16 @@ export default {
     }
     this.$http.getValidatorList().then(res => {
       this.validators = res
+    })
+    this.$http.getSlashingSigningInfo().then(res => {
+      if (res.info) {
+        res.info.forEach(x => {
+          if (x.address) {
+            const hex = toHex(Bech32.decode(x.address).data).toUpperCase()
+            this.missing[hex] = x
+          }
+        })
+      }
     })
     this.initBlocks()
   },
