@@ -6,7 +6,7 @@
         class="ml-25 font-weight-bolder"
         href="#"
         target="_blank"
-      >explorer.postcapitalist.io</b-link>
+      >POSTCAPITALIST</b-link>
     </span>
 
     <router-link
