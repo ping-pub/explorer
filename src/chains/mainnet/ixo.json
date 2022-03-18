@@ -1,17 +1,16 @@
 {
     "chain_name": "ixo",
     "api": "https://ixo.postcapitalist.io/",
-    "sdk_version": "0.34.11",
+    "sdk_version": "0.42.6",
     "coin_type": "118",
-    "min_tx_fee": "40000",
+    "min_tx_fee": "3000",
     "addr_prefix": "ixo",
-    "excludes": "mint",
-    "logo": "https://assets.coingecko.com/coins/images/16829/small/ixo.png",
+    "logo": "https://ping.pub/logos/ixo.svg",
     "assets": [{
         "base": "uixo",
         "symbol": "IXO",
         "exponent": "6",
         "coingecko_id": "ixo",
-        "logo": "https://assets.coingecko.com/coins/images/16829/small/ixo.png"
+        "logo": "https://ping.pub/logos/ixo.svg"
     }]
 }

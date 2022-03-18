@@ -2,10 +2,10 @@
     "chain_name": "fetchhub",
     "coingecko": "fetch",
     "api": ["https://fetch.postcapitalist.io/"],
-    "sdk_version": "0.34.14",
+    "sdk_version": "0.45.1",
     "coin_type": "118",
     "min_tx_fee": "3000000000000000",
-    "addr_prefix": "fet",
+    "addr_prefix": "fetch",
     "logo": "https://assets.coingecko.com/coins/images/5681/small/Fetch.jpg?1572098136",
     "assets": [{
         "base": "afet",
