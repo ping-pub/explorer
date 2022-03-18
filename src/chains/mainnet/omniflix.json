@@ -1,0 +1,17 @@
+{
+    "chain_name": "omniflix",
+    "coingecko": "",
+    "api": "https://omniflixhub-api.skynetvalidators.com",
+    "sdk_version": "0.45.1",
+    "coin_type": "118",
+    "min_tx_fee": "3000",
+    "addr_prefix": "omniflix",
+    "logo": "https://explorer-images.s3.filebase.com/omniflix-alpha-logo.png",
+    "assets": [{
+        "base": "uflix",
+        "symbol": "FLIX",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "https://explorer-images.s3.filebase.com/omniflix-alpha-logo.png"
+    }]
+}
