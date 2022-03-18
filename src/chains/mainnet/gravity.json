@@ -1,0 +1,17 @@
+{
+    "chain_name": "gravity-bridge",
+    "api": "https://gravity-api.skynetvalidators.com",
+    "sdk_version": "0.44.5",
+    "coin_type": "60",
+    "min_tx_fee": "5000",
+    "addr_prefix": "gravity",
+    "excludes": "",
+    "logo": "https://gravity-images.s3.filebase.com/icon_badge.svg",
+    "assets": [{
+        "base": "ugraviton",
+        "symbol": "GRAVITON",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "https://gravity-images.s3.filebase.com/icon_badge.svg"
+    }]
+}

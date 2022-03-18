@@ -1,4 +1,6 @@
 import Vue from 'vue'
+// import { Vue, createApp } from 'vue'
+
 import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
 import messages from '@/lang'
@@ -7,9 +9,11 @@ import VueI18n from 'vue-i18n'
 
 import ChainAPI from '@/libs/fetch'
 
+// import VueGtag from 'vue-gtag'
+import App from './App.vue'
+
 import router from './router'
 import store from './store'
-import App from './App.vue'
 
 // Global Components
 import './global-components'
@@ -19,7 +23,13 @@ import '@/libs/portal-vue'
 import '@/libs/toastification'
 import '@/libs/clipboard'
 
-// Vue.use(VueGtag, { config: { id: 'UA-238887-1' } }, router)
+// import VueGtag from 'vue-gtag';
+
+// Vue.use(VueGtag, { config: { id: 'G-3P63KYN8YV' } }, router)
+
+// createApp(App).use(VueGtag, {
+//   config: { id: 'G-3P63KYN8YV' },
+// }).mount('#app')
 
 Vue.use(VueI18n)
 

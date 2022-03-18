@@ -1,0 +1,17 @@
+{
+    "chain_name": "Cerberus",
+    "coingecko": "",
+    "api": "https://cerberus-api.skynetvalidators.com/",
+    "sdk_version": "0.44.5",
+    "coin_type": "118",
+    "min_tx_fee": "1000",
+    "addr_prefix": "evmos",
+    "logo": "https://explorer-images.s3.filebase.com/cerberus-logo.png",
+    "assets": [{
+        "base": "ucrbrus",
+        "symbol": "CRBRUS",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "https://explorer-images.s3.filebase.com/cerberus-logo.png"
+    }]
+}

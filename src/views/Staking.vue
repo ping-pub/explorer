@@ -2,7 +2,7 @@
   <div>
     <b-card
       v-if="pingVals && pingVals.length > 0"
-      title="❤️ Helping Ping.pub By Staking ❤️"
+      title="❤️ Support SkyNet | Explorers By Staking With Us ❤️"
     >
       <b-table
         :items="pingVals"
@@ -231,21 +231,19 @@ export default {
   data() {
     return {
       keys: [
-        'bitsongvaloper1jxv0u20scum4trha72c7ltfgfqef6nscl86wxa',
-        'akashvaloper1vgstlgtsx4w80gphwgre0fcvc04lcnaelukvll',
-        'certikvaloper1jxv0u20scum4trha72c7ltfgfqef6nsczkvcu7',
-        'cosmosvaloper1jxv0u20scum4trha72c7ltfgfqef6nsch7q6cu',
-        'iva16plp8cmfkjssp222taq6pv6mkm8c5pa9lcktta',
-        'junovaloper1jxv0u20scum4trha72c7ltfgfqef6nscm9pmg2',
-        'kavavaloper1xftqdxvq0xkv2mu8c5y0jrsc578tak4m9u0s44',
-        'kivaloper1jxv0u20scum4trha72c7ltfgfqef6nschqtan9',
-        'osmovaloper1jxv0u20scum4trha72c7ltfgfqef6nscqx0u46',
-        'persistencevaloper1jxv0u20scum4trha72c7ltfgfqef6nsc4zjpnj',
-        'starsvaloper1jxv0u20scum4trha72c7ltfgfqef6nscdghxyx',
-        'digvaloper1jxv0u20scum4trha72c7ltfgfqef6nsc4s577p',
-        'bcnavaloper1jxv0u20scum4trha72c7ltfgfqef6nsc384wxf',
-        'pbvaloper1jxv0u20scum4trha72c7ltfgfqef6nsc5nn6cf',
-        'rizonvaloper1jxv0u20scum4trha72c7ltfgfqef6nsczn2l68',
+        'akashvaloper1zfcmwh56kmz4wqqg2t8pxrm228dx2c6hzh0ewm',
+        'cerberusvaloper1r34mlqewsxrde38vp3tzwh3rk5vt6ez0slzuvu',
+        'chihuahuavaloper1y6m72uxs6hhsudxqpq73rsdgkjh6nhkqef8pej',
+        'cosmos1zfcmwh56kmz4wqqg2t8pxrm228dx2c6h9wvc8t',
+        'desmosvaloper17ue85ck027c4grv7nuks7k7p4fqnlc55uqhskj',
+        'dewebvaloper1v4f0kjaj0ywz9j3fnt97ffj9af7lygnjnc9srx',
+        'evmosvaloper1uvespdsgqjr3s09v747224zre33vs8kl82h497',
+        'gravityvaloper1zfcmwh56kmz4wqqg2t8pxrm228dx2c6hs487gh',
+        'junovaloper1me5ts52qg98s76nketn5gckj9p6nu9zc79a68u',
+        'omniflixvaloper1nrqnmd2g5s4e974n9fxn8t6e83lh6yxqgzlv4r',
+        'osmovaloper1zfcmwh56kmz4wqqg2t8pxrm228dx2c6hhzhtx7',
+        'tgrade1ylrt7dqjz0vmr3h2e53q3h74jrjxfwf4ehk635',
+        'umeevaloper1p4hx7khq8udesprg69xj6snmgafxppglpl5kr8',
       ],
       islive: true,
       validator_address: null,

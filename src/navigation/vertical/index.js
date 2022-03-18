@@ -14,7 +14,7 @@ const modules = [
   },
   {
     scope: 'normal',
-    title: 'staking',
+    title: 'Validators',
     route: 'staking',
   },
   {
@@ -76,13 +76,13 @@ function processMenu() {
   if (isTestnet()) {
     chainMenus.push({
       title: 'Mainnet Explorer',
-      href: 'https://ping.pub',
+      href: 'https://www.skynetexplorers.com',
       icon: 'ChromeIcon',
     })
   } else {
     chainMenus.push({
-      title: 'Testnet Explorer',
-      href: 'http://testnet.ping.pub',
+      title: 'Mainnet Explorer',
+      href: 'https://www.skynetexplorers.com',
       icon: 'LifeBuoyIcon',
     })
   }
@@ -93,13 +93,13 @@ function processMenu() {
   })
   chainMenus.push({
     title: 'Twitter',
-    href: 'https://twitter.com/ping_pub',
+    href: 'https://twitter.com/skynetvalidator',
     icon: 'TwitterIcon',
   })
   chainMenus.push({
-    title: 'Github',
-    href: 'https://github.com/ping-pub/explorer',
-    icon: 'GithubIcon',
+    title: 'Telegram',
+    href: 'https://t.me/SkyNet_Validators',
+    icon: 'EyeIcon',
   })
 
   return chainMenus

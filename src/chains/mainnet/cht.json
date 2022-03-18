@@ -1,0 +1,23 @@
+{
+    "chain_name": "chronic-token",
+    "coingecko": "",
+    "api": "https://chtd-api.skynetvalidators.com",
+    "sdk_version": "0.44.5",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "chronic",
+    "logo": "https://explorer-images.s3.filebase.com/cht-logo.jpg",
+    "assets": [{
+        "base": "ucgas",
+        "symbol": "CGAS",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "https://explorer-images.s3.filebase.com/cht-logo.jpg"
+    },{
+        "base": "ucht",
+        "symbol": "CHT",
+        "exponent": "6",
+        "coingecko_id": "ion", 
+        "logo": "https://explorer-images.s3.filebase.com/cht-logo.jpg"
+    }]
+}

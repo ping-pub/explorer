@@ -1,7 +1,7 @@
 {
-    "chain_name": "akash-network",
-    "api": ["https://akash-api.skynetvalidators.com"],
-    "sdk_version": "0.41.3",
+    "chain_name": "akash-testnet-3",
+    "api": ["https://akash-edgenet-1-api.skynetvalidators.com"],
+    "sdk_version": "v0.44.5",
     "coin_type": "118",
     "min_tx_fee": "8000",
     "assets": [{
