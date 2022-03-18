@@ -1,0 +1,17 @@
+{
+    "chain_name": "fetch",
+    "coingecko": "fetch",
+    "api": ["https://fetch.postcapitalist.io/"],
+    "sdk_version": "0.34.14",
+    "coin_type": "60",
+    "min_tx_fee": "3000000000000000",
+    "addr_prefix": "fet",
+    "logo": "https://assets.coingecko.com/coins/images/5681/small/Fetch.jpg?1572098136",
+    "assets": [{
+        "base": "afet",
+        "symbol": "fet",
+        "exponent": "18",
+        "coingecko_id": "fet",
+        "logo": "https://assets.coingecko.com/coins/images/5681/small/Fetch.jpg?1572098136"
+    }]
+}
