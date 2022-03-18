@@ -1,7 +1,7 @@
 {
     "chain_name": "regen",
     "coingecko": "regen",
-    "api": "https://regen.api.ping.pub",
+    "api": "https://regen.postcapitalist.io/",
     "sdk_version": "0.44.3",
     "coin_type": "118",
     "min_tx_fee": "3000",
@@ -11,7 +11,7 @@
         "base": "uregen",
         "symbol": "REGEN",
         "exponent": "6",
-        "coingecko_id": "regen", 
+        "coingecko_id": "regen",
         "logo": "https://dl.airtable.com/.attachments/0c988f2cd6a7d4fec95f0a3bc87b45da/c7a9f8ba/regen-brandmark-48.svg"
     }]
 }
