@@ -14,7 +14,7 @@ const modules = [
   },
   {
     scope: 'normal',
-    title: 'staking',
+    title: 'validators',
     route: 'staking',
   },
   {
@@ -71,7 +71,7 @@ function processMenu() {
   if (isTestnet()) {
     chainMenus.push({
       title: 'Mainnet Explorer',
-      href: 'https://explorer.postcapitalsist.io',
+      href: 'https://explorer.postcapitalist.io',
       icon: 'ChromeIcon',
     })
   } else {
@@ -93,7 +93,7 @@ function processMenu() {
   })
   chainMenus.push({
     title: 'Github',
-    href: 'https://github.com/POSTCAPITALIST-IO',
+    href: 'https://github.com/postcapitalist_io',
     icon: 'GithubIcon',
   })
 
