@@ -4,15 +4,9 @@
       Forked from
       <b-link
         class="ml-25 font-weight-bolder"
-        href="#"
+        href="https://ping.pub"
         target="_blank"
       >Ping.pub</b-link>
-      By
-      <b-link
-        class="ml-25 font-weight-bolder"
-        href="#"
-        target="_blank"
-      >POSTCAPITALIST</b-link>
     </span>
 
     <router-link
