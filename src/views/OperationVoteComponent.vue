@@ -182,47 +182,7 @@
 
           <b-row>
             <b-col>
-              <b-form-group
-                label="Wallet"
-                label-for="wallet"
-              >
-                <validation-provider
-                  v-slot="{ errors }"
-                  rules="required"
-                  name="wallet"
-                >
-                  <b-form-radio-group
-                    v-model="wallet"
-                    stacked
-                    class="demo-inline-spacing"
-                  >
-                    <b-form-radio
-                      v-model="wallet"
-                      name="wallet"
-                      value="keplr"
-                      class="d-none d-md-block"
-                    >
-                      Keplr
-                    </b-form-radio>
-                    <b-form-radio
-                      v-model="wallet"
-                      name="wallet"
-                      value="ledgerUSB"
-                    >
-                      <small>Ledger(USB)</small>
-                    </b-form-radio>
-                    <b-form-radio
-                      v-model="wallet"
-                      name="wallet"
-                      value="ledgerBle"
-                      class="mr-0"
-                    >
-                      <small>Ledger(Bluetooth)</small>
-                    </b-form-radio>
-                  </b-form-radio-group>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
+              <wallet-input-vue v-model="wallet" />
             </b-col>
           </b-row>
         </b-form>
@@ -236,7 +196,7 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
   BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormCheckbox,
-  BForm, BFormRadioGroup, BFormRadio, BInputGroupAppend, BOverlay, BButton,
+  BForm, BFormRadio, BInputGroupAppend, BOverlay, BButton,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
@@ -247,6 +207,7 @@ import {
   formatToken, getLocalAccounts, setLocalTxHistory, sign, timeIn,
 } from '@/libs/utils'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import WalletInputVue from './components/WalletInput.vue'
 
 export default {
   name: 'VoteDialogue',
@@ -259,7 +220,6 @@ export default {
     BFormInput,
     BFormGroup,
     BFormSelect,
-    BFormRadioGroup,
     BFormRadio,
     BFormCheckbox,
     BInputGroupAppend,
@@ -268,6 +228,8 @@ export default {
 
     ValidationProvider,
     ValidationObserver,
+
+    WalletInputVue,
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
   },

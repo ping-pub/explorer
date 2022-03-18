@@ -32,9 +32,9 @@
           </b-media-aside>
           <b-media-body>
             <h6 class="transaction-title">
-              {{ formatNumber(d.amount) }}
+              {{ formatDenom(d) }}
             </h6>
-            <small>{{ formatDenom(d.denom) }} </small>
+            <small>{{ formatNumber(d.amount) }}</small>
           </b-media-body>
         </b-media>
         <small
@@ -63,9 +63,9 @@
           </b-media-aside>
           <b-media-body>
             <h6 class="transaction-title">
-              {{ formatNumber(d.amount) }}
+              {{ formatDenom(d) }}
             </h6>
-            <small>{{ formatDenom(d.denom) }}</small>
+            <small>{{ formatNumber(d.amount) }}</small>
           </b-media-body>
         </b-media>
         <small
@@ -98,6 +98,7 @@ import {
 } from 'bootstrap-vue'
 import { sha256 } from '@cosmjs/crypto'
 import { toHex } from '@cosmjs/encoding'
+import { formatToken, numberWithCommas } from '@/libs/utils'
 import OperationWithdrawCommissionComponent from './OperationWithdrawCommissionComponent.vue'
 
 export default {
@@ -142,10 +143,12 @@ export default {
   },
   methods: {
     formatNumber(value) {
-      return Number(value).toFixed(2)
+      if (value < 1) return value
+      // eslint-disable-next-line no-undef
+      return numberWithCommas(BigInt(Number(value).toFixed(0)))
     },
     formatDenom(value) {
-      return value.startsWith('ibc') ? this.denoms[value] : value
+      return formatToken(value, this.denoms, 2)
     },
   },
 }

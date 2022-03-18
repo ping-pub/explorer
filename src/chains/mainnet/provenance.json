@@ -4,7 +4,7 @@
     "api": "https://api.provenance.io",
     "sdk_version": "0.44.3",
     "coin_type": "505",
-    "min_tx_fee": "3000",
+    "min_tx_fee": "400000000",
     "addr_prefix": "pb",
     "logo": "https://raw.githubusercontent.com/provenance-io/provenance/main/docs/pio.svg",
     "assets": [{
