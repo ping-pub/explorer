@@ -1,0 +1,16 @@
+{
+    "chain_name": "ixo",
+    "api": ["https://impacthub.ixo.world/rest", "https://proxies.sifchain.finance/api/impacthub-3/rest"],
+    "sdk_version": "0.42.6",
+    "coin_type": "118",
+    "min_tx_fee": "3000",
+    "addr_prefix": "ixo",
+    "logo": "https://ping.pub/logos/ixo.svg",
+    "assets": [{
+        "base": "uixo",
+        "symbol": "IXO",
+        "exponent": "6",
+        "coingecko_id": "ixo", 
+        "logo": "https://ping.pub/logos/ixo.svg"
+    }]
+}

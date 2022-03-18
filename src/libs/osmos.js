@@ -91,8 +91,16 @@ export default class OsmosAPI {
 
   async get(url) {
     const chains = getLocalChains()
-    this.host = chains.osmosis.api
+    const conf = chains.osmosis
+    const index = this.getApiIndex(conf)
+    this.host = Array.isArray(conf.api) ? conf.api[index] : conf.api
     return fetch(`${this.host}${url}`).then(res => res.json())
+  }
+
+  getApiIndex(config = null) {
+    const conf = config || this.config
+    const index = Number(localStorage.getItem(`${conf.chain_name}-api-index`) || 0)
+    return index < conf.api.length ? index : 0
   }
 
   async getMarketData(from, to, days = 14) {

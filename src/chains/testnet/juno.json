@@ -1,0 +1,8 @@
+{
+    "chain_name": "juno",
+    "coingecko": "juno-network",
+    "api": "https://api.uni.junonetwork.io",
+    "sdk_version": "0.42.4",
+    "addr_prefix": "juno",
+    "logo": "https://dl.airtable.com/.attachments/0f66137c6fb2868000d5a1e214c9ae3d/75a9c5bc/S3c2V3Xd_400x400.jpg"
+}

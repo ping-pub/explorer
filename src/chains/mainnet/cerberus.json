@@ -4,7 +4,7 @@
     "api": "https://cerberus-api.skynetvalidators.com/",
     "sdk_version": "0.44.5",
     "coin_type": "118",
-    "min_tx_fee": "1000",
+    "min_tx_fee": "5000",
     "addr_prefix": "evmos",
     "logo": "https://explorer-images.s3.filebase.com/cerberus-logo.png",
     "assets": [{

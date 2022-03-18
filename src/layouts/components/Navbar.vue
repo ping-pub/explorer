@@ -48,8 +48,8 @@
             /></b-link>
         </b-media-aside>
         <b-media-body class="my-auto">
-          <h6 class="mb-0 text-uppercase">
-            {{ selected_chain.chain_name }}
+          <h6 class="mb-0 ">
+            <span class="text-uppercase">{{ chainid || selected_chain.chain_name }}</span>
           </h6>
           <small id="data-provider">
             {{ currentApi }} ({{ selected_chain.sdk_version || '-' }})
@@ -106,7 +106,7 @@
           </b-button>
         </template>
 
-        <b-dropdown-item
+        <!-- <b-dropdown-item
           :to="{ name: 'portfolio' }"
           class="d-none"
         >
@@ -115,7 +115,7 @@
             size="16"
           />
           <span class="align-middle ml-50">Portofolio</span>
-        </b-dropdown-item>
+        </b-dropdown-item> -->
 
         <b-dropdown-item :to="{ name: 'accounts' }">
           <feather-icon
@@ -199,6 +199,7 @@ export default {
       variant: 'success',
       tips: 'Synced',
       index: 0,
+      chainid: '',
     }
   },
   computed: {
@@ -242,6 +243,7 @@ export default {
       this.index = Number(s)
       this.$store.commit('setHeight', 0)
       this.$http.getLatestBlock().then(block => {
+        this.chainid = block.block.header.chain_id
         this.$store.commit('setHeight', Number(block.block.header.height))
         if (timeIn(block.block.header.time, 1, 'm')) {
           this.variant = 'danger'

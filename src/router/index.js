@@ -27,34 +27,6 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/wallet/setting',
-      name: 'setting',
-      component: () => import('@/views/WalletSetting.vue'),
-      meta: {
-        pageTitle: 'Setting',
-        breadcrumb: [
-          {
-            text: 'Setting',
-            active: true,
-          },
-        ],
-      },
-    },
-    {
-      path: '/wallet/portfolio',
-      name: 'portfolio',
-      component: () => import('@/views/WalletPortfolio.vue'),
-      meta: {
-        pageTitle: 'Portfolio',
-        breadcrumb: [
-          {
-            text: 'Portfolio',
-            active: true,
-          },
-        ],
-      },
-    },
-    {
       path: '/coffee',
       name: 'coffee',
       component: () => import('@core/layouts/components/Coffee.vue'),
@@ -92,20 +64,6 @@ const router = new VueRouter({
         breadcrumb: [
           {
             text: 'Import',
-            active: true,
-          },
-        ],
-      },
-    },
-    {
-      path: '/wallet/address',
-      name: 'addresses',
-      component: () => import('@/views/WalletAddressBook.vue'),
-      meta: {
-        pageTitle: 'Address Book',
-        breadcrumb: [
-          {
-            text: 'Address Book',
             active: true,
           },
         ],

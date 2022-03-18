@@ -42,11 +42,6 @@ const modules = [
 
 function processMenu() {
   const chainMenus = [
-    // {
-    //   title: 'Home',
-    //   route: 'home',
-    //   icon: 'HomeIcon',
-    // },
     {
       header: 'blockchains',
     },

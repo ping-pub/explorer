@@ -40,7 +40,7 @@
         <b-col
           v-for="(data,index) in chains"
           :key="index"
-          md="4"
+          md="3"
           sm="6"
         >
           <router-link :to="data.chain_name">
@@ -48,34 +48,36 @@
               v-if="data"
               class="earnings-card text-left"
             >
-              <b-row>
-                <b-col cols="8">
-                  <b-card-title class="mb-1 text-uppercase">
-                    {{ data.chain_name }} <small class="font-small-2">{{ data.sdk_version }}</small>
-                  </b-card-title>
-                  <div class="font-small-2">
-                    Height
+              <div>
+                <b-card-title class="mb-1 text-uppercase">
+                  {{ data.chain_name }} <small class="font-small-2">{{ data.sdk_version }}</small>
+                </b-card-title>
+
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <div class="font-small-2">
+                      Height
+                    </div>
+                    <h5 class="mb-1">
+                      {{ data.height || '0' }}
+                    </h5>
                   </div>
-                  <h5 class="mb-1">
-                    {{ data.height || '0' }}
-                  </h5>
-                  <b-card-text class="text-muted font-small-2">
-                    <span> Updated on </span><span class="font-weight-bolder">{{ data.time || '...' }}</span>
-                  </b-card-text>
-                </b-col>
-                <b-col
-                  cols="4"
-                >
-                  <b-avatar
-                    :src="data.logo"
-                    class="mt-1 badge-minimal"
-                    variant="light-primary"
-                    rounded
-                    size="82"
-                    badge
-                    :badge-variant="data.variant"
-                  /></b-col>
-              </b-row>
+                  <div>
+                    <b-avatar
+                      :src="data.logo"
+                      class="badge-minimal"
+                      variant="light-primary"
+                      rounded
+                      size="md"
+                      badge
+                      :badge-variant="data.variant"
+                    />
+                  </div>
+                </div>
+                <b-card-text class="text-muted font-small-2">
+                  <span> Updated on </span><span class="font-weight-bolder">{{ data.time || '...' }}</span>
+                </b-card-text>
+              </div>
             </b-card>
           </router-link>
         </b-col>
