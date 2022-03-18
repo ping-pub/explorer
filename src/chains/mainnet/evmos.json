@@ -1,17 +1,17 @@
 {
     "chain_name": "evmos",
     "coingecko": "",
-    "api": ["https://rest.bd.evmos.org:1317", "https://evmos-api.skynetvalidators.com"],
+    "api": ["https://evmos-api.skynetvalidators.com", "https://rest.bd.evmos.org:1317"],
     "sdk_version": "0.45.1",
     "coin_type": "60",
     "min_tx_fee": "3000000000000000",
     "addr_prefix": "evmos",
-    "logo": "https://ping.pub/logos/evmos.jpeg",
+    "logo": "https://explorer-images.s3.filebase.com/EvmosWhiteOnBlack.jpg",
     "assets": [{
         "base": "aevmos",
-        "symbol": "evmos",
+        "symbol": "EVMOS",
         "exponent": "18",
-        "coingecko_id": "", 
-        "logo": "https://ping.pub/logos/evmos.jpeg"
+        "coingecko_id": "",
+        "logo": "https://explorer-images.s3.filebase.com/EvmosWhiteOnBlack.jpg"
     }]
 }
