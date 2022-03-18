@@ -71,8 +71,8 @@ export default class ChainFetch {
     return this.get(`/blocks/${height}`, config).then(data => Block.create(data))
   }
 
-  async getSlashingSigningInfo() {
-    return this.get('/cosmos/slashing/v1beta1/signing_infos')
+  async getSlashingSigningInfo(config = null) {
+    return this.get('/cosmos/slashing/v1beta1/signing_infos?pagination.limit=500', config)
   }
 
   async getTxs(hash) {
@@ -140,8 +140,8 @@ export default class ChainFetch {
     })
   }
 
-  async getValidatorList() {
-    return this.get('/staking/validators').then(data => {
+  async getValidatorList(config = null) {
+    return this.get('/staking/validators', config).then(data => {
       const vals = commonProcess(data).map(i => new Validator().init(i))
       localStorage.setItem(`validators-${this.config.chain_name}`, JSON.stringify(vals))
       return vals
