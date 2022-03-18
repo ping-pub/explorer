@@ -1,7 +1,7 @@
 {
     "chain_name": "celestia",
     "coingecko": "",
-    "api": "https://celestia-api.skynetvalidators.com",
+    "api": "https://celestia-test.postcapitalist.io/",
     "sdk_version": "0.44.0",
     "coin_type": "118",
     "min_tx_fee": "800",

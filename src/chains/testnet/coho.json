@@ -1,6 +1,6 @@
 {
     "chain_name": "cosmic-horizon",
-    "api": ["https://coho-api.skynetvalidators.com"],
+    "api": ["https://coho-test.postcapitalist.io/"],
     "sdk_version": "0.44.5",
     "coin_type": "118",
     "min_tx_fee": "300",
