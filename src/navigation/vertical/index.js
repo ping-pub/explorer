@@ -14,7 +14,7 @@ const modules = [
   },
   {
     scope: 'normal',
-    title: 'validators',
+    title: 'Validators',
     route: 'staking',
   },
   {
