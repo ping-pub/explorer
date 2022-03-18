@@ -1,6 +1,6 @@
 {
     "chain_name": "Archway",
-    "api": ["https://rpc.augusta-1.archway.tech", "https://archway-test.postcapitalist.io/"],
+    "api": ["https://archway-test.postcapitalist.io/"],
     "sdk_version": "0.44.5",
     "coin_type": "118",
     "min_tx_fee": "300",
