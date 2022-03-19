@@ -29,7 +29,7 @@
     </b-link>
 
     <p class="mb-1">
-      PostCapitalist | Explorer explorer and staking service powered by by Razumv and KURASH.
+      PostCapitalist | Explorer and staking service powered by Razumv and KURASH.
     </p>
     <h2 class="mb-3">
       Cosmos Ecosystem Blockchains 🌚
