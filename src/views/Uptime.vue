@@ -19,10 +19,20 @@
         >
           Browse favorite only
         </b-button>
-        <b-form-input
-          v-model="query"
-          placeholder="Keywords to filter validators"
-        />
+        <b-input-group>
+          <b-input-group-prepend is-text>
+            <b-form-checkbox
+              v-model="missedFilter"
+              v-b-tooltip.hover
+              title="Only missed blocks"
+              name="viewMissed"
+            />
+          </b-input-group-prepend>
+          <b-form-input
+            v-model="query"
+            placeholder="Keywords to filter validators"
+          />
+        </b-input-group>
       </b-card>
       <b-row>
         <b-col
@@ -40,15 +50,27 @@
               @change="pinValidator(`${chain}#${x.address}`)"
             ><span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
             </b-form-checkbox>
-            <b-badge
-              v-if="missing[x.address] && missing[x.address].missed_blocks_counter > 0"
-              v-b-tooltip.hover.v-danger
-              variant="light-danger"
-              :title="`missed blocks: ${missing[x.address].missed_blocks_counter}`"
-              class="text-danger text-bolder"
+            <span
+              v-if="missing[x.address]"
             >
-              {{ missing[x.address].missed_blocks_counter }}
-            </b-badge>
+              <b-badge
+                v-if="missing[x.address].missed_blocks_counter > 0"
+                v-b-tooltip.hover.v-danger
+                variant="light-danger"
+                :title="`${missing[x.address].missed_blocks_counter} missed blocks`"
+                class="text-danger text-bolder"
+              >
+                {{ missing[x.address].missed_blocks_counter }}
+              </b-badge>
+              <b-badge
+                v-else
+                v-b-tooltip.hover.v-success
+                variant="light-success"
+                title="Perfect! No missed blocks"
+              >
+                0
+              </b-badge>
+            </span>
           </div>
           <div class="d-flex justify-content-between align-self-stretch flex-wrap">
             <div
@@ -73,7 +95,7 @@
 
 <script>
 import {
-  BRow, BCol, VBTooltip, BFormInput, BCard, BAlert, BFormCheckbox, BButton, BBadge,
+  BRow, BCol, VBTooltip, BFormInput, BCard, BAlert, BFormCheckbox, BButton, BBadge, BInputGroup, BInputGroupPrepend,
 } from 'bootstrap-vue'
 
 import {
@@ -91,6 +113,8 @@ export default {
     BButton,
     BBadge,
     BFormCheckbox,
+    BInputGroup,
+    BInputGroupPrepend,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -99,6 +123,7 @@ export default {
     const { chain } = this.$route.params
     const pinned = localStorage.getItem('pinned') ? localStorage.getItem('pinned').split(',') : ''
     return {
+      missedFilter: false,
       pinned,
       chain,
       query: '',
@@ -113,10 +138,14 @@ export default {
     uptime() {
       const vals = this.query ? this.validators.filter(x => String(x.description.moniker).indexOf(this.query) > -1) : this.validators
       vals.sort((a, b) => b.delegator_shares - a.delegator_shares)
-      return vals.map(x => ({
+      const rets = vals.map(x => ({
         validator: x.description,
         address: consensusPubkeyToHexAddress(x.consensus_pubkey),
       }))
+      if (this.missedFilter) {
+        return rets.filter(x => this.missing[x.address].missed_blocks_counter > 0)
+      }
+      return rets
     },
   },
   created() {

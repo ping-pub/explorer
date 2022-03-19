@@ -32,15 +32,27 @@
             >
               <span class="d-inline-block text-truncate font-weight-bold align-bottom"> {{ x.validator.moniker }} </span>
             </b-form-checkbox>
-            <b-badge
-              v-if="missing[x.address] && missing[x.address].missed_blocks_counter > 0"
-              v-b-tooltip.hover.v-danger
-              variant="light-danger"
-              :title="`missed blocks: ${missing[x.address].missed_blocks_counter}`"
-              class="text-danger text-bolder"
+            <span
+              v-if="missing[x.address]"
             >
-              {{ missing[x.address].missed_blocks_counter }}
-            </b-badge>
+              <b-badge
+                v-if="missing[x.address].missed_blocks_counter > 0"
+                v-b-tooltip.hover.v-danger
+                variant="light-danger"
+                :title="`${missing[x.address].missed_blocks_counter} missed blocks`"
+                class="text-danger text-bolder"
+              >
+                {{ missing[x.address].missed_blocks_counter }}
+              </b-badge>
+              <b-badge
+                v-else
+                v-b-tooltip.hover.v-success
+                variant="light-success"
+                title="Perfect! No missed blocks"
+              >
+                0
+              </b-badge>
+            </span>
           </div>
           <div class="d-flex justify-content-between align-self-stretch flex-wrap">
             <div

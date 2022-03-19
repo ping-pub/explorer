@@ -24,8 +24,8 @@
         Note
       </div>
       <div class="alert-body">
-        There are two ways to monitor your valdiators:
-        <li> Pin a validator on Uptime page.</li>
+        There are two ways to monitor your validators:
+        <li> Pin a validator on Uptime pages.</li>
         <li> Specify parameters like following: <pre>https://ping.pub/cosmos/uptime/my?validators={"sifchain":["FBADE9A30473BB9ED6DFA16BFB3838E028F33650"],"chain_name":["hexAddress"]}</pre></li>
       </div>
     </b-alert>
