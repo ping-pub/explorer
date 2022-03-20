@@ -124,6 +124,17 @@
         <b-card-title>Delegation</b-card-title>
         <div>
           <b-button
+            v-b-modal.operation-modal
+            variant="primary"
+            size="sm"
+            class="mr-25"
+          >
+            <feather-icon
+              icon="LogInIcon"
+              class="d-md-none"
+            /><small class="d-none d-md-block">Delegate-new</small>
+          </b-button>
+          <b-button
             v-b-modal.delegate-window
             variant="primary"
             size="sm"
@@ -353,6 +364,11 @@
       :address="address"
       :validator-address.sync="selectedValidator"
     />
+    <operation-modal
+      type="Delegate"
+      :address="address"
+      :validator-address.sync="selectedValidator"
+    />
   </div>
 </template>
 
@@ -373,6 +389,7 @@ import {
 } from '@/libs/utils'
 import { sha256 } from '@cosmjs/crypto'
 import { toHex } from '@cosmjs/encoding'
+import OperationModal from '@/views/components/OperationModal/index.vue'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
 import OperationTransferComponent from './OperationTransferComponent.vue'
 import OperationWithdrawComponent from './OperationWithdrawComponent.vue'
@@ -412,6 +429,7 @@ export default {
     OperationUnbondComponent,
     OperationTransfer2Component,
     ChartComponentDoughnut,
+    OperationModal,
   },
   directives: {
     'b-modal': VBModal,
