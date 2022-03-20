@@ -327,28 +327,7 @@ export default {
     },
   },
   created() {
-    this.$http.getValidatorListByHeight('latest').then(data => {
-      let height = Number(data.block_height)
-      if (height > 14400) {
-        height -= 14400
-      } else {
-        height = 1
-      }
-      const changes = {}
-      data.validators.forEach(x => {
-        changes[x.pub_key.key] = { latest: Number(x.voting_power), previous: 0 }
-      })
-      this.$http.getValidatorListByHeight(height).then(previous => {
-        previous.validators.forEach(x => {
-          if (changes[x.pub_key.key]) {
-            changes[x.pub_key.key].previous = Number(x.voting_power)
-          } else {
-            changes[x.pub_key.key] = { latest: 0, previous: Number(x.voting_power) }
-          }
-        })
-        this.$set(this, 'changes', changes)
-      })
-    })
+    this.getValidatorListByHeight()
     this.$http.getStakingParameters().then(res => {
       this.stakingParameters = res
     })
@@ -358,6 +337,30 @@ export default {
     this.islive = false
   },
   methods: {
+    getValidatorListByHeight(offset = 0) {
+      this.$http.getValidatorListByHeight('latest', offset).then(data => {
+        let height = Number(data.block_height)
+        if (height > 14400) {
+          height -= 14400
+        } else {
+          height = 1
+        }
+        const { changes } = this
+        data.validators.forEach(x => {
+          changes[x.pub_key.key] = { latest: Number(x.voting_power), previous: 0 }
+        })
+        this.$http.getValidatorListByHeight(height, offset).then(previous => {
+          previous.validators.forEach(x => {
+            if (changes[x.pub_key.key]) {
+              changes[x.pub_key.key].previous = Number(x.voting_power)
+            } else {
+              changes[x.pub_key.key] = { latest: 0, previous: Number(x.voting_power) }
+            }
+          })
+          this.$set(this, 'changes', changes)
+        })
+      })
+    },
     getValidatorListByStatus(statusList) {
       this.validators = []
       statusList.forEach(status => {
@@ -376,6 +379,9 @@ export default {
             }
           }
           this.stakingPool = total
+          if (total > 100) {
+            this.getValidatorListByHeight(100)
+          }
           this.validators.push(...temp)
 
           // fetch avatar from keybase

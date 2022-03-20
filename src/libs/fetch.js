@@ -157,15 +157,15 @@ export default class ChainFetch {
   }
 
   async getValidatorListByStatus(status) {
-    return this.get(`/cosmos/staking/v1beta1/validators?status=${status}`).then(data => {
+    return this.get(`/cosmos/staking/v1beta1/validators?status=${status}&pagination.limit=500`).then(data => {
       const result = commonProcess(data)
       const vals = result.validators ? result.validators : result
       return vals.map(i => new Validator().init(i))
     })
   }
 
-  async getValidatorListByHeight(height) {
-    return this.get(`/cosmos/base/tendermint/v1beta1/validatorsets/${height}?pagination.limit=500`).then(data => commonProcess(data))
+  async getValidatorListByHeight(height, offset) {
+    return this.get(`/cosmos/base/tendermint/v1beta1/validatorsets/${height}?pagination.limit=100&pagination.offset=${offset}`).then(data => commonProcess(data))
   }
 
   async getStakingValidator(address) {
