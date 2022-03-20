@@ -334,16 +334,16 @@ export default {
       } else {
         height = 1
       }
-      const changes = []
+      const changes = {}
       data.validators.forEach(x => {
-        changes[x.pub_key.value] = { latest: Number(x.voting_power), previous: 0 }
+        changes[x.pub_key.key] = { latest: Number(x.voting_power), previous: 0 }
       })
       this.$http.getValidatorListByHeight(height).then(previous => {
         previous.validators.forEach(x => {
-          if (changes[x.pub_key.value]) {
-            changes[x.pub_key.value].previous = Number(x.voting_power)
+          if (changes[x.pub_key.key]) {
+            changes[x.pub_key.key].previous = Number(x.voting_power)
           } else {
-            changes[x.pub_key.value] = { latest: 0, previous: Number(x.voting_power) }
+            changes[x.pub_key.key] = { latest: 0, previous: Number(x.voting_power) }
           }
         })
         this.$set(this, 'changes', changes)
