@@ -318,7 +318,7 @@ export default {
     list() {
       return this.validators.map(x => {
         const xh = x
-        const change = this.changes[x.consensus_pubkey.value]
+        const change = this.changes[x.consensus_pubkey.key]
         if (change) {
           xh.changes = change.latest - change.previous
         }
