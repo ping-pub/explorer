@@ -165,7 +165,7 @@ export default class ChainFetch {
   }
 
   async getValidatorListByHeight(height) {
-    return this.get(`/validatorsets/${height}`).then(data => commonProcess(data))
+    return this.get(`/cosmos/base/tendermint/v1beta1/validatorsets/${height}?pagination.limit=500`).then(data => commonProcess(data))
   }
 
   async getStakingValidator(address) {
