@@ -41,7 +41,7 @@
             :is="type"
             ref="component"
             :address="address"
-            :validator-address.sync="selectedValidator"
+            :validator-address="selectedValidator"
           />
           <b-row>
             <b-col>
@@ -143,13 +143,14 @@ import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  abbrAddress, extractAccountNumberAndSequence, getLocalAccounts, setLocalTxHistory, sign, timeIn,
+  extractAccountNumberAndSequence, setLocalTxHistory, sign, timeIn,
 } from '@/libs/utils'
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 import WalletInputVue from '../WalletInput.vue'
 import Delegate from './components/Delegate.vue'
+import Redelegate from './components/Redelegate.vue'
 
 export default {
   name: 'DelegateDialogue',
@@ -176,6 +177,7 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
     Delegate,
+    Redelegate,
   },
   directives: {
     Ripple,
@@ -197,26 +199,20 @@ export default {
   data() {
     return {
       selectedAddress: this.address,
-      availableAddress: [],
-      validators: [],
-      unbundValidators: [],
       selectedValidator: null,
       token: '',
-      amount: null,
       chainId: '',
-      selectedChain: '',
       balance: [],
-      delegations: [],
       IBCDenom: {},
-      memo: '',
-      fee: '900',
-      feeDenom: '',
-      wallet: 'ledgerUSB',
       error: null,
       sequence: 1,
       accountNumber: 0,
       advance: false,
+      fee: '900',
+      feeDenom: '',
+      wallet: 'ledgerUSB',
       gas: '200000',
+      memo: '',
 
       required,
       password,
@@ -237,35 +233,8 @@ export default {
       return this.balance.filter(item => !item.denom.startsWith('ibc'))
     },
   },
-  created() {
-    // console.log('address: ', this.address)
-  },
   methods: {
-    computeAccount() {
-      const accounts = getLocalAccounts()
-      const values = accounts ? Object.values(accounts) : []
-      let array = []
-      for (let i = 0; i < values.length; i += 1) {
-        const addrs = values[i].address.filter(x => x.chain === this.$route.params.chain)
-        if (addrs && addrs.length > 0) {
-          array = array.concat(addrs.map(x => ({ value: x.addr, label: values[i].name.concat(' - ', abbrAddress(x.addr)) })))
-          if (!this.selectedAddress) {
-            this.selectedAddress = addrs[0].addr
-          }
-        }
-      }
-      this.selectedValidator = this.validatorAddress
-      return array
-    },
     loadBalance() {
-      this.account = this.computeAccount()
-      // if (this.account && this.account.length > 0) this.selectedAddress
-      this.$http.getValidatorList().then(v => {
-        this.validators = v
-      })
-      this.$http.getValidatorUnbondedList().then(v => {
-        this.unbundValidators = v
-      })
       this.$http.getLatestBlock().then(ret => {
         this.chainId = ret.block.header.chain_id
         const notSynced = timeIn(ret.block.header.time, 10, 'm')
@@ -303,11 +272,7 @@ export default {
       })
     },
     handleOk(bvModalEvt) {
-      // console.log('send')
-      // Prevent modal from closing
       bvModalEvt.preventDefault()
-      // Trigger submit handler
-      // this.handleSubmit()
       this.$refs.simpleRules.validate().then(ok => {
         if (ok) {
           this.sendTx().then(ret => {
@@ -365,7 +330,7 @@ export default {
             hash: res.tx_response.txhash,
             time: new Date(),
           })
-          this.$bvModal.hide('delegate-window')
+          this.$bvModal.hide('operation-modal')
           this.$toast({
             component: ToastificationContent,
             props: {

@@ -2,48 +2,17 @@
   <div>
     <b-row>
       <b-col>
-        <validation-provider
-          #default="{ errors }"
-          rules="required"
-          name="Validator"
-        >
-          <b-form-group
-            label="Validator"
-            label-for="validator"
-          >
-            <v-select
-              v-model="selectedValidator"
-              :options="valOptions"
-              :reduce="val => val.value"
-              placeholder="Select a validator"
-              :readonly="validatorAddress"
-            />
-          </b-form-group>
-          <small class="text-danger">{{ errors[0] }}</small>
-        </validation-provider>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
         <b-form-group
           label="Delegator"
-          label-for="Delegator"
+          label-for="Account"
         >
           <validation-provider
             #default="{ errors }"
             rules="required"
             name="Delegator"
           >
-            <b-form-select
-              v-if="account.length > 0"
-              v-model="selectedAddress"
-              :options="account"
-              text-field="label"
-              @change="onChange"
-            />
             <b-form-input
-              v-else
-              v-model="selectedAddress"
+              v-model="address"
               readonly
             />
             <small class="text-danger">{{ errors[0] }}</small>
@@ -54,7 +23,23 @@
     <b-row>
       <b-col>
         <b-form-group
-          label="Available Token"
+          label="From Validator"
+          label-for="validator"
+        >
+          <v-select
+            :value="validatorAddress"
+            :options="valOptions"
+            :reduce="val => val.value"
+            placeholder="Select a validator"
+            :disabled="true"
+          />
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <b-form-group
+          label="Current Delegation"
           label-for="Token"
         >
           <validation-provider
@@ -62,20 +47,28 @@
             rules="required"
             name="Token"
           >
-            <b-form-select
+            <v-select
               v-model="token"
-              text-field="label"
-            >
-              <b-form-select-option
-                v-for="x in balance"
-                :key="x.denom"
-                :value="x.denom"
-              >
-                {{ format(x) }}
-              </b-form-select-option>
-            </b-form-select>
+              :options="tokenOptions"
+              :reduce="token => token.value"
+            />
             <small class="text-danger">{{ errors[0] }}</small>
           </validation-provider>
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <b-form-group
+          label="To Validator"
+          label-for="validator"
+        >
+          <v-select
+            v-model="toValidator"
+            :options="valOptions"
+            :reduce="val => val.value"
+            placeholder="Select a validator"
+          />
         </b-form-group>
       </b-col>
     </b-row>
@@ -113,29 +106,27 @@
 <script>
 import { ValidationProvider } from 'vee-validate'
 import {
-  BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
+  BRow, BCol, BInputGroup, BFormInput, BFormGroup,
   BInputGroupAppend,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  abbrAddress, formatToken, formatTokenDenom, getLocalAccounts, getUnitAmount,
+  formatToken, formatTokenDenom, getUnitAmount,
 } from '@/libs/utils'
 import vSelect from 'vue-select'
 
 export default {
+  name: 'UnbondDialogue',
   components: {
     BRow,
     BCol,
     BInputGroup,
     BFormInput,
     BFormGroup,
-    BFormSelect,
-    BFormSelectOption,
     vSelect,
     BInputGroupAppend,
-
     ValidationProvider,
   },
   props: {
@@ -152,24 +143,21 @@ export default {
     return {
       selectedAddress: this.address,
       availableAddress: [],
-      validators: [],
       unbundValidators: [],
-      selectedValidator: null,
+      validators: [],
+      toValidator: null,
       token: '',
       amount: null,
       chainId: '',
       selectedChain: '',
       balance: [],
       delegations: [],
-      IBCDenom: {},
       memo: '',
       feeDenom: '',
-      wallet: 'ledgerUSB',
       error: null,
       sequence: 1,
       accountNumber: 0,
-      advance: false,
-      gas: '200000',
+      account: [],
 
       required,
       password,
@@ -182,7 +170,6 @@ export default {
       digits,
       length,
       alphaDash,
-      account: [],
     }
   },
   computed: {
@@ -191,16 +178,17 @@ export default {
       const unbunded = this.unbundValidators.map(x => ({ value: x.operator_address, label: `* ${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
       return vals.concat(unbunded)
     },
-    feeDenoms() {
-      if (!this.balance) return []
-      return this.balance.filter(item => !item.denom.startsWith('ibc'))
+    tokenOptions() {
+      if (!this.delegations) return []
+      return this.delegations.filter(x => x.delegation.validator_address === this.validatorAddress).map(x => ({ value: x.balance.denom, label: formatToken(x.balance) }))
     },
     msg() {
       return [{
-        typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
+        typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
         value: {
-          delegatorAddress: this.selectedAddress,
-          validatorAddress: this.selectedValidator,
+          delegatorAddress: this.address,
+          validatorSrcAddress: this.validatorAddress,
+          validatorDstAddress: this.toValidator,
           amount: {
             amount: getUnitAmount(this.amount, this.token),
             denom: this.token,
@@ -213,66 +201,40 @@ export default {
     this.loadBalance()
   },
   methods: {
+    printDenom() {
+      return formatTokenDenom(this.token)
+    },
     loadBalance() {
-      this.account = this.computeAccount()
       this.$http.getValidatorList().then(v => {
         this.validators = v
       })
       this.$http.getValidatorUnbondedList().then(v => {
         this.unbundValidators = v
       })
-      this.onChange()
-    },
-
-    onChange() {
-      if (this.selectedAddress) {
-        this.$http.getBankBalances(this.selectedAddress).then(res => {
-          if (res && res.length > 0) {
-            this.balance = res.reverse()
-            const token = this.balance.find(i => !i.denom.startsWith('ibc'))
-            this.token = token.denom
-            if (token) this.feeDenom = token.denom
-            this.balance.filter(i => i.denom.startsWith('ibc')).forEach(x => {
-              if (!this.IBCDenom[x.denom]) {
-                this.$http.getIBCDenomTrace(x.denom).then(denom => {
-                  this.IBCDenom[x.denom] = denom.denom_trace.base_denom
-                })
-              }
-            })
+      this.$http.getBankBalances(this.address).then(res => {
+        if (res && res.length > 0) {
+          this.balance = res.reverse()
+        }
+      })
+      this.$http.getStakingDelegations(this.address).then(res => {
+        this.delegations = res.delegation_responses
+        console.log(res)
+        this.delegations.forEach(x => {
+          if (x.delegation.validator_address === this.validatorAddress) {
+            this.token = x.balance.denom
+            this.feeDenom = x.balance.denom
           }
         })
-        console.log('onChange----------->')
-        // TODO: this.$emit()
-        // this.$parent.getAuthAccount(this.selectedAddress)
-      }
-    },
-    computeAccount() {
-      const accounts = getLocalAccounts()
-      const values = accounts ? Object.values(accounts) : []
-      let array = []
-      for (let i = 0; i < values.length; i += 1) {
-        const addrs = values[i].address.filter(x => x.chain === this.$route.params.chain)
-        if (addrs && addrs.length > 0) {
-          array = array.concat(addrs.map(x => ({ value: x.addr, label: values[i].name.concat(' - ', abbrAddress(x.addr)) })))
-          if (!this.selectedAddress) {
-            this.selectedAddress = addrs[0].addr
-          }
-        }
-      }
-      this.selectedValidator = this.validatorAddress
-      return array
-    },
-    printDenom() {
-      return formatTokenDenom(this.IBCDenom[this.token] || this.token)
+      })
     },
 
     format(v) {
-      return formatToken(v, this.IBCDenom)
+      return formatToken(v)
     },
+
   },
 }
 </script>
-
-<style lang="scss" scoped>
-
+<style lang="scss">
+@import '@core/scss/vue/libs/vue-select.scss';
 </style>

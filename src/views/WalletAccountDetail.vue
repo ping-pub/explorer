@@ -128,6 +128,7 @@
             variant="primary"
             size="sm"
             class="mr-25"
+            @click="setOperationModalType('Delegate')"
           >
             <feather-icon
               icon="LogInIcon"
@@ -183,6 +184,15 @@
                 v-b-tooltip.hover.top="'Redelegate'"
                 variant="outline-primary"
                 @click="selectValue(data.value)"
+              >
+                <feather-icon icon="ShuffleIcon" />
+              </b-button>
+              <b-button
+                v-b-modal.operation-modal
+                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                v-b-tooltip.hover.top="'Redelegate'"
+                variant="outline-primary"
+                @click="selectValue(data.value,'Redelegate')"
               >
                 <feather-icon icon="ShuffleIcon" />
               </b-button>
@@ -365,9 +375,9 @@
       :validator-address.sync="selectedValidator"
     />
     <operation-modal
-      type="Delegate"
+      :type="operationModalType"
       :address="address"
-      :validator-address.sync="selectedValidator"
+      :validator-address="selectedValidator"
     />
   </div>
 </template>
@@ -452,6 +462,7 @@ export default {
       unbonding: [],
       quotes: {},
       transactions: [],
+      operationModalType: '',
     }
   },
   computed: {
@@ -638,8 +649,12 @@ export default {
         this.transactions = res
       })
     },
-    selectValue(v) {
+    selectValue(v, type) {
       this.selectedValidator = v
+      this.setOperationModalType(type)
+    },
+    setOperationModalType(type) {
+      this.operationModalType = type
     },
     formatHash: abbrAddress,
     formatDenom(v) {
