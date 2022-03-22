@@ -1,5 +1,5 @@
 {
-    "chain_name": "fetchhub",
+    "chain_name": "fetch",
     "coingecko": "fetch",
     "api": ["https://fetch.postcapitalist.io/"],
     "sdk_version": "0.45.1",
