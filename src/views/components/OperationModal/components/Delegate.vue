@@ -120,7 +120,7 @@ import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  abbrAddress, formatToken, formatTokenDenom, getLocalAccounts, getUnitAmount,
+  abbrAddress, formatToken, formatTokenDenom, getLocalAccounts, getUnitAmount, extractAccountNumberAndSequence,
 } from '@/libs/utils'
 import vSelect from 'vue-select'
 
@@ -210,6 +210,10 @@ export default {
     },
   },
   mounted() {
+    this.$emit('update', {
+      modalTitle: 'Delegate Token',
+      historyName: 'delegate',
+    })
     this.loadBalance()
   },
   methods: {
@@ -241,9 +245,13 @@ export default {
             })
           }
         })
-        console.log('onChange----------->')
-        // TODO: this.$emit()
-        // this.$parent.getAuthAccount(this.selectedAddress)
+        this.$http.getAuthAccount(this.selectedAddress).then(ret => {
+          const account = extractAccountNumberAndSequence(ret)
+          this.$emit('update', {
+            accountNumber: account.accountNumber,
+            sequence: account.sequence,
+          })
+        })
       }
     },
     computeAccount() {

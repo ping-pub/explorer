@@ -3,7 +3,7 @@
     id="operation-modal"
     centered
     size="md"
-    title="Delegate Token"
+    :title="modalTitle"
     ok-title="Send"
     hide-header-close
     scrollable
@@ -41,7 +41,8 @@
             :is="type"
             ref="component"
             :address="address"
-            :validator-address="selectedValidator"
+            :validator-address="validatorAddress"
+            @update="componentUpdate"
           />
           <b-row>
             <b-col>
@@ -151,6 +152,8 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 import WalletInputVue from '../WalletInput.vue'
 import Delegate from './components/Delegate.vue'
 import Redelegate from './components/Redelegate.vue'
+import Withdraw from './components/Withdraw.vue'
+import Unbond from './components/Unbond.vue'
 
 export default {
   name: 'DelegateDialogue',
@@ -178,6 +181,8 @@ export default {
     ToastificationContent,
     Delegate,
     Redelegate,
+    Withdraw,
+    Unbond,
   },
   directives: {
     Ripple,
@@ -198,8 +203,11 @@ export default {
   },
   data() {
     return {
+      modalTitle: '',
+      historyName: '',
       selectedAddress: this.address,
       selectedValidator: null,
+      selectedChain: null,
       token: '',
       chainId: '',
       balance: [],
@@ -244,7 +252,11 @@ export default {
           this.error = null
         }
       })
-      this.getAuthAccount()
+      this.$http.getAuthAccount(this.selectedAddress).then(ret => {
+        const account = extractAccountNumberAndSequence(ret)
+        this.accountNumber = account.accountNumber
+        this.sequence = account.sequence
+      })
       this.$http.getBankBalances(this.selectedAddress).then(res => {
         if (res && res.length > 0) {
           this.balance = res.reverse()
@@ -263,12 +275,10 @@ export default {
       this.fee = this.$store.state.chains.selected?.min_tx_fee || '1000'
       this.feeDenom = this.$store.state.chains.selected?.assets[0]?.base || ''
     },
-    getAuthAccount(address = this.selectedAddress) {
-      this.$http.getAuthAccount(address).then(ret => {
-        const account = extractAccountNumberAndSequence(ret)
-        console.log(account)
-        this.accountNumber = account.accountNumber
-        this.sequence = account.sequence
+    componentUpdate(obj) {
+      console.log(obj)
+      Object.keys(obj).forEach(key => {
+        this[key] = obj[key]
       })
     },
     handleOk(bvModalEvt) {
@@ -288,7 +298,7 @@ export default {
     },
     async sendTx() {
       const txMsgs = this.$refs.component.msg
-
+      console.log(txMsgs)
       if (txMsgs.length === 0) {
         this.error = 'No delegation found'
         return ''
@@ -323,10 +333,10 @@ export default {
         this.memo,
         signerData,
       ).then(bodyBytes => {
-        this.$http.broadcastTx(bodyBytes).then(res => {
+        this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
           setLocalTxHistory({
             chain: this.$store.state.chains.selected,
-            op: 'delegate',
+            op: this.historyName,
             hash: res.tx_response.txhash,
             time: new Date(),
           })

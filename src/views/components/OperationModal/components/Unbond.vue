@@ -6,24 +6,17 @@
           label="Delegator"
           label-for="Account"
         >
-          <validation-provider
-            #default="{ errors }"
-            rules="required"
-            name="Delegator"
-          >
-            <b-form-input
-              v-model="address"
-              readonly
-            />
-            <small class="text-danger">{{ errors[0] }}</small>
-          </validation-provider>
+          <b-form-input
+            v-model="address"
+            readonly
+          />
         </b-form-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
         <b-form-group
-          label="From Validator"
+          label="Validator"
           label-for="validator"
         >
           <v-select
@@ -54,21 +47,6 @@
             />
             <small class="text-danger">{{ errors[0] }}</small>
           </validation-provider>
-        </b-form-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        <b-form-group
-          label="To Validator"
-          label-for="validator"
-        >
-          <v-select
-            v-model="toValidator"
-            :options="valOptions"
-            :reduce="val => val.value"
-            placeholder="Select a validator"
-          />
         </b-form-group>
       </b-col>
     </b-row>
@@ -106,8 +84,7 @@
 <script>
 import { ValidationProvider } from 'vee-validate'
 import {
-  BRow, BCol, BInputGroup, BFormInput, BFormGroup,
-  BInputGroupAppend,
+  BRow, BCol, BInputGroup, BFormInput, BFormGroup, BInputGroupAppend,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
@@ -118,7 +95,7 @@ import {
 import vSelect from 'vue-select'
 
 export default {
-  name: 'Redelegate',
+  name: 'UnbondDialogue',
   components: {
     BRow,
     BCol,
@@ -128,6 +105,7 @@ export default {
     vSelect,
     BInputGroupAppend,
     ValidationProvider,
+
   },
   props: {
     validatorAddress: {
@@ -141,19 +119,12 @@ export default {
   },
   data() {
     return {
-      selectedAddress: this.address,
-      unbundValidators: [],
       validators: [],
-      toValidator: null,
+      selectedValidator: this.validatorAddress,
       token: '',
       amount: null,
       balance: [],
       delegations: [],
-      feeDenom: '',
-      error: null,
-      sequence: 1,
-      accountNumber: 0,
-      account: [],
 
       required,
       password,
@@ -170,9 +141,7 @@ export default {
   },
   computed: {
     valOptions() {
-      const vals = this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
-      const unbunded = this.unbundValidators.map(x => ({ value: x.operator_address, label: `* ${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
-      return vals.concat(unbunded)
+      return this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
     },
     tokenOptions() {
       if (!this.delegations) return []
@@ -180,11 +149,10 @@ export default {
     },
     msg() {
       return [{
-        typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
+        typeUrl: '/cosmos.staking.v1beta1.MsgUndelegate',
         value: {
           delegatorAddress: this.address,
-          validatorSrcAddress: this.validatorAddress,
-          validatorDstAddress: this.toValidator,
+          validatorAddress: this.validatorAddress,
           amount: {
             amount: getUnitAmount(this.amount, this.token),
             denom: this.token,
@@ -193,24 +161,25 @@ export default {
       }]
     },
   },
+
   mounted() {
     this.$emit('update', {
-      modalTitle: 'Redelegate Token',
-      historyName: 'redelegate',
+      modalTitle: 'Unbond Token',
+      historyName: 'unbond',
     })
     this.loadBalance()
   },
+
   methods: {
     printDenom() {
       return formatTokenDenom(this.token)
     },
     loadBalance() {
-      this.$http.getValidatorList().then(v => {
-        this.validators = v
-      })
-      this.$http.getValidatorUnbondedList().then(v => {
-        this.unbundValidators = v
-      })
+      if (this.address) {
+        this.$http.getValidatorList().then(v => {
+          this.validators = v
+        })
+      }
       this.$http.getBankBalances(this.address).then(res => {
         if (res && res.length > 0) {
           this.balance = res.reverse()
@@ -218,7 +187,6 @@ export default {
       })
       this.$http.getStakingDelegations(this.address).then(res => {
         this.delegations = res.delegation_responses
-        console.log(res)
         this.delegations.forEach(x => {
           if (x.delegation.validator_address === this.validatorAddress) {
             this.token = x.balance.denom
@@ -228,10 +196,6 @@ export default {
           }
         })
       })
-    },
-
-    format(v) {
-      return formatToken(v)
     },
 
   },

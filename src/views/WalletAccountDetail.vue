@@ -133,7 +133,7 @@
             <feather-icon
               icon="LogInIcon"
               class="d-md-none"
-            /><small class="d-none d-md-block">Delegate-new</small>
+            /><small class="d-none d-md-block">Delegate1</small>
           </b-button>
           <b-button
             v-b-modal.delegate-window
@@ -156,6 +156,18 @@
               icon="ShareIcon"
               class="d-md-none"
             /><small class="d-none d-md-block"> Withdraw Rewards</small>
+          </b-button>
+          <b-button
+            v-if="delegations"
+            v-b-modal.operation-modal
+            variant="primary"
+            size="sm"
+            @click="setOperationModalType('Withdraw')"
+          >
+            <feather-icon
+              icon="ShareIcon"
+              class="d-md-none"
+            /><small class="d-none d-md-block"> Withdraw Rewards1</small>
           </b-button>
         </div>
       </b-card-header>
@@ -190,7 +202,7 @@
               <b-button
                 v-b-modal.operation-modal
                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                v-b-tooltip.hover.top="'Redelegate'"
+                v-b-tooltip.hover.top="'Redelegate1'"
                 variant="outline-primary"
                 @click="selectValue(data.value,'Redelegate')"
               >
@@ -202,6 +214,15 @@
                 v-b-tooltip.hover.top="'Unbond'"
                 variant="outline-primary"
                 @click="selectValue(data.value)"
+              >
+                <feather-icon icon="LogOutIcon" />
+              </b-button>
+              <b-button
+                v-b-modal.operation-modal
+                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                v-b-tooltip.hover.top="'Unbond1'"
+                variant="outline-primary"
+                @click="selectValue(data.value,'Unbond')"
               >
                 <feather-icon icon="LogOutIcon" />
               </b-button>
