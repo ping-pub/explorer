@@ -51,7 +51,7 @@
           <h6 class="mb-0 ">
             <span class="text-uppercase">{{ chainid || selected_chain.chain_name }}</span>
           </h6>
-          <!-- <small id="data-provider">
+          <small id="data-provider" hidden>
             {{ currentApi }} ({{ selected_chain.sdk_version || '-' }})
             <b-dropdown
               class="ml-0"
@@ -76,14 +76,14 @@
                 {{ item }}
               </b-dropdown-item>
             </b-dropdown>
-          </small> -->
+          </small>
         </b-media-body>
       </b-media>
     </div>
 
     <!-- <dark-Toggler class="d-none d-lg-block" /> -->
     <!-- Right Col -->
-    <!-- <b-navbar-nav class="nav align-items-center ml-auto">
+    <b-navbar-nav class="nav align-items-center ml-auto">
       <dark-Toggler class="d-none d-lg-block" />
       <search-bar />
       <locale />
@@ -93,7 +93,7 @@
         no-caret
         toggle-class="p-0"
         right
-      > -->
+      >
 
         <template #button-content>
           <b-button
