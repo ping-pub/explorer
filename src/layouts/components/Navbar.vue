@@ -86,7 +86,7 @@
     <b-navbar-nav class="nav align-items-center ml-auto">
       <dark-Toggler class="d-none d-lg-block" />
       <search-bar />
-      <locale />
+      <locale hidden/>
       <b-dropdown
         class="ml-1"
         variant="link"
