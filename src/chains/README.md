@@ -12,6 +12,7 @@
 {
     "chain_name": "cosmos",
     "api": ["https://cosmos.api.ping.pub"], 
+    "rpc": ["https://cosmos.rpc.ping.pub:443","http://your-host:26657"]
     "sdk_version": "0.42.6",
     "coin_type": "118",
     "min_tx_fee": "800",
@@ -28,6 +29,7 @@
 ```
 - **chain_name** the name to identify the chain on ping.pub
 - **api** the rest api endpoint.(make sure that CORS is enabled: `Allow-Control-Allow-Origin: *`)
+- **rpc** the rpc endpoint, make sure that the port is added. 
 - **assets** Native Assets on blockchain. 
 # Test 
 

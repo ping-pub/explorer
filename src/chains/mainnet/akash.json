@@ -1,6 +1,7 @@
 {
     "chain_name": "akash-network",
     "api": ["https://akash.api.ping.pub"],
+    "rpc": ["http://rpc.akash.forbole.com:80", "http://akashsentry01.skynetvalidators.com:26657"],
     "sdk_version": "0.41.3",
     "coin_type": "118",
     "min_tx_fee": "8000",
