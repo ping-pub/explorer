@@ -93,7 +93,7 @@
       no-body
     >
       <b-card-header class="d-flex justify-content-between">
-        <b-form-group>
+        <b-form-group class="mb-0">
           <b-form-radio-group
             id="btn-radios-1"
             v-model="selectedStatus"
@@ -108,8 +108,9 @@
           <span>Validators {{ validators.length }}/{{ stakingParameters.max_validators }} </span>
         </b-card-title>
       </b-card-header>
-      <b-card-body class="pl-0 pr-0">
+      <b-card-body class="pl-0 pr-0 pb-0">
         <b-table
+          class="mb-0"
           :items="list"
           :fields="validator_fields"
           :sort-desc="true"
@@ -317,7 +318,7 @@ export default {
     list() {
       return this.validators.map(x => {
         const xh = x
-        const change = this.changes[x.consensus_pubkey.value]
+        const change = this.changes[x.consensus_pubkey.key]
         if (change) {
           xh.changes = change.latest - change.previous
         }
@@ -326,28 +327,7 @@ export default {
     },
   },
   created() {
-    this.$http.getValidatorListByHeight('latest').then(data => {
-      let height = Number(data.block_height)
-      if (height > 14400) {
-        height -= 14400
-      } else {
-        height = 1
-      }
-      const changes = []
-      data.validators.forEach(x => {
-        changes[x.pub_key.value] = { latest: Number(x.voting_power), previous: 0 }
-      })
-      this.$http.getValidatorListByHeight(height).then(previous => {
-        previous.validators.forEach(x => {
-          if (changes[x.pub_key.value]) {
-            changes[x.pub_key.value].previous = Number(x.voting_power)
-          } else {
-            changes[x.pub_key.value] = { latest: 0, previous: Number(x.voting_power) }
-          }
-        })
-        this.$set(this, 'changes', changes)
-      })
-    })
+    this.getValidatorListByHeight()
     this.$http.getStakingParameters().then(res => {
       this.stakingParameters = res
     })
@@ -357,6 +337,30 @@ export default {
     this.islive = false
   },
   methods: {
+    getValidatorListByHeight(offset = 0) {
+      this.$http.getValidatorListByHeight('latest', offset).then(data => {
+        let height = Number(data.block_height)
+        if (height > 14400) {
+          height -= 14400
+        } else {
+          height = 1
+        }
+        const { changes } = this
+        data.validators.forEach(x => {
+          changes[x.pub_key.key] = { latest: Number(x.voting_power), previous: 0 }
+        })
+        this.$http.getValidatorListByHeight(height, offset).then(previous => {
+          previous.validators.forEach(x => {
+            if (changes[x.pub_key.key]) {
+              changes[x.pub_key.key].previous = Number(x.voting_power)
+            } else {
+              changes[x.pub_key.key] = { latest: 0, previous: Number(x.voting_power) }
+            }
+          })
+          this.$set(this, 'changes', changes)
+        })
+      })
+    },
     getValidatorListByStatus(statusList) {
       this.validators = []
       statusList.forEach(status => {
@@ -375,6 +379,9 @@ export default {
             }
           }
           this.stakingPool = total
+          if (total > 100) {
+            this.getValidatorListByHeight(100)
+          }
           this.validators.push(...temp)
 
           // fetch avatar from keybase
