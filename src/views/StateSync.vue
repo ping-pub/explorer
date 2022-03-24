@@ -38,12 +38,12 @@
         Enable Snapshot For State Sync
       </b-card-title>
       To make state sync works, We need at least 2 available RPC servers which enabled snapshot. You can configure in <code>$DAEMON_HOME/config/app.toml</code>,
-      and don't forget to share your RPC server <a href="https://github.com/ping-pub/explorer/tree/master/src/chains">Here</a>
+      and don't forget to share your snapshot server <a href="https://github.com/ping-pub/explorer/discussions">Here</a>
       <b-form-textarea
         id="snapshot"
         v-model="snapshot"
         readonly
-        rows="7"
+        rows="8"
         class="mt-1"
       />
     </b-card>
@@ -81,8 +81,8 @@ export default {
 # taken (0 to disable). Must be a multiple of pruning-keep-every.
 snapshot-interval = 1000
 
-# snapshot-keep-recent specifies the number of recent snapshots to keep and serve (0 to keep all).
-snapshot-keep-recent = 10`,
+# snapshot-keep-recent specifies the number of recent snapshots to keep and serve (0 to keep all). each snapshot is around 500MiB
+snapshot-keep-recent = 2`,
     }
   },
   //   computed: {
@@ -107,8 +107,7 @@ snapshot-keep-recent = 10`,
   //     },
   //   },
   created() {
-    console.log(this.$store.state.chains.selected.state_sync_interval)
-    const interval = this.$store.state.chains.selected.state_sync_interval || 1000
+    const interval = 1000
     this.$http.getLatestBlock().then(l => {
       const { height } = l.block.header
       if (height > interval) {

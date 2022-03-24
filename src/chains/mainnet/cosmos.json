@@ -3,7 +3,6 @@
     "coingecko": "cosmos",
     "api": ["https://cosmos.api.ping.pub", "https://lcd-cosmoshub.blockapsis.com"],
     "rpc": ["http://cosmos.rpc.ping.pub:26657", "https://cosmoshub.validator.network:443"],
-    "state_sync_interval": "1000",
     "sdk_version": "0.44.3",
     "coin_type": "118",
     "min_tx_fee": "800",
