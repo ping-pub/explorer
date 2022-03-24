@@ -8,18 +8,18 @@
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "chronic",
-    "logo": "https://explorer-images.s3.filebase.com/cht-logo.jpg",
+    "logo": "/logos/chronic-token.jpg",
     "assets": [{
         "base": "ucgas",
         "symbol": "CGAS",
         "exponent": "6",
         "coingecko_id": "",
-        "logo": "https://explorer-images.s3.filebase.com/cht-logo.jpg"
+        "logo": "/logos/chronic-token.jpg"
     },{
         "base": "ucht",
         "symbol": "CHT",
         "exponent": "6",
         "coingecko_id": "ion",
-        "logo": "https://explorer-images.s3.filebase.com/cht-logo.jpg"
+        "logo": "/logos/chronic-token.jpg"
     }]
 }

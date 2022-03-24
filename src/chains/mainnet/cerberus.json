@@ -2,20 +2,20 @@
   "chain_name": "cerberus",
   "coingecko": "",
   "api": ["https://api.cerberus.zone:1317"],
-  "rpc": [],
+  "rpc": ["https://rpc.cerberus.zone:26657", "https://rpc-cerberus.ecostake.com:443"],
   "snapshot_provider": "",
   "sdk_version": "0.44.5",
   "coin_type": "118",
   "min_tx_fee": "5000",
   "addr_prefix": "cerberus",
-  "logo": "https://cerberus-chain.s3.us-east-2.amazonaws.com/main/logo.png",
+  "logo": "/logos/cerberus.png",
   "assets": [
     {
       "base": "ucrbrus",
       "symbol": "CRBRUS",
       "exponent": "6",
       "coingecko_id": "",
-      "logo": "https://cerberus-chain.s3.us-east-2.amazonaws.com/main/logo.png"
+      "logo": "/logos/cerberus.png"
     }
   ]
 }

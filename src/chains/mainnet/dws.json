@@ -8,12 +8,12 @@
     "coin_type": "118",
     "min_tx_fee": "200",
     "addr_prefix": "deweb",
-    "logo": "https://dws-images.s3.filebase.com/logo.png",
+    "logo": "/logos/DWS.png",
     "assets": [{
         "base": "udws",
         "symbol": "DWS",
         "exponent": "6",
         "coingecko_id": "",
-        "logo": "https://dws-images.s3.filebase.com/logo.png"
+        "logo": "/logos/DWS.png"
     }]
 }

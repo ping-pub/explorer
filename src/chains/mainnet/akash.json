@@ -11,8 +11,8 @@
         "symbol": "AKT",
         "exponent": "6",
         "coingecko_id": "akash-network", 
-        "logo": "https://dl.airtable.com/.attachments/52586702dd8352d97834fce5c2d83614/969b4d53/akash-network.png"
+        "logo": "/logos/akash-network.png"
     }],
     "addr_prefix": "akash",
-    "logo": "https://dl.airtable.com/.attachments/52586702dd8352d97834fce5c2d83614/969b4d53/akash-network.png"
+    "logo": "/logos/akash-network.png"
 }

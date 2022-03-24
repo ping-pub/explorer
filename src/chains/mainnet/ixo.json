@@ -7,12 +7,12 @@
     "coin_type": "118",
     "min_tx_fee": "3000",
     "addr_prefix": "ixo",
-    "logo": "https://ping.pub/logos/ixo.svg",
+    "logo": "/logos/ixo.svg",
     "assets": [{
         "base": "uixo",
         "symbol": "IXO",
         "exponent": "6",
         "coingecko_id": "ixo", 
-        "logo": "https://ping.pub/logos/ixo.svg"
+        "logo": "/logos/ixo.svg"
     }]
 }

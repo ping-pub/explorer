@@ -2,18 +2,18 @@
     "chain_name": "kava",
     "coingecko": "kava",
     "api": "https://api.data.kava.io",
-    "rpc": [],
+    "rpc": ["https://rpc.kava.io:443", "https://rpc.kava.io:443"],
     "snapshot_provider": "",
     "sdk_version": "0.44.5",
     "coin_type": "118",
     "min_tx_fee": "5000",
     "addr_prefix": "kava",
-    "logo": "https://dl.airtable.com/.attachments/f25737491bd0034240093a7b4e039b15/afec77ff/logo.png",
+    "logo": "/logos/kava.png",
     "assets": [{
         "base": "ukava",
         "symbol": "KAVA",
         "exponent": "6",
         "coingecko_id": "kava", 
-        "logo": "https://dl.airtable.com/.attachments/f25737491bd0034240093a7b4e039b15/afec77ff/logo.png"
+        "logo": "/logos/kava.png"
     }]
 }
