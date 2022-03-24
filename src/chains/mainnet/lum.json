@@ -2,7 +2,7 @@
     "chain_name": "lum-network",
     "coingecko": "",
     "api": "https://node0.mainnet.lum.network/rest",
-    "rpc": [],
+    "rpc": ["https://node0.mainnet.lum.network:443/rpc", "https://node0.mainnet.lum.network:443/rpc"],
     "snapshot_provider": "",
     "sdk_version": "0.44.5",
     "coin_type": "880",

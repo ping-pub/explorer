@@ -2,7 +2,7 @@
     "chain_name": "chihuahua",
     "coingecko": "",
     "api": ["https://api.chihuahua.wtf", "https://chihuahua-api.mercury-nodes.net"],
-    "rpc": [],
+    "rpc": ["https://rpc.chihuahua.wtf:443", "https://rpc.chihuahua.wtf:443"],
     "snapshot_provider": "",
     "sdk_version": "0.44.3",
     "coin_type": "118",

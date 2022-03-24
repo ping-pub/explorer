@@ -2,7 +2,7 @@
     "chain_name": "e-money",
     "coingecko": "e-money",
     "api": "https://emoney.validator.network/api",
-    "rpc": [],
+    "rpc": ["https://rpc-emoney.keplr.app:443", "https://emoney.validator.network:443"],
     "snapshot_provider": "",
     "addr_prefix": "emoney",
     "coin_type": "118",

@@ -1,7 +1,7 @@
 {
     "chain_name": "fetchhub",
     "api": ["https://rest-fetchhub.fetch.ai"],
-    "rpc": [],
+    "rpc": ["https://rpc-fetchhub.fetch.ai:443", "https://rpc-fetchhub.fetch.ai:443"],
     "snapshot_provider": "",
     "sdk_version": "0.45.1",
     "coin_type": "118",

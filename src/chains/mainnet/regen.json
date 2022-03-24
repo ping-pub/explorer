@@ -2,7 +2,7 @@
     "chain_name": "regen",
     "coingecko": "regen",
     "api": "https://regen.api.ping.pub",
-    "rpc": [],
+    "rpc": ["http://public-rpc.regen.vitwit.com:26657", "https://regen.stakesystems.io:2053"],
     "snapshot_provider": "",
     "sdk_version": "0.44.3",
     "coin_type": "118",

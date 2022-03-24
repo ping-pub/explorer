@@ -2,7 +2,7 @@
     "chain_name": "bostrom",
     "coingecko": "",
     "api": "https://lcd.bostrom.cybernode.ai",
-    "rpc": [],
+    "rpc": ["https://rpc.bostrom.cybernode.ai:443", "https://rpc.bostrom.cybernode.ai:443"],
     "snapshot_provider": "",
     "sdk_version": "0.44.3",
     "coin_type": "118",
