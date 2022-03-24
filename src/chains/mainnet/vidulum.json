@@ -2,6 +2,8 @@
     "chain_name": "vidulum",
     "coingecko": "vidulum",
     "api": "https://mainnet-lcd.vidulum.app",
+    "rpc": [],
+    "snapshot_provider": "",
     "sdk_version": "0.44.0",
     "coin_type": "370",
     "min_tx_fee": "8000",

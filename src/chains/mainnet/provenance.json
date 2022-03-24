@@ -2,6 +2,8 @@
     "chain_name": "provenance",
     "coingecko": "",
     "api": "https://api.provenance.io",
+    "rpc": [],
+    "snapshot_provider": "",
     "sdk_version": "0.44.3",
     "coin_type": "505",
     "min_tx_fee": "400000000",

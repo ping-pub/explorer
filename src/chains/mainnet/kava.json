@@ -2,6 +2,8 @@
     "chain_name": "kava",
     "coingecko": "kava",
     "api": "https://api.data.kava.io",
+    "rpc": [],
+    "snapshot_provider": "",
     "sdk_version": "0.44.5",
     "coin_type": "118",
     "min_tx_fee": "5000",

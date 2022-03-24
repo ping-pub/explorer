@@ -28,8 +28,19 @@
         readonly
         placeholder="Loading..."
         rows="7"
-        class="mt-1"
+        class="my-1"
         @change="check()"
+      />
+      <b class="mt-1">3. Snapshot Providers </b><br>
+      To reduce snapshot discovering time, we can add providers into persistent_peers in <code>$DAEMON_HOME/config/config.toml</code>.
+      <b-form-textarea
+        id="provider"
+        v-model="providers"
+        readonly
+        :state="snapshot_provider?true:false"
+        placeholder="Loading..."
+        rows="3"
+        class="mt-1"
       />
     </b-card>
 
@@ -63,25 +74,28 @@ export default {
     BFormTextarea,
   },
   data() {
-    const { rpc } = this.$store.state.chains.selected
+    const { rpc, snapshot_provider } = this.$store.state.chains.selected
     let servers = ''
     if (rpc && Array.isArray(rpc)) {
       servers = rpc.join(',')
     }
+    // eslint-disable-next-line camelcase
+    const providers = snapshot_provider ? `# Comma separated list of nodes to keep persistent connections to \npersistent_peers = "${snapshot_provider}" ` : 'Currently, NO available providers'
     return {
+      snapshot_provider,
       servers,
+      providers,
       height: 0,
       hash: '',
       error: [],
       state: '',
       valid: false,
       snapshot: `[state-sync]
-
 # snapshot-interval specifies the block interval at which local state sync snapshots are
 # taken (0 to disable). Must be a multiple of pruning-keep-every.
 snapshot-interval = 1000
 
-# snapshot-keep-recent specifies the number of recent snapshots to keep and serve (0 to keep all). each snapshot is around 500MiB
+# snapshot-keep-recent specifies the number of recent snapshots to keep and serve (0 to keep all). Each snapshot is about 500MiB
 snapshot-keep-recent = 2`,
     }
   },

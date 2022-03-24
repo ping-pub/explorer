@@ -1,7 +1,8 @@
 {
     "chain_name": "starname",
-    "coingecko": "starname",
     "api": "https://api.iov-mainnet-ibc.iov.one",
+    "rpc": [],
+    "snapshot_provider": "",
     "sdk_version": "0.42.6",
     "coin_type": "234",
     "min_tx_fee": "8000",

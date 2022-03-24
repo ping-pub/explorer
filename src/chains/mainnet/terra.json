@@ -2,6 +2,8 @@
     "chain_name": "terra-luna",
     "coingecko": "terra-luna",
     "api": "https://fcd.terra.dev",
+    "rpc": [],
+    "snapshot_provider": "",
     "sdk_version": "0.44.2",
     "coin_type": "330",
     "min_tx_fee": "5000",

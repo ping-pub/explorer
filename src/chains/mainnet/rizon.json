@@ -1,6 +1,8 @@
 {
     "chain_name": "rizon",
     "api": ["https://rizon.api.ping.pub"],
+    "rpc": [],
+    "snapshot_provider": "",
     "sdk_version": "v0.42.9",
     "coin_type": "118",
     "min_tx_fee": "8000",

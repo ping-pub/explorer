@@ -1,6 +1,8 @@
 {
     "chain_name": "cosmic-horizon",
     "api": ["https://coho-api.skynetvalidators.com"],
+    "rpc": [],
+    "snapshot_provider": "",
     "sdk_version": "0.44.5",
     "coin_type": "118",
     "min_tx_fee": "300",

@@ -1,7 +1,8 @@
 {
     "chain_name": "sentinel",
-    "coingecko": "sentinel",
     "api": "https://lcd.sentinel.co",
+    "rpc": [],
+    "snapshot_provider": "",
     "sdk_version": "0.42.6",
     "coin_type": "750",
     "min_tx_fee": "8000",

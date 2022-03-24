@@ -1,7 +1,8 @@
 {
     "chain_name": "okexchain",
-    "coingecko": "okexchain",
     "api": "https://exchainrpc.okex.org/okexchain/v1",
+    "rpc": [],
+    "snapshot_provider": "",
     "sdk_version": "0.39.2",
     "coin_type": "118",
     "min_tx_fee": "800",

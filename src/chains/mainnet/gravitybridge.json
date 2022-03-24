@@ -1,6 +1,8 @@
 {
     "chain_name": "gravity-bridge",
     "api": "https://gravitychain.io:1317",
+    "rpc": [],
+    "snapshot_provider": "",
     "sdk_version": "0.44.5",
     "coin_type": "60",
     "min_tx_fee": "5000",

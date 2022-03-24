@@ -2,6 +2,8 @@
     "chain_name": "chronic-token",
     "coingecko": "",
     "api": "https://chtd-api.skynetvalidators.com",
+    "rpc": [],
+    "snapshot_provider": "",
     "sdk_version": "0.44.5",
     "coin_type": "118",
     "min_tx_fee": "800",

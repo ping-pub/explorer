@@ -3,6 +3,8 @@
     "chain_name": "crypto-com-chain",
     "coingecko": "crypto-com-chain",
     "api": "https://mainnet.crypto.org:1317",
+    "rpc": [],
+    "snapshot_provider": "",
     "sdk_version": "0.39.2",
     "coin_type": "394",
     "min_tx_fee": "5000",

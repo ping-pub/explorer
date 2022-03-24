@@ -2,6 +2,8 @@
     "chain_name": "e-money",
     "coingecko": "e-money",
     "api": "https://emoney.validator.network/api",
+    "rpc": [],
+    "snapshot_provider": "",
     "addr_prefix": "emoney",
     "coin_type": "118",
     "min_tx_fee": "5000",
