@@ -12,8 +12,8 @@
         "symbol": "BCNA",
         "exponent": "6",
         "coingecko_id": "bitcanna", 
-        "logo": "https://raw.githubusercontent.com/osmosis-labs/assetlists/main/images/bcna.svg"
+        "logo": "/logos/bitcanna.svg"
     }],
     "addr_prefix": "bcna",
-    "logo": "https://raw.githubusercontent.com/osmosis-labs/assetlists/main/images/bcna.svg"
+    "logo": "/logos/bitcanna.svg"
 }

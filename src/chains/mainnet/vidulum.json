@@ -8,12 +8,12 @@
     "coin_type": "370",
     "min_tx_fee": "8000",
     "addr_prefix": "vdl",
-    "logo": "https://ping.pub/logos/VDL.png",
+    "logo": "/logos/VDL.png",
     "assets": [{
         "base": "uvdl",
         "symbol": "VDL",
         "exponent": "6",
         "coingecko_id": "vidulum", 
-        "logo": "https://ping.pub/logos/VDL.png"
+        "logo": "/logos/VDL.png"
     }]
   }

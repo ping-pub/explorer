@@ -7,12 +7,12 @@
     "coin_type": "118",
     "min_tx_fee": "8000",
     "addr_prefix": "sif",
-    "logo": "https://dl.airtable.com/.attachments/990cb076d7566e53e976c1fa69d60b09/3c05e786/71144030.jpeg",
+    "logo": "/logos/sifchain.jpeg",
     "assets": [{
         "base": "rowan",
         "symbol": "ROWAN",
         "exponent": "18",
         "coingecko_id": "sifchain", 
-        "logo": "https://dl.airtable.com/.attachments/990cb076d7566e53e976c1fa69d60b09/3c05e786/71144030.jpeg"
+        "logo": "/logos/sifchain.jpeg"
     }]
 }

@@ -11,8 +11,8 @@
         "symbol": "BAND",
         "exponent": "6",
         "coingecko_id": "band-protocol", 
-        "logo": "https://dl.airtable.com/.attachments/472ae99a508e32b4439b416beddd4eb9/c5166f62/band-symbol-blue-bg.75a3ad91.svg"
+        "logo": "/logos/band-protocol.svg"
     }],
-    "logo": "https://dl.airtable.com/.attachments/472ae99a508e32b4439b416beddd4eb9/c5166f62/band-symbol-blue-bg.75a3ad91.svg",
+    "logo": "/logos/band-protocol.svg",
     "sdk_version": "0.44.0"
 }

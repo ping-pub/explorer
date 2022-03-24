@@ -11,8 +11,8 @@
         "symbol": "COHO",
         "exponent": "6",
         "coingecko_id": "",
-        "logo": "https://coho-images.s3.filebase.com/red_logo.png"
+        "logo": "/logos/cosmic-horizon.png"
     }],
     "addr_prefix": "coho",
-    "logo": "https://coho-images.s3.filebase.com/red_logo.png"
+    "logo": "/logos/cosmic-horizon.png"
 }

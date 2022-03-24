@@ -7,12 +7,12 @@
     "coin_type": "118",
     "min_tx_fee": "8000",
     "addr_prefix": "umee",
-    "logo": "https://ping.pub/logos/umee.png",
+    "logo": "/logos/umee.png",
     "assets": [{
         "base": "uumee",
         "symbol": "UMEE",
         "exponent": "6",
         "coingecko_id": "", 
-        "logo": "https://ping.pub/logos/umee.png"
+        "logo": "/logos/umee.png"
     }]
   }
