@@ -327,6 +327,9 @@ export default {
     },
   },
   created() {
+    this.$http.getStakingPool().then(pool => {
+      this.stakingPool = pool.bondedToken
+    })
     this.getValidatorListByHeight()
     this.$http.getStakingParameters().then(res => {
       this.stakingParameters = res
@@ -378,7 +381,6 @@ export default {
               identities.push(identity)
             }
           }
-          this.stakingPool = total
           if (total > 100) {
             this.getValidatorListByHeight(100)
           }

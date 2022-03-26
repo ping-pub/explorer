@@ -1,6 +1,8 @@
 {
     "chain_name": "akash-network",
     "api": ["https://akash.api.ping.pub"],
+    "rpc": ["http://rpc.akash.forbole.com:80", "http://akashsentry01.skynetvalidators.com:26657"],
+    "snapshot_provider": "",
     "sdk_version": "0.41.3",
     "coin_type": "118",
     "min_tx_fee": "8000",
@@ -9,8 +11,8 @@
         "symbol": "AKT",
         "exponent": "6",
         "coingecko_id": "akash-network", 
-        "logo": "https://dl.airtable.com/.attachments/52586702dd8352d97834fce5c2d83614/969b4d53/akash-network.png"
+        "logo": "/logos/akash-network.png"
     }],
     "addr_prefix": "akash",
-    "logo": "https://dl.airtable.com/.attachments/52586702dd8352d97834fce5c2d83614/969b4d53/akash-network.png"
+    "logo": "/logos/akash-network.png"
 }
