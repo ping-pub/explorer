@@ -11,7 +11,7 @@
       Click <a href="https://blog.cosmos.network/cosmos-sdk-state-sync-guide-99e4cf43be2f">here</a> for more infomation.
       <br><br>
       <b class="mt-1">2. How to use it? </b><br>
-      We can configure Tendermint to use state sync in <code>$DAEMON_HOME/config/config.toml</code>, then start your daemon.
+      We can configure Tendermint to use state sync in <code>$DAEMON_HOME/config/config.toml</code>, then start daemon.
       <ul class="mt-1">
         <li
           v-for="e in error"
@@ -32,7 +32,7 @@
         @change="check()"
       />
       <b class="mt-1">3. Snapshot Providers </b><br>
-      To reduce snapshot discovering time, we can add providers into persistent_peers in <code>$DAEMON_HOME/config/config.toml</code>.
+      To reduce the time of snapshot discovering, we can add providers into persistent_peers in <code>$DAEMON_HOME/config/config.toml</code>.
       <b-form-textarea
         id="provider"
         v-model="providers"
@@ -48,7 +48,7 @@
       <b-card-title>
         Enable Snapshot For State Sync
       </b-card-title>
-      To make state sync works, We need at least 2 available RPC servers which enabled snapshot. You can configure in <code>$DAEMON_HOME/config/app.toml</code>,
+      To make state sync works, we can enable snapshot in <code>$DAEMON_HOME/config/app.toml</code>
       and don't forget to share your snapshot server <a href="https://github.com/ping-pub/explorer/discussions">Here</a>
       <b-form-textarea
         id="snapshot"
@@ -80,7 +80,7 @@ export default {
       servers = rpc.join(',')
     }
     // eslint-disable-next-line camelcase
-    const providers = snapshot_provider ? `# Comma separated list of nodes to keep persistent connections to \npersistent_peers = "${snapshot_provider}" ` : 'Currently, NO available providers'
+    const providers = snapshot_provider ? `# Comma separated list of nodes to keep persistent connections to \npersistent_peers = "${snapshot_provider}" ` : 'OMG！ NO available providers'
     return {
       snapshot_provider,
       servers,

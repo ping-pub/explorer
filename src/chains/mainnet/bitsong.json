@@ -3,7 +3,7 @@
     "coingecko": "bitsong",
     "api": "https://lcd.explorebitsong.com",
     "rpc": ["https://rpc-bitsong.itastakers.com:443","https://rpc-bitsong.itastakers.com:443"],
-    "snapshot_provider": "",
+    "snapshot_provider": "8dbeefed0d1e39475328d3850226063208bb8ee4@bitsong.rpc.ping.pub:26656",
     "addr_prefix": "bitsong",
     "coin_type": "639",
     "min_tx_fee": "3500",
