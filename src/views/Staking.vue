@@ -309,6 +309,7 @@ export default {
         { text: 'Inactive', value: ['BOND_STATUS_UNBONDED', 'BOND_STATUS_UNBONDING'] },
       ],
       selectedStatus: ['BOND_STATUS_BONDED'],
+      isChangesLoaded: false,
     }
   },
   computed: {
@@ -320,7 +321,7 @@ export default {
         const xh = x
         const change = this.changes[x.consensus_pubkey.key]
         if (change) {
-          xh.changes = change.latest - change.previous
+          xh.changes = this.isChangesLoaded ? change.latest - change.previous : 0
         }
         return xh
       })
@@ -330,6 +331,7 @@ export default {
     this.$http.getStakingPool().then(pool => {
       this.stakingPool = pool.bondedToken
     })
+    // set
     this.getValidatorListByHeight()
     this.$http.getStakingParameters().then(res => {
       this.stakingParameters = res
@@ -360,6 +362,7 @@ export default {
               changes[x.pub_key.key] = { latest: 0, previous: Number(x.voting_power) }
             }
           })
+          this.isChangesLoaded = true
           this.$set(this, 'changes', changes)
         })
       })
