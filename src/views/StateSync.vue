@@ -80,7 +80,10 @@ export default {
       servers = rpc.join(',')
     }
     // eslint-disable-next-line camelcase
-    const providers = snapshot_provider ? `# Comma separated list of nodes to keep persistent connections to \npersistent_peers = "${snapshot_provider}" ` : 'OMG！ NO available providers'
+    const peers = snapshot_provider
+    const providers = peers
+      ? `# Comma separated list of nodes to keep persistent connections to \npersistent_peers = "${peers}" `
+      : 'OMG！ There is NO available providers, but you can try it.'
     return {
       snapshot_provider,
       servers,
