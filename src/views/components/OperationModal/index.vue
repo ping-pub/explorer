@@ -7,13 +7,13 @@
     ok-title="Send"
     hide-header-close
     scrollable
-    :ok-disabled="!selectedAddress"
+    :ok-disabled="isOwner"
     @hidden="resetModal"
     @ok="handleOk"
-    @show="loadBalance"
+    @show="initialize"
   >
     <b-overlay
-      :show="!selectedAddress"
+      :show="isOwner"
       rounded="sm"
     >
       <template #overlay>
@@ -24,7 +24,7 @@
             animation="cylon"
           />
           <p id="cancel-label">
-            No available account found.
+            {{ blockingMsg }}
           </p>
           <b-button
             v-ripple.400="'rgba(255, 255, 255, 0.15)'"
@@ -42,6 +42,7 @@
             ref="component"
             :address="address"
             :validator-address="validatorAddress"
+            :balance="balance"
             @update="componentUpdate"
           />
           <b-row>
@@ -144,7 +145,7 @@ import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  extractAccountNumberAndSequence, setLocalTxHistory, sign, timeIn,
+  extractAccountNumberAndSequence, getLocalAccounts, setLocalTxHistory, sign, timeIn,
 } from '@/libs/utils'
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -221,6 +222,7 @@ export default {
       wallet: 'ledgerUSB',
       gas: '200000',
       memo: '',
+      blockingMsg: 'No available account found.',
 
       required,
       password,
@@ -240,9 +242,19 @@ export default {
       if (!this.balance) return []
       return this.balance.filter(item => !item.denom.startsWith('ibc'))
     },
+    isOwner() {
+      const accounts = getLocalAccounts()
+      const selectedWallet = this.$store.state.chains.defaultWallet
+      if (accounts && accounts[selectedWallet]) {
+        if (accounts[selectedWallet].address.findIndex(x => x.addr === this.address) > -1) {
+          return false
+        }
+      }
+      return true
+    },
   },
   methods: {
-    loadBalance() {
+    initialize() {
       this.$http.getLatestBlock().then(ret => {
         this.chainId = ret.block.header.chain_id
         const notSynced = timeIn(ret.block.header.time, 10, 'm')
@@ -263,17 +275,11 @@ export default {
           const token = this.balance.find(i => !i.denom.startsWith('ibc'))
           this.token = token.denom
           if (token) this.feeDenom = token.denom
-          this.balance.filter(i => i.denom.startsWith('ibc')).forEach(x => {
-            if (!this.IBCDenom[x.denom]) {
-              this.$http.getIBCDenomTrace(x.denom).then(denom => {
-                this.IBCDenom[x.denom] = denom.denom_trace.base_denom
-              })
-            }
-          })
         }
       })
       this.fee = this.$store.state.chains.selected?.min_tx_fee || '1000'
       this.feeDenom = this.$store.state.chains.selected?.assets[0]?.base || ''
+      // this.$refs.component.loadData()
     },
     componentUpdate(obj) {
       console.log(obj)
