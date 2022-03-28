@@ -1,7 +1,7 @@
 {
     "chain_name": "lum-network",
     "coingecko": "",
-    "api": "https://node0.mainnet.lum.network/rest",
+    "api": "https://lum.postcapitalist.io",
     "sdk_version": "0.44.5",
     "coin_type": "880",
     "min_tx_fee": "5000",
@@ -11,7 +11,7 @@
         "base": "ulum",
         "symbol": "LUM",
         "exponent": "6",
-        "coingecko_id": "", 
+        "coingecko_id": "",
         "logo": "https://ipfs.infura.io/ipfs/QmWwKRnkHantvhoFx9serWaWKBUG6gfhSYN3SHdAv1jmKY"
     }]
 }
