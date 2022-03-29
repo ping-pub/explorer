@@ -11,15 +11,7 @@
             rules="required"
             name="Delegator"
           >
-            <b-form-select
-              v-if="account.length > 0"
-              v-model="selectedAddress"
-              :options="account"
-              text-field="label"
-              @change="onChange"
-            />
             <b-form-input
-              v-else
               v-model="selectedAddress"
               readonly
             />
@@ -176,7 +168,6 @@ export default {
       digits,
       length,
       alphaDash,
-      account: [],
     }
   },
   computed: {
