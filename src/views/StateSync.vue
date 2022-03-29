@@ -31,7 +31,7 @@
         class="my-1"
         @change="check()"
       />
-      <b class="mt-1">3. Snapshot Providers </b><br>
+      <b class="mt-1">3. (Optional) Adding Snapshot Providers </b><br>
       To reduce the time of snapshot discovering, we can add providers into persistent_peers in <code>$DAEMON_HOME/config/config.toml</code>.
       <b-form-textarea
         id="provider"
