@@ -1,13 +1,13 @@
 <template>
   <p class="clearfix mb-0">
-    <!-- <span class="float-md-left d-none d-md-block d-md-inline-block mt-25">
-      Forked from
+    <span class="float-md-left d-none d-md-block d-md-inline-block mt-25">
+      POSTCAPITALIST
       <b-link
         class="ml-25 font-weight-bolder"
-        href="https://ping.pub"
+        href="https://blog.postcapitalist.io/"
         target="_blank"
-      >Ping.pub</b-link>
-    </span> -->
+      >Blog</b-link>
+    </span>
 
     <router-link
       v-ripple.400="'rgba(113, 102, 240, 0.15)'"
