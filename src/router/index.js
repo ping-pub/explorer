@@ -55,14 +55,14 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/coffee',
-      name: 'coffee',
+      path: '/donation',
+      name: 'donation',
       component: () => import('@core/layouts/components/Coffee.vue'),
       meta: {
         pageTitle: 'Donation',
         breadcrumb: [
           {
-            text: 'Buy me a cup of coffee!',
+            text: 'Make a donation',
             active: false,
           },
         ],
