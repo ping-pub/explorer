@@ -28,9 +28,9 @@
       </div>
     </b-link>
 
-    <p class="mb-1">
+    <!-- <p class="mb-1">
       PostCapitalist | Explorer and staking service powered by Razumv and KURASH.
-    </p>
+    </p> -->
     <h2 class="mb-3">
       Cosmos Ecosystem Blockchains 🌚
     </h2>
