@@ -155,6 +155,7 @@ import Delegate from './components/Delegate.vue'
 import Redelegate from './components/Redelegate.vue'
 import Withdraw from './components/Withdraw.vue'
 import Unbond from './components/Unbond.vue'
+import Transfer from './components/Transfer.vue'
 
 export default {
   name: 'DelegateDialogue',
@@ -184,6 +185,7 @@ export default {
     Redelegate,
     Withdraw,
     Unbond,
+    Transfer,
   },
   directives: {
     Ripple,

@@ -50,6 +50,18 @@
             <span class="d-none d-md-block">Transfer</span>
           </b-button>
           <b-button
+            v-b-modal.operation-modal
+            variant="primary"
+            size="sm"
+            class="mr-25"
+            @click="setOperationModalType('Transfer')"
+          >
+            <feather-icon
+              icon="SendIcon"
+              class="d-md-none"
+            /><small class="d-none d-md-block">Transfer1</small>
+          </b-button>
+          <b-button
             v-b-modal.ibc-transfer-window
             variant="danger"
             size="sm"

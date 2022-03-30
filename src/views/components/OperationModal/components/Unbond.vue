@@ -105,7 +105,6 @@ export default {
     vSelect,
     BInputGroupAppend,
     ValidationProvider,
-
   },
   props: {
     validatorAddress: {
@@ -123,7 +122,6 @@ export default {
       selectedValidator: this.validatorAddress,
       token: '',
       amount: null,
-      balance: [],
       delegations: [],
 
       required,
@@ -167,24 +165,16 @@ export default {
       modalTitle: 'Unbond Token',
       historyName: 'unbond',
     })
-    this.loadBalance()
+    this.loadData()
   },
 
   methods: {
-    printDenom() {
-      return formatTokenDenom(this.token)
-    },
-    loadBalance() {
+    loadData() {
       if (this.address) {
         this.$http.getValidatorList().then(v => {
           this.validators = v
         })
       }
-      this.$http.getBankBalances(this.address).then(res => {
-        if (res && res.length > 0) {
-          this.balance = res.reverse()
-        }
-      })
       this.$http.getStakingDelegations(this.address).then(res => {
         this.delegations = res.delegation_responses
         this.delegations.forEach(x => {
@@ -197,7 +187,9 @@ export default {
         })
       })
     },
-
+    printDenom() {
+      return formatTokenDenom(this.token)
+    },
   },
 }
 </script>

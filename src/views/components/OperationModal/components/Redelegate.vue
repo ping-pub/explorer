@@ -68,6 +68,7 @@
             :options="valOptions"
             :reduce="val => val.value"
             placeholder="Select a validator"
+            :selectable="(v) => v.value"
           />
         </b-form-group>
       </b-col>
@@ -213,7 +214,6 @@ export default {
       })
       this.$http.getStakingDelegations(this.address).then(res => {
         this.delegations = res.delegation_responses
-        console.log(res)
         this.delegations.forEach(x => {
           if (x.delegation.validator_address === this.validatorAddress) {
             this.token = x.balance.denom
