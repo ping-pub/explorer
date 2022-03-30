@@ -23,7 +23,7 @@
         <h1
           class="text-primary display-4 font-weight-bolder d-none d-md-block"
         >
-          PostCapitalist | Explorer<small class="flow-left"></small>
+          POSTCAPITALIST | Explorer<small class="flow-left"></small>
         </h1>
       </div>
     </b-link>
