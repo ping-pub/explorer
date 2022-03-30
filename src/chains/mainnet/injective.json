@@ -1,6 +1,6 @@
 {
     "chain_name": "injective",
-    "api": "https://lcd.injective.network",
+    "api": "https://injective.postcapitalist.io",
     "sdk_version": "v0.44.5",
     "coin_type": "60",
     "min_tx_fee": "5000",
@@ -11,7 +11,7 @@
         "base": "inj",
         "symbol": "INJ",
         "exponent": "18",
-        "coingecko_id": "injective-protocol", 
+        "coingecko_id": "injective-protocol",
         "logo": "https://dl.airtable.com/.attachments/e024faae112ae873d301f9e1e17a921c/3f3671f7/9pOKAlQ5_400x400.jpg"
     }]
 }

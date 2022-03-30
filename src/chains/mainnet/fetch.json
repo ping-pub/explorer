@@ -1,7 +1,7 @@
 {
     "chain_name": "fetch",
     "coingecko": "fetch",
-    "api": ["https://fetch.postcapitalist.io/"],
+    "api": ["https://fetch.postcapitalist.io"],
     "sdk_version": "0.45.1",
     "coin_type": "118",
     "min_tx_fee": "3000000000000000",
