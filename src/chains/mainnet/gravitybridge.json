@@ -1,6 +1,6 @@
 {
     "chain_name": "gravity-bridge",
-    "api": "https://gbridge.postcapitalist.io",
+    "api": "https://gravity.postcapitalist.io",
     "sdk_version": "0.44.5",
     "coin_type": "60",
     "min_tx_fee": "5000",
