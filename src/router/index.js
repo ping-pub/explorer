@@ -292,6 +292,20 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/:chain/transactions',
+      name: 'blocks',
+      component: () => import('@/views/Transactions.vue'),
+      meta: {
+        pageTitle: 'Transactions',
+        breadcrumb: [
+          {
+            text: 'Transactions',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
       path: '/:chain/blocks/:height',
       name: 'block',
       component: () => import('@/views/Block.vue'),
