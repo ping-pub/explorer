@@ -13,9 +13,7 @@ import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/legend'
 import 'echarts/lib/chart/scatter'
 // import theme from './theme.json'
-
 // ECharts.registerTheme('theme-color', theme)
-
 export default {
   components: {
     ECharts,

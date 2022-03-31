@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "analyz": "vue-cli-service build --report"
   },
   "dependencies": {
     "@casl/ability": "4.1.6",
@@ -18,7 +19,6 @@
     "@cosmjs/math": "^0.26.5",
     "@cosmjs/proto-signing": "^0.26.5",
     "@cosmjs/stargate": "0.26.5",
-    "@cosmostation/cosmosjs": "^0.10.6",
     "@intlify/vue-i18n-loader": "^2.1.2",
     "@ledgerhq/hw-app-cosmos": "^6.3.0",
     "@ledgerhq/hw-transport-web-ble": "^6.3.0",
@@ -92,11 +92,13 @@
     "@vue/eslint-config-airbnb": "^5.3.0",
     "@vuepress/plugin-medium-zoom": "^1.7.1",
     "babel-eslint": "^10.0.3",
+    "compression-webpack-plugin": "6.1.1",
     "eslint": "6.8.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-vue": "6.2.2",
     "sass": "1.32.*",
     "sass-loader": "^10.1.0",
-    "vue-template-compiler": "2.x"
+    "vue-template-compiler": "2.x",
+    "webpack-bundle-analyzer": "^4.5.0"
   }
 }

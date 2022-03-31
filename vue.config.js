@@ -1,4 +1,8 @@
 const path = require('path')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
+
+const productionGzipExtensions = ['js', 'css']
 
 module.exports = {
   publicPath: '/',
@@ -21,6 +25,17 @@ module.exports = {
         '@axios': path.resolve(__dirname, 'src/libs/axios'),
       },
     },
+    plugins: [
+      new BundleAnalyzerPlugin({
+        analyzerMode: 'static',
+        openAnalyzer: false,
+      }),
+      new CompressionWebpackPlugin({
+        test: new RegExp(`\\.(${productionGzipExtensions.join('|')})$`),
+        threshold: 8192,
+        minRatio: 0.8,
+      }),
+    ],
   },
   chainWebpack: config => {
     config.module

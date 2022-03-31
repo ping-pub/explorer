@@ -291,7 +291,6 @@ import OperationTransferComponent from './OperationTransferComponent.vue'
 import OperationTransfer2Component from './OperationTransfer2Component.vue'
 import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
 import EchartScatter from './components/charts/EchartScatter.vue'
-
 export default {
   components: {
     BAvatar,
@@ -678,5 +677,4 @@ export default {
 .addzone :hover {
     border: 2px dashed #7367F0;
 }
-
 </style>

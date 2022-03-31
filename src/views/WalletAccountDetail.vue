@@ -116,7 +116,43 @@
         </b-row>
       </b-card-body>
     </b-card>
-
+    <b-card
+      v-if="unbonding && unbonding.length > 0"
+    >
+      <b-card-header class="pt-0 pl-0 pr-0">
+        <b-card-title>Unbonding Tokens</b-card-title>
+      </b-card-header>
+      <b-card-body class="pl-0 pr-0">
+        <b-row
+          v-for="item in unbonding"
+          :key="item.validator_address"
+        >
+          <b-col cols="12">
+            <span class="font-weight-bolder">From: <router-link :to="`../staking/${item.validator_address}`">{{ item.validator_address }}</router-link></span>
+          </b-col>
+          <b-col cols="12">
+            <b-table
+              :items="item.entries"
+              class="mt-1"
+              striped
+              hover
+              responsive="sm"
+              stacked="sm"
+            >
+              <template #cell(completion_time)="data">
+                {{ formatDate(data.item.completion_time) }}
+              </template>
+              <template #cell(initial_balance)="data">
+                {{ data.item.initial_balance }}{{ stakingParameters.bond_denom }}
+              </template>
+              <template #cell(balance)="data">
+                {{ data.item.balance }}{{ stakingParameters.bond_denom }}
+              </template>
+            </b-table>
+          </b-col>
+        </b-row>
+      </b-card-body>
+    </b-card>
     <b-card
       v-if="delegations"
     >
@@ -358,6 +394,7 @@
 
 <script>
 import { $themeColors } from '@themeConfig'
+import dayjs from 'dayjs'
 import {
   BCard, BAvatar, BPopover, BTable, BRow, BCol, BTableSimple, BTr, BTd, BTbody, BCardHeader, BCardTitle, BButton, BCardBody, VBModal,
   BButtonGroup, VBTooltip, BPagination,
@@ -381,7 +418,6 @@ import OperationDelegateComponent from './OperationDelegateComponent.vue'
 import OperationRedelegateComponent from './OperationRedelegateComponent.vue'
 import OperationTransfer2Component from './OperationTransfer2Component.vue'
 import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
-
 export default {
   components: {
     BRow,
@@ -434,6 +470,7 @@ export default {
       unbonding: [],
       quotes: {},
       transactions: [],
+      stakingParameters: {},
     }
   },
   computed: {
@@ -468,9 +505,7 @@ export default {
         sum += Number(xh.amount)
         return xh
       }))
-
       let stakingDenom = ''
-
       if (this.delegations && this.delegations.length > 0) {
         let temp = 0
         this.delegations.forEach(x => {
@@ -489,7 +524,6 @@ export default {
           currency: this.formatCurrency(temp, stakingDenom),
         })
       }
-
       if (this.reward.total) {
         total = total.concat(this.reward.total.map(x => {
           const xh = x
@@ -509,6 +543,7 @@ export default {
             tmp1 += Number(e.balance)
           })
         })
+        if (this.stakingParameters) stakingDenom = this.stakingParameters.bond_denom
         const unbonding = this.formatCurrency(tmp1, stakingDenom)
         sumCurrency += unbonding
         sum += tmp1
@@ -610,6 +645,9 @@ export default {
     this.$http.getTxsBySender(this.address).then(res => {
       this.transactions = res
     })
+    this.$http.getStakingParameters().then(res => {
+      this.stakingParameters = res
+    })
   },
   methods: {
     formatNumber(v) {
@@ -644,6 +682,7 @@ export default {
       }
       return 0
     },
+    formatDate: v => dayjs(v).format('YYYY-MM-DD HH:mm:ss'),
     formatTime: v => toDay(Number(v) * 1000),
     formatLength: v => toDuration(Number(v) * 1000),
     copy() {
