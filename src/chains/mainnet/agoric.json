@@ -20,5 +20,5 @@
         "logo": ""
     }],
     "addr_prefix": "agoric",
-    "logo": "/logos/agoric.png"
+    "logo": "https://ping.pub/logos/agoric.png"
 }
