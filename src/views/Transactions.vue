@@ -10,10 +10,10 @@
         </b-card-title>
       </b-card-header>
       <b-table
-        :items="blocks"
+        :items="transactions"
         :fields="list_fields"
         :sort-desc="true"
-        sort-by="tokens"
+        sort-by="blocks"
         striped
         hover
         stacked="sm"
