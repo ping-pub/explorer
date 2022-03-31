@@ -4,7 +4,7 @@
     centered
     size="md"
     :title="modalTitle"
-    ok-title="Send"
+    :ok-title="actionName"
     hide-header-close
     scrollable
     :ok-disabled="isOwner"
@@ -43,6 +43,8 @@
             :address="address"
             :validator-address="validatorAddress"
             :balance="balance"
+            :proposal-id="proposalId"
+            :proposal-title="proposalTitle"
             @update="componentUpdate"
           />
           <b-row>
@@ -156,6 +158,8 @@ import Redelegate from './components/Redelegate.vue'
 import Withdraw from './components/Withdraw.vue'
 import Unbond from './components/Unbond.vue'
 import Transfer from './components/Transfer.vue'
+import IBCTransfer from './components/IBCTransfer.vue'
+import Vote from './components/Vote.vue'
 
 export default {
   name: 'DelegateDialogue',
@@ -186,6 +190,8 @@ export default {
     Withdraw,
     Unbond,
     Transfer,
+    IBCTransfer,
+    Vote,
   },
   directives: {
     Ripple,
@@ -200,6 +206,14 @@ export default {
       default: null,
     },
     address: {
+      type: String,
+      default: null,
+    },
+    proposalId: {
+      type: Number,
+      default: null,
+    },
+    proposalTitle: {
       type: String,
       default: null,
     },
@@ -225,6 +239,7 @@ export default {
       gas: '200000',
       memo: '',
       blockingMsg: 'No available account found.',
+      actionName: 'Send',
 
       required,
       password,
@@ -247,8 +262,14 @@ export default {
     isOwner() {
       const accounts = getLocalAccounts()
       const selectedWallet = this.$store.state.chains.defaultWallet
+      if (!this.address) {
+        const chain = this.$store.state.chains.selected.chain_name
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.selectedAddress = accounts[selectedWallet].address.find(x => x.chain === chain)
+      }
+
       if (accounts && accounts[selectedWallet]) {
-        if (accounts[selectedWallet].address.findIndex(x => x.addr === this.address) > -1) {
+        if (accounts[selectedWallet].address.findIndex(x => x.addr === this.selectedAddress) > -1) {
           return false
         }
       }

@@ -44,7 +44,6 @@ export default {
   data() {
     return {
       account: [],
-      selectedChain: '',
       balance: [],
       delegations: [],
       feeDenom: '',
