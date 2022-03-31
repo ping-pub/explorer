@@ -294,7 +294,7 @@ const router = new VueRouter({
     {
       path: '/:chain/transactions',
       name: 'blocks',
-      component: () => import('@/views/Transaction.vue'),
+      component: () => import('@/views/Transactions.vue'),
       meta: {
         pageTitle: 'Transactions',
         breadcrumb: [
