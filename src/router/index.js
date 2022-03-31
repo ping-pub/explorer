@@ -293,7 +293,7 @@ const router = new VueRouter({
     },
     {
       path: '/:chain/transactions',
-      name: 'blocks',
+      name: 'transactions',
       component: () => import('@/views/Transactions.vue'),
       meta: {
         pageTitle: 'Transactions',
