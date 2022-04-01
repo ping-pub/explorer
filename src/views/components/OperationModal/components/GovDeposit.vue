@@ -2,37 +2,33 @@
   <div>
     <b-row>
       <b-col>
+        <h4>{{ proposalId }}. {{ proposalTitle }}</h4>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
         <b-form-group
-          label="Delegator"
-          label-for="Account"
+          label="Depositor"
+          label-for="Voter"
         >
-          <b-form-input
-            v-model="address"
-            readonly
-          />
+          <validation-provider
+            #default="{ errors }"
+            rules="required"
+            name="Voter"
+          >
+            <b-form-input
+              v-model="address"
+              readonly
+            />
+            <small class="text-danger">{{ errors[0] }}</small>
+          </validation-provider>
         </b-form-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
         <b-form-group
-          label="Validator"
-          label-for="validator"
-        >
-          <v-select
-            :value="validatorAddress"
-            :options="valOptions"
-            :reduce="val => val.value"
-            placeholder="Select a validator"
-            :disabled="true"
-          />
-        </b-form-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        <b-form-group
-          label="Current Delegation"
+          label="Available Token"
           label-for="Token"
         >
           <validation-provider
@@ -40,11 +36,17 @@
             rules="required"
             name="Token"
           >
-            <v-select
+            <b-form-select
               v-model="token"
-              :options="tokenOptions"
-              :reduce="token => token.value"
-            />
+            >
+              <b-form-select-option
+                v-for="item in balanceOptions"
+                :key="item.denom"
+                :value="item.denom"
+              >
+                {{ format(item) }}
+              </b-form-select-option>
+            </b-form-select>
             <small class="text-danger">{{ errors[0] }}</small>
           </validation-provider>
         </b-form-group>
@@ -61,7 +63,7 @@
             rules="required|regex:^([0-9\.]+)$"
             name="amount"
           >
-            <b-input-group>
+            <b-input-group class="mb-25">
               <b-form-input
                 id="Amount"
                 v-model="amount"
@@ -84,7 +86,8 @@
 <script>
 import { ValidationProvider } from 'vee-validate'
 import {
-  BRow, BCol, BInputGroup, BFormInput, BFormGroup, BInputGroupAppend,
+  BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect,
+  BInputGroupAppend, BFormSelectOption,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
@@ -92,24 +95,32 @@ import {
 import {
   formatToken, formatTokenDenom, getUnitAmount,
 } from '@/libs/utils'
-import vSelect from 'vue-select'
 
 export default {
-  name: 'UnbondDialogue',
+  name: 'DepositDialogue',
   components: {
     BRow,
     BCol,
     BInputGroup,
     BFormInput,
     BFormGroup,
-    vSelect,
+    BFormSelect,
     BInputGroupAppend,
+    BFormSelectOption,
     ValidationProvider,
   },
   props: {
-    validatorAddress: {
+    proposalId: {
+      type: Number,
+      required: true,
+    },
+    proposalTitle: {
       type: String,
-      default: null,
+      required: true,
+    },
+    balance: {
+      type: Array,
+      default: () => [],
     },
     address: {
       type: String,
@@ -118,10 +129,8 @@ export default {
   },
   data() {
     return {
-      validators: [],
-      token: '',
-      amount: null,
-      delegations: [],
+      token: null,
+      amount: '',
 
       required,
       password,
@@ -137,61 +146,49 @@ export default {
     }
   },
   computed: {
-    valOptions() {
-      return this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
-    },
-    tokenOptions() {
-      if (!this.delegations) return []
-      return this.delegations.filter(x => x.delegation.validator_address === this.validatorAddress).map(x => ({ value: x.balance.denom, label: formatToken(x.balance) }))
-    },
     msg() {
       return [{
-        typeUrl: '/cosmos.staking.v1beta1.MsgUndelegate',
+        typeUrl: '/cosmos.gov.v1beta1.MsgDeposit',
         value: {
-          delegatorAddress: this.address,
-          validatorAddress: this.validatorAddress,
-          amount: {
-            amount: getUnitAmount(this.amount, this.token),
-            denom: this.token,
-          },
+          depositor: this.address,
+          proposalId: String(this.proposalId),
+          amount: [
+            {
+              amount: getUnitAmount(this.amount, this.token),
+              denom: this.token,
+            },
+          ],
         },
       }]
     },
+    balanceOptions() {
+      return this.setupBalance()
+    },
   },
-
   mounted() {
     this.$emit('update', {
-      modalTitle: 'Unbond Token',
-      historyName: 'unbond',
+      modalTitle: 'Deposit',
+      historyName: 'deposit',
     })
-    this.loadData()
   },
-
   methods: {
-    loadData() {
-      if (this.address) {
-        this.$http.getValidatorList().then(v => {
-          this.validators = v
-        })
-      }
-      this.$http.getStakingDelegations(this.address).then(res => {
-        this.delegations = res.delegation_responses
-        this.delegations.forEach(x => {
-          if (x.delegation.validator_address === this.validatorAddress) {
-            this.token = x.balance.denom
-            this.$emit('update', {
-              feeDenom: x.balance.denom,
-            })
-          }
-        })
-      })
-    },
     printDenom() {
       return formatTokenDenom(this.token)
+    },
+    format(v) {
+      return formatToken(v)
+    },
+    setupBalance() {
+      if (this.balance && this.balance.length > 0) {
+        this.token = this.balance[0].denom
+        return this.balance
+      }
+      return []
     },
   },
 }
 </script>
+
 <style lang="scss">
 @import '@core/scss/vue/libs/vue-select.scss';
 </style>

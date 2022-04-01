@@ -177,7 +177,6 @@ export default {
       token: '',
       amount: null,
       recipient: null,
-      error: null,
       IBCDenom: {},
       paths: {},
       destination: {},

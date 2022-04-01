@@ -165,6 +165,15 @@
               {{ $t('btn_deposit') }}
             </b-button>
             <b-button
+              v-if="p.status===1"
+              v-b-modal.operation-modal
+              variant="primary"
+              class="btn float-right mg-2"
+              @click="selectProposal('GovDeposit',p.id, p.title)"
+            >
+              {{ $t('btn_deposit') }}1
+            </b-button>
+            <b-button
               v-if="p.status===2"
               v-b-modal.vote-window
               variant="primary"

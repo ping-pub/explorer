@@ -40,7 +40,7 @@
           <component
             :is="type"
             ref="component"
-            :address="address"
+            :address="selectedAddress"
             :validator-address="validatorAddress"
             :balance="balance"
             :proposal-id="proposalId"
@@ -160,6 +160,8 @@ import Unbond from './components/Unbond.vue'
 import Transfer from './components/Transfer.vue'
 import IBCTransfer from './components/IBCTransfer.vue'
 import Vote from './components/Vote.vue'
+import WithdrawCommission from './components/WithdrawCommission.vue'
+import GovDeposit from './components/GovDeposit.vue'
 
 export default {
   name: 'DelegateDialogue',
@@ -192,6 +194,8 @@ export default {
     Transfer,
     IBCTransfer,
     Vote,
+    WithdrawCommission,
+    GovDeposit,
   },
   directives: {
     Ripple,
