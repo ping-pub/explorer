@@ -68,6 +68,7 @@
             :options="valOptions"
             :reduce="val => val.value"
             placeholder="Select a validator"
+            :selectable="(v) => v.value"
           />
         </b-form-group>
       </b-col>
@@ -147,13 +148,7 @@ export default {
       toValidator: null,
       token: '',
       amount: null,
-      balance: [],
       delegations: [],
-      feeDenom: '',
-      error: null,
-      sequence: 1,
-      accountNumber: 0,
-      account: [],
 
       required,
       password,
@@ -170,9 +165,18 @@ export default {
   },
   computed: {
     valOptions() {
+      let options = []
       const vals = this.validators.map(x => ({ value: x.operator_address, label: `${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
+      if (vals.length > 0) {
+        options.push({ value: null, label: '=== ACTIVE VALIDATORS ===' })
+        options = options.concat(vals)
+      }
       const unbunded = this.unbundValidators.map(x => ({ value: x.operator_address, label: `* ${x.description.moniker} (${Number(x.commission.rate) * 100}%)` }))
-      return vals.concat(unbunded)
+      if (unbunded.length > 0) {
+        options.push({ value: null, label: '=== INACTIVE VALIDATORS ===', disabled: true })
+        options = options.concat(unbunded)
+      }
+      return options
     },
     tokenOptions() {
       if (!this.delegations) return []
@@ -198,27 +202,18 @@ export default {
       modalTitle: 'Redelegate Token',
       historyName: 'redelegate',
     })
-    this.loadBalance()
+    this.loadData()
   },
   methods: {
-    printDenom() {
-      return formatTokenDenom(this.token)
-    },
-    loadBalance() {
+    loadData() {
       this.$http.getValidatorList().then(v => {
         this.validators = v
       })
       this.$http.getValidatorUnbondedList().then(v => {
         this.unbundValidators = v
       })
-      this.$http.getBankBalances(this.address).then(res => {
-        if (res && res.length > 0) {
-          this.balance = res.reverse()
-        }
-      })
       this.$http.getStakingDelegations(this.address).then(res => {
         this.delegations = res.delegation_responses
-        console.log(res)
         this.delegations.forEach(x => {
           if (x.delegation.validator_address === this.validatorAddress) {
             this.token = x.balance.denom
@@ -233,7 +228,9 @@ export default {
     format(v) {
       return formatToken(v)
     },
-
+    printDenom() {
+      return formatTokenDenom(this.token)
+    },
   },
 }
 </script>

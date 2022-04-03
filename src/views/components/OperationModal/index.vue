@@ -4,7 +4,7 @@
     centered
     size="md"
     :title="modalTitle"
-    ok-title="Send"
+    :ok-title="actionName"
     hide-header-close
     scrollable
     :ok-disabled="isOwner"
@@ -40,9 +40,11 @@
           <component
             :is="type"
             ref="component"
-            :address="address"
+            :address="selectedAddress"
             :validator-address="validatorAddress"
             :balance="balance"
+            :proposal-id="proposalId"
+            :proposal-title="proposalTitle"
             @update="componentUpdate"
           />
           <b-row>
@@ -155,6 +157,11 @@ import Delegate from './components/Delegate.vue'
 import Redelegate from './components/Redelegate.vue'
 import Withdraw from './components/Withdraw.vue'
 import Unbond from './components/Unbond.vue'
+import Transfer from './components/Transfer.vue'
+import IBCTransfer from './components/IBCTransfer.vue'
+import Vote from './components/Vote.vue'
+import WithdrawCommission from './components/WithdrawCommission.vue'
+import GovDeposit from './components/GovDeposit.vue'
 
 export default {
   name: 'DelegateDialogue',
@@ -184,6 +191,11 @@ export default {
     Redelegate,
     Withdraw,
     Unbond,
+    Transfer,
+    IBCTransfer,
+    Vote,
+    WithdrawCommission,
+    GovDeposit,
   },
   directives: {
     Ripple,
@@ -201,12 +213,19 @@ export default {
       type: String,
       default: null,
     },
+    proposalId: {
+      type: Number,
+      default: null,
+    },
+    proposalTitle: {
+      type: String,
+      default: null,
+    },
   },
   data() {
     return {
       modalTitle: '',
       historyName: '',
-      selectedAddress: this.address,
       selectedValidator: null,
       selectedChain: null,
       token: '',
@@ -222,7 +241,8 @@ export default {
       wallet: 'ledgerUSB',
       gas: '200000',
       memo: '',
-      blockingMsg: 'No available account found.',
+      blockingMsg: this.address ? 'You are not the owner' : 'No available account found.',
+      actionName: 'Send',
 
       required,
       password,
@@ -242,15 +262,26 @@ export default {
       if (!this.balance) return []
       return this.balance.filter(item => !item.denom.startsWith('ibc'))
     },
-    isOwner() {
+    accounts() {
       const accounts = getLocalAccounts()
       const selectedWallet = this.$store.state.chains.defaultWallet
-      if (accounts && accounts[selectedWallet]) {
-        if (accounts[selectedWallet].address.findIndex(x => x.addr === this.address) > -1) {
+      return accounts[selectedWallet]
+    },
+    isOwner() {
+      if (this.accounts) {
+        if (this.accounts.address.findIndex(x => x.addr === this.selectedAddress) > -1) {
           return false
         }
       }
       return true
+    },
+    selectedAddress() {
+      if (this.address) {
+        return this.address
+      }
+      const chain = this.$store.state.chains.selected.chain_name
+      const selectedAddress = this.accounts.address.find(x => x.chain === chain)
+      return selectedAddress?.addr
     },
   },
   methods: {

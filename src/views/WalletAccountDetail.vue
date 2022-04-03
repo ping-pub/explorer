@@ -50,6 +50,18 @@
             <span class="d-none d-md-block">Transfer</span>
           </b-button>
           <b-button
+            v-b-modal.operation-modal
+            variant="primary"
+            size="sm"
+            class="mr-25"
+            @click="setOperationModalType('Transfer')"
+          >
+            <feather-icon
+              icon="SendIcon"
+              class="d-md-none"
+            /><small class="d-none d-md-block">Transfer1</small>
+          </b-button>
+          <b-button
             v-b-modal.ibc-transfer-window
             variant="danger"
             size="sm"
@@ -57,8 +69,19 @@
              icon="SendIcon"
              class="d-md-none"
            />
-            <span class="d-none d-md-block">IBC Transfer
-            </span></b-button>
+            <span class="d-none d-md-block">IBC Transfer</span>
+          </b-button>
+          <b-button
+            v-b-modal.operation-modal
+            variant="danger"
+            size="sm"
+            @click="setOperationModalType('IBCTransfer')"
+          ><feather-icon
+             icon="SendIcon"
+             class="d-md-none"
+           />
+            <span class="d-none d-md-block">IBC Transfer1</span>
+          </b-button>
         </div>
       </b-card-header>
       <b-card-body class="pl-0 pr-0">
