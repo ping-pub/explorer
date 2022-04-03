@@ -5,8 +5,10 @@
     size="md"
     :title="modalTitle"
     :ok-title="actionName"
-    hide-header-close
     scrollable
+    :hide-header-close="!showResult"
+    :hide-footer="showResult"
+    modal-class="custom-transaction-modal"
     :ok-disabled="isOwner"
     @hidden="resetModal"
     @ok="handleOk"
@@ -35,7 +37,10 @@
           </b-button>
         </div>
       </template>
-      <validation-observer ref="simpleRules">
+      <validation-observer
+        v-if="!showResult"
+        ref="simpleRules"
+      >
         <b-form>
           <component
             :is="type"
@@ -130,8 +135,13 @@
             </b-col>
           </b-row>
         </b-form>
+        {{ error }}
       </validation-observer>
-      {{ error }}
+
+      <TransactionResult v-else />
+      <b-button @click="showResult = !showResult">
+        toggle
+      </b-button>
     </b-overlay>
   </b-modal>
 </template>
@@ -162,6 +172,7 @@ import IBCTransfer from './components/IBCTransfer.vue'
 import Vote from './components/Vote.vue'
 import WithdrawCommission from './components/WithdrawCommission.vue'
 import GovDeposit from './components/GovDeposit.vue'
+import TransactionResult from './TransactionResult.vue'
 
 export default {
   name: 'DelegateDialogue',
@@ -196,6 +207,7 @@ export default {
     Vote,
     WithdrawCommission,
     GovDeposit,
+    TransactionResult,
   },
   directives: {
     Ripple,
@@ -243,6 +255,7 @@ export default {
       memo: '',
       blockingMsg: this.address ? 'You are not the owner' : 'No available account found.',
       actionName: 'Send',
+      showResult: false,
 
       required,
       password,
@@ -402,4 +415,14 @@ export default {
 </script>
 <style lang="scss">
 @import '@core/scss/vue/libs/vue-select.scss';
+.custom-transaction-modal {
+  .modal-header {
+    .modal-title {
+      font-size: 24px;
+    }
+    .close {
+      margin: 0;
+    }
+  }
+}
 </style>
