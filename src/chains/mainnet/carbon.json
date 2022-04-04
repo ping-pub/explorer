@@ -6,7 +6,7 @@
     "snapshot_provider": "",
     "sdk_version": "0.45.2",
     "coin_type": "118",
-    "min_tx_fee": "100000",
+    "min_tx_fee": "100000000",
     "addr_prefix": "swth",
     "logo": "/logos/carbon.svg",
     "assets": [{
