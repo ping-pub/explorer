@@ -9,6 +9,11 @@
     "min_tx_fee": "100000000",
     "addr_prefix": "swth",
     "logo": "/logos/carbon.svg",
+    "sign_opts": {
+        "keplr": {
+            "preferNoSetFee": true
+        }
+    },
     "assets": [{
         "base": "swth",
         "symbol": "SWTH",

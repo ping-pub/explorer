@@ -409,6 +409,7 @@ export default {
         chainId: this.chainId,
       }
 
+      const { sign_opts: signOpts } = this.$store.state.chains.selected
       sign(
         this.wallet,
         this.chainId,
@@ -417,6 +418,7 @@ export default {
         txFee,
         this.memo,
         signerData,
+        signOpts,
       ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes).then(res => {
           setLocalTxHistory({

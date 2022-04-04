@@ -217,6 +217,7 @@ import {
 } from '@validations'
 import {
   extractAccountNumberAndSequence,
+  findNativeConfigToken,
   formatToken, formatTokenDenom, getLocalAccounts, getLocalChains, getUnitAmount, setLocalTxHistory, sign, timeIn,
 } from '@/libs/utils'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -324,7 +325,8 @@ export default {
           if (res && res.length > 0) {
             this.balance = res.reverse()
             this.token = this.balance[0].denom
-            this.feeDenom = this.balance.find(x => !x.denom.startsWith('ibc')).denom
+            const token = findNativeConfigToken(this.balance, this.$store.state.chains.selected)
+            this.feeDenom = token?.denom
             this.balance.filter(i => i.denom.startsWith('ibc')).forEach(x => {
               if (!this.IBCDenom[x.denom]) {
                 this.$http.getIBCDenomTrace(x.denom, this.selectedChain).then(denom => {
@@ -404,6 +406,7 @@ export default {
         chainId: this.chainId,
       }
 
+      const { sign_opts: signOpts } = this.$store.state.chains.selected
       sign(
         this.wallet,
         this.chainId,
@@ -412,6 +415,7 @@ export default {
         txFee,
         this.memo,
         signerData,
+        signOpts,
       ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
           setLocalTxHistory({
