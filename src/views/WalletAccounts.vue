@@ -153,15 +153,15 @@
                   />
                   <b-dropdown-item
                     v-if="balances[acc.addr]"
-                    v-b-modal.transfer-window
-                    @click="transfer(acc.addr)"
+                    v-b-modal.operation-modal
+                    @click="transfer('Transfer',acc.addr)"
                   >
                     <feather-icon icon="SendIcon" /> Transfer
                   </b-dropdown-item>
                   <b-dropdown-item
                     v-if="balances[acc.addr]"
-                    v-b-modal.ibc-transfer-window
-                    @click="transfer(acc.addr)"
+                    v-b-modal.operation-modal
+                    @click="transfer('IBCTransfer',acc.addr)"
                   >
                     <feather-icon icon="SendIcon" /> IBC Transfer
                   </b-dropdown-item>
@@ -265,10 +265,10 @@
         Connect Wallet
       </b-card>
     </router-link>
-    <operation-transfer-component
-      :address.sync="selectedAddress"
+    <operation-modal
+      :type="operationModalType"
+      :address="selectedAddress"
     />
-    <operation-transfer-2-component :address="selectedAddress" />
   </div>
 </template>
 
@@ -287,8 +287,7 @@ import {
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import AppCollapse from '@core/components/app-collapse/AppCollapse.vue'
 import AppCollapseItem from '@core/components/app-collapse/AppCollapseItem.vue'
-import OperationTransferComponent from './OperationTransferComponent.vue'
-import OperationTransfer2Component from './OperationTransfer2Component.vue'
+import OperationModal from '@/views/components/OperationModal/index.vue'
 import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
 import EchartScatter from './components/charts/EchartScatter.vue'
 
@@ -309,14 +308,13 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     VBTooltip,
     FeatherIcon,
-    OperationTransferComponent,
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
-    OperationTransfer2Component,
     ChartComponentDoughnut,
     AppCollapse,
     AppCollapseItem,
     EchartScatter,
+    OperationModal,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -335,6 +333,7 @@ export default {
       delegations: {},
       ibcDenom: {},
       quotes: {},
+      operationModalType: '',
       options: {
         maintainAspectRatio: false,
         legend: {
@@ -533,7 +532,8 @@ export default {
       this.currency2 = c
       this.currency = getUserCurrencySign()
     },
-    transfer(addr) {
+    transfer(type, addr) {
+      this.operationModalType = type
       this.selectedAddress = addr
     },
     completeAdd() {

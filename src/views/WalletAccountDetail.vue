@@ -342,21 +342,6 @@
       <vue-qr :text="address" />
     </b-popover>
 
-    <operation-transfer-component :address="address" />
-    <operation-transfer-2-component :address="address" />
-    <operation-withdraw-component :address="address" />
-    <operation-unbond-component
-      :address="address"
-      :validator-address.sync="selectedValidator"
-    />
-    <operation-delegate-component
-      :address="address"
-      :validator-address.sync="selectedValidator"
-    />
-    <operation-redelegate-component
-      :address="address"
-      :validator-address.sync="selectedValidator"
-    />
     <operation-modal
       :type="operationModalType"
       :address="address"
@@ -384,12 +369,6 @@ import { sha256 } from '@cosmjs/crypto'
 import { toHex } from '@cosmjs/encoding'
 import OperationModal from '@/views/components/OperationModal/index.vue'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
-import OperationTransferComponent from './OperationTransferComponent.vue'
-import OperationWithdrawComponent from './OperationWithdrawComponent.vue'
-import OperationUnbondComponent from './OperationUnbondComponent.vue'
-import OperationDelegateComponent from './OperationDelegateComponent.vue'
-import OperationRedelegateComponent from './OperationRedelegateComponent.vue'
-import OperationTransfer2Component from './OperationTransfer2Component.vue'
 import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
 
 export default {
@@ -415,12 +394,6 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
     ObjectFieldComponent,
-    OperationTransferComponent,
-    OperationWithdrawComponent,
-    OperationDelegateComponent,
-    OperationRedelegateComponent,
-    OperationUnbondComponent,
-    OperationTransfer2Component,
     ChartComponentDoughnut,
     OperationModal,
   },

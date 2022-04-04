@@ -6,7 +6,7 @@
     <b-card-header>
       <b-card-title>Outstanding Rewards</b-card-title>
       <feather-icon
-        v-b-modal.operation-modal
+        v-b-modal.WithdrawCommission
         icon="MoreVerticalIcon"
         size="18"
         class="cursor-pointer"
@@ -76,7 +76,7 @@
     </b-card-body>
     <b-card-body class="pt-0">
       <b-button
-        v-b-modal.operation-modal
+        v-b-modal.WithdrawCommission
         block
         size="sm"
         variant="primary"
@@ -84,12 +84,9 @@
         Withdraw Commission
       </b-button>
     </b-card-body>
-    <operation-withdraw-commission-component
-      :validator-address="validator"
-      :address="address"
-    />
     <operation-modal
       type="WithdrawCommission"
+      modal-id="WithdrawCommission"
       :address="address"
       :validator-address="validator"
     />
@@ -104,7 +101,6 @@ import { sha256 } from '@cosmjs/crypto'
 import { toHex } from '@cosmjs/encoding'
 import { formatToken, numberWithCommas } from '@/libs/utils'
 import OperationModal from '@/views/components/OperationModal/index.vue'
-import OperationWithdrawCommissionComponent from './OperationWithdrawCommissionComponent.vue'
 
 export default {
   components: {
@@ -117,7 +113,6 @@ export default {
     BMedia,
     BMediaAside,
     BAvatar,
-    OperationWithdrawCommissionComponent,
     OperationModal,
   },
   props: {

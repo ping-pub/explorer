@@ -1,6 +1,6 @@
 <template>
   <b-modal
-    id="operation-modal"
+    :id="modalId"
     centered
     size="md"
     :title="modalTitle"
@@ -215,6 +215,10 @@ export default {
     type: {
       type: String,
       default: '',
+    },
+    modalId: {
+      type: String,
+      default: 'operation-modal',
     },
     validatorAddress: {
       type: String,

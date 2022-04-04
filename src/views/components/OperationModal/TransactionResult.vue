@@ -137,6 +137,7 @@ export default {
           if (res.code === 0) {
             this.succeed = true
             clearInterval(this.timer)
+            window.location.reload()
           } else if (res.code !== 3) { // code 3 is tx unconfirmed(not founded).
             this.error = res.raw_log
             console.log('error:', this.error)
