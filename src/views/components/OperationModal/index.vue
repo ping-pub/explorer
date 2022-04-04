@@ -339,7 +339,6 @@ export default {
       this.$refs.simpleRules.validate().then(ok => {
         if (ok) {
           this.sendTx().then(ret => {
-            console.log(ret)
             this.error = ret
           })
         }
@@ -396,18 +395,14 @@ export default {
             time: new Date(),
           })
         }).catch(e => {
-          console.log(e)
           this.error = e
         })
       }).catch(e => {
-        console.log(e)
-
         this.error = e
       })
       return ''
     },
     updateWallet(v) {
-      console.log('device', v)
       if (v && v !== 'address') {
         this.wallet = v
       }
