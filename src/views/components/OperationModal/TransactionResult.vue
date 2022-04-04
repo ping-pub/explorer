@@ -106,6 +106,7 @@ export default {
       isLoading: true,
       succeed: false,
       error: '',
+      checkTimes: 0,
     }
   },
   computed: {
@@ -133,15 +134,20 @@ export default {
       if (this.hash) {
         this.error = null
         this.$http.getTxs(this.hash).then(res => {
-          console.log('tx', res)
           if (res.code === 0) {
             this.succeed = true
             clearInterval(this.timer)
             window.location.reload()
           } else if (res.code !== 3) { // code 3 is tx unconfirmed(not founded).
             this.error = res.raw_log
-            console.log('error:', this.error)
             clearInterval(this.timer)
+          }
+        }, () => {
+          // error statement
+          this.checkTimes += 1
+          if (this.checkTimes > 5) {
+            clearInterval(this.timer)
+            this.error = 'Timeout'
           }
         }).catch(e => {
           this.error = e
