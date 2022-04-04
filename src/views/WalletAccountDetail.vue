@@ -39,17 +39,6 @@
         <b-card-title>Assets</b-card-title>
         <div>
           <b-button
-            v-b-modal.transfer-window
-            variant="primary"
-            size="sm"
-            class="mr-25"
-          ><feather-icon
-             icon="SendIcon"
-             class="d-md-none"
-           />
-            <span class="d-none d-md-block">Transfer</span>
-          </b-button>
-          <b-button
             v-b-modal.operation-modal
             variant="primary"
             size="sm"
@@ -59,17 +48,7 @@
             <feather-icon
               icon="SendIcon"
               class="d-md-none"
-            /><small class="d-none d-md-block">Transfer1</small>
-          </b-button>
-          <b-button
-            v-b-modal.ibc-transfer-window
-            variant="danger"
-            size="sm"
-          ><feather-icon
-             icon="SendIcon"
-             class="d-md-none"
-           />
-            <span class="d-none d-md-block">IBC Transfer</span>
+            /><small class="d-none d-md-block">Transfer</small>
           </b-button>
           <b-button
             v-b-modal.operation-modal
@@ -80,7 +59,7 @@
              icon="SendIcon"
              class="d-md-none"
            />
-            <span class="d-none d-md-block">IBC Transfer1</span>
+            <span class="d-none d-md-block">IBC Transfer</span>
           </b-button>
         </div>
       </b-card-header>
@@ -156,29 +135,7 @@
             <feather-icon
               icon="LogInIcon"
               class="d-md-none"
-            /><small class="d-none d-md-block">Delegate1</small>
-          </b-button>
-          <b-button
-            v-b-modal.delegate-window
-            variant="primary"
-            size="sm"
-            class="mr-25"
-          >
-            <feather-icon
-              icon="LogInIcon"
-              class="d-md-none"
             /><small class="d-none d-md-block">Delegate</small>
-          </b-button>
-          <b-button
-            v-if="delegations"
-            v-b-modal.withdraw-window
-            variant="primary"
-            size="sm"
-          >
-            <feather-icon
-              icon="ShareIcon"
-              class="d-md-none"
-            /><small class="d-none d-md-block"> Withdraw Rewards</small>
           </b-button>
           <b-button
             v-if="delegations"
@@ -190,7 +147,7 @@
             <feather-icon
               icon="ShareIcon"
               class="d-md-none"
-            /><small class="d-none d-md-block"> Withdraw Rewards1</small>
+            /><small class="d-none d-md-block"> Withdraw Rewards</small>
           </b-button>
         </div>
       </b-card-header>
@@ -205,45 +162,27 @@
               size="sm"
             >
               <b-button
-                v-b-modal.delegate-window
+                v-b-modal.operation-modal
                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                 v-b-tooltip.hover.top="'Delegate'"
                 variant="outline-primary"
-                @click="selectValue(data.value)"
+                @click="selectValue(data.value,'Delegate')"
               >
                 <feather-icon icon="LogInIcon" />
               </b-button>
               <b-button
-                v-b-modal.redelegate-window
-                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                v-b-tooltip.hover.top="'Redelegate'"
-                variant="outline-primary"
-                @click="selectValue(data.value)"
-              >
-                <feather-icon icon="ShuffleIcon" />
-              </b-button>
-              <b-button
                 v-b-modal.operation-modal
                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                v-b-tooltip.hover.top="'Redelegate1'"
+                v-b-tooltip.hover.top="'Redelegate'"
                 variant="outline-primary"
                 @click="selectValue(data.value,'Redelegate')"
               >
                 <feather-icon icon="ShuffleIcon" />
               </b-button>
               <b-button
-                v-b-modal.unbond-window
-                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                v-b-tooltip.hover.top="'Unbond'"
-                variant="outline-primary"
-                @click="selectValue(data.value)"
-              >
-                <feather-icon icon="LogOutIcon" />
-              </b-button>
-              <b-button
                 v-b-modal.operation-modal
                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                v-b-tooltip.hover.top="'Unbond1'"
+                v-b-tooltip.hover.top="'Unbond'"
                 variant="outline-primary"
                 @click="selectValue(data.value,'Unbond')"
               >

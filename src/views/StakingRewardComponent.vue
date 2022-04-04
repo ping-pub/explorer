@@ -76,20 +76,12 @@
     </b-card-body>
     <b-card-body class="pt-0">
       <b-button
-        v-b-modal.withdraw-commission-window
-        block
-        size="sm"
-        variant="primary"
-      >
-        Withdraw Commission
-      </b-button>
-      <b-button
         v-b-modal.operation-modal
         block
         size="sm"
         variant="primary"
       >
-        Withdraw Commission1
+        Withdraw Commission
       </b-button>
     </b-card-body>
     <operation-withdraw-commission-component

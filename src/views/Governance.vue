@@ -157,7 +157,7 @@
             </router-link>
             <b-button
               v-if="p.status===1"
-              v-b-modal.deposit-window
+              v-b-modal.operation-modal
               variant="primary"
               class="btn float-right mg-2"
               @click="selectProposal('GovDeposit',p.id, p.title)"
@@ -165,31 +165,13 @@
               {{ $t('btn_deposit') }}
             </b-button>
             <b-button
-              v-if="p.status===1"
-              v-b-modal.operation-modal
-              variant="primary"
-              class="btn float-right mg-2"
-              @click="selectProposal('GovDeposit',p.id, p.title)"
-            >
-              {{ $t('btn_deposit') }}1
-            </b-button>
-            <b-button
               v-if="p.status===2"
-              v-b-modal.vote-window
+              v-b-modal.operation-modal
               variant="primary"
               class="btn float-right mg-2"
               @click="selectProposal('Vote',p.id, p.title)"
             >
               {{ $t('btn_vote') }}
-            </b-button>
-            <b-button
-              v-if="p.status===2"
-              v-b-modal.operation-modal
-              variant="primary"
-              class="btn float-right mg-2"
-              @click="selectProposal('Vote',p.id, p.title)"
-            >
-              {{ $t('btn_vote') }}1
             </b-button>
           </b-card-footer>
         </b-card>

@@ -60,7 +60,7 @@ export default class ChainFetch {
     if (conf.chain_name === 'injective') {
       return ChainFetch.fetch('https://tm.injective.network', '/block').then(data => Block.create(commonProcess(data)))
     }
-    return this.get('/blocks/latest', config).then(data => Block.create(data))
+    return this.get(`/blocks/latest?${new Date().getTime()}`, config).then(data => Block.create(data))
   }
 
   async getBlockByHeight(height, config = null) {
@@ -384,6 +384,19 @@ export default class ChainFetch {
 
   static async fetchTokenQuote(symbol) {
     return ChainFetch.fetchCoinMarketCap(`/quote/${symbol}`)
+  }
+
+  // Simulate Execution of tx
+  async simulate(tx, config = null) {
+    return this.post('/cosmos/tx/v1beta1/simulate', tx, config).then(res => {
+      if (res.code && res.code !== 0) {
+        throw new Error(res.message)
+      }
+      if (res.tx_response && res.tx_response.code !== 0) {
+        throw new Error(res.tx_response.raw_log)
+      }
+      return res
+    })
   }
 
   // Tx Submit
