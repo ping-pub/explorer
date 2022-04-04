@@ -21,7 +21,7 @@
       show
     >
       <div class="alert-heading">
-        Note
+        Tips
       </div>
       <div class="alert-body">
         There are two ways to monitor your validators:

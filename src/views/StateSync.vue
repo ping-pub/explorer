@@ -2,15 +2,25 @@
   <div class="container-md">
     <b-card>
       <b-card-title>
-        Starting New Node From State Sync <b-badge variant="danger">
+        What's State Sync?
+      </b-card-title>
+      The Tendermint Core 0.34 release includes support for state sync, which allows a new node to join a network by fetching a snapshot of the application state at a recent height instead of fetching and replaying all historical blocks. This can reduce the time needed to sync with the network from days to minutes.
+      Click <a href="https://blog.cosmos.network/cosmos-sdk-state-sync-guide-99e4cf43be2f">here</a> for more infomation.
+    </b-card>
+    <b-card>
+      <b-card-title>
+        Starting New Node From State Sync
+        <b-badge
+          v-if="snapshot_provider?false:true"
+          variant="danger"
+        >
           WIP
         </b-badge>
       </b-card-title>
-      <b class="mt-1">1. What's State Sync? </b><br>
-      The Tendermint Core 0.34 release includes support for state sync, which allows a new node to join a network by fetching a snapshot of the application state at a recent height instead of fetching and replaying all historical blocks. This can reduce the time needed to sync with the network from days to minutes.
-      Click <a href="https://blog.cosmos.network/cosmos-sdk-state-sync-guide-99e4cf43be2f">here</a> for more infomation.
+      <b class="mt-1">1. Install Binary</b><br>
+      We need to install the binary first and make sure that the version is the one currently in use on mainnet.
       <br><br>
-      <b class="mt-1">2. How to use it? </b><br>
+      <b class="mt-1">2. Enable State Sync</b><br>
       We can configure Tendermint to use state sync in <code>$DAEMON_HOME/config/config.toml</code>, then start daemon.
       <ul class="mt-1">
         <li
@@ -31,7 +41,7 @@
         class="my-1"
         @change="check()"
       />
-      <b class="mt-1">3. Snapshot Providers </b><br>
+      <b class="mt-1">3. (Optional) Add Snapshot Providers </b><br>
       To reduce the time of snapshot discovering, we can add providers into persistent_peers in <code>$DAEMON_HOME/config/config.toml</code>.
       <b-form-textarea
         id="provider"
@@ -80,7 +90,10 @@ export default {
       servers = rpc.join(',')
     }
     // eslint-disable-next-line camelcase
-    const providers = snapshot_provider ? `# Comma separated list of nodes to keep persistent connections to \npersistent_peers = "${snapshot_provider}" ` : 'OMG！ NO available providers'
+    const peers = snapshot_provider
+    const providers = peers
+      ? `# Comma separated list of nodes to keep persistent connections to \npersistent_peers = "${peers}" `
+      : 'OMG！ There is NO available providers, but you can try it.'
     return {
       snapshot_provider,
       servers,
