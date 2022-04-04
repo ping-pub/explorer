@@ -31,6 +31,24 @@
 - **api** the rest api endpoint.(make sure that CORS is enabled: `Allow-Control-Allow-Origin: *`)
 - **rpc** the rpc endpoint, make sure that the port is added. rpc endpoint is only used for state sync. it's optional.
 - **assets** Native Assets on blockchain. 
+
+# Additional Signing Configuration
+```json
+{
+    "chain_name": "cosmos",
+    ...
+    "sign_opts": {
+        "keplr": {
+            "preferNoSetFee": true,
+            "preferNoSetMemo": true
+        }
+    },
+    ...
+}
+```
+- **sign_opts** (optional) configuration for sign requests, only Keplr is supported at the moment.
+- **sign_opts.keplr** (optional) KeplrSignOptions - See Keplr [documentation](https://docs.keplr.app/api/#interaction-options).
+
 # Test 
 
 please add these check points in comments with your PR, and adding your test result by clicking the checkbox of each line
