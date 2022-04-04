@@ -78,7 +78,7 @@
         </template>
         <template #cell(operation)="data">
           <b-button
-            v-b-modal.delegate-window
+            v-b-modal.operation-modal
             :name="data.item.operator_address"
             variant="primary"
             size="sm"
@@ -186,7 +186,7 @@
           </template>
           <template #cell(operation)="data">
             <b-button
-              v-b-modal.delegate-window
+              v-b-modal.operation-modal
               :name="data.item.operator_address"
               variant="primary"
               size="sm"
@@ -210,7 +210,10 @@
         </small>
       </template>
     </b-card>
-    <operation-delegate-component :validator-address="validator_address" />
+    <operation-modal
+      type="Delegate"
+      :validator-address="validator_address"
+    />
   </div>
 </template>
 
@@ -222,9 +225,9 @@ import {
   percent, StakingParameters, formatToken,
 } from '@/libs/utils'
 import { keybase } from '@/libs/fetch'
+import OperationModal from '@/views/components/OperationModal/index.vue'
 // import { toHex } from '@cosmjs/encoding'
 // import fetch from 'node-fetch'
-import OperationDelegateComponent from './OperationDelegateComponent.vue'
 
 export default {
   components: {
@@ -237,9 +240,9 @@ export default {
     BCardTitle,
     BCardBody,
     BButton,
-    OperationDelegateComponent,
     BFormRadioGroup,
     BFormGroup,
+    OperationModal,
   },
   directives: {
     'b-tooltip': VBTooltip,

@@ -25,7 +25,7 @@
               </div>
               <div class="d-flex flex-wrap">
                 <b-button
-                  v-b-modal.delegate-window
+                  v-b-modal.operation-modal
                   variant="primary"
                   class="mr-25 mb-25"
                 >
@@ -268,7 +268,10 @@
         </b-col>
       </b-row>
     </template>
-    <operation-delegate-component :validator-address="validator.operator_address" />
+    <operation-modal
+      type="Delegate"
+      :validator-address="validator.operator_address"
+    />
   </div>
 </template>
 
@@ -281,10 +284,10 @@ import {
   percent, formatToken, StakingParameters, Validator, operatorAddressToAccount, consensusPubkeyToHexAddress, toDay, abbrMessage, abbrAddress,
 } from '@/libs/utils'
 import { keybase } from '@/libs/fetch'
+import OperationModal from '@/views/components/OperationModal/index.vue'
 import StakingAddressComponent from './StakingAddressComponent.vue'
 import StakingCommissionComponent from './StakingCommissionComponent.vue'
 import StakingRewardComponent from './StakingRewardComponent.vue'
-import OperationDelegateComponent from './OperationDelegateComponent.vue'
 
 export default {
   components: {
@@ -300,7 +303,7 @@ export default {
     StakingAddressComponent,
     StakingCommissionComponent,
     StakingRewardComponent,
-    OperationDelegateComponent,
+    OperationModal,
   },
   directives: {
     'b-modal': VBModal,

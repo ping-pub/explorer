@@ -177,14 +177,6 @@
         </b-card>
       </b-col>
     </b-row>
-    <operation-vote-component
-      :proposal-id="selectedProposalId"
-      :title="selectedTitle"
-    />
-    <operation-gov-deposit-component
-      :proposal-id="selectedProposalId"
-      :title="selectedTitle"
-    />
     <operation-modal
       :type="operationModalType"
       :proposal-id="selectedProposalId"
@@ -202,8 +194,6 @@ import { Proposal } from '@/libs/data'
 import { percent, tokenFormatter } from '@/libs/utils'
 import dayjs from 'dayjs'
 import OperationModal from '@/views/components/OperationModal/index.vue'
-import OperationVoteComponent from './OperationVoteComponent.vue'
-import OperationGovDepositComponent from './OperationGovDepositComponent.vue'
 
 export default {
   components: {
@@ -218,8 +208,6 @@ export default {
     BCardBody,
     BRow,
     BCol,
-    OperationVoteComponent,
-    OperationGovDepositComponent,
     OperationModal,
   },
   directives: {

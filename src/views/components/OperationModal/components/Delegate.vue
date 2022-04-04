@@ -151,7 +151,7 @@ export default {
       availableAddress: [],
       validators: [],
       unbundValidators: [],
-      selectedValidator: null,
+      selectedValidator: this.validatorAddress,
       token: '',
       amount: null,
       selectedChain: '',
