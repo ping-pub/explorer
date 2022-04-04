@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="board">
-      <div
-        v-if="1"
-        class="data"
-      >
+    <div
+      v-if="false"
+      class="board "
+    >
+      <div class="data">
         <div class="board-row">
           <div class="key">
             AMOUNT
@@ -33,10 +33,22 @@
     </div>
 
     <p
-      v-if="1"
-      class="result-text"
+      v-if="succeed"
+      class="result-text mt-1 text-success"
     >
       Congratulations! Transfer completed successfully.
+    </p>
+    <p
+      v-else-if="error"
+      class="result-text mt-1 text-danger"
+    >
+      {{ error }}
+    </p>
+    <p
+      v-else
+      class="result-text mt-1 text-primary"
+    >
+      Processing...
     </p>
 
     <div class="status">
@@ -60,15 +72,16 @@
         />
       </b-progress>
       <div class="status-text">
-        <span>SUBMITED</span>
-        <span>COMPLETED</span>
+        <span v-if="hash">SUBMITED</span>
+        <span v-if="succeed">COMPLETED</span>
+        <span v-if="error">FAILED</span>
       </div>
     </div>
     <div class="link">
       <router-link
         to="/"
       >
-        View on explorer
+        View details
       </router-link>
     </div>
   </div>
@@ -82,9 +95,17 @@ export default {
     BProgress,
     BProgressBar,
   },
+  props: {
+    hash: {
+      type: String,
+      default: null,
+    },
+  },
   data() {
     return {
       isLoading: true,
+      succeed: false,
+      error: '',
     }
   },
   computed: {
@@ -92,7 +113,40 @@ export default {
       // success: [100, 0, 0]
       // fail: [50, 50, 0]
       // pending: [0, 0, 100]
-      return [0, 0, 100]
+      if (!this.hash) {
+        return [0, 0, 100]
+      }
+      if (this.succeed) {
+        return [100, 0, 0]
+      }
+      return [50, 0, 50]
+    },
+  },
+  mounted() {
+    this.timer = setInterval(this.trace, 6000)
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
+  },
+  methods: {
+    trace() {
+      if (this.hash) {
+        this.error = null
+        this.$http.getTxs(this.hash).then(res => {
+          console.log('tx', res)
+          if (res.code === 0) {
+            this.succeed = true
+            clearInterval(this.timer)
+          } else if (res.code !== 3) { // code 3 is tx unconfirmed(not founded).
+            this.error = res.raw_log
+            console.log('error:', this.error)
+            clearInterval(this.timer)
+          }
+        }).catch(e => {
+          this.error = e
+          clearInterval(this.timer)
+        })
+      }
     },
   },
 }

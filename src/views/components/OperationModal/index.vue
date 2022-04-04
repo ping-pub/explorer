@@ -53,7 +53,20 @@
             @update="componentUpdate"
           />
           <b-row>
-            <b-col>
+            <b-col cols="12">
+              <b-form-group>
+                <b-form-checkbox
+                  v-model="advance"
+                  name="advance"
+                  value="true"
+                >
+                  <small>Advanced</small>
+                </b-form-checkbox>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row v-if="advance">
+            <b-col cols="12">
               <b-form-group
                 label="Fee"
                 label-for="Fee"
@@ -78,19 +91,6 @@
                 </validation-provider>
               </b-form-group>
             </b-col>
-            <b-col cols="12">
-              <b-form-group>
-                <b-form-checkbox
-                  v-model="advance"
-                  name="advance"
-                  value="true"
-                >
-                  <small>Advanced</small>
-                </b-form-checkbox>
-              </b-form-group>
-            </b-col>
-          </b-row>
-          <b-row v-if="advance">
             <b-col cols="12">
               <b-form-group
                 label="Gas"
@@ -128,8 +128,7 @@
               </b-form-group>
             </b-col>
           </b-row>
-
-          <b-row>
+          <b-row v-if="advance">
             <b-col>
               <wallet-input-vue v-model="wallet" />
             </b-col>
@@ -138,10 +137,10 @@
         {{ error }}
       </validation-observer>
 
-      <TransactionResult v-else />
-      <b-button @click="showResult = !showResult">
-        toggle
-      </b-button>
+      <TransactionResult
+        v-else
+        :hash="txHash"
+      />
     </b-overlay>
   </b-modal>
 </template>
@@ -251,11 +250,12 @@ export default {
       fee: '900',
       feeDenom: '',
       wallet: 'ledgerUSB',
-      gas: '200000',
+      gas: '250000',
       memo: '',
       blockingMsg: this.address ? 'You are not the owner' : 'No available account found.',
       actionName: 'Send',
       showResult: false,
+      txHash: '',
 
       required,
       password,
@@ -282,6 +282,7 @@ export default {
     },
     isOwner() {
       if (this.accounts) {
+        this.updateWallet(this.accounts.device)
         if (this.accounts.address.findIndex(x => x.addr === this.selectedAddress) > -1) {
           return false
         }
@@ -323,10 +324,8 @@ export default {
       })
       this.fee = this.$store.state.chains.selected?.min_tx_fee || '1000'
       this.feeDenom = this.$store.state.chains.selected?.assets[0]?.base || ''
-      // this.$refs.component.loadData()
     },
     componentUpdate(obj) {
-      console.log(obj)
       Object.keys(obj).forEach(key => {
         this[key] = obj[key]
       })
@@ -345,10 +344,10 @@ export default {
     resetModal() {
       this.feeDenom = ''
       this.error = null
+      this.showResult = false
     },
     async sendTx() {
       const txMsgs = this.$refs.component.msg
-      console.log(txMsgs)
       if (txMsgs.length === 0) {
         this.error = 'No delegation found'
         return ''
@@ -383,21 +382,14 @@ export default {
         this.memo,
         signerData,
       ).then(bodyBytes => {
+        this.showResult = true
         this.$http.broadcastTx(bodyBytes, this.selectedChain).then(res => {
+          this.txHash = res.tx_response.txhash
           setLocalTxHistory({
             chain: this.$store.state.chains.selected,
             op: this.historyName,
             hash: res.tx_response.txhash,
             time: new Date(),
-          })
-          this.$bvModal.hide('operation-modal')
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Transaction sent!',
-              icon: 'EditIcon',
-              variant: 'success',
-            },
           })
         }).catch(e => {
           console.log(e)
@@ -409,6 +401,13 @@ export default {
         this.error = e
       })
       return ''
+    },
+    updateWallet(v) {
+      console.log('device', v)
+      if (v && v !== 'address') {
+        this.wallet = v
+      }
+      this.wallet = 'keplr'
     },
   },
 }
