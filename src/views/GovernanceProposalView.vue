@@ -109,10 +109,11 @@
           </b-button>
         </router-link>
         <b-button
-          v-b-modal.vote-window
+          v-b-modal.operation-modal
           :disabled="proposal.status!=2"
           variant="primary"
           class="btn float-right mg-2"
+          @click="openModal('Vote')"
         >
           {{ $t('btn_vote') }}
         </b-button>
@@ -232,30 +233,29 @@
           </b-button>
         </router-link>
         <b-button
-          v-b-modal.deposit-window
+          v-b-modal.operation-modal
           :disabled="proposal.status!=1"
           variant="primary"
           class="btn float-right mg-2"
+          @click="openModal('GovDeposit')"
         >
           {{ $t('btn_deposit') }}
         </b-button>
         <b-button
-          v-b-modal.vote-window
+          v-b-modal.operation-modal
           :disabled="proposal.status!=2"
           variant="primary"
           class="btn float-right mg-2 mr-1"
+          @click="openModal('Vote')"
         >
           {{ $t('btn_vote') }}
         </b-button>
       </b-card-footer>
     </b-card>
-    <operation-vote-component
+    <operation-modal
+      :type="operationModalType"
       :proposal-id="Number(proposal.id)"
-      :title="proposal.title"
-    />
-    <operation-gov-deposit-component
-      :proposal-id="Number(proposal.id)"
-      :title="proposal.title"
+      :proposal-title="proposal.title"
     />
   </section>
 </template>
@@ -273,9 +273,9 @@ import {
 } from '@/libs/utils'
 import { Proposal, Proposer } from '@/libs/data'
 import dayjs from 'dayjs'
+import OperationModal from '@/views/components/OperationModal/index.vue'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
-import OperationVoteComponent from './OperationVoteComponent.vue'
-import OperationGovDepositComponent from './OperationGovDepositComponent.vue'
+
 // import { formatToken } from '@/libs/data/data'
 
 export default {
@@ -295,9 +295,8 @@ export default {
     BTooltip,
     BBadge,
     ObjectFieldComponent,
-    OperationVoteComponent,
-    OperationGovDepositComponent,
     FlipCountdown,
+    OperationModal,
   },
   data() {
     return {
@@ -307,6 +306,7 @@ export default {
       proposer: new Proposer(),
       deposits: [],
       votes: [],
+      operationModalType: '',
       votes_fields: [
         {
           key: 'voter',
@@ -410,6 +410,9 @@ export default {
     },
     formatAddress(v) {
       return getStakingValidatorByAccount(this.$http.config.chain_name, v)
+    },
+    openModal(type) {
+      this.operationModalType = type
     },
   },
 }

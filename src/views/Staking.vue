@@ -78,7 +78,7 @@
         </template>
         <template #cell(operation)="data">
           <b-button
-            v-b-modal.delegate-window
+            v-b-modal.operation-modal
             :name="data.item.operator_address"
             variant="primary"
             size="sm"
@@ -186,7 +186,7 @@
           </template>
           <template #cell(operation)="data">
             <b-button
-              v-b-modal.delegate-window
+              v-b-modal.operation-modal
               :name="data.item.operator_address"
               variant="primary"
               size="sm"
@@ -210,7 +210,10 @@
         </small>
       </template>
     </b-card>
-    <operation-delegate-component :validator-address="validator_address" />
+    <operation-modal
+      type="Delegate"
+      :validator-address="validator_address"
+    />
   </div>
 </template>
 
@@ -222,9 +225,9 @@ import {
   percent, StakingParameters, formatToken,
 } from '@/libs/utils'
 import { keybase } from '@/libs/fetch'
+import OperationModal from '@/views/components/OperationModal/index.vue'
 // import { toHex } from '@cosmjs/encoding'
 // import fetch from 'node-fetch'
-import OperationDelegateComponent from './OperationDelegateComponent.vue'
 
 export default {
   components: {
@@ -237,32 +240,15 @@ export default {
     BCardTitle,
     BCardBody,
     BButton,
-    OperationDelegateComponent,
     BFormRadioGroup,
     BFormGroup,
+    OperationModal,
   },
   directives: {
     'b-tooltip': VBTooltip,
   },
   data() {
     return {
-      keys: [
-        'bitsongvaloper1jxv0u20scum4trha72c7ltfgfqef6nscl86wxa',
-        'akashvaloper1vgstlgtsx4w80gphwgre0fcvc04lcnaelukvll',
-        'certikvaloper1jxv0u20scum4trha72c7ltfgfqef6nsczkvcu7',
-        'cosmosvaloper1jxv0u20scum4trha72c7ltfgfqef6nsch7q6cu',
-        'iva16plp8cmfkjssp222taq6pv6mkm8c5pa9lcktta',
-        'junovaloper1jxv0u20scum4trha72c7ltfgfqef6nscm9pmg2',
-        'kavavaloper1xftqdxvq0xkv2mu8c5y0jrsc578tak4m9u0s44',
-        'kivaloper1jxv0u20scum4trha72c7ltfgfqef6nschqtan9',
-        'osmovaloper1jxv0u20scum4trha72c7ltfgfqef6nscqx0u46',
-        'persistencevaloper1jxv0u20scum4trha72c7ltfgfqef6nsc4zjpnj',
-        'starsvaloper1jxv0u20scum4trha72c7ltfgfqef6nscdghxyx',
-        'digvaloper1jxv0u20scum4trha72c7ltfgfqef6nsc4s577p',
-        'bcnavaloper1jxv0u20scum4trha72c7ltfgfqef6nsc384wxf',
-        'pbvaloper1jxv0u20scum4trha72c7ltfgfqef6nsc5nn6cf',
-        'rizonvaloper1jxv0u20scum4trha72c7ltfgfqef6nsczn2l68',
-      ],
       islive: true,
       validator_address: null,
       mintInflation: 0,
@@ -314,7 +300,7 @@ export default {
   },
   computed: {
     pingVals() {
-      return this.list.filter(x => this.keys.includes(x.operator_address))
+      return this.list.filter(x => x.description.identity === '6783E9F948541962')
     },
     list() {
       return this.validators.map(x => {

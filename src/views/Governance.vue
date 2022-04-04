@@ -157,19 +157,19 @@
             </router-link>
             <b-button
               v-if="p.status===1"
-              v-b-modal.deposit-window
+              v-b-modal.operation-modal
               variant="primary"
               class="btn float-right mg-2"
-              @click="selectProposal(p.id, p.title)"
+              @click="selectProposal('GovDeposit',p.id, p.title)"
             >
               {{ $t('btn_deposit') }}
             </b-button>
             <b-button
               v-if="p.status===2"
-              v-b-modal.vote-window
+              v-b-modal.operation-modal
               variant="primary"
               class="btn float-right mg-2"
-              @click="selectProposal(p.id, p.title)"
+              @click="selectProposal('Vote',p.id, p.title)"
             >
               {{ $t('btn_vote') }}
             </b-button>
@@ -177,13 +177,10 @@
         </b-card>
       </b-col>
     </b-row>
-    <operation-vote-component
+    <operation-modal
+      :type="operationModalType"
       :proposal-id="selectedProposalId"
-      :title="selectedTitle"
-    />
-    <operation-gov-deposit-component
-      :proposal-id="selectedProposalId"
-      :title="selectedTitle"
+      :proposal-title="selectedTitle"
     />
   </div>
 </template>
@@ -196,8 +193,7 @@ import Ripple from 'vue-ripple-directive'
 import { Proposal } from '@/libs/data'
 import { percent, tokenFormatter } from '@/libs/utils'
 import dayjs from 'dayjs'
-import OperationVoteComponent from './OperationVoteComponent.vue'
-import OperationGovDepositComponent from './OperationGovDepositComponent.vue'
+import OperationModal from '@/views/components/OperationModal/index.vue'
 
 export default {
   components: {
@@ -212,8 +208,7 @@ export default {
     BCardBody,
     BRow,
     BCol,
-    OperationVoteComponent,
-    OperationGovDepositComponent,
+    OperationModal,
   },
   directives: {
     'b-modal': VBModal,
@@ -225,6 +220,7 @@ export default {
       selectedTitle: '',
       proposals: [new Proposal()],
       max: 1,
+      operationModalType: '',
     }
   },
   mounted() {
@@ -234,7 +230,8 @@ export default {
     percent: v => percent(v),
     formatDate: v => dayjs(v).format('YYYY-MM-DD'),
     formatToken: v => tokenFormatter(v, {}),
-    selectProposal(pid, title) {
+    selectProposal(modal, pid, title) {
+      this.operationModalType = modal
       this.selectedProposalId = Number(pid)
       this.selectedTitle = title
     },
