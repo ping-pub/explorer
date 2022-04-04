@@ -193,7 +193,7 @@ function getHdPath(address) {
   return stringToPath(hdPath)
 }
 
-export async function sign(device, chainId, signerAddress, messages, fee, memo, signerData) {
+export async function sign(device, chainId, signerAddress, messages, fee, memo, signerData, signOpts) {
   let transport
   let signer
   switch (device) {
@@ -226,7 +226,7 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
   // Ensure the address has some tokens to spend
   const client = await PingWalletClient.offline(signer)
   // const client = await SigningStargateClient.offline(signer)
-  return client.signAmino2(device.startsWith('ledger') ? toSignAddress(signerAddress) : signerAddress, messages, fee, memo, signerData)
+  return client.signAmino2(device.startsWith('ledger') ? toSignAddress(signerAddress) : signerAddress, messages, fee, memo, signerData, signOpts)
   // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
 }
 
@@ -324,6 +324,21 @@ export function isToken(value) {
     is = value.findIndex(x => Object.keys(x).includes('denom')) > -1
   }
   return is
+}
+
+export function findNativeConfigToken(balances, chain) {
+  if (!Array.isArray(balances)) return undefined
+  if (!Array.isArray(chain?.assets)) return balances
+
+  const configAssetDenoms = chain.assets.map(i => i.base)
+
+  // prioritise config tokens in token selection dropdown if available.
+  const token = balances.find(i => !i.denom.startsWith('ibc') && configAssetDenoms.includes(i.denom))
+
+  if (token) return token
+
+  // if no token in config, return any native (non-ibc) token
+  return balances.find(i => !i.denom.startsWith('ibc'))
 }
 
 export function formatTokenDenom(tokenDenom) {

@@ -245,7 +245,7 @@ import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  abbrAddress, extractAccountNumberAndSequence, formatToken, formatTokenDenom, getLocalAccounts, getUnitAmount, setLocalTxHistory, sign, timeIn,
+  abbrAddress, extractAccountNumberAndSequence, findNativeConfigToken, formatToken, formatTokenDenom, getLocalAccounts, getUnitAmount, setLocalTxHistory, sign, timeIn,
 } from '@/libs/utils'
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -349,7 +349,7 @@ export default {
         this.$http.getBankBalances(this.selectedAddress).then(res => {
           if (res && res.length > 0) {
             this.balance = res.reverse()
-            const token = this.balance.find(i => !i.denom.startsWith('ibc'))
+            const token = findNativeConfigToken(this.balance, this.$store.state.chains.selected)
             this.token = token.denom
             if (token) this.feeDenom = token.denom
             this.balance.filter(i => i.denom.startsWith('ibc')).forEach(x => {
@@ -469,6 +469,7 @@ export default {
         chainId: this.chainId,
       }
 
+      const { sign_opts: signOpts } = this.$store.state.chains.selected
       sign(
         this.wallet,
         this.chainId,
@@ -477,6 +478,7 @@ export default {
         txFee,
         this.memo,
         signerData,
+        signOpts,
       ).then(bodyBytes => {
         this.$http.broadcastTx(bodyBytes).then(res => {
           setLocalTxHistory({

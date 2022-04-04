@@ -25,7 +25,8 @@ export default class PingWalletClient extends SigningStargateClient {
     return instance
   }
 
-  async signAmino2(signerAddress, messages, fee, memo, { accountNumber, sequence, chainId }) {
+  async signAmino2(signerAddress, messages, fee, memo, signerData, signOpts = {}) {
+    const { accountNumber, sequence, chainId } = signerData
     // utils_1.assert(!proto_signing_1.isOfflineDirectSigner(this.signer))
     const accountFromSigner = (await this.signer.getAccounts()).find(account => account.address === signerAddress)
     if (!accountFromSigner) {
@@ -37,7 +38,18 @@ export default class PingWalletClient extends SigningStargateClient {
     const msgs = messages.map(msg => this.aminoTypes.toAmino(msg))
     // console.log('msgs:', msgs)
     const signDoc = amino_1.makeSignDoc(msgs, fee, chainId, memo, accountNumber, sequence)
-    const { signature, signed } = await this.signer.signAmino(signerAddress, signDoc)
+
+    let signature = null
+    let signed = null
+    if (this.signer.keplr && signOpts.keplr?.preferNoSetFee) {
+      // additional keplr signer specific sign opts
+      ({ signature, signed } = await this.signer.keplr.signAmino(this.signer.chainId, signerAddress, signDoc, {
+        preferNoSetFee: signOpts.keplr.preferNoSetFee,
+      }))
+    } else {
+      ({ signature, signed } = await this.signer.signAmino(signerAddress, signDoc))
+    }
+
     const signedTxBody = {
       messages: signed.msgs.map(msg => this.aminoTypes.fromAmino(msg)),
       memo: signed.memo,
