@@ -488,7 +488,6 @@ export default {
       this.currency = getUserCurrencySign()
     },
     transfer(type, addr, chain) {
-      console.log(chain)
       this.operationModalType = type
       this.selectedAddress = addr
       this.selectedChainName = chain
