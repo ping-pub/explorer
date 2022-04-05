@@ -8,6 +8,9 @@
 import { isTestnet } from '@/libs/utils'
 import { sha256 } from '@cosmjs/crypto'
 import { toHex } from '@cosmjs/encoding'
+import Vue from 'vue'
+
+console.log(Vue.prototype)
 
 let chains = {}
 
@@ -39,6 +42,7 @@ export default {
     quotes: {},
     defaultWallet: localStorage.getItem('default-wallet'),
     denoms: {},
+    ibcPaths: {},
   },
   getters: {
     getchains: state => state.chains,
@@ -73,6 +77,9 @@ export default {
     setIBCDenoms(state, denoms) {
       state.denoms = denoms
     },
+    setIBCPaths(state, paths) {
+      state.ibcPaths = paths
+    },
   },
   actions: {
     async getQuotes(context) {
@@ -81,15 +88,25 @@ export default {
       })
     },
 
-    async getAllIBCDenoms(context) {
-      this.$http.getAllIBCDenoms().then(x => {
+    async getAllIBCDenoms(context, _this) {
+      _this.$http.getAllIBCDenoms().then(x => {
         const denomsMap = {}
+        const pathsMap = {}
         x.denom_traces.forEach(trace => {
           const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
-          denomsMap[`ibc/${hash.toUpperCase()}`] = trace.base_denom
-          // this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace.base_denom)
+          const ibcDenom = `ibc/${hash.toUpperCase()}`
+          denomsMap[ibcDenom] = trace.base_denom
+
+          const path = trace.path.split('/')
+          if (path.length >= 2) {
+            pathsMap[ibcDenom] = {
+              channel_id: path[path.length - 1],
+              port_id: path[path.length - 2],
+            }
+          }
         })
         context.commit('setIBCDenoms', denomsMap)
+        context.commit('setIBCPaths', pathsMap)
       })
     },
   },
