@@ -308,7 +308,7 @@ export default {
     selectedChain() {
       let config = null
       const allChains = localStorage.getItem('chains')
-      if (allChains) {
+      if (allChains && this.selectedChainName) {
         config = JSON.parse(allChains)[this.selectedChainName]
       }
       return config
