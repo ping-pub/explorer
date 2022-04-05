@@ -366,7 +366,6 @@ export function numberWithCommas(x) {
 export function formatTokenAmount(tokenAmount, decimals = 2, tokenDenom = 'uatom', format = true) {
   const denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
   let amount = 0
-  console.log('format:', denom)
   let exp = String(denom).startsWith('gravity') ? 18 : 6
   const config = Object.values(getLocalChains())
 
