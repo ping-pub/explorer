@@ -403,10 +403,11 @@ export default {
       return ''
     },
     updateWallet(v) {
-      if (v && v !== 'address') {
+      if (v && v === 'address') {
+        this.wallet = 'keplr'
+      } else {
         this.wallet = v
       }
-      this.wallet = 'keplr'
     },
   },
 }

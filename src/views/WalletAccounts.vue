@@ -92,22 +92,18 @@
             />
             <span class="align-middle">{{ item.name }}</span>
           </b-button>
-          <b-form-checkbox
-            v-model="defaultWallet"
-            v-b-tooltip.hover.v-primary
-            :value="item.name"
-            title="Set as default wallet"
-            variant="outline-warning"
-            :readonly="item.name===defaultWallet"
-          >
-            <span
-              :class="item.name===defaultWallet ? 'text-primary' : ''"
-              class="font-weight-bolder pb-0"
-              style="font-size:16px"
+          <div class="mr-50">
+            <router-link
+              :to="`/wallet/import?name=${item.name}`"
+              class="mr-50"
             >
-              Set as default
-            </span>
-          </b-form-checkbox>
+              <feather-icon
+                icon="EditIcon"
+                class="mr-10"
+              />
+              <span class="align-middle">Edit</span>
+            </router-link>
+          </div>
         </div>
 
         <b-row>
@@ -128,48 +124,14 @@
                 <div>
                   <b-card-title> <span class="text-uppercase">{{ acc.chain }}</span></b-card-title>
                 </div>
-                <b-dropdown
-                  class="ml-1"
-                  variant="link"
-                  no-caret
-                  toggle-class="p-0"
-                  right
-                >
-                  <template #button-content>
-                    <feather-icon
-                      icon="AlignJustifyIcon"
-                      size="18"
-                      class="cursor-pointer"
-                    />
-                  </template>
-                  <b-dropdown-item
-                    v-if="balances[acc.addr]"
-                    :to="`/${acc.chain}/account/${acc.addr}`"
-                  >
-                    <feather-icon icon="TrelloIcon" /> Detail
-                  </b-dropdown-item>
-                  <b-dropdown-divider
-                    v-if="balances[acc.addr]"
-                  />
-                  <b-dropdown-item
-                    v-if="balances[acc.addr]"
-                    v-b-modal.operation-modal
-                    @click="transfer('Transfer',acc.addr)"
-                  >
-                    <feather-icon icon="SendIcon" /> Transfer
-                  </b-dropdown-item>
-                  <b-dropdown-item
-                    v-if="balances[acc.addr]"
-                    v-b-modal.operation-modal
-                    @click="transfer('IBCTransfer',acc.addr)"
-                  >
-                    <feather-icon icon="SendIcon" /> IBC Transfer
-                  </b-dropdown-item>
-                  <b-dropdown-item @click="removeAddress(acc.addr)">
-                    <feather-icon icon="Trash2Icon" /> Remove
-                  </b-dropdown-item>
-                </b-dropdown>
-
+                <feather-icon
+                  v-b-tooltip.hover.v-danger
+                  :title="`Remove ${acc.chain.toUpperCase()}`"
+                  icon="XSquareIcon"
+                  size="18"
+                  class="cursor-pointer text-danger"
+                  @click="removeAddress(acc.addr)"
+                />
               </b-card-header>
               <b-card-body class="text-truncate">
                 <b-row>
@@ -245,6 +207,7 @@
                           variant="outline-primary"
                           :to="`/${acc.chain}/account/${acc.addr}`"
                           class="mt-1 mb-0"
+                          @click="updateDefaultWallet(item.name)"
                         >
                           <feather-icon icon="TrelloIcon" /> Detail
                         </b-button>
@@ -275,7 +238,7 @@
 <script>
 import {
   BCard, BCardHeader, BCardTitle, BCardBody, VBModal, BRow, BCol, BAvatar, BButton,
-  BDropdown, BDropdownItem, BDropdownDivider, BFormCheckbox, VBTooltip,
+  BDropdown, BDropdownItem, VBTooltip,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
@@ -303,8 +266,6 @@ export default {
     BCardTitle,
     BDropdown,
     BDropdownItem,
-    BDropdownDivider,
-    BFormCheckbox,
     // eslint-disable-next-line vue/no-unused-components
     VBTooltip,
     FeatherIcon,
@@ -384,14 +345,6 @@ export default {
     }
   },
   computed: {
-    defaultWallet: {
-      get() {
-        return this.$store.state.chains.defaultWallet
-      },
-      set(value) {
-        this.$store.commit('setDefaultWallet', value)
-      },
-    },
     calculateTotal() {
       let total = 0
       if (this.calculateByDenom.value) {
@@ -642,6 +595,9 @@ export default {
         }
       })
       localStorage.setItem('accounts', JSON.stringify(this.accounts))
+    },
+    updateDefaultWallet(v) {
+      this.$store.commit('setDefaultWallet', v)
     },
     copy(v) {
       this.$copyText(v).then(() => {
