@@ -8,9 +8,6 @@
 import { isTestnet } from '@/libs/utils'
 import { sha256 } from '@cosmjs/crypto'
 import { toHex } from '@cosmjs/encoding'
-import Vue from 'vue'
-
-console.log(Vue.prototype)
 
 let chains = {}
 
