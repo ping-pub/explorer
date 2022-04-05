@@ -1,0 +1,7 @@
+{
+    "chain_name": "test-core-1",
+    "api":"https://rest.testnet.persistence.one",
+    "sdk_version": "0.44.2",
+    "addr_prefix": "persistence",
+    "logo": "https://raw.githubusercontent.com/auditOne/explorer/master/public/logos/persistence.png"
+}

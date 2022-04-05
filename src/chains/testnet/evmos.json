@@ -1,0 +1,8 @@
+{
+    "chain_name": "evmos",
+    "coingecko": "evmos",
+    "api": "https://testnet-evmos.api.ping.pub",
+    "sdk_version": "0.42.4",
+    "addr_prefix": "evmos",
+    "logo": "https://dl.airtable.com/.attachments/53c13408739d92d9eada6bda12d0a50a/4c2f1c8c/Hgl3o3VL_400x400.jpg"
+}

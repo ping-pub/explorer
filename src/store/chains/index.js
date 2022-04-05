@@ -24,12 +24,14 @@ chains = update
 localStorage.setItem('chains', JSON.stringify(update))
 const selected = chains.cosmos
 
+const avatarcache = localStorage.getItem('avatars')
+
 export default {
   namespaced: true,
   state: {
     config: chains,
     selected,
-    avatars: {},
+    avatars: avatarcache ? JSON.parse(avatarcache) : {},
     height: 0,
     ibcChannels: {},
     quotes: {},
@@ -48,6 +50,7 @@ export default {
     },
     cacheAvatar(state, args) {
       state.chains.avatars[args.identity] = args.url
+      localStorage.setItem('avatars', JSON.stringify(state.chains.avatars))
     },
     setHeight(state, height) {
       state.chains.height = height

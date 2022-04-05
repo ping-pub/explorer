@@ -19,10 +19,20 @@
         >
           Browse favorite only
         </b-button>
-        <b-form-input
-          v-model="query"
-          placeholder="Keywords to filter validators"
-        />
+        <b-input-group>
+          <b-input-group-prepend is-text>
+            <b-form-checkbox
+              v-model="missedFilter"
+              v-b-tooltip.hover
+              title="Only missed blocks"
+              name="viewMissed"
+            />
+          </b-input-group-prepend>
+          <b-form-input
+            v-model="query"
+            placeholder="Keywords to filter validators"
+          />
+        </b-input-group>
       </b-card>
       <b-row>
         <b-col
@@ -32,13 +42,36 @@
           md="4"
           class="text-truncate"
         >
-          <b-form-checkbox
-            v-model="pinned"
-            :value="`${chain}#${x.address}`"
-            class="custom-control-warning"
-            @change="pinValidator(`${chain}#${x.address}`)"
-          ><span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
-          </b-form-checkbox>
+          <div class="d-flex justify-content-between">
+            <b-form-checkbox
+              v-model="pinned"
+              :value="`${chain}#${x.address}`"
+              class="custom-control-warning text-truncate"
+              @change="pinValidator(`${chain}#${x.address}`)"
+            ><span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
+            </b-form-checkbox>
+            <span
+              v-if="missing[x.address]"
+            >
+              <b-badge
+                v-if="missing[x.address].missed_blocks_counter > 0"
+                v-b-tooltip.hover.v-danger
+                variant="light-danger"
+                :title="`${missing[x.address].missed_blocks_counter} missed blocks`"
+                class="text-danger text-bolder"
+              >
+                {{ missing[x.address].missed_blocks_counter }}
+              </b-badge>
+              <b-badge
+                v-else
+                v-b-tooltip.hover.v-success
+                variant="light-success"
+                title="Perfect! No missed blocks"
+              >
+                0
+              </b-badge>
+            </span>
+          </div>
           <div class="d-flex justify-content-between align-self-stretch flex-wrap">
             <div
               v-for="(b,i) in blocks"
@@ -62,12 +95,13 @@
 
 <script>
 import {
-  BRow, BCol, VBTooltip, BFormInput, BCard, BAlert, BFormCheckbox, BButton,
+  BRow, BCol, VBTooltip, BFormInput, BCard, BAlert, BFormCheckbox, BButton, BBadge, BInputGroup, BInputGroupPrepend,
 } from 'bootstrap-vue'
 
 import {
   consensusPubkeyToHexAddress, getCachedValidators, timeIn, toDay,
 } from '@/libs/utils'
+import { Bech32, toHex } from '@cosmjs/encoding'
 
 export default {
   components: {
@@ -77,7 +111,10 @@ export default {
     BCard,
     BAlert,
     BButton,
+    BBadge,
     BFormCheckbox,
+    BInputGroup,
+    BInputGroupPrepend,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -86,6 +123,7 @@ export default {
     const { chain } = this.$route.params
     const pinned = localStorage.getItem('pinned') ? localStorage.getItem('pinned').split(',') : ''
     return {
+      missedFilter: false,
       pinned,
       chain,
       query: '',
@@ -100,10 +138,14 @@ export default {
     uptime() {
       const vals = this.query ? this.validators.filter(x => String(x.description.moniker).indexOf(this.query) > -1) : this.validators
       vals.sort((a, b) => b.delegator_shares - a.delegator_shares)
-      return vals.map(x => ({
+      const rets = vals.map(x => ({
         validator: x.description,
         address: consensusPubkeyToHexAddress(x.consensus_pubkey),
       }))
+      if (this.missedFilter) {
+        return rets.filter(x => this.missing[x.address].missed_blocks_counter > 0)
+      }
+      return rets
     },
   },
   created() {
@@ -114,6 +156,16 @@ export default {
     }
     this.$http.getValidatorList().then(res => {
       this.validators = res
+    })
+    this.$http.getSlashingSigningInfo().then(res => {
+      if (res.info) {
+        res.info.forEach(x => {
+          if (x.address) {
+            const hex = toHex(Bech32.decode(x.address).data).toUpperCase()
+            this.missing[hex] = x
+          }
+        })
+      }
     })
     this.initBlocks()
   },

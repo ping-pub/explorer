@@ -27,34 +27,6 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/wallet/setting',
-      name: 'setting',
-      component: () => import('@/views/WalletSetting.vue'),
-      meta: {
-        pageTitle: 'Setting',
-        breadcrumb: [
-          {
-            text: 'Setting',
-            active: true,
-          },
-        ],
-      },
-    },
-    {
-      path: '/wallet/portfolio',
-      name: 'portfolio',
-      component: () => import('@/views/WalletPortfolio.vue'),
-      meta: {
-        pageTitle: 'Portfolio',
-        breadcrumb: [
-          {
-            text: 'Portfolio',
-            active: true,
-          },
-        ],
-      },
-    },
-    {
       path: '/coffee',
       name: 'coffee',
       component: () => import('@core/layouts/components/Coffee.vue'),
@@ -92,20 +64,6 @@ const router = new VueRouter({
         breadcrumb: [
           {
             text: 'Import',
-            active: true,
-          },
-        ],
-      },
-    },
-    {
-      path: '/wallet/address',
-      name: 'addresses',
-      component: () => import('@/views/WalletAddressBook.vue'),
-      meta: {
-        pageTitle: 'Address Book',
-        breadcrumb: [
-          {
-            text: 'Address Book',
             active: true,
           },
         ],
@@ -154,6 +112,20 @@ const router = new VueRouter({
         breadcrumb: [
           {
             text: 'Home',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/:chain/statesync',
+      name: 'statesync',
+      component: () => import('@/views/StateSync.vue'),
+      meta: {
+        pageTitle: 'State Sync',
+        breadcrumb: [
+          {
+            text: 'State Synchronization',
             active: true,
           },
         ],
@@ -359,14 +331,6 @@ const router = new VueRouter({
       },
     },
     // common modules
-    {
-      path: '/user/login',
-      name: 'login',
-      component: () => import('@/views/Login.vue'),
-      meta: {
-        layout: 'full',
-      },
-    },
     {
       path: '/error/error-404',
       name: 'error-404',

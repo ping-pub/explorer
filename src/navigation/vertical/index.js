@@ -29,6 +29,11 @@ const modules = [
     route: 'uptime',
   },
   {
+    scope: 'normal',
+    title: 'statesync',
+    route: 'statesync',
+  },
+  {
     scope: 'cos-mos',
     title: 'gravity',
     route: 'gravity',
@@ -42,11 +47,6 @@ const modules = [
 
 function processMenu() {
   const chainMenus = [
-    // {
-    //   title: 'Home',
-    //   route: 'home',
-    //   icon: 'HomeIcon',
-    // },
     {
       header: 'blockchains',
     },

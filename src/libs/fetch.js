@@ -60,7 +60,7 @@ export default class ChainFetch {
     if (conf.chain_name === 'injective') {
       return ChainFetch.fetch('https://tm.injective.network', '/block').then(data => Block.create(commonProcess(data)))
     }
-    return this.get('/blocks/latest', config).then(data => Block.create(data))
+    return this.get(`/blocks/latest?${new Date().getTime()}`, config).then(data => Block.create(data))
   }
 
   async getBlockByHeight(height, config = null) {
@@ -71,12 +71,13 @@ export default class ChainFetch {
     return this.get(`/blocks/${height}`, config).then(data => Block.create(data))
   }
 
-  async getSlashingSigningInfo() {
-    return this.get('/cosmos/slashing/v1beta1/signing_infos')
+  async getSlashingSigningInfo(config = null) {
+    return this.get('/cosmos/slashing/v1beta1/signing_infos?pagination.limit=500', config)
   }
 
-  async getTxs(hash) {
-    const ver = this.getSelectedConfig() ? this.config.sdk_version : '0.41'
+  async getTxs(hash, config = null) {
+    const conf = config || this.getSelectedConfig()
+    const ver = conf.sdk_version || '0.41'
     // /cosmos/tx/v1beta1/txs/{hash}
     if (ver && compareVersions(ver, '0.40') < 1) {
       return this.get(`/txs/${hash}`).then(data => WrapStdTx.create(data, ver))
@@ -140,8 +141,8 @@ export default class ChainFetch {
     })
   }
 
-  async getValidatorList() {
-    return this.get('/staking/validators').then(data => {
+  async getValidatorList(config = null) {
+    return this.get('/staking/validators', config).then(data => {
       const vals = commonProcess(data).map(i => new Validator().init(i))
       localStorage.setItem(`validators-${this.config.chain_name}`, JSON.stringify(vals))
       return vals
@@ -156,8 +157,16 @@ export default class ChainFetch {
     })
   }
 
-  async getValidatorListByHeight(height) {
-    return this.get(`/validatorsets/${height}`).then(data => commonProcess(data))
+  async getValidatorListByStatus(status) {
+    return this.get(`/cosmos/staking/v1beta1/validators?status=${status}&pagination.limit=500`).then(data => {
+      const result = commonProcess(data)
+      const vals = result.validators ? result.validators : result
+      return vals.map(i => new Validator().init(i))
+    })
+  }
+
+  async getValidatorListByHeight(height, offset) {
+    return this.get(`/cosmos/base/tendermint/v1beta1/validatorsets/${height}?pagination.limit=100&pagination.offset=${offset}`).then(data => commonProcess(data))
   }
 
   async getStakingValidator(address) {
@@ -376,6 +385,19 @@ export default class ChainFetch {
 
   static async fetchTokenQuote(symbol) {
     return ChainFetch.fetchCoinMarketCap(`/quote/${symbol}`)
+  }
+
+  // Simulate Execution of tx
+  async simulate(tx, config = null) {
+    return this.post('/cosmos/tx/v1beta1/simulate', tx, config).then(res => {
+      if (res.code && res.code !== 0) {
+        throw new Error(res.message)
+      }
+      if (res.tx_response && res.tx_response.code !== 0) {
+        throw new Error(res.tx_response.raw_log)
+      }
+      return res
+    })
   }
 
   // Tx Submit
