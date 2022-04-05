@@ -2,22 +2,24 @@
     "chain_name": "osmosis",
     "coingecko": "osmosis",
     "api": ["https://lcd-osmosis.blockapsis.com", "https://osmo.api.ping.pub"],
+    "rpc": ["https://osmosis.validator.network:443", "https://rpc-osmosis.blockapsis.com:443"],
+    "snapshot_provider": "",
     "sdk_version": "0.44.5",
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "osmo",
-    "logo": "https://dl.airtable.com/.attachments/4ef30ec4008bc86cc3c0f74a6bb84050/0eeb4d64/aQ5W3zaT_400x400.jpg",
+    "logo": "/logos/osmosis.jpg",
     "assets": [{
         "base": "uosmo",
         "symbol": "OSMO",
         "exponent": "6",
         "coingecko_id": "osmosis", 
-        "logo": "https://dl.airtable.com/.attachments/4ef30ec4008bc86cc3c0f74a6bb84050/0eeb4d64/aQ5W3zaT_400x400.jpg"
+        "logo": "/logos/osmosis.jpg"
     },{
         "base": "uion",
         "symbol": "ION",
         "exponent": "6",
         "coingecko_id": "ion", 
-        "logo": "https://dl.airtable.com/.attachments/4ef30ec4008bc86cc3c0f74a6bb84050/0eeb4d64/aQ5W3zaT_400x400.jpg"
+        "logo": "/logos/osmosis.jpg"
     }]
 }

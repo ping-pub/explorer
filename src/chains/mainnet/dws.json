@@ -1,0 +1,19 @@
+{
+    "chain_name": "DWS",
+    "coingecko": "",
+    "api": "https://dws-api.skynetvalidators.com",
+    "rpc": [],
+    "snapshot_provider": "",
+    "sdk_version": "0.44.3",
+    "coin_type": "118",
+    "min_tx_fee": "200",
+    "addr_prefix": "deweb",
+    "logo": "/logos/DWS.png",
+    "assets": [{
+        "base": "udws",
+        "symbol": "DWS",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "/logos/DWS.png"
+    }]
+}

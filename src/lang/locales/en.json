@@ -39,6 +39,7 @@
   "blocks": "Blocks",
   "blockchains": "Blockchains",
   "uptime": "Uptime",
+  "statesync": "State Sync",
   "trade": "Trade",
 
   "gravity": "Gravity(WIP)",

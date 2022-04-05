@@ -39,26 +39,28 @@
         <b-card-title>Assets</b-card-title>
         <div>
           <b-button
-            v-b-modal.transfer-window
+            v-b-modal.operation-modal
             variant="primary"
             size="sm"
             class="mr-25"
-          ><feather-icon
-             icon="SendIcon"
-             class="d-md-none"
-           />
-            <span class="d-none d-md-block">Transfer</span>
+            @click="setOperationModalType('Transfer')"
+          >
+            <feather-icon
+              icon="SendIcon"
+              class="d-md-none"
+            /><small class="d-none d-md-block">Transfer</small>
           </b-button>
           <b-button
-            v-b-modal.ibc-transfer-window
+            v-b-modal.operation-modal
             variant="danger"
             size="sm"
+            @click="setOperationModalType('IBCTransfer')"
           ><feather-icon
              icon="SendIcon"
              class="d-md-none"
            />
-            <span class="d-none d-md-block">IBC Transfer
-            </span></b-button>
+            <span class="d-none d-md-block">IBC Transfer</span>
+          </b-button>
         </div>
       </b-card-header>
       <b-card-body class="pl-0 pr-0">
@@ -116,7 +118,43 @@
         </b-row>
       </b-card-body>
     </b-card>
-
+    <b-card
+      v-if="unbonding && unbonding.length > 0"
+    >
+      <b-card-header class="pt-0 pl-0 pr-0">
+        <b-card-title>Unbonding Tokens</b-card-title>
+      </b-card-header>
+      <b-card-body class="pl-0 pr-0">
+        <b-row
+          v-for="item in unbonding"
+          :key="item.validator_address"
+        >
+          <b-col cols="12">
+            <span class="font-weight-bolder">From: <router-link :to="`../staking/${item.validator_address}`">{{ item.validator_address }}</router-link></span>
+          </b-col>
+          <b-col cols="12">
+            <b-table
+              :items="item.entries"
+              class="mt-1"
+              striped
+              hover
+              responsive="sm"
+              stacked="sm"
+            >
+              <template #cell(completion_time)="data">
+                {{ formatDate(data.item.completion_time) }}
+              </template>
+              <template #cell(initial_balance)="data">
+                {{ data.item.initial_balance }}{{ stakingParameters.bond_denom }}
+              </template>
+              <template #cell(balance)="data">
+                {{ data.item.balance }}{{ stakingParameters.bond_denom }}
+              </template>
+            </b-table>
+          </b-col>
+        </b-row>
+      </b-card-body>
+    </b-card>
     <b-card
       v-if="delegations"
     >
@@ -124,10 +162,11 @@
         <b-card-title>Delegation</b-card-title>
         <div>
           <b-button
-            v-b-modal.delegate-window
+            v-b-modal.operation-modal
             variant="primary"
             size="sm"
             class="mr-25"
+            @click="setOperationModalType('Delegate')"
           >
             <feather-icon
               icon="LogInIcon"
@@ -136,9 +175,10 @@
           </b-button>
           <b-button
             v-if="delegations"
-            v-b-modal.withdraw-window
+            v-b-modal.operation-modal
             variant="primary"
             size="sm"
+            @click="setOperationModalType('Withdraw')"
           >
             <feather-icon
               icon="ShareIcon"
@@ -158,29 +198,29 @@
               size="sm"
             >
               <b-button
-                v-b-modal.delegate-window
+                v-b-modal.operation-modal
                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                 v-b-tooltip.hover.top="'Delegate'"
                 variant="outline-primary"
-                @click="selectValue(data.value)"
+                @click="selectValue(data.value,'Delegate')"
               >
                 <feather-icon icon="LogInIcon" />
               </b-button>
               <b-button
-                v-b-modal.redelegate-window
+                v-b-modal.operation-modal
                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                 v-b-tooltip.hover.top="'Redelegate'"
                 variant="outline-primary"
-                @click="selectValue(data.value)"
+                @click="selectValue(data.value,'Redelegate')"
               >
                 <feather-icon icon="ShuffleIcon" />
               </b-button>
               <b-button
-                v-b-modal.unbond-window
+                v-b-modal.operation-modal
                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                 v-b-tooltip.hover.top="'Unbond'"
                 variant="outline-primary"
-                @click="selectValue(data.value)"
+                @click="selectValue(data.value,'Unbond')"
               >
                 <feather-icon icon="LogOutIcon" />
               </b-button>
@@ -338,26 +378,17 @@
       <vue-qr :text="address" />
     </b-popover>
 
-    <operation-transfer-component :address="address" />
-    <operation-transfer-2-component :address="address" />
-    <operation-withdraw-component :address="address" />
-    <operation-unbond-component
+    <operation-modal
+      :type="operationModalType"
       :address="address"
-      :validator-address.sync="selectedValidator"
-    />
-    <operation-delegate-component
-      :address="address"
-      :validator-address.sync="selectedValidator"
-    />
-    <operation-redelegate-component
-      :address="address"
-      :validator-address.sync="selectedValidator"
+      :validator-address="selectedValidator"
     />
   </div>
 </template>
 
 <script>
 import { $themeColors } from '@themeConfig'
+import dayjs from 'dayjs'
 import {
   BCard, BAvatar, BPopover, BTable, BRow, BCol, BTableSimple, BTr, BTd, BTbody, BCardHeader, BCardTitle, BButton, BCardBody, VBModal,
   BButtonGroup, VBTooltip, BPagination,
@@ -373,13 +404,8 @@ import {
 } from '@/libs/utils'
 import { sha256 } from '@cosmjs/crypto'
 import { toHex } from '@cosmjs/encoding'
+import OperationModal from '@/views/components/OperationModal/index.vue'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
-import OperationTransferComponent from './OperationTransferComponent.vue'
-import OperationWithdrawComponent from './OperationWithdrawComponent.vue'
-import OperationUnbondComponent from './OperationUnbondComponent.vue'
-import OperationDelegateComponent from './OperationDelegateComponent.vue'
-import OperationRedelegateComponent from './OperationRedelegateComponent.vue'
-import OperationTransfer2Component from './OperationTransfer2Component.vue'
 import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
 
 export default {
@@ -405,13 +431,8 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
     ObjectFieldComponent,
-    OperationTransferComponent,
-    OperationWithdrawComponent,
-    OperationDelegateComponent,
-    OperationRedelegateComponent,
-    OperationUnbondComponent,
-    OperationTransfer2Component,
     ChartComponentDoughnut,
+    OperationModal,
   },
   directives: {
     'b-modal': VBModal,
@@ -434,6 +455,8 @@ export default {
       unbonding: [],
       quotes: {},
       transactions: [],
+      stakingParameters: {},
+      operationModalType: '',
     }
   },
   computed: {
@@ -509,6 +532,7 @@ export default {
             tmp1 += Number(e.balance)
           })
         })
+        if (this.stakingParameters) stakingDenom = this.stakingParameters.bond_denom
         const unbonding = this.formatCurrency(tmp1, stakingDenom)
         sumCurrency += unbonding
         sum += tmp1
@@ -610,6 +634,9 @@ export default {
     this.$http.getTxsBySender(this.address).then(res => {
       this.transactions = res
     })
+    this.$http.getStakingParameters().then(res => {
+      this.stakingParameters = res
+    })
   },
   methods: {
     formatNumber(v) {
@@ -620,8 +647,12 @@ export default {
         this.transactions = res
       })
     },
-    selectValue(v) {
+    selectValue(v, type) {
       this.selectedValidator = v
+      this.setOperationModalType(type)
+    },
+    setOperationModalType(type) {
+      this.operationModalType = type
     },
     formatHash: abbrAddress,
     formatDenom(v) {
@@ -644,6 +675,7 @@ export default {
       }
       return 0
     },
+    formatDate: v => dayjs(v).format('YYYY-MM-DD HH:mm:ss'),
     formatTime: v => toDay(Number(v) * 1000),
     formatLength: v => toDuration(Number(v) * 1000),
     copy() {

@@ -2,6 +2,8 @@
     "chain_name": "genesisL1",
     "coingecko": "",
     "api": "https://api.genesisl1.org",
+    "rpc": [],
+    "snapshot_provider": "",
     "sdk_version": "0.42.4",
     "coin_type": "118",
     "min_tx_fee": "3000000000000000",

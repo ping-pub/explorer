@@ -42,29 +42,29 @@
             size="sm"
           >
             <b-button
-              v-b-modal.delegate-window
+              v-b-modal.operation-modal
               v-ripple.400="'rgba(113, 102, 240, 0.15)'"
               v-b-tooltip.hover.top="'Delegate'"
               variant="outline-primary"
-              @click="selectValue(data.item)"
+              @click="selectValue('Delegate',data.item)"
             >
               <feather-icon icon="LogInIcon" />
             </b-button>
             <b-button
-              v-b-modal.redelegate-window
+              v-b-modal.operation-modal
               v-ripple.400="'rgba(113, 102, 240, 0.15)'"
               v-b-tooltip.hover.top="'Redelegate'"
               variant="outline-primary"
-              @click="selectValue(data.item)"
+              @click="selectValue('Redelegate',data.item)"
             >
               <feather-icon icon="ShuffleIcon" />
             </b-button>
             <b-button
-              v-b-modal.unbond-window
+              v-b-modal.operation-modal
               v-ripple.400="'rgba(113, 102, 240, 0.15)'"
               v-b-tooltip.hover.top="'Unbond'"
               variant="outline-primary"
-              @click="selectValue(data.item)"
+              @click="selectValue('Unbond',data.item)"
             >
               <feather-icon icon="LogOutIcon" />
             </b-button>
@@ -74,18 +74,10 @@
     </b-card>
 
     <!--- not completed--->
-    <operation-withdraw-component :address="address" />
-    <operation-unbond-component
+    <operation-modal
+      :type="operationModalType"
       :address="address"
-      :validator-address.sync="selectedValidator"
-    />
-    <operation-delegate-component
-      :address="address"
-      :validator-address.sync="selectedValidator"
-    />
-    <operation-redelegate-component
-      :address="address"
-      :validator-address.sync="selectedValidator"
+      :validator-address="selectedValidator"
     />
   </div>
 </template>
@@ -99,11 +91,7 @@ import {
   formatToken, getCachedValidators, getLocalAccounts, getLocalChains, tokenFormatter,
 } from '@/libs/utils'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
-
-import OperationWithdrawComponent from './OperationWithdrawComponent.vue'
-import OperationUnbondComponent from './OperationUnbondComponent.vue'
-import OperationDelegateComponent from './OperationDelegateComponent.vue'
-import OperationRedelegateComponent from './OperationRedelegateComponent.vue'
+import OperationModal from '@/views/components/OperationModal/index.vue'
 
 export default {
   components: {
@@ -113,11 +101,7 @@ export default {
     BTable,
     BCard,
     FeatherIcon,
-
-    OperationWithdrawComponent,
-    OperationDelegateComponent,
-    OperationRedelegateComponent,
-    OperationUnbondComponent,
+    OperationModal,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -153,6 +137,7 @@ export default {
       accounts: [],
       delegations: [],
       rewards: {},
+      operationModalType: '',
     }
   },
   computed: {
@@ -200,7 +185,8 @@ export default {
     this.init()
   },
   methods: {
-    selectValue(v) {
+    selectValue(type, v) {
+      this.operationModalType = type
       this.address = v.delegator_address
       this.selectedValidator = v.validator.validator
       return v
