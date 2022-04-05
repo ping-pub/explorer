@@ -51,6 +51,7 @@ import { ValidationProvider } from 'vee-validate'
 import {
   BFormRadioGroup, BFormRadio, BFormGroup,
 } from 'bootstrap-vue'
+import { getLocalAccounts } from '@/libs/utils'
 
 export default {
   name: 'WalletInput',
@@ -74,6 +75,12 @@ export default {
   methods: {
     handleInput() {
       this.$emit('input', this.content)
+      const accounts = getLocalAccounts()
+      const wallet = accounts[this.$store.state.chains.defaultWallet]
+      if (wallet) {
+        wallet.device = this.content
+        localStorage.setItem('accounts', JSON.stringify(accounts)) // update signer device
+      }
     },
   },
 }
