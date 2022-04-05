@@ -140,6 +140,7 @@
       <TransactionResult
         v-else
         :hash="txHash"
+        :selected-chain="selectedChain"
       />
     </b-overlay>
   </b-modal>
@@ -236,13 +237,16 @@ export default {
       type: String,
       default: null,
     },
+    selectedChainName: {
+      type: String,
+      default: null,
+    },
   },
   data() {
     return {
       modalTitle: '',
       historyName: '',
       selectedValidator: null,
-      selectedChain: null,
       token: '',
       chainId: '',
       balance: [],
@@ -301,6 +305,14 @@ export default {
       const selectedAddress = this.accounts.address.find(x => x.chain === chain)
       return selectedAddress?.addr
     },
+    selectedChain() {
+      let config = null
+      const allChains = localStorage.getItem('chains')
+      if (allChains) {
+        config = JSON.parse(allChains)[this.selectedChainName]
+      }
+      return config
+    },
   },
   methods: {
     initialize() {
@@ -318,7 +330,7 @@ export default {
         this.accountNumber = account.accountNumber
         this.sequence = account.sequence
       })
-      this.$http.getBankBalances(this.selectedAddress).then(res => {
+      this.$http.getBankBalances(this.selectedAddress, this.selectedChain).then(res => {
         if (res && res.length > 0) {
           this.balance = res.reverse()
           const token = this.balance.find(i => !i.denom.startsWith('ibc'))

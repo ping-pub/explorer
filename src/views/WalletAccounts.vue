@@ -154,14 +154,14 @@
                   <b-dropdown-item
                     v-if="balances[acc.addr]"
                     v-b-modal.operation-modal
-                    @click="transfer('Transfer',acc.addr)"
+                    @click="transfer('Transfer',acc.addr,acc.chain)"
                   >
                     <feather-icon icon="SendIcon" /> Transfer
                   </b-dropdown-item>
                   <b-dropdown-item
                     v-if="balances[acc.addr]"
                     v-b-modal.operation-modal
-                    @click="transfer('IBCTransfer',acc.addr)"
+                    @click="transfer('IBCTransfer',acc.addr,acc.chain)"
                   >
                     <feather-icon icon="SendIcon" /> IBC Transfer
                   </b-dropdown-item>
@@ -268,6 +268,7 @@
     <operation-modal
       :type="operationModalType"
       :address="selectedAddress"
+      :selected-chain-name="selectedChainName"
     />
   </div>
 </template>
@@ -334,6 +335,7 @@ export default {
       ibcDenom: {},
       quotes: {},
       operationModalType: '',
+      selectedChainName: '',
       options: {
         maintainAspectRatio: false,
         legend: {
@@ -532,9 +534,11 @@ export default {
       this.currency2 = c
       this.currency = getUserCurrencySign()
     },
-    transfer(type, addr) {
+    transfer(type, addr, chain) {
+      console.log(chain)
       this.operationModalType = type
       this.selectedAddress = addr
+      this.selectedChainName = chain
     },
     completeAdd() {
       this.init()
