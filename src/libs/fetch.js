@@ -75,8 +75,9 @@ export default class ChainFetch {
     return this.get('/cosmos/slashing/v1beta1/signing_infos?pagination.limit=500', config)
   }
 
-  async getTxs(hash) {
-    const ver = this.getSelectedConfig() ? this.config.sdk_version : '0.41'
+  async getTxs(hash, config = null) {
+    const conf = config || this.getSelectedConfig()
+    const ver = conf.sdk_version || '0.41'
     // /cosmos/tx/v1beta1/txs/{hash}
     if (ver && compareVersions(ver, '0.40') < 1) {
       return this.get(`/txs/${hash}`).then(data => WrapStdTx.create(data, ver))

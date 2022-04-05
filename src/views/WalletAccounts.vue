@@ -231,6 +231,7 @@
     <operation-modal
       :type="operationModalType"
       :address="selectedAddress"
+      :selected-chain-name="selectedChainName"
     />
   </div>
 </template>
@@ -295,6 +296,7 @@ export default {
       ibcDenom: {},
       quotes: {},
       operationModalType: '',
+      selectedChainName: '',
       options: {
         maintainAspectRatio: false,
         legend: {
@@ -485,9 +487,10 @@ export default {
       this.currency2 = c
       this.currency = getUserCurrencySign()
     },
-    transfer(type, addr) {
+    transfer(type, addr, chain) {
       this.operationModalType = type
       this.selectedAddress = addr
+      this.selectedChainName = chain
     },
     completeAdd() {
       this.init()
