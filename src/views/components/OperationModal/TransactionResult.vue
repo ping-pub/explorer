@@ -100,6 +100,10 @@ export default {
       type: String,
       default: null,
     },
+    selectedChain: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
@@ -133,7 +137,7 @@ export default {
     trace() {
       if (this.hash) {
         this.error = null
-        this.$http.getTxs(this.hash).then(res => {
+        this.$http.getTxs(this.hash, this.selectedChain).then(res => {
           if (res.code === 0) {
             this.succeed = true
             clearInterval(this.timer)
