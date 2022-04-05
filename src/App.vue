@@ -93,6 +93,7 @@ export default {
     })
 
     store.dispatch('chains/getQuotes')
+    store.dispatch('chains/getAllIBCDenoms')
 
     return {
       skinClasses,

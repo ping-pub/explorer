@@ -6,6 +6,8 @@
  * @LastEditTime: 2021-11-20 15:33:07
  */
 import { isTestnet } from '@/libs/utils'
+import { sha256 } from '@cosmjs/crypto'
+import { toHex } from '@cosmjs/encoding'
 
 let chains = {}
 
@@ -36,6 +38,7 @@ export default {
     ibcChannels: {},
     quotes: {},
     defaultWallet: localStorage.getItem('default-wallet'),
+    denoms: {},
   },
   getters: {
     getchains: state => state.chains,
@@ -67,11 +70,26 @@ export default {
         state.chains.defaultWallet = defaultWallet
       }
     },
+    setIBCDenoms(state, denoms) {
+      state.denoms = denoms
+    },
   },
   actions: {
     async getQuotes(context) {
       fetch('https://price.ping.pub/quotes').then(data => data.json()).then(data => {
         context.commit('setQuotes', data)
+      })
+    },
+
+    async getAllIBCDenoms(context) {
+      this.$http.getAllIBCDenoms().then(x => {
+        const denomsMap = {}
+        x.denom_traces.forEach(trace => {
+          const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
+          denomsMap[`ibc/${hash.toUpperCase()}`] = trace.base_denom
+          // this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace.base_denom)
+        })
+        context.commit('setIBCDenoms', denomsMap)
       })
     },
   },
