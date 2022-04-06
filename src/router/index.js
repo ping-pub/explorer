@@ -360,7 +360,6 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const c = to.params.chain
-  console.log(Vue.prototype)
   if (c) {
     store.commit('select', { chain_name: c })
     store.dispatch('chains/getAllIBCDenoms', Vue.prototype)
