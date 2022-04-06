@@ -14,7 +14,6 @@
     <b-overlay
       :show="!isOwner"
       rounded="sm"
-      class="p-3"
     >
       <template #overlay>
         <div
@@ -330,7 +329,7 @@ export default {
   },
   methods: {
     initialize() {
-      if (this.selectedAddress) {
+      if (this.isOwner && this.selectedAddress) {
         this.$http.getLatestBlock().then(ret => {
           this.chainId = ret.block.header.chain_id
           const notSynced = timeIn(ret.block.header.time, 10, 'm')
