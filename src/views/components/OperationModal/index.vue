@@ -4,37 +4,34 @@
     centered
     size="md"
     :title="modalTitle"
-    :ok-title="actionName"
     scrollable
-    :hide-header-close="!showResult"
+    :hide-header-close="false"
     :hide-footer="showResult"
     modal-class="custom-transaction-modal"
-    :ok-disabled="isOwner"
     @hidden="resetModal"
-    @ok="handleOk"
     @show="initialize"
   >
     <b-overlay
-      :show="isOwner"
+      :show="!isOwner"
       rounded="sm"
     >
       <template #overlay>
-        <div class="text-center">
+        <div
+          class="text-center"
+        >
           <b-avatar
-            icon="stopwatch"
             font-scale="3"
+            variant="danger"
             animation="cylon"
-          />
-          <p id="cancel-label">
+          >
+            <feather-icon
+              icon="XCircleIcon"
+              size="16"
+            />
+          </b-avatar>
+          <p class="mt-1 font-weight-bolder">
             {{ blockingMsg }}
           </p>
-          <b-button
-            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-            variant="outline-primary"
-            to="/wallet/import"
-          >
-            Connect Wallet
-          </b-button>
         </div>
       </template>
       <validation-observer
@@ -52,19 +49,6 @@
             :proposal-title="proposalTitle"
             @update="componentUpdate"
           />
-          <b-row>
-            <b-col cols="12">
-              <b-form-group>
-                <b-form-checkbox
-                  v-model="advance"
-                  name="advance"
-                  value="true"
-                >
-                  <small>Advanced</small>
-                </b-form-checkbox>
-              </b-form-group>
-            </b-col>
-          </b-row>
           <b-row v-if="advance">
             <b-col cols="12">
               <b-form-group
@@ -143,6 +127,35 @@
         :selected-chain="selectedChain"
       />
     </b-overlay>
+    <template #modal-footer>
+      <div class="d-flex justify-content-between w-100">
+        <div id="left-footer">
+          <b-form-checkbox
+            v-if="isOwner"
+            v-model="advance"
+            name="advance"
+            value="true"
+          >
+            <small>Advanced</small>
+          </b-form-checkbox>
+        </div>
+        <b-button
+          v-if="isOwner"
+          variant="primary"
+          @click="handleOk"
+        >
+          {{ actionName }}
+        </b-button>
+        <b-button
+          v-else
+          v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+          variant="outline-primary"
+          to="/wallet/import"
+        >
+          Connect Wallet
+        </b-button>
+      </div>
+    </template>
   </b-modal>
 </template>
 
@@ -292,10 +305,10 @@ export default {
       if (this.accounts) {
         this.updateWallet(this.accounts.device)
         if (this.accounts.address.findIndex(x => x.addr === this.selectedAddress) > -1) {
-          return false
+          return true
         }
       }
-      return true
+      return false
     },
     selectedAddress() {
       if (this.address) {
@@ -316,30 +329,32 @@ export default {
   },
   methods: {
     initialize() {
-      this.$http.getLatestBlock().then(ret => {
-        this.chainId = ret.block.header.chain_id
-        const notSynced = timeIn(ret.block.header.time, 10, 'm')
-        if (notSynced) {
-          this.error = 'Client is not synced or blockchain is halted'
-        } else {
-          this.error = null
-        }
-      })
-      this.$http.getAuthAccount(this.selectedAddress).then(ret => {
-        const account = extractAccountNumberAndSequence(ret)
-        this.accountNumber = account.accountNumber
-        this.sequence = account.sequence
-      })
-      this.$http.getBankBalances(this.selectedAddress, this.selectedChain).then(res => {
-        if (res && res.length > 0) {
-          this.balance = res.reverse()
-          const token = this.balance.find(i => !i.denom.startsWith('ibc'))
-          this.token = token.denom
-          if (token) this.feeDenom = token.denom
-        }
-      })
-      this.fee = this.$store.state.chains.selected?.min_tx_fee || '1000'
-      this.feeDenom = this.$store.state.chains.selected?.assets[0]?.base || ''
+      if (this.isOwner && this.selectedAddress) {
+        this.$http.getLatestBlock().then(ret => {
+          this.chainId = ret.block.header.chain_id
+          const notSynced = timeIn(ret.block.header.time, 10, 'm')
+          if (notSynced) {
+            this.error = 'Client is not synced or blockchain is halted'
+          } else {
+            this.error = null
+          }
+        })
+        this.$http.getAuthAccount(this.selectedAddress).then(ret => {
+          const account = extractAccountNumberAndSequence(ret)
+          this.accountNumber = account.accountNumber
+          this.sequence = account.sequence
+        })
+        this.$http.getBankBalances(this.selectedAddress, this.selectedChain).then(res => {
+          if (res && res.length > 0) {
+            this.balance = res.reverse()
+            const token = this.balance.find(i => !i.denom.startsWith('ibc'))
+            this.token = token.denom
+            if (token) this.feeDenom = token.denom
+          }
+        })
+        this.fee = this.$store.state.chains.selected?.min_tx_fee || '1000'
+        this.feeDenom = this.$store.state.chains.selected?.assets[0]?.base || ''
+      }
     },
     componentUpdate(obj) {
       Object.keys(obj).forEach(key => {

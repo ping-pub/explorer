@@ -402,8 +402,6 @@ import {
   formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay,
   toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign, numberWithCommas,
 } from '@/libs/utils'
-import { sha256 } from '@cosmjs/crypto'
-import { toHex } from '@cosmjs/encoding'
 import OperationModal from '@/views/components/OperationModal/index.vue'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
 import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
@@ -448,7 +446,6 @@ export default {
       address,
       account: null,
       assets: [],
-      denoms: {},
       reward: [],
       delegations: [],
       redelegations: [],
@@ -600,14 +597,11 @@ export default {
       }
       return table
     },
+    denoms() {
+      return this.$store.state.chains.denoms
+    },
   },
   created() {
-    this.$http.getAllIBCDenoms().then(x => {
-      x.denom_traces.forEach(trace => {
-        const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
-        this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace.base_denom)
-      })
-    })
     this.$http.getAuthAccount(this.address).then(acc => {
       this.account = acc
     })

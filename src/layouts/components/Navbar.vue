@@ -122,7 +122,7 @@
                 <feather-icon icon="CheckIcon" />
               </b-avatar>
             </span>
-            <small>{{ item.address ? formatAddr(item.address.addr) : `Not available for ${selected_chain.chain_name}` }}</small>
+            <small>{{ item.address ? formatAddr(item.address.addr) : `Not available on ${selected_chain.chain_name}` }}</small>
           </div>
         </b-dropdown-item>
         <b-dropdown-divider />

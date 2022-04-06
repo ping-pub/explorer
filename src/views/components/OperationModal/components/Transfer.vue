@@ -92,6 +92,9 @@
             </b-input-group>
             <small class="text-danger">{{ errors[0] }}</small>
           </validation-provider>
+          <b-form-text>
+            ≈ <strong class="text-primary">{{ currencySign }}{{ valuation }}</strong>
+          </b-form-text>
         </b-form-group>
       </b-col>
     </b-row>
@@ -101,13 +104,14 @@
 <script>
 import { ValidationProvider } from 'vee-validate'
 import {
-  BRow, BCol, BInputGroup, BInputGroupAppend, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
+  BRow, BCol, BInputGroup, BInputGroupAppend, BFormInput, BFormGroup,
+  BFormSelect, BFormSelectOption, BFormText,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
 } from '@validations'
 import {
-  formatToken, formatTokenDenom, getUnitAmount,
+  formatToken, formatTokenDenom, getUnitAmount, getUserCurrency, getUserCurrencySign,
 } from '@/libs/utils'
 
 export default {
@@ -118,6 +122,7 @@ export default {
     BInputGroup,
     BInputGroupAppend,
     BFormInput,
+    BFormText,
     BFormGroup,
     BFormSelect,
     BFormSelectOption,
@@ -136,11 +141,11 @@ export default {
   },
   data() {
     return {
+      currency: getUserCurrency(),
+      currencySign: getUserCurrencySign(),
       token: '',
       amount: null,
       recipient: '',
-      IBCDenom: {},
-
       required,
       password,
       email,
@@ -175,6 +180,19 @@ export default {
     balanceOptions() {
       return this.setupBalance()
     },
+    IBCDenom() {
+      return this.$store.state.chains.denoms
+    },
+    valuation() {
+      const { amount } = this
+      if (amount) {
+        const d2 = this.printDenom()
+        const quote = this.$store.state.chains.quotes[d2]
+        const price = quote ? quote[this.currency] : 0
+        return parseFloat((amount * price).toFixed(2))
+      }
+      return 0
+    },
   },
   mounted() {
     this.$emit('update', {
@@ -192,12 +210,11 @@ export default {
       return []
     },
     format(v) {
-      return formatToken(v, this.IBCDenom)
+      return formatToken(v, this.IBCDenom, 6)
     },
     printDenom() {
       return formatTokenDenom(this.IBCDenom[this.token] || this.token)
     },
-
   },
 
 }

@@ -97,8 +97,6 @@
 import {
   BCard, BCardHeader, BCardTitle, BCardBody, BMediaBody, BMedia, BMediaAside, BAvatar, BButton,
 } from 'bootstrap-vue'
-import { sha256 } from '@cosmjs/crypto'
-import { toHex } from '@cosmjs/encoding'
 import { formatToken, numberWithCommas } from '@/libs/utils'
 import OperationModal from '@/views/components/OperationModal/index.vue'
 
@@ -131,16 +129,12 @@ export default {
   },
   data() {
     return {
-      denoms: {},
     }
   },
-  created() {
-    this.$http.getAllIBCDenoms().then(x => {
-      x.denom_traces.forEach(trace => {
-        const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
-        this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace.base_denom)
-      })
-    })
+  computed: {
+    denoms() {
+      return this.$store.state.chains.denoms
+    },
   },
   methods: {
     formatNumber(value) {
