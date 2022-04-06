@@ -380,7 +380,7 @@ export function formatTokenAmount(tokenAmount, decimals = 2, tokenDenom = 'uatom
     if (format) { return numberWithCommas(parseFloat(amount.toFixed(decimals))) }
     return parseFloat(amount.toFixed(decimals))
   }
-  return parseFloat(amount.toFixed(decimals))
+  return parseFloat(amount.toFixed(exp))
 }
 
 export function isTestnet() {
