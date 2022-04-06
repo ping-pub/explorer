@@ -72,7 +72,7 @@ export default {
       }
     },
     setIBCDenoms(state, denoms) {
-      state.denoms = denoms
+      state.denoms = { ...state.denoms, ...denoms }
     },
     setIBCPaths(state, paths) {
       state.ibcPaths = paths
