@@ -325,7 +325,8 @@ export default class ChainFetch {
   }
 
   async getAllIBCDenoms(config = null) {
-    const sdkVersion = config ? config.sdk_version : this.config.sdk_version
+    const conf = config || this.getSelectedConfig()
+    const sdkVersion = conf.sdk_version
     if (compareVersions(sdkVersion, '0.44.2') < 0) {
       return this.get('/ibc/applications/transfer/v1beta1/denom_traces?pagination.limit=500', config).then(data => commonProcess(data))
     }

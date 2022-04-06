@@ -155,8 +155,6 @@ export default {
       token: '',
       amount: null,
       selectedChain: '',
-      IBCDenom: {},
-
       required,
       password,
       email,
@@ -200,6 +198,9 @@ export default {
           },
         },
       }]
+    },
+    IBCDenom() {
+      return this.$store.state.chains.denoms
     },
   },
   mounted() {

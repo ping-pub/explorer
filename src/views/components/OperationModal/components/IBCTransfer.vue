@@ -143,8 +143,6 @@ import {
 import vSelect from 'vue-select'
 import { coin } from '@cosmjs/amino'
 import dayjs from 'dayjs'
-import { toHex } from '@cosmjs/encoding'
-import { sha256 } from '@cosmjs/crypto'
 
 export default {
   name: 'TransforDialogue',
@@ -177,8 +175,6 @@ export default {
       token: '',
       amount: null,
       recipient: null,
-      IBCDenom: {},
-      paths: {},
       destination: {},
       channels: [],
 
@@ -228,6 +224,12 @@ export default {
     selectedChain() {
       return this.$store.state.chains.selected
     },
+    IBCDenom() {
+      return this.$store.state.chains.denoms
+    },
+    paths() {
+      return this.$store.state.chains.ibcPaths
+    },
   },
   mounted() {
     this.$emit('update', {
@@ -244,23 +246,6 @@ export default {
       this.token = ''
       this.targetChainId = ''
       if (this.address) {
-        this.$http.getAllIBCDenoms(this.selectedChain).then(x => {
-          x.denom_traces.forEach(trace => {
-            const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
-            const ibcDenom = `ibc/${hash.toUpperCase()}`
-            // add base_denom to cache
-            this.$set(this.IBCDenom, ibcDenom, trace.base_denom)
-            // store channel/part for ibc denoms
-            const path = trace.path.split('/')
-            if (path.length >= 2) {
-              this.paths[ibcDenom] = {
-                channel_id: path[path.length - 1],
-                port_id: path[path.length - 2],
-              }
-            }
-          })
-        })
-
         this.$http.getIBCChannels(this.selectedChain, null).then(ret => {
           const chans = ret.channels.filter(x => x.state === 'STATE_OPEN').map(x => ({ channel_id: x.channel_id, port_id: x.port_id }))
           this.$set(this, 'channels', chans)

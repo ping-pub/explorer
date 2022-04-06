@@ -139,8 +139,6 @@ export default {
       token: '',
       amount: null,
       recipient: '',
-      IBCDenom: {},
-
       required,
       password,
       email,
@@ -174,6 +172,9 @@ export default {
     },
     balanceOptions() {
       return this.setupBalance()
+    },
+    IBCDenom() {
+      return this.$store.state.chains.denoms
     },
   },
   mounted() {
