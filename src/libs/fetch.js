@@ -389,16 +389,12 @@ export default class ChainFetch {
   }
 
   // Simulate Execution of tx
-  async simulate(tx, config = null) {
-    return this.post('/cosmos/tx/v1beta1/simulate', tx, config).then(res => {
-      if (res.code && res.code !== 0) {
-        throw new Error(res.message)
-      }
-      if (res.tx_response && res.tx_response.code !== 0) {
-        throw new Error(res.tx_response.raw_log)
-      }
-      return res
-    })
+  async simulate(bodyBytes, config = null) {
+    const txString = toBase64(TxRaw.encode(bodyBytes).finish())
+    const txRaw = {
+      tx_bytes: txString,
+    }
+    return this.post('/cosmos/tx/v1beta1/simulate', txRaw, config)
   }
 
   // Tx Submit
