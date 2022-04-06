@@ -14,6 +14,7 @@
     <b-overlay
       :show="!isOwner"
       rounded="sm"
+      class="p-3"
     >
       <template #overlay>
         <div
@@ -29,7 +30,7 @@
               size="16"
             />
           </b-avatar>
-          <p id="cancel-label">
+          <p class="mt-1 font-weight-bolder">
             {{ blockingMsg }}
           </p>
         </div>
