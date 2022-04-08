@@ -328,9 +328,9 @@ export default class ChainFetch {
     const conf = config || this.getSelectedConfig()
     const sdkVersion = conf.sdk_version
     if (compareVersions(sdkVersion, '0.44.2') < 0) {
-      return this.get('/ibc/applications/transfer/v1beta1/denom_traces?pagination.limit=500', config).then(data => commonProcess(data))
+      return this.get('/ibc/applications/transfer/v1beta1/denom_traces?pagination.limit=500', conf).then(data => commonProcess(data))
     }
-    return this.get('/ibc/apps/transfer/v1/denom_traces?pagination.limit=500', config).then(data => commonProcess(data))
+    return this.get('/ibc/apps/transfer/v1/denom_traces?pagination.limit=500', conf).then(data => commonProcess(data))
   }
 
   async getIBCDenomTrace(hash, config = null) {
