@@ -352,7 +352,6 @@ export default {
     this.$http.getStakingParameters().then(res => { this.stakingParameter = res })
     this.$http.getMintingInflation().then(res => { this.mintInflation = res })
     this.address = this.$route.params.address
-    this.$http.getValidatorDistribution(this.address).then(res => { this.distribution = res })
     this.initial()
   },
   mounted() {
@@ -379,6 +378,7 @@ export default {
           }
         })
       })
+      this.$http.getValidatorDistribution(this.address).then(res => { this.distribution = res })
     },
     pageload(v) {
       this.$http.getTxsBySender(this.accountAddress, v).then(res => {
