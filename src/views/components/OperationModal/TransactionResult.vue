@@ -79,9 +79,9 @@
     </div>
     <div class="link">
       <router-link
-        to="/"
+        :to="txUrl"
       >
-        View details
+        View Transaction
       </router-link>
     </div>
   </div>
@@ -126,6 +126,10 @@ export default {
       }
       return [50, 0, 50]
     },
+    txUrl() {
+      const chain = this.selectedChain ? this.selectedChain.chain_name : this.$store.state.chains.selected.chain_name
+      return `/${chain}/tx/${this.hash}`
+    },
   },
   mounted() {
     this.timer = setInterval(this.trace, 6000)
@@ -141,7 +145,11 @@ export default {
           if (res.code === 0) {
             this.succeed = true
             clearInterval(this.timer)
-            window.location.reload()
+            const elem = document.getElementById('txevent')
+            if (elem) {
+              const event = new Event('txcompleted', res)
+              elem.dispatchEvent(event)
+            }
           } else if (res.code !== 3) { // code 3 is tx unconfirmed(not founded).
             this.error = res.raw_log
             clearInterval(this.timer)

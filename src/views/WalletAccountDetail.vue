@@ -383,6 +383,7 @@
       :address="address"
       :validator-address="selectedValidator"
     />
+    <div id="txevent" />
   </div>
 </template>
 
@@ -605,26 +606,7 @@ export default {
     this.$http.getAuthAccount(this.address).then(acc => {
       this.account = acc
     })
-    this.$http.getBankAccountBalance(this.address).then(bal => {
-      this.assets = bal
-      bal.forEach(x => {
-        const symbol = formatTokenDenom(x.denom)
-        if (!this.quotes[symbol] && symbol.indexOf('/') === -1) {
-          chainAPI.fetchTokenQuote(symbol).then(quote => {
-            this.$set(this.quotes, symbol, quote)
-          })
-        }
-      })
-    })
-    this.$http.getStakingReward(this.address).then(res => {
-      this.reward = res
-    })
-    this.$http.getStakingDelegations(this.address).then(res => {
-      this.delegations = res.delegation_responses || res
-    })
-    this.$http.getStakingUnbonding(this.address).then(res => {
-      this.unbonding = res.unbonding_responses || res
-    })
+    this.initial()
     this.$http.getTxsBySender(this.address).then(res => {
       this.transactions = res
     })
@@ -632,7 +614,35 @@ export default {
       this.stakingParameters = res
     })
   },
+  mounted() {
+    const elem = document.getElementById('txevent')
+    elem.addEventListener('txcompleted', () => {
+      this.initial()
+    })
+  },
   methods: {
+    initial() {
+      this.$http.getBankAccountBalance(this.address).then(bal => {
+        this.assets = bal
+        bal.forEach(x => {
+          const symbol = formatTokenDenom(x.denom)
+          if (!this.quotes[symbol] && symbol.indexOf('/') === -1) {
+            chainAPI.fetchTokenQuote(symbol).then(quote => {
+              this.$set(this.quotes, symbol, quote)
+            })
+          }
+        })
+      })
+      this.$http.getStakingReward(this.address).then(res => {
+        this.reward = res
+      })
+      this.$http.getStakingDelegations(this.address).then(res => {
+        this.delegations = res.delegation_responses || res
+      })
+      this.$http.getStakingUnbonding(this.address).then(res => {
+        this.unbonding = res.unbonding_responses || res
+      })
+    },
     formatNumber(v) {
       return numberWithCommas(v)
     },
