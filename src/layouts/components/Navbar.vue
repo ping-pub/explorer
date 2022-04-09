@@ -239,8 +239,8 @@ export default {
       let accounts = getLocalAccounts() || {}
       accounts = Object.entries(accounts).map(v => ({ wallet: v[0], address: v[1].address.find(x => x.chain === this.selected_chain.chain_name) }))
 
-      if (!this.$store.state.chains.defaultWallet && this.accounts.length > 0) {
-        this.updateDefaultWallet(this.accounts[0].wallet)
+      if (!this.$store.state.chains.defaultWallet && accounts.length > 0) {
+        this.updateDefaultWallet(accounts[0].wallet)
       }
       return accounts
     },
