@@ -22,86 +22,46 @@
 
         <template #cell(validator)="data">
           <router-link :to="`/${data.item.validator.chain}/staking/${data.item.validator.validator}`">
-            <b-avatar
-              :src="data.item.validator.logo"
-              size="18"
-              variant="light-primary"
-              rounded=""
-            />
-            {{ data.item.validator.moniker }}
+            <div cols="6">
+              <b-avatar
+                :src="data.item.validator.logo"
+                size="18"
+                variant="light-primary"
+                rounded=""
+              />
+              {{ data.item.validator.moniker }}
+            </div>
           </router-link>
         </template>
-        <template #cell(delegator)="data">
+        <template #cell(reward)="data">
           <router-link :to="`/${data.item.validator.chain}/account/${data.item.delegator_address}`">
-            Withdraw
+            <div>{{ data.item.reward }}</div>
+            <div class="text-success">
+              {{ currency }}{{ toCurrency(data.item.reward) }}
+            </div>
           </router-link>
-        </template>
-        <template #cell(action)="data">
-          <!-- size -->
-          <b-button-group
-            size="sm"
-          >
-            <b-button
-              v-b-modal.operation-modal
-              v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-              v-b-tooltip.hover.top="'Delegate'"
-              variant="outline-primary"
-              @click="selectValue('Delegate',data.item)"
-            >
-              <feather-icon icon="LogInIcon" />
-            </b-button>
-            <b-button
-              v-b-modal.operation-modal
-              v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-              v-b-tooltip.hover.top="'Redelegate'"
-              variant="outline-primary"
-              @click="selectValue('Redelegate',data.item)"
-            >
-              <feather-icon icon="ShuffleIcon" />
-            </b-button>
-            <b-button
-              v-b-modal.operation-modal
-              v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-              v-b-tooltip.hover.top="'Unbond'"
-              variant="outline-primary"
-              @click="selectValue('Unbond',data.item)"
-            >
-              <feather-icon icon="LogOutIcon" />
-            </b-button>
-          </b-button-group>
         </template>
       </b-table>
     </b-card>
-
-    <!--- not completed--->
-    <operation-modal
-      :type="operationModalType"
-      :address="address"
-      :validator-address="selectedValidator"
-    />
   </div>
 </template>
 
 <script>
 import {
-  BButton, VBTooltip, BTable, BCard, BButtonGroup, BAvatar,
+  VBTooltip, BTable, BCard, BAvatar,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import {
-  formatToken, getCachedValidators, getLocalAccounts, getLocalChains, tokenFormatter,
+  formatToken, getCachedValidators, getLocalAccounts, getLocalChains, getUserCurrency, getUserCurrencySign, numberWithCommas, tokenFormatter,
 } from '@/libs/utils'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
-import OperationModal from '@/views/components/OperationModal/index.vue'
 
 export default {
   components: {
     BAvatar,
-    BButton,
-    BButtonGroup,
     BTable,
     BCard,
     FeatherIcon,
-    OperationModal,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -113,23 +73,21 @@ export default {
         {
           key: 'validator',
           sortable: true,
-          // sortByFormatted: true,
         },
         {
           key: 'delegation',
           sortable: true,
           // sortByFormatted: true,
+          tdAttr() {
+            return { width: '20%' }
+          },
         },
         {
           key: 'reward',
           sortable: true,
-          // sortByFormatted: true,
-        },
-        {
-          key: 'delegator',
-          label: '',
-          sortable: true,
-          // sortByFormatted: true,
+          tdAttr() {
+            return { width: '35%' }
+          },
         },
       ],
       address: '',
@@ -138,6 +96,9 @@ export default {
       delegations: [],
       rewards: {},
       operationModalType: '',
+      ibcDenoms: {},
+      currency: getUserCurrencySign(),
+      currency2: getUserCurrency(),
     }
   },
   computed: {
@@ -193,18 +154,32 @@ export default {
     },
     findMoniker(chain, addr) {
       const vals = JSON.parse(getCachedValidators(chain))
-      const val = vals.find(x => x.operator_address === addr)
-      if (val) {
-        return val.description.moniker
+      if (vals) {
+        const val = vals.find(x => x.operator_address === addr)
+        if (val) {
+          return val.description.moniker
+        }
       }
       return addr
     },
     findReward(delegator, validator) {
       const reward = this.rewards[delegator]?.rewards.find(x => x.validator_address === validator) || null
       if (reward) {
-        return tokenFormatter(reward.reward)
+        return tokenFormatter(reward.reward, this.ibcDenoms)
       }
       return '-'
+    },
+    getPrice(denom) {
+      const quote = this.$store.state.chains.quotes[denom]
+      return quote ? quote[this.currency2] : 0
+    },
+    toCurrency(token) {
+      let profit = 0
+      token.split(', ').forEach(r => {
+        const t = r.trim().replace(/,/, '').split(' ')
+        profit += Number(t[0]) * this.getPrice(t[1])
+      })
+      return numberWithCommas(profit.toFixed(2))
     },
     init() {
       this.accounts = getLocalAccounts()
@@ -215,6 +190,13 @@ export default {
             const chain = chains[add.chain]
             this.$http.getStakingReward(add.addr, chain).then(res => {
               this.rewards[add.addr] = res
+              res.total.forEach(t => {
+                if (t.denom.startsWith('ibc')) {
+                  this.$http.getIBCDenomTrace(t.denom, chain).then(denom => {
+                    this.$set(this.ibcDenoms, t.denom, denom)
+                  })
+                }
+              })
             })
             this.$http.getStakingDelegations(add.addr, chain).then(res => {
               if (res.delegation_responses && res.delegation_responses.length > 0) {
