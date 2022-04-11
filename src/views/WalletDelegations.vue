@@ -11,44 +11,80 @@
     </router-link>
     <b-card
       v-for="(items,k) in groupedDelegations"
-      :key="k"
+      :key="`row-${k}`"
       :title="k"
     >
-      <b-table
-        :items="items"
-        stacked="sm"
-        :fields="fields"
+      <b-row class="bg-light-secondary text-white">
+        <b-col
+          md="4"
+          sm="12"
+          class="p-1 font-weight-bold"
+        >
+          VALIDATOR
+        </b-col>
+        <b-col
+          md="3"
+          sm="12"
+          class="p-1 font-weight-bold"
+        >
+          DELEGATION
+        </b-col>
+        <b-col
+          md="5"
+          sm="12"
+          class="p-1 font-weight-bold"
+        >
+          REWARD
+        </b-col>
+      </b-row>
+      <b-row
+        v-for="(row,j) in items"
+        :key="`${row.validator.validator}-${j}`"
+        class="border-bottom"
       >
-
-        <template #cell(validator)="data">
-          <router-link :to="`/${data.item.validator.chain}/staking/${data.item.validator.validator}`">
+        <b-col
+          md="4"
+          sm="12"
+          class="d-flex align-items-center"
+        >
+          <router-link :to="`/${row.validator.chain}/staking/${row.validator.validator}`">
             <div cols="6">
               <b-avatar
-                :src="data.item.validator.logo"
+                :src="row.validator.logo"
                 size="18"
                 variant="light-primary"
                 rounded=""
               />
-              {{ data.item.validator.moniker }}
+              {{ row.validator.moniker }}
             </div>
           </router-link>
-        </template>
-        <template #cell(reward)="data">
-          <router-link :to="`/${data.item.validator.chain}/account/${data.item.delegator_address}`">
-            <div>{{ data.item.reward }}</div>
+        </b-col>
+        <b-col
+          md="3"
+          sm="12"
+          class="d-flex align-items-center"
+        >
+          {{ row.delegation }}
+        </b-col>
+        <b-col
+          md="5"
+          sm="12"
+        >
+          <router-link :to="`/${row.validator.chain}/account/${row.delegator_address}`">
+            <div>{{ row.reward }}</div>
             <div class="text-success">
-              {{ currency }}{{ toCurrency(data.item.reward) }}
+              {{ currency }}{{ toCurrency(row.reward) }}
             </div>
           </router-link>
-        </template>
-      </b-table>
+        </b-col>
+      </b-row>
     </b-card>
   </div>
 </template>
 
 <script>
 import {
-  VBTooltip, BTable, BCard, BAvatar,
+  VBTooltip, BCard, BAvatar, BRow, BCol,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import {
@@ -59,8 +95,9 @@ import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 export default {
   components: {
     BAvatar,
-    BTable,
     BCard,
+    BRow,
+    BCol,
     FeatherIcon,
   },
   directives: {
@@ -69,27 +106,6 @@ export default {
   },
   data() {
     return {
-      fields: [
-        {
-          key: 'validator',
-          sortable: true,
-        },
-        {
-          key: 'delegation',
-          sortable: true,
-          // sortByFormatted: true,
-          tdAttr() {
-            return { width: '20%' }
-          },
-        },
-        {
-          key: 'reward',
-          sortable: true,
-          tdAttr() {
-            return { width: '35%' }
-          },
-        },
-      ],
       address: '',
       selectedValidator: '',
       accounts: [],
