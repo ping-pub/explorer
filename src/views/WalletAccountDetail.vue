@@ -639,7 +639,6 @@ export default {
         this.stakingParameters = res
       })
     }).catch(err => {
-      console.log(err)
       this.error = err
     })
   },
