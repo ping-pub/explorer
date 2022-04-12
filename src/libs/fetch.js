@@ -55,6 +55,10 @@ export default class ChainFetch {
     return true
   }
 
+  async getNodeInfo() {
+    return this.get('/node_info')
+  }
+
   async getLatestBlock(config = null) {
     const conf = config || this.getSelectedConfig()
     if (conf.chain_name === 'injective') {
