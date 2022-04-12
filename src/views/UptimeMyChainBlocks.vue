@@ -209,7 +209,7 @@ export default {
           if (x.validator_address) sigs[x.validator_address] = 'bg-success'
         })
         this.height = res.block.last_commit.height
-        const block = this.blocks.find(b => b[1] === res.block.last_commit.height)
+        const block = this.blocks.find(b => b.height === res.block.last_commit.height)
         if (typeof block === 'undefined') { // mei
           // this.$set(block, 0, typeof sigs !== 'undefined')
           if (this.blocks.length >= 50) this.blocks.shift()
