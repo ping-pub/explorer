@@ -131,7 +131,6 @@ trust_period = "168h"  # 2/3 of unbonding time`
         })
       }
       this.$http.getNodeInfo().then(res => {
-        console.log(res)
         this.version = res.application_version.version
       })
     })
