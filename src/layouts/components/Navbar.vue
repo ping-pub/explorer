@@ -259,6 +259,7 @@ export default {
       this.index = v
       const conf = this.$store.state.chains.selected
       localStorage.setItem(`${conf.chain_name}-api-index`, v)
+      window.location.reload()
     },
     block() {
       const conf = this.$store.state.chains.selected
