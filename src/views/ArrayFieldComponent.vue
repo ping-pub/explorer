@@ -4,8 +4,8 @@
     :items="tablefield"
     :sticky-header="true"
     :no-border-collapse="true"
-    responsive="sm"
-    class="ml-0 mr-0"
+    responsive="md"
+    class="ml-0 mr-0 dataview text-nowrap"
   >
     <template #cell()="data">
       <span v-if="isTokenField(data.value)">{{ formatTokens(data.value) }}</span>
@@ -63,9 +63,9 @@ export default {
       if (percentage.test(value)) {
         return `${percent(value)}%`
       }
-      if (value.length > 40) {
-        return value.substring(0, 40).concat('...')
-      }
+      // if (value.length > 40) {
+      //   return value.substring(0, 40).concat('...')
+      // }
       return value
     },
     formatTokens(value) {
@@ -80,3 +80,32 @@ export default {
   },
 }
 </script>
+<style lang='css' scoped>
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .dataview {
+    max-width: 300px;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {
+  .dataview {
+    max-width: 500px;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .dataview {
+    max-width: 700px;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .dataview {
+    max-width: 820px;
+  }
+}
+</style>

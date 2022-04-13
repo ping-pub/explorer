@@ -34,7 +34,10 @@
           hover
           class="overflow-hidden"
         >
-          <b-tabs small>
+          <b-tabs
+            v-if="value"
+            small
+          >
             <b-tab
               v-for="key in Object.keys(value)"
               :key="key"
