@@ -8,12 +8,12 @@
     "coin_type": "60",
     "min_tx_fee": "3000000000000000",
     "addr_prefix": "echelon",
-    "logo": "https://user-images.githubusercontent.com/102999403/162600548-1fa6f810-8f22-4800-a3b4-187c3e62bda5.gif",
+    "logo": "/logos/echelon.gif",
     "assets": [{
         "base": "aechelon",
         "symbol": "ECH",
         "exponent": "18",
         "coingecko_id": "", 
-        "logo": "https://user-images.githubusercontent.com/102999403/162600548-1fa6f810-8f22-4800-a3b4-187c3e62bda5.gif"
+        "logo": "/logos/echelon.gif"
     }]
 }
