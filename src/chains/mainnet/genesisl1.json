@@ -10,8 +10,8 @@
     "addr_prefix": "genesis",
     "logo": "/logos/genesisl1.png",
     "assets": [{
-        "base": "aphoton",
-        "symbol": "PHOTON",
+        "base": "el1",
+        "symbol": "L1",
         "exponent": "18",
         "coingecko_id": "", 
         "logo": "/logos/genesisl1.png"
