@@ -1,5 +1,5 @@
 <template>
-  <div class="container-md px-0">
+  <div class="px-0">
     <b-card>
       <b-alert
         variant="danger"
@@ -38,10 +38,11 @@
         <template #loading>
           <b-row>
             <b-col
-              v-for="index in 100"
+              v-for="index in 60"
               :key="index"
               sm="12"
               md="4"
+              xl="3"
             >
               <b-skeleton width="100%" />
             </b-col>
@@ -53,6 +54,7 @@
             :key="index"
             sm="12"
             md="4"
+            xl="3"
             class="text-truncate"
           >
             <div class="d-flex justify-content-between">

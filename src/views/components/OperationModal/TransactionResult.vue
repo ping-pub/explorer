@@ -144,6 +144,7 @@ export default {
         this.$http.getTxs(this.hash, this.selectedChain).then(res => {
           if (res.code === 0) {
             this.succeed = true
+            this.isLoading = false
             clearInterval(this.timer)
             const elem = document.getElementById('txevent')
             if (elem) {
