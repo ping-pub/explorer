@@ -40,6 +40,7 @@
         <b-col
           v-for="(data,index) in chains"
           :key="index"
+          v-observe-visibility="(visible) => visibilityChanged(visible, data)"
           md="3"
           sm="6"
         >
@@ -150,29 +151,27 @@ export default {
       return this.downImg
     },
   },
-  created() {
-    this.fetch()
-    this.timer = setInterval(this.fetch, 120000)
-  },
-  beforeDestroy() {
-    clearInterval(this.timer)
-  },
   methods: {
-    fetch() {
-      Object.keys(this.chains).forEach(k => {
-        const chain = this.chains[k]
+    fetch(k) {
+      const chain = this.chains[k]
+      if (chain.api) {
         const index = localStorage.getItem(`${chain.chain_name}-api-index`) || 0
-        if (chain.api) {
-          const host = Array.isArray(chain.api) ? chain.api[index] : chain.api
-          fetch(`${host}/blocks/latest`).then(res => res.json()).then(b => {
-          // console.log(b.block.header)
-            const { header } = b.block
-            this.$set(chain, 'height', header.height)
-            this.$set(chain, 'time', toDay(header.time))
-            this.$set(chain, 'variant', timeIn(header.time, 3, 'm') ? 'danger' : 'success')
-          })
-        }
-      })
+        const host = Array.isArray(chain.api) ? chain.api[index] : chain.api
+        fetch(`${host}/blocks/latest`).then(res => res.json()).then(b => {
+          const { header } = b.block
+          this.$set(chain, 'height', header.height)
+          this.$set(chain, 'time', toDay(header.time))
+          this.$set(chain, 'variant', timeIn(header.time, 3, 'm') ? 'danger' : 'success')
+        })
+      }
+    },
+    visibilityChanged(isVisible, chain) {
+      this.isVisible = isVisible
+      const idle = this.chains[chain.chain_name]
+      if (isVisible && !idle.loaded) {
+        this.$set(idle, 'loaded', true)
+        this.fetch(chain.chain_name)
+      }
     },
   },
 }
