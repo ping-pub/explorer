@@ -1,5 +1,5 @@
 {
-    "chain_name": "nyx",
+    "chain_name": "nym",
     "api": ["https://api.nyx.nodes.guru"],
     "rpc": ["https://rpc.nyx.nodes.guru"],
     "snapshot_provider": "",
