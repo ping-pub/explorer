@@ -1,7 +1,7 @@
 {
     "chain_name": "osmosis",
     "coingecko": "osmosis",
-    "api": ["https://lcd-osmosis.blockapsis.com", "https://osmo.api.ping.pub"],
+    "api": ["https://osmosis-api.polkachu.com", "https://osmo.api.ping.pub", "https://lcd-osmosis.blockapsis.com"],
     "rpc": ["https://osmosis.validator.network:443", "https://rpc-osmosis.blockapsis.com:443"],
     "snapshot_provider": "",
     "sdk_version": "0.44.5",

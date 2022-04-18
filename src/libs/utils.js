@@ -337,7 +337,7 @@ export function formatTokenDenom(tokenDenom) {
         if (asset) denom = asset.symbol
       }
     })
-    return denom.startsWith('ibc') ? `IBC...${denom.substring(denom.length - 3)}` : denom.toUpperCase()
+    return denom.length > 10 ? `${denom.substring(0, 7).toUpperCase()}..${denom.substring(denom.length - 3)}` : denom.toUpperCase()
   }
   return ''
 }

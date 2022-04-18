@@ -113,7 +113,6 @@
             sm="12"
             md="6"
             xl="4"
-            :class="(balances[acc.addr])? 'order-1' : 'order-9' "
           >
 
             <b-card

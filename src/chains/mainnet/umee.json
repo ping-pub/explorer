@@ -12,7 +12,7 @@
         "base": "uumee",
         "symbol": "UMEE",
         "exponent": "6",
-        "coingecko_id": "", 
+        "coingecko_id": "umee", 
         "logo": "/logos/umee.png"
     }]
   }
