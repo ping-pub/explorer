@@ -17,7 +17,7 @@
       "base": "ubld",
       "exponent": 6,
       "coingecko_id": "agoric",
-      "logo": "https://raw.githubusercontent.com/Agoric/agoric-sdk/master/packages/wallet/ui/public/tokens/BLD.svg",
+      "logo": "https://raw.githubusercontent.com/Agoric/agoric-sdk/master/packages/wallet/ui/public/tokens/BLD.svg"
     },
     {
       "symbol": "RUN",
