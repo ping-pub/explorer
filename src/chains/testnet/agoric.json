@@ -10,6 +10,7 @@
   ],
   "sdk_version": "0.45.1",
   "addr_prefix": "agoric",
+  "min_tx_fee": "0",
   "logo": "/logos/agoric.png",
   "assets": [
     {
