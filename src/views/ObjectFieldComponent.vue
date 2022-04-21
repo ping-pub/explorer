@@ -63,7 +63,7 @@
           </b-tabs>
         </b-td>
         <b-td v-else>
-          {{ addNewLine(value) }}
+          <p v-html="addNewLine(value)" />
         </b-td>
       </b-tr>
     </b-tbody>
@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import { marked } from 'marked'
 import {
   BTableSimple, BTr, BTd, BTabs, BTab, BTbody,
 } from 'bootstrap-vue'
@@ -139,8 +140,8 @@ export default {
       if (percentage.test(value)) {
         return `${percent(value)}%`
       }
-      if (typeof value === 'string' && value.indexOf('\\n') > -1) {
-        return value.replaceAll('\\n', '\n')
+      if (typeof value === 'string') {
+        return marked.parse(value.replaceAll('\\n', '\n'))
       }
 
       return value

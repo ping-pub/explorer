@@ -157,6 +157,15 @@
           />
           <span class="align-middle ml-50">My Validators</span>
         </b-dropdown-item>
+
+        <b-dropdown-item :to="`/wallet/votes`">
+          <feather-icon
+            icon="PocketIcon"
+            size="16"
+          />
+          <span class="align-middle ml-50">My Votes</span>
+        </b-dropdown-item>
+
         <b-dropdown-item :to="`/wallet/transactions`">
           <feather-icon
             icon="LayersIcon"

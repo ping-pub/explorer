@@ -90,7 +90,7 @@ export default class ChainFetch {
   }
 
   async getTxsBySender(sender, page = 1) {
-    return this.get(`/txs?message.sender=${sender}&page=${page}&limit=20`)
+    return this.get(`/cosmos/tx/v1beta1/txs?events=message.sender='${sender}'&page=${page}&limit=20`)
   }
 
   async getTxsByRecipient(recipient) {
@@ -98,7 +98,7 @@ export default class ChainFetch {
   }
 
   async getTxsByHeight(height) {
-    return this.get(`/txs?tx.height=${height}`)
+    return this.get(`/cosmos/tx/v1beta1/txs?events=tx.height=${height}`)
   }
 
   async getValidatorDistribution(address) {
@@ -207,8 +207,8 @@ export default class ChainFetch {
     return this.get('/gov/parameters/voting').then(data => commonProcess(data))
   }
 
-  async getGovernanceTally(pid, total) {
-    return this.get(`/gov/proposals/${pid}/tally`).then(data => new ProposalTally().init(commonProcess(data), total))
+  async getGovernanceTally(pid, total, conf) {
+    return this.get(`/gov/proposals/${pid}/tally`, conf).then(data => new ProposalTally().init(commonProcess(data), total))
   }
 
   getGovernance(pid) {
@@ -246,19 +246,49 @@ export default class ChainFetch {
         pagination: {},
       }))
     }
-    if (this.config.chain_name === 'certik') {
-      return this.get(`/shentu/gov/v1alpha1/proposals/${pid}/votes?pagination.key=${encodeURIComponent(next)}&pagination.limit=${limit}`)
+    if (this.config.chain_name === 'shentu') {
+      return this.get(`/shentu/gov/v1alpha1/proposals/${pid}/votes?pagination.key=${encodeURIComponent(next)}&pagination.limit=${limit}&pagination.reverse=true`)
     }
-    return this.get(`/cosmos/gov/v1beta1/proposals/${pid}/votes?pagination.key=${encodeURIComponent(next)}&pagination.limit=${limit}`)
+    return this.get(`/cosmos/gov/v1beta1/proposals/${pid}/votes?pagination.key=${encodeURIComponent(next)}&pagination.limit=${limit}&pagination.reverse=true`)
   }
 
-  async getGovernanceListByStatus(status) {
-    const url = this.config.chain_name === 'certik' ? `/shentu/gov/v1alpha1/proposals?pagination.limit=100&proposal_status=${status}` : `/cosmos/gov/v1beta1/proposals?pagination.limit=100&proposal_status=${status}`
-    return this.get(url)
+  async getGovernanceListByStatus(status, chain = null) {
+    const conf = chain || this.config
+    const url = conf.chain_name === 'shentu' ? `/shentu/gov/v1alpha1/proposals?pagination.limit=100&proposal_status=${status}` : `/cosmos/gov/v1beta1/proposals?pagination.limit=100&proposal_status=${status}`
+    return this.get(url, conf).then(data => {
+      let proposals = commonProcess(data)
+      if (Array.isArray(proposals.proposals)) {
+        proposals = proposals.proposals
+      }
+      const ret = []
+      if (proposals) {
+        proposals.forEach(e => {
+          const g = new Proposal().init(e, 0)
+          g.versionFixed(this.config.sdk_version)
+          ret.push(g)
+        })
+      }
+      return {
+        proposals: ret,
+        pagination: data.pagination,
+      }
+    })
+  }
+
+  async getGovernanceProposalVote(pid, voter, chain) {
+    const url = this.config.chain_name === 'shentu'
+      ? `/shentu/gov/v1alpha1/proposals/${pid}/votes/${voter}`
+      : `/cosmos/gov/v1beta1/proposals/${pid}/votes/${voter}`
+    return this.get(url, chain).then(data => {
+      if (data.code === 3) {
+        throw new Error('not found')
+      }
+      return data
+    })
   }
 
   async getGovernanceList(next = '') {
-    const url = this.config.chain_name === 'certik'
+    const url = this.config.chain_name === 'shentu'
       ? `/shentu/gov/v1alpha1/proposals?pagination.limit=50&pagination.reverse=true&pagination.key=${next}`
       : `/cosmos/gov/v1beta1/proposals?pagination.limit=50&pagination.reverse=true&pagination.key=${next}`
     return this.get(url).then(data => {

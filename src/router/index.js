@@ -101,6 +101,22 @@ const router = new VueRouter({
         ],
       },
     },
+    {
+      path: '/wallet/votes',
+      name: 'myVotes',
+      component: () => import('@/views/WalletVotes.vue'),
+      meta: {
+        pageTitle: 'My Votes',
+        breadcrumb: [
+          {
+            text: 'Wallet',
+          },
+          {
+            text: 'My Votes',
+          },
+        ],
+      },
+    },
     // chain modules
     {
       path: '/:chain/',

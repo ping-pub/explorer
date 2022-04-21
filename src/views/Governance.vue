@@ -50,7 +50,7 @@
               {{ p.title }}
             </router-link></b-card-title>
           <b-card-body md="12">
-            <div class="gov-wrapper d-flex flex-wrap">
+            <div class="gov-wrapper d-flex flex-nowrap">
               <div class="gov">
                 <p class="card-text mb-25">
                   Type
@@ -285,7 +285,7 @@ export default {
 <style scoped>
 section {
   display: flex;
-  flex-wrap: wrap;
+  /* flex-wrap: nowrap; */
   justify-content: space-between;
 }
 .card {
@@ -294,7 +294,6 @@ section {
 .gov-wrapper {
     display: flex;
     justify-content:center;
-    align-items:flex-end;
 }
 .dark-layout .gov-wrapper .gov {
     background-color: #161d31;
