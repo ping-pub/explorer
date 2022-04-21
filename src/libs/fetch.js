@@ -252,23 +252,33 @@ export default class ChainFetch {
     return this.get(`/cosmos/gov/v1beta1/proposals/${pid}/votes?pagination.key=${encodeURIComponent(next)}&pagination.limit=${limit}`)
   }
 
-  async getGovernanceList() {
-    const url = this.config.chain_name === 'certik' ? '/shentu/gov/v1alpha1/proposals?pagination.limit=500' : '/cosmos/gov/v1beta1/proposals?pagination.limit=500'
-    return Promise.all([this.get(url), this.get('/staking/pool')]).then(data => {
-      const pool = new StakingPool().init(commonProcess(data[1]))
-      let proposals = commonProcess(data[0])
+  async getGovernanceListByStatus(status) {
+    const url = this.config.chain_name === 'certik' ? `/shentu/gov/v1alpha1/proposals?pagination.limit=100&proposal_status=${status}` : `/cosmos/gov/v1beta1/proposals?pagination.limit=100&proposal_status=${status}`
+    return this.get(url)
+  }
+
+  async getGovernanceList(next = '') {
+    const url = this.config.chain_name === 'certik'
+      ? `/shentu/gov/v1alpha1/proposals?pagination.limit=50&pagination.reverse=true&pagination.key=${next}`
+      : `/cosmos/gov/v1beta1/proposals?pagination.limit=50&pagination.reverse=true&pagination.key=${next}`
+    return this.get(url).then(data => {
+      // const pool = new StakingPool().init(commonProcess(data[1]))
+      let proposals = commonProcess(data)
       if (Array.isArray(proposals.proposals)) {
         proposals = proposals.proposals
       }
       const ret = []
       if (proposals) {
         proposals.forEach(e => {
-          const g = new Proposal().init(e, pool.bondedToken)
+          const g = new Proposal().init(e, 0)
           g.versionFixed(this.config.sdk_version)
           ret.push(g)
         })
       }
-      return ret
+      return {
+        proposals: ret,
+        pagination: data.pagination,
+      }
     })
   }
 
