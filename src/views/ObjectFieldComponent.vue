@@ -63,7 +63,13 @@
           </b-tabs>
         </b-td>
         <b-td v-else>
-          <p v-html="addNewLine(value)" />
+          <markdown-view-vue
+            v-if="name==='description'"
+            class="md-body"
+            :options="options"
+            :content="addNewLine(value)"
+          />
+          <span v-else>{{ value }}</span>
         </b-td>
       </b-tr>
     </b-tbody>
@@ -71,13 +77,13 @@
 </template>
 
 <script>
-import { marked } from 'marked'
 import {
   BTableSimple, BTr, BTd, BTabs, BTab, BTbody,
 } from 'bootstrap-vue'
 import {
   abbr, getStakingValidatorByHex, isHexAddress, isStringArray, isToken, percent, tokenFormatter,
 } from '@/libs/utils'
+import MarkdownViewVue from './components/markdown/MarkdownView.vue'
 import ArrayFieldComponent from './ArrayFieldComponent.vue'
 
 export default {
@@ -90,6 +96,7 @@ export default {
     BTab,
     BTbody,
     ArrayFieldComponent,
+    MarkdownViewVue,
   },
   props: {
     tablefield: {
@@ -100,6 +107,21 @@ export default {
       type: Boolean,
       default: true,
     },
+  },
+  data() {
+    return {
+      options: {
+        markdownIt: {
+          linkify: true,
+        },
+        linkAttributes: {
+          attrs: {
+            target: '_blank',
+            rel: 'noopener',
+          },
+        },
+      },
+    }
   },
   methods: {
     formatObject(value) {
@@ -141,7 +163,7 @@ export default {
         return `${percent(value)}%`
       }
       if (typeof value === 'string') {
-        return marked.parse(value.replaceAll('\\n', '\n'))
+        return value.replaceAll('\\n', '\n')
       }
 
       return value
