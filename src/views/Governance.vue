@@ -232,7 +232,7 @@ export default {
       proposals: [],
       max: 1,
       operationModalType: '',
-      next: null,
+      next: '',
     }
   },
   mounted() {

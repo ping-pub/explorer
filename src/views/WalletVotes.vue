@@ -169,15 +169,7 @@
       title="Upgrade Events"
       lazy
     >
-      <b-alert
-        variant="info"
-        show
-        class="mb-0"
-      >
-        <div class="alert-body">
-          {{ votes }}
-        </div>
-      </b-alert>
+      <wallet-upgrade-events />
     </b-tab>
   </b-tabs>
 </template>
@@ -192,6 +184,7 @@ import {
   getLocalAccounts, getLocalChains, percent, ProposalTally, tokenFormatter,
 } from '@/libs/utils'
 import dayjs from 'dayjs'
+import WalletUpgradeEvents from './WalletUpgradeEvents.vue'
 
 export default {
   components: {
@@ -208,6 +201,7 @@ export default {
     BProgress,
     BProgressBar,
     BTooltip,
+    WalletUpgradeEvents,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -229,7 +223,7 @@ export default {
         x2.tally = this.tally[`${x.chain.chain_name}-${x.id}`] || new ProposalTally()
         x2.votes = this.votes.filter(v => v.vote.proposal_id === x.id)
         return x2
-      })
+      }).sort((a, b) => dayjs(b.voting_start_time).unix() - dayjs(a.voting_start_time).unix())
     },
   },
   created() {
@@ -287,18 +281,14 @@ export default {
           })
         })
 
-        let promise = Promise.resolve()
         Object.values(toQuery).forEach(item => {
-          promise = promise.then(() => new Promise(resolve => {
-            this.fetchProposals(item, resolve)
-          }))
+          this.fetchProposals(item)
         })
       }
     },
-    fetchProposals(item, resolve) {
+    fetchProposals(item) {
       if (this.islive) {
         this.$http.getGovernanceListByStatus(2, item.conf).then(data => {
-          resolve()
           data.proposals.forEach(p => {
             const p2 = p
             p2.chain = item.conf
