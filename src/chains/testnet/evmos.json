@@ -10,8 +10,8 @@
     "addr_prefix": "evmos",
     "logo": "/logos/evmos.jpeg",
     "assets": [{
-        "base": "aevmos",
-        "symbol": "evmos",
+        "base": "atevmos",
+        "symbol": "TEVMOS",
         "exponent": "18",
         "coingecko_id": "", 
         "logo": "/logos/evmos.jpeg"
