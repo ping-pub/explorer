@@ -63,12 +63,9 @@
           </b-tabs>
         </b-td>
         <b-td v-else>
-          <markdown-view-vue
-            v-if="name==='description'"
-            class="md-body"
-            :options="options"
-            :content="addNewLine(value)"
-          />
+          <VueMarkdown v-if="name==='description'">
+            {{ addNewLine(value) }}
+          </VueMarkdown>
           <span v-else>{{ value }}</span>
         </b-td>
       </b-tr>
@@ -83,7 +80,7 @@ import {
 import {
   abbr, getStakingValidatorByHex, isHexAddress, isStringArray, isToken, percent, tokenFormatter,
 } from '@/libs/utils'
-import MarkdownViewVue from './components/markdown/MarkdownView.vue'
+import VueMarkdown from 'vue-markdown'
 import ArrayFieldComponent from './ArrayFieldComponent.vue'
 
 export default {
@@ -96,7 +93,7 @@ export default {
     BTab,
     BTbody,
     ArrayFieldComponent,
-    MarkdownViewVue,
+    VueMarkdown,
   },
   props: {
     tablefield: {
