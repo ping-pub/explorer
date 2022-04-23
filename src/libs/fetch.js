@@ -89,8 +89,8 @@ export default class ChainFetch {
     return this.get(`/cosmos/tx/v1beta1/txs/${hash}`).then(data => WrapStdTx.create(data, ver))
   }
 
-  async getTxsBySender(sender, page = 1) {
-    return this.get(`/cosmos/tx/v1beta1/txs?events=message.sender='${sender}'&page=${page}&limit=20`)
+  async getTxsBySender(sender) {
+    return this.get(`/cosmos/tx/v1beta1/txs?events=message.sender='${sender}'&pagination.reverse=true&order_by=ORDER_BY_DESC`)
   }
 
   async getTxsByRecipient(recipient) {
