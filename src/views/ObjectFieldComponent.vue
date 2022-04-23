@@ -159,11 +159,7 @@ export default {
       if (percentage.test(value)) {
         return `${percent(value)}%`
       }
-      if (typeof value === 'string') {
-        return value.replaceAll('\\n', '\n')
-      }
-
-      return value
+      return value.replace(/(?:\\[rn])+/g, '\n')
     },
   },
 }
