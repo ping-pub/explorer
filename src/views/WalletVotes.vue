@@ -23,45 +23,13 @@
               />
               <span class="text-uppercase"> {{ p.chain.chain_name }}</span>
               #{{ p.id }}.
-              <b-badge
-                v-if="p.status == 1"
-                pill
-                variant="light-info"
-                class="text-right"
-              >
-                Deposit
-              </b-badge>
-              <b-badge
-                v-if="p.status == 2"
-                pill
-                variant="light-primary"
-                class="text-right"
-              >
-                Voting
-              </b-badge>
-              <b-badge
-                v-if="p.status == 3"
-                pill
-                variant="light-success"
-                class="text-right"
-              >
-                Passed
-              </b-badge>
-              <b-badge
-                v-if="p.status == 4"
-                pill
-                variant="light-danger"
-                class="text-right"
-              >
-                Rejected
-              </b-badge>
               <router-link
                 :to="`/${p.chain.chain_name}/gov/${p.id}?from=/wallet/votes`"
               >
                 {{ p.title }}
               </router-link></b-card-title>
             <b-card-body md="12">
-              <div class="gov-wrapper d-flex">
+              <div class="gov-wrapper d-flex flex-wrap">
                 <div class="gov">
                   <p class="card-text mb-25">
                     Type

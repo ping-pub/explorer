@@ -50,7 +50,7 @@
               {{ p.title }}
             </router-link></b-card-title>
           <b-card-body md="12">
-            <div class="gov-wrapper d-flex flex-nowrap">
+            <div class="gov-wrapper flex-wrap">
               <div class="gov">
                 <p class="card-text mb-25">
                   Type
