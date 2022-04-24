@@ -180,7 +180,7 @@ export default {
       islive: true,
       proposals: [],
       tally: {},
-      voters: [], // need to be query.
+      // voters: [], // need to be query.
       votes: [], // votes of voters
     }
   },
@@ -256,13 +256,23 @@ export default {
     },
     fetchProposals(item) {
       if (this.islive) {
+        let promise = Promise.resolve()
+        // identities.forEach(item => {
+        //   promise = promise.then(() => new Promise(resolve => {
+        //     this.avatar(item, resolve)
+        //   }))
+        // })
         this.$http.getGovernanceListByStatus(2, item.conf).then(data => {
           data.proposals.forEach(p => {
             const p2 = p
             p2.chain = item.conf
             this.proposals.push(p2)
             item.addresses.forEach(a => {
-              this.fetchMyVote(p.id, a, item.conf)
+              // this.fetchMyVote(p.id, a, item.conf)
+              // this.voters.push({ pid: p.id, addr: a, conf: item.conf })
+              promise = promise.then(() => new Promise(resolve => {
+                this.fetchMyVote(p.id, a, item.conf, resolve)
+              }))
             })
           })
           this.updateTally(data.proposals, item.conf)
@@ -271,13 +281,16 @@ export default {
         })
       }
     },
-    fetchMyVote(pid, addr, chain) {
+    fetchMyVote(pid, addr, conf, resolve) {
       if (this.islive) {
-        this.$http.getGovernanceProposalVote(pid, addr, chain).then(data => {
+        this.$http.getGovernanceProposalVote(pid, addr, conf).then(data => {
+          resolve()
           const x = data
           x.keyname = this.keyname(data.vote.voter)
           this.votes.push(x)
-        }).catch(() => { })
+        }).catch(() => {
+          resolve()
+        })
       }
     },
     updateTally(voting, chain) {
