@@ -1,6 +1,5 @@
 {
   "chain_name": "meme",
-  "coingecko": "",
   "api": "https://api-meme-1.meme.sx",
   "rpc": [
     "https://rpc-meme-1.meme.sx:443",
@@ -9,7 +8,7 @@
   "snapshot_provider": "",
   "sdk_version": "0.45.1",
   "coin_type": "118",
-  "min_tx_fee": "5000",
+  "min_tx_fee": "8000",
   "addr_prefix": "meme",
   "logo": "/logos/meme.svg",
   "assets": [
