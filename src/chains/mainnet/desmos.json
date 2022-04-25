@@ -13,7 +13,7 @@
         "base": "udsm",
         "symbol": "DSM",
         "exponent": "6",
-        "coingecko_id": "", 
+        "coingecko_id": "desmos", 
         "logo": "/logos/desmos.png"
     }]
 }
