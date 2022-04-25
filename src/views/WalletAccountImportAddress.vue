@@ -415,7 +415,6 @@ export default {
     const { selected } = this.$store.state.chains
     // this.chain = selected
     this.$http.getLatestBlock().then(res => {
-      console.log(res.block.header.chain_id)
       this.chainId = res.block.header.chain_id
       this.keplr = this.initParamsForKeplr(this.chainId, selected)
     })
