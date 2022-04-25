@@ -283,6 +283,35 @@
         <span>Ping.pub is maintained by the community, Everyone could add a chain to ping.pub. Some of those blockchains are not fully tested, Use at your own risk.</span>
       </div>
     </b-alert>
+
+    <b-alert
+      variant="secondary"
+      :show="true"
+    >
+      <h4 class="alert-heading">
+        Enable Keplr For {{ chainId }}
+      </h4>
+      <div class="alert-body p-1">
+        <span>If Keplr has not added <code>{{ chainId }}</code>, We can enable it here.</span>
+        <b-form-textarea
+          :value="keplr"
+          rows="10"
+          class="mt-1 mb-1"
+        />
+        <div
+          v-if="error"
+          class="text-danger"
+        >
+          {{ error }}
+        </div>
+        <b-button
+          variant="primary"
+          @click="suggest()"
+        >
+          Enable Keplr
+        </b-button>
+      </div>
+    </b-alert>
   </div>
 </template>
 
@@ -305,9 +334,10 @@ import {
   BInputGroupPrepend,
   BFormRadioGroup,
   VBTooltip,
+  BFormTextarea,
+  BButton,
 } from 'bootstrap-vue'
 import { required } from '@validations'
-import store from '@/store'
 import {
   addressDecode, addressEnCode, getLedgerAddress, getLocalAccounts,
 } from '@/libs/utils'
@@ -316,6 +346,7 @@ import { toHex } from '@cosmjs/encoding'
 export default {
   components: {
     BAlert,
+    BButton,
     ValidationProvider,
     ValidationObserver,
     FormWizard,
@@ -327,6 +358,7 @@ export default {
     BFormInput,
     BFormRadio,
     BFormCheckbox,
+    BFormTextarea,
     BInputGroup,
     BInputGroupPrepend,
     BFormRadioGroup,
@@ -349,6 +381,9 @@ export default {
       accounts: null,
       exludes: [], // HD Path is NOT supported,
       edit: false,
+      keplr: '',
+      chainId: '',
+      error: null,
     }
   },
   computed: {
@@ -377,7 +412,13 @@ export default {
     },
   },
   mounted() {
-    const { selected } = store.state.chains
+    const { selected } = this.$store.state.chains
+    // this.chain = selected
+    this.$http.getLatestBlock().then(res => {
+      console.log(res.block.header.chain_id)
+      this.chainId = res.block.header.chain_id
+      this.keplr = this.initParamsForKeplr(this.chainId, selected)
+    })
     if (selected && selected.chain_name && !this.exludes.includes(selected.chain_name)) {
       this.selected.push(selected.chain_name)
     }
@@ -405,6 +446,60 @@ export default {
     }
   },
   methods: {
+    suggest() {
+      if (window.keplr) {
+        window.keplr.experimentalSuggestChain(JSON.parse(this.keplr)).catch(e => {
+          this.error = e
+        })
+      }
+    },
+    initParamsForKeplr(chainid, chain) {
+      return JSON.stringify({
+        chainId: chainid,
+        chainName: chain.chain_name,
+        rpc: Array.isArray(chain.rpc) ? chain.rpc[0] : chain.rpc,
+        rest: Array.isArray(chain.api) ? chain.api[0] : chain.api,
+        bip44: {
+          coinType: chain.coin_type,
+        },
+        coinType: chain.coin_type,
+        bech32Config: {
+          bech32PrefixAccAddr: chain.addr_prefix,
+          bech32PrefixAccPub: `${chain.addr_prefix}pub`,
+          bech32PrefixValAddr: `${chain.addr_prefix}valoper`,
+          bech32PrefixValPub: `${chain.addr_prefix}valoperpub`,
+          bech32PrefixConsAddr: `${chain.addr_prefix}valcons`,
+          bech32PrefixConsPub: `${chain.addr_prefix}valconspub`,
+        },
+        currencies: [
+          {
+            coinDenom: chain.assets[0].symbol,
+            coinMinimalDenom: chain.assets[0].base,
+            coinDecimals: chain.assets[0].exponent,
+            coinGeckoId: chain.assets[0].coingecko_id || 'unknown',
+          },
+        ],
+        feeCurrencies: [
+          {
+            coinDenom: chain.assets[0].symbol,
+            coinMinimalDenom: chain.assets[0].base,
+            coinDecimals: chain.assets[0].exponent,
+            coinGeckoId: chain.assets[0].coingecko_id || 'unknown',
+          },
+        ],
+        stakeCurrency: {
+          coinDenom: chain.assets[0].symbol,
+          coinMinimalDenom: chain.assets[0].base,
+          coinDecimals: chain.assets[0].exponent,
+          coinGeckoId: chain.assets[0].coingecko_id || 'unknown',
+        },
+        gasPriceStep: {
+          low: 0.01,
+          average: 0.025,
+          high: 0.03,
+        },
+      }, null, '\t')
+    },
     formatPubkey(v) {
       if (typeof (v) === 'string') {
         return v
