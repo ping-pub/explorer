@@ -22,13 +22,6 @@
         </b-form-radio>
         <b-form-radio
           name="wallet"
-          value="pingKMS"
-          class="d-none d-md-block"
-        >
-          Ping Signer
-        </b-form-radio>
-        <b-form-radio
-          name="wallet"
           value="ledgerUSB"
         >
           Ledger (USB)
