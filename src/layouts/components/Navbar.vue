@@ -125,6 +125,7 @@
             <small>{{ item.address ? formatAddr(item.address.addr) : `Not available on ${selected_chain.chain_name}` }}</small>
           </div>
         </b-dropdown-item>
+        <b-dropdown-divider />
         <b-dropdown-item to="/wallet/import">
           <feather-icon
             icon="PlusIcon"
