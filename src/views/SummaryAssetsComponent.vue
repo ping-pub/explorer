@@ -15,8 +15,6 @@
 </template>
 
 <script>
-import { sha256 } from '@cosmjs/crypto'
-import { toHex } from '@cosmjs/encoding'
 import { BTable, BCardTitle, BCard } from 'bootstrap-vue'
 import { formatTokenAmount, formatTokenDenom } from '@/libs/utils'
 
@@ -30,7 +28,6 @@ export default {
     return {
       islive: true,
       assets: [],
-      denoms: {},
       cfield: [
         {
           key: 'denom',
@@ -44,13 +41,12 @@ export default {
       ],
     }
   },
+  computed: {
+    denoms() {
+      return this.$store.state.chains.denoms
+    },
+  },
   created() {
-    this.$http.getAllIBCDenoms().then(x => {
-      x.denom_traces.forEach(trace => {
-        const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
-        this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace)
-      })
-    })
     this.$http.getBankTotals().then(res => {
       const toshow = res.sort()
       this.assets = toshow.reverse().map(x => {

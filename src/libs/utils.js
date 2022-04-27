@@ -380,7 +380,7 @@ export function formatTokenAmount(tokenAmount, decimals = 2, tokenDenom = 'uatom
     if (format) { return numberWithCommas(parseFloat(amount.toFixed(decimals))) }
     return parseFloat(amount.toFixed(decimals))
   }
-  return parseFloat(amount.toFixed(decimals))
+  return parseFloat(amount.toFixed(exp))
 }
 
 export function isTestnet() {
@@ -390,10 +390,11 @@ export function isTestnet() {
 
 export function formatToken(token, IBCDenom = {}, decimals = 2, withDenom = true) {
   if (token) {
+    const denom = IBCDenom[token.denom] || token.denom
     if (withDenom) {
-      return `${formatTokenAmount(token.amount, decimals, token.denom)} ${formatTokenDenom(IBCDenom[token.denom] || token.denom)}`
+      return `${formatTokenAmount(token.amount, decimals, denom)} ${formatTokenDenom(denom)}`
     }
-    return formatTokenAmount(token.amount, decimals, token.denom)
+    return formatTokenAmount(token.amount, decimals, denom)
   }
   return token
 }

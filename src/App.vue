@@ -92,11 +92,13 @@ export default {
       store.commit('app/UPDATE_WINDOW_WIDTH', val)
     })
 
-    store.dispatch('chains/getQuotes')
-
     return {
       skinClasses,
     }
+  },
+  created() {
+    store.dispatch('chains/getQuotes')
+    store.dispatch('chains/getAllIBCDenoms', this)
   },
 }
 </script>
