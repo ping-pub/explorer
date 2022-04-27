@@ -2,8 +2,12 @@
   <div
     class="main-menu menu-fixed menu-accordion menu-shadow"
     :class="[
-      { 'expanded': !isVerticalMenuCollapsed || (isVerticalMenuCollapsed && isMouseHovered) },
-      skin === 'semi-dark' ? 'menu-dark' : 'menu-light'
+      {
+        expanded:
+          !isVerticalMenuCollapsed ||
+          (isVerticalMenuCollapsed && isMouseHovered),
+      },
+      skin === 'dark' ? 'menu-dark' : 'menu-light',
     ]"
     @mouseenter="updateMouseHovered(true)"
     @mouseleave="updateMouseHovered(false)"
@@ -17,7 +21,6 @@
         :collapseTogglerIcon="collapseTogglerIcon"
       >
         <ul class="nav navbar-nav flex-row">
-
           <!-- Logo & Text -->
           <li class="nav-item mr-auto">
             <b-link
@@ -66,7 +69,7 @@
     </div>
     <!-- Shadow -->
     <div
-      :class="{'d-block': shallShadowBottom}"
+      :class="{ 'd-block': shallShadowBottom }"
       class="shadow-bottom"
     />
 
@@ -75,13 +78,17 @@
       :settings="perfectScrollbarSettings"
       class="main-menu-content scroll-area"
       tagname="ul"
-      @ps-scroll-y="evt => { shallShadowBottom = evt.srcElement.scrollTop > 0 }"
+      @ps-scroll-y="
+        (evt) => {
+          shallShadowBottom = evt.srcElement.scrollTop > 0;
+        }
+      "
     >
       <vertical-nav-menu-items
         :items.sync="options"
         class="navigation navigation-main"
       />
-      <div style="height: 28rem;" />
+      <div style="height: 28rem" />
     </vue-perfect-scrollbar>
     <!-- /main menu content-->
   </div>
@@ -165,7 +172,7 @@ export default {
     current() {
       const preload = []
       const { selected } = this.$store.state.chains
-      const current = navMenuItems.find(x => (x.title === selected.chain_name))
+      const current = navMenuItems.find(x => x.title === selected.chain_name)
       // preload.push({ header: 'current' })
       preload.push(current)
       return preload
