@@ -3,7 +3,7 @@
     class="main-menu menu-fixed menu-accordion menu-shadow"
     :class="[
       { 'expanded': !isVerticalMenuCollapsed || (isVerticalMenuCollapsed && isMouseHovered) },
-      skin === 'semi-dark' ? 'menu-dark' : 'menu-light'
+      skin === 'dark' ? 'menu-dark' : 'menu-light'
     ]"
     @mouseenter="updateMouseHovered(true)"
     @mouseleave="updateMouseHovered(false)"
@@ -64,11 +64,6 @@
         class="navigation navigation-main"
       />
     </div>
-    <!-- Shadow -->
-    <div
-      :class="{'d-block': shallShadowBottom}"
-      class="shadow-bottom"
-    />
 
     <!-- main menu content-->
     <vue-perfect-scrollbar
