@@ -6,7 +6,7 @@
     "snapshot_provider": "df2dffa0560e41c682b6b2e150524859e41ec1d8@chihuahua.rpc.ping.pub:26656",
     "sdk_version": "0.44.3",
     "coin_type": "118",
-    "min_tx_fee": "5000",
+    "min_tx_fee": "8000",
     "addr_prefix": "chihuahua",
     "logo": "/logos/chihuahua.png",
     "assets": [{

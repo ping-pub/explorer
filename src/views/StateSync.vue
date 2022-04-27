@@ -17,7 +17,7 @@
           WIP
         </b-badge>
       </b-card-title>
-      <b class="mt-1">1. Install Binary</b><br>
+      <b class="mt-1">1. Install Binary ({{ version }})</b><br>
       We need to install the binary first and make sure that the version is the one currently in use on mainnet.
       <br><br>
       <b class="mt-1">2. Enable State Sync</b><br>
@@ -40,17 +40,6 @@
         rows="7"
         class="my-1"
         @change="check()"
-      />
-      <b class="mt-1">3. (Optional) Add Snapshot Providers </b><br>
-      To reduce the time of snapshot discovering, we can add providers into persistent_peers in <code>$DAEMON_HOME/config/config.toml</code>.
-      <b-form-textarea
-        id="provider"
-        v-model="providers"
-        readonly
-        :state="snapshot_provider?true:false"
-        placeholder="Loading..."
-        rows="3"
-        class="mt-1"
       />
     </b-card>
 
@@ -95,6 +84,7 @@ export default {
       ? `# Comma separated list of nodes to keep persistent connections to \npersistent_peers = "${peers}" `
       : 'OMG！ There is NO available providers, but you can try it.'
     return {
+      version: '',
       snapshot_provider,
       servers,
       providers,
@@ -112,33 +102,12 @@ snapshot-interval = 1000
 snapshot-keep-recent = 2`,
     }
   },
-  //   computed: {
-  //     state: {
-  //       get() {
-  //         let servers = ''
-  //         const { rpc } = this.$store.state.chains.selected
-  //         if (rpc && Array.isArray(rpc)) {
-  //           servers = rpc.join(',')
-  //         }
-  //         return `[statesync]
-  // enable = true
-  // rpc_servers = "${servers}"
-  // trust_height = ${this.height}
-  // trust_hash = "${this.hash}"
-  // trust_period = "168h"  # 2/3 of unbonding time`
-  //       },
-  //       set(text) {
-  //         console.log(text)
-  //         // this.state = text
-  //       },
-  //     },
-  //   },
   created() {
     const interval = 1000
     this.$http.getLatestBlock().then(l => {
       const { height } = l.block.header
-      if (height > interval) {
-        this.$http.getBlockByHeight(Math.trunc(height / interval) * interval).then(x => {
+      if (height > interval * 3) {
+        this.$http.getBlockByHeight(Math.trunc((height - 3 * interval) / interval) * interval).then(x => {
           this.hash = x.block_id.hash
           this.height = x.block.header.height
           this.state = `[statesync]
@@ -150,6 +119,9 @@ trust_period = "168h"  # 2/3 of unbonding time`
           this.check()
         })
       }
+      this.$http.getNodeInfo().then(res => {
+        this.version = res.application_version.version
+      })
     })
   },
   methods: {

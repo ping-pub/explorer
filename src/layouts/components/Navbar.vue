@@ -126,6 +126,14 @@
           </div>
         </b-dropdown-item>
         <b-dropdown-divider />
+        <b-dropdown-item to="/wallet/import">
+          <feather-icon
+            icon="PlusIcon"
+            size="16"
+          />
+          <span class="align-middle ml-50">Import Address</span>
+        </b-dropdown-item>
+        <b-dropdown-divider />
 
         <b-dropdown-item :to="{ name: 'accounts' }">
           <feather-icon
@@ -150,6 +158,15 @@
           />
           <span class="align-middle ml-50">My Validators</span>
         </b-dropdown-item>
+
+        <b-dropdown-item :to="`/wallet/votes`">
+          <feather-icon
+            icon="PocketIcon"
+            size="16"
+          />
+          <span class="align-middle ml-50">My Votes</span>
+        </b-dropdown-item>
+
         <b-dropdown-item :to="`/wallet/transactions`">
           <feather-icon
             icon="LayersIcon"
@@ -239,10 +256,10 @@ export default {
       let accounts = getLocalAccounts() || {}
       accounts = Object.entries(accounts).map(v => ({ wallet: v[0], address: v[1].address.find(x => x.chain === this.selected_chain.chain_name) }))
 
-      if (!this.$store.state.chains.defaultWallet && this.accounts.length > 0) {
-        this.updateDefaultWallet(this.accounts[0].wallet)
+      if (accounts.length > 0) {
+        this.updateDefaultWallet(accounts[0].wallet)
       }
-      return accounts
+      return accounts.filter(x => x.address)
     },
   },
   mounted() {
@@ -259,6 +276,7 @@ export default {
       this.index = v
       const conf = this.$store.state.chains.selected
       localStorage.setItem(`${conf.chain_name}-api-index`, v)
+      window.location.reload()
     },
     block() {
       const conf = this.$store.state.chains.selected

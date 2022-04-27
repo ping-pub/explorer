@@ -3,5 +3,13 @@
     "api":"https://rest.testnet.persistence.one",
     "sdk_version": "0.44.2",
     "addr_prefix": "persistence",
-    "logo": "https://raw.githubusercontent.com/auditOne/explorer/master/public/logos/persistence.png"
+    "min_tx_fee": "3000",
+    "logo": "/logos/persistence.png",
+    "assets": [{
+        "base": "uxprt",
+        "symbol": "XPRT",
+        "exponent": "6",
+        "coingecko_id": "persistence", 
+        "logo": "/logos/persistence.png"
+    }]
 }

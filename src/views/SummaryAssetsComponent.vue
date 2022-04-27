@@ -61,11 +61,11 @@ export default {
   },
   methods: {
     formatDenom(v) {
-      if (this.denoms[v]) {
-        const trace = this.denoms[v]
-        return `* ${formatTokenDenom(trace.base_denom)} (${trace.path})`
+      const trace = this.denoms[v]
+      if (trace) {
+        return `* ${formatTokenDenom(trace)}`
       }
-      return v
+      return formatTokenDenom(v)
     },
   },
 }

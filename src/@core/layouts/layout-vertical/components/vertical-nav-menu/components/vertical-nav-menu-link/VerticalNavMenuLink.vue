@@ -11,8 +11,19 @@
       v-bind="linkProps"
       class="d-flex align-items-center"
     >
-      <feather-icon :icon="item.icon || 'ChevronRightIcon'" />
-      <span class="text-truncate">{{ t(item.title) }}</span>
+      <b-avatar
+        v-if="item.logo"
+        variant="transparent"
+        :src="item.logo"
+        icon="people-fill"
+        size="sm"
+        class="mr-1"
+      />
+      <feather-icon
+        v-else
+        :icon="item.icon || 'ChevronRightIcon'"
+      />
+      <span class="text-truncate text-capitalize">{{ t(item.title) }}</span>
       <b-badge
         v-if="item.tag"
         pill
@@ -27,7 +38,7 @@
 
 <script>
 import { useUtils as useAclUtils } from '@core/libs/acl'
-import { BLink, BBadge } from 'bootstrap-vue'
+import { BLink, BBadge, BAvatar } from 'bootstrap-vue'
 import { useUtils as useI18nUtils } from '@core/libs/i18n'
 import useVerticalNavMenuLink from './useVerticalNavMenuLink'
 import mixinVerticalNavMenuLink from './mixinVerticalNavMenuLink'
@@ -36,6 +47,7 @@ export default {
   components: {
     BLink,
     BBadge,
+    BAvatar,
   },
   mixins: [mixinVerticalNavMenuLink],
   props: {

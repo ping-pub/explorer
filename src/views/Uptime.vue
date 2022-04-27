@@ -1,5 +1,5 @@
 <template>
-  <div class="container-md px-0">
+  <div class="px-0">
     <b-card>
       <b-alert
         variant="danger"
@@ -34,67 +34,84 @@
           />
         </b-input-group>
       </b-card>
-      <b-row>
-        <b-col
-          v-for="(x,index) in uptime"
-          :key="index"
-          sm="12"
-          md="4"
-          class="text-truncate"
-        >
-          <div class="d-flex justify-content-between">
-            <b-form-checkbox
-              v-model="pinned"
-              :value="`${chain}#${x.address}`"
-              class="custom-control-warning text-truncate"
-              @change="pinValidator(`${chain}#${x.address}`)"
-            ><span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
-            </b-form-checkbox>
-            <span
-              v-if="missing[x.address]"
+      <b-skeleton-wrapper :loading="loading">
+        <template #loading>
+          <b-row>
+            <b-col
+              v-for="index in 60"
+              :key="index"
+              sm="12"
+              md="4"
+              xl="3"
             >
-              <b-badge
-                v-if="missing[x.address].missed_blocks_counter > 0"
-                v-b-tooltip.hover.v-danger
-                variant="light-danger"
-                :title="`${missing[x.address].missed_blocks_counter} missed blocks`"
-                class="text-danger text-bolder"
+              <b-skeleton width="100%" />
+            </b-col>
+          </b-row>
+        </template>
+        <b-row>
+          <b-col
+            v-for="(x,index) in uptime"
+            :key="index"
+            sm="12"
+            md="4"
+            xl="3"
+            class="text-truncate"
+          >
+            <div class="d-flex justify-content-between">
+              <b-form-checkbox
+                v-model="pinned"
+                :value="`${chain}#${x.address}`"
+                class="custom-control-warning text-truncate"
+                @change="pinValidator(`${chain}#${x.address}`)"
+              ><span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
+              </b-form-checkbox>
+              <span
+                v-if="missing[x.address]"
               >
-                {{ missing[x.address].missed_blocks_counter }}
-              </b-badge>
-              <b-badge
-                v-else
-                v-b-tooltip.hover.v-success
-                variant="light-success"
-                title="Perfect! No missed blocks"
-              >
-                0
-              </b-badge>
-            </span>
-          </div>
-          <div class="d-flex justify-content-between align-self-stretch flex-wrap">
-            <div
-              v-for="(b,i) in blocks"
-              :key="i"
-              style="width:1.5%;"
-            ><router-link :to="`./blocks/${b.height}`">
-              <div
-                v-b-tooltip.hover.v-second
-                :title="b.height"
-                :class="b.sigs && b.sigs[x.address] ? b.sigs[x.address] : 'bg-light-success'"
-                class="m-auto"
-              >&nbsp;</div>
-            </router-link>
+                <b-badge
+                  v-if="missing[x.address].missed_blocks_counter > 0"
+                  v-b-tooltip.hover.v-danger
+                  variant="light-danger"
+                  :title="`${missing[x.address].missed_blocks_counter} missed blocks`"
+                  class="text-danger text-bolder"
+                >
+                  {{ missing[x.address].missed_blocks_counter }}
+                </b-badge>
+                <b-badge
+                  v-else
+                  v-b-tooltip.hover.v-success
+                  variant="light-success"
+                  title="Perfect! No missed blocks"
+                >
+                  0
+                </b-badge>
+              </span>
             </div>
-          </div>
-        </b-col>
-      </b-row>
+            <div class="d-flex justify-content-between align-self-stretch flex-wrap">
+              <div
+                v-for="(b,i) in blocks"
+                :key="i"
+                style="width:1.5%;"
+              ><router-link :to="`./blocks/${b.height}`">
+                <div
+                  v-b-tooltip.hover.v-second
+                  :title="b.height"
+                  :class="b.sigs && b.sigs[x.address] ? b.sigs[x.address] : 'bg-light-success'"
+                  class="m-auto"
+                >&nbsp;</div>
+              </router-link>
+              </div>
+            </div>
+          </b-col>
+        </b-row>
+      </b-skeleton-wrapper>
     </b-card>
   </div>
 </template>
 
 <script>
 import {
+  BSkeleton, BSkeletonWrapper,
   BRow, BCol, VBTooltip, BFormInput, BCard, BAlert, BFormCheckbox, BButton, BBadge, BInputGroup, BInputGroupPrepend,
 } from 'bootstrap-vue'
 
@@ -114,6 +131,8 @@ export default {
     BBadge,
     BFormCheckbox,
     BInputGroup,
+    BSkeleton,
+    BSkeletonWrapper,
     BInputGroupPrepend,
   },
   directives: {
@@ -123,6 +142,7 @@ export default {
     const { chain } = this.$route.params
     const pinned = localStorage.getItem('pinned') ? localStorage.getItem('pinned').split(',') : ''
     return {
+      loading: true,
       missedFilter: false,
       pinned,
       chain,
@@ -207,6 +227,7 @@ export default {
         this.blocks = blocks
 
         this.timer = setInterval(this.fetch_latest, 6000)
+        this.loading = false
       })
     },
     initColor() {
@@ -235,7 +256,7 @@ export default {
         res.block.last_commit.signatures.forEach(x => {
           if (x.validator_address) sigs[x.validator_address] = 'bg-success'
         })
-        const block = this.blocks.find(b => b[1] === res.block.last_commit.height)
+        const block = this.blocks.find(b => b.height === res.block.last_commit.height)
         if (typeof block === 'undefined') { // mei
           // this.$set(block, 0, typeof sigs !== 'undefined')
           if (this.blocks.length >= 50) this.blocks.shift()

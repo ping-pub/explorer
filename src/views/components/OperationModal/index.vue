@@ -118,7 +118,15 @@
             </b-col>
           </b-row>
         </b-form>
-        {{ error }}
+        <b-alert
+          v-model="showDismissibleAlert"
+          variant="danger"
+          dismissible
+        >
+          <div class="alert-body">
+            <span>{{ error }}</span>
+          </div>
+        </b-alert>
       </validation-observer>
 
       <TransactionResult
@@ -163,7 +171,7 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
   BAvatar, BModal, BRow, BCol, BInputGroup, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
-  BForm, BButton, BInputGroupAppend, BFormCheckbox, BOverlay,
+  BForm, BButton, BInputGroupAppend, BFormCheckbox, BOverlay, BAlert,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import {
@@ -175,7 +183,7 @@ import {
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
-import WalletInputVue from '../WalletInput.vue'
+import WalletInputVue from './WalletInput.vue'
 import Delegate from './components/Delegate.vue'
 import Redelegate from './components/Redelegate.vue'
 import Withdraw from './components/Withdraw.vue'
@@ -190,6 +198,7 @@ import TransactionResult from './TransactionResult.vue'
 export default {
   name: 'DelegateDialogue',
   components: {
+    BAlert,
     BAvatar,
     BModal,
     BRow,
@@ -265,6 +274,7 @@ export default {
       balance: [],
       IBCDenom: {},
       error: null,
+      showDismissibleAlert: false,
       sequence: 1,
       accountNumber: 0,
       advance: false,
@@ -422,10 +432,14 @@ export default {
             time: new Date(),
           })
         }).catch(e => {
+          this.showResult = false
           this.error = e
+          this.showDismissibleAlert = true
         })
       }).catch(e => {
+        this.showResult = false
         this.error = e
+        this.showDismissibleAlert = true
       })
       return ''
     },

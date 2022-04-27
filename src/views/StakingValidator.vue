@@ -272,6 +272,7 @@
       type="Delegate"
       :validator-address="validator.operator_address"
     />
+    <div id="txevent" />
   </div>
 </template>
 
@@ -326,6 +327,7 @@ export default {
       mintInflation: 0,
       stakingParameter: new StakingParameters(),
       validator: new Validator(),
+      address: null,
       userData: {},
       blocks: Array.from('0'.repeat(100)).map(x => [Boolean(x), Number(x)]),
       distribution: {},
@@ -335,10 +337,10 @@ export default {
   computed: {
     txs() {
       if (this.transactions.txs) {
-        return this.transactions.txs.map(x => ({
+        return this.transactions.tx_responses.map(x => ({
           height: Number(x.height),
           txhash: x.txhash,
-          msgs: abbrMessage(x.tx.value ? x.tx.value.msg : x.tx.msg),
+          msgs: abbrMessage(x.tx.body.messages),
           time: toDay(x.timestamp),
         }))
       }
@@ -349,26 +351,35 @@ export default {
     this.$http.getStakingPool().then(res => { this.stakingPool = res })
     this.$http.getStakingParameters().then(res => { this.stakingParameter = res })
     this.$http.getMintingInflation().then(res => { this.mintInflation = res })
-    const { address } = this.$route.params
-    this.$http.getValidatorDistribution(address).then(res => { this.distribution = res })
-    this.$http.getStakingValidator(address).then(data => {
-      this.validator = data
-
-      this.processAddress(data.operator_address, data.consensus_pubkey)
-      this.$http.getTxsBySender(this.accountAddress).then(res => {
-        this.transactions = res
-      })
-
-      const { identity } = data.description
-      keybase(identity).then(d => {
-        if (Array.isArray(d.them) && d.them.length > 0) {
-          this.$set(this.validator, 'avatar', d.them[0].pictures.primary.url)
-          this.$store.commit('cacheAvatar', { identity, url: d.them[0].pictures.primary.url })
-        }
-      })
+    this.address = this.$route.params.address
+    this.initial()
+  },
+  mounted() {
+    const elem = document.getElementById('txevent')
+    elem.addEventListener('txcompleted', () => {
+      this.initial()
     })
   },
   methods: {
+    initial() {
+      this.$http.getStakingValidator(this.address).then(data => {
+        this.validator = data
+
+        this.processAddress(data.operator_address, data.consensus_pubkey)
+        this.$http.getTxsBySender(this.accountAddress).then(res => {
+          this.transactions = res
+        })
+
+        const { identity } = data.description
+        keybase(identity).then(d => {
+          if (Array.isArray(d.them) && d.them.length > 0) {
+            this.$set(this.validator, 'avatar', d.them[0].pictures.primary.url)
+            this.$store.commit('cacheAvatar', { identity, url: d.them[0].pictures.primary.url })
+          }
+        })
+      })
+      this.$http.getValidatorDistribution(this.address).then(res => { this.distribution = res })
+    },
     pageload(v) {
       this.$http.getTxsBySender(this.accountAddress, v).then(res => {
         this.transactions = res

@@ -300,6 +300,9 @@ export function abbrMessage(msg) {
     })
     return output.join(', ')
   }
+  if (msg['@type']) {
+    return msg['@type'].substring(msg['@type'].lastIndexOf('.') + 1).replace('Msg', '')
+  }
   if (msg.typeUrl) {
     return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1).replace('Msg', '')
   }
@@ -322,6 +325,8 @@ export function isToken(value) {
   let is = false
   if (Array.isArray(value)) {
     is = value.findIndex(x => Object.keys(x).includes('denom')) > -1
+  } else {
+    is = Object.keys(value).includes('denom')
   }
   return is
 }
@@ -337,7 +342,7 @@ export function formatTokenDenom(tokenDenom) {
         if (asset) denom = asset.symbol
       }
     })
-    return denom.startsWith('ibc') ? `IBC...${denom.substring(denom.length - 3)}` : denom.toUpperCase()
+    return denom.length > 10 ? `${denom.substring(0, 7).toUpperCase()}..${denom.substring(denom.length - 3)}` : denom.toUpperCase()
   }
   return ''
 }

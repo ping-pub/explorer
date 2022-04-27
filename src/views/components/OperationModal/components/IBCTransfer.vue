@@ -135,7 +135,7 @@
 import { ValidationProvider } from 'vee-validate'
 import {
   BRow, BCol, BInputGroup, BInputGroupAppend, BFormInput, BFormGroup, BFormSelect, BFormSelectOption,
-
+  BFormText,
 } from 'bootstrap-vue'
 import {
   required, email, url, between, alpha, integer, password, min, digits, alphaDash, length,
@@ -157,6 +157,7 @@ export default {
     BFormInput,
     BFormGroup,
     BFormSelect,
+    BFormText,
     BFormSelectOption,
     vSelect,
 

@@ -8,12 +8,12 @@
     "coin_type": "118",
     "min_tx_fee": "5000",
     "addr_prefix": "dig",
-    "logo": "/logos/dig.png",
+    "logo": "/logos/dig1.png",
     "assets": [{
         "base": "udig",
         "symbol": "DIG",
         "exponent": "6",
         "coingecko_id": "dig-chain", 
-        "logo": "/logos/dig.png"
+        "logo": "/logos/dig1.png"
     }]
 }

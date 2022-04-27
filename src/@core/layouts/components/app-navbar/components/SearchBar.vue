@@ -27,14 +27,18 @@
       <b-form-input
         v-if="showSearchBar"
         v-model="searchQuery"
-        placeholder="Search Height/Transaction/Address"
+        placeholder="Search Height/Transaction/Account Address"
         autofocus
+        :state="false"
         autocomplete="off"
         @keyup.enter="doQuery"
       />
+      <b-form-text class="text-danger pl-3">
+        {{ error }}
+      </b-form-text>
       <div
         class="search-input-close"
-        @click="showSearchBar = false;"
+        @click="reset()"
       >
         <feather-icon icon="XIcon" />
       </div>
@@ -43,7 +47,7 @@
 </template>
 
 <script>
-import { BFormInput } from 'bootstrap-vue'
+import { BFormInput, BFormText } from 'bootstrap-vue'
 import { ref } from '@vue/composition-api'
 import { title } from '@core/utils/filter'
 import store from '@/store'
@@ -51,6 +55,7 @@ import store from '@/store'
 export default {
   components: {
     BFormInput,
+    BFormText,
   },
   setup() {
     const showSearchBar = ref(false)
@@ -68,13 +73,19 @@ export default {
   data() {
     return {
       searchQuery: null,
+      error: null,
     }
   },
   methods: {
+    reset() {
+      this.showSearchBar = false
+      this.searchQuery = null
+      this.error = null
+    },
     doQuery() {
       const height = /^\d+$/
       const txhash = /^[A-Z\d]{64}$/
-      const addr = /^[a-z]{2,6}1[a-z\d]{38}$/
+      const addr = /^[a-z]+1[a-z\d]{38}$/
       const key = this.searchQuery
 
       const c = store.state.chains.selected
@@ -85,7 +96,8 @@ export default {
           this.$router.push({ name: 'transaction', params: { chain: c.chain_name, hash: key } })
         } else if (addr.test(key)) {
           this.$router.push({ name: 'chain-account', params: { chain: c.chain_name, address: key } })
-          // console.log('address', key)
+        } else {
+          this.error = 'The input not recognized'
         }
       }
       // this.$router.push('/')
