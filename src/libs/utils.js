@@ -197,7 +197,7 @@ function getLedgerAppName(coinType) {
   switch (coinType) {
     case 60:
       return 'Ethereum'
-    case 523:
+    case 529:
       return 'Secret'
     case 852:
       return 'Desmos'
@@ -245,7 +245,7 @@ export async function getLedgerAddress(transport = 'blu', hdPath = "m/44'/118/0'
   const trans = transport === 'usb' ? await TransportWebUSB.create() : await TransportWebBLE.create()
   // extract Cointype from from HDPath
   const coinType = Number(stringToPath(hdPath)[1])
-  // Check if Cointype is 529 for Secret Ledger App and use Cosmos Ledger App instead
+  
   const ledgerName = getLedgerAppName(coinType)
 
   const signer = new LedgerSigner(trans, { hdPaths: [stringToPath(hdPath)], ledgerAppName: ledgerName })
