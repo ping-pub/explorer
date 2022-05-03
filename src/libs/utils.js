@@ -232,7 +232,12 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
 
 export async function getLedgerAddress(transport = 'blu', hdPath = "m/44'/118/0'/0/0") {
   const trans = transport === 'usb' ? await TransportWebUSB.create() : await TransportWebBLE.create()
-  const signer = new LedgerSigner(trans, { hdPaths: [stringToPath(hdPath)] })
+  // extract Cointype from from HDPath
+  const coinType = Number(stringToPath(hdPath)[1])
+  // Check if Cointype is 529 for Secret Ledger App and use Cosmos Ledger App instead
+  const ledgerName = (coinType === 529) ? 'Secret' : 'Cosmos'
+
+  const signer = new LedgerSigner(trans, { hdPaths: [stringToPath(hdPath)], ledgerAppName: ledgerName })
   return signer.getAccounts()
 }
 
