@@ -13,62 +13,67 @@
           md="12"
         >
           <b-card>
-            <b-card-title
-              class="mb-0"
-            >
+            <b-card-title @click="description(`model-${i}`)">
               <b-avatar
+                v-b-tooltip.hover
                 :src="p.chain.logo"
                 variant="light-primary"
                 size="22"
+                :title="p.chain.chain_name"
               />
-              <span class="text-uppercase"> {{ p.chain.chain_name }}</span>
               #{{ p.id }}.
-              <router-link
-                :to="`/${p.chain.chain_name}/gov/${p.id}?from=/wallet/votes`"
-              >
+              <router-link :to="`/${p.chain.chain_name}/gov/${p.id}?from=/wallet/votes`">
                 {{ p.title }}
-              </router-link></b-card-title>
-            <b-card-body md="12">
-              <div class="gov-wrapper d-flex flex-wrap">
-                <div class="gov">
-                  <p class="card-text mb-25">
-                    Type
-                  </p>
-                  <h6 class="mb-0">
-                    {{ formatType(p.contents['@type']) }}
-                  </h6>
-                </div>
-                <div class="gov">
-                  <p class="card-text mb-25">
-                    Start Date
-                  </p>
-                  <h6 class="mb-0">
-                    {{ formatDate(p.voting_start_time) }}
-                  </h6>
-                </div>
-                <div class="gov">
-                  <p class="card-text mb-25">
-                    End Date
-                  </p>
-                  <h6 class="mb-0">
-                    {{ formatDate(p.voting_end_time) }}
-                  </h6>
-                </div>
-                <div class="gov">
-                  <p class="card-text mb-25">
-                    Deposit
-                  </p>
-                  <h6 class="mb-0">
-                    {{ formatToken(p.total_deposit) || '-' }}
-                  </h6>
-                </div>
+              </router-link>
+            </b-card-title>
+            <div
+              class="overflow-auto"
+              :class="descId === `model-${i}`?'d-block': 'd-none'"
+            >
+              <object-field-component
+                :tablefield="p.contents"
+                :small="false"
+              />
+            </div>
+            <div class="gov-wrapper d-flex flex-wrap">
+              <div class="gov">
+                <p class="card-text mb-25">
+                  Type
+                </p>
+                <h6 class="mb-0">
+                  {{ formatType(p.contents['@type']) }}
+                </h6>
               </div>
-            </b-card-body>
+              <div class="gov">
+                <p class="card-text mb-25">
+                  Start Date
+                </p>
+                <h6 class="mb-0">
+                  {{ formatDate(p.voting_start_time) }}
+                </h6>
+              </div>
+              <div class="gov">
+                <p class="card-text mb-25">
+                  End Date
+                </p>
+                <h6 class="mb-0">
+                  {{ formatDate(p.voting_end_time) }}
+                </h6>
+              </div>
+              <div class="gov">
+                <p class="card-text mb-25">
+                  Deposit
+                </p>
+                <h6 class="mb-0">
+                  {{ formatToken(p.total_deposit) || '-' }}
+                </h6>
+              </div>
+            </div>
 
             <b-progress
               :max="100"
               height="2rem"
-              class="mb-2"
+              class="my-2"
               show-progress
             >
               <b-progress-bar
@@ -145,7 +150,7 @@
 <script>
 import {
   VBTooltip, BTabs, BTab, BRow, BCol, BCard, BCardFooter, BBadge,
-  BCardTitle, BCardBody, BProgress, BProgressBar, BTooltip, BAvatar,
+  BCardTitle, BProgress, BProgressBar, BTooltip, BAvatar,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import {
@@ -153,6 +158,7 @@ import {
 } from '@/libs/utils'
 import dayjs from 'dayjs'
 import WalletUpgradeEvents from './WalletUpgradeEvents.vue'
+import ObjectFieldComponent from './ObjectFieldComponent.vue'
 
 export default {
   components: {
@@ -164,12 +170,12 @@ export default {
     BCard,
     BCardFooter,
     BCardTitle,
-    BCardBody,
     BBadge,
     BProgress,
     BProgressBar,
     BTooltip,
     WalletUpgradeEvents,
+    ObjectFieldComponent,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -179,6 +185,7 @@ export default {
     return {
       islive: true,
       proposals: [],
+      descId: null,
       tally: {},
       // voters: [], // need to be query.
       votes: [], // votes of voters
@@ -201,6 +208,9 @@ export default {
     this.islive = false
   },
   methods: {
+    description(v) {
+      this.descId = v === this.descId ? null : v
+    },
     color(v) {
       switch (v) {
         case 'VOTE_OPTION_YES':
