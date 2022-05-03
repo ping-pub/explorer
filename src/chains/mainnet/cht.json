@@ -13,8 +13,8 @@
         "coingecko_id": "", 
         "logo": "/logos/chronic-token.jpg"
     },{
-        "base": "urun",
-        "symbol": "RUN",
+        "base": "ucgas",
+        "symbol": "CGAS",
         "exponent": "6",
         "coingecko_id": "", 
         "logo": "/logos/chronic-token.jpg"
