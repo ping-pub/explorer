@@ -193,23 +193,34 @@ function getHdPath(address) {
   return stringToPath(hdPath)
 }
 
+function getLedgerAppName(coinType) {
+  switch (coinType) {
+    case 60:
+      return 'Ethereum'
+    case 523:
+      return 'Secret'
+    case 852:
+      return 'Desmos'
+    case 118:
+    default:
+      return 'Cosmos'
+  }
+}
+
 export async function sign(device, chainId, signerAddress, messages, fee, memo, signerData) {
   let transport
   let signer
+  const hdpath = getHdPath(signerAddress)
+  const coinType = Number(hdpath[1])
+  const ledgerName = getLedgerAppName(coinType)
   switch (device) {
     case 'ledgerBle':
       transport = await TransportWebBLE.create()
-      signer = new LedgerSigner(transport, { hdPaths: [getHdPath(signerAddress)] })
+      signer = new LedgerSigner(transport, { hdPaths: [hdpath], ledgerAppName: ledgerName })
       break
     case 'ledgerUSB':
       transport = await TransportWebUSB.create()
-      signer = new LedgerSigner(transport, { hdPaths: [getHdPath(signerAddress)] })
-      break
-    case 'pingKMS':
-      if (!window.PingSigner) {
-        throw new Error('Please install Ping KMS extension')
-      }
-      signer = window.PingSigner
+      signer = new LedgerSigner(transport, { hdPaths: [hdpath], ledgerAppName: ledgerName })
       break
     case 'keplr':
     default:
@@ -235,7 +246,7 @@ export async function getLedgerAddress(transport = 'blu', hdPath = "m/44'/118/0'
   // extract Cointype from from HDPath
   const coinType = Number(stringToPath(hdPath)[1])
   // Check if Cointype is 529 for Secret Ledger App and use Cosmos Ledger App instead
-  const ledgerName = (coinType === 529) ? 'Secret' : 'Cosmos'
+  const ledgerName = getLedgerAppName(coinType)
 
   const signer = new LedgerSigner(trans, { hdPaths: [stringToPath(hdPath)], ledgerAppName: ledgerName })
   return signer.getAccounts()
