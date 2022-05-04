@@ -245,9 +245,7 @@ export async function getLedgerAddress(transport = 'blu', hdPath = "m/44'/118/0'
   const trans = transport === 'usb' ? await TransportWebUSB.create() : await TransportWebBLE.create()
   // extract Cointype from from HDPath
   const coinType = Number(stringToPath(hdPath)[1])
-  
   const ledgerName = getLedgerAppName(coinType)
-
   const signer = new LedgerSigner(trans, { hdPaths: [stringToPath(hdPath)], ledgerAppName: ledgerName })
   return signer.getAccounts()
 }
