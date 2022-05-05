@@ -1,6 +1,6 @@
 {
     "chain_name": "chronic-token",
-    "api": ["https://api-chronic.zenchainlabs.io/"],
+    "api": ["https://chtd-api.skynetvalidators.com"],
     "rpc": ["https://rpc-chronic.zenchainlabs.io/"],
     "snapshot_provider": "",
     "sdk_version": "0.41.3",
