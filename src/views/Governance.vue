@@ -8,9 +8,7 @@
         md="12"
       >
         <b-card>
-          <b-card-title
-            class="mb-0"
-          >
+          <b-card-title class="mb-0">
             #{{ p.id }}.
             <b-badge
               v-if="p.status == 1"
@@ -48,43 +46,42 @@
               :to="`./gov/${p.id}`"
             >
               {{ p.title }}
-            </router-link></b-card-title>
-          <b-card-body md="12">
-            <div class="gov-wrapper flex-wrap">
-              <div class="gov">
-                <p class="card-text mb-25">
-                  Type
-                </p>
-                <h6 class="mb-0">
-                  {{ formatType(p.contents['@type']) }}
-                </h6>
-              </div>
-              <div class="gov">
-                <p class="card-text mb-25">
-                  Start Date
-                </p>
-                <h6 class="mb-0">
-                  {{ formatDate(p.voting_start_time) }}
-                </h6>
-              </div>
-              <div class="gov">
-                <p class="card-text mb-25">
-                  End Date
-                </p>
-                <h6 class="mb-0">
-                  {{ formatDate(p.voting_end_time) }}
-                </h6>
-              </div>
-              <div class="gov">
-                <p class="card-text mb-25">
-                  Deposit
-                </p>
-                <h6 class="mb-0">
-                  {{ formatToken(p.total_deposit) || '-' }}
-                </h6>
-              </div>
+            </router-link>
+          </b-card-title>
+          <div class="gov-wrapper flex-wrap my-1">
+            <div class="gov">
+              <p class="card-text mb-25">
+                Type
+              </p>
+              <h6 class="mb-0">
+                {{ formatType(p.contents['@type']) }}
+              </h6>
             </div>
-          </b-card-body>
+            <div class="gov">
+              <p class="card-text mb-25">
+                Start Date
+              </p>
+              <h6 class="mb-0">
+                {{ formatDate(p.voting_start_time) }}
+              </h6>
+            </div>
+            <div class="gov">
+              <p class="card-text mb-25">
+                End Date
+              </p>
+              <h6 class="mb-0">
+                {{ formatDate(p.voting_end_time) }}
+              </h6>
+            </div>
+            <div class="gov">
+              <p class="card-text mb-25">
+                Deposit
+              </p>
+              <h6 class="mb-0">
+                {{ formatToken(p.total_deposit) || '-' }}
+              </h6>
+            </div>
+          </div>
 
           <b-progress
             :max="100"
@@ -199,7 +196,7 @@
 
 <script>
 import {
-  BCard, BCardTitle, BCardBody, BCardFooter, BButton, BProgressBar, BProgress, BBadge, BTooltip, BRow, BCol, VBModal,
+  BCard, BCardTitle, BCardFooter, BButton, BProgressBar, BProgress, BBadge, BTooltip, BRow, BCol, VBModal,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import { percent, tokenFormatter } from '@/libs/utils'
@@ -216,7 +213,6 @@ export default {
     BBadge,
     BCardTitle,
     BTooltip,
-    BCardBody,
     BRow,
     BCol,
     OperationModal,
