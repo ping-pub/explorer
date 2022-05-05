@@ -35,10 +35,8 @@
 import {
   BLink, BNavbarNav,
 } from 'bootstrap-vue'
-import Bookmarks from './components/Bookmarks.vue'
 import SearchBar from './components/SearchBar.vue'
 import DarkToggler from './components/DarkToggler.vue'
-import NotificationDropdown from './components/NotificationDropdown.vue'
 
 export default {
   components: {
@@ -46,10 +44,8 @@ export default {
 
     // Navbar Components
     BNavbarNav,
-    Bookmarks,
     SearchBar,
     DarkToggler,
-    NotificationDropdown,
   },
   props: {
     toggleVerticalMenuActive: {
