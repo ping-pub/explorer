@@ -260,18 +260,9 @@ export default {
     updateTally(res) {
       const voting = res.filter(i => i.status === 2)
       if (voting.length > 0) {
-        let i = 0
-        Promise.all(voting.reverse().map(p => this.$http.getGovernanceTally(p.id, 0))).then(update => {
-          this.proposals.map(x => {
-            if (x.status === 2) {
-              const xh = x
-              xh.tally = update[i]
-              i += 1
-              return xh
-            }
-            return x
-          })
-        })
+        voting.forEach(p => this.$http.getGovernanceTally(p.id, 0).then(update => {
+          this.$set(p, 'tally', update)
+        }))
       }
     },
   },
