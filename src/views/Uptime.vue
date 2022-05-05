@@ -51,9 +51,7 @@
               @change="pinValidator(`${chain}#${x.address}`)"
             ><span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
             </b-form-checkbox>
-            <span
-              v-if="missing[x.address]"
-            >
+            <span v-if="missing[x.address]">
               <b-badge
                 v-if="missing[x.address].missed_blocks_counter > 0"
                 v-b-tooltip.hover.v-danger
