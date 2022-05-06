@@ -1,6 +1,6 @@
 {
     "chain_name": "stargaze",
-    "api": ["https://rest.stargaze-apis.com", "https://rest.stargaze.publicawesome.dev", "https://stargaze.c29r3.xyz:443/api"],
+    "api": ["https://rest.stargaze-apis.com", "https://rest.stargaze.publicawesome.dev"],
     "rpc": ["https://rpc.stargaze-apis.com:443", "https://rpc.stargaze.ezstaking.io:443"],
     "snapshot_provider": "",
     "sdk_version": "0.44.3",
