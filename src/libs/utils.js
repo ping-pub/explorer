@@ -1,5 +1,5 @@
 import {
-  Bech32, fromBase64, fromHex, toHex,
+  Bech32, fromBase64, fromBech32, fromHex, toHex,
 } from '@cosmjs/encoding'
 import { sha256, stringToPath } from '@cosmjs/crypto'
 // ledger
@@ -169,10 +169,14 @@ export function consensusPubkeyToHexAddress(consensusPubkey) {
     }
     raw = sha256(fromBase64(consensusPubkey.value))
   } else {
-    raw = sha256(fromHex(toHex(Bech32.decode(consensusPubkey).data).toUpperCase().replace('1624DE6420', '')))
+    raw = sha256(fromHex(toHex(fromBech32(consensusPubkey).data).toUpperCase().replace('1624DE6420', '')))
   }
   const address = toHex(raw).slice(0, 40).toUpperCase()
   return address
+}
+
+export function toETHAddress(cosmosAddress) {
+  return `0x${toHex(fromBech32(cosmosAddress).data)}`
 }
 
 function toSignAddress(addr) {

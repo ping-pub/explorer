@@ -30,6 +30,7 @@
               />
             </h3>
             {{ address }}
+            <span v-if="isEthAddr"> - {{ ethaddress() }}</span>
           </div>
         </div>
       </b-card>
@@ -426,7 +427,7 @@ import VueQr from 'vue-qr'
 import chainAPI from '@/libs/fetch'
 import {
   formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay,
-  toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign, numberWithCommas,
+  toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign, numberWithCommas, toETHAddress,
 } from '@/libs/utils'
 import OperationModal from '@/views/components/OperationModal/index.vue'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
@@ -627,6 +628,9 @@ export default {
     denoms() {
       return this.$store.state.chains.denoms
     },
+    isEthAddr() {
+      return JSON.stringify(this.account).indexOf('PubKeyEthSecp256k1') > 0
+    },
   },
   created() {
     this.$http.getAuthAccount(this.address).then(acc => {
@@ -729,6 +733,9 @@ export default {
           },
         })
       })
+    },
+    ethaddress() {
+      return toETHAddress(this.address)
     },
   },
 }
