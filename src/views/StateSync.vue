@@ -76,7 +76,17 @@ export default {
     const { rpc, snapshot_provider } = this.$store.state.chains.selected
     let servers = ''
     if (rpc && Array.isArray(rpc)) {
-      servers = rpc.join(',')
+      let serv = rpc
+      if (serv.length === 1) {
+        serv = serv.concat(serv)
+      }
+      servers = serv.map(x => {
+        const url = new URL(x)
+        if (url.port === '') {
+          return `${url.protocol}//${url.hostname}:${url.protocol.startsWith('https') ? '443' : '80'}`
+        }
+        return `${url.protocol}//${url.hostname}:${url.port}`
+      }).join(',')
     }
     // eslint-disable-next-line camelcase
     const peers = snapshot_provider
