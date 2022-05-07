@@ -1,6 +1,6 @@
 {
   "chain_name": "cerberus",
-  "coingecko": "",
+  "coingecko": "cerberus-2",
   "api": ["https://api.test.cerberus.zone:1317"],
   "sdk_version": "0.44.5",
   "coin_type": "118",
@@ -12,7 +12,7 @@
       "base": "ucrbrus",
       "symbol": "CRBRUS",
       "exponent": "6",
-      "coingecko_id": "",
+      "coingecko_id": "cerberus-2",
       "logo": "https://cerberus-chain.s3.us-east-2.amazonaws.com/main/logo.png"
     }
   ]
