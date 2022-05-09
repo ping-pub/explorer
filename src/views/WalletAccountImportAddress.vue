@@ -286,7 +286,7 @@
 
     <b-alert
       variant="secondary"
-      :show="true"
+      :show="!accounts"
     >
       <h4 class="alert-heading">
         Enable Keplr For {{ chainId }}
@@ -389,6 +389,13 @@ export default {
   computed: {
     chains() {
       const config = JSON.parse(localStorage.getItem('chains'))
+
+      Object.values(config).forEach(x => {
+        if (x.coin_type === '60') {
+          this.exludes.push(x.chain_name)
+        }
+      })
+
       this.exludes.forEach(x => {
         delete config[x]
       })
