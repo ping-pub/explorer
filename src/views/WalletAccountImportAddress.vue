@@ -391,7 +391,7 @@ export default {
       const config = JSON.parse(localStorage.getItem('chains'))
 
       Object.values(config).forEach(x => {
-        if (x.coin_type === '60') {
+        if (x.coin_type === '60' && x.chain_name !== 'gravity-bridge') {
           this.exludes.push(x.chain_name)
         }
       })
