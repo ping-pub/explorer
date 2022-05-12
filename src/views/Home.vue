@@ -1,22 +1,6 @@
 <template>
   <div class="text-center container-lg">
-    <b-nav
-      align="right"
-      style="width:100%"
-      class="nav text-right text-nowrap ml-auto"
-    >
-      <b-nav-item><dark-toggler /></b-nav-item>
-      <b-nav-item><locale /></b-nav-item>
-      <b-button
-        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-        variant="primary"
-        class="btn-icon mt-25"
-        :to="{ name: 'accounts' }"
-      >
-        <feather-icon icon="KeyIcon" />
-        <span class="align-middle ml-25">Wallet</span>
-      </b-button>
-    </b-nav>
+    <full-header />
     <b-link>
       <div class="d-flex justify-content-center align-items-center">
         <vuexy-logo />
@@ -135,16 +119,14 @@
 <script>
 /* eslint-disable global-require */
 import {
-  BLink, BAvatar, BRow, BCol, BCard, BCardText, BCardTitle, BNav, BNavItem, BButton,
-  BDropdown, BDropdownItem,
+  BLink, BAvatar, BRow, BCol, BCard, BCardText, BCardTitle, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import store from '@/store/index'
 import { timeIn, toDay } from '@/libs/utils'
-import DarkToggler from '@/@core/layouts/components/app-navbar/components/DarkToggler.vue'
-import Locale from '@/@core/layouts/components/app-navbar/components/Locale.vue'
 import AppFooter from '@/@core/layouts/components/AppFooter.vue'
+import FullHeader from './components/FullHeader.vue'
 
 export default {
   components: {
@@ -157,14 +139,9 @@ export default {
     BCardTitle,
     BDropdown,
     BDropdownItem,
-    BNav,
-    BNavItem,
-    BButton,
-
     VuexyLogo,
-    DarkToggler,
-    Locale,
     AppFooter,
+    FullHeader,
   },
   directives: {
     Ripple,
