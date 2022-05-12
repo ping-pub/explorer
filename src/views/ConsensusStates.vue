@@ -6,8 +6,11 @@
     </b-card>
 
     <b-card>
-      <b-input-group>
-        <b-input-group-prepend>
+      <b-row>
+        <b-col
+          sm="12"
+          md="4"
+        >
           <v-select
             v-model="selected"
             :options="Object.values(chains)"
@@ -24,23 +27,27 @@
                 variant="light-primary"
                 class="align-middle mr-50"
               />
-              <span> {{ chain_name }}</span>
+              <span> {{ chain_name.toUpperCase() }}</span>
             </template>
           </v-select>
-        </b-input-group-prepend>
-        <b-form-input
-          v-model="rpc"
-          placeholder="Button on both side"
-        />
-        <b-input-group-append>
-          <b-button
-            variant="outline-primary"
-            @click="update()"
-          >
-            Moniter
-          </b-button>
-        </b-input-group-append>
-      </b-input-group>
+        </b-col>
+        <b-col>
+          <b-input-group>
+            <b-form-input
+              v-model="rpc"
+              placeholder="Button on both side"
+            />
+            <b-input-group-append>
+              <b-button
+                variant="outline-primary"
+                @click="update()"
+              >
+                Moniter
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
+        </b-col>
+      </b-row>
       <div
         v-if="httpstatus !== 200"
         class="text-danger"
@@ -69,38 +76,62 @@
           </b-button>
         </b-card-body>
       </div>
+      <b-card-footer>
+        <b-button
+          variant="primary"
+          size="sm"
+        />  Proposer Signed
+        <b-button
+          variant="outline-primary"
+          size="sm"
+        />  Proposer Not Signed
+        <b-button
+          variant="success"
+          size="sm"
+        /> Signed
+        <b-button
+          variant="outline-secondary"
+          size="sm"
+        /> Not Signed
+      </b-card-footer>
+
     </b-card>
+    <app-footer class="mb-1" />
   </div>
 </template>
 
 <script>
 import {
-  BAvatar,
-  BBreadcrumb, BCard, BCardBody, BInputGroup, BFormInput, BInputGroupAppend, BInputGroupPrepend, BButton,
+  BAvatar, BCardFooter, BRow, BCol,
+  BBreadcrumb, BCard, BCardBody, BInputGroup, BFormInput, BInputGroupAppend, BButton,
 } from 'bootstrap-vue'
 import fetch from 'node-fetch'
 import { consensusPubkeyToHexAddress, getLocalChains } from '@/libs/utils'
 import vSelect from 'vue-select'
+import AppFooter from '@/@core/layouts/components/AppFooter.vue'
 import FullHeader from './components/FullHeader.vue'
 
 export default {
   components: {
     FullHeader,
     BBreadcrumb,
+    BRow,
+    BCol,
     BCard,
     BCardBody,
+    BCardFooter,
     BInputGroup,
     BFormInput,
     BInputGroupAppend,
-    BInputGroupPrepend,
     BButton,
     BAvatar,
     vSelect,
+    AppFooter,
   },
 
   data() {
     const chains = getLocalChains()
-    const selected = 'cosmos'
+    const selected = 'agoric'
     return {
       navs: [
         {
@@ -111,7 +142,7 @@ export default {
         },
       ],
       showPrevote: false,
-      rpc: chains[selected].rpc[0],
+      rpc: `${chains[selected].rpc[0]}/consensus_state`,
       httpstatus: 200,
       httpStatusText: '',
       roundState: {},
@@ -138,6 +169,9 @@ export default {
         return data.json()
       }).then(res => {
         this.roundState = res.result.round_state
+      }).catch(err => {
+        this.httpstatus = 500
+        this.httpStatusText = err
       })
     },
     validators() {
@@ -151,6 +185,8 @@ export default {
       })
     },
     onchange(v) {
+      this.httpstatus = 200
+      this.httpStatusText = ''
       this.roundState = {}
       this.selected = v.chain_name
       this.rpc = `${v.rpc[0]}/consensus_state`
@@ -162,6 +198,9 @@ export default {
             this.positions = this.positions.concat(res.result.validators)
           })
         }
+      }).catch(err => {
+        this.httpstatus = 500
+        this.httpStatusText = err
       })
       this.validators()
     },
