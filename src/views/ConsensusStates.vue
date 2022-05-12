@@ -64,7 +64,7 @@
         :key="item.round"
       >
         Round: {{ item.round }} {{ item.precommits_bit_array }}
-        <b-card-body nobody>
+        <b-card-body class="px-0">
           <b-button
             v-for="(pre, i) in item.precommits"
             :key="i"
