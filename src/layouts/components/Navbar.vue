@@ -110,6 +110,7 @@
           v-for="(item,k) in accounts"
           :key="k"
           :disabled="!item.address"
+          :to="`/${selected_chain.chain_name}/account/${item.address.addr}`"
           @click="updateDefaultWallet(item.wallet)"
         >
           <div class="d-flex flex-column">
