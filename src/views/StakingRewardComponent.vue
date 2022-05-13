@@ -139,6 +139,10 @@ export default {
   methods: {
     formatNumber(value) {
       if (value < 1) return value
+      if (value.indexOf('.') > 0) {
+      // eslint-disable-next-line no-undef
+        return numberWithCommas(BigInt(value.substring(0, value.indexOf('.'))))
+      }
       // eslint-disable-next-line no-undef
       return numberWithCommas(BigInt(Number(value).toFixed(0)))
     },
