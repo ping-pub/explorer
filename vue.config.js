@@ -58,6 +58,14 @@ module.exports = {
         }
         return options
       })
+    config.module
+      .rule('ts')
+      .test(/\.tsx?$/)
+      .use('ts-loader')
+      .loader('ts-loader')
+      .options({
+        appendTsSuffixTo: [/\.vue$/],
+      })
   },
   transpileDependencies: ['vue-echarts', 'resize-detector'],
   devServer: {
