@@ -52,11 +52,6 @@
     </p>
 
     <div class="status">
-      <!-- <b-progress
-        :value="100"
-        :variant="progressColor"
-        :animated="isLoading"
-      /> -->
       <b-progress :animated="isLoading">
         <b-progress-bar
           variant="success"
@@ -65,10 +60,6 @@
         <b-progress-bar
           variant="danger"
           :value="progresBar[1]"
-        />
-        <b-progress-bar
-          variant="info"
-          :value="progresBar[2]"
         />
       </b-progress>
       <div class="status-text">
