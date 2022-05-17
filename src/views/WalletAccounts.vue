@@ -543,7 +543,7 @@ export default {
       if (price > 0) {
         return `+${parseFloat(price.toFixed(2))}%`
       }
-      return price === 0 ? '' : `${parseFloat(price.toFixed(2))}%`
+      return ''
     },
     formatPrice(denom) {
       const d2 = this.formatDenom(denom)
