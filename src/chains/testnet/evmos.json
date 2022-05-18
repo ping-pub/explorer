@@ -1,8 +1,8 @@
 {
     "chain_name": "evmos",
     "coingecko": "",
-    "api": ["https://rest.bd.evmos.org:1317", "https://evmos-api.skynetvalidators.com"],
-    "rpc": ["https://tendermint.bd.evmos.org:26657", "https://tendermint.bd.evmos.org:26657"],
+    "api": ["https://rest.bd.evmos.dev:1317"],
+    "rpc": ["https://tendermint.bd.evmos.dev:26657"],
     "snapshot_provider": "",
     "sdk_version": "0.45.1",
     "coin_type": "60",
@@ -10,8 +10,8 @@
     "addr_prefix": "evmos",
     "logo": "/logos/evmos.jpeg",
     "assets": [{
-        "base": "aevmos",
-        "symbol": "evmos",
+        "base": "atevmos",
+        "symbol": "TEVMOS",
         "exponent": "18",
         "coingecko_id": "", 
         "logo": "/logos/evmos.jpeg"

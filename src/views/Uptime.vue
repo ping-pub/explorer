@@ -34,77 +34,67 @@
           />
         </b-input-group>
       </b-card>
-      <b-skeleton-wrapper :loading="loading">
-        <template #loading>
-          <b-row>
-            <b-col
-              v-for="index in 60"
-              :key="index"
-              sm="12"
-              md="4"
-              xl="3"
-            >
-              <b-skeleton width="100%" />
-            </b-col>
-          </b-row>
-        </template>
-        <b-row>
-          <b-col
-            v-for="(x,index) in uptime"
-            :key="index"
-            sm="12"
-            md="4"
-            xl="3"
-            class="text-truncate"
-          >
-            <div class="d-flex justify-content-between">
-              <b-form-checkbox
-                v-model="pinned"
-                :value="`${chain}#${x.address}`"
-                class="custom-control-warning text-truncate"
-                @change="pinValidator(`${chain}#${x.address}`)"
-              ><span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
-              </b-form-checkbox>
-              <span
-                v-if="missing[x.address]"
+      <b-row>
+        <b-col
+          v-for="(x,index) in uptime"
+          :key="index"
+          sm="12"
+          md="4"
+          xl="3"
+          class="text-truncate"
+        >
+          <div class="d-flex justify-content-between">
+            <b-form-checkbox
+              v-model="pinned"
+              :value="`${chain}#${x.address}`"
+              class="custom-control-warning text-truncate"
+              @change="pinValidator(`${chain}#${x.address}`)"
+            ><span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
+            </b-form-checkbox>
+            <span v-if="missing[x.address]">
+              <b-badge
+                v-if="missing[x.address].missed_blocks_counter > 0"
+                v-b-tooltip.hover.v-danger
+                variant="light-danger"
+                :title="`${missing[x.address].missed_blocks_counter} missed blocks`"
+                class="text-danger text-bolder"
               >
-                <b-badge
-                  v-if="missing[x.address].missed_blocks_counter > 0"
-                  v-b-tooltip.hover.v-danger
-                  variant="light-danger"
-                  :title="`${missing[x.address].missed_blocks_counter} missed blocks`"
-                  class="text-danger text-bolder"
-                >
-                  {{ missing[x.address].missed_blocks_counter }}
-                </b-badge>
-                <b-badge
-                  v-else
-                  v-b-tooltip.hover.v-success
-                  variant="light-success"
-                  title="Perfect! No missed blocks"
-                >
-                  0
-                </b-badge>
-              </span>
-            </div>
-            <div class="d-flex justify-content-between align-self-stretch flex-wrap">
-              <div
-                v-for="(b,i) in blocks"
-                :key="i"
-                style="width:1.5%;"
-              ><router-link :to="`./blocks/${b.height}`">
+                {{ missing[x.address].missed_blocks_counter }}
+              </b-badge>
+              <b-badge
+                v-else
+                v-b-tooltip.hover.v-success
+                variant="light-success"
+                title="Perfect! No missed blocks"
+              >
+                0
+              </b-badge>
+            </span>
+          </div>
+          <b-skeleton-wrapper :loading="loading">
+            <template #loading>
+              <b-skeleton width="100%" />
+            </template>
+            <template #default>
+              <div class="d-flex justify-content-between align-self-stretch flex-wrap">
                 <div
-                  v-b-tooltip.hover.v-second
-                  :title="b.height"
-                  :class="b.sigs && b.sigs[x.address] ? b.sigs[x.address] : 'bg-light-success'"
-                  class="m-auto"
-                >&nbsp;</div>
-              </router-link>
+                  v-for="(b,i) in blocks"
+                  :key="i"
+                  style="width:1.5%;"
+                ><router-link :to="`./blocks/${b.height}`">
+                  <div
+                    v-b-tooltip.hover.v-second
+                    :title="b.height"
+                    :class="b.sigs && b.sigs[x.address] ? b.sigs[x.address] : 'bg-light-success'"
+                    class="m-auto"
+                  >&nbsp;</div>
+                </router-link>
+                </div>
               </div>
-            </div>
-          </b-col>
-        </b-row>
-      </b-skeleton-wrapper>
+            </template>
+          </b-skeleton-wrapper>
+        </b-col>
+      </b-row>
     </b-card>
   </div>
 </template>

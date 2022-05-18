@@ -14,5 +14,11 @@
         "exponent": "6",
         "coingecko_id": "", 
         "logo": "/logos/cre.png"
+    },{
+        "base": "ubcre",
+        "symbol": "bCRE",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "/logos/cre.png"
     }]
 }

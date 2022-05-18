@@ -86,7 +86,7 @@
             </b-tr>
           </tbody>
         </b-table-simple>
-        <div style="white-space: pre-line">
+        <div>
           <object-field-component
             :tablefield="proposal.contents"
             :small="false"
@@ -101,7 +101,7 @@
         </b-table-simple>
       </b-card-body>
       <b-card-footer>
-        <router-link :to="`../gov`">
+        <router-link :to="from">
           <b-button
             variant="outline-primary"
           >
@@ -204,7 +204,10 @@
         </div>
       </b-card-body>
     </b-card>
-    <b-card no-body>
+    <b-card
+      v-if="proposal.total_deposit"
+      no-body
+    >
       <b-card-header>
         <b-card-title>
           Deposits ({{ formatToken(proposal.total_deposit) }})
@@ -212,8 +215,9 @@
       </b-card-header>
       <b-card-body>
         <b-table
+          v-if="Array.isArray(deposits.deposits || deposits)"
           stacked="sm"
-          :items="deposits.deposits?deposits.deposits:deposits"
+          :items="deposits.deposits || deposits"
           :fields="deposit_fields"
           striped
         >
@@ -225,7 +229,7 @@
         </b-table>
       </b-card-body>
       <b-card-footer>
-        <router-link :to="`../gov`">
+        <router-link :to="from">
           <b-button
             variant="outline-primary"
           >
@@ -307,6 +311,7 @@ export default {
       deposits: [],
       votes: [],
       operationModalType: '',
+      from: '../gov',
       votes_fields: [
         {
           key: 'voter',
@@ -366,6 +371,9 @@ export default {
   },
   created() {
     const pid = this.$route.params.proposalid
+    if (this.$route.query.from) {
+      this.from = this.$route.query.from
+    }
 
     this.$http.getLatestBlock().then(res => {
       this.latest = res
@@ -387,7 +395,7 @@ export default {
     })
     this.$http.getGovernanceDeposits(pid).then(res => {
       this.deposits = res
-    })
+    }).catch(() => {})
     this.$http.getGovernanceVotes(pid).then(res => {
       this.votes = res
       this.next = res.pagination ? res.pagination.next_key : null

@@ -1,7 +1,7 @@
 <template>
   <b-table
-    v-if="Array.isArray(tablefield)"
-    :items="tablefield"
+    v-if="Array.isArray(items)"
+    :items="items"
     :sticky-header="true"
     :no-border-collapse="true"
     responsive="md"
@@ -38,6 +38,14 @@ export default {
     tablefield: {
       type: [Array, Object],
       default: () => [],
+    },
+  },
+  computed: {
+    items() {
+      if (this.tablefield.length > 0 && typeof (this.tablefield[0]) === 'string') {
+        return this.tablefield.map(x => ({ array: x }))
+      }
+      return this.tablefield
     },
   },
   methods: {

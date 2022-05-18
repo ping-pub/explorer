@@ -183,7 +183,7 @@ import {
 import vSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
-import WalletInputVue from '../WalletInput.vue'
+import WalletInputVue from './WalletInput.vue'
 import Delegate from './components/Delegate.vue'
 import Redelegate from './components/Redelegate.vue'
 import Withdraw from './components/Withdraw.vue'

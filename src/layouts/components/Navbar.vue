@@ -110,6 +110,7 @@
           v-for="(item,k) in accounts"
           :key="k"
           :disabled="!item.address"
+          :to="`/${selected_chain.chain_name}/account/${item.address.addr}`"
           @click="updateDefaultWallet(item.wallet)"
         >
           <div class="d-flex flex-column">
@@ -125,6 +126,7 @@
             <small>{{ item.address ? formatAddr(item.address.addr) : `Not available on ${selected_chain.chain_name}` }}</small>
           </div>
         </b-dropdown-item>
+        <b-dropdown-divider />
         <b-dropdown-item to="/wallet/import">
           <feather-icon
             icon="PlusIcon"
@@ -157,6 +159,15 @@
           />
           <span class="align-middle ml-50">My Validators</span>
         </b-dropdown-item>
+
+        <b-dropdown-item :to="`/wallet/votes`">
+          <feather-icon
+            icon="PocketIcon"
+            size="16"
+          />
+          <span class="align-middle ml-50">My Votes</span>
+        </b-dropdown-item>
+
         <b-dropdown-item :to="`/wallet/transactions`">
           <feather-icon
             icon="LayersIcon"

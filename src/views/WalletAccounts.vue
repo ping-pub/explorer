@@ -527,14 +527,14 @@ export default {
     getPrice(denom) {
       const d2 = this.formatDenom(denom)
       const quote = this.$store.state.chains.quotes[d2]
-      return quote ? quote[this.currency2] : 0
+      return quote ? quote[this.currency2] || 0 : 0
     },
     getChanges(denom) {
       const d2 = this.formatDenom(denom)
       const quote = this.$store.state.chains.quotes[d2]
       if (quote) {
         const price = quote[`${this.currency2}_24h_change`]
-        return price
+        return price || 0
       }
       return 0
     },
@@ -543,7 +543,7 @@ export default {
       if (price > 0) {
         return `+${parseFloat(price.toFixed(2))}%`
       }
-      return price === 0 ? '' : `${parseFloat(price.toFixed(2))}%`
+      return '0'
     },
     formatPrice(denom) {
       const d2 = this.formatDenom(denom)

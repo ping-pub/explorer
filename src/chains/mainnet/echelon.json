@@ -1,6 +1,6 @@
 {
     "chain_name": "echelon",
-    "coingecko": "",
+    "coingecko": "echelon",
     "api": "https://api.ech.network",
     "rpc": ["https://tendermint.ech.network"],
     "snapshot_provider": "",
@@ -13,7 +13,7 @@
         "base": "aechelon",
         "symbol": "ECH",
         "exponent": "18",
-        "coingecko_id": "", 
+        "coingecko_id": "echelon", 
         "logo": "/logos/echelon.gif"
     }]
 }

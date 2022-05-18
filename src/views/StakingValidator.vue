@@ -337,10 +337,10 @@ export default {
   computed: {
     txs() {
       if (this.transactions.txs) {
-        return this.transactions.txs.map(x => ({
+        return this.transactions.tx_responses.map(x => ({
           height: Number(x.height),
           txhash: x.txhash,
-          msgs: abbrMessage(x.tx.value ? x.tx.value.msg : x.tx.msg),
+          msgs: abbrMessage(x.tx.body.messages),
           time: toDay(x.timestamp),
         }))
       }

@@ -101,6 +101,22 @@ const router = new VueRouter({
         ],
       },
     },
+    {
+      path: '/wallet/votes',
+      name: 'myVotes',
+      component: () => import('@/views/WalletVotes.vue'),
+      meta: {
+        pageTitle: 'My Votes',
+        breadcrumb: [
+          {
+            text: 'Wallet',
+          },
+          {
+            text: 'My Votes',
+          },
+        ],
+      },
+    },
     // chain modules
     {
       path: '/:chain/',
@@ -331,6 +347,14 @@ const router = new VueRouter({
       },
     },
     // common modules
+    {
+      path: '/tools/consensus-states',
+      name: 'consensus',
+      component: () => import('@/views/ConsensusStates.vue'),
+      meta: {
+        layout: 'full',
+      },
+    },
     {
       path: '/error/error-404',
       name: 'error-404',

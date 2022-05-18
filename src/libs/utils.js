@@ -1,5 +1,5 @@
 import {
-  Bech32, fromBase64, fromHex, toHex,
+  Bech32, fromBase64, fromBech32, fromHex, toHex,
 } from '@cosmjs/encoding'
 import { sha256, stringToPath } from '@cosmjs/crypto'
 // ledger
@@ -169,10 +169,14 @@ export function consensusPubkeyToHexAddress(consensusPubkey) {
     }
     raw = sha256(fromBase64(consensusPubkey.value))
   } else {
-    raw = sha256(fromHex(toHex(Bech32.decode(consensusPubkey).data).toUpperCase().replace('1624DE6420', '')))
+    raw = sha256(fromHex(toHex(fromBech32(consensusPubkey).data).toUpperCase().replace('1624DE6420', '')))
   }
   const address = toHex(raw).slice(0, 40).toUpperCase()
   return address
+}
+
+export function toETHAddress(cosmosAddress) {
+  return `0x${toHex(fromBech32(cosmosAddress).data)}`
 }
 
 function toSignAddress(addr) {
@@ -193,23 +197,34 @@ function getHdPath(address) {
   return stringToPath(hdPath)
 }
 
+function getLedgerAppName(coinType) {
+  switch (coinType) {
+    case 60:
+      return 'Ethereum'
+    case 529:
+      return 'Secret'
+    case 852:
+      return 'Desmos'
+    case 118:
+    default:
+      return 'Cosmos'
+  }
+}
+
 export async function sign(device, chainId, signerAddress, messages, fee, memo, signerData) {
   let transport
   let signer
+  const hdpath = getHdPath(signerAddress)
+  const coinType = Number(hdpath[1])
+  const ledgerName = getLedgerAppName(coinType)
   switch (device) {
     case 'ledgerBle':
       transport = await TransportWebBLE.create()
-      signer = new LedgerSigner(transport, { hdPaths: [getHdPath(signerAddress)] })
+      signer = new LedgerSigner(transport, { hdPaths: [hdpath], ledgerAppName: ledgerName })
       break
     case 'ledgerUSB':
       transport = await TransportWebUSB.create()
-      signer = new LedgerSigner(transport, { hdPaths: [getHdPath(signerAddress)] })
-      break
-    case 'pingKMS':
-      if (!window.PingSigner) {
-        throw new Error('Please install Ping KMS extension')
-      }
-      signer = window.PingSigner
+      signer = new LedgerSigner(transport, { hdPaths: [hdpath], ledgerAppName: ledgerName })
       break
     case 'keplr':
     default:
@@ -232,7 +247,10 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
 
 export async function getLedgerAddress(transport = 'blu', hdPath = "m/44'/118/0'/0/0") {
   const trans = transport === 'usb' ? await TransportWebUSB.create() : await TransportWebBLE.create()
-  const signer = new LedgerSigner(trans, { hdPaths: [stringToPath(hdPath)] })
+  // extract Cointype from from HDPath
+  const coinType = Number(stringToPath(hdPath)[1])
+  const ledgerName = getLedgerAppName(coinType)
+  const signer = new LedgerSigner(trans, { hdPaths: [stringToPath(hdPath)], ledgerAppName: ledgerName })
   return signer.getAccounts()
 }
 
@@ -300,6 +318,9 @@ export function abbrMessage(msg) {
     })
     return output.join(', ')
   }
+  if (msg['@type']) {
+    return msg['@type'].substring(msg['@type'].lastIndexOf('.') + 1).replace('Msg', '')
+  }
   if (msg.typeUrl) {
     return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1).replace('Msg', '')
   }
@@ -322,6 +343,8 @@ export function isToken(value) {
   let is = false
   if (Array.isArray(value)) {
     is = value.findIndex(x => Object.keys(x).includes('denom')) > -1
+  } else {
+    is = Object.keys(value).includes('denom')
   }
   return is
 }

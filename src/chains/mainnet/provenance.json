@@ -6,7 +6,7 @@
     "snapshot_provider": "",
     "sdk_version": "0.44.3",
     "coin_type": "505",
-    "min_tx_fee": "400000000",
+    "min_tx_fee": "800000000",
     "addr_prefix": "pb",
     "logo": "/logos/provenance.svg",
     "assets": [{

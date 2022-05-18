@@ -41,17 +41,6 @@
         class="my-1"
         @change="check()"
       />
-      <b class="mt-1">3. (Optional) Add Snapshot Providers </b><br>
-      To reduce the time of snapshot discovering, we can add providers into persistent_peers in <code>$DAEMON_HOME/config/config.toml</code>.
-      <b-form-textarea
-        id="provider"
-        v-model="providers"
-        readonly
-        :state="snapshot_provider?true:false"
-        placeholder="Loading..."
-        rows="3"
-        class="mt-1"
-      />
     </b-card>
 
     <b-card>
@@ -87,7 +76,17 @@ export default {
     const { rpc, snapshot_provider } = this.$store.state.chains.selected
     let servers = ''
     if (rpc && Array.isArray(rpc)) {
-      servers = rpc.join(',')
+      let serv = rpc
+      if (serv.length === 1) {
+        serv = serv.concat(serv)
+      }
+      servers = serv.map(x => {
+        const url = new URL(x)
+        if (url.port === '') {
+          return `${url.protocol}//${url.hostname}:${url.protocol.startsWith('https') ? '443' : '80'}`
+        }
+        return `${url.protocol}//${url.hostname}:${url.port}`
+      }).join(',')
     }
     // eslint-disable-next-line camelcase
     const peers = snapshot_provider
@@ -117,8 +116,8 @@ snapshot-keep-recent = 2`,
     const interval = 1000
     this.$http.getLatestBlock().then(l => {
       const { height } = l.block.header
-      if (height > interval) {
-        this.$http.getBlockByHeight(Math.trunc(height / interval) * interval).then(x => {
+      if (height > interval * 3) {
+        this.$http.getBlockByHeight(Math.trunc((height - 3 * interval) / interval) * interval).then(x => {
           this.hash = x.block_id.hash
           this.height = x.block.header.height
           this.state = `[statesync]

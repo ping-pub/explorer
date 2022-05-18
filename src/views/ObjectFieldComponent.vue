@@ -63,7 +63,10 @@
           </b-tabs>
         </b-td>
         <b-td v-else>
-          {{ addNewLine(value) }}
+          <VueMarkdown v-if="name==='description'">
+            {{ addNewLine(value) }}
+          </VueMarkdown>
+          <span v-else>{{ value }}</span>
         </b-td>
       </b-tr>
     </b-tbody>
@@ -77,6 +80,7 @@ import {
 import {
   abbr, getStakingValidatorByHex, isHexAddress, isStringArray, isToken, percent, tokenFormatter,
 } from '@/libs/utils'
+import VueMarkdown from 'vue-markdown'
 import ArrayFieldComponent from './ArrayFieldComponent.vue'
 
 export default {
@@ -89,6 +93,7 @@ export default {
     BTab,
     BTbody,
     ArrayFieldComponent,
+    VueMarkdown,
   },
   props: {
     tablefield: {
@@ -99,6 +104,21 @@ export default {
       type: Boolean,
       default: true,
     },
+  },
+  data() {
+    return {
+      options: {
+        markdownIt: {
+          linkify: true,
+        },
+        linkAttributes: {
+          attrs: {
+            target: '_blank',
+            rel: 'noopener',
+          },
+        },
+      },
+    }
   },
   methods: {
     formatObject(value) {
@@ -139,11 +159,7 @@ export default {
       if (percentage.test(value)) {
         return `${percent(value)}%`
       }
-      if (typeof value === 'string' && value.indexOf('\\n') > -1) {
-        return value.replaceAll('\\n', '\n')
-      }
-
-      return value
+      return value.replace(/(?:\\[rn])+/g, '\n')
     },
   },
 }

@@ -21,5 +21,11 @@
         "exponent": "6",
         "coingecko_id": "ion", 
         "logo": "/logos/osmosis.jpg"
+    },{
+        "base": "usomm",
+        "symbol": "SOMM",
+        "exponent": "6",
+        "coingecko_id": "somm", 
+        "logo": ""
     }]
 }

@@ -3,7 +3,6 @@
     "coingecko": "",
     "api": ["https://api.chihuahua.wtf", "https://chihuahua-api.mercury-nodes.net"],
     "rpc": ["https://rpc.chihuahua.wtf:443", "https://rpc.chihuahua.wtf:443"],
-    "snapshot_provider": "df2dffa0560e41c682b6b2e150524859e41ec1d8@chihuahua.rpc.ping.pub:26656",
     "sdk_version": "0.44.3",
     "coin_type": "118",
     "min_tx_fee": "8000",

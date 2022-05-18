@@ -3,7 +3,7 @@
     class="main-menu menu-fixed menu-accordion menu-shadow"
     :class="[
       { 'expanded': !isVerticalMenuCollapsed || (isVerticalMenuCollapsed && isMouseHovered) },
-      skin === 'semi-dark' ? 'menu-dark' : 'menu-light'
+      skin === 'dark' ? 'menu-dark' : 'menu-light'
     ]"
     @mouseenter="updateMouseHovered(true)"
     @mouseleave="updateMouseHovered(false)"
@@ -58,11 +58,12 @@
     </div>
     <!-- / main menu header-->
 
-    <!-- Shadow -->
-    <div
-      :class="{'d-block': shallShadowBottom}"
-      class="shadow-bottom"
-    />
+    <div>
+      <vertical-nav-menu-items
+        :items.sync="current"
+        class="navigation navigation-main"
+      />
+    </div>
 
     <!-- main menu content-->
     <vue-perfect-scrollbar
@@ -72,9 +73,10 @@
       @ps-scroll-y="evt => { shallShadowBottom = evt.srcElement.scrollTop > 0 }"
     >
       <vertical-nav-menu-items
-        :items.sync="leftMenu"
+        :items.sync="options"
         class="navigation navigation-main"
       />
+      <div style="height: 28rem;" />
     </vue-perfect-scrollbar>
     <!-- /main menu content-->
   </div>
@@ -155,13 +157,21 @@ export default {
     }
   },
   computed: {
-    leftMenu() {
+    current() {
       const preload = []
       const { selected } = this.$store.state.chains
       const current = navMenuItems.find(x => (x.title === selected.chain_name))
-      preload.push({ header: 'current' })
+      // preload.push({ header: 'current' })
       preload.push(current)
-      return preload.concat(navMenuItems.filter(x => x.title !== selected.chain_name))
+      return preload
+    },
+    options() {
+      return navMenuItems.map(x => {
+        if (x.children) {
+          return { title: x.title, logo: x.icon, route: x.children[0].route }
+        }
+        return x
+      })
     },
   },
 }

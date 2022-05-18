@@ -1,6 +1,18 @@
 <template>
   <div>
+    <b-alert
+      :show="error !== null"
+      variant="danger"
+    >
+      <h4 class="alert-heading">
+        Error:
+      </h4>
+      <div class="alert-body">
+        <span>Tx not found on chain. {{ error }}</span>
+      </div>
+    </b-alert>
     <b-card
+      v-if="error===null"
       title="Basic"
       class="text-truncate"
     >
@@ -92,13 +104,14 @@
 
 <script>
 import {
-  BCard, BTableSimple, BTr, BTd, BBadge, BCardBody,
+  BCard, BTableSimple, BTr, BTd, BBadge, BCardBody, BAlert,
 } from 'bootstrap-vue'
 import { toDay, tokenFormatter } from '@/libs/utils'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
 
 export default {
   components: {
+    BAlert,
     BCard,
     BCardBody,
     BTableSimple,
@@ -109,14 +122,18 @@ export default {
   },
   data() {
     return {
+      error: null,
       tx: { tx: {} },
     }
   },
   beforeRouteUpdate(to, from, next) {
     const { hash } = to.params
     if (hash !== from.params.hash) {
+      this.error = null
       this.$http.getTxs(hash).then(res => {
         this.tx = res
+      }).catch(err => {
+        this.error = err
       })
       next()
     }
@@ -124,7 +141,10 @@ export default {
   created() {
     const { hash } = this.$route.params
     this.$http.getTxs(hash).then(res => {
+      this.error = null
       this.tx = res
+    }).catch(err => {
+      this.error = err
     })
   },
   methods: {
