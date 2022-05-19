@@ -1,4 +1,8 @@
 const path = require('path')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
+
+const productionGzipExtensions = ['js', 'css']
 
 module.exports = {
   publicPath: '/',
@@ -21,6 +25,17 @@ module.exports = {
         '@axios': path.resolve(__dirname, 'src/libs/axios'),
       },
     },
+    plugins: [
+      new BundleAnalyzerPlugin({
+        analyzerMode: 'disabled',
+        openAnalyzer: false,
+      }),
+      new CompressionWebpackPlugin({
+        test: new RegExp(`\\.(${productionGzipExtensions.join('|')})$`),
+        threshold: 8192,
+        minRatio: 0.8,
+      }),
+    ],
   },
   chainWebpack: config => {
     config.module
@@ -42,6 +57,14 @@ module.exports = {
           'b-embed': 'src',
         }
         return options
+      })
+    config.module
+      .rule('ts')
+      .test(/\.tsx?$/)
+      .use('ts-loader')
+      .loader('ts-loader')
+      .options({
+        appendTsSuffixTo: [/\.vue$/],
       })
   },
   transpileDependencies: ['vue-echarts', 'resize-detector'],

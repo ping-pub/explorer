@@ -1,7 +1,7 @@
 <template>
   <div class="text-center">
     <b-card
-      v-if="calculateTotal > 0"
+      v-if="calculateTotalChange !== 0"
       border-variant="primary"
     >
       <b-row class="mx-0 d-flex align-items-center">
@@ -31,27 +31,32 @@
               HKD (港幣)
             </b-dropdown-item>
             <b-dropdown-item @click="setCurrency('sgd')">
-              SGD
+              SGD (新加坡元)
             </b-dropdown-item>
             <b-dropdown-item @click="setCurrency('krw')">
               KRW (대한민국원)
             </b-dropdown-item>
           </b-dropdown>
           <h2 class="mt-1 mb-0">
-            {{ currency }}{{ calculateTotal }}
+            {{ currency }}{{ (calculateTotal) }}
           </h2>
           <small
             v-if="calculateTotalChange > 0"
             class="my-0 text-success"
           >
-            +{{ calculateTotalChange }} (24h)
+            +{{ formatTotalChange(calculateTotalChange) }} (24h)
           </small>
           <small
             v-else
             class="my-0 text-danger"
           >
-            {{ calculateTotalChange }} (24h)
+            {{ formatTotalChange(calculateTotalChange) }} (24h)
           </small>
+          <span @click="refreshPrice()">
+            <feather-icon
+              icon="RefreshCwIcon"
+              size="12"
+            /></span>
           <!-- chart -->
           <chart-component-doughnut
             :height="160"
@@ -62,10 +67,9 @@
         <b-col
           md="8"
         >
-          <chartjs-component-bar
-            :height="200"
-            :chart-data="calculateChartBar"
-            :options="options"
+          <echart-scatter
+            :items.sync="scatters"
+            auto-resize
           />
         </b-col>
       </b-row>
@@ -88,22 +92,18 @@
             />
             <span class="align-middle">{{ item.name }}</span>
           </b-button>
-          <b-form-checkbox
-            v-model="defaultWallet"
-            v-b-tooltip.hover.v-primary
-            :value="item.name"
-            title="Set as default wallet"
-            variant="outline-warning"
-            :readonly="item.name===defaultWallet"
-          >
-            <span
-              :class="item.name===defaultWallet ? 'text-primary' : ''"
-              class="font-weight-bolder pb-0"
-              style="font-size:16px"
+          <div class="mr-50">
+            <router-link
+              :to="`/wallet/import?name=${item.name}`"
+              class="mr-50"
             >
-              Set as default
-            </span>
-          </b-form-checkbox>
+              <feather-icon
+                icon="EditIcon"
+                class="mr-10"
+              />
+              <span class="align-middle">Edit</span>
+            </router-link>
+          </div>
         </div>
 
         <b-row>
@@ -113,7 +113,6 @@
             sm="12"
             md="6"
             xl="4"
-            :class="(balances[acc.addr])? 'order-1' : 'order-9' "
           >
 
             <b-card
@@ -124,48 +123,14 @@
                 <div>
                   <b-card-title> <span class="text-uppercase">{{ acc.chain }}</span></b-card-title>
                 </div>
-                <b-dropdown
-                  class="ml-1"
-                  variant="link"
-                  no-caret
-                  toggle-class="p-0"
-                  right
-                >
-                  <template #button-content>
-                    <feather-icon
-                      icon="AlignJustifyIcon"
-                      size="18"
-                      class="cursor-pointer"
-                    />
-                  </template>
-                  <b-dropdown-item
-                    v-if="balances[acc.addr]"
-                    :to="`/${acc.chain}/account/${acc.addr}`"
-                  >
-                    <feather-icon icon="TrelloIcon" /> Detail
-                  </b-dropdown-item>
-                  <b-dropdown-divider
-                    v-if="balances[acc.addr]"
-                  />
-                  <b-dropdown-item
-                    v-if="balances[acc.addr]"
-                    v-b-modal.transfer-window
-                    @click="transfer(acc.addr)"
-                  >
-                    <feather-icon icon="SendIcon" /> Transfer
-                  </b-dropdown-item>
-                  <b-dropdown-item
-                    v-if="balances[acc.addr]"
-                    v-b-modal.ibc-transfer-window
-                    @click="transfer(acc.addr)"
-                  >
-                    <feather-icon icon="SendIcon" /> IBC Transfer
-                  </b-dropdown-item>
-                  <b-dropdown-item @click="removeAddress(acc.addr)">
-                    <feather-icon icon="Trash2Icon" /> Remove
-                  </b-dropdown-item>
-                </b-dropdown>
-
+                <feather-icon
+                  v-b-tooltip.hover.v-danger
+                  :title="`Remove ${acc.chain.toUpperCase()}`"
+                  icon="XSquareIcon"
+                  size="18"
+                  class="cursor-pointer text-danger"
+                  @click="removeAddress(acc.addr)"
+                />
               </b-card-header>
               <b-card-body class="text-truncate">
                 <b-row>
@@ -241,6 +206,7 @@
                           variant="outline-primary"
                           :to="`/${acc.chain}/account/${acc.addr}`"
                           class="mt-1 mb-0"
+                          @click="updateDefaultWallet(item.name)"
                         >
                           <feather-icon icon="TrelloIcon" /> Detail
                         </b-button>
@@ -261,32 +227,32 @@
         Connect Wallet
       </b-card>
     </router-link>
-    <operation-transfer-component
-      :address.sync="selectedAddress"
+    <operation-modal
+      :type="operationModalType"
+      :address="selectedAddress"
+      :selected-chain-name="selectedChainName"
     />
-    <operation-transfer-2-component :address="selectedAddress" />
   </div>
 </template>
 
 <script>
 import {
   BCard, BCardHeader, BCardTitle, BCardBody, VBModal, BRow, BCol, BAvatar, BButton,
-  BDropdown, BDropdownItem, BDropdownDivider, BFormCheckbox, VBTooltip,
+  BDropdown, BDropdownItem, VBTooltip,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import {
   chartColors,
   formatNumber,
-  formatTokenAmount, formatTokenDenom, getLocalAccounts, getLocalChains, getUserCurrency, getUserCurrencySign, setUserCurrency,
+  formatTokenAmount, formatTokenDenom, getLocalAccounts, getLocalChains, getUserCurrency, getUserCurrencySign, numberWithCommas, setUserCurrency,
 } from '@/libs/utils'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import AppCollapse from '@core/components/app-collapse/AppCollapse.vue'
 import AppCollapseItem from '@core/components/app-collapse/AppCollapseItem.vue'
-import OperationTransferComponent from './OperationTransferComponent.vue'
-import OperationTransfer2Component from './OperationTransfer2Component.vue'
+import OperationModal from '@/views/components/OperationModal/index.vue'
 import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
-import ChartjsComponentBar from './ChartjsComponentBar.vue'
+import EchartScatter from './components/charts/EchartScatter.vue'
 
 export default {
   components: {
@@ -300,19 +266,16 @@ export default {
     BCardTitle,
     BDropdown,
     BDropdownItem,
-    BDropdownDivider,
-    BFormCheckbox,
     // eslint-disable-next-line vue/no-unused-components
     VBTooltip,
     FeatherIcon,
-    OperationTransferComponent,
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
-    OperationTransfer2Component,
     ChartComponentDoughnut,
-    ChartjsComponentBar,
     AppCollapse,
     AppCollapseItem,
+    EchartScatter,
+    OperationModal,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -331,6 +294,8 @@ export default {
       delegations: {},
       ibcDenom: {},
       quotes: {},
+      operationModalType: '',
+      selectedChainName: '',
       options: {
         maintainAspectRatio: false,
         legend: {
@@ -381,46 +346,30 @@ export default {
     }
   },
   computed: {
-    defaultWallet: {
-      get() {
-        return this.$store.state.chains.defaultWallet
-      },
-      set(value) {
-        this.$store.commit('setDefaultWallet', value)
-      },
-    },
     calculateTotal() {
-      const v = Object.values(this.balances)
       let total = 0
-      if (v) {
-        v.forEach(tokens => {
-          const subtotal = tokens.map(x => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c)
-          total += subtotal
+      if (this.calculateByDenom.value) {
+        Object.values(this.calculateByDenom.value).forEach(i => {
+          total += i
         })
       }
-      const d = Object.values(this.delegations)
-      if (d) {
-        d.forEach(tokens => {
-          const subtotal = tokens.map(x => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c, 0)
-          total += subtotal
+      return numberWithCommas(parseFloat(total.toFixed(2)))
+    },
+    scatters() {
+      const total = []
+      if (this.calculateByDenom.qty) {
+        Object.entries(this.calculateByDenom.qty).forEach(i => {
+          const price = this.getPrice(i[0])
+          total.push([Math.sqrt(i[1]), Math.sqrt(price), i[1] * price, i[0]])
         })
       }
-      return parseFloat(total.toFixed(2))
+      return total.sort((a, b) => b[2] - a[2])
     },
     calculateTotalChange() {
-      const v = Object.values(this.balances)
       let total = 0
-      if (v) {
-        v.forEach(tokens => {
-          const subtotal = tokens.map(x => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c)
-          total += subtotal
-        })
-      }
-      const d = Object.values(this.delegations)
-      if (d) {
-        d.forEach(tokens => {
-          const subtotal = tokens.map(x => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c, 0)
-          total += subtotal
+      if (this.calculateByDenom.value) {
+        Object.entries(this.calculateByDenom.value).forEach(i => {
+          total += i[1] * this.getChanges(i[0]) * 0.01
         })
       }
       return parseFloat(total.toFixed(2))
@@ -439,9 +388,9 @@ export default {
               total[denom] = this.formatCurrency(x.amount, x.denom)
             }
             if (qty[denom]) {
-              qty[denom] += this.formatAmount(x.amount, x.denom)
+              qty[denom] += this.formatAmount(x.amount, x.denom, false)
             } else {
-              qty[denom] = this.formatAmount(x.amount, x.denom)
+              qty[denom] = this.formatAmount(x.amount, x.denom, false)
             }
           })
         })
@@ -457,9 +406,9 @@ export default {
               total[denom] = this.formatCurrency(x.amount, x.denom)
             }
             if (qty[denom]) {
-              qty[denom] += this.formatAmount(x.amount, x.denom)
+              qty[denom] += this.formatAmount(x.amount, x.denom, false)
             } else {
-              qty[denom] = this.formatAmount(x.amount, x.denom)
+              qty[denom] = this.formatAmount(x.amount, x.denom, false)
             }
           })
         })
@@ -468,40 +417,20 @@ export default {
     },
     calculateChartDoughnut() {
       const total = this.calculateByDenom
+      const labels = []
+      const data = []
+      Object.entries(total.value).sort((a, b) => b[1] - a[1]).forEach(i => {
+        labels.push(i[0])
+        data.push(i[1])
+      })
       return {
         datasets: [
           {
-            labels: Object.keys(total.value),
-            data: Object.values(total.value),
+            labels,
+            data,
             backgroundColor: chartColors(),
             borderWidth: 0,
             pointStyle: 'rectRounded',
-          },
-        ],
-      }
-    },
-    calculateChartBar() {
-      const total = this.calculateByDenom
-      // Object.entries(total.value).sort((a, b) => b[0].localeCompare(a[0]));
-      const data = Object.entries(total.value).sort((a, b) => b[1] - a[1]).slice(0, 15)
-      return {
-        labels: data.map(x => x[0]),
-        datasets: [
-          {
-            label: 'Market Cap',
-            data: data.map(x => x[1]),
-            backgroundColor: chartColors(),
-            borderWidth: 0,
-            pointStyle: 'rectRounded',
-            yAxisID: 'y-axis-1',
-          },
-          {
-            label: 'Qty',
-            data: data.map(x => total.qty[x[0]]), // Object.values(total.qty),
-            backgroundColor: chartColors(),
-            borderWidth: 0,
-            pointStyle: 'rectRounded',
-            yAxisID: 'y-axis-2',
           },
         ],
       }
@@ -513,6 +442,9 @@ export default {
   mounted() {
   },
   methods: {
+    refreshPrice() {
+      this.$store.dispatch('chains/getQuotes')
+    },
     init() {
       this.accounts = getLocalAccounts()
       const chains = getLocalChains()
@@ -554,8 +486,10 @@ export default {
       this.currency2 = c
       this.currency = getUserCurrencySign()
     },
-    transfer(addr) {
+    transfer(type, addr, chain) {
+      this.operationModalType = type
       this.selectedAddress = addr
+      this.selectedChainName = chain
     },
     completeAdd() {
       this.init()
@@ -566,23 +500,20 @@ export default {
       const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v)
       return formatTokenDenom(denom)
     },
-    formatAmount(v, denom = 'uatom') {
+    formatTotalChange(v) {
+      return numberWithCommas(v)
+    },
+    formatAmount(v, denom = 'uatom', format = true) {
       if (!v) return ''
       const denom2 = (denom.startsWith('ibc') ? this.ibcDenom[denom] : denom)
-      return formatTokenAmount(v, 2, denom2)
+      return formatTokenAmount(v, 2, denom2, format)
     },
     formatAddr(v) {
       return v.substring(0, 10).concat('...', v.substring(v.length - 10))
     },
     formatCurrency(amount, denom) {
-      const qty = this.formatAmount(amount, denom)
-      const d2 = this.formatDenom(denom)
-      const quote = this.$store.state.chains.quotes[d2]
-      if (quote) {
-        const price = quote[this.currency2]
-        return parseFloat((qty * price).toFixed(2))
-      }
-      return 0
+      const qty = this.formatAmount(amount, denom, false)
+      return parseFloat((qty * this.getPrice(denom)).toFixed(2))
     },
     priceColor(denom) {
       const d2 = this.formatDenom(denom)
@@ -593,18 +524,26 @@ export default {
       }
       return ''
     },
+    getPrice(denom) {
+      const d2 = this.formatDenom(denom)
+      const quote = this.$store.state.chains.quotes[d2]
+      return quote ? quote[this.currency2] || 0 : 0
+    },
     getChanges(denom) {
       const d2 = this.formatDenom(denom)
       const quote = this.$store.state.chains.quotes[d2]
       if (quote) {
         const price = quote[`${this.currency2}_24h_change`]
-        return price
+        return price || 0
       }
       return 0
     },
     formatChanges(denom) {
       const price = this.getChanges(denom)
-      return price === 0 ? '' : `${parseFloat(price.toFixed(2))}%`
+      if (price > 0) {
+        return `+${parseFloat(price.toFixed(2))}%`
+      }
+      return '0'
     },
     formatPrice(denom) {
       const d2 = this.formatDenom(denom)
@@ -627,7 +566,7 @@ export default {
         const ret = delegations.map(x => this.formatCurrency(x.amount, x.denom)).reduce((t, c) => t + c, 0)
         total += ret
       }
-      return parseFloat(total.toFixed(2))
+      return numberWithCommas(parseFloat(total.toFixed(2)))
     },
     formatBalanceChanges(v) {
       let total = 0
@@ -641,7 +580,7 @@ export default {
         const ret = delegations.map(x => this.formatCurrency(x.amount, x.denom) * this.getChanges(x.denom) * 0.01).reduce((t, c) => t + c, 0)
         total += ret
       }
-      return parseFloat(total.toFixed(2))
+      return total > 0 ? `+${parseFloat(total.toFixed(2))}` : parseFloat(total.toFixed(2))
     },
     formatBalanceChangesColor(v) {
       const total = this.formatBalanceChanges(v)
@@ -658,6 +597,9 @@ export default {
         }
       })
       localStorage.setItem('accounts', JSON.stringify(this.accounts))
+    },
+    updateDefaultWallet(v) {
+      this.$store.commit('setDefaultWallet', v)
     },
     copy(v) {
       this.$copyText(v).then(() => {

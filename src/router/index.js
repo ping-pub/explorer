@@ -27,34 +27,6 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/wallet/setting',
-      name: 'setting',
-      component: () => import('@/views/WalletSetting.vue'),
-      meta: {
-        pageTitle: 'Setting',
-        breadcrumb: [
-          {
-            text: 'Setting',
-            active: true,
-          },
-        ],
-      },
-    },
-    {
-      path: '/wallet/portfolio',
-      name: 'portfolio',
-      component: () => import('@/views/WalletPortfolio.vue'),
-      meta: {
-        pageTitle: 'Portfolio',
-        breadcrumb: [
-          {
-            text: 'Portfolio',
-            active: true,
-          },
-        ],
-      },
-    },
-    {
       path: '/coffee',
       name: 'coffee',
       component: () => import('@core/layouts/components/Coffee.vue'),
@@ -98,20 +70,6 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/wallet/address',
-      name: 'addresses',
-      component: () => import('@/views/WalletAddressBook.vue'),
-      meta: {
-        pageTitle: 'Address Book',
-        breadcrumb: [
-          {
-            text: 'Address Book',
-            active: true,
-          },
-        ],
-      },
-    },
-    {
       path: '/wallet/delegations',
       name: 'delegations',
       component: () => import('@/views/WalletDelegations.vue'),
@@ -143,6 +101,22 @@ const router = new VueRouter({
         ],
       },
     },
+    {
+      path: '/wallet/votes',
+      name: 'myVotes',
+      component: () => import('@/views/WalletVotes.vue'),
+      meta: {
+        pageTitle: 'My Votes',
+        breadcrumb: [
+          {
+            text: 'Wallet',
+          },
+          {
+            text: 'My Votes',
+          },
+        ],
+      },
+    },
     // chain modules
     {
       path: '/:chain/',
@@ -154,6 +128,20 @@ const router = new VueRouter({
         breadcrumb: [
           {
             text: 'Home',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/:chain/statesync',
+      name: 'statesync',
+      component: () => import('@/views/StateSync.vue'),
+      meta: {
+        pageTitle: 'State Sync',
+        breadcrumb: [
+          {
+            text: 'State Synchronization',
             active: true,
           },
         ],
@@ -360,9 +348,9 @@ const router = new VueRouter({
     },
     // common modules
     {
-      path: '/user/login',
-      name: 'login',
-      component: () => import('@/views/Login.vue'),
+      path: '/tools/consensus-states',
+      name: 'consensus',
+      component: () => import('@/views/ConsensusStates.vue'),
       meta: {
         layout: 'full',
       },
@@ -396,7 +384,10 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const c = to.params.chain
-  if (c) store.commit('select', { chain_name: c })
+  if (c) {
+    store.commit('select', { chain_name: c })
+    store.dispatch('chains/getAllIBCDenoms', Vue.prototype)
+  }
 
   const config = JSON.parse(localStorage.getItem('chains'))
   // const has = Object.keys(config).findIndex(i => i === c)

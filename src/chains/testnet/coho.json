@@ -1,0 +1,18 @@
+{
+    "chain_name": "cosmic-horizon",
+    "api": ["https://coho-api.skynetvalidators.com"],
+    "rpc": [],
+    "snapshot_provider": "",
+    "sdk_version": "0.44.5",
+    "coin_type": "118",
+    "min_tx_fee": "300",
+    "assets": [{
+        "base": "ucoho",
+        "symbol": "COHO",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "/logos/cosmic-horizon.png"
+    }],
+    "addr_prefix": "coho",
+    "logo": "/logos/cosmic-horizon.png"
+}

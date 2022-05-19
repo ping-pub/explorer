@@ -26,6 +26,13 @@ export function keybase(identity) {
 export default class ChainFetch {
   constructor() {
     this.osmosis = new OsmosAPI()
+    this.EndpointVersion = {
+      certik: 'v1alpha1',
+    }
+  }
+
+  getEndpointVersion() {
+    return this.EndpointVersion[this.config.chain_name] || 'v1beta1'
   }
 
   getSelectedConfig() {
@@ -48,12 +55,16 @@ export default class ChainFetch {
     return true
   }
 
+  async getNodeInfo() {
+    return this.get('/node_info')
+  }
+
   async getLatestBlock(config = null) {
     const conf = config || this.getSelectedConfig()
     if (conf.chain_name === 'injective') {
       return ChainFetch.fetch('https://tm.injective.network', '/block').then(data => Block.create(commonProcess(data)))
     }
-    return this.get('/blocks/latest', config).then(data => Block.create(data))
+    return this.get(`/blocks/latest?${new Date().getTime()}`, config).then(data => Block.create(data))
   }
 
   async getBlockByHeight(height, config = null) {
@@ -64,12 +75,13 @@ export default class ChainFetch {
     return this.get(`/blocks/${height}`, config).then(data => Block.create(data))
   }
 
-  async getSlashingSigningInfo() {
-    return this.get('/cosmos/slashing/v1beta1/signing_infos')
+  async getSlashingSigningInfo(config = null) {
+    return this.get('/cosmos/slashing/v1beta1/signing_infos?pagination.limit=500', config)
   }
 
-  async getTxs(hash) {
-    const ver = this.getSelectedConfig() ? this.config.sdk_version : '0.41'
+  async getTxs(hash, config = null) {
+    const conf = config || this.getSelectedConfig()
+    const ver = conf.sdk_version || '0.41'
     // /cosmos/tx/v1beta1/txs/{hash}
     if (ver && compareVersions(ver, '0.40') < 1) {
       return this.get(`/txs/${hash}`).then(data => WrapStdTx.create(data, ver))
@@ -77,8 +89,8 @@ export default class ChainFetch {
     return this.get(`/cosmos/tx/v1beta1/txs/${hash}`).then(data => WrapStdTx.create(data, ver))
   }
 
-  async getTxsBySender(sender, page = 1) {
-    return this.get(`/txs?message.sender=${sender}&page=${page}&limit=20`)
+  async getTxsBySender(sender) {
+    return this.get(`/cosmos/tx/v1beta1/txs?events=message.sender='${sender}'&pagination.reverse=true&order_by=ORDER_BY_DESC`)
   }
 
   async getTxsByRecipient(recipient) {
@@ -86,7 +98,7 @@ export default class ChainFetch {
   }
 
   async getTxsByHeight(height) {
-    return this.get(`/txs?tx.height=${height}`)
+    return this.get(`/cosmos/tx/v1beta1/txs?events=tx.height=${height}`)
   }
 
   async getValidatorDistribution(address) {
@@ -120,10 +132,16 @@ export default class ChainFetch {
   }
 
   async getMintingInflation() {
+    if (this.config.chain_name === 'evmos') {
+      return this.get('/evmos/inflation/v1/inflation_rate').then(data => Number(data.inflation_rate / 100 || 0))
+    }
+    if (this.config.chain_name === 'echelon') {
+      return this.get('/echelon/inflation/v1/inflation_rate').then(data => Number(data.inflation_rate / 100 || 0))
+    }
     if (this.isModuleLoaded('minting')) {
       return this.get('/minting/inflation').then(data => Number(commonProcess(data)))
     }
-    return null
+    return 0
   }
 
   async getStakingParameters() {
@@ -133,16 +151,32 @@ export default class ChainFetch {
     })
   }
 
-  async getValidatorList() {
-    return this.get('/staking/validators').then(data => {
+  async getValidatorList(config = null) {
+    return this.get('/staking/validators', config).then(data => {
       const vals = commonProcess(data).map(i => new Validator().init(i))
       localStorage.setItem(`validators-${this.config.chain_name}`, JSON.stringify(vals))
       return vals
     })
   }
 
-  async getValidatorListByHeight(height) {
-    return this.get(`/validatorsets/${height}`).then(data => commonProcess(data))
+  async getValidatorUnbondedList() {
+    return this.get('/cosmos/staking/v1beta1/validators?status=BOND_STATUS_UNBONDED').then(data => {
+      const result = commonProcess(data)
+      const vals = result.validators ? result.validators : result
+      return vals.map(i => new Validator().init(i))
+    })
+  }
+
+  async getValidatorListByStatus(status) {
+    return this.get(`/cosmos/staking/v1beta1/validators?status=${status}&pagination.limit=500`).then(data => {
+      const result = commonProcess(data)
+      const vals = result.validators ? result.validators : result
+      return vals.map(i => new Validator().init(i))
+    })
+  }
+
+  async getValidatorListByHeight(height, offset) {
+    return this.get(`/cosmos/base/tendermint/v1beta1/validatorsets/${height}?pagination.limit=100&pagination.offset=${offset}`).then(data => commonProcess(data))
   }
 
   async getStakingValidator(address) {
@@ -157,6 +191,42 @@ export default class ChainFetch {
   }
 
   async getMintParameters() {
+    if (this.config.chain_name === 'evmos') {
+      const result = await this.get('/evmos/inflation/v1/params').then(data => data.params)
+      await this.get('/evmos/inflation/v1/period').then(data => {
+        Object.entries(data).forEach(x => {
+          const k = x[0]
+          const v = x[1]
+          result[k] = v
+        })
+      })
+      await this.get('/evmos/inflation/v1/total_supply').then(data => {
+        Object.entries(data).forEach(x => {
+          const k = x[0]
+          const v = x[1]
+          result[k] = v
+        })
+      })
+      return result
+    }
+    if (this.config.chain_name === 'echelon') {
+      const result = await this.get('/echelon/inflation/v1/params').then(data => data.params)
+      await this.get('/echelon/inflation/v1/period').then(data => {
+        Object.entries(data).forEach(x => {
+          const k = x[0]
+          const v = x[1]
+          result[k] = v
+        })
+      })
+      await this.get('/echelon/inflation/v1/total_supply').then(data => {
+        Object.entries(data).forEach(x => {
+          const k = x[0]
+          const v = x[1]
+          result[k] = v
+        })
+      })
+      return result
+    }
     if (this.isModuleLoaded('minting')) {
       return this.get('/minting/parameters').then(data => commonProcess(data))
     }
@@ -179,8 +249,8 @@ export default class ChainFetch {
     return this.get('/gov/parameters/voting').then(data => commonProcess(data))
   }
 
-  async getGovernanceTally(pid, total) {
-    return this.get(`/gov/proposals/${pid}/tally`).then(data => new ProposalTally().init(commonProcess(data), total))
+  async getGovernanceTally(pid, total, conf) {
+    return this.get(`/gov/proposals/${pid}/tally`, conf).then(data => new ProposalTally().init(commonProcess(data), total))
   }
 
   getGovernance(pid) {
@@ -218,54 +288,76 @@ export default class ChainFetch {
         pagination: {},
       }))
     }
-    if (this.config.chain_name === 'certik') {
-      return this.get(`/shentu/gov/v1alpha1/proposals/${pid}/votes?pagination.key=${encodeURIComponent(next)}&pagination.limit=${limit}`)
+    if (this.config.chain_name === 'shentu') {
+      return this.get(`/shentu/gov/v1alpha1/proposals/${pid}/votes?pagination.key=${encodeURIComponent(next)}&pagination.limit=${limit}&pagination.reverse=true`)
     }
-    return this.get(`/cosmos/gov/v1beta1/proposals/${pid}/votes?pagination.key=${encodeURIComponent(next)}&pagination.limit=${limit}`)
+    return this.get(`/cosmos/gov/v1beta1/proposals/${pid}/votes?pagination.key=${encodeURIComponent(next)}&pagination.limit=${limit}&pagination.reverse=true`)
   }
 
-  async getGovernanceList() {
-    return Promise.all([this.get('/gov/proposals'), this.get('/staking/pool')]).then(data => {
-      const pool = new StakingPool().init(commonProcess(data[1]))
-      let proposals = commonProcess(data[0])
+  async getGovernanceListByStatus(status, chain = null) {
+    const conf = chain || this.config
+    const url = conf.chain_name === 'shentu' ? `/shentu/gov/v1alpha1/proposals?pagination.limit=100&proposal_status=${status}` : `/cosmos/gov/v1beta1/proposals?pagination.limit=100&proposal_status=${status}`
+    return this.get(url, conf).then(data => {
+      let proposals = commonProcess(data)
       if (Array.isArray(proposals.proposals)) {
         proposals = proposals.proposals
       }
       const ret = []
       if (proposals) {
         proposals.forEach(e => {
-          const g = new Proposal().init(e, pool.bondedToken)
+          const g = new Proposal().init(e, 0)
           g.versionFixed(this.config.sdk_version)
           ret.push(g)
         })
       }
-      return ret
+      return {
+        proposals: ret,
+        pagination: data.pagination,
+      }
     })
   }
 
-  async get(url, config = null) {
-    let host = ''
-    if (!config) {
-      this.getSelectedConfig()
-    }
-    host = (config ? config.api : this.config.api)
-    const ret = await fetch((Array.isArray(host) ? host[this.getApiIndex(config)] : host) + url).then(response => response.json())
-    return ret
+  async getGovernanceProposalVote(pid, voter, chain) {
+    const url = this.config.chain_name === 'shentu'
+      ? `/shentu/gov/v1alpha1/proposals/${pid}/votes/${voter}`
+      : `/cosmos/gov/v1beta1/proposals/${pid}/votes/${voter}`
+    return this.get(url, chain).then(data => {
+      if (data.code === 3) {
+        throw new Error('not found')
+      }
+      return data
+    })
   }
 
-  getApiIndex(config = null) {
-    const conf = config || this.config
-    return localStorage.getItem(`${conf.chain_name}-api-index`) || 0
+  /// does NOT return value as expected
+  async getUpgradeCurrentPlan(chain = null) {
+    return this.get('/cosmos/upgrade/v1beta1/current_plan', chain)
   }
 
-  async getUrl(url) {
-    this.getSelectedConfig()
-    return fetch(url).then(res => res.json())
-  }
-
-  static fetch(host, url) {
-    const ret = fetch((Array.isArray(host) ? host[0] : host) + url).then(response => response.json())
-    return ret
+  async getGovernanceList(next = '', chain = null) {
+    const key = next || ''
+    const url = this.config.chain_name === 'shentu'
+      ? `/shentu/gov/v1alpha1/proposals?pagination.limit=50&pagination.reverse=true&pagination.key=${key}`
+      : `/cosmos/gov/v1beta1/proposals?pagination.limit=50&pagination.reverse=true&pagination.key=${key}`
+    return this.get(url, chain).then(data => {
+      // const pool = new StakingPool().init(commonProcess(data[1]))
+      let proposals = commonProcess(data)
+      if (Array.isArray(proposals.proposals)) {
+        proposals = proposals.proposals
+      }
+      const ret = []
+      if (proposals) {
+        proposals.forEach(e => {
+          const g = new Proposal().init(e, 0)
+          g.versionFixed(this.config.sdk_version)
+          ret.push(g)
+        })
+      }
+      return {
+        proposals: ret,
+        pagination: data.pagination,
+      }
+    })
   }
 
   async getAuthAccount(address, config = null) {
@@ -325,11 +417,12 @@ export default class ChainFetch {
   }
 
   async getAllIBCDenoms(config = null) {
-    const sdkVersion = config ? config.sdk_version : this.config.sdk_version
+    const conf = config || this.getSelectedConfig()
+    const sdkVersion = conf.sdk_version
     if (compareVersions(sdkVersion, '0.44.2') < 0) {
-      return this.get('/ibc/applications/transfer/v1beta1/denom_traces?pagination.limit=500', config).then(data => commonProcess(data))
+      return this.get('/ibc/applications/transfer/v1beta1/denom_traces?pagination.limit=500', conf).then(data => commonProcess(data))
     }
-    return this.get('/ibc/apps/transfer/v1/denom_traces?pagination.limit=500', config).then(data => commonProcess(data))
+    return this.get('/ibc/apps/transfer/v1/denom_traces?pagination.limit=500', conf).then(data => commonProcess(data))
   }
 
   async getIBCDenomTrace(hash, config = null) {
@@ -387,6 +480,15 @@ export default class ChainFetch {
     return ChainFetch.fetchCoinMarketCap(`/quote/${symbol}`)
   }
 
+  // Simulate Execution of tx
+  async simulate(bodyBytes, config = null) {
+    const txString = toBase64(TxRaw.encode(bodyBytes).finish())
+    const txRaw = {
+      tx_bytes: txString,
+    }
+    return this.post('/cosmos/tx/v1beta1/simulate', txRaw, config)
+  }
+
   // Tx Submit
   async broadcastTx(bodyBytes, config = null) {
     const txString = toBase64(TxRaw.encode(bodyBytes).finish())
@@ -410,9 +512,9 @@ export default class ChainFetch {
       this.getSelectedConfig()
     }
     const conf = config || this.config
-    const index = localStorage.getItem(`${conf.chain_name}-api-index`) || 0
+    const index = this.getApiIndex(config)
     // Default options are marked with *
-    const response = await fetch((Array.isArray(conf.api) ? conf.api[Number(index)] : conf.api) + url, {
+    const response = await fetch((Array.isArray(conf.api) ? conf.api[index] : conf.api) + url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       // mode: 'cors', // no-cors, *cors, same-origin
       // credentials: 'same-origin', // redirect: 'follow', // manual, *follow, error
@@ -426,6 +528,33 @@ export default class ChainFetch {
     })
     // const response = axios.post((config ? config.api : this.config.api) + url, data)
     return response.json() // parses JSON response into native JavaScript objects
+  }
+
+  async get(url, config = null) {
+    if (!config) {
+      this.getSelectedConfig()
+    }
+    const conf = config || this.config
+    const finalurl = (Array.isArray(conf.api) ? conf.api[this.getApiIndex(config)] : conf.api) + url
+    // finalurl = finalurl.replaceAll('v1beta1', this.getEndpointVersion())
+    const ret = await fetch(finalurl).then(response => response.json())
+    return ret
+  }
+
+  getApiIndex(config = null) {
+    const conf = config || this.config
+    const index = Number(localStorage.getItem(`${conf.chain_name}-api-index`) || 0)
+    return index < conf.api.length ? index : 0
+  }
+
+  async getUrl(url) {
+    this.getSelectedConfig()
+    return fetch(url).then(res => res.json())
+  }
+
+  static fetch(host, url) {
+    const ret = fetch((Array.isArray(host) ? host[0] : host) + url).then(response => response.json())
+    return ret
   }
 }
 

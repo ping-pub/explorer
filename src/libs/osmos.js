@@ -91,8 +91,16 @@ export default class OsmosAPI {
 
   async get(url) {
     const chains = getLocalChains()
-    this.host = chains.osmosis.api
+    const conf = chains.osmosis
+    const index = this.getApiIndex(conf)
+    this.host = Array.isArray(conf.api) ? conf.api[index] : conf.api
     return fetch(`${this.host}${url}`).then(res => res.json())
+  }
+
+  getApiIndex(config = null) {
+    const conf = config || this.config
+    const index = Number(localStorage.getItem(`${conf.chain_name}-api-index`) || 0)
+    return index < conf.api.length ? index : 0
   }
 
   async getMarketData(from, to, days = 14) {
@@ -164,7 +172,7 @@ export default class OsmosAPI {
   }
 
   async getDenomTraces() {
-    return this.get('/ibc/applications/transfer/v1beta1/denom_traces?pagination.limit=300').then(x => {
+    return this.get('/ibc/apps/transfer/v1/denom_traces?pagination.limit=500').then(x => {
       const combined = {}
       x.denom_traces.forEach(item => {
         const k = 'ibc/'.concat(toHex(sha256(new TextEncoder('utf-8').encode(`${item.path}/${item.base_denom}`))).toUpperCase())

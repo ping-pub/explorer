@@ -1,22 +1,6 @@
 <template>
   <div class="text-center container-lg">
-    <b-nav
-      align="right"
-      style="width:100%"
-      class="nav text-right text-nowrap ml-auto"
-    >
-      <b-nav-item><dark-toggler /></b-nav-item>
-      <b-nav-item><locale /></b-nav-item>
-      <b-button
-        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-        variant="primary"
-        class="btn-icon mt-25"
-        :to="{ name: 'accounts' }"
-      >
-        <feather-icon icon="KeyIcon" />
-        <span class="align-middle ml-25">Wallet</span>
-      </b-button>
-    </b-nav>
+    <full-header />
     <b-link>
       <div class="d-flex justify-content-center align-items-center">
         <vuexy-logo />
@@ -40,42 +24,77 @@
         <b-col
           v-for="(data,index) in chains"
           :key="index"
-          md="4"
+          v-observe-visibility="(visible) => visibilityChanged(visible, data)"
           sm="6"
+          md="4"
+          lg="4"
+          xl="3"
         >
           <router-link :to="data.chain_name">
             <b-card
               v-if="data"
               class="earnings-card text-left"
             >
-              <b-row>
-                <b-col cols="8">
-                  <b-card-title class="mb-1 text-uppercase">
-                    {{ data.chain_name }} <small class="font-small-2">{{ data.sdk_version }}</small>
-                  </b-card-title>
-                  <div class="font-small-2">
-                    Height
+              <div>
+                <b-card-title class="mb-1 d-flex justify-content-between">
+                  <span class="text-uppercase">{{ data.chain_name }} <small class="font-small-2">{{ data.sdk_version }}</small></span>
+                  <b-dropdown
+                    class="ml-1"
+                    variant="link"
+                    no-caret
+                    toggle-class="p-0"
+                    right
+                  >
+                    <template #button-content>
+                      <feather-icon
+                        icon="MoreVerticalIcon"
+                        size="18"
+                        class="cursor-pointer"
+                      />
+                    </template>
+                    <b-dropdown-item :to="`/${data.chain_name}/`">
+                      Summary
+                    </b-dropdown-item>
+                    <b-dropdown-item :to="`/${data.chain_name}/staking`">
+                      Staking
+                    </b-dropdown-item>
+                    <b-dropdown-item :to="`/${data.chain_name}/gov`">
+                      Governance
+                    </b-dropdown-item>
+                    <b-dropdown-item :to="`/${data.chain_name}/uptime`">
+                      Uptime
+                    </b-dropdown-item>
+                    <b-dropdown-item :to="`/${data.chain_name}/statesync`">
+                      State Sync
+                    </b-dropdown-item>
+                  </b-dropdown>
+                </b-card-title>
+
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <div class="font-small-2">
+                      Height
+                    </div>
+                    <h5 class="mb-1">
+                      {{ data.height || '0' }}
+                    </h5>
                   </div>
-                  <h5 class="mb-1">
-                    {{ data.height || '0' }}
-                  </h5>
-                  <b-card-text class="text-muted font-small-2">
-                    <span> Updated on </span><span class="font-weight-bolder">{{ data.time || '...' }}</span>
-                  </b-card-text>
-                </b-col>
-                <b-col
-                  cols="4"
-                >
-                  <b-avatar
-                    :src="data.logo"
-                    class="mt-1 badge-minimal"
-                    variant="light-primary"
-                    rounded
-                    size="82"
-                    badge
-                    :badge-variant="data.variant"
-                  /></b-col>
-              </b-row>
+                  <div>
+                    <b-avatar
+                      :src="data.logo"
+                      class="badge-minimal"
+                      variant="light-primary"
+                      rounded
+                      size="md"
+                      badge
+                      :badge-variant="data.variant"
+                    />
+                  </div>
+                </div>
+                <b-card-text class="text-muted font-small-2">
+                  <span> Updated on </span><span class="font-weight-bolder">{{ data.time || '...' }}</span>
+                </b-card-text>
+              </div>
             </b-card>
           </router-link>
         </b-col>
@@ -100,15 +119,14 @@
 <script>
 /* eslint-disable global-require */
 import {
-  BLink, BAvatar, BRow, BCol, BCard, BCardText, BCardTitle, BNav, BNavItem, BButton,
+  BLink, BAvatar, BRow, BCol, BCard, BCardText, BCardTitle, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import store from '@/store/index'
 import { timeIn, toDay } from '@/libs/utils'
-import DarkToggler from '@/@core/layouts/components/app-navbar/components/DarkToggler.vue'
-import Locale from '@/@core/layouts/components/app-navbar/components/Locale.vue'
 import AppFooter from '@/@core/layouts/components/AppFooter.vue'
+import FullHeader from './components/FullHeader.vue'
 
 export default {
   components: {
@@ -119,14 +137,11 @@ export default {
     BCard,
     BCardText,
     BCardTitle,
-    BNav,
-    BNavItem,
-    BButton,
-
+    BDropdown,
+    BDropdownItem,
     VuexyLogo,
-    DarkToggler,
-    Locale,
     AppFooter,
+    FullHeader,
   },
   directives: {
     Ripple,
@@ -148,29 +163,27 @@ export default {
       return this.downImg
     },
   },
-  created() {
-    this.fetch()
-    this.timer = setInterval(this.fetch, 120000)
-  },
-  beforeDestroy() {
-    clearInterval(this.timer)
-  },
   methods: {
-    fetch() {
-      Object.keys(this.chains).forEach(k => {
-        const chain = this.chains[k]
+    fetch(k) {
+      const chain = this.chains[k]
+      if (chain.api) {
         const index = localStorage.getItem(`${chain.chain_name}-api-index`) || 0
-        if (chain.api) {
-          const host = Array.isArray(chain.api) ? chain.api[index] : chain.api
-          fetch(`${host}/blocks/latest`).then(res => res.json()).then(b => {
-          // console.log(b.block.header)
-            const { header } = b.block
-            this.$set(chain, 'height', header.height)
-            this.$set(chain, 'time', toDay(header.time))
-            this.$set(chain, 'variant', timeIn(header.time, 3, 'm') ? 'danger' : 'success')
-          })
-        }
-      })
+        const host = Array.isArray(chain.api) ? chain.api[index] : chain.api
+        fetch(`${host}/blocks/latest`).then(res => res.json()).then(b => {
+          const { header } = b.block
+          this.$set(chain, 'height', header.height)
+          this.$set(chain, 'time', toDay(header.time))
+          this.$set(chain, 'variant', timeIn(header.time, 3, 'm') ? 'danger' : 'success')
+        })
+      }
+    },
+    visibilityChanged(isVisible, chain) {
+      this.isVisible = isVisible
+      const idle = this.chains[chain.chain_name]
+      if (isVisible && !idle.loaded) {
+        this.$set(idle, 'loaded', true)
+        this.fetch(chain.chain_name)
+      }
     },
   },
 }

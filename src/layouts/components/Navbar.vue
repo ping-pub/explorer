@@ -48,13 +48,12 @@
             /></b-link>
         </b-media-aside>
         <b-media-body class="my-auto">
-          <h6 class="mb-0 text-uppercase">
-            {{ selected_chain.chain_name }}
+          <h6 class="mb-0 ">
+            <span class="text-uppercase">{{ chainid || selected_chain.chain_name }}</span>
           </h6>
           <small id="data-provider">
             {{ currentApi }} ({{ selected_chain.sdk_version || '-' }})
             <b-dropdown
-              v-if="apiOptions.length > 1"
               class="ml-0"
               variant="flat-primary"
               no-caret
@@ -108,15 +107,34 @@
         </template>
 
         <b-dropdown-item
-          :to="{ name: 'portfolio' }"
-          class="d-none"
+          v-for="(item,k) in accounts"
+          :key="k"
+          :disabled="!item.address"
+          :to="`/${selected_chain.chain_name}/account/${item.address.addr}`"
+          @click="updateDefaultWallet(item.wallet)"
         >
+          <div class="d-flex flex-column">
+            <span class="font-weight-bolder">{{ item.wallet }}
+              <b-avatar
+                v-if="item.wallet===walletName"
+                variant="success"
+                size="sm"
+              >
+                <feather-icon icon="CheckIcon" />
+              </b-avatar>
+            </span>
+            <small>{{ item.address ? formatAddr(item.address.addr) : `Not available on ${selected_chain.chain_name}` }}</small>
+          </div>
+        </b-dropdown-item>
+        <b-dropdown-divider />
+        <b-dropdown-item to="/wallet/import">
           <feather-icon
-            icon="PieChartIcon"
+            icon="PlusIcon"
             size="16"
           />
-          <span class="align-middle ml-50">Portofolio</span>
+          <span class="align-middle ml-50">Import Address</span>
         </b-dropdown-item>
+        <b-dropdown-divider />
 
         <b-dropdown-item :to="{ name: 'accounts' }">
           <feather-icon
@@ -141,6 +159,15 @@
           />
           <span class="align-middle ml-50">My Validators</span>
         </b-dropdown-item>
+
+        <b-dropdown-item :to="`/wallet/votes`">
+          <feather-icon
+            icon="PocketIcon"
+            size="16"
+          />
+          <span class="align-middle ml-50">My Votes</span>
+        </b-dropdown-item>
+
         <b-dropdown-item :to="`/wallet/transactions`">
           <feather-icon
             icon="LayersIcon"
@@ -156,14 +183,13 @@
 <script>
 import {
   BLink, BNavbarNav, BMedia, BMediaAside, BAvatar, BMediaBody, VBTooltip, BButton,
-  BDropdown, BDropdownItem,
+  BDropdown, BDropdownItem, BDropdownDivider,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import DarkToggler from '@core/layouts/components/app-navbar/components/DarkToggler.vue'
 import Locale from '@core/layouts/components/app-navbar/components/Locale.vue'
 import SearchBar from '@core/layouts/components/app-navbar/components/SearchBar.vue'
 // import CartDropdown from '@core/layouts/components/app-navbar/components/CartDropdown.vue'
-import store from '@/store'
 import { getLocalAccounts, timeIn, toDay } from '@/libs/utils'
 // import UserDropdown from '@core/layouts/components/app-navbar/components/UserDropdown.vue'
 
@@ -178,6 +204,7 @@ export default {
     BButton,
     BDropdown,
     BDropdownItem,
+    BDropdownDivider,
 
     // Navbar Components
     DarkToggler,
@@ -197,12 +224,11 @@ export default {
     },
   },
   data() {
-    const conf = store.state.chains.selected
-    const s = localStorage.getItem(`${conf.chain_name}-api-index`)
     return {
       variant: 'success',
       tips: 'Synced',
-      index: s || 0,
+      index: 0,
+      chainid: '',
     }
   },
   computed: {
@@ -212,41 +238,58 @@ export default {
     },
     selected_chain() {
       this.block()
-      return store.state.chains.selected
+      return this.$store.state.chains.selected
     },
     chainVariant() {
       return this.variant
     },
     currentApi() {
-      return this.apiOptions[Number(this.index)]
+      return this.index + 1 > this.apiOptions.length ? this.apiOptions[0] : this.apiOptions[this.index]
     },
     apiOptions() {
-      const conf = store.state.chains.selected
+      const conf = this.$store.state.chains.selected
       if (Array.isArray(conf.api)) {
         return conf.api
       }
       return [conf.api]
     },
+    accounts() {
+      let accounts = getLocalAccounts() || {}
+      accounts = Object.entries(accounts).map(v => ({ wallet: v[0], address: v[1].address.find(x => x.chain === this.selected_chain.chain_name) }))
+
+      if (accounts.length > 0) {
+        this.updateDefaultWallet(accounts[0].wallet)
+      }
+      return accounts.filter(x => x.address)
+    },
   },
   mounted() {
-    const accounts = Object.keys(getLocalAccounts() || {})
-    if (!this.$store.state.chains.defaultWallet && accounts.length > 0) {
-      this.$store.commit('setDefaultWallet', accounts[0])
-    }
+
   },
   methods: {
+    formatAddr(v) {
+      return v.substring(0, 10).concat('...', v.substring(v.length - 10))
+    },
+    updateDefaultWallet(v) {
+      this.$store.commit('setDefaultWallet', v)
+    },
     change(v) {
       this.index = v
-      const conf = store.state.chains.selected
+      const conf = this.$store.state.chains.selected
       localStorage.setItem(`${conf.chain_name}-api-index`, v)
+      window.location.reload()
     },
     block() {
-      store.commit('setHeight', 0)
+      const conf = this.$store.state.chains.selected
+      const s = localStorage.getItem(`${conf.chain_name}-api-index`) || 0
+      this.index = Number(s)
+      this.$store.commit('setHeight', 0)
       this.$http.getLatestBlock().then(block => {
-        store.commit('setHeight', Number(block.block.header.height))
+        this.chainid = block.block.header.chain_id
+        this.$store.commit('setHeight', Number(block.block.header.height))
         if (timeIn(block.block.header.time, 1, 'm')) {
           this.variant = 'danger'
-          this.tips = `Halted ${toDay(block.block.header.time, 'from')}, Height: ${store.state.chains.height} `
+          this.tips = `Halted ${toDay(block.block.header.time, 'from')}, Height: ${this.$store.state.chains.height} `
         } else {
           this.variant = 'success'
           this.tips = 'Synced'

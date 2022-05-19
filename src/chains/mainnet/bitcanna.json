@@ -2,7 +2,8 @@
     "chain_name": "bitcanna",
     "coingecko": "bitcanna", 
     "api":"https://lcd.bitcanna.io", 
-    "sdk_version": "0.44.2",
+    "rpc": ["https://rpc.bitcanna.io:443","https://rpc.bitcanna.ezstaking.io:443"],
+    "sdk_version": "0.45.1",
     "coin_type": "118",
     "min_tx_fee": "8000",
     "assets": [{
@@ -10,8 +11,8 @@
         "symbol": "BCNA",
         "exponent": "6",
         "coingecko_id": "bitcanna", 
-        "logo": "https://raw.githubusercontent.com/osmosis-labs/assetlists/main/images/bcna.svg"
+        "logo": "/logos/bitcanna.svg"
     }],
     "addr_prefix": "bcna",
-    "logo": "https://raw.githubusercontent.com/osmosis-labs/assetlists/main/images/bcna.svg"
+    "logo": "/logos/bitcanna.svg"
 }

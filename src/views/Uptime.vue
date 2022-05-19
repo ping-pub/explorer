@@ -1,5 +1,5 @@
 <template>
-  <div class="container-md px-0">
+  <div class="px-0">
     <b-card>
       <b-alert
         variant="danger"
@@ -19,10 +19,20 @@
         >
           Browse favorite only
         </b-button>
-        <b-form-input
-          v-model="query"
-          placeholder="Keywords to filter validators"
-        />
+        <b-input-group>
+          <b-input-group-prepend is-text>
+            <b-form-checkbox
+              v-model="missedFilter"
+              v-b-tooltip.hover
+              title="Only missed blocks"
+              name="viewMissed"
+            />
+          </b-input-group-prepend>
+          <b-form-input
+            v-model="query"
+            placeholder="Keywords to filter validators"
+          />
+        </b-input-group>
       </b-card>
       <b-row>
         <b-col
@@ -30,30 +40,59 @@
           :key="index"
           sm="12"
           md="4"
+          xl="3"
           class="text-truncate"
         >
-          <b-form-checkbox
-            v-model="pinned"
-            :value="`${chain}#${x.address}`"
-            class="custom-control-warning"
-            @change="pinValidator(`${chain}#${x.address}`)"
-          ><span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
-          </b-form-checkbox>
-          <div class="d-flex justify-content-between align-self-stretch flex-wrap">
-            <div
-              v-for="(b,i) in blocks"
-              :key="i"
-              style="width:1.5%;"
-            ><router-link :to="`./blocks/${b.height}`">
-              <div
-                v-b-tooltip.hover.v-second
-                :title="b.height"
-                :class="b.sigs && b.sigs[x.address] ? b.sigs[x.address] : 'bg-light-success'"
-                class="m-auto"
-              >&nbsp;</div>
-            </router-link>
-            </div>
+          <div class="d-flex justify-content-between">
+            <b-form-checkbox
+              v-model="pinned"
+              :value="`${chain}#${x.address}`"
+              class="custom-control-warning text-truncate"
+              @change="pinValidator(`${chain}#${x.address}`)"
+            ><span class="d-inline-block text-truncate font-weight-bold align-bottom">{{ index+1 }} {{ x.validator.moniker }}</span>
+            </b-form-checkbox>
+            <span v-if="missing[x.address]">
+              <b-badge
+                v-if="missing[x.address].missed_blocks_counter > 0"
+                v-b-tooltip.hover.v-danger
+                variant="light-danger"
+                :title="`${missing[x.address].missed_blocks_counter} missed blocks`"
+                class="text-danger text-bolder"
+              >
+                {{ missing[x.address].missed_blocks_counter }}
+              </b-badge>
+              <b-badge
+                v-else
+                v-b-tooltip.hover.v-success
+                variant="light-success"
+                title="Perfect! No missed blocks"
+              >
+                0
+              </b-badge>
+            </span>
           </div>
+          <b-skeleton-wrapper :loading="loading">
+            <template #loading>
+              <b-skeleton width="100%" />
+            </template>
+            <template #default>
+              <div class="d-flex justify-content-between align-self-stretch flex-wrap">
+                <div
+                  v-for="(b,i) in blocks"
+                  :key="i"
+                  style="width:1.5%;"
+                ><router-link :to="`./blocks/${b.height}`">
+                  <div
+                    v-b-tooltip.hover.v-second
+                    :title="b.height"
+                    :class="b.sigs && b.sigs[x.address] ? b.sigs[x.address] : 'bg-light-success'"
+                    class="m-auto"
+                  >&nbsp;</div>
+                </router-link>
+                </div>
+              </div>
+            </template>
+          </b-skeleton-wrapper>
         </b-col>
       </b-row>
     </b-card>
@@ -62,12 +101,14 @@
 
 <script>
 import {
-  BRow, BCol, VBTooltip, BFormInput, BCard, BAlert, BFormCheckbox, BButton,
+  BSkeleton, BSkeletonWrapper,
+  BRow, BCol, VBTooltip, BFormInput, BCard, BAlert, BFormCheckbox, BButton, BBadge, BInputGroup, BInputGroupPrepend,
 } from 'bootstrap-vue'
 
 import {
   consensusPubkeyToHexAddress, getCachedValidators, timeIn, toDay,
 } from '@/libs/utils'
+import { Bech32, toHex } from '@cosmjs/encoding'
 
 export default {
   components: {
@@ -77,7 +118,12 @@ export default {
     BCard,
     BAlert,
     BButton,
+    BBadge,
     BFormCheckbox,
+    BInputGroup,
+    BSkeleton,
+    BSkeletonWrapper,
+    BInputGroupPrepend,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -86,6 +132,8 @@ export default {
     const { chain } = this.$route.params
     const pinned = localStorage.getItem('pinned') ? localStorage.getItem('pinned').split(',') : ''
     return {
+      loading: true,
+      missedFilter: false,
       pinned,
       chain,
       query: '',
@@ -100,10 +148,14 @@ export default {
     uptime() {
       const vals = this.query ? this.validators.filter(x => String(x.description.moniker).indexOf(this.query) > -1) : this.validators
       vals.sort((a, b) => b.delegator_shares - a.delegator_shares)
-      return vals.map(x => ({
+      const rets = vals.map(x => ({
         validator: x.description,
         address: consensusPubkeyToHexAddress(x.consensus_pubkey),
       }))
+      if (this.missedFilter) {
+        return rets.filter(x => this.missing[x.address].missed_blocks_counter > 0)
+      }
+      return rets
     },
   },
   created() {
@@ -114,6 +166,16 @@ export default {
     }
     this.$http.getValidatorList().then(res => {
       this.validators = res
+    })
+    this.$http.getSlashingSigningInfo().then(res => {
+      if (res.info) {
+        res.info.forEach(x => {
+          if (x.address) {
+            const hex = toHex(Bech32.decode(x.address).data).toUpperCase()
+            this.missing[hex] = x
+          }
+        })
+      }
     })
     this.initBlocks()
   },
@@ -155,6 +217,7 @@ export default {
         this.blocks = blocks
 
         this.timer = setInterval(this.fetch_latest, 6000)
+        this.loading = false
       })
     },
     initColor() {
@@ -183,7 +246,7 @@ export default {
         res.block.last_commit.signatures.forEach(x => {
           if (x.validator_address) sigs[x.validator_address] = 'bg-success'
         })
-        const block = this.blocks.find(b => b[1] === res.block.last_commit.height)
+        const block = this.blocks.find(b => b.height === res.block.last_commit.height)
         if (typeof block === 'undefined') { // mei
           // this.$set(block, 0, typeof sigs !== 'undefined')
           if (this.blocks.length >= 50) this.blocks.shift()

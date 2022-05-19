@@ -18,7 +18,7 @@
 import { sha256 } from '@cosmjs/crypto'
 import { toHex } from '@cosmjs/encoding'
 import { BTable, BCardTitle, BCard } from 'bootstrap-vue'
-import { formatNumber, formatTokenAmount, formatTokenDenom } from '@/libs/utils'
+import { formatTokenAmount, formatTokenDenom } from '@/libs/utils'
 
 export default {
   components: {
@@ -37,9 +37,9 @@ export default {
           formatter: this.formatDenom,
           tdClass: 'text-nowrap text-truncate overflow-hidden',
         },
-        'abbr',
         {
-          key: 'amount',
+          key: 'abbr',
+          label: 'Amount',
         },
       ],
     }
@@ -48,14 +48,14 @@ export default {
     this.$http.getAllIBCDenoms().then(x => {
       x.denom_traces.forEach(trace => {
         const hash = toHex(sha256(new TextEncoder().encode(`${trace.path}/${trace.base_denom}`)))
-        this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace.base_denom)
+        this.$set(this.denoms, `ibc/${hash.toUpperCase()}`, trace)
       })
     })
     this.$http.getBankTotals().then(res => {
       const toshow = res.sort()
       this.assets = toshow.reverse().map(x => {
         const xh = x
-        xh.abbr = x.amount > 1 ? formatNumber(formatTokenAmount(x.amount, 0, x.denom), true, 2) : x.amount
+        xh.abbr = formatTokenAmount(x.amount, 0, x.denom)
         return xh
       })
     })
@@ -65,7 +65,11 @@ export default {
   },
   methods: {
     formatDenom(v) {
-      return formatTokenDenom(this.denoms[v] ? this.denoms[v] : v)
+      if (this.denoms[v]) {
+        const trace = this.denoms[v]
+        return `* ${formatTokenDenom(trace.base_denom)} (${trace.path})`
+      }
+      return v
     },
   },
 }

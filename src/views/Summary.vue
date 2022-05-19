@@ -164,7 +164,7 @@ export default {
       Promise.all([this.$http.getStakingPool(), this.$http.getBankTotal(res.bond_denom)])
         .then(pool => {
           const bondedAndSupply = this.chain.items.findIndex(x => x.subtitle === 'bonded_and_supply')
-          this.$set(this.chain.items[bondedAndSupply], 'title', `${formatNumber(formatTokenAmount(pool[0].bondedToken, 2, res.bond_denom), true, 0)}/${formatNumber(formatTokenAmount(pool[1].amount, 2, res.bond_denom), true, 0)}`)
+          this.$set(this.chain.items[bondedAndSupply], 'title', `${formatNumber(formatTokenAmount(pool[0].bondedToken, 2, res.bond_denom, false), true, 0)}/${formatNumber(formatTokenAmount(pool[1].amount, 2, res.bond_denom, false), true, 0)}`)
           const bondedRatio = this.chain.items.findIndex(x => x.subtitle === 'bonded_ratio')
           this.$set(this.chain.items[bondedRatio], 'title', `${percent(pool[0].bondedToken / pool[1].amount)}%`)
         })
@@ -224,15 +224,31 @@ export default {
         if (typeof data[k] === 'boolean') {
           return { title: data[k], subtitle: k }
         }
-        const d = Number(data[k])
-        if (d < 1.01) {
-          return { title: `${percent(d)}%`, subtitle: k }
-        }
-        if (d > 1000000000) {
-          return { title: `${toDuration(d / 1000000)}`, subtitle: k }
-        }
-        return { title: data[k], subtitle: k }
+        return { title: this.convert(data[k]), subtitle: k }
       })
+    },
+    convert(v) {
+      if (typeof v === 'object') {
+        const v2 = {}
+        Object.entries(v).forEach(e => {
+          const k = e[0]
+          const x = e[1]
+          v2[k] = this.convert(x)
+        })
+        return v2
+      }
+      const d = parseFloat(v)
+      if (d === 0) return 0
+      if (d < 1.01) {
+        return `${percent(d)}%`
+      }
+      if (d > 1000000000) {
+        return `${toDuration(d / 1000000)}`
+      }
+      if (d > 0) {
+        return d.toFixed()
+      }
+      return v
     },
   },
 }

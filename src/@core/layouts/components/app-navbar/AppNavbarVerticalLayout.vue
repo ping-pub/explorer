@@ -17,11 +17,7 @@
     </ul>
 
     <!-- Left Col -->
-    <div class="bookmark-wrapper align-items-center flex-grow-1 d-none d-lg-flex">
-
-      <!-- Bookmarks Container -->
-      <bookmarks />
-    </div>
+    <div class="bookmark-wrapper align-items-center flex-grow-1 d-none d-lg-flex" />
 
     <b-navbar-nav class="nav align-items-center ml-auto">
       <dark-Toggler class="d-none d-lg-block" />
@@ -35,10 +31,8 @@
 import {
   BLink, BNavbarNav,
 } from 'bootstrap-vue'
-import Bookmarks from './components/Bookmarks.vue'
 import SearchBar from './components/SearchBar.vue'
 import DarkToggler from './components/DarkToggler.vue'
-import NotificationDropdown from './components/NotificationDropdown.vue'
 
 export default {
   components: {
@@ -46,10 +40,8 @@ export default {
 
     // Navbar Components
     BNavbarNav,
-    Bookmarks,
     SearchBar,
     DarkToggler,
-    NotificationDropdown,
   },
   props: {
     toggleVerticalMenuActive: {

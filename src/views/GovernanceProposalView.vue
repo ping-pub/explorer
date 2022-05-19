@@ -86,7 +86,7 @@
             </b-tr>
           </tbody>
         </b-table-simple>
-        <div style="white-space: pre-line">
+        <div>
           <object-field-component
             :tablefield="proposal.contents"
             :small="false"
@@ -101,7 +101,7 @@
         </b-table-simple>
       </b-card-body>
       <b-card-footer>
-        <router-link :to="`../gov`">
+        <router-link :to="from">
           <b-button
             variant="outline-primary"
           >
@@ -109,10 +109,11 @@
           </b-button>
         </router-link>
         <b-button
-          v-b-modal.vote-window
+          v-b-modal.operation-modal
           :disabled="proposal.status!=2"
           variant="primary"
           class="btn float-right mg-2"
+          @click="openModal('Vote')"
         >
           {{ $t('btn_vote') }}
         </b-button>
@@ -203,7 +204,10 @@
         </div>
       </b-card-body>
     </b-card>
-    <b-card no-body>
+    <b-card
+      v-if="proposal.total_deposit"
+      no-body
+    >
       <b-card-header>
         <b-card-title>
           Deposits ({{ formatToken(proposal.total_deposit) }})
@@ -211,8 +215,9 @@
       </b-card-header>
       <b-card-body>
         <b-table
+          v-if="Array.isArray(deposits.deposits || deposits)"
           stacked="sm"
-          :items="deposits.deposits?deposits.deposits:deposits"
+          :items="deposits.deposits || deposits"
           :fields="deposit_fields"
           striped
         >
@@ -224,7 +229,7 @@
         </b-table>
       </b-card-body>
       <b-card-footer>
-        <router-link :to="`../gov`">
+        <router-link :to="from">
           <b-button
             variant="outline-primary"
           >
@@ -232,30 +237,29 @@
           </b-button>
         </router-link>
         <b-button
-          v-b-modal.deposit-window
+          v-b-modal.operation-modal
           :disabled="proposal.status!=1"
           variant="primary"
           class="btn float-right mg-2"
+          @click="openModal('GovDeposit')"
         >
           {{ $t('btn_deposit') }}
         </b-button>
         <b-button
-          v-b-modal.vote-window
+          v-b-modal.operation-modal
           :disabled="proposal.status!=2"
           variant="primary"
           class="btn float-right mg-2 mr-1"
+          @click="openModal('Vote')"
         >
           {{ $t('btn_vote') }}
         </b-button>
       </b-card-footer>
     </b-card>
-    <operation-vote-component
+    <operation-modal
+      :type="operationModalType"
       :proposal-id="Number(proposal.id)"
-      :title="proposal.title"
-    />
-    <operation-gov-deposit-component
-      :proposal-id="Number(proposal.id)"
-      :title="proposal.title"
+      :proposal-title="proposal.title"
     />
   </section>
 </template>
@@ -273,9 +277,9 @@ import {
 } from '@/libs/utils'
 import { Proposal, Proposer } from '@/libs/data'
 import dayjs from 'dayjs'
+import OperationModal from '@/views/components/OperationModal/index.vue'
 import ObjectFieldComponent from './ObjectFieldComponent.vue'
-import OperationVoteComponent from './OperationVoteComponent.vue'
-import OperationGovDepositComponent from './OperationGovDepositComponent.vue'
+
 // import { formatToken } from '@/libs/data/data'
 
 export default {
@@ -295,9 +299,8 @@ export default {
     BTooltip,
     BBadge,
     ObjectFieldComponent,
-    OperationVoteComponent,
-    OperationGovDepositComponent,
     FlipCountdown,
+    OperationModal,
   },
   data() {
     return {
@@ -307,6 +310,8 @@ export default {
       proposer: new Proposer(),
       deposits: [],
       votes: [],
+      operationModalType: '',
+      from: '../gov',
       votes_fields: [
         {
           key: 'voter',
@@ -366,6 +371,9 @@ export default {
   },
   created() {
     const pid = this.$route.params.proposalid
+    if (this.$route.query.from) {
+      this.from = this.$route.query.from
+    }
 
     this.$http.getLatestBlock().then(res => {
       this.latest = res
@@ -387,7 +395,7 @@ export default {
     })
     this.$http.getGovernanceDeposits(pid).then(res => {
       this.deposits = res
-    })
+    }).catch(() => {})
     this.$http.getGovernanceVotes(pid).then(res => {
       this.votes = res
       this.next = res.pagination ? res.pagination.next_key : null
@@ -410,6 +418,9 @@ export default {
     },
     formatAddress(v) {
       return getStakingValidatorByAccount(this.$http.config.chain_name, v)
+    },
+    openModal(type) {
+      this.operationModalType = type
     },
   },
 }
