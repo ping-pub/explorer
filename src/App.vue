@@ -30,7 +30,35 @@ export default {
     LayoutVertical,
     LayoutFull,
   },
+  setup() {
+    const { skin, skinClasses } = useAppConfig()
 
+    // If skin is dark when initialized => Add class to body
+    if (skin.value === 'dark') document.body.classList.add('dark-layout')
+
+    // Provide toast for Composition API usage
+    // This for those apps/components which uses composition API
+    // Demos will still use Options API for ease
+    provideToast({
+      hideProgressBar: true,
+      closeOnClick: false,
+      closeButton: false,
+      icon: false,
+      timeout: 3000,
+      transition: 'Vue-Toastification__fade',
+    })
+
+    // Set Window Width in store
+    store.commit('app/UPDATE_WINDOW_WIDTH', window.innerWidth)
+    const { width: windowWidth } = useWindowSize()
+    watch(windowWidth, val => {
+      store.commit('app/UPDATE_WINDOW_WIDTH', val)
+    })
+
+    return {
+      skinClasses,
+    }
+  },
   // ! We can move this computed: layout & contentLayoutType once we get to use Vue 3
   // Currently, router.currentRoute is not reactive and doesn't trigger any change
   computed: {
@@ -64,35 +92,6 @@ export default {
     // Set RTL
     const { isRTL } = $themeConfig.layout
     document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr')
-  },
-  setup() {
-    const { skin, skinClasses } = useAppConfig()
-
-    // If skin is dark when initialized => Add class to body
-    if (skin.value === 'dark') document.body.classList.add('dark-layout')
-
-    // Provide toast for Composition API usage
-    // This for those apps/components which uses composition API
-    // Demos will still use Options API for ease
-    provideToast({
-      hideProgressBar: true,
-      closeOnClick: false,
-      closeButton: false,
-      icon: false,
-      timeout: 3000,
-      transition: 'Vue-Toastification__fade',
-    })
-
-    // Set Window Width in store
-    store.commit('app/UPDATE_WINDOW_WIDTH', window.innerWidth)
-    const { width: windowWidth } = useWindowSize()
-    watch(windowWidth, val => {
-      store.commit('app/UPDATE_WINDOW_WIDTH', val)
-    })
-
-    return {
-      skinClasses,
-    }
   },
   created() {
     store.dispatch('chains/getQuotes')

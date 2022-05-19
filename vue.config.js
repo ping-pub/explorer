@@ -1,6 +1,7 @@
 const path = require('path')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 
 const productionGzipExtensions = ['js', 'css']
 
@@ -26,6 +27,7 @@ module.exports = {
       },
     },
     plugins: [
+      new NodePolyfillPlugin(),
       new BundleAnalyzerPlugin({
         analyzerMode: 'disabled',
         openAnalyzer: false,

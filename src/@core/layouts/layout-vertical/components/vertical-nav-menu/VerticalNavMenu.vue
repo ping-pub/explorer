@@ -12,9 +12,9 @@
     <div class="navbar-header expanded">
       <slot
         name="header"
-        :toggleVerticalMenuActive="toggleVerticalMenuActive"
-        :toggleCollapsed="toggleCollapsed"
-        :collapseTogglerIcon="collapseTogglerIcon"
+        :toggle-vertical-menu-active="toggleVerticalMenuActive"
+        :toggle-collapsed="toggleCollapsed"
+        :collapse-toggler-icon="collapseTogglerIcon"
       >
         <ul class="nav navbar-nav flex-row">
 

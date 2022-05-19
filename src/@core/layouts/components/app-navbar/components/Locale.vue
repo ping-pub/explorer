@@ -39,12 +39,6 @@ export default {
     BDropdownItem,
     BImg,
   },
-  // ! Need to move this computed property to comp function once we get to Vue 3
-  computed: {
-    currentLocale() {
-      return this.locales.find(l => l.locale === this.$i18n.locale)
-    },
-  },
   setup() {
     /* eslint-disable global-require */
     const locales = [
@@ -74,6 +68,12 @@ export default {
     return {
       locales,
     }
+  },
+  // ! Need to move this computed property to comp function once we get to Vue 3
+  computed: {
+    currentLocale() {
+      return this.locales.find(l => l.locale === this.$i18n.locale)
+    },
   },
 }
 </script>

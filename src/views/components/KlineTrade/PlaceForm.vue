@@ -95,10 +95,10 @@
       class="px-0"
     >
       <b-form-group>
-        <label>
+        <label for="slip">
           Slippage Tolerance
         </label>
-        <div>
+        <div id="slip">
           <b-form-radio
             v-model="slippage"
             value="0.01"

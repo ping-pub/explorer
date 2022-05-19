@@ -18,7 +18,7 @@
     </b-tabs>
     <PlaceForm
       :type="tabIndex"
-      :pool.sync="pool"
+      :pool="pool"
       :denom-trace="denomTrace"
     />
   </div>

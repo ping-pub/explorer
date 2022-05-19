@@ -26,23 +26,19 @@ export default class PingWalletClient extends SigningStargateClient {
   }
 
   async signAmino2(signerAddress, messages, fee, memo, { accountNumber, sequence, chainId }) {
-    // utils_1.assert(!proto_signing_1.isOfflineDirectSigner(this.signer))
     const accountFromSigner = (await this.signer.getAccounts()).find(account => account.address === signerAddress)
     if (!accountFromSigner) {
       throw new Error('Failed to retrieve account from signer')
     }
     const pubkey = proto_signing_1.encodePubkey(amino_1.encodeSecp256k1Pubkey(accountFromSigner.pubkey))
     const signMode = signing_1.SignMode.SIGN_MODE_LEGACY_AMINO_JSON
-    // console.log('messages:', messages)
     const msgs = messages.map(msg => this.aminoTypes.toAmino(msg))
-    // console.log('msgs:', msgs)
     const signDoc = amino_1.makeSignDoc(msgs, fee, chainId, memo, accountNumber, sequence)
     const { signature, signed } = await this.signer.signAmino(signerAddress, signDoc)
     const signedTxBody = {
       messages: signed.msgs.map(msg => this.aminoTypes.fromAmino(msg)),
       memo: signed.memo,
     }
-    // console.log(signedTxBody)
     const signedTxBodyEncodeObject = {
       typeUrl: '/cosmos.tx.v1beta1.TxBody',
       value: signedTxBody,
