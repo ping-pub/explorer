@@ -1,6 +1,6 @@
 {
-  "chain_name": "odin-mainnet-freya",
-  "api": "https://odinapi.chillvalidation.com",
+  "chain_name": "odin",
+  "api": "https://node.odin-freya-website.odinprotocol.io/mainnet/a/api",
   "rpc": ["https://node.odin-freya-website.odinprotocol.io/mainnet/a"],
   "snapshot_provider": "",
   "addr_prefix": "odin",
