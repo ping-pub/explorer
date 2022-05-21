@@ -69,7 +69,7 @@ export default {
         const trace = this.denoms[v]
         return `* ${formatTokenDenom(trace.base_denom)} (${trace.path})`
       }
-      return v
+      return formatTokenDenom(v)
     },
   },
 }
