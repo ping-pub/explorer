@@ -12,6 +12,8 @@
     "analyz": "vue-cli-service build --report"
   },
   "dependencies": {
+    "@tharsis/address-converter": "^0.1.7",
+    "@tharsis/transactions": "^0.2.2",
     "@casl/ability": "4.1.6",
     "@casl/vue": "1.1.1",
     "@cosmjs/amino": "^0.28.4",

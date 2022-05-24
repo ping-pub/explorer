@@ -3,7 +3,14 @@ module.exports = {
   env: {
     node: true,
   },
-  extends: ['plugin:vue/recommended', '@vue/airbnb'],
+  extends: [
+    '@vue/airbnb',
+    'plugin:vue/recommended', 
+    // "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript",
+    // "plugin:prettier/recommended",
+    // "prettier/@typescript-eslint"
+  ],
   parserOptions: {
     parser: '@babel/eslint-parser',
   },
@@ -26,5 +33,6 @@ module.exports = {
     'vuejs-accessibility/anchor-has-content': 'off',
     'no-unsafe-optional-chaining': 1,
     'vuejs-accessibility/label-has-for': 1,
+    'import/extensions': 'off'
   },
 }

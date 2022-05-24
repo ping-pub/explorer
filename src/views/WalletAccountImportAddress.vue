@@ -286,7 +286,7 @@
 
     <b-alert
       variant="secondary"
-      :show="!accounts"
+      :show="!accounts && device === 'keplr'"
     >
       <h4 class="alert-heading">
         Enable Keplr For {{ chainId }}
@@ -390,12 +390,6 @@ export default {
     chains() {
       const config = JSON.parse(localStorage.getItem('chains'))
 
-      Object.values(config).forEach(x => {
-        if (x.coin_type === '60' && x.chain_name !== 'gravity-bridge') {
-          this.exludes.push(x.chain_name)
-        }
-      })
-
       this.exludes.forEach(x => {
         delete config[x]
       })
@@ -406,8 +400,8 @@ export default {
         const { data } = addressDecode(this.accounts.address)
         return this.selected.map(x => {
           if (this.chains[x]) {
-            const { logo, addr_prefix } = this.chains[x]
-            const addr = addressEnCode(addr_prefix, data)
+            const { logo, addr_prefix, coin_type } = this.chains[x]
+            const addr = addressEnCode(addr_prefix, data, coin_type)
             return {
               chain: x, addr, logo, hdpath: this.hdpath,
             }
@@ -586,6 +580,7 @@ export default {
           case 'ledger':
           case 'ledger2':
             await this.connect().then(accounts => {
+              console.log('connect:', accounts)
               if (accounts) {
               // eslint-disable-next-line prefer-destructuring
                 this.accounts = accounts[0]
