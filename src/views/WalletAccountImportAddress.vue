@@ -580,7 +580,6 @@ export default {
           case 'ledger':
           case 'ledger2':
             await this.connect().then(accounts => {
-              console.log('connect:', accounts)
               if (accounts) {
               // eslint-disable-next-line prefer-destructuring
                 this.accounts = accounts[0]
