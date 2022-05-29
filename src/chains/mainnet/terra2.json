@@ -1,6 +1,6 @@
 {
     "chain_name": "terra2",
-    "api": "https://terra-api.polkachu.com/",
+    "api": ["https://phoenix-lcd.terra.dev", "https://terra-api.polkachu.com/"],
     "rpc": [],
     "snapshot_provider": "",
     "sdk_version": "0.44.2",
