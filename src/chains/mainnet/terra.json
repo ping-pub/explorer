@@ -11,13 +11,13 @@
     "logo": "/logos/terra-luna.jpg",
     "assets": [{
         "base": "uluna",
-        "symbol": "LUNA",
+        "symbol": "LUNC",
         "exponent": "6",
         "coingecko_id": "terra-luna", 
         "logo": "/logos/terra-luna.jpg"
     },{
         "base": "uusd",
-        "symbol": "UST",
+        "symbol": "USTc",
         "exponent": "6",
         "coingecko_id": "terrausd", 
         "logo": "/logos/terra-luna-ust.png"
