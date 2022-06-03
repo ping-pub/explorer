@@ -1,9 +1,9 @@
 const path = require('path')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const CompressionWebpackPlugin = require('compression-webpack-plugin')
+// const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 
-const productionGzipExtensions = ['js', 'css']
+// const productionGzipExtensions = ['js', 'css']
 
 module.exports = {
   publicPath: '/',
@@ -25,6 +25,7 @@ module.exports = {
         '@validations': path.resolve(__dirname, 'src/@core/utils/validations/validations.js'),
         '@axios': path.resolve(__dirname, 'src/libs/axios'),
       },
+      extensions: ['.json', '.js', '.jsx', '.ts', '.tsx'],
     },
     plugins: [
       new NodePolyfillPlugin(),
@@ -32,11 +33,11 @@ module.exports = {
         analyzerMode: 'disabled',
         openAnalyzer: false,
       }),
-      new CompressionWebpackPlugin({
-        test: new RegExp(`\\.(${productionGzipExtensions.join('|')})$`),
-        threshold: 8192,
-        minRatio: 0.8,
-      }),
+      // new CompressionWebpackPlugin({
+      //   test: new RegExp(`\\.(${productionGzipExtensions.join('|')})$`),
+      //   threshold: 8192,
+      //   minRatio: 0.8,
+      // }),
     ],
   },
   chainWebpack: config => {

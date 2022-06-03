@@ -1,5 +1,5 @@
 
-import { AminoSignResponse, OfflineAminoSigner, Pubkey, StdSignature, StdSignDoc } from "@cosmjs/amino";
+import { AccountData, AminoSignResponse, OfflineAminoSigner, Pubkey, StdSignature, StdSignDoc } from "@cosmjs/amino";
 import { AddressAndPubkey } from "@cosmjs/ledger-amino";
 import Transport from "@ledgerhq/hw-transport";
 
@@ -12,15 +12,15 @@ import { HdPath } from "@cosmjs/crypto";
 import { ethToCosmos } from '@tharsis/address-converter'
 import eth from "@tharsis/proto/dist/proto/ethermint/crypto/v1/ethsecp256k1/keys";
 
-export type Algo = "secp256k1" | "ed25519" | "sr25519" | "ethsecp256k1";
-export interface AccountData {
-  /** A printable address (typically bech32 encoded) */
-  readonly address: string;
-  readonly algo: Algo;
-  readonly pubkey: Uint8Array;
-}
+// export type Algo = "secp256k1" | "ed25519" | "sr25519" | "ethsecp256k1";
+// export interface AccountData {
+//   /** A printable address (typically bech32 encoded) */
+//   readonly address: string;
+//   readonly algo: Algo;
+//   readonly pubkey: Uint8Array;
+// }
 
-export class EthereumLedgerSigner {
+export class EthereumLedgerSigner implements OfflineAminoSigner{
   app: Eth
   hdpath: string
 
@@ -40,12 +40,12 @@ export class EthereumLedgerSigner {
       const x1: AccountData = {
         pubkey: new TextEncoder().encode(x.publicKey),
         address: x.address,
-        algo: "ethsecp256k1" // should be 'ethsecp256k1'
+        algo: "secp256k1" // should be 'ethsecp256k1'
       }
       const x2: AccountData = {
         pubkey: new TextEncoder().encode(x.publicKey),
         address: ethToCosmos(x.address),
-        algo: "ethsecp256k1" // // should be 'ethsecp256k1'
+        algo: "secp256k1" // // should be 'ethsecp256k1'
       }
       return [x1, x2]
     })
@@ -91,7 +91,11 @@ export class EthereumLedgerSigner {
     return new Promise((r, j) => { })
   }
 
-  async signTransaction(rawTxHex: string, resolution: LedgerEthTransactionResolution) {
+  // async sign712Transaction(rawTxHex: string, resolution: LedgerEthTransactionResolution) {
+  //   return this.app.signEIP712HashedMessage(this.hdpath, rawTxHex, resolution)
+  // }
+
+  async signTransaction(rawTxHex: string, resolution?: LedgerEthTransactionResolution) {
     return this.app.signTransaction(this.hdpath, rawTxHex, resolution)
   }
 }
