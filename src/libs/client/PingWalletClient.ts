@@ -11,7 +11,7 @@ import { LedgerSigner } from '@cosmjs/ledger-amino';
 import { EthereumLedgerSigner } from './EthereumLedgerSigner';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import TransportWebBLE from '@ledgerhq/hw-transport-web-ble'
-import { stringToPath } from '@cosmjs/crypto';
+import { HdPath, stringToPath } from '@cosmjs/crypto';
 import { StdFee } from "@cosmjs/amino";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 
@@ -44,9 +44,9 @@ import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 
 export declare type SigningClient = SigningStargateClient | SigningEthermintClient;
 
-export async function getSigningClient(device, hdpath) : Promise<SigningClient> {
+export async function getSigningClient(device, hdpath): Promise<SigningClient> {
     let ledgerAppName = 'Cosmos'
-    let coinType = Number(stringToPath(hdpath)[1])
+    let coinType = Number(hdpath[1])
     switch (coinType) {
         case 60:
             return new SigningEthermintClient(await EthereumLedgerSigner.create(device, hdpath)) // 'Ethereum'
@@ -71,7 +71,7 @@ export class SigningEthermintClient {
     }
 
     sign(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee, memo: string, explicitSignerData?: SignerData): Promise<TxRaw> {
-        return new Promise(()=>{return TxRaw.decode(null)})
+        return new Promise(() => { return TxRaw.decode(null) })
     }
 
 }

@@ -18,6 +18,7 @@ import localeData from 'dayjs/plugin/localeData'
 import { $themeColors } from '@themeConfig'
 // import { SigningStargateClient } from '@cosmjs/stargate'
 // import PingWalletClient from './data/signing'
+import { SigningStargateClient } from '@cosmjs/stargate'
 import { getSigningClient } from './client/PingWalletClient.ts'
 import { EthereumLedgerSigner } from './client/EthereumLedgerSigner.ts'
 
@@ -225,30 +226,23 @@ async function getLedgerAppName(coinType, device, hdpath) {
 
 export async function sign(device, chainId, signerAddress, messages, fee, memo, signerData) {
   const hdpath = getHdPath(signerAddress)
-  const client = getSigningClient(device, hdpath)
+  let client
+  if (device.startsWith('ledger')) {
+    client = await getSigningClient(device, hdpath)
+  } else {
+    if (!window.getOfflineSigner || !window.keplr) {
+      throw new Error('Please install keplr extension')
+    }
+    await window.keplr.enable(chainId)
+    const signer = window.getOfflineSignerOnlyAmino(chainId)
+    client = await SigningStargateClient.offline(signer)
+  }
   // let transport
   // let signer
   // const hdpath = getHdPath(signerAddress)
-  // const coinType = Number(hdpath[1])
-  // switch (device) {
-  //   case 'ledgerBle':
-  //     signer = await getLedgerAppName(coinType, device, hdpath)
-  //     break
-  //   case 'ledgerUSB':
-  //     signer = await getLedgerAppName(coinType, device, hdpath)
-  //     break
-  //   case 'keplr':
-  //   default:
-  //     if (!window.getOfflineSigner || !window.keplr) {
-  //       throw new Error('Please install keplr extension')
-  //     }
-  //     await window.keplr.enable(chainId)
-  //     signer = window.getOfflineSignerOnlyAmino(chainId)
-  // }
-
-  // // Ensure the address has some tokens to spend
-  // const client = await PingWalletClient.offline(signer)
-  return client.signAmino(device.startsWith('ledger') ? toSignAddress(signerAddress) : signerAddress, messages, fee, memo, signerData)
+  const coinType = Number(hdpath[1])
+  const addr = device.startsWith('ledger') && coinType === 118 ? toSignAddress(signerAddress) : signerAddress
+  return client.sign(addr, messages, fee, memo, signerData)
 }
 
 export async function getLedgerAddress(transport = 'blu', hdPath = "m/44'/118/0'/0/0") {
