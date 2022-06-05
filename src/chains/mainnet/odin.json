@@ -1,7 +1,7 @@
 {
   "chain_name": "odin",
   "api": "https://node.odin-freya-website.odinprotocol.io/mainnet/a/api",
-  "rpc": ["https://node.odin-freya-website.odinprotocol.io/mainnet/a"],
+  "rpc": ["http://34.79.179.216:26657,http://34.140.252.7:26657,http://35.241.221.154:26657,http://35.241.238.207:26657"],
   "snapshot_provider": "",
   "addr_prefix": "odin",
   "coin_type": "118",
