@@ -1,7 +1,0 @@
-{
-    "chain_name": "arkh",
-    "api":"https://asc-blockchain-api.arkhadian.com",
-    "sdk_version": "0.44.1",
-    "addr_prefix": "arkh",
-    "logo": "https://www.arkhadian.com/static/images/600-prism_ejAjDRh.jpg"
-}

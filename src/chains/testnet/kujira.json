@@ -1,0 +1,16 @@
+{
+    "chain_name": "kujira",
+    "api": "https://dev-api-kujira.mintthemoon.xyz",
+    "rpc": "https://dev-lcd-kujira.mintthemoon.xyz",
+    "sdk_version": "0.45.4",
+    "addr_prefix": "kujira",
+    "coin_type": "118",
+    "assets": [{
+        "base": "ukuji",
+        "symbol": "KUJI",
+        "exponent": "6",
+        "coingecko_id": "kujira", 
+        "logo": "/logos/kujira.png"
+    }],
+    "logo": "/logos/kujira.png"
+}
