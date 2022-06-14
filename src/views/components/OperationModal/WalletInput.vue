@@ -22,6 +22,13 @@
         </b-form-radio>
         <b-form-radio
           name="wallet"
+          value="metamask"
+          class="d-none d-md-block"
+        >
+          Metamask
+        </b-form-radio>
+        <b-form-radio
+          name="wallet"
           value="ledgerUSB"
         >
           Ledger (USB)
