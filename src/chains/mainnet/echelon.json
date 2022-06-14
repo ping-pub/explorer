@@ -1,8 +1,8 @@
 {
     "chain_name": "echelon",
     "coingecko": "echelon",
-    "api": "https://api.ech.network",
-    "rpc": ["https://tendermint.ech.network"],
+    "api": ["https://api.ech.network", "https://lcd-echelon.whispernode.com"],
+    "rpc": ["https://tendermint.ech.network", "https://rpc-echelon.whispernode.com"],
     "snapshot_provider": "",
     "sdk_version": "0.45.1",
     "coin_type": "60",
