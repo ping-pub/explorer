@@ -11,6 +11,10 @@
         "exponent": "6",
         "coingecko_id": "kujira", 
         "logo": "/logos/kujira.png"
+    }, {
+        "base": "factory/kujira1ltvwg69sw3c5z99c6rr08hal7v0kdzfxz07yj5/demo",
+        "symbol": "DEMO",
+        "exponent": "6"
     }],
     "logo": "/logos/kujira.png"
 }
