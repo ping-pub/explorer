@@ -1,0 +1,17 @@
+{
+  "chain_name": "source",
+  "coingecko": "source-network",
+  "api": "https://testnet.sourceprotocol.io:1317",
+  "sdk_version": "0.45.1",
+  "addr_prefix": "source",
+  "logo": "https://2061232594-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F2ufmW7exCclo14ABKCcm%2Fuploads%2FoC43RLB9pbHnkLuk4Imd%2Fsource-logo-S-only.svg?alt=media&token=56741963-b3ff-47e6-a4a2-cbf1ebf69187",
+  "assets": [
+    {
+      "base": "usource",
+      "symbol": "SOURCE",
+      "exponent": "6",
+      "coingecko_id": "source-network",
+      "logo": "https://2061232594-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F2ufmW7exCclo14ABKCcm%2Fuploads%2FoC43RLB9pbHnkLuk4Imd%2Fsource-logo-S-only.svg?alt=media&token=56741963-b3ff-47e6-a4a2-cbf1ebf69187"
+    }
+  ]
+}
