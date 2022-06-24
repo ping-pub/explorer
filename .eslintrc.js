@@ -5,9 +5,9 @@ module.exports = {
   },
   extends: [
     '@vue/airbnb',
-    'plugin:vue/recommended', 
+    'plugin:vue/recommended',
     // "plugin:@typescript-eslint/recommended",
-    "plugin:import/typescript",
+    'plugin:import/typescript',
     // "plugin:prettier/recommended",
     // "prettier/@typescript-eslint"
   ],
@@ -27,12 +27,12 @@ module.exports = {
     'vue/multi-word-component-names': 0,
     'vue/no-mutating-props': 0,
     'vue/v-slot-style': 0,
-    'camelcase': 0,
+    camelcase: 0,
     'vuejs-accessibility/click-events-have-key-events': 'off',
     'vuejs-accessibility/mouse-events-have-key-events': 'off',
     'vuejs-accessibility/anchor-has-content': 'off',
     'no-unsafe-optional-chaining': 1,
     'vuejs-accessibility/label-has-for': 1,
-    'import/extensions': 'off'
+    'import/extensions': 'off',
   },
 }
