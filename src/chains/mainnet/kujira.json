@@ -4,9 +4,9 @@
     "api": ["https://kujira-api.polkachu.com"],
     "rpc": ["https://kujira-api.polkachu.com:443"],
     "snapshot_provider": "",
-    "sdk_version": "0.44.5",
+    "sdk_version": "0.45.4",
     "coin_type": "118",
-    "min_tx_fee": "3000",
+    "min_tx_fee": "1250",
     "addr_prefix": "kujira",
     "logo": "/logos/kujira.png",
     "assets": [{
