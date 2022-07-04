@@ -1,8 +1,8 @@
 
 {
     "chain_name": "shentu",
-    "api":"https://azuredragon.noopsbycertik.com",
-    "rpc": ["https://shenturpc.certikpowered.info:443", "http://3.236.161.42:26657"],
+    "api":"https://shentuapi.panthea.eu",
+    "rpc": ["https://shenturpc.panthea.eu", "https://shenturpc.panthea.eu"],
     "snapshot_provider": "",
     "sdk_version": "0.45.0",
     "coin_type": "118",
