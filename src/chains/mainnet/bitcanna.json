@@ -1,7 +1,7 @@
 {
     "chain_name": "bitcanna",
     "coingecko": "bitcanna", 
-    "api": ["https://lcd.bitcanna.io", "https://bitcannaapi.panthea.eu/"], 
+    "api": ["https://lcd.bitcanna.io", "https://bitcannaapi.panthea.eu"], 
     "rpc": ["https://rpc.bitcanna.io:443", "https://rpc.bitcanna.ezstaking.io:443", "https://bitcannarpc.panthea.eu:443"],
     "sdk_version": "0.45.1",
     "coin_type": "118",
