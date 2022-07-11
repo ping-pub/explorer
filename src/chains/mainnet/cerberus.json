@@ -1,8 +1,8 @@
 {
   "chain_name": "cerberus",
   "coingecko": "",
-  "api": ["https://api.cerberus.zone:1317"],
-  "rpc": ["https://rpc.cerberus.zone:26657", "https://rpc-cerberus.ecostake.com:443"],
+  "api": ["https://api.cerberus.zone:1317", "https://cerberusapi.panthea.eu"],
+  "rpc": ["https://rpc.cerberus.zone:26657", "https://rpc-cerberus.ecostake.com:443", "https://cerberusrpc.panthea.eu:443"],
   "snapshot_provider": "",
   "sdk_version": "0.44.5",
   "coin_type": "118",
