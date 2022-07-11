@@ -1,6 +1,6 @@
 {
   "chain_name": "cerberus",
-  "coingecko": "",
+  "coingecko": "cerberus",
   "api": ["https://api.cerberus.zone:1317", "https://cerberusapi.panthea.eu"],
   "rpc": ["https://rpc.cerberus.zone:26657", "https://rpc-cerberus.ecostake.com:443", "https://cerberusrpc.panthea.eu:443"],
   "snapshot_provider": "",
@@ -14,7 +14,7 @@
       "base": "ucrbrus",
       "symbol": "CRBRUS",
       "exponent": "6",
-      "coingecko_id": "",
+      "coingecko_id": "cerberus-2",
       "logo": "/logos/cerberus.png"
     }
   ]
