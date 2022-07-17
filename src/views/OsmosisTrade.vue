@@ -133,6 +133,12 @@ export default {
     SummaryPriceChart,
     FeatherIcon,
   },
+  beforeRouteUpdate(to, from, next) {
+    const { poolid } = to.params
+    this.init(poolid)
+    next()
+    // }
+  },
   data() {
     return {
       loading: true,
@@ -205,12 +211,6 @@ export default {
         this.init(poolid)
       })
     })
-  },
-  beforeRouteUpdate(to, from, next) {
-    const { poolid } = to.params
-    this.init(poolid)
-    next()
-    // }
   },
   methods: {
     getPrice(symbol) {

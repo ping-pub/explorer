@@ -1,7 +1,7 @@
 {
     "chain_name": "juno",
     "coingecko": "juno-network",
-    "api": "https://lcd-juno.itastakers.com",
+    "api": ["https://lcd-juno.itastakers.com", "https://juno-api.polkachu.com", "https://api-juno.nodes.guru"],
     "rpc": ["https://rpc-juno.itastakers.com:443", "https://rpc-juno.itastakers.com:443"],
     "snapshot_provider": "",
     "sdk_version": "0.44.5",

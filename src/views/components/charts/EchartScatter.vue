@@ -32,14 +32,14 @@ export default {
   components: {
     VChart,
   },
+  provide: {
+    [THEME_KEY]: 'light',
+  },
   props: {
     items: {
       type: Array,
       default: () => [],
     },
-  },
-  provide: {
-    [THEME_KEY]: 'light',
   },
   computed: {
     option() {

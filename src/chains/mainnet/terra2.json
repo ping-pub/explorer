@@ -1,8 +1,7 @@
 {
-    "chain_name": "terra-luna",
-    "coingecko": "terra-luna",
-    "api": "https://fcd.terra.dev",
-    "rpc": ["https://terra-rpc.easy2stake.com:443", "http://public-node.terra.dev:26657"],
+    "chain_name": "terra2",
+    "api": ["https://phoenix-lcd.terra.dev", "https://terra-api.polkachu.com/"],
+    "rpc": [],
     "snapshot_provider": "",
     "sdk_version": "0.44.2",
     "coin_type": "330",
@@ -11,13 +10,13 @@
     "logo": "/logos/terra-luna.jpg",
     "assets": [{
         "base": "uluna",
-        "symbol": "LUNC",
+        "symbol": "LUNA",
         "exponent": "6",
         "coingecko_id": "terra-luna", 
         "logo": "/logos/terra-luna.jpg"
     },{
         "base": "uusd",
-        "symbol": "USTc",
+        "symbol": "UST",
         "exponent": "6",
         "coingecko_id": "terrausd", 
         "logo": "/logos/terra-luna-ust.png"

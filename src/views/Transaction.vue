@@ -120,12 +120,6 @@ export default {
     BBadge,
     ObjectFieldComponent,
   },
-  data() {
-    return {
-      error: null,
-      tx: { tx: {} },
-    }
-  },
   beforeRouteUpdate(to, from, next) {
     const { hash } = to.params
     if (hash !== from.params.hash) {
@@ -136,6 +130,12 @@ export default {
         this.error = err
       })
       next()
+    }
+  },
+  data() {
+    return {
+      error: null,
+      tx: { tx: {} },
     }
   },
   created() {

@@ -28,7 +28,6 @@
         v-if="showSearchBar"
         v-model="searchQuery"
         placeholder="Search Height/Transaction/Account Address"
-        autofocus
         :state="false"
         autocomplete="off"
         @keyup.enter="doQuery"

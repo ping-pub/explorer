@@ -39,7 +39,7 @@ export default class ChainFetch {
     let chain = store.state.chains.selected
     const lschains = localStorage.getItem('chains')
     if (lschains) {
-      chain = JSON.parse(lschains)[chain.chain_name]
+      chain = JSON.parse(lschains)[chain?.chain_name || 'cosmos']
     }
     if (!chain.sdk_version) {
       chain.sdk_version = '0.33'
@@ -491,7 +491,8 @@ export default class ChainFetch {
 
   // Tx Submit
   async broadcastTx(bodyBytes, config = null) {
-    const txString = toBase64(TxRaw.encode(bodyBytes).finish())
+    const txbytes = bodyBytes.authInfoBytes ? TxRaw.encode(bodyBytes).finish() : bodyBytes
+    const txString = toBase64(txbytes)
     const txRaw = {
       tx_bytes: txString,
       mode: 'BROADCAST_MODE_SYNC', // BROADCAST_MODE_SYNC, BROADCAST_MODE_BLOCK, BROADCAST_MODE_ASYNC

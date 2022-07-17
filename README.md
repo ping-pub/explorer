@@ -42,7 +42,7 @@ yarn && yarn build
 cp -r ./dist/* <ROOT_OF_WEB_SERVER>
 ```
 
-# Enable LCD for Ping.pub
+# Enable LCD for Ping.pub (do this on the config for your chain)
 
 1. Set `enable = true` in `./config/app.toml`
 ```

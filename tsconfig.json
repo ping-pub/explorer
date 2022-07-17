@@ -2,20 +2,17 @@
     "compilerOptions": {
         "lib": [
             "dom",
-            "es5",
-            "es2015"
+            "es6",
+            "es2016"
         ],
-        "target": "es5",
+        "target": "es6",
         "module": "es2015",
         "moduleResolution": "node",
         "sourceMap": true,
         "allowSyntheticDefaultImports": true
     },
     "include": [
-        "src/**/*.ts",
-        "src/**/*.tsx",
-        "src/**/*.vue",
-        "src/**/*.d.ts"
+        "src/**/*",
     ],
     "exclude": ["node_modules"]
 }

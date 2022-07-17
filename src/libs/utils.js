@@ -1,5 +1,5 @@
 import {
-  Bech32, fromBase64, fromBech32, fromHex, toHex,
+  Bech32, fromBase64, fromBech32, fromHex, toBech32, toHex,
 } from '@cosmjs/encoding'
 import { sha256, stringToPath } from '@cosmjs/crypto'
 // ledger
@@ -7,6 +7,7 @@ import TransportWebBLE from '@ledgerhq/hw-transport-web-ble'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 import CosmosApp from 'ledger-cosmos-js'
 import { LedgerSigner } from '@cosmjs/ledger-amino'
+import { ethToEvmos } from '@tharsis/address-converter'
 
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
@@ -16,7 +17,10 @@ import RIPEMD160 from 'ripemd160'
 import localeData from 'dayjs/plugin/localeData'
 import { $themeColors } from '@themeConfig'
 // import { SigningStargateClient } from '@cosmjs/stargate'
-import PingWalletClient from './data/signing'
+// import PingWalletClient from './data/signing'
+import { SigningStargateClient } from '@cosmjs/stargate'
+import { getSigningClient } from './client/PingWalletClient.ts'
+import { EthereumLedgerSigner } from './client/EthereumLedgerSigner.ts'
 
 dayjs.extend(localeData)
 dayjs.extend(duration)
@@ -74,12 +78,19 @@ export function pubkeyToAccountAddress(pubkey, prefix) {
   return Bech32.encode(prefix, pubkey, 40)
 }
 
+export function toETHAddress(cosmosAddress) {
+  return `0x${toHex(fromBech32(cosmosAddress).data)}`
+}
+
 export function addressDecode(address) {
-  return Bech32.decode(address)
+  if (address.startsWith('0x')) {
+    return fromBech32(ethToEvmos(address))
+  }
+  return fromBech32(address)
 }
 
 export function addressEnCode(prefix, pubkey) {
-  return Bech32.encode(prefix, pubkey)
+  return toBech32(prefix, pubkey)
 }
 
 export function getUserCurrency() {
@@ -175,10 +186,6 @@ export function consensusPubkeyToHexAddress(consensusPubkey) {
   return address
 }
 
-export function toETHAddress(cosmosAddress) {
-  return `0x${toHex(fromBech32(cosmosAddress).data)}`
-}
-
 function toSignAddress(addr) {
   const { data } = addressDecode(addr)
   return addressEnCode('cosmos', data)
@@ -192,65 +199,57 @@ function getHdPath(address) {
       hdPath = curr.hdpath
     }
   })
-  // return [44, 118, 0, 0, 0]
   //  m/0'/1/2'/2/1000000000
   return stringToPath(hdPath)
 }
 
-function getLedgerAppName(coinType) {
+async function getLedgerAppName(coinType, device, hdpath) {
+  let ledgerAppName = 'Cosmos'
   switch (coinType) {
     case 60:
-      return 'Ethereum'
+      return EthereumLedgerSigner.create(device, hdpath) // 'Ethereum'
     case 529:
-      return 'Secret'
+      ledgerAppName = 'Secret' // 'Secret'
+      break
     case 852:
-      return 'Desmos'
+      ledgerAppName = 'Desmos' // 'Desmos'
+      break
+    case 330:
+      ledgerAppName = 'Terra' // 'Terra'
+      break
     case 118:
     default:
-      return 'Cosmos'
   }
+  const transport = await (device === 'ledgerBle' ? TransportWebBLE.create() : TransportWebUSB.create())
+  return new LedgerSigner(transport, { hdPaths: [hdpath], ledgerAppName })
 }
 
 export async function sign(device, chainId, signerAddress, messages, fee, memo, signerData) {
-  let transport
-  let signer
   const hdpath = getHdPath(signerAddress)
-  const coinType = Number(hdpath[1])
-  const ledgerName = getLedgerAppName(coinType)
-  switch (device) {
-    case 'ledgerBle':
-      transport = await TransportWebBLE.create()
-      signer = new LedgerSigner(transport, { hdPaths: [hdpath], ledgerAppName: ledgerName })
-      break
-    case 'ledgerUSB':
-      transport = await TransportWebUSB.create()
-      signer = new LedgerSigner(transport, { hdPaths: [hdpath], ledgerAppName: ledgerName })
-      break
-    case 'keplr':
-    default:
-      if (!window.getOfflineSigner || !window.keplr) {
-        throw new Error('Please install keplr extension')
-      }
-      await window.keplr.enable(chainId)
-      // signer = window.getOfflineSigner(chainId)
-      signer = window.getOfflineSignerOnlyAmino(chainId)
+  let client
+  if (device.startsWith('ledger')) {
+    client = await getSigningClient(device, hdpath)
+  } else {
+    if (!window.getOfflineSigner || !window.keplr) {
+      throw new Error('Please install keplr extension')
+    }
+    await window.keplr.enable(chainId)
+    const signer = window.getOfflineSignerOnlyAmino(chainId)
+    client = await SigningStargateClient.offline(signer)
   }
-
-  // if (signer) return signAmino(signer, signerAddress, messages, fee, memo, signerData)
-
-  // Ensure the address has some tokens to spend
-  const client = await PingWalletClient.offline(signer)
-  // const client = await SigningStargateClient.offline(signer)
-  return client.signAmino2(device.startsWith('ledger') ? toSignAddress(signerAddress) : signerAddress, messages, fee, memo, signerData)
-  // return signDirect(signer, signerAddress, messages, fee, memo, signerData)
+  // let transport
+  // let signer
+  // const hdpath = getHdPath(signerAddress)
+  const coinType = Number(hdpath[1])
+  const addr = device.startsWith('ledger') && coinType === 118 ? toSignAddress(signerAddress) : signerAddress
+  return client.sign(addr, messages, fee, memo, signerData)
 }
 
 export async function getLedgerAddress(transport = 'blu', hdPath = "m/44'/118/0'/0/0") {
-  const trans = transport === 'usb' ? await TransportWebUSB.create() : await TransportWebBLE.create()
+  const protocol = transport === 'usb' ? await TransportWebUSB.create() : await TransportWebBLE.create()
   // extract Cointype from from HDPath
   const coinType = Number(stringToPath(hdPath)[1])
-  const ledgerName = getLedgerAppName(coinType)
-  const signer = new LedgerSigner(trans, { hdPaths: [stringToPath(hdPath)], ledgerAppName: ledgerName })
+  const signer = await getLedgerAppName(coinType, protocol, stringToPath(hdPath))
   return signer.getAccounts()
 }
 

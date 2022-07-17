@@ -13,9 +13,9 @@
     >
       <slot
         name="navbar"
-        :toggleVerticalMenuActive="toggleVerticalMenuActive"
-        :navbarBackgroundColor="navbarBackgroundColor"
-        :navbarTypeClass="[...navbarTypeClass, 'header-navbar navbar navbar-shadow align-items-center']"
+        :toggle-vertical-menu-active="toggleVerticalMenuActive"
+        :navbar-background-color="navbarBackgroundColor"
+        :navbar-type-class="[...navbarTypeClass, 'header-navbar navbar navbar-shadow align-items-center']"
       >
         <app-navbar-vertical-layout :toggle-vertical-menu-active="toggleVerticalMenuActive" />
       </slot>
@@ -109,14 +109,6 @@ export default {
     LayoutContentRendererDefault,
   },
   mixins: [mixinVerticalLayout],
-  computed: {
-    layoutContentRenderer() {
-      const rendererType = this.$route.meta.contentRenderer
-      if (rendererType === 'sidebar-left') return 'layout-content-renderer-left'
-      if (rendererType === 'sidebar-left-detached') return 'layout-content-renderer-left-detached'
-      return 'layout-content-renderer-default'
-    },
-  },
   setup() {
     const {
       routerTransition, navbarBackgroundColor, navbarType, footerType, isNavMenuHidden,
@@ -154,6 +146,14 @@ export default {
       navbarBackgroundColor,
       isNavMenuHidden,
     }
+  },
+  computed: {
+    layoutContentRenderer() {
+      const rendererType = this.$route.meta.contentRenderer
+      if (rendererType === 'sidebar-left') return 'layout-content-renderer-left'
+      if (rendererType === 'sidebar-left-detached') return 'layout-content-renderer-left-detached'
+      return 'layout-content-renderer-default'
+    },
   },
 }
 </script>

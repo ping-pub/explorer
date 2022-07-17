@@ -57,6 +57,13 @@ export default {
     ObjectFieldComponent,
     ArrayFieldComponent,
   },
+  beforeRouteUpdate(to, from, next) {
+    const { height } = to.params
+    if (height > 0 && height !== from.params.height) {
+      this.initData(height)
+      next()
+    }
+  },
   data() {
     return {
       block: { block: { header: {}, data: {}, evidence: {} } },
@@ -67,13 +74,6 @@ export default {
         { key: 'messages', formatter: v => abbrMessage(v) },
         { key: 'memo' },
       ],
-    }
-  },
-  beforeRouteUpdate(to, from, next) {
-    const { height } = to.params
-    if (height > 0 && height !== from.params.height) {
-      this.initData(height)
-      next()
     }
   },
   created() {

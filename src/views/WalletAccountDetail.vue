@@ -464,6 +464,23 @@ export default {
     'b-tooltip': VBTooltip,
     Ripple,
   },
+  beforeRouteUpdate(to, from, next) {
+    // const { address } = this.$route.params
+    const { address } = to.params
+    if (address !== from.params.hash) {
+      this.address = address
+      this.$http.getAuthAccount(this.address).then(acc => {
+        this.account = acc
+        this.initial()
+        this.$http.getTxsBySender(this.address).then(res => {
+          this.transactions = res
+        })
+      }).catch(err => {
+        this.error = err
+      })
+      next()
+    }
+  },
   data() {
     const { address } = this.$route.params
     return {
@@ -645,23 +662,6 @@ export default {
     }).catch(err => {
       this.error = err
     })
-  },
-  beforeRouteUpdate(to, from, next) {
-    // const { address } = this.$route.params
-    const { address } = to.params
-    if (address !== from.params.hash) {
-      this.address = address
-      this.$http.getAuthAccount(this.address).then(acc => {
-        this.account = acc
-        this.initial()
-        this.$http.getTxsBySender(this.address).then(res => {
-          this.transactions = res
-        })
-      }).catch(err => {
-        this.error = err
-      })
-      next()
-    }
   },
   mounted() {
     const elem = document.getElementById('txevent')
