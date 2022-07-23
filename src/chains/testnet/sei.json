@@ -1,0 +1,19 @@
+{
+    "chain_name": "SEI",
+    "coingecko": "",
+    "api": ["https://sei-api.nodeist.net"], 
+    "rpc": ["http://157.245.100.103:36377"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.4",
+    "coin_type": "505",
+    "min_tx_fee": "800",
+    "addr_prefix": "sei",
+    "logo": "https://nodeist.net/projeler/sei.png",
+    "assets": [{
+        "base": "usei",
+        "symbol": "SEI",
+        "exponent": "6", 
+        "coingecko_id": "",
+        "logo": "https://nodeist.net/projeler/sei.png"
+    }]
+}
