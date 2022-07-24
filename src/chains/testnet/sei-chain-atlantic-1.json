@@ -1,0 +1,15 @@
+{
+    "chain_name": "atlantic-1",
+    "api": ["https://sei-api.theamsolutions.info/"],
+    "rpc": ["http://rpc-sei-test.ecostake.com"],
+    "sdk_version": "0.44.3",
+    "coin_type": "118",
+    "addr_prefix": "sei",
+    "logo": "https://pbs.twimg.com/profile_images/1525699660223942656/SryHMGDk_400x400.jpg",
+    "assets": [{
+        "base": "usei",
+        "symbol": "SEI",
+        "exponent": "6",
+        "logo": "https://pbs.twimg.com/profile_images/1525699660223942656/SryHMGDk_400x400.jpg"
+    }]
+}
