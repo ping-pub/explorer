@@ -508,6 +508,7 @@ export default {
           average: 0.025,
           high: 0.03,
         },
+        features: chain.keplr_features || [],
       }, null, '\t')
     },
     formatPubkey(v) {
