@@ -76,7 +76,7 @@ export class SendMessageAdapter implements MessageAdapter {
     toProto(message: EncodeObject) {
         const param = message.value
         const amount = Array.isArray(param.amount) ? param.amount[0] : param.amount
-        return createMsgSend(param.fromAddress, param.toAddress, amount.amount, param.amount.denom)
+        return createMsgSend(param.fromAddress, param.toAddress, amount.amount, amount.denom)
     }
     getTypes() {
         return MSG_SEND_TYPES
