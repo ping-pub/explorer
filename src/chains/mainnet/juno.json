@@ -8,7 +8,7 @@
     "coin_type": "118",
     "min_tx_fee": "3000",
     "addr_prefix": "juno",
-    "logo": "/logos/juno.jpg",
+    "logo": "/logos/juno.png",
     "assets": [{
         "base": "ujuno",
         "symbol": "JUNO",
