@@ -60,6 +60,9 @@ export class EthereumLedgerSigner implements OfflineAminoSigner{
       } 
       if(e.toString().indexOf('0x6e00')> 0) {
         throw new Error('Please open Ethereum app on the Ledger!')
+      } 
+      if(e.toString().indexOf('0x6511')> 0) {
+        throw new Error('Please open Ethereum app on the Ledger!')
       }
       throw e
     })
