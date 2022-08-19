@@ -1,7 +1,7 @@
 {
   "chain_name": "passage",
-  "api": ["https://passage-api.polkachu.com"],
-  "rpc": ["https://passage-rpc.polkachu.com:443"],
+  "api": ["https://passage-api.polkachu.com", "https://passageapi.panthea.eu"],
+  "rpc": ["https://passage-rpc.polkachu.com:443", "https://passagerpc.panthea.eu:443"],
   "snapshot_provider": "",
   "sdk_version": "0.45.5",
   "coin_type": "118",
