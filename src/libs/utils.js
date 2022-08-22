@@ -351,14 +351,22 @@ export function isToken(value) {
 export function formatTokenDenom(tokenDenom) {
   if (tokenDenom && tokenDenom.code === undefined) {
     let denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
-    const config = Object.values(getLocalChains())
-
-    config.forEach(x => {
-      if (x.assets) {
-        const asset = x.assets.find(a => (a.base === denom))
-        if (asset) denom = asset.symbol
-      }
-    })
+    const chains = getLocalChains()
+    const selected = localStorage.getItem('selected_chain')
+    const selChain = chains[selected]
+    const nativeAsset = selChain.assets.find(a => (a.base === denom))
+    if (nativeAsset) {
+      denom = nativeAsset.symbol
+    } else {
+      const config = Object.values(chains)
+      console.log(config, localStorage.getItem('selected_chain'))
+      config.forEach(x => {
+        if (x.assets) {
+          const asset = x.assets.find(a => (a.base === denom))
+          if (asset) denom = asset.symbol
+        }
+      })
+    }
     return denom.length > 10 ? `${denom.substring(0, 7).toUpperCase()}..${denom.substring(denom.length - 3)}` : denom.toUpperCase()
   }
   return ''
