@@ -1,6 +1,6 @@
 <template>
   <b-card
-    v-if="data"
+    v-if="data && data.items"
     no-body
     :class="`card-statistics ${data.class} `"
   >
