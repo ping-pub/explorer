@@ -124,7 +124,7 @@ import {
 import Ripple from 'vue-ripple-directive'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import store from '@/store/index'
-import { timeIn, toDay } from '@/libs/utils'
+import { timeIn, toDay, getLocalChains } from '@/libs/utils'
 import AppFooter from '@/@core/layouts/components/AppFooter.vue'
 import FullHeader from './components/FullHeader.vue'
 
@@ -162,6 +162,12 @@ export default {
       }
       return this.downImg
     },
+  },
+  beforeCreate() {
+    const keys = Object.keys(getLocalChains())
+    if (keys.length === 1) {
+      this.$router.push(`/${keys[0]}`)
+    }
   },
   methods: {
     fetch(k) {
