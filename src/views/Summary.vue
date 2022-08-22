@@ -238,7 +238,7 @@ export default {
         return v2
       }
       const d = parseFloat(v)
-      if (d === 0) return 0
+      if (d === 0) return '0'
       if (d < 1.01) {
         return `${percent(d)}%`
       }
