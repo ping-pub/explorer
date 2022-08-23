@@ -120,7 +120,7 @@ const router = new VueRouter({
     // chain modules
     {
       path: '/:chain/',
-      name: 'info',
+      name: 'dashboard',
       alias: '/:chain',
       component: () => import('@/views/Summary.vue'),
       meta: {
@@ -128,6 +128,20 @@ const router = new VueRouter({
         breadcrumb: [
           {
             text: 'Home',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/:chain/parameters',
+      name: 'parameters',
+      component: () => import('@/views/Summary.vue'),
+      meta: {
+        pageTitle: 'Parameters',
+        breadcrumb: [
+          {
+            text: 'Parameters',
             active: true,
           },
         ],

@@ -359,7 +359,6 @@ export function formatTokenDenom(tokenDenom) {
       denom = nativeAsset.symbol
     } else {
       const config = Object.values(chains)
-      console.log(config, localStorage.getItem('selected_chain'))
       config.forEach(x => {
         if (x.assets) {
           const asset = x.assets.find(a => (a.base === denom))
