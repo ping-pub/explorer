@@ -13,11 +13,15 @@ function processMenu() {
     blockchains.push(menu)
   })
 
-  chainMenus.push({
-    title: 'blockchains',
-    children: blockchains,
-    icon: 'https://ping.pub/logo.svg',
-  })
+  if (blockchains.length > 1) {
+    chainMenus.push({ header: 'ecosystem' })
+    chainMenus.push({
+      title: 'blockchains',
+      children: blockchains,
+      tag: `${blockchains.length}`,
+      icon: 'https://ping.pub/logo.svg',
+    })
+  }
   chainMenus.push({ header: 'LINKS' })
   if (isTestnet()) {
     chainMenus.push({

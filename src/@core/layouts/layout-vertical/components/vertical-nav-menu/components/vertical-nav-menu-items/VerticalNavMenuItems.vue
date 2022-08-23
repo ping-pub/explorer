@@ -58,7 +58,7 @@ export default {
       }
       current.children = children
       // this.items.unshift(current)
-      return [{ header: 'dashboard' }, current, { header: 'ecosystem' }].concat(this.items)
+      return [{ header: 'dashboard' }, current].concat(this.items)
     },
   },
 }
