@@ -12,17 +12,19 @@
 
       "description": "The native token of Oraichain",
 
-      "denom_units": [
+     
+     
 
-        {
 
-          "denom": "ibc/161D7D62BAB3B9C39003334F1671208F43C06B643CC9EDBBE82B64793C857F1D",
 
-          "exponent": 0
 
-        },
 
-        {
+
+
+
+
+
+
 
           "denom": "orai",
 
