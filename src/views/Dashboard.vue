@@ -150,7 +150,7 @@
           sm="6"
         >
           <dashboard-card-horizontal
-            icon="BoxIcon"
+            icon="LockIcon"
             :statistic="walletStaking"
             statistic-title="Staking"
           />
@@ -160,8 +160,8 @@
           sm="6"
         >
           <dashboard-card-horizontal
-            icon="PercentIcon"
-            color="danger"
+            icon="ArrowUpCircleIcon"
+            color="info"
             :statistic="walletRewards"
             statistic-title="Rewards"
           />
@@ -171,8 +171,8 @@
           sm="6"
         >
           <dashboard-card-horizontal
-            icon="TrendingUpIcon"
-            color="warning"
+            icon="UnlockIcon"
+            color="danger"
 
             :statistic="walletUnbonding"
             statistic-title="Unbonding"
