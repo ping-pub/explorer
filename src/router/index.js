@@ -122,7 +122,7 @@ const router = new VueRouter({
       path: '/:chain/',
       name: 'dashboard',
       alias: '/:chain',
-      component: () => import('@/views/Summary.vue'),
+      component: () => import('@/views/Dashboard.vue'),
       meta: {
         pageTitle: 'Home',
         breadcrumb: [
@@ -136,7 +136,7 @@ const router = new VueRouter({
     {
       path: '/:chain/parameters',
       name: 'parameters',
-      component: () => import('@/views/Summary.vue'),
+      component: () => import('@/views/Parameters.vue'),
       meta: {
         pageTitle: 'Parameters',
         breadcrumb: [
@@ -400,7 +400,6 @@ router.beforeEach((to, from, next) => {
   const c = to.params.chain
   if (c) {
     store.commit('select', { chain_name: String(c).toLowerCase() })
-    store.dispatch('chains/getAllIBCDenoms', Vue.prototype)
   }
 
   const config = JSON.parse(localStorage.getItem('chains'))

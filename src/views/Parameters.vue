@@ -10,50 +10,32 @@
     </b-alert>
     <b-row>
       <b-col>
-        <summary-parmeters-component
-          :data="chain"
-        />
-      </b-col>
-    </b-row>
-    <b-row v-if="marketChartData">
-      <b-col>
-        <b-card>
-          <summary-price-chart
-            :chart-data="marketChartData"
-            :height="150"
-            :min-height="150"
-          />
-        </b-card>
+        <parameters-module-component :data="chain" />
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <summary-assets-component />
+        <parameters-module-component :data="mint" />
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <summary-parmeters-component :data="mint" />
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        <summary-parmeters-component :data="staking" />
+        <parameters-module-component :data="staking" />
       </b-col>
     </b-row>
     <b-row v-if="gov.items.length > 0">
       <b-col>
-        <summary-parmeters-component :data="gov" />
+        <parameters-module-component :data="gov" />
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <summary-parmeters-component :data="distribution" />
+        <parameters-module-component :data="distribution" />
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <summary-parmeters-component :data="slashing" />
+        <parameters-module-component :data="slashing" />
       </b-col>
     </b-row>
   </div>
@@ -64,12 +46,10 @@ import {
   BRow, BCol, BAlert, BCard,
 } from 'bootstrap-vue'
 import {
-  formatNumber, formatTokenAmount, getUserCurrency, isToken, percent, timeIn, toDay, toDuration, tokenFormatter,
+  formatNumber, formatTokenAmount, isToken, percent, timeIn, toDay, toDuration, tokenFormatter,
 } from '@/libs/utils'
 
-import SummaryParmetersComponent from './SummaryParmetersComponent.vue'
-import SummaryAssetsComponent from './SummaryAssetsComponent.vue'
-import SummaryPriceChart from './SummaryPriceChart.vue'
+import ParametersModuleComponent from './components/parameters/ParametersModuleComponent.vue'
 
 export default {
   components: {
@@ -77,9 +57,7 @@ export default {
     BCol,
     BAlert,
     BCard,
-    SummaryParmetersComponent,
-    SummaryAssetsComponent,
-    SummaryPriceChart,
+    ParametersModuleComponent,
   },
   data() {
     return {
@@ -117,29 +95,6 @@ export default {
         items: [],
       },
     }
-  },
-  computed: {
-    marketChartData() {
-      if (this.marketData && this.marketData.prices) {
-        const labels = this.marketData.prices.map(x => x[0])
-        const data = this.marketData.prices.map(x => x[1])
-        return {
-          labels,
-          datasets: [
-            {
-              label: `Price (${getUserCurrency().toUpperCase()})`,
-              data,
-              backgroundColor: 'rgba(54, 162, 235, 0.2)',
-              borderColor: 'rgba(54, 162, 235, 1)',
-              borderWidth: 1,
-              pointStyle: 'dash',
-              barThickness: 15,
-            },
-          ],
-        }
-      }
-      return null
-    },
   },
   created() {
     this.$http.getLatestBlock().then(res => {

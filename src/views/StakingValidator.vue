@@ -204,70 +204,68 @@
       </b-card-footer>
     </b-card>
     <!-- First Row -->
-    <template>
-      <b-row class="match-height">
-        <b-col
-          lg="4"
-          md="12"
-        >
-          <staking-commission-component :data="validator.commission" />
-        </b-col>
-        <b-col
-          lg="4"
-          md="12"
-        >
-          <staking-reward-component
-            :data="distribution"
-            :validator="validator.operator_address"
-            :address="accountAddress"
+    <b-row class="match-height">
+      <b-col
+        lg="4"
+        md="12"
+      >
+        <staking-commission-component :data="validator.commission" />
+      </b-col>
+      <b-col
+        lg="4"
+        md="12"
+      >
+        <staking-reward-component
+          :data="distribution"
+          :validator="validator.operator_address"
+          :address="accountAddress"
+        />
+      </b-col>
+      <b-col
+        lg="4"
+        md="12"
+      >
+        <staking-address-component
+          :hex-address="hexAddress"
+          :operator-address="validator.operator_address"
+          :consensus-pubkey="validator.consensus_pubkey"
+          :account-address="accountAddress"
+        />
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <b-card title="Transactions">
+          <b-table
+            :items="txs"
+            striped
+            hover
+            responsive="sm"
+            stacked="sm"
+          >
+            <template #cell(height)="data">
+              <router-link :to="`../blocks/${data.item.height}`">
+                {{ data.item.height }}
+              </router-link>
+            </template>
+            <template #cell(txhash)="data">
+              <router-link :to="`../tx/${data.item.txhash}`">
+                {{ formatHash(data.item.txhash) }}
+              </router-link>
+            </template>
+          </b-table>
+          <b-pagination
+            v-if="Number(transactions.page_total) > 1"
+            :total-rows="transactions.total_count"
+            :per-page="transactions.limit"
+            :value="transactions.page_number"
+            align="center"
+            class="mt-1"
+            @change="pageload"
           />
-        </b-col>
-        <b-col
-          lg="4"
-          md="12"
-        >
-          <staking-address-component
-            :hex-address="hexAddress"
-            :operator-address="validator.operator_address"
-            :consensus-pubkey="validator.consensus_pubkey"
-            :account-address="accountAddress"
-          />
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <b-card title="Transactions">
-            <b-table
-              :items="txs"
-              striped
-              hover
-              responsive="sm"
-              stacked="sm"
-            >
-              <template #cell(height)="data">
-                <router-link :to="`../blocks/${data.item.height}`">
-                  {{ data.item.height }}
-                </router-link>
-              </template>
-              <template #cell(txhash)="data">
-                <router-link :to="`../tx/${data.item.txhash}`">
-                  {{ formatHash(data.item.txhash) }}
-                </router-link>
-              </template>
-            </b-table>
-            <b-pagination
-              v-if="Number(transactions.page_total) > 1"
-              :total-rows="transactions.total_count"
-              :per-page="transactions.limit"
-              :value="transactions.page_number"
-              align="center"
-              class="mt-1"
-              @change="pageload"
-            />
-          </b-card>
-        </b-col>
-      </b-row>
-    </template>
+        </b-card>
+      </b-col>
+    </b-row>
     <operation-modal
       type="Delegate"
       :validator-address="validator.operator_address"
@@ -286,9 +284,9 @@ import {
 } from '@/libs/utils'
 import { keybase } from '@/libs/fetch'
 import OperationModal from '@/views/components/OperationModal/index.vue'
-import StakingAddressComponent from './StakingAddressComponent.vue'
-import StakingCommissionComponent from './StakingCommissionComponent.vue'
-import StakingRewardComponent from './StakingRewardComponent.vue'
+import StakingAddressComponent from './components/staking/StakingAddressComponent.vue'
+import StakingCommissionComponent from './components/staking/StakingCommissionComponent.vue'
+import StakingRewardComponent from './components/staking/StakingRewardComponent.vue'
 
 export default {
   components: {

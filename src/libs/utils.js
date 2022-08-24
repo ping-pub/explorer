@@ -439,9 +439,9 @@ export function formatNumber(count, withAbbr = false, decimals = 2) {
   return result
 }
 
-export function tokenFormatter(tokens, denoms = {}) {
+export function tokenFormatter(tokens, denoms = {}, decimal = 2) {
   if (Array.isArray(tokens)) {
-    return tokens.map(t => formatToken(t, denoms, 2)).join(', ')
+    return tokens.map(t => formatToken(t, denoms, decimal)).join(', ')
   }
   return formatToken(tokens, denoms, 2)
 }

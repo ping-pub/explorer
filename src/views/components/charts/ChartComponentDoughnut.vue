@@ -12,7 +12,7 @@
 import { percent } from '@/libs/utils'
 import { $themeColors } from '@themeConfig'
 
-import ChartjsComponentDoughnutChart from './ChartjsComponentDoughnutChart.vue'
+import ChartjsComponentDoughnutChart from './ChartjsComponentDoughnutChart'
 
 export default {
   name: 'ChartDoughnut',

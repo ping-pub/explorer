@@ -70,6 +70,8 @@ export default {
       if (defaultWallet && defaultWallet.length > 0) {
         localStorage.setItem('default-wallet', defaultWallet)
         state.chains.defaultWallet = defaultWallet
+      } else {
+        state.chains.defaultWallet = null
       }
     },
     setIBCDenoms(state, denoms) {

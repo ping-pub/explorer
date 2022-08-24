@@ -255,16 +255,20 @@ export default {
     },
     accounts() {
       let accounts = getLocalAccounts() || {}
-      accounts = Object.entries(accounts).map(v => ({ wallet: v[0], address: v[1].address.find(x => x.chain === this.selected_chain.chain_name) }))
+      accounts = Object.entries(accounts)
+        .map(v => ({ wallet: v[0], address: v[1].address.find(x => x.chain === this.selected_chain.chain_name) }))
+        .filter(v => v.address)
 
-      if (accounts.length > 0) {
+      // accounts > 0 and wallet not setted, pick the first one as default
+      if (accounts.length > 0 && accounts.findIndex(x => x.wallet === this.walletName) < 0) {
         this.updateDefaultWallet(accounts[0].wallet)
       }
-      return accounts.filter(x => x.address)
-    },
-  },
-  mounted() {
 
+      if (accounts.findIndex(x => x.wallet === this.walletName) < 0 && this.walletName !== 'Wallet') {
+        this.updateDefaultWallet(null)
+      }
+      return accounts
+    },
   },
   methods: {
     formatAddr(v) {

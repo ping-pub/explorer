@@ -251,7 +251,7 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 import AppCollapse from '@core/components/app-collapse/AppCollapse.vue'
 import AppCollapseItem from '@core/components/app-collapse/AppCollapseItem.vue'
 import OperationModal from '@/views/components/OperationModal/index.vue'
-import ChartComponentDoughnut from './ChartComponentDoughnut.vue'
+import ChartComponentDoughnut from './components/charts/ChartComponentDoughnut.vue'
 import EchartScatter from './components/charts/EchartScatter.vue'
 
 export default {
