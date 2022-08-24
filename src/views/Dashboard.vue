@@ -346,7 +346,9 @@ export default {
               })
             })
           })
-          this.walletUnbonding = this.formatToken(newTokens)
+          if (newTokens.length > 0) {
+            this.walletUnbonding = this.formatToken(newTokens)
+          }
         }
       })
     },
