@@ -2,8 +2,8 @@
 {
     "chain_name": "shentu",
     "coingecko": "certik",
-    "api": ["https://chainfull.noopsbycertik.com", "https://shentuapi.panthea.eu"],
-    "rpc": ["https://shenturpc.panthea.eu:443", "https://shenturpc.panthea.eu:443"],
+    "api": ["https://chainfull.noopsbycertik.com"],
+    "rpc": "",
     "snapshot_provider": "",
     "sdk_version": "0.44.3",
     "coin_type": "118",
