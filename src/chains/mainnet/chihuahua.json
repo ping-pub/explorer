@@ -1,6 +1,5 @@
 {
     "chain_name": "chihuahua",
-    "coingecko": "",
     "api": ["https://api.chihuahua.wtf", "https://chihuahua-api.mercury-nodes.net"],
     "rpc": ["https://rpc.chihuahua.wtf:443", "https://rpc.chihuahua.wtf:443"],
     "sdk_version": "0.44.3",
@@ -12,7 +11,7 @@
         "base": "uhuahua",
         "symbol": "HUAHUA",
         "exponent": "6",
-        "coingecko_id": "", 
+        "coingecko_id": "chihuahua-token", 
         "logo": "/logos/chihuahua.png"
     }]
 }

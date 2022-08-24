@@ -1,6 +1,5 @@
 {
     "chain_name": "evmos",
-    "coingecko": "",
     "api": ["https://evmos-api.polkachu.com", "https://rest.bd.evmos.org:1317", "https://evmos-api.skynetvalidators.com"],
     "rpc": ["https://evmos-rpc.polkachu.com:443", "https://tendermint.bd.evmos.org:26657", "https://tendermint.bd.evmos.org:26657"],
     "snapshot_provider": "",
@@ -14,7 +13,7 @@
         "base": "aevmos",
         "symbol": "evmos",
         "exponent": "18",
-        "coingecko_id": "",
+        "coingecko_id": "evmos",
         "logo": "/logos/evmos.jpeg"
     }]
 }
