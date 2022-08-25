@@ -124,10 +124,10 @@ const router = new VueRouter({
       alias: '/:chain',
       component: () => import('@/views/Dashboard.vue'),
       meta: {
-        pageTitle: 'Home',
+        pageTitle: 'Dashboard',
         breadcrumb: [
           {
-            text: 'Home',
+            text: 'Dashboard',
             active: true,
           },
         ],
