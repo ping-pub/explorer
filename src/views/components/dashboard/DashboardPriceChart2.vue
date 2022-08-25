@@ -33,6 +33,9 @@
               text="Pairs"
               :variant="color"
             >
+              <b-dropdown-header>
+                <span class="text-primary font-weight-bolder">{{ tickers.length }}</span> pairs available
+              </b-dropdown-header>
               <vue-perfect-scrollbar
                 :settings="settings"
                 class="pair-scroll-area"
@@ -200,7 +203,7 @@
 <script>
 import {
   BCard, BCardHeader, BCardTitle, BCardBody, BCardText, BFormRadio, BButton, BButtonGroup, BCol, BRow,
-  BCardFooter, BBadge, VBTooltip, BDropdown, BDropdownItem,
+  BCardFooter, BBadge, VBTooltip, BDropdown, BDropdownItem, BDropdownHeader,
 } from 'bootstrap-vue'
 import VueApexCharts from 'vue-apexcharts'
 import { $themeColors } from '@themeConfig'
@@ -224,6 +227,7 @@ export default {
     BBadge,
     BDropdown,
     BDropdownItem,
+    BDropdownHeader,
     FeatherIcon,
     VuePerfectScrollbar,
   },
