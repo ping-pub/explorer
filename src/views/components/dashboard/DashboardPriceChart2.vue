@@ -83,7 +83,7 @@
         </div>
       </b-col>
       <b-col md="8">
-        <b-card-header class="d-flex justify-content-between">
+        <b-card-header class="d-flex justify-content-between px-0">
           <!-- size -->
           <b-button-group
             size="sm"
@@ -126,7 +126,7 @@
           </b-button-group>
         </b-card-header>
 
-        <b-card-body class="pb-0">
+        <b-card-body class="p-0">
           <!-- apex chart -->
           <vue-apex-charts
             type="line"
@@ -141,8 +141,7 @@
       <div v-if="coinInfo.description && coinInfo.description.en">
         {{ coinInfo.description.en || '' }}
       </div>
-      <div class="my-1">
-        LINKS:
+      <div class="mt-1">
         <b-button
           :href="homepage"
           class="mr-1"
@@ -357,6 +356,8 @@ export default {
   created() {
     this.$http.getMarketChart(this.days).then(res => {
       this.marketData = res
+    }).catch(() => {
+      this.marketData = null
     })
     this.$http.getCoinInfo().then(res => {
       if (res) {

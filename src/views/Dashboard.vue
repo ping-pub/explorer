@@ -303,7 +303,7 @@ export default {
   methods: {
     formatToken(tokens) {
       if (Array.isArray(tokens)) {
-        let nativeToken = tokens.filter(x => !x.denom.toUpperCase().startsWith('IBC/'))
+        let nativeToken = tokens.filter(x => x.denom.length < 11)
         if (tokens.length > 1) {
           const sum = {}
           const reduce = nativeToken.reduce((b, a) => {
