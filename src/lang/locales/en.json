@@ -36,7 +36,7 @@
   "staking": "Staking",
   "governance": "Governance",
   "summary": "Summary",
-  "blocks": "Blocks / Txs",
+  "blocks": "Blocks / Transactions",
   "blockchains": "Blockchains",
   "uptime": "Uptime",
   "statesync": "State Sync",
