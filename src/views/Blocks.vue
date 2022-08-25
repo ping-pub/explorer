@@ -191,7 +191,7 @@ export default {
         tx.setHash(txs[i])
         if (direction === 'head') {
           this.txs.unshift(tx)
-          if (this.txs.length > 100) {
+          if (this.txs.length > 200) {
             this.txs.pop()
           }
         } else if (this.txs.length < 100) {
