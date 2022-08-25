@@ -2,9 +2,9 @@
   <b-card no-body>
     <b-card-body class="d-flex justify-content-between align-items-center">
       <div class="truncate">
-        <h2 class="mb-25 font-weight-bolder">
+        <h4 class="mb-25 font-weight-bolder">
           {{ statistic }}
-        </h2>
+        </h4>
         <span>{{ statisticTitle }}</span>
       </div>
       <b-avatar

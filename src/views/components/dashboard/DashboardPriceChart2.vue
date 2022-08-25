@@ -36,30 +36,38 @@
               text="Pairs"
               :variant="color"
             >
-              <b-dropdown-item
-                v-for="(pair, i) in tickers"
-                :key="i"
-                @click="selectPair(pair)"
+              <vue-perfect-scrollbar
+                :settings="settings"
+                class="pair-scroll-area"
               >
-                <b-row style="width:400px;">
-                  <b-col cols="4">
-                    {{ pair.market.name }}
-                  </b-col>
-                  <b-col
-                    cols="4"
-                    class="text-uppercase text-truncate"
-                  >
-                    {{ coinInfo.symbol }}/{{ pair.target }}
-                  </b-col>
-                  <b-col
-                    cols="4"
-                    class="font-weight-bold"
-                    :class="`text-${colorMap(pair.trust_score)}`"
-                  >
-                    ${{ pair.converted_last.usd }}
-                  </b-col>
-                </b-row>
-              </b-dropdown-item>
+                <b-dropdown-item
+                  v-for="(pair, i) in tickers"
+                  :key="i"
+                  @click="selectPair(pair)"
+                >
+                  <b-row style="width:400px;">
+                    <b-col
+                      cols="4"
+                      class="text-truncate"
+                    >
+                      {{ pair.market.name }}
+                    </b-col>
+                    <b-col
+                      cols="4"
+                      class="text-uppercase text-truncate"
+                    >
+                      {{ coinInfo.symbol }}/{{ pair.target }}
+                    </b-col>
+                    <b-col
+                      cols="4"
+                      class="font-weight-bold"
+                      :class="`text-${colorMap(pair.trust_score)}`"
+                    >
+                      ${{ pair.converted_last.usd }}
+                    </b-col>
+                  </b-row>
+                </b-dropdown-item>
+              </vue-perfect-scrollbar>
             </b-dropdown>
             <div class="text-truncate ml-1">
               <sup class="text-body">
@@ -199,6 +207,7 @@ import {
 } from 'bootstrap-vue'
 import VueApexCharts from 'vue-apexcharts'
 import { $themeColors } from '@themeConfig'
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import FeatherIcon from '../../../@core/components/feather-icon/FeatherIcon.vue'
 
 export default {
@@ -219,12 +228,16 @@ export default {
     BDropdown,
     BDropdownItem,
     FeatherIcon,
+    VuePerfectScrollbar,
   },
   directives: {
     'b-tooltip': VBTooltip,
   },
   data() {
     return {
+      settings: {
+        maxScrollbarLength: 60,
+      },
       colors: {
         green: 'success',
         yellow: 'warning',
@@ -390,3 +403,12 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.pair-scroll-area {
+  position: relative;
+  margin: auto;
+  /* width: 400px; //*/
+  max-height: 300px;
+}
+</style>

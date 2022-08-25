@@ -11,9 +11,9 @@
       />
     </b-avatar>
     <div class="truncate">
-      <h2 class="mb-25 font-weight-bolder">
+      <h4 class="mb-25 font-weight-bolder">
         {{ statistic }}
-      </h2>
+      </h4>
       <span>{{ statisticTitle }}</span>
     </div>
   </b-card>
