@@ -241,7 +241,7 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
   // let signer
   // const hdpath = getHdPath(signerAddress)
   const coinType = Number(hdpath[1])
-  const addr = device.startsWith('ledger') && coinType === 118 ? toSignAddress(signerAddress) : signerAddress
+  const addr = device.startsWith('ledger') && coinType !== 60 ? toSignAddress(signerAddress) : signerAddress
   return client.sign(addr, messages, fee, memo, signerData)
 }
 
