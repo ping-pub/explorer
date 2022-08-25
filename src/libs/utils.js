@@ -241,7 +241,7 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
   // let signer
   // const hdpath = getHdPath(signerAddress)
   const coinType = Number(hdpath[1])
-  const addr = device.startsWith('ledger') && coinType === 118 ? toSignAddress(signerAddress) : signerAddress
+  const addr = device.startsWith('ledger') && coinType !== 60 ? toSignAddress(signerAddress) : signerAddress
   return client.sign(addr, messages, fee, memo, signerData)
 }
 
@@ -351,14 +351,21 @@ export function isToken(value) {
 export function formatTokenDenom(tokenDenom) {
   if (tokenDenom && tokenDenom.code === undefined) {
     let denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
-    const config = Object.values(getLocalChains())
-
-    config.forEach(x => {
-      if (x.assets) {
-        const asset = x.assets.find(a => (a.base === denom))
-        if (asset) denom = asset.symbol
-      }
-    })
+    const chains = getLocalChains()
+    const selected = localStorage.getItem('selected_chain')
+    const selChain = chains[selected]
+    const nativeAsset = selChain.assets.find(a => (a.base === denom))
+    if (nativeAsset) {
+      denom = nativeAsset.symbol
+    } else {
+      const config = Object.values(chains)
+      config.forEach(x => {
+        if (x.assets) {
+          const asset = x.assets.find(a => (a.base === denom))
+          if (asset) denom = asset.symbol
+        }
+      })
+    }
     return denom.length > 10 ? `${denom.substring(0, 7).toUpperCase()}..${denom.substring(denom.length - 3)}` : denom.toUpperCase()
   }
   return ''
@@ -432,9 +439,9 @@ export function formatNumber(count, withAbbr = false, decimals = 2) {
   return result
 }
 
-export function tokenFormatter(tokens, denoms = {}) {
+export function tokenFormatter(tokens, denoms = {}, decimal = 2) {
   if (Array.isArray(tokens)) {
-    return tokens.map(t => formatToken(t, denoms, 2)).join(', ')
+    return tokens.map(t => formatToken(t, denoms, decimal)).join(', ')
   }
   return formatToken(tokens, denoms, 2)
 }

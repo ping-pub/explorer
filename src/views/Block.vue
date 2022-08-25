@@ -47,8 +47,8 @@ import { fromBase64 } from '@cosmjs/encoding'
 import { decodeTxRaw } from '@cosmjs/proto-signing'
 import Tx from '@/libs/data/tx'
 import { abbrMessage, tokenFormatter } from '@/libs/utils'
-import ObjectFieldComponent from './ObjectFieldComponent.vue'
-import ArrayFieldComponent from './ArrayFieldComponent.vue'
+import ObjectFieldComponent from './components/ObjectFieldComponent.vue'
+import ArrayFieldComponent from './components/ArrayFieldComponent.vue'
 
 export default {
   components: {

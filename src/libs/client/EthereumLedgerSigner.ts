@@ -54,6 +54,17 @@ export class EthereumLedgerSigner implements OfflineAminoSigner{
         algo: "secp256k1" // should be 'ethsecp256k1'
       }
       return [x2, x1]
+    }).catch(e=> {
+      if(e.toString().indexOf('0x6b0c')> 0) {
+        throw new Error('Please unlock your Ledger first')
+      } 
+      if(e.toString().indexOf('0x6e00')> 0) {
+        throw new Error('Please open Ethereum app on the Ledger!')
+      } 
+      if(e.toString().indexOf('0x6511')> 0) {
+        throw new Error('Please open Ethereum app on the Ledger!')
+      }
+      throw e
     })
   };
 
@@ -85,7 +96,6 @@ export class EthereumLedgerSigner implements OfflineAminoSigner{
             signed: signDoc,
             signature
           }
-          console.log(result, output)
           return output
         })
       }

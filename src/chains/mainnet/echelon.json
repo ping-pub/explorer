@@ -9,6 +9,7 @@
     "min_tx_fee": "3000000000000000",
     "addr_prefix": "echelon",
     "logo": "/logos/echelon.gif",
+    "keplr_features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
     "assets": [{
         "base": "aechelon",
         "symbol": "ECH",

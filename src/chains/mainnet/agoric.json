@@ -1,6 +1,6 @@
 {
     "chain_name": "agoric",
-    "api": ["https://api.agoric.sgtstake.com", "https://main.api.agoric.net"],
+    "api": ["https://api.agoric.sgtstake.com", "https://agoric-api.polkachu.com", "https://api-agoric.nodes.guru", "https://agoric.stakesystems.io", "https://agoric-lcd.stakely.io"],
     "rpc": ["https://main.rpc.agoric.net:443", "https://main.rpc.agoric.net:443"],
     "snapshot_provider": "",
     "sdk_version": "0.41.3",
@@ -13,8 +13,8 @@
         "coingecko_id": "", 
         "logo": ""
     },{
-        "base": "urun",
-        "symbol": "RUN",
+        "base": "uist",
+        "symbol": "IST",
         "exponent": "6",
         "coingecko_id": "", 
         "logo": ""

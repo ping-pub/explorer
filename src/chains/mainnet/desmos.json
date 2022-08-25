@@ -1,9 +1,8 @@
 {
     "chain_name": "desmos",
     "coingecko": "desmos",
-    "api": ["https://desmosapi.panthea.eu", "https://api.mainnet.desmos.network", "https://desmos.api.ping.pub"],
-    "rpc": ["https://desmosrpc.panthea.eu:443", "https://rpc.mainnet.desmos.network:443"],
-    "snapshot_provider": "05d15d195cd40a1d20f937a87a63fbb3ec1a4b80@desmos.rpc.ping.pub:26656",
+    "api": ["https://api.mainnet.desmos.network"],
+    "rpc": ["https://rpc.mainnet.desmos.network:443"],
     "sdk_version": "0.44.4",
     "coin_type": "852",
     "min_tx_fee": "3000",

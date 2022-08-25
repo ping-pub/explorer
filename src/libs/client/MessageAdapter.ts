@@ -64,7 +64,8 @@ export class BeginRedelegateMessageAdapter implements MessageAdapter {
 export class DelegateMessageAdapter implements MessageAdapter {
     toProto(message: EncodeObject) {
         const param = message.value
-        return createMsgDelegate(param.delegatorAddress, param.validatorAddress, param.amount[0].amount, param.amount[0].denom)
+        const amount = Array.isArray(param.amount) ? param.amount[0] : param.amount
+        return createMsgDelegate(param.delegatorAddress, param.validatorAddress, amount.amount, amount.denom)
     }
     getTypes() {
         return MSG_DELEGATE_TYPES
@@ -74,7 +75,8 @@ export class DelegateMessageAdapter implements MessageAdapter {
 export class SendMessageAdapter implements MessageAdapter {
     toProto(message: EncodeObject) {
         const param = message.value
-        return createMsgSend(param.fromAddress, param.toAddress, param.amount[0].amount, param.amount[0].denom)
+        const amount = Array.isArray(param.amount) ? param.amount[0] : param.amount
+        return createMsgSend(param.fromAddress, param.toAddress, amount.amount, amount.denom)
     }
     getTypes() {
         return MSG_SEND_TYPES
@@ -84,7 +86,8 @@ export class SendMessageAdapter implements MessageAdapter {
 export class UndelegateMessageAdapter implements MessageAdapter {
     toProto(message: EncodeObject) {
         const param = message.value
-        return createMsgUndelegate(param.delegatorAddress, param.validatorAddress, param.amount[0].amount, param.amount[0].denom)
+        const amount = Array.isArray(param.amount) ? param.amount[0] : param.amount
+        return createMsgUndelegate(param.delegatorAddress, param.validatorAddress, amount.amount, amount.denom)
     }
     getTypes() {
         return MSG_UNDELEGATE_TYPES

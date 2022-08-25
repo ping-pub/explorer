@@ -56,7 +56,7 @@ export default class ChainFetch {
   }
 
   async getNodeInfo() {
-    return this.get('/node_info')
+    return this.get('/cosmos/base/tendermint/v1beta1/node_info')
   }
 
   async getLatestBlock(config = null) {
@@ -416,6 +416,10 @@ export default class ChainFetch {
     return this.get('/bank/balances/'.concat(address), config).then(data => commonProcess(data))
   }
 
+  async getCommunityPool(config = null) {
+    return this.get('/cosmos/distribution/v1beta1/community_pool', config).then(data => commonProcess(data))
+  }
+
   async getAllIBCDenoms(config = null) {
     const conf = config || this.getSelectedConfig()
     const sdkVersion = conf.sdk_version
@@ -466,6 +470,14 @@ export default class ChainFetch {
     const currency = getUserCurrency()
     if (conf.assets[0] && conf.assets[0].coingecko_id) {
       return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin || conf.assets[0].coingecko_id}/market_chart?vs_currency=${currency}&days=${days}`)
+    }
+    return null
+  }
+
+  async getCoinInfo(coin = null) {
+    const conf = this.getSelectedConfig()
+    if (conf.assets[0] && conf.assets[0].coingecko_id) {
+      return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin || conf.assets[0].coingecko_id}`)
     }
     return null
   }

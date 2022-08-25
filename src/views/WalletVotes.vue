@@ -2,7 +2,7 @@
   <b-tabs content-class="mt-1">
     <!-- This tabs content will always be mounted -->
     <b-tab
-      title="Ongoing Proposals"
+      title="Active Proposals"
       pill
     >
       <b-row class="match-height">
@@ -158,7 +158,7 @@ import {
 } from '@/libs/utils'
 import dayjs from 'dayjs'
 import WalletUpgradeEvents from './WalletUpgradeEvents.vue'
-import ObjectFieldComponent from './ObjectFieldComponent.vue'
+import ObjectFieldComponent from './components/ObjectFieldComponent.vue'
 
 export default {
   components: {

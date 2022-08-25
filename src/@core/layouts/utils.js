@@ -40,6 +40,8 @@ export const resolveNavDataRouteName = link => {
  * @param {Object} link nav-link object
  */
 export const isNavLinkActive = link => {
+  // only select one active nav
+  if (link.route && link.route.name === 'dashboard' && link.title !== link.route.name) return false
   // Matched routes array of current route
   const matchedRoutes = router.currentRoute.matched
 

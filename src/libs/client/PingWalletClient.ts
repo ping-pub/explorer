@@ -156,6 +156,10 @@ export class SigningEthermintClient {
         this.signer.prefix = fromBech32(signerAddress).prefix
         const account = await this.signer.getAccounts()
 
+        const acc = account.find(x => x.address === signerAddress)
+        if(!acc) {
+            throw new Error('The signer address dose not exsits in Ledger!')
+        }
         const sender = {
             accountAddress: signerAddress,
             sequence: explicitSignerData.sequence,
@@ -240,7 +244,6 @@ function makeRawTx(sender, messages, memo, fee, signature, registry): TxRaw {
         signatures: [fromHex(signature)],
     });
 
-    console.log("rawTx", rawTx)
     return rawTx
 }
 

@@ -278,7 +278,7 @@ import {
 import { Proposal, Proposer } from '@/libs/data'
 import dayjs from 'dayjs'
 import OperationModal from '@/views/components/OperationModal/index.vue'
-import ObjectFieldComponent from './ObjectFieldComponent.vue'
+import ObjectFieldComponent from './components/ObjectFieldComponent.vue'
 
 // import { formatToken } from '@/libs/data/data'
 

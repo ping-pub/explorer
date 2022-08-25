@@ -19,6 +19,7 @@ if (isTestnet()) {
 const update = {}
 configs.keys().forEach(k => {
   const c = configs(k)
+  c.chain_name = String(c.chain_name).toLowerCase()
   update[c.chain_name] = c
 })
 
@@ -69,6 +70,8 @@ export default {
       if (defaultWallet && defaultWallet.length > 0) {
         localStorage.setItem('default-wallet', defaultWallet)
         state.chains.defaultWallet = defaultWallet
+      } else {
+        state.chains.defaultWallet = null
       }
     },
     setIBCDenoms(state, denoms) {

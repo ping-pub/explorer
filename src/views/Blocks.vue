@@ -4,57 +4,84 @@
       no-body
       class="text-truncate"
     >
-      <b-card-header>
-        <b-card-title>
-          Blocks
-        </b-card-title>
-      </b-card-header>
-      <b-table
-        :items="blocks"
-        :fields="list_fields"
-        :sort-desc="true"
-        sort-by="tokens"
-        striped
-        hover
-        stacked="sm"
+      <b-tabs
+        pills
+        class="mt-1"
       >
-        <!-- Column: Height -->
-        <template #cell(height)="data">
-          <router-link :to="`./blocks/${data.item.block.header.height}`">
-            {{ data.item.block.header.height }}
-          </router-link>
-        </template>
-        <template #cell(hash)="data">
-          <small>{{ data.item.block_id.hash }}</small>
-        </template>
-        <template #cell(time)="data">
-          {{ formatTime(data.item.block.header.time) }}
-        </template>
-        <template #cell(proposer)="data">
-          {{ formatProposer(data.item.block.header.proposer_address) }}
-        </template>
-        <template #cell(txs)="data">
-          {{ length(data.item.block.data.txs) }}
-        </template>
+        <b-tab
+          title="Recent"
+          disabled
+        />
+        <b-tab
+          title="Blocks"
+          active
+        >
+          <b-table
+            :items="blocks"
+            :fields="list_fields"
+            :sort-desc="true"
+            sort-by="tokens"
+            striped
+            hover
+            stacked="sm"
+          >
+            <!-- Column: Height -->
+            <template #cell(height)="data">
+              <router-link :to="`./blocks/${data.item.block.header.height}`">
+                {{ data.item.block.header.height }}
+              </router-link>
+            </template>
+            <template #cell(hash)="data">
+              <small>{{ data.item.block_id.hash }}</small>
+            </template>
+            <template #cell(time)="data">
+              {{ formatTime(data.item.block.header.time) }}
+            </template>
+            <template #cell(proposer)="data">
+              {{ formatProposer(data.item.block.header.proposer_address) }}
+            </template>
+            <template #cell(txs)="data">
+              {{ length(data.item.block.data.txs) }}
+            </template>
 
-      </b-table>
+          </b-table>
+        </b-tab>
+        <b-tab title="Transactions">
+          <b-table
+            :items="txs"
+            :fields="txFields"
+            responsive="sm"
+          >
+            <template #cell(hash)="data">
+              <router-link :to="`./tx/${data.value}`">
+                {{ shortHash(data.value) }}
+              </router-link>
+            </template>
+          </b-table>
+        </b-tab>
+      </b-tabs>
     </b-card>
   </div>
 </template>
 
 <script>
 import {
-  BTable, BCard, BCardHeader, BCardTitle, VBTooltip,
+  BTable, BCard, BCardHeader, BCardTitle, VBTooltip, BTab, BTabs,
 } from 'bootstrap-vue'
 import {
   getCachedValidators,
   getStakingValidatorByHex,
-  toDay,
+  toDay, abbr, abbrMessage, tokenFormatter,
 } from '@/libs/utils'
+import { decodeTxRaw } from '@cosmjs/proto-signing'
+import { fromBase64 } from '@cosmjs/encoding'
+import Tx from '@/libs/data/tx'
 // import fetch from 'node-fetch'
 
 export default {
   components: {
+    BTab,
+    BTabs,
     BCard,
     BTable,
     BCardHeader,
@@ -67,6 +94,7 @@ export default {
     return {
       islive: true,
       blocks: [],
+      txs: [],
       list_fields: [
         {
           key: 'height',
@@ -90,6 +118,13 @@ export default {
           tdClass: 'd-none d-md-block',
         },
       ],
+      txFields: [
+        { key: 'hash' },
+        { key: 'time', formatter: v => toDay(v, 'time') },
+        { key: 'fee', formatter: v => tokenFormatter(v) },
+        { key: 'messages', formatter: v => abbrMessage(v) },
+        { key: 'memo' },
+      ],
     }
   },
   created() {
@@ -111,6 +146,9 @@ export default {
           this.$http.getBlockByHeight(item).then(b => {
             resolve()
             this.blocks.push(b)
+            if (this.txs.length < 20) {
+              this.extractTx(b, 'tail')
+            }
           })
         }))
       })
@@ -123,6 +161,7 @@ export default {
   },
   methods: {
     length: v => (Array.isArray(v) ? v.length : 0),
+    shortHash: v => abbr(v),
     formatTime: v => toDay(v, 'time'),
     formatProposer(v) {
       return getStakingValidatorByHex(this.$http.config.chain_name, v)
@@ -130,9 +169,35 @@ export default {
     fetch() {
       this.$http.getLatestBlock().then(b => {
         const has = this.blocks.findIndex(x => x.block.header.height === b.block.header.height)
-        if (has < 0) this.blocks.unshift(b)
+        if (has < 0) {
+          this.blocks.unshift(b)
+          this.extractTx(b)
+        }
         if (this.blocks.length > 200) this.blocks.pop()
       })
+    },
+    extractTx(block, direction = 'head') {
+      const { txs } = block.block.data
+      if (txs === null) return
+      for (let i = 0; i < txs.length; i += 1) {
+        let tx = new Tx()
+        try {
+          const origin = decodeTxRaw(fromBase64(txs[i]))
+          tx = Tx.create(origin)
+          tx.time = block.block.header.time
+        } catch (e) {
+          // catch errors
+        }
+        tx.setHash(txs[i])
+        if (direction === 'head') {
+          this.txs.unshift(tx)
+          if (this.txs.length > 200) {
+            this.txs.pop()
+          }
+        } else if (this.txs.length < 100) {
+          this.txs.push(tx)
+        }
+      }
     },
   },
 }

@@ -214,6 +214,11 @@ export default {
     loadData() {
       this.$http.getValidatorList().then(v => {
         this.validators = v
+        if (!this.selectedValidator) {
+          const r = Math.random()
+          const index = (r * v.length).toFixed()
+          this.selectedValidator = v[index].operator_address
+        }
       })
       this.$http.getValidatorUnbondedList().then(v => {
         this.unbundValidators = v

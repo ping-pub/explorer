@@ -25,6 +25,12 @@
                 />
               </b-breadcrumb-item>
               <b-breadcrumb-item
+                :to="`/${chainname}`"
+                class="text-uppercase"
+              >
+                {{ chainname }}
+              </b-breadcrumb-item>
+              <b-breadcrumb-item
                 v-for="item in $route.meta.breadcrumb"
                 :key="item.text"
                 :active="item.active"
@@ -64,6 +70,11 @@ export default {
     BBreadcrumbItem,
     BRow,
     BCol,
+  },
+  computed: {
+    chainname() {
+      return this.$store?.state?.chains?.selected?.chain_name
+    },
   },
 }
 </script>

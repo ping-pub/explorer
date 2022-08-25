@@ -1,6 +1,6 @@
 <template>
   <b-card
-    v-if="data"
+    v-if="data && data.items"
     no-body
     :class="`card-statistics ${data.class} `"
   >
@@ -85,8 +85,8 @@
 import {
   BCard, BCardHeader, BCardTitle, BCardText, BCardBody, BRow, BCol, BMedia, BMediaAside, BAvatar, BMediaBody, BPopover, BButton,
 } from 'bootstrap-vue'
-import ObjectFieldComponent from './ObjectFieldComponent.vue'
-import ArrayFieldComponent from './ArrayFieldComponent.vue'
+import ObjectFieldComponent from '../ObjectFieldComponent.vue'
+import ArrayFieldComponent from '../ArrayFieldComponent.vue'
 
 export default {
   components: {

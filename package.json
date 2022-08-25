@@ -29,7 +29,7 @@
     "@ledgerhq/hw-transport-webusb": "^6.27.1",
     "@metamask/eth-sig-util": "^4.0.1",
     "@tharsis/address-converter": "^0.1.8",
-    "@tharsis/transactions": "^0.2.3",
+    "@tharsis/transactions": "^0.2.5",
     "@vue/composition-api": "^1.4.9",
     "@vueuse/core": "4.0.0",
     "animate.css": "4.1.1",

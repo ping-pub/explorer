@@ -94,7 +94,6 @@
           size="sm"
         /> Not Signed
       </b-card-footer>
-
     </b-card>
     <app-footer class="mb-1" />
   </div>
@@ -131,7 +130,6 @@ export default {
 
   data() {
     const chains = getLocalChains()
-    const selected = 'agoric'
     return {
       navs: [
         {
@@ -142,15 +140,21 @@ export default {
         },
       ],
       showPrevote: false,
-      rpc: `${chains[selected].rpc[0]}/consensus_state`,
       httpstatus: 200,
       httpStatusText: '',
       roundState: {},
-      selected,
       chains,
       vals: [],
       positions: [],
     }
+  },
+  computed: {
+    selected() {
+      return this.$route.query.chain || this.chains[Object.keys(this.chains)[0]].chain_name
+    },
+    rpc() {
+      return `${this.chains[this.selected].rpc[0]}/consensus_state`
+    },
   },
   created() {
     this.validators()

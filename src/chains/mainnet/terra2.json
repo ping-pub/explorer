@@ -12,7 +12,7 @@
         "base": "uluna",
         "symbol": "LUNA",
         "exponent": "6",
-        "coingecko_id": "terra-luna", 
+        "coingecko_id": "terra-luna-2", 
         "logo": "/logos/terra-luna.jpg"
     },{
         "base": "uusd",
