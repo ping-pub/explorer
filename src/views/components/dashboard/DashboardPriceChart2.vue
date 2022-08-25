@@ -323,7 +323,7 @@ export default {
                 return `${(val / 1000).toFixed()}k`
               }
               if (val > 1) {
-                return val.toFixed(1)
+                return parseFloat(val.toFixed(2)).toString()
               }
               if (val > 0.001) {
                 return parseFloat(val.toFixed(4)).toString()
