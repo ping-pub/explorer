@@ -106,7 +106,7 @@
               :variant="type !== 'prices'? 'primary': 'outline-primary'"
               @click="selectChart('total_volumes')"
             >
-              Volumes
+              Volume
             </b-button>
           </b-button-group>
           <!-- size -->
