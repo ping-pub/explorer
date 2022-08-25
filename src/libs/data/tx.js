@@ -9,6 +9,7 @@ export default class Tx {
     this.memo = ''
     this.messages = []
     this.signatures = []
+    this.time = null
   }
 
   static create(element) {
