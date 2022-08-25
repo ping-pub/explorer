@@ -129,10 +129,18 @@
     </b-card>
     <b-card
       border-variant="primary"
-      :title="`${walletName} Assets`"
       bg-variant="transparent"
       class="shadow-none"
     >
+      <b-card-title class="d-flex justify-content-between">
+        <span>{{ walletName }} Assets </span>
+        <b-link
+          v-if="address"
+          :to="`./${chain}/account/${address}`"
+        >
+          More
+        </b-link>
+      </b-card-title>
       <b-row>
         <b-col
           lg="3"
@@ -243,6 +251,7 @@ export default {
       walletStaking: '-',
       walletRewards: '-',
       walletUnbonding: '-',
+      address: null,
     }
   },
   computed: {
@@ -323,6 +332,7 @@ export default {
       return '-'
     },
     fetchAccount(address) {
+      this.address = address
       this.$http.getBankAccountBalance(address).then(bal => {
         this.walletBalances = this.formatToken(bal)
       })
