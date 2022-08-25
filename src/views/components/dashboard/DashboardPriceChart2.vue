@@ -6,10 +6,7 @@
           <h2 class="font-weight-bold">
             {{ coinInfo.name }} <span class="text-uppercase">({{ coinInfo.symbol }})</span>
           </h2>
-          <span
-            v-b-tooltip.hover.v-danger
-            title="Coingecko Rank"
-          >Coingecko Rank: <b-badge variant="light-danger">
+          <span>Coingecko Rank: <b-badge variant="light-danger">
             #{{ coinInfo.coingecko_rank }}
           </b-badge></span>
         </div>
@@ -97,13 +94,13 @@
             size="sm"
           >
             <b-button
-              :variant="type==='prices'? 'primary': 'outline-primary'"
+              :variant="type==='prices'? 'secondary': 'outline-secondary'"
               @click="selectChart('prices')"
             >
               Price
             </b-button>
             <b-button
-              :variant="type !== 'prices'? 'primary': 'outline-primary'"
+              :variant="type !== 'prices'? 'secondary': 'outline-secondary'"
               @click="selectChart('total_volumes')"
             >
               Volume
@@ -114,19 +111,19 @@
             size="sm"
           >
             <b-button
-              :variant="days===1? 'primary': 'outline-primary'"
+              :variant="days===1? 'secondary': 'outline-secondary'"
               @click="selectDays(1)"
             >
               Daily
             </b-button>
             <b-button
-              :variant="days===7? 'primary': 'outline-primary'"
+              :variant="days===7? 'secondary': 'outline-secondary'"
               @click="selectDays(7)"
             >
               Weekly
             </b-button>
             <b-button
-              :variant="days===30? 'primary': 'outline-primary'"
+              :variant="days===30? 'secondary': 'outline-secondary'"
               @click="selectDays(30)"
             >
               Monthly
@@ -153,7 +150,7 @@
         <b-button
           :href="homepage"
           class="mr-1"
-          variant="outline-primary"
+          variant="outline-secondary"
           size="sm"
         >
           <feather-icon icon="CastIcon" /> Webwite
@@ -161,7 +158,7 @@
         <b-button
           :href="twitter"
           class="mr-1"
-          variant="outline-primary"
+          variant="outline-secondary"
           size="sm"
         >
           <feather-icon icon="TwitterIcon" /> Twitter
@@ -169,7 +166,7 @@
         <b-button
           :href="github"
           class="mr-1"
-          variant="outline-primary"
+          variant="outline-secondary"
           size="sm"
         >
           <feather-icon icon="GithubIcon" /> Github
@@ -177,7 +174,7 @@
         <b-button
           :href="telegram"
           class="mr-1"
-          variant="outline-primary"
+          variant="outline-secondary"
           size="sm"
         >
           <feather-icon icon="SendIcon" /> Telegram
@@ -187,7 +184,7 @@
           id="dropdown-2"
           size="sm"
           text="Explorers"
-          variant="outline-primary"
+          variant="outline-secondary"
         >
           <b-dropdown-item
             v-for="site in coinInfo.links.blockchain_site.filter(x => x)"
@@ -364,7 +361,7 @@ export default {
     },
     telegram() {
       if (this.coinInfo.links) {
-        return this.coinInfo.links.telegram_channel_identifier ? `https://twitter.com/${this.coinInfo.links.telegram_channel_identifier}` : '#'
+        return this.coinInfo.links.telegram_channel_identifier ? `https://t.me/${this.coinInfo.links.telegram_channel_identifier}` : '#'
       }
       return '#'
     },
