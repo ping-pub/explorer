@@ -134,12 +134,20 @@
     >
       <b-card-title class="d-flex justify-content-between">
         <span>{{ walletName }} Assets </span>
-        <b-link
-          v-if="address"
-          :to="`./${chain}/account/${address}`"
-        >
-          More
-        </b-link>
+        <small>
+          <b-link
+            v-if="address"
+            :to="`./${chain}/account/${address}`"
+          >
+            More
+          </b-link>
+          <b-link
+            v-else
+            :to="`/wallet/accounts`"
+          >
+            Not connected?
+          </b-link>
+        </small>
       </b-card-title>
       <b-row>
         <b-col

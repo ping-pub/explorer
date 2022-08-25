@@ -183,7 +183,7 @@
           v-if="coinInfo.links && coinInfo.links.blockchain_site"
           id="dropdown-2"
           size="sm"
-          text="Explorers"
+          text="Block Explorers"
           variant="outline-secondary"
         >
           <b-dropdown-item
