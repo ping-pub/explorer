@@ -314,12 +314,21 @@ export default {
             },
             formatter(val) {
               if (val > 999999999) {
-                return `${(val / 1000000000).toFixed(1)}b`
+                return `${(val / 1000000000).toFixed()}b`
               }
               if (val > 999999) {
-                return `${(val / 1000000).toFixed(1)}m`
+                return `${(val / 1000000).toFixed()}m`
               }
-              return val > 999 ? `${(val / 1000).toFixed(1)}k` : val.toFixed(2)
+              if (val > 999) {
+                return `${(val / 1000).toFixed()}k`
+              }
+              if (val > 1) {
+                return val.toFixed(1)
+              }
+              if (val > 0.001) {
+                return parseFloat(val.toFixed(4)).toString()
+              }
+              return parseFloat(val.toFixed(6)).toString()
             },
           },
         },
