@@ -56,7 +56,7 @@ export default class ChainFetch {
   }
 
   async getNodeInfo() {
-    return this.get('/node_info')
+    return this.get('/cosmos/base/tendermint/v1beta1/node_info')
   }
 
   async getLatestBlock(config = null) {
