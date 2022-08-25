@@ -110,19 +110,23 @@
           v-for="(item,k) in accounts"
           :key="k"
           :disabled="!item.address"
-          :to="`/${selected_chain.chain_name}/account/${item.address.addr}`"
           @click="updateDefaultWallet(item.wallet)"
         >
           <div class="d-flex flex-column">
-            <span class="font-weight-bolder">{{ item.wallet }}
-              <b-avatar
-                v-if="item.wallet===walletName"
-                variant="success"
-                size="sm"
-              >
-                <feather-icon icon="CheckIcon" />
-              </b-avatar>
-            </span>
+            <div class="d-flex justify-content-between">
+              <span class="font-weight-bolder">{{ item.wallet }}
+                <b-avatar
+                  v-if="item.wallet===walletName"
+                  variant="success"
+                  size="sm"
+                >
+                  <feather-icon icon="CheckIcon" />
+                </b-avatar>
+              </span>
+              <b-link :to="`/${selected_chain.chain_name}/account/${item.address.addr}`">
+                <feather-icon icon="ArrowRightIcon" />
+              </b-link>
+            </div>
             <small>{{ item.address ? formatAddr(item.address.addr) : `Not available on ${selected_chain.chain_name}` }}</small>
           </div>
         </b-dropdown-item>

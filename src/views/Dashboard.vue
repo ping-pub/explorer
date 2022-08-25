@@ -248,6 +248,16 @@ export default {
   computed: {
     walletName() {
       const key = this.$store?.state?.chains?.defaultWallet
+      if (key) {
+        const accounts = getLocalAccounts() || {}
+        const account = Object.entries(accounts)
+          .map(v => ({ wallet: v[0], address: v[1].address.find(x => x.chain === this.$store.state.chains.selected.chain_name) }))
+          .filter(v => v.address)
+          .find(x => x.wallet === key)
+        if (account) {
+          this.fetchAccount(account.address.addr)
+        }
+      }
       return key || 'Wallet'
     },
   },
@@ -290,15 +300,6 @@ export default {
     this.$http.getGovernanceListByStatus(2).then(res => {
       this.proposals = res.proposals
     })
-
-    const accounts = getLocalAccounts() || {}
-    const account = Object.entries(accounts)
-      .map(v => ({ wallet: v[0], address: v[1].address.find(x => x.chain === this.$store.state.chains.selected.chain_name) }))
-      .filter(v => v.address)
-      .find(x => x.wallet === this.walletName)
-    if (account) {
-      this.fetchAccount(account.address.addr)
-    }
   },
   methods: {
     formatToken(tokens) {
