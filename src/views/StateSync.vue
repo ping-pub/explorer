@@ -35,8 +35,8 @@
         class="my-1"
         @change="check()"
       />
-      <b class="mt-1">3. Start the daemon</b><br>
-      If you are resetting node, run <code>unsafe-reset-all</code> before you start the daemon.
+      <b class="mt-1">3. Start the daemon: <span v-if="daemon"><code>{{ daemon }} start</code></span></b><br>
+      If you are resetting node, run <code>{{ daemon }} unsafe-reset-all</code> or <code>{{ daemon }} tendermint unsafe-reset-all --home ~/.HOME</code> before you start the daemon.
     </b-card>
 
     <b-card>
@@ -97,6 +97,7 @@ export default {
       error: [],
       state: '',
       valid: false,
+      daemon: '',
       snapshot: `[state-sync]
 # snapshot-interval specifies the block interval at which local state sync snapshots are
 # taken (0 to disable). Must be a multiple of pruning-keep-every.
@@ -125,6 +126,8 @@ trust_period = "168h"  # 2/3 of unbonding time`
       }
       this.$http.getNodeInfo().then(res => {
         this.version = res.application_version.version
+        console.log(res)
+        this.daemon = res.application_version.app_name
       })
     })
   },
