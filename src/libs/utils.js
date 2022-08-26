@@ -12,6 +12,7 @@ import { ethToEvmos } from '@tharsis/address-converter'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import updateLocale from 'dayjs/plugin/updateLocale'
 import utc from 'dayjs/plugin/utc'
 import RIPEMD160 from 'ripemd160'
 import localeData from 'dayjs/plugin/localeData'
@@ -25,7 +26,25 @@ import { EthereumLedgerSigner } from './client/EthereumLedgerSigner.ts'
 dayjs.extend(localeData)
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
+dayjs.extend(updateLocale)
 dayjs.extend(utc)
+dayjs.updateLocale('en', {
+  relativeTime: {
+    future: 'in %s',
+    past: '%s ago',
+    s: '%ds',
+    m: '1m',
+    mm: '%dm',
+    h: 'an hour',
+    hh: '%d hours',
+    d: 'a day',
+    dd: '%d days',
+    M: 'a month',
+    MM: '%d months',
+    y: 'a year',
+    yy: '%d years',
+  },
+})
 
 export function getLocalObject(name) {
   const text = localStorage.getItem(name)
