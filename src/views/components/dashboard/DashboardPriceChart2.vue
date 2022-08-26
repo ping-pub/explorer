@@ -34,7 +34,7 @@
               :variant="color"
             >
               <b-dropdown-header>
-                <span class="text-primary font-weight-bolder">{{ tickers.length }}</span> pairs available
+                <span class="text-primary font-weight-bolder">{{ tickers.length }}</span> pairs
               </b-dropdown-header>
               <vue-perfect-scrollbar
                 :settings="settings"
