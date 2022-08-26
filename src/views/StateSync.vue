@@ -10,18 +10,12 @@
     <b-card>
       <b-card-title>
         Starting New Node From State Sync
-        <b-badge
-          v-if="snapshot_provider?false:true"
-          variant="danger"
-        >
-          WIP
-        </b-badge>
       </b-card-title>
-      <b class="mt-1">1. Install Binary ({{ version }})</b><br>
+      <b class="mt-1">1. Install Binary (Version: {{ version }})</b><br>
       We need to install the binary first and make sure that the version is the one currently in use on mainnet.
       <br><br>
       <b class="mt-1">2. Enable State Sync</b><br>
-      We can configure Tendermint to use state sync in <code>$DAEMON_HOME/config/config.toml</code>, then start daemon.
+      We can configure Tendermint to use state sync in <code>$DAEMON_HOME/config/config.toml</code>.
       <ul class="mt-1">
         <li
           v-for="e in error"
@@ -41,6 +35,8 @@
         class="my-1"
         @change="check()"
       />
+      <b class="mt-1">3. Start the daemon</b><br>
+      If you are resetting node, run <code>unsafe-reset-all</code> before you start the daemon.
     </b-card>
 
     <b-card>
@@ -48,7 +44,6 @@
         Enable Snapshot For State Sync
       </b-card-title>
       To make state sync works, we can enable snapshot in <code>$DAEMON_HOME/config/app.toml</code>
-      and don't forget to share your snapshot server <a href="https://github.com/ping-pub/explorer/discussions">Here</a>
       <b-form-textarea
         id="snapshot"
         v-model="snapshot"
@@ -62,12 +57,11 @@
 
 <script>
 import {
-  BCard, BCardTitle, BFormTextarea, BBadge,
+  BCard, BCardTitle, BFormTextarea,
 } from 'bootstrap-vue'
 
 export default {
   components: {
-    BBadge,
     BCard,
     BCardTitle,
     BFormTextarea,

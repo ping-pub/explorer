@@ -362,11 +362,17 @@ const router = new VueRouter({
     },
     // common modules
     {
-      path: '/tools/consensus-states',
+      path: '/:chain/consensus',
       name: 'consensus',
       component: () => import('@/views/ConsensusStates.vue'),
       meta: {
-        layout: 'full',
+        pageTitle: 'Consensus State',
+        breadcrumb: [
+          {
+            text: 'Consensus State',
+            active: true,
+          },
+        ],
       },
     },
     {
