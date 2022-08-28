@@ -124,10 +124,7 @@ export default class ChainFetch {
     if (compareVersions(this.config.sdk_version, '0.40') < 0) {
       return this.get(`/supply/total/${denom}`).then(data => ({ amount: commonProcess(data), denom }))
     }
-    if (compareVersions(this.config.sdk_version, '0.46') < 0) {
-      return this.get(`/bank/total/${denom}`).then(data => commonProcess(data))
-    }
-    return this.get(`/cosmos/bank/v1beta1/supply/${denom}`).then(data => commonProcess(data))
+    return this.get(`/cosmos/bank/v1beta1/supply/${denom}`).then(data => commonProcess(data).amount)
   }
 
   async getBankTotals() {
