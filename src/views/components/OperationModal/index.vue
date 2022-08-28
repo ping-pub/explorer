@@ -358,8 +358,8 @@ export default {
           this.sequence = account.sequence
         })
         this.$http.getBankBalances(this.selectedAddress, this.selectedChain).then(res => {
-          if (res && res.length > 0) {
-            this.balance = res.reverse()
+          if (res.balances && res.balances.length > 0) {
+            this.balance = res.balances.reverse()
             const token = this.balance.find(i => !i.denom.startsWith('ibc'))
             this.token = token.denom
             if (token) this.feeDenom = token.denom
@@ -391,6 +391,7 @@ export default {
     },
     async sendTx() {
       const txMsgs = this.$refs.component.msg
+
       if (txMsgs.length === 0) {
         this.error = 'No delegation found'
         return ''

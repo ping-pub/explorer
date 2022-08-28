@@ -102,18 +102,26 @@ export default class ChainFetch {
   }
 
   async getValidatorDistribution(address) {
-    // return this.get(`/distribution/validators/${address}`).then(data => {
-    return Promise.all([
-      this.get(`/cosmos/distribution/v1beta1/validators/${address}/commission`),
-      this.get(`/cosmos/distribution/v1beta1/validators/${address}/outstanding_rewards`),
-    ]).then(data => {
+    return this.get(`/distribution/validators/${address}`).then(data => {
+      const value = commonProcess(data)
       const ret = ValidatorDistribution.create({
         operator_address: address,
-        self_bond_rewards: data[1].rewards.rewards,
-        val_commission: data[0].commission.commission,
+        self_bond_rewards: value.self_bond_rewards,
+        val_commission: value.val_commission.commission,
       })
       return ret
     })
+    // return Promise.all([
+    //   this.get(`/cosmos/distribution/v1beta1/validators/${address}/commission`),
+    //   this.get(`/cosmos/distribution/v1beta1/validators/${address}/outstanding_rewards`),
+    // ]).then(data => {
+    //   const ret = ValidatorDistribution.create({
+    //     operator_address: address,
+    //     self_bond_rewards: data[1].rewards.rewards,
+    //     val_commission: data[0].commission.commission,
+    //   })
+    //   return ret
+    // })
   }
 
   async getStakingDelegatorDelegation(delegatorAddr, validatorAddr) {
@@ -370,7 +378,7 @@ export default class ChainFetch {
   async getAuthAccount(address, config = null) {
     return this.get('/cosmos/auth/v1beta1/accounts/'.concat(address), config).then(data => {
       const result = commonProcess(data)
-      return result.value ? result : { value: result }
+      return result
     })
   }
 

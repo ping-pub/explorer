@@ -156,11 +156,11 @@ export function chartColors() {
 }
 
 export function extractAccountNumberAndSequence(ret) {
-  let account = ret.value
-  if (ret.value && ret.value.base_vesting_account) { // vesting account
-    account = ret.value.base_vesting_account?.base_account
-  } else if (ret.value && ret.value.base_account) { // evmos based account
-    account = ret.value.base_account
+  let { account } = ret
+  if (account && account.base_vesting_account) { // vesting account
+    account = account.base_vesting_account?.base_account
+  } else if (account && account.base_account) { // evmos based account
+    account = account.base_account
   }
   const accountNumber = account.account_number
   const sequence = account?.sequence || 0
