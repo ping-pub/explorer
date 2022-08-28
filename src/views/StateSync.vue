@@ -69,7 +69,6 @@ export default {
   data() {
     const { rpc, snapshot_provider } = this.$store.state.chains.selected
     let servers = ''
-    console.log('rpc', rpc)
     if (rpc && Array.isArray(rpc) && rpc.length > 0) {
       let serv = rpc
       if (serv.length === 1) {
