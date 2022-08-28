@@ -260,12 +260,12 @@ export default class ChainFetch {
   }
 
   async getGovernanceTally(pid, total, conf) {
-    return this.get(`/cosmos/gov/v1beta1/proposals/${pid}/tally`, conf).then(data => new ProposalTally().init(commonProcess(data), total))
+    return this.get(`/cosmos/gov/v1beta1/proposals/${pid}/tally`, conf).then(data => new ProposalTally().init(commonProcess(data).tally, total))
   }
 
   getGovernance(pid) {
     return this.get(`/cosmos/gov/v1beta1/proposals/${pid}`).then(data => {
-      const p = new Proposal().init(commonProcess(data), 0)
+      const p = new Proposal().init(commonProcess(data).proposal, 0)
       p.versionFixed(this.config.sdk_version)
       return p
     })
