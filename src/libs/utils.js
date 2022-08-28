@@ -1,5 +1,5 @@
 import {
-  Bech32, fromBase64, fromBech32, fromHex, toBech32, toHex,
+  Bech32, fromBase64, fromBech32, fromHex, toBase64, toBech32, toHex,
 } from '@cosmjs/encoding'
 import { sha256, stringToPath } from '@cosmjs/crypto'
 // ledger
@@ -193,6 +193,15 @@ export function getUserCurrencySign() {
 export function consensusPubkeyToHexAddress(consensusPubkey) {
   let raw = null
   if (typeof consensusPubkey === 'object') {
+    if (consensusPubkey['@type'] === '/cosmos.crypto.ed25519.PubKey') {
+      raw = toBase64(fromHex(toHex(sha256(fromBase64(consensusPubkey.key))).slice(0, 40)))
+      return raw
+    }
+    // /cosmos.crypto.secp256k1.PubKey
+    if (consensusPubkey['@type'] === '/cosmos.crypto.secp256k1.PubKey') {
+      raw = toBase64(fromHex(new RIPEMD160().update(Buffer.from(sha256(fromBase64(consensusPubkey.key)))).digest('hex')))
+      return raw
+    }
     if (consensusPubkey.type === 'tendermint/PubKeySecp256k1') {
       raw = new RIPEMD160().update(Buffer.from(sha256(fromBase64(consensusPubkey.value)))).digest('hex').toUpperCase()
       return raw

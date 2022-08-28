@@ -11,7 +11,7 @@
       <b-card-title>
         Starting New Node From State Sync
       </b-card-title>
-      <b class="mt-1">1. Install Binary (Version: {{ version }})</b><br>
+      <b class="mt-1">1. Install Binary (Version: {{ app_version }})</b><br>
       We need to install the binary first and make sure that the version is the one currently in use on mainnet.
       <br><br>
       <b class="mt-1">2. Enable State Sync</b><br>
@@ -69,7 +69,8 @@ export default {
   data() {
     const { rpc, snapshot_provider } = this.$store.state.chains.selected
     let servers = ''
-    if (rpc && Array.isArray(rpc)) {
+    console.log('rpc', rpc)
+    if (rpc && Array.isArray(rpc) && rpc.length > 0) {
       let serv = rpc
       if (serv.length === 1) {
         serv = serv.concat(serv)
@@ -88,7 +89,7 @@ export default {
       ? `# Comma separated list of nodes to keep persistent connections to \npersistent_peers = "${peers}" `
       : 'OMG！ There is NO available providers, but you can try it.'
     return {
-      version: '',
+      app_version: '',
       snapshot_provider,
       servers,
       providers,
@@ -125,9 +126,9 @@ trust_period = "168h"  # 2/3 of unbonding time`
         })
       }
       this.$http.getNodeInfo().then(res => {
-        this.version = res.application_version.version
+        this.app_version = res.application_version.version
         this.daemon = res.application_version.app_name
-      })
+      }).catch()
     })
   },
   methods: {

@@ -108,7 +108,7 @@ import {
 import {
   consensusPubkeyToHexAddress, getCachedValidators, timeIn, toDay,
 } from '@/libs/utils'
-import { Bech32, toHex } from '@cosmjs/encoding'
+import { fromBech32, toBase64 } from '@cosmjs/encoding'
 
 export default {
   components: {
@@ -171,7 +171,7 @@ export default {
       if (res.info) {
         res.info.forEach(x => {
           if (x.address) {
-            const hex = toHex(Bech32.decode(x.address).data).toUpperCase()
+            const hex = toBase64(fromBech32(x.address).data)
             this.missing[hex] = x
           }
         })

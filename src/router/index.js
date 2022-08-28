@@ -403,18 +403,13 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const c = String(to.params.chain).toLowerCase()
-
   const configs = JSON.parse(localStorage.getItem('chains'))
-  const conf = Object.values(configs).find(i => i.chain_name === c || i.alias === c)
-  if (!configs || conf) {
+  if (configs && to.params.chain) {
+    const c = String(to.params.chain).toLowerCase()
+    const conf = Object.values(configs).find(i => i.chain_name === c || i.alias === c)
     if (conf) {
       store.commit('select', { chain_name: conf.chain_name })
-    }
-    next()
-  } else if (c) {
-    if (c === 'index.php') {
-      next({ name: '/' })
+      next()
     } else {
       next({ name: 'chain-404' })
     }

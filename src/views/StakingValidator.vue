@@ -259,7 +259,6 @@
             :total-rows="transactions.total_count"
             :per-page="transactions.limit"
             :value="transactions.page_number"
-            align="center"
             class="mt-1"
             @change="pageload"
           />

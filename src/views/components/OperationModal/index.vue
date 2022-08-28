@@ -324,9 +324,12 @@ export default {
       if (this.address) {
         return this.address
       }
-      const chain = this.$store.state.chains.selected.chain_name
-      const selectedAddress = this.accounts.address.find(x => x.chain === chain)
-      return selectedAddress?.addr
+      if (this.accounts) {
+        const chain = this.$store.state.chains.selected.chain_name
+        const selectedAddress = this.accounts?.address.find(x => x.chain === chain)
+        return selectedAddress?.addr
+      }
+      return null
     },
     selectedChain() {
       let config = null
