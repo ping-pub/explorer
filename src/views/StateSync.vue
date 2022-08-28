@@ -59,6 +59,7 @@
 import {
   BCard, BCardTitle, BFormTextarea,
 } from 'bootstrap-vue'
+import { fromBase64, toHex } from '@cosmjs/encoding'
 
 export default {
   components: {
@@ -113,7 +114,7 @@ snapshot-keep-recent = 2`,
       const { height } = l.block.header
       if (height > interval * 3) {
         this.$http.getBlockByHeight(Math.trunc((height - 3 * interval) / interval) * interval).then(x => {
-          this.hash = x.block_id.hash
+          this.hash = toHex(fromBase64(x.block_id.hash))
           this.height = x.block.header.height
           this.state = `[statesync]
 enable = true
