@@ -24,6 +24,9 @@ export default class Proposal {
     this.id = element.proposal_id || element.id
     this.status = element.status
     this.type = element.content.type
+    if (element.content['@type']) {
+      this.type = element.content['@type']
+    }
     this.tally = new ProposalTally().init(element.final_tally_result, total)
     this.submit_time = element.submit_time
     this.voting_end_time = element.voting_end_time

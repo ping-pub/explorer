@@ -27,13 +27,18 @@ export default () => ([
   },
   {
     scope: 'normal',
+    title: 'parameters',
+    route: 'parameters',
+  },
+  {
+    scope: 'normal',
     title: 'statesync',
     route: 'statesync',
   },
   {
     scope: 'normal',
-    title: 'parameters',
-    route: 'parameters',
+    title: 'consensus',
+    route: 'consensus',
   },
   {
     scope: 'cos-mos',

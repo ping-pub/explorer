@@ -362,11 +362,17 @@ const router = new VueRouter({
     },
     // common modules
     {
-      path: '/tools/consensus-states',
+      path: '/:chain/consensus',
       name: 'consensus',
       component: () => import('@/views/ConsensusStates.vue'),
       meta: {
-        layout: 'full',
+        pageTitle: 'Consensus State',
+        breadcrumb: [
+          {
+            text: 'Consensus State',
+            active: true,
+          },
+        ],
       },
     },
     {
@@ -397,18 +403,13 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const c = to.params.chain
-  if (c) {
-    store.commit('select', { chain_name: String(c).toLowerCase() })
-  }
-
-  const config = JSON.parse(localStorage.getItem('chains'))
-  // const has = Object.keys(config).findIndex(i => i === c)
-  if (!config || Object.keys(config).findIndex(i => i === String(c).toLowerCase()) > -1) {
-    next()
-  } else if (c) {
-    if (c === 'index.php') {
-      next({ name: '/' })
+  const configs = JSON.parse(localStorage.getItem('chains'))
+  if (configs && to.params.chain) {
+    const c = String(to.params.chain).toLowerCase()
+    const conf = Object.values(configs).find(i => i.chain_name === c || i.alias === c)
+    if (conf) {
+      store.commit('select', { chain_name: conf.chain_name })
+      next()
     } else {
       next({ name: 'chain-404' })
     }

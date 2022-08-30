@@ -452,9 +452,10 @@ export default {
         Object.keys(this.accounts).forEach(acc => {
           this.accounts[acc].address.forEach(add => {
             this.$http.getBankBalances(add.addr, chains[add.chain]).then(res => {
-              if (res && res.length > 0) {
-                this.$set(this.balances, add.addr, res)
-                res.forEach(token => {
+              const { balances } = res
+              if (balances && balances.length > 0) {
+                this.$set(this.balances, add.addr, balances)
+                balances.forEach(token => {
                   if (token.denom.startsWith('ibc')) {
                     this.$http.getIBCDenomTrace(token.denom, chains[add.chain]).then(denom => {
                       this.$set(this.ibcDenom, token.denom, denom)

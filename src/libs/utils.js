@@ -1,5 +1,5 @@
 import {
-  Bech32, fromBase64, fromBech32, fromHex, toBech32, toHex,
+  Bech32, fromBase64, fromBech32, fromHex, toBase64, toBech32, toHex,
 } from '@cosmjs/encoding'
 import { sha256, stringToPath } from '@cosmjs/crypto'
 // ledger
@@ -12,6 +12,7 @@ import { ethToEvmos } from '@tharsis/address-converter'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import updateLocale from 'dayjs/plugin/updateLocale'
 import utc from 'dayjs/plugin/utc'
 import RIPEMD160 from 'ripemd160'
 import localeData from 'dayjs/plugin/localeData'
@@ -25,7 +26,25 @@ import { EthereumLedgerSigner } from './client/EthereumLedgerSigner.ts'
 dayjs.extend(localeData)
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
+dayjs.extend(updateLocale)
 dayjs.extend(utc)
+dayjs.updateLocale('en', {
+  relativeTime: {
+    future: 'in %s',
+    past: '%s ago',
+    s: '%ds',
+    m: '1m',
+    mm: '%dm',
+    h: 'an hour',
+    hh: '%d hours',
+    d: 'a day',
+    dd: '%d days',
+    M: 'a month',
+    MM: '%d months',
+    y: 'a year',
+    yy: '%d years',
+  },
+})
 
 export function getLocalObject(name) {
   const text = localStorage.getItem(name)
@@ -137,11 +156,11 @@ export function chartColors() {
 }
 
 export function extractAccountNumberAndSequence(ret) {
-  let account = ret.value
-  if (ret.value && ret.value.base_vesting_account) { // vesting account
-    account = ret.value.base_vesting_account?.base_account
-  } else if (ret.value && ret.value.base_account) { // evmos based account
-    account = ret.value.base_account
+  let { account } = ret
+  if (account && account.base_vesting_account) { // vesting account
+    account = account.base_vesting_account?.base_account
+  } else if (account && account.base_account) { // evmos based account
+    account = account.base_account
   }
   const accountNumber = account.account_number
   const sequence = account?.sequence || 0
@@ -174,6 +193,15 @@ export function getUserCurrencySign() {
 export function consensusPubkeyToHexAddress(consensusPubkey) {
   let raw = null
   if (typeof consensusPubkey === 'object') {
+    if (consensusPubkey['@type'] === '/cosmos.crypto.ed25519.PubKey') {
+      raw = toBase64(fromHex(toHex(sha256(fromBase64(consensusPubkey.key))).slice(0, 40)))
+      return raw
+    }
+    // /cosmos.crypto.secp256k1.PubKey
+    if (consensusPubkey['@type'] === '/cosmos.crypto.secp256k1.PubKey') {
+      raw = toBase64(fromHex(new RIPEMD160().update(Buffer.from(sha256(fromBase64(consensusPubkey.key)))).digest('hex')))
+      return raw
+    }
     if (consensusPubkey.type === 'tendermint/PubKeySecp256k1') {
       raw = new RIPEMD160().update(Buffer.from(sha256(fromBase64(consensusPubkey.value)))).digest('hex').toUpperCase()
       return raw

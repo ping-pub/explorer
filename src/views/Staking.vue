@@ -315,8 +315,8 @@ export default {
       return tab.map(x => {
         const xh = x
         if (Object.keys(this.latestPower).length > 0 && Object.keys(this.previousPower).length > 0) {
-          const latest = this.latestPower[x.consensus_pubkey.value] || 0
-          const previous = this.previousPower[x.consensus_pubkey.value] || 0
+          const latest = this.latestPower[x.consensus_pubkey.key] || 0
+          const previous = this.previousPower[x.consensus_pubkey.key] || 0
           xh.changes = latest - previous
         }
         return xh

@@ -37,6 +37,11 @@ function processMenu() {
     })
   }
   chainMenus.push({
+    title: 'Github',
+    href: 'https://github.com/ping-pub/explorer',
+    icon: 'GithubIcon',
+  })
+  chainMenus.push({
     title: 'Discord',
     href: 'https://discord.gg/CmjYVSr6GW',
     icon: 'EyeIcon',
@@ -47,9 +52,9 @@ function processMenu() {
     icon: 'TwitterIcon',
   })
   chainMenus.push({
-    title: 'Github',
-    href: 'https://github.com/ping-pub/explorer',
-    icon: 'GithubIcon',
+    title: 'Telegram',
+    href: 'https://t.me/pingpub',
+    icon: 'SendIcon',
   })
 
   return chainMenus

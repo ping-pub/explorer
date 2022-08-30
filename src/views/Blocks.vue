@@ -120,7 +120,7 @@ export default {
       ],
       txFields: [
         { key: 'hash' },
-        { key: 'time', formatter: v => toDay(v, 'time') },
+        { key: 'time', formatter: v => toDay(v, 'from') },
         { key: 'fee', formatter: v => tokenFormatter(v) },
         { key: 'messages', formatter: v => abbrMessage(v) },
         { key: 'memo' },
@@ -162,7 +162,7 @@ export default {
   methods: {
     length: v => (Array.isArray(v) ? v.length : 0),
     shortHash: v => abbr(v),
-    formatTime: v => toDay(v, 'time'),
+    formatTime: v => toDay(v, 'from'),
     formatProposer(v) {
       return getStakingValidatorByHex(this.$http.config.chain_name, v)
     },

@@ -120,10 +120,6 @@ export default {
       this.latestTime = toDay(res.block.header.time, 'long')
     })
 
-    this.$http.getMarketChart().then(res => {
-      this.marketData = res
-    })
-
     this.$http.getStakingParameters().then(res => {
       this.staking = this.normalize(res, 'Staking Parameters')
       Promise.all([this.$http.getStakingPool(), this.$http.getBankTotal(res.bond_denom)])

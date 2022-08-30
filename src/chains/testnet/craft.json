@@ -1,0 +1,21 @@
+{
+  "chain_name": "craft",
+  "coingecko": "",
+  "api": ["https://craft-testnet-api.polkachu.com"],
+  "rpc": ["https://craft-testnet-rpc.polkachu.com"],
+  "snapshot_provider": "",
+  "sdk_version": "0.44.5",
+  "coin_type": "118",
+  "min_tx_fee": "8000",
+  "addr_prefix": "craft",
+  "logo": "/logos/craft.png",
+  "assets": [
+    {
+      "base": "craft",
+      "symbol": "CRAFT",
+      "exponent": "6",
+      "coingecko_id": "",
+      "logo": "/logos/craft.png"
+    }
+  ]
+}
