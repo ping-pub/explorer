@@ -21,7 +21,6 @@ const handler = class DefaultHandler {
   }
 
   processProposalTally(tally) {
-    console.log(tally)
     const result = this.commonProcess(tally)
     return result
   }

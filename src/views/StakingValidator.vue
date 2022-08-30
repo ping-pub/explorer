@@ -123,13 +123,7 @@
                 <span class="font-weight-bold">Status</span>
               </th>
               <td class="pb-50 text-capitalize">
-                <b-badge
-                  v-if="validator.status===3"
-                  variant="light-success"
-                >
-                  Active
-                </b-badge>
-                <span v-else>{{ validator.status }}</span>
+                <span>{{ String(validator.status).replace('BOND_STATUS_', '') }}</span>
               </td>
             </tr>
             <tr>
