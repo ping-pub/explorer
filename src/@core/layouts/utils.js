@@ -57,11 +57,12 @@ export const isNavLinkActive = link => {
     chainCompare = router.currentRoute.params.chain === link.route.params.chain
   }
 
+  if (chainCompare) {
+    localStorage.setItem('selected_chain', link.route.params.chain)
+  }
+
   return matchedRoutes.some(route => {
     const actived = (route.name === resolveRoutedName && chainCompare) || route.meta.navActiveLink === resolveRoutedName
-    if (actived) {
-      localStorage.setItem('selected_chain', link.route.params.chain)
-    }
     return actived
   })
 }
