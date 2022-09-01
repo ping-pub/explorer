@@ -1,0 +1,20 @@
+{
+    "chain_name": "Point",
+    "coingecko": "",
+    "api": ["https://rpc-mainnet-1.point.space:1317"],
+    "rpc": ["https://rpc-mainnet-1.point.space:26657"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.7",
+    "coin_type": "60",
+    "min_tx_fee": "1000",
+    "addr_prefix": "point",
+    "logo": "/logos/point.jpg",
+    "assets": [{
+        "base": "apoint",
+        "symbol": "POINT",
+        "exponent": "18",
+        "coingecko_id": "", 
+        "logo": "/logos/point.jpg"
+    }],
+    "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
+}
