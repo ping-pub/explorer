@@ -6,7 +6,7 @@
     "snapshot_provider": "",
     "sdk_version": "0.45.7",
     "coin_type": "60",
-    "min_tx_fee": "1000",
+    "min_tx_fee": "5000000000000000",
     "addr_prefix": "point",
     "logo": "/logos/point.jpg",
     "assets": [{
@@ -16,5 +16,5 @@
         "coingecko_id": "", 
         "logo": "/logos/point.jpg"
     }],
-    "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
+    "keplr_features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
 }
