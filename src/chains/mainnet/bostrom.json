@@ -1,0 +1,19 @@
+{
+    "chain_name": "bostrom",
+    "coingecko": "",
+    "api": "https://lcd.bostrom.cybernode.ai",
+    "rpc": ["https://rpc.bostrom.cybernode.ai:443", "https://rpc.bostrom.cybernode.ai:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.44.3",
+    "coin_type": "118",
+    "min_tx_fee": "5000",
+    "addr_prefix": "bostrom",
+    "logo": "/logos/bostrom.png",
+    "assets": [{
+        "base": "boot",
+        "symbol": "BOOT",
+        "exponent": "0",
+        "coingecko_id": "", 
+        "logo": "/logos/bostrom.png"
+    }]
+}
