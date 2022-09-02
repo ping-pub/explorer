@@ -5,7 +5,7 @@
     "rpc": ["https://rpc-mainnet-1.point.space:26657"],
     "snapshot_provider": "",
     "sdk_version": "0.45.7",
-    "coin_type": "60",
+    "coin_type": 60,
     "min_tx_fee": "5000000000000000",
     "addr_prefix": "point",
     "logo": "/logos/point.jpg",
