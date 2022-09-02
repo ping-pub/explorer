@@ -1,0 +1,22 @@
+{
+    "chain_name": "sommelier",
+    "api": ["https://lcd-sommelier.keplr.app"],
+    "sdk_version": "0.44.5",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "addr_prefix": "somm",
+    "logo": "https://dl.airtable.com/.attachments/0f37f3aa77836b2db0ed217560264ff1/6f51315b/St07WEsb_400x400.png",
+    "assets": [{
+        "base": "usomm",
+        "symbol": "somm",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "https://dl.airtable.com/.attachments/0f37f3aa77836b2db0ed217560264ff1/6f51315b/St07WEsb_400x400.png"
+    },{
+        "base": "msomm",
+        "symbol": "somm",
+        "exponent": "3",
+        "coingecko_id": "", 
+        "logo": "https://dl.airtable.com/.attachments/0f37f3aa77836b2db0ed217560264ff1/6f51315b/St07WEsb_400x400.png"
+    }]
+}
