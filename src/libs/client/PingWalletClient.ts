@@ -4,12 +4,12 @@ import {
     SigningStargateClient,
     defaultRegistryTypes,
 } from '@cosmjs/stargate';
-import { Registry, EncodeObject, TxBodyEncodeObject, makeAuthInfoBytes, makeSignDoc, GeneratedType } from '@cosmjs/proto-signing';
+import { Registry, EncodeObject, TxBodyEncodeObject, makeAuthInfoBytes, GeneratedType } from '@cosmjs/proto-signing';
 import { LedgerSigner } from '@cosmjs/ledger-amino';
 import { EthereumLedgerSigner } from './EthereumLedgerSigner';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import TransportWebBLE from '@ledgerhq/hw-transport-web-ble'
-import { OfflineAminoSigner, Pubkey, pubkeyType, StdFee } from "@cosmjs/amino";
+import { makeSignDoc, OfflineAminoSigner, Pubkey, pubkeyType, StdFee } from "@cosmjs/amino";
 import { TxBody, TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import {
     generateMessageWithMultipleTransactions,
@@ -26,10 +26,10 @@ import {
     MsgMultipleWithdrawDelegatorRewardParams,
     EIPToSign,
 } from '@tharsis/transactions'
-import {
-    createTransactionWithMultipleMessages,
-    createMsgWithdrawDelegatorReward,
-    createIBCMsgTransfer
+import { 
+    createTransactionWithMultipleMessages, 
+    createMsgWithdrawDelegatorReward, 
+    createIBCMsgTransfer 
 } from '@tharsis/proto'
 import { fromBase64, fromBech32, fromHex, toBase64, toHex } from '@cosmjs/encoding';
 //import { generateEndpointBroadcast, generatePostBodyBroadcast } from '@tharsis/provider'
@@ -179,24 +179,11 @@ export class SigningEthermintClient {
             msgs,
         )
 
-        const txBodyEncodeObject = {
-            typeUrl: "/cosmos.tx.v1beta1.TxBody",
-            value: {
-                messages: messages,
-                memo: memo,
-            },
-        }
-        const txBodyBytes = chain.encode(txBodyEncodeObject)
+        const types = generateTypes(defaultMessageAdapter[messages[0].typeUrl].getTypes())
+        const eip = createEIP712(types, chain.chainId, tx )
+        const sig = await this.signer.sign712(eip)
 
-        // const types = generateTypes(defaultMessageAdapter[messages[0].typeUrl].getTypes())
-        // const eip = createEIP712(types, chain.chainId, tx )
-        // const sig = await this.signer.sign712(eip)
-        const gasLimit = Int53.fromString(fee.gas).toNumber();
-        const authInfoBytes = makeAuthInfoBytes([{ pubkey: sender.pubkey, sequence: sender.sequence }], fee.amount, gasLimit);
-        const signDoc = makeSignDoc(tx, authInfoBytes, chain.chainId, sender.accountNumber.toString());
-        const { signature, signed } = await this.signer.signDirect(signerAddress, signDoc);
-
-        const rawTx = makeRawTx(sender, messages, memo, fee, signature, chain)
+        const rawTx = makeRawTxEvmos(sender, messages, memo, fee, sig, chain)
 
         return Promise.resolve(rawTx)
     }
