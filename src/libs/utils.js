@@ -271,9 +271,11 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
   const coinType = Number(hdpath[1])
   const addr = device.startsWith('ledger') && coinType !== 60 ? toSignAddress(signerAddress) : signerAddress
 
-  const signer = window.getOfflineSigner(chainId)
-  const SC = new SigningEthermintClient(signer)
-  client = SC
+
+
+  const SC = new SigningEthermintClient(signer);
+  client = SC;
+
 
   return client.sign(addr, messages, fee, memo, signerData)
 }
