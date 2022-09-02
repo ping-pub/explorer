@@ -20,7 +20,7 @@ import { $themeColors } from '@themeConfig'
 // import { SigningStargateClient } from '@cosmjs/stargate'
 // import PingWalletClient from './data/signing'
 import { SigningStargateClient } from '@cosmjs/stargate'
-import { getSigningClient, SigningEthermintClient } from './client/PingWalletClient.ts'
+import { getSigningClient } from './client/PingWalletClient.ts'
 import { EthereumLedgerSigner } from './client/EthereumLedgerSigner.ts'
 
 dayjs.extend(localeData)
@@ -270,13 +270,6 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
   // const hdpath = getHdPath(signerAddress)
   const coinType = Number(hdpath[1])
   const addr = device.startsWith('ledger') && coinType !== 60 ? toSignAddress(signerAddress) : signerAddress
-
-
-
-  const SC = new SigningEthermintClient(signer);
-  client = SC;
-
-
   return client.sign(addr, messages, fee, memo, signerData)
 }
 
