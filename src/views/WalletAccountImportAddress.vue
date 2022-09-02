@@ -466,7 +466,7 @@ export default {
     initParamsForKeplr(chainid, chain) {
       return JSON.stringify({
         chainId: chainid,
-        chainName: Point,
+        chainName: 'Point',
         rpc: Array.isArray(chain.rpc) ? chain.rpc[0] : chain.rpc,
         rest: Array.isArray(chain.api) ? chain.api[0] : chain.api,
         bip44: {
