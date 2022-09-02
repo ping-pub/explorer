@@ -262,7 +262,7 @@ export async function sign(device, chainId, signerAddress, messages, fee, memo, 
       throw new Error('Please install keplr extension')
     }
     await window.keplr.enable(chainId)
-    const signer = window.getOfflineSignerOnlyAmino(chainId)
+    const signer = window.getOfflineSigner(chainId)
     client = await SigningStargateClient.offline(signer)
   }
   // let transport
