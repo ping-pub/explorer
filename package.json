@@ -32,7 +32,7 @@
     "@tharsis/address-converter": "^0.1.8",
     "@tharsis/transactions": "^0.2.5",
     "@tharsis/eip712": "0.2.4",
-    "@tharsis/proto": "0.1.20",
+    "@tharsis/proto": "0.1.19",
     "@vue/composition-api": "^1.4.9",
     "@vueuse/core": "4.0.0",
     "animate.css": "4.1.1",
