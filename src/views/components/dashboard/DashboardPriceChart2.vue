@@ -156,7 +156,7 @@
           variant="outline-secondary"
           size="sm"
         >
-          <feather-icon icon="CastIcon" /> Webwite
+          <feather-icon icon="CastIcon" /> Website
         </b-button>
         <b-button
           :href="twitter"
