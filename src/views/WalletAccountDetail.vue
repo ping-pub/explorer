@@ -651,7 +651,7 @@ export default {
   },
   created() {
     this.$http.getAuthAccount(this.address).then(acc => {
-      this.account = acc
+      this.account = acc.account
       this.initial()
       this.$http.getTxsBySender(this.address).then(res => {
         this.transactions = res
