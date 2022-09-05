@@ -6,7 +6,7 @@ import {
 } from '@cosmjs/stargate';
 import { Registry, EncodeObject, TxBodyEncodeObject, makeAuthInfoBytes, GeneratedType } from '@cosmjs/proto-signing';
 import { LedgerSigner } from '@cosmjs/ledger-amino';
-import { EthereumLedgerSigner } from './EthereumLedgerSigner';
+import EthereumLedgerSigner from './EthereumLedgerSigner';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import TransportWebBLE from '@ledgerhq/hw-transport-web-ble'
 import { makeSignDoc, OfflineAminoSigner, Pubkey, pubkeyType, StdFee } from "@cosmjs/amino";
