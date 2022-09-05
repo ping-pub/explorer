@@ -466,7 +466,7 @@ export default {
     initParamsForKeplr(chainid, chain) {
       return JSON.stringify({
         chainId: chainid,
-        chainName: chain.chain_name,
+        chainName: 'Point',
         rpc: Array.isArray(chain.rpc) ? chain.rpc[0] : chain.rpc,
         rest: Array.isArray(chain.api) ? chain.api[0] : chain.api,
         bip44: {
@@ -504,9 +504,9 @@ export default {
           coinGeckoId: chain.assets[0].coingecko_id || 'unknown',
         },
         gasPriceStep: {
-          low: 0.01,
-          average: 0.025,
-          high: 0.03,
+          low: 5000000000,
+          average: 25000000000,
+          high: 40000000000,
         },
         features: chain.keplr_features || [],
       }, null, '\t')
