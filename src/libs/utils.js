@@ -233,7 +233,7 @@ function getHdPath(address) {
 }
 
 function isEvmosBasedChain(chainId) {
-  const re = /[_]{1}[\d]{4}[\\-]{1}[\d]+$/g
+  const re = /[_]{1}[\d]{4,5}[\\-]{1}[\d]+$/g
   return re.test(chainId)
 }
 
