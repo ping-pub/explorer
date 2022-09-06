@@ -55,7 +55,7 @@
           </b-media>
         </template>
         <!-- Verified Point Validators -->
-        <template #cell(verified)="data">
+        <template #cell(point_validators)="data">
           <ul>
             <li v-for="node in data.item.point_validators" v-bind:key="node.name">
               {{ node.name }} - {{ node.id }}
