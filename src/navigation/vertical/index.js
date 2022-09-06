@@ -26,13 +26,13 @@ function processMenu() {
   if (isTestnet()) {
     chainMenus.push({
       title: 'Mainnet Explorer',
-      href: 'https://ping.pub',
+      href: 'https://cosmos.pointnetwork.io/point',
       icon: 'ChromeIcon',
     })
   } else {
     chainMenus.push({
-      title: 'Testnet Explorer',
-      href: 'http://testnet.ping.pub',
+      title: 'Mainnet Explorer',
+      href: 'https://cosmos.pointnetwork.io/point',
       icon: 'LifeBuoyIcon',
     })
   }
