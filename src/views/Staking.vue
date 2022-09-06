@@ -63,7 +63,7 @@
           <small
             v-else
             class="text-danger"
-          >{{ data.item.point_validators.id }}</small>
+          >{{ data.item.description.moniker }}</small>
         </template>
         <!-- Token -->
         <template #cell(tokens)="data">
@@ -274,7 +274,7 @@ export default {
       stakingParameters: new StakingParameters(),
       validators: [],
       delegations: [],
-      point_validators: [],
+      point_validators: [{ name: 'point-validator-main ' }, { name: 'Point' }],
       changes: {},
       latestPower: {},
       previousPower: {},
