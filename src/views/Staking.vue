@@ -57,21 +57,13 @@
         <!-- Verified Point Validators -->
         <template #cell(point_validators)="data">
           <small
-            v-if="data.item.changes>0"
+            v-if="data.item.point_validators>0"
             class="text-success"
-          >+{{ data.item.changes }}</small>
-          <small v-else-if="data.item.changes===0">-</small>
+          >+{{ data.item.point_validators.name }}</small>
           <small
             v-else
             class="text-danger"
-          >{{ data.item.changes }}</small>
-          <!--
-          <ul>
-            <li v-for="node in data.item.point_validators" v-bind:key="node.name">
-              {{ node.name }} - {{ node.id }}
-            </li>
-          </ul>
-          -->
+          >{{ data.item.point_validators.id }}</small>
         </template>
         <!-- Token -->
         <template #cell(tokens)="data">
@@ -184,25 +176,17 @@
               >{{ data.item.description.website || data.item.description.identity }}</small>
             </b-media>
           </template>
-          <!-- Verified Point Validators -->
-          <template #cell(point_validators)="data">
-            <small
-              v-if="data.item.changes>0"
-              class="text-success"
-            >+{{ data.item.changes }}</small>
-            <small v-else-if="data.item.changes===0">-</small>
-            <small
-              v-else
-              class="text-danger"
-            >{{ data.item.changes }}</small>
-            <!--
-            <ul>
-              <li v-for="node in data.item.point_validators" v-bind:key="node.name">
-                {{ node.name }} - {{ node.id }}
-              </li>
-            </ul>
-            -->
-          </template>
+        <!-- Verified Point Validators -->
+        <template #cell(point_validators)="data">
+          <small
+            v-if="data.item.point_validators>0"
+            class="text-success"
+          >+{{ data.item.point_validators.name }}</small>
+          <small
+            v-else
+            class="text-danger"
+          >{{ data.item.point_validators.id }}</small>
+        </template>
           <!-- Token -->
           <template #cell(tokens)="data">
             <div
