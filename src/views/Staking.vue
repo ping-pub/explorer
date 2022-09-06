@@ -63,7 +63,7 @@
           <small
             v-else
             class="text-danger"
-          >{{ data.item.point_validators.id }}</small>
+          >{{ data.item.description.moniker }}</small>
         </template>
         <!-- Token -->
         <template #cell(tokens)="data">
