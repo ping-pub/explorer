@@ -59,11 +59,11 @@
           <small
             v-if="data.item.point_validators>0"
             class="text-success"
-          >+{{ data.item.point_validators.name }}</small>
+          >+{{ point_validators.name }}</small>
           <small
             v-else
             class="text-danger"
-          >{{ data.item.description.moniker }}</small>
+          >{{ point_validators.name }}</small>
         </template>
         <!-- Token -->
         <template #cell(tokens)="data">
@@ -246,6 +246,9 @@ import OperationModal from '@/views/components/OperationModal/index.vue'
 // import { toHex } from '@cosmjs/encoding'
 // import fetch from 'node-fetch'
 
+
+point_validators: [{ id: 1, name: 'point-validator-main ' }, { id: 2, name: 'Point' }]
+
 export default {
   components: {
     BCard,
@@ -274,7 +277,6 @@ export default {
       stakingParameters: new StakingParameters(),
       validators: [],
       delegations: [],
-      point_validators: [{ name: 'point-validator-main ' }, { name: 'Point' }],
       changes: {},
       latestPower: {},
       previousPower: {},
