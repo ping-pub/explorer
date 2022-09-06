@@ -55,15 +55,12 @@
           </b-media>
         </template>
         <!-- Verified Point Validators -->
-        <template #cell(verified)="data" >
-          <small
-            v-if="data.item.point_validators>0"
-            class="text-success"
-          >+{{ point_validators.name }}</small>
-          <small
-            v-else
-            class="text-danger"
-          >{{ point_validators.name }}</small>
+        <template #cell(verified)="data">
+          <ul>
+            <li v-for="node in point_validators" v-bind:key="node.name">
+              {{ node.name }} - {{ node.id }}
+            </li>
+          </ul>
         </template>
         <!-- Token -->
         <template #cell(tokens)="data">
@@ -246,8 +243,7 @@ import OperationModal from '@/views/components/OperationModal/index.vue'
 // import { toHex } from '@cosmjs/encoding'
 // import fetch from 'node-fetch'
 
-
-point_validators: [{ id: 1, name: 'point-validator-main ' }, { id: 2, name: 'Point' }]
+point_validators: [{ id: 1, name: 'point-validator-main' }, { id: 2, name: 'Point' }]
 
 export default {
   components: {
