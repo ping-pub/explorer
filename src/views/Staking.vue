@@ -57,7 +57,7 @@
         <!-- Verified Point Validators -->
         <template #cell(point_validators)="data">
           <small
-            v-if="data.item.point_validators>0"
+            v-if="data.item.point_validators.length > 0"
             class="text-success"
           >+{{ data.item.point_validators.name }}</small>
           <small
@@ -179,13 +179,13 @@
         <!-- Verified Point Validators -->
         <template #cell(point_validators)="data">
           <small
-            v-if="data.item.point_validators>0"
+            v-if="data.item.point_validators.length > 0"
             class="text-success"
           >+{{ data.item.point_validators.name }}</small>
           <small
             v-else
             class="text-danger"
-          >{{ data.item.point_validators.id }}</small>
+          >{{ data.item.description.moniker }}</small>
         </template>
           <!-- Token -->
           <template #cell(tokens)="data">
