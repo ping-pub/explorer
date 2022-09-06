@@ -287,11 +287,11 @@ export default {
           label: 'Validator',
         },
         {
-          key: 'verified',
+          key: 'point_validators',
           label: 'verified',
-          sortable: true,
-          tdClass: 'text-right',
-          thClass: 'text-right',
+          sortable: false,
+          tdClass: 'text-center',
+          thClass: 'text-center',
           sortByFormatted: true,
         },
         {
