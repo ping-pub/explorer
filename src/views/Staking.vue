@@ -55,7 +55,7 @@
           </b-media>
         </template>
         <!-- Verified Point Validators -->
-        <template #cell(verified)="data">
+        <template #cell(verified)="data" >
           <small
             v-if="data.item.point_validators>0"
             class="text-success"
@@ -179,11 +179,9 @@
           <!-- Verified -->
           <template #cell(verified)="data">
             <div
-              v-for='(point_validators, index) in point_validators'
-              :key='point_validators.id'
+              v-for='(point_validators, id) in point_validators' :key='point_validators.id'
               class="d-flex flex-column"
             >
-            
               <span class="font-weight-bold mb-0">{{ tokenFormatter(data.item.tokens, stakingParameters.bond_denom) }}</span>
               <span class="font-small-2 text-muted text-nowrap d-none d-lg-block">{{ percent(data.item.tokens/stakingPool) }}%</span>
             </div>
@@ -260,11 +258,6 @@ import OperationModal from '@/views/components/OperationModal/index.vue'
 // import fetch from 'node-fetch'
 import { ref } from 'vue'
 
-const point_validators = ref([
-  {id: 0, name: 'point-validator-main'},
-  {id: 1, name: 'Point'}
-]) 
-
 export default {
   components: {
     BCard,
@@ -293,7 +286,14 @@ export default {
       stakingParameters: new StakingParameters(),
       validators: [],
       delegations: [],
-      point_validators: [],
+      point_validators: [
+                          { 
+                            id: 0, name: 'point-validator-main' 
+                          },
+                          { 
+                            id: 1, name: 'Point'
+                          }
+                        ],
       changes: {},
       latestPower: {},
       previousPower: {},
