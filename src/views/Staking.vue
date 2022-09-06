@@ -56,14 +56,11 @@
         </template>
         <!-- Verified Point Validators -->
         <template #cell(point_validators)="data">
-          <small
-            v-if="data.item.point_validators.length > 0"
-            class="text-success"
-          >+{{ data.item.point_validators.name }}</small>
-          <small
-            v-else
-            class="text-danger"
-          >{{ data.item.description.moniker }}</small>
+          <ul>
+            <li v-for="node in data.item.point_validators" v-bind:key="node.name">
+              {{ node.name }} - {{ node.id }}
+            </li>
+          </ul>
         </template>
         <!-- Token -->
         <template #cell(tokens)="data">
@@ -176,16 +173,13 @@
               >{{ data.item.description.website || data.item.description.identity }}</small>
             </b-media>
           </template>
-        <!-- Verified Point Validators -->
+          <!-- Verified Point Validators -->
         <template #cell(point_validators)="data">
-          <small
-            v-if="data.item.point_validators.length > 0"
-            class="text-success"
-          >+{{ data.item.point_validators.name }}</small>
-          <small
-            v-else
-            class="text-danger"
-          >{{ data.item.description.moniker }}</small>
+          <ul>
+            <li v-for="node in data.item.point_validators" v-bind:key="node.name">
+              {{ node.name }} - {{ node.id }}
+            </li>
+          </ul>
         </template>
           <!-- Token -->
           <template #cell(tokens)="data">
