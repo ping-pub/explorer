@@ -54,7 +54,6 @@
             >{{ data.item.description.website || data.item.description.identity }}</small>
           </b-media>
         </template>
-
         <!-- Verified Point Validators -->
         <template #cell(verified)="data">
           <small
@@ -66,8 +65,6 @@
             class="text-danger"
           >{{ data.item.verified =='' }}</small>
         </template>
-
-
         <!-- Token -->
         <template #cell(tokens)="data">
           <div
@@ -100,7 +97,6 @@
             @click="selectValidator(data.item.operator_address)"
           >
             Delegate
-          </b-button>
           </b-button>
         </template>
       </b-table>
@@ -277,7 +273,7 @@ export default {
       stakingPool: 1,
       stakingParameters: new StakingParameters(),
       validators: [],
-      verified:[],
+      verified: [],
       delegations: [],
       changes: {},
       latestPower: {},
@@ -289,10 +285,12 @@ export default {
           tdClass: 'd-none d-md-block',
           thClass: 'd-none d-md-block',
         },
-        { key: 'description',
+        { 
+          key: 'description',
           label: 'Validator'
         },
-        { key: 'verified',
+        { 
+          key: 'verified',
           label: 'verified',
           sortable: true,
           tdClass: 'text-right',
