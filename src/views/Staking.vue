@@ -56,11 +56,19 @@
         </template>
         <!-- Verified Point Validators -->
         <template #cell(point_validators)="data">
-          <ul>
-            <li v-for="node in data.item.point_validators" v-bind:key="node.name">
-              {{ node.name }} - {{ node.id }}
-            </li>
-          </ul>
+          <b-media
+            vertical-align="center"
+            class="text-truncate"
+            style="max-width:320px;"
+          >
+            <b-avatar
+              v-if="!data.item.avatar"
+              v-b-tooltip.hover.v-primary
+              v-b-tooltip.hover.right="data.item.description.details"
+            >
+              <feather-icon icon="ServerIcon" />
+            </b-avatar>
+          </b-media>
         </template>
         <!-- Token -->
         <template #cell(tokens)="data">
@@ -175,11 +183,19 @@
           </template>
           <!-- Verified Point Validators -->
         <template #cell(point_validators)="data">
-          <ul>
-            <li v-for="node in data.item.point_validators" v-bind:key="node.name">
-              {{ node.name }} - {{ node.id }}
-            </li>
-          </ul>
+          <b-media
+            vertical-align="center"
+            class="text-truncate"
+            style="max-width:320px;"
+          >
+            <b-avatar
+              v-if="!data.item.avatar"
+              v-b-tooltip.hover.v-primary
+              v-b-tooltip.hover.right="data.item.description.details"
+            >
+              <feather-icon icon="ServerIcon" />
+            </b-avatar>
+          </b-media>
         </template>
           <!-- Token -->
           <template #cell(tokens)="data">
