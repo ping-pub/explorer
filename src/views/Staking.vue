@@ -285,11 +285,11 @@ export default {
           tdClass: 'd-none d-md-block',
           thClass: 'd-none d-md-block',
         },
-        { 
+        {
           key: 'description',
-          label: 'Validator'
+          label: 'Validator',
         },
-        { 
+        {
           key: 'verified',
           label: 'verified',
           sortable: true,
