@@ -8,7 +8,7 @@
     "coin_type": 60,
     "min_tx_fee": "5000000000000000",
     "addr_prefix": "point",
-    "logo": "/logos/point.jpg",
+    "logo": "/logos/point.png",
     "assets": [{
         "base": "apoint",
         "symbol": "POINT",
