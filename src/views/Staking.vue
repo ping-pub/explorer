@@ -55,7 +55,7 @@
           </b-media>
         </template>
         <!-- Verified Point Validators -->
-        <template #cell(point_validators)="data">
+        <template #cell(point_validators)>
           <b-media
             vertical-align="center"
             class="text-truncate"
@@ -359,6 +359,7 @@ export default {
         return xh
       })
     },
+  },
   created() {
     this.$http.getStakingPool().then(pool => {
       this.stakingPool = pool.bondedToken
