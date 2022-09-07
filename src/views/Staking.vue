@@ -371,7 +371,7 @@ export default {
         if (a.name > b.name) return 1
         return 0
       }
-     return this.validNodes.filter(node => {return node.name.toLowerCase().includes(this.validNodes.toLowerCase()).sort(compare)})
+      return this.validNodes.filter(node => { return node.name.toLowerCase().includes(this.validNodes.toLowerCase()).sort(compare) })
     },
   },
   created() {
