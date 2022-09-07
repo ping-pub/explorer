@@ -364,17 +364,14 @@ export default {
       })
     },
     filtered() {
-      let filtered = this.point_validators
+      const filtered = this.point_validators
       // function to compare names
       function compare(a, b) {
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
-        return 0;
+        if (a.name < b.name) return -1
+        if (a.name > b.name) return 1
+        return 0
       }
-      
-     return this.validNodes.filter(node => {
-        return node.name.toLowerCase().includes(this.validNodes.toLowerCase())
-     }).sort(compare)
+     return this.validNodes.filter(node => {return node.name.toLowerCase().includes(this.validNodes.toLowerCase()).sort(compare)})
     },
   },
   created() {
