@@ -66,7 +66,7 @@
               v-b-tooltip.hover.v-primary
               v-b-tooltip.hover.right="data.item.description.details"
             >
-              <feather-icon icon="award" />
+              <feather-icon icon="AwardIcon" />
             </b-avatar>
           </b-media>
         </template>
@@ -191,7 +191,7 @@
               v-b-tooltip.hover.v-primary
               v-b-tooltip.hover.right="data.item.description.details"
             >
-              <feather-icon icon="award" />
+              <feather-icon icon="AwardIcon" />
             </b-avatar>
           </b-media>
         </template>
