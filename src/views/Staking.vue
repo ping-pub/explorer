@@ -66,7 +66,7 @@
               v-b-tooltip.hover.v-primary
               v-b-tooltip.hover.right="data.item.description.details"
             >
-              <feather-icon icon="ServerIcon" />
+              <feather-icon icon="award" />
             </b-avatar>
           </b-media>
         </template>
@@ -173,8 +173,6 @@
                 >
                   {{ data.item.description.moniker }}
                 </router-link>
-                <!-- add verified logic point nodes -->
-
               </span>
               <small
                 class="text-muted"
@@ -193,7 +191,7 @@
               v-b-tooltip.hover.v-primary
               v-b-tooltip.hover.right="data.item.description.details"
             >
-              <feather-icon icon="ServerIcon" />
+              <feather-icon icon="award" />
             </b-avatar>
           </b-media>
         </template>
