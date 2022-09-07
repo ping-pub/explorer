@@ -62,7 +62,7 @@
             style="max-width:320px;"
           >
             <div v-if="data.item.description.moniker === 'point-validator-main'">
-              <img v-bind:src="'/logos/point-logo.png'" alt="Point"/>
+              <img v-bind:src="'/logos/point-logo.png'" alt="Point" width=8% hight=auto />
             </div>
           </b-media>
         </template>
@@ -183,7 +183,7 @@
             style="max-width:320px;"
           >
             <div v-if="data.item.description.moniker === 'point-validator-main'">
-              <img v-bind:src="'/logos/point-logo.png'" alt="Point"/>
+              <img v-bind:src="'/logos/point-logo.png'" alt="Point" width=8% hight=auto />
             </div>
           </b-media>
         </template>
