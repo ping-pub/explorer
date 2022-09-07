@@ -185,8 +185,8 @@
               style="max-width:320px;"
             >
               <div v-for="(node, index) in filtered" :key="index">
-                <p>{{ node.name }}</p>
                 <p>{{ node.index }}</p>
+                <p>{{ node.name }}</p>
                 <feather-icon icon="AwardIcon" />
               </div>
             </b-media>
@@ -364,14 +364,12 @@ export default {
       })
     },
     filtered() {
-      const filtered = this.point_validators
-      // function to compare names
-      function compare(a, b) {
-        if (a.name < b.name) return -1
-        if (a.name > b.name) return 1
-        return 0
-      }
-      return this.validNodes.filter(node => { return node.name.toLowerCase().includes(this.validNodes.toLowerCase()).sort(compare) })
+      const result = point_validators.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+        };
+      }).sort((a, b) => b.count - a.count);
     },
   },
   created() {
