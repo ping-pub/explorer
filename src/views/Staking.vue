@@ -61,7 +61,7 @@
             class="text-truncate"
             style="max-width:320px;"
           >
-            <div v-for="(node, index) in activeFilters" :key="index">
+            <div v-for="(node, index) in filtered" :key="index">
               <p>{{ node.name }}</p>
               <p>{{ node.index }}</p>
               <feather-icon icon="AwardIcon" />
@@ -184,7 +184,7 @@
               class="text-truncate"
               style="max-width:320px;"
             >
-              <div v-for="(node, index) in activeFilters" :key="index">
+              <div v-for="(node, index) in filtered" :key="index">
                 <p>{{ node.name }}</p>
                 <p>{{ node.index }}</p>
                 <feather-icon icon="AwardIcon" />
@@ -289,7 +289,7 @@ export default {
       stakingParameters: new StakingParameters(),
       validators: [],
       delegations: [],
-      activeFilters: [],
+      validNodes: [],
       point_validators: [{ id: 1, name: 'point-validator-main' }, { id: 2, name: 'Point' }],
       changes: {},
       latestPower: {},
@@ -365,10 +365,16 @@ export default {
     },
     filtered() {
       let filtered = this.point_validators
-      this.activeFilters.forEach(filter => {
-        filtered = filtered.filter(record => { return filter.name === 'name'? new RegExp(filter.value, 'i').test(record[filter.name]): record[filter.name] === filter.value })
-      })
-      return filtered
+      // function to compare names
+      function compare(a, b) {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+      }
+      
+     return this.validNodes.filter(node => {
+        return node.name.toLowerCase().includes(this.validNodes.toLowerCase())
+     }).sort(compare)
     },
   },
   created() {
