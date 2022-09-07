@@ -27,12 +27,12 @@ function processMenu() {
     chainMenus.push({
       title: 'Mainnet Explorer',
       href: 'https://cosmos.pointnetwork.io/point',
-      icon: 'ChromeIcon',
+      icon: 'https://cosmos.pointnetwork.io/logos/point-logo.png',
     })
   } else {
     chainMenus.push({
       title: 'Mainnet Explorer',
-      href: 'https://cosmos.pointnetwork.io/point',
+      href: 'https://explorer.pointnetwork.io',
       icon: 'LifeBuoyIcon',
     })
   }

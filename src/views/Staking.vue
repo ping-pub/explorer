@@ -366,12 +366,7 @@ export default {
     filtered() {
       let filtered = this.point_validators
       this.activeFilters.forEach(filter => {
-        filtered = filtered.filter(record => 
-        {
-          return filter.name === 'name'
-            ? new RegExp(filter.value, 'i').test(record[filter.name])
-            : record[filter.name] === filter.value
-        })
+        filtered = filtered.filter(record => { return filter.name === 'name'? new RegExp(filter.value, 'i').test(record[filter.name]): record[filter.name] === filter.value })
       })
       return filtered
     },
