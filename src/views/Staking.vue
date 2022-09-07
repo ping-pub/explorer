@@ -180,19 +180,14 @@
             </b-media>
           </template>
           <!-- Verified Point Validators -->
-        <template #cell(point_validators)="data">
+        <template #cell(point_validators)="filteredValidators">
           <b-media
             vertical-align="center"
             class="text-truncate"
             style="max-width:320px;"
           >
-            <b-avatar
-              v-if="!data.item.avatar"
-              v-b-tooltip.hover.v-primary
-              v-b-tooltip.hover.right="data.item.description.details"
-            >
-              <feather-icon icon="AwardIcon" />
-            </b-avatar>
+            <span v-for="node in filteredValidators" :key="node.id">{{ node.name }}</span>
+            <feather-icon icon="AwardIcon" />
           </b-media>
         </template>
           <!-- Token -->
@@ -366,6 +361,13 @@ export default {
         return xh
       })
     },
+    filteredValidators() {
+      let validValidators = this.point_validators
+      
+      validValidators = validValidators.filter((item) => {
+        return validValidators.includes(item.id)
+      })
+      },
   },
   created() {
     this.$http.getStakingPool().then(pool => {
