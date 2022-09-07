@@ -62,7 +62,7 @@
             style="max-width:320px;"
           >
             <div v-if="data.item.description.moniker === 'point-validator-main'">
-              <feather-icon icon="AwardIcon" />
+              <img v-bind:src="'/logos/point-logo.png'" />
             </div>
           </b-media>
         </template>
@@ -183,7 +183,7 @@
             style="max-width:320px;"
           >
             <div v-if="data.item.description.moniker === 'point-validator-main'">
-              <feather-icon icon="AwardIcon" />
+              <img v-bind:src="'/logos/point-logo.png'" />
             </div>
           </b-media>
         </template>
@@ -303,7 +303,7 @@ export default {
         },
         {
           key: 'point_validators',
-          label: 'verified',
+          label: 'Foundation',
           sortable: false,
           tdClass: 'text-center',
           thClass: 'text-center',
