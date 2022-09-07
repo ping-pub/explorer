@@ -27,13 +27,13 @@ function processMenu() {
     chainMenus.push({
       title: 'Mainnet Explorer',
       href: 'https://cosmos.pointnetwork.io/point',
-      icon: 'https://cosmos.pointnetwork.io/logos/point-logo.png',
+      icon: 'ServerIcon',
     })
   } else {
     chainMenus.push({
       title: 'Mainnet Explorer',
       href: 'https://explorer.pointnetwork.io',
-      icon: 'https://cosmos.pointnetwork.io/logos/point-logo.png',
+      icon: 'ServerIcon',
     })
   }
   chainMenus.push({
