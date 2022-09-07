@@ -25,13 +25,13 @@ function processMenu() {
   chainMenus.push({ header: 'LINKS' })
   if (isTestnet()) {
     chainMenus.push({
-      title: 'Ethermint (EVM) Explorer',
+      title: 'Mainnet EVM Explorer',
       href: 'https://cosmos.pointnetwork.io/point',
       icon: 'ServerIcon',
     })
   } else {
     chainMenus.push({
-      title: 'Ethermint (EVM) Explorer',
+      title: 'Mainnet EVM Explorer',
       href: 'https://explorer.pointnetwork.io',
       icon: 'ServerIcon',
     })
