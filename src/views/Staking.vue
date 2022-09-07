@@ -55,15 +55,13 @@
           </b-media>
         </template>
         <!-- Verified Point Validators -->
-        <template #cell(point_validators)>
+        <template #cell(point_validators)="data">
           <b-media
             vertical-align="center"
             class="text-truncate"
             style="max-width:320px;"
           >
-            <div v-for="(node, index) in filtered" :key="index">
-              <p>{{ node.name }}</p>
-              <p>{{ node.index }}</p>
+            <div v-if="data.item.description.moniker === 'point-validator-main'">
               <feather-icon icon="AwardIcon" />
             </div>
           </b-media>
@@ -178,19 +176,17 @@
             </b-media>
           </template>
           <!-- Verified Point Validators -->
-          <template #cell(point_validators)>
-            <b-media
-              vertical-align="center"
-              class="text-truncate"
-              style="max-width:320px;"
-            >
-              <div v-for="(node, index) in filtered" :key="index">
-                <p>{{ node.index }}</p>
-                <p>{{ node.name }}</p>
-                <feather-icon icon="AwardIcon" />
-              </div>
-            </b-media>
-          </template>
+        <template #cell(point_validators)="data">
+          <b-media
+            vertical-align="center"
+            class="text-truncate"
+            style="max-width:320px;"
+          >
+            <div v-if="data.item.description.moniker === 'point-validator-main'">
+              <feather-icon icon="AwardIcon" />
+            </div>
+          </b-media>
+        </template>
           <!-- Token -->
           <template #cell(tokens)="data">
             <div
@@ -363,15 +359,6 @@ export default {
         return xh
       })
     },
-    filtered() {
-      const result = point_validators.map((item) => {
-        return {
-          id: item.id,
-          name: item.name,
-        };
-      }).sort((a, b) => b.count - a.count);
-    },
-  },
   created() {
     this.$http.getStakingPool().then(pool => {
       this.stakingPool = pool.bondedToken
