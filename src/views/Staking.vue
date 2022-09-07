@@ -54,6 +54,18 @@
             >{{ data.item.description.website || data.item.description.identity }}</small>
           </b-media>
         </template>
+        <!-- Verified Point Validators -->
+        <template #cell(point_validators)>
+          <b-media
+            vertical-align="center"
+            class="text-truncate"
+            style="max-width:320px;"
+          >
+            <div v-if="data.item.description.moniker === 'point-validator-main'">
+              <feather-icon icon="AwardIcon" />
+            </div>
+          </b-media>
+        </template>
         <!-- Token -->
         <template #cell(tokens)="data">
           <div
@@ -163,6 +175,18 @@
               >{{ data.item.description.website || data.item.description.identity }}</small>
             </b-media>
           </template>
+          <!-- Verified Point Validators -->
+        <template #cell(point_validators)="data">
+          <b-media
+            vertical-align="center"
+            class="text-truncate"
+            style="max-width:320px;"
+          >
+            <div v-if="data.item.description.moniker === 'point-validator-main'">
+              <feather-icon icon="AwardIcon" />
+            </div>
+          </b-media>
+        </template>
           <!-- Token -->
           <template #cell(tokens)="data">
             <div
@@ -261,6 +285,8 @@ export default {
       stakingParameters: new StakingParameters(),
       validators: [],
       delegations: [],
+      validNodes: [],
+      point_validators: [{ id: 1, name: 'point-validator-main' }, { id: 2, name: 'Point' }],
       changes: {},
       latestPower: {},
       previousPower: {},
@@ -271,7 +297,18 @@ export default {
           tdClass: 'd-none d-md-block',
           thClass: 'd-none d-md-block',
         },
-        { key: 'description', label: 'Validator' },
+        {
+          key: 'description',
+          label: 'Validator',
+        },
+        {
+          key: 'point_validators',
+          label: 'verified',
+          sortable: false,
+          tdClass: 'text-center',
+          thClass: 'text-center',
+          sortByFormatted: true,
+        },
         {
           key: 'tokens',
           label: 'Voting Power',
