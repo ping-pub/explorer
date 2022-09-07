@@ -55,19 +55,17 @@
           </b-media>
         </template>
         <!-- Verified Point Validators -->
-        <template #cell(point_validators)="data">
+        <template #cell(point_validators)>
           <b-media
             vertical-align="center"
             class="text-truncate"
             style="max-width:320px;"
           >
-            <b-avatar
-              v-if="!data.item.avatar"
-              v-b-tooltip.hover.v-primary
-              v-b-tooltip.hover.right="data.item.description.details"
-            >
+            <div v-for="(node, index) in activeFilters" :key="index">
+              <p>{{ node.name }}</p>
+              <p>{{ node.index }}</p>
               <feather-icon icon="AwardIcon" />
-            </b-avatar>
+            </div>
           </b-media>
         </template>
         <!-- Token -->
@@ -180,16 +178,19 @@
             </b-media>
           </template>
           <!-- Verified Point Validators -->
-        <template #cell(point_validators)="filteredValidators">
-          <b-media
-            vertical-align="center"
-            class="text-truncate"
-            style="max-width:320px;"
-          >
-            <span v-for="node in filteredValidators" :key="node.id">{{ node.name }}</span>
-            <feather-icon icon="AwardIcon" />
-          </b-media>
-        </template>
+          <template #cell(point_validators)>
+            <b-media
+              vertical-align="center"
+              class="text-truncate"
+              style="max-width:320px;"
+            >
+              <div v-for="(node, index) in activeFilters" :key="index">
+                <p>{{ node.name }}</p>
+                <p>{{ node.index }}</p>
+                <feather-icon icon="AwardIcon" />
+              </div>
+            </b-media>
+          </template>
           <!-- Token -->
           <template #cell(tokens)="data">
             <div
@@ -288,6 +289,7 @@ export default {
       stakingParameters: new StakingParameters(),
       validators: [],
       delegations: [],
+      activeFilters: [],
       point_validators: [{ id: 1, name: 'point-validator-main' }, { id: 2, name: 'Point' }],
       changes: {},
       latestPower: {},
@@ -361,14 +363,18 @@ export default {
         return xh
       })
     },
-    filteredValidators() {
-      let validValidators = this.point_validators
-      
-      validValidators = validValidators.filter((item) => {
-        return validValidators.includes(item.id)
+    filtered () {
+      var filtered = this.point_validators
+      this.activeFilters.forEach(filter => {
+        filtered = filtered.filter(record => {
+          return filter.name === 'name'
+            ? new RegExp(filter.value, 'i').test(record[filter.name])
+            : record[filter.name] == filter.value
+        })
       })
-      },
-  },
+      return filtered
+    }
+},
   created() {
     this.$http.getStakingPool().then(pool => {
       this.stakingPool = pool.bondedToken
