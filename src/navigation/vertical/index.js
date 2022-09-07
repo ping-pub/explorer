@@ -33,7 +33,7 @@ function processMenu() {
     chainMenus.push({
       title: 'Mainnet Explorer',
       href: 'https://explorer.pointnetwork.io',
-      icon: 'LifeBuoyIcon',
+      icon: 'https://cosmos.pointnetwork.io/logos/point-logo.png',
     })
   }
   chainMenus.push({
