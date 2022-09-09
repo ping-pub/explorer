@@ -14,7 +14,7 @@
         "symbol": "POINT",
         "exponent": "18",
         "coingecko_id": "", 
-        "logo": "/logos/point.jpg"
+        "logo": "/logos/point-logo.png"
     }],
     "keplr_features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
 }
