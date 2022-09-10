@@ -175,7 +175,7 @@ export default class ChainFetch {
   }
 
   async getValidatorUnbondedList() {
-    return this.get('/cosmos/staking/v1beta1/validators?pagination.limit&status=BOND_STATUS_UNBONDED').then(data => {
+    return this.get('/cosmos/staking/v1beta1/validators?pagination.limit=100&status=BOND_STATUS_UNBONDED').then(data => {
       const result = commonProcess(data.validators)
       const vals = result.validators ? result.validators : result
       return vals.map(i => new Validator().init(i))
