@@ -15,6 +15,7 @@
           />
         </div>
         <b-button
+          v-if="fromAddress"
           v-b-modal.operation-modal
           block
           variant="success"
@@ -22,6 +23,14 @@
         >
           <feather-icon icon="SendIcon" />
           Go To Pay
+        </b-button>
+        <b-button
+          v-else
+          block
+          class="mt-2"
+          variant="primary"
+        >
+          Connect Wallet
         </b-button>
       </b-card-body>
     </b-card>

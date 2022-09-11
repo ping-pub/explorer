@@ -279,7 +279,10 @@
           </b-card>
         </b-col>
       </b-row>
-      <b-row class="mt-1">
+      <b-row
+        v-if="address"
+        class="mt-1"
+      >
         <b-col cols="6">
           <b-button
             v-b-modal.operation-modal
