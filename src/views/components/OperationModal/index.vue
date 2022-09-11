@@ -47,6 +47,7 @@
             :balance="balance"
             :proposal-id="proposalId"
             :proposal-title="proposalTitle"
+            :to-address="toAddress"
             @update="componentUpdate"
           />
           <b-row v-if="advance">
@@ -260,6 +261,10 @@ export default {
       default: null,
     },
     selectedChainName: {
+      type: String,
+      default: null,
+    },
+    toAddress: {
       type: String,
       default: null,
     },

@@ -212,6 +212,24 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/:chain/account/:address/receive',
+      name: 'chain-receive',
+      component: () => import('@/views/WalletAccountReceive.vue'),
+      meta: {
+        pageTitle: 'Accounts',
+        breadcrumb: [
+          {
+            text: 'Accounts',
+            active: true,
+          },
+          {
+            text: 'Pay Me',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
       path: '/:chain/staking',
       name: 'staking',
       component: () => import('@/views/Staking.vue'),
