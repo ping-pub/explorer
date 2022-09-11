@@ -271,10 +271,10 @@
                       {{ formatDate(data.item.completion_time) }}
                     </template>
                     <template #cell(initial_balance)="data">
-                      {{ data.item.initial_balance }}{{ stakingParameters.bond_denom }}
+                      {{ data.item.initial_balance }}
                     </template>
                     <template #cell(balance)="data">
-                      {{ data.item.balance }}{{ stakingParameters.bond_denom }}
+                      {{ data.item.balance }}
                     </template>
                   </b-table>
                 </b-col>
@@ -339,6 +339,7 @@ import {
 } from '@/libs/utils'
 import OperationModal from '@/views/components/OperationModal/index.vue'
 import Ripple from 'vue-ripple-directive'
+import dayjs from 'dayjs'
 import ParametersModuleComponent from './components/parameters/ParametersModuleComponent.vue'
 import DashboardCardHorizontal from './components/dashboard/DashboardCardHorizontal.vue'
 import DashboardCardVertical from './components/dashboard/DashboardCardVertical.vue'
@@ -592,6 +593,7 @@ export default {
         return { title: this.convert(data[k]), subtitle: k }
       })
     },
+    formatDate: v => dayjs(v).format('YYYY-MM-DD HH:mm:ss'),
     convert(v) {
       if (typeof v === 'object') {
         const v2 = {}
