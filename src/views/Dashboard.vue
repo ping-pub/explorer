@@ -551,7 +551,6 @@ export default {
       this.proposals.forEach(x => {
         this.$http.getGovernanceProposalVote(x.id, address, null)
           .then(v => {
-            console.log(v)
             this.myVotes[x.id] = this.formatVoteOption(v.vote.option)
           })
           .catch(() => {
