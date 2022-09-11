@@ -201,6 +201,10 @@
           <b-table
             :items="stakingList"
             :fields="fields"
+            striped
+            hover
+            responsive="sm"
+            stacked="sm"
           >
             <template #cell(action)="data">
               <!-- size -->
