@@ -5,9 +5,10 @@
     "https://agoric-api.polkachu.com",
     "https://api-agoric.nodes.guru",
     "https://agoric.stakesystems.io",
-    "https://agoric-lcd.stakely.io"
+    "https://agoric-lcd.stakely.io",
+    "https://api.agoric.nodestake.top"
   ],
-  "rpc": ["https://main.rpc.agoric.net:443", "https://main.rpc.agoric.net:443"],
+  "rpc": ["https://main.rpc.agoric.net:443", "https://main.rpc.agoric.net:443","https://rpc.agoric.nodestake.top"],
   "snapshot_provider": "",
   "sdk_version": "0.45.4",
   "coin_type": "564",
