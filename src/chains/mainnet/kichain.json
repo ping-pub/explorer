@@ -1,7 +1,7 @@
 {
     "chain_name": "kichain",
-    "api": ["https://api-mainnet.blockchain.ki", "https://ki.api.ping.pub"],
-    "rpc": ["https://rpc-mainnet.blockchain.ki:443", "https://rpc-mainnet.blockchain.ki:443"],
+    "api": ["https://api-mainnet.blockchain.ki", "https://ki.api.ping.pub","https://api.ki.nodestake.top"],
+    "rpc": ["https://rpc-mainnet.blockchain.ki:443", "https://rpc-mainnet.blockchain.ki:443","https://rpc.ki.nodestake.top"],
     "snapshot_provider": "",
     "sdk_version": "0.42.10",
     "coin_type": "118",
