@@ -189,6 +189,11 @@ export default {
     },
   },
   methods: {
+    selectProposal(modal, pid, title) {
+      this.$parent.operationModalType = modal
+      this.$parent.selectedProposalId = Number(pid)
+      this.$parent.selectedTitle = title
+    },
     formatType(v) {
       const txt = String(v).replace('Proposal', '')
       const index = txt.lastIndexOf('.')

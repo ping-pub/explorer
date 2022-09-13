@@ -117,7 +117,7 @@
                     v-model="hdpath"
                     class="mt-1"
                     name="hdpath"
-                    placeholder="m/44'/118/0'/0/0"
+                    placeholder="m/44'/60/0'/0/0"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -383,7 +383,7 @@ export default {
       debug: '',
       device: 'keplr',
       address: '',
-      hdpath: "m/44'/118/0'/0/0",
+      hdpath: "m/44'/60/0'/0/0",
       name: '',
       options: {},
       required,
@@ -466,7 +466,7 @@ export default {
     initParamsForKeplr(chainid, chain) {
       return JSON.stringify({
         chainId: chainid,
-        chainName: chain.chain_name,
+        chainName: 'Point',
         rpc: Array.isArray(chain.rpc) ? chain.rpc[0] : chain.rpc,
         rest: Array.isArray(chain.api) ? chain.api[0] : chain.api,
         bip44: {

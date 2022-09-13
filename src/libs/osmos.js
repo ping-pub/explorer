@@ -63,6 +63,7 @@ export const CoinGeckoMap = {
   VDL: ['vidulum'],
   XKI: ['ki'],
   INJ: ['injective-protocol'],
+  POINT: ['point-network'],
 }
 
 export function getChainConfigForSymbol(symbol) {

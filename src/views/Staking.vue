@@ -2,7 +2,7 @@
   <div>
     <b-card
       v-if="pingVals && pingVals.length > 0"
-      title="❤️ Helping Ping.pub By Staking ❤️"
+      title=""
       class="overflow-auto"
     >
       <b-table
@@ -61,8 +61,8 @@
             class="text-truncate"
             style="max-width:320px;"
           >
-            <div v-if="data.item.description.moniker === 'point-validator-main'">
-              <img v-bind:src="'/logos/point-logo.png'" alt="Point" width=8% hight=auto />
+            <div v-if="data.item.operator_address === 'pointvaloper1v2a2jpuzeq9xss2sk3kummfllrcaemf5wuaq7e'">
+              <img v-bind:src="'/logos/point-logo.png'" alt="Point" width="40em" hight=auto />
             </div>
           </b-media>
         </template>
@@ -182,8 +182,8 @@
             class="text-truncate"
             style="max-width:320px;"
           >
-            <div v-if="data.item.description.moniker === 'point-validator-main'">
-              <img v-bind:src="'/logos/point-logo.png'" alt="Point" width=8% hight=auto />
+            <div v-if="data.item.operator_address === 'pointvaloper1v2a2jpuzeq9xss2sk3kummfllrcaemf5wuaq7e'">
+              <img v-bind:src="'/logos/point-logo.png'" alt="Point" width="40em" hight=auto />
             </div>
           </b-media>
         </template>
@@ -285,8 +285,7 @@ export default {
       stakingParameters: new StakingParameters(),
       validators: [],
       delegations: [],
-      validNodes: [],
-      point_validators: [{ id: 1, name: 'point-validator-main' }, { id: 2, name: 'Point' }],
+      foundationNodes: [{ id: 1, name: 'point-validator-main' }, { id: 2, name: 'Point' }],
       changes: {},
       latestPower: {},
       previousPower: {},
@@ -345,7 +344,7 @@ export default {
   },
   computed: {
     pingVals() {
-      return this.list.filter(x => x.description.identity === '6783E9F948541962')
+      return this.list.filter(x => x.description.identity === '94EFE192B2C52424')
     },
     list() {
       const tab = this.selectedStatus === 'active' ? this.validators : this.inactiveValidators

@@ -70,11 +70,6 @@ export default {
     this.getList()
   },
   methods: {
-    selectProposal(modal, pid, title) {
-      this.operationModalType = modal
-      this.selectedProposalId = Number(pid)
-      this.selectedTitle = title
-    },
     getList() {
       this.loading = true
       this.$http.getGovernanceList(this.next).then(res => {
