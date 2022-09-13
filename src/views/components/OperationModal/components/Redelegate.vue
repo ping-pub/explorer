@@ -39,6 +39,22 @@
     <b-row>
       <b-col>
         <b-form-group
+          label="To Validator"
+          label-for="validator"
+        >
+          <v-select
+            v-model="toValidator"
+            :options="valOptions"
+            :reduce="val => val.value"
+            placeholder="Select a validator"
+            :selectable="(v) => v.value"
+          />
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <b-form-group
           label="Current Delegation"
           label-for="Token"
         >
@@ -54,22 +70,6 @@
             />
             <small class="text-danger">{{ errors[0] }}</small>
           </validation-provider>
-        </b-form-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        <b-form-group
-          label="To Validator"
-          label-for="validator"
-        >
-          <v-select
-            v-model="toValidator"
-            :options="valOptions"
-            :reduce="val => val.value"
-            placeholder="Select a validator"
-            :selectable="(v) => v.value"
-          />
         </b-form-group>
       </b-col>
     </b-row>

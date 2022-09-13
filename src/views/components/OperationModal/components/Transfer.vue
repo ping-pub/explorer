@@ -134,6 +134,10 @@ export default {
       type: String,
       default: '',
     },
+    toAddress: {
+      type: String,
+      default: '',
+    },
     balance: {
       type: Array,
       default: () => [],
@@ -145,7 +149,7 @@ export default {
       currencySign: getUserCurrencySign(),
       token: '',
       amount: null,
-      recipient: '',
+      recipient: this.toAddress,
       required,
       password,
       email,

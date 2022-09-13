@@ -1,7 +1,7 @@
 {
   "chain_name": "passage",
-  "api": ["https://passage-api.polkachu.com"],
-  "rpc": ["https://passage-rpc.polkachu.com:443"],
+  "api": ["https://passage-api.polkachu.com","https://api.passage.nodestake.top"],
+  "rpc": ["https://passage-rpc.polkachu.com:443","https://rpc.passage.nodestake.top"],
   "snapshot_provider": "",
   "sdk_version": "0.45.5",
   "coin_type": "118",

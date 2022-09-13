@@ -175,7 +175,7 @@ export default class ChainFetch {
   }
 
   async getValidatorUnbondedList() {
-    return this.get('/cosmos/staking/v1beta1/validators?pagination.limit&status=BOND_STATUS_UNBONDED').then(data => {
+    return this.get('/cosmos/staking/v1beta1/validators?pagination.limit=100&status=BOND_STATUS_UNBONDED').then(data => {
       const result = commonProcess(data.validators)
       const vals = result.validators ? result.validators : result
       return vals.map(i => new Validator().init(i))
@@ -352,10 +352,9 @@ export default class ChainFetch {
   async getGovernanceList(next = '', chain = null) {
     const key = next || ''
     const url = this.config.chain_name === 'shentu'
-      ? `/shentu/gov/v1alpha1/proposals?pagination.limit=50&pagination.reverse=true&pagination.key=${key}`
-      : `/cosmos/gov/v1beta1/proposals?pagination.limit=50&pagination.reverse=true&pagination.key=${key}`
+      ? `/shentu/gov/v1alpha1/proposals?pagination.limit=20&pagination.reverse=true&pagination.key=${key}`
+      : `/cosmos/gov/v1beta1/proposals?pagination.limit=20&pagination.reverse=true&pagination.key=${key}`
     return this.get(url, chain).then(data => {
-      // const pool = new StakingPool().init(commonProcess(data[1]))
       let proposals = commonProcess(data)
       if (Array.isArray(proposals.proposals)) {
         proposals = proposals.proposals

@@ -1,7 +1,7 @@
 {
     "chain_name": "cheqd",
-    "api": "https://api.cheqd.net",
-    "rpc": ["https://rpc.cheqd.net:443", "https://rpc.cheqd.net:443"],
+    "api": ["https://api.cheqd.net","https://api.cheqd.nodestake.top"],
+    "rpc": ["https://rpc.cheqd.net:443", "https://rpc.cheqd.net:443","https://rpc.cheqd.nodestake.top"],
     "snapshot_provider": "",
     "sdk_version": "0.44.3",
     "coin_type": "118",

@@ -93,33 +93,34 @@
         <b-card-title>Active Proposals</b-card-title>
       </b-card-header>
       <b-card-body>
-        <b-link
-          v-for="prop in proposals"
+        <b-media
+          v-for="prop in proprosals2"
           :key="prop.id"
-          :to="`./${chain}/gov/${prop.id}`"
+          no-body
+          class="mb-1"
         >
-          <b-media
-            no-body
-            class="mb-1"
+          <b-media-aside
+            v-b-modal.operation-modal
+            @click="selectProposal('Vote',prop.id, prop.title)"
           >
-            <b-media-aside>
-              <b-avatar
-                rounded
-                size="42"
-                variant="light-primary"
-              >
-                {{ prop.id }}
-              </b-avatar>
-            </b-media-aside>
+            <b-avatar
+              rounded
+              size="42"
+              :variant="myVotes[prop.id] ? 'light-primary': 'primary'"
+            >
+              {{ myVotes[prop.id] || 'Vote' }}
+            </b-avatar>
+          </b-media-aside>
+          <b-link :to="`./${chain}/gov/${prop.id}`">
             <b-media-body class="d-flex flex-column justify-content-center">
               <h6 class="transaction-title">
-                {{ prop.title }}
+                {{ prop.id }}. {{ prop.title }}
               </h6>
               <small>{{ formatType(prop.contents['@type']) }}  {{ formatEnding(prop.voting_end_time) }}</small>
             </b-media-body>
-          </b-media>
-        </b-link>
-        <div v-if="proposals.length === 0">
+          </b-link>
+        </b-media>
+        <div v-if="proprosals2.length === 0">
           No active proposal!
           <b-link :to="`./${chain}/gov`">
             Browse all
@@ -195,6 +196,121 @@
           />
         </b-col>
       </b-row>
+      <b-row v-if="stakingList && stakingList.length > 0">
+        <b-col>
+          <b-table
+            :items="stakingList"
+            :fields="fields"
+            striped
+            hover
+            responsive="sm"
+            stacked="sm"
+          >
+            <template #cell(action)="data">
+              <!-- size -->
+              <b-button-group
+                size="sm"
+              >
+                <b-button
+                  v-b-modal.operation-modal
+                  v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                  v-b-tooltip.hover.top="'Delegate'"
+                  variant="outline-primary"
+                  @click="selectDelegation(data,'Delegate')"
+                >
+                  <feather-icon icon="LogInIcon" />
+                </b-button>
+                <b-button
+                  v-b-modal.operation-modal
+                  v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                  v-b-tooltip.hover.top="'Redelegate'"
+                  variant="outline-primary"
+                  @click="selectDelegation(data,'Redelegate')"
+                >
+                  <feather-icon icon="ShuffleIcon" />
+                </b-button>
+                <b-button
+                  v-b-modal.operation-modal
+                  v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                  v-b-tooltip.hover.top="'Unbond'"
+                  variant="outline-primary"
+                  @click="selectDelegation(data,'Unbond')"
+                >
+                  <feather-icon icon="LogOutIcon" />
+                </b-button>
+              </b-button-group>
+            </template>
+          </b-table>
+        </b-col>
+      </b-row>
+
+      <b-row v-if="unbonding && unbonding.length > 0">
+        <b-col>
+          <b-card>
+            <b-card-header class="pt-0 pl-0 pr-0">
+              <b-card-title>Unbonding Tokens</b-card-title>
+            </b-card-header>
+            <b-card-body class="pl-0 pr-0">
+              <b-row
+                v-for="item in unbonding"
+                :key="item.validator_address"
+              >
+                <b-col cols="12">
+                  <span class="font-weight-bolder">From: <router-link :to="`../staking/${item.validator_address}`">{{ item.validator_address }}</router-link></span>
+                </b-col>
+                <b-col cols="12">
+                  <b-table
+                    :items="item.entries"
+                    class="mt-1"
+                    striped
+                    hover
+                    responsive="sm"
+                    stacked="sm"
+                  >
+                    <template #cell(completion_time)="data">
+                      {{ formatDate(data.item.completion_time) }}
+                    </template>
+                    <template #cell(initial_balance)="data">
+                      {{ data.item.initial_balance }}
+                    </template>
+                    <template #cell(balance)="data">
+                      {{ data.item.balance }}
+                    </template>
+                  </b-table>
+                </b-col>
+              </b-row>
+            </b-card-body>
+          </b-card>
+        </b-col>
+      </b-row>
+      <b-row
+        v-if="address"
+        class="mt-1"
+      >
+        <b-col cols="6">
+          <b-button
+            v-b-modal.operation-modal
+            block
+            variant="success"
+            @click="selectSend()"
+          >
+            <feather-icon icon="SendIcon" />
+            Send
+          </b-button>
+        </b-col>
+        <b-col cols="6">
+          <b-button
+            block
+            variant="info"
+            :to="`${chain}/account/${address}/receive`"
+          >
+            <feather-icon
+              icon="PlusCircleIcon"
+            />
+            receive
+          </b-button>
+        </b-col>
+      </b-row>
     </b-card>
     <router-link to="/wallet/import">
       <b-card class="addzone text-center">
@@ -202,25 +318,40 @@
         Connect Wallet
       </b-card>
     </router-link>
+    <operation-modal
+      :address="address"
+      :validator-address="selectedValidator"
+      :type="operationModalType"
+      :proposal-id="selectedProposalId"
+      :proposal-title="selectedTitle"
+    />
   </div>
 </template>
 
 <script>
 import {
   BRow, BCol, BAlert, BCard, BTable, BFormCheckbox, BCardHeader, BCardTitle, BMedia, BMediaAside, BMediaBody, BAvatar,
-  BCardBody, BLink,
+  BCardBody, BLink, BButtonGroup, BButton, BTooltip, VBModal, VBTooltip,
 } from 'bootstrap-vue'
 import {
   formatNumber, formatTokenAmount, isToken, percent, timeIn, toDay, toDuration, tokenFormatter, getLocalAccounts,
+  getStakingValidatorOperator,
 } from '@/libs/utils'
+import OperationModal from '@/views/components/OperationModal/index.vue'
+import Ripple from 'vue-ripple-directive'
+import dayjs from 'dayjs'
 import ParametersModuleComponent from './components/parameters/ParametersModuleComponent.vue'
 import DashboardCardHorizontal from './components/dashboard/DashboardCardHorizontal.vue'
 import DashboardCardVertical from './components/dashboard/DashboardCardVertical.vue'
 import DashboardPriceChart2 from './components/dashboard/DashboardPriceChart2.vue'
+import FeatherIcon from '../@core/components/feather-icon/FeatherIcon.vue'
 
 export default {
   components: {
     BAvatar,
+    BButtonGroup,
+    BTooltip,
+    BButton,
     BRow,
     BCol,
     BAlert,
@@ -235,13 +366,24 @@ export default {
     BCardBody,
     BLink,
 
+    OperationModal,
     ParametersModuleComponent,
     DashboardCardHorizontal,
     DashboardPriceChart2,
     DashboardCardVertical,
+    FeatherIcon,
+  },
+  directives: {
+    'b-modal': VBModal,
+    'b-tooltip': VBTooltip,
+    Ripple,
   },
   data() {
     return {
+      fields: ['validator', 'delegation', 'rewards', 'action'],
+      delegations: [],
+      rewards: [],
+      unbonding: [],
       chain: this.$store.state.chains.selected.chain_name,
       syncing: false,
       latestTime: '',
@@ -254,12 +396,24 @@ export default {
       ratio: '-',
       inflation: '-',
       proposals: [],
+      myVotes: {},
+      selectedValidator: '',
+      selectedProposalId: 0,
+      selectedTitle: '',
+      operationModalType: '',
+      voteColors: {
+        YES: 'success',
+        NO: 'warning',
+        ABSTAIN: 'info',
+        NO_WITH_VETO: 'danger',
+      },
 
       walletBalances: '-',
       walletStaking: '-',
       walletRewards: '-',
       walletUnbonding: '-',
       address: null,
+
     }
   },
   computed: {
@@ -277,8 +431,26 @@ export default {
       }
       return key || 'Wallet'
     },
+    proprosals2() {
+      return this.proposals
+    },
+    stakingList() {
+      return this.delegations.map(x => {
+        const rewards = this.rewards.find(r => r.validator_address === x.delegation.validator_address)
+        return {
+          valAddress: x.delegation.validator_address,
+          validator: getStakingValidatorOperator(this.$store.state.chains.selected.chain_name, x.delegation.validator_address),
+          delegation: this.formatToken([x.balance]),
+          rewards: rewards ? this.formatToken(rewards.reward) : '',
+          action: '',
+        }
+      })
+    },
   },
   created() {
+    this.$http.getGovernanceListByStatus(2).then(res => {
+      this.proposals = res.proposals
+    })
     this.$http.getLatestBlock().then(res => {
       this.height = res.block.header.height
       if (timeIn(res.block.header.time, 3, 'm')) {
@@ -313,12 +485,20 @@ export default {
         this.inflation = '-'
       })
     }
-
-    this.$http.getGovernanceListByStatus(2).then(res => {
-      this.proposals = res.proposals
-    })
   },
   methods: {
+    selectProposal(modal, pid, title) {
+      this.operationModalType = modal
+      this.selectedProposalId = Number(pid)
+      this.selectedTitle = title
+    },
+    selectDelegation(v, type) {
+      this.selectedValidator = v.item.valAddress
+      this.operationModalType = type
+    },
+    selectSend() {
+      this.operationModalType = 'Transfer'
+    },
     formatToken(tokens) {
       if (Array.isArray(tokens)) {
         let nativeToken = tokens.filter(x => x.denom.length < 11)
@@ -345,10 +525,12 @@ export default {
         this.walletBalances = this.formatToken(bal)
       })
       this.$http.getStakingReward(address).then(res => {
+        this.rewards = res.rewards
         this.walletRewards = this.formatToken(res.rewards.map(x => x.reward).flat())
       })
       this.$http.getStakingDelegations(address).then(res => {
         const delegations = res.delegation_responses || res
+        this.delegations = delegations
         this.walletStaking = this.formatToken(delegations.map(x => x.balance).flat())
       })
       this.$http.getStakingUnbonding(address).then(res => {
@@ -357,6 +539,7 @@ export default {
           const newTokens = []
           const denom = token.base
           const unbonding = res.unbonding_responses || res
+          this.unbonding = unbonding
           unbonding.forEach(x => {
             x.entries.forEach(y => {
               newTokens.push({
@@ -370,6 +553,18 @@ export default {
           }
         }
       })
+      this.proposals.forEach(x => {
+        this.$http.getGovernanceProposalVote(x.id, address, null)
+          .then(v => {
+            this.myVotes[x.id] = this.formatVoteOption(v.vote.option)
+          })
+          .catch(() => {
+            this.myVotes[x.id] = null
+          })
+      })
+    },
+    formatVoteOption(v) {
+      return v.replaceAll('VOTE_OPTION_', '')
     },
     formatEnding(v) {
       return toDay(v, 'from')
@@ -398,6 +593,7 @@ export default {
         return { title: this.convert(data[k]), subtitle: k }
       })
     },
+    formatDate: v => dayjs(v).format('YYYY-MM-DD HH:mm:ss'),
     convert(v) {
       if (typeof v === 'object') {
         const v2 = {}

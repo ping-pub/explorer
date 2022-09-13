@@ -3,7 +3,7 @@
     <b-card-body class="d-flex justify-content-between align-items-center">
       <div class="truncate">
         <h4 class="mb-25 font-weight-bolder">
-          {{ statistic }}
+          {{ statistic || '-' }}
         </h4>
         <span>{{ statisticTitle }}</span>
       </div>
