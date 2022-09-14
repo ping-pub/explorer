@@ -54,16 +54,16 @@
                     </b-col>
                     <b-col
                       cols="4"
-                      class="text-uppercase text-truncate"
-                    >
-                      {{ coinInfo.symbol }}/{{ pair.target }}
-                    </b-col>
-                    <b-col
-                      cols="4"
                       class="font-weight-bold"
                       :class="`text-${colorMap(pair.trust_score)}`"
                     >
                       ${{ pair.converted_last.usd }}
+                    </b-col>
+                    <b-col
+                      cols="4"
+                      class="text-uppercase text-truncate"
+                    >
+                      {{ coinInfo.symbol }}/{{ pair.target }}
                     </b-col>
                   </b-row>
                 </b-dropdown-item>
