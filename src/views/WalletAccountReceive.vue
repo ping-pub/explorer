@@ -29,6 +29,7 @@
           block
           class="mt-2"
           variant="primary"
+          to="/wallet/import"
         >
           Connect Wallet
         </b-button>
