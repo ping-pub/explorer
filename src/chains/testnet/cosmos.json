@@ -1,7 +1,0 @@
-{
-    "chain_name": "cosmos-vega",
-    "api":"https://vega.api.ping.pub",
-    "sdk_version": "0.42.9",
-    "addr_prefix": "cosmos",
-    "logo": "https://dl.airtable.com/.attachments/e54f814bba8c0f9af8a3056020210de0/2d1155fb/cosmos-hub.svg"
-}
