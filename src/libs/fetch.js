@@ -500,7 +500,7 @@ export default class ChainFetch {
     return this.get('/cosmos/liquidity/v1beta1/pools').then(data => commonProcess(data))
   }
 
-  async getMarketChart(days = 14, coin = null) {
+  async getMarketChart(days = 14, coin = 'point-network') {
     const conf = this.getSelectedConfig()
     const currency = getUserCurrency()
     if (conf.assets[0] && conf.assets[0].coingecko_id) {
@@ -509,7 +509,7 @@ export default class ChainFetch {
     return null
   }
 
-  async getCoinInfo(coin = null) {
+  async getCoinInfo(coin = 'point-network') {
     const conf = this.getSelectedConfig()
     if (conf.assets[0] && conf.assets[0].coingecko_id) {
       return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin || conf.assets[0].coingecko_id}`)
@@ -524,7 +524,7 @@ export default class ChainFetch {
   }
 
   static async fetchTokenQuote(symbol) {
-    return ChainFetch.fetchCoinMarketCap('api/price/POINT_USDT')
+    return ChainFetch.fetchCoinMarketCap('/api/price/POINT_USDT')
   }
 
   // Simulate Execution of tx
