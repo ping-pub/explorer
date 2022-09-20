@@ -200,6 +200,7 @@
                           </div>
                         </div>
                         <b-button
+                          v-if="balances[acc.addr]"
                           block
                           size="sm"
                           variant="outline-primary"
@@ -451,10 +452,9 @@ export default {
         Object.keys(this.accounts).forEach(acc => {
           this.accounts[acc].address.forEach(add => {
             this.$http.getBankBalances(add.addr, chains[add.chain]).then(res => {
-              const { balances } = res
-              if (balances && balances.length > 0) {
-                this.$set(this.balances, add.addr, balances)
-                balances.forEach(token => {
+              if (res && res.length > 0) {
+                this.$set(this.balances, add.addr, res)
+                res.forEach(token => {
                   if (token.denom.startsWith('ibc')) {
                     this.$http.getIBCDenomTrace(token.denom, chains[add.chain]).then(denom => {
                       this.$set(this.ibcDenom, token.denom, denom)
@@ -497,8 +497,7 @@ export default {
     },
     formatDenom(v) {
       if (!v) return ''
-      // const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v)
-      const denom = 'apoint'
+      const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v)
       return formatTokenDenom(denom)
     },
     formatTotalChange(v) {
@@ -518,23 +517,23 @@ export default {
     },
     priceColor(denom) {
       const d2 = this.formatDenom(denom)
-      const quote = 'POINT_USDT'
+      const quote = this.$store.state.chains.quotes[d2]
       if (quote) {
-        const price = quote[this.usd_24h_change]
+        const price = quote[`${this.currency2}_24h_change`]
         return price > 0 ? 'text-success' : 'text-danger'
       }
       return ''
     },
     getPrice(denom) {
       const d2 = this.formatDenom(denom)
-      const quote = 'POINT_USDT'
-      return quote ? quote[this.usd] || 0 : 0
+      const quote = this.$store.state.chains.quotes[d2]
+      return quote ? quote[this.currency2] || 0 : 0
     },
     getChanges(denom) {
       const d2 = this.formatDenom(denom)
-      const quote = 'POINT_USDT'
+      const quote = this.$store.state.chains.quotes[d2]
       if (quote) {
-        const price = quote.usd_24h_change
+        const price = quote[`${this.currency2}_24h_change`]
         return price || 0
       }
       return 0
@@ -548,9 +547,9 @@ export default {
     },
     formatPrice(denom) {
       const d2 = this.formatDenom(denom)
-      const quote = 'POINT_USDT'
+      const quote = this.$store.state.chains.quotes[d2]
       if (quote) {
-        const price = quote.usd
+        const price = quote[this.currency2]
         return price
       }
       return 0

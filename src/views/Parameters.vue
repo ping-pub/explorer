@@ -38,12 +38,6 @@
         <parameters-module-component :data="slashing" />
       </b-col>
     </b-row>
-    <b-card title="Application Version">
-      <object-field-component :tablefield="appVersion" />
-    </b-card>
-    <b-card title="Node Information">
-      <object-field-component :tablefield="nodeVersion" />
-    </b-card>
   </div>
 </template>
 
@@ -56,7 +50,6 @@ import {
 } from '@/libs/utils'
 
 import ParametersModuleComponent from './components/parameters/ParametersModuleComponent.vue'
-import ObjectFieldComponent from './components/ObjectFieldComponent.vue'
 
 export default {
   components: {
@@ -65,7 +58,6 @@ export default {
     BAlert,
     BCard,
     ParametersModuleComponent,
-    ObjectFieldComponent,
   },
   data() {
     return {
@@ -102,8 +94,6 @@ export default {
         title: 'Governance Parameters',
         items: [],
       },
-      appVersion: null,
-      nodeVersion: null,
     }
   },
   created() {
@@ -118,6 +108,10 @@ export default {
         this.syncing = false
       }
       this.latestTime = toDay(res.block.header.time, 'long')
+    })
+
+    this.$http.getMarketChart().then(res => {
+      this.marketData = res
     })
 
     this.$http.getStakingParameters().then(res => {
@@ -167,10 +161,6 @@ export default {
         this.$set(this.gov, 'items', items)
       })
     }
-    this.$http.getNodeInfo().then(res => {
-      this.appVersion = res.application_version
-      this.nodeVersion = res.default_node_info
-    })
   },
   methods: {
     normalize(data, title) {

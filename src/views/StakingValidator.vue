@@ -123,7 +123,13 @@
                 <span class="font-weight-bold">Status</span>
               </th>
               <td class="pb-50 text-capitalize">
-                <span>{{ String(validator.status).replace('BOND_STATUS_', '') }}</span>
+                <b-badge
+                  v-if="validator.status===3"
+                  variant="light-success"
+                >
+                  Active
+                </b-badge>
+                <span v-else>{{ validator.status }}</span>
               </td>
             </tr>
             <tr>
@@ -253,6 +259,7 @@
             :total-rows="transactions.total_count"
             :per-page="transactions.limit"
             :value="transactions.page_number"
+            align="center"
             class="mt-1"
             @change="pageload"
           />
