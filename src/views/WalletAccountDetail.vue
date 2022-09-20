@@ -711,7 +711,7 @@ export default {
     formatDenom(v) {
       return formatTokenDenom(this.denoms[v] ? this.denoms[v] : v)
     },
-    formatAmount(v, dec = 2, denom = 'uatom', format = true) {
+    formatAmount(v, dec = 2, denom = 'apoint', format = true) {
       return formatTokenAmount(v, dec, denom, format)
     },
     formatToken(v) {
@@ -719,11 +719,11 @@ export default {
     },
     formatCurrency(amount, denom) {
       const qty = this.formatAmount(amount, 2, denom, false)
-      const d2 = this.formatDenom(denom)
-      const userCurrency = getUserCurrency()
+      const d2 = 'point-network'
+      // const userCurrency = getUserCurrency()
       const quote = this.$store.state.chains.quotes[d2]
       if (quote) {
-        const price = quote[userCurrency]
+        const price = quote.usd
         return parseFloat((qty * price).toFixed(2))
       }
       return 0
