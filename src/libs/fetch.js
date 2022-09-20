@@ -506,7 +506,7 @@ export default class ChainFetch {
     if (conf.assets[0] && conf.assets[0].coingecko_id) {
       return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin || conf.assets[0].coingecko_id}/market_chart?vs_currency=${currency}&days=${days}`)
     }
-    return null
+    return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin}`)
   }
 
   async getCoinInfo(coin = 'point-network') {
@@ -514,7 +514,7 @@ export default class ChainFetch {
     if (conf.assets[0] && conf.assets[0].coingecko_id) {
       return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin || conf.assets[0].coingecko_id}`)
     }
-    return null
+    return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin}`)
   }
 
   // CoinMarketCap
