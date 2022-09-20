@@ -518,7 +518,7 @@ export default {
     },
     priceColor(denom) {
       const d2 = this.formatDenom(denom)
-      const quote = 'POINT'
+      const quote = 'POINT_USDT'
       if (quote) {
         const price = quote[this.usd_24h_change]
         return price > 0 ? 'text-success' : 'text-danger'
@@ -527,12 +527,12 @@ export default {
     },
     getPrice(denom) {
       const d2 = this.formatDenom(denom)
-      const quote = 'POINT'
+      const quote = 'POINT_USDT'
       return quote ? quote[this.usd] || 0 : 0
     },
     getChanges(denom) {
       const d2 = this.formatDenom(denom)
-      const quote = 'POINT'
+      const quote = 'POINT_USDT'
       if (quote) {
         const price = quote.usd_24h_change
         return price || 0
@@ -548,7 +548,7 @@ export default {
     },
     formatPrice(denom) {
       const d2 = this.formatDenom(denom)
-      const quote = 'POINT'
+      const quote = 'POINT_USDT'
       if (quote) {
         const price = quote.usd
         return price
