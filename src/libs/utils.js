@@ -389,8 +389,7 @@ export function formatTokenDenom(tokenDenom) {
   if (tokenDenom && tokenDenom.code === undefined) {
     let denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
     const chains = getLocalChains()
-    // const selected = localStorage.getItem('selected_chain')
-    const selected = 'point'
+    const selected = localStorage.getItem('selected_chain')
     const selChain = chains[selected]
     const nativeAsset = selChain.assets.find(a => (a.base === denom))
     if (nativeAsset) {

@@ -36,8 +36,7 @@ export default class ChainFetch {
   }
 
   getSelectedConfig() {
-    // let chain = store.state.chains.selected
-    let chain = 'point'
+    let chain = store.state.chains.selected
     const lschains = localStorage.getItem('chains')
     if (lschains) {
       chain = JSON.parse(lschains)[chain?.chain_name || 'cosmos']
