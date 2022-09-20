@@ -497,7 +497,8 @@ export default {
     },
     formatDenom(v) {
       if (!v) return ''
-      const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v)
+      // const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v)
+      const denom = 'apoint'
       return formatTokenDenom(denom)
     },
     formatTotalChange(v) {
@@ -533,7 +534,7 @@ export default {
       const d2 = this.formatDenom(denom)
       const quote = this.$store.state.chains.quotes[d2]
       if (quote) {
-        const price = quote[`${this.currency2}_24h_change`]
+        const price = quote['usd_24h_change']
         return price || 0
       }
       return 0
@@ -547,9 +548,9 @@ export default {
     },
     formatPrice(denom) {
       const d2 = this.formatDenom(denom)
-      const quote = this.$store.state.chains.quotes[d2]
+      const quote = 'POINT'
       if (quote) {
-        const price = quote[this.currency2]
+        const price = quote['usd']
         return price
       }
       return 0
