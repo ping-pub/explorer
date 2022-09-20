@@ -550,7 +550,7 @@ export default {
       const d2 = this.formatDenom(denom)
       const quote = 'POINT'
       if (quote) {
-        const price = quote['usd']
+        const price = quote.usd
         return price
       }
       return 0
