@@ -36,7 +36,8 @@ export default class ChainFetch {
   }
 
   getSelectedConfig() {
-    let chain = store.state.chains.selected
+    //let chain = store.state.chains.selected
+    let chain = 'point'
     const lschains = localStorage.getItem('chains')
     if (lschains) {
       chain = JSON.parse(lschains)[chain?.chain_name || 'cosmos']
@@ -524,7 +525,7 @@ export default class ChainFetch {
   }
 
   static async fetchTokenQuote(symbol) {
-    return ChainFetch.fetchCoinMarketCap('/api/price/POINT_USDT')
+    return ChainFetch.fetchCoinMarketCap(`api/price/${symbol}_USDT`)
   }
 
   // Simulate Execution of tx

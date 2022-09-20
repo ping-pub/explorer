@@ -389,7 +389,8 @@ export function formatTokenDenom(tokenDenom) {
   if (tokenDenom && tokenDenom.code === undefined) {
     let denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
     const chains = getLocalChains()
-    const selected = localStorage.getItem('selected_chain')
+    //const selected = localStorage.getItem('selected_chain')
+    const selected = 'point'
     const selChain = chains[selected]
     const nativeAsset = selChain.assets.find(a => (a.base === denom))
     if (nativeAsset) {
@@ -429,7 +430,7 @@ export function numberWithCommas(x) {
   return parts.join('.')
 }
 
-export function formatTokenAmount(tokenAmount, decimals = 2, tokenDenom = 'uatom', format = true) {
+export function formatTokenAmount(tokenAmount, decimals = 2, tokenDenom = 'apoint', format = true) {
   const denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
   let amount = 0
   let exp = String(denom).startsWith('gravity') ? 18 : 6
