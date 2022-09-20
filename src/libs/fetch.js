@@ -524,7 +524,7 @@ export default class ChainFetch {
   }
 
   static async fetchTokenQuote(symbol) {
-    return ChainFetch.fetchCoinMarketCap('/api/v3/simple/price?ids=point-network&vs_currencies=usd')
+    return ChainFetch.fetchCoinMarketCap('/api/v3/simple/price?ids=point-network&vs_currencies=usd&include_24hr_change=true')
   }
 
   // Simulate Execution of tx
