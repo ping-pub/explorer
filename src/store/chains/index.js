@@ -83,7 +83,7 @@ export default {
   },
   actions: {
     async getQuotes(context) {
-      fetch('https://sale.pointnetwork.io/api/price/POINT_USDT').then(data => data.json()).then(data => {
+      fetch('https://sale.pointnetwork.io/api/price/POINT_USDT').then(response => response.json()).then(data => {
         context.commit('setQuotes', data)
       })
     },
