@@ -518,23 +518,23 @@ export default {
     },
     priceColor(denom) {
       const d2 = this.formatDenom(denom)
-      const quote = this.$store.state.chains.quotes[d2]
+      const quote = 'POINT'
       if (quote) {
-        const price = quote[`${this.currency2}_24h_change`]
+        const price = quote[this.usd_24h_change]
         return price > 0 ? 'text-success' : 'text-danger'
       }
       return ''
     },
     getPrice(denom) {
       const d2 = this.formatDenom(denom)
-      const quote = this.$store.state.chains.quotes[d2]
-      return quote ? quote[this.currency2] || 0 : 0
+      const quote = 'POINT'
+      return quote ? quote[this.usd] || 0 : 0
     },
     getChanges(denom) {
       const d2 = this.formatDenom(denom)
-      const quote = this.$store.state.chains.quotes[d2]
+      const quote = 'POINT'
       if (quote) {
-        const price = quote['usd_24h_change']
+        const price = quote.usd_24h_change
         return price || 0
       }
       return 0
