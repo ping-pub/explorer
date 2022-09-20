@@ -496,9 +496,8 @@ export default {
       this.$bvModal.hide('add-account')
     },
     formatDenom(v) {
-      // if (!v) return ''
-      // const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v)
-      const denom = 'apoint'
+      if (!v) return ''
+      const denom = (v.startsWith('ibc') ? this.ibcDenom[v] : v)
       return formatTokenDenom(denom)
     },
     formatTotalChange(v) {
