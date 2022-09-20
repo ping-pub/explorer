@@ -29,32 +29,16 @@ function processMenu() {
       href: 'https://ping.pub',
       icon: 'ChromeIcon',
     })
-  } else {
-    chainMenus.push({
-      title: 'Testnet Explorer',
-      href: 'http://testnet.ping.pub',
-      icon: 'LifeBuoyIcon',
-    })
   }
   chainMenus.push({
     title: 'Github',
-    href: 'https://github.com/ping-pub/explorer',
+    href: 'https://github.com/neobase-one/canto-cosmos-explorer',
     icon: 'GithubIcon',
   })
   chainMenus.push({
-    title: 'Discord',
-    href: 'https://discord.gg/CmjYVSr6GW',
-    icon: 'EyeIcon',
-  })
-  chainMenus.push({
     title: 'Twitter',
-    href: 'https://twitter.com/ping_pub',
+    href: 'https://twitter.com/NeoBase_Studios',
     icon: 'TwitterIcon',
-  })
-  chainMenus.push({
-    title: 'Telegram',
-    href: 'https://t.me/pingpub',
-    icon: 'SendIcon',
   })
 
   return chainMenus

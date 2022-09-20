@@ -9,7 +9,7 @@ export const $themeBreakpoints = {}
 // APP CONFIG
 export const $themeConfig = {
   app: {
-    appName: 'PING.PUB', // Will update name in navigation menu (Branding)
+    appName: 'Explorer', // Will update name in navigation menu (Branding)
     // eslint-disable-next-line global-require
     appLogoImage: '/logo.svg', // Will update logo in navigation menu (Branding)
   },
