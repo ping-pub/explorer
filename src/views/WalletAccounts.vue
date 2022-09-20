@@ -516,24 +516,24 @@ export default {
       return parseFloat((qty * this.getPrice(denom)).toFixed(2))
     },
     priceColor(denom) {
-      const d2 = this.formatDenom(denom)
+      const d2 = 'point-network'
       const quote = this.$store.state.chains.quotes[d2]
       if (quote) {
-        const price = quote[`${this.currency2}_24h_change`]
+        const price = quote.usd_24h_change
         return price > 0 ? 'text-success' : 'text-danger'
       }
       return ''
     },
     getPrice(denom) {
-      const d2 = this.formatDenom(denom)
+      const d2 = 'point-network'
       const quote = this.$store.state.chains.quotes[d2]
-      return quote ? quote[this.currency2] || 0 : 0
+      return quote ? quote.usd || 0 : 0
     },
     getChanges(denom) {
-      const d2 = this.formatDenom(denom)
+      const d2 = 'point-network'
       const quote = this.$store.state.chains.quotes[d2]
       if (quote) {
-        const price = quote[`${this.currency2}_24h_change`]
+        const price = quote.usd_24h_change
         return price || 0
       }
       return 0
@@ -546,10 +546,10 @@ export default {
       return '0'
     },
     formatPrice(denom) {
-      const d2 = this.formatDenom(denom)
+      const d2 = 'point-network'
       const quote = this.$store.state.chains.quotes[d2]
       if (quote) {
-        const price = quote[this.currency2]
+        const price = quote.usd
         return price
       }
       return 0
