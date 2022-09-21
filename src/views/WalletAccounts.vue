@@ -200,7 +200,6 @@
                           </div>
                         </div>
                         <b-button
-                          v-if="balances[acc.addr]"
                           block
                           size="sm"
                           variant="outline-primary"
