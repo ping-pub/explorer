@@ -429,7 +429,7 @@ export function numberWithCommas(x) {
   return parts.join('.')
 }
 
-export function formatTokenAmount(tokenAmount, decimals = 2, tokenDenom = 'uatom', format = true) {
+export function formatTokenAmount(tokenAmount, decimals = 2, tokenDenom = 'apoint', format = true) {
   const denom = tokenDenom.denom_trace ? tokenDenom.denom_trace.base_denom : tokenDenom
   let amount = 0
   let exp = String(denom).startsWith('gravity') ? 18 : 6
