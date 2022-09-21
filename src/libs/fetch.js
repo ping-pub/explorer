@@ -506,7 +506,7 @@ export default class ChainFetch {
     if (conf.assets[0] && conf.assets[0].coingecko_id) {
       return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin || conf.assets[0].coingecko_id}/market_chart?vs_currency=${currency}&days=${days}`)
     }
-    return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin}`)
+    return null
   }
 
   async getCoinInfo(coin = 'point-network') {
@@ -514,7 +514,7 @@ export default class ChainFetch {
     if (conf.assets[0] && conf.assets[0].coingecko_id) {
       return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin || conf.assets[0].coingecko_id}`)
     }
-    return ChainFetch.fetch(' https://api.coingecko.com', `/api/v3/coins/${coin}`)
+    return null
   }
 
   // CoinMarketCap
@@ -524,7 +524,7 @@ export default class ChainFetch {
   }
 
   static async fetchTokenQuote(symbol) {
-    return ChainFetch.fetchCoinMarketCap('/api/v3/simple/price?ids=point-network&vs_currencies=usd&include_24hr_change=true')
+    return ChainFetch.fetchCoinMarketCap(`/api/v3/simple/price?ids=point-network&vs_currencies=${symbol}&include_24hr_change=true`)
   }
 
   // Simulate Execution of tx
