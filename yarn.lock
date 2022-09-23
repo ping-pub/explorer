@@ -2377,18 +2377,18 @@
     link-module-alias "^1.2.0"
     shx "^0.3.4"
 
-"@tharsis/eip712@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@tharsis/eip712/-/eip712-0.2.2.tgz#1b458433bfe153e49e2dd9eecff55a373804296f"
-  integrity sha512-NRCMEGLAeddrRi0orWPRDiwtXt2089prodlpT23jxUKaLrdDxE9JFjXWo25BUxjflftsh39BTXXVwTWnwCJgDA==
+"@tharsis/eip712@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@tharsis/eip712/-/eip712-0.2.4.tgz#4c38247ae24e42f7f6053f3cf7887c7f79a36ee8"
+  integrity sha512-tn3zghCpsar2ZDsF8d7eBAfr+Toeqd9uOxFTa8LlCyewXmXE18mPMyoLeNDYX0jU7kTO0TTV9RQf0uNCahzQHA==
   dependencies:
     link-module-alias "^1.2.0"
     shx "^0.3.4"
 
-"@tharsis/proto@^0.1.17":
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/@tharsis/proto/-/proto-0.1.17.tgz#c8f2285ddd94a4eb111152dffae7221f82a258bb"
-  integrity sha512-v3pQ8Bleuqtrw0dSWkL1KNbjglFGL336jPhdE/HtC+zlvY0ux7D4gHc+TnEo2A0m+ZGDxAqHqWd8+8zs+MBCzQ==
+"@tharsis/proto@^0.1.20":
+  version "0.1.20"
+  resolved "https://registry.yarnpkg.com/@tharsis/proto/-/proto-0.1.20.tgz#3a372d303e51e4ca2747dee1549a2a31f17094b5"
+  integrity sha512-Ls7Mmw8Oe9uTPpyxcjsjmiREK/MQwrdF4AHwB5J7MsQEjyk7rNFS2lbPDB8hT4bzquIhF9MOTt4Nvh83iyMAAA==
   dependencies:
     "@types/google-protobuf" "^3.15.5"
     "@types/node" "^17.0.21"
@@ -2397,13 +2397,13 @@
     sha3 "^2.1.4"
     shx "^0.3.4"
 
-"@tharsis/transactions@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@tharsis/transactions/-/transactions-0.2.3.tgz#b18bc2c4ed1e3d43e6adfa2ca1376e81bb6ced40"
-  integrity sha512-RXm2LWrHclSg+cGju+1REIrYf4TsBi1WlME5XjaEPwW7Uo1b6CUfqd3lSfoWWzE5xoc5D7q5apC+yu2xUSJzag==
+"@tharsis/transactions@^0.2.5":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@tharsis/transactions/-/transactions-0.2.6.tgz#b6478eca3987e69e060d098adf601d68d8960da9"
+  integrity sha512-RHDYaLYvDL4UvKveN08vppsRyjTOnJ2eSBBCXmSyRBbeEVXOBG83qhoECx9nrcs3gXzEL5pqU3PUe3p+3hzfDQ==
   dependencies:
-    "@tharsis/eip712" "^0.2.2"
-    "@tharsis/proto" "^0.1.17"
+    "@tharsis/eip712" "^0.2.4"
+    "@tharsis/proto" "^0.1.20"
     "@types/node" "^17.0.21"
     link-module-alias "^1.2.0"
     shx "^0.3.4"
