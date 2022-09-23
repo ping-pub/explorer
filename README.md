@@ -2,9 +2,9 @@
 
 ![Ping Wallet](./public/logo.svg)
 
-<h1>Ping Explorer</h1>
+<h1>Ping Dashboard</h1>
 
-**Ping explorer is not only an explorer but also a wallet and more ... 🛠**
+**Ping Dashboard is not only an explorer but also a wallet and more ... 🛠**
 
 [![version](https://img.shields.io/github/tag/ping-pub/explorer.svg)](https://github.com/ping-pub/explorer/releases/latest)
 [![GitHub](https://img.shields.io/github/license/ping-pub/explorer.svg)](https://github.com/ping-pub/explorer/blob/master/LICENSE)
@@ -27,63 +27,32 @@ Pull your request [here](./src/chains), We will add your chains as soon as possi
 
 ## Why Ping explorer use official/trusted third party public LCD/rpc server? 
 
-We have two considerations: 1, Trust, In decentralize system, everything controlled by one single team/organization could be risks. So we decided to co-build with the community. 2. We will list hundreds cosmos-based blockchains in the future, it's impossible for our team to run validators or fullnodes for all of those chains.
+We have two considerations: 
 
-# Installation:
+ - Trust, In decentralize system, everything controlled by one single team/organization could be risks. So we decided to co-build with the community. 
+ - Limited Resources: ` Ping Dashboard ` will list hundreds cosmos-based blockchains in the future, it's impossible for our team to run validators or fullnodes for all of those chains.
 
-1. Running with yarn
+
+## Donation
+
+Your donation will help us make better products. Thanks in advance.
+
+ - Address for ERC20: USDC, USDT, ETH
 ```
-yarn && yarn serve
-```
-
-2. Building for web servers, like nginx, apache
-```
-yarn && yarn build
-cp -r ./dist/* <ROOT_OF_WEB_SERVER>
-```
-
-# Enable LCD for Ping.pub (do this on the config for your chain)
-
-1. Set `enable = true` in `./config/app.toml`
-```
-###############################################################################
-###                           API Configuration                             ###
-###############################################################################
-
-[api]
-
-# Enable defines if the API server should be enabled.
-enable = true
-
-# Swagger defines if swagger documentation should automatically be registered.
-swagger = false
-
-# Address defines the API server to listen on.
-address = "tcp://0.0.0.0:1317"
-
-# MaxOpenConnections defines the number of maximum open connections.
-max-open-connections = 1000
+0x88BFec573Dd3E4b7d2E6BfD4D0D6B11F843F8aa1
 ```
 
-2. add proxy server and enable CORS. NOTE: You must enable https as well.
+ - You can denote any token in Cosmos ecosystem: 
 
-```
-server {
-    server_name juno.api.ping.pub;
-    listen 443;
-    location / {
-        add_header Access-Control-Allow-Origin *;
-        add_header Access-Control-Max-Age 3600;
-        add_header Access-Control-Expose-Headers Content-Length;
+https://ping.pub/coffee
 
-        proxy_pass http://<HOST>:1317;
+> If you are an individual please do not donate more than $10, a cup of coffee means a lot to us.
 
-    }
-}
-```
-3. config your blockchain in [./src/chains]()
+#### Donations from project
 
-
+- Point Network: 1000USDC and $1000 worth of POINT
+- Bitsong: 50k BTSG
+- IRISnet: 100k IRIS
 
 
 ## Contributors
