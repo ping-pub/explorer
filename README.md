@@ -42,9 +42,7 @@ Your donation will help us make better products. Thanks in advance.
 0x88BFec573Dd3E4b7d2E6BfD4D0D6B11F843F8aa1
 ```
 
- - You can denote any token in Cosmos ecosystem: 
-
-https://ping.pub/coffee
+ - You can donate any token in the Cosmos ecosystem: [here](https://ping.pub/coffee)
 
 > If you are an individual please do not donate more than $10, a cup of coffee means a lot to us.
 
