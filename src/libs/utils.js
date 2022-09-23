@@ -195,12 +195,13 @@ export function consensusPubkeyToHexAddress(consensusPubkey) {
   let raw = null
   if (typeof consensusPubkey === 'object') {
     if (consensusPubkey['@type'] === '/cosmos.crypto.ed25519.PubKey') {
-      raw = toBase64(fromHex(toHex(sha256(fromBase64(consensusPubkey.key))).slice(0, 40)))
+      // raw = toBase64(fromHex(toHex(sha256(fromBase64(consensusPubkey.key))).slice(0, 40)))
+      raw = toHex(sha256(fromBase64(consensusPubkey.key))).slice(0, 40).toUpperCase()
       return raw
     }
     // /cosmos.crypto.secp256k1.PubKey
     if (consensusPubkey['@type'] === '/cosmos.crypto.secp256k1.PubKey') {
-      raw = toBase64(fromHex(new RIPEMD160().update(Buffer.from(sha256(fromBase64(consensusPubkey.key)))).digest('hex')))
+      raw = new RIPEMD160().update(Buffer.from(sha256(fromBase64(consensusPubkey.key)))).digest('hex')
       return raw
     }
     if (consensusPubkey.type === 'tendermint/PubKeySecp256k1') {

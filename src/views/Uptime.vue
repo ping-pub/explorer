@@ -108,7 +108,7 @@ import {
 import {
   consensusPubkeyToHexAddress, getCachedValidators, timeIn, toDay,
 } from '@/libs/utils'
-import { fromBech32, toBase64 } from '@cosmjs/encoding'
+import { fromBech32, fromHex, toBase64 } from '@cosmjs/encoding'
 
 export default {
   components: {
@@ -150,7 +150,7 @@ export default {
       vals.sort((a, b) => b.delegator_shares - a.delegator_shares)
       const rets = vals.map(x => ({
         validator: x.description,
-        address: consensusPubkeyToHexAddress(x.consensus_pubkey),
+        address: this.hex2base64(consensusPubkeyToHexAddress(x.consensus_pubkey)),
       }))
       if (this.missedFilter) {
         return rets.filter(x => this.missing[x.address].missed_blocks_counter > 0)
@@ -223,9 +223,12 @@ export default {
     initColor() {
       const sigs = {}
       this.validators.forEach(x => {
-        sigs[consensusPubkeyToHexAddress(x.consensus_pubkey)] = 'bg-danger'
+        sigs[this.hex2base64(consensusPubkeyToHexAddress(x.consensus_pubkey))] = 'bg-danger'
       })
       return sigs
+    },
+    hex2base64(v) {
+      return toBase64(fromHex(v))
     },
     fetch_status(height, resolve) {
       const block = this.blocks.find(b => b.height === height)
