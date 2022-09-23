@@ -82,15 +82,15 @@
       >
         Round: {{ item.round }} {{ item.prevotes_bit_array }}
         <b-card-body class="px-0">
-          <b-button
+          <b-badge
             v-for="(pre, i) in item.prevotes"
             :key="i"
             size="sm"
             style="margin: 2px;"
             :variant="color(i, pre)"
           >
-            <small>{{ showName(i, pre) }}</small>
-          </b-button>
+            <small class="small">{{ showName(i, pre) }}</small>
+          </b-badge>
         </b-card-body>
       </div>
       <b-card-footer>
@@ -99,7 +99,7 @@
           size="sm"
         />  Proposer Signed
         <b-button
-          variant="outline-primary"
+          variant="dark"
           size="sm"
         />  Proposer Not Signed
         <b-button
@@ -107,7 +107,7 @@
           size="sm"
         /> Signed
         <b-button
-          variant="outline-secondary"
+          variant="secondary"
           size="sm"
         /> Not Signed
       </b-card-footer>
@@ -122,6 +122,7 @@
       </h4>
       <div class="alert-body">
         <ul>
+          <li>This tool is useful for validators to monitor who is onboard during an upgrade</li>
           <li>If you want to change the default rpc endpoint. make sure that "https" and "CORS" are enabled on your server.</li>
         </ul>
       </div>
@@ -131,7 +132,7 @@
 
 <script>
 import {
-  BAvatar, BCardFooter, BRow, BCol, BCardTitle, BAlert,
+  BAvatar, BCardFooter, BRow, BCol, BCardTitle, BAlert, BBadge,
   BCard, BCardBody, BInputGroup, BFormInput, BInputGroupAppend, BButton,
 } from 'bootstrap-vue'
 import fetch from 'node-fetch'
@@ -144,6 +145,7 @@ import DashboardCardHorizontal from './components/dashboard/DashboardCardHorizon
 export default {
   components: {
     BAlert,
+    BBadge,
     BRow,
     BCol,
     BCard,
@@ -196,9 +198,9 @@ export default {
     format: v => toDay(v, 'time'),
     color(i, txt) {
       if (i === this.roundState.proposer.index) {
-        return txt === 'nil-Vote' ? 'outline-primary' : 'primary'
+        return txt === 'nil-Vote' ? 'dark' : 'primary'
       }
-      return txt === 'nil-Vote' ? 'outline-secondary' : 'success'
+      return txt === 'nil-Vote' ? 'secondary' : 'success'
     },
     fetchPosition() {
       const dumpurl = this.rpc.replace('consensus_state', 'dump_consensus_state')
@@ -232,7 +234,7 @@ export default {
           this.roundState.height_vote_set.forEach(element => {
             const rate = Number(element.prevotes_bit_array.substring(element.prevotes_bit_array.length - 4))
             if (rate > 0) {
-              this.rate = `${rate * 100}%`
+              this.rate = `${(rate * 100).toFixed()}%`
             }
           })
         }).catch(err => {
