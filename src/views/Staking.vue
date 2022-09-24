@@ -214,6 +214,7 @@
           :fields="excelCols"
           :data="list"
           type="csv"
+          worksheet="Validators"
           name="validators.xls"
         >
           <b-button

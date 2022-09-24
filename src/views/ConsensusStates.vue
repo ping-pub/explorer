@@ -80,7 +80,7 @@
         v-for="item in roundState.height_vote_set"
         :key="item.round"
       >
-        Round: {{ item.round }} {{ item.prevotes_bit_array }}
+        <small>Round: {{ item.round }} {{ item.prevotes_bit_array }}</small>
         <b-card-body class="px-0">
           <b-badge
             v-for="(pre, i) in item.prevotes"
