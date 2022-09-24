@@ -1,0 +1,18 @@
+{
+    "chain_name": "axelar",
+    "api": ["https://axelar-lcd.quickapi.com", "https://axelar-lcd.qubelabs.io", "https://axelar-rest.chainode.tech", "https://axelar-lcd.quantnode.tech"],
+    "rpc": ["https://axelar-rpc.quickapi.com", "https://axelar-rpc.pops.one", "https://axelar-rpc.chainode.tech"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.6",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "axelar",
+    "logo": "/logos/axelar.svg",
+    "assets": [{
+        "base": "uaxl",
+        "symbol": "AXL",
+        "exponent": "6",
+        "coingecko_id": "axelar",
+        "logo": "/logos/axelar.svg"
+    }]
+}
