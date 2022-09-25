@@ -74,9 +74,9 @@
                 <small>$</small>
               </sup>
               <h2 class="d-inline mr-25">
-                {{ selectedTicker.converted_last.usd }}
+                {{ selectedTicker.converted_last.usd || '-' }}
               </h2>
-              <sub class="text-body"><small>/ {{ selectedTicker.target }}</small></sub>
+              <sub class="text-body"><small>/ {{ selectedTicker.target || 'USDC' }}</small></sub>
             </div>
           </div>
           <!--/ buy  -->
@@ -346,7 +346,7 @@ export default {
       ]
     },
     color() {
-      return this.colorMap(this.selectedTicker.trust_score)
+      return this.colorMap(this.selectedTicker?.trust_score)
     },
     homepage() {
       if (this.coinInfo.links) {
@@ -382,9 +382,11 @@ export default {
     this.$http.getCoinInfo().then(res => {
       if (res) {
         this.coinInfo = res
-        this.tickers = res.tickers
-        // eslint-disable-next-line prefer-destructuring
-        this.selectedTicker = this.tickers[0]
+        if (res.tickers.lenght > 0) {
+          this.tickers = res.tickers
+          // eslint-disable-next-line prefer-destructuring
+          this.selectedTicker = this.tickers[0]
+        }
       }
     })
   },
