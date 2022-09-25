@@ -60,10 +60,12 @@
                       ${{ pair.converted_last.usd }}
                     </b-col>
                     <b-col
+                      v-b-tooltip.left
                       cols="4"
                       class="text-uppercase text-truncate"
+                      :title="`${pair.base}/${pair.target}`"
                     >
-                      {{ coinInfo.symbol }}/{{ pair.target }}
+                      {{ pair.base }}/{{ pair.target }}
                     </b-col>
                   </b-row>
                 </b-dropdown-item>
@@ -76,7 +78,7 @@
               <h2 class="d-inline mr-25">
                 {{ selectedTicker.converted_last.usd || '-' }}
               </h2>
-              <sub class="text-body"><small>/ {{ selectedTicker.target || 'USDC' }}</small></sub>
+              <sub class="text-body"><small>/ USD</small></sub>
             </div>
           </div>
           <!--/ buy  -->
@@ -382,8 +384,8 @@ export default {
     this.$http.getCoinInfo().then(res => {
       if (res) {
         this.coinInfo = res
-        if (res.tickers.lenght > 0) {
-          this.tickers = res.tickers
+        this.tickers = res.tickers
+        if (this.tickers.length > 0) {
           // eslint-disable-next-line prefer-destructuring
           this.selectedTicker = this.tickers[0]
         }
