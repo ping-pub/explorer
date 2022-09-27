@@ -1,0 +1,20 @@
+{
+    "chain_name": "quicksilver",
+    "coingecko": "",
+    "api": ["https://quicksilver-testnet-api.polkachu.com"],
+    "rpc": ["https://quicksilver-testnet-rpc.polkachu.com"],
+    "sdk_version": "0.46.1",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "addr_prefix": "quicksilver",
+    "logo": "/logos/quicksilver.png",
+    "assets": [
+      {
+        "base": "uqck",
+        "symbol": "QCK",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "/logos/quicksilver.png"
+      }
+    ]
+  }
