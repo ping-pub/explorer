@@ -23,6 +23,7 @@
             <b-link
               class="navbar-brand"
               to="/"
+              :style="{'justify-content': 'center'}"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
