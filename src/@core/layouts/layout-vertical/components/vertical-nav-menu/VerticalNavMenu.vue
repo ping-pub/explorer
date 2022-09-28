@@ -28,7 +28,7 @@
                 xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 viewBox="0 0 287.89 400"
-                width="8%"
+                width="30%"
                 class="mb-50 mr-1"
               ><defs><linearGradient
                 id="a"
@@ -149,30 +149,6 @@
                 d="M280.77,347.51v6.38h-31v-6.38Zm0,40.22h-31V364.46h31v6.32H256.11v10.57h24.66Z"
                 style="fill:url(#d)"
               /></svg>
-              <h2
-                cla
-                ss="brand-text"
-              >
-                {{ appName }}
-              </h2>
-            </b-link>
-          </li>
-
-          <!-- Toggler Button -->
-          <li class="nav-item nav-toggle">
-            <b-link class="nav-link modern-nav-toggle">
-              <feather-icon
-                icon="XIcon"
-                size="20"
-                class="d-block d-xl-none"
-                @click="toggleVerticalMenuActive"
-              />
-              <feather-icon
-                :icon="collapseTogglerIconFeather"
-                size="20"
-                class="d-none d-xl-block collapse-toggle-icon"
-                @click="toggleCollapsed"
-              />
             </b-link>
           </li>
         </ul>
