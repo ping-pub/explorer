@@ -51,32 +51,6 @@
           <h6 class="mb-0 ">
             <span class="text-uppercase">{{ chainid || selected_chain.chain_name }}</span>
           </h6>
-          <small id="data-provider">
-            {{ currentApi }} ({{ selected_chain.sdk_version || '-' }})
-            <b-dropdown
-              class="ml-0"
-              variant="flat-primary"
-              no-caret
-              toggle-class="p-0"
-              right
-              sm
-            >
-              <template #button-content>
-                <feather-icon
-                  icon="RepeatIcon"
-                  size="12"
-                  class="cursor-pointer"
-                />
-              </template>
-              <b-dropdown-item
-                v-for="(item, i) in apiOptions"
-                :key="item"
-                @click="change(i)"
-              >
-                {{ item }}
-              </b-dropdown-item>
-            </b-dropdown>
-          </small>
         </b-media-body>
       </b-media>
     </div>
