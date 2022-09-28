@@ -18,6 +18,7 @@
       >
         <ul class="nav navbar-nav flex-row">
 
+          <br />
           <!-- Logo & Text -->
           <li class="nav-item mr-auto">
             <b-link
@@ -29,7 +30,7 @@
                 xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 viewBox="0 0 287.89 400"
-                width="30%"
+                width="28%"
                 class="mb-50 mr-1"
               ><defs><linearGradient
                 id="a"

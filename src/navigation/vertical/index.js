@@ -32,7 +32,7 @@ function processMenu() {
   }
   chainMenus.push({
     title: 'Github',
-    href: 'https://github.com/neobase-one/canto-cosmos-explorer',
+    href: 'https://github.com/neobase-one/neobase-cosmos-explorer',
     icon: 'GithubIcon',
   })
   chainMenus.push({
