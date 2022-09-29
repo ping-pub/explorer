@@ -1,0 +1,20 @@
+{
+  "chain_name": "androma",
+  "coingecko": "",
+  "api": ["https://androma-testnet-api.polkachu.com"],
+  "rpc": ["https://androma-testnet-rpc.polkachu.com"],
+  "sdk_version": "0.46.1",
+  "coin_type": "118",
+  "min_tx_fee": "8000",
+  "addr_prefix": "andr",
+  "logo": "/logos/androma.png",
+  "assets": [
+    {
+      "base": "uandr",
+      "symbol": "ANDR",
+      "exponent": "6",
+      "coingecko_id": "",
+      "logo": "/logos/androma.png"
+    }
+  ]
+}
