@@ -77,8 +77,8 @@ export default {
         class: 'border-primary',
         items: [
           { subtitle: 'height', icon: 'BoxIcon', color: 'light-success' },
-          { subtitle: 'bonded_and_supply', icon: 'DollarSignIcon', color: 'light-danger' },
-          { subtitle: 'bonded_ratio', icon: 'PercentIcon', color: 'light-warning' },
+          { subtitle: 'bonded and supply', icon: 'DollarSignIcon', color: 'light-danger' },
+          { subtitle: 'bonded ratio', icon: 'PercentIcon', color: 'light-warning' },
           { subtitle: 'inflation', icon: 'TrendingUpIcon', color: 'light-primary' },
         ],
       },
@@ -124,9 +124,9 @@ export default {
       this.staking = this.normalize(res, 'Staking Parameters')
       Promise.all([this.$http.getStakingPool(), this.$http.getBankTotal(res.bond_denom)])
         .then(pool => {
-          const bondedAndSupply = this.chain.items.findIndex(x => x.subtitle === 'bonded_and_supply')
+          const bondedAndSupply = this.chain.items.findIndex(x => x.subtitle === 'bonded and supply')
           this.$set(this.chain.items[bondedAndSupply], 'title', `${formatNumber(formatTokenAmount(pool[0].bondedToken, 2, res.bond_denom, false), true, 0)}/${formatNumber(formatTokenAmount(pool[1].amount, 2, res.bond_denom, false), true, 0)}`)
-          const bondedRatio = this.chain.items.findIndex(x => x.subtitle === 'bonded_ratio')
+          const bondedRatio = this.chain.items.findIndex(x => x.subtitle === 'bonded ratio')
           this.$set(this.chain.items[bondedRatio], 'title', `${percent(pool[0].bondedToken / pool[1].amount)}%`)
         })
     })
