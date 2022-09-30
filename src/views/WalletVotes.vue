@@ -60,14 +60,6 @@
                   {{ formatDate(p.voting_end_time) }}
                 </h6>
               </div>
-              <div class="gov">
-                <p class="card-text mb-25">
-                  Deposit
-                </p>
-                <h6 class="mb-0">
-                  {{ formatToken(p.total_deposit) || '-' }}
-                </h6>
-              </div>
             </div>
 
             <b-progress
