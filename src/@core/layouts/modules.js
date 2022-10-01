@@ -36,11 +36,6 @@ export default () => ([
     route: 'statesync',
   },
   {
-    scope: 'normal',
-    title: 'consensus',
-    route: 'consensus',
-  },
-  {
     scope: 'cos-mos',
     title: 'gravity',
     route: 'gravity',
