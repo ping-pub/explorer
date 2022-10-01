@@ -1,9 +1,8 @@
 <template>
   <!-- Error page-->
   <div class="misc-wrapper">
-    <b-link class="navbar-brand" to="/" :style="{'justify-content': 'center'}">
-      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 287.89 400"
-        width="28%" class="mb-50 mr-1">
+    <b-link class="brand-logo" to="/" >
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 287.89 400">
         <defs>
           <linearGradient id="a" x1="1.28" y1="164.53" x2="258.89" y2="164.53" gradientUnits="userSpaceOnUse">
             <stop offset="0" stop-color="gold" />
@@ -32,13 +31,15 @@
         <path
           d="M233.91,209.17V72.66h24.23V301.91l24.21,24.21V48.44H141.69l24.22,24.22h43.78v78L83.23,24.23H185.48L161.76,0h-137Z"
           style="fill:url(#b)" />
-        <polygon points="236.73 242.86 237.88 275.86 46.91 84.73 45.75 51.72 236.73 242.86" style="fill:url(#c)" /><text
+        <polygon points="236.73 242.86 237.88 275.86 46.91 84.73 45.75 51.72 236.73 242.86" style="fill:url(#c)" />
+        <text
           transform="translate(0 392.36)" style="font-size:57.46369934082031px;font-family:DepofixRegular, Depofix">N
           <tspan x="44.48" y="0" style="font-family:ZeniqNano, Zeniq Nano">EO</tspan>
           <tspan x="129.29" y="0" style="letter-spacing:-0.00497936637881475em">B</tspan>
           <tspan x="171.7" y="0">A</tspan>
           <tspan x="210.32" y="0" style="font-family:ZeniqNano, Zeniq Nano">SE</tspan>
-        </text><text transform="translate(0 387.73)"
+        </text>
+        <text transform="translate(0 387.73)"
           style="font-size:57.46369934082031px;font-family:DepofixRegular, Depofix">N<tspan x="44.48" y="0"
             style="font-family:ZeniqNano, Zeniq Nano">EO</tspan>
           <tspan x="129.29" y="0" style="letter-spacing:-0.00497936637881475em">B</tspan>
