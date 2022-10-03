@@ -12,7 +12,7 @@ import { toHex } from '@cosmjs/encoding'
 let chains = {}
 
 let configs = require.context('../../chains/mainnet', false, /\.json$/)
-if (isTestnet()) {
+if (true) {
   configs = require.context('../../chains/testnet', false, /\.json$/)
 }
 
