@@ -78,7 +78,7 @@
         </small>
       </div>
     </b-card-body>
-    <b-card-body class="pt-0">
+    <!-- <b-card-body class="pt-0">
       <b-button
         v-b-modal.WithdrawCommission
         block
@@ -87,7 +87,7 @@
       >
         Withdraw Commission
       </b-button>
-    </b-card-body>
+    </b-card-body> -->
     <operation-modal
       type="WithdrawCommission"
       modal-id="WithdrawCommission"
@@ -106,7 +106,6 @@ import OperationModal from '@/views/components/OperationModal/index.vue'
 
 export default {
   components: {
-    BButton,
     BCard,
     BCardHeader,
     BCardTitle,

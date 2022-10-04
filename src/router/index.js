@@ -40,6 +40,83 @@ const router = new VueRouter({
         ],
       },
     },
+    {
+      path: '/wallet/accounts',
+      alias: '/wallet',
+      name: 'accounts',
+      component: () => import('@/views/WalletAccounts.vue'),
+      meta: {
+        pageTitle: 'Accounts',
+        breadcrumb: [
+          {
+            text: 'Accounts',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/wallet/import',
+      name: 'accounts-import',
+      component: () => import('@/views/WalletAccountImportAddress.vue'),
+      meta: {
+        pageTitle: 'Accounts',
+        breadcrumb: [
+          {
+            text: 'Import',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/wallet/delegations',
+      name: 'delegations',
+      component: () => import('@/views/WalletDelegations.vue'),
+      meta: {
+        pageTitle: 'My Delegations',
+        breadcrumb: [
+          {
+            text: 'Wallet',
+          },
+          {
+            text: 'My Delegations',
+          },
+        ],
+      },
+    },
+    {
+      path: '/wallet/transactions',
+      name: 'mytransactions',
+      component: () => import('@/views/WalletTransactions.vue'),
+      meta: {
+        pageTitle: 'Transaction History',
+        breadcrumb: [
+          {
+            text: 'Wallet',
+          },
+          {
+            text: 'Transaction History',
+          },
+        ],
+      },
+    },
+    {
+      path: '/wallet/votes',
+      name: 'myVotes',
+      component: () => import('@/views/WalletVotes.vue'),
+      meta: {
+        pageTitle: 'My Votes',
+        breadcrumb: [
+          {
+            text: 'Wallet',
+          },
+          {
+            text: 'My Votes',
+          },
+        ],
+      },
+    },
     // chain modules
     {
       path: '/:chain/',
@@ -99,6 +176,60 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/:chain/uptime/my',
+      name: 'myuptime',
+      component: () => import('@/views/UptimeMyValidators.vue'),
+      meta: {
+        pageTitle: 'Uptime',
+        breadcrumb: [
+          {
+            text: 'Uptime',
+            active: true,
+          },
+          {
+            text: 'My Validators',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/:chain/account/:address',
+      name: 'chain-account',
+      component: () => import('@/views/WalletAccountDetail.vue'),
+      meta: {
+        pageTitle: 'Accounts',
+        breadcrumb: [
+          {
+            text: 'Accounts',
+            active: true,
+          },
+          {
+            text: 'Detail',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/:chain/account/:address/receive',
+      name: 'chain-receive',
+      component: () => import('@/views/WalletAccountReceive.vue'),
+      meta: {
+        pageTitle: 'Accounts',
+        breadcrumb: [
+          {
+            text: 'Accounts',
+            active: true,
+          },
+          {
+            text: 'Pay Me',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
       path: '/:chain/staking',
       name: 'staking',
       component: () => import('@/views/Staking.vue'),
@@ -107,6 +238,24 @@ const router = new VueRouter({
         breadcrumb: [
           {
             text: 'Staking',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/:chain/staking/:address',
+      name: 'staking-valiator',
+      component: () => import('@/views/StakingValidator.vue'),
+      meta: {
+        pageTitle: 'Staking Validator',
+        breadcrumb: [
+          {
+            text: 'Staking',
+            active: true,
+          },
+          {
+            text: 'Validator',
             active: true,
           },
         ],

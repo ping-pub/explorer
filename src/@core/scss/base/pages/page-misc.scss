@@ -21,13 +21,17 @@ $misc-inner-max-width: 750px;
     position: relative;
     max-width: $misc-inner-max-width;
   }
-
+  .brand-logo svg {
+    height: 50px;
+    width: 40.95px;
+}
   .brand-logo {
     display: flex;
     justify-content: center;
     position: absolute;
     top: 2rem;
-    left: 2rem;
+    left: 3rem;
+    
     margin: 0;
     .brand-text {
       font-weight: 600;
