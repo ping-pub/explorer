@@ -1,7 +1,8 @@
 <template>
-  <div class="text-center container-lg">
+  <div></div>
+  <!-- <div class="text-center container-lg">
     <full-header />
-    <b-link>
+     <b-link>
       <div class="d-flex justify-content-center align-items-center">
         <vuexy-logo />
         <h1
@@ -35,7 +36,7 @@
               v-if="data"
               class="earnings-card text-left"
             >
-              <div>
+               <div>
                 <b-card-title class="mb-1 d-flex justify-content-between">
                   <span class="text-uppercase">{{ data.chain_name }} <small class="font-small-2">{{ data.sdk_version }}</small></span>
                   <b-dropdown
@@ -99,7 +100,7 @@
           </router-link>
         </b-col>
 
-        <!-- no result found -->
+        no result found
         <b-col
           v-show="!chains"
           cols="12"
@@ -109,11 +110,11 @@
             No blockchain found!!
           </h4>
         </b-col>
-        <!--/ no result found -->
+        / no result found
       </b-row>
     </div>
     <app-footer class="mb-1" />
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -129,20 +130,7 @@ import AppFooter from '@/@core/layouts/components/AppFooter.vue'
 import FullHeader from './components/FullHeader.vue'
 
 export default {
-  components: {
-    BLink,
-    BAvatar,
-    BRow,
-    BCol,
-    BCard,
-    BCardText,
-    BCardTitle,
-    BDropdown,
-    BDropdownItem,
-    VuexyLogo,
-    AppFooter,
-    FullHeader,
-  },
+  components: {},
   directives: {
     Ripple,
   },
