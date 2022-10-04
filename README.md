@@ -52,6 +52,10 @@ Your donation will help us make better products. Thanks in advance.
 - Bitsong: 50k BTSG
 - IRISnet: 100k IRIS
 
+## Hire us
+
+You can hire us by submiting an issue and fund the issue on [IssueHunter](https://issuehunt.io/r/ping-pub/explorer)
+
 
 ## Contributors
 
