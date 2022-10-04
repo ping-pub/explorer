@@ -23,7 +23,7 @@
                 </h4>
                 <span class="card-text">{{ validator.description.website }}</span>
               </div>
-              <div class="d-flex flex-wrap">
+              <!-- <div class="d-flex flex-wrap">
                 <b-button
                   v-b-modal.operation-modal
                   variant="primary"
@@ -31,7 +31,7 @@
                 >
                   Delegate
                 </b-button>
-              </div>
+              </div> -->
             </div>
           </div>
 

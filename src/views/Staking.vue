@@ -199,7 +199,7 @@
           </template> -->
         </b-table>
       </b-card-body>
-      <b-card-footer class="d-none d-md-block">
+      <b-card-footer class="d-none d-md-block d-md-flex justify-content-between">
         <small>
           <b-badge variant="danger">
               &nbsp;
@@ -230,8 +230,6 @@ import {
 } from '@/libs/utils'
 import { keybase } from '@/libs/fetch'
 import OperationModal from '@/views/components/OperationModal/index.vue'
-// import { toHex } from '@cosmjs/encoding'
-// import fetch from 'node-fetch'
 
 export default {
   components: {

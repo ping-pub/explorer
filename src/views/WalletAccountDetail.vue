@@ -39,7 +39,7 @@
       >
         <b-card-header class="pt-0 pl-0 pr-0">
           <b-card-title>Assets</b-card-title>
-          <div>
+          <!-- <div>
             <b-button
               v-b-modal.operation-modal
               variant="primary"
@@ -63,7 +63,7 @@
              />
               <span class="d-none d-md-block">IBC Transfer</span>
             </b-button>
-          </div>
+          </div> -->
         </b-card-header>
         <b-card-body class="pl-0 pr-0">
           <b-row>
@@ -165,7 +165,7 @@
       >
         <b-card-header class="pt-0 pl-0 pr-0">
           <b-card-title>Delegation</b-card-title>
-          <div>
+          <!-- <div>
             <b-button
               v-b-modal.operation-modal
               variant="primary"
@@ -190,15 +190,15 @@
                 class="d-md-none"
               /><small class="d-none d-md-block"> Withdraw Rewards</small>
             </b-button>
-          </div>
+          </div> -->
         </b-card-header>
         <b-card-body class="pl-0 pr-0">
           <b-table
             :items="deleTable"
             stacked="sm"
           >
-            <template #cell(action)="data">
-              <!-- size -->
+            <!-- <template #cell(action)="data">
+              size
               <b-button-group
                 size="sm"
               >
@@ -230,7 +230,7 @@
                   <feather-icon icon="LogOutIcon" />
                 </b-button>
               </b-button-group>
-            </template>
+            </template> -->
           </b-table>
         </b-card-body>
       </b-card>
