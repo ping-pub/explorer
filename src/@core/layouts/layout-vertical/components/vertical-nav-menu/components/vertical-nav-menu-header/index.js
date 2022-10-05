@@ -12,8 +12,9 @@ export default {
     },
   },
   render(h) {
+    // const logo = this.item.icon || 'MoreHorizontalIcon'
     const span = h('span', {}, this.item.header)
-    const icon = h('feather-icon', { props: { icon: 'MoreHorizontalIcon', size: '18' } })
+    const icon = h('feather-icon', { props: { icon: this.item.icon || 'MoreHorizontalIcon', size: '18' } })
     if (canViewVerticalNavMenuHeader(this.item)) {
       return h('li', { class: 'navigation-header text-truncate' }, [span, icon])
     }

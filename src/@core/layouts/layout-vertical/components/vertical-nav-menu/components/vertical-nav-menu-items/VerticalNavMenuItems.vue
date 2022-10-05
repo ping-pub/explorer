@@ -51,14 +51,11 @@ export default {
           }
         }
       })
-      const current = {
-        title: selected.chain_name,
+
+      return [{
+        header: `${selected.chain_name} Dashboard`,
         icon: selected.logo,
-        route: { name: selected.chain_name, params: { chain: selected.chain_name } },
-      }
-      current.children = children
-      // this.items.unshift(current)
-      return [{ header: 'dashboard' }, current].concat(this.items)
+      }].concat(children).concat(this.items)
     },
   },
 }
