@@ -1,6 +1,16 @@
 <template>
   <div>
-    <b-card title="Block Id">
+    <b-card>
+      <b-card-title class="d-flex justify-content-between">
+        <span>#{{ height }}</span>
+        <span><b-button
+          size="sm"
+          @click="goblock(height-1)"
+        > &lt; </b-button> <b-button
+          size="sm"
+          @click="goblock(Number(height)+1)"
+        > > </b-button></span>
+      </b-card-title>
       <object-field-component :tablefield="block.block_id" />
     </b-card>
 
@@ -42,7 +52,9 @@
 </template>
 
 <script>
-import { BCard, BTable } from 'bootstrap-vue'
+import {
+  BCard, BTable, BCardTitle, BButton,
+} from 'bootstrap-vue'
 import { fromBase64 } from '@cosmjs/encoding'
 import { decodeTxRaw } from '@cosmjs/proto-signing'
 import Tx from '@/libs/data/tx'
@@ -52,8 +64,10 @@ import ArrayFieldComponent from './components/ArrayFieldComponent.vue'
 
 export default {
   components: {
+    BButton,
     BCard,
     BTable,
+    BCardTitle,
     ObjectFieldComponent,
     ArrayFieldComponent,
   },
@@ -68,6 +82,7 @@ export default {
     return {
       block: { block: { header: {}, data: {}, evidence: {} } },
       txs: null,
+      height: 0,
       fields: [
         { key: 'hash' },
         { key: 'fee', formatter: v => tokenFormatter(v) },
@@ -82,6 +97,7 @@ export default {
   },
   methods: {
     initData(height) {
+      this.height = height
       this.$http.getBlockByHeight(height).then(res => {
         this.block = res
         const { txs } = res.block.data
@@ -100,6 +116,9 @@ export default {
         }
         if (array.length > 0) this.txs = array
       })
+    },
+    goblock(height) {
+      this.$router.push({ name: 'block', params: { height } })
     },
   },
 }
