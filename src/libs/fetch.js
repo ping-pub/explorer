@@ -392,6 +392,10 @@ export default class ChainFetch {
     return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/rewards`, config).then(data => commonProcess(data))
   }
 
+  async getValidatorSlashs(address, config = null) {
+    return this.get(`/cosmos/distribution/v1beta1/validators//${address}/slashes`, config).then(data => commonProcess(data))
+  }
+
   async getStakingValidators(address) {
     return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/validators?pagination.size=200`).then(data => commonProcess(data.validators))
   }
