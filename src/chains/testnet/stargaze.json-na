@@ -1,7 +1,7 @@
 {
     "chain_name": "stargaze",
-    "api": ["https://stargaze-api.polkachu.com/","https://api-stargaze-ia.cosmosia.notional.ventures/", "https://rest.stargaze-apis.com", "https://rest.stargaze.publicawesome.dev"],
-    "rpc": ["https://stargaze-rpc.polkachu.com/", "https://rpc-stargaze-ia.cosmosia.notional.ventures/","https://rpc.stargaze-apis.com:443", "https://rpc.stargaze.ezstaking.io:443"],
+    "api": ["https://rest.stargaze-apis.com", "https://rest.stargaze.publicawesome.dev"],
+    "rpc": ["https://rpc.stargaze-apis.com:443", "https://rpc.stargaze.ezstaking.io:443"],
     "snapshot_provider": "",
     "sdk_version": "0.44.3",
     "coin_type": "118",

@@ -1,7 +1,7 @@
 {
     "chain_name": "axelar",
-    "api": ["https://lcd-axelar.imperator.co", "https://axelar-lcd.quickapi.com", "https://axelar-api.polkachu.com", "https://axelar-lcd.qubelabs.io", "https://axelar-rest.chainode.tech", "https://axelar-lcd.quantnode.tech", "https://api-1.axelar.nodes.guru:443"],
-    "rpc": ["https://rpc-axelar.imperator.co:443", "https://axelar-rpc.quickapi.com:443", "https://axelar-rpc.pops.one:443", "https://axelar-rpc.chainode.tech:443", "https://axelar-rpc.polkachu.com:443"],
+    "api": ["https://api-axelar-ia.cosmosia.notional.ventures", "https://lcd-axelar.imperator.co", "https://axelar-lcd.quickapi.com", "https://axelar-api.polkachu.com", "https://axelar-lcd.qubelabs.io", "https://axelar-rest.chainode.tech", "https://axelar-lcd.quantnode.tech", "https://api-1.axelar.nodes.guru:443"],
+    "rpc": ["https://rpc-axelar-ia.cosmosia.notional.ventures:443", "https://rpc-axelar.imperator.co:443", "https://axelar-rpc.quickapi.com:443", "https://axelar-rpc.pops.one:443", "https://axelar-rpc.chainode.tech:443", "https://axelar-rpc.polkachu.com:443"],
     "snapshot_provider": "",
     "sdk_version": "0.45.6",
     "coin_type": "118",
