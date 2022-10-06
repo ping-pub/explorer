@@ -37,14 +37,14 @@
           <b-tabs
             v-if="value"
             small
+            class="overflow-hidden"
           >
             <b-tab
               v-for="key in Object.keys(value)"
               :key="key"
               :title="key"
-              class="pl-0 pr-0"
+              class="p-0 overflow-hidden"
               title-item-class="bg-light-primary"
-              style="padding: 0px;"
             >
               <array-field-component
                 v-if="Array.isArray(value[key])"
@@ -58,7 +58,10 @@
                 v-else-if="isObjectText(value[key])"
                 :tablefield="toObject(value[key])"
               />
-              <span v-else>{{ value[key] }}</span>
+              <div
+                v-else
+                style="max-width: 800px; overflow: auto;"
+              >{{ value[key] }}</div>
             </b-tab>
           </b-tabs>
         </b-td>
@@ -66,7 +69,10 @@
           <VueMarkdown v-if="name==='description'">
             {{ addNewLine(value) }}
           </VueMarkdown>
-          <span v-else>{{ value }}</span>
+          <div
+            v-else
+            style="max-width: 800px; word-wrap:normal"
+          >{{ value }}</div>
         </b-td>
       </b-tr>
     </b-tbody>
