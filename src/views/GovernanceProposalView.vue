@@ -49,14 +49,7 @@
         >
           <tbody>
             <b-tr>
-              <b-td
-                style="text-transform: capitalize; vertical-align: top; width:200px"
-              >
-                {{ $t('proposal_id') }}
-              </b-td><b-td>{{ proposal.id }}</b-td>
-            </b-tr>
-            <b-tr>
-              <b-td>
+              <b-td style="text-transform: capitalize; vertical-align: top; width:200px">
                 {{ $t('proposal_proposer') }}
               </b-td><b-td><router-link :to="`../account/${proposer.proposer}`">
                 {{ formatAddress(proposer.proposer) }}
