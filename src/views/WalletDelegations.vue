@@ -124,7 +124,7 @@ export default {
           logo: x.chain.logo,
           validator: x.delegation.validator_address,
           moniker: this.findMoniker(x.chain.chain_name, x.delegation.validator_address),
-          chain: 'point',
+          chain: x.chain.chain_name,
         },
         delegator: x.keyname,
         delegator_address: x.delegation.delegator_address,
@@ -141,7 +141,7 @@ export default {
             logo: x.chain.logo,
             validator: x.delegation.validator_address,
             moniker: this.findMoniker(x.chain.chain_name, x.delegation.validator_address),
-            chain: 'point',
+            chain: x.chain.chain_name,
           },
           delegator: x.keyname,
           delegator_address: x.delegation.delegator_address,
@@ -181,7 +181,7 @@ export default {
     findReward(delegator, validator) {
       const reward = this.rewards[delegator]?.rewards.find(x => x.validator_address === validator) || null
       if (reward) {
-        return tokenFormatter(reward.reward, this.ibcDenoms)
+        return tokenFormatter(reward.reward, this.denom)
       }
       return '-'
     },
