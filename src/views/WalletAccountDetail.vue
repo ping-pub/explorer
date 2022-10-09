@@ -150,10 +150,10 @@
                   {{ formatDate(data.item.completion_time) }}
                 </template>
                 <template #cell(initial_balance)="data">
-                  {{ this.formatAmount(data.item.initial_balance, 2, denom, false) }}{{ stakingParameters.bond_denom }}
+                  {{ this.formatAmount(data.item.initial_balance, 2, denom, false) }}{{ formatDenom(stakingParameters.bond_denom) }}
                 </template>
                 <template #cell(balance)="data">
-                  {{ this.formatAmount(data.item.balance, 2, denom, false) }}{{ stakingParameters.bond_denom }}
+                  {{ this.formatAmount(data.item.balance, 2, denom, false) }}{{ formatDenom(stakingParameters.bond_denom) }}
                 </template>
               </b-table>
             </b-col>
@@ -711,7 +711,7 @@ export default {
     formatDenom(v) {
       return formatTokenDenom(this.denoms[v] ? this.denoms[v] : v)
     },
-    formatAmount(v, dec = 2, denom = 'point', format = true) {
+    formatAmount(v, dec = 2, denom = 'apoint', format = true) {
       return formatTokenAmount(v, dec, denom, format)
     },
     formatToken(v) {

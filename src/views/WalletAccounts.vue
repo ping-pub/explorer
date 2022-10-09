@@ -502,7 +502,7 @@ export default {
     formatTotalChange(v) {
       return numberWithCommas(v)
     },
-    formatAmount(v, denom = 'point', format = true) {
+    formatAmount(v, denom = 'apoint', format = true) {
       if (!v) return ''
       const denom2 = (denom.startsWith('ibc') ? this.ibcDenom[denom] : denom)
       return formatTokenAmount(v, 2, denom2, format)
