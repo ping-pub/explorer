@@ -3,7 +3,7 @@
     "api": ["https://api-mainnet.blockchain.ki", "https://ki.api.ping.pub","https://api.ki.nodestake.top"],
     "rpc": ["https://rpc-mainnet.blockchain.ki:443", "https://rpc-mainnet.blockchain.ki:443","https://rpc.ki.nodestake.top"],
     "snapshot_provider": "",
-    "sdk_version": "0.42.10",
+    "sdk_version": "0.45.6",
     "coin_type": "118",
     "min_tx_fee": "8000",
     "addr_prefix": "ki",

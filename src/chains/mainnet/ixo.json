@@ -3,7 +3,7 @@
     "api": ["https://impacthub.ixo.world/rest", "https://proxies.sifchain.finance/api/impacthub-3/rest"],
     "rpc": [],
     "snapshot_provider": "",
-    "sdk_version": "0.42.6",
+    "sdk_version": "0.45.4",
     "coin_type": "118",
     "min_tx_fee": "3000",
     "addr_prefix": "ixo",

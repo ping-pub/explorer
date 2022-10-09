@@ -4,7 +4,7 @@
     "api": "https://rest.core.persistence.one",
     "rpc": ["https://rpc.core.persistence.one:443", "https://rpc.core.persistence.one:443"],
     "snapshot_provider": "",
-    "sdk_version": "0.44.2",
+    "sdk_version": "0.45.6",
     "coin_type": "750",
     "min_tx_fee": "3000",
     "addr_prefix": "persistence",

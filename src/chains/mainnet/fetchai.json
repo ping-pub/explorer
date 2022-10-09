@@ -3,7 +3,7 @@
     "api": ["https://rest-fetchhub.fetch.ai"],
     "rpc": ["https://rpc-fetchhub.fetch.ai:443", "https://rpc-fetchhub.fetch.ai:443"],
     "snapshot_provider": "",
-    "sdk_version": "0.45.1",
+    "sdk_version": "0.45.6",
     "coin_type": "118",
     "min_tx_fee": "3000000000000000",
     "addr_prefix": "fetch",

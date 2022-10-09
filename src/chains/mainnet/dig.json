@@ -4,7 +4,7 @@
     "api": "https://api-1-dig.notional.ventures",
     "rpc": ["https://rpc-1-dig.notional.ventures:443", "https://rpc-1-dig.notional.ventures:443"],
     "snapshot_provider": "",
-    "sdk_version": "0.44.5",
+    "sdk_version": "0.46.1",
     "coin_type": "118",
     "min_tx_fee": "5000",
     "addr_prefix": "dig",

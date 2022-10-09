@@ -4,7 +4,7 @@
     "api": "https://api.data.kava.io",
     "rpc": ["https://rpc.kava.io:443", "https://rpc.kava.io:443"],
     "snapshot_provider": "",
-    "sdk_version": "0.44.5",
+    "sdk_version": "0.45.4",
     "coin_type": "118",
     "min_tx_fee": "5000",
     "addr_prefix": "kava",

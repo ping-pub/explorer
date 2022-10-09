@@ -5,7 +5,7 @@
     "api": "https://mainnet.crypto.org:1317",
     "rpc": ["https://mainnet.crypto.org:443", "https://rpc-crypto-org.keplr.app:443"],
     "snapshot_provider": "",
-    "sdk_version": "0.39.2",
+    "sdk_version": "0.46.1",
     "coin_type": "394",
     "min_tx_fee": "5000",
     "addr_prefix": "cro",

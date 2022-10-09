@@ -7,7 +7,7 @@
     "coin_type": "639",
     "min_tx_fee": "5000",
     "logo": "/logos/bitsong.svg",
-    "sdk_version": "0.45.0",
+    "sdk_version": "0.45.6",
     "assets": [{
         "base": "ubtsg",
         "symbol": "BTSG",
