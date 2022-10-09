@@ -305,7 +305,7 @@ export default {
 
     const conf = this.$http.getSelectedConfig()
     this.$http.getMintingInflation().then(res => {
-        this.inflation = `${percent(res)}%`
+      this.inflation = `${percent(res)}%`
     })
 
     this.$http.getGovernanceListByStatus(2).then(res => {
