@@ -1,5 +1,5 @@
 {
-    "chain_name": "Point",
+    "chain_name": "point",
     "coingecko": "point-network",
     "api": ["https://rpc-mainnet-1.point.space:1317"],
     "rpc": ["https://rpc-mainnet-1.point.space:26657"],
