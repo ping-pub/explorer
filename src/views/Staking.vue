@@ -285,7 +285,6 @@ export default {
       stakingParameters: new StakingParameters(),
       validators: [],
       delegations: [],
-      foundationNodes: [{ id: 1, name: 'point-validator-main' }, { id: 2, name: 'Point' }],
       changes: {},
       latestPower: {},
       previousPower: {},
