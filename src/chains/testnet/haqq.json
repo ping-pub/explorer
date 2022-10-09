@@ -2,7 +2,7 @@
     "chain_name": "haqq",
     "coingecko": "",
     "api": ["https://rest.cosmos.testedge.haqq.network/"],
-    "rpc": ["https://rpc.tm.testedge.haqq.network/"],
+    "rpc": ["http://178.128.62.21:26657/"],
     "snapshot_provider": "",
     "sdk_version": "0.45.3",
     "coin_type": "60",
@@ -17,3 +17,4 @@
         "logo": "/logos/islm.png"
     }]
 }
+
