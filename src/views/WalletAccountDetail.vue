@@ -150,10 +150,10 @@
                   {{ formatDate(data.item.completion_time) }}
                 </template>
                 <template #cell(initial_balance)="data">
-                  {{ data.item.initial_balance }}{{ stakingParameters.bond_denom }}
+                  {{ formatNumber(data.item.initial_balance) }}{{ stakingParameters.bond_denom }}
                 </template>
                 <template #cell(balance)="data">
-                  {{ data.item.balance }}{{ stakingParameters.bond_denom }}
+                  {{ formatNumber(data.item.balance) }}{{ stakingParameters.bond_denom }}
                 </template>
               </b-table>
             </b-col>
