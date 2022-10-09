@@ -711,7 +711,7 @@ export default {
     formatDenom(v) {
       return formatTokenDenom(this.denoms[v] ? this.denoms[v] : v)
     },
-    formatAmount(v, dec = 2, denom = 'apoint', format = true) {
+    formatAmount(v, dec = 2, denom = 'point', format = true) {
       return formatTokenAmount(v, dec, denom, format)
     },
     formatToken(v) {

@@ -10,7 +10,7 @@
     "addr_prefix": "point",
     "logo": "/logos/point-logo.png",
     "assets": [{
-        "base": "apoint",
+        "base": "upoint",
         "symbol": "POINT",
         "exponent": "18",
         "coingecko_id": "", 

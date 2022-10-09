@@ -186,7 +186,7 @@ export default {
     valuation() {
       const { amount } = this
       if (amount) {
-        const d2 = this.printDenom()
+        const d2 = 'point-network'
         const quote = this.$store.state.chains.quotes[d2]
         const price = quote ? quote[this.currency] : 0
         return parseFloat((amount * price).toFixed(2))

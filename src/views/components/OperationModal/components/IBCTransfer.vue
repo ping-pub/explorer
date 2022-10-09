@@ -238,7 +238,8 @@ export default {
     },
     valuation() {
       const { amount } = this
-      const d2 = this.printDenom()
+      // const d2 = this.printDenom()
+      const d2 = 'point-network'
       if (amount && d2) {
         const quote = this.$store.state.chains.quotes[d2]
         const price = quote ? quote[this.currency] : 0
