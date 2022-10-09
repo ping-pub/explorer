@@ -38,7 +38,7 @@
         </b-col>
       </b-row>
       <b-row
-        v-for="(row,j) in data.items"
+        v-for="(row,j) in items"
         :key="`${row.validator.validator}-${j}`"
         class="border-bottom"
       >
