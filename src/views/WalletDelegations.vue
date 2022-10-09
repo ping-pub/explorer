@@ -141,7 +141,7 @@ export default {
             logo: x.chain.logo,
             validator: x.delegation.validator_address,
             moniker: this.findMoniker(x.chain.chain_name, x.delegation.validator_address),
-            chain: x.chain.chain_name,
+            chain: this.$store.state.chains.selected.chain_name,
           },
           delegator: x.keyname,
           delegator_address: x.delegation.delegator_address,
