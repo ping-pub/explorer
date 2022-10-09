@@ -304,15 +304,9 @@ export default {
     })
 
     const conf = this.$http.getSelectedConfig()
-    if (conf.excludes && conf.excludes.indexOf('mint') > -1) {
-      this.inflation = '-'
-    } else {
-      this.$http.getMintingInflation().then(res => {
+    this.$http.getMintingInflation().then(res => {
         this.inflation = `${percent(res)}%`
-      }).catch(() => {
-        this.inflation = '-'
-      })
-    }
+    })
 
     this.$http.getGovernanceListByStatus(2).then(res => {
       this.proposals = res.proposals

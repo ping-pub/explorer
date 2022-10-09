@@ -4,7 +4,7 @@ export default class StakingParameters {
     this.historical_entries = 0
     this.unbonding_time = ''
     this.max_validators = 0
-    this.bond_denom = 'POINT'
+    this.bond_denom = ''
   }
 
   static create(element, chain = '') {
