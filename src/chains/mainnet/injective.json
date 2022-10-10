@@ -3,7 +3,7 @@
     "api": "https://lcd.injective.network",
     "rpc": ["https://injective-rpc.api.chainlayer.network:443", "https://injective-rpc.api.chainlayer.network:443"],
     "snapshot_provider": "",
-    "sdk_version": "v0.44.5",
+    "sdk_version": "v0.45.5",
     "coin_type": "60",
     "min_tx_fee": "5000",
     "addr_prefix": "inj",
