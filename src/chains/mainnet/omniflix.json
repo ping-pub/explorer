@@ -4,7 +4,7 @@
     "api": ["https://api.omniflix.nodestake.top","https://omniflixhub-api.skynetvalidators.com"],
     "rpc": ["https://rpc.omniflix.nodestake.top"],
     "snapshot_provider": "",
-    "sdk_version": "0.45.1",
+    "sdk_version": "0.46.1",
     "coin_type": "118",
     "min_tx_fee": "3000",
     "addr_prefix": "omniflix",

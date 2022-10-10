@@ -1,9 +1,9 @@
 {
     "chain_name": "evmos",
-    "api": ["https://evmos-api.polkachu.com", "https://rest.bd.evmos.org:1317", "https://evmos-api.skynetvalidators.com","https://api.evmos.nodestake.top"],
-    "rpc": ["https://evmos-rpc.polkachu.com:443", "https://tendermint.bd.evmos.org:26657", "https://tendermint.bd.evmos.org:26657","https://rpc.evmos.nodestake.top"],
+    "api": ["https://evmos-api.polkachu.com", "https://api-evmos-ia.cosmosia.notional.ventures", "https://rest.bd.evmos.org:1317", "https://evmos-api.skynetvalidators.com","https://api.evmos.nodestake.top"],
+    "rpc": ["https://evmos-rpc.polkachu.com:443", "https://rpc-evmos-ia.cosmosia.notional.ventures:443", "https://tendermint.bd.evmos.org:26657", "https://tendermint.bd.evmos.org:26657","https://rpc.evmos.nodestake.top"],
     "snapshot_provider": "",
-    "sdk_version": "0.45.1",
+    "sdk_version": "0.46.2",
     "coin_type": "60",
     "min_tx_fee": "5000000000000000",
     "addr_prefix": "evmos",

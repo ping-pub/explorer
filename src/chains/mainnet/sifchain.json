@@ -1,7 +1,7 @@
 {
     "chain_name": "sifchain",
-    "api": "https://api.sifchain.finance",
-    "rpc": ["https://rpc.sifchain.finance:443", "https://rpc-archive.sifchain.finance:443"],
+    "api": ["https://api-sifchain-ia.cosmosia.notional.ventures", "https://sifchain-api.polkachu.com", "https://api.sifchain.finance"],
+    "rpc": ["https://rpc-sifchain-ia.cosmosia.notional.ventures/", "https://sifchain-rpc.polkachu.com:443", "https://rpc.sifchain.finance:443", "https://rpc-archive.sifchain.finance:443"],
     "snapshot_provider": "",
     "sdk_version": "0.45.0",
     "coin_type": "118",

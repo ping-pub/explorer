@@ -4,7 +4,7 @@
     "api": "https://api.provenance.io",
     "rpc": ["https://rpc.provenance.io:443", "https://rpc.provenance.io:443"],
     "snapshot_provider": "",
-    "sdk_version": "0.44.3",
+    "sdk_version": "0.46.1",
     "coin_type": "505",
     "min_tx_fee": "800000000",
     "addr_prefix": "pb",

@@ -4,7 +4,7 @@
     "api": "https://regen.api.ping.pub",
     "rpc": ["http://public-rpc.regen.vitwit.com:26657", "https://regen.stakesystems.io:2053"],
     "snapshot_provider": "",
-    "sdk_version": "0.44.3",
+    "sdk_version": "0.46.2",
     "coin_type": "118",
     "min_tx_fee": "3000",
     "addr_prefix": "regen",

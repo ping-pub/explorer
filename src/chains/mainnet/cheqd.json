@@ -3,7 +3,7 @@
     "api": ["https://api.cheqd.net","https://api.cheqd.nodestake.top"],
     "rpc": ["https://rpc.cheqd.net:443", "https://rpc.cheqd.net:443","https://rpc.cheqd.nodestake.top"],
     "snapshot_provider": "",
-    "sdk_version": "0.44.3",
+    "sdk_version": "0.45.5",
     "coin_type": "118",
     "min_tx_fee": "5000",
     "addr_prefix": "cheqd",

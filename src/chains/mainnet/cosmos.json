@@ -1,9 +1,10 @@
 {
     "chain_name": "cosmos",
     "coingecko": "cosmos",
-    "api": ["https://cosmos.api.ping.pub", "https://cosmos.api.s16.ventures", "https://lcd-cosmoshub.whispernode.com", "https://api-cosmoshub-ia.cosmosia.notional.ventures", "https://cosmos-api.polkachu.com"],
-    "rpc": ["https://cosmos.rpc.s16.ventures", "https://rpc-cosmoshub-ia.cosmosia.notional.ventures"],
-    "sdk_version": "0.44.3",
+    "api": ["https://cosmos.api.ping.pub", "https://lcd-cosmoshub.blockapsis.com"],
+    "rpc": ["http://cosmos.rpc.skystarcapital.xyz:26657", "https://cosmoshub.validator.network:443"],
+    "snapshot_provider": "d2008adf6d12f1a1951cce2b5ef531fbecb81895@cosmos.statesync.ping.pub:26656,27483c10217c542908a899024ed26ddfefeee9b9@cosmos.rpc.skystarcapital.xyz:26656",
+    "sdk_version": "0.45.1",
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "cosmos",

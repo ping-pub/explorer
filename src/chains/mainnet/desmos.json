@@ -3,7 +3,7 @@
     "coingecko": "desmos",
     "api": ["https://api.mainnet.desmos.network"],
     "rpc": ["https://rpc.mainnet.desmos.network:443"],
-    "sdk_version": "0.44.4",
+    "sdk_version": "0.45.8",
     "coin_type": "852",
     "min_tx_fee": "3000",
     "addr_prefix": "desmos",

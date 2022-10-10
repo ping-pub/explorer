@@ -2,7 +2,7 @@
     "chain_name": "rizon",
     "api": ["https://api.rizon.chaintools.tech", "https://restapi.rizon.world"],
     "rpc": ["http://seed-1.mainnet.rizon.world:26657"],
-    "sdk_version": "v0.45.0",
+    "sdk_version": "v0.45.6",
     "coin_type": "118",
     "min_tx_fee": "8000",
     "assets": [{

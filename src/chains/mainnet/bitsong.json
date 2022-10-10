@@ -1,13 +1,13 @@
 {
     "chain_name": "bitsong",
     "coingecko": "bitsong",
-    "api": "https://lcd.explorebitsong.com",
-    "rpc": ["https://rpc-bitsong.itastakers.com:443","https://rpc-bitsong.itastakers.com:443"],
+    "api": ["https://api-bitsong-ia.cosmosia.notional.ventures", "https://lcd.explorebitsong.com"],
+    "rpc": ["https://rpc-bitsong-ia.cosmosia.notional.ventures:443", "https://rpc-bitsong.itastakers.com:443","https://rpc-bitsong.itastakers.com:443"],
     "addr_prefix": "bitsong",
     "coin_type": "639",
     "min_tx_fee": "5000",
     "logo": "/logos/bitsong.svg",
-    "sdk_version": "0.45.0",
+    "sdk_version": "0.45.6",
     "assets": [{
         "base": "ubtsg",
         "symbol": "BTSG",

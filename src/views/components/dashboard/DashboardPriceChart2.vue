@@ -177,6 +177,14 @@
           <feather-icon icon="GithubIcon" /> Github
         </b-button>
         <b-button
+          :href="discord"
+          class="mr-1"
+          variant="outline-secondary"
+          size="sm"
+        >
+          <feather-icon icon="MessageSquareIcon" /> Discord
+        </b-button>
+        <b-button
           :href="telegram"
           class="mr-1"
           variant="outline-secondary"
@@ -359,6 +367,13 @@ export default {
     twitter() {
       if (this.coinInfo.links) {
         return this.coinInfo.links.twitter_screen_name ? `https://twitter.com/${this.coinInfo.links.twitter_screen_name}` : '#'
+      }
+      return '#'
+    },
+    discord() {
+      const discordLink = this.coinInfo.links.chat_url.filter(x => x.includes('discord'))
+      if (discordLink) {
+        return discordLink ? `${discordLink}` : '#'
       }
       return '#'
     },
