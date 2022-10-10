@@ -62,7 +62,7 @@ export default class ChainFetch {
   async getLatestBlock(config = null) {
     const conf = config || this.getSelectedConfig()
     const ver = conf.sdk_version || '0.41'
-    if (ver < 1 && compareVersions(ver, '0.45') < 1) {
+    if (ver && compareVersions(ver, '0.45') < 1) {
       return this.get('/blocks/latest', config).then(data => Block.create(data))
     }
     return this.get('/cosmos/base/tendermint/v1beta1/blocks/latest', config).then(data => Block.create(data))
@@ -71,7 +71,7 @@ export default class ChainFetch {
   async getBlockByHeight(height, config = null) {
     const conf = config || this.getSelectedConfig()
     const ver = conf.sdk_version || '0.41'
-    if (ver < 1 && compareVersions(ver, '0.45') < 1) {
+    if (ver && compareVersions(ver, '0.45') < 1) {
       return this.get(`/blocks/${height}`, config).then(data => Block.create(data))
     }
     return this.get(`/cosmos/base/tendermint/v1beta1/blocks/${height}`, config).then(data => Block.create(data))
