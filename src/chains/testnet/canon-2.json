@@ -1,0 +1,17 @@
+{
+    "chain_name": "canon-2",
+    "api": ["https://api.ruby.canon-2.network.umee.cc/","https://api.emerald.canon-2.network.umee.cc/","https://api.sapphire.canon-2.network.umee.cc/"], 
+    "rpc": ["https://rpc.ruby.canon-2.network.umee.cc/","https://rpc.emerald.canon-2.network.umee.cc/","https://rpc.sapphire.canon-2.network.umee.cc/"],
+    "sdk_version": "0.45.1",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "addr_prefix": "umee",
+    "logo": "/logos/umee.png",
+    "assets": [{
+        "base": "uumee",
+        "symbol": "UMEE",
+        "exponent": "6",
+        "coingecko_id": "umee", 
+        "logo": "/logos/umee.png"
+    }]
+}
