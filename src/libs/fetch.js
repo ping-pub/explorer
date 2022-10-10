@@ -60,18 +60,20 @@ export default class ChainFetch {
   }
 
   async getLatestBlock(config = null) {
-    // const conf = config || this.getSelectedConfig()
-    // if (conf.chain_name === 'injective') {
-    //   return ChainFetch.fetch('https://tm.injective.network', '/cosmos/base/tendermint/v1beta1/block').then(data => Block.create(commonProcess(data)))
-    // }
+    const conf = config || this.getSelectedConfig()
+    const ver = conf.sdk_version || '0.41'
+    if (ver && compareVersions(ver, '0.45') < 1) {
+      return this.get('/blocks/latest', config).then(data => Block.create(data))
+    }
     return this.get('/cosmos/base/tendermint/v1beta1/blocks/latest', config).then(data => Block.create(data))
   }
 
   async getBlockByHeight(height, config = null) {
-    // const conf = config || this.getSelectedConfig()
-    // if (conf.chain_name === 'injective') {
-    //   return ChainFetch.fetch('https://tm.injective.network', `/cosmos/base/tendermint/v1beta1/block?height=${height}`).then(data => Block.create(commonProcess(data)))
-    // }
+    const conf = config || this.getSelectedConfig()
+    const ver = conf.sdk_version || '0.41'
+    if (ver && compareVersions(ver, '0.45') < 1) {
+      return this.get(`/blocks/${height}`, config).then(data => Block.create(data))
+    }
     return this.get(`/cosmos/base/tendermint/v1beta1/blocks/${height}`, config).then(data => Block.create(data))
   }
 

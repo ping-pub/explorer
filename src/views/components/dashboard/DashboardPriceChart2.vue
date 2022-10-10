@@ -371,9 +371,11 @@ export default {
       return '#'
     },
     discord() {
-      const discordLink = this.coinInfo.links.chat_url.filter(x => x.includes('discord'))
-      if (discordLink) {
-        return discordLink ? `${discordLink}` : '#'
+      if (this.coinInfo.links) {
+        const discordLink = this.coinInfo.links.chat_url.filter(x => x.includes('discord'))
+        if (discordLink) {
+          return discordLink ? `${discordLink}` : '#'
+        }
       }
       return '#'
     },
