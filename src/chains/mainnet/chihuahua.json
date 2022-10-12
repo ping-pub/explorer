@@ -6,7 +6,7 @@
     "snapshot_provider": "12611137be6f64f9a7fb8977614a5a6f257c1394@65.21.200.224:29656",
     "sdk_version": "0.45.8",
     "coin_type": "118",
-    "min_tx_fee": "8000",
+    "min_tx_fee": "250000",
     "addr_prefix": "chihuahua",
     "logo": "/logos/chihuahua.png",
     "assets": [{
