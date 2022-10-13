@@ -74,8 +74,9 @@ import {
   toDay, abbr, abbrMessage, tokenFormatter,
 } from '@/libs/utils'
 import { decodeTxRaw } from '@cosmjs/proto-signing'
-import { fromBase64 } from '@cosmjs/encoding'
+import { fromBase64, fromHex, toBase64 } from '@cosmjs/encoding'
 import Tx from '@/libs/data/tx'
+import compareVersions from 'compare-versions'
 // import fetch from 'node-fetch'
 
 export default {
@@ -160,11 +161,16 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    hex2base64(v) {
+      return toBase64(fromHex(v))
+    },
     length: v => (Array.isArray(v) ? v.length : 0),
     shortHash: v => abbr(v),
     formatTime: v => toDay(v, 'from'),
     formatProposer(v) {
-      return getStakingValidatorByHex(this.$http.config.chain_name, v)
+      const conf = this.$http.getSelectedConfig()
+      const ver = conf.sdk_version || '0.41'
+      return (ver && compareVersions(ver, '0.45') < 1) ? getStakingValidatorByHex(this.$http.config.chain_name, this.hex2base64(v)) : getStakingValidatorByHex(this.$http.config.chain_name, v)
     },
     fetch() {
       this.$http.getLatestBlock().then(b => {

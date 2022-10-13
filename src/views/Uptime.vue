@@ -109,6 +109,7 @@ import {
   consensusPubkeyToHexAddress, getCachedValidators, timeIn, toDay,
 } from '@/libs/utils'
 import { fromBech32, fromHex, toBase64 } from '@cosmjs/encoding'
+import compareVersions from 'compare-versions'
 
 export default {
   components: {
@@ -210,9 +211,17 @@ export default {
         }
 
         const sigs = this.initColor()
-        d.block.last_commit.signatures.forEach(x => {
-          if (x.validator_address) sigs[x.validator_address] = 'bg-success'
-        })
+        const conf = this.$http.getSelectedConfig()
+        const ver = conf.sdk_version || '0.41'
+        if (ver && compareVersions(ver, '0.45') < 1) {
+          d.block.last_commit.signatures.forEach(x => {
+            if (this.hex2base64(x.validator_address)) sigs[this.hex2base64(x.validator_address)] = 'bg-success'
+          })
+        } else {
+          d.block.last_commit.signatures.forEach(x => {
+            if (x.validator_address) sigs[x.validator_address] = 'bg-success'
+          })
+        }
         blocks.push({ sigs, height })
         this.blocks = blocks
 
@@ -236,9 +245,17 @@ export default {
         this.$http.getBlockByHeight(height).then(res => {
           resolve()
           const sigs = this.initColor()
-          res.block.last_commit.signatures.forEach(x => {
-            if (x.validator_address) sigs[x.validator_address] = 'bg-success'
-          })
+          const conf = this.$http.getSelectedConfig()
+          const ver = conf.sdk_version || '0.41'
+          if (ver && compareVersions(ver, '0.45') < 1) {
+            res.block.last_commit.signatures.forEach(x => {
+              if (this.hex2base64(x.validator_address)) sigs[this.hex2base64(x.validator_address)] = 'bg-success'
+            })
+          } else {
+            res.block.last_commit.signatures.forEach(x => {
+              if (x.validator_address) sigs[x.validator_address] = 'bg-success'
+            })
+          }
           this.$set(block, 'sigs', sigs)
         })
       }
@@ -246,9 +263,17 @@ export default {
     fetch_latest() {
       this.$http.getLatestBlock().then(res => {
         const sigs = this.initColor()
-        res.block.last_commit.signatures.forEach(x => {
-          if (x.validator_address) sigs[x.validator_address] = 'bg-success'
-        })
+        const conf = this.$http.getSelectedConfig()
+        const ver = conf.sdk_version || '0.41'
+        if (ver && compareVersions(ver, '0.45') < 1) {
+          res.block.last_commit.signatures.forEach(x => {
+            if (this.hex2base64(x.validator_address)) sigs[this.hex2base64(x.validator_address)] = 'bg-success'
+          })
+        } else {
+          res.block.last_commit.signatures.forEach(x => {
+            if (x.validator_address) sigs[x.validator_address] = 'bg-success'
+          })
+        }
         const block = this.blocks.find(b => b.height === res.block.last_commit.height)
         if (typeof block === 'undefined') { // mei
           // this.$set(block, 0, typeof sigs !== 'undefined')
