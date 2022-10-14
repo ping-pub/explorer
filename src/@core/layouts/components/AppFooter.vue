@@ -6,7 +6,7 @@
         class="ml-25 font-weight-bolder"
         href="#"
         target="_blank"
-      >Neobase</b-link>
+      >NeoBase</b-link>
     </span>
 
     <!-- <router-link
