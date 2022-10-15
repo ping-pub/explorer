@@ -13,7 +13,7 @@
                 variant="outline-primary"
                 @click="onchange()"
               >
-                Moniter
+                Monitor
               </b-button>
             </b-input-group-append>
           </b-input-group>
