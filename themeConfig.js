@@ -11,7 +11,7 @@ export const $themeConfig = {
   app: {
     appName: 'Neobase', // Will update name in navigation menu (Branding)
     // eslint-disable-next-line global-require
-    appLogoImage: '/Neobase.jpeg', // Will update logo in navigation menu (Branding)
+    appLogoImage: '/Neobase.png', // Will update logo in navigation menu (Branding)
   },
   layout: {
     isRTL: false,
