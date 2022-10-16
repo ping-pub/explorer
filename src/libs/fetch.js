@@ -3,7 +3,7 @@ import fetch from 'node-fetch'
 import store from '@/store'
 import compareVersions from 'compare-versions'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
-import { toBase64 } from '@cosmjs/encoding'
+import { fromHex, toBase64 } from '@cosmjs/encoding'
 import {
   Proposal, ProposalTally, Proposer, StakingPool, Votes, Deposit,
   Validator, StakingParameters, Block, ValidatorDistribution, StakingDelegation, WrapStdTx, getUserCurrency,
@@ -63,7 +63,14 @@ export default class ChainFetch {
     const conf = config || this.getSelectedConfig()
     const ver = conf.sdk_version || '0.41'
     if (ver && compareVersions(ver, '0.45') < 1) {
-      return this.get('/blocks/latest', config).then(data => Block.create(data))
+      return this.get('/blocks/latest', config).then(data => Block.create(data)).then(block => {
+        block.block.last_commit.signatures.map(s1 => {
+          const s = s1
+          s.validator_address = toBase64(fromHex(s.validator_address))
+          return s
+        })
+        return block
+      })
     }
     return this.get('/cosmos/base/tendermint/v1beta1/blocks/latest', config).then(data => Block.create(data))
   }
@@ -72,7 +79,14 @@ export default class ChainFetch {
     const conf = config || this.getSelectedConfig()
     const ver = conf.sdk_version || '0.41'
     if (ver && compareVersions(ver, '0.45') < 1) {
-      return this.get(`/blocks/${height}`, config).then(data => Block.create(data))
+      return this.get('/blocks/latest', config).then(data => Block.create(data)).then(block => {
+        block.block.last_commit.signatures.map(s1 => {
+          const s = s1
+          s.validator_address = toBase64(fromHex(s.validator_address))
+          return s
+        })
+        return block
+      })
     }
     return this.get(`/cosmos/base/tendermint/v1beta1/blocks/${height}`, config).then(data => Block.create(data))
   }
