@@ -50,8 +50,11 @@ export default class Proposal {
   }
 
   versionFixed(ver) {
-    if (compareVersions(ver, '0.40') >= 0) {
-      // do nothing
+    if (compareVersions(ver, '0.46') >= 0) {
+      if (this.element.metadata) {
+        this.title = this.element.metadata.title || this.element.metadata
+        this.description = this.element.metadata.description || this.element.metadata
+      }
     } else if (compareVersions(ver, '0.30') >= 0) {
       switch (this.element.proposal_status) {
         case 'Passed':
