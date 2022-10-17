@@ -67,7 +67,7 @@ export default class Proposal {
           this.status = 4
           break
         default:
-          this.status = 1
+          // this.status = 1
       }
     }
     if (String(this.status).indexOf('PASSED') > -1) {
