@@ -1,8 +1,8 @@
 {
     "chain_name": "echelon",
     "coingecko": "echelon",
-    "api": ["https://api.ech.network", "https://lcd-echelon.whispernode.com", "https://api.echelon.nodestake.top", "https://echelon-api.polkachu.com"],
-    "rpc": ["https://tendermint.ech.network", "https://rpc-echelon.whispernode.com" , "https://rpc.echelon.nodestake.top", "https://echelon-rpc.polkachu.com"],
+    "api": ["https://api.ech.network", "https://lcd-echelon.whispernode.com", "https://api.echelon.nodestake.top", "https://echelon-api.polkachu.com", "https://api.eu.ech.world", "https://api.us.ech.world"],
+    "rpc": ["https://tendermint.ech.network", "https://rpc-echelon.whispernode.com" , "https://rpc.echelon.nodestake.top", "https://echelon-rpc.polkachu.com", "https://rpc.eu.ech.world", "https://rpc.us.ech.world"],
     "snapshot_provider": "",
     "sdk_version": "0.45.1",
     "coin_type": "60",
