@@ -1,9 +1,10 @@
 {
     "chain_name": "jackal",
     "coingecko": "jackal",
-    "api": "http://localhost:1317",
+    "api": "http://157.230.71.144:1317",
     "sdk_version": "0.49.5",
     "addr_prefix": "jkl",    
+    "coin_type": "118",
     "logo": "/logos/jackal.png",
     "assets": [{
         "base": "ujkl",
