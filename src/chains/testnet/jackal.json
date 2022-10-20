@@ -1,0 +1,15 @@
+{
+    "chain_name": "jackal",
+    "coingecko": "jackal",
+    "api": "http://localhost:1317",
+    "sdk_version": "0.49.5",
+    "addr_prefix": "jkl",    
+    "logo": "/logos/jackal.png",
+    "assets": [{
+        "base": "ujkl",
+        "symbol": "JKL",
+        "exponent": "6",
+        "coingecko_id": "jackal", 
+        "logo": "/logos/jackal.png"
+    }]
+}
