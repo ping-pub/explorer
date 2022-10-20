@@ -198,49 +198,61 @@
       </b-row>
       <b-row v-if="stakingList && stakingList.length > 0">
         <b-col>
-          <b-table
-            :items="stakingList"
-            :fields="fields"
-            striped
-            hover
-            responsive="sm"
-            stacked="sm"
-          >
-            <template #cell(action)="data">
-              <!-- size -->
-              <b-button-group
-                size="sm"
+          <b-card no-body>
+            <b-table
+              :items="stakingList"
+              :fields="fields"
+              striped
+              hover
+              responsive="sm"
+              stacked="sm"
+            >
+              <template #cell(action)="data">
+                <!-- size -->
+                <b-button-group
+                  size="sm"
+                >
+                  <b-button
+                    v-b-modal.operation-modal
+                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                    v-b-tooltip.hover.top="'Delegate'"
+                    variant="outline-primary"
+                    @click="selectDelegation(data,'Delegate')"
+                  >
+                    <feather-icon icon="LogInIcon" />
+                  </b-button>
+                  <b-button
+                    v-b-modal.operation-modal
+                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                    v-b-tooltip.hover.top="'Redelegate'"
+                    variant="outline-primary"
+                    @click="selectDelegation(data,'Redelegate')"
+                  >
+                    <feather-icon icon="ShuffleIcon" />
+                  </b-button>
+                  <b-button
+                    v-b-modal.operation-modal
+                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                    v-b-tooltip.hover.top="'Unbond'"
+                    variant="outline-primary"
+                    @click="selectDelegation(data,'Unbond')"
+                  >
+                    <feather-icon icon="LogOutIcon" />
+                  </b-button>
+                </b-button-group>
+              </template>
+            </b-table>
+            <b-card-footer class="text-right">
+              <b-button
+                v-b-modal.operation-modal
+                variant="outline-primary"
+                @click="selectWithdraw()"
               >
-                <b-button
-                  v-b-modal.operation-modal
-                  v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                  v-b-tooltip.hover.top="'Delegate'"
-                  variant="outline-primary"
-                  @click="selectDelegation(data,'Delegate')"
-                >
-                  <feather-icon icon="LogInIcon" />
-                </b-button>
-                <b-button
-                  v-b-modal.operation-modal
-                  v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                  v-b-tooltip.hover.top="'Redelegate'"
-                  variant="outline-primary"
-                  @click="selectDelegation(data,'Redelegate')"
-                >
-                  <feather-icon icon="ShuffleIcon" />
-                </b-button>
-                <b-button
-                  v-b-modal.operation-modal
-                  v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                  v-b-tooltip.hover.top="'Unbond'"
-                  variant="outline-primary"
-                  @click="selectDelegation(data,'Unbond')"
-                >
-                  <feather-icon icon="LogOutIcon" />
-                </b-button>
-              </b-button-group>
-            </template>
-          </b-table>
+                <feather-icon icon="AwardIcon" />
+                Widthdraw Rewards
+              </b-button>
+            </b-card-footer>
+          </b-card>
         </b-col>
       </b-row>
 
@@ -331,7 +343,7 @@
 <script>
 import {
   BRow, BCol, BAlert, BCard, BTable, BFormCheckbox, BCardHeader, BCardTitle, BMedia, BMediaAside, BMediaBody, BAvatar,
-  BCardBody, BLink, BButtonGroup, BButton, BTooltip, VBModal, VBTooltip,
+  BCardBody, BLink, BButtonGroup, BButton, BTooltip, VBModal, VBTooltip, BCardFooter,
 } from 'bootstrap-vue'
 import {
   formatNumber, formatTokenAmount, isToken, percent, timeIn, toDay, toDuration, tokenFormatter, getLocalAccounts,
@@ -365,6 +377,7 @@ export default {
     BMedia,
     BCardBody,
     BLink,
+    BCardFooter,
 
     OperationModal,
     ParametersModuleComponent,
@@ -498,6 +511,9 @@ export default {
     },
     selectSend() {
       this.operationModalType = 'Transfer'
+    },
+    selectWithdraw() {
+      this.operationModalType = 'Withdraw'
     },
     formatToken(tokens) {
       if (Array.isArray(tokens)) {
