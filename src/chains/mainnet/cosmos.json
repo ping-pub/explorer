@@ -1,7 +1,14 @@
 {
     "chain_name": "cosmos",
-    "api": ["https://cosmos.api.ping.pub", "https://lcd-cosmoshub.blockapsis.com:443"],
-    "rpc": ["https://cosmos-rpc.icycro.org", "https://rpc.cosmos.dragonstake.io"],
+    "api": [
+        "https://cosmos.api.ping.pub", 
+        "https://cosmoshub-api.lavenderfive.com:443", 
+        "https://lcd-cosmoshub.blockapsis.com:443",
+        "https://api-cosmoshub-ia.cosmosia.notional.ventures",
+        "https://cosmos-api.cyphercore.io",
+        "https://rest-cosmoshub.ecostake.com"
+    ],
+    "rpc": ["https://rpc.cosmos.network:443", "https://cosmos-rpc.icycro.org", "https://rpc.cosmos.dragonstake.io"],
     "sdk_version": "0.45.1",
     "coin_type": "118",
     "min_tx_fee": "800",
