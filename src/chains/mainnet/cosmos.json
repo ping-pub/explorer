@@ -1,6 +1,6 @@
 {
     "chain_name": "cosmos",
-    "api": ["https://cosmos.api.ping.pub", "https://lcd-cosmoshub.blockapsis.com"],
+    "api": ["https://cosmos.api.ping.pub", "https://lcd-cosmoshub.blockapsis.com:443"],
     "rpc": ["https://cosmos-rpc.icycro.org", "https://rpc.cosmos.dragonstake.io"],
     "sdk_version": "0.45.1",
     "coin_type": "118",
