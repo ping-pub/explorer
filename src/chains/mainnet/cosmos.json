@@ -4,7 +4,7 @@
         "https://cosmos.api.ping.pub", 
         "https://lcd-cosmoshub.blockapsis.com:443",
         "https://api-cosmoshub-ia.cosmosia.notional.ventures",
-        "https://rest-cosmoshub.ecostake.com"
+        "https://cosmos-rpc.polkachu.com"
     ],
     "rpc": ["https://rpc.cosmos.network:443", "https://cosmos-rpc.icycro.org", "https://rpc.cosmos.dragonstake.io"],
     "sdk_version": "0.45.1",
