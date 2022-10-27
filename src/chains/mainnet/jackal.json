@@ -1,8 +1,8 @@
 {
     "chain_name": "jackal",
     "coingecko": "",
-    "api": "https://api.jackalprotocol.com, https://jackal-api.polkachu.com",
-    "rpc": "https://rpc.jackalprotocol.com, https://jackal-rpc.polkachu.com",
+    "api": "https://jackal-api.polkachu.com, https://api.jackalprotocol.com",
+    "rpc": "https://jackal-rpc.polkachu.com, https://rpc.jackalprotocol.com",
     "snapshot_provider": "",
     "coin_type": "118",
     "sdk_version": "0.45.9",
