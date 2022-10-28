@@ -118,8 +118,33 @@
               <h4>#{{ height }}</h4>
             </b-col>
             <b-col
+              md="3"
               sm="12"
-              md="9"
+            >
+              <b-input-group
+                prepend="Fetch Frequency"
+              >
+                <b-form-select
+                  id="frequency"
+                  v-model="frequency"
+                  placeholder="Frequency to fetch data"
+                  @change="onFrequencyChange()"
+                >
+                  <b-form-select-option value="6000">
+                    6s
+                  </b-form-select-option>
+                  <b-form-select-option value="2000">
+                    2s
+                  </b-form-select-option>
+                  <b-form-select-option value="1000">
+                    1s
+                  </b-form-select-option>
+                </b-form-select>
+              </b-input-group>
+            </b-col>
+            <b-col
+              sm="12"
+              md="6"
             >
               <b-input-group
                 prepend="Qty of absent validators"
@@ -144,7 +169,12 @@
             class="text-truncate"
           >
             {{ x.name }}
-            <b-badge :variant="x.counter > 0 ? 'light-danger': 'light-success'">
+            <b-badge
+              v-if="x.proposed > 0"
+              v-b-tooltip.hover.v-second
+              :title="x.proposed > 0?`${ Number(x.counter / x.proposed * 100).toFixed(2) } %`:''"
+              :variant="x.counter > 0 ? 'light-danger': 'light-success'"
+            >
               {{ x.counter }} / {{ x.proposed }}
             </b-badge>
           </b-col>
@@ -157,7 +187,7 @@
 
 <script>
 import {
-  BSkeleton, BSkeletonWrapper, BInputGroupAppend, BTabs, BTab, BFormGroup,
+  BSkeleton, BSkeletonWrapper, BInputGroupAppend, BTabs, BTab, BFormGroup, BFormSelect, BFormSelectOption,
   BRow, BCol, VBTooltip, BFormInput, BCard, BAlert, BFormCheckbox, BButton, BBadge, BInputGroup, BInputGroupPrepend,
 } from 'bootstrap-vue'
 
@@ -177,6 +207,8 @@ export default {
     BButton,
     BBadge,
     BFormCheckbox,
+    BFormSelect,
+    BFormSelectOption,
     BInputGroup,
     BSkeleton,
     BSkeletonWrapper,
@@ -208,6 +240,7 @@ export default {
       absentValsInBlock: {},
       numOfBlock: 1000,
       temp: 0,
+      frequency: 6000,
     }
   },
   computed: {
@@ -302,7 +335,7 @@ export default {
         blocks.push({ sigs, height })
         this.blocks = blocks
 
-        this.timer = setInterval(this.fetch_latest, 6000)
+        this.timer = setInterval(this.fetch_latest, this.frequency)
         this.loading = false
       })
     },
@@ -312,6 +345,10 @@ export default {
         sigs[this.hex2base64(consensusPubkeyToHexAddress(x.consensus_pubkey))] = 'bg-danger'
       })
       return sigs
+    },
+    onFrequencyChange() {
+      clearInterval(this.timer)
+      this.timer = setInterval(this.fetch_latest, this.frequency)
     },
     hex2base64(v) {
       return toBase64(fromHex(v))

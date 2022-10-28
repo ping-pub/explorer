@@ -319,7 +319,7 @@
             <feather-icon
               icon="PlusCircleIcon"
             />
-            receive
+            Receive
           </b-button>
         </b-col>
       </b-row>
