@@ -279,10 +279,10 @@ export default {
     },
   },
   created() {
-    const cached = JSON.parse(getCachedValidators(this.$route.params.chain))
-    if (cached) {
-      this.validators = cached
-    }
+    // const cached = JSON.parse(getCachedValidators(this.$route.params.chain))
+    // if (cached) {
+    //   this.validators = cached
+    // }
     this.$http.getValidatorList().then(res => {
       this.validators = res
     })
