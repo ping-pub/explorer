@@ -1,6 +1,5 @@
 {
   "chain_name": "rebus",
-  "coingecko_id": "rebus",
   "api": ["https://api.mainnet.rebus.money:1317"],
   "rpc": ["https://api.mainnet.rebus.money:26657"],
   "snapshot_provider": "",
