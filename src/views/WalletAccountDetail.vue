@@ -673,14 +673,6 @@ export default {
     initial() {
       this.$http.getBankAccountBalance(this.address).then(bal => {
         this.assets = bal
-        bal.forEach(x => {
-          const symbol = formatTokenDenom(x.denom)
-          if (!this.quotes[symbol] && symbol.indexOf('/') === -1) {
-            chainAPI.fetchTokenQuote(symbol).then(quote => {
-              this.$set(this.quotes, symbol, quote)
-            })
-          }
-        })
       })
       this.$http.getStakingReward(this.address).then(res => {
         this.reward = res
