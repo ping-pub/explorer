@@ -88,9 +88,7 @@ export default {
     async getQuotes(context) {
       // fetch('https://price.ping.pub/quotes').then(data => data.json()).then(data => {
       //   context.commit('setQuotes', data)
-      //   console.log(data)
       // })
-      console.log(coingecko)
       const keys = Object.keys(coingecko)
       if (keys.length > 0) {
         const currencies = 'usd,cny,eur,jpy,krw,sgd,hkd'
@@ -101,7 +99,6 @@ export default {
             quotes[coingecko[k]] = data[k]
           })
           context.commit('setQuotes', quotes)
-          console.log(quotes)
         })
       }
     },
