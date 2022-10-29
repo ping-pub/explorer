@@ -37,9 +37,9 @@ function processMenu() {
     })
   }
   chainMenus.push({
-    title: 'Github',
-    href: 'https://github.com/ping-pub/explorer',
-    icon: 'GithubIcon',
+    title: 'Twitter',
+    href: 'https://twitter.com/ping_pub',
+    icon: 'TwitterIcon',
   })
   chainMenus.push({
     title: 'FAQ',
@@ -47,9 +47,9 @@ function processMenu() {
     icon: 'MessageSquareIcon',
   })
   chainMenus.push({
-    title: 'Twitter',
-    href: 'https://twitter.com/ping_pub',
-    icon: 'TwitterIcon',
+    title: 'Github',
+    href: 'https://github.com/ping-pub/explorer',
+    icon: 'GithubIcon',
   })
 
   return chainMenus
