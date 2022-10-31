@@ -21,9 +21,11 @@ configs.keys().forEach(k => {
   const c = configs(k)
   c.chain_name = String(c.chain_name).toLowerCase()
   update[c.chain_name] = c
-  c.assets.forEach(x => {
-    if (x.coingecko_id && x.coingecko_id !== '') coingecko[x.coingecko_id] = String(x.symbol).toUpperCase()
-  })
+  if (Array.isArray(c.assets)) {
+    c.assets.forEach(x => {
+      if (x.coingecko_id && x.coingecko_id !== '') coingecko[x.coingecko_id] = String(x.symbol).toUpperCase()
+    })
+  }
 })
 
 chains = update
