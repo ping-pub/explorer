@@ -95,9 +95,11 @@ export default {
         fetch(`https://api.coingecko.com/api/v3/simple/price?include_24hr_change=true&vs_currencies=${currencies}&ids=${keys.join(',')}`).then(data => data.json()).then(data => {
           // use symbol as key instead of coingecko id
           const quotes = {}
-          Object.keys(data).forEach(k => {
-            quotes[coingecko[k]] = data[k]
-          })
+          if (data && Object.keys(data)) {
+            Object.keys(data).forEach(k => {
+              quotes[coingecko[k]] = data[k]
+            })
+          }
           context.commit('setQuotes', quotes)
         })
       }
