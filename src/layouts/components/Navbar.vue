@@ -136,7 +136,7 @@
             icon="PlusIcon"
             size="16"
           />
-          <span class="align-middle ml-50">Import Address</span>
+          <span class="align-middle ml-50">Connect Wallet</span>
         </b-dropdown-item>
         <b-dropdown-divider />
 
