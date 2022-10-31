@@ -1,6 +1,7 @@
 <template>
   <div class="text-center">
     <b-card
+      v-if="calculateTotal !== '0'"
       border-variant="primary"
     >
       <b-row class="mx-0 d-flex align-items-center">
@@ -92,16 +93,22 @@
             <span class="align-middle">{{ item.name }}</span>
           </b-button>
           <div class="mr-50">
-            <router-link
+            <b-button
               :to="`/wallet/import?name=${item.name}`"
-              class="mr-50"
+              variant="flat-primary"
+              size="sm"
             >
-              <feather-icon
-                icon="EditIcon"
-                class="mr-10"
-              />
+              <feather-icon icon="EditIcon" />
               <span class="align-middle">Edit</span>
-            </router-link>
+            </b-button>
+            <b-button
+              variant="flat-danger"
+              size="sm"
+              @click="disconnect(item.name)"
+            >
+              <feather-icon icon="EyeOffIcon" />
+              <span class="align-middle">Disconnect</span>
+            </b-button>
           </div>
         </div>
 
@@ -437,13 +444,13 @@ export default {
   created() {
     this.init()
   },
-  mounted() {
-  },
   methods: {
     refreshPrice() {
       this.$store.dispatch('chains/getQuotes')
     },
     init() {
+      this.balances = {}
+      this.delegations = {}
       this.accounts = getLocalAccounts()
       const chains = getLocalChains()
       if (this.accounts) {
@@ -590,12 +597,21 @@ export default {
         const item = this.accounts[key]
         const newAddrs = item.address.filter(a => a.addr !== v)
         if (newAddrs.length > 0) {
+          this.$delete(this.balances, v)
+          this.$delete(this.delegations, v)
           this.$set(item, 'address', newAddrs)
+          localStorage.setItem('accounts', JSON.stringify(this.accounts))
         } else {
           delete this.accounts[key]
+          localStorage.setItem('accounts', JSON.stringify(this.accounts))
+          this.init()
         }
       })
+    },
+    disconnect(key) {
+      delete this.accounts[key]
       localStorage.setItem('accounts', JSON.stringify(this.accounts))
+      this.init()
     },
     updateDefaultWallet(v) {
       this.$store.commit('setDefaultWallet', v)
