@@ -424,7 +424,6 @@ import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import Ripple from 'vue-ripple-directive'
 import VueQr from 'vue-qr'
-import chainAPI from '@/libs/fetch'
 import {
   formatToken, formatTokenAmount, formatTokenDenom, getStakingValidatorOperator, percent, tokenFormatter, toDay,
   toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign, numberWithCommas, toETHAddress,
