@@ -35,7 +35,7 @@
           <b-row>
             <b-col md="12">
               <b-form-group
-                label="Select a device to import accounts"
+                label="Select a device to connect"
                 label-for="device"
               >
                 <validation-provider
@@ -198,7 +198,7 @@
             </b-col>
             <b-col md="12">
               <b-form-group
-                label="Import Address For Chains:"
+                label="Derivate Address For Chains:"
               >
                 <validation-provider
                   #default="{ errors }"
