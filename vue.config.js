@@ -3,7 +3,6 @@ const path = require('path')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 // const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
-
 // const productionGzipExtensions = ['js', 'css']
 
 module.exports = {
@@ -19,6 +18,28 @@ module.exports = {
     },
   },
   configureWebpack: {
+    optimization: {
+      runtimeChunk: 'single',
+      splitChunks: {
+        chunks: 'all',
+        maxInitialRequests: Infinity,
+        minSize: 120000,
+        maxSize: 250000,
+        cacheGroups: {
+          vendor: {
+            test: /node_modules/,
+            name() {
+              // get the name. E.g. node_modules/packageName/not/this/part.js
+              // or node_modules/packageName
+              // const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)
+
+              // npm package names are URL-safe, but some servers don't like @ symbols
+              return 'ping.pub.chunks'
+            },
+          },
+        },
+      },
+    },
     resolve: {
       alias: {
         '@themeConfig': path.resolve(__dirname, 'themeConfig.js'),
