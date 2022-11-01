@@ -49,15 +49,15 @@ export default {
         data: [item],
         type: 'scatter',
         symbolSize(data) {
-          const r = Math.log10(data[2]) * 5
-          return r < 10 ? 10 : r
+          const r = Math.log(data[2]) * 8
+          return r < 15 ? 15 : r
         },
         emphasis: {
           focus: 'series',
           label: {
             show: true,
             formatter(param) {
-              return `${param.data[3]}, ${formatNumber(param.data[2], true, 1)}`
+              return `${param.data[3]}, $${parseFloat(param.data[2]).toFixed(2)}`
             },
             position: 'top',
           },
@@ -94,7 +94,7 @@ export default {
           },
         },
         yAxis: {
-          name: 'Price',
+          name: 'Value',
           nameLocation: 'center',
           axisLabel: {
             show: false,

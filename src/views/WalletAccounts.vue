@@ -364,8 +364,9 @@ export default {
       const total = []
       if (this.calculateByDenom.qty) {
         Object.entries(this.calculateByDenom.qty).forEach(i => {
-          const price = this.getPrice(i[0])
-          total.push([Math.sqrt(i[1]), Math.sqrt(price), i[1] * price, i[0]])
+          const price = this.getPrice(i[0], 'usd')
+          // x, y, circle
+          total.push([Math.sqrt(i[1]), i[1] * price, price, i[0]])
         })
       }
       return total.sort((a, b) => b[2] - a[2])
@@ -530,10 +531,10 @@ export default {
       }
       return ''
     },
-    getPrice(denom) {
+    getPrice(denom, currency = null) {
       const d2 = this.formatDenom(denom)
       const quote = this.$store.state.chains.quotes[d2]
-      return quote ? quote[this.currency2] || 0 : 0
+      return quote ? quote[currency || this.currency2 || 'usd'] || 0 : 0
     },
     getChanges(denom) {
       const d2 = this.formatDenom(denom)
