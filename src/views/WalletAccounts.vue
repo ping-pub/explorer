@@ -97,6 +97,7 @@
               :to="`/wallet/import?name=${item.name}`"
               variant="flat-primary"
               size="sm"
+              class="d-none d-md-inline-block"
             >
               <feather-icon icon="EditIcon" />
               <span class="align-middle">Edit</span>
