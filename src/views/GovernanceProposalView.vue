@@ -141,7 +141,7 @@
           />
           <b-progress-bar
             :id="'vote-abstain'+proposal.id"
-            variant="info"
+            variant="secondary"
             :value="percent(proposal.tally.abstain)"
             :label="`${percent(proposal.tally.abstain).toFixed()}%`"
             show-progress
