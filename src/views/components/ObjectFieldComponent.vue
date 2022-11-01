@@ -42,8 +42,8 @@
               v-for="key in Object.keys(value)"
               :key="key"
               :title="formatTitle(key)"
-              class="p-0 text-capitalize"
-              title-item-class="bg-light-primary"
+              class="p-0"
+              title-item-class="bg-light-primary text-capitalize"
             >
               <array-field-component
                 v-if="Array.isArray(value[key])"
@@ -134,7 +134,7 @@ export default {
       // }
       return value
     },
-    formatTitle: v => v.replaceAll('_', ' '),
+    formatTitle: v => String(v).replaceAll('_', ' '),
     isObjectText(v) {
       return String(v).startsWith('{') && String(v).endsWith('}')
     },
