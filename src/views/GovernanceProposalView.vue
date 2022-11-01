@@ -367,7 +367,9 @@ export default {
 
     this.$http.getGovernance(pid).then(p => {
       if (p.status === 2) {
-        this.$http.getGovernanceTally(pid, 0).then(t => p.updateTally(t))
+        this.$http.getStakingPool().then(pool => {
+          this.$http.getGovernanceTally(pid, pool.bondedToken).then(t => p.updateTally(t))
+        })
       }
       this.proposal = p
     })

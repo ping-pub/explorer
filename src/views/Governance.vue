@@ -80,12 +80,14 @@ export default {
       })
     },
     updateTally(res) {
-      const voting = res.filter(i => i.status === 2)
-      if (voting.length > 0) {
-        voting.forEach(p => this.$http.getGovernanceTally(p.id, 0).then(update => {
-          this.$set(p, 'tally', update)
-        }))
-      }
+      this.$http.getStakingPool().then(pool => {
+        const voting = res.filter(i => i.status === 2)
+        if (voting.length > 0) {
+          voting.forEach(p => this.$http.getGovernanceTally(p.id, pool.bondedToken).then(update => {
+            this.$set(p, 'tally', update)
+          }))
+        }
+      })
     },
   },
 }
