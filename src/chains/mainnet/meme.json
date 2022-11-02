@@ -1,9 +1,9 @@
 {
   "chain_name": "meme",
-  "api": [ "https://api-meme-1.meme.sx", "https://meme-api.polkachu.com:443", "https://api.meme.interbloc.org:443"  ],
-  "rpc": [ "https://rpc-meme-1.meme.sx:443", "https://meme-rpc.polkachu.com:443", "https://rpc.meme.interbloc.org:443" ],
+  "api": [ "https://api-meme-1.meme.sx", "https://meme-api.polkachu.com:443", "https://api.meme.pupmos.network:443"  ],
+  "rpc": [ "https://rpc-meme-1.meme.sx:443", "https://meme-rpc.polkachu.com:443", "https://rpc.meme.pupmos.network:443" ],
   "snapshot_provider": "",
-  "sdk_version": "0.45.1",
+  "sdk_version": "0.45.9",
   "coin_type": "118",
   "min_tx_fee": "8000",
   "addr_prefix": "meme",
