@@ -5,7 +5,10 @@ on:
   # push:
   #   branches: [ master ]
   pull_request:
-    branches: [ master ]
+   # branches: [ master ]
+   paths:
+      - 'src/chains/mainnet/**'
+      - 'src/chains/testnet/**'
 
 jobs:
   deploy:
