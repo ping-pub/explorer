@@ -1,7 +1,7 @@
 {
   "chain_name": "teritori",
-  "api": ["https://rest.mainnet.teritori.com"],
-  "rpc": ["https://rpc.mainnet.teritori.com"],
+  "api": ["https://rest.mainnet.teritori.com","https://teritori.api.kjnodes.com"],
+  "rpc": ["https://rpc.mainnet.teritori.com","https://teritori.rpc.kjnodes.com:443"],
   "snapshot_provider": "",
   "sdk_version": "0.45.4",
   "coin_type": "118",
