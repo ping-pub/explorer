@@ -12,7 +12,7 @@
         <span
           v-else-if="changes < 0"
           v-b-tooltip.hover.v-danger
-          :title="`${(changes*100).toFixed(1)}%`"
+          :title="`${changes.toFixed(1)}%`"
           class="text-danger"
         >
           {{ showPrice(statistic, statisticTitle) }}
@@ -20,7 +20,7 @@
         <span
           v-else
           v-b-tooltip.hover.v-success
-          :title="`+${(changes*100).toFixed(1)}%`"
+          :title="`+${changes.toFixed(1)}%`"
           class="text-success"
         >
           {{ showPrice(statistic, statisticTitle) }}
