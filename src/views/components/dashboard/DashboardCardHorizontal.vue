@@ -6,13 +6,16 @@
           {{ statistic || '-' }}
         </h4>
         <span v-if="!statistic || statistic === '-'">{{ statisticTitle }}</span>
+        <span v-else-if="changes === 0">
+          {{ showPrice(statistic, statisticTitle) }}
+        </span>
         <span
           v-else-if="changes < 0"
           v-b-tooltip.hover.v-danger
           :title="`${(changes*100).toFixed(1)}%`"
           class="text-danger"
         >
-          {{ showPrice(statistic) }}
+          {{ showPrice(statistic, statisticTitle) }}
         </span>
         <span
           v-else
@@ -20,7 +23,7 @@
           :title="`+${(changes*100).toFixed(1)}%`"
           class="text-success"
         >
-          {{ showPrice(statistic) }}
+          {{ showPrice(statistic, statisticTitle) }}
         </span>
       </div>
       <b-avatar
@@ -74,7 +77,7 @@ export default {
     }
   },
   methods: {
-    showPrice(v) {
+    showPrice(v, statisticTitle) {
       const token = String(v).split(' ')
       if (token.length >= 2) {
         const quote = this.$store.state.chains.quotes[token[1]]
@@ -84,7 +87,7 @@ export default {
           return `${getUserCurrencySign()}${(Number(token[0].replaceAll(',', '')) * price).toFixed(2)}`
         }
       }
-      return token
+      return statisticTitle
     },
   },
 }
