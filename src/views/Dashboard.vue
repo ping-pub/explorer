@@ -192,6 +192,7 @@
                   v-b-modal.operation-modal
                   variant="primary"
                   size="sm"
+                  class="mb-2"
                   @click="selectProposal('Vote',prop.id, prop.title)"
                 >
                   {{ myVotes[prop.id] ? `${myVotes[prop.id]}`: 'Vote' }}
@@ -209,7 +210,7 @@
               class="shadow-none"
               style="max-height:350px;overflow: auto;"
             >
-              <VueMarkdown>
+              <VueMarkdown class="pb-1">
                 {{ addNewLine(prop.description) }}
               </VueMarkdown>
             </b-card>
