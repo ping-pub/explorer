@@ -7,7 +7,10 @@
         lg="6"
         md="12"
       >
-        <proposal-summary-component :p="p" />
+        <proposal-summary-component
+          :p="p"
+          :total-power="totalPower"
+        />
       </b-col>
     </b-row>
     <b-row v-if="next">
@@ -64,6 +67,7 @@ export default {
       max: 1,
       operationModalType: '',
       next: '',
+      totalPower: 0,
     }
   },
   mounted() {
@@ -81,9 +85,10 @@ export default {
     },
     updateTally(res) {
       this.$http.getStakingPool().then(pool => {
+        this.totalPower = pool.bondedToken
         const voting = res.filter(i => i.status === 2)
         if (voting.length > 0) {
-          voting.forEach(p => this.$http.getGovernanceTally(p.id, pool.bondedToken).then(update => {
+          voting.forEach(p => this.$http.getGovernanceTally(p.id, 0).then(update => {
             this.$set(p, 'tally', update)
           }))
         }

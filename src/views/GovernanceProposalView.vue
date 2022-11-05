@@ -113,7 +113,7 @@
       </b-card-header>
       <b-card-body>
         <b-progress
-          :max="100"
+          :max="totalPower && proposal.status ===2? 100 * (totalPower/proposal.tally.total) :100"
           height="2rem"
           class="mb-2"
           show-progress
@@ -294,6 +294,7 @@ export default {
       next: null,
       proposal: new Proposal(),
       proposer: new Proposer(),
+      totalPower: 0,
       deposits: [],
       votes: [],
       operationModalType: '',
@@ -368,7 +369,8 @@ export default {
     this.$http.getGovernance(pid).then(p => {
       if (p.status === 2) {
         this.$http.getStakingPool().then(pool => {
-          this.$http.getGovernanceTally(pid, pool.bondedToken).then(t => p.updateTally(t))
+          this.totalPower = pool.bondedToken
+          this.$http.getGovernanceTally(pid, 0).then(t => p.updateTally(t))
         })
       }
       this.proposal = p

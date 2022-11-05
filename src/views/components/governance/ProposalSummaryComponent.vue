@@ -65,7 +65,7 @@
     </div>
 
     <b-progress
-      :max="100"
+      :max="totalPower && p.status === 2? 100 * (totalPower/p.tally.total) :100"
       height="2rem"
       class="mb-2"
       show-progress
@@ -186,6 +186,10 @@ export default {
     p: {
       type: Object,
       default: () => ({}),
+    },
+    totalPower: {
+      type: Number,
+      default: 0,
     },
   },
   methods: {

@@ -133,7 +133,7 @@
             <b-row>
               <b-col cols="8">
                 <b-progress
-                  :max="100"
+                  :max="totalPower? 100 * (totalPower/prop.tally.total) :100"
                   height="2rem"
                   show-progress
                 >
@@ -169,22 +169,22 @@
                 <b-tooltip
                   :target="'vote-yes'+prop.id"
                 >
-                  {{ percent(prop.tally.yes) }}% voted Yes
+                  {{ percent(prop.tally.yes) }}% voters voted Yes
                 </b-tooltip>
                 <b-tooltip
                   :target="'vote-no'+prop.id"
                 >
-                  {{ percent(prop.tally.no) }}% voted No
+                  {{ percent(prop.tally.no) }}% voters voted No
                 </b-tooltip>
                 <b-tooltip
                   :target="'vote-veto'+prop.id"
                 >
-                  {{ percent(prop.tally.veto) }}% voted No With Veto
+                  {{ percent(prop.tally.veto) }}% voters voted No With Veto
                 </b-tooltip>
                 <b-tooltip
                   :target="'vote-abstain'+prop.id"
                 >
-                  {{ percent(prop.tally.abstain) }}% voted Abstain
+                  {{ percent(prop.tally.abstain) }}% voters voted Abstain
                 </b-tooltip>
               </b-col>
               <b-col cols="4">
@@ -515,6 +515,7 @@ export default {
       selectedProposalId: 0,
       selectedTitle: '',
       operationModalType: '',
+      totalPower: 0,
       voteColors: {
         YES: 'success',
         NO: 'warning',
@@ -568,18 +569,19 @@ export default {
           this.supply = `${formatNumber(formatTokenAmount(pool[1].amount, 2, res.bond_denom, false), true, 2)}`
           this.bonded = `${formatNumber(formatTokenAmount(pool[0].bondedToken, 2, res.bond_denom, false), true, 2)}`
           this.ratio = `${percent(pool[0].bondedToken / pool[1].amount)}%`
-
-          this.$http.getGovernanceListByStatus(2).then(gov => {
-            gov.proposals.forEach(p => {
-              this.$http.getGovernanceTally(p.id, pool[0].bondedToken).then(update => {
-                const p2 = p
-                p2.tally = update
-                this.proposals.push(p2)
-                this.proposals.sort((a, b) => a.id - b.id)
-              })
-            })
-          })
+          this.totalPower = pool[0].bondedToken
         })
+    })
+
+    this.$http.getGovernanceListByStatus(2).then(gov => {
+      gov.proposals.forEach(p => {
+        this.$http.getGovernanceTally(p.id, 0).then(update => {
+          const p2 = p
+          p2.tally = update
+          this.proposals.push(p2)
+          this.proposals.sort((a, b) => a.id - b.id)
+        })
+      })
     })
 
     this.$http.getLatestBlock().then(res => {
@@ -722,6 +724,9 @@ export default {
       return value ? value.replace(/(?:\\[rn])+/g, '\n') : '-'
     },
     percent: v => percent(v),
+    processBarLength(v) {
+      return percent(v)
+    },
     formatDate: v => dayjs(v).format('YYYY-MM-DD HH:mm:ss'),
     convert(v) {
       if (typeof v === 'object') {
