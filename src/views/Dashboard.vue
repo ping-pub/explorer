@@ -132,40 +132,48 @@
           >
             <b-row>
               <b-col cols="8">
-                <b-progress
-                  :max="totalPower? 100 * (totalPower/prop.tally.total) :100"
-                  height="2rem"
-                  show-progress
-                >
-                  <b-progress-bar
-                    :id="'vote-yes'+prop.id"
-                    variant="success"
-                    :value="percent(prop.tally.yes)"
-                    show-progress
-                    :label="`${percent(prop.tally.yes).toFixed()}%`"
+                <div class="scale">
+                  <div class="box">
+                    <b-progress
+                      :max="totalPower? 100 * (totalPower/prop.tally.total) :100"
+                      height="2rem"
+                      show-progress
+                    >
+                      <b-progress-bar
+                        :id="'vote-yes'+prop.id"
+                        variant="success"
+                        :value="percent(prop.tally.yes)"
+                        show-progress
+                        :label="`${percent(prop.tally.yes).toFixed()}%`"
+                      />
+                      <b-progress-bar
+                        :id="'vote-no'+prop.id"
+                        variant="warning"
+                        :value="percent(prop.tally.no)"
+                        :label="`${percent(prop.tally.no).toFixed()}%`"
+                        show-progress
+                      />
+                      <b-progress-bar
+                        :id="'vote-veto'+prop.id"
+                        variant="danger"
+                        :value="percent(prop.tally.veto)"
+                        :label="`${percent(prop.tally.veto).toFixed()}%`"
+                        show-progress
+                      />
+                      <b-progress-bar
+                        :id="'vote-abstain'+prop.id"
+                        variant="secondary"
+                        :value="percent(prop.tally.abstain)"
+                        :label="`${percent(prop.tally.abstain).toFixed()}%`"
+                        show-progress
+                      />
+                    </b-progress>
+                  </div>
+                  <div
+                    class="box overlay"
+                    :style="`width:${scaleWidth(prop.tally)}%`"
                   />
-                  <b-progress-bar
-                    :id="'vote-no'+prop.id"
-                    variant="warning"
-                    :value="percent(prop.tally.no)"
-                    :label="`${percent(prop.tally.no).toFixed()}%`"
-                    show-progress
-                  />
-                  <b-progress-bar
-                    :id="'vote-veto'+prop.id"
-                    variant="danger"
-                    :value="percent(prop.tally.veto)"
-                    :label="`${percent(prop.tally.veto).toFixed()}%`"
-                    show-progress
-                  />
-                  <b-progress-bar
-                    :id="'vote-abstain'+prop.id"
-                    variant="secondary"
-                    :value="percent(prop.tally.abstain)"
-                    :label="`${percent(prop.tally.abstain).toFixed()}%`"
-                    show-progress
-                  />
-                </b-progress>
+                </div>
                 <b-tooltip
                   :target="'vote-yes'+prop.id"
                 >
@@ -515,6 +523,7 @@ export default {
       selectedProposalId: 0,
       selectedTitle: '',
       operationModalType: '',
+      tallyParam: null,
       totalPower: 0,
       voteColors: {
         YES: 'success',
@@ -574,12 +583,14 @@ export default {
     })
 
     this.$http.getGovernanceListByStatus(2).then(gov => {
-      gov.proposals.forEach(p => {
+      this.proposals = gov.proposals
+      this.proposals.forEach(p => {
         this.$http.getGovernanceTally(p.id, 0).then(update => {
-          const p2 = p
-          p2.tally = update
-          this.proposals.push(p2)
-          this.proposals.sort((a, b) => a.id - b.id)
+          // const p2 = p
+          // p2.tally = update
+          // this.proposals.push(p2)
+          // this.proposals.sort((a, b) => a.id - b.id)
+          this.$set(p, 'tally', update)
         })
       })
     })
@@ -599,6 +610,10 @@ export default {
       this.communityPool = this.formatToken(res.pool)
     })
 
+    this.$http.getGovernanceParameterTallying().then(res => {
+      this.tallyParam = res
+    })
+
     const conf = this.$http.getSelectedConfig()
     if (conf.excludes && conf.excludes.indexOf('mint') > -1) {
       this.inflation = '-'
@@ -611,6 +626,12 @@ export default {
     }
   },
   methods: {
+    scaleWidth() {
+      if (this.tallyParam) {
+        return Number(this.tallyParam.quorum) * Number(this.tallyParam.threshold) * 100
+      }
+      return 30
+    },
     selectProposal(modal, pid, title) {
       this.operationModalType = modal
       this.selectedProposalId = Number(pid)
@@ -772,5 +793,29 @@ export default {
 }
 .addzone :hover {
     border: 2px dashed #7367F0;
+}
+
+.scale {
+  width: 100%;
+  height: 3em;
+  position: relative;
+  /* margin: 30px; // */
+}
+.box {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-top: 0.5em;
+  /* opacity: 0.7; */
+  background: transparent;
+}
+.overlay {
+  z-index: 9;
+  border-right-color: green;
+  border-right-width: 2px;
+  border-right-style: dotted;
+  background: transparent;
 }
 </style>
