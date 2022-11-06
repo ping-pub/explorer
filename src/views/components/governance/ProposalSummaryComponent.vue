@@ -63,96 +63,105 @@
         </h6>
       </div>
     </div>
-
-    <b-progress
-      :max="totalPower && p.status === 2? 100 * (totalPower/p.tally.total) :100"
-      height="2rem"
-      class="mb-2"
-      show-progress
-    >
-      <b-progress-bar
-        :id="'vote-yes'+p.id"
-        variant="success"
-        :value="percent(p.tally.yes)"
-        show-progress
-        :label="`${percent(p.tally.yes).toFixed()}%`"
-      />
-      <b-progress-bar
-        :id="'vote-no'+p.id"
-        variant="warning"
-        :value="percent(p.tally.no)"
-        :label="`${percent(p.tally.no).toFixed()}%`"
-        show-progress
-      />
-      <b-progress-bar
-        :id="'vote-veto'+p.id"
-        variant="danger"
-        :value="percent(p.tally.veto)"
-        :label="`${percent(p.tally.veto).toFixed()}%`"
-        show-progress
-      />
-      <b-progress-bar
-        :id="'vote-abstain'+p.id"
-        variant="secondary"
-        :value="percent(p.tally.abstain)"
-        :label="`${percent(p.tally.abstain).toFixed()}%`"
-        show-progress
-      />
-    </b-progress>
-    <b-tooltip
-      :target="'vote-yes'+p.id"
-    >
-      {{ percent(p.tally.yes) }}% voted Yes
-    </b-tooltip>
-    <b-tooltip
-      :target="'vote-no'+p.id"
-    >
-      {{ percent(p.tally.no) }}% voted No
-    </b-tooltip>
-    <b-tooltip
-      :target="'vote-veto'+p.id"
-    >
-      {{ percent(p.tally.veto) }}% voted No With Veto
-    </b-tooltip>
-    <b-tooltip
-      :target="'vote-abstain'+p.id"
-    >
-      {{ percent(p.tally.abstain) }}% voted Abstain
-    </b-tooltip>
-    <b-card-footer class="pb-0">
-      <router-link
-        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        :to="`./gov/${p.id}`"
-        variant="outline-primary"
-      >
-        <b-button
+    <div>
+      <div class="scale">
+        <div class="box">
+          <b-progress
+            :max="totalPower && p.status === 2? 100 * (totalPower/p.tally.total) :100"
+            height="2rem"
+            class="mb-2"
+            show-progress
+          >
+            <b-progress-bar
+              :id="'vote-yes'+p.id"
+              variant="success"
+              :value="percent(p.tally.yes)"
+              show-progress
+              :label="`${percent(p.tally.yes).toFixed()}%`"
+            />
+            <b-progress-bar
+              :id="'vote-no'+p.id"
+              variant="danger"
+              :value="percent(p.tally.no)"
+              :label="`${percent(p.tally.no).toFixed()}%`"
+              show-progress
+            />
+            <b-progress-bar
+              :id="'vote-veto'+p.id"
+              class="bg-danger bg-darken-4"
+              :value="percent(p.tally.veto)"
+              :label="`${percent(p.tally.veto).toFixed()}%`"
+              show-progress
+            />
+            <b-progress-bar
+              :id="'vote-abstain'+p.id"
+              variant="secondary"
+              :value="percent(p.tally.abstain)"
+              :label="`${percent(p.tally.abstain).toFixed()}%`"
+              show-progress
+            />
+          </b-progress>
+          <div
+            v-if="tallyParam"
+            class="box overlay"
+            :style="`left:${scaleWidth(p)}%;`"
+          />
+        </div>
+        <b-tooltip
+          :target="'vote-yes'+p.id"
+        >
+          {{ percent(p.tally.yes) }}% voted Yes
+        </b-tooltip>
+        <b-tooltip
+          :target="'vote-no'+p.id"
+        >
+          {{ percent(p.tally.no) }}% voted No
+        </b-tooltip>
+        <b-tooltip
+          :target="'vote-veto'+p.id"
+        >
+          {{ percent(p.tally.veto) }}% voted No With Veto
+        </b-tooltip>
+        <b-tooltip
+          :target="'vote-abstain'+p.id"
+        >
+          {{ percent(p.tally.abstain) }}% voted Abstain
+        </b-tooltip>
+      </div>
+      <b-card-footer class="pb-0">
+        <router-link
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-          :href="`./gov/${p.id}`"
+          :to="`./gov/${p.id}`"
           variant="outline-primary"
         >
-          {{ $t('btn_detail') }}
+          <b-button
+            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+            :href="`./gov/${p.id}`"
+            variant="outline-primary"
+          >
+            {{ $t('btn_detail') }}
+          </b-button>
+        </router-link>
+        <b-button
+          v-if="p.status===1"
+          v-b-modal.operation-modal
+          variant="primary"
+          class="btn float-right mg-2"
+          @click="selectProposal('GovDeposit',p.id, p.title)"
+        >
+          {{ $t('btn_deposit') }}
         </b-button>
-      </router-link>
-      <b-button
-        v-if="p.status===1"
-        v-b-modal.operation-modal
-        variant="primary"
-        class="btn float-right mg-2"
-        @click="selectProposal('GovDeposit',p.id, p.title)"
-      >
-        {{ $t('btn_deposit') }}
-      </b-button>
-      <b-button
-        v-if="p.status===2"
-        v-b-modal.operation-modal
-        variant="primary"
-        class="btn float-right mg-2"
-        @click="selectProposal('Vote',p.id, p.title)"
-      >
-        {{ $t('btn_vote') }}
-      </b-button>
-    </b-card-footer>
-  </b-card>
+        <b-button
+          v-if="p.status===2"
+          v-b-modal.operation-modal
+          variant="primary"
+          class="btn float-right mg-2"
+          @click="selectProposal('Vote',p.id, p.title)"
+        >
+          {{ $t('btn_vote') }}
+        </b-button>
+      </b-card-footer>
+    </div></b-card>
 </template>
 
 <script>
@@ -191,8 +200,21 @@ export default {
       type: Number,
       default: 0,
     },
+    tallyParam: {
+      type: Object,
+      default: null,
+    },
   },
   methods: {
+    scaleWidth(p) {
+      if (this.tallyParam) {
+        if (p.status === 2) {
+          return Number(this.tallyParam.quorum) * Number(this.tallyParam.threshold) * 100
+        }
+        return Number(this.tallyParam.threshold) * 100
+      }
+      return 50
+    },
     selectProposal(modal, pid, title) {
       this.$parent.operationModalType = modal
       this.$parent.selectedProposalId = Number(pid)

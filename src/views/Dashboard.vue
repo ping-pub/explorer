@@ -138,6 +138,7 @@
                       :max="totalPower? 100 * (totalPower/prop.tally.total) :100"
                       height="2rem"
                       show-progress
+                      class="font-small-1"
                     >
                       <b-progress-bar
                         :id="'vote-yes'+prop.id"
@@ -148,14 +149,14 @@
                       />
                       <b-progress-bar
                         :id="'vote-no'+prop.id"
-                        variant="warning"
+                        variant="danger"
                         :value="percent(prop.tally.no)"
                         :label="`${percent(prop.tally.no).toFixed()}%`"
                         show-progress
                       />
                       <b-progress-bar
                         :id="'vote-veto'+prop.id"
-                        variant="danger"
+                        class="bg-danger bg-darken-4"
                         :value="percent(prop.tally.veto)"
                         :label="`${percent(prop.tally.veto).toFixed()}%`"
                         show-progress
@@ -171,7 +172,7 @@
                   </div>
                   <div
                     class="box overlay"
-                    :style="`width:${scaleWidth(prop.tally)}%`"
+                    :style="`left:${scaleWidth(prop.tally)}%;`"
                   />
                 </div>
                 <b-tooltip
@@ -195,7 +196,10 @@
                   {{ percent(prop.tally.abstain) }}% voters voted Abstain
                 </b-tooltip>
               </b-col>
-              <b-col cols="4">
+              <b-col
+                cols="4"
+                style="padding-top: 0.5em"
+              >
                 <b-button
                   v-b-modal.operation-modal
                   variant="primary"
@@ -793,29 +797,5 @@ export default {
 }
 .addzone :hover {
     border: 2px dashed #7367F0;
-}
-
-.scale {
-  width: 100%;
-  height: 3em;
-  position: relative;
-  /* margin: 30px; // */
-}
-.box {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding-top: 0.5em;
-  /* opacity: 0.7; */
-  background: transparent;
-}
-.overlay {
-  z-index: 9;
-  border-right-color: green;
-  border-right-width: 2px;
-  border-right-style: dotted;
-  background: transparent;
 }
 </style>

@@ -10,6 +10,7 @@
         <proposal-summary-component
           :p="p"
           :total-power="totalPower"
+          :tally-param="tallyParam"
         />
       </b-col>
     </b-row>
@@ -68,9 +69,13 @@ export default {
       operationModalType: '',
       next: '',
       totalPower: 0,
+      tallyParam: null,
     }
   },
   mounted() {
+    this.$http.getGovernanceParameterTallying().then(res => {
+      this.tallyParam = res
+    })
     this.getList()
   },
   methods: {
