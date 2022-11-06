@@ -1,7 +1,7 @@
 {
   "chain_name": "rebus",
-  "api": ["https://api.mainnet.rebus.money:1317"],
-  "rpc": ["https://api.mainnet.rebus.money:26657"],
+  "api": ["https://api.mainnet.rebus.money:1317","https://api.rebus.nodestake.top"],
+  "rpc": ["https://api.mainnet.rebus.money:26657","https://rpc.rebus.nodestake.top"],
   "snapshot_provider": "",
   "sdk_version": "0.45.6",
   "coin_type": "118",
