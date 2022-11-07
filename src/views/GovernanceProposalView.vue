@@ -413,7 +413,6 @@ export default {
         if (p.status === 2) {
           return Number(this.tallyParam.quorum) * Number(this.tallyParam.threshold) * (1 - p.tally.abstain) * 100
         }
-        console.log(p.tally, Number(this.tallyParam.threshold) * (1 - p.tally.abstain) * 100)
         return Number(this.tallyParam.threshold) * (1 - p.tally.abstain) * 100
       }
       return 50
