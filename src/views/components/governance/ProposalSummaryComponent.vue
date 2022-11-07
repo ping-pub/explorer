@@ -103,8 +103,17 @@
           </b-progress>
           <div
             v-if="tallyParam"
+            v-b-tooltip.hover
+            title="Threshold"
             class="box overlay"
             :style="`left:${scaleWidth(p)}%;`"
+          />
+          <div
+            v-if="tallyParam && p.status === 2"
+            v-b-tooltip.hover
+            title="Quorum"
+            class="box overlay"
+            :style="`left:${Number(tallyParam.quorum) * 100}%; border-color:black`"
           />
         </div>
         <b-tooltip
@@ -166,7 +175,7 @@
 
 <script>
 import {
-  BCard, BCardTitle, BCardFooter, BButton, BProgressBar, BProgress, BBadge, BTooltip, BRow, BCol, VBModal,
+  BCard, BCardTitle, BCardFooter, BButton, BProgressBar, BProgress, BBadge, BTooltip, BRow, BCol, VBModal, VBTooltip,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import { percent, tokenFormatter } from '@/libs/utils'
@@ -189,6 +198,7 @@ export default {
   },
   directives: {
     'b-modal': VBModal,
+    'b-tooltip': VBTooltip,
     Ripple,
   },
   props: {

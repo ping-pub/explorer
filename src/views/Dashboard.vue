@@ -119,9 +119,14 @@
               <b-link :to="`./${chain}/gov/${prop.id}`">
                 <b-media-body class="d-flex flex-column justify-content-center">
                   <h6 class="transaction-title">
-                    {{ prop.title }}
+                    <b-badge
+                      pill
+                      variant="light-primary"
+                    >
+                      {{ formatType(prop.contents['@type']) }}
+                    </b-badge>{{ prop.title }}
                   </h6>
-                  <small>{{ formatType(prop.contents['@type']) }}  {{ formatEnding(prop.voting_end_time) }}</small>
+                  <small>will {{ caculateTallyResult(prop.tally) }}  {{ formatEnding(prop.voting_end_time) }}</small>
                 </b-media-body>
               </b-link>
             </b-media>
@@ -171,8 +176,17 @@
                     </b-progress>
                   </div>
                   <div
+                    v-b-tooltip.hover
+                    title="Threshold"
                     class="box overlay"
                     :style="`left:${scaleWidth(prop.tally)}%;`"
+                  />
+                  <div
+                    v-if="tallyParam"
+                    v-b-tooltip.hover
+                    title="Quorum"
+                    class="box overlay"
+                    :style="`left:${Number(tallyParam.quorum) * 100}%; border-color:black`"
                   />
                 </div>
                 <b-tooltip
@@ -241,7 +255,7 @@
       bg-variant="transparent"
       class="shadow-none"
     >
-      <b-card-title class="d-flex justify-content-between">
+      <b-card-title class="d-flex justify-content-between text-capitalize">
         <span>{{ walletName }} Assets </span>
         <small>
           <b-link
@@ -451,7 +465,7 @@
 <script>
 import {
   BRow, BCol, BAlert, BCard, BTable, BFormCheckbox, BCardHeader, BCardTitle, BMedia, BMediaAside, BMediaBody, BAvatar,
-  BCardBody, BLink, BButtonGroup, BButton, BTooltip, VBModal, VBTooltip, BCardFooter, BProgress, BProgressBar,
+  BCardBody, BLink, BButtonGroup, BButton, BTooltip, VBModal, VBTooltip, BCardFooter, BProgress, BProgressBar, BBadge,
 } from 'bootstrap-vue'
 import {
   formatNumber, formatTokenAmount, isToken, percent, timeIn, toDay, toDuration, tokenFormatter, getLocalAccounts,
@@ -490,6 +504,7 @@ export default {
     BProgress,
     BProgressBar,
     VueMarkdown,
+    BBadge,
 
     OperationModal,
     ParametersModuleComponent,
@@ -630,11 +645,21 @@ export default {
     }
   },
   methods: {
+    caculateTallyResult(tally) {
+      if (this.tallyParam && tally && this.totalPower > 0) {
+        if (tally.veto < Number(this.tallyParam.veto_threshold)
+        && tally.yes > Number(this.tallyParam.threshold)
+        && tally.total / this.totalPower > Number(this.tallyParam.quorum)) {
+          return 'pass'
+        }
+      }
+      return 'be rejected'
+    },
     scaleWidth() {
       if (this.tallyParam) {
         return Number(this.tallyParam.quorum) * Number(this.tallyParam.threshold) * 100
       }
-      return 30
+      return 50
     },
     selectProposal(modal, pid, title) {
       this.operationModalType = modal

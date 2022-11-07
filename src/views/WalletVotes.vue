@@ -98,7 +98,7 @@
               />
               <b-progress-bar
                 :id="'vote-abstain'+p.id"
-                variant="info"
+                variant="secondary"
                 :value="percent(p.tally.abstain)"
                 :label="`${percent(p.tally.abstain).toFixed()}%`"
                 show-progress
@@ -128,7 +128,7 @@
               <span
                 v-for="(v,k) in p.votes"
                 :key="k"
-              > <b-badge :variant="color(v.vote.option)">{{ v.keyname }} : {{ v.vote.option }}</b-badge></span>
+              > <b-badge :variant="color(v.vote.option)">{{ v.keyname }} : {{ formatOption(v.vote.option) }}</b-badge></span>
             </b-card-footer>
           </b-card>
         </b-col>
@@ -236,6 +236,13 @@ export default {
     percent: v => percent(v),
     formatDate: v => dayjs(v).format('YYYY-MM-DD'),
     formatToken: v => tokenFormatter(v, {}),
+    formatOption: v => {
+      const start = String(v).lastIndexOf('_')
+      if (start > 0) {
+        return String(v).substring(start + 1)
+      }
+      return v
+    },
     init() {
       this.accounts = getLocalAccounts()
       if (this.accounts) {
