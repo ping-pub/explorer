@@ -219,9 +219,9 @@ export default {
     scaleWidth(p) {
       if (this.tallyParam) {
         if (p.status === 2) {
-          return Number(this.tallyParam.quorum) * Number(this.tallyParam.threshold) * 100
+          return Number(this.tallyParam.quorum) * Number(this.tallyParam.threshold) * (1 - p.tally.abstain) * 100
         }
-        return Number(this.tallyParam.threshold) * 100
+        return Number(this.tallyParam.threshold) * (1 - p.tally.abstain) * 100
       }
       return 50
     },

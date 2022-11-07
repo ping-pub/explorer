@@ -179,7 +179,7 @@
                     v-b-tooltip.hover
                     title="Threshold"
                     class="box overlay"
-                    :style="`left:${scaleWidth(prop.tally)}%;`"
+                    :style="`left:${scaleWidth(prop)}%;`"
                   />
                   <div
                     v-if="tallyParam"
@@ -655,9 +655,9 @@ export default {
       }
       return 'be rejected'
     },
-    scaleWidth() {
+    scaleWidth(p) {
       if (this.tallyParam) {
-        return Number(this.tallyParam.quorum) * Number(this.tallyParam.threshold) * 100
+        return Number(this.tallyParam.quorum) * Number(this.tallyParam.threshold) * (1 - p.tally.abstain) * 100
       }
       return 50
     },
