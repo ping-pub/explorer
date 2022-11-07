@@ -69,7 +69,6 @@
                 </h6>
               </div>
             </div>
-
             <b-progress
               :max="100"
               height="2rem"
@@ -85,14 +84,14 @@
               />
               <b-progress-bar
                 :id="'vote-no'+p.id"
-                variant="warning"
+                variant="danger"
                 :value="percent(p.tally.no)"
                 :label="`${percent(p.tally.no).toFixed()}%`"
                 show-progress
               />
               <b-progress-bar
                 :id="'vote-veto'+p.id"
-                variant="danger"
+                class="bg-danger bg-darken-4"
                 :value="percent(p.tally.veto)"
                 :label="`${percent(p.tally.veto).toFixed()}%`"
                 show-progress
