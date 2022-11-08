@@ -13,6 +13,5 @@
         "exponent": "6",
         "coingecko_id": "", 
         "logo": "/logos/game_of_chain.jpeg"
-    }],
-    "keplr_features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
+    }]
 }
