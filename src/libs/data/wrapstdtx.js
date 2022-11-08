@@ -46,6 +46,7 @@ export default class WrapStdTx {
       self.tx = StdTx.create(element.tx, version)
       self.raw_log = element.tx_response.raw_log
     }
+    self.element = element
     return self
   }
 }

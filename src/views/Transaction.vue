@@ -46,7 +46,8 @@
               variant="light-danger"
             >
               Failed
-            </b-badge><b v-if="tx.code > 0"> {{ tx.raw_log }}</b> </b-td>
+            </b-badge>
+            </b-td>
           </b-tr>
           <b-tr>
             <b-td>
@@ -85,11 +86,8 @@
       </b-table-simple>
     </b-card>
 
-    <b-card
-      v-if="tx.tx.messages"
-      :title="`Messages (total: ${tx.tx.messages.length})`"
-      no-body
-    >
+    <b-card v-if="tx.tx.messages">
+      <b-card-title>Messages (total: {{ tx.tx.messages.length }})</b-card-title>
       <b-card-body
         v-for="(item, i) in tx.tx.messages "
         id="message"
@@ -99,12 +97,19 @@
         <object-field-component :tablefield="item" />
       </b-card-body>
     </b-card>
+
+    <b-card
+      v-if="tx.element"
+      title="Details"
+    >
+      <object-field-component :tablefield="tx.element.tx_response" />
+    </b-card>
   </div>
 </template>
 
 <script>
 import {
-  BCard, BTableSimple, BTr, BTd, BBadge, BCardBody, BAlert,
+  BCard, BTableSimple, BTr, BTd, BBadge, BCardBody, BAlert, BCardTitle,
 } from 'bootstrap-vue'
 import { toDay, tokenFormatter } from '@/libs/utils'
 import ObjectFieldComponent from './components/ObjectFieldComponent.vue'
@@ -113,6 +118,7 @@ export default {
   components: {
     BAlert,
     BCard,
+    BCardTitle,
     BCardBody,
     BTableSimple,
     BTr,
