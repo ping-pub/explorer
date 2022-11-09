@@ -235,7 +235,9 @@ export default {
       return formatTokenDenom(this.token)
     },
     format(v) {
-      return formatToken(v, this.IBCDenom, 6)
+      const conf = this.$http.getSelectedConfig()
+      const decimal = conf.assets.exponent || '6'
+      return formatToken(v, this.IBCDenom, decimal)
     },
   },
 }
