@@ -13,7 +13,7 @@
     </b-alert>
     <b-card
       v-if="error===null"
-      title="Basic"
+      title="Summary"
       class="text-truncate"
     >
       <object-field-component
