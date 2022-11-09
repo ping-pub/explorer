@@ -297,6 +297,12 @@ export default class ChainFetch {
   }
 
   getGovernance(pid) {
+    if (this.config.chain_name === 'shentu') {
+      return this.get(`/shentu/gov/v1alpha1/proposals/${pid}`).then(data => {
+        const p = new Proposal().init(commonProcess(data).proposal, 0)
+        return p
+      })
+    }
     return this.get(`/cosmos/gov/v1beta1/proposals/${pid}`).then(data => {
       const p = new Proposal().init(commonProcess(data).proposal, 0)
       p.versionFixed(this.config.sdk_version)
@@ -305,14 +311,14 @@ export default class ChainFetch {
   }
 
   async getGovernanceProposer(pid) {
-    if (this.config.chain_name === 'certik') {
+    if (this.config.chain_name === 'shentu') {
       return this.get(`/shentu/gov/v1alpha1/${pid}/proposer`).then(data => new Proposer().init(commonProcess(data)))
     }
     return this.get(`/gov/proposals/${pid}/proposer`).then(data => new Proposer().init(commonProcess(data)))
   }
 
   async getGovernanceDeposits(pid) {
-    if (this.config.chain_name === 'certik') {
+    if (this.config.chain_name === 'shentu') {
       return this.get(`/shentu/gov/v1alpha1/proposals/${pid}/deposits`).then(data => {
         const result = commonProcess(data)
         return Array.isArray(result) ? result.reverse().map(d => new Deposit().init(d)) : result
