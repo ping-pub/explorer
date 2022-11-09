@@ -92,7 +92,7 @@
         v-for="(item, i) in tx.tx.messages "
         id="message"
         :key="i"
-        class="message"
+        class="message px-0"
       >
         <object-field-component :tablefield="item" />
       </b-card-body>
