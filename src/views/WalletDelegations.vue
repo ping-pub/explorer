@@ -120,7 +120,7 @@ export default {
   computed: {
     formatedDelegations() {
       const conf = this.$http.getSelectedConfig()
-      const decimal = conf.assets.exponent || '6'
+      const decimal = conf.assets[0].exponent || '6'
       return this.delegations.map(x => ({
         validator: {
           logo: x.chain.logo,
@@ -138,7 +138,7 @@ export default {
     groupedDelegations() {
       const group = {}
       const conf = this.$http.getSelectedConfig()
-      const decimal = conf.assets.exponent || '6'
+      const decimal = conf.assets[0].exponent || '6'
       this.delegations.forEach(x => {
         const d = {
           validator: {

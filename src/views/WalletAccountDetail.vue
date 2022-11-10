@@ -622,7 +622,7 @@ export default {
     deleTable() {
       const re = []
       const conf = this.$http.getSelectedConfig()
-      const decimal = conf.assets.exponent || '6'
+      const decimal = conf.assets[0].exponent || '6'
       if (this.reward.rewards && this.delegations && this.delegations.length > 0) {
         this.delegations.forEach(e => {
           const reward = this.reward.rewards.find(r => r.validator_address === e.delegation.validator_address)

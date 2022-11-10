@@ -581,7 +581,7 @@ export default {
       return this.delegations.map(x => {
         const rewards = this.rewards.find(r => r.validator_address === x.delegation.validator_address)
         const conf = this.$http.getSelectedConfig()
-        const decimal = conf.assets.exponent || '6'
+        const decimal = conf.assets[0].exponent || '6'
         return {
           valAddress: x.delegation.validator_address,
           validator: getStakingValidatorOperator(this.$store.state.chains.selected.chain_name, x.delegation.validator_address),
@@ -700,7 +700,7 @@ export default {
     },
     fetchAccount(address) {
       const conf = this.$http.getSelectedConfig()
-      const decimal = conf.assets.exponent || '6'
+      const decimal = conf.assets[0].exponent || '6'
       this.address = address
       this.$http.getBankAccountBalance(address).then(bal => {
         this.walletBalances = this.formatToken(bal)
