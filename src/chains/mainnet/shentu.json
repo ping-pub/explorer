@@ -2,10 +2,10 @@
 {
     "chain_name": "shentu",
     "coingecko": "certik",
-    "api": ["https://certik-api.polkachu.com/", "https://shentu-api.panthea.eu", "https://chainfull.noopsbycertik.com"],
+    "api": ["https://certik-api.polkachu.com", "https://shentu-api.panthea.eu", "https://chainfull.noopsbycertik.com"],
     "rpc": ["https://certik-rpc.polkachu.com:443", "https://shentu-rpc.panthea.eu:443"],
     "snapshot_provider": "",
-    "sdk_version": "0.45.4",
+    "sdk_version": "0.45.9",
     "coin_type": "118",
     "min_tx_fee": "8000",
     "addr_prefix": "certik",
