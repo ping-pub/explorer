@@ -1,7 +1,7 @@
 {
     "chain_name": "chain4energy",
     "api": ["https://lcd.c4e.io"],
-    "rpc": ["https://rpc.c4e.io", "https://rpc.c4e.io"],
+    "rpc": ["https://rpc.c4e.io:443", "https://rpc.c4e.io:443"],
     "sdk_version": "0.45.5",
     "coin_type": "4444",
     "min_tx_fee": "3000",
