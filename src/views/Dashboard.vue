@@ -469,7 +469,7 @@ import {
 } from 'bootstrap-vue'
 import {
   formatNumber, formatTokenAmount, isToken, percent, timeIn, toDay, toDuration, tokenFormatter, getLocalAccounts,
-  getStakingValidatorOperator,
+  getStakingValidatorOperator, formatToken,
 } from '@/libs/utils'
 import OperationModal from '@/views/components/OperationModal/index.vue'
 import Ripple from 'vue-ripple-directive'
@@ -580,10 +580,12 @@ export default {
     stakingList() {
       return this.delegations.map(x => {
         const rewards = this.rewards.find(r => r.validator_address === x.delegation.validator_address)
+        const conf = this.$http.getSelectedConfig()
+        const decimal = conf.assets[0].exponent || '6'
         return {
           valAddress: x.delegation.validator_address,
           validator: getStakingValidatorOperator(this.$store.state.chains.selected.chain_name, x.delegation.validator_address),
-          delegation: this.formatToken([x.balance]),
+          delegation: formatToken(x.balance, {}, decimal),
           rewards: rewards ? this.formatToken(rewards.reward) : '',
           action: '',
         }
@@ -697,6 +699,8 @@ export default {
       return '-'
     },
     fetchAccount(address) {
+      const conf = this.$http.getSelectedConfig()
+      const decimal = conf.assets[0].exponent || '6'
       this.address = address
       this.$http.getBankAccountBalance(address).then(bal => {
         this.walletBalances = this.formatToken(bal)

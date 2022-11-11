@@ -179,8 +179,10 @@ export default {
       return options
     },
     tokenOptions() {
+      const conf = this.$http.getSelectedConfig()
+      const decimal = conf.assets[0].exponent || '6'
       if (!this.delegations) return []
-      return this.delegations.filter(x => x.delegation.validator_address === this.validatorAddress).map(x => ({ value: x.balance.denom, label: formatToken(x.balance) }))
+      return this.delegations.filter(x => x.delegation.validator_address === this.validatorAddress).map(x => ({ value: x.balance.denom, label: formatToken(x.balance, {}, decimal) }))
     },
     msg() {
       return [{
