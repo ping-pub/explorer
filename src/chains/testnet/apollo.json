@@ -1,0 +1,17 @@
+{
+    "chain_name": "apollo",
+    "api": ["https://apollo.api.ping.pub"],
+    "rpc": [],
+    "sdk_version": "0.45.7",
+    "coin_type": 118,
+    "min_tx_fee": "0",
+    "addr_prefix": "cosmos",
+    "logo": "/logos/game_of_chain.jpeg",
+    "assets": [{
+        "base": "uprov",
+        "symbol": "PROV",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "/logos/game_of_chain.jpeg"
+    }]
+}
