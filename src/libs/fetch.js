@@ -183,7 +183,7 @@ export default class ChainFetch {
   }
 
   async getValidatorList(config = null) {
-    return this.get('/cosmos/staking/v1beta1/validators?pagination.limit=200&status=BOND_STATUS_BONDED', config).then(data => {
+    return this.get('/cosmos/staking/v1beta1/validators?pagination.limit=200&status=BOND_STATUS_BONDED', config, true).then(data => {
       const vals = commonProcess(data.validators).map(i => new Validator().init(i))
       try {
         localStorage.setItem(`validators-${this.config.chain_name}`, JSON.stringify(vals))
@@ -203,7 +203,7 @@ export default class ChainFetch {
   }
 
   async getValidatorUnbondedList() {
-    return this.get('/cosmos/staking/v1beta1/validators?pagination.limit=100&status=BOND_STATUS_UNBONDED').then(data => {
+    return this.get('/cosmos/staking/v1beta1/validators?pagination.limit=100&status=BOND_STATUS_UNBONDED', null, true).then(data => {
       const result = commonProcess(data.validators)
       const vals = result.validators ? result.validators : result
       return vals.map(i => new Validator().init(i))
@@ -211,7 +211,7 @@ export default class ChainFetch {
   }
 
   async getValidatorListByStatus(status) {
-    return this.get(`/cosmos/staking/v1beta1/validators?status=${status}&pagination.limit=500`).then(data => {
+    return this.get(`/cosmos/staking/v1beta1/validators?status=${status}&pagination.limit=500`, null, true).then(data => {
       const result = commonProcess(data)
       const vals = result.validators ? result.validators : result
       return vals.map(i => new Validator().init(i))
@@ -427,7 +427,7 @@ export default class ChainFetch {
   }
 
   async getValidatorSlashs(address, config = null) {
-    return this.get(`/cosmos/distribution/v1beta1/validators//${address}/slashes`, config).then(data => commonProcess(data))
+    return this.get(`/cosmos/distribution/v1beta1/validators/${address}/slashes`, config).then(data => commonProcess(data))
   }
 
   async getStakingValidators(address) {
@@ -595,15 +595,17 @@ export default class ChainFetch {
     return response.json() // parses JSON response into native JavaScript objects
   }
 
-  async get(url, config = null) {
+  async get(url, config = null, fetch_on_provider = false) {
     if (!config) {
       this.getSelectedConfig()
     }
     const conf = config || this.config
+    if (fetch_on_provider && conf.provider_chain) {
+      return fetch(`${conf.provider_chain.api}${url}`).then(response => response.json())
+    }
     const finalurl = (Array.isArray(conf.api) ? conf.api[this.getApiIndex(config)] : conf.api) + url
     // finalurl = finalurl.replaceAll('v1beta1', this.getEndpointVersion())
-    const ret = await fetch(finalurl).then(response => response.json())
-    return ret
+    return fetch(finalurl).then(response => response.json())
   }
 
   getApiIndex(config = null) {
