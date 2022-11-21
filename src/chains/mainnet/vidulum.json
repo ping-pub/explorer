@@ -1,9 +1,9 @@
 {
     "chain_name": "vidulum",
     "coingecko": "vidulum",
-    "api": ["https://mainnet-lcd.vidulum.app", "https://api-vidulum-ia.cosmosia.notional.ventures", "https://rest.rpc.erialos.me"],
-    "rpc": ["https://trpc.rpc.erialos.me:443","https://rpc-vidulum-ia.cosmosia.notional.ventures:443", "https://mainnet-rpc.vidulum.app:443"],
-    "snapshot_provider": "c32903505e9ab811ac46306d2913c98ccf4883ce@rpc.erialos.me:26656",
+    "api": ["https://mainnet-lcd.vidulum.app", "https://api-vidulum-ia.cosmosia.notional.ventures"],
+    "rpc": ["https://mainnet-rpc.vidulum.app:443", "https://rpc-vidulum-ia.cosmosia.notional.ventures:443"],
+    "snapshot_provider": "",
     "sdk_version": "0.45.9",
     "coin_type": "370",
     "min_tx_fee": "8000",
