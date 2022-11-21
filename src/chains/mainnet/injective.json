@@ -1,7 +1,7 @@
 {
     "chain_name": "injective",
-    "api": "https://lcd.injective.network",
-    "rpc": ["https://injective-rpc.api.chainlayer.network:443", "https://injective-rpc.api.chainlayer.network:443"],
+    "api": ["https://lcd.injective.network", "https://injective-api.polkachu.com"],
+    "rpc": ["https://tm.injective.network", "https://injective-rpc.polkachu.com"],
     "snapshot_provider": "",
     "sdk_version": "v0.45.5",
     "coin_type": "60",
