@@ -1,0 +1,17 @@
+{
+  "chain_name": "deweb",
+  "api": "https://dws-testnet.nodejumper.io:1317",
+  "sdk_version": "0.45.5",
+  "coin_type": "118",
+  "min_tx_fee": "8000",
+  "addr_prefix": "deweb",
+  "logo": "/logos/DWS.png",
+  "assets": [
+    {
+      "base": "udws",
+      "symbol": "DWS",
+      "exponent": "6",
+      "logo": "/logos/DWS.png"
+    }
+  ]
+}

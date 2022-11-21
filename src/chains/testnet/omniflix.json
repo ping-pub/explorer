@@ -1,7 +1,0 @@
-{
-    "chain_name": "omniflix",
-    "api": "https://api.testnet.omniflix.network",
-    "sdk_version": "0.44.0",
-    "addr_prefix": "omniflix",
-    "logo": "https://dl.airtable.com/.attachments/cfdba6dfc6889b7909d60cf6e419960b/f5959d18/uYvkubS-_400x400.jpg"
-}

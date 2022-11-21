@@ -1,0 +1,9 @@
+version: "3"
+services:
+  explorer:
+    container_name: explorer
+    image: ghcr.io/deweb-services/explorer/explorer:latest
+    stdin_open: true
+    ports:
+      - "8080:8080"
+    restart: unless-stopped

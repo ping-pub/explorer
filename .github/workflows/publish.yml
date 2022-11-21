@@ -1,0 +1,49 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+
+jobs:
+  explorer:
+    name: Build Explorer Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+      - name: Build and Publish to Github Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}/explorer
+          tags: latest, ${{ github.sha }}
+          push: true
+          context: .
+  deploy:
+    name: Deploy
+    needs: explorer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: copy docker-compose.yml via ssh
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.ID_RSA }}
+          port: 22
+          source: "docker-compose.yml"
+          target: "~"
+      - name: executing remote ssh docker-compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.ID_RSA }}
+          port: 22
+          script: |
+            echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            docker pull ghcr.io/deweb-services/explorer/explorer:latest
+            docker container rm -f explorer || true
+            docker-compose up -d --force-recreate
