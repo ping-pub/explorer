@@ -128,8 +128,8 @@ export default class ChainFetch {
     //   return ret
     // })
     return Promise.all([
-      this.get(`/cosmos/distribution/v1beta1/validators/${address}/commission`),
-      this.get(`/cosmos/distribution/v1beta1/validators/${address}/outstanding_rewards`),
+      this.get(`/cosmos/distribution/v1beta1/validators/${address}/commission`, null, true),
+      this.get(`/cosmos/distribution/v1beta1/validators/${address}/outstanding_rewards`, null, true),
     ]).then(data => {
       const ret = ValidatorDistribution.create({
         operator_address: address,
@@ -159,7 +159,7 @@ export default class ChainFetch {
   }
 
   async getStakingPool() {
-    return this.get('/cosmos/staking/v1beta1/pool').then(data => new StakingPool().init(commonProcess(data.pool)))
+    return this.get('/cosmos/staking/v1beta1/pool', null, true).then(data => new StakingPool().init(commonProcess(data.pool)))
   }
 
   async getMintingInflation() {
@@ -176,7 +176,7 @@ export default class ChainFetch {
   }
 
   async getStakingParameters() {
-    return this.get('/cosmos/staking/v1beta1/params').then(data => {
+    return this.get('/cosmos/staking/v1beta1/params', null, true).then(data => {
       this.getSelectedConfig()
       return StakingParameters.create(commonProcess(data.params), this.config.chain_name)
     })
@@ -223,7 +223,7 @@ export default class ChainFetch {
   }
 
   async getStakingValidator(address) {
-    return this.get(`/cosmos/staking/v1beta1/validators/${address}`).then(data => new Validator().init(commonProcess(data).validator))
+    return this.get(`/cosmos/staking/v1beta1/validators/${address}`, null, true).then(data => new Validator().init(commonProcess(data).validator))
   }
 
   async getSlashingParameters() {
@@ -277,7 +277,7 @@ export default class ChainFetch {
   }
 
   async getDistributionParameters() {
-    return this.get('/cosmos/distribution/v1beta1/params').then(data => commonProcess(data.params))
+    return this.get('/cosmos/distribution/v1beta1/params', null, true).then(data => commonProcess(data.params))
   }
 
   async getGovernanceParameterDeposit() {
@@ -421,22 +421,22 @@ export default class ChainFetch {
 
   async getStakingReward(address, config = null) {
     if (compareVersions(config ? config.sdk_version : this.config.sdk_version, '0.40') < 0) {
-      return this.get(`/distribution/delegators/${address}/rewards`, config).then(data => commonProcess(data))
+      return this.get(`/distribution/delegators/${address}/rewards`, config, true).then(data => commonProcess(data))
     }
-    return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/rewards`, config).then(data => commonProcess(data))
+    return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/rewards`, config, true).then(data => commonProcess(data))
   }
 
   async getValidatorSlashs(address, config = null) {
-    return this.get(`/cosmos/distribution/v1beta1/validators/${address}/slashes`, config).then(data => commonProcess(data))
+    return this.get(`/cosmos/distribution/v1beta1/validators/${address}/slashes`, config, true).then(data => commonProcess(data))
   }
 
   async getStakingValidators(address) {
-    return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/validators?pagination.size=200`).then(data => commonProcess(data.validators))
+    return this.get(`/cosmos/distribution/v1beta1/delegators/${address}/validators?pagination.size=200`, null, true).then(data => commonProcess(data.validators))
   }
 
   async getStakingDelegations(address, config = null) {
     if (compareVersions(config ? config.sdk_version : this.config.sdk_version, '0.40') < 0) {
-      return this.get(`/staking/delegators/${address}/delegations`, config).then(data => commonProcess(data).map(x => {
+      return this.get(`/staking/delegators/${address}/delegations`, config, true).then(data => commonProcess(data).map(x => {
         const xh = x
         if (!xh.delegation) {
           xh.delegation = {
@@ -447,21 +447,21 @@ export default class ChainFetch {
         return xh
       }))
     }
-    return this.get(`/cosmos/staking/v1beta1/delegations/${address}`, config).then(data => commonProcess(data))
+    return this.get(`/cosmos/staking/v1beta1/delegations/${address}`, config, true).then(data => commonProcess(data))
   }
 
   async getStakingRedelegations(address, config = null) {
     if (compareVersions(config ? config.sdk_version : this.config.sdk_version, '0.40') < 0) {
-      return this.get(`/staking/redelegations?delegator=${address}`, config).then(data => commonProcess(data))
+      return this.get(`/staking/redelegations?delegator=${address}`, config, true).then(data => commonProcess(data))
     }
-    return this.get(`/cosmos/staking/v1beta1/delegators/${address}/redelegations`, config).then(data => commonProcess(data))
+    return this.get(`/cosmos/staking/v1beta1/delegators/${address}/redelegations`, config, true).then(data => commonProcess(data))
   }
 
   async getStakingUnbonding(address, config = null) {
     if (compareVersions(config ? config.sdk_version : this.config.sdk_version, '0.40') < 0) {
-      return this.get(`/staking/delegators/${address}/unbonding_delegations`, config).then(data => commonProcess(data))
+      return this.get(`/staking/delegators/${address}/unbonding_delegations`, config, true).then(data => commonProcess(data))
     }
-    return this.get(`/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations`, config).then(data => commonProcess(data))
+    return this.get(`/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations`, config, true).then(data => commonProcess(data))
   }
 
   async getBankBalances(address, config = null) {
@@ -469,7 +469,7 @@ export default class ChainFetch {
   }
 
   async getCommunityPool(config = null) {
-    return this.get('/cosmos/distribution/v1beta1/community_pool', config).then(data => commonProcess(data))
+    return this.get('/cosmos/distribution/v1beta1/community_pool', config, true).then(data => commonProcess(data))
   }
 
   async getAllIBCDenoms(config = null) {
