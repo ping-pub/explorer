@@ -42,6 +42,11 @@
         </b-card-title>
       </b-card-header>
       <b-card-body>
+        <div>
+          <object-field-component
+            :tablefield="proposal.contents"
+            :small="false"
+          /></div>
         <b-table-simple
           stacked="sm"
           hover
@@ -50,13 +55,6 @@
           <tbody>
             <b-tr>
               <b-td style="text-transform: capitalize; vertical-align: top; width:200px">
-                {{ $t('proposal_proposer') }}
-              </b-td><b-td><router-link :to="`../account/${proposer.proposer}`">
-                {{ formatAddress(proposer.proposer) }}
-              </router-link> </b-td>
-            </b-tr>
-            <b-tr>
-              <b-td>
                 {{ $t('proposal_total_deposit') }}
               </b-td><b-td>{{ formatToken(proposal.total_deposit) }} </b-td>
             </b-tr>
@@ -70,13 +68,13 @@
                 {{ $t('voting_time') }}
               </b-td><b-td>{{ formatDate(proposal.voting_start_time) }} - {{ formatDate(proposal.voting_end_time) }}</b-td>
             </b-tr>
+            <b-tr>
+              <b-td>
+                Metadata
+              </b-td><b-td>{{ proposal.metadata }}</b-td>
+            </b-tr>
           </tbody>
         </b-table-simple>
-        <div>
-          <object-field-component
-            :tablefield="proposal.contents"
-            :small="false"
-          /></div>
         <b-table-simple v-if="proposal.type.indexOf('SoftwareUpgrade') > 0">
           <b-tr>
             <b-td class="text-center">
@@ -395,10 +393,9 @@ export default {
     if (!getCachedValidators()) {
       this.$http.getValidatorList()
     }
-
-    this.$http.getGovernanceProposer(pid).then(res => {
-      this.proposer = res
-    })
+    // this.$http.getGovernanceProposer(pid).then(res => {
+    //   this.proposer = res
+    // })
     this.$http.getGovernanceDeposits(pid).then(res => {
       this.deposits = res
     }).catch(() => {})
