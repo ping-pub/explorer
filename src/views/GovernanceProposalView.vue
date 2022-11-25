@@ -68,7 +68,7 @@
                 {{ $t('voting_time') }}
               </b-td><b-td>{{ formatDate(proposal.voting_start_time) }} - {{ formatDate(proposal.voting_end_time) }}</b-td>
             </b-tr>
-            <b-tr>
+            <b-tr v-if="proposal.metadata">
               <b-td>
                 Metadata
               </b-td><b-td>{{ proposal.metadata }}</b-td>
@@ -80,6 +80,21 @@
             <b-td class="text-center">
               {{ $t('upgrade_time') }} {{ upgradeTime }}
               <flip-countdown :deadline="upgradeTime" />
+              <b-input-group prepend="Estimated by block time: ">
+                <b-form-select v-model="blocktime">
+                  <b-form-select-option value="7">
+                    7s
+                  </b-form-select-option>
+                  <b-form-select-option value="6">
+                    6s
+                  </b-form-select-option>
+                  <b-form-select-option value="2">
+                    2s
+                  </b-form-select-option>
+                  <b-form-select-option value="1">
+                    1s
+                  </b-form-select-option>
+                </b-form-select></b-input-group>
             </b-td>
           </b-tr>
         </b-table-simple>
@@ -263,7 +278,7 @@
 <script>
 import {
   BCard, BCardBody, BCardFooter, BButton, BTable, BTableSimple, BTr, BTd, BCardTitle, BCardHeader,
-  BProgressBar, BProgress, BTooltip, BBadge,
+  BProgressBar, BProgress, BTooltip, BBadge, BFormSelect, BFormSelectOption, BInputGroup, BInputGroupPrepend,
 } from 'bootstrap-vue'
 import FlipCountdown from 'vue2-flip-countdown'
 // import fetch from 'node-fetch'
@@ -294,12 +309,17 @@ export default {
     BProgress,
     BTooltip,
     BBadge,
+    BFormSelect,
+    BFormSelectOption,
+    BInputGroup,
+    BInputGroupPrepend,
     ObjectFieldComponent,
     FlipCountdown,
     OperationModal,
   },
   data() {
     return {
+      blocktime: 6,
       tallyParam: null,
       latest: {},
       next: null,
@@ -358,7 +378,7 @@ export default {
         if (Number(this.proposal?.contents.plan.height || 0) > 0 && this.latest?.block) {
           const blocks = Number(this.proposal.contents.plan.height) - Number(this.latest.block?.header?.height || 0)
           if (blocks > 0) {
-            const endtime = dayjs().add(blocks * 6, 'second').format('YYYY-MM-DD HH:mm:ss')
+            const endtime = dayjs().add(blocks * this.blocktime, 'second').format('YYYY-MM-DD HH:mm:ss')
             return endtime
           }
         }

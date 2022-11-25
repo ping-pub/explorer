@@ -34,6 +34,10 @@ export default class Proposal {
     if (this.contents) {
       this.title = this.contents.title
       this.description = this.contents.description
+      this.type = element.content.type
+      if (element.content['@type']) {
+        this.type = element.content['@type']
+      }
     }
     this.metadata = element.metadata
     return this
@@ -50,6 +54,7 @@ export default class Proposal {
   versionFixed(ver) {
     if (compareVersions(ver, '0.46') >= 0) {
       [this.contents] = this.element.messages
+      if (this.contents) this.type = this.contents['@type']
       if (this.contents['@type'] === '/cosmos.gov.v1.MsgExecLegacyContent') {
         this.title = this.contents.content.title
         this.description = this.contents.content.description
