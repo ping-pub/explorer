@@ -277,6 +277,9 @@ export default {
       })
       return Object.values(valCounter).sort((a, b) => b.counter - a.counter)
     },
+    h() {
+      return this.height
+    },
   },
   created() {
     const cached = JSON.parse(getCachedValidators(this.$route.params.chain))
@@ -323,13 +326,15 @@ export default {
         const blocks = []
         // update height
         let promise = Promise.resolve()
-        for (let i = height - 1; i > height - 50; i -= 1) {
+        for (let i = height - 1; i > height - 48; i -= 1) {
           blocks.unshift({ sigs: {}, height: i > 0 ? i : 0 })
-          if (i > height - 48 && i > 0) {
-            promise = promise.then(() => new Promise(resolve => {
+          promise = promise.then(() => new Promise(resolve => {
+            if (i > this.blocks[0].height && i > 0) { // filter useless loading
               this.fetch_status(i, resolve)
-            }))
-          }
+            } else {
+              resolve()
+            }
+          }))
         }
 
         const sigs = this.initColor()
@@ -390,8 +395,8 @@ export default {
         res.block.last_commit.signatures.forEach(x => {
           if (x.validator_address) sigs[x.validator_address] = 'bg-success'
         })
-        this.height = res.block.header.height
-        if (Number(this.height) % 100 === 0) { // update the missing number each 100
+        this.height = Number(res.block.header.height)
+        if (this.height % 100 === 0) { // update the missing number each 100
           this.fetchMissingInfo()
         }
         const block = this.blocks.find(b => b.height === res.block.last_commit.height)
