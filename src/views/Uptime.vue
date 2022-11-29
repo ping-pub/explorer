@@ -283,19 +283,11 @@ export default {
     if (cached) {
       this.validators = cached
     }
+    this.fetchMissingInfo()
     this.$http.getValidatorList().then(res => {
       this.validators = res
     })
-    this.$http.getSlashingSigningInfo().then(res => {
-      if (res.info) {
-        res.info.forEach(x => {
-          if (x.address) {
-            const hex = toBase64(fromBech32(x.address).data)
-            this.missing[hex] = x
-          }
-        })
-      }
-    })
+
     this.initBlocks()
   },
   beforeDestroy() {
@@ -304,6 +296,18 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    fetchMissingInfo() {
+      this.$http.getSlashingSigningInfo().then(res => {
+        if (res.info) {
+          res.info.forEach(x => {
+            if (x.address) {
+              const hex = toBase64(fromBech32(x.address).data)
+              this.missing[hex] = x
+            }
+          })
+        }
+      })
+    },
     pinValidator() {
       localStorage.setItem('pinned', this.pinned)
     },
@@ -387,6 +391,9 @@ export default {
           if (x.validator_address) sigs[x.validator_address] = 'bg-success'
         })
         this.height = res.block.header.height
+        if (Number(this.height) % 100 === 0) { // update the missing number each 100
+          this.fetchMissingInfo()
+        }
         const block = this.blocks.find(b => b.height === res.block.last_commit.height)
         if (typeof block === 'undefined') { // mei
           // this.$set(block, 0, typeof sigs !== 'undefined')
