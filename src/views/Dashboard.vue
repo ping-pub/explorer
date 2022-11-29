@@ -333,6 +333,7 @@
                 <!-- size -->
                 <b-button-group
                   size="sm"
+                  class="d-none"
                 >
                   <b-button
                     v-b-modal.operation-modal
@@ -362,18 +363,41 @@
                     <feather-icon icon="LogOutIcon" />
                   </b-button>
                 </b-button-group>
+                <b-dropdown
+                  v-b-modal.operation-modal
+                  split
+                  variant="outline-primary"
+                  text="Delegate"
+                  class="mr-1"
+                  size="sm"
+                  @click="selectDelegation(data,'Delegate')"
+                >
+                  <template #button-content>
+                    Delegate
+                  </template>
+                  <b-dropdown-item
+                    v-b-modal.operation-modal
+                    @click="selectDelegation(data,'Redelegate')"
+                  >
+                    Redelegate
+                  </b-dropdown-item>
+                  <b-dropdown-item
+                    v-b-modal.operation-modal
+                    @click="selectDelegation(data,'Unbond')"
+                  >
+                    Unbond
+                  </b-dropdown-item>
+                </b-dropdown>
+                <b-button
+                  v-b-modal.operation-modal
+                  variant="outline-primary"
+                  size="sm"
+                  @click="selectWithdraw()"
+                >
+                  Widthdraw Rewards
+                </b-button>
               </template>
             </b-table>
-            <b-card-footer class="text-right">
-              <b-button
-                v-b-modal.operation-modal
-                variant="outline-primary"
-                @click="selectWithdraw()"
-              >
-                <feather-icon icon="AwardIcon" />
-                Widthdraw Rewards
-              </b-button>
-            </b-card-footer>
           </b-card>
         </b-col>
       </b-row>
@@ -459,6 +483,7 @@
       :proposal-id="selectedProposalId"
       :proposal-title="selectedTitle"
     />
+    <div id="txevent" />
   </div>
 </template>
 
@@ -466,6 +491,7 @@
 import {
   BRow, BCol, BAlert, BCard, BTable, BFormCheckbox, BCardHeader, BCardTitle, BMedia, BMediaAside, BMediaBody, BAvatar,
   BCardBody, BLink, BButtonGroup, BButton, BTooltip, VBModal, VBTooltip, BCardFooter, BProgress, BProgressBar, BBadge,
+  BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 import {
   formatNumber, formatTokenAmount, isToken, percent, timeIn, toDay, toDuration, tokenFormatter, getLocalAccounts,
@@ -487,6 +513,8 @@ export default {
     BButtonGroup,
     BTooltip,
     BButton,
+    BDropdown,
+    BDropdownItem,
     BRow,
     BCol,
     BAlert,
@@ -646,6 +674,22 @@ export default {
       })
     }
   },
+  mounted() {
+    const elem = document.getElementById('txevent')
+    elem.addEventListener('txcompleted', () => {
+      const key = this.$store?.state?.chains?.defaultWallet
+      if (key) {
+        const accounts = getLocalAccounts() || {}
+        const account = Object.entries(accounts)
+          .map(v => ({ wallet: v[0], address: v[1].address.find(x => x.chain === this.$store.state.chains.selected.chain_name) }))
+          .filter(v => v.address)
+          .find(x => x.wallet === key)
+        if (account) {
+          this.fetchAccount(account.address.addr)
+        }
+      }
+    })
+  },
   methods: {
     caculateTallyResult(tally) {
       if (this.tallyParam && tally && this.totalPower > 0) {
@@ -699,8 +743,6 @@ export default {
       return '-'
     },
     fetchAccount(address) {
-      const conf = this.$http.getSelectedConfig()
-      const decimal = conf.assets[0].exponent || '6'
       this.address = address
       this.$http.getBankAccountBalance(address).then(bal => {
         this.walletBalances = this.formatToken(bal)
