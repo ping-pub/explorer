@@ -31,7 +31,7 @@
                 {{ chainname }}
               </b-breadcrumb-item>
               <b-breadcrumb-item
-                v-for="item in $route.meta.breadcrumb"
+                v-for="item in breadcrumb"
                 :key="item.text"
                 :active="item.active"
                 :to="item.to"
@@ -74,6 +74,14 @@ export default {
   computed: {
     chainname() {
       return this.$store?.state?.chains?.selected?.chain_name
+    },
+    /**
+     * Invoke `route.meta.breadcrumb($route)` if breadcrumb is callable.
+     */
+    breadcrumb() {
+      const { breadcrumb } = this.$route.meta
+      const breadcrumbIsCallable = typeof breadcrumb === 'function'
+      return breadcrumbIsCallable ? breadcrumb(this.$route) : breadcrumb
     },
   },
 }
