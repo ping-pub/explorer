@@ -468,11 +468,10 @@ export default {
       if (this.selectedStatus === 'inactive') return 'primary'
       const { index, item } = data
       if (index === 0) {
-        window.sum = item.tokens
-      } else {
-        window.sum += item.tokens
+        window.sum = 0
       }
       const rank = window.sum / this.stakingPool
+      window.sum += item.tokens // sum up after the calculating.
       if (rank < 0.333) {
         return 'danger'
       }
