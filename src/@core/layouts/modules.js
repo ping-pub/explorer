@@ -1,53 +1,53 @@
 export default () => ([
   {
     scope: 'normal',
-    title: 'dashboard',
+    title: 'dashboard.dashboard',
     route: 'dashboard',
   },
   {
     scope: 'normal',
-    title: 'blocks',
+    title: 'dashboard.blocks',
     route: 'blocks',
   },
   {
     scope: 'normal',
-    title: 'staking',
+    title: 'dashboard.staking',
     route: 'staking',
   },
   {
     scope: 'normal',
-    title: 'governance',
+    title: 'dashboard.governance',
     route: 'governance',
     exclude: 'emoney',
   },
   {
     scope: 'normal',
-    title: 'uptime',
+    title: 'dashboard.uptime',
     route: 'uptime',
   },
   {
     scope: 'normal',
-    title: 'parameters',
+    title: 'dashboard.parameters',
     route: 'parameters',
   },
   {
     scope: 'normal',
-    title: 'statesync',
+    title: 'dashboard.statesync',
     route: 'statesync',
   },
   {
     scope: 'normal',
-    title: 'consensus',
+    title: 'dashboard.consensus',
     route: 'consensus',
   },
   {
     scope: 'cos-mos',
-    title: 'gravity',
+    title: 'dashboard.gravity',
     route: 'gravity',
   },
   {
     scope: 'osmosis',
-    title: 'trade',
+    title: 'dashboard.trade',
     route: 'osmosis-trade',
   },
 ])

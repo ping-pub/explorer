@@ -40,6 +40,7 @@
   },
 
   "dashboard": {
+    "dashboard": "Dashboard",
     "staking": "Staking",
     "governance": "Governance",
     "summary": "Summary",
@@ -47,7 +48,9 @@
     "blockchains": "Blockchains",
     "uptime": "Uptime",
     "statesync": "State Sync",
-    "trade": "Trade"
+    "trade": "Trade",
+    "parameters": "Parameters",
+    "consensus": "consensus"
   },
 
   "governance-proposal": {
