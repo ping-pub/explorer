@@ -53,7 +53,7 @@ export default class Proposal {
 
   versionFixed(ver) {
     if (compareVersions(ver, '0.46') >= 0) {
-      [this.contents] = this.element.messages
+      if (this.element.messages) [this.contents] = this.element.messages
       if (this.contents) this.type = this.contents['@type']
       if (this.contents['@type'] === '/cosmos.gov.v1.MsgExecLegacyContent') {
         this.title = this.contents.content.title
