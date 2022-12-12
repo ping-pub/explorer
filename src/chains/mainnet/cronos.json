@@ -1,0 +1,17 @@
+
+{
+    "chain_name": "cronos",
+    "api": ["https://rest.cronos.org"],
+    "rpc": ["https://rpc.cronos.org:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.11",
+    "coin_type": "60",
+    "min_tx_fee": "5000000000000000",
+    "addr_prefix": "crc",
+    "logo": "/logos/cronos.png",
+    "assets": [{
+        "base": "basecro",
+        "symbol": "CRO",
+        "exponent": "18"
+    }]
+}
