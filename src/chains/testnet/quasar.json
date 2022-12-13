@@ -1,0 +1,20 @@
+{
+    "chain_name": "quasar",
+    "coingecko": "",
+    "api": ["https://quasar-testnet-api.polkachu.com"],
+    "rpc": ["https://quasar-testnet-rpc.polkachu.com", "https://questnet.quasar-finance.rhinostake.com"],
+    "sdk_version": "0.45.6",
+    "coin_type": 118,
+    "min_tx_fee": "8000",
+    "addr_prefix": "quasar",
+    "logo": "/logos/quasar.png",
+    "assets": [
+      {
+        "base": "uqsr",
+        "symbol": "QSR",
+        "exponent": 6,
+        "coingecko_id": "",
+        "logo": "/logos/quasar.png"
+      }
+    ]
+  }
