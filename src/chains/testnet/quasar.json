@@ -1,8 +1,8 @@
 {
     "chain_name": "quasar",
     "coingecko": "",
-    "api": ["https://quasar-testnet-api.polkachu.com"],
-    "rpc": ["https://quasar-testnet-rpc.polkachu.com", "https://questnet.quasar-finance.rhinostake.com"],
+    "api": ["https://quasar-testnet-api.polkachu.com", "https://lcd-office.cosmostation.io/quasar-testnet"],
+    "rpc": ["https://quasar-testnet-rpc.polkachu.com", "https://rpc-office.cosmostation.io/quasar-testnet", "https://questnet.quasar-finance.rhinostake.com"],
     "sdk_version": "0.45.6",
     "coin_type": 118,
     "min_tx_fee": "8000",
@@ -17,4 +17,4 @@
         "logo": "/logos/quasar.png"
       }
     ]
-  }
+}
