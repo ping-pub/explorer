@@ -6,7 +6,7 @@
   "sdk_version": "0.46.7",
   "coin_type": "118",
   "min_tx_fee": "8000",
-  "addr_prefix": "quicksilver",
+  "addr_prefix": "quick",
   "logo": "/logos/quicksilver.png",
   "assets": [
     {
