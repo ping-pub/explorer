@@ -15,15 +15,15 @@
 
 </div>
 
-Ping Explorer is a light explorer for Cosmos-based Blockchains.  https://ping.pub .
+`Ping Dashboard` is a light explorer for Cosmos-based Blockchains.  https://ping.pub .
 
 ## What is the difference between Ping explorer and other explorers? 
 
-Ping Explorer is designed to explore blockchain data as real as possible, therefore there is no cache, no pre-processing. Ping Explorer only fetch data from Cosmos full node via LCD/RPC endpoints. We call it "Light Explorer".
+`Ping Dashboard` is designed to explore blockchain data as real as possible, therefore there is no cache, no pre-processing. `Ping Dashboard` only fetch data from Cosmos full node via LCD/RPC endpoints. We call it "Light Explorer".
 
 ## Do you want to list your blockchain on ping.pub?
 
-Pull your request [here](./src/chains), We will add your chains as soon as possible. It is **FREE** (You must have 10+ independent validators on your chain).
+Submit your pull request [here](./src/chains), We will add your chains as soon as possible. It is **FREE** (You must have 10+ independent validators on your chain).
 
 We remain neutral to all chains, and we do not comment on their market prospects, technical risks, or investment risks. The only condition we list on ping.pub is if there are ten validators, and we cannot determine if these validators are controlled by the same entity.
 
