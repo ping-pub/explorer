@@ -25,12 +25,14 @@ Ping Explorer is designed to explore blockchain data as real as possible, theref
 
 Pull your request [here](./src/chains), We will add your chains as soon as possible. It is **FREE** (You must have 10+ independent validators on your chain).
 
+We remain neutral to all chains, and we do not comment on their market prospects, technical risks, or investment risks. The only condition we list on ping.pub is if there are ten validators, and we cannot determine if these validators are controlled by the same entity.
+
 ## Why Ping explorer use official/trusted third party public LCD/rpc server? 
 
-We have two considerations: 
+There are two main reasons:
 
- - Trust, In decentralize system, everything controlled by one single team/organization could be risks. So we decided to co-build with the community. 
- - Limited Resources: ` Ping Dashboard ` will list hundreds cosmos-based blockchains in the future, it's impossible for our team to run validators or fullnodes for all of those chains.
+   - Trust, in a decentralized system, anything controlled by one entity cannot be trusted. So we decided to build with the community.
+   - Limited resources: `Ping Dashboard` will list hundreds of cosmos-based blockchains in the future, and it is impossible for our team to run validators or full nodes for all of them.
 
 
 ## Donation
