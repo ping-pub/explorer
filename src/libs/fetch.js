@@ -145,7 +145,7 @@ export default class ChainFetch {
   }
 
   async getBankTotal(denom) {
-    if (compareVersions(this.config.sdk_version, '0.46.5') > 0) {
+    if (compareVersions(this.config.sdk_version, '0.46.2') > 0) {
       return this.get(`/cosmos/bank/v1beta1/supply/by_denom?denom=${denom}`).then(data => commonProcess(data).amount)
     }
     if (compareVersions(this.config.sdk_version, '0.40') < 0) {
