@@ -1,8 +1,8 @@
 {
     "chain_name": "osmosis",
     "coingecko": "osmosis",
-    "api": ["https://testnet-rest.osmosis.zone", "https://lcd.osmo-test.ccvalidators.com", "https://osmosistest-lcd.quickapi.com"],
-    "rpc": ["https://testnet-rpc.osmosis.zone:443", "https://rpc.osmo-test.ccvalidators.com:443"," https://osmosistest-rpc.quickapi.com:443"],
+    "api": ["https://lcd-test.osmosis.zone", "https://lcd.osmo-test.ccvalidators.com", "https://osmosistest-lcd.quickapi.com"],
+    "rpc": ["https://rpc-test.osmosis.zone", "https://testnet-rpc.osmosis.zone:443", "https://rpc.osmo-test.ccvalidators.com:443"," https://osmosistest-rpc.quickapi.com:443"],
     "snapshot_provider": "",
     "sdk_version": "0.44.5",
     "coin_type": "118",
