@@ -6,7 +6,7 @@
     "snapshot_provider": "29edc55748bc341224f711a05cb0a9f6d73b4da3@bitcanna.rpc.ping.pub:26656",
     "sdk_version": "0.45.10",
     "coin_type": "118",
-    "min_tx_fee": "8000",
+    "min_tx_fee": "420",
     "assets": [{
         "base": "ubcna",
         "symbol": "BCNA",
