@@ -1,0 +1,22 @@
+{
+  "chain_name": "canto-testnet",
+  "api": [
+    "https://api-cosmos.testnet.canto.neobase.one"
+  ],
+  "rpc": [
+    "https://rpc-cosmos.testnet.canto.neobase.one"
+  ],
+  "snapshot_provider": "",
+  "sdk_version": "0.45.6",
+  "coin_type": "60",
+  "min_tx_fee": "800",
+  "addr_prefix": "canto",
+  "logo": "/logos/canto.png",
+  "assets": [
+    {
+      "base": "acanto",
+      "symbol": "CANTO",
+      "exponent": "18"
+    }
+  ]
+}
