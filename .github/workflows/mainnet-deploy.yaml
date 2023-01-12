@@ -12,13 +12,14 @@ jobs:
     name: Ping deploy
     runs-on: mainnet 
     steps:
-    - name: print
-      run: echo ${GITHUB_REF#refs/heads/}
+    - name: Environment
+      run:  export NODE_OPTIONS="--max_old_space_size=4096"
+      
     - name: Git Checkout Latest
       uses: actions/checkout@v3
       
     - name: Install
-      run: yarn install
+      run: yarn install --ignore-engines
 
     - name: Build
       run: yarn run vue-cli-service build
