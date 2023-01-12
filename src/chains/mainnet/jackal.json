@@ -1,6 +1,6 @@
 {
     "chain_name": "jackal",
-    "coingecko": "jackal_protocol",
+    "coingecko": "jackal-protocol",
     "api": [
         "https://api.jackalprotocol.com",
         "https://jackal-api.polkachu.com",
@@ -13,7 +13,7 @@
     ],
     "snapshot_provider": "",
     "coin_type": "118",
-    "sdk_version": "0.45.10",
+    "sdk_version": "0.45.11",
     "addr_prefix": "jkl",
     "logo": "/logos/jackal.png",
     "assets": [
