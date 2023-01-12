@@ -98,6 +98,29 @@
         <small @click="copy(hexAddress)">{{ hexAddress }}</small>
       </b-media-body>
     </b-media>
+    <b-media
+      class="mb-1"
+      no-body
+    >
+      <b-media-aside class="mr-1">
+        <b-avatar
+          rounded
+          variant="light-primary"
+          size="34"
+        >
+          <feather-icon
+            icon="HashIcon"
+            size="18"
+          />
+        </b-avatar>
+      </b-media-aside>
+      <b-media-body class="text-truncate">
+        <h6 class="mb-0">
+          Signer Address
+        </h6>
+        <small @click="copy(valconsAddress)">{{ valconsAddress }}</small>
+      </b-media-body>
+    </b-media>
   </b-card>
 </template>
 
@@ -135,6 +158,10 @@ export default {
       required: true,
     },
     hexAddress: {
+      type: String,
+      default: '-',
+    },
+    valconsAddress: {
       type: String,
       default: '-',
     },
