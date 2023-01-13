@@ -1,5 +1,5 @@
 import {
-  Bech32, fromBase64, fromBech32, fromHex, toBase64, toBech32, toHex,
+  fromBase64, fromBech32, fromHex, toBase64, toBech32, toHex,
 } from '@cosmjs/encoding'
 import { sha256, stringToPath } from '@cosmjs/crypto'
 // ledger
@@ -82,20 +82,26 @@ export async function connectLedger(transport = 'usb') {
   return new CosmosApp(trans)
 }
 
-export function operatorAddressToAccount(operAddress) {
-  const { prefix, data } = Bech32.decode(operAddress)
-  if (prefix === 'iva') { // handle special cases
-    return Bech32.encode('iaa', data)
-  }
-  if (prefix === 'crocncl') { // handle special cases
-    return Bech32.encode('cro', data)
-  }
-  return Bech32.encode(prefix.replace('valoper', ''), data)
+export function valoperToPrefix(valoper) {
+  const prefixIndex = valoper.indexOf('valoper')
+  if (prefixIndex === -1) return null
+  return valoper.slice(0, prefixIndex)
 }
 
-// TODO, not tested
-export function pubkeyToAccountAddress(pubkey, prefix) {
-  return Bech32.encode(prefix, pubkey, 40)
+export function operatorAddressToAccount(operAddress) {
+  const { prefix, data } = fromBech32(operAddress)
+  if (prefix === 'iva') { // handle special cases
+    return toBech32('iaa', data)
+  }
+  if (prefix === 'crocncl') { // handle special cases
+    return toBech32('cro', data)
+  }
+  return toBech32(prefix.replace('valoper', ''), data)
+}
+
+export function pubKeyToValcons(pubkey, prefix) {
+  const addressData = sha256(fromBase64(pubkey.key)).slice(0, 20)
+  return toBech32(`${prefix}valcons`, addressData)
 }
 
 export function toETHAddress(cosmosAddress) {
