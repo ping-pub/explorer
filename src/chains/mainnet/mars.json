@@ -14,7 +14,7 @@
     ],
     "snapshot_provider": "",
     "coin_type": "118",
-    "sdk_version": "0.45.11",
+    "sdk_version": "0.46.8",
     "addr_prefix": "mars",
     "logo": "/logos/mars.jpg",
     "assets": [
