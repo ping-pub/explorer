@@ -23,7 +23,7 @@
               style="color: #fff"
               class="mb-0"
             >
-              Address: <feather-icon
+              {{ $t('walletAccountDetail.address') }} <feather-icon
                 icon="CopyIcon"
                 size="18"
                 @click="copy()"
@@ -38,7 +38,7 @@
         class="d-flex flex-row"
       >
         <b-card-header class="pt-0 pl-0 pr-0">
-          <b-card-title>Assets</b-card-title>
+          <b-card-title>{{ $t('walletAccountDetail.assets') }}</b-card-title>
           <div>
             <b-button
               v-b-modal.operation-modal
@@ -50,7 +50,7 @@
               <feather-icon
                 icon="SendIcon"
                 class="d-md-none"
-              /><small class="d-none d-md-block">Transfer</small>
+              /><small class="d-none d-md-block">{{ $t('walletAccountDetail.transfer') }}</small>
             </b-button>
             <b-button
               v-b-modal.operation-modal
@@ -61,7 +61,7 @@
                icon="SendIcon"
                class="d-md-none"
              />
-              <span class="d-none d-md-block">IBC Transfer</span>
+              <span class="d-none d-md-block">{{ $t('walletAccountDetail.ibc_transfer') }}</span>
             </b-button>
           </div>
         </b-card-header>
@@ -117,7 +117,7 @@
               </div>
               <!--/ tokens -->
               <div class="text-right border-top pt-1">
-                <h2>Total: {{ currency }}{{ formatNumber(assetTable.currency) }}</h2>
+                <h2>{{ $t('walletAccountDetail.total') }}{{ currency }}{{ formatNumber(assetTable.currency) }}</h2>
               </div>
             </b-col>
           </b-row>
@@ -127,7 +127,7 @@
         v-if="unbonding && unbonding.length > 0"
       >
         <b-card-header class="pt-0 pl-0 pr-0">
-          <b-card-title>Unbonding Tokens</b-card-title>
+          <b-card-title>{{ $t('walletAccountDetail.unbonding') }}</b-card-title>
         </b-card-header>
         <b-card-body class="pl-0 pr-0">
           <b-row
@@ -135,7 +135,7 @@
             :key="item.validator_address"
           >
             <b-col cols="12">
-              <span class="font-weight-bolder">From: <router-link :to="`../staking/${item.validator_address}`">{{ item.validator_address }}</router-link></span>
+              <span class="font-weight-bolder">{{ $t('walletAccountDetail.from') }}<router-link :to="`../staking/${item.validator_address}`">{{ item.validator_address }}</router-link></span>
             </b-col>
             <b-col cols="12">
               <b-table
@@ -164,7 +164,7 @@
         v-if="delegations"
       >
         <b-card-header class="pt-0 pl-0 pr-0">
-          <b-card-title>Delegation</b-card-title>
+          <b-card-title>{{ $t('walletAccountDetail.delegation') }}</b-card-title>
           <div>
             <b-button
               v-b-modal.operation-modal
@@ -176,7 +176,7 @@
               <feather-icon
                 icon="LogInIcon"
                 class="d-md-none"
-              /><small class="d-none d-md-block">Delegate</small>
+              /><small class="d-none d-md-block">{{ $t('walletAccountDetail.delegate') }}</small>
             </b-button>
             <b-button
               v-if="delegations"
@@ -188,7 +188,7 @@
               <feather-icon
                 icon="ShareIcon"
                 class="d-md-none"
-              /><small class="d-none d-md-block"> Withdraw Rewards</small>
+              /><small class="d-none d-md-block">{{ $t('walletAccountDetail.withdraw') }}</small>
             </b-button>
           </div>
         </b-card-header>
@@ -284,25 +284,25 @@
           <b-tbody v-if="account.type === 'cosmos-sdk/BaseAccount'">
             <b-tr>
               <b-td>
-                Account Type
+                {{ $t('walletAccountDetail.acct_type') }}
               </b-td><b-td> {{ account.type }} </b-td>
             </b-tr>
             <b-tr>
               <b-td class="max-width:100px;">
-                Account Number
+                {{ $t('walletAccountDetail.acct_num') }}
               </b-td><b-td> {{ account.value.account_number }} </b-td>
             </b-tr>
             <b-tr>
-              <b-td> Sequence </b-td><b-td> {{ account.value.sequence }} </b-td>
+              <b-td> {{ $t('walletAccountDetail.seq') }} </b-td><b-td> {{ account.value.sequence }} </b-td>
             </b-tr>
             <b-tr>
-              <b-td> Public Key </b-td><b-td> <object-field-component :tablefield="account.value.public_key" /> </b-td>
+              <b-td> {{ $t('walletAccountDetail.pub_key') }} </b-td><b-td> <object-field-component :tablefield="account.value.public_key" /> </b-td>
             </b-tr>
           </b-tbody>
           <b-tbody v-else-if="account.type === 'cosmos-sdk/PeriodicVestingAccount' && account.value.base_vesting_account">
             <b-tr>
               <b-td>
-                Account Type
+                {{ $t('walletAccountDetail.acct_type') }}
               </b-td>
               <b-td>
                 {{ account.type }}
@@ -310,32 +310,32 @@
             </b-tr>
             <b-tr>
               <b-td>
-                Account Number
+                {{ $t('walletAccountDetail.acct_num') }}
               </b-td><b-td> {{ account.value.base_vesting_account.base_account.account_number }} </b-td>
             </b-tr>
             <b-tr>
-              <b-td> Sequence </b-td><b-td> {{ account.value.base_vesting_account.base_account.sequence }} </b-td>
+              <b-td> {{ $t('walletAccountDetail.seq') }} </b-td><b-td> {{ account.value.base_vesting_account.base_account.sequence }} </b-td>
             </b-tr>
             <b-tr>
-              <b-td> Public Key </b-td><b-td> <object-field-component :tablefield="account.value.base_vesting_account.base_account.public_key" /> </b-td>
+              <b-td> {{ $t('walletAccountDetail.pub_key') }} </b-td><b-td> <object-field-component :tablefield="account.value.base_vesting_account.base_account.public_key" /> </b-td>
             </b-tr>
             <b-tr>
-              <b-td> Original Vesting </b-td><b-td> {{ formatToken(account.value.base_vesting_account.original_vesting) }} </b-td>
+              <b-td> {{ $t('walletAccountDetail.orig_vest') }} </b-td><b-td> {{ formatToken(account.value.base_vesting_account.original_vesting) }} </b-td>
             </b-tr>
             <b-tr>
-              <b-td> Delegated Free </b-td><b-td> {{ formatToken(account.value.base_vesting_account.delegated_free) }} </b-td>
+              <b-td> {{ $t('walletAccountDetail.delegated_free') }} </b-td><b-td> {{ formatToken(account.value.base_vesting_account.delegated_free) }} </b-td>
             </b-tr>
             <b-tr>
-              <b-td> Delegated Vesting </b-td><b-td> {{ formatToken(account.value.base_vesting_account.delegated_vesting) }} </b-td>
+              <b-td> {{ $t('walletAccountDetail.delegated_vest') }} </b-td><b-td> {{ formatToken(account.value.base_vesting_account.delegated_vesting) }} </b-td>
             </b-tr>
             <b-tr>
-              <b-td> Vesting Time </b-td><b-td> {{ formatTime(account.value.start_time) }} - {{ formatTime(account.value.base_vesting_account.end_time) }}</b-td>
+              <b-td> {{ $t('walletAccountDetail.vest_time') }} </b-td><b-td> {{ formatTime(account.value.start_time) }} - {{ formatTime(account.value.base_vesting_account.end_time) }}</b-td>
             </b-tr>
             <b-tr>
-              <b-td> Vesting Periods </b-td>
+              <b-td> {{ $t('walletAccountDetail.vest_period') }} </b-td>
               <b-td>
                 <b-table-simple>
-                  <th>Length</th><th>Amount</th>
+                  <th>{{ $t('walletAccountDetail.length') }}</th><th>{{ $t('walletAccountDetail.amount') }}</th>
                   <b-tr
                     v-for="p, index in account.value.vesting_periods"
                     :key="index"
@@ -349,31 +349,31 @@
           <b-tbody v-else-if="account.type === 'cosmos-sdk/DelayedVestingAccount' && account.value.base_vesting_account">
             <b-tr>
               <b-td>
-                Account Type
+                {{ $t('walletAccountDetail.acct_type') }}
               </b-td><b-td> {{ account.type }} </b-td>
             </b-tr>
             <b-tr>
               <b-td style="max-width:100px;">
-                Account Number
+                {{ $t('walletAccountDetail.acct_num') }}
               </b-td><b-td> {{ account.value.base_vesting_account.base_account.account_number }} </b-td>
             </b-tr>
             <b-tr>
-              <b-td> Sequence </b-td><b-td> {{ account.value.base_vesting_account.base_account.sequence }} </b-td>
+              <b-td> {{ $t('walletAccountDetail.seq') }} </b-td><b-td> {{ account.value.base_vesting_account.base_account.sequence }} </b-td>
             </b-tr>
             <b-tr>
-              <b-td> Public Key </b-td><b-td> <object-field-component :tablefield="account.value.base_vesting_account.base_account.public_key" /> </b-td>
+              <b-td> {{ $t('walletAccountDetail.pub_key') }} </b-td><b-td> <object-field-component :tablefield="account.value.base_vesting_account.base_account.public_key" /> </b-td>
             </b-tr>
             <b-tr>
-              <b-td> Original Vesting </b-td><b-td> {{ formatToken(account.value.base_vesting_account.original_vesting) }} </b-td>
+              <b-td> {{ $t('walletAccountDetail.orig_vest') }} </b-td><b-td> {{ formatToken(account.value.base_vesting_account.original_vesting) }} </b-td>
             </b-tr>
             <b-tr>
-              <b-td> Delegated Free </b-td><b-td> {{ formatToken(account.value.base_vesting_account.delegated_free) }} </b-td>
+              <b-td> {{ $t('walletAccountDetail.delegated_free') }} </b-td><b-td> {{ formatToken(account.value.base_vesting_account.delegated_free) }} </b-td>
             </b-tr>
             <b-tr>
-              <b-td> Delegated Vesting </b-td><b-td> {{ formatToken(account.value.base_vesting_account.delegated_vesting) }} </b-td>
+              <b-td> {{ $t('walletAccountDetail.delegated_vest') }} </b-td><b-td> {{ formatToken(account.value.base_vesting_account.delegated_vesting) }} </b-td>
             </b-tr>
             <b-tr>
-              <b-td> End Time </b-td><b-td> {{ formatTime(account.value.base_vesting_account.end_time) }}</b-td>
+              <b-td> {{ $t('walletAccountDetail.end_time') }} </b-td><b-td> {{ formatTime(account.value.base_vesting_account.end_time) }}</b-td>
             </b-tr>
           </b-tbody>
           <object-field-component
@@ -403,10 +403,10 @@
       <div class="misc-inner p-2 p-sm-3">
         <div class="w-100 text-center">
           <h2 class="mb-1">
-            Account not found  🕵🏻‍♀️
+            {{ $t('walletAccountDetail.acct_not_found') }}  🕵🏻‍♀️
           </h2>
           <p class="mb-2">
-            Oops! 😖 {{ error }}.
+            {{ $t('walletAccountDetail.opps') }} 😖 {{ error }}.
           </p>
 
           <b-button
@@ -414,7 +414,7 @@
             class="mb-2 btn-sm-block"
             :to="{path:'../'}"
           >
-            Back to home
+            {{ $t('walletAccountDetail.back_home') }}
           </b-button>
         </div>
       </div>

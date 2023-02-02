@@ -20,27 +20,27 @@
     <div class="gov-wrapper flex-wrap my-1">
       <div class="gov">
         <p class="card-text mb-25">
-          {{$t('governance-proposal.proposal_status')}}
+          {{$t('governanceProposal.proposal_status')}}
         </p>
         <h6 class="mb-0">
           <span v-if="p.status == 1">
-            {{$t('governance-proposal.proposal_status_deposit')}}
+            {{$t('governanceProposal.proposal_status_deposit')}}
           </span>
           <span v-else-if="p.status == 2">
-            {{$t('governance-proposal.proposal_status_voting')}}
+            {{$t('governanceProposal.proposal_status_voting')}}
           </span>
           <span v-else-if="p.status == 3">
-            {{$t('governance-proposal.proposal_status_passed')}}
+            {{$t('governanceProposal.proposal_status_passed')}}
           </span>
           <span v-else-if="p.status == 4">
-            {{$t('governance-proposal.proposal_status_rejected')}}
+            {{$t('governanceProposal.proposal_status_rejected')}}
           </span>
           <span v-else>{{ p.status }}</span>
         </h6>
       </div>
       <div class="gov">
         <p class="card-text mb-25">
-          {{$t('governance-proposal.proposal_status_start_date')}}
+          {{$t('governanceProposal.proposal_status_start_date')}}
         </p>
         <h6 class="mb-0">
           {{ formatDate(p.voting_start_time) }}
@@ -48,7 +48,7 @@
       </div>
       <div class="gov">
         <p class="card-text mb-25">
-          {{$t('governance-proposal.proposal_status_end_date')}}
+          {{$t('governanceProposal.proposal_status_end_date')}}
         </p>
         <h6 class="mb-0">
           {{ formatDate(p.voting_end_time) }}
@@ -56,7 +56,7 @@
       </div>
       <div class="gov">
         <p class="card-text mb-25">
-          {{$t('governance-proposal.proposal_status_deposit')}}
+          {{$t('governanceProposal.proposal_status_deposit')}}
         </p>
         <h6 class="mb-0">
           {{ formatToken(p.total_deposit) || '-' }}
@@ -119,22 +119,22 @@
         <b-tooltip
           :target="'vote-yes'+p.id"
         >
-          {{ percent(p.tally.yes) }}% {{ $t('governance-proposal.proposal_votes_yes') }}
+          {{ percent(p.tally.yes) }}% {{ $t('governanceProposal.proposal_votes_yes') }}
         </b-tooltip>
         <b-tooltip
           :target="'vote-no'+p.id"
         >
-          {{ percent(p.tally.no) }}% {{ $t('governance-proposal.proposal_votes_no') }}
+          {{ percent(p.tally.no) }}% {{ $t('governanceProposal.proposal_votes_no') }}
         </b-tooltip>
         <b-tooltip
           :target="'vote-veto'+p.id"
         >
-          {{ percent(p.tally.veto) }}% {{ $t('governance-proposal.proposal_votes_nwv') }}
+          {{ percent(p.tally.veto) }}% {{ $t('governanceProposal.proposal_votes_nwv') }}
         </b-tooltip>
         <b-tooltip
           :target="'vote-abstain'+p.id"
         >
-          {{ percent(p.tally.abstain) }}% {{ $t('governance-proposal.proposal_votes_abstain') }}
+          {{ percent(p.tally.abstain) }}% {{ $t('governanceProposal.proposal_votes_abstain') }}
         </b-tooltip>
       </div>
       <b-card-footer class="pb-0">
@@ -148,7 +148,7 @@
             :href="`./gov/${p.id}`"
             variant="outline-primary"
           >
-            {{ $t('governance-proposal.btn_detail') }}
+            {{ $t('governanceProposal.btn_detail') }}
           </b-button>
         </router-link>
         <b-button
@@ -158,7 +158,7 @@
           class="btn float-right mg-2"
           @click="selectProposal('GovDeposit',p.id, p.title)"
         >
-          {{ $t('governance-proposal.btn_deposit') }}
+          {{ $t('governanceProposal.btn_deposit') }}
         </b-button>
         <b-button
           v-if="p.status===2"
@@ -167,7 +167,7 @@
           class="btn float-right mg-2"
           @click="selectProposal('Vote',p.id, p.title)"
         >
-          {{ $t('governance-proposal.btn_vote') }}
+          {{ $t('governanceProposal.btn_vote') }}
         </b-button>
       </b-card-footer>
     </div></b-card>
