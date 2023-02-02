@@ -12,7 +12,7 @@
             variant="light-info"
             class="text-right"
           >
-            {{$t('governance-proposal.proposal_status_deposit')}}
+            {{$t('governanceProposal.proposal_status_deposit')}}
           </b-badge>
           <b-badge
             v-if="proposal.status == 2"
@@ -20,7 +20,7 @@
             variant="light-primary"
             class="text-right"
           >
-            {{$t('governance-proposal.proposal_status_voting')}}
+            {{$t('governanceProposal.proposal_status_voting')}}
           </b-badge>
           <b-badge
             v-if="proposal.status == 3"
@@ -28,7 +28,7 @@
             variant="light-success"
             class="text-right"
           >
-            {{$t('governance-proposal.proposal_status_passed')}}
+            {{$t('governanceProposal.proposal_status_passed')}}
           </b-badge>
           <b-badge
             v-if="proposal.status == 4"
@@ -36,7 +36,7 @@
             variant="light-danger"
             class="text-right"
           >
-            {{$t('governance-proposal.proposal_status_rejected')}}
+            {{$t('governanceProposal.proposal_status_rejected')}}
           </b-badge>
           {{ proposal.title }}
         </b-card-title>
@@ -55,17 +55,17 @@
           <tbody>
             <b-tr>
               <b-td style="text-transform: capitalize; vertical-align: top; width:200px">
-                {{ $t('governance-proposal.proposal_total_deposit') }}
+                {{ $t('governanceProposal.proposal_total_deposit') }}
               </b-td><b-td>{{ formatToken(proposal.total_deposit) }} </b-td>
             </b-tr>
             <b-tr>
               <b-td>
-                {{ $t('governance-proposal.proposal_submit_time') }}
+                {{ $t('governanceProposal.proposal_submit_time') }}
               </b-td><b-td>{{ formatDate(proposal.submit_time) }}</b-td>
             </b-tr>
             <b-tr>
               <b-td>
-                {{ $t('governance-proposal.voting_time') }}
+                {{ $t('governanceProposal.voting_time') }}
               </b-td><b-td>{{ formatDate(proposal.voting_start_time) }} - {{ formatDate(proposal.voting_end_time) }}</b-td>
             </b-tr>
             <b-tr v-if="proposal.metadata">
@@ -78,7 +78,7 @@
         <b-table-simple v-if="proposal.type.indexOf('SoftwareUpgrade') > 0">
           <b-tr>
             <b-td class="text-center">
-              {{ $t('governance-proposal.upgrade_time') }} {{ upgradeTime }}
+              {{ $t('governanceProposal.upgrade_time') }} {{ upgradeTime }}
               <flip-countdown :deadline="upgradeTime" />
               <b-input-group prepend="Estimated by block time: ">
                 <b-form-select v-model="blocktime">
@@ -104,7 +104,7 @@
           <b-button
             variant="outline-primary"
           >
-            {{ $t('governance-proposal.btn_back_list') }}
+            {{ $t('governanceProposal.btn_back_list') }}
           </b-button>
         </router-link>
         <b-button
@@ -114,14 +114,14 @@
           class="btn float-right mg-2"
           @click="openModal('Vote')"
         >
-          {{ $t('governance-proposal.btn_vote') }}
+          {{ $t('governanceProposal.btn_vote') }}
         </b-button>
       </b-card-footer>
     </b-card>
     <b-card no-body>
       <b-card-header>
         <b-card-title>
-          {{ $t('governance-proposal.proposal_votes') }}
+          {{ $t('governanceProposal.proposal_votes') }}
         </b-card-title>
       </b-card-header>
       <b-card-body>
@@ -166,22 +166,22 @@
               <b-tooltip
                 :target="'vote-yes'+proposal.id"
               >
-                {{ percent(proposal.tally.yes) }}% {{ $t('governance-proposal.proposal_votes_yes') }}
+                {{ percent(proposal.tally.yes) }}% {{ $t('governanceProposal.proposal_votes_yes') }}
               </b-tooltip>
               <b-tooltip
                 :target="'vote-no'+proposal.id"
               >
-                {{ percent(proposal.tally.no) }}% {{ $t('governance-proposal.proposal_votes_no') }}
+                {{ percent(proposal.tally.no) }}% {{ $t('governanceProposal.proposal_votes_no') }}
               </b-tooltip>
               <b-tooltip
                 :target="'vote-veto'+proposal.id"
               >
-                {{ percent(proposal.tally.veto) }}% voted {{ $t('governance-proposal.proposal_votes_nwv') }}
+                {{ percent(proposal.tally.veto) }}% voted {{ $t('governanceProposal.proposal_votes_nwv') }}
               </b-tooltip>
               <b-tooltip
                 :target="'vote-abstain'+proposal.id"
               >
-                {{ percent(proposal.tally.abstain) }}% {{ $t('governance-proposal.proposal_votes_abstain') }}
+                {{ percent(proposal.tally.abstain) }}% {{ $t('governanceProposal.proposal_votes_abstain') }}
               </b-tooltip>
 
               <div
@@ -211,7 +211,7 @@
             @click="loadVotes()"
           >
             <feather-icon icon="PlusIcon" />
-            {{ $t('governance-proposal.proposal_votes_load') }}
+            {{ $t('governanceProposal.proposal_votes_load') }}
           </div>
         </div></b-card-body>
     </b-card>
@@ -221,7 +221,7 @@
     >
       <b-card-header>
         <b-card-title>
-          {{ $t('governance-proposal.proposal_deposits') }} ({{ formatToken(proposal.total_deposit) }})
+          {{ $t('governanceProposal.proposal_deposits') }} ({{ formatToken(proposal.total_deposit) }})
         </b-card-title>
       </b-card-header>
       <b-card-body>
@@ -244,7 +244,7 @@
           <b-button
             variant="outline-primary"
           >
-            {{ $t('governance-proposal.btn_back_list') }}
+            {{ $t('governanceProposal.btn_back_list') }}
           </b-button>
         </router-link>
         <b-button
@@ -254,7 +254,7 @@
           class="btn float-right mg-2"
           @click="openModal('GovDeposit')"
         >
-          {{ $t('governance-proposal.btn_deposit') }}
+          {{ $t('governanceProposal.btn_deposit') }}
         </b-button>
         <b-button
           v-b-modal.operation-modal
@@ -263,7 +263,7 @@
           class="btn float-right mg-2 mr-1"
           @click="openModal('Vote')"
         >
-          {{ $t('governance-proposal.btn_vote') }}
+          {{ $t('governanceProposal.btn_vote') }}
         </b-button>
       </b-card-footer>
     </b-card>
