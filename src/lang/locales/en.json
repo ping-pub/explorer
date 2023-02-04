@@ -50,10 +50,29 @@
     "statesync": "State Sync",
     "trade": "Trade",
     "parameters": "Parameters",
-    "consensus": "consensus"
+    "consensus": "consensus",
+    "no_new_blocks": "No new blocks have been produced since  ",
+    "active_props": "Active Proposals",
+    "proposal_votes_yes": "voters voted Yes",
+    "proposal_votes_no": "voters voted No",
+    "proposal_votes_nwv": "voters voted No With Veto",
+    "proposal_votes_abstain": "voters voted Abstain",
+    "no_active_prop": "No active proposal!",
+    "browse": "Browse all",
+    "assets": "Assets",
+    "more": "More",
+    "not_conn": "Not Connected?",
+    "delegate": "Delegate",
+    "redelegate": "Redelegate",
+    "unbond": "Unbond",
+    "withdraw_reward": "Withdraw Rewards",
+    "unbonding_token": "Unbonding Tokens",
+    "send": "Send",
+    "receive": "Receive",
+    "connect_wal": "Connect Wallet"
   },
 
-  "governance-proposal": {
+  "governanceProposal": {
     "proposal_id": "Proposal ID",
     "proposal_type": "Proposal Type",
     "proposal_proposer": "Proposer",
@@ -85,5 +104,48 @@
     "proposal_votes_nwv": "voted No With Veto",
     "proposal_votes_abstain": "voted Abstain",
     "proposal_votes_load": "Load More Votes"
-  }  
+  },
+  "parameters" : {
+    "no_blocks_produced" : "No new blocks have been produced since  ",
+    "app_ver": "Application Version",
+    "node_info": "Node Information"
+  },
+  "uptimeMyChainBlocks" : {
+    "height": "Height:",
+    "no_blocks_produced" : "No new blocks have been produced since  ",
+    "not_active": "Your node is out of active validator set"
+  },
+  "walletAccountDetail": {
+    "address": "Address:",
+    "assets": "Assets",
+    "transfer": "Transfer",
+    "ibc_transfer": "IBC Transfer",
+    "total": "Total: ",
+    "unbonding": "Unbonding Tokens",
+    "from": "From: ",
+    "delegation": "Delegation",
+    "delegate": "Delegate",
+    "withdraw": " Withdraw Rewards",
+    "acct_type": "Account Type",
+    "acct_num": "Account Number",
+    "seq": "Sequence",
+    "pub_key": "Public Key",
+    "orig_vest": "Original Vesting",
+    "delegated_free": "Delegated Free",
+    "delegated_vest": "Delegated Vesting",
+    "vest_time": "Vesting Time",
+    "vest_period": "Vesting Periods",
+    "length": "Length",
+    "amount": "Amount",
+    "end_time": "End Time",
+    "acct_not_found": "Account not found",
+    "opps": "Oops!",
+    "back_home": "Back to home"
+  },
+  "uptimeMyValidators": {
+    "tips": "Tips",
+    "two_ways": "There are two ways to monitor your validators:",
+    "pin": "Pin a validator on Uptime pages.",
+    "link": "Specify parameters like following:"
+  }
 }

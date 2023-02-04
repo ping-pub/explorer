@@ -21,12 +21,12 @@
       show
     >
       <div class="alert-heading">
-        Tips
+        {{ $t('uptimeMyValidators.tips') }}
       </div>
       <div class="alert-body">
-        There are two ways to monitor your validators:
-        <li> Pin a validator on Uptime pages.</li>
-        <li> Specify parameters like following: <pre>https://ping.pub/cosmos/uptime/my?validators={"sifchain":["FBADE9A30473BB9ED6DFA16BFB3838E028F33650"],"chain_name":["hexAddress"]}</pre></li>
+        {{ $t('uptimeMyValidators.two_ways') }}
+        <li> {{ $t('uptimeMyValidators.pin') }}</li>
+        <li> {{ $t('uptimeMyValidators.link') }} <pre>https://ping.pub/cosmos/uptime/my?validators={"sifchain":["FBADE9A30473BB9ED6DFA16BFB3838E028F33650"],"chain_name":["hexAddress"]}</pre></li>
       </div>
     </b-alert>
   </div>
