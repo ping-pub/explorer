@@ -4,9 +4,9 @@
     "api":"https://lcd-testnet.bitcanna.io", 
     "rpc": ["https://rpc-testnet.bitcanna.io:443", "https://lcd-testnet.bitcanna.io:443"],
     "snapshot_provider": "dcdc83e240eb046faabef62e4daf1cfcecfa93a2@159.65.198.245:26656,8e241ba2e8db2e83bb5d80473b4fd4d901043dda@178.128.247.173:26656",
-    "sdk_version": "0.45.1",
+    "sdk_version": "0.46.6",
     "coin_type": "118",
-    "min_tx_fee": "8000",
+    "min_tx_fee": "420",
     "assets": [{
         "base": "ubcna",
         "symbol": "BCNA",
