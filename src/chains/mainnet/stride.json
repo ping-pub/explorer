@@ -1,7 +1,7 @@
 {
     "chain_name": "stride",
-    "api": ["https://stride-api.polkachu.com","https://api.stride.nodestake.top", "https://api-stride.nodeist.net"],
-    "rpc": ["https://stride-rpc.polkachu.com:443","https://rpc.stride.nodestake.top", "https://rpc-stride.nodeist.net"],
+    "api": ["https://stride-api.polkachu.com", "https://api.stride.nodestake.top", "https://api-stride.nodeist.net", "https://stride.api.kjnodes.com"],
+    "rpc": ["https://stride-rpc.polkachu.com:443", "https://rpc.stride.nodestake.top", "https://rpc-stride.nodeist.net", "https://stride.rpc.kjnodes.com:443"],
     "snapshot_provider": "",
     "sdk_version": "0.45.5",
     "coin_type": "118",
