@@ -1,0 +1,20 @@
+{
+    "chain_name": "hero",
+    "provider_chain": {
+        "api": "https://rest.provider-sentry-01.goc.earthball.xyz"
+    },
+    "api": ["https://api-c.hero.nodestake.top"],
+    "rpc": ["https://rpc-c.hero.nodestake.top"],
+    "sdk_version": "0.45.7",
+    "coin_type": 118,
+    "min_tx_fee": "0",
+    "addr_prefix": "cosmos",
+    "logo": "/logos/game_of_chain.jpeg",
+    "assets": [{
+        "base": "uhero",
+        "symbol": "HERO",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "/logos/game_of_chain.jpeg"
+    }]
+}

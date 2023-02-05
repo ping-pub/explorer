@@ -63,7 +63,7 @@
         />
       </b-progress>
       <div class="status-text">
-        <span v-if="hash">SUBMITED</span>
+        <span v-if="hash">SUBMITTED</span>
         <span v-if="succeed">COMPLETED</span>
         <span v-if="error">FAILED</span>
       </div>

@@ -119,6 +119,8 @@ export default {
   },
   computed: {
     formatedDelegations() {
+      const conf = this.$http.getSelectedConfig()
+      const decimal = conf.assets[0].exponent || '6'
       return this.delegations.map(x => ({
         validator: {
           logo: x.chain.logo,
@@ -128,13 +130,15 @@ export default {
         },
         delegator: x.keyname,
         delegator_address: x.delegation.delegator_address,
-        delegation: formatToken(x.balance),
+        delegation: formatToken(x.balance, {}, decimal),
         reward: this.findReward(x.delegation.delegator_address, x.delegation.validator_address),
         // action: '',
       }))
     },
     groupedDelegations() {
       const group = {}
+      const conf = this.$http.getSelectedConfig()
+      const decimal = conf.assets[0].exponent || '6'
       this.delegations.forEach(x => {
         const d = {
           validator: {
@@ -145,7 +149,7 @@ export default {
           },
           delegator: x.keyname,
           delegator_address: x.delegation.delegator_address,
-          delegation: formatToken(x.balance),
+          delegation: formatToken(x.balance, {}, decimal),
           reward: this.findReward(x.delegation.delegator_address, x.delegation.validator_address),
           // action: '',
         }

@@ -464,15 +464,20 @@ export default {
       }
     },
     initParamsForKeplr(chainid, chain) {
+      const gasPriceStep = chain.keplr_price_step || {
+        low: 0.01,
+        average: 0.025,
+        high: 0.03,
+      }
       return JSON.stringify({
         chainId: chainid,
         chainName: chain.chain_name,
         rpc: Array.isArray(chain.rpc) ? chain.rpc[0] : chain.rpc,
         rest: Array.isArray(chain.api) ? chain.api[0] : chain.api,
         bip44: {
-          coinType: chain.coin_type,
+          coinType: Number(chain.coin_type),
         },
-        coinType: chain.coin_type,
+        coinType: Number(chain.coin_type),
         bech32Config: {
           bech32PrefixAccAddr: chain.addr_prefix,
           bech32PrefixAccPub: `${chain.addr_prefix}pub`,
@@ -485,7 +490,7 @@ export default {
           {
             coinDenom: chain.assets[0].symbol,
             coinMinimalDenom: chain.assets[0].base,
-            coinDecimals: chain.assets[0].exponent,
+            coinDecimals: Number(chain.assets[0].exponent),
             coinGeckoId: chain.assets[0].coingecko_id || 'unknown',
           },
         ],
@@ -493,20 +498,17 @@ export default {
           {
             coinDenom: chain.assets[0].symbol,
             coinMinimalDenom: chain.assets[0].base,
-            coinDecimals: chain.assets[0].exponent,
+            coinDecimals: Number(chain.assets[0].exponent),
             coinGeckoId: chain.assets[0].coingecko_id || 'unknown',
+            gasPriceStep,
           },
         ],
+        gasPriceStep,
         stakeCurrency: {
           coinDenom: chain.assets[0].symbol,
           coinMinimalDenom: chain.assets[0].base,
-          coinDecimals: chain.assets[0].exponent,
+          coinDecimals: Number(chain.assets[0].exponent),
           coinGeckoId: chain.assets[0].coingecko_id || 'unknown',
-        },
-        gasPriceStep: {
-          low: 0.01,
-          average: 0.025,
-          high: 0.03,
         },
         features: chain.keplr_features || [],
       }, null, '\t')

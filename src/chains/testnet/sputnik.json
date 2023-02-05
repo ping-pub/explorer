@@ -1,0 +1,20 @@
+{
+    "chain_name": "sputnik",    
+    "provider_chain": {
+        "api": "https://rest.provider-sentry-01.goc.earthball.xyz"
+    },
+    "api": ["https://sputnik.api.ping.pub"],
+    "rpc": [],
+    "sdk_version": "0.45.7",
+    "coin_type": 118,
+    "min_tx_fee": "0",
+    "addr_prefix": "cosmos",
+    "logo": "/logos/game_of_chain.jpeg",
+    "assets": [{
+        "base": "unik",
+        "symbol": "NIK",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "/logos/game_of_chain.jpeg"
+    }]
+}

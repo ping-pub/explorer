@@ -1,7 +1,6 @@
 {
   "chain_name": "agoric",
   "api": [
-    "https://api.agoric.sgtstake.com",
     "https://agoric-api.polkachu.com",
     "https://api-agoric.nodes.guru",
     "https://agoric.stakesystems.io",

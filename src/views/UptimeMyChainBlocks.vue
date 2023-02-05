@@ -2,21 +2,21 @@
   <div class="px-0">
     <b-card>
       <b-card-title class="d-flex justify-content-between">
-        <span class="text-uppercase"> {{ chain }} </span><small class="text-right"> Height: {{ height }} </small>
+        <span class="text-uppercase"> {{ chain }} </span><small class="text-right"> {{$t('uptimeMyChainBlocks.height')}} {{ height }} </small>
       </b-card-title>
       <b-alert
         variant="danger"
         :show="syncing"
       >
         <div class="alert-body">
-          <span>No new blocks have been produced since  <strong>{{ latestTime }}</strong> </span>
+          <span>{{$t('uptimeMyChainBlocks.no_blocks_produced')}}<strong>{{ latestTime }}</strong> </span>
         </div>
       </b-alert>
       <b-row>
         <span
           v-if="uptime.length===0"
           class="text-danger"
-        > Your node is out of active validator set</span>
+        > {{$t(uptimeMyChainBlocks.not_active)}}</span>
         <b-col
           v-for="(x,index) in uptime"
           :key="index"

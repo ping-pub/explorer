@@ -273,8 +273,9 @@ export default {
         return i
       }
       const txt = text.substring(text.indexOf(':') + 1, text.indexOf(' '))
+      const sig = text.split(' ')
       const val = this.vals.find(x => x.hex.startsWith(txt))
-      return val?.description?.moniker || txt
+      return `${val?.description?.moniker || txt} - ${sig[2]}`
     },
   },
 

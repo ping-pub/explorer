@@ -5,7 +5,7 @@
       :show="syncing"
     >
       <div class="alert-body">
-        <span>No new blocks have been produced since  <strong>{{ latestTime }}</strong> </span>
+        <span>{{ $t('dashboard.no_new_blocks') }}<strong>{{ latestTime }}</strong> </span>
       </div>
     </b-alert>
 
@@ -90,40 +90,162 @@
     </b-row>
     <b-card no-body>
       <b-card-header>
-        <b-card-title>Active Proposals</b-card-title>
+        <b-card-title>{{ $t('dashboard.active_props') }}</b-card-title>
       </b-card-header>
       <b-card-body>
-        <b-media
+        <b-row
           v-for="prop in proprosals2"
           :key="prop.id"
-          no-body
-          class="mb-1"
         >
-          <b-media-aside
-            v-b-modal.operation-modal
-            @click="selectProposal('Vote',prop.id, prop.title)"
+          <b-col
+            md="6"
+            sm="12"
           >
-            <b-avatar
-              rounded
-              size="42"
-              :variant="myVotes[prop.id] ? 'light-primary': 'primary'"
+            <b-media
+              no-body
+              class="mb-1"
             >
-              {{ myVotes[prop.id] || 'Vote' }}
-            </b-avatar>
-          </b-media-aside>
-          <b-link :to="`./${chain}/gov/${prop.id}`">
-            <b-media-body class="d-flex flex-column justify-content-center">
-              <h6 class="transaction-title">
-                {{ prop.id }}. {{ prop.title }}
-              </h6>
-              <small>{{ formatType(prop.contents['@type']) }}  {{ formatEnding(prop.voting_end_time) }}</small>
-            </b-media-body>
-          </b-link>
-        </b-media>
+              <b-media-aside
+                @click="showDetail(prop.id)"
+              >
+                <b-avatar
+                  rounded
+                  size="42"
+                  variant="light-primary"
+                >
+                  {{ prop.id }}
+                </b-avatar>
+              </b-media-aside>
+              <b-link :to="`./${chain}/gov/${prop.id}`">
+                <b-media-body class="d-flex flex-column justify-content-center">
+                  <h6 class="transaction-title">
+                    <b-badge
+                      pill
+                      variant="light-primary"
+                    >
+                      {{ formatType(prop.contents['@type']) }}
+                    </b-badge>{{ prop.title }}
+                  </h6>
+                  <small>will {{ caculateTallyResult(prop.tally) }}  {{ formatEnding(prop.voting_end_time) }}</small>
+                </b-media-body>
+              </b-link>
+            </b-media>
+          </b-col>
+          <b-col
+            md="6"
+            sm="12"
+          >
+            <b-row>
+              <b-col cols="8">
+                <div class="scale">
+                  <div class="box">
+                    <b-progress
+                      :max="totalPower? 100 * (totalPower/prop.tally.total) :100"
+                      height="2rem"
+                      show-progress
+                      class="font-small-1"
+                    >
+                      <b-progress-bar
+                        :id="'vote-yes'+prop.id"
+                        variant="success"
+                        :value="percent(prop.tally.yes)"
+                        show-progress
+                        :label="`${percent(prop.tally.yes).toFixed()}%`"
+                      />
+                      <b-progress-bar
+                        :id="'vote-no'+prop.id"
+                        variant="danger"
+                        :value="percent(prop.tally.no)"
+                        :label="`${percent(prop.tally.no).toFixed()}%`"
+                        show-progress
+                      />
+                      <b-progress-bar
+                        :id="'vote-veto'+prop.id"
+                        class="bg-danger bg-darken-4"
+                        :value="percent(prop.tally.veto)"
+                        :label="`${percent(prop.tally.veto).toFixed()}%`"
+                        show-progress
+                      />
+                      <b-progress-bar
+                        :id="'vote-abstain'+prop.id"
+                        variant="secondary"
+                        :value="percent(prop.tally.abstain)"
+                        :label="`${percent(prop.tally.abstain).toFixed()}%`"
+                        show-progress
+                      />
+                    </b-progress>
+                  </div>
+                  <div
+                    v-b-tooltip.hover
+                    title="Threshold"
+                    class="box overlay"
+                    :style="`left:${scaleWidth(prop)}%;`"
+                  />
+                  <div
+                    v-if="tallyParam"
+                    v-b-tooltip.hover
+                    title="Quorum"
+                    class="box overlay"
+                    :style="`left:${Number(tallyParam.quorum) * 100}%; border-color:black`"
+                  />
+                </div>
+                <b-tooltip
+                  :target="'vote-yes'+prop.id"
+                >
+                  {{ percent(prop.tally.yes) }}% {{ $t('dashboard.proposal_votes_yes') }}
+                </b-tooltip>
+                <b-tooltip
+                  :target="'vote-no'+prop.id"
+                >
+                  {{ percent(prop.tally.no) }}% {{ $t('dashboard.proposal_votes_no') }}
+                </b-tooltip>
+                <b-tooltip
+                  :target="'vote-veto'+prop.id"
+                >
+                  {{ percent(prop.tally.veto) }}% {{ $t('dashboard.proposal_votes_nwv') }}
+                </b-tooltip>
+                <b-tooltip
+                  :target="'vote-abstain'+prop.id"
+                >
+                  {{ percent(prop.tally.abstain) }}% {{ $t('dashboard.proposal_votes_abstain') }}
+                </b-tooltip>
+              </b-col>
+              <b-col
+                cols="4"
+                style="padding-top: 0.5em"
+              >
+                <b-button
+                  v-b-modal.operation-modal
+                  variant="primary"
+                  size="sm"
+                  class="mb-2"
+                  @click="selectProposal('Vote',prop.id, prop.title)"
+                >
+                  {{ myVotes[prop.id] ? `${myVotes[prop.id]}`: 'Vote' }}
+                </b-button>
+              </b-col>
+            </b-row>
+          </b-col>
+          <b-col
+            cols="12"
+            :class="detailId === prop.id? 'd-block': 'd-none'"
+          >
+            <b-card
+              border-variant="primary"
+              bg-variant="transparent"
+              class="shadow-none"
+              style="max-height:350px;overflow: auto;"
+            >
+              <VueMarkdown class="pb-1">
+                {{ addNewLine(prop.description) }}
+              </VueMarkdown>
+            </b-card>
+          </b-col>
+        </b-row>
         <div v-if="proprosals2.length === 0">
-          No active proposal!
+          {{ $t('dashboard.no_active_prop') }}
           <b-link :to="`./${chain}/gov`">
-            Browse all
+            {{ $t('dashboard.browse') }}
           </b-link>
         </div>
       </b-card-body>
@@ -133,20 +255,20 @@
       bg-variant="transparent"
       class="shadow-none"
     >
-      <b-card-title class="d-flex justify-content-between">
-        <span>{{ walletName }} Assets </span>
+      <b-card-title class="d-flex justify-content-between text-capitalize">
+        <span>{{ walletName }} {{ $t('dashboard.assets') }} </span>
         <small>
           <b-link
             v-if="address"
             :to="`./${chain}/account/${address}`"
           >
-            More
+            {{ $t('dashboard.more') }}
           </b-link>
           <b-link
             v-else
             :to="`/wallet/accounts`"
           >
-            Not connected?
+            {{ $t('dashboard.not_conn') }}
           </b-link>
         </small>
       </b-card-title>
@@ -211,6 +333,7 @@
                 <!-- size -->
                 <b-button-group
                   size="sm"
+                  class="d-none"
                 >
                   <b-button
                     v-b-modal.operation-modal
@@ -240,18 +363,41 @@
                     <feather-icon icon="LogOutIcon" />
                   </b-button>
                 </b-button-group>
+                <b-dropdown
+                  v-b-modal.operation-modal
+                  split
+                  variant="outline-primary"
+                  text="Delegate"
+                  class="mr-1"
+                  size="sm"
+                  @click="selectDelegation(data,'Delegate')"
+                >
+                  <template #button-content>
+                    {{ $t('dashboard.delegate') }}
+                  </template>
+                  <b-dropdown-item
+                    v-b-modal.operation-modal
+                    @click="selectDelegation(data,'Redelegate')"
+                  >
+                    {{ $t('dashboard.redelegate') }}
+                  </b-dropdown-item>
+                  <b-dropdown-item
+                    v-b-modal.operation-modal
+                    @click="selectDelegation(data,'Unbond')"
+                  >
+                    {{ $t('dashboard.unbond') }}
+                  </b-dropdown-item>
+                </b-dropdown>
+                <b-button
+                  v-b-modal.operation-modal
+                  variant="outline-primary"
+                  size="sm"
+                  @click="selectWithdraw()"
+                >
+                  {{ $t('dashboard.withdraw_reward') }}
+                </b-button>
               </template>
             </b-table>
-            <b-card-footer class="text-right">
-              <b-button
-                v-b-modal.operation-modal
-                variant="outline-primary"
-                @click="selectWithdraw()"
-              >
-                <feather-icon icon="AwardIcon" />
-                Widthdraw Rewards
-              </b-button>
-            </b-card-footer>
           </b-card>
         </b-col>
       </b-row>
@@ -260,7 +406,7 @@
         <b-col>
           <b-card>
             <b-card-header class="pt-0 pl-0 pr-0">
-              <b-card-title>Unbonding Tokens</b-card-title>
+              <b-card-title>{{ $t('dashboard.unbonding_token') }}</b-card-title>
             </b-card-header>
             <b-card-body class="pl-0 pr-0">
               <b-row
@@ -307,7 +453,7 @@
             @click="selectSend()"
           >
             <feather-icon icon="SendIcon" />
-            Send
+            {{ $t('dashboard.send') }}
           </b-button>
         </b-col>
         <b-col cols="6">
@@ -319,7 +465,7 @@
             <feather-icon
               icon="PlusCircleIcon"
             />
-            Receive
+            {{ $t('dashboard.receive') }}
           </b-button>
         </b-col>
       </b-row>
@@ -327,7 +473,7 @@
     <router-link to="/wallet/import">
       <b-card class="addzone text-center">
         <feather-icon icon="PlusIcon" />
-        Connect Wallet
+        {{ $t('dashboard.connect_wal') }}
       </b-card>
     </router-link>
     <operation-modal
@@ -337,21 +483,24 @@
       :proposal-id="selectedProposalId"
       :proposal-title="selectedTitle"
     />
+    <div id="txevent" />
   </div>
 </template>
 
 <script>
 import {
   BRow, BCol, BAlert, BCard, BTable, BFormCheckbox, BCardHeader, BCardTitle, BMedia, BMediaAside, BMediaBody, BAvatar,
-  BCardBody, BLink, BButtonGroup, BButton, BTooltip, VBModal, VBTooltip, BCardFooter,
+  BCardBody, BLink, BButtonGroup, BButton, BTooltip, VBModal, VBTooltip, BCardFooter, BProgress, BProgressBar, BBadge,
+  BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 import {
   formatNumber, formatTokenAmount, isToken, percent, timeIn, toDay, toDuration, tokenFormatter, getLocalAccounts,
-  getStakingValidatorOperator,
+  getStakingValidatorOperator, formatToken,
 } from '@/libs/utils'
 import OperationModal from '@/views/components/OperationModal/index.vue'
 import Ripple from 'vue-ripple-directive'
 import dayjs from 'dayjs'
+import VueMarkdown from 'vue-markdown'
 import ParametersModuleComponent from './components/parameters/ParametersModuleComponent.vue'
 import DashboardCardHorizontal from './components/dashboard/DashboardCardHorizontal.vue'
 import DashboardCardVertical from './components/dashboard/DashboardCardVertical.vue'
@@ -364,6 +513,8 @@ export default {
     BButtonGroup,
     BTooltip,
     BButton,
+    BDropdown,
+    BDropdownItem,
     BRow,
     BCol,
     BAlert,
@@ -378,6 +529,10 @@ export default {
     BCardBody,
     BLink,
     BCardFooter,
+    BProgress,
+    BProgressBar,
+    VueMarkdown,
+    BBadge,
 
     OperationModal,
     ParametersModuleComponent,
@@ -393,6 +548,7 @@ export default {
   },
   data() {
     return {
+      detailId: 0,
       fields: ['validator', 'delegation', 'rewards', 'action'],
       delegations: [],
       rewards: [],
@@ -414,6 +570,8 @@ export default {
       selectedProposalId: 0,
       selectedTitle: '',
       operationModalType: '',
+      tallyParam: null,
+      totalPower: 0,
       voteColors: {
         YES: 'success',
         NO: 'warning',
@@ -450,10 +608,12 @@ export default {
     stakingList() {
       return this.delegations.map(x => {
         const rewards = this.rewards.find(r => r.validator_address === x.delegation.validator_address)
+        const conf = this.$http.getSelectedConfig()
+        const decimal = conf.assets[0].exponent || '6'
         return {
           valAddress: x.delegation.validator_address,
           validator: getStakingValidatorOperator(this.$store.state.chains.selected.chain_name, x.delegation.validator_address),
-          delegation: this.formatToken([x.balance]),
+          delegation: formatToken(x.balance, {}, decimal),
           rewards: rewards ? this.formatToken(rewards.reward) : '',
           action: '',
         }
@@ -461,9 +621,29 @@ export default {
     },
   },
   created() {
-    this.$http.getGovernanceListByStatus(2).then(res => {
-      this.proposals = res.proposals
+    this.$http.getStakingParameters().then(res => {
+      Promise.all([this.$http.getStakingPool(), this.$http.getBankTotal(res.bond_denom)])
+        .then(pool => {
+          this.supply = `${formatNumber(formatTokenAmount(pool[1].amount, 2, res.bond_denom, false), true, 2)}`
+          this.bonded = `${formatNumber(formatTokenAmount(pool[0].bondedToken, 2, res.bond_denom, false), true, 2)}`
+          this.ratio = `${percent(pool[0].bondedToken / pool[1].amount)}%`
+          this.totalPower = pool[0].bondedToken
+        })
     })
+
+    this.$http.getGovernanceListByStatus(2).then(gov => {
+      this.proposals = gov.proposals
+      this.proposals.forEach(p => {
+        this.$http.getGovernanceTally(p.id, 0).then(update => {
+          // const p2 = p
+          // p2.tally = update
+          // this.proposals.push(p2)
+          // this.proposals.sort((a, b) => a.id - b.id)
+          this.$set(p, 'tally', update)
+        })
+      })
+    })
+
     this.$http.getLatestBlock().then(res => {
       this.height = res.block.header.height
       if (timeIn(res.block.header.time, 3, 'm')) {
@@ -475,17 +655,12 @@ export default {
       this.validators = res.block.last_commit.signatures.length
     })
 
-    this.$http.getStakingParameters().then(res => {
-      Promise.all([this.$http.getStakingPool(), this.$http.getBankTotal(res.bond_denom)])
-        .then(pool => {
-          this.supply = `${formatNumber(formatTokenAmount(pool[1].amount, 2, res.bond_denom, false), true, 2)}`
-          this.bonded = `${formatNumber(formatTokenAmount(pool[0].bondedToken, 2, res.bond_denom, false), true, 2)}`
-          this.ratio = `${percent(pool[0].bondedToken / pool[1].amount)}%`
-        })
-    })
-
     this.$http.getCommunityPool().then(res => {
       this.communityPool = this.formatToken(res.pool)
+    })
+
+    this.$http.getGovernanceParameterTallying().then(res => {
+      this.tallyParam = res
     })
 
     const conf = this.$http.getSelectedConfig()
@@ -499,7 +674,39 @@ export default {
       })
     }
   },
+  mounted() {
+    const elem = document.getElementById('txevent')
+    elem.addEventListener('txcompleted', () => {
+      const key = this.$store?.state?.chains?.defaultWallet
+      if (key) {
+        const accounts = getLocalAccounts() || {}
+        const account = Object.entries(accounts)
+          .map(v => ({ wallet: v[0], address: v[1].address.find(x => x.chain === this.$store.state.chains.selected.chain_name) }))
+          .filter(v => v.address)
+          .find(x => x.wallet === key)
+        if (account) {
+          this.fetchAccount(account.address.addr)
+        }
+      }
+    })
+  },
   methods: {
+    caculateTallyResult(tally) {
+      if (this.tallyParam && tally && this.totalPower > 0) {
+        if (tally.veto < Number(this.tallyParam.veto_threshold)
+        && tally.yes > Number(this.tallyParam.threshold)
+        && tally.total / this.totalPower > Number(this.tallyParam.quorum)) {
+          return 'pass'
+        }
+      }
+      return 'be rejected'
+    },
+    scaleWidth(p) {
+      if (this.tallyParam) {
+        return Number(this.tallyParam.quorum) * Number(this.tallyParam.threshold) * (1 - p.tally.abstain) * 100
+      }
+      return 50
+    },
     selectProposal(modal, pid, title) {
       this.operationModalType = modal
       this.selectedProposalId = Number(pid)
@@ -609,6 +816,13 @@ export default {
         return { title: this.convert(data[k]), subtitle: k }
       })
     },
+    addNewLine(value) {
+      return value ? value.replace(/(?:\\[rn])+/g, '\n') : '-'
+    },
+    percent: v => percent(v),
+    processBarLength(v) {
+      return percent(v)
+    },
     formatDate: v => dayjs(v).format('YYYY-MM-DD HH:mm:ss'),
     convert(v) {
       if (typeof v === 'object') {
@@ -632,6 +846,13 @@ export default {
         return d.toFixed()
       }
       return v
+    },
+    showDetail(id) {
+      if (this.detailId !== id) {
+        this.detailId = id
+      } else {
+        this.detailId = 0
+      }
     },
   },
 }
