@@ -1,0 +1,54 @@
+/*
+  TODO: Add docs on when to use placeholder vs when to use SASS variable
+
+  Placeholder
+    - When we want to keep customization to our self between templates use it
+
+  Variables
+    - When we want to allow customization from both user and our side
+    - You can also use variable for consistency (e.g. mx 1 rem should be applied to both vertical nav items and vertical nav header)
+*/
+
+// @forward "@layouts/styles/variables" with (
+//   // Adjust z-index so vertical nav & overlay stays on top of v-layout in v-main. E.g. Email app
+//   $layout-vertical-nav-z-index: 1004,
+//   $layout-overlay-z-index: 1003,
+// );
+// @use "@layouts/styles/variables" as *;
+
+$css-vars: (
+  /*
+    - Skins
+      - CSS var
+        - Theme
+  */
+  "default": (
+    "--v-theme-background": (
+      "light": (244 ,245, 250),
+      "dark": (40 ,36, 61),
+    ),
+    "--v-theme-surface": (
+      "light": (255, 255, 255),
+      "dark": (49, 45, 75),
+    ),
+  ),
+  "bordered": (
+    "--v-theme-background": (
+      "light": (255 ,255, 255),
+      "dark": (49, 45, 75),
+    ),
+    "--v-theme-surface": (
+      "light": (255, 255, 255),
+      "dark": (49, 45, 75),
+    ),
+  ),
+) !default;
+$theme-colors-name: (
+  "primary",
+  "secondary",
+  "error",
+  "info",
+  "success",
+  "warning"
+) !default;
+

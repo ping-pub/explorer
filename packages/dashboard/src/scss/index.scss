@@ -1,4 +1,7 @@
-@use 'vuetify' with (
-  $utilities: true,
-  $color-pack: true,
+// main.scss
+@use '_variables';
+
+@use 'vuetify/settings' with (
+  $color-pack: false,
+  $utilities: false,
 );

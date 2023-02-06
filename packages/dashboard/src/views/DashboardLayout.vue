@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const theme = 'dark'
+const theme = 'light' 
 </script>
 
 <template>
