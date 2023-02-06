@@ -1,0 +1,108 @@
+@use "vuetify/lib/styles/tools/_elevation" as mixins_elevation;
+@use "@configured-variables" as variables;
+
+// 👉 Expansion panels
+.v-expansion-panel-title,
+.v-expansion-panel-title--active,
+.v-expansion-panel-title:hover,
+.v-expansion-panel-title:focus,
+.v-expansion-panel-title:focus-visible,
+.v-expansion-panel-title--active:focus,
+.v-expansion-panel-title--active:hover {
+  .v-expansion-panel-title__overlay {
+    opacity: 0 !important;
+  }
+}
+
+.v-expansion-panels {
+  :first-child {
+    border-start-end-radius: variables.$expansion-panel-border-radius-custom;
+    border-start-start-radius: variables.$expansion-panel-border-radius-custom;
+  }
+
+  :last-child {
+    border-end-end-radius: variables.$expansion-panel-border-radius-custom;
+    border-end-start-radius: variables.$expansion-panel-border-radius-custom;
+  }
+}
+
+// 👉 Set Elevation when panel open
+.v-expansion-panels:not(.v-expansion-panels--variant-accordion) {
+  .v-expansion-panel.v-expansion-panel--active {
+    .v-expansion-panel__shadow {
+      @include mixins_elevation.elevation(3);
+    }
+  }
+}
+
+// v-tab with pill support
+.v-tabs:not(.v-tabs-pill) {
+  &.v-tabs--vertical {
+    border-inline-end: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  }
+}
+
+.v-tab__slider {
+  inset-inline-end: 0;
+  inset-inline-start: unset;
+}
+
+.v-tabs.v-tabs-pill:not(.v-tabs--stacked) {
+  &.v-tabs--density-default {
+    --v-tabs-height: 38px;
+  }
+
+  .v-tab.v-btn {
+    border-radius: 0.5rem !important;
+  }
+}
+
+// 👉 added box shadow
+.v-timeline-item {
+  .v-timeline-divider__dot {
+    .v-timeline-divider__inner-dot {
+      box-shadow: 0 0 0 0.1875rem rgb(var(--v-theme-on-surface-variant));
+
+      @each $color-name in variables.$theme-colors-name {
+
+        &.bg-#{$color-name} {
+          box-shadow: 0 0 0 0.1875rem rgba(var(--v-theme-#{$color-name}), 0.12);
+        }
+      }
+    }
+  }
+}
+
+// 👉 Timeline Outlined style
+.v-timeline-variant-outlined.v-timeline {
+  .v-timeline-divider__dot {
+    .v-timeline-divider__inner-dot {
+      box-shadow: inset 0 0 0 0.125rem rgb(var(--v-theme-on-surface-variant));
+
+      @each $color-name in variables.$theme-colors-name {
+        background-color: rgb(var(--v-theme-surface)) !important;
+
+        &.bg-#{$color-name} {
+          box-shadow: inset 0 0 0 0.125rem rgb(var(--v-theme-#{$color-name}));
+        }
+      }
+    }
+  }
+}
+
+// 👉 Slider
+.v-slider-thumb {
+  .v-slider-thumb__label {
+    background-color: variables.$slider-thumb-label-color;
+    color: rgb(var(--v-theme-on-primary));
+  }
+
+  .v-slider-thumb__label::before {
+    color: variables.$slider-thumb-label-color;
+  }
+}
+
+// 👉 switch inactive thumb style
+.v-switch__thumb {
+  color: variables.$switch-thumb-inactive-color;
+}

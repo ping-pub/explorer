@@ -1,3 +1,5 @@
 <template>
-    <div> Hello, Dashboard</div>
+    <div>
+        dashboard view
+    </div>
 </template>

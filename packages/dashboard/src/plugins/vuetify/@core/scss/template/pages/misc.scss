@@ -1,0 +1,35 @@
+.layout-blank {
+  .misc-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    min-block-size: calc(var(--vh, 1vh) * 100);
+  }
+
+  .misc-avatar {
+    z-index: 1;
+  }
+}
+
+.footer-coming-soon {
+  position: absolute;
+  z-index: -1;
+  inline-size: 100%;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+}
+
+.footer-coming-soon-obj {
+  position: absolute;
+  inline-size: 100%;
+  inset-block-end: 12%;
+  inset-inline-start: 15%;
+}
+
+@media (max-width: 1200px) {
+  .footer-coming-soon-obj {
+    inset-block-end: 5%;
+  }
+}

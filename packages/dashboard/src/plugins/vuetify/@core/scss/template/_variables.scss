@@ -1,0 +1,71 @@
+@use "sass:map";
+@use "utils";
+
+$vertical-nav-horizontal-padding-margin-custom: 1.75rem;
+
+// ℹ️ We created this SCSS var to extract the start padding
+// Docs: https://sass-lang.com/documentation/modules/string
+// $vertical-nav-horizontal-padding => 0 8px;
+// string.index(#{$vertical-nav-horizontal-padding}, " ") + 1 => 2
+//   string.index(#{$vertical-nav-horizontal-padding}, " ") => 1
+// string.slice(0 8px, 2, -1) => 8px => $card-actions-padding-x
+
+$vertical-nav-horizontal-padding-start: utils.get-first-value($vertical-nav-horizontal-padding-margin-custom) !default;
+
+@forward "@/plugins/vuetify/@core/scss/base/variables" with(
+  $css-vars: (
+    /*
+      - Skins
+        - CSS var
+          - Theme
+    */
+    "default": (
+      "--v-theme-background": (
+        "light": (247,247,249),
+        "dark": (40,42,66),
+      ),
+      "--v-theme-surface": (
+        "light": (255, 255, 255),
+        "dark": (48,51,78),
+      ),
+    ),
+    "bordered": (
+      "--v-theme-background": (
+        "light": (255 ,255, 255),
+        "dark": (40,42,66),
+      ),
+      "--v-theme-surface": (
+        "light": (255, 255, 255),
+        "dark": (40,42,66),
+      ),
+    ),
+  ) !default,
+);
+
+// 👉 Vertical nav
+// This is used by nav items & nav header
+$vertical-nav-horizontal-spacing: 0.75rem !default;
+$vertical-nav-header-inline-spacing: $vertical-nav-horizontal-spacing 0.25rem !default;
+$vertical-nav-horizontal-padding: 1rem 0.75rem !default;
+
+// Section title margin bottom
+$vertical-nav-section-title-mb: 0.75rem !default;
+
+// Vertical nav header padding
+$vertical-nav-header-padding: $vertical-nav-horizontal-padding !default;
+$vertical-nav-items-nested-icon-size: 0.5rem !default;
+
+// 👉 expansion panel
+$expansion-panel-border-radius-custom: 8px !default;
+
+// 👉 range-slider
+$slider-thumb-label-color: rgb(117, 117, 117) !default;
+
+// 👉 switch
+$switch-thumb-inactive-color: rgb(250, 250, 250) !default;
+
+// 👉 Horizontal nav
+
+// Horizontal nav icons
+$horizontal-nav-third-level-icon-size: 0.5rem !default;
+$horizontal-nav-items-icon-margin-inline-end: 0.75rem !default;
