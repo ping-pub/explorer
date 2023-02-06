@@ -1,0 +1,12 @@
+@use "sass:map";
+@forward "@/plugins/vuetify/@core/scss/base";
+
+// Layout
+@use "vertical-nav";
+@use "horizontal-nav";
+
+// Components
+@use "components";
+
+// Utilities
+@use "utilities";

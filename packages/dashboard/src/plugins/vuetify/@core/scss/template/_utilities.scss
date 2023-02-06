@@ -1,0 +1,11 @@
+@use "@configured-variables" as variables;
+
+.bg-card {
+  background: rgb(var(--v-theme-surface)) !important;
+}
+
+.table-header-bg {
+  th {
+    background-color: rgb(var(--v-theme-grey-200));
+  }
+}
