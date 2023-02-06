@@ -1,0 +1,11 @@
+{
+  "name": "dashboard",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "lerna": "^6.4.1"
+  }
+}
