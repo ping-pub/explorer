@@ -48,6 +48,7 @@
     "echarts": "5.3.0",
     "eth-crypto": "^2.3.0",
     "ethers": "^5.6.8",
+    "ibc-domains-sdk": "^1.1.0",
     "leaflet": "1.6.0",
     "ledger-cosmos-js": "2.1.8",
     "long": "^5.2.0",

@@ -630,6 +630,13 @@ export default class ChainFetch {
     return index < conf.api.length ? index : 0
   }
 
+  async resolveStarName(address) {
+    const endpoint = 'https://rest.stargaze-apis.com'
+    const query = toBase64(Buffer.from(JSON.stringify({ name: { address } })))
+    const contract = 'stars1fx74nkqkw2748av8j7ew7r3xt9cgjqduwn8m0ur5lhe49uhlsasszc5fhr'
+    return this.getUrl(`${endpoint}/cosmwasm/wasm/v1/contract/${contract}/smart/${query}`)
+  }
+
   async getUrl(url) {
     this.getSelectedConfig()
     return fetch(url).then(res => res.json())
