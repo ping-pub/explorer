@@ -23,13 +23,15 @@
               style="color: #fff"
               class="mb-0"
             >
-              {{ $t('walletAccountDetail.address') }} <feather-icon
+              {{ $t('walletAccountDetail.address') }}
+              <feather-icon
                 icon="CopyIcon"
                 size="18"
                 @click="copy()"
               />
             </h3>
-            {{ address }} <b-badge
+            {{ address }}
+            <b-badge
               v-for="name in names"
               :key="name.name"
               v-b-tooltip.hover.top="name.provider"
@@ -692,10 +694,12 @@ export default {
       this.error = err
     })
     this.$http.resolveStarName(this.address).then(x => {
-      this.names.push({
-        provider: 'Stargaze',
-        name: x.data,
-      })
+      if (x.data) {
+        this.names.push({
+          provider: 'Stargaze',
+          name: x.data,
+        })
+      }
     })
     resolvePrimaryDomainByAddress(this.address).then(result => {
       if (result.isOk()) {
