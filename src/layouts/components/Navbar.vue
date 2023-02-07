@@ -117,7 +117,7 @@
               <span class="font-weight-bolder">
                 {{ item.wallet }}
                 <b-badge
-                  v-for="(name, i) in names[item.address.addr]"
+                  v-for="(name, i) in domains[item.address.addr]"
                   :key="i"
                   v-b-tooltip.hover.top="name.provider"
                   variant="primary"
@@ -243,9 +243,13 @@ export default {
       index: 0,
       chainid: '',
       names: {},
+      loading: [],
     }
   },
   computed: {
+    domains() {
+      return this.names
+    },
     walletName() {
       const key = this.$store?.state?.chains?.defaultWallet
       return key || 'Wallet'
@@ -286,30 +290,33 @@ export default {
   },
   methods: {
     formatAddr(v) {
-      this.$http.resolveStarName(v).then(res => {
-        const name = {
-          name: res.data,
-          provider: 'Stargaze',
-        }
-        if (this.names[v]) {
-          this.names[v].push(name)
-        } else {
-          this.names[v] = [name]
-        }
-      })
-      resolvePrimaryDomainByAddress(this.address).then(result => {
-        if (result.isOk()) {
+      if (!this.loading.includes(v)) {
+        this.loading.push(v)
+        this.$http.resolveStarName(v).then(res => {
           const name = {
-            name: result.value,
-            provider: 'IBC Domain',
+            name: res.data,
+            provider: 'Stargaze',
           }
           if (this.names[v]) {
             this.names[v].push(name)
           } else {
             this.names[v] = [name]
           }
-        }
-      })
+        })
+        resolvePrimaryDomainByAddress(this.address).then(result => {
+          if (result.isOk()) {
+            const name = {
+              name: result.value,
+              provider: 'IBC Domain',
+            }
+            if (this.names[v]) {
+              this.names[v].push(name)
+            } else {
+              this.names[v] = [name]
+            }
+          }
+        })
+      }
       return v.substring(0, 10).concat('...', v.substring(v.length - 10))
     },
     updateDefaultWallet(v) {
