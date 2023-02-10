@@ -3,12 +3,12 @@ import navItems from '@/plugins/vuetify/navigation/vertical'
 import { useThemeConfig } from '@/plugins/vuetify/@core/composable/useThemeConfig'
 
 // Components
-import Footer from '@/plugins/vuetify/layouts/components/Footer.vue'
-import NavbarThemeSwitcher from '@/plugins/vuetify/layouts/components/NavbarThemeSwitcher.vue'
-import UserProfile from '@/plugins/vuetify/layouts/components/UserProfile.vue'
+import Footer from '@/layouts/components/Footer.vue'
+import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
+import UserProfile from '@/layouts/components/UserProfile.vue'
 
 // @layouts plugin
-import { VerticalNavLayout } from '@/plugins/vuetify/@layouts'
+import { VerticalNavLayout } from '@layouts'
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint, isVerticalNavCollapsed } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()

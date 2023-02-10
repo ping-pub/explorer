@@ -21,10 +21,10 @@ export default defineConfig({
       },
     }),
     Pages({
-      dirs: ["./src/plugins/vuetify/pages"],
+      dirs: ["./src/pages", "./src/modules"],
     }),
     Layouts({
-      layoutsDirs: "./src/plugins/vuetify/layouts/",
+      layoutsDirs: "./src/layouts/",
     }),
     Components({
       dirs: ["src/plugins/vuetify/@core/components"],
