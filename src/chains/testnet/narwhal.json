@@ -1,0 +1,17 @@
+{
+    "chain_name": "narwhal",
+    "api": ["https://whitewhale-testnet-api.polkachu.com"],
+    "rpc": [ "https://whitewhale-testnet-rpc.polkachu.com"],
+    "sdk_version": "0.45.9",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "migaloo",
+    "logo": "/logos/migaloo.png",
+    "assets": [{
+        "base": "uwhale",
+        "symbol": "WHALE",
+        "exponent": "6",
+        "coingecko_id": "cosmos", 
+        "logo": "/logos/migaloo.png"
+    }]
+}
