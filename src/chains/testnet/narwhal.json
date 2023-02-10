@@ -2,7 +2,7 @@
     "chain_name": "narwhal",
     "api": ["https://whitewhale-testnet-api.polkachu.com"],
     "rpc": [ "https://whitewhale-testnet-rpc.polkachu.com"],
-    "sdk_version": "0.45.1",
+    "sdk_version": "0.45.9",
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "migaloo",
