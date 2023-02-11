@@ -24,10 +24,6 @@ export interface UserConfig {
     isVerticalNavCollapsed: boolean
     defaultNavItemIconProps: unknown
   }
-  horizontalNav: {
-    type: 'sticky' | 'static' | 'hidden'
-    transition?: string | Component
-  }
   icons: {
     chevronDown: any
     chevronRight: any
@@ -64,10 +60,10 @@ export interface Config {
     isVerticalNavCollapsed: Ref<UserConfig['verticalNav']['isVerticalNavCollapsed']>
     defaultNavItemIconProps: UserConfig['verticalNav']['defaultNavItemIconProps']
   }
-  horizontalNav: {
-    type: Ref<UserConfig['horizontalNav']['type']>
-    transition?: UserConfig['horizontalNav']['transition']
-  }
+  // horizontalNav: {
+  //   type: Ref<UserConfig['horizontalNav']['type']>
+  //   transition?: UserConfig['horizontalNav']['transition']
+  // }
   icons: {
     chevronDown: UserConfig['icons']['chevronDown']
     chevronRight: UserConfig['icons']['chevronRight']

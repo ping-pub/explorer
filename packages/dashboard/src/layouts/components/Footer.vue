@@ -12,26 +12,22 @@
         class="mx-1"
       />
       By <a
-        href="https://pixinvent.com"
+        href="https://ping.pub"
         target="_blank"
         rel="noopener noreferrer"
         class="text-primary ms-1"
-      >Pixinvent</a>
+      >Ping.pub</a>
     </span>
     <!-- 👉 Footer: right content -->
     <span class="d-md-flex gap-x-4 text-primary d-none">
       <a
-        href="https://themeforest.net/licenses/standard"
+        href="https://github.com/ping-pub/explorer/blob/master/LICENSE"
         target="noopener noreferrer"
       >License</a>
       <a
-        href="https://pixinvent.com/"
+        href="https://github.com/ping-pub/explorer"
         target="noopener noreferrer"
-      >More Themes</a>
-      <a
-        href="https://pixinvent.com/demo/materialize-vuejs-admin-template/documentation/"
-        target="noopener noreferrer"
-      >Documentation</a>
+      >Github</a>
     </span>
   </div>
 </template>

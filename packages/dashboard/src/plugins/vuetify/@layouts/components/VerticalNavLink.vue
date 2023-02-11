@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useLayouts } from '@layouts'
-import { config } from '@layouts/config'
-import { can } from '@layouts/plugins/casl'
+import { themeConfig as config } from '@themeConfig'
 import type { NavLink } from '@layouts/types'
 import { getComputedNavLinkToProp, isNavLinkActive } from '@layouts/utils'
 
@@ -16,7 +15,7 @@ const hideTitleAndBadge = isVerticalNavMini(windowWidth)
 </script>
 
 <template>
-  <li v-if="can(item.action, item.subject)" class="nav-link" :class="{ disabled: item.disable }">
+  <li class="nav-link" :class="{ disabled: item.disable }">
     <Component :is="item.to ? 'RouterLink' : 'a'" v-bind="getComputedNavLinkToProp(item)"
       :class="{ 'router-link-active router-link-exact-active': isNavLinkActive(item, $router) }">
       <Component :is="config.app.iconRenderer || 'div'" v-bind="item.icon || config.verticalNav.defaultNavItemIconProps"

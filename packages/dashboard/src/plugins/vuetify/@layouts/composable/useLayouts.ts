@@ -1,7 +1,7 @@
 import type { MaybeRef } from '@vueuse/shared'
 import type { Ref } from 'vue'
 import { AppContentLayoutNav, NavbarType } from '../enums'
-import { config } from '@layouts/config'
+import { themeConfig as config } from '@themeConfig'
 import { injectionKeyIsVerticalNavHovered } from '@layouts'
 
 export const useLayouts = () => {

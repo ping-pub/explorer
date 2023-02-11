@@ -1,6 +1,6 @@
 import type { InjectionKey, Plugin, Ref } from 'vue'
 import { useDynamicVhCssProperty } from './composable/useDynamicVhCssProperty'
-import { config } from './config'
+import { themeConfig as config } from '@themeConfig'
 import { ContentWidth } from './enums'
 import type { UserConfig } from './types'
 import { useLayouts } from '@layouts'
@@ -41,7 +41,7 @@ export const createLayouts = (userConfig: UserConfig): Plugin => {
 
   config.verticalNav.defaultNavItemIconProps = userConfig.verticalNav.defaultNavItemIconProps
 
-  config.horizontalNav.type.value = userConfig.horizontalNav.type
+  // config.horizontalNav.type.value = userConfig.horizontalNav.type
 
   config.icons.chevronDown = userConfig.icons.chevronDown
   config.icons.chevronRight = userConfig.icons.chevronRight

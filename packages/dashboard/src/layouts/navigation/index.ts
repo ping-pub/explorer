@@ -1,4 +1,4 @@
-import type { HorizontalNavItems } from '@layouts/types'
+import type { VerticalNavItems } from '@/@layouts/types'
 
 export default [
   {
@@ -11,4 +11,9 @@ export default [
     to: { name: 'second-page' },
     icon: { icon: 'mdi-file-document-outline' },
   },
-] as HorizontalNavItems
+  {
+    title: 'Second2 page',
+    to: { name: 'second-page' },
+    icon: { icon: 'mdi-file-document-outline' },
+  },
+] as VerticalNavItems

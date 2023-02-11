@@ -21,7 +21,7 @@ export default defineConfig({
       },
     }),
     Pages({
-      dirs: ["./src/pages", "./src/modules"],
+      dirs: ["./src/modules", "./src/pages", ],
     }),
     Layouts({
       layoutsDirs: "./src/layouts/",

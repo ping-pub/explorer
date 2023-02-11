@@ -1,15 +1,14 @@
 <script lang="ts" setup>
 import { injectionKeyIsVerticalNavHovered, useLayouts } from '@layouts'
 import { TransitionExpand, VerticalNavLink } from '@layouts/components'
-import { config } from '@layouts/config'
-import { canViewNavMenuGroup } from '@layouts/plugins/casl'
+import { themeConfig as config } from '@themeConfig'
 import type { NavGroup } from '@layouts/types'
 import { isNavGroupActive, openGroups } from '@layouts/utils'
 
 const props = defineProps<{
   item: NavGroup
 }>()
-
+ 
 defineOptions({
   name: 'VerticalNavGroup',
 })
@@ -172,7 +171,6 @@ watch(isVerticalNavMini(windowWidth, isVerticalNavHovered), val => {
 
 <template>
   <li
-    v-if="canViewNavMenuGroup(item)"
     class="nav-group"
     :class="[
       {

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import navItems from '@/plugins/vuetify/navigation/vertical'
+import navItems from '@/layouts/navigation'
 import { useThemeConfig } from '@/plugins/vuetify/@core/composable/useThemeConfig'
 
 // Components
