@@ -283,6 +283,61 @@
           @change="pageload"
         />
       </b-card>
+      <b-card
+        v-if="isContract && !!contractInfo"
+      >
+        <query-modal
+          modal-id="queryModal"
+          :address="address"
+        />
+        <b-card-header class="pt-0 pl-0 pr-0">
+          <b-card-title>{{ $t('walletAccountDetail.contract_info') }}</b-card-title>
+          <div>
+            <b-button
+              v-b-modal.queryModal
+              variant="primary"
+              size="sm"
+              class="mr-25"
+            >{{ $t('walletAccountDetail.query') }}</b-button>
+          </div>
+        </b-card-header>
+        <b-card-body class="pl-0 pr-0">
+          <b-table-simple stacked="sm">
+            <b-tbody>
+              <b-tr>
+                <b-td>
+                  {{ $t('walletAccountDetail.code_id') }}
+                </b-td><b-td> {{ contractInfo.code_id }} </b-td>
+              </b-tr>
+              <b-tr>
+                <b-td>
+                  {{ $t('walletAccountDetail.creator') }}
+                </b-td><b-td> {{ contractInfo.creator }} </b-td>
+              </b-tr>
+              <b-tr>
+                <b-td>
+                  {{ $t('walletAccountDetail.admin') }}
+                </b-td><b-td> {{ contractInfo.admin }} </b-td>
+              </b-tr>
+              <b-tr>
+                <b-td>
+                  {{ $t('walletAccountDetail.label') }}
+                </b-td><b-td> {{ contractInfo.label }} </b-td>
+              </b-tr>
+              <b-tr v-if="contractInfo.created">
+                <b-td>
+                  {{ $t('walletAccountDetail.created') }} ({{ $t('walletAccountDetail.height') }} / {{ $t('walletAccountDetail.tx_index') }})
+                </b-td><b-td> {{ contractInfo.created.block_height }} / {{ contractInfo.created.tx_index }} </b-td>
+              </b-tr>
+              <b-tr>
+                <b-td>
+                  {{ $t('walletAccountDetail.ibc_port_id') }}
+                </b-td><b-td> {{ contractInfo.ibc_port_id }} </b-td>
+              </b-tr>
+            </b-tbody>
+          </b-table-simple>
+        </b-card-body>
+      </b-card>
 
       <b-card
         v-if="account"
@@ -447,6 +502,7 @@ import {
   toDuration, abbrMessage, abbrAddress, getUserCurrency, getUserCurrencySign, numberWithCommas, toETHAddress,
 } from '@/libs/utils'
 import OperationModal from '@/views/components/OperationModal/index.vue'
+import QueryModal from '@/views/components/QueryModal/index.vue'
 import {
   convertAddress,
   resolveDomainDetails,
@@ -483,6 +539,7 @@ export default {
     ObjectFieldComponent,
     ChartComponentDoughnut,
     OperationModal,
+    QueryModal,
   },
   directives: {
     'b-modal': VBModal,
@@ -513,7 +570,9 @@ export default {
       selectedValidator: '',
       totalCurrency: 0,
       address,
+      isContract: !!address.match(/^[a-z]+1[a-z\d]{58}$/),
       account: null,
+      contractInfo: null,
       assets: [],
       reward: [],
       delegations: [],
@@ -721,6 +780,11 @@ export default {
       this.$http.getBankAccountBalance(this.address).then(bal => {
         this.assets = bal
       })
+      if (this.isContract) {
+        this.$http.getContractInfo(this.address).then(res => {
+          this.contractInfo = res
+        })
+      }
       this.$http.getStakingReward(this.address).then(res => {
         this.reward = res
       })

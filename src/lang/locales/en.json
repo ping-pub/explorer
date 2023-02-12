@@ -130,6 +130,16 @@
     "acct_num": "Account Number",
     "seq": "Sequence",
     "pub_key": "Public Key",
+    "contract_info": "Contract Info",
+    "query": "Query",
+    "code_id": "Code ID",
+    "creator": "Creator",
+    "admin": "Admin",
+    "label": "Label",
+    "created": "Created",
+    "height": "Height",
+    "tx_index": "Tx index",
+    "ibc_port_id": "IBC port ID",
     "orig_vest": "Original Vesting",
     "delegated_free": "Delegated Free",
     "delegated_vest": "Delegated Vesting",
@@ -147,5 +157,10 @@
     "two_ways": "There are two ways to monitor your validators:",
     "pin": "Pin a validator on Uptime pages.",
     "link": "Specify parameters like following:"
+  },
+  "queryContractModal": {
+    "title": "Query Contract",
+    "submit": "Query",
+    "reset": "Reset"
   }
 }
