@@ -52,9 +52,10 @@ export const isNavLinkActive = (link: NavLink, router: Router) => {
   if (!resolveRoutedName)
     return false
 
-  return matchedRoutes.some(route => {
-    return route.name === resolveRoutedName || route.meta.navActiveLink === resolveRoutedName
-  })
+  return false
+  // return matchedRoutes.some(route => {
+  //   return route.name === resolveRoutedName || route.meta.navActiveLink === resolveRoutedName
+  // })
 }
 
 /**

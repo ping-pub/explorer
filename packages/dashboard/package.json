@@ -15,6 +15,7 @@
     "@casl/vue": "^2.2.1",
     "@floating-ui/dom": "^1.2.0",
     "@iconify/vue": "^4.1.0",
+    "@ping-pub/chain-registry-client": "^0.0.25",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
     "@vueuse/core": "^9.12.0",
     "@vueuse/math": "^9.12.0",

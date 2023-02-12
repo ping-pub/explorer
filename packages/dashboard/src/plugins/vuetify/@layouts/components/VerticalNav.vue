@@ -41,6 +41,8 @@ const resolveNavItemComponent = (item: NavLink | NavSectionTitle | NavGroup) => 
   return VerticalNavLink
 }
 
+
+
 /*
   ℹ️ Close overlay side when route is changed
   Close overlay vertical nav when link is clicked

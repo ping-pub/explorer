@@ -1,6 +1,6 @@
 import { breakpointsVuetify } from '@vueuse/core'
 
-import { VIcon } from 'vuetify/components'
+import { VAvatar } from 'vuetify/components'
 
 // ❗ Logo SVG must be imported with ?raw suffix
 // import logo from '@/assets/logo.svg?raw'
@@ -24,7 +24,7 @@ export const { themeConfig, layoutConfig } = defineThemeConfig({
     isRtl: false,
     skin: Skins.Default,
     routeTransition: RouteTransitions.Fade,
-    iconRenderer: VIcon,
+    iconRenderer: VAvatar,
   },
   navbar: {
     type: NavbarType.Sticky,

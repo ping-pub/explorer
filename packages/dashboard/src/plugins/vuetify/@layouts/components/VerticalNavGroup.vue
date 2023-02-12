@@ -39,7 +39,7 @@ const isVerticalNavHovered = inject(injectionKeyIsVerticalNavHovered, ref(false)
 // })
 
 const isGroupActive = ref(false)
-const isGroupOpen = ref(false)
+const isGroupOpen = ref(true)
 
 /**
 * Checks if any of children group is open or not.
@@ -77,7 +77,9 @@ watch(() => route.path, () => {
   const isActive = isNavGroupActive(props.item.children, router)
 
   // Don't open group if vertical nav is collapsed and window size is more than overlay nav breakpoint
-  isGroupOpen.value = isActive && !isVerticalNavMini(windowWidth, isVerticalNavHovered).value
+  if(props.item.badgeContent) {
+    isGroupOpen.value = isActive && !isVerticalNavMini(windowWidth, isVerticalNavHovered).value
+  }
   isGroupActive.value = isActive
 }, { immediate: true })
 
@@ -135,7 +137,7 @@ watch(openGroups, val => {
   if (isAnyChildOpen(props.item.children))
     return
 
-  isGroupOpen.value = isActive
+  // isGroupOpen.value = isActive
   isGroupActive.value = isActive
 }, { deep: true })
 

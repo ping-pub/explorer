@@ -1,25 +1,35 @@
-<template>
-  <div>
-    <VCard
-      class="mb-6"
-      title="Kick start your project 🚀"
-    >
-      <VCardText>All the best for your new project.</VCardText>
-      <VCardText>
-        Please make sure to read our <a
-          href="https://pixinvent.com/demo/materialize-vuejs-admin-dashboard-template/documentation/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-decoration-none"
-        >
-          Template Documentation
-        </a> to understand where to go from here and how to use our template.
-      </VCardText>
-    </VCard>
+<script lang="ts" setup>
+import { useDashboard, LoadingStatus } from '@/stores/useDashboard';
+import ChainSummary from '@/components/ChainSummary.vue';
 
-    <VCard title="Want to integrate JWT? 🔒">
-      <VCardText>We carefully crafted JWT flow so you can implement JWT with ease and with minimum efforts.</VCardText>
-      <VCardText>Please read our  JWT Documentation to get more out of JWT authentication.</VCardText>
-    </VCard>
+const dashboard = useDashboard()
+
+dashboard.$subscribe((mutation, state) => {
+  localStorage.setItem('favorite', JSON.stringify(state.favorite))
+})
+</script>
+<template>
+  <div class="d-flex flex-column align-center">
+    <div class="d-flex justify-center align-center align-self-center p-1 b1">
+      <VImg src="/logo.svg" width="85" height="85"/>
+      <h1 class="text-primary text-h3 font-weight-bold d-none d-md-block ml-1">
+        Ping Dashboard<VChip>Beta</VChip>
+      </h1>
+    </div>
+
+    <p class="mb-1">
+      Ping Dashboard is not just an explorer but also a wallet and more ... 🛠
+    </p>
+    <h2 class="mb-9">
+      Cosmos Ecosystem Blockchains 🚀
+    </h2>
+    <VProgressLinear v-if="dashboard.status !== LoadingStatus.Loaded " indeterminate color="primary darken-2"/>
+    <VRow>
+      <VCol v-for="k in dashboard.chains" md="3">
+        <VLazy min-height="40" min-width="200" transition="fade-transition">
+          <ChainSummary :name="k.chain_name" />
+        </VLazy>
+      </VCol>    
+    </VRow>
   </div>
 </template>

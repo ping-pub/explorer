@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-import navItems from '@/layouts/navigation'
 import { useThemeConfig } from '@/plugins/vuetify/@core/composable/useThemeConfig'
 
 // Components
 import Footer from '@/layouts/components/Footer.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
+
+import type { VerticalNavItems } from '@/@layouts/types'
+import { useDashboard } from '@/stores/useDashboard'
 
 // @layouts plugin
 import { VerticalNavLayout } from '@layouts'
@@ -19,10 +21,15 @@ const verticalNavHeaderActionAnimationName = ref<null | 'rotate-180' | 'rotate-b
 watch(isVerticalNavCollapsed, val => {
   verticalNavHeaderActionAnimationName.value = val ? 'rotate-180' : 'rotate-back-180'
 })
+
+
+const dashboard = useDashboard()
+dashboard.initial()
+
 </script>
 
 <template>
-  <VerticalNavLayout :nav-items="navItems">
+  <VerticalNavLayout :nav-items="dashboard.computeChainNav">
     <!-- 👉 navbar -->
     <template #navbar="{ toggleVerticalOverlayNavActive }">
       <div class="d-flex h-100 align-center">

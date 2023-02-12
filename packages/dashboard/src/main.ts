@@ -6,10 +6,11 @@ import vuetify from "@/plugins/vuetify";
 import { loadFonts } from "@/plugins/vuetify/webfontloader";
 import "@/plugins/vuetify/@core/scss/template/index.scss";
 import "@/plugins/vuetify/styles/styles.scss";
-import { createApp } from "vue";
+import { createApp, markRaw } from "vue";
 import { createPinia } from "pinia";
-import router from "./router";
+import { useDashboard } from "./stores/useDashboard";
 // import router from "@/plugins/vuetify/router";
+import router from "./router";
 
 loadFonts();
 
@@ -19,8 +20,9 @@ const app = createApp(App);
 // Use plugins
 app.use(vuetify);
 app.use(createPinia());
-app.use(router);
 app.use(layoutsPlugin);
+app.use(router);
+
 
 // Mount vue app
 app.mount("#app");

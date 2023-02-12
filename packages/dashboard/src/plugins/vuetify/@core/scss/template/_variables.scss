@@ -22,11 +22,14 @@ $vertical-nav-horizontal-padding-start: utils.get-first-value($vertical-nav-hori
     "default": (
       "--v-theme-background": (
         "light": (247,247,249),
-        "dark": (40,42,66),
+        // "dark": (40,42,66),
+        "dark": (22, 29, 49)
       ),
       "--v-theme-surface": (
         "light": (255, 255, 255),
-        "dark": (48,51,78),
+        "dark": (40,51,78),
+        // "dark": (48,51,78),
+        // "dark": #283046
       ),
     ),
     "bordered": (
