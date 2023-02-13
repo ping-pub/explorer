@@ -194,7 +194,7 @@ watch(isVerticalNavMini(windowWidth, isVerticalNavHovered), val => {
       <TransitionGroup name="transition-slide-x">
         <!-- 👉 Title -->
         <Component
-          :is=" config.app.enableI18n ? 'i18n-t' : 'span'"
+          :is=" config.app.enableI18n && item.i18n ? 'i18n-t' : 'span'"
           v-bind="dynamicI18nProps(item.title, 'span')"
           v-show="!hideTitleAndBadge"
           key="title"
@@ -205,7 +205,7 @@ watch(isVerticalNavMini(windowWidth, isVerticalNavHovered), val => {
 
         <!-- 👉 Badge -->
         <Component
-          :is="config.app.enableI18n ? 'i18n-t' : 'span'"
+          :is="config.app.enableI18n && false ? 'i18n-t' : 'span'"
           v-bind="dynamicI18nProps(item.badgeContent, 'span')"
           v-show="!hideTitleAndBadge"
           v-if="item.badgeContent"

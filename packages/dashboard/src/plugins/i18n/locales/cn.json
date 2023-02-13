@@ -1,0 +1,9 @@
+{
+  "module": {
+    "chain": "面板首页",
+    "chain-test": "测试功能",
+  },
+  "Ecosystem": "生态系统",
+  "All Blockchains": "全部区块链",
+  "Favorite": "收藏夹"
+}

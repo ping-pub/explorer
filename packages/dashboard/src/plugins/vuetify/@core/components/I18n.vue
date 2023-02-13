@@ -21,7 +21,7 @@ watch(locale, val => {
   document.documentElement.setAttribute('lang', val as string)
 })
 
-const currentLang = ref(['en'])
+const currentLang = ref([localStorage.getItem('lang')|| 'en'])
 </script>
 
 <template>

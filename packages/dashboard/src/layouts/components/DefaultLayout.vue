@@ -4,13 +4,15 @@ import { useThemeConfig } from '@/plugins/vuetify/@core/composable/useThemeConfi
 // Components
 import Footer from '@/layouts/components/Footer.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
-import UserProfile from '@/layouts/components/UserProfile.vue'
+import UserProfile from '@/layouts/components/ChainProfile.vue'
 
-import type { VerticalNavItems } from '@/@layouts/types'
 import { useDashboard } from '@/stores/useDashboard'
 
 // @layouts plugin
 import { VerticalNavLayout } from '@layouts'
+import NavBarI18n from './NavBarI18n.vue'
+import NavSearchBar from './NavSearchBar.vue'
+import NavBarNotifications from './NavBarNotifications.vue'
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint, isVerticalNavCollapsed } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
@@ -38,11 +40,13 @@ dashboard.initial()
           <VIcon icon="mdi-menu" />
         </IconBtn>
 
-        <NavbarThemeSwitcher />
+        <UserProfile />
 
         <VSpacer />
-
-        <UserProfile />
+        <NavSearchBar />
+        <NavBarNotifications />
+        <NavBarI18n />
+        <NavbarThemeSwitcher />
       </div>
     </template>
 

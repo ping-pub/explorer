@@ -3,6 +3,7 @@ import "@/plugins/vuetify/@iconify/icons-bundle";
 import App from "@/App.vue";
 import layoutsPlugin from "@/plugins/vuetify/layouts";
 import vuetify from "@/plugins/vuetify";
+import i18n from "@/plugins/i18n";
 import { loadFonts } from "@/plugins/vuetify/webfontloader";
 import "@/plugins/vuetify/@core/scss/template/index.scss";
 import "@/plugins/vuetify/styles/styles.scss";
@@ -18,6 +19,7 @@ loadFonts();
 const app = createApp(App);
 
 // Use plugins
+app.use(i18n)
 app.use(vuetify);
 app.use(createPinia());
 app.use(layoutsPlugin);

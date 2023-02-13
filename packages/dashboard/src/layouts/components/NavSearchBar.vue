@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { SearchHeader, SearchItem } from '@/@fake-db/types'
-import axios from '@axios'
+import axios from 'axios'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 
 interface Suggestion {

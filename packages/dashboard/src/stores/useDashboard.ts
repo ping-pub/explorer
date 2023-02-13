@@ -4,6 +4,7 @@ import { get } from '../libs/http'
 import type { Chain, Asset } from '@ping-pub/chain-registry-client/dist/types'
 import type { VerticalNavItems } from '@/@layouts/types'
 import ChainRegistryClient from '@ping-pub/chain-registry-client'
+import { useRouter } from "vue-router";
 
 export interface DirectoryChain {
   assets: Asset[],
@@ -103,21 +104,30 @@ export const useDashboard = defineStore("dashboard", () => {
   const findChainByName = computed((name) => chains.value[name]);
 
   const computeChainNav = computed(() => {
+    // compute current menu
     const currChain = chains.value[current.value]
     let currNavItem: VerticalNavItems = []
-    if(currChain) {
+
+    const router = useRouter()
+    const routes = router?.getRoutes()||[]
+    console.log(routes)
+    if(currChain && routes) {
       currNavItem = [{
         title: currChain.pretty_name || currChain.chain_name || current.value,
         icon: {image: getLogo(currChain.logo_URIs), size: '22'},
-        children: [
-          {
-            title: 'Dashboard',
-            to: { path: `/${current.value}`},
-            icon: { icon: 'mdi-chevron-right', size: '22'}
-          }
-        ]
+        i18n: false,
+        children: routes
+                  .filter(x=>x.name && x.name.toString().startsWith('chain'))
+                  .map(x => ({
+                    title: `module.${x.name?.toString()}`, 
+                    to: {path: x.path.replace(':chain',current.value)}, 
+                    icon: { icon: 'mdi-chevron-right', size: '22'},
+                    i18n: true
+                  }))
+                  .sort((a,b)=>a.to.path.length - b.to.path.length)
       }]
     }
+    // compute favorite menu
     const favNavItems: VerticalNavItems = []
     favorite.value.forEach(name => {
       const ch = chains.value[name]
@@ -130,20 +140,23 @@ export const useDashboard = defineStore("dashboard", () => {
       } 
     })
     
+    // combine all together
     return [...currNavItem,
         { heading: 'Ecosystem' },
         {
           title: 'Favorite', 
           children: favNavItems, 
           badgeContent: favorite.value.length,
-          badgeClass: 'bg-success',
+          badgeClass: 'bg-error',
+          i18n: true,
           icon: { icon: 'mdi-star', size: '22'}
         },
         {
           title: 'All Blockchains',
           to: { path : '/'},
           badgeContent: length.value,
-          badgeClass: 'bg-success',
+          badgeClass: 'bg-error',
+          i18n: true,
           icon: { icon: 'mdi-grid', size: '22'}
         }
       ]
@@ -176,6 +189,9 @@ export const useDashboard = defineStore("dashboard", () => {
       current.value = name
     }
   }
+  function getCurrentChain() {
+    return chains.value[current.value]
+  }
   function setConfigSource(newSource: ConfigSource) {
     source.value = newSource
     initial()
@@ -184,7 +200,7 @@ export const useDashboard = defineStore("dashboard", () => {
     // states
     status, favorite, current, chains, length, 
     // getters
-    computeChainNav, findChainByName, 
+    computeChainNav, findChainByName, getCurrentChain,
     // actions
     initial, loadingFromRegistry, loadingChainByName, setCurrentChain, setConfigSource
   };

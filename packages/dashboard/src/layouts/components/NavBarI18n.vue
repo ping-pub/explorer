@@ -11,8 +11,8 @@ const i18nCompLanguages: I18nLanguage[] = [
     i18nLang: 'en',
   },
   {
-    label: 'French',
-    i18nLang: 'fr',
+    label: '中文',
+    i18nLang: 'cn',
   },
   {
     label: 'Arabic',
@@ -22,6 +22,7 @@ const i18nCompLanguages: I18nLanguage[] = [
 
 const handleLangChange = (lang: string) => {
   isAppRtl.value = lang === 'ar'
+  localStorage.setItem('lang', lang)
 }
 </script>
 
