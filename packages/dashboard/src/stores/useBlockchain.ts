@@ -1,7 +1,7 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { getLogo, useDashboard } from "./useDashboard";
-
+import { useTheme } from 'vuetify'
 
 export const useBlockchain = defineStore("blockchain", () => {
   const dbstore = useDashboard()
@@ -18,12 +18,22 @@ export const useBlockchain = defineStore("blockchain", () => {
   const name = computed(() => {
     return current.value.chain_name
   })
+  const primaryColor = computed(() => {
+    const colors = ['#fff', '#fea', '#123', '#68f', '#aca', 'bbe', '#666CFF']
+    const color = colors[Math.floor(Math.random() * colors.length)]
+
+    const vuetifyTheme = useTheme()
+    const currentThemeName = vuetifyTheme.name.value
+    vuetifyTheme.themes.value[currentThemeName].colors.primary = color
+    return color
+  })
   const availableEndpoint = computed(() => {
     const all = current.value?.apis?.rest
     if(all) {
       if(!rest.value || all.findIndex(x => x.address === rest.value) < 0) {        
         const rn = Math.random()
-        rest.value = all[Math.floor(rn * all.length)].address
+        const endpoint = all[Math.floor(rn * all.length)]
+        rest.value = endpoint?.address || ''
       }
     }
     
@@ -38,7 +48,7 @@ export const useBlockchain = defineStore("blockchain", () => {
     // states
     availableEndpoint,
     // getters
-    name, current, logo,
+    name, current, logo, primaryColor,
     // actions
     setRestEndpoint
   };

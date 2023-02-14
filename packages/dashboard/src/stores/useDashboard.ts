@@ -147,7 +147,7 @@ export const useDashboard = defineStore("dashboard", () => {
           title: 'Favorite', 
           children: favNavItems, 
           badgeContent: favorite.value.length,
-          badgeClass: 'bg-error',
+          badgeClass: 'bg-primary',
           i18n: true,
           icon: { icon: 'mdi-star', size: '22'}
         },
@@ -155,7 +155,7 @@ export const useDashboard = defineStore("dashboard", () => {
           title: 'All Blockchains',
           to: { path : '/'},
           badgeContent: length.value,
-          badgeClass: 'bg-error',
+          badgeClass: 'bg-primary',
           i18n: true,
           icon: { icon: 'mdi-grid', size: '22'}
         }

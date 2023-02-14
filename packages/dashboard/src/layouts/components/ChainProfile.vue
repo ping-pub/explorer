@@ -34,7 +34,7 @@ const chainStore = useBlockchain()
             <!-- 👉 Rest -->
             <VListSubheader v-if="chainStore.current.apis?.rest" title="Rest Endpoint" />
             <VListItem v-for="i in chainStore.current.apis?.rest" link @click="chainStore.setRestEndpoint(i.address)">
-              <VListItemTitle>{{ i.provider }} <VIcon v-if="chainStore.availableEndpoint && i.address === chainStore.availableEndpoint" icon="mdi-check" color="primary" /></VListItemTitle>
+              <VListItemTitle>{{ i.provider }} <VIcon v-if="chainStore.availableEndpoint && i.address === chainStore.availableEndpoint" icon="mdi-check" color="success" /></VListItemTitle>
               <VListItemSubtitle>{{ i.address }}</VListItemSubtitle>
             </VListItem>
 

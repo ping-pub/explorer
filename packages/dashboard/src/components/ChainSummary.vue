@@ -47,7 +47,7 @@ const logoPath = computed(() => {
                         activator="parent"
                         location="top"
                     >
-                        Add to favorite
+                        {{ $t('index.add_to_favorite') }}
                     </VTooltip>
                 </VListItemAction>
             </template>

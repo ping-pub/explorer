@@ -20,7 +20,7 @@ const chains = computed(()=> {
 </script>
 <template>
   <div class="d-flex flex-column justify-center">
-    <div class="d-flex justify-center align-self-center p-1 b1">
+    <div class="d-flex justify-center align-center align-self-center p-1 b1">
       <VImg src="/logo.svg" width="85" height="85"/>
       <h1 class="text-primary text-h3 font-weight-bold d-none d-md-block ml-1">
         Ping Dashboard<VChip>Beta</VChip>
@@ -28,14 +28,14 @@ const chains = computed(()=> {
     </div>
     <div class="d-flex flex-column align-center">
       <p class="mb-1">
-        Ping Dashboard is not just an explorer but also a wallet and more ... 🛠
+        {{ $t('index.slogan') }}
       </p>
       <h2 class="mb-9">
         Cosmos Ecosystem Blockchains 🚀
       </h2>
     </div>
     <VProgressLinear v-if="dashboard.status !== LoadingStatus.Loaded " indeterminate color="primary darken-2"/>
-    <VTextField v-model="keywords" variant="underlined" placeholder="Search chain name" style="max-width: 300px;" app>
+    <VTextField v-model="keywords" variant="underlined" :placeholder="$t('index.search_placeholder')" style="max-width: 300px;" app>
       <template #append-inner>
         {{ chains.length }}/{{ dashboard.length }}
       </template>
