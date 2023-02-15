@@ -183,7 +183,7 @@
                 <span class="font-weight-bold">Contact</span>
               </th>
               <td>
-                {{ validator.security_contact || '-' }}
+                {{ validator.description.security_contact || '-' }}
               </td>
             </tr>
           </table>
