@@ -44,7 +44,7 @@ dashboard.initial()
         <UserProfile />
 
         <VSpacer />
-        <NavSearchBar />
+        <!-- <NavSearchBar />-->
         <NavBarNotifications />
         <NavBarI18n />
         <NavbarThemeSwitcher />

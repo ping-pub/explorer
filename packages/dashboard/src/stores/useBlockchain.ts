@@ -2,6 +2,8 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { getLogo, useDashboard } from "./useDashboard";
 import { useTheme } from 'vuetify'
+import { osmosis,  } from 'osmojs';
+import { LCDClient } from '@osmonauts/lcd'
 
 export const useBlockchain = defineStore("blockchain", () => {
   const dbstore = useDashboard()
@@ -18,6 +20,7 @@ export const useBlockchain = defineStore("blockchain", () => {
   const name = computed(() => {
     return current.value.chain_name
   })
+
   const primaryColor = computed(() => {
     const colors = ['#fff', '#fea', '#123', '#68f', '#aca', 'bbe', '#666CFF']
     const color = colors[Math.floor(Math.random() * colors.length)]
@@ -40,6 +43,11 @@ export const useBlockchain = defineStore("blockchain", () => {
     return rest.value
   })
 
+  const restClient = computed(()=> {
+    console.log(availableEndpoint, 'endpoint')
+    return new LCDClient({restEndpoint: availableEndpoint})
+  })
+
   function setRestEndpoint(endpoint: string) {
     rest.value = endpoint
   }
@@ -48,7 +56,7 @@ export const useBlockchain = defineStore("blockchain", () => {
     // states
     availableEndpoint,
     // getters
-    name, current, logo, primaryColor,
+    name, current, logo, primaryColor, restClient, 
     // actions
     setRestEndpoint
   };
