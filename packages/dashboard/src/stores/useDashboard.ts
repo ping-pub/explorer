@@ -6,12 +6,26 @@ import type { VerticalNavItems } from '@/@layouts/types'
 import ChainRegistryClient from '@ping-pub/chain-registry-client'
 import { useRouter } from "vue-router";
 
+export enum EndpointType {
+  rpc,
+  rest,
+  grpc,
+  // webgrpc
+}
+
+export interface Endpoint {
+  type?: EndpointType,
+  address: string,
+  provider: string
+}
+
+// Chain config structure of cosmos.directory
 export interface DirectoryChain {
   assets: Asset[],
   bech32_prefix: string,
   best_apis: {
-    rest: {address: string, provider: string}[]
-    rpc: {address: string, provider: string}[]
+    rest: Endpoint[]
+    rpc: Endpoint[]
   },
   chain_id: string,
   chain_name: string,
@@ -33,18 +47,54 @@ export interface DirectoryChain {
   name: string,
   network_type: string,
   symbol: string,
-  versions: {
+  versions?: {
     application_version: string,
     cosmos_sdk_version: string,
     tendermint_version: string,
   }
 }
 
+export interface ChainConfig {
+  chainName: string,
+  prettyName: string,
+  bech32Prefix: string,
+  chainId: string,
+  assets: Asset[],
+  endpoints: {
+    rest?: Endpoint[]
+    rpc?: Endpoint[]
+    grpc?: Endpoint[] 
+  },
+  logo: string,
+  versions: {
+    application?: string,
+    cosmosSdk?: string,
+    tendermint?: string,
+  },
+}
+
+export function fromDirectory(source: DirectoryChain): ChainConfig {
+  const conf = {} as ChainConfig
+  conf.assets = source.assets,
+  conf.bech32Prefix = source.bech32_prefix,
+  conf.chainId = source.chain_id,
+  conf.chainName = source.chain_name,
+  conf.prettyName = source.pretty_name,
+  conf.versions = {
+    application: source.versions?.application_version || '',
+    cosmosSdk: source.versions?.cosmos_sdk_version || '',
+    tendermint: source.versions?.tendermint_version || '',
+  },
+  conf.logo = pathConvert(source.image)
+  conf.endpoints = source.best_apis
+  return conf
+}
+
 function pathConvert(path: string | undefined) {
   if(path) {
     path = path.replace('https://raw.githubusercontent.com/cosmos/chain-registry/master', 'https://registry.ping.pub')
   }
-  return path
+  return path || ''
 }
 
 export function getLogo(conf: {
@@ -99,7 +149,7 @@ export const useDashboard = defineStore("dashboard", () => {
   const source = ref(ConfigSource.MainnetCosmosDirectory)
   const favorite = ref(JSON.parse(localStorage.getItem('favorite') || '["cosmoshub", "osmosis"]') as string[])
   const current = ref(favorite.value[0])
-  const chains = ref({} as Record<string, Chain>);
+  const chains = ref({} as Record<string, ChainConfig>);
 
   const findChainByName = computed((name) => chains.value[name]);
 
@@ -110,11 +160,10 @@ export const useDashboard = defineStore("dashboard", () => {
 
     const router = useRouter()
     const routes = router?.getRoutes()||[]
-    console.log(routes)
     if(currChain && routes) {
       currNavItem = [{
-        title: currChain.pretty_name || currChain.chain_name || current.value,
-        icon: {image: getLogo(currChain.logo_URIs), size: '22'},
+        title: currChain.prettyName || currChain.chainName || current.value,
+        icon: {image: currChain.logo, size: '22'},
         i18n: false,
         children: routes
                   .filter(x=>x.name && x.name.toString().startsWith('chain'))
@@ -133,9 +182,9 @@ export const useDashboard = defineStore("dashboard", () => {
       const ch = chains.value[name]
       if(ch) {
         favNavItems.push({
-          title: ch.pretty_name || ch.chain_name || name, 
-          to: { path: `/${ch.chain_name || name}`}, 
-          icon: {image: getLogo(ch.logo_URIs), size: '22'}
+          title: ch.prettyName || ch.chainName || name, 
+          to: { path: `/${ch.chainName || name}`}, 
+          icon: {image: ch.logo, size: '22'}
         } )
       } 
     })
@@ -178,7 +227,7 @@ export const useDashboard = defineStore("dashboard", () => {
         status.value = LoadingStatus.Loading
         get(source.value).then((res)=> {
             res.chains.forEach(( x: DirectoryChain ) => {
-                chains.value[x.chain_name] = createChainFromDirectory(x)
+                chains.value[x.chain_name] = fromDirectory(x)
             });
             status.value = LoadingStatus.Loaded
         })

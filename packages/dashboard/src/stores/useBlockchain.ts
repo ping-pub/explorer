@@ -15,10 +15,10 @@ export const useBlockchain = defineStore("blockchain", () => {
     return dbstore.getCurrentChain()
   });
   const logo = computed(() => {
-    return getLogo(current.value?.logo_URIs)
+    return current.value?.logo
   })
   const name = computed(() => {
-    return current.value.chain_name
+    return current.value.chainName
   })
 
   const primaryColor = computed(() => {
@@ -31,7 +31,7 @@ export const useBlockchain = defineStore("blockchain", () => {
     return color
   })
   const availableEndpoint = computed(() => {
-    const all = current.value?.apis?.rest
+    const all = current.value?.endpoints?.rest
     if(all) {
       if(!rest.value || all.findIndex(x => x.address === rest.value) < 0) {        
         const rn = Math.random()
@@ -44,8 +44,7 @@ export const useBlockchain = defineStore("blockchain", () => {
   })
 
   const restClient = computed(()=> {
-    console.log(availableEndpoint, 'endpoint')
-    return new LCDClient({restEndpoint: availableEndpoint})
+    return new LCDClient({restEndpoint: availableEndpoint.value})
   })
 
   function setRestEndpoint(endpoint: string) {

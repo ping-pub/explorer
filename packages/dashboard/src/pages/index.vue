@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import { useDashboard, LoadingStatus } from '@/stores/useDashboard';
+import { useDashboard, LoadingStatus, type ChainConfig } from '@/stores/useDashboard';
 import ChainSummary from '@/components/ChainSummary.vue';
 import { computed, ref } from 'vue';
-import type { Chain } from '@ping-pub/chain-registry-client/dist/types';
 
 const dashboard = useDashboard()
 
@@ -12,7 +11,7 @@ dashboard.$subscribe((mutation, state) => {
 const keywords = ref('')
 const chains = computed(()=> {
   if(keywords.value) {
-    return Object.values(dashboard.chains).filter( (x: Chain)=>x.chain_name.indexOf(keywords.value) > -1)
+    return Object.values(dashboard.chains).filter( (x: ChainConfig)=>x.chainName.indexOf(keywords.value) > -1)
   }else{
     return Object.values(dashboard.chains)
   }
@@ -43,7 +42,7 @@ const chains = computed(()=> {
     <VRow class="my-auto">
       <VCol v-for="k in chains" md="3">
         <VLazy min-height="40" min-width="200" transition="fade-transition">
-          <ChainSummary :name="k.chain_name" />
+          <ChainSummary :name="k.chainName" />
         </VLazy>
       </VCol>    
     </VRow>

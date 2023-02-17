@@ -9,12 +9,14 @@ import type { QueryTotalSupplyRequest, QueryTotalSupplyResponseSDKType } from "o
 
 export const useBank = defineStore("usebank", () => {
   const totalSupply = ref({} as QueryTotalSupplyResponseSDKType);
-  const blockchain = useBlockchain()
 
-
-  const client: ComputedRef<LCDQueryClient> = computed(() => new LCDQueryClient(blockchain.restClient))
+  const client = computed(() => {
+    const blockchain = useBlockchain()
+    return new LCDQueryClient(new LCDClient({restEndpoint: blockchain.availableEndpoint}))
+})
 
   async function fetchTotalSupply({}) {
+    console.log(client)
     totalSupply.value = await client.value.totalSupply({})
     return totalSupply.value;
   }
