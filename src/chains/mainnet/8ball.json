@@ -2,7 +2,8 @@
     "chain_name": "8ball",
     "coingecko": "",
     "api": [
-        "https://rest.8ball.info"    ],
+        "https://rest.8ball.info"
+    ],
     "rpc": [
         "https://rpc.8ball.info"
     ],
