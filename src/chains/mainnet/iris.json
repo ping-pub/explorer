@@ -1,7 +1,7 @@
 {
     "chain_name": "iris",
     "alias": "iris-network",
-    "api": "https://iris.api.ping.pub",
+    "api": ["https://api.irishub-1.irisnet.org"],
     "rpc": ["http://34.82.96.8:26657","http://34.77.68.145:26657"],
     "snapshot_provider": "fcc1d9bc43163b20ce5163cf41a302b33f25375f@34.82.96.8:26656",
     "sdk_version": "0.46.1",
