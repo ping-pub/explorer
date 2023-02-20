@@ -1,5 +1,5 @@
 {
-    "chain_name": "whitewhale",
+    "chain_name": "Migaloo",
     "coingecko": "",
     "api": ["https://api.migaloo.silknodes.io"],
     "rpc": ["https://rpc.migaloo.silknodes.io"],
