@@ -2,10 +2,13 @@
     "chain_name": "8ball",
     "coingecko": "",
     "api": [
-        "https://rest.8ball.info"
+        "https://rest.8ball.info",
+        "https://api-8ball.nodeist.net"
+
     ],
     "rpc": [
-        "https://rpc.8ball.info"
+        "https://rpc.8ball.info",
+        "https://rpc-8ball.nodeist.net"
     ],
     "snapshot_provider": "",
     "coin_type": "118",
