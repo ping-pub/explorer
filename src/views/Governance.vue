@@ -1,5 +1,13 @@
 <template>
   <div>
+    <b-button-group class="mb-2">
+      <b-button
+        v-for="(t,i) in types"
+        :key="t"
+        :variant="i===type? 'secondary': 'outline-secondary'"
+        @click="switchStatus(i)"
+      >{{ t }}</b-button>
+    </b-button-group>
     <b-row class="match-height">
       <b-col
         v-for="p in proposals"
@@ -36,7 +44,7 @@
 
 <script>
 import {
-  BCardTitle, BCardFooter, BButton, BProgressBar, BProgress, BBadge, BTooltip, BRow, BCol, VBModal,
+  BCardTitle, BCardFooter, BButton, BProgressBar, BProgress, BBadge, BTooltip, BRow, BCol, VBModal, BButtonGroup,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import OperationModal from '@/views/components/OperationModal/index.vue'
@@ -45,6 +53,7 @@ import ProposalSummaryComponent from './components/governance/ProposalSummaryCom
 export default {
   components: {
     BButton,
+    BButtonGroup,
     BCardFooter,
     BProgressBar,
     BProgress,
@@ -70,6 +79,12 @@ export default {
       next: '',
       totalPower: 0,
       tallyParam: null,
+      type: '2',
+      types: {
+        2: 'Voting',
+        3: 'Passed',
+        4: 'Rejected',
+      },
     }
   },
   mounted() {
@@ -79,9 +94,16 @@ export default {
     this.getList()
   },
   methods: {
+    switchStatus(s) {
+      if (!this.loading) {
+        this.proposals = []
+        this.type = s
+        this.getList()
+      }
+    },
     getList() {
       this.loading = true
-      this.$http.getGovernanceList(this.next).then(res => {
+      this.$http.getGovernanceListByStatus(this.type).then(res => {
         this.proposals = this.proposals.concat(res.proposals)
         this.updateTally(this.proposals)
         this.next = res.pagination.next_key
