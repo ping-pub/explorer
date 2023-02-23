@@ -70,6 +70,9 @@ export default {
       next: '',
       totalPower: 0,
       tallyParam: null,
+      type: 2,
+      types: ['Passed', 'Voting'],
+
     }
   },
   mounted() {
@@ -81,7 +84,7 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      this.$http.getGovernanceList(this.next).then(res => {
+      this.$http.getGovernanceListByStatus(this.type).then(res => {
         this.proposals = this.proposals.concat(res.proposals)
         this.updateTally(this.proposals)
         this.next = res.pagination.next_key
