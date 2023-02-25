@@ -14,13 +14,14 @@ function processMenu() {
   })
 
   if (blockchains.length > 1) {
-    chainMenus.push({ header: 'ecosystem' })
-    chainMenus.push({
-      title: 'blockchains',
-      children: blockchains,
-      tag: `${blockchains.length}`,
-      icon: 'https://ping.pub/logo.svg',
-    })
+    chainMenus.push({ header: 'Game of NFT' })
+    // chainMenus.push({
+    //   title: 'blockchains',
+    //   children: blockchains,
+    //   tag: `${blockchains.length}`,
+    //   icon: 'https://ping.pub/logo.svg',
+    // })
+    blockchains.forEach(item => chainMenus.push(item))
   }
 
   chainMenus.push({ header: 'sponsors' })
