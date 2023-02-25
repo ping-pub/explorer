@@ -22,6 +22,19 @@ function processMenu() {
       icon: 'https://ping.pub/logo.svg',
     })
   }
+
+  chainMenus.push({ header: 'sponsors' })
+  chainMenus.push({
+    title: 'Becole',
+    href: 'https://becole.com',
+    logo: 'https://becole.com/static/logo/logo_becole.png',
+  })
+  chainMenus.push({
+    title: 'Osmosis',
+    href: 'https://app.osmosis.zone',
+    logo: 'https://ping.pub/logos/osmosis.jpg',
+  })
+
   chainMenus.push({ header: 'LINKS' })
   if (isTestnet()) {
     chainMenus.push({
