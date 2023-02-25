@@ -31,7 +31,7 @@ function processMenu() {
   chainMenus.push({
     title: 'Osmosis',
     href: 'https://app.osmosis.zone',
-    logo: 'http://localhost:8080/logos/osmosis.jpg',
+    logo: 'https://ping.pub/logos/osmosis.jpg',
   })
   chainMenus.push({ header: 'LINKS' })
   if (isTestnet()) {
