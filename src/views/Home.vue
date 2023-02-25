@@ -3,7 +3,7 @@
     <full-header />
     <b-link>
       <div class="d-flex justify-content-center align-items-center p-1">
-        <vuexy-logo />
+        <img src="https://interchainnfts.dev/assets/img/banner.e3623744.png" width="250" alt="logo" >
         <h1
           class="text-primary display-4 font-weight-bolder d-none d-md-block ml-1"
         >
@@ -173,7 +173,7 @@ export default {
     fetch(k) {
       const chain = this.chains[k]
       if (chain.api) {
-        const index = localStorage.getItem(`${chain.chain_name}-api-index`) || 0
+        const index = 0
         const host = Array.isArray(chain.api) ? chain.api[index] : chain.api
         fetch(`${host}/cosmos/base/tendermint/v1beta1/blocks/latest`).then(res => res.json()).then(b => {
           const { header } = b.block
