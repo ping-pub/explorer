@@ -1,8 +1,7 @@
 {
     "chain_name": "omniflix",
-    "coingecko": "",
-    "api": ["https://api.omniflix.nodestake.top","https://omniflixhub-api.skynetvalidators.com"],
-    "rpc": ["https://rpc.omniflix.nodestake.top"],
+    "api": ["https://api.testnet.omniflix.network"],
+    "rpc": [""],
     "snapshot_provider": "",
     "sdk_version": "0.46.1",
     "coin_type": "118",
