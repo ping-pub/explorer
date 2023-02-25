@@ -1,14 +1,24 @@
+# Prerequisite
+1. Node, https://nodejs.org 
+2. Yarn,  https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
+
 # Installation:
 
 1. Running with yarn
-```
-yarn && yarn serve
+```sh
+yarn --ignore-engines && yarn serve
 ```
 
 2. Building for web servers, like nginx, apache
-```
-yarn && yarn build
+```sh
+yarn --ignore-engines && yarn build
 cp -r ./dist/* <ROOT_OF_WEB_SERVER>
+```
+
+3. Running with docker
+```sh
+./docker.sh
+docker run -d -p 8088:80 ping.pub/dashboard
 ```
 
 # Enable LCD for Ping.pub (do this on the config for your chain)
