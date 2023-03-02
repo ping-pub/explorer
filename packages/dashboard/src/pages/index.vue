@@ -2,6 +2,7 @@
 import { useDashboard, LoadingStatus, type ChainConfig } from '@/stores/useDashboard';
 import ChainSummary from '@/components/ChainSummary.vue';
 import { computed, ref } from 'vue';
+import { useBlockchain } from '@/stores';
 
 const dashboard = useDashboard()
 
@@ -16,6 +17,7 @@ const chains = computed(()=> {
     return Object.values(dashboard.chains)
   }
 })
+const chain = useBlockchain()
 </script>
 <template>
   <div class="d-flex flex-column justify-center">
@@ -46,5 +48,6 @@ const chains = computed(()=> {
         </VLazy>
       </VCol>    
     </VRow>
+    <VBtn @click="chain.calltest()">test</VBtn>
   </div>
 </template>

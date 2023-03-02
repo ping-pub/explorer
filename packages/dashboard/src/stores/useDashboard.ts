@@ -60,6 +60,7 @@ export interface ChainConfig {
   bech32Prefix: string,
   chainId: string,
   assets: Asset[],
+  themeColor?: string,
   endpoints: {
     rest?: Endpoint[]
     rpc?: Endpoint[]
@@ -239,7 +240,7 @@ export const useDashboard = defineStore("dashboard", () => {
     }
   }
   function getCurrentChain() {
-    return chains.value[current.value]
+    return chains.value[current.value] || Object.values(chains.value)[0]
   }
   function setConfigSource(newSource: ConfigSource) {
     source.value = newSource

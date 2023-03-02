@@ -24,6 +24,7 @@ export default defineConfig({
     }),
     Pages({
       dirs: ["./src/modules", "./src/pages", ],
+      exclude: ['**/*.ts'], // only load .vue as modules
     }),
     Layouts({
       layoutsDirs: "./src/layouts/",

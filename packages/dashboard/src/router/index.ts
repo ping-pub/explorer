@@ -14,6 +14,7 @@ const router = createRouter({
 //update current blockchain
 router.beforeEach((to) => {
     const { chain } = to.params
+    console.log('chain', chain)
     if(chain){
       const dashboard = useDashboard()
       dashboard.setCurrentChain(chain.toString())

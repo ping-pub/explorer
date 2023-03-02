@@ -1,0 +1,17 @@
+{
+  "protoDirs": [
+    "./proto"
+  ],
+  "outPath": "./src",
+  "options": {
+    "aminoEncoding": {
+      "enabled": false
+    },
+    "lcdClients": {
+      "enabled": true
+    },
+    "rpcClients": {
+      "enabled": true
+    }
+  }
+}

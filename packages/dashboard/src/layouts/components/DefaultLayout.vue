@@ -14,6 +14,7 @@ import NavBarI18n from './NavBarI18n.vue'
 import NavSearchBar from './NavSearchBar.vue'
 import NavBarNotifications from './NavBarNotifications.vue'
 import TheCustomizer from '@/plugins/vuetify/@core/components/TheCustomizer.vue'
+import Breadcrumbs from './Breadcrumbs.vue'
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint, isVerticalNavCollapsed } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()

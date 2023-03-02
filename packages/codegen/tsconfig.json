@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "ES2015",
+        "moduleResolution": "node",
+        "allowJs": true,
+        "esModuleInterop": true,
+        "declaration": true,
+        "outDir": "dist",
+        // "declarationDir": "./types",
+        "emitDeclarationOnly": true,
+        "isolatedModules": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

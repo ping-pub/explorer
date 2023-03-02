@@ -1,0 +1,24 @@
+{
+  "name": "@ping-pub/codegen",
+  "version": "1.0.0",
+  "description": "Libs genereted from protobuf by Telescope.",
+  "main": "dist/index.js",
+  "module": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "repository": "https://github.com/ping-pub/explorer.git",
+  "author": "Ping Liang",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@osmonauts/telescope": "^0.88.2",
+    "@protobufs/cosmos": "^0.1.0",
+    "@protobufs/cosmos_proto": "^0.0.10",
+    "@protobufs/cosmwasm": "^0.1.1",
+    "@protobufs/google": "^0.0.10",
+    "@protobufs/ibc": "^0.1.0"
+  },
+  "scripts": {
+    "build": "tsc --module es2022 --project ./tsconfig.json ",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+  }
+}
