@@ -14,7 +14,7 @@
         "symbol": "CUDOS",
         "exponent": "18",
         "coingecko_id": "cudos", 
-        "logo": "/logos/cudos.jpg"
+        "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cudos/images/cudos.png"
     }
     ]
 }
