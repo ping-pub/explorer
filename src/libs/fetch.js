@@ -95,6 +95,28 @@ export default class ChainFetch {
     return this.get('/cosmos/slashing/v1beta1/signing_infos?pagination.limit=500', config)
   }
 
+  async getNFTsByOwner(address) {
+    return this.get(`/irismod/nft/nfts?owner=${address}`)
+  }
+
+  async getNFTDenom(denom_id) {
+    return this.get(`/irismod/nft/denoms/${denom_id}`)
+  }
+
+  async getWasmQuery(contract, query) {
+    const query_data = toBase64(Buffer.from(query))
+    console.log(contract, query_data)
+    return this.get(`/cosmwasm/wasm/v1/contract/${contract}/smart/${query_data}`)
+  }
+
+  async getNFTdetails(denom_id, token_id) {
+    return this.get(`/irismod/nft/nfts/${denom_id}/${token_id}`)
+  }
+
+  async getWasmNFTsByOwner(address) {
+    return this.get(`/irismod/nft/nfts?owner=${address}`)
+  }
+
   async getTxs(hash, config = null) {
     const conf = config || this.getSelectedConfig()
     const ver = conf.sdk_version || '0.41'

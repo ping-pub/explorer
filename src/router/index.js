@@ -343,6 +343,20 @@ const router = new VueRouter({
         ],
       },
     },
+    {
+      path: '/:chain/nft/:denom',
+      name: 'nftdenom',
+      component: () => import('@/views/NFTDenom.vue'),
+      meta: {
+        pageTitle: 'NFT',
+        breadcrumb: [
+          {
+            text: 'NFT',
+            active: true,
+          },
+        ],
+      },
+    },
     // custom modules for specified chains
     // 1. cosmos
     {

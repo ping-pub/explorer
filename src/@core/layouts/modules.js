@@ -27,6 +27,11 @@ export default () => ([
   },
   {
     scope: 'normal',
+    title: 'NFT',
+    route: 'nftdenom',
+  },
+  {
+    scope: 'normal',
     title: 'dashboard.parameters',
     route: 'parameters',
   },

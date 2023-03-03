@@ -253,6 +253,25 @@
         </b-card-body>
       </b-card>
 
+      <b-card title="NFTs">
+        <b-table
+          :items="nfts"
+          striped
+          hover
+          responsive="sm"
+          stacked="sm"
+        >
+          <template #cell(denom_id)="data">
+            <router-link :to="`../nft/${data.item.denom_id}`">
+              {{ data.item.denom_id }}
+            </router-link>
+          </template>
+          <template #cell(token_ids)="data">
+            <div>{{ data.item.token_ids.join(',') }}</div>
+          </template>
+        </b-table>
+      </b-card>
+
       <b-card title="Transactions">
         <b-table
           :items="txs"
@@ -483,8 +502,23 @@
         </div>
       </div>
     </div>
-  </div>
-</template>
+    <b-modal
+      id="bv-nft-viewer"
+      hide-footer
+      title="NFT Viewer"
+    >
+      <div class="d-block text-center">
+        <object-field-component tablefield="nft" />
+      </div>
+      <b-button
+        class="mt-3"
+        block
+        @click="$bvModal.hide('bv-nft-viewer')"
+      >
+        Close
+      </b-button>
+    </b-modal>
+  </div></template>
 
 <script>
 import { $themeColors } from '@themeConfig'
@@ -584,6 +618,8 @@ export default {
       operationModalType: '',
       error: null,
       names: [],
+      nfts: [],
+      nft: {},
     }
   },
   computed: {
@@ -794,6 +830,23 @@ export default {
       this.$http.getStakingUnbonding(this.address).then(res => {
         this.unbonding = res.unbonding_responses || res
       })
+      this.$http.getNFTsByOwner(this.address).then(res => {
+        this.nfts = res.owner.id_collections
+      })
+    },
+    showNft(denom, token) {
+      console.log(denom, token)
+      if (token) {
+        this.$http.getNFTdetails(denom, token).then(res => {
+          this.nft = res
+          this.$bvModal.show('bv-nft-viewer')
+        })
+      } else {
+        this.$http.getNFTDenom(denom).then(res => {
+          this.nft = res
+          this.$bvModal.show('bv-nft-viewer')
+        })
+      }
     },
     formatNumber(v) {
       return numberWithCommas(v)
