@@ -835,7 +835,6 @@ export default {
       })
     },
     showNft(denom, token) {
-      console.log(denom, token)
       if (token) {
         this.$http.getNFTdetails(denom, token).then(res => {
           this.nft = res

@@ -105,7 +105,6 @@ export default class ChainFetch {
 
   async getWasmQuery(contract, query) {
     const query_data = toBase64(Buffer.from(query))
-    console.log(contract, query_data)
     return this.get(`/cosmwasm/wasm/v1/contract/${contract}/smart/${query_data}`)
   }
 
