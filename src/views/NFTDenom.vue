@@ -111,9 +111,13 @@ export default {
               })
           }
         }
-      } else {
+      } else if (this.chainName === 'iris') {
         this.$http.getNFTDenom(this.tokenId).then(res => {
           this.data = res.denom
+        })
+      } else {
+        this.$http.getONFTDenom(this.tokenId).then(res => {
+          this.data = res
         })
       }
     },

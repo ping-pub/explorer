@@ -103,6 +103,10 @@ export default class ChainFetch {
     return this.get(`/irismod/nft/denoms/${denom_id}`)
   }
 
+  async getONFTDenom(denom_id) {
+    return this.get(`/omniflix/onft/v1beta1/denoms/${denom_id}`)
+  }
+
   async getWasmQuery(contract, query) {
     const query_data = toBase64(Buffer.from(query))
     return this.get(`/cosmwasm/wasm/v1/contract/${contract}/smart/${query_data}`)
