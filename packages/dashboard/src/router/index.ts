@@ -1,10 +1,7 @@
+import { useBlockchain } from "@/stores";
 import { setupLayouts } from "virtual:generated-layouts";
 import { createRouter, createWebHistory } from "vue-router";
-import { useDashboard } from "@/stores/useDashboard";
 import routes from "~pages";
-
-// import { useDashboard } from "@/stores/useDashboard";
-// const dashboard = useDashboard()
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,10 +11,9 @@ const router = createRouter({
 //update current blockchain
 router.beforeEach((to) => {
     const { chain } = to.params
-    console.log('chain', chain)
     if(chain){
-      const dashboard = useDashboard()
-      dashboard.setCurrentChain(chain.toString())
+      const blockchain = useBlockchain()
+      blockchain.setCurrent(chain.toString())
     } 
 })
 

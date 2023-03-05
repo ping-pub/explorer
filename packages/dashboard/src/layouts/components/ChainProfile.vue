@@ -1,7 +1,8 @@
 <script setup lang="ts">
 
-import { useBlockchain } from '@/stores/useBlockchain';
+import { useBlockchain, useBaseStore } from '@/stores';
 const chainStore = useBlockchain()
+const baseStore = useBaseStore()
 
 </script>
 
@@ -49,7 +50,7 @@ const chainStore = useBlockchain()
       </VAvatar>
     </VBadge>
   </template>
-  <VListItemTitle>{{ chainStore.current?.chainId || '' }}</VListItemTitle>
+  <VListItemTitle>{{ baseStore.latest.block?.header?.chain_id || '' }}</VListItemTitle>
   <VListItemSubtitle> {{ chainStore.availableEndpoint }}</VListItemSubtitle>
   </VListItem>
 </template>

@@ -1,34 +1,43 @@
 <script lang="ts" setup>
 import MdEditor from 'md-editor-v3';
 import PriceMarketChart from '@/components/charts/PriceMarketChart.vue'
-import numeral from 'numeral'
 
-import { useCoingecko, useBlockchain } from '@/stores';
+import { useCoingecko, useBlockchain, useBankStore, useFormatter } from '@/stores';
 import { onMounted, ref } from 'vue';
-import { useIndexModule } from './store';
+import { useIndexModule } from './indexStore';
 import { computed } from '@vue/reactivity';
 
-const store = useIndexModule()
-const chain = useBlockchain()
+import CardStatisticsHorizontal from '@/components/CardStatisticsHorizontal.vue';
+import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
+import { useBaseStore } from '@/stores';
 
-const coinInfo = computed(() => store.coinInfo)
+const blockchain = useBlockchain()
+const store = useIndexModule()
+
+const coinInfo = computed(() => {
+  return store.coinInfo
+})
+
+onMounted(() => {
+  store.loadDashboard()
+})
+
+const format = useFormatter()
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex])
 const desc = ref('')
 
-onMounted(()=> {
-  if(chain.current) {
-    store.initCoingecko()
-  }
-})
-chain.$subscribe((m) => {
-  store.initCoingecko()
-})
 store.$subscribe((m, s) => {
   desc.value = s.coinInfo.description?.en || ''
+})
+blockchain.$subscribe((m, s) => {
+  if(m.events.key === 'rest') {
+    store.loadDashboard()
+  }
 })
 function shortName(name: string, id: string) {
   return name.toLowerCase().startsWith('ibc/') || name.toLowerCase().startsWith('0x') ? id: name
 }
+
 </script>
 
 <template>
@@ -120,7 +129,22 @@ function shortName(name: string, id: string) {
       <VCardItem>
         <VChip v-for="tag in coinInfo.categories" size="x-small">{{ tag }}</VChip>
       </VCardItem>
-      <VBtn @click="chain.calltest()">test</VBtn>
     </VCard>
+
+    <VRow class="mt-5">
+      <VCol v-for="item in store.stats" cols="12" sm="6" md="2">
+        <VCard>
+          <CardStatisticsVertical v-bind="item" />
+        </VCard>
+      </VCol>
+    </VRow>
   </div>
 </template>
+<style>
+#chart {
+  max-width: 260px;
+  margin: 35px auto;
+  opacity: 0.9;
+}
+
+</style>

@@ -7,11 +7,11 @@ import i18n from "@/plugins/i18n";
 import { loadFonts } from "@/plugins/vuetify/webfontloader";
 import "@/plugins/vuetify/@core/scss/template/index.scss";
 import "@/plugins/vuetify/styles/styles.scss";
-import { createApp, markRaw } from "vue";
+import { createApp } from "vue";
 import { createPinia } from "pinia";
-import { useDashboard } from "./stores/useDashboard";
 // import router from "@/plugins/vuetify/router";
 import router from "./router";
+import { useBaseStore } from "./stores/useBaseStore";
 
 loadFonts();
 
@@ -28,3 +28,7 @@ app.use(router);
 
 // Mount vue app
 app.mount("#app");
+
+// fetch latest block every 6s
+// const blockStore = useBaseStore()
+// setInterval(() => {blockStore.fetchLatest()}, 6000)

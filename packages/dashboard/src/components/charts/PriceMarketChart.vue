@@ -2,7 +2,7 @@
 import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
 import { getAreaChartSplineConfig, getMarketPriceChartConfig } from './apexCharConfig'
-import { useIndexModule } from '@/modules/[chain]/store';
+import { useIndexModule } from '@/modules/[chain]/indexStore';
 import { computed, ref } from '@vue/reactivity';
 
 const store = useIndexModule()

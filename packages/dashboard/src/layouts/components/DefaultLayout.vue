@@ -15,6 +15,7 @@ import NavSearchBar from './NavSearchBar.vue'
 import NavBarNotifications from './NavBarNotifications.vue'
 import TheCustomizer from '@/plugins/vuetify/@core/components/TheCustomizer.vue'
 import Breadcrumbs from './Breadcrumbs.vue'
+import { useBlockchain } from '@/stores'
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint, isVerticalNavCollapsed } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
@@ -26,14 +27,19 @@ watch(isVerticalNavCollapsed, val => {
   verticalNavHeaderActionAnimationName.value = val ? 'rotate-180' : 'rotate-back-180'
 })
 
-
 const dashboard = useDashboard()
 dashboard.initial()
-
+const blockchain = useBlockchain()
+// blockchain.initial()
+blockchain.$subscribe((m, s) => {
+  if(m.events.key === 'rest') {
+    blockchain.initial()
+  }
+})
 </script>
 
 <template>
-  <VerticalNavLayout :nav-items="dashboard.computeChainNav">
+  <VerticalNavLayout :nav-items="blockchain.computedChainMenu">
     <!-- 👉 navbar -->
     <template #navbar="{ toggleVerticalOverlayNavActive }">
       <div class="d-flex h-100 align-center">

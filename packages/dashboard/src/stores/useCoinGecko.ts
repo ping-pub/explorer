@@ -42,8 +42,10 @@ export const useCoingecko = defineStore('coingecko', {
             return get(`https://api.coingecko.com/api/v3/coins/${coinId}`)
         },
         setSecondaryCurrency(currency: string) {
-            localStorage.setItem(LocalStoreKey, currency)
-            this.currency = currency            
+            if(currency !== 'usd') {
+                localStorage.setItem(LocalStoreKey, currency)
+                this.currency = currency
+            }            
         }
     }
 })

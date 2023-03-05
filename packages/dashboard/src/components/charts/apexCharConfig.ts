@@ -18,7 +18,9 @@ export const getMarketPriceChartConfig = (themeColors: ThemeInstance['themes']['
 
   return {
     chart: {
-      height: 260,
+      redrawOnParentResize: false,
+      width: '100%',
+      height: '260px;',
       parentHeightOffset: 0,
       toolbar: { show: false },
     },

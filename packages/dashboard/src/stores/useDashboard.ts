@@ -2,9 +2,7 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { get } from '../libs/http'
 import type { Chain, Asset } from '@ping-pub/chain-registry-client/dist/types'
-import type { VerticalNavItems } from '@/@layouts/types'
-import ChainRegistryClient from '@ping-pub/chain-registry-client'
-import { useRouter } from "vue-router";
+import { useBlockchain } from "./useBlockchain";
 
 export enum EndpointType {
   rpc,
@@ -74,6 +72,56 @@ export interface ChainConfig {
   },
 }
 
+export interface LocalConfig {
+  addr_prefix: string,
+  alias: string,
+  api: string[] | Endpoint[],
+  assets: {base: string, coingecko_id: string, exponent: string, logo: string, symbol: string}[]
+  chain_name: string,
+  coin_type: string
+  logo: string,
+  min_tx_fee: string,
+  rpc: string[] | Endpoint[],
+  sdk_version: string,
+}
+
+function apiConverter(api: any[]){
+  return api.map(x => {
+    if(typeof x === 'string') {
+      const parts = String(x).split('.')
+      return {
+        address: x,
+        provider: parts.length >=2 ? parts[parts.length-2] : x
+      }
+    }else{
+      return x as Endpoint
+    }
+  })
+}
+
+export function fromLocal(lc: LocalConfig ): ChainConfig {
+  const conf = {} as ChainConfig
+  conf.assets = lc.assets.map(x => ({
+    name: x.base, 
+    base: x.base, 
+    display: x.symbol, 
+    symbol: x.symbol, 
+    logo_URIs: { svg: x.logo }, 
+    coingecko_id: x.coingecko_id, 
+    denom_units: [{denom: x.base, exponent: 0}, {denom: x.symbol.toLowerCase(), exponent: Number(x.exponent)}]
+  }))
+  conf.bech32Prefix = lc.addr_prefix
+  conf.chainName = lc.chain_name
+  conf.prettyName = lc.chain_name
+  conf.endpoints = {
+    rest: apiConverter(lc.api),
+    rpc: apiConverter(lc.rpc),
+  }
+  conf.logo = lc.logo
+  return conf
+}
+
+
 export function fromDirectory(source: DirectoryChain): ChainConfig {
   const conf = {} as ChainConfig
   conf.assets = source.assets,
@@ -129,7 +177,6 @@ function createChainFromDirectory(source: DirectoryChain) : Chain {
       svg: source.image
     }
   }
-
   return conf
 }
 
@@ -138,120 +185,64 @@ export enum LoadingStatus {
     Loading,
     Loaded,
 }
+export enum NetworkType {
+  Mainnet,
+  Testnet,
+}
 export enum ConfigSource {
   MainnetCosmosDirectory = "https://chains.cosmos.directory",
   TestnetCosmosDirectory = "https://chains.testcosmos.directory",
-  Local = './src/blockchain',
+  Local = 'local',
 }
 
-export const useDashboard = defineStore("dashboard", () => {
-  const status = ref(LoadingStatus.Empty)
-  // current blockchain for display
-  const source = ref(ConfigSource.MainnetCosmosDirectory)
-  const favorite = ref(JSON.parse(localStorage.getItem('favorite') || '["cosmoshub", "osmosis"]') as string[])
-  const current = ref(favorite.value[0])
-  const chains = ref({} as Record<string, ChainConfig>);
-
-  const findChainByName = computed((name) => chains.value[name]);
-
-  const computeChainNav = computed(() => {
-    // compute current menu
-    const currChain = chains.value[current.value]
-    let currNavItem: VerticalNavItems = []
-
-    const router = useRouter()
-    const routes = router?.getRoutes()||[]
-    if(currChain && routes) {
-      currNavItem = [{
-        title: currChain.prettyName || currChain.chainName || current.value,
-        icon: {image: currChain.logo, size: '22'},
-        i18n: false,
-        children: routes
-                  .filter(x=>x.name && x.name.toString().startsWith('chain'))
-                  .map(x => ({
-                    title: `module.${x.name?.toString()}`, 
-                    to: {path: x.path.replace(':chain',current.value)}, 
-                    icon: { icon: 'mdi-chevron-right', size: '22'},
-                    i18n: true
-                  }))
-                  .sort((a,b)=>a.to.path.length - b.to.path.length)
-      }]
+export const useDashboard = defineStore('dashboard', {
+  state: () => {
+    const fav = JSON.parse(localStorage.getItem('favorite') || '["cosmoshub", "osmosis"]')
+      return {
+        status: LoadingStatus.Empty,
+        source: ConfigSource.MainnetCosmosDirectory,
+        networkType: NetworkType.Mainnet, 
+        favorite: fav as string[],
+        chains: {} as Record<string, ChainConfig>,
+      }
+  },
+  getters: {
+    current() : string {
+      const blockchain = useBlockchain()
+      return blockchain.chainName || this.favorite[0] || ''
+    },
+    length() : number {
+      return Object.keys(this.chains).length
     }
-    // compute favorite menu
-    const favNavItems: VerticalNavItems = []
-    favorite.value.forEach(name => {
-      const ch = chains.value[name]
-      if(ch) {
-        favNavItems.push({
-          title: ch.prettyName || ch.chainName || name, 
-          to: { path: `/${ch.chainName || name}`}, 
-          icon: {image: ch.logo, size: '22'}
-        } )
-      } 
-    })
-    
-    // combine all together
-    return [...currNavItem,
-        { heading: 'Ecosystem' },
-        {
-          title: 'Favorite', 
-          children: favNavItems, 
-          badgeContent: favorite.value.length,
-          badgeClass: 'bg-primary',
-          i18n: true,
-          icon: { icon: 'mdi-star', size: '22'}
-        },
-        {
-          title: 'All Blockchains',
-          to: { path : '/'},
-          badgeContent: length.value,
-          badgeClass: 'bg-primary',
-          i18n: true,
-          icon: { icon: 'mdi-grid', size: '22'}
-        }
-      ]
-  })
-
-  const length = computed(()=> {
-    return Object.keys(chains.value).length
-  })
-  async function initial() {
-    await loadingFromRegistry()
-  }
-
-  async function loadingChainByName(name: string) {
-    // const chain = await client.fetchChainInfo(name)
-    // chains.value[name] = chain
-  }
-  function loadingFromRegistry() {
-    if(status.value === LoadingStatus.Empty) {
-        status.value = LoadingStatus.Loading
-        get(source.value).then((res)=> {
-            res.chains.forEach(( x: DirectoryChain ) => {
-                chains.value[x.chain_name] = fromDirectory(x)
-            });
-            status.value = LoadingStatus.Loaded
-        })
+  },
+  actions: {
+    initial() {
+      this.loadingFromLocal()
+      // this.loadingFromRegistry()
+    },
+    async loadingFromRegistry() {
+      if(this.status === LoadingStatus.Empty) {
+          this.status = LoadingStatus.Loading
+          get(this.source).then((res)=> {
+              res.chains.forEach(( x: DirectoryChain ) => {
+                  this.chains[x.chain_name] = fromDirectory(x)
+              });
+              this.status = LoadingStatus.Loaded
+          })
+      }
+    },
+    async loadingFromLocal() {
+      const source = this.networkType === NetworkType.Mainnet 
+          ? import.meta.glob('../../chains/mainnet/*.json', {eager: true})
+          : import.meta.glob('../../chains/testnet/*.json', {eager: true})
+      Object.values(source).forEach((x: LocalConfig) => {
+        this.chains[x.chain_name] = fromLocal(x)
+      })
+      this.status = LoadingStatus.Loaded
+    },
+    setConfigSource(newSource: ConfigSource) {
+      this.source = newSource
+      this.initial()
     }
   }
-  function setCurrentChain(name: string) {
-    if(name && name !== current.value) {
-      current.value = name
-    }
-  }
-  function getCurrentChain() {
-    return chains.value[current.value] || Object.values(chains.value)[0]
-  }
-  function setConfigSource(newSource: ConfigSource) {
-    source.value = newSource
-    initial()
-  }
-  return {
-    // states
-    status, favorite, current, chains, length, 
-    // getters
-    computeChainNav, findChainByName, getCurrentChain,
-    // actions
-    initial, loadingFromRegistry, loadingChainByName, setCurrentChain, setConfigSource
-  };
-});
+})

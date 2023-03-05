@@ -48,6 +48,5 @@ const chain = useBlockchain()
         </VLazy>
       </VCol>    
     </VRow>
-    <VBtn @click="chain.calltest()">test</VBtn>
   </div>
 </template>
