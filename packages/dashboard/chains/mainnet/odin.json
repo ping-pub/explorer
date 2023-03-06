@@ -1,0 +1,30 @@
+{
+    "chain_name": "odin",
+    "coingecko": "odin-protocol",
+    "api": "https://node.odin-freya-website.odinprotocol.io/mainnet/a/api",
+    "rpc": ["http://34.79.179.216:26657","http://34.140.252.7:26657","http://35.241.221.154:26657","http://35.241.238.207:26657"],
+    "addr_prefix": "odin",
+    "coin_type": "118",
+    "min_tx_fee": "2500",
+    "logo": "/logos/odin.png",
+    "sdk_version": "0.45.6",
+    "assets": [{
+        "base": "loki",
+        "symbol": "ODIN",
+        "exponent": "6",
+        "coingecko_id": "odin-protocol", 
+        "logo": "/logos/odin.png"
+    },{
+        "base": "mGeo",
+        "symbol": "geo",
+        "exponent": "6",
+        "coingecko_id": "geodb", 
+        "logo": "/logos/odin.png"
+    },{
+        "base": "mO9W",
+        "symbol": "O9W",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "/logos/odin.png"
+    }]
+}

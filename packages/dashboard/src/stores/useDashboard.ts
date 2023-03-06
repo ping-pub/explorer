@@ -86,7 +86,9 @@ export interface LocalConfig {
 }
 
 function apiConverter(api: any[]){
-  return api.map(x => {
+  if(!api) return []
+  const array = typeof api === 'string'? [api] : api
+  return array.map(x => {
     if(typeof x === 'string') {
       const parts = String(x).split('.')
       return {

@@ -1,0 +1,18 @@
+{
+    "chain_name": "comdex",
+    "api": ["https://api-comdex-ia.cosmosia.notional.ventures", "https://comdex-api.polkachu.com", "https://rest.comdex.one/"],
+    "rpc": ["https://rpc-comdex-ia.cosmosia.notional.ventures:443", "https://comdex-rpc.polkachu.com:443", "https://api.comdex.audit.one:443/rpc", "https://rpc.comdex.one:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.8",
+    "coin_type": "118",
+    "min_tx_fee": "5000",
+    "addr_prefix": "comdex",
+    "logo": "/logos/comdex.png",
+    "assets": [{
+        "base": "ucmdx",
+        "symbol": "CMDX",
+        "exponent": "6",
+        "coingecko_id": "comdex", 
+        "logo": "/logos/comdex.png"
+    }]
+}

@@ -1,7 +1,8 @@
-import { useBlockchain, useCoingecko, useBaseStore, useBankStore, useFormatter } from "@/stores";
+import { useBlockchain, useCoingecko, useBaseStore, useBankStore, useFormatter, useGovStore } from "@/stores";
 import { useDistributionStore } from "@/stores/useDistributionStore";
 import { useMintStore } from "@/stores/useMintStore";
 import { useStakingStore } from "@/stores/useStakingStore";
+import { ProposalStatus, type ProposalSDKType } from "@ping-pub/codegen/src/cosmos/gov/v1beta1/gov";
 import numeral from "numeral";
 import { defineStore } from "pinia";
 
@@ -63,7 +64,14 @@ export const useIndexModule = defineStore('module-index', {
                 prices: [] as number[],
                 total_volumes: [] as number[],
             },
-            communityPool: [] as {amount: string, denom: string}[]
+            communityPool: [] as {amount: string, denom: string}[],
+            proposals: [] as ProposalSDKType[],
+            tally: {} as Record<number, {
+                yes: string;
+                abstain: string;
+                no: string;
+                no_with_veto: string;
+              }>
         }
     },
     getters: {
@@ -118,12 +126,16 @@ export const useIndexModule = defineStore('module-index', {
             return useMintStore()
         },
 
+        pool() {
+            const staking = useStakingStore()
+            return staking.pool
+        },
+
         stats () { 
             const base = useBaseStore()
             const bank = useBankStore()
-            const formatter = useFormatter()
             const staking = useStakingStore()
-            const pool = staking.pool
+            const formatter = useFormatter()
             return [
                 {
                   title: 'Height',
@@ -150,7 +162,7 @@ export const useIndexModule = defineStore('module-index', {
                   title: 'Bonded Tokens',
                   color: 'warning',
                   icon: 'mdi-lock',
-                  stats: formatter.formatTokenAmount({amount: pool.bonded_tokens, denom: staking.params.bond_denom }),
+                  stats: formatter.formatTokenAmount({amount: this.pool.bonded_tokens, denom: staking.params.bond_denom }),
                   change: 0,
                 },                
                 {
@@ -172,6 +184,7 @@ export const useIndexModule = defineStore('module-index', {
     },
     actions: {
         async loadDashboard() {
+            this.$reset()
             this.initCoingecko()
             this.mintStore.fetchInflation()
             const dist = useDistributionStore()
@@ -180,6 +193,15 @@ export const useIndexModule = defineStore('module-index', {
                     amount: String(parseInt(t.amount)),
                     denom: t.denom
                 }))
+            })
+            const gov = useGovStore()
+            gov.fetchProposals(ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD).then(x => {
+                this.proposals = x.proposals
+                x.proposals.forEach(x1 => {
+                    gov.fetchTally(x1.proposal_id).then(t => {
+                        if(t.tally) this.tally[Number(x1.proposal_id)] = t.tally
+                    })
+                })
             })
         },
         tickerColor(color: string) {

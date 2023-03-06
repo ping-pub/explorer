@@ -1,0 +1,19 @@
+{
+    "chain_name": "chihuahua",
+    "coingecko": "chihuahua-token",
+    "api": ["https://chihuahua-api.polkachu.com", "https://api.chihuahua.wtf", "https://chihuahua-api.mercury-nodes.net"],
+    "rpc": ["https://chihuahua-rpc.polkachu.com:443", "https://rpc.chihuahua.wtf:443"],
+    "snapshot_provider": "12611137be6f64f9a7fb8977614a5a6f257c1394@65.21.200.224:29656",
+    "sdk_version": "0.45.8",
+    "coin_type": "118",
+    "min_tx_fee": "250000",
+    "addr_prefix": "chihuahua",
+    "logo": "/logos/chihuahua.png",
+    "assets": [{
+        "base": "uhuahua",
+        "symbol": "HUAHUA",
+        "exponent": "6",
+        "coingecko_id": "chihuahua-token", 
+        "logo": "/logos/chihuahua.png"
+    }]
+}

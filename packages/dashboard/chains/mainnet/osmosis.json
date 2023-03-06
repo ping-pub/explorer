@@ -1,0 +1,31 @@
+{
+    "chain_name": "osmosis",
+    "coingecko": "osmosis",
+    "api": ["https://api-osmosis-ia.cosmosia.notional.ventures", "https://osmosis-api.polkachu.com", "https://osmo.api.ping.pub", "https://lcd-osmosis.blockapsis.com"],
+    "rpc": ["https://rpc-osmosis-ia.cosmosia.notional.ventures:443", "https://osmosis-rpc.polkachu.com:443", "https://osmosis.validator.network:443", "https://rpc-osmosis.blockapsis.com:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.1",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "osmo",
+    "logo": "/logos/osmosis.jpg",
+    "assets": [{
+        "base": "uosmo",
+        "symbol": "OSMO",
+        "exponent": "6",
+        "coingecko_id": "osmosis", 
+        "logo": "/logos/osmosis.jpg"
+    },{
+        "base": "uion",
+        "symbol": "ION",
+        "exponent": "6",
+        "coingecko_id": "ion", 
+        "logo": "/logos/osmosis.jpg"
+    },{
+        "base": "usomm",
+        "symbol": "SOMM",
+        "exponent": "6",
+        "coingecko_id": "somm", 
+        "logo": ""
+    }]
+}

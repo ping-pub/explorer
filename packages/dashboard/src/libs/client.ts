@@ -2,7 +2,7 @@ import { LCDQueryClient as BankRestClient} from '@ping-pub/codegen/src/cosmos/ba
 import { LCDQueryClient as BaseRestClient} from '@ping-pub/codegen/src/cosmos/base/tendermint/v1beta1/query.lcd'
 import { LCDQueryClient as MintRestClient} from '@ping-pub/codegen/src/cosmos/mint/v1beta1/query.lcd'
 import { LCDQueryClient as DistributionRestClient} from '@ping-pub/codegen/src/cosmos/distribution/v1beta1/query.lcd'
-import { LCDQueryClient as GovRestClient} from '@ping-pub/codegen/src/cosmos/gov/v1/query.lcd'
+import { LCDQueryClient as GovRestClient} from '@ping-pub/codegen/src/cosmos/gov/v1beta1/query.lcd'
 import { LCDQueryClient as StakingRestClient} from '@ping-pub/codegen/src/cosmos/staking/v1beta1/query.lcd'
 import { LCDQueryClient as SlashingRestClient} from '@ping-pub/codegen/src/cosmos/slashing/v1beta1/query.lcd'
 import type { LCDClient } from '@osmonauts/lcd'

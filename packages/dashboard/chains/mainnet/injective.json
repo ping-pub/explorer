@@ -1,0 +1,25 @@
+{
+    "chain_name": "injective",
+    "api": ["https://lcd.injective.network", "https://injective-api.polkachu.com"],
+    "rpc": ["https://tm.injective.network", "https://injective-rpc.polkachu.com"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.45.5",
+    "coin_type": "60",
+    "min_tx_fee": "5000",
+    "addr_prefix": "inj",
+    "excludes": "",
+    "logo": "/logos/injective.jpg",
+    "keplr_features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
+    "keplr_price_step": {
+      "low": 100000000000,
+      "average": 200000000000,
+      "high": 30000000000000
+    },
+    "assets": [{
+        "base": "inj",
+        "symbol": "INJ",
+        "exponent": "18",
+        "coingecko_id": "injective-protocol", 
+        "logo": "/logos/injective.jpg"
+    }]
+}

@@ -2,14 +2,13 @@
 import MdEditor from 'md-editor-v3';
 import PriceMarketChart from '@/components/charts/PriceMarketChart.vue'
 
-import { useCoingecko, useBlockchain, useBankStore, useFormatter } from '@/stores';
+import { useBlockchain, useFormatter } from '@/stores';
 import { onMounted, ref } from 'vue';
 import { useIndexModule } from './indexStore';
 import { computed } from '@vue/reactivity';
 
-import CardStatisticsHorizontal from '@/components/CardStatisticsHorizontal.vue';
 import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
-import { useBaseStore } from '@/stores';
+import ProposalProcess from '@/components/ProposalProcess.vue';
 
 const blockchain = useBlockchain()
 const store = useIndexModule()
@@ -25,6 +24,7 @@ onMounted(() => {
 const format = useFormatter()
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex])
 const desc = ref('')
+const detailId = ref('')
 
 store.$subscribe((m, s) => {
   desc.value = s.coinInfo.description?.en || ''
@@ -42,16 +42,18 @@ function shortName(name: string, id: string) {
 
 <template>
   <div>
-    <VCard v-if="coinInfo && coinInfo.name">
+    <VCard v-if="coinInfo && coinInfo.name" class="mb-5">
       <VRow>
         <VCol md="4">
-          <VCardTitle>
-            {{ coinInfo.name }} (<span class="text-uppercase">{{ coinInfo.symbol }}</span>)
-          </VCardTitle>
-          <VCardSubtitle>
-            Rank:  <VChip color="warning" size="x-small">#{{ coinInfo.market_cap_rank }}</VChip>
-          </VCardSubtitle>
-          <VDivider class="mt-2" />
+          <VCardItem>
+            <VCardTitle>
+              {{ coinInfo.name }} (<span class="text-uppercase">{{ coinInfo.symbol }}</span>)
+            </VCardTitle>
+            <VCardSubtitle>
+              Rank:  <VChip color="error" size="x-small">#{{ coinInfo.market_cap_rank }}</VChip>
+            </VCardSubtitle>
+          </VCardItem>
+          <VDivider/>
           <VCardItem>              
             <VBtn variant="text" size="small" :href="store.homepage" prependIcon="mdi-web">Website</VBtn> 
             <VBtn variant="text" size="small" :href="store.twitter" prependIcon="mdi-twitter">Twitter</VBtn>
@@ -125,26 +127,68 @@ function shortName(name: string, id: string) {
         </VCol>
       </VRow>
       <VDivider />
-      <VCardText style="max-height: 250px; overflow:scroll;"><MdEditor v-model="desc" previewOnly></MdEditor></VCardText>
+      <VCardText style="max-height: 250px; overflow:scroll;"><MdEditor :model-value="coinInfo.description?.en" previewOnly></MdEditor></VCardText>
       <VCardItem>
         <VChip v-for="tag in coinInfo.categories" size="x-small">{{ tag }}</VChip>
       </VCardItem>
     </VCard>
 
-    <VRow class="mt-5">
+    <VRow>
       <VCol v-for="item in store.stats" cols="12" sm="6" md="2">
         <VCard>
           <CardStatisticsVertical v-bind="item" />
         </VCard>
       </VCol>
     </VRow>
+
+    <VCard class="my-5">
+        <VCardItem class="pb-0">
+          <VCardTitle>Active Proposals</VCardTitle>
+        </VCardItem>
+        <VCardItem>
+          <VExpansionPanels variant="accordion">
+            <VExpansionPanel v-for="(x, i) in store.proposals">
+              <VExpansionPanelTitle disable-icon-rotate>
+                    <VChip label color="primary" class="mr-2">{{x.proposal_id}}</VChip>
+                    <div class="w-100">{{ x.content?.title }}
+                      <div class="d-flex mt-1">
+                        <small class="text-secondary me-auto"> {{ format.toDay(x.voting_end_time, 'from') }}</small>      
+                        <ProposalProcess style="width:300px;" :pool="store.pool" :tally="store.tally[Number(x.proposal_id)]"></ProposalProcess> 
+                        <span></span>
+                      </div>              
+                    </div>
+                <template #actions>    
+                  <VIcon
+                    icon="mdi-check"
+                    color="success"
+                    class="ml-2"
+                  />
+                </template>
+              </VExpansionPanelTitle>
+              <VExpansionPanelText>
+                <VCard class="card-box">         
+                  <VCardText>
+                    <MdEditor :model-value="x.content?.description" previewOnly></MdEditor> 
+                  </VCardText>
+                  <div class="text-center w-100 my-2">
+                    <VBtn color="primary" variant="flat">Vote</VBtn>
+                  </div>
+                </VCard>
+              </VExpansionPanelText>
+            </VExpansionPanel>
+          </VExpansionPanels>          
+        </VCardItem>   
+        <VCardText v-if="store.proposals.length === 0">No active proposals</VCardText>
+    </VCard>
+
+    <VBtn block color='secondary' variant="outlined" class="mt-5">
+      Connect Wallet
+    </VBtn>
   </div>
 </template>
-<style>
-#chart {
-  max-width: 260px;
-  margin: 35px auto;
-  opacity: 0.9;
-}
 
+<style lang="scss" scoped>
+.card-box {
+  border: 1px solid rgb(var(--v-theme-primary));
+}
 </style>

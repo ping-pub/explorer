@@ -1,0 +1,20 @@
+
+{
+    "chain_name": "shentu",
+    "coingecko": "certik",
+    "api": ["https://certik-api.polkachu.com", "https://chainfull.noopsbycertik.com"],
+    "rpc": ["https://certik-rpc.polkachu.com:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.9",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "addr_prefix": "certik",
+    "logo": "/logos/shentu.jpg",
+    "assets": [{
+        "base": "uctk",
+        "symbol": "CTK",
+        "exponent": "6",
+        "coingecko_id": "certik", 
+        "logo": "/logos/shentu.jpg"
+    }]
+}

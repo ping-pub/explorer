@@ -6,6 +6,7 @@ import { useRouter } from "vue-router";
 import { useStakingStore } from "./useStakingStore";
 import { useBankStore } from "./useBankStore";
 import { useBaseStore } from "./useBaseStore";
+import { useGovStore } from "./useGovStore";
 
 export const useBlockchain = defineStore("blockchain", {
   state: () => {
@@ -101,6 +102,7 @@ export const useBlockchain = defineStore("blockchain", {
       await useStakingStore().init()
       await useBankStore().initial()
       useBaseStore().initial()
+      useGovStore().initial()
     },
     setRestEndpoint(endpoint: string) {
       this.rest = endpoint

@@ -1,0 +1,18 @@
+{
+    "chain_name": "genesisL1",
+    "api": "https://api.genesisl1.org",
+    "rpc": ["https://26657.genesisl1.org:443", "https://26657.genesisl1.org:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.4",
+    "coin_type": "118",
+    "min_tx_fee": "3000000000000000",
+    "addr_prefix": "genesis",
+    "logo": "/logos/genesisl1.png",
+    "assets": [{
+        "base": "el1",
+        "symbol": "L1",
+        "exponent": "18",
+        "coingecko_id": "", 
+        "logo": "/logos/genesisl1.png"
+    }]
+}
