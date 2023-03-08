@@ -1,0 +1,18 @@
+{
+    "chain_name": "side",
+    "api": ["https://rest.testnet.side.one"], 
+    "rpc": [""],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.4",
+    "coin_type": "60",
+    "min_tx_fee": "800",
+    "addr_prefix": "side",
+    "logo": "/logos/side.jpeg",
+    "assets": [{
+        "base": "aside",
+        "symbol": "SIDE",
+        "exponent": "18", 
+        "coingecko_id": "",
+        "logo": "/logos/side.jpeg"
+    }]
+}
