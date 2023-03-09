@@ -21,7 +21,11 @@
                 <h4 class="mb-0">
                   {{ validator.description.moniker }}
                 </h4>
-                <span class="card-text">{{ validator.description.website }}</span>
+                <span class="card-text">
+                  <b-link :href="validator.description.website">
+                    {{ validator.description.website }}
+                  </b-link>
+                </span>
               </div>
               <div class="d-flex flex-wrap">
                 <b-button
@@ -270,7 +274,7 @@
 
 <script>
 import {
-  BCard, BButton, BAvatar, BRow, BCol, BTable, BCardFooter, VBTooltip, VBModal, BBadge, BPagination,
+  BCard, BButton, BAvatar, BRow, BCol, BTable, BCardFooter, VBTooltip, VBModal, BBadge, BPagination, BLink,
 } from 'bootstrap-vue'
 
 import {
@@ -293,6 +297,7 @@ export default {
     BBadge,
     BPagination,
     BTable,
+    BLink,
     StakingAddressComponent,
     StakingCommissionComponent,
     StakingRewardComponent,
