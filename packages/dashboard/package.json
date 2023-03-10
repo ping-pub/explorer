@@ -2,6 +2,7 @@
   "name": "framework",
   "version": "0.0.0",
   "private": true,
+  "target": "",
   "scripts": {
     "serve": "vite",
     "build": "run-p type-check build-only",
@@ -13,6 +14,8 @@
   "dependencies": {
     "@casl/ability": "^6.3.3",
     "@casl/vue": "^2.2.1",
+    "@cosmjs/crypto": "^0.29.5",
+    "@cosmjs/encoding": "^0.29.5",
     "@floating-ui/dom": "^1.2.0",
     "@iconify/vue": "^4.1.0",
     "@intlify/unplugin-vue-i18n": "^0.8.2",

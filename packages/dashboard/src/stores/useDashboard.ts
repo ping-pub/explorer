@@ -209,10 +209,6 @@ export const useDashboard = defineStore('dashboard', {
       }
   },
   getters: {
-    current() : string {
-      const blockchain = useBlockchain()
-      return blockchain.chainName || this.favorite[0] || ''
-    },
     length() : number {
       return Object.keys(this.chains).length
     }
@@ -234,13 +230,28 @@ export const useDashboard = defineStore('dashboard', {
       }
     },
     async loadingFromLocal() {
-      const source = this.networkType === NetworkType.Mainnet 
+      const source: Record<string, LocalConfig> = this.networkType === NetworkType.Mainnet 
           ? import.meta.glob('../../chains/mainnet/*.json', {eager: true})
           : import.meta.glob('../../chains/testnet/*.json', {eager: true})
-      Object.values(source).forEach((x: LocalConfig) => {
+      Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {        
         this.chains[x.chain_name] = fromLocal(x)
       })
+      this.setupDefault()
       this.status = LoadingStatus.Loaded
+    },
+    setupDefault() {
+      if(this.length > 0) {
+        const blockchain = useBlockchain()
+        for(let i=0; i < this.favorite.length; i++) {
+          if(!blockchain.chainName && this.chains[this.favorite[i]]) {
+            blockchain.setCurrent(this.favorite[i])
+          }
+        }
+        if(!blockchain.chainName) {
+          const [first] = Object.keys(this.chains)
+          blockchain.setCurrent(first)
+        }
+      }
     },
     setConfigSource(newSource: ConfigSource) {
       this.source = newSource

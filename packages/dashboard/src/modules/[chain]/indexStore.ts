@@ -2,7 +2,7 @@ import { useBlockchain, useCoingecko, useBaseStore, useBankStore, useFormatter, 
 import { useDistributionStore } from "@/stores/useDistributionStore";
 import { useMintStore } from "@/stores/useMintStore";
 import { useStakingStore } from "@/stores/useStakingStore";
-import { ProposalStatus, type ProposalSDKType } from "@ping-pub/codegen/src/cosmos/gov/v1beta1/gov";
+import { ProposalStatus, type ProposalSDKType, Proposal } from "@ping-pub/codegen/src/cosmos/gov/v1beta1/gov";
 import numeral from "numeral";
 import { defineStore } from "pinia";
 
@@ -65,12 +65,12 @@ export const useIndexModule = defineStore('module-index', {
                 total_volumes: [] as number[],
             },
             communityPool: [] as {amount: string, denom: string}[],
-            proposals: [] as ProposalSDKType[],
+            proposals: [] as Proposal[],
             tally: {} as Record<number, {
                 yes: string;
                 abstain: string;
                 no: string;
-                no_with_veto: string;
+                noWithVeto: string;
               }>
         }
     },
@@ -102,7 +102,6 @@ export const useIndexModule = defineStore('module-index', {
 
         priceChange(): string {
             const change = this.coinInfo.market_data?.price_change_percentage_24h || 0
-            console.log(change, 'change')
             return numeral(change).format('+0.[00]')
         },
 
@@ -122,10 +121,6 @@ export const useIndexModule = defineStore('module-index', {
             return colorMap(change)
         },
 
-        mintStore() {
-            return useMintStore()
-        },
-
         pool() {
             const staking = useStakingStore()
             return staking.pool
@@ -135,7 +130,9 @@ export const useIndexModule = defineStore('module-index', {
             const base = useBaseStore()
             const bank = useBankStore()
             const staking = useStakingStore()
+            const mintStore = useMintStore()
             const formatter = useFormatter()
+
             return [
                 {
                   title: 'Height',
@@ -148,7 +145,7 @@ export const useIndexModule = defineStore('module-index', {
                   title: 'Validators',
                   color: 'error',
                   icon: 'mdi-human-queue',
-                  stats: String(base.latest.block?.last_commit?.signatures.length || 0),
+                  stats: String(base.latest.block?.lastCommit?.signatures.length || 0),
                   change: 0,
                 },
                 {
@@ -162,14 +159,14 @@ export const useIndexModule = defineStore('module-index', {
                   title: 'Bonded Tokens',
                   color: 'warning',
                   icon: 'mdi-lock',
-                  stats: formatter.formatTokenAmount({amount: this.pool.bonded_tokens, denom: staking.params.bond_denom }),
+                  stats: formatter.formatTokenAmount({amount: this.pool.bondedTokens, denom: staking.params.bondDenom }),
                   change: 0,
                 },                
                 {
                     title: 'Inflation',
                     color: 'success',
                     icon: 'mdi-chart-multiple',
-                    stats: formatter.formatDecimalToPercent(this.mintStore.inflation),
+                    stats: formatter.formatDecimalToPercent(mintStore.inflation),
                     change: 0,
                 },
                 {
@@ -184,25 +181,25 @@ export const useIndexModule = defineStore('module-index', {
     },
     actions: {
         async loadDashboard() {
+            console.log('initial dashboard')
             this.$reset()
             this.initCoingecko()
-            this.mintStore.fetchInflation()
-            const dist = useDistributionStore()
-            dist.fetchCommunityPool().then(x => {
+            useMintStore().fetchInflation()
+            useDistributionStore().fetchCommunityPool().then(x => {
                 this.communityPool = x.pool.filter(t=> t.denom.length < 10).map(t => ({ 
                     amount: String(parseInt(t.amount)),
                     denom: t.denom
                 }))
             })
-            const gov = useGovStore()
-            gov.fetchProposals(ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD).then(x => {
-                this.proposals = x.proposals
-                x.proposals.forEach(x1 => {
-                    gov.fetchTally(x1.proposal_id).then(t => {
-                        if(t.tally) this.tally[Number(x1.proposal_id)] = t.tally
-                    })
-                })
-            })
+            // const gov = useGovStore()
+            // gov.fetchProposals(ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD).then(x => {
+            //     this.proposals = x.proposals
+            //     x.proposals.forEach(x1 => {
+            //         gov.fetchTally(Number(x1.proposalId)).then(t => {
+            //             if(t.tally) this.tally[Number(x1.proposalId)] = t.tally
+            //         })
+            //     })
+            // })
         },
         tickerColor(color: string) {
             return colorMap(color)

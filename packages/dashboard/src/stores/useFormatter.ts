@@ -47,9 +47,12 @@ export const useFormatter = defineStore('formatter', {
         formatTokenAmount(token: {denom: string, amount: string;}) {
             return this.formatToken(token, false)
         },
-        formatToken(token: {  denom: string, amount: string;}, withDenom = true) : string {
+        formatToken2(token: {  denom: string, amount: string;}, withDenom = true) {
+            return this.formatToken(token, true, '0,0.[00]')
+        },
+        formatToken(token: {  denom: string, amount: string;}, withDenom = true, fmt='0.0a') : string {
             if(token && token.amount) {
-                let amount = Long.fromValue(token.amount)
+                let amount = Number(token.amount)
                 let denom = token.denom
                 const conf = this.blockchain.current?.assets?.find(x => x.base === token.denom || x.base.denom === token.denom)
                 if(conf) {
@@ -61,11 +64,11 @@ export const useFormatter = defineStore('formatter', {
                         }
                     })
                     if(unit && unit.exponent > 0) {
-                        amount = Long.fromValue(token.amount).divide(Math.pow(10, unit?.exponent))
+                        amount = amount / Math.pow(10, unit?.exponent)
                         denom = unit.denom.toUpperCase()
                     }
                 }
-                return `${numeral(amount).format('0.0a')} ${withDenom ? denom: ''}`
+                return `${numeral(amount).format(fmt)} ${withDenom ? denom: ''}`
             } 
             return '-'      
         },
@@ -82,7 +85,7 @@ export const useFormatter = defineStore('formatter', {
             }
             return '-'
         },
-        calculatePercent(input?: string, total?: string ) {
+        calculatePercent(input?: string, total?: string|number ) {
             if(!input || !total) return '0'
             const percent = Number(input)/Number(total)
             return numeral(percent).format("0.[00]%")
@@ -90,8 +93,11 @@ export const useFormatter = defineStore('formatter', {
         formatDecimalToPercent(decimal: string) {
             return numeral(decimal).format('0.[00]%')
         },
-        formatDateTo(date: string) {
-            return dayjs(date).to
+        percent(decimal?: string) {
+            return decimal ? numeral(decimal).format('0.[00]%') : '-'
+        },
+        numberAndSign(input: number, fmt="+0,0") {
+            return numeral(input).format(fmt)
         },
         toDay(time?: string, format = 'long') {
             if(!time) return ''

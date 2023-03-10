@@ -1,52 +1,47 @@
 import { defineStore } from "pinia";
 import { useBlockchain } from "./useBlockchain";
 import { createGovRestClientForChain } from "@/libs/client";
-import type { ProposalStatus } from "@ping-pub/codegen/src/cosmos/gov/v1/gov";
+import type { DepositParams, ProposalStatus } from "@ping-pub/codegen/src/cosmos/gov/v1/gov";
 import type { PageRequest } from "@ping-pub/codegen/src/helpers";
-import type { DepositParams, DepositParamsSDKType, TallyParams, TallyParamsSDKType, VotingParams, VotingParamsSDKType } from "@ping-pub/codegen/src/cosmos/gov/v1beta1/gov";
+import { createRpcQueryExtension } from '@ping-pub/codegen/src/cosmos/gov/v1beta1/query.rpc.Query'
+import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { QueryClient } from "@cosmjs/stargate";
 
 export const useGovStore = defineStore('govStore', {
     state: () => {
         return {
             params: {
-                deposit: {} as DepositParamsSDKType,
-                voting: {} as VotingParamsSDKType,
-                tally: {} as TallyParamsSDKType,
+                deposit: {} as DepositParams,
+                voting: {} as VotingParams,
+                tally: {} as TallyParams,
             }
         }
     },
     getters: {
-        client() {
-            const chain = useBlockchain()
-            return createGovRestClientForChain(chain.chainName, chain.restClient)
+        blockchain() {
+            return useBlockchain()
         }
     },
     actions: {
         initial() {
             this.fetchParams()
         },
-        fetchProposals( proposalStatus: ProposalStatus, pagination?: PageRequest ) {
+        async fetchProposals( proposalStatus: ProposalStatus, pagination?: PageRequest ) {
             const param = {
                 proposalStatus,
                 voter: '',
                 depositor: '',
                 pagination,
             }
-            return this.client.proposals(param)
+            return this.blockchain.rpc.proposals(proposalStatus, '', '')
         },
-        fetchParams() {
-            this.client.params({paramsType: 'deposit'}).then(x => {
-                if(x.deposit_params) this.params.deposit = x.deposit_params
-            })
-            this.client.params({paramsType: 'voting'}).then(x => {
-                if(x.voting_params) this.params.voting = x.voting_params
-            })
-            this.client.params({paramsType: 'tallying'}).then(x => {
-                if(x.tally_params) this.params.tally = x.tally_params
-            })
+        async fetchParams() {
+            // this.blockchain.rpc.govParam().then(x => {
+            //     this.params.deposit = x.deposit
+            // })
         },
-        fetchTally(proposalId: Long) {
-            return this.client.tallyResult({proposalId})
+        async fetchTally(proposalId: number) {
+            return this.blockchain.rpc.tally(proposalId)
         }
     }
 })

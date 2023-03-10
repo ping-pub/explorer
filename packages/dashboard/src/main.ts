@@ -17,7 +17,6 @@ loadFonts();
 
 // Create vue app
 const app = createApp(App);
-
 // Use plugins
 app.use(i18n)
 app.use(vuetify);

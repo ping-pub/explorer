@@ -32,7 +32,7 @@ dashboard.initial()
 const blockchain = useBlockchain()
 // blockchain.initial()
 blockchain.$subscribe((m, s) => {
-  if(m.events.key === 'rest') {
+  if(!Array.isArray(m.events) && m.events.key === 'chainName') {
     blockchain.initial()
   }
 })

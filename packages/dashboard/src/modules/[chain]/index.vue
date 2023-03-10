@@ -23,14 +23,11 @@ onMounted(() => {
 
 const format = useFormatter()
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex])
-const desc = ref('')
-const detailId = ref('')
 
-store.$subscribe((m, s) => {
-  desc.value = s.coinInfo.description?.en || ''
-})
 blockchain.$subscribe((m, s) => {
-  if(m.events.key === 'rest') {
+  console.log('index:', m)
+  if(!Array.isArray(m.events) && ['chainName', 'endpoint'].includes(m.events.key)) {
+    console.log(m.events.key)
     store.loadDashboard()
   }
 })
@@ -44,7 +41,7 @@ function shortName(name: string, id: string) {
   <div>
     <VCard v-if="coinInfo && coinInfo.name" class="mb-5">
       <VRow>
-        <VCol md="4">
+        <VCol md="5">
           <VCardItem>
             <VCardTitle>
               {{ coinInfo.name }} (<span class="text-uppercase">{{ coinInfo.symbol }}</span>)
@@ -120,7 +117,7 @@ function shortName(name: string, id: string) {
           </VBtn>
           </VCardItem>
         </VCol>
-        <VCol md="8">
+        <VCol md="7">
           <VCardItem>
             <PriceMarketChart />
           </VCardItem>
@@ -129,7 +126,7 @@ function shortName(name: string, id: string) {
       <VDivider />
       <VCardText style="max-height: 250px; overflow:scroll;"><MdEditor :model-value="coinInfo.description?.en" previewOnly></MdEditor></VCardText>
       <VCardItem>
-        <VChip v-for="tag in coinInfo.categories" size="x-small">{{ tag }}</VChip>
+        <VChip v-for="tag in coinInfo.categories" size="x-small" class="mr-2">{{ tag }}</VChip>
       </VCardItem>
     </VCard>
 

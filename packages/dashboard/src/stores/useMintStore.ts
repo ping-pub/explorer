@@ -2,6 +2,10 @@ import { defineStore } from "pinia";
 import { useBlockchain } from "./useBlockchain";
 import { createMintClientForChain } from "@/libs/client";
 
+import { createRpcQueryExtension } from '@ping-pub/codegen/src/cosmos/mint/v1beta1/query.rpc.Query'
+import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { QueryClient, setupMintExtension } from "@cosmjs/stargate";
+
 export const useMintStore = defineStore('mintStore', {
     state: () => {
         return {
@@ -9,16 +13,16 @@ export const useMintStore = defineStore('mintStore', {
         }
     },
     getters: {
-        client() {
-            const chain = useBlockchain()
-            return createMintClientForChain(chain.chainName, chain.restClient)
+        blockchain() {
+            return useBlockchain()
         }
     },
     actions: {
-        fetchInflation() {
-            this.client.inflation({}).then(x => {
-                this.inflation = String(x.inflation)
-                console.log(this.inflation)
+        async fetchInflation() {
+            this.blockchain.rpc.inflation().then(x => {
+                this.inflation = String(x)
+            }).catch(err => {
+                this.inflation = ""
             })
         }
     }

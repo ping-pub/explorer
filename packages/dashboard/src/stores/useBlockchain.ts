@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useDashboard, type ChainConfig } from "./useDashboard";
+import { useDashboard, type ChainConfig, type Endpoint, EndpointType } from "./useDashboard";
 import { LCDClient } from '@osmonauts/lcd'
 import type { VerticalNavItems } from '@/@layouts/types'
 import { useRouter } from "vue-router";
@@ -7,35 +7,29 @@ import { useStakingStore } from "./useStakingStore";
 import { useBankStore } from "./useBankStore";
 import { useBaseStore } from "./useBaseStore";
 import { useGovStore } from "./useGovStore";
+import { RPCClient } from '../libs/client.rpc'
+import { ref } from "vue";
 
 export const useBlockchain = defineStore("blockchain", {
   state: () => {
     return {
       status: {} as Record<string, string>,
       rest: '',
-      chainName: ""
+      chainName: "",
+      endpoint: {} as {
+        type?: EndpointType,
+        address: string
+        provider: string       
+      },
+      connErr: ""
     }
   },
   getters: {
-    current() : ChainConfig {
+    current() : ChainConfig | undefined {
       return this.dashboard.chains[this.chainName]
     },
     logo(): string {
       return this.current?.logo || ''
-    },
-    availableEndpoint() : string {
-      const all = this.current?.endpoints?.rest
-      if(all) {
-        if(this.rest || all.findIndex(x => x.address === this.rest) < 0) {        
-          const rn = Math.random()
-          const endpoint = all[Math.floor(rn * all.length)]
-          this.rest = endpoint?.address || ''
-        }
-      }      
-      return this.rest
-    },
-    restClient() : LCDClient {
-      return new LCDClient({restEndpoint: this.rest})
     },
     dashboard() {
       return useDashboard()
@@ -46,6 +40,7 @@ export const useBlockchain = defineStore("blockchain", {
 
       const router = useRouter()
       const routes = router?.getRoutes()||[]
+      console.log(routes)
       if(this.current && routes) {
         currNavItem = [{
           title: this.current?.prettyName || this.chainName || '',
@@ -99,16 +94,35 @@ export const useBlockchain = defineStore("blockchain", {
   },
   actions: {
     async initial() {
+      console.log('begin Setup')
+      await this.randomSetupEndpoint()
+      console.log('rpc setup')
       await useStakingStore().init()
-      await useBankStore().initial()
+      useBankStore().initial()
       useBaseStore().initial()
       useGovStore().initial()
+      
     },
-    setRestEndpoint(endpoint: string) {
-      this.rest = endpoint
+
+    async randomSetupEndpoint() {
+      const all = this.current?.endpoints?.rpc
+      if(all) {    
+          const rn = Math.random()
+          const endpoint = all[Math.floor(rn * all.length)]
+          await this.setRestEndpoint(endpoint)
+      } 
+    },
+    
+    async setRestEndpoint(endpoint: Endpoint) {
+      this.connErr = ''
+      this.endpoint = endpoint
+      this.rpc = new RPCClient(endpoint.address)
+      console.log(this.rpc.endpoint)
     },
     setCurrent(name: string) {
       this.chainName = name
-    }
+      console.log('set current', name)
+    },
+
   }
 })

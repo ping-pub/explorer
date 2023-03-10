@@ -23,8 +23,8 @@ const series = computed(() => {
   <VTabs v-model="kind" align-tabs="end"><VTab value="price">Price</VTab><VTab value="volume">Volume</VTab></VTabs>
   <VueApexCharts
     type="area"
+    height="261"
     :options="chartConfig"
     :series="series"
-    style="max-height: 280px;"
   />
 </template>
