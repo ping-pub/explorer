@@ -131,7 +131,11 @@ export default class ChainFetch {
   }
 
   async getTxsBySender(sender) {
-    return this.get(`/cosmos/tx/v1beta1/txs?events=message.sender='${sender}'&pagination.reverse=true&order_by=ORDER_BY_DESC`)
+    return this.get(`/cosmos/tx/v1beta1/txs?events=message.sender='${sender}'&pagination.reverse=true`)
+  }
+
+  async getNFTTxsBySender(sender) {
+    return this.get(`/cosmos/tx/v1beta1/txs?events=ibc_nft_transfer.sender='${sender}'&pagination.reverse=true`)
   }
 
   async getTxsByRecipient(recipient) {
