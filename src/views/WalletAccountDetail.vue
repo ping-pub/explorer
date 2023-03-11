@@ -837,9 +837,7 @@ export default {
       this.$http.getNFTsByOwner(this.address).then(res => {
         this.nfts = res.owner.id_collections
       })
-      console.log('=================')
       this.$http.getTxsByRecipient(this.address).then(res => {
-        console.log('recip:', res)
         this.recvTxs = res
       })
     },
