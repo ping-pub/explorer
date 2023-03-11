@@ -57,7 +57,6 @@ export default {
   },
   created() {
     this.$http.getIBCChannels().then(res => {
-      console.log(res)
       this.channels = res.channels
     })
   },
