@@ -130,6 +130,14 @@ export default class ChainFetch {
     return this.get(`/cosmos/tx/v1beta1/txs/${hash}`).then(data => WrapStdTx.create(data, ver))
   }
 
+  async getIBCReceipts(channel_id, port_id, sequence) {
+    return this.get(`/ibc/core/channel/v1/channels/${channel_id}/ports/${port_id}/packet_receipts/${sequence}`)
+  }
+
+  async getIBCAcks(channel_id, port_id, sequence) {
+    return this.get(`/ibc/core/channel/v1/channels/${channel_id}/ports/${port_id}/packet_acks/${sequence}`)
+  }
+
   async getTxsBySender(sender) {
     return this.get(`/cosmos/tx/v1beta1/txs?events=message.sender='${sender}'&pagination.reverse=true`)
   }

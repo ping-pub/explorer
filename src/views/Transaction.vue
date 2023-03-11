@@ -89,7 +89,7 @@
     <b-card v-if="tx.tx.messages">
       <b-card-title>Messages (total: {{ tx.tx.messages.length }})</b-card-title>
       <b-card-body
-        v-for="(item, i) in tx.tx.messages "
+        v-for="(item, i) in messages"
         id="message"
         :key="i"
         class="message px-0"
@@ -98,6 +98,17 @@
       </b-card-body>
     </b-card>
 
+    <b-card v-if="ibcAcks">
+      <b-card-title>IBC Acknowledgements</b-card-title>
+      <b-card-body
+        v-for="(item, i) in ibcAcks"
+        id="message"
+        :key="`ack${i}`"
+        class="message px-0"
+      >
+        <object-field-component :tablefield="item" />
+      </b-card-body>
+    </b-card>
     <b-card
       v-if="tx.element"
       title="Details"
@@ -142,13 +153,41 @@ export default {
     return {
       error: null,
       tx: { tx: {} },
+      ibcAcks: { },
     }
+  },
+  computed: {
+    messages() {
+      return this.tx.tx.messages.map((x, i) => {
+        const x1 = x
+        if (this.ibcAcks[i]) {
+          x1.status = this.ibcAcks[i].acknowledgement
+        }
+        return x1
+      })
+    },
   },
   created() {
     const { hash } = this.$route.params
     this.$http.getTxs(hash).then(res => {
       this.error = null
       this.tx = res
+      res.logs.forEach((log, i) => {
+        log.events.forEach(e => {
+          const keys = Object.values(e.attributes).map(x => x.key)
+          if (keys.includes('packet_src_port')) {
+            const att = {}
+            e.attributes.forEach(x => {
+              att[x.key] = x.value
+            })
+            // console.log(att)
+            // this.$http.getIBCReceipts(att.packet_dst_channel, att.packet_dst_port, att.packet_sequence).then(re => console.log(re))
+            this.$http.getIBCAcks(att.packet_src_channel, att.packet_src_port, att.packet_sequence).then(re => {
+              this.$set(this.ibcAcks, i, JSON.parse(JSON.stringify(re)))
+            })
+          }
+        })
+      })
     }).catch(err => {
       this.error = err
     })
