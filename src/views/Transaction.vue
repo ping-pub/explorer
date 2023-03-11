@@ -108,6 +108,7 @@
       >
         <object-field-component :tablefield="item" />
       </b-card-body>
+      Note: <code>CPdVftUYJv4Y2EUSvyTsdQAe268hI6R333KgqfNkCnw=</code> is success status in bytes
     </b-card>
     <b-card
       v-if="tx.element"
