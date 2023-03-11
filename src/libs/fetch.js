@@ -147,7 +147,15 @@ export default class ChainFetch {
   }
 
   async getTxsByRecipient(recipient) {
-    return this.get(`/cosmos/tx/v1beta1/txs?message.recipient=${recipient}`)
+    return this.get(`/cosmos/tx/v1beta1/txs?events=ibc_nft_transfer.receiver='${recipient}'`)
+  }
+
+  async getTxsByChannelAndPort(channel, port) {
+    return this.get(`/cosmos/tx/v1beta1/txs?&pagination.reverse=true&events=send_packet.packet_src_channel='${channel}'&events=send_packet.packet_src_port='${port}'`)
+  }
+
+  async getRecvTxsByChannelAndPort(channel, port) {
+    return this.get(`/cosmos/tx/v1beta1/txs?&pagination.reverse=true&events=recv_packet.packet_dst_channel='${channel}'&events=recv_packet.packet_dst_port='${port}'`)
   }
 
   async getTxsByHeight(height) {

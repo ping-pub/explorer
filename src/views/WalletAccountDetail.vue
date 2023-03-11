@@ -302,6 +302,9 @@
           @change="pageload"
         />
       </b-card>
+      <b-card v-if="recvTxs" title="Received IBC Transactions">
+        <object-field-component :tablefield="recvTxs.txs" />
+      </b-card>
       <b-card
         v-if="isContract && !!contractInfo"
       >
@@ -620,6 +623,7 @@ export default {
       names: [],
       nfts: [],
       nft: {},
+      recvTxs: {},
     }
   },
   computed: {
@@ -772,7 +776,7 @@ export default {
       return this.$store.state.chains.denoms
     },
     isEthAddr() {
-      return JSON.stringify(this.account).indexOf('PubKeyEthSecp256k1') > 0
+      return false
     },
   },
   created() {
@@ -832,6 +836,11 @@ export default {
       })
       this.$http.getNFTsByOwner(this.address).then(res => {
         this.nfts = res.owner.id_collections
+      })
+      console.log('=================')
+      this.$http.getTxsByRecipient(this.address).then(res => {
+        console.log('recip:', res)
+        this.recvTxs = res
       })
     },
     showNft(denom, token) {

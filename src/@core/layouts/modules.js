@@ -32,6 +32,11 @@ export default () => ([
   },
   {
     scope: 'normal',
+    title: 'IBC',
+    route: 'ibchannels',
+  },
+  {
+    scope: 'normal',
     title: 'dashboard.parameters',
     route: 'parameters',
   },

@@ -357,6 +357,36 @@ const router = new VueRouter({
         ],
       },
     },
+
+    {
+      path: '/:chain/ibc/:channel/:port',
+      name: 'ibchannel',
+      component: () => import('@/views/IBCChannel.vue'),
+      meta: {
+        pageTitle: 'Channels',
+        breadcrumb: [
+          {
+            text: 'ibc',
+            active: true,
+          },
+        ],
+      },
+    },
+
+    {
+      path: '/:chain/ibc',
+      name: 'ibchannels',
+      component: () => import('@/views/IBC.vue'),
+      meta: {
+        pageTitle: 'Channels',
+        breadcrumb: [
+          {
+            text: 'ibc',
+            active: true,
+          },
+        ],
+      },
+    },
     // custom modules for specified chains
     // 1. cosmos
     {
