@@ -736,7 +736,8 @@ export default {
       return this.$store.state.chains.denoms
     },
     isEthAddr() {
-      return JSON.stringify(this.account).indexOf('PubKeyEthSecp256k1') > 0
+      // JSON.stringify(this.account).indexOf('PubKeyEthSecp256k1') > 0
+      return false
     },
   },
   created() {
