@@ -1,13 +1,14 @@
 {
     "chain_name": "side",
     "api": ["https://rest.testnet.side.one"], 
-    "rpc": [""],
+    "rpc": ["https://rpc.testnet.side.one"],
     "snapshot_provider": "",
-    "sdk_version": "0.45.4",
+    "sdk_version": "0.46.4",
     "coin_type": "60",
     "min_tx_fee": "800",
     "addr_prefix": "side",
     "logo": "/logos/side.jpeg",
+    "keplr_features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
     "assets": [{
         "base": "aside",
         "symbol": "SIDE",
