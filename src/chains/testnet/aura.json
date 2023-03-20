@@ -1,6 +1,6 @@
 {
     "chain_name": "aura",
-    "coingecko": "aura-network",
+    "coingecko": "",
     "api": ["https://lcd.euphoria.aura.network"],
     "rpc": [
         "https://snapshot-1.euphoria.aura.network:443",
@@ -17,7 +17,7 @@
             "base": "ueaura",
             "symbol": "AURA",
             "exponent": "6",
-            "coingecko_id": "aura-network",
+            "coingecko_id": "",
             "logo": "/logos/aura.png"
         }
     ]
