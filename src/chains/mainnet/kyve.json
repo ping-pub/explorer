@@ -10,7 +10,7 @@
         "symbol": "KYVE",
         "exponent": "6",
         "coingecko_id": "", 
-        "logo": "https://raw.githubusercontent.com/cosmostation/chainlist/master/chain/kyve/chainImg/logoImg/chainImg.svg"
+        "logo": "https://raw.githubusercontent.com/cosmostation/chainlist/master/chain/kyve/chainImg/logoImg/tokenImg.svg"
     }],
     "addr_prefix": "kyve",
     "logo": "https://raw.githubusercontent.com/cosmostation/chainlist/master/chain/kyve/chainImg/logoImg/tokenImg.svg"
