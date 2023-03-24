@@ -1,8 +1,8 @@
 {
     "chain_name": "Migaloo",
     "coingecko": "",
-    "api": ["https://api.migaloo.silknodes.io"],
-    "rpc": ["https://rpc.migaloo.silknodes.io"],
+    "api": ["https://migaloo-api.polkachu.com", "https://api.migaloo.silknodes.io"],
+    "rpc": ["https://migaloo-rpc.polkachu.com/:443","https://rpc.migaloo.silknodes.io"],
     "snapshot_provider": "",
     "coin_type": 118,
     "sdk_version": "0.45.9",
