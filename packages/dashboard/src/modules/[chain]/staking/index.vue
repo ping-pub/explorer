@@ -1,9 +1,11 @@
 <script lang=ts setup>
 import { useBaseStore, useFormatter, useStakingStore } from '@/stores';
+import { toBase64, toHex } from '@cosmjs/encoding';
+import { pubkeyToAddress } from '@cosmjs/tendermint-rpc';
 import type { ValidatorSDKType } from '@ping-pub/codegen/src/cosmos/staking/v1beta1/staking';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, type DebuggerEvent } from 'vue';
-
+import { consensusPubkeyToHexAddress } from '@/libs'
 const staking = useStakingStore()
 const format = useFormatter()
 
@@ -13,7 +15,7 @@ const latest = ref({} as Record<string, number>)
 const yesterday = ref({} as Record<string, number>)
 const tab = ref('active')
 const unbondList = ref([] as ValidatorSDKType[])
-
+const base = useBaseStore()
 onMounted(()=> {
   fetchChange(0)
   staking.fetchInacitveValdiators().then(x => {
@@ -24,36 +26,39 @@ onMounted(()=> {
 function fetchChange(offset: number) {
   const base = useBaseStore()
   const diff = 86400000 / base.blocktime
-  base.fetchLatestValidators(offset).then(x => {
-    const height = Number(x.block_height) - diff
-    x.validators.forEach(v => {
-      latest.value[v.pub_key?.key] = Number(v.voting_power)
+  base.fetchAbciInfo().then(h => {
+    // console.log('block:', h)
+    base.fetchValidatorByHeight(h.lastBlockHeight, offset).then(x => {
+      x.validators.forEach(v => {
+        if(v.pubkey) latest.value[pubkeyToAddress(v.pubkey.algorithm, v.pubkey.data)] = Number(v.votingPower)
+      })         
     })
-    const len = Object.keys(latest.value).length
-    if(x.pagination && len < Number(x.pagination.total) ) {
-      fetchChange(len)
-    }
+    const height = Number(h.lastBlockHeight) - diff
     base.fetchValidatorByHeight(height > 0 ? height : 1, offset).then(old => {
       old.validators.forEach(v => {
-      yesterday.value[v.pub_key?.key] = Number(v.voting_power)
-    })
+        if(v.pubkey) yesterday.value[pubkeyToAddress(v.pubkey.algorithm, v.pubkey.data)] = Number(v.votingPower)
+      })
+      // console.log(Object.keys(yesterday.value).map(x => x.toUpperCase()))
     })
   })
 }
 
-const change24 = (key: string) => {
-  const n : number = latest.value[key];
-  const o : number = yesterday.value[key]
+const change24 = (key: {typeUrl: string, value: Uint8Array}) => {
+  // console.log('hex key:', consensusPubkeyToHexAddress(key))
+  const txt = toBase64(key.value)
+  const n : number = latest.value[txt];
+  const o : number = yesterday.value[txt]
+  // console.log( txt, n, o)
   return n >0 && o > 0 ? n - o : 0
 }
 
-const change24Text = (key?: string) => {
+const change24Text = (key?: {typeUrl: string, value: Uint8Array}) => {
   if(!key) return ''
   const v = change24(key)
   return v!==0 ? format.numberAndSign(v) : ''
 }
 
-const change24Color = (key?: string) => {
+const change24Color = (key?: {typeUrl: string, value: Uint8Array}) => {
   if(!key) return ''
   const v = change24(key)
   if(v > 0) return 'text-success'
@@ -67,7 +72,8 @@ const update = (m: DebuggerEvent) => {
 }
 
 const list = computed(() => {
-  return tab.value === 'active' ? staking.validators: unbondList.value
+  // return tab.value === 'active' ? staking.validators: unbondList.value
+  return staking.validators
 })
 
 const loadAvatars = () => {
@@ -111,7 +117,7 @@ const logo = (identity?: string) => {
 const rank = function(position: number) {
     let sum = 0
     for(let i = 0;i < position; i++) {
-      sum += Number(staking.validators[i]?.delegator_shares)
+      sum += Number(staking.validators[i]?.delegatorShares)
     }
     const percent = (sum / staking.totalPower)
 
@@ -130,7 +136,7 @@ const rank = function(position: number) {
                     <VBtn value="active" variant="outlined" >Active</VBtn>
                     <VBtn value="inactive" variant="outlined">Inactive</VBtn>
                 </VBtnToggle>
-                <span class="mt-2">{{ list.length }}/{{ staking.params.max_validators }}</span>
+                <span class="mt-2">{{ list.length }}/{{ staking.params.maxValidators }}</span>
             </VCardTitle>
         <VTable class="text-no-wrap table-header-bg rounded-0">
             <thead>
@@ -159,7 +165,7 @@ const rank = function(position: number) {
         <tbody>
             <tr
             v-for="(v, i) in list"
-            :key="v.operator_address"
+            :key="v.operatorAddress"
           >
             <!-- 👉 rank -->
             <td>
@@ -181,7 +187,7 @@ const rank = function(position: number) {
                 <div class="d-flex flex-column">
                   <h6 class="text-sm">
                     <RouterLink
-                      :to="{name: 'chain-staking-validator', params: {validator: v.operator_address}}"
+                      :to="{name: 'chain-staking-validator', params: {validator: v.operatorAddress}}"
                       class="font-weight-medium user-list-name"
                     >
                       {{ v.description?.moniker }}
@@ -197,18 +203,18 @@ const rank = function(position: number) {
             <td class="text-right">
                 <div class="d-flex flex-column">
                   <h6 class="text-sm font-weight-medium">
-                    {{ format.formatToken( {amount: parseInt(v.delegator_shares).toString(), denom: staking.params.bond_denom }, true, "0,0") }}
+                    {{ format.formatToken( {amount: parseInt(v.tokens).toString(), denom: staking.params.bondDenom }, true, "0,0") }}
                   </h6>
-                  <span class="text-xs">{{ format.calculatePercent(v.delegator_shares, staking.totalPower) }}</span>
+                  <span class="text-xs">{{ format.calculatePercent(v.delegatorShares, staking.totalPower) }}</span>
                 </div>
             </td>
             <!-- 👉 24h Changes -->
-            <td class="text-right text-xs" :class="change24Color(v.consensus_pubkey?.key)">
-              {{ change24Text(v.consensus_pubkey?.key) }} <VChip label v-if="v.jailed" color="error">Jailed</VChip>
+            <td class="text-right text-xs" :class="change24Color(v.consensusPubkey)">
+              {{ change24Text(v.consensusPubkey) }} <VChip label v-if="v.jailed" color="error">Jailed</VChip>
             </td>
             <!-- 👉 commission -->
             <td  class="text-right">
-              {{ format.percent(v.commission?.commission_rates?.rate) }}
+              {{ format.formatCommissionRate(v.commission?.commissionRates?.rate) }}
             </td>
             <!-- 👉 Action -->
             <td>

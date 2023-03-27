@@ -5,12 +5,13 @@ import type { Params, Pool, Validator} from "@ping-pub/codegen/src/cosmos/stakin
 import { get } from "@/libs/http";
 
 import type { BondStatusString } from "@/libs/client.rpc";
+import type { QueryParamsResponse } from "@ping-pub/codegen/src/cosmos/staking/v1beta1/query";
 
 export const useStakingStore = defineStore('stakingStore', {
     state: () => {
         return {
             validators: [] as Validator[],
-            params: {} ,
+            params: {} as QueryParamsResponse,
             pool: {} as Pool | undefined,
         }
     },
@@ -50,6 +51,9 @@ export const useStakingStore = defineStore('stakingStore', {
         },
         async fetchValidator(validatorAddr: string) {  
             return this.blockchain.rpc.validator(validatorAddr)
+        },
+        async fetchValidatorDelegation(validatorAddr: string, delegatorAddr: string) {  
+            return (await this.blockchain.rpc.validatorDelegation(validatorAddr, delegatorAddr)).delegationResponse
         },
         async fetchValidators(status: BondStatusString) { 
             return this.blockchain.rpc.validators(status, undefined).then(res => {

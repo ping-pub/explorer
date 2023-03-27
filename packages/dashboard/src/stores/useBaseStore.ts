@@ -59,9 +59,12 @@ export const useBaseStore = defineStore('baseStore', {
         async fetchLatestValidators(offset = 0) {
             return this.blockchain.rpc.validatorsAtHeight()
         },
-        async fetchBlock(height: number) {
+        async fetchBlock(height?: number) {
             return this.blockchain.rpc.block(height)
         },
+        async fetchAbciInfo() {
+            return this.blockchain.rpc.abciInfo()
+        }
         // async fetchNodeInfo() {
         //     return this.blockchain.rpc.no()
         // }

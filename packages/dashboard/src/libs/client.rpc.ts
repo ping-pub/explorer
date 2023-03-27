@@ -4,6 +4,8 @@ import { cosmos } from '@ping-pub/codegen/src/index'
 import type { BondStatus } from "@ping-pub/codegen/src/cosmos/staking/v1beta1/staking";
 import long from "long";
 import type { ProposalStatus } from "@ping-pub/codegen/src/cosmos/gov/v1/gov";
+import { OrderBy } from "@ping-pub/codegen/src/cosmos/tx/v1beta1/service";
+import { fromHex } from "@cosmjs/encoding";
 
 export declare type BondStatusString = keyof Pick<typeof BondStatus, "BOND_STATUS_BONDED" | "BOND_STATUS_UNBONDED" | "BOND_STATUS_UNBONDING"> | "";
 
@@ -37,8 +39,13 @@ export class RPCClient {
     async allBalance(address: string) {
         return cosmos.bank.v1beta1.createRpcQueryExtension(await this.getQueryClient()).allBalances({address})
     }
+    async latestBlock() {
+        const base = cosmos.base.tendermint.v1beta1.createRpcQueryExtension(await this.getQueryClient())
+        return base.getLatestBlock()
+    }
     async block(height?: number) {
-        return (await this.getTMClient()).block(height)
+        const base = cosmos.base.tendermint.v1beta1.createRpcQueryExtension(await this.getQueryClient())
+        return height ? base.getBlockByHeight({height: long.fromNumber(height)}) : base.getLatestBlock()
     }
     async abciInfo() {
         return (await this.getTMClient()).abciInfo()
@@ -46,8 +53,15 @@ export class RPCClient {
     async status() {
         return (await this.getTMClient()).status()
     }
-    async validatorsAtHeight(height?: number) {
+    async tmTx(hashStr: string) {
+        const hash = fromHex(hashStr)
+        return (await this.getTMClient()).tx({hash})
+    }
+    async validatorsAllAtHeight(height?: number) {
         return (await this.getTMClient()).validatorsAll(height)
+    }
+    async validatorsAtHeight(height?: number) {
+        return (await this.getTMClient()).validators({height})
     }
     
     async proposal(id: number) {
@@ -100,6 +114,15 @@ export class RPCClient {
     async stakingParams() {
         return cosmos.staking.v1beta1.createRpcQueryExtension(await this.getQueryClient()).params()
     }
+    async delegatorDelegations(delegatorAddr: string) {
+        return cosmos.staking.v1beta1.createRpcQueryExtension(await this.getQueryClient()).delegatorDelegations({delegatorAddr, })
+    }
+    async validatorDelegations(validatorAddr: string) {
+        return cosmos.staking.v1beta1.createRpcQueryExtension(await this.getQueryClient()).validatorDelegations({validatorAddr })
+    }
+    async validatorDelegation(validatorAddr: string, delegatorAddr: string) {
+        return cosmos.staking.v1beta1.createRpcQueryExtension(await this.getQueryClient()).delegation({validatorAddr, delegatorAddr })
+    }    
     async historicalInfo(height: number) {
         return cosmos.staking.v1beta1.createRpcQueryExtension(await this.getQueryClient()).historicalInfo({height: long.fromNumber(height)})
     }
@@ -108,6 +131,12 @@ export class RPCClient {
     }
     async inflation() {
         return cosmos.mint.v1beta1.createRpcQueryExtension(await this.getQueryClient()).inflation()
+    }
+    async txs(events: string[]) {
+        return cosmos.tx.v1beta1.createRpcQueryExtension(await this.getQueryClient()).getTxsEvent({events, orderBy: OrderBy.ORDER_BY_DESC})
+    }
+    async tx(hash: string) {
+        return cosmos.tx.v1beta1.createRpcQueryExtension(await this.getQueryClient()).getTx({hash})
     }
 
     

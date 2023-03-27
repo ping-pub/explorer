@@ -191,15 +191,16 @@ export const useIndexModule = defineStore('module-index', {
                     denom: t.denom
                 }))
             })
-            // const gov = useGovStore()
-            // gov.fetchProposals(ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD).then(x => {
-            //     this.proposals = x.proposals
-            //     x.proposals.forEach(x1 => {
-            //         gov.fetchTally(Number(x1.proposalId)).then(t => {
-            //             if(t.tally) this.tally[Number(x1.proposalId)] = t.tally
-            //         })
-            //     })
-            // })
+            const gov = useGovStore()
+            gov.fetchProposals(ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD).then(x => {
+                this.proposals = x.proposals
+                x.proposals.forEach(x1 => {
+                    gov.fetchTally(Number(x1.proposalId)).then(t => {
+                        console.log("log: ", t)
+                        if(t.tally) this.tally[Number(x1.proposalId)] = t.tally
+                    })
+                })
+            })
         },
         tickerColor(color: string) {
             return colorMap(color)

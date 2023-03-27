@@ -33,7 +33,9 @@ export const useGovStore = defineStore('govStore', {
                 depositor: '',
                 pagination,
             }
-            return this.blockchain.rpc.proposals(proposalStatus, '', '')
+            const proposals = await this.blockchain.rpc.proposals(proposalStatus, '', '')
+            console.log(proposals)
+            return proposals
         },
         async fetchParams() {
             // this.blockchain.rpc.govParam().then(x => {

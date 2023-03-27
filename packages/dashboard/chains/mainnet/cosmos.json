@@ -8,37 +8,10 @@
         "provider": "FreshSTAKING"
     },
     {
-        "address": "https://rpc.cosmos.bh.rocks/",
-        "provider": "BlockHunters 🎯"
-    },
-    {
-        "address": "https://cosmoshub-rpc.lavenderfive.com/",
-        "provider": "Lavender.Five Nodes 🐝"
-    },
-    {
         "address": "https://cosmos-rpc.polkachu.com/",
         "provider": "Polkachu"
     },
-    {
-        "address": "https://rpc.cosmos.dragonstake.io/",
-        "provider": "DragonStake"
-    },
-    {
-        "address": "https://cosmos-rpc.rockrpc.net/",
-        "provider": "RockawayX Infra"
-    },
-    {
-        "address": "https://rpc-cosmoshub.pupmos.network/",
-        "provider": "PUPMØS"
-    },
-    {
-        "address": "https://cosmos-rpc.icycro.org/",
-        "provider": "IcyCRO 🧊"
-    },
-    {
-        "address": "https://rpc.cosmos.interbloc.org/",
-        "provider": "Interbloc"
-    },
+    
     {
         "address": "https://rpc.cosmoshub.strange.love/",
         "provider": "strangelove-ventures"

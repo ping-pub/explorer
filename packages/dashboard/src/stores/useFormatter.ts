@@ -9,6 +9,9 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import utc from 'dayjs/plugin/utc'
 import localeData from 'dayjs/plugin/localeData'
 import type { PoolSDKType } from "@ping-pub/codegen/src/cosmos/staking/v1beta1/staking";
+import { useStakingStore } from "./useStakingStore";
+import { fromBech32, toBase64, toHex } from "@cosmjs/encoding";
+import { consensusPubkeyToHexAddress, operatorAddressToAccount } from "@/libs";
 
 dayjs.extend(localeData)
 dayjs.extend(duration)
@@ -41,6 +44,9 @@ export const useFormatter = defineStore('formatter', {
     getters: {
         blockchain() {
             return useBlockchain()
+        },
+        staking() {
+            return useStakingStore()
         }
     },
     actions: {
@@ -56,7 +62,7 @@ export const useFormatter = defineStore('formatter', {
                 let denom = token.denom
                 const conf = this.blockchain.current?.assets?.find(x => x.base === token.denom || x.base.denom === token.denom)
                 if(conf) {
-                    let unit = {exponent: 0, denom: ''}
+                    let unit = {exponent: 6, denom: ''}
                     // find the max exponent for display
                     conf.denom_units.forEach(x => {
                         if(x.exponent >= unit.exponent) {
@@ -64,7 +70,7 @@ export const useFormatter = defineStore('formatter', {
                         }
                     })
                     if(unit && unit.exponent > 0) {
-                        amount = amount / Math.pow(10, unit?.exponent)
+                        amount = amount / Math.pow(10, unit.exponent || 6)
                         denom = unit.denom.toUpperCase()
                     }
                 }
@@ -72,8 +78,9 @@ export const useFormatter = defineStore('formatter', {
             } 
             return '-'      
         },
-        formatTokens(tokens: {  denom: string, amount: string;}[], withDenom = true) : string {
-            return tokens.map(x => this.formatToken(x, withDenom)).join(', ')  
+        formatTokens(tokens?: {  denom: string, amount: string;}[], withDenom = true, fmt='0.0a') : string {
+            if(!tokens) return ''
+            return tokens.map(x => this.formatToken(x, withDenom, fmt)).join(', ')  
         },
         calculateBondedRatio(pool: {bonded_tokens: string, not_bonded_tokens: string}|undefined) {
             if(pool && pool.bonded_tokens) {
@@ -85,6 +92,11 @@ export const useFormatter = defineStore('formatter', {
             }
             return '-'
         },
+        validator(address: Uint8Array) {
+            const txt = toHex(address).toUpperCase()
+            const validator = this.staking.validators.find(x => consensusPubkeyToHexAddress(x.consensusPubkey) === txt)
+            return validator?.description?.moniker
+        },
         calculatePercent(input?: string, total?: string|number ) {
             if(!input || !total) return '0'
             const percent = Number(input)/Number(total)
@@ -93,7 +105,13 @@ export const useFormatter = defineStore('formatter', {
         formatDecimalToPercent(decimal: string) {
             return numeral(decimal).format('0.[00]%')
         },
-        percent(decimal?: string) {
+        formatCommissionRate(v?: string) {
+            console.log(v)
+            if(!v) return '-'
+            const rate = Number(v) / Number("1000000000000000000")
+            return this.percent(rate)
+        },
+        percent(decimal?: string|number) {
             return decimal ? numeral(decimal).format('0.[00]%') : '-'
         },
         numberAndSign(input: number, fmt="+0,0") {
@@ -117,7 +135,27 @@ export const useFormatter = defineStore('formatter', {
               return dayjs(time).toNow()
             }
             return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
-          }          
+        },
+        messages(msgs: {typeUrl: string}[]) {
+            if(msgs) {
+                const sum: Record<string, number> = msgs.map(msg => {
+                    return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1).replace('Msg', '')
+                }).reduce((s, c) => {
+                    const sh: Record<string, number> = s
+                    if (sh[c]) {
+                      sh[c] += 1
+                    } else {
+                      sh[c] = 1
+                    }
+                    return sh
+                  }, {})
+                  const output: string[] = []
+                  Object.keys(sum).forEach(k => {
+                    output.push(sum[k] > 1 ? `${k}×${sum[k]}` : k)
+                  })
+                  return output.join(', ')
+            }
+        },                 
     }
 })
 

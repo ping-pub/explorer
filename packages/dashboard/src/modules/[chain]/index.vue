@@ -146,11 +146,11 @@ function shortName(name: string, id: string) {
           <VExpansionPanels variant="accordion">
             <VExpansionPanel v-for="(x, i) in store.proposals">
               <VExpansionPanelTitle disable-icon-rotate>
-                    <VChip label color="primary" class="mr-2">{{x.proposal_id}}</VChip>
+                    <VChip label color="primary" class="mr-2">{{x.proposalId}}</VChip>
                     <div class="w-100">{{ x.content?.title }}
                       <div class="d-flex mt-1">
-                        <small class="text-secondary me-auto"> {{ format.toDay(x.voting_end_time, 'from') }}</small>      
-                        <ProposalProcess style="width:300px;" :pool="store.pool" :tally="store.tally[Number(x.proposal_id)]"></ProposalProcess> 
+                        <small class="text-secondary me-auto"> {{ format.toDay(x.votingEndTime, 'from') }}</small>      
+                        <ProposalProcess style="width:300px;" :pool="store.pool" :tally="store.tally[Number(x.proposalId)]"></ProposalProcess> 
                         <span></span>
                       </div>              
                     </div>

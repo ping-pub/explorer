@@ -8,21 +8,24 @@ const props = defineProps({
   tally: { type: Object as PropType<{
     yes: string,
     no: string,
-    no_with_veto: string,
+    noWithVeto: string,
     abstain: string
   }>},
   pool: {
     type: Object as PropType<{
-        not_bonded_tokens: string;
-        bonded_tokens: string;
+        notBondedTokens: string;
+        bondedTokens: string;
     }>,
   },
 })
 const format = useFormatter()
-const yes = computed(() => (format.calculatePercent(props.tally?.yes, props.pool?.bonded_tokens)))
-const no = computed(() => ref(format.calculatePercent(props.tally?.no, props.pool?.bonded_tokens)))
-const abstain = computed(() => (format.calculatePercent(props.tally?.abstain, props.pool?.bonded_tokens)))
-const veto = computed(() => (format.calculatePercent(props.tally?.no_with_veto, props.pool?.bonded_tokens)))
+const yes = computed(() => (format.calculatePercent(props.tally?.yes, props.pool?.bondedTokens)))
+const no = computed(() => ref(format.calculatePercent(props.tally?.no, props.pool?.bondedTokens)))
+const abstain = computed(() => (format.calculatePercent(props.tally?.abstain, props.pool?.bondedTokens)))
+const veto = computed(() => (format.calculatePercent(props.tally?.noWithVeto, props.pool?.bondedTokens)))
+
+
+console.log(yes.value, no.value, abstain.value, veto.value)
 </script>
 <template>
 <div class="progress">

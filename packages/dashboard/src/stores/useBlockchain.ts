@@ -9,6 +9,8 @@ import { useBaseStore } from "./useBaseStore";
 import { useGovStore } from "./useGovStore";
 import { RPCClient } from '../libs/client.rpc'
 import { ref } from "vue";
+import { useMintStore } from "./useMintStore";
+import { useBlockModule } from "@/modules/[chain]/block/block";
 
 export const useBlockchain = defineStore("blockchain", {
   state: () => {
@@ -94,14 +96,13 @@ export const useBlockchain = defineStore("blockchain", {
   },
   actions: {
     async initial() {
-      console.log('begin Setup')
       await this.randomSetupEndpoint()
-      console.log('rpc setup')
       await useStakingStore().init()
       useBankStore().initial()
       useBaseStore().initial()
       useGovStore().initial()
-      
+      useMintStore().initial()
+      useBlockModule().initial()      
     },
 
     async randomSetupEndpoint() {
