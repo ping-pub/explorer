@@ -1,0 +1,20 @@
+{
+    "chain_name": "hermit",
+    "api": ["https://rpc.hermit.network:1317"], 
+    "rpc": ["https://rpc.hermit.network:9191","http://rpc.hermit.network:26657"],
+	/*The same domain name is shared, but the ports are different. 
+	Port 9191 is used for grpc-web, and port 26657 is used as the rpc for tendermint.
+	*/
+    "sdk_version": "0.45.4",
+    "coin_type": "928",
+    "min_tx_fee": "800",
+    "assets": [{
+        "base": "ughm",
+        "symbol": "GHM",
+        "exponent": "6",
+        "coingecko_id": "Hermit", 
+        "logo": "https://dl.airtable.com/.attachments/e54f814bba8c0f9af8a3056020210de0/2d1155fb/cosmos-hub.svg"
+    }],
+    "addr_prefix": "ghm",
+    "logo": "https://dl.airtable.com/.attachments/e54f814bba8c0f9af8a3056020210de0/2d1155fb/cosmos-hub.svg"
+}
