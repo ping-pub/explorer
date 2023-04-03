@@ -1,2 +1,5 @@
 export * from './Coin'
 export * from './Proposal'
+export * from './NodeInfo'
+export * from './Block'
+export * from './SlashingSigningInfo'

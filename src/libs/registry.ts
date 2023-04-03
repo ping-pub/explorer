@@ -1,3 +1,6 @@
+import type { Block, NodeInfo, SlashingSigningInfo } from "@/types";
+import type { Tx } from "@/types/Tx";
+import type { Txs } from "@/types/Txs";
 import semver from "semver";
 
 
@@ -14,12 +17,62 @@ interface Post {
 
 }
 
+// use snake style, since the all return object use snake style.
 export interface RequestRegistry {
-  users: Request<User>;
-  posts: Request<Post>;
+  auth_params: Request<any>
+  auth_accounts: Request<any>;
+  auth_account_address: Request<any>;
+
+  bank_params: Request<any>;
+  bank_balances_address: Request<any>;
+  bank_denoms_metadata: Request<any>;
+  bank_supply: Request<any>;
+  bank_supply_by_denom: Request<any>;
+
+  distribution_params: Request<any>;
+  distribution_validator_commission: Request<any>;
+  distribution_validator_outstanding_rewards: Request<any>;
+  distribution_validator_slashes: Request<any>;
+
+  slashing_params: Request<any>;
+  slashing_signing_info: Request<SlashingSigningInfo>;
+  
+  gov_params_voting: Request<any>;
+  gov_params_tally: Request<any>;
+  gov_params_deposit: Request<any>;
+  gov_proposals: Request<any>;
+  gov_proposals_proposal_id: Request<any>;
+  gov_proposals_deposits: Request<any>;
+  gov_proposals_tally: Request<any>;
+  gov_proposals_votes: Request<any>;
+  gov_proposals_votes_voter: Request<any>;
+
+  staking_deletations: Request<any>;
+  staking_delegator_redelegations: Request<any>;
+  staking_delegator_unbonding_delegations: Request<any>;
+  staking_delegator_validators: Request<any>;
+  staking_params: Request<any>;
+  staking_pool: Request<any>;
+  staking_validators: Request<any>;
+  staking_validators_address: Request<any>;
+  staking_validators_delegations: Request<any>;
+  staking_validators_delegations_delegator: Request<any>;
+  staking_validators_delegations_unbonding_delegations: Request<any>;
+
+  base_tendermint_abci_query: Request<any>;
+  base_tendermint_block_latest: Request<Block>;
+  base_tendermint_block_height: Request<Block>;
+  base_tendermint_node_info: Request<NodeInfo>;
+  base_tendermint_validatorsets_latest: Request<any>;
+  base_tendermint_validatorsets_height: Request<any>;
+
+  tx_txs: Request<any>;
+  tx_txs_block: Request<any>;
+  tx_hash: Request<any>;
+
 }
 
-export function convert<T>(source: any): T {
+export function adapter<T>(source: any): T {
   return source
 }
 
