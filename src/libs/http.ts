@@ -1,20 +1,30 @@
 import fetch from 'cross-fetch'
 
-export interface ApiResponse<T> {
-  data: T;
+export async function fetchData<T>(url: string, adapter: (source: any) => T): Promise<T> {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`HTTP error: ${response.status}`);
+  }
+  const data = await response.json();
+  return adapter(data);
 }
 
 // Usage:
-// const usersResponse = await fetchData<User[]>("https://somewhere/") 
-export async function fetchData<T>(url: string): Promise<ApiResponse<T>> {
-  const response = await fetch(url);
-  const data = await response.json();
-
-  const result : ApiResponse<T> = {
-    data
-  }
-  return result
+/*
+const userAdapter = (source: any): User => {
+  return {
+    id: source.id,
+    name: source.name,
+    email: source.email,
+  };
+};
+try {
+  const userData = await fetchData<User>("https://jsonplaceholder.typicode.com/users/1", userAdapter);
+  console.log(userData); // Output: { id: 1, name: "Leanne Graham", email: "Sincere@april.biz" }
+} catch (error) {
+  console.error(error.message);
 }
+// */
 
 export async function get(url: string) {
     return (await fetch(url)).json()
