@@ -1,0 +1,18 @@
+{
+    "chain_name": "desmos",
+    "coingecko": "desmos",
+    "api": ["https://api.mainnet.desmos.network"],
+    "rpc": ["https://rpc.mainnet.desmos.network:443"],
+    "sdk_version": "0.45.8",
+    "coin_type": "852",
+    "min_tx_fee": "3000",
+    "addr_prefix": "desmos",
+    "logo": "/logos/desmos.png",
+    "assets": [{
+        "base": "udsm",
+        "symbol": "DSM",
+        "exponent": "6",
+        "coingecko_id": "desmos", 
+        "logo": "/logos/desmos.png"
+    }]
+}

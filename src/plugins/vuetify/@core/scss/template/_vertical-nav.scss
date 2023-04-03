@@ -1,0 +1,32 @@
+@use "@configured-variables" as variables;
+
+$divider-gap: 0.625rem;
+
+.layout-vertical-nav {
+  .nav-section-title {
+    .title-text {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: flex-start;
+      column-gap: $divider-gap;
+
+      &::before {
+        flex: 0 1 calc(variables.$vertical-nav-horizontal-padding-start - $divider-gap);
+        border-block-end: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+        content: "";
+        margin-inline-start: -#{variables.$vertical-nav-horizontal-padding-start};
+      }
+    }
+  }
+
+  // nested level nav icon
+  .nav-group {
+    .nav-group,
+    .nav-link :not(.router-link-active) {
+      .nav-item-icon {
+        color: rgba(var(--v-theme-on-background), var(--v-medium-emphasis-opacity));
+      }
+    }
+  }
+}

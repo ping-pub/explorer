@@ -1,0 +1,16 @@
+{
+    "chain_name": "chain4energy",
+    "api": ["https://lcd.c4e.io"],
+    "rpc": ["https://rpc.c4e.io:443", "https://rpc.c4e.io:443"],
+    "sdk_version": "0.45.5",
+    "coin_type": "4444",
+    "min_tx_fee": "3000",
+    "addr_prefix": "c4e",
+    "logo": "/logos/c4e.png",
+    "assets": [{
+        "base": "uc4e",
+        "symbol": "C4E",
+        "exponent": "6",
+        "logo": "/logos/c4e.png"
+    }]
+}

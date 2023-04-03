@@ -1,0 +1,18 @@
+{
+    "chain_name": "sentinel",
+    "api": ["https://api-sentinel-ia.cosmosia.notional.ventures", "https://lcd.sentinel.co"],
+    "rpc": ["https://api-sentinel-ia.cosmosia.notional.ventures:443", "https://rpc-sentinel.keplr.app:443", "https://rpc-sentinel.keplr.app:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.8",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "addr_prefix": "sent",
+    "logo": "/logos/sentinel.png",
+    "assets": [{
+        "base": "udvpn",
+        "symbol": "DVPN",
+        "exponent": "6",
+        "coingecko_id": "sentinel", 
+        "logo": "/logos/sentinel.png"
+    }]
+}

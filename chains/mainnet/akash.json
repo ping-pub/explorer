@@ -1,0 +1,19 @@
+{
+    "chain_name": "akash",
+    "alias": "akash-network",
+    "api": ["https://api-akash-ia.cosmosia.notional.ventures/", "https://akash-api.polkachu.com", "https://akash.c29r3.xyz:443/api", "https://akash.api.ping.pub"],
+    "rpc": ["https://rpc-akash-ia.cosmosia.notional.ventures/", "https://akash-rpc.polkachu.com/", "http://rpc.akash.forbole.com:80", "http://akashsentry01.skynetvalidators.com:26657"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.4",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "assets": [{
+        "base": "uakt",
+        "symbol": "AKT",
+        "exponent": "6",
+        "coingecko_id": "akash-network", 
+        "logo": "/logos/akash-network.png"
+    }],
+    "addr_prefix": "akash",
+    "logo": "/logos/akash-network.png"
+}

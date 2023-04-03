@@ -1,0 +1,35 @@
+{
+    "chain_name": "cosmos",
+    "api": [
+        "https://api-cosmoshub-ia.cosmosia.notional.ventures"
+    ],
+    "rpc": [{
+        "address": "http://rpc-cosmoshub.freshstaking.com:26657/",
+        "provider": "FreshSTAKING"
+    },
+    {
+        "address": "https://cosmos-rpc.polkachu.com/",
+        "provider": "Polkachu"
+    },
+    
+    {
+        "address": "https://rpc.cosmoshub.strange.love/",
+        "provider": "strangelove-ventures"
+    },
+    {
+        "address": "https://rpc-cosmoshub.whispernode.com/",
+        "provider": "WhisperNode🤐"
+    }],
+    "sdk_version": "0.45.1",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "cosmos",
+    "logo": "/logos/cosmos.svg",
+    "assets": [{
+        "base": "uatom",
+        "symbol": "ATOM",
+        "exponent": "6",
+        "coingecko_id": "cosmos", 
+        "logo": "/logos/cosmos.svg"
+    }]
+}

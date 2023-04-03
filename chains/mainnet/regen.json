@@ -1,0 +1,19 @@
+{
+    "chain_name": "regen",
+    "coingecko": "regen",
+    "api": "https://regen.api.ping.pub",
+    "rpc": ["http://public-rpc.regen.vitwit.com:26657", "https://regen.stakesystems.io:2053"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.2",
+    "coin_type": "118",
+    "min_tx_fee": "3000",
+    "addr_prefix": "regen",
+    "logo": "/logos/regen.svg",
+    "assets": [{
+        "base": "uregen",
+        "symbol": "REGEN",
+        "exponent": "6",
+        "coingecko_id": "regen", 
+        "logo": "/logos/regen.svg"
+    }]
+}

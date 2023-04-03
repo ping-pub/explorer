@@ -1,0 +1,19 @@
+{
+    "chain_name": "dig",
+    "coingecko": "",
+    "api": "https://api-1-dig.notional.ventures",
+    "rpc": ["https://rpc-1-dig.notional.ventures:443", "https://rpc-1-dig.notional.ventures:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.1",
+    "coin_type": "118",
+    "min_tx_fee": "5000",
+    "addr_prefix": "dig",
+    "logo": "/logos/dig1.png",
+    "assets": [{
+        "base": "udig",
+        "symbol": "DIG",
+        "exponent": "6",
+        "coingecko_id": "dig-chain", 
+        "logo": "/logos/dig1.png"
+    }]
+}

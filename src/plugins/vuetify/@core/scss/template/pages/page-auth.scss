@@ -1,0 +1,45 @@
+.layout-blank {
+  .auth-wrapper {
+    min-block-size: calc(var(--vh, 1vh) * 100);
+  }
+
+  .auth-card {
+    z-index: 1 !important;
+  }
+}
+
+@media (min-width: 960px) {
+  .skin--bordered {
+    .auth-card-v2 {
+      border-inline-start: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .auth-footer-mask {
+    inset-block-end: 12% !important;
+  }
+}
+
+.auth-logo {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: 1.8rem;
+  inset-inline-start: 2.5rem;
+}
+
+.auth-card-v2 {
+  z-index: 1;
+}
+
+.auth-illustration {
+  z-index: 1;
+  max-inline-size: 48rem;
+}
+
+.auth-footer-mask {
+  position: absolute;
+  inline-size: 100%;
+  inset-block-end: 7%;
+}

@@ -1,0 +1,17 @@
+{
+    "chain_name": "juno",
+    "api": ["https://api.uni.junonetwork.io"],
+    "rpc": [""],
+    "sdk_version": "0.46.1",
+    "coin_type": "118",
+    "min_tx_fee": "3000",
+    "addr_prefix": "juno",
+    "logo": "/logos/juno.png",
+    "assets": [{
+        "base": "ujunox",
+        "symbol": "JUNOX",
+        "exponent": "6",
+        "coingecko_id": "juno-network", 
+        "logo": "/logos/juno.png"
+    }]
+}

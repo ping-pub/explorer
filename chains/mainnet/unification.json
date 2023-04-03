@@ -1,0 +1,26 @@
+{
+  "chain_name": "Unification",
+  "coingecko": "unification",
+  "api": ["https://rest.unification.chainmasters.ninja", "https://rest.unification.io"],
+  "rpc": ["https://rpc.unification.chainmasters.ninja", "https://rpc1.unification.io"],
+  "snapshot_provider": "fcccb1745ee75a5984bd10f8d0b51564011c0310@sync1.unification.io:26657,35986ac67257e8f8805ff0c2f408ac2a48cbba77@sync2.unification.io:26657",
+  "sdk_version": "0.42.11",
+  "walletUrlForStaking": "https://explorer.unification.chainmasters.ninja/wallet",
+  "coin_type": "5555",
+  "min_tx_fee": "25000000000000000",
+  "addr_prefix": "und",
+  "logo": "/logos/unification.png",
+  "assets": [{
+    "base": "nund",
+    "symbol": "FUND",
+    "exponent": "9",
+    "coingecko_id": "unification",
+    "logo": "/logos/unification.png"
+  }],
+  "gasPriceStep": {
+    "low": 100,
+    "average": 200,
+    "high": 300
+  },
+  "votingPowerPerCoin": 1000
+}

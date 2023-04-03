@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="500"
+   height="500"
+   viewBox="0 0 500 500"
+   fill="none"
+   version="1.1"
+   id="svg15029"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs15033" />
+  <rect
+     style="fill:#1c1c1c;fill-opacity:1;stroke:none;stroke-width:6.21721;stroke-linecap:round"
+     id="rect13428"
+     width="500"
+     height="500"
+     x="0"
+     y="0" />
+  <path
+     d="M152.395 363.823L110.593 112.61C108.954 102.763 121.17 96.8571 127.87 104.257L236.781 224.535C244.958 233.565 232.944 246.597 223.28 239.18L198.088 219.847C191.51 214.799 182 219.488 182 227.78V291.213C182 301.086 194.788 304.986 200.298 296.794L220 267.5L171.232 366.597C166.941 375.316 153.99 373.409 152.395 363.823Z"
+     fill="white"
+     id="path15013" />
+  <path
+     d="M318.267 153.892L383.815 382.918C386.69 392.966 374.169 400.134 366.961 392.568L250.731 270.565C242.233 261.644 254.243 248.243 264.038 255.717L290.934 276.24C297.515 281.263 307 276.569 307 268.29V193.91C307 183.782 293.674 180.071 288.439 188.741L259 237.5L299.628 152.338C303.593 144.027 315.733 145.039 318.267 153.892Z"
+     fill="white"
+     id="path15015" />
+  <circle
+     cx="244"
+     cy="247"
+     r="12"
+     fill="white"
+     id="circle15017" />
+  <circle
+     cx="259"
+     cy="243"
+     r="2"
+     fill="white"
+     id="circle15019" />
+  <circle
+     cx="246"
+     cy="228"
+     r="4"
+     fill="white"
+     id="circle15021" />
+  <circle
+     cx="227"
+     cy="252"
+     r="2"
+     fill="white"
+     id="circle15023" />
+  <ellipse
+     cx="258.73"
+     cy="216.767"
+     rx="1"
+     ry="23.5"
+     transform="rotate(24.7044 258.73 216.767)"
+     fill="white"
+     id="ellipse15025" />
+  <ellipse
+     cx="229.46"
+     cy="274.44"
+     rx="1"
+     ry="23.5"
+     transform="rotate(26.7214 229.46 274.44)"
+     fill="white"
+     id="ellipse15027" />
+</svg>

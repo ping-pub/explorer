@@ -1,0 +1,18 @@
+{
+    "chain_name": "stargaze",
+    "api": ["https://stargaze-api.polkachu.com/","https://api-stargaze-ia.cosmosia.notional.ventures/", "https://rest.stargaze-apis.com", "https://rest.stargaze.publicawesome.dev"],
+    "rpc": ["https://stargaze-rpc.polkachu.com/", "https://rpc-stargaze-ia.cosmosia.notional.ventures/","https://rpc.stargaze-apis.com:443", "https://rpc.stargaze.ezstaking.io:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.6",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "stars",
+    "logo": "/logos/stargaze.png",
+    "assets": [{
+        "base": "ustars",
+        "symbol": "STARS",
+        "exponent": "6",
+        "coingecko_id": "stargaze", 
+        "logo": "/logos/stargaze.png"
+    }]
+}

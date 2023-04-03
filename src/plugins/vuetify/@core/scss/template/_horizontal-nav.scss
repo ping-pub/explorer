@@ -1,0 +1,13 @@
+.layout-horizontal-nav {
+  .nav-group {
+    .nav-group-arrow {
+      font-size: 1.5rem;
+    }
+
+    &:not(.active) {
+      .nav-group-arrow {
+        color: rgba(var(--v-theme-on-background), var(--v-medium-emphasis-opacity));
+      }
+    }
+  }
+}

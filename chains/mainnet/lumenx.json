@@ -1,0 +1,19 @@
+{
+    "chain_name": "lumenx",
+    "coingecko": "",
+    "api": ["https://api.lumenx.chaintools.tech:443","https://api-lumenx.cryptonet.pl:443"],
+    "rpc": ["https://rpc.lumenx.chaintools.tech:443","https://rpc-lumenx.cryptonet.pl:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.5",
+    "coin_type": "118",
+    "min_tx_fee": "5000",
+    "addr_prefix": "lumen",
+    "logo": "/logos/lumen.png",
+    "assets": [{
+        "base": "ulumen",
+        "symbol": "LUMEN",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "/logos/lumen.png"
+    }]
+}
