@@ -1,16 +1,13 @@
 import { defineStore } from "pinia";
 import { useBlockchain } from "./useBlockchain";
-import { createGovRestClientForChain } from "@/libs/client";
-import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
-import { QueryClient } from "@cosmjs/stargate";
 
 export const useGovStore = defineStore('govStore', {
     state: () => {
         return {
             params: {
-                deposit: {} as DepositParams,
-                voting: {} as VotingParams,
-                tally: {} as TallyParams,
+                deposit: {},
+                voting: {},
+                tally: {},
             }
         }
     },

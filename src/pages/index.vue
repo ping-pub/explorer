@@ -4,9 +4,6 @@ import ChainSummary from '@/components/ChainSummary.vue';
 import { computed, ref } from 'vue';
 import { useBlockchain } from '@/stores';
 
-import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
-import { QueryClient, setupBankExtension, setupDistributionExtension, setupGovExtension, setupMintExtension, setupStakingExtension } from "@cosmjs/stargate";
-
 const dashboard = useDashboard()
 
 dashboard.$subscribe((mutation, state) => {

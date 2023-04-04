@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { useBlockchain } from "./useBlockchain";
-import Long from "long";
 import numeral from "numeral";
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration'
@@ -9,8 +8,8 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import utc from 'dayjs/plugin/utc'
 import localeData from 'dayjs/plugin/localeData'
 import { useStakingStore } from "./useStakingStore";
-import { fromBech32, toBase64, toHex } from "@cosmjs/encoding";
-import { consensusPubkeyToHexAddress, operatorAddressToAccount } from "@/libs";
+import { toHex } from "@cosmjs/encoding";
+import { consensusPubkeyToHexAddress } from "@/libs";
 
 dayjs.extend(localeData)
 dayjs.extend(duration)

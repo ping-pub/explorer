@@ -1,7 +1,5 @@
 import {fromBase64, fromBech32, fromHex, toBase64, toBech32, toHex} from '@cosmjs/encoding'
 import { Ripemd160, sha256 } from '@cosmjs/crypto'
-import { cosmos } from '@ping-pub/codegen'
-import type { PubKey } from '@ping-pub/codegen/src/cosmos/crypto/ed25519/keys'
 
 export function decodeAddress(address: string) {
     return fromBech32(address)
@@ -25,41 +23,27 @@ export function valoperToPrefix(valoper?: string) {
     }
     return toBech32(prefix.replace('valoper', ''), data)
   }
-  
-  export function decodeKey(consensusPubkey: {typeUrl: string, value: Uint8Array}) {
-    let raw = null
-    if (consensusPubkey.typeUrl === '/cosmos.crypto.ed25519.PubKey') {
-      const pubkey = cosmos.crypto.ed25519.PubKey.decode(consensusPubkey.value)
-      return pubkey
-    }
-  
-    if (consensusPubkey.typeUrl === '/cosmos.crypto.secp256k1.PubKey') {
-      const pubkey = cosmos.crypto.secp256k1.PubKey.decode(consensusPubkey.value)
-      return pubkey
-    }
-    return raw
-  
-  }
-export function consensusPubkeyToHexAddress(consensusPubkey?: {typeUrl: string, value: Uint8Array}) {
+
+export function consensusPubkeyToHexAddress(consensusPubkey?: {"@type": string, key: string}) {
   if(!consensusPubkey) return ""
   let raw = ""
-  if (consensusPubkey.typeUrl === '/cosmos.crypto.ed25519.PubKey') {
-    const pubkey = decodeKey(consensusPubkey)   
-    if(pubkey) return toHex(sha256(pubkey.key)).slice(0, 40).toUpperCase()
+  if (consensusPubkey['@type'] === '/cosmos.crypto.ed25519.PubKey') {
+    const pubkey = fromBase64(consensusPubkey.key)   
+    if(pubkey) return toHex(sha256(pubkey)).slice(0, 40).toUpperCase()
   }
 
-  if (consensusPubkey.typeUrl === '/cosmos.crypto.secp256k1.PubKey') {
-    const pubkey = decodeKey(consensusPubkey)
-    if(pubkey) return toHex(new Ripemd160().update(sha256(pubkey.key)).digest())
+  if (consensusPubkey['@type'] === '/cosmos.crypto.secp256k1.PubKey') {
+    const pubkey = fromBase64(consensusPubkey.key)
+    if(pubkey) return toHex(new Ripemd160().update(sha256(pubkey)).digest())
   }
   return raw
 
 }
 
-  export function pubKeyToValcons(consensusPubkey: {typeUrl: string, value: Uint8Array}, prefix: string) {
-    const pubkey = decodeKey(consensusPubkey)
+  export function pubKeyToValcons(consensusPubkey: {"@type": string, key: string}, prefix: string) {
+    const pubkey = fromBase64(consensusPubkey.key)
     if(pubkey) {
-      const addressData = sha256(pubkey.key).slice(0, 20)
+      const addressData = sha256(pubkey).slice(0, 20)
       return toBech32(`${prefix}valcons`, addressData)
     }
   }

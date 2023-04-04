@@ -2,7 +2,6 @@
 import { useBaseStore, useFormatter, useStakingStore } from '@/stores';
 import { toBase64, toHex } from '@cosmjs/encoding';
 import { pubkeyToAddress } from '@cosmjs/tendermint-rpc';
-import type { ValidatorSDKType } from '@ping-pub/codegen/src/cosmos/staking/v1beta1/staking';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, type DebuggerEvent } from 'vue';
 import { consensusPubkeyToHexAddress } from '@/libs'
@@ -14,7 +13,7 @@ const avatars = ref( cache || {} )
 const latest = ref({} as Record<string, number>)
 const yesterday = ref({} as Record<string, number>)
 const tab = ref('active')
-const unbondList = ref([] as ValidatorSDKType[])
+const unbondList = ref([])
 const base = useBaseStore()
 onMounted(()=> {
   fetchChange(0)

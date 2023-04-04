@@ -2,7 +2,6 @@ import { useBlockchain, useCoingecko, useBaseStore, useBankStore, useFormatter, 
 import { useDistributionStore } from "@/stores/useDistributionStore";
 import { useMintStore } from "@/stores/useMintStore";
 import { useStakingStore } from "@/stores/useStakingStore";
-import { ProposalStatus, type ProposalSDKType, Proposal } from "@ping-pub/codegen/src/cosmos/gov/v1beta1/gov";
 import numeral from "numeral";
 import { defineStore } from "pinia";
 

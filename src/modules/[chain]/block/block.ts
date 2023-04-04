@@ -1,16 +1,15 @@
 import { defineStore } from "pinia";
 import { decodeTxRaw, type DecodedTxRaw } from '@cosmjs/proto-signing'
-import { createBaseClientForChain } from "@/libs/client";
 import { useBlockchain } from "@/stores";
-import type { GetLatestBlockResponse, GetLatestBlockResponseSDKType } from "@ping-pub/codegen/src/cosmos/base/tendermint/v1beta1/query";
 import { hashTx } from "@/libs";
+import type { Block } from "@/types";
 
 export const useBlockModule = defineStore('blockModule', {
     state: () => {
         return {
-            latest: {} as GetLatestBlockResponse,
-            current: {} as GetLatestBlockResponse,
-            recents: [] as GetLatestBlockResponse[]
+            latest: {} as Block,
+            current: {} as Block,
+            recents: [] as Block[]
         }
     },
     getters: {

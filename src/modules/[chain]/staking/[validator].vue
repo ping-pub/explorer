@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { useBlockchain, useFormatter, useMintStore, useStakingStore } from '@/stores';
-import type { QueryValidatorResponseSDKType } from '@ping-pub/codegen/src/cosmos/staking/v1beta1/query';
 import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import ValidatorCommissionRate from '@/components/ValidatorCommissionRate.vue'
-import type { Coin, DecCoin } from '@ping-pub/codegen/src/cosmos/base/v1beta1/coin';
 import { consensusPubkeyToHexAddress, operatorAddressToAccount, pubKeyToValcons, valoperToPrefix } from '@/libs';
 import { computed } from '@vue/reactivity';
-import type { GetTxsEventResponse } from '@ping-pub/codegen/src/cosmos/tx/v1beta1/service';
+import type { Coin } from '@/types';
+import type { Txs } from '@/types/Txs';
 
 const props = defineProps(['validator', 'chain'])
 
@@ -17,11 +16,11 @@ const format = useFormatter()
 
 const validator: string = props.validator
 
-const v = ref({} as QueryValidatorResponseSDKType)
+const v = ref({})
 const cache = JSON.parse(localStorage.getItem('avatars')||'{}')
 const avatars = ref( cache || {} )
 const identity = ref("")
-const rewards = ref([] as DecCoin[])
+const rewards = ref([] as Coin[])
 const addresses = ref({} as {
     account: string
     operAddress: string
@@ -38,7 +37,7 @@ staking.fetchValidatorDelegation(validator, addresses.value.account).then(x => {
     }
 })
 
-const txs = ref({} as GetTxsEventResponse)
+const txs = ref({} as Txs)
 
 blockchain.rpc.txs([`message.sender='${addresses.value.account}'`]).then(x => {
     console.log("txs", x)

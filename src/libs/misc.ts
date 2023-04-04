@@ -1,6 +1,5 @@
 import { sha256 } from "@cosmjs/crypto";
 import { toHex } from "@cosmjs/encoding";
-import { PageRequest } from "@ping-pub/codegen/src/cosmos/base/query/v1beta1/pagination";
 
 export function newPageRequest(param: {
     key?: Uint8Array,
@@ -9,9 +8,7 @@ export function newPageRequest(param: {
     countTotal?: boolean,
     reverse?: boolean
 }) {
-    return PageRequest.fromPartial(
-        param
-    )
+    return param
 }
 
 export function hashTx(raw: Uint8Array) {

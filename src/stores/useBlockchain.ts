@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { useDashboard, type ChainConfig, type Endpoint, EndpointType } from "./useDashboard";
-import { LCDClient } from '@osmonauts/lcd'
 import type { VerticalNavItems } from '@/@layouts/types'
 import { useRouter } from "vue-router";
 import { useStakingStore } from "./useStakingStore";

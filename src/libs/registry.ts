@@ -9,14 +9,6 @@ export interface Request<T> {
   adapter: (source: any) => T
 }
 
-interface User {
-
-}
-
-interface Post {
-
-}
-
 // use snake style, since the all return object use snake style.
 export interface RequestRegistry {
   auth_params: Request<any>
@@ -66,9 +58,9 @@ export interface RequestRegistry {
   base_tendermint_validatorsets_latest: Request<any>;
   base_tendermint_validatorsets_height: Request<any>;
 
-  tx_txs: Request<any>;
-  tx_txs_block: Request<any>;
-  tx_hash: Request<any>;
+  tx_txs: Request<Txs>;
+  tx_txs_block: Request<Txs>;
+  tx_hash: Request<Tx>;
 
 }
 
