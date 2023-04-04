@@ -1,6 +1,6 @@
 import { type RequestRegistry, type Registry, adapter, withCustomAdapter } from "./registry";
 
-const DEFAULT: RequestRegistry = {
+export const DEFAULT: RequestRegistry = {
     auth_params: { url: "/cosmos/auth/v1beta1/params", adapter },
     auth_accounts: { url: "/cosmos/auth/v1beta1/accounts", adapter },
     auth_account_address: { url: "/cosmos/auth/v1beta1/accounts/{address}", adapter },
@@ -23,7 +23,7 @@ const DEFAULT: RequestRegistry = {
     gov_proposals_deposits: { url: "/cosmos/gov/v1/proposals/{proposal_id}/deposits", adapter },
     gov_proposals_tally: { url: "/cosmos/gov/v1/proposals/{proposal_id}/tally", adapter },
     gov_proposals_votes: { url: "/cosmos/gov/v1/proposals/{proposal_id}/votes", adapter },
-    gov_proposals_votes_voter: { url: "/cosmos/gov/v1/proposals/{proposal_id}/votes/voter", adapter },
+    gov_proposals_votes_voter: { url: "/cosmos/gov/v1/proposals/{proposal_id}/votes/{voter}", adapter },
     staking_deletations: { url: "/cosmos/staking/v1beta1/delegations/{delegator_addr}", adapter },
     staking_delegator_redelegations: { url: "/cosmos/staking/v1beta1/delegators/{delegator_addr}/redelegations", adapter },
     staking_delegator_unbonding_delegations: { url: "/cosmos/staking/v1beta1/delegators/{delegator_addr}/unbonding_delegations", adapter },
@@ -46,11 +46,11 @@ const DEFAULT: RequestRegistry = {
     tx_hash: { url: "/cosmos/tx/v1beta1/txs/{hash}", adapter },
 };
 
-const VERSION_REGISTRY: Registry = {
+export const VERSION_REGISTRY: Registry = {
     "0.46.1": DEFAULT
 }
 
-const NAME_REGISTRY: Registry = {
+export const NAME_REGISTRY: Registry = {
     "evmos": withCustomAdapter(DEFAULT, {})
 }
 

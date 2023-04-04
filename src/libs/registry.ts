@@ -1,6 +1,8 @@
 import type { Block, NodeInfo, SlashingSigningInfo } from "@/types";
+import type { PaginabledAccounts } from "@/types/Auth";
 import type { Tx } from "@/types/Tx";
 import type { Txs } from "@/types/Txs";
+import type { PaginatedDenomMetadata, PaginatedSupply } from "@/types/bank";
 import semver from "semver";
 
 
@@ -12,13 +14,13 @@ export interface Request<T> {
 // use snake style, since the all return object use snake style.
 export interface RequestRegistry {
   auth_params: Request<any>
-  auth_accounts: Request<any>;
+  auth_accounts: Request<PaginabledAccounts>;
   auth_account_address: Request<any>;
 
   bank_params: Request<any>;
   bank_balances_address: Request<any>;
-  bank_denoms_metadata: Request<any>;
-  bank_supply: Request<any>;
+  bank_denoms_metadata: Request<PaginatedDenomMetadata>;
+  bank_supply: Request<PaginatedSupply>;
   bank_supply_by_denom: Request<any>;
 
   distribution_params: Request<any>;

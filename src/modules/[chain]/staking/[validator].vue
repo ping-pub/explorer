@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useBlockchain, useFormatter, useMintStore, useStakingStore } from '@/stores';
 import { onMounted } from 'vue';
-import { useRoute } from 'vue-router';
 import ValidatorCommissionRate from '@/components/ValidatorCommissionRate.vue'
 import { consensusPubkeyToHexAddress, operatorAddressToAccount, pubKeyToValcons, valoperToPrefix } from '@/libs';
 import { computed } from '@vue/reactivity';

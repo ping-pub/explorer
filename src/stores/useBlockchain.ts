@@ -95,12 +95,12 @@ export const useBlockchain = defineStore("blockchain", {
   actions: {
     async initial() {
       await this.randomSetupEndpoint()
-      await useStakingStore().init()
-      useBankStore().initial()
-      useBaseStore().initial()
-      useGovStore().initial()
-      useMintStore().initial()
-      useBlockModule().initial()      
+      // await useStakingStore().init()
+      // useBankStore().initial()
+      // useBaseStore().initial()
+      // useGovStore().initial()
+      // useMintStore().initial()
+      // useBlockModule().initial()      
     },
 
     async randomSetupEndpoint() {
