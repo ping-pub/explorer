@@ -1,5 +1,5 @@
-import type { Coin } from "./Coin"
-import type { PaginatedResponse } from "./common"
+
+import type { Coin, PaginatedResponse } from "./common"
 
 export interface GovParams {
     "voting_params": {

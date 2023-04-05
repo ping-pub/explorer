@@ -1,11 +1,10 @@
-import type { Block, Coin, NodeInfo, PaginatedTendermintValidator, SlashingSigningInfo } from "@/types";
-import type { AuthAccount, PaginabledAccounts } from "@/types/Auth";
-import type { PaginatedTxs, Tx, TxResponse } from "@/types/Tx";
-import type { Txs } from "@/types/Txs";
+import type { AuthAccount, Block, Coin, NodeInfo, PaginabledAccounts, PaginatedTendermintValidator,} from "@/types";
 import type { BankParams, PaginatedBalances, PaginatedDenomMetadata, PaginatedSupply } from "@/types/bank";
 import type { DistributionParams, PaginatedSlashes } from "@/types/distribution";
 import type { GovParams, GovProposal, GovVote, PaginatedProposalDeposit, PaginatedProposalVotes, PaginatedProposals, Tally } from "@/types/gov";
+import type { PaginatedSigningInfo } from "@/types/slashing";
 import type { Delegation, PaginatedDelegations, PaginatedRedelegations, PaginatedUnbonding, PaginatedValdiators, StakingParam, StakingPool, Validator } from "@/types/staking";
+import type { PaginatedTxs, Tx, TxResponse } from "@/types/tx";
 import semver from "semver";
 
 
@@ -32,7 +31,7 @@ export interface RequestRegistry {
   distribution_validator_slashes: Request<PaginatedSlashes>;
 
   slashing_params: Request<any>;
-  slashing_signing_info: Request<SlashingSigningInfo>;
+  slashing_signing_info: Request<PaginatedSigningInfo>;
   
   gov_params_voting: Request<GovParams>;
   gov_params_tally: Request<GovParams>;
@@ -64,7 +63,7 @@ export interface RequestRegistry {
   base_tendermint_validatorsets_height: Request<PaginatedTendermintValidator>;
 
   tx_txs: Request<PaginatedTxs>;
-  tx_txs_block: Request<Txs>;
+  tx_txs_block: Request<Tx>;
   tx_hash: Request<{tx: Tx, tx_response: TxResponse}>;
 
 }
