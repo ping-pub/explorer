@@ -1,5 +1,8 @@
-export * from './Coin'
-export * from './Proposal'
-export * from './NodeInfo'
-export * from './Block'
-export * from './SlashingSigningInfo'
+
+export * from './base'
+export * from './auth'
+export * from './bank'
+export * from './common'
+export * from './distribution'
+export * from './gov'
+export * from './staking'

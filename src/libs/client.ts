@@ -139,7 +139,7 @@ export class CosmosRestClient {
         return this.request(this.registry.base_tendermint_validatorsets_height, {height})
     }
     async getBaseValidatorsetLatest() {
-        return this.request(this.registry.base_tendermint_block_latest, {})
+        return this.request(this.registry.base_tendermint_validatorsets_latest, {})
     }
     // tx
     async getTxsBySender(sender: string) {
@@ -150,7 +150,7 @@ export class CosmosRestClient {
         return this.request(this.registry.tx_txs_block, {height})
     }
     async getTx(hash: string) {
-        return this.request(this.registry.tx_hash, {})
+        return this.request(this.registry.tx_hash, {hash})
     }
 
 }

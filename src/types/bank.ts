@@ -1,5 +1,5 @@
-import type { Coin } from "./Coin";
-import type { PaginatedResponse } from "./Pagination";
+
+import type { Coin, PaginatedResponse } from "./common";
 
 export interface BankParams {
     params: {
@@ -19,6 +19,10 @@ export interface DenomMetadata {
     "display": string,
     "name": string,
     "symbol": string
+}
+
+export interface PaginatedBalances extends PaginatedResponse{
+    balances: Coin[]
 }
 
 export interface PaginatedDenomMetadata extends PaginatedResponse{

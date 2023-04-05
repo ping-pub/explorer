@@ -1,8 +1,11 @@
-import type { Block, NodeInfo, SlashingSigningInfo } from "@/types";
-import type { PaginabledAccounts } from "@/types/Auth";
-import type { Tx } from "@/types/Tx";
+import type { Block, Coin, NodeInfo, PaginatedTendermintValidator, SlashingSigningInfo } from "@/types";
+import type { AuthAccount, PaginabledAccounts } from "@/types/Auth";
+import type { PaginatedTxs, Tx, TxResponse } from "@/types/Tx";
 import type { Txs } from "@/types/Txs";
-import type { PaginatedDenomMetadata, PaginatedSupply } from "@/types/bank";
+import type { BankParams, PaginatedBalances, PaginatedDenomMetadata, PaginatedSupply } from "@/types/bank";
+import type { DistributionParams, PaginatedSlashes } from "@/types/distribution";
+import type { GovParams, GovProposal, GovVote, PaginatedProposalDeposit, PaginatedProposalVotes, PaginatedProposals, Tally } from "@/types/gov";
+import type { Delegation, PaginatedDelegations, PaginatedRedelegations, PaginatedUnbonding, PaginatedValdiators, StakingParam, StakingPool, Validator } from "@/types/staking";
 import semver from "semver";
 
 
@@ -15,54 +18,54 @@ export interface Request<T> {
 export interface RequestRegistry {
   auth_params: Request<any>
   auth_accounts: Request<PaginabledAccounts>;
-  auth_account_address: Request<any>;
+  auth_account_address: Request<{account: AuthAccount}>;
 
-  bank_params: Request<any>;
-  bank_balances_address: Request<any>;
+  bank_params: Request<BankParams>;
+  bank_balances_address: Request<PaginatedBalances>;
   bank_denoms_metadata: Request<PaginatedDenomMetadata>;
   bank_supply: Request<PaginatedSupply>;
-  bank_supply_by_denom: Request<any>;
+  bank_supply_by_denom: Request<{amount: Coin}>;
 
-  distribution_params: Request<any>;
-  distribution_validator_commission: Request<any>;
-  distribution_validator_outstanding_rewards: Request<any>;
-  distribution_validator_slashes: Request<any>;
+  distribution_params: Request<DistributionParams>;
+  distribution_validator_commission: Request<{commission?: {commission?: Coin[]}}>;
+  distribution_validator_outstanding_rewards: Request<{rewards?: {rewards?: Coin[]}}>;
+  distribution_validator_slashes: Request<PaginatedSlashes>;
 
   slashing_params: Request<any>;
   slashing_signing_info: Request<SlashingSigningInfo>;
   
-  gov_params_voting: Request<any>;
-  gov_params_tally: Request<any>;
-  gov_params_deposit: Request<any>;
-  gov_proposals: Request<any>;
-  gov_proposals_proposal_id: Request<any>;
-  gov_proposals_deposits: Request<any>;
-  gov_proposals_tally: Request<any>;
-  gov_proposals_votes: Request<any>;
-  gov_proposals_votes_voter: Request<any>;
+  gov_params_voting: Request<GovParams>;
+  gov_params_tally: Request<GovParams>;
+  gov_params_deposit: Request<GovParams>;
+  gov_proposals: Request<PaginatedProposals>;
+  gov_proposals_proposal_id: Request<{proposal: GovProposal}>;
+  gov_proposals_deposits: Request<PaginatedProposalDeposit>;
+  gov_proposals_tally: Request<Tally>;
+  gov_proposals_votes: Request<PaginatedProposalVotes>;
+  gov_proposals_votes_voter: Request<{vote: GovVote}>;
 
-  staking_deletations: Request<any>;
-  staking_delegator_redelegations: Request<any>;
-  staking_delegator_unbonding_delegations: Request<any>;
-  staking_delegator_validators: Request<any>;
-  staking_params: Request<any>;
-  staking_pool: Request<any>;
-  staking_validators: Request<any>;
-  staking_validators_address: Request<any>;
-  staking_validators_delegations: Request<any>;
-  staking_validators_delegations_delegator: Request<any>;
+  staking_deletations: Request<PaginatedDelegations>;
+  staking_delegator_redelegations: Request<PaginatedRedelegations>;
+  staking_delegator_unbonding_delegations: Request<PaginatedUnbonding>;
+  staking_delegator_validators: Request<PaginatedValdiators>;
+  staking_params: Request<StakingParam>;
+  staking_pool: Request<StakingPool>;
+  staking_validators: Request<PaginatedValdiators>;
+  staking_validators_address: Request<{validator: Validator}>;
+  staking_validators_delegations: Request<PaginatedDelegations>;
+  staking_validators_delegations_delegator: Request<{delegation_response: Delegation}>;
   staking_validators_delegations_unbonding_delegations: Request<any>;
 
   base_tendermint_abci_query: Request<any>;
   base_tendermint_block_latest: Request<Block>;
   base_tendermint_block_height: Request<Block>;
   base_tendermint_node_info: Request<NodeInfo>;
-  base_tendermint_validatorsets_latest: Request<any>;
-  base_tendermint_validatorsets_height: Request<any>;
+  base_tendermint_validatorsets_latest: Request<PaginatedTendermintValidator>;
+  base_tendermint_validatorsets_height: Request<PaginatedTendermintValidator>;
 
-  tx_txs: Request<Txs>;
+  tx_txs: Request<PaginatedTxs>;
   tx_txs_block: Request<Txs>;
-  tx_hash: Request<Tx>;
+  tx_hash: Request<{tx: Tx, tx_response: TxResponse}>;
 
 }
 

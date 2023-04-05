@@ -1,5 +1,5 @@
-import type { PaginatedResponse } from "./Pagination";
-import type { Key } from "./common";
+
+import type { Key, PaginatedResponse } from "./common";
 
 export interface AuthAccount {
     "@type": string,
