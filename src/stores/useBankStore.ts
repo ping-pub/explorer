@@ -24,7 +24,7 @@ export const useBankStore = defineStore('bankstore', {
         initial() {
             this.$reset()
             this.supply = {} as Coin
-            const denom = this.staking.params.bondDenom || this.blockchain.current?.assets[0].base
+            const denom = this.staking.params.bond_denom || this.blockchain.current?.assets[0].base
             if(denom) {
                 this.blockchain.rpc.getBankSupplyByDenom(denom).then(res => {
                     if(res.amount) this.supply = res.amount

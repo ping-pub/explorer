@@ -4,26 +4,26 @@ import ArrayElement from './ArrayElement.vue'
 import UInt8Array from './UInt8Array.vue'
 import NumberElement from './NumberElement.vue'
 import TxsElement from './TxsElement.vue'
+import ObjectHorizontalElement from './ObjectHorizontalElement.vue'
 import Long from 'long'
 
-export function select(v: any, k?: any) {
-    if(k === 'txs' && v) {
-        console.log("=======txs=======", k, v)
-        return TxsElement
-    } else {
+export function select(v: any, direct?: string) {
+    // if(k === 'txs' && v) {
+    //     return TxsElement
+    // } else {
         const type = typeof v
         switch(type) {
             case 'object':
-                return selectObject(v)
+                return selectObject(v, direct)
             case 'number':
                 return NumberElement
             default: 
                 return TextElement
         }
-    }
+    // }
 }
 
-function selectObject(v: Object) {
+function selectObject(v: Object, direct?: string) {
     switch(true) {
         case v instanceof Long:
             return NumberElement
@@ -31,6 +31,8 @@ function selectObject(v: Object) {
             return UInt8Array
         case Array.isArray(v):
             return ArrayElement
+        case direct === 'horizontal':
+            return ObjectHorizontalElement
         default:
             return ObjectElement
     }

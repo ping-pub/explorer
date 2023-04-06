@@ -189,3 +189,11 @@ function shortName(name: string, id: string) {
   border: 1px solid rgb(var(--v-theme-primary));
 }
 </style>
+
+<route>
+  {
+    meta: {
+      i18n: 'dashboard'
+    }
+  }
+</route>

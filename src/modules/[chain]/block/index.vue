@@ -69,3 +69,11 @@ const format = useFormatter()
     </VCard>
  
 </template>
+
+<route>
+    {
+      meta: {
+        i18n: 'blocks'
+      }
+    }
+  </route>

@@ -1,7 +1,9 @@
 {
   "module": {
-    "chain": "Dashboard",
-    "chain-test": "test",
+    "dashboard": "Dashboard",
+    "blocks": "Blocks&Transaction",
+    "staking": "Staking",
+    "governance": "Governance"
   },
   "index": {
     "slogan": "Ping Dashboard is not just an explorer but also a wallet and more ... 🛠",

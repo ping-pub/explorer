@@ -229,3 +229,11 @@ const rank = function(position: number) {
         </VCard>
     </div>
 </template>
+
+<route>
+  {
+    meta: {
+      i18n: 'staking'
+    }
+  }
+</route>

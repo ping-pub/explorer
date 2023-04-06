@@ -3,6 +3,8 @@ import { useBlockchain, useFormatter } from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { computed, ref } from '@vue/reactivity';
 import type { Tx, TxResponse } from '@/types';
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 
 const props = defineProps(['hash', 'chain'])
 
@@ -40,27 +42,21 @@ const messages = computed(() => {
             </VCardItem>
         </VCard>
 
-        <VCard title="Messages" class="my-5">
-            <VCardItem style="border-top: 2px dotted gray;">
+        <VCard :title="`Messages: (${messages.length})`" class="my-5">
+            <VCardItem class="pt-0" style="border-top: 2px dotted gray;">
                 <div v-for="(msg, i) in messages">
                     <div><DynamicComponent :value="msg" /></div>                  
+                </div>
+                <div v-if="messages.length === 0">
+                    <VIcon icon="mdi-empty"/>
                 </div>
             </VCardItem>
         </VCard>
 
-        <VCard title="Detail">
-            <VExpansionPanels>
-                <VExpansionPanel title="Transaction">
-                    <v-expansion-panel-text>
-                        <DynamicComponent :value="tx.tx" />
-                    </v-expansion-panel-text>                
-                </VExpansionPanel>
-                <VExpansionPanel title="Transaction Response">
-                    <v-expansion-panel-text>
-                        <DynamicComponent :value="tx.tx_response" />
-                    </v-expansion-panel-text>                
-                </VExpansionPanel>
-            </VExpansionPanels>
+        <VCard title="JSON">
+            <VCardItem class="pt-0">
+                <vue-json-pretty :data="tx" :deep="3"/>
+            </VCardItem>
         </VCard>
         
     </div>

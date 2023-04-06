@@ -9,9 +9,9 @@ const props = defineProps(["value"]);
     <VTable>
         <tbody>
             <tr v-for="(v, k) of value">
-                <td class="text-capitalize">{{ k }}</td>
+                <td class="text-capitalize" style="max-width: 200px;">{{ k }}</td>
                 <td><div class="overflow-hidden w-auto" style="max-width: 1000px;">
-                    <Component v-if="v" :is="select(v, k)" :value="v"></Component></div>
+                    <Component v-if="v" :is="select(v, 'horizontal')" :value="v"></Component></div>
                 </td>
             </tr>
         </tbody>

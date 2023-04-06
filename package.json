@@ -38,6 +38,7 @@
     "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.2.45",
     "vue-i18n": "^9.2.2",
+    "vue-json-pretty": "^2.2.4",
     "vue-router": "^4.1.6",
     "vue3-apexcharts": "^1.4.1",
     "vue3-perfect-scrollbar": "^1.6.1",

@@ -43,9 +43,9 @@ export const useBlockchain = defineStore("blockchain", {
           icon: {image: this.current.logo, size: '22'},
           i18n: false,
           children: routes
-                    .filter(x=>x.name && x.name.toString().startsWith('chain'))
+                    .filter(x=> x.meta.i18n)
                     .map(x => ({
-                      title: `module.${x.name?.toString()}`, 
+                      title: `module.${x.meta.i18n}`, 
                       to: {path: x.path.replace(':chain',this.chainName)}, 
                       icon: { icon: 'mdi-chevron-right', size: '22'},
                       i18n: true
@@ -112,7 +112,6 @@ export const useBlockchain = defineStore("blockchain", {
       this.connErr = ''
       this.endpoint = endpoint
       this.rpc = new CosmosRestClient(endpoint.address)
-      // console.log(this.rpc.endpoint)
     },
     setCurrent(name: string) {
       this.chainName = name
