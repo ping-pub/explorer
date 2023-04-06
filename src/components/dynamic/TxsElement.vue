@@ -5,11 +5,11 @@ import { computed } from '@vue/reactivity';
 import { hashTx } from '@/libs'
 import { useBlockchain, useFormatter } from '@/stores';
 const props = defineProps({
-  value: { type: Array<Uint8Array>},
+  value: { type: Array<string>},
 });
 
 const txs = computed(() => {
-    return props.value?.map(x => ({ hash: hashTx(x) , tx: decodeTxRaw(x) })) || []
+    return props.value?.map(x => ({ hash: hashTx(fromBase64(x)) , tx: decodeTxRaw(fromBase64(x)) })) || []
 })
 
 const format = useFormatter()
@@ -26,7 +26,7 @@ const chain = useBlockchain()
         <tbody>
             <tr v-for="item in txs">
                 <td><RouterLink :to="`/${chain.chainName}/tx/${item.hash}`">{{ item.hash }}</RouterLink></td>
-                <td>{{ format.messages(item.tx.body.messages) }}</td>
+                <td>{{ format.messages(item.tx.body.messages.map(x => ({"@type": x.typeUrl}))) }}</td>
                 <td>{{ item.tx.body.memo }}</td>
             </tr>
         </tbody>

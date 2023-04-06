@@ -33,8 +33,8 @@ chainStore.initial()
         >
           <VList>
             <!-- 👉 Rest -->
-            <VListSubheader v-if="chainStore.current?.endpoints?.rpc" title="Rest Endpoint" />
-            <VListItem v-for="i in chainStore.current?.endpoints?.rpc" link @click="chainStore.setRestEndpoint(i)">
+            <VListSubheader v-if="chainStore.current?.endpoints?.rest" title="Rest Endpoint" />
+            <VListItem v-for="i in chainStore.current?.endpoints?.rest" link @click="chainStore.setRestEndpoint(i)">
               <VListItemTitle>{{ i.provider }} <VIcon v-if="i.address === chainStore.endpoint?.address" icon="mdi-check" color="success" /></VListItemTitle>
               <VListItemSubtitle>{{ i.address }}</VListItemSubtitle>
             </VListItem>

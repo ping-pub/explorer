@@ -41,11 +41,14 @@ export function consensusPubkeyToHexAddress(consensusPubkey?: {"@type": string, 
 }
 
   export function pubKeyToValcons(consensusPubkey: {"@type": string, key: string}, prefix: string) {
-    const pubkey = fromBase64(consensusPubkey.key)
-    if(pubkey) {
-      const addressData = sha256(pubkey).slice(0, 20)
-      return toBech32(`${prefix}valcons`, addressData)
+    if(consensusPubkey && consensusPubkey.key) {
+      const pubkey = fromBase64(consensusPubkey.key)
+      if(pubkey) {
+        const addressData = sha256(pubkey).slice(0, 20)
+        return toBech32(`${prefix}valcons`, addressData)
+      }
     }
+    return ''
   }
   
   export function toETHAddress(cosmosAddress: string) {

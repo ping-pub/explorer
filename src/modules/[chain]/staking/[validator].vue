@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { useBlockchain, useFormatter, useMintStore, useStakingStore } from '@/stores';
-import { onMounted } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import ValidatorCommissionRate from '@/components/ValidatorCommissionRate.vue'
 import { consensusPubkeyToHexAddress, operatorAddressToAccount, pubKeyToValcons, valoperToPrefix } from '@/libs';
-import { computed } from '@vue/reactivity';
-import type { Coin } from '@/types';
-import type { Txs } from '@/types/Txs';
+import type { Coin, Delegation, PaginatedTxs, Validator } from '@/types';
 
 const props = defineProps(['validator', 'chain'])
 
@@ -15,45 +13,44 @@ const format = useFormatter()
 
 const validator: string = props.validator
 
-const v = ref({})
+const v = ref({} as Validator)
 const cache = JSON.parse(localStorage.getItem('avatars')||'{}')
 const avatars = ref( cache || {} )
 const identity = ref("")
-const rewards = ref([] as Coin[])
+const rewards = ref([] as Coin[]|undefined)
 const addresses = ref({} as {
     account: string
     operAddress: string
     hex: string
     valCons: string,
 })
-const selfBonded = ref({} as Coin)
+const selfBonded = ref({} as Delegation)
 
 addresses.value.account = operatorAddressToAccount(validator)
 // load self bond
 staking.fetchValidatorDelegation(validator, addresses.value.account).then(x => {
     if(x) {
-        selfBonded.value = x
+        selfBonded.value = x.delegation_response
     }
 })
 
-const txs = ref({} as Txs)
+const txs = ref({} as PaginatedTxs)
 
-blockchain.rpc.txs([`message.sender='${addresses.value.account}'`]).then(x => {
+blockchain.rpc.getTxsBySender(addresses.value.account).then(x => {
     console.log("txs", x)
     txs.value = x
 })
 
 const apr = computed(()=> {
-    const rate = v.value.commission?.commissionRates.rate || 0
+    const rate = v.value.commission?.commission_rates.rate || 0
     const inflation = useMintStore().inflation
     if(Number(inflation)) {
-        return format.percent((1 - rate) * Number(inflation))
+        return format.percent((1 - Number(rate)) * Number(inflation))
     }
     return "-"
 })
 
 const selfRate = computed(()=> {
-    console.log("self rate", selfBonded.value.balance?.amount, v.value.tokens)
     if(selfBonded.value.balance?.amount) {
         return format.calculatePercent(selfBonded.value.balance.amount, v.value.tokens)
     }
@@ -62,9 +59,9 @@ const selfRate = computed(()=> {
 
 onMounted(()=> {
     if(validator) {
-        staking.fetchValidator(validator.toString()).then(res => {
+        staking.fetchValidator(validator).then(res => {
             v.value = res.validator
-            identity.value = res.validator?.description?.identity
+            identity.value = res.validator?.description?.identity || ''
             if(identity.value && !avatars.value[identity.value]) {
                 console.log(identity.value, avatars)
                 staking.keybase(identity.value).then(d => {
@@ -77,12 +74,11 @@ onMounted(()=> {
                 }
             })
             }
-            const prefix = valoperToPrefix(v.value.operatorAddress) || '<Invalid>'            
-            addresses.value.hex = consensusPubkeyToHexAddress(v.value.consensusPubkey)
-            addresses.value.valCons = pubKeyToValcons(v.value.consensusPubkey, prefix)
+            const prefix = valoperToPrefix(v.value.operator_address) || '<Invalid>'            
+            addresses.value.hex = consensusPubkeyToHexAddress(v.value.consensus_pubkey)
+            addresses.value.valCons = pubKeyToValcons(v.value.consensus_pubkey, prefix)
         })
-        blockchain.rpc.validatorOutstandingRewards(validator).then(res => {
-            console.log(res)
+        blockchain.rpc.getDistributionValidatorOutstandingRewards(validator).then(res => {
             rewards.value = res.rewards?.rewards
         })
     }
@@ -114,7 +110,7 @@ onMounted(()=> {
                                 <span>Website: </span><span> {{ v.description?.website || '-' }}</span>
                             </VListItem>
                             <VListItem prepend-icon="mdi-phone">
-                                <span>Contact: </span><span> {{ v.description?.securityContact }}</span>
+                                <span>Contact: </span><span> {{ v.description?.security_contact }}</span>
                             </VListItem>
                         </VList>
 
@@ -137,7 +133,7 @@ onMounted(()=> {
                         <div class="d-flex">
                             <VAvatar color="secondary" rounded variant="outlined" icon="mdi-coin"></VAvatar> 
                             <div class="ml-3 d-flex flex-column justify-center">
-                                <h4>{{ format.formatToken2({amount: v.tokens, denom: staking.params.bondDenom}) }}</h4>
+                                <h4>{{ format.formatToken2({amount: v.tokens, denom: staking.params.bond_denom}) }}</h4>
                                 <span class="text-sm">Bonded Tokens</span>
                             </div>
                         </div>
@@ -152,7 +148,7 @@ onMounted(()=> {
                         <div class="d-flex">
                             <VAvatar color="secondary" rounded variant="outlined" icon="mdi-flag"></VAvatar> 
                             <div class="ml-3 d-flex flex-column justify-center">
-                                <h4>{{ v.minSelfDelegation }} {{ staking.params.bondDenom }}</h4>
+                                <h4>{{ v.minSelfDelegation }} {{ staking.params.bond_denom }}</h4>
                                 <span class="text-sm">Min Self Delegation:</span>
                             </div>
                         </div>
@@ -167,7 +163,7 @@ onMounted(()=> {
                         <div class="d-flex">
                             <VAvatar color="secondary" rounded variant="outlined" icon="mdi-pound"></VAvatar> 
                             <div class="ml-3 d-flex flex-column justify-center">
-                                <h4>{{ v.unbondingHeight }}</h4>
+                                <h4>{{ v.unbonding_height }}</h4>
                                 <span class="text-sm">Unbonding Height</span>
                             </div>
                         </div>
@@ -175,7 +171,7 @@ onMounted(()=> {
                         <div class="d-flex">
                             <VAvatar color="secondary" rounded variant="outlined" icon="mdi-clock"></VAvatar> 
                             <div class="ml-3 d-flex flex-column justify-center">
-                                <h4>{{ format.toDay(v.unbondingTime, 'from') }}</h4>
+                                <h4>{{ format.toDay(v.unbonding_time, 'from') }}</h4>
                                 <span class="text-sm">Unbonding Time</span>
                             </div>
                         </div>
@@ -209,7 +205,7 @@ onMounted(()=> {
                     </VListItem>
                     <VListItem>
                         <VListItemTitle>Operator Address</VListItemTitle>
-                        <VListItemSubtitle class="text-caption">{{ v.operatorAddress }}</VListItemSubtitle>
+                        <VListItemSubtitle class="text-caption">{{ v.operator_address }}</VListItemSubtitle>
                     </VListItem>
                     <VListItem>
                         <VListItemTitle>Hex Address</VListItemTitle>
@@ -233,10 +229,10 @@ onMounted(()=> {
                 <th class="text-left pl-4">Time</th>
             </thead>
             <tbody>
-                <tr v-for="(item, i) in txs.txResponses">
+                <tr v-for="(item, i) in txs.tx_responses">
                     <td>{{ item.height }}</td>
                     <td class="text-truncate" style="max-width: 200px;">{{ item.txhash }}</td>
-                    <td>{{ format.messages(txs.txs[i]?.body.messages) }}</td>
+                    <td>{{ format.messages(item.tx.body.messages) }}</td>
                     <td width="150">{{ format.toDay(item.timestamp,'from') }}</td>
                 </tr>
             </tbody>

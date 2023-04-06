@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { useBlockchain } from "./useBlockchain";
+import type { PageRequest } from "@/types";
 
 export const useGovStore = defineStore('govStore', {
     state: () => {
@@ -20,24 +21,17 @@ export const useGovStore = defineStore('govStore', {
         initial() {
             this.fetchParams()
         },
-        async fetchProposals( proposalStatus: ProposalStatus, pagination?: PageRequest ) {
-            const param = {
-                proposalStatus,
-                voter: '',
-                depositor: '',
-                pagination,
-            }
-            const proposals = await this.blockchain.rpc.proposals(proposalStatus, '', '')
-            console.log(proposals)
+        async fetchProposals( status: string, pagination?: PageRequest ) {
+            const proposals = await this.blockchain.rpc.getGovProposals(status)
             return proposals
         },
         async fetchParams() {
-            // this.blockchain.rpc.govParam().then(x => {
+            // this.blockchain.rpc.getGovParamsDeposit().then(x => {
             //     this.params.deposit = x.deposit
             // })
         },
-        async fetchTally(proposalId: number) {
-            return this.blockchain.rpc.tally(proposalId)
+        async fetchTally(proposalId: string) {
+            return this.blockchain.rpc.getGovProposalTally(proposalId)
         }
     }
 })

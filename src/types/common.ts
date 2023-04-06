@@ -8,6 +8,10 @@ export interface Pagination {
     total?: string;
 }
 
+export class PageRequest {
+    limit?: number;
+}
+
 export interface PaginatedResponse {
     pagination: Pagination;
 }
@@ -17,6 +21,6 @@ export class Response<T> {
 }
 
 export interface Coin {
-    amount: string|number;
+    amount: string;
     denom: string;
 }

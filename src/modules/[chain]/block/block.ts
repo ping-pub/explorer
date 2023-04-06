@@ -22,7 +22,7 @@ export const useBlockModule = defineStore('blockModule', {
         },
         txsInRecents() {
             const txs = [] as {hash:string, tx: DecodedTxRaw}[]
-            this.recents.forEach((x:GetLatestBlockResponse) => x.block?.data?.txs.forEach((tx:Uint8Array) => txs.push({
+            this.recents.forEach((x) => x.block?.data?.txs.forEach((tx:Uint8Array) => txs.push({
                 hash: hashTx(tx),
                 tx :decodeTxRaw(tx)
             })))
@@ -47,13 +47,13 @@ export const useBlockModule = defineStore('blockModule', {
             })
         },
         async fetchLatest() {
-            this.latest = await this.blockchain.rpc.block()
+            this.latest = await this.blockchain.rpc.getBaseBlockLatest()
             if(this.recents.length >= 50) this.recents.shift()
             this.recents.push(this.latest)
             return this.latest
         },
-        async fetchBlock(height?: number) {
-            this.current = await this.blockchain.rpc.block(height)
+        async fetchBlock(height: string) {
+            this.current = await this.blockchain.rpc.getBaseBlockAt(height)
             return this.current
         },
     }

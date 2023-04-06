@@ -16,15 +16,17 @@ export interface Validator {
     },
     "unbonding_height": string,
     "unbonding_time": string,
-    "commission": {
-        "commission_rates": {
-            "rate": string,
-            "max_rate": string,
-            "max_change_rate": string
-        },
-        "update_time": string
-    },
+    "commission": CommissionRate,
     "min_self_delegation": string
+}
+
+export interface CommissionRate {
+    "commission_rates": {
+        "rate": string,
+        "max_rate": string,
+        "max_change_rate": string
+    },
+    "update_time": string
 }
 
 export interface Delegation {

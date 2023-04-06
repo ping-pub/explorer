@@ -1,31 +1,26 @@
 <script lang="ts" setup>
 import { useFormatter } from '@/stores';
+import type { Tally } from '@/types';
 import { computed } from '@vue/reactivity';
 import { ref, type PropType } from 'vue';
 
 
 const props = defineProps({
-  tally: { type: Object as PropType<{
-    yes: string,
-    no: string,
-    noWithVeto: string,
-    abstain: string
-  }>},
+  tally: { type: Object as PropType<Tally>},
   pool: {
     type: Object as PropType<{
-        notBondedTokens: string;
-        bondedTokens: string;
+        not_bonded_tokens: string;
+        bonded_tokens: string;
     }>,
   },
 })
+const total = computed(() => props.pool?.bonded_tokens)
 const format = useFormatter()
-const yes = computed(() => (format.calculatePercent(props.tally?.yes, props.pool?.bondedTokens)))
-const no = computed(() => ref(format.calculatePercent(props.tally?.no, props.pool?.bondedTokens)))
-const abstain = computed(() => (format.calculatePercent(props.tally?.abstain, props.pool?.bondedTokens)))
-const veto = computed(() => (format.calculatePercent(props.tally?.noWithVeto, props.pool?.bondedTokens)))
+const yes = computed(() => (format.calculatePercent(props.tally?.yes, total.value)))
+const no = computed(() => ref(format.calculatePercent(props.tally?.no, total.value)))
+const abstain = computed(() => (format.calculatePercent(props.tally?.abstain, total.value)))
+const veto = computed(() => (format.calculatePercent(props.tally?.no_with_veto, total.value)))
 
-
-console.log(yes.value, no.value, abstain.value, veto.value)
 </script>
 <template>
 <div class="progress">

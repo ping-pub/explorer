@@ -1,4 +1,5 @@
 import type { Key } from "./common"
+import type { Tx } from "./tx"
 
 export interface NodeInfo {
     "default_node_info": {
@@ -35,9 +36,57 @@ export interface NodeInfo {
         "cosmos_sdk_version": string,
     }
 }
+export interface BlockId {
+    "hash": string,
+    "part_set_header": {
+        "total": number,
+        "hash": string
+    }
+}
+
+export interface Signature 
+{
+    "block_id_flag": string,
+    "validator_address": string,
+    "timestamp": string,
+    "signature": string,
+}
 
 export interface Block {
-    
+    "block_id": BlockId,
+    "block": {
+        "header": {
+            "version": {
+                "block": string,
+                "app": string
+            },
+            "chain_id": string,
+            "height": string,
+            "time": string,
+            "last_block_id": BlockId,
+            "last_commit_hash": string,
+            "data_hash": string,
+            "validators_hash": string,
+            "next_validators_hash": string,
+            "consensus_hash": string,
+            "app_hash": string,
+            "last_results_hash": string,
+            "evidence_hash": string,
+            "proposer_address": string,
+        },
+        "data": {
+            "txs": any[]
+        },
+        "evidence": {
+            "evidence": any[]
+        },
+        "last_commit": {
+            "height": string,
+            "round": number,
+            "block_id": BlockId,
+            "signatures": Signature[]
+        }
+    }
 }
 
 export interface TendermintValidator {

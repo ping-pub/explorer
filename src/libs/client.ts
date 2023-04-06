@@ -5,9 +5,9 @@ import { adapter, type Request, type RequestRegistry } from './registry';
 export class CosmosRestClient {
     endpoint: string;
     registry: RequestRegistry;
-    constructor(endpoint: string) {
+    constructor(endpoint: string, registry?: RequestRegistry) {
         this.endpoint = endpoint
-        this.registry = DEFAULT
+        this.registry =  registry || DEFAULT
     }
     async request<T>(request: Request<T>, args: Record<string, any>, query="") {
         let url = `${this.endpoint}${request.url}${query}`
@@ -42,6 +42,9 @@ export class CosmosRestClient {
     // Distribution Module
     async getDistributionParams() {
         return this.request(this.registry.distribution_params, {})
+    }    
+    async getDistributionCommunityPool() {
+        return this.request(this.registry.distributino_community_pool, {})
     }
     async getDistributionValidatorCommission(validator_address: string) {
         return this.request(this.registry.distribution_validator_commission, {validator_address})
@@ -69,8 +72,9 @@ export class CosmosRestClient {
     async getGovParamsTally() {
         return this.request(this.registry.gov_params_tally, {})
     }
-    async getGovProposals() {
-        return this.request(this.registry.gov_proposals, {})
+    async getGovProposals(status: string, limit = 100) {
+        const query = "?proposal_status={status}&pagination.limit={limit}&pagination.reverse=true&pagination.key="
+        return this.request(this.registry.gov_proposals, {status, limit}, query)
     }
     async getGovProposal(proposal_id: string) {
         return this.request(this.registry.gov_proposals_proposal_id, {proposal_id})
@@ -106,8 +110,8 @@ export class CosmosRestClient {
     async getStakingPool() {
         return this.request(this.registry.staking_pool, {})
     }
-    async getStakingValidators() {
-        return this.request(this.registry.staking_validators, {})
+    async getStakingValidators(status: string, limit = 200) {
+        return this.request(this.registry.staking_validators, {status, limit})
     }
     async getStakingValidator(validator_addr: string) {
         return this.request(this.registry.staking_validators_address, {validator_addr})
@@ -151,6 +155,17 @@ export class CosmosRestClient {
     }
     async getTx(hash: string) {
         return this.request(this.registry.tx_hash, {hash})
+    }
+
+    // mint
+    async getMintParam() {
+        return this.request(this.registry.mint_params, {})
+    }
+    async getMintInflation() {
+        return this.request(this.registry.mint_inflation, {})
+    }
+    async getMintAnnualProvisions() {
+        return this.request(this.registry.mint_annual_provisions, {})
     }
 
 }

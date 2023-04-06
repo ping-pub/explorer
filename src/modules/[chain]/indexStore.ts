@@ -2,6 +2,7 @@ import { useBlockchain, useCoingecko, useBaseStore, useBankStore, useFormatter, 
 import { useDistributionStore } from "@/stores/useDistributionStore";
 import { useMintStore } from "@/stores/useMintStore";
 import { useStakingStore } from "@/stores/useStakingStore";
+import type { GovProposal, Tally } from "@/types";
 import numeral from "numeral";
 import { defineStore } from "pinia";
 
@@ -64,13 +65,8 @@ export const useIndexModule = defineStore('module-index', {
                 total_volumes: [] as number[],
             },
             communityPool: [] as {amount: string, denom: string}[],
-            proposals: [] as Proposal[],
-            tally: {} as Record<number, {
-                yes: string;
-                abstain: string;
-                no: string;
-                noWithVeto: string;
-              }>
+            proposals: [] as GovProposal[],
+            tally: {} as Record<string, Tally>
         }
     },
     getters: {
@@ -144,7 +140,7 @@ export const useIndexModule = defineStore('module-index', {
                   title: 'Validators',
                   color: 'error',
                   icon: 'mdi-human-queue',
-                  stats: String(base.latest.block?.lastCommit?.signatures.length || 0),
+                  stats: String(base.latest.block?.last_commit?.signatures.length || 0),
                   change: 0,
                 },
                 {
@@ -158,7 +154,7 @@ export const useIndexModule = defineStore('module-index', {
                   title: 'Bonded Tokens',
                   color: 'warning',
                   icon: 'mdi-lock',
-                  stats: formatter.formatTokenAmount({amount: this.pool.bondedTokens, denom: staking.params.bondDenom }),
+                  stats: formatter.formatTokenAmount({amount: this.pool.bonded_tokens, denom: staking.params.bond_denom }),
                   change: 0,
                 },                
                 {
@@ -185,18 +181,18 @@ export const useIndexModule = defineStore('module-index', {
             this.initCoingecko()
             useMintStore().fetchInflation()
             useDistributionStore().fetchCommunityPool().then(x => {
-                this.communityPool = x.pool.filter(t=> t.denom.length < 10).map(t => ({ 
+                this.communityPool = x.pool.filter(t => t.denom.length < 10).map(t => ({ 
                     amount: String(parseInt(t.amount)),
                     denom: t.denom
                 }))
             })
             const gov = useGovStore()
-            gov.fetchProposals(ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD).then(x => {
+            gov.fetchProposals(2).then(x => {
                 this.proposals = x.proposals
                 x.proposals.forEach(x1 => {
-                    gov.fetchTally(Number(x1.proposalId)).then(t => {
+                    gov.fetchTally(x1.proposal_id).then(t => {
                         console.log("log: ", t)
-                        if(t.tally) this.tally[Number(x1.proposalId)] = t.tally
+                        if(t.tally) this.tally[x1.proposal_id] = t.tally
                     })
                 })
             })

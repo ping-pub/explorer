@@ -7,9 +7,9 @@ import type { Coin } from "@/types";
 export const useBankStore = defineStore('bankstore', {
     state: () => {
         return {
-            supply: {} as Coin[],
+            supply: {} as Coin,
             balances: {} as Record<string, Coin[]>,
-            totalSupply: {supply: []} ,
+            totalSupply: {supply: [] as Coin[]} ,
         }
     },
     getters: {
@@ -26,7 +26,7 @@ export const useBankStore = defineStore('bankstore', {
             this.supply = {} as Coin
             const denom = this.staking.params.bondDenom || this.blockchain.current?.assets[0].base
             if(denom) {
-                this.blockchain.rpc.supplyOf(denom).then(res => {
+                this.blockchain.rpc.getBankSupplyByDenom(denom).then(res => {
                     if(res.amount) this.supply = res.amount
                 })
             }
@@ -38,7 +38,7 @@ export const useBankStore = defineStore('bankstore', {
         //     return response
         // },
         async fetchSupply(denom: string) {
-            return this.blockchain.rpc.supplyOf( denom )
+            return this.blockchain.rpc.getBankSupplyByDenom( denom )
         }
     }
 })

@@ -8,7 +8,7 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import utc from 'dayjs/plugin/utc'
 import localeData from 'dayjs/plugin/localeData'
 import { useStakingStore } from "./useStakingStore";
-import { toHex } from "@cosmjs/encoding";
+import { fromBase64, toHex } from "@cosmjs/encoding";
 import { consensusPubkeyToHexAddress } from "@/libs";
 
 dayjs.extend(localeData)
@@ -90,9 +90,9 @@ export const useFormatter = defineStore('formatter', {
             }
             return '-'
         },
-        validator(address: Uint8Array) {
-            const txt = toHex(address).toUpperCase()
-            const validator = this.staking.validators.find(x => consensusPubkeyToHexAddress(x.consensusPubkey) === txt)
+        validator(address: string) {
+            const txt = toHex(fromBase64(address)).toUpperCase()
+            const validator = this.staking.validators.find(x => consensusPubkeyToHexAddress(x.consensus_pubkey) === txt)
             return validator?.description?.moniker
         },
         calculatePercent(input?: string, total?: string|number ) {
@@ -103,10 +103,8 @@ export const useFormatter = defineStore('formatter', {
         formatDecimalToPercent(decimal: string) {
             return numeral(decimal).format('0.[00]%')
         },
-        formatCommissionRate(v?: string) {
-            console.log(v)
-            if(!v) return '-'
-            const rate = Number(v) / Number("1000000000000000000")
+        formatCommissionRate(rate?: string) {
+            if(!rate) return '-'
             return this.percent(rate)
         },
         percent(decimal?: string|number) {
@@ -134,10 +132,10 @@ export const useFormatter = defineStore('formatter', {
             }
             return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
         },
-        messages(msgs: {typeUrl: string}[]) {
+        messages(msgs: {"@type": string}[]) {
             if(msgs) {
                 const sum: Record<string, number> = msgs.map(msg => {
-                    return msg.typeUrl.substring(msg.typeUrl.lastIndexOf('.') + 1).replace('Msg', '')
+                    return msg["@type"].substring(msg["@type"].lastIndexOf('.') + 1).replace('Msg', '')
                 }).reduce((s, c) => {
                     const sh: Record<string, number> = s
                     if (sh[c]) {

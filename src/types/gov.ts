@@ -44,12 +44,10 @@ export interface GovProposal {
 }
 
 export interface Tally {
-    tally: {
-        yes: string,
-        abstain: string,
-        no: string,
-        no_with_veto: string
-    }
+    yes: string,
+    abstain: string,
+    no: string,
+    no_with_veto: string
 }
 
 export interface GovVote {

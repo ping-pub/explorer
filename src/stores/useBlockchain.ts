@@ -2,12 +2,8 @@ import { defineStore } from "pinia";
 import { useDashboard, type ChainConfig, type Endpoint, EndpointType } from "./useDashboard";
 import type { VerticalNavItems } from '@/@layouts/types'
 import { useRouter } from "vue-router";
-import { useStakingStore } from "./useStakingStore";
-import { useBankStore } from "./useBankStore";
-import { useBaseStore } from "./useBaseStore";
-import { useGovStore } from "./useGovStore";
-import { ref } from "vue";
-import { useMintStore } from "./useMintStore";
+import { CosmosRestClient } from "@/libs/client";
+import { useBankStore, useBaseStore, useGovStore, useMintStore, useStakingStore } from ".";
 import { useBlockModule } from "@/modules/[chain]/block/block";
 
 export const useBlockchain = defineStore("blockchain", {
@@ -95,16 +91,16 @@ export const useBlockchain = defineStore("blockchain", {
   actions: {
     async initial() {
       await this.randomSetupEndpoint()
-      // await useStakingStore().init()
-      // useBankStore().initial()
-      // useBaseStore().initial()
-      // useGovStore().initial()
-      // useMintStore().initial()
-      // useBlockModule().initial()      
+      await useStakingStore().init()
+      useBankStore().initial()
+      useBaseStore().initial()
+      useGovStore().initial()
+      useMintStore().initial()
+      useBlockModule().initial()      
     },
 
     async randomSetupEndpoint() {
-      const all = this.current?.endpoints?.rpc
+      const all = this.current?.endpoints?.rest
       if(all) {    
           const rn = Math.random()
           const endpoint = all[Math.floor(rn * all.length)]
@@ -115,7 +111,7 @@ export const useBlockchain = defineStore("blockchain", {
     async setRestEndpoint(endpoint: Endpoint) {
       this.connErr = ''
       this.endpoint = endpoint
-      // this.rpc = new RPCClient(endpoint.address)
+      this.rpc = new CosmosRestClient(endpoint.address)
       // console.log(this.rpc.endpoint)
     },
     setCurrent(name: string) {

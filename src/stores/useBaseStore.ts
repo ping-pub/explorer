@@ -1,15 +1,14 @@
 import { defineStore } from "pinia";
 import { useBlockchain } from "@/stores";
 import dayjs from "dayjs";
-
-import type { BlockResponse } from "@cosmjs/tendermint-rpc";
+import type { Block } from "@/types";
 
 export const useBaseStore = defineStore('baseStore', {
     state: () => {
         return {
-            earlest: {} as BlockResponse,
-            latest: {} as BlockResponse,
-            recents: [] as BlockResponse[]
+            earlest: {} as Block,
+            latest: {} as Block,
+            recents: [] as Block[]
         }
     },
     getters: {
@@ -34,8 +33,8 @@ export const useBaseStore = defineStore('baseStore', {
             this.recents = []
         },  
         async fetchLatest() {
-            this.latest = await this.blockchain.rpc.block()            
-            if(!this.earlest || this.earlest.block?.header?.chainId != this.latest.block?.header?.chainId) {
+            this.latest = await this.blockchain.rpc.getBaseBlockLatest()          
+            if(!this.earlest || this.earlest.block?.header?.chain_id != this.latest.block?.header?.chain_id) {
                 //reset earlest and recents
                 this.earlest = this.latest
                 this.recents = []
@@ -48,16 +47,16 @@ export const useBaseStore = defineStore('baseStore', {
         },
 
         async fetchValidatorByHeight(height?: number, offset = 0) {
-             return this.blockchain.rpc.validatorsAtHeight(height)
+             return this.blockchain.rpc.getBaseValidatorsetAt(String(height))
         },
         async fetchLatestValidators(offset = 0) {
-            return this.blockchain.rpc.validatorsAtHeight()
+            return this.blockchain.rpc.getBaseValidatorsetLatest()
         },
         async fetchBlock(height?: number) {
-            return this.blockchain.rpc.block(height)
+            return this.blockchain.rpc.getBaseBlockAt(String(height))
         },
         async fetchAbciInfo() {
-            return this.blockchain.rpc.abciInfo()
+            return this.blockchain.rpc.getBaseNodeInfo()
         }
         // async fetchNodeInfo() {
         //     return this.blockchain.rpc.no()

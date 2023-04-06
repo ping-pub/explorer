@@ -2,50 +2,33 @@
 import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
 import { hexToRgb } from '@/plugins/vuetify/@layouts/utils'
-import type { PropType } from 'vue';
+import { computed, type PropType } from 'vue';
 import { useFormatter } from '@/stores';
+import type { CommissionRate } from '@/types'
 
 const props = defineProps({
-  commission: { type: Object as PropType<{
-    commissionRates: {
-      rate: string,
-      maxRate: string,
-      maxChangeRate: string,
-    },
-    updateTime: string,
-  }>},
+  commission: { type: Object as PropType<CommissionRate>},
 })
-console.log('commission:', props)
 
-const zeros = Math.pow(10, 16)
-let rate = Number(props.commission?.commissionRates.rate || 0)
-let change = Number(props.commission?.commissionRates.maxChangeRate || 10)
-let max = Number(props.commission?.commissionRates.maxRate || 100)
+let rate = computed(() => Number(props.commission?.commission_rates.rate || 0) * 100)
+let change = computed(() => Number(props.commission?.commission_rates.max_change_rate || 0) * 100)
+let max = computed(() => Number(props.commission?.commission_rates.max_rate || 1) * 100)
 
-if(rate > 100) {
-  rate = rate / zeros
-}
-if(change > 100) {
-  change = change / zeros
-}
-if(max > 100) {
-  max = max / zeros
-}
 
 // const rate = 15 // props.commision?.commissionRates.rate
 // const change = 15
 // const max = 20
 
 const left = rate
-const right = max - rate
+const right = computed(() => max.value - rate.value)
 
-const s1 = left > change ? left - change : 0
-const s2 = left > change ? change: left
+const s1 = computed(() => left.value > change.value ? left.value - change.value : 0 )
+const s2 = computed(() => left.value > change.value ? change.value: left.value)
 const s3 = 2
-const s4 = right > change? change: right
-const s5 = right > change? right - change: 0
+const s4 = computed(() => right.value > change.value? change.value: right.value)
+const s5 = computed(() => right.value > change.value? right.value - change.value: 0)
 
-const series = [s1, s2, s3, s4, s5]
+const series = computed(() => [s1.value, s2.value, s3, s4.value, s5.value])
 
 const vuetifyTheme = useTheme()
 const format = useFormatter()
@@ -99,7 +82,7 @@ const chartConfig = computed(() => {
               offsetY: -15,
               fontWeight: 500,
               fontSize: '2.125rem',
-              formatter: (value: unknown) => `${rate}%`,
+              formatter: (value: unknown) => `${rate.value}%`,
               color: primaryText,
             },
             total: {
@@ -107,7 +90,7 @@ const chartConfig = computed(() => {
               label: 'Commission Rate',
               fontSize: '1rem',
               color: secondaryText,
-              formatter: ( ) => `${rate}%`,
+              formatter: ( ) => `${rate.value}%`,
             },
           },
         },
@@ -127,7 +110,7 @@ const chartConfig = computed(() => {
 </script>
 
 <template>
-  <VCard title="Commission Rate" :subtitle="`Updated at ${format.toDay(props.commision?.updateTime, 'short')}`">
+  <VCard title="Commission Rate" :subtitle="`Updated at ${format.toDay(props.commission?.update_time, 'short')}`">
     <VCardText>
       <VueApexCharts
         type="donut"

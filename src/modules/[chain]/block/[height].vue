@@ -16,7 +16,7 @@ const height = computed(() => {
 
 onBeforeRouteUpdate(async (to, from, next) => {
     if (from.path !== to.path) {
-      store.fetchBlock(Number(to.params.height))
+      store.fetchBlock(String(to.params.height))
       next()
     }
 }) 
@@ -33,7 +33,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
             </span>
         </VCardTitle>
         <VCardItem class="pt-0">
-            <DynamicComponent :value="store.current.blockId"/>
+            <DynamicComponent :value="store.current.block_id"/>
         </VCardItem>
     </VCard>
 
@@ -51,7 +51,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
 
     <VCard title="Last Commit" class="mt-5">
         <VCardItem class="pt-0">
-            <DynamicComponent :value="store.current.block?.lastCommit"/>
+            <DynamicComponent :value="store.current.block?.last_commit"/>
         </VCardItem>
     </VCard>
 </div>

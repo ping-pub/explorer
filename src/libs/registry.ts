@@ -29,6 +29,16 @@ export interface RequestRegistry {
   distribution_validator_commission: Request<{commission?: {commission?: Coin[]}}>;
   distribution_validator_outstanding_rewards: Request<{rewards?: {rewards?: Coin[]}}>;
   distribution_validator_slashes: Request<PaginatedSlashes>;
+  distributino_community_pool: Request<{pool: Coin[]}>;
+
+  mint_inflation: Request<{inflation: string}>;
+  mint_params: Request<{
+    params: {
+      mint_denom: string,
+      blocks_per_year: string
+    }
+  }>;
+  mint_annual_provisions: Request<{annual_provisions: string}>
 
   slashing_params: Request<any>;
   slashing_signing_info: Request<PaginatedSigningInfo>;
@@ -39,7 +49,7 @@ export interface RequestRegistry {
   gov_proposals: Request<PaginatedProposals>;
   gov_proposals_proposal_id: Request<{proposal: GovProposal}>;
   gov_proposals_deposits: Request<PaginatedProposalDeposit>;
-  gov_proposals_tally: Request<Tally>;
+  gov_proposals_tally: Request<{tally: Tally}>;
   gov_proposals_votes: Request<PaginatedProposalVotes>;
   gov_proposals_votes_voter: Request<{vote: GovVote}>;
 
