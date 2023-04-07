@@ -48,7 +48,7 @@ const messages = computed(() => {
                     <div><DynamicComponent :value="msg" /></div>                  
                 </div>
                 <div v-if="messages.length === 0">
-                    <VIcon icon="mdi-empty"/>
+                    No messages
                 </div>
             </VCardItem>
         </VCard>

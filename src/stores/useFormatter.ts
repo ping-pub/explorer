@@ -151,7 +151,10 @@ export const useFormatter = defineStore('formatter', {
                   })
                   return output.join(', ')
             }
-        },                 
+        },
+        multiLine(v: string) {
+            return v? v.replaceAll("\\n","\n"): ""
+        }                 
     }
 })
 

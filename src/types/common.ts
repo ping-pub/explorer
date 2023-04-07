@@ -3,6 +3,12 @@ export interface Key {
     "key": string,
 }
 
+export enum LoadingStatus {
+    UNLOADED,
+    LOADING,
+    LOADED,
+}
+
 export interface Pagination {
     key?: string;
     total?: string;

@@ -2,7 +2,7 @@ import { useBlockchain, useCoingecko, useBaseStore, useBankStore, useFormatter, 
 import { useDistributionStore } from "@/stores/useDistributionStore";
 import { useMintStore } from "@/stores/useMintStore";
 import { useStakingStore } from "@/stores/useStakingStore";
-import type { GovProposal, Tally } from "@/types";
+import type { GovProposal, PaginatedProposals, Tally } from "@/types";
 import numeral from "numeral";
 import { defineStore } from "pinia";
 
@@ -65,7 +65,7 @@ export const useIndexModule = defineStore('module-index', {
                 total_volumes: [] as number[],
             },
             communityPool: [] as {amount: string, denom: string}[],
-            proposals: [] as GovProposal[],
+            proposals: {} as PaginatedProposals,
             tally: {} as Record<string, Tally>
         }
     },
@@ -187,14 +187,8 @@ export const useIndexModule = defineStore('module-index', {
                 }))
             })
             const gov = useGovStore()
-            gov.fetchProposals(2).then(x => {
-                this.proposals = x.proposals
-                x.proposals.forEach(x1 => {
-                    gov.fetchTally(x1.proposal_id).then(t => {
-                        console.log("log: ", t)
-                        if(t.tally) this.tally[x1.proposal_id] = t.tally
-                    })
-                })
+            gov.fetchProposals("2").then(x => {
+                this.proposals = x
             })
         },
         tickerColor(color: string) {

@@ -4,8 +4,8 @@ import TextElement from './TextElement.vue'
 import ObjectElement from './ObjectElement.vue'
 import { select } from './index'
 
-const props = defineProps(["value"]);
+const props = defineProps(["value", "direct"]);
 </script>
 <template>
-    <Component :is="select(value)" :value="value"></Component>
+    <Component :is="select(value, direct)" :value="value"></Component>
 </template>

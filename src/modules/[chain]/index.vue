@@ -8,7 +8,7 @@ import { useIndexModule } from './indexStore';
 import { computed } from '@vue/reactivity';
 
 import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
-import ProposalProcess from '@/components/ProposalProcess.vue';
+import ProposalListItem from '@/components/ProposalListItem.vue';
 
 const blockchain = useBlockchain()
 const store = useIndexModule()
@@ -143,37 +143,7 @@ function shortName(name: string, id: string) {
           <VCardTitle>Active Proposals</VCardTitle>
         </VCardItem>
         <VCardItem>
-          <VExpansionPanels variant="accordion">
-            <VExpansionPanel v-for="(x, i) in store.proposals">
-              <VExpansionPanelTitle disable-icon-rotate>
-                    <VChip label color="primary" class="mr-2">{{x.proposal_id}}</VChip>
-                    <div class="w-100">{{ x.content?.title }}
-                      <div class="d-flex mt-1">
-                        <small class="text-secondary me-auto"> {{ format.toDay(x.voting_end_time, 'from') }}</small>      
-                        <ProposalProcess style="width:300px;" :pool="store.pool" :tally="store.tally[x.proposal_id]"></ProposalProcess> 
-                        <span></span>
-                      </div>              
-                    </div>
-                <template #actions>    
-                  <VIcon
-                    icon="mdi-check"
-                    color="success"
-                    class="ml-2"
-                  />
-                </template>
-              </VExpansionPanelTitle>
-              <VExpansionPanelText>
-                <VCard class="card-box">         
-                  <VCardText>
-                    <MdEditor :model-value="x.content?.description" previewOnly></MdEditor> 
-                  </VCardText>
-                  <div class="text-center w-100 my-2">
-                    <VBtn color="primary" variant="flat">Vote</VBtn>
-                  </div>
-                </VCard>
-              </VExpansionPanelText>
-            </VExpansionPanel>
-          </VExpansionPanels>          
+          <ProposalListItem :proposals="store.proposals"/>      
         </VCardItem>   
         <VCardText v-if="store.proposals.length === 0">No active proposals</VCardText>
     </VCard>

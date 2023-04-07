@@ -24,10 +24,10 @@ const veto = computed(() => (format.calculatePercent(props.tally?.no_with_veto, 
 </script>
 <template>
 <div class="progress">
-  <div class="progress-bar bg-success" :style="`width: ${yes}`"></div>
-  <div class="progress-bar bg-error" :style="`width: ${no}`"></div>
-  <div class="progress-bar " :style="`width: ${veto}; background-color: #B71C1C;`"></div>
-  <div class="progress-bar bg-secondary" :style="`width: ${abstain}`"></div>
+  <div class="progress-bar bg-success" :style="`width: ${yes}`"> {{ yes }}</div>
+  <div class="progress-bar bg-error" :style="`width: ${no}`">{{ no }} </div>
+  <div class="progress-bar " :style="`width: ${veto}; background-color: #B71C1C;`"> {{ veto }} </div>
+  <div class="progress-bar bg-secondary" :style="`width: ${abstain}`"> </div>
 </div>
 </template>
 <style scoped>
