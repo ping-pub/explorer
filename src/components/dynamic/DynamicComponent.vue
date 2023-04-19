@@ -1,7 +1,5 @@
 
 <script lang="ts" setup>
-import TextElement from './TextElement.vue'
-import ObjectElement from './ObjectElement.vue'
 import { select } from './index'
 
 const props = defineProps(["value", "direct"]);

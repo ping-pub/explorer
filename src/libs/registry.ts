@@ -76,6 +76,21 @@ export interface RequestRegistry {
   tx_txs_block: Request<Tx>;
   tx_hash: Request<{tx: Tx, tx_response: TxResponse}>;
 
+  ibc_app_ica_controller_params: Request<any>;
+  ibc_app_ica_host_params: Request<any>
+  ibc_app_transfer_escrow_address: Request<any>;
+  ibc_app_transfer_denom_traces: Request<any>;
+  ibc_app_transfer_denom_traces_hash: Request<{
+    "denom_trace": {
+      "path": "string",
+      "base_denom": "string"
+    }
+  }>;
+  ibc_core_channel_channels: Request<any>;
+  ibc_core_channel_channels_next_sequence: Request<any>;
+  ibc_core_channel_channels_acknowledgements: Request<any>;
+
+
 }
 
 export function adapter<T>(source: any): T {

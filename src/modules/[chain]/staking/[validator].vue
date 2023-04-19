@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useBlockchain, useFormatter, useMintStore, useStakingStore } from '@/stores';
+import { useBankStore, useBlockchain, useFormatter, useMintStore, useStakingStore } from '@/stores';
 import { onMounted, computed, ref } from 'vue';
 import ValidatorCommissionRate from '@/components/ValidatorCommissionRate.vue'
 import { consensusPubkeyToHexAddress, operatorAddressToAccount, pubKeyToValcons, valoperToPrefix } from '@/libs';
@@ -18,6 +18,7 @@ const cache = JSON.parse(localStorage.getItem('avatars')||'{}')
 const avatars = ref( cache || {} )
 const identity = ref("")
 const rewards = ref([] as Coin[]|undefined)
+const commission = ref([] as Coin[]|undefined)
 const addresses = ref({} as {
     account: string
     operAddress: string
@@ -79,7 +80,20 @@ onMounted(()=> {
             addresses.value.valCons = pubKeyToValcons(v.value.consensus_pubkey, prefix)
         })
         blockchain.rpc.getDistributionValidatorOutstandingRewards(validator).then(res => {
-            rewards.value = res.rewards?.rewards
+            rewards.value = res.rewards?.rewards?.sort((a, b) => Number(b.amount) - Number(a.amount))
+            res.rewards?.rewards?.forEach(x => {
+                if(x.denom.startsWith("ibc/")) {
+                    format.fetchDenomTrace(x.denom)
+                }
+            })
+        })
+        blockchain.rpc.getDistributionValidatorCommission(validator).then(res => {
+            commission.value = res.commission?.commission?.sort((a, b) => Number(b.amount) - Number(a.amount))
+            res.commission?.commission?.forEach(x => {
+                if(x.denom.startsWith("ibc/")) {
+                    format.fetchDenomTrace(x.denom)
+                }
+            })
         })
     }
     
@@ -148,7 +162,7 @@ onMounted(()=> {
                         <div class="d-flex">
                             <VAvatar color="secondary" rounded variant="outlined" icon="mdi-flag"></VAvatar> 
                             <div class="ml-3 d-flex flex-column justify-center">
-                                <h4>{{ v.minSelfDelegation }} {{ staking.params.bond_denom }}</h4>
+                                <h4>{{ v.min_self_delegation }} {{ staking.params.bond_denom }}</h4>
                                 <span class="text-sm">Min Self Delegation:</span>
                             </div>
                         </div>
@@ -184,16 +198,26 @@ onMounted(()=> {
     </VCard>
 
     <VRow class="mt-3">
-        <VCol md="4" sm="12">
+        <VCol md="4" sm="12" class="h-100">
             <ValidatorCommissionRate :commission="v.commission"></ValidatorCommissionRate>
         </VCol>
         <VCol md="4" sm="12">
-            <VCard title="Outstanding Rewards" class="h-100">
-                <VList>
-                    <VListItem v-for="(i, k) in rewards" :key="`reward-${k}`">
-                        <VAlertTitle>{{ format.formatToken2(i) }}</VAlertTitle>
-                    </VListItem>
-                </VList>
+            <VCard class="h-100">
+                <VCardTitle>Commissions & Rewards</VCardTitle>
+                <VCardItem class="pt-0 pb-0">  
+                <div class="overflow-auto" style="max-height: 280px;">   
+                <VCardSubtitle>Commissions <VBtn size="small" class="float-right" variant="text">Withdraw</VBtn></VCardSubtitle>               
+                        <VDivider class="mb-2"></VDivider>
+                        <VChip v-for="(i, k) in commission" :key="`reward-${k}`" color="info" label variant="outlined" class="mr-1 mb-1">
+                            {{ format.formatToken2(i) }}
+                        </VChip>
+                        <VCardSubtitle class="mt-2">Outstanding Rewards</VCardSubtitle> 
+                        <VDivider class="mb-2"></VDivider>
+                        <VChip v-for="(i, k) in rewards" :key="`reward-${k}`" color="success" label variant="outlined" class="mr-1 mb-1">
+                            {{ format.formatToken2(i) }}
+                        </VChip>
+                </div>                
+                </VCardItem>
             </VCard>
         </VCol>
         <VCol md="4" sm="12">

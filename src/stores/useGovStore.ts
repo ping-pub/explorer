@@ -49,6 +49,15 @@ export const useGovStore = defineStore('govStore', {
         },
         async fetchTally(proposalId: string) {
             return this.blockchain.rpc.getGovProposalTally(proposalId)
+        },
+        async fetchProposal(proposalId: string) {
+            return this.blockchain.rpc.getGovProposal(proposalId)
+        },
+        async fetchProposalDeposits(proposalId: string) {
+            return this.blockchain.rpc.getGovProposalDeposits(proposalId)
+        },
+        async fetchProposalVotes(proposalId: string, next_key?: string) {
+            return this.blockchain.rpc.getGovProposalVotes(proposalId, next_key)
         }
     }
 })

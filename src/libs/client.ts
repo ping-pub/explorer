@@ -12,7 +12,7 @@ export class CosmosRestClient {
     async request<T>(request: Request<T>, args: Record<string, any>, query="") {
         let url = `${this.endpoint}${request.url}${query}`
         Object.keys(args).forEach(k => {
-            url = url.replace(`{${k}}`, args[k])
+            url = url.replace(`{${k}}`, args[k] || "")
         })
         return fetchData<T>(url, adapter)
     }
@@ -72,7 +72,7 @@ export class CosmosRestClient {
     async getGovParamsTally() {
         return this.request(this.registry.gov_params_tally, {})
     }
-    async getGovProposals(status: string, limit = 100) {
+    async getGovProposals(status: string, limit = 50) {
         const query = "?proposal_status={status}&pagination.limit={limit}&pagination.reverse=true&pagination.key="
         return this.request(this.registry.gov_proposals, {status, limit}, query)
     }
@@ -85,8 +85,8 @@ export class CosmosRestClient {
     async getGovProposalTally(proposal_id: string) {
         return this.request(this.registry.gov_proposals_tally, {proposal_id})
     }
-    async getGovProposalVotes(proposal_id: string) {
-        return this.request(this.registry.gov_proposals_votes, {proposal_id})
+    async getGovProposalVotes(proposal_id: string, next_key?: string) {
+        return this.request(this.registry.gov_proposals_votes, {proposal_id, next_key})
     }
     async getGovProposalVotesVoter(proposal_id: string, voter: string ) {
         return this.request(this.registry.gov_proposals_votes_voter, {proposal_id, voter})
@@ -147,7 +147,7 @@ export class CosmosRestClient {
     }
     // tx
     async getTxsBySender(sender: string) {
-        const query = `?events=message.sender='${sender}'&pagination.reverse=true`
+        const query = `?pagination.reverse=true&events=message.sender='${sender}'`
         return this.request(this.registry.tx_txs, {}, query)
     }
     async getTxsAt(height: string|number) {
@@ -167,5 +167,11 @@ export class CosmosRestClient {
     async getMintAnnualProvisions() {
         return this.request(this.registry.mint_annual_provisions, {})
     }
+
+    // ibc
+    async getIBCAppTransferDenom(hash: string) {
+        return this.request(this.registry.ibc_app_transfer_denom_traces_hash, {hash})
+    }
+
 
 }

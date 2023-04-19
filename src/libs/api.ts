@@ -10,7 +10,7 @@ export const DEFAULT: RequestRegistry = {
     bank_supply: { url: "/cosmos/bank/v1beta1/supply", adapter },
     bank_supply_by_denom: { url: "/cosmos/bank/v1beta1/supply/{denom}", adapter },
     distribution_params: { url: "/cosmos/distribution/v1beta1/params", adapter },
-    distributino_community_pool: {url: "/cosmos/distribution/v1beta1/community_pool", adapter},
+    distributino_community_pool: { url: "/cosmos/distribution/v1beta1/community_pool", adapter },
     distribution_validator_commission: { url: "/cosmos/distribution/v1beta1/validators/{validator_address}/commission", adapter },
     distribution_validator_outstanding_rewards: { url: "/cosmos/distribution/v1beta1/validators/{validator_address}/outstanding_rewards", adapter },
     distribution_validator_slashes: { url: "/cosmos/distribution/v1beta1/validators/{validator_address}/slashes", adapter },
@@ -20,10 +20,10 @@ export const DEFAULT: RequestRegistry = {
     gov_params_tally: { url: "/cosmos/gov/v1beta1/params/tallying", adapter },
     gov_params_deposit: { url: "/cosmos/gov/v1beta1/params/deposit", adapter },
     gov_proposals: { url: "/cosmos/gov/v1beta1/proposals", adapter },
-    gov_proposals_proposal_id: {url: "/cosmos/gov/v1beta1/proposals/{proposal_id}", adapter},
+    gov_proposals_proposal_id: { url: "/cosmos/gov/v1beta1/proposals/{proposal_id}", adapter },
     gov_proposals_deposits: { url: "/cosmos/gov/v1beta1/proposals/{proposal_id}/deposits", adapter },
     gov_proposals_tally: { url: "/cosmos/gov/v1beta1/proposals/{proposal_id}/tally", adapter },
-    gov_proposals_votes: { url: "/cosmos/gov/v1beta1/proposals/{proposal_id}/votes", adapter },
+    gov_proposals_votes: { url: "/cosmos/gov/v1beta1/proposals/{proposal_id}/votes?pagination.key={next_key}", adapter },
     gov_proposals_votes_voter: { url: "/cosmos/gov/v1beta1/proposals/{proposal_id}/votes/{voter}", adapter },
     staking_deletations: { url: "/cosmos/staking/v1beta1/delegations/{delegator_addr}", adapter },
     staking_delegator_redelegations: { url: "/cosmos/staking/v1beta1/delegators/{delegator_addr}/redelegations", adapter },
@@ -45,6 +45,20 @@ export const DEFAULT: RequestRegistry = {
     tx_txs: { url: "/cosmos/tx/v1beta1/txs", adapter },
     tx_txs_block: { url: "/cosmos/tx/v1beta1/txs/block/{height}", adapter },
     tx_hash: { url: "/cosmos/tx/v1beta1/txs/{hash}", adapter },
+
+    mint_inflation: { url: "/cosmos/mint/v1beta1/inflation", adapter},
+    mint_params: { url: "/cosmos/mint/v1beta1/params", adapter},
+    mint_annual_provisions: { url: "/cosmos/mint/v1beta1/annual_provisions", adapter},
+
+    // ibc
+    ibc_app_ica_controller_params: { url: "/ibc/apps/interchain_accounts/controller/v1/params", adapter },
+    ibc_app_ica_host_params: { url: "/ibc​/apps​/interchain_accounts​/host​/v1​/params", adapter},
+    ibc_app_transfer_escrow_address: { url: "/ibc/apps/transfer/v1/channels/{channel_id}/ports/{port_id}/escrow_address", adapter},
+    ibc_app_transfer_denom_traces: { url: "/ibc/apps/transfer/v1/denom_traces", adapter},
+    ibc_app_transfer_denom_traces_hash: { url: "/ibc/apps/transfer/v1/denom_traces/{hash}", adapter},
+    ibc_core_channel_channels: { url: "/ibc/core/channel/v1/channels", adapter},
+    ibc_core_channel_channels_next_sequence: { url: "/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/next_sequence", adapter},
+    ibc_core_channel_channels_acknowledgements: { url: "/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_acknowledgements", adapter}
 };
 
 export const VERSION_REGISTRY: Registry = {

@@ -1435,6 +1435,11 @@
   dependencies:
     "@babel/runtime" "^7.19.4"
 
+"@chenfengyuan/vue-countdown@2":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@chenfengyuan/vue-countdown/-/vue-countdown-2.1.1.tgz#0e19b59b46eecab54b3a569d6a2dba78f7b6996f"
+  integrity sha512-HARJ62AFyxrBH/nMzwuaHUd20waKLN07mjyo2+8YfVouALkFERNRabqt5i3lfp3OISHb2054lWgyaX9L60hdPw==
+
 "@confio/ics23@^0.6.8":
   version "0.6.8"
   resolved "https://registry.yarnpkg.com/@confio/ics23/-/ics23-0.6.8.tgz#2a6b4f1f2b7b20a35d9a0745bb5a446e72930b3d"
@@ -2468,6 +2473,13 @@
   integrity sha512-SwUDyjWnah1AaNl7kxsa7cfLhlTYoiyhDAIgyh+El30YvXs/o7OLXpYH88Zdhyx9JExKrmHDJ+10bwIcY80Jmw==
   dependencies:
     "@sinonjs/commons" "^2.0.0"
+
+"@tomieric/vue-flip-countdown@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@tomieric/vue-flip-countdown/-/vue-flip-countdown-0.0.5.tgz#ecf832ebad03aef7cfefad76ca3988af2d66e427"
+  integrity sha512-V2Y37zFiing2cSTD1xLOs9S+ZLLwKvcOEMoCRpzElyWLxEyY9Q2lydU7jwRpA+8QRzhJ9P7JKCHGdd8Aukt7LQ==
+  dependencies:
+    vue "^3.0.2"
 
 "@trysound/sax@0.2.0":
   version "0.2.0"
@@ -7847,6 +7859,13 @@ vue3-apexcharts@^1.4.1:
   resolved "https://registry.yarnpkg.com/vue3-apexcharts/-/vue3-apexcharts-1.4.1.tgz#ea561308430a1c5213b7f17c44ba3c845f6c490d"
   integrity sha512-96qP8JDqB9vwU7bkG5nVU+E0UGQn7yYQVqUUCLQMYWDuQyu2vE77H/UFZ1yI+hwzlSTBKT9BqnNG8JsFegB3eg==
 
+vue3-flip-countdown@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/vue3-flip-countdown/-/vue3-flip-countdown-0.1.6.tgz#995255932223a2cf6d58ae6ee1c1c78364157684"
+  integrity sha512-RRz+iZ7Zvr1U9mrZRya7I5815jboDyRJz9vzgILq8ZCc2fQ6SxZPYwOr3pD5oWCDBprAEsPF9x4fsTtEitSmXw==
+  dependencies:
+    vue "^3.0.0"
+
 vue3-perfect-scrollbar@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/vue3-perfect-scrollbar/-/vue3-perfect-scrollbar-1.6.1.tgz#296e0e0c61a8f6278184f5b09bb45d137af92327"
@@ -7856,7 +7875,7 @@ vue3-perfect-scrollbar@^1.6.1:
     perfect-scrollbar "^1.5.5"
     postcss-import "^12.0.0"
 
-vue@^3.2.45:
+vue@^3.0.0, vue@^3.0.2, vue@^3.2.45:
   version "3.2.47"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.47.tgz#3eb736cbc606fc87038dbba6a154707c8a34cff0"
   integrity sha512-60188y/9Dc9WVrAZeUVSDxRQOZ+z+y5nO2ts9jWXSTkMvayiWxCWOWtBQoYjLeccfXkiiPZWAHcV+WTPhkqJHQ==

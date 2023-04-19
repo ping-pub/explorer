@@ -10,7 +10,7 @@ export enum LoadingStatus {
 }
 
 export interface Pagination {
-    key?: string;
+    next_key?: string;
     total?: string;
 }
 

@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 import { useBlockchain } from "./useBlockchain";
 import { useStakingStore } from "./useStakingStore";
-import type { Coin } from "@/types";
+import type { Coin, DenomTrace } from "@/types";
 
 export const useBankStore = defineStore('bankstore', {
     state: () => {
@@ -31,14 +31,17 @@ export const useBankStore = defineStore('bankstore', {
                 })
             }
         },
-        // async fetchTotalSupply(param: QueryTotalSupplyRequest): Promise<QueryTotalSupplyResponse> {
-        //     const response = await this.blockchain.rpc.(param)
-        //     this.totalSupply.supply = [...this.totalSupply.supply, ...response.supply]
-        //     this.totalSupply.pagination = response.pagination
-        //     return response
-        // },
         async fetchSupply(denom: string) {
             return this.blockchain.rpc.getBankSupplyByDenom( denom )
+        },
+        async fetchDenomTrace(denom: string) {
+            const hash = denom.replace("ibc/", "")
+            let trace = this.ibcDenoms[hash]
+            if(!trace) {
+                trace = (await this.blockchain.rpc.getIBCAppTransferDenom( hash )).denom_trace
+                this.ibcDenoms[hash] = trace
+            }
+            return trace
         }
     }
 })

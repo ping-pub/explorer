@@ -7,6 +7,7 @@ import {select} from './index'
 import ArrayBytesElement from './ArrayBytesElement.vue';
 import ArrayObjectElement from './ArrayObjectElement.vue';
 import TextElement from './TextElement.vue';
+import ArrayCoinElement from './ArrayCoinElement.vue';
 
 const props = defineProps({
   value: { type: Array<Object>},
@@ -18,6 +19,8 @@ function selectByElement() {
     switch(true) {
       case first instanceof Uint8Array: 
         return ArrayBytesElement
+      case Object.keys(first).includes('denom'):
+        return ArrayCoinElement
       default:
         return ArrayObjectElement
     }

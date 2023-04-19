@@ -10,6 +10,8 @@ import localeData from 'dayjs/plugin/localeData'
 import { useStakingStore } from "./useStakingStore";
 import { fromBase64, toHex } from "@cosmjs/encoding";
 import { consensusPubkeyToHexAddress } from "@/libs";
+import { useBankStore } from "./useBankStore";
+import type { DenomTrace } from "@/types";
 
 dayjs.extend(localeData)
 dayjs.extend(duration)
@@ -37,6 +39,7 @@ dayjs.updateLocale('en', {
 export const useFormatter = defineStore('formatter', {
     state: () => {
         return {
+            ibcDenoms: {} as Record<string, DenomTrace>
         }
     },
     getters: {
@@ -45,9 +48,21 @@ export const useFormatter = defineStore('formatter', {
         },
         staking() {
             return useStakingStore()
+        },
+        useBank() {
+            return useBankStore()
         }
     },
     actions: {
+        async fetchDenomTrace(denom: string) {
+            const hash = denom.replace("ibc/", "")
+            let trace = this.ibcDenoms[hash]
+            if(!trace) {
+                trace = (await this.blockchain.rpc.getIBCAppTransferDenom( hash )).denom_trace
+                this.ibcDenoms[hash] = trace
+            }
+            return trace
+        },
         formatTokenAmount(token: {denom: string, amount: string;}) {
             return this.formatToken(token, false)
         },
@@ -58,6 +73,15 @@ export const useFormatter = defineStore('formatter', {
             if(token && token.amount) {
                 let amount = Number(token.amount)
                 let denom = token.denom
+
+                if( denom && denom.startsWith("ibc/")) {
+                    console.log(denom)
+                    let ibcDenom = this.ibcDenoms[denom.replace("ibc/", "")]
+                    if(ibcDenom) {
+                        denom = ibcDenom.base_denom
+                    }
+                }
+
                 const conf = this.blockchain.current?.assets?.find(x => x.base === token.denom || x.base.denom === token.denom)
                 if(conf) {
                     let unit = {exponent: 6, denom: ''}

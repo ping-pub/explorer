@@ -15,6 +15,7 @@
   "dependencies": {
     "@casl/ability": "^6.3.3",
     "@casl/vue": "^2.2.1",
+    "@chenfengyuan/vue-countdown": "2",
     "@cosmjs/crypto": "^0.29.5",
     "@cosmjs/encoding": "^0.29.5",
     "@floating-ui/dom": "^1.2.0",
@@ -22,6 +23,7 @@
     "@intlify/unplugin-vue-i18n": "^0.8.2",
     "@osmonauts/lcd": "^0.8.0",
     "@ping-pub/chain-registry-client": "^0.0.25",
+    "@tomieric/vue-flip-countdown": "^0.0.5",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
     "@vueuse/core": "^9.12.0",
     "@vueuse/math": "^9.12.0",
@@ -41,6 +43,7 @@
     "vue-json-pretty": "^2.2.4",
     "vue-router": "^4.1.6",
     "vue3-apexcharts": "^1.4.1",
+    "vue3-flip-countdown": "^0.1.6",
     "vue3-perfect-scrollbar": "^1.6.1",
     "vuetify": "3.0.6",
     "webfontloader": "^1.6.28"
