@@ -1,4 +1,4 @@
-import type { PaginatedResponse } from "./common"
+import type { Coin, PaginatedResponse } from "./common"
 
 export interface DistributionParams {
     params: {
@@ -7,6 +7,14 @@ export interface DistributionParams {
         "bonus_proposer_reward": string,
         "withdraw_addr_enabled": boolean
     }
+}
+
+export interface DelegatorRewards {
+    rewards: {
+        validator_address: string,
+        reward: Coin[],
+    }[],
+    total: Coin[],
 }
 
 export interface PaginatedSlashes extends PaginatedResponse {

@@ -44,7 +44,10 @@ export class CosmosRestClient {
         return this.request(this.registry.distribution_params, {})
     }    
     async getDistributionCommunityPool() {
-        return this.request(this.registry.distributino_community_pool, {})
+        return this.request(this.registry.distribution_community_pool, {})
+    }
+    async getDistributionDelegatorRewards(delegator_addr: string) {
+        return this.request(this.registry.distribution_delegator_rewards, {delegator_addr})
     }
     async getDistributionValidatorCommission(validator_address: string) {
         return this.request(this.registry.distribution_validator_commission, {validator_address})

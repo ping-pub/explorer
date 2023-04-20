@@ -225,7 +225,7 @@ onMounted(()=> {
                 <VList class="pt-0">
                     <VListItem>
                         <VListItemTitle>Account</VListItemTitle>
-                        <VListItemSubtitle class="text-caption">{{ addresses.account }}</VListItemSubtitle>
+                        <VListItemSubtitle class="text-caption"><RouterLink :to="`/${chain}/account/${addresses.account}`">{{ addresses.account }}</RouterLink></VListItemSubtitle>
                     </VListItem>
                     <VListItem>
                         <VListItemTitle>Operator Address</VListItemTitle>

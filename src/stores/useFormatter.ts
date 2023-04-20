@@ -8,7 +8,7 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import utc from 'dayjs/plugin/utc'
 import localeData from 'dayjs/plugin/localeData'
 import { useStakingStore } from "./useStakingStore";
-import { fromBase64, toHex } from "@cosmjs/encoding";
+import { fromBase64, fromBech32, toHex } from "@cosmjs/encoding";
 import { consensusPubkeyToHexAddress } from "@/libs";
 import { useBankStore } from "./useBankStore";
 import type { DenomTrace } from "@/types";
@@ -75,7 +75,6 @@ export const useFormatter = defineStore('formatter', {
                 let denom = token.denom
 
                 if( denom && denom.startsWith("ibc/")) {
-                    console.log(denom)
                     let ibcDenom = this.ibcDenoms[denom.replace("ibc/", "")]
                     if(ibcDenom) {
                         denom = ibcDenom.base_denom
@@ -96,7 +95,7 @@ export const useFormatter = defineStore('formatter', {
                         denom = unit.denom.toUpperCase()
                     }
                 }
-                return `${numeral(amount).format(fmt)} ${withDenom ? denom: ''}`
+                return `${numeral(amount).format(fmt)} ${withDenom ? denom.substring(0, 10): ''}`
             } 
             return '-'      
         },
@@ -109,20 +108,27 @@ export const useFormatter = defineStore('formatter', {
                 const b = Number(pool.bonded_tokens)
                 const nb = Number(pool.not_bonded_tokens)
                 const p = b/(b+nb)
-                console.log(b, nb, p, pool)
                 return numeral(p).format('0.[00]%')
             }
             return '-'
         },
         validator(address: string) {
+            if(!address) return address
+            
             const txt = toHex(fromBase64(address)).toUpperCase()
             const validator = this.staking.validators.find(x => consensusPubkeyToHexAddress(x.consensus_pubkey) === txt)
+            return validator?.description?.moniker
+        },
+        validatorFromBech32(address: string) {
+            if(!address) return address
+            const validator = this.staking.validators.find(x => x.operator_address === address)
             return validator?.description?.moniker
         },
         calculatePercent(input?: string, total?: string|number ) {
             if(!input || !total) return '0'
             const percent = Number(input)/Number(total)
-            return numeral(percent).format("0.[00]%")
+            console.log(input, total, percent);
+            return numeral(percent>0.0001?percent: 0).format("0.[00]%")
         },
         formatDecimalToPercent(decimal: string) {
             return numeral(decimal).format('0.[00]%')

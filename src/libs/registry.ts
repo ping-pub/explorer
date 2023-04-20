@@ -29,7 +29,8 @@ export interface RequestRegistry {
   distribution_validator_commission: Request<{commission?: {commission?: Coin[]}}>;
   distribution_validator_outstanding_rewards: Request<{rewards?: {rewards?: Coin[]}}>;
   distribution_validator_slashes: Request<PaginatedSlashes>;
-  distributino_community_pool: Request<{pool: Coin[]}>;
+  distribution_community_pool: Request<{pool: Coin[]}>;
+  distribution_delegator_rewards: Request<any>;
 
   mint_inflation: Request<{inflation: string}>;
   mint_params: Request<{
