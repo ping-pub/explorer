@@ -29,6 +29,17 @@ export interface CommissionRate {
     "update_time": string
 }
 
+export interface UnbondingResponses {
+    delegator_address: string,
+    validator_address: string,
+    entries: {
+        creation_height: string,
+        completion_time: string,
+        initial_balance: string,
+        balance: string
+      }[]
+  }
+
 export interface Delegation {
     delegation: {
         delegator_address: string,
@@ -70,7 +81,7 @@ export interface PaginatedRedelegations extends PaginatedResponse {
 }
 
 export interface PaginatedUnbonding extends PaginatedResponse {
-    unbonding_responses: any[]
+    unbonding_responses: UnbondingResponses[]
 }
 
 export interface PaginatedValdiators extends PaginatedResponse {

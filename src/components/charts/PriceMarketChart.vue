@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
-import { getAreaChartSplineConfig, getMarketPriceChartConfig } from './apexCharConfig'
+import { getAreaChartSplineConfig, getMarketPriceChartConfig } from './apexChartConfig'
 import { useIndexModule } from '@/modules/[chain]/indexStore';
 import { computed, ref } from '@vue/reactivity';
 

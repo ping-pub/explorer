@@ -1,32 +1,52 @@
 <script lang="ts" setup>
-import { useBlockchain, useFormatter } from '@/stores';
+import { useBlockchain, useFormatter, useStakingStore } from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
+import DonutChart from '@/components/charts/DonutChart.vue'
 import { computed, ref } from '@vue/reactivity';
 import 'vue-json-pretty/lib/styles.css';
-import type { AuthAccount, Delegation, TxResponse, DelegatorRewards } from '@/types';
+import type { AuthAccount, Delegation, TxResponse, DelegatorRewards, UnbondingResponses } from '@/types';
 import type { Coin } from '@cosmjs/amino';
 
 const props = defineProps(['address', 'chain'])
 
 const blockchain = useBlockchain()
+const stakingStore = useStakingStore()
 const format = useFormatter()
 const account = ref({} as AuthAccount)
 const txs = ref({} as TxResponse[])
 const delegations = ref([] as Delegation[])
 const rewards = ref({} as DelegatorRewards)
 const balances = ref([] as Coin[])
-const totalAmount = computed(()=> {
-    let total = 0;
+const unbonding = ref([] as UnbondingResponses[])
+const unbondingTotal = ref(0)
+const chart = {}
+
+const totalAmountByCategory = computed(()=> {
+    let sumDel = 0;
     delegations.value?.forEach(x => {
-        total += Number(x.balance.amount)
+        sumDel += Number(x.balance.amount)
     })
+    let sumRew = 0
     rewards.value?.total?.forEach(x => {
-        total += Number(x.amount)
+        sumRew += Number(x.amount)
     })
+    let sumBal = 0
     balances.value?.forEach(x => {
-        total += Number(x.amount)
+        sumBal += Number(x.amount)
     })
-    return total
+    let sumUn = 0
+    unbonding.value?.forEach(x => {
+        x.entries?.forEach(y => {
+            sumUn += Number(y.balance)
+        })
+    })
+    return [sumBal, sumDel, sumRew, sumUn]
+})
+
+const labels = ['Balance', 'Delegation', 'Reward', 'Unbonding']
+
+const totalAmount= computed(()=> {
+    return totalAmountByCategory.value.reduce((p, c)=> c + p, 0)
 })
 
 
@@ -45,6 +65,14 @@ function loadAccount(address: string) {
     })
     blockchain.rpc.getBankBalances(address).then(x => {
         balances.value = x.balances
+    })
+    blockchain.rpc.getStakingDelegatorUnbonding(address).then(x => {
+        unbonding.value = x.unbonding_responses
+        x.unbonding_responses?.forEach(y => {
+            y.entries.forEach(z => {
+                unbondingTotal.value += Number(z.balance)
+            })
+        })
     })
 }
 loadAccount(props.address)
@@ -80,7 +108,7 @@ loadAccount(props.address)
             <VCardItem>
             <VRow>
                 <VCol cols="12" md="4">
-                    xx
+                    <DonutChart :series="totalAmountByCategory" :labels="labels"/>
                 </VCol>
                 <VCol cols="12" md="8">
                     <VList class="card-list">
@@ -89,10 +117,10 @@ loadAccount(props.address)
                             <VAvatar
                             rounded
                             variant="tonal"
-                            size="45"
-                            color="success"
+                            size="35"
+                            color="info"
                             >
-                                <VIcon icon="mdi-card" />
+                                <VIcon icon="mdi-account-cash"  size="20"/>
                             </VAvatar>
                         </template>
                         <VListItemTitle class="text-sm font-weight-semibold">
@@ -110,10 +138,10 @@ loadAccount(props.address)
                             <VAvatar
                             rounded
                             variant="tonal"
-                            size="45"
-                            color="info"
+                            size="35"
+                            color="warning"
                             >
-                                <VIcon icon="mdi-lock" />
+                                <VIcon icon="mdi-user-clock"  size="20" />
                             </VAvatar>
                         </template>
 
@@ -132,10 +160,10 @@ loadAccount(props.address)
                             <VAvatar
                             rounded
                             variant="tonal"
-                            size="45"
-                            color="warning"
+                            size="35"
+                            color="success"
                             >
-                                <VIcon icon="mdi-up" />
+                                <VIcon icon="mdi-account-arrow-up" size="20" />
                             </VAvatar>
                         </template>
 
@@ -147,6 +175,29 @@ loadAccount(props.address)
                         </VListItemSubtitle>
                         <template #append>
                             <VChip color="primary">{{ format.calculatePercent(v.amount, totalAmount) }}</VChip>
+                        </template>
+                        </VListItem>
+
+                        <VListItem>
+                        <template #prepend>
+                            <VAvatar
+                            rounded
+                            variant="tonal"
+                            size="35"
+                            color="error"
+                            >
+                                <VIcon icon="mdi-account-arrow-right" size="20" />
+                            </VAvatar>
+                        </template>
+
+                        <VListItemTitle class="text-sm font-weight-semibold">
+                            {{ format.formatToken({amount: String(unbondingTotal), denom: stakingStore.params.bond_denom}) }}
+                        </VListItemTitle>
+                        <VListItemSubtitle class="text-xs">
+                            ≈${{ 0 }}
+                        </VListItemSubtitle>
+                        <template #append>
+                            <VChip color="primary">{{ format.calculatePercent(unbondingTotal, totalAmount) }}</VChip>
                         </template>
                         </VListItem>
                     </VList>
@@ -173,6 +224,29 @@ loadAccount(props.address)
                                 action
                             </td>
                         </tr>
+                    </tbody>
+                </VTable>
+            </VCardItem>
+        </VCard>
+        <VCard class="my-5" v-if="unbonding && unbonding.length > 0">
+            <VCardItem>
+                <VCardTitle>Unbonding Delegations</VCardTitle>
+                <VTable>
+                    <thead>
+                        <tr><th>Creation Height</th><th>Initial Balance</th><th>Balance</th><th>Completion Time</th></tr>
+                    </thead>
+                    <tbody>
+                        <div v-for="v in unbonding">
+                        <tr>
+                            <td>{{ format.validatorFromBech32(v.validator_address) }} </td>
+                        </tr>
+                        <tr v-for="entry in v.entries">
+                            <td>{{ entry.creation_height }}</td>
+                            <td>{{ format.formatToken({ amount: entry.initial_balance, denom: stakingStore.params.bond_denom }, true, "0,0.[00]") }}</td>
+                            <td>{{ format.formatToken({ amount: entry.balance, denom: stakingStore.params.bond_denom }, true, "0,0.[00]") }}</td>
+                            <td>{{ format.toDay(entry.completion_time, "to") }} </td>
+                        </tr>
+                        </div>
                     </tbody>
                 </VTable>
             </VCardItem>

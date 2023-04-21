@@ -124,7 +124,7 @@ export const useFormatter = defineStore('formatter', {
             const validator = this.staking.validators.find(x => x.operator_address === address)
             return validator?.description?.moniker
         },
-        calculatePercent(input?: string, total?: string|number ) {
+        calculatePercent(input?: string|number, total?: string|number ) {
             if(!input || !total) return '0'
             const percent = Number(input)/Number(total)
             console.log(input, total, percent);

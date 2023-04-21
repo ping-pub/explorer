@@ -64,7 +64,7 @@ export interface RequestRegistry {
   staking_validators_address: Request<{validator: Validator}>;
   staking_validators_delegations: Request<PaginatedDelegations>;
   staking_validators_delegations_delegator: Request<{delegation_response: Delegation}>;
-  staking_validators_delegations_unbonding_delegations: Request<any>;
+  staking_validators_delegations_unbonding_delegations: Request<PaginatedUnbonding>;
 
   base_tendermint_abci_query: Request<any>;
   base_tendermint_block_latest: Request<Block>;

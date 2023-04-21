@@ -383,7 +383,7 @@ export const getRadialBarChartConfig = (themeColors: ThemeInstance['themes']['va
   }
 }
 
-export const getDonutChartConfig = (themeColors: ThemeInstance['themes']['value']['colors']) => {
+export const getDonutChartConfig = (themeColors: ThemeInstance['themes']['value']['colors'], labels: string[]) => {
   const donutColors = {
     series1: '#fdd835',
     series2: '#00d4bd',
@@ -396,7 +396,7 @@ export const getDonutChartConfig = (themeColors: ThemeInstance['themes']['value'
 
   return {
     stroke: { width: 0 },
-    labels: ['Operational', 'Networking', 'Hiring', 'R&D'],
+    labels,
     colors: [donutColors.series1, donutColors.series5, donutColors.series3, donutColors.series2],
     dataLabels: {
       enabled: true,
@@ -425,10 +425,10 @@ export const getDonutChartConfig = (themeColors: ThemeInstance['themes']['value'
               formatter: (val: string) => `${parseInt(val, 10)}`,
             },
             total: {
-              show: true,
+              show: false,
               fontSize: '1.5rem',
-              label: 'Operational',
-              formatter: () => '31%',
+              // label: 'Operational',
+              // formatter: () => '31%',
               color: themePrimaryTextColor,
             },
           },
