@@ -3,6 +3,7 @@
     "coingecko": "aura-network",
     "api": ["https://lcd.aura.network"],
     "rpc": [
+        "https://rpc.aura.network:443",
         "https://snapshot-1.aura.network:443",
         "https://snapshot-2.aura.network:443"
     ],
