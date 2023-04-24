@@ -124,7 +124,7 @@ function shortName(name: string, id: string) {
         </VCol>
       </VRow>
       <VDivider />
-      <VCardText style="max-height: 250px; overflow:scroll;"><MdEditor :model-value="coinInfo.description?.en" previewOnly></MdEditor></VCardText>
+      <VCardText class="" style="max-height: 250px; overflow:auto;"><MdEditor :model-value="coinInfo.description?.en" previewOnly></MdEditor></VCardText>
       <VCardItem>
         <VChip v-for="tag in coinInfo.categories" size="x-small" class="mr-2">{{ tag }}</VChip>
       </VCardItem>
