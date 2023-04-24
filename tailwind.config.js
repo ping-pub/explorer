@@ -10,6 +10,7 @@ module.exports = {
         main: '#5973fe',
         yes: '#3fb68b',
         no: '#ff5353',
+        info: '#00ddc6',
       },
     },
   },

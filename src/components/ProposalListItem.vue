@@ -51,7 +51,7 @@ const statusMap: Record<string, string> = {
           <div class="text-xs">{{ statusMap?.[item?.status] || item?.status }}</div>
         </div>
 
-        <div class="truncate mb-3 col-span-2 md:col-span-1 text-right md:flex md:justify-start">
+        <div class="truncate mb-3 col-span-2 md:col-span-1 text-xs text-gray-400 text-right md:flex md:justify-start">
           {{ format.toDay(item.voting_end_time, 'from') }}
         </div>
       </div>

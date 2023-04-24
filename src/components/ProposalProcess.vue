@@ -22,7 +22,7 @@ const veto = computed(() => format.calculatePercent(props.tally?.no_with_veto, t
 </script>
 
 <template>
-  <div class="progress rounded-full h-1 text-xs">
+  <div class="progress rounded-full h-1 text-xs flex items-center">
     <div class="h-1 bg-yes" :style="`width: ${yes}`"></div>
     <div class="h-1 bg-no" :style="`width: ${no}`"></div>
     <div class="h-1" :style="`width: ${veto}; background-color: #B71C1C;`"></div>
