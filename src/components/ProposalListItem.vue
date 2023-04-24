@@ -26,22 +26,24 @@ const statusMap: Record<string, string> = {
 };
 </script>
 <template>
-  <div class="bg-[#28334e] rounded text-sm">
+  <div class="bg-white dark:bg-[#28334e] rounded text-sm">
     <RouterLink
       :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
       v-for="(item, index) in proposals?.proposals"
       :key="index"
-      class="py-4 px-4 hover:bg-[#353f5a] block rounded cursor-pointer"
+      class="py-4 px-4 hover:bg-gray-100 dark:hover:bg-[#353f5a] block rounded cursor-pointer"
     >
       <div class="grid grid-cols-6 md:grid-cols-11 flex-1">
-        <div class="text-white mb-3">#{{ item?.proposal_id }}</div>
+        <div class="text-textMain dark:text-white mb-3">#{{ item?.proposal_id }}</div>
 
-        <div class="col-span-5 md:pr-10 text-white truncate">
+        <div class="col-span-5 md:pr-10 text-textMain dark:text-white truncate">
           {{ item?.content?.title }}
         </div>
 
         <div class="col-span-3 mb-3 truncate">
-          <div class="bg-gray-600 text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs">
+          <div
+            class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs"
+          >
             {{ showType(item.content['@type']) }}
           </div>
         </div>
@@ -51,7 +53,9 @@ const statusMap: Record<string, string> = {
           <div class="text-xs">{{ statusMap?.[item?.status] || item?.status }}</div>
         </div>
 
-        <div class="truncate mb-3 col-span-2 md:col-span-1 text-xs text-gray-400 text-right md:flex md:justify-start">
+        <div
+          class="truncate mb-3 col-span-2 md:col-span-1 text-xs text-gray-500 dark:text-gray-400 text-right md:flex md:justify-start"
+        >
           {{ format.toDay(item.voting_end_time, 'from') }}
         </div>
       </div>
