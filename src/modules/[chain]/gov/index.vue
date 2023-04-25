@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import { useGovStore } from '@/stores';
 import ProposalListItem from '@/components/ProposalListItem.vue';
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 const tab = ref("")
 const store = useGovStore()
-store.fetchProposals('2')
+
+onMounted(()=>{
+    store.fetchProposals('2')
+})
 
 </script>
 <template>
