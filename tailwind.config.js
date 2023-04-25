@@ -5,12 +5,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        main: '#5973fe',
         yes: '#3fb68b',
         no: '#ff5353',
         info: '#00b2ff',
-        textMain: '#333',
         primary: '#666cff',
+        main: 'var(--text-main)',
+        secondary: 'var(--text-secondary)',
+        card: 'var(--bg-card)',
+        hover: 'var(--bg-hover)',
+        active: 'var(--bg-active)',
       },
     },
   },

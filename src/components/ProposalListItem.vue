@@ -1,14 +1,13 @@
 <script lang="ts" setup>
-import MdEditor from 'md-editor-v3';
 import { useBlockchain, useFormatter, useStakingStore } from '@/stores';
-import type { GovProposal, PaginatedProposals } from '@/types';
+import type { PaginatedProposals } from '@/types';
 import ProposalProcess from './ProposalProcess.vue';
 import type { PropType } from 'vue';
 
-const props = defineProps({
+defineProps({
   proposals: { type: Object as PropType<PaginatedProposals> },
 });
-// const list = computed(()=> proposl)
+
 const format = useFormatter();
 const staking = useStakingStore();
 const chain = useBlockchain();
@@ -34,9 +33,11 @@ const statusMap: Record<string, string> = {
       class="py-4 px-4 hover:bg-gray-100 dark:hover:bg-[#353f5a] block rounded cursor-pointer"
     >
       <div class="grid grid-cols-6 md:grid-cols-11 flex-1">
-        <div class="text-textMain dark:text-white mb-3">#{{ item?.proposal_id }}</div>
+        <div class="text-main dark:text-white mb-3">
+          #{{ item?.proposal_id }}
+        </div>
 
-        <div class="col-span-5 md:pr-10 text-textMain dark:text-white truncate">
+        <div class="col-span-5 md:pr-10 text-main dark:text-white truncate">
           {{ item?.content?.title }}
         </div>
 
@@ -48,9 +49,29 @@ const statusMap: Record<string, string> = {
           </div>
         </div>
 
-        <div class="text-yes flex items-center mb-3">
-          <div class="w-1 h-1 bg-yes rounded-full mr-2"></div>
-          <div class="text-xs">{{ statusMap?.[item?.status] || item?.status }}</div>
+        <div
+          class="flex items-center mb-3"
+          :class="
+            statusMap?.[item?.status] === 'PASSED'
+              ? 'text-yes'
+              : statusMap?.[item?.status] === 'REJECTED'
+              ? 'text-no'
+              : 'text-info'
+          "
+        >
+          <div
+            class="w-1 h-1 rounded-full mr-2"
+            :class="
+              statusMap?.[item?.status] === 'PASSED'
+                ? 'bg-yes'
+                : statusMap?.[item?.status] === 'REJECTED'
+                ? 'bg-no'
+                : 'bg-info'
+            "
+          ></div>
+          <div class="text-xs">
+            {{ statusMap?.[item?.status] || item?.status }}
+          </div>
         </div>
 
         <div
@@ -59,7 +80,10 @@ const statusMap: Record<string, string> = {
           {{ format.toDay(item.voting_end_time, 'from') }}
         </div>
       </div>
-      <ProposalProcess :pool="staking.pool" :tally="item.final_tally_result"></ProposalProcess>
+      <ProposalProcess
+        :pool="staking.pool"
+        :tally="item.final_tally_result"
+      ></ProposalProcess>
     </RouterLink>
   </div>
 </template>

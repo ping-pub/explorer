@@ -17,15 +17,22 @@ import TheCustomizer from '@/plugins/vuetify/@core/components/TheCustomizer.vue'
 import Breadcrumbs from './Breadcrumbs.vue';
 import { useBlockchain } from '@/stores';
 
-const { appRouteTransition, isLessThanOverlayNavBreakpoint, isVerticalNavCollapsed } =
-  useThemeConfig();
+const {
+  appRouteTransition,
+  isLessThanOverlayNavBreakpoint,
+  isVerticalNavCollapsed,
+} = useThemeConfig();
 const { width: windowWidth } = useWindowSize();
 
 // ℹ️ Provide animation name for vertical nav collapse icon.
-const verticalNavHeaderActionAnimationName = ref<null | 'rotate-180' | 'rotate-back-180'>(null);
+const verticalNavHeaderActionAnimationName = ref<
+  null | 'rotate-180' | 'rotate-back-180'
+>(null);
 
-watch(isVerticalNavCollapsed, val => {
-  verticalNavHeaderActionAnimationName.value = val ? 'rotate-180' : 'rotate-back-180';
+watch(isVerticalNavCollapsed, (val) => {
+  verticalNavHeaderActionAnimationName.value = val
+    ? 'rotate-180'
+    : 'rotate-back-180';
 });
 
 const dashboard = useDashboard();

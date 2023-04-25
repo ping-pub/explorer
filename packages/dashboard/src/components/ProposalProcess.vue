@@ -37,10 +37,7 @@ const veto = computed(() =>
   <div class="progress">
     <div class="progress-bar bg-success" :style="`width: ${yes}`"></div>
     <div class="progress-bar bg-error" :style="`width: ${no}`"></div>
-    <div
-      class="progress-bar"
-      :style="`width: ${veto}; background-color: #B71C1C;`"
-    ></div>
+    <div class="progress-bar bg-[#B71C1C]" :style="`width: ${veto};`"></div>
     <div class="progress-bar bg-secondary" :style="`width: ${abstain}`"></div>
   </div>
 </template>
