@@ -11,6 +11,7 @@ module.exports = {
         no: '#ff5353',
         info: '#00b2ff',
         textMain: '#333',
+        primary: '#666cff',
       },
     },
   },
