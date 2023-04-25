@@ -1,14 +1,13 @@
 <script lang="ts" setup>
-import MdEditor from 'md-editor-v3';
 import { useBlockchain, useFormatter, useStakingStore } from '@/stores';
-import type { GovProposal, PaginatedProposals } from '@/types';
+import type { PaginatedProposals } from '@/types';
 import ProposalProcess from './ProposalProcess.vue';
 import type { PropType } from 'vue';
 
-const props = defineProps({
+defineProps({
   proposals: { type: Object as PropType<PaginatedProposals> },
 });
-// const list = computed(()=> proposl)
+
 const format = useFormatter();
 const staking = useStakingStore();
 const chain = useBlockchain();
@@ -48,12 +47,26 @@ const statusMap: Record<string, string> = {
           </div>
         </div>
 
-        <div 
-          class=" flex items-center mb-3"
-          :class="statusMap?.[item?.status] === 'PASSED'?'text-yes':statusMap?.[item?.status] === 'REJECTED' ?'text-no':'text-inProgress'">
-          <div 
+        <div
+          class="flex items-center mb-3"
+          :class="
+            statusMap?.[item?.status] === 'PASSED'
+              ? 'text-yes'
+              : statusMap?.[item?.status] === 'REJECTED'
+              ? 'text-no'
+              : 'text-info'
+          "
+        >
+          <div
             class="w-1 h-1 rounded-full mr-2"
-            :class="statusMap?.[item?.status] === 'PASSED'?'bg-yes':statusMap?.[item?.status] === 'REJECTED' ?'bg-no':'bg-inProgress'"></div>
+            :class="
+              statusMap?.[item?.status] === 'PASSED'
+                ? 'bg-yes'
+                : statusMap?.[item?.status] === 'REJECTED'
+                ? 'bg-no'
+                : 'bg-info'
+            "
+          ></div>
           <div class="text-xs">{{ statusMap?.[item?.status] || item?.status }}</div>
         </div>
 

@@ -1,34 +1,28 @@
 <script setup lang="ts">
 interface Props {
-  title: string
-  color?: string
-  icon: string
-  stats: string
-  change?: number
-  subtitle?: string
+  title: string;
+  color?: string;
+  icon: string;
+  stats: string;
+  change?: number;
+  subtitle?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   color: 'primary',
-})
+});
 
-const isPositive = controlledComputed(() => props.change, () => Math.sign(props.change||0) === 1)
+const isPositive = controlledComputed(
+  () => props.change,
+  () => Math.sign(props.change || 0) === 1
+);
 </script>
 
 <template>
   <VCard class="h-full flex-col content-between">
     <VCardText class="d-flex align-center justify-between">
-      <VAvatar
-        v-if="props.icon"
-        rounded
-        size="38"
-        variant="tonal"
-        :color="props.color"
-      >
-        <VIcon
-          :icon="props.icon"
-          size="24"
-        />
+      <VAvatar v-if="props.icon" rounded size="38" variant="tonal" :color="props.color">
+        <VIcon :icon="props.icon" size="24" />
       </VAvatar>
 
       <div
@@ -50,11 +44,7 @@ const isPositive = controlledComputed(() => props.change, () => Math.sign(props.
         {{ props.title }}
       </p>
 
-      <VChip
-        v-if="props.subtitle"
-        size="x-small"
-        class="font-weight-medium"
-      >
+      <VChip v-if="props.subtitle" size="x-small" class="font-weight-medium">
         <span class="text-truncate">{{ props.subtitle }}</span>
       </VChip>
     </VCardText>

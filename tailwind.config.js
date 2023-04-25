@@ -7,7 +7,6 @@ module.exports = {
       colors: {
         main: '#5973fe',
         yes: '#3fb68b',
-        inProgress: '#4472de',
         no: '#ff5353',
         info: '#00b2ff',
         textMain: '#333',
