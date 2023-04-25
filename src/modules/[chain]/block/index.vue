@@ -24,7 +24,7 @@ const format = useFormatter()
                 <VTable>
                     <thead>
                         <tr>
-                            <th>Height</th><th>Hash</th><th>Proposor</th><th>Txs</th><th>Time</th>
+                            <th>Height</th><th>Hash</th><th>Proposer</th><th>Txs</th><th>Time</th>
                         </tr>
                     </thead>
                     <tbody>

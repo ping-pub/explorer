@@ -254,7 +254,7 @@ onMounted(()=> {
             </thead>
             <tbody>
                 <tr v-for="(item, i) in txs.tx_responses">
-                    <td>{{ item.height }}</td>
+                    <td class="text-sm text-primary"><RouterLink :to="`/${props.chain}/block/${item.height}`">{{ item.height }}</RouterLink></td>
                     <td class="text-truncate" style="max-width: 200px;">{{ item.txhash }}</td>
                     <td>{{ format.messages(item.tx.body.messages) }}</td>
                     <td width="150">{{ format.toDay(item.timestamp,'from') }}</td>

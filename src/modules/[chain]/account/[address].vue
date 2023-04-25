@@ -217,7 +217,7 @@ loadAccount(props.address)
                     </thead>
                     <tbody>
                         <tr v-for="v in delegations">
-                            <td>{{ format.validatorFromBech32(v.delegation.validator_address) }} </td>
+                            <td class="text-caption text-primary"><RouterLink :to="`/${chain}/staking/${v.delegation.validator_address}`">{{ format.validatorFromBech32(v.delegation.validator_address) }}</RouterLink></td>
                             <td>{{ format.formatToken(v.balance, true, "0,0.[00]") }} </td>
                             <td>{{ format.formatTokens(rewards?.rewards?.find(x => x.validator_address ===v.delegation.validator_address)?.reward) }} </td>
                             <td>
@@ -238,7 +238,7 @@ loadAccount(props.address)
                     <tbody>
                         <div v-for="v in unbonding">
                         <tr>
-                            <td>{{ format.validatorFromBech32(v.validator_address) }} </td>
+                            <td class="text-caption text-primary"><RouterLink :to="`/${chain}/staking/${v.validator_address}`">{{ format.validatorFromBech32(v.validator_address) }}</RouterLink></td>
                         </tr>
                         <tr v-for="entry in v.entries">
                             <td>{{ entry.creation_height }}</td>
