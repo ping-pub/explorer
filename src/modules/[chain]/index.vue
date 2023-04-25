@@ -132,9 +132,7 @@ function shortName(name: string, id: string) {
 
     <VRow>
       <VCol v-for="item in store.stats" cols="12" sm="6" md="2">
-        <VCard>
-          <CardStatisticsVertical v-bind="item" />
-        </VCard>
+        <CardStatisticsVertical v-bind="item" />
       </VCol>
     </VRow>
 
