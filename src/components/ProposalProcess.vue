@@ -2,52 +2,36 @@
 import { useFormatter } from '@/stores';
 import type { Tally } from '@/types';
 import { computed } from '@vue/reactivity';
-import { ref, type PropType } from 'vue';
-
+import type { PropType } from 'vue';
 
 const props = defineProps({
-  tally: { type: Object as PropType<Tally>},
+  tally: { type: Object as PropType<Tally> },
   pool: {
     type: Object as PropType<{
-        not_bonded_tokens: string;
-        bonded_tokens: string;
+      not_bonded_tokens: string;
+      bonded_tokens: string;
     }>,
   },
-})
-const total = computed(() => props.pool?.bonded_tokens)
-const format = useFormatter()
-const yes = computed(() => (format.calculatePercent(props.tally?.yes, total.value)))
-const no = computed(() => ref(format.calculatePercent(props.tally?.no, total.value)))
-const abstain = computed(() => (format.calculatePercent(props.tally?.abstain, total.value)))
-const veto = computed(() => (format.calculatePercent(props.tally?.no_with_veto, total.value)))
-
+});
+const total = computed(() => props.pool?.bonded_tokens);
+const format = useFormatter();
+const yes = computed(() => format.calculatePercent(props.tally?.yes, total.value));
+const no = computed(() => format.calculatePercent(props.tally?.no, total.value));
+const abstain = computed(() => format.calculatePercent(props.tally?.abstain, total.value));
+const veto = computed(() => format.calculatePercent(props.tally?.no_with_veto, total.value));
 </script>
+
 <template>
-<div class="progress">
-  <div class="progress-bar bg-success" :style="`width: ${yes}`"> {{ yes }}</div>
-  <div class="progress-bar bg-error" :style="`width: ${no}`">{{ no }} </div>
-  <div class="progress-bar " :style="`width: ${veto}; background-color: #B71C1C;`"> {{ veto }} </div>
-  <div class="progress-bar bg-secondary" :style="`width: ${abstain}`"> </div>
-</div>
+  <div class="progress rounded-full h-1 text-xs flex items-center">
+    <div class="h-1 bg-yes" :style="`width: ${yes}`"></div>
+    <div class="h-1 bg-no" :style="`width: ${no}`"></div>
+    <div class="h-1" :style="`width: ${veto}; background-color: #B71C1C;`"></div>
+    <div class="h-1 bg-secondary" :style="`width: ${abstain}`"></div>
+  </div>
 </template>
 <style scoped>
 .progress {
-    height: 0.8rem;
-    overflow: hidden;
-    background-color: rgba(128, 128, 128, 0.178);
-}
-.progress-bar {
-    display: inline-block;
-    height: 100%;
-}
-.progress :first-child {
-    border-radius: 0px !important;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-top-left-radius: 0;
-}
-.progress :last-child {
-    border-radius: 0px !important;
+  overflow: hidden;
+  background-color: rgba(128, 128, 128, 0.178);
 }
 </style>
