@@ -48,8 +48,12 @@ const statusMap: Record<string, string> = {
           </div>
         </div>
 
-        <div class="text-yes flex items-center mb-3">
-          <div class="w-1 h-1 bg-yes rounded-full mr-2"></div>
+        <div 
+          class=" flex items-center mb-3"
+          :class="statusMap?.[item?.status] === 'PASSED'?'text-yes':statusMap?.[item?.status] === 'REJECTED' ?'text-no':'text-inProgress'">
+          <div 
+            class="w-1 h-1 rounded-full mr-2"
+            :class="statusMap?.[item?.status] === 'PASSED'?'bg-yes':statusMap?.[item?.status] === 'REJECTED' ?'bg-no':'bg-inProgress'"></div>
           <div class="text-xs">{{ statusMap?.[item?.status] || item?.status }}</div>
         </div>
 
