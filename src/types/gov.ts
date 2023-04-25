@@ -27,6 +27,10 @@ export interface GovProposal {
         "@type": string,
         "title": string,
         "description": string,
+        "plan"?: { 
+            'height'?: string | number,
+            'time'?: string | number,
+        }
     },
     "status": string,
     "final_tally_result": {

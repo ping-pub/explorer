@@ -87,7 +87,6 @@ const upgradeCountdown = computed((): number => {
 })
 
 const total = computed(()=> {
-    console.log(proposal.value, 'proposal.value')
     const tally = proposal.value.final_tally_result
     let sum = 0
     if(tally) {
