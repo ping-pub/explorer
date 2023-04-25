@@ -2,7 +2,7 @@
 import ObjectElement from '@/components/dynamic/ObjectElement.vue';
 import { useBaseStore, useFormatter, useGovStore, useStakingStore } from '@/stores';
 import type { GovProposal, GovVote, PaginabledAccounts, PaginatedProposalDeposit, PaginatedProposalVotes, Pagination } from '@/types';
-import { ref } from 'vue';
+import { ref , reactive} from 'vue';
 import Countdown from '@/components/Countdown.vue';
 import { computed } from '@vue/reactivity';
 
@@ -12,7 +12,16 @@ const props = defineProps(["proposal_id", "chain"]);
 const proposal = ref({} as GovProposal)
 const format = useFormatter()
 const store = useGovStore()
-store.fetchProposal(props.proposal_id).then((x) => proposal.value = x.proposal)
+store.fetchProposal(props.proposal_id).then((res) => {
+    const proposalDetail = reactive(res.proposal)
+    // when status under the voting, final_tally_result are no data, should request fetchTally
+    if (res.proposal?.status === 'PROPOSAL_STATUS_VOTING_PERIOD'){
+        store.fetchTally(props.proposal_id).then((tallRes)=>{
+            proposalDetail.final_tally_result = tallRes?.tally
+        })
+    }
+    proposal.value = proposalDetail
+})
 
 const color = computed(() => {
     if (proposal.value.status==='PROPOSAL_STATUS_PASSED') {
@@ -78,6 +87,7 @@ const upgradeCountdown = computed((): number => {
 })
 
 const total = computed(()=> {
+    console.log(proposal.value, 'proposal.value')
     const tally = proposal.value.final_tally_result
     let sum = 0
     if(tally) {
