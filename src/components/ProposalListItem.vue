@@ -33,9 +33,11 @@ const statusMap: Record<string, string> = {
       class="py-4 px-4 hover:bg-gray-100 dark:hover:bg-[#353f5a] block rounded cursor-pointer"
     >
       <div class="grid grid-cols-6 md:grid-cols-11 flex-1">
-        <div class="text-textMain dark:text-white mb-3">#{{ item?.proposal_id }}</div>
+        <div class="text-main dark:text-white mb-3">
+          #{{ item?.proposal_id }}
+        </div>
 
-        <div class="col-span-5 md:pr-10 text-textMain dark:text-white truncate">
+        <div class="col-span-5 md:pr-10 text-main dark:text-white truncate">
           {{ item?.content?.title }}
         </div>
 
@@ -67,7 +69,9 @@ const statusMap: Record<string, string> = {
                 : 'bg-info'
             "
           ></div>
-          <div class="text-xs">{{ statusMap?.[item?.status] || item?.status }}</div>
+          <div class="text-xs">
+            {{ statusMap?.[item?.status] || item?.status }}
+          </div>
         </div>
 
         <div
@@ -76,7 +80,10 @@ const statusMap: Record<string, string> = {
           {{ format.toDay(item.voting_end_time, 'from') }}
         </div>
       </div>
-      <ProposalProcess :pool="staking.pool" :tally="item.final_tally_result"></ProposalProcess>
+      <ProposalProcess
+        :pool="staking.pool"
+        :tally="item.final_tally_result"
+      ></ProposalProcess>
     </RouterLink>
   </div>
 </template>
