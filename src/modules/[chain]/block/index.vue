@@ -24,12 +24,12 @@ const format = useFormatter()
                 <VTable>
                     <thead>
                         <tr>
-                            <th>Height</th><th>Hash</th><th>Proposor</th><th>Txs</th><th>Time</th>
+                            <th>Height</th><th>Hash</th><th>Proposer</th><th>Txs</th><th>Time</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in store.recents">
-                            <td><RouterLink :to="`/${props.chain}/block/${item.block?.header?.height}`">{{ item.block?.header?.height }}</RouterLink></td>
+                            <td class="text-sm text-primary"><RouterLink :to="`/${props.chain}/block/${item.block?.header?.height}`">{{ item.block?.header?.height }}</RouterLink></td>
                             <td>{{ item.block_id?.hash }}</td>
                             <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
                             <td>{{ item.block?.data?.txs.length }}</td>
