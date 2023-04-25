@@ -184,7 +184,7 @@ const rank = function(position: number) {
                   :image="logo(v.description?.identity)"
                 />
                 <div class="d-flex flex-column">
-                  <h6 class="text-sm">
+                  <h6 class="text-sm text-primary">
                     <RouterLink
                       :to="{name: 'chain-staking-validator', params: {validator: v.operator_address}}"
                       class="font-weight-medium user-list-name"
