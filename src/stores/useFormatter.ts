@@ -127,7 +127,6 @@ export const useFormatter = defineStore('formatter', {
         calculatePercent(input?: string|number, total?: string|number ) {
             if(!input || !total) return '0'
             const percent = Number(input)/Number(total)
-            console.log(input, total, percent);
             return numeral(percent>0.0001?percent: 0).format("0.[00]%")
         },
         formatDecimalToPercent(decimal: string) {
