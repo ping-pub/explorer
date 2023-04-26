@@ -116,26 +116,26 @@ onMounted(()=> {
                     </div>
                     <VSpacer/>
                     <VCardText>
-                        <p class="text-xs">
+                        <p class="text-md">
                             About Us
                         </p>
                         <VList class="card-list">
                             <VListItem prepend-icon="mdi-web">
                                 <span>Website: </span><span> {{ v.description?.website || '-' }}</span>
                             </VListItem>
-                            <VListItem prepend-icon="mdi-phone">
+                            <VListItem prepend-icon="mdi-email-outline">
                                 <span>Contact: </span><span> {{ v.description?.security_contact }}</span>
                             </VListItem>
                         </VList>
-
-                        <p class="text-xs mt-3">
+                        
+                        <p class="text-md mt-3">
                            Validator Status
                         </p>
                         <VList class="card-list">
-                            <VListItem prepend-icon="mdi-check">
+                            <VListItem prepend-icon="mdi-shield-account-outline">
                                 <span>Status: </span><span> {{ v.status }}</span>
                             </VListItem>
-                            <VListItem prepend-icon="mdi-lock">
+                            <VListItem prepend-icon="mdi-shield-alert-outline">
                                 <span>Jailed: </span><span> {{ v.jailed }}</span>
                             </VListItem>
                         </VList>
@@ -148,7 +148,7 @@ onMounted(()=> {
                             <VAvatar color="secondary" rounded variant="outlined" icon="mdi-coin"></VAvatar> 
                             <div class="ml-3 d-flex flex-column justify-center">
                                 <h4>{{ format.formatToken2({amount: v.tokens, denom: staking.params.bond_denom}) }}</h4>
-                                <span class="text-sm">Bonded Tokens</span>
+                                <span class="text-sm">Total Bonded Tokens</span>
                             </div>
                         </div>
                         <div class="d-flex">
@@ -160,14 +160,14 @@ onMounted(()=> {
                         </div>
 
                         <div class="d-flex">
-                            <VAvatar color="secondary" rounded variant="outlined" icon="mdi-flag"></VAvatar> 
+                            <VAvatar color="secondary" rounded variant="outlined" icon="mdi-account-tie"></VAvatar> 
                             <div class="ml-3 d-flex flex-column justify-center">
                                 <h4>{{ v.min_self_delegation }} {{ staking.params.bond_denom }}</h4>
                                 <span class="text-sm">Min Self Delegation:</span>
                             </div>
                         </div>
                         <div class="d-flex">
-                            <VAvatar color="secondary" rounded variant="outlined" icon="mdi-coin"></VAvatar> 
+                            <VAvatar color="secondary" rounded variant="outlined" icon="mdi-finance"></VAvatar> 
                             <div class="ml-3 d-flex flex-column justify-center">
                                 <h4>{{ apr }}</h4>
                                 <span class="text-sm">Annual Profit</span>
@@ -175,7 +175,7 @@ onMounted(()=> {
                         </div>
 
                         <div class="d-flex">
-                            <VAvatar color="secondary" rounded variant="outlined" icon="mdi-pound"></VAvatar> 
+                            <VAvatar color="secondary" rounded variant="outlined" icon="mdi-stairs-up"></VAvatar> 
                             <div class="ml-3 d-flex flex-column justify-center">
                                 <h4>{{ v.unbonding_height }}</h4>
                                 <span class="text-sm">Unbonding Height</span>
