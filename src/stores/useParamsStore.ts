@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { useBlockchain } from "./useBlockchain";
-
+import { percent,formatNumber,formatTokenAmount } from '@/libs/utils'
 export interface stakingItem {
     unbonding_time: string
     max_validators: number
@@ -24,25 +24,25 @@ export const useParamStore = defineStore("paramstore", {
                 { subtitle: 'inflation', icon: 'TrendingUpIcon', color: 'light-primary', value: '' },
             ],
         },
+        mint: {
+            title: 'Mint Parameters',
+            items: [] as Array<any>,
+        },
         staking: {
             title: 'Staking Parameters',
             items: [] as Array<any>,
         },
         distribution: {
             title: 'Distribution Parameters',
-            items: [],
+            items: [] as Array<any>,
         },
         slashing: {
             title: 'Slashing Parameters',
-            items: null,
-        },
-        mint: {
-            title: 'Mint Parameters',
-            items: null,
+            items: [] as Array<any>,
         },
         gov: {
             title: 'Governance Parameters',
-            items: [],
+            items: [] as Array<any>,
         },
     }),
     getters: {
@@ -53,6 +53,7 @@ export const useParamStore = defineStore("paramstore", {
     actions: {
         initial() {
             this.handleBaseBlockLatest()
+            this.handleMintParam()
             this.handleStakingParams()
         },
         async handleBaseBlockLatest() {
@@ -61,7 +62,7 @@ export const useParamStore = defineStore("paramstore", {
                 const height = this.chain.items.findIndex(x => x.subtitle === 'height')
                 this.chain.title = `Chain ID: ${res.block.header.chain_id}`
                 this.chain.items[height].value = res.block.header.height
-                console.log(this.chain.items[height].value, 999)
+                console.log(res, 999)
                 // if (timeIn(res.block.header.time, 3, 'm')) {
                 //   this.syncing = true
                 // } else {
@@ -74,41 +75,33 @@ export const useParamStore = defineStore("paramstore", {
             }
         },
         async handleStakingParams() {
-            console.log('handleStakingParams', 99999)
-
             const res = await this.getStakingParams()
+            const bond_denom = res?.params.bond_denom
             this.staking.items = Object.entries(res.params).map(([key, value]) => ({ subtitle:key,
-                value: value }))
-
-            Promise.all([this.getStakingPool(), this.getBankTotal(res?.params.bond_denom)])
+                value: value })).filter((item: any) => {
+                    if (!['min_commission_rate','min_self_delegation'].includes(item.subtitle)) return item 
+                 })
+            Promise.all([this.getStakingPool(), this.getBankTotal(bond_denom)])
                 .then(resArr => { 
-                    console.log(resArr, 'ddd')  
+                    const pool = resArr[0]?.pool
+                    const amount =resArr[1]?.amount?.amount
+                    const assets = this.blockchain.current?.assets
+                    const bondedAndSupply = this.chain.items.findIndex(x => x.subtitle === 'bonded_and_supply')
+                    this.chain.items[bondedAndSupply].value = `${formatNumber(formatTokenAmount(assets,pool.bonded_tokens, 2, bond_denom, false), true, 0)}/${formatNumber(formatTokenAmount(assets,amount, 2, bond_denom, false), true, 0)}`
+                    const bondedRatio = this.chain.items.findIndex(x => x.subtitle === 'bonded_ratio')
+                    this.chain.items[bondedRatio].value = `${percent(Number(pool.bonded_tokens) /Number(amount)) }%`
                 })
-                // const totalRes = await this.getBankTotal(res?.params.bond_denom)
-                // console.log(res, 9999, totalRes)
-           
         },
-        // normalize(data: {}, title:string) {
-        //     if (!data) return null
-        //     const items = this.makeItems(data)
-        //     return {
-        //       title,
-        //       items,
-        //     }
-        //   },
-        //   makeItems(data) {
-        //     return Object.keys(data).map(k => {
-        //       if (isToken(data[k])) {
-        //         return { title: tokenFormatter(data[k]), subtitle: k }
-        //       }
-        //       if (typeof data[k] === 'boolean') {
-        //         return { title: data[k], subtitle: k }
-        //       }
-        //       return { title: this.convert(data[k]), subtitle: k }
-        //     })
-        //   },
+        async handleMintParam() {
+            const res = await this.getMintParam()
+            console.log(res, 'mint')
+
+        },
         async getBaseTendermintBlockLatest() {
             return await this.blockchain.rpc.getBaseBlockLatest()
+        },
+        async getMintParam() {
+            return await this.blockchain.rpc.getMintParam()
         },
         async getStakingParams() {
             return await this.blockchain.rpc.getStakingParams()
