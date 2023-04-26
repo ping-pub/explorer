@@ -75,14 +75,18 @@ export const useParamStore = defineStore("paramstore", {
         },
         async handleStakingParams() {
             console.log('handleStakingParams', 99999)
-            try {
-                const res = await this.getStakingParams()
-                this.staking.items = Object.entries(res.params).map(([key, value]) => ({ subtitle:key,
-                    value: value }))
-                console.log(res, 9999, this.staking.items)
-            } catch (error) {
-                
-            }
+
+            const res = await this.getStakingParams()
+            this.staking.items = Object.entries(res.params).map(([key, value]) => ({ subtitle:key,
+                value: value }))
+
+            Promise.all([this.getStakingPool(), this.getBankTotal(res?.params.bond_denom)])
+                .then(resArr => { 
+                    console.log(resArr, 'ddd')  
+                })
+                // const totalRes = await this.getBankTotal(res?.params.bond_denom)
+                // console.log(res, 9999, totalRes)
+           
         },
         // normalize(data: {}, title:string) {
         //     if (!data) return null
@@ -113,7 +117,14 @@ export const useParamStore = defineStore("paramstore", {
             return await this.blockchain.rpc.getStakingPool()
         },
         async getBankTotal(denom: string){
-            // return
+            return await this.blockchain.rpc.getBankSupplyByDenom(denom)
+            // if (compareVersions(this.config.sdk_version, '0.46.2') > 0) {
+            //     return this.get(`/cosmos/bank/v1beta1/supply/by_denom?denom=${denom}`).then(data => commonProcess(data).amount)
+            //   }
+            //   if (compareVersions(this.config.sdk_version, '0.40') < 0) {
+            //     return this.get(`/supply/total/${denom}`).then(data => ({ amount: commonProcess(data), denom }))
+            //   }
+            //   return this.get(`/cosmos/bank/v1beta1/supply/${denom}`).then(data => commonProcess(data).amount)
         }
     }
 
