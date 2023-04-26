@@ -154,7 +154,7 @@ function shortName(name: string, id: string) {
         <VCardTitle>Active Proposals</VCardTitle>
       </VCardItem>
       <VCardItem>
-        <ProposalListItem :proposals="store.proposals" />
+        <ProposalListItem :proposals="store?.proposals" />
       </VCardItem>
       <VCardText v-if="store.proposals.length === 0">No active proposals</VCardText>
     </VCard>
