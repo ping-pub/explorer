@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useThemeConfig } from '@core/composable/useThemeConfig';
 import type { ThemeSwitcherTheme } from '@layouts/types';
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 
 const props = defineProps<{
   themes: ThemeSwitcherTheme[];
@@ -19,10 +19,16 @@ const {
 
 const changeTheme = () => {
   theme.value = getNextThemeName();
+  console.log(theme.value, 'theme.value', window.matchMedia('(prefers-color-scheme: dark)').matches)
+  
 };
 
-const changeMode = (val: 'dark' | 'light') => {
-  if (val === 'dark') {
+const changeMode = (val: 'dark' | 'light' | 'system') => {
+  let value = val;
+  if (theme.value === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    value = 'dark';
+  }
+  if (value === 'dark') {
     document.documentElement.classList.add('dark');
     document.documentElement.classList.remove('light');
   } else {
@@ -31,7 +37,7 @@ const changeMode = (val: 'dark' | 'light') => {
   }
 };
 // Update icon if theme is changed from other sources
-watch(theme, (val: 'dark' | 'light') => {
+watch(theme, (val: 'dark' | 'light' | 'system') => {
   currentThemeName.value = val;
   changeMode(val);
 });
