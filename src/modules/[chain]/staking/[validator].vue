@@ -256,7 +256,10 @@ onMounted(()=> {
                 <tr v-for="(item, i) in txs.tx_responses">
                     <td class="text-sm text-primary"><RouterLink :to="`/${props.chain}/block/${item.height}`">{{ item.height }}</RouterLink></td>
                     <td class="text-truncate" style="max-width: 200px;">{{ item.txhash }}</td>
-                    <td>{{ format.messages(item.tx.body.messages) }}</td>
+                    <td>
+                    {{ format.messages(item.tx.body.messages) }}
+                    <VIcon v-if="item.code === 0" icon="mdi-check" color="success"></VIcon>
+                    <VIcon v-else icon="mdi-multiply" color="error"></VIcon> </td>
                     <td width="150">{{ format.toDay(item.timestamp,'from') }}</td>
                 </tr>
             </tbody>
