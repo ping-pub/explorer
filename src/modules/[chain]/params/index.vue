@@ -15,7 +15,7 @@ onMounted(() => {
 <template>
     <div>
         <!-- Chain ID -->
-        <div class="bg-card px-4 pt-3 pb-4 rounded-sm">
+        <div class="bg-card px-4 pt-3 pb-4 rounded">
             <div class="text-base mb-3 text-main">{{ chain.title }}</div>
             <div class="grid grid-cols-5 gap-4">
                 <div v-for="(item,index) of chain.items" :key="index" class="rounded-sm bg-active px-4 py-2">
