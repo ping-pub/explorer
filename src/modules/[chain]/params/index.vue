@@ -1,18 +1,20 @@
 <script lang="ts" setup>
 import { useParamStore } from '@/stores';
-import { ref, onMounted } from 'vue';
-import CardParameter from '@/components/CardParameter.vue';
-import TableParameter from '@/components/TableParameter.vue';
-
-const store = useParamStore();
-const chain = ref(store.chain);
+import { ref, onMounted } from 'vue'
+import CardParameter from '@/components/CardParameter.vue'
+import TableParameter from '@/components/TableParameter.vue'
+import ArrayObjectElement from '@/components/dynamic/ArrayObjectElement.vue';
+import { sort } from 'semver';
+const store = useParamStore()
+const chain = ref(store.chain)
 onMounted(() => {
-  // fetch the data
-  store.initial();
-});
+    // fetch the data
+    store.initial()
+})
+
 </script>
 <template>
-  <div>
+  <div class="overflow-hidden">
     <!-- Chain ID -->
     <div class="bg-card px-4 pt-3 pb-4 rounded">
       <div class="text-base mb-3 text-main">{{ chain.title }}</div>
@@ -29,20 +31,32 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <!-- minting Parameters  -->
-    <CardParameter :cardItem="store.mint" />
-    <!-- Staking Parameters  -->
-    <CardParameter :cardItem="store.staking" />
-    <!-- Governance Parameters -->
-    <CardParameter :cardItem="store.gov" />
-    <!-- Distribution Parameters -->
-    <CardParameter :cardItem="store.distribution" />
-    <!-- Slashing Parameters -->
-    <CardParameter :cardItem="store.slashing" />
+        <!-- minting Parameters  -->
+        <CardParameter :cardItem="store.mint"/> 
+        <!-- Staking Parameters  -->
+        <CardParameter :cardItem="store.staking"/>
+        <!-- Governance Parameters -->
+        <CardParameter :cardItem="store.gov"/>
+        <!-- Distribution Parameters -->
+        <CardParameter :cardItem="store.distribution"/>
+        <!-- Slashing Parameters -->
+        <CardParameter :cardItem="store.slashing"/>
+        <!-- Application Version -->
+        <div class="bg-card px-4 pt-3 pb-4 rounded-sm mt-6">
+            <div class="text-base mb-3 text-main">{{ store.appVersion?.title }}</div>
+            <ArrayObjectElement :value="store.appVersion?.items" :thead="false"/>
+        </div>
+        
+        <!-- Node Information -->
+        <div class="bg-card px-4 pt-3 pb-4 rounded-sm mt-6">
+            <div class="text-base mb-3 text-main">{{ store.nodeVersion?.title }}</div>
+            <ArrayObjectElement :value="store.nodeVersion?.items" :thead="false"/>
+        </div>
+ 
     <!-- Application Version -->
-    <TableParameter :tableItem="store.appVersion" />
+    <!-- <TableParameter :tableItem="store.appVersion" /> -->
     <!-- Node Information -->
-    <TableParameter :tableItem="store.nodeVersion" />
+    <!-- <TableParameter :tableItem="store.nodeVersion" /> -->
   </div>
 </template>
 
