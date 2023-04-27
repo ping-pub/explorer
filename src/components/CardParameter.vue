@@ -21,8 +21,7 @@ const props = defineProps({
         class="rounded-sm bg-active px-4 py-2"
       >
         <div class="text-xs mb-2 text-secondary">{{ item?.subtitle }}</div>
-        <div class="text-base text-main">{{ item?.value }}</div>
-        <!-- {{ item }} -->
+        <div class="text-base text-main">{{ Array.isArray(item?.value) ? (item?.value[0] && item?.value[0].amount)|| '-':`${Number(item?.value)}` === 'NaN' ? item?.value : Number(item?.value)}}</div>
       </div>
     </div>
   </div>

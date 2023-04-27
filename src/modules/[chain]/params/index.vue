@@ -2,9 +2,7 @@
 import { useParamStore } from '@/stores';
 import { ref, onMounted } from 'vue'
 import CardParameter from '@/components/CardParameter.vue'
-import TableParameter from '@/components/TableParameter.vue'
 import ArrayObjectElement from '@/components/dynamic/ArrayObjectElement.vue';
-import { sort } from 'semver';
 const store = useParamStore()
 const chain = ref(store.chain)
 onMounted(() => {
@@ -48,7 +46,7 @@ onMounted(() => {
         </div>
         
         <!-- Node Information -->
-        <div class="bg-card px-4 pt-3 pb-4 rounded-sm mt-6">
+        <div class="bg-card px-4 pt-3 pb-4ß rounded-sm mt-6">
             <div class="text-base mb-3 text-main">{{ store.nodeVersion?.title }}</div>
             <ArrayObjectElement :value="store.nodeVersion?.items" :thead="false"/>
         </div>
