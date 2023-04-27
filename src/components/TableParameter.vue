@@ -11,7 +11,7 @@ function formatTitle(name: string) {
 }
 </script>
 <template>
-  <div class="bg-card px-4 pt-3 pb-4 rounded mt-6">
+  <div class="bg-card px-4 pt-3 pb-4 rounded mt-">
     <div class="text-base mb-3 text-main">{{ props.tableItem?.title }}</div>
     <div class="">
       <div
