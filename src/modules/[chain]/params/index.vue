@@ -30,7 +30,7 @@ onMounted(() => {
         <CardParameter :cardItem="store.staking"/>
 
         <!-- Governance Parameters -->
-
+        <CardParameter :cardItem="store.gov"/>
         <!-- Distribution Parameters -->
         <CardParameter :cardItem="store.distribution"/>
         <!-- Slashing Parameters -->

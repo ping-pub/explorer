@@ -49,9 +49,6 @@ export const useParamStore = defineStore("paramstore", {
         blockchain() {
             return useBlockchain()
         },
-        excludes() {
-            return this.blockchain().current?.excludes
-        }
     },
     actions: {
         initial() {
@@ -60,6 +57,7 @@ export const useParamStore = defineStore("paramstore", {
             this.handleStakingParams()
             this.handleSlashingParams()
             this.handleDistributionParams()
+            this.handleGovernanceParams()
         },
         async handleBaseBlockLatest() {
             try {
@@ -121,9 +119,16 @@ export const useParamStore = defineStore("paramstore", {
                 value: value }))
         },
         async handleGovernanceParams() {
-            if(this.excludes && this.excludes.indexOf('governance') > -1){
+            const excludes = this.blockchain.current?.excludes
+            if(excludes && excludes.indexOf('governance') > -1){
                 return
             }
+            Promise.all([this.getGovParamsVoting(),this.getGovParamsDeposit(),this.getGovParamsTally()]).then((resArr) => {
+                console.log(resArr, 'resArrr')
+                const govParams = {...resArr[0]?.voting_params,...resArr[1]?.deposit_params,...resArr[2]?.tally_params}
+                this.gov.items = Object.entries(govParams).map(([key, value]) => ({ subtitle:key,
+                    value: value }))
+            })
             
         },
         async getBaseTendermintBlockLatest() {
@@ -163,6 +168,7 @@ export const useParamStore = defineStore("paramstore", {
         async getGovParamsTally() {
             return await this.blockchain.rpc.getGovParamsTally()
         },
+
         
     }
 
