@@ -260,7 +260,7 @@ loadAccount(props.address)
                     </thead>
                     <tbody>
                         <tr v-for="v in txs">
-                            <td>{{ v.height }} </td>
+                            <td class="text-sm text-primary"><RouterLink :to="`/${chain}/block/${v.height}`">{{ v.height }}</RouterLink></td>
                             <td class="text-truncate" style="max-width: 200px;">{{ v.txhash }} </td>
                             <td>
                                 {{ format.messages(v.tx.body.messages) }}
