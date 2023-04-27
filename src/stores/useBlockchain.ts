@@ -36,7 +36,6 @@ export const useBlockchain = defineStore("blockchain", {
 
       const router = useRouter()
       const routes = router?.getRoutes()||[]
-      console.log(routes)
       if(this.current && routes) {
         currNavItem = [{
           title: this.current?.prettyName || this.chainName || '',
@@ -115,7 +114,6 @@ export const useBlockchain = defineStore("blockchain", {
     },
     setCurrent(name: string) {
       this.chainName = name
-      console.log('set current', name)
     },
 
   }

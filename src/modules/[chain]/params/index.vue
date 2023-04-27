@@ -2,6 +2,8 @@
 import { useParamStore } from '@/stores';
 import { ref, onMounted } from 'vue'
 import CardParameter from '@/components/CardParameter.vue'
+import TableParameter from '@/components/TableParameter.vue'
+import { sort } from 'semver';
 const store = useParamStore()
 const chain = ref(store.chain)
 onMounted(() => {
@@ -22,13 +24,10 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-
         <!-- minting Parameters  -->
-        <CardParameter :cardItem="store.mint"/>
-        
+        <CardParameter :cardItem="store.mint"/> 
         <!-- Staking Parameters  -->
         <CardParameter :cardItem="store.staking"/>
-
         <!-- Governance Parameters -->
         <CardParameter :cardItem="store.gov"/>
         <!-- Distribution Parameters -->
@@ -36,7 +35,9 @@ onMounted(() => {
         <!-- Slashing Parameters -->
         <CardParameter :cardItem="store.slashing"/>
         <!-- Application Version -->
+        <TableParameter :tableItem="store.appVersion"/>
         <!-- Node Information -->
+        <TableParameter :tableItem="store.nodeVersion"/>
     </div>
 
 </template>

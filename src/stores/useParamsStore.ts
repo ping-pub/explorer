@@ -44,6 +44,14 @@ export const useParamStore = defineStore("paramstore", {
             title: 'Governance Parameters',
             items: [] as Array<any>,
         },
+        appVersion: {
+            title: 'Application Version',
+            items: {},
+        },
+        nodeVersion:  {
+            title: 'Node Information',
+            items: {},
+        },
     }),
     getters: {
         blockchain() {
@@ -58,6 +66,7 @@ export const useParamStore = defineStore("paramstore", {
             this.handleSlashingParams()
             this.handleDistributionParams()
             this.handleGovernanceParams()
+            this.handleAbciInfo()
         },
         async handleBaseBlockLatest() {
             try {
@@ -65,7 +74,6 @@ export const useParamStore = defineStore("paramstore", {
                 const height = this.chain.items.findIndex(x => x.subtitle === 'height')
                 this.chain.title = `Chain ID: ${res.block.header.chain_id}`
                 this.chain.items[height].value = res.block.header.height
-                console.log(res, 999)
                 // if (timeIn(res.block.header.time, 3, 'm')) {
                 //   this.syncing = true
                 // } else {
@@ -111,7 +119,6 @@ export const useParamStore = defineStore("paramstore", {
             const res = await this.getSlashingParams()
             this.slashing.items = Object.entries(res.params).map(([key, value]) => ({ subtitle:key,
                 value: value }))
-            console.log('Slashing', res)
         },
         async handleDistributionParams(){
             const res = await this.getDistributionParams()
@@ -124,12 +131,19 @@ export const useParamStore = defineStore("paramstore", {
                 return
             }
             Promise.all([this.getGovParamsVoting(),this.getGovParamsDeposit(),this.getGovParamsTally()]).then((resArr) => {
-                console.log(resArr, 'resArrr')
                 const govParams = {...resArr[0]?.voting_params,...resArr[1]?.deposit_params,...resArr[2]?.tally_params}
                 this.gov.items = Object.entries(govParams).map(([key, value]) => ({ subtitle:key,
                     value: value }))
             })
             
+        },
+        async handleAbciInfo(){
+            const res = await this.fetchAbciInfo()
+            this.appVersion.items =  Object.entries(res.application_version).map(([key, value]) => ({ subtitle:key,
+                value: value }))
+            this.nodeVersion.items = Object.entries(res.default_node_info).map(([key, value]) => ({ subtitle:key,
+                value: value }))
+            console.log('handleAbciInfo', res)
         },
         async getBaseTendermintBlockLatest() {
             return await this.blockchain.rpc.getBaseBlockLatest()
@@ -168,6 +182,9 @@ export const useParamStore = defineStore("paramstore", {
         async getGovParamsTally() {
             return await this.blockchain.rpc.getGovParamsTally()
         },
+        async fetchAbciInfo() {
+            return this.blockchain.rpc.getBaseNodeInfo()
+        }
 
         
     }

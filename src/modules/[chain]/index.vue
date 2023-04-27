@@ -25,9 +25,7 @@ const format = useFormatter();
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
 
 blockchain.$subscribe((m, s) => {
-  console.log('index:', m);
   if (!Array.isArray(m.events) && ['chainName', 'endpoint'].includes(m.events.key)) {
-    console.log(m.events.key);
     store.loadDashboard();
   }
 });
