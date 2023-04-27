@@ -4,7 +4,8 @@
     "blocks": "Blocks&Transaction",
     "staking": "Staking",
     "governance": "Governance",
-    "parameters": "Parameters"
+    "parameters": "Parameters",
+    "uptime": "Uptime"
   },
   "index": {
     "slogan": "Ping Dashboard is not just an explorer but also a wallet and more ... 🛠",
