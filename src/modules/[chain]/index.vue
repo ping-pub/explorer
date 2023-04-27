@@ -25,9 +25,7 @@ const format = useFormatter();
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
 
 blockchain.$subscribe((m, s) => {
-  console.log('index:', m);
   if (!Array.isArray(m.events) && ['chainName', 'endpoint'].includes(m.events.key)) {
-    console.log(m.events.key);
     store.loadDashboard();
   }
 });
@@ -154,7 +152,7 @@ function shortName(name: string, id: string) {
         <VCardTitle>Active Proposals</VCardTitle>
       </VCardItem>
       <VCardItem>
-        <ProposalListItem :proposals="store.proposals" />
+        <ProposalListItem :proposals="store?.proposals" />
       </VCardItem>
       <VCardText v-if="store.proposals.length === 0">No active proposals</VCardText>
     </VCard>

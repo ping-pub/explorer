@@ -19,15 +19,15 @@ onMounted(()=>{
         </VTabs>
         <VWindow v-model="tab" class="mt-5">
             <VWindowItem value="2">
-                <ProposalListItem :proposals="store.proposals['2']"/>
+                <ProposalListItem :proposals="store?.proposals['2']"/>
             </VWindowItem>  
 
             <VWindowItem value="3">
-                <ProposalListItem :proposals="store.proposals['3']"/>
+                <ProposalListItem :proposals="store?.proposals['3']"/>
             </VWindowItem>
 
             <VWindowItem value="4">
-                <ProposalListItem :proposals="store.proposals['4']"/>
+                <ProposalListItem :proposals="store?.proposals['4']"/>
             </VWindowItem>
         </VWindow>
     </div>

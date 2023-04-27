@@ -230,8 +230,8 @@ watch(isVerticalNavMini(windowWidth, isVerticalNavHovered), val => {
         class="nav-group-children"
       >
         <Component
-          :is="'children' in child ? 'VerticalNavGroup' : VerticalNavLink"
           v-for="child in item.children"
+          :is="'children' in child ? 'VerticalNavGroup' : VerticalNavLink"
           :key="child.title"
           :item="child"
         />

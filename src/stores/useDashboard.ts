@@ -70,6 +70,8 @@ export interface ChainConfig {
     cosmosSdk?: string,
     tendermint?: string,
   },
+  exponent: string,
+  excludes?: string,
 }
 
 export interface LocalConfig {
@@ -109,7 +111,8 @@ export function fromLocal(lc: LocalConfig ): ChainConfig {
     display: x.symbol, 
     symbol: x.symbol, 
     logo_URIs: { svg: x.logo }, 
-    coingecko_id: x.coingecko_id, 
+    coingecko_id: x.coingecko_id,
+    exponent: x.exponent, 
     denom_units: [{denom: x.base, exponent: 0}, {denom: x.symbol.toLowerCase(), exponent: Number(x.exponent)}]
   }))
   conf.bech32Prefix = lc.addr_prefix

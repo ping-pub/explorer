@@ -176,7 +176,6 @@ export const useIndexModule = defineStore('module-index', {
     },
     actions: {
         async loadDashboard() {
-            console.log('initial dashboard')
             this.$reset()
             this.initCoingecko()
             useMintStore().fetchInflation()
