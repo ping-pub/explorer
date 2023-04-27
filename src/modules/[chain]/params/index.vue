@@ -32,7 +32,9 @@ onMounted(() => {
         <!-- Governance Parameters -->
 
         <!-- Distribution Parameters -->
+        <CardParameter :cardItem="store.distribution"/>
         <!-- Slashing Parameters -->
+        <CardParameter :cardItem="store.slashing"/>
         <!-- Application Version -->
         <!-- Node Information -->
     </div>

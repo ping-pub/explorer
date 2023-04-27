@@ -18,9 +18,7 @@ const {
 );
 
 const changeTheme = () => {
-  theme.value = getNextThemeName();
-  console.log(theme.value, 'theme.value', window.matchMedia('(prefers-color-scheme: dark)').matches)
-  
+  theme.value = getNextThemeName();  
 };
 
 const changeMode = (val: 'dark' | 'light' | 'system') => {

@@ -18,10 +18,10 @@ export const useParamStore = defineStore("paramstore", {
             title: '',
             class: 'border-primary',
             items: [
-                { subtitle: 'height', icon: 'BoxIcon', color: 'light-success', value: '' },
-                { subtitle: 'bonded_and_supply', icon: 'DollarSignIcon', color: 'light-danger', value: '' },
-                { subtitle: 'bonded_ratio', icon: 'PercentIcon', color: 'light-warning', value: '' },
-                { subtitle: 'inflation', icon: 'TrendingUpIcon', color: 'light-primary', value: '' },
+                { subtitle: 'height', icon: 'BoxIcon', color: 'light-success', value: '-' },
+                { subtitle: 'bonded_and_supply', icon: 'DollarSignIcon', color: 'light-danger', value: '-' },
+                { subtitle: 'bonded_ratio', icon: 'PercentIcon', color: 'light-warning', value: '-' },
+                { subtitle: 'inflation', icon: 'TrendingUpIcon', color: 'light-primary', value: '-' },
             ],
         },
         mint: {
@@ -48,13 +48,18 @@ export const useParamStore = defineStore("paramstore", {
     getters: {
         blockchain() {
             return useBlockchain()
+        },
+        excludes() {
+            return this.blockchain().current?.excludes
         }
     },
     actions: {
         initial() {
             this.handleBaseBlockLatest()
-            this.handleMintParam()
+            // this.handleMintParam()
             this.handleStakingParams()
+            this.handleSlashingParams()
+            this.handleDistributionParams()
         },
         async handleBaseBlockLatest() {
             try {
@@ -93,9 +98,33 @@ export const useParamStore = defineStore("paramstore", {
                 })
         },
         async handleMintParam() {
+            const excludes = this.blockchain.current?.excludes
+            if(excludes && excludes.indexOf('mint') > -1){
+                return
+            }
+            // this.getMintingInflation().then(res => {
+            //     const chainIndex = this.chain.items.findIndex(x => x.subtitle === 'inflation')
+            //     this.chain.items[chainIndex].value = `${percent(res)}%`
+            // })
             const res = await this.getMintParam()
             console.log(res, 'mint')
-
+        },
+        async handleSlashingParams(){
+            const res = await this.getSlashingParams()
+            this.slashing.items = Object.entries(res.params).map(([key, value]) => ({ subtitle:key,
+                value: value }))
+            console.log('Slashing', res)
+        },
+        async handleDistributionParams(){
+            const res = await this.getDistributionParams()
+            this.distribution.items =  Object.entries(res.params).map(([key, value]) => ({ subtitle: key,
+                value: value }))
+        },
+        async handleGovernanceParams() {
+            if(this.excludes && this.excludes.indexOf('governance') > -1){
+                return
+            }
+            
         },
         async getBaseTendermintBlockLatest() {
             return await this.blockchain.rpc.getBaseBlockLatest()
@@ -118,7 +147,23 @@ export const useParamStore = defineStore("paramstore", {
             //     return this.get(`/supply/total/${denom}`).then(data => ({ amount: commonProcess(data), denom }))
             //   }
             //   return this.get(`/cosmos/bank/v1beta1/supply/${denom}`).then(data => commonProcess(data).amount)
-        }
+        },
+        async getSlashingParams() {
+            return await this.blockchain.rpc.getSlashingParams()
+        },
+        async getDistributionParams() {
+            return await this.blockchain.rpc.getDistributionParams()
+        },
+        async getGovParamsVoting() {
+            return await this.blockchain.rpc.getGovParamsVoting()
+        },
+        async getGovParamsDeposit() {
+            return await this.blockchain.rpc.getGovParamsDeposit()
+        },
+        async getGovParamsTally() {
+            return await this.blockchain.rpc.getGovParamsTally()
+        },
+        
     }
 
 

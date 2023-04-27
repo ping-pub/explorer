@@ -71,6 +71,7 @@ export interface ChainConfig {
     tendermint?: string,
   },
   exponent: string,
+  excludes?: string,
 }
 
 export interface LocalConfig {
