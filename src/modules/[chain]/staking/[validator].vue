@@ -133,7 +133,7 @@ onMounted(()=> {
                         </p>
                         <VList class="card-list">
                             <VListItem prepend-icon="mdi-shield-account-outline">
-                                <span>Status: </span><span> {{ (v.status).replace('BOND_STATUS_', '') }} </span>
+                                <span>Status: </span><span> {{ String(v.status).replace('BOND_STATUS_', '') }} </span>
                             </VListItem>
                             <VListItem prepend-icon="mdi-shield-alert-outline">
                                 <span>Jailed: </span><span> {{ v.jailed || '-' }} </span>
