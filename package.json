@@ -76,7 +76,7 @@
     "unplugin-auto-import": "^0.13.0",
     "unplugin-vue-components": "^0.23.0",
     "unplugin-vue-define-options": "1.1.4",
-    "vite": "^4.3.1",
+    "vite": "^4.3.3",
     "vite-plugin-pages": "^0.28.0",
     "vue-tsc": "^1.0.12"
   }

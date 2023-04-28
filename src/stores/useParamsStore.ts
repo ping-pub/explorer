@@ -143,7 +143,7 @@ export const useParamStore = defineStore("paramstore", {
                 value: value }))
             this.nodeVersion.items = Object.entries(res.default_node_info).map(([key, value]) => ({ subtitle:key,
                 value: value }))
-            console.log('handleAbciInfo', res)
+            console.log('handleAbciInfo', this.nodeVersion.items)
         },
         async getBaseTendermintBlockLatest() {
             return await this.blockchain.rpc.getBaseBlockLatest()
