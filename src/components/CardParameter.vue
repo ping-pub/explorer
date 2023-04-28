@@ -1,10 +1,27 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+import { useFormatter } from "@/stores";
 const props = defineProps({
   cardItem: {
     type: Object as PropType<{ title: string; items: Array<any> }>,
   },
 });
+
+const formatter = useFormatter()
+function calculateValue(value: any){
+  if (Array.isArray(value) ){
+    return (value[0] && value[0].amount)|| '-'
+  }
+  const newValue =  Number(value)
+  if(`${newValue}` === 'NaN' || typeof(value) === 'boolean'){
+    return value
+  }
+  
+  if (newValue < 1 && newValue > 0) {
+    return formatter.formatDecimalToPercent(value)
+  }
+  return newValue
+}
 </script>
 <template>
   <div
@@ -21,7 +38,7 @@ const props = defineProps({
         class="rounded-sm bg-active px-4 py-2"
       >
         <div class="text-xs mb-2 text-secondary">{{ item?.subtitle }}</div>
-        <div class="text-base text-main">{{ Array.isArray(item?.value) ? (item?.value[0] && item?.value[0].amount)|| '-':`${Number(item?.value)}` === 'NaN' ? item?.value : Number(item?.value)}}</div>
+        <div class="text-base text-main">{{ calculateValue(item?.value) }}</div>
       </div>
     </div>
   </div>

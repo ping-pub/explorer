@@ -51,10 +51,6 @@ onMounted(() => {
             <ArrayObjectElement :value="store.nodeVersion?.items" :thead="false"/>
         </div>
  
-    <!-- Application Version -->
-    <!-- <TableParameter :tableItem="store.appVersion" /> -->
-    <!-- Node Information -->
-    <!-- <TableParameter :tableItem="store.nodeVersion" /> -->
   </div>
 </template>
 
