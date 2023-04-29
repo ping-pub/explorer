@@ -58,7 +58,7 @@ onMounted(() => {
       <VCol cols="12" md="8"><VTextField v-model="keyword" label="Keywords to filter validators" /></VCol>
     </VRow>
     <VRow>
-      <VCol v-for="(v, i) in validators" cols="12" md="3" xl="2">
+      <VCol v-for="(v, i) in validators" cols="12" md="3" xl="2" class="py-1">
         <div class="d-flex justify-between">
           <span class="text-truncate">{{i + 1}}. {{v.description.moniker}}</span> 
           <VChip v-if="Number(signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter || 0) > 0" size="small" class="mb-1" label color="error">{{ signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter }}</VChip>
