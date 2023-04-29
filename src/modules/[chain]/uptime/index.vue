@@ -34,7 +34,7 @@ onMounted(() => {
       // constructs sequence for loading blocks
       let promise = Promise.resolve()
       for (let i = height - 1; i > height - 50; i -= 1) {
-        if (i > height - 48 && i > 0) {
+        if (i > height - 50 && i > 0) {
           promise = promise.then(() => new Promise(resolve => {
             baseStore.fetchBlock(i).then((x) => {
               commits.value.unshift(x.block.last_commit)
@@ -64,13 +64,13 @@ loadAccount(props.address)
 <template>
   <div>
     <VRow>
-      <VCol cols="12" md="4">Current Height: {{latest.block?.header?.height}} </VCol>
+      <VCol cols="12" md="4">Current Height: <span class="font-weight-medium"> {{latest.block?.header?.height}} </span></VCol>
       <VCol cols="12" md="8"><VTextField v-model="keyword" label="Keywords to filter validators" /></VCol>
     </VRow>
     <VRow>
       <VCol v-for="(v, i) in validators" cols="12" md="3" xl="2" class="py-1">
         <div class="d-flex justify-between">
-          <span class="text-truncate text-primary"><RouterLink :to="`/${chain}/staking/${v.operator_address}`">{{i + 1}}. {{v.description.moniker}}</RouterLink></span> 
+          <span class="text-truncate"> {{i + 1}}. <RouterLink class="" :to="`/${chain}/staking/${v.operator_address}`"> {{v.description.moniker}} </RouterLink></span> 
           <VChip v-if="Number(signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter || 0) > 0" size="small" class="mb-1" label color="error">{{ signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter }}</VChip>
           <VChip v-else size="small" class="mb-1" label color="success">{{ signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter }}</VChip>
         </div>
