@@ -80,13 +80,15 @@ export interface Block {
         "evidence": {
             "evidence": any[]
         },
-        "last_commit": {
-            "height": string,
-            "round": number,
-            "block_id": BlockId,
-            "signatures": Signature[]
-        }
+        "last_commit": Commit
     }
+}
+
+export interface Commit {
+    "height": string,
+    "round": number,
+    "block_id": BlockId,
+    "signatures": Signature[]
 }
 
 export interface TendermintValidator {

@@ -63,7 +63,8 @@ export class CosmosRestClient {
         return this.request(this.registry.slashing_params, {})
     }
     async getSlashingSigningInfos() {
-        return this.request(this.registry.slashing_signing_info, {})
+        const query = "?pagination.limit=300"
+        return this.request(this.registry.slashing_signing_info, {}, query)
     }
     // Gov
     async getGovParamsVoting() {
