@@ -30,3 +30,9 @@ export interface Coin {
     amount: string;
     denom: string;
 }
+
+export interface UptimeStatus {
+    height: number;
+    filled: boolean;
+    signed: boolean;
+}

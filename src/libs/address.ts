@@ -50,6 +50,11 @@ export function consensusPubkeyToHexAddress(consensusPubkey?: {"@type": string, 
     }
     return ''
   }
+
+  export function valconsToBase64(address: string) {
+    if(address) return toHex(fromBech32(address).data).toUpperCase()
+    return ''
+  }
   
   export function toETHAddress(cosmosAddress: string) {
     return `0x${toHex(fromBech32(cosmosAddress).data)}`
