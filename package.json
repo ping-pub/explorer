@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "vite",
     "serve": "vite",
-    "build": "run-p type-check build-only",
-    "preview": "vite preview",
+    "build-only": "run-p build-only",
     "test": "jest",
-    "build-only": "vite build",
+    "build": "vite build",
+    "host": "vite --host",
+    "preview": "vite preview --port $PORT",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
