@@ -64,9 +64,17 @@ onUnmounted(() => {
 <template>
   <div>
     <VRow>
-      <VCol cols="12" md="4">Current Height: {{latest.block?.header?.height}} </VCol>
-      <VCol cols="12" md="8"><VTextField v-model="keyword" label="Keywords to filter validators" /></VCol>
+      <VCol cols="12" md="4" > 
+        <VCard class="h-full self-center d-flex p-4">
+          <div class="self-center">Current Height: {{latest.block?.header?.height}} </div>
+        </VCard>
+      </VCol>
+      <VCol cols="12" md="8" class=""> 
+        <VTextField v-model="keyword" label="Keywords to filter validators" variant="outlined"/>
+        
+      </VCol>
     </VRow>
+    
     <VRow>
       <VCol v-for="(v, i) in validators" cols="12" md="3" xl="2" class="py-1">
         <div class="d-flex justify-between">
@@ -76,7 +84,7 @@ onUnmounted(() => {
         </div>
         <UptimeBar :blocks="commits" :validator="toBase64(fromHex(consensusPubkeyToHexAddress(v.consensus_pubkey)))" />
       </VCol>
-    </VRow>
+    </VRow> 
   </div>
 </template>
 <route>
@@ -86,3 +94,9 @@ onUnmounted(() => {
     }
   }
 </route>
+
+<style lang="scss">
+.v-field--variant-outlined .v-field__outline__notch{
+  border-width: 0 !important;
+}
+</style>
