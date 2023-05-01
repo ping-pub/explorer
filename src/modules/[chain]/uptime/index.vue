@@ -13,6 +13,7 @@ const format = useFormatter();
 const latest = ref({})
 const commits = ref([] as Commit[]);
 const keyword = ref("")
+const live = ref(true);
 
 const signingInfo = ref({})
 
@@ -22,6 +23,7 @@ const validators = computed(()=> {
 })
 
 onMounted(() => {
+  live.value = true
   baseStore.fetchLatest().then(block => {
     latest.value = block
     commits.value.unshift(block.block.last_commit)
@@ -30,11 +32,15 @@ onMounted(() => {
       // constructs sequence for loading blocks
       let promise = Promise.resolve()
       for (let i = height - 1; i > height - 50; i -= 1) {
-        if (i > height - 48 && i > 0) {
-          promise = promise.then(() => new Promise(resolve => {
+        if (i > height - 48) {
+          promise = promise.then(() => new Promise((resolve, reject) => {
             baseStore.fetchBlock(i).then((x) => {
               commits.value.unshift(x.block.last_commit)
-              resolve()
+              if(live.value) {
+                resolve()
+              } else {
+                reject()
+              }
             })
           }))
         }
@@ -47,6 +53,10 @@ onMounted(() => {
       signingInfo.value[valconsToBase64(i.address)] = i
     })
   })
+})
+
+onUnmounted(() => {
+  live.value = false
 })
 
 </script>
