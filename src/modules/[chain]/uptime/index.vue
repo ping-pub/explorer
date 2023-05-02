@@ -6,6 +6,8 @@ import UptimeBar from '@/components/UptimeBar.vue';
 import type { Commit } from '@/types'
 import { consensusPubkeyToHexAddress, valconsToBase64 } from "@/libs";
 
+const props = defineProps(['chain'])
+
 const stakingStore = useStakingStore();
 const baseStore = useBaseStore();
 const chainStore = useBlockchain()
@@ -78,7 +80,7 @@ onUnmounted(() => {
     <VRow>
       <VCol v-for="(v, i) in validators" cols="12" md="3" xl="2" class="py-1">
         <div class="d-flex justify-between">
-          <span class="text-truncate">{{i + 1}}. {{v.description.moniker}}</span> 
+          <span class="text-truncate"> {{i + 1}}. <RouterLink class="" :to="`/${props.chain}/staking/${v.operator_address}`"> {{v.description.moniker}} </RouterLink></span> 
           <VChip v-if="Number(signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter || 0) > 0" size="small" class="mb-1" label color="error">{{ signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter }}</VChip>
           <VChip v-else size="small" class="mb-1" label color="success">{{ signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter }}</VChip>
         </div>
