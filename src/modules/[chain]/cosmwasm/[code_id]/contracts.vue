@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { useBlockchain, useFormatter } from '@/stores';
+import { fromHex } from "@cosmjs/encoding";
 import { useWasmStore } from '../WasmStore';
 import { ref } from 'vue';
 import type { ContractInfo, PaginabledContractStates, PaginabledContracts } from '../types';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import type CustomRadiosVue from '@/plugins/vuetify/@core/components/CustomRadios.vue';
 import type { CustomInputContent } from '@/plugins/vuetify/@core/types';
+import { useFormatter } from "@/stores";
 
 const props = defineProps(['code_id', 'chain', ])
 
@@ -15,6 +16,7 @@ const wasmStore = useWasmStore()
 wasmStore.wasmClient.getWasmCodeContracts(props.code_id).then(x =>{ 
     response.value = x
 })
+const format = useFormatter()
 const infoDialog = ref(false)
 const stateDialog = ref(false)
 const queryDialog = ref(false)
@@ -80,6 +82,7 @@ const radioContent: CustomInputContent[] = [
 const selectedRadio = ref('raw')
 const query = ref("")
 const result = ref("")
+
 </script>
 <template>
     <div>
@@ -116,10 +119,10 @@ const result = ref("")
                 <VList>
                     <VListItem v-for="v in state.models">
                         <VListItemTitle>
-                            {{ v.value }}
+                            {{ format.hexToString(v.key)  }}
                         </VListItemTitle>
-                        <VListItemSubtitle>
-                            {{ v.key }}
+                        <VListItemSubtitle :title="format.base64ToString(v.value)">
+                            {{ format.base64ToString(v.value) }}
                         </VListItemSubtitle>
                     </VListItem>
                 </VList>
