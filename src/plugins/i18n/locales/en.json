@@ -5,7 +5,9 @@
     "staking": "Staking",
     "governance": "Governance",
     "parameters": "Parameters",
-    "uptime": "Uptime"
+    "uptime": "Uptime",
+    "state-sync": "State Sync",
+    "cosmwasm": "Cosmwasm"
   },
   "index": {
     "slogan": "Ping Dashboard is not just an explorer but also a wallet and more ... 🛠",

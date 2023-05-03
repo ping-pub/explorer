@@ -13,8 +13,12 @@ export interface Request<T> {
   adapter: (source: any) => T
 }
 
+export interface AbstractRegistry {
+  [key: string]: Request<any>
+}
+
 // use snake style, since the all return object use snake style.
-export interface RequestRegistry {
+export interface RequestRegistry extends AbstractRegistry {
   auth_params: Request<any>
   auth_accounts: Request<PaginabledAccounts>;
   auth_account_address: Request<{account: AuthAccount}>;
@@ -102,8 +106,8 @@ export interface Registry {
   [key: string]: RequestRegistry;
 }
 
-export function withCustomAdapter<T extends RequestRegistry>(target: T, source: Partial<T>): T {
-  return Object.assign({}, target, source);
+export function withCustomAdapter<T extends RequestRegistry>(target: T, source?: Partial<T>): T {
+  return source ? Object.assign({}, target, source): target;
 }
 
 export function findConfigByName(name: string, registry: Registry): RequestRegistry {
