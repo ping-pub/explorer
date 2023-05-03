@@ -41,14 +41,12 @@ onMounted(() => {
       for (let i = height - 1; i > height - 50; i -= 1) {
         if (i > height - 48) {
           promise = promise.then(() => new Promise((resolve, reject) => {
-            baseStore.fetchBlock(i).then((x) => {
-              commits.value.unshift(x.block.last_commit)
-              if(live.value) {
-                resolve()
-              } else {
-                reject()
-              }
-            })
+            if(live.value) { // continue only if the page is living
+              baseStore.fetchBlock(i).then((x) => {
+                commits.value.unshift(x.block.last_commit)
+                  resolve()
+              })
+            }
           }))
         }
       }
