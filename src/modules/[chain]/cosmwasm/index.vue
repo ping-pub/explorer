@@ -28,7 +28,8 @@ wasmStore.wasmClient.getWasmCodeList().then(x =>{
                         <td><RouterLink :to="`/${props.chain}/cosmwasm/${v.code_id}/contracts`"><div class="text-truncate" style="max-width: 200px;">{{ v.data_hash }}</div></RouterLink></td>
                         <td>
                             {{ v.instantiate_permission?.permission }}
-                            <span>{{ v.instantiate_permission?.address }}</span>
+                            <span>{{ v.instantiate_permission?.address }} {{ v.instantiate_permission.addresses.join(", ") }}</span>
+                            
                         </td>
                     </tr>
                 </tbody>
