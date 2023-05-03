@@ -8,7 +8,7 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import utc from 'dayjs/plugin/utc'
 import localeData from 'dayjs/plugin/localeData'
 import { useStakingStore } from "./useStakingStore";
-import { fromBase64, fromBech32, toHex } from "@cosmjs/encoding";
+import { fromBase64, fromBech32, fromHex, toHex } from "@cosmjs/encoding";
 import { consensusPubkeyToHexAddress } from "@/libs";
 import { useBankStore } from "./useBankStore";
 import type { DenomTrace } from "@/types";
@@ -183,7 +183,19 @@ export const useFormatter = defineStore('formatter', {
         },
         multiLine(v: string) {
             return v? v.replaceAll("\\n","\n"): ""
-        }                 
+        },
+        hexToString(hex: string) {
+            if(hex) {
+                return new TextDecoder().decode(fromHex(hex))
+            }
+            return ""
+        },
+        base64ToString(hex: string) {
+            if(hex) {
+                return new TextDecoder().decode(fromBase64(hex))
+            }
+            return ""
+        }                              
     }
 })
 
