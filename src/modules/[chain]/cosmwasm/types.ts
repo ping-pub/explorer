@@ -11,6 +11,22 @@ export interface CodeInfo {
     }
 }
 
+export interface ContractInfo {
+    code_id: string,
+    creator: string,
+    admin: string,
+    label: string,
+    created: {
+      block_height: string,
+      tx_index: string
+    },
+    ibc_port_id: string,
+    extension: {
+      type_url: string,
+      value: string
+    }
+  }
+
 export interface WasmParam {
     params: {
         code_upload_access: {
@@ -41,7 +57,7 @@ export interface PaginabledContractHistory extends PaginatedResponse {
     entries: HistoryEntry[]
 }
 
-export interface PaginabledStates extends PaginatedResponse {
+export interface PaginabledContractStates extends PaginatedResponse {
     models: Models[]
 }
 

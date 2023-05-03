@@ -2,7 +2,7 @@ import { BaseRestClient } from "@/libs/client";
 import { adapter, type AbstractRegistry, type Request } from "@/libs/registry";
 import type { PaginabledAccounts } from "@/types";
 import { defineStore } from "pinia";
-import type { CodeInfo, PaginabledCodeInfos, PaginabledContractHistory, PaginabledContracts, PaginabledStates, WasmParam } from "./types";
+import type { CodeInfo, ContractInfo, PaginabledCodeInfos, PaginabledContractHistory, PaginabledContracts, PaginabledContractStates, WasmParam } from "./types";
 import { toBase64 } from "@cosmjs/encoding";
 import { useBlockchain } from "@/stores";
 
@@ -11,11 +11,11 @@ export interface WasmRequestRegistry extends AbstractRegistry {
     cosmwasm_code_id: Request<CodeInfo>;
     cosmwasm_code_id_contracts: Request<PaginabledContracts>;
     cosmwasm_param: Request<WasmParam>;
-    cosmwasm_contract_address: Request<any>;
+    cosmwasm_contract_address: Request<{address: string, contract_info: ContractInfo}>;
     cosmwasm_contract_address_history: Request<PaginabledContractHistory>;
     cosmwasm_contract_address_raw_query_data: Request<any>;
     cosmwasm_contract_address_smart_query_data: Request<any>;
-    cosmwasm_contract_address_state: Request<PaginabledStates>;
+    cosmwasm_contract_address_state: Request<PaginabledContractStates>;
 }
 
 export const DEFAULT: WasmRequestRegistry = {
