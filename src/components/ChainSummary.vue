@@ -13,6 +13,13 @@ const props = defineProps({
 const dashboardStore = useDashboard()
 const conf = computed(() => dashboardStore.chains[props.name] || {})
 
+const addFavor = (e: Event) => {
+  e.stopPropagation();
+  e.preventDefault();
+  dashboardStore.favoriteMap[props.name] = !dashboardStore?.favoriteMap?.[props.name];
+  window.localStorage.setItem('favoriteMap', JSON.stringify(dashboardStore.favoriteMap))
+}
+
 </script>
 <template>
   <RouterLink :to="`/${name}`" class="bg-base-100 rounded shadow flex items-center px-3 py-3 cursor-pointer">
@@ -22,9 +29,7 @@ const conf = computed(() => dashboardStore.chains[props.name] || {})
     <div class="font-semibold ml-4 text-base flex-1">
       {{ conf?.prettyName || props.name }}
     </div>
-    <div
-      @click="(e: Event) => { e.stopPropagation(); e.preventDefault(); dashboardStore.favoriteMap[props.name] = !dashboardStore?.favoriteMap?.[props.name] }"
-      class="pl-4 text-xl"
+    <div @click="addFavor" class="pl-4 text-xl"
       :class="{ 'text-warning': dashboardStore?.favoriteMap?.[props.name], 'text-gray-300 dark:text-gray-500': !dashboardStore?.favoriteMap?.[props.name] }">
       <Icon icon="mdi-star" />
     </div>
