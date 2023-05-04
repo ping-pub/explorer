@@ -23,14 +23,22 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        light: {
-          ...require("daisyui/src/colors/themes")["[data-theme=light]"],
-          // primary: "blue",
+        myTheme: {
           info: "#666CFF",
         }
       },
-      // "light", 
-      "dark"
+      {
+        light: {
+          ...require("daisyui/src/colors/themes")["[data-theme=light]"],
+          info: "#666CFF",
+        }
+      },
+      {
+        dark: {
+          ...require("daisyui/src/colors/themes")["[data-theme=dark]"],
+          info: "#666CFF",
+        }
+      },
     ],
   }
 };
