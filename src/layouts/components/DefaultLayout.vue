@@ -2,7 +2,8 @@
 import { useThemeConfig } from '@/plugins/vuetify/@core/composable/useThemeConfig';
 
 // Components
-import Footer from '@/layouts/components/Footer.vue';
+// import Footer from '@/layouts/components/Footer.vue';
+import newFooter from '@/layouts/components/newFooter.vue';
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
 import UserProfile from '@/layouts/components/ChainProfile.vue';
 
@@ -79,7 +80,8 @@ blockchain.$subscribe((m, s) => {
 
     <!-- 👉 Footer -->
     <template #footer>
-      <Footer />
+      <!-- <Footer /> -->
+      <newFooter />
     </template>
 
     <!-- 👉 Customizer -->
