@@ -20,6 +20,6 @@ const themes: ThemeSwitcherTheme[] = [
 <template>
   <div>
     <NewThemeSwitcher :themes="themes"/>
-    <ThemeSwitcher :themes="themes" />
+    <!-- <ThemeSwitcher :themes="themes" /> -->
   </div>
 </template>

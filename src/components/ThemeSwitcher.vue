@@ -29,10 +29,12 @@ const changeMode = (val: 'dark' | 'light' | 'system') => {
   if (value === 'dark') {
     document.documentElement.classList.add('dark');
     document.documentElement.classList.remove('light');
+    
   } else {
     document.documentElement.classList.add('light');
     document.documentElement.classList.remove('dark');
   }
+  document.documentElement.setAttribute("data-theme", value);
 };
 // Update icon if theme is changed from other sources
 watch(theme, (val: 'dark' | 'light' | 'system') => {
