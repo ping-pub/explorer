@@ -23,13 +23,13 @@ const chain = useBlockchain()
 <template>
   <div class="">
     <div class="flex items-center justify-center mb-6 mt-10">
-      <div class="w-16 rounded-full mr-3">
+      <div class="w-8 md:w-16 rounded-full mr-3">
         <img src="/logo.svg" />
       </div>
-      <h1 class="text-primary text-6xl font-bold mr-2">
+      <h1 class="text-primary text-3xl md:text-6xl font-bold mr-2">
         Ping dashboard
       </h1>
-      <div class="badge badge-info badge-outline mt-5">Beta</div>
+      <div class="badge badge-info badge-outline mt-1 text-sm md:mt-5">Beta</div>
     </div>
     <div class="text-center text-base">
       <p class="mb-1">
@@ -41,19 +41,17 @@ const chain = useBlockchain()
     </div>
     <div v-if="dashboard.status !== LoadingStatus.Loaded" class="flex justify-center"><progress
         class="progress progress-info w-80 h-1"></progress></div>
-        
+
     <VTextField v-model="keywords" variant="underlined" :placeholder="$t('index.search_placeholder')"
       style="max-width: 300px;" app>
       <template #append-inner>
         {{ chains.length }}/{{ dashboard.length }}
       </template>
     </VTextField>
-    <VRow class="my-auto">
-      <VCol v-for="k in chains" md="3">
-        <VLazy min-height="40" min-width="200" transition="fade-transition">
-          <ChainSummary :name="k.chainName" />
-        </VLazy>
-      </VCol>
-    </VRow>
+
+    <div class="grid grid-cols-2 gap-4 mt-6 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+      <ChainSummary v-for="(chain, index) in chains" :key="index" :name="chain.chainName" />
+    </div>
+
   </div>
 </template>
