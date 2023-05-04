@@ -4,7 +4,7 @@
     "api": ["https://public-rest-rpc1.stafihub.io","https://api.stafihub.nodestake.top"],
     "rpc": ["https://public-rpc1.stafihub.io:443","https://rpc.stafihub.nodestake.top"],
     "snapshot_provider": "",
-    "sdk_version": "0.45.7",
+    "sdk_version": "0.46.12",
     "coin_type": "118",
     "min_tx_fee": "20000",
     "addr_prefix": "stafi",
@@ -31,6 +31,12 @@
         "base": "urhuahua",
         "symbol": "rHUAHUA",
         "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "/logos/stafihub.png"
+    },{
+        "base": "urswth",
+        "symbol": "rSWTH",
+        "exponent": "8",
         "coingecko_id": "", 
         "logo": "/logos/stafihub.png"
     }]
