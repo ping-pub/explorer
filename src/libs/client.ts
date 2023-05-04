@@ -179,6 +179,27 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     async getIBCAppTransferDenom(hash: string) {
         return this.request(this.registry.ibc_app_transfer_denom_traces_hash, {hash})
     }
+    async getIBCConnections() {
+        return this.request(this.registry.ibc_core_connection_connections, {})
+    }
+    async getIBCConnectionsById(connection_id: string) {
+        return this.request(this.registry.ibc_core_connection_connections_connection_id, {connection_id})
+    }
+    async getIBCConnectionsClientState(connection_id: string) {
+        return this.request(this.registry.ibc_core_connection_connections_connection_id_client_state, {connection_id})
+    }    
+    async getIBCConnectionsChannels(connection_id: string) {
+        return this.request(this.registry.ibc_core_channel_connections_channels, {connection_id})
+    }        
+    async getIBCChannels() {
+        return this.request(this.registry.ibc_core_channel_channels, {})
+    }       
+    async getIBCChannelAcknowledgements(channel_id: string, port_id: string) {
+        return this.request(this.registry.ibc_core_channel_channels_acknowledgements, {channel_id, port_id})
+    }       
+    async getIBCChannelNextSequence(channel_id: string, port_id: string) {
+        return this.request(this.registry.ibc_core_channel_channels_next_sequence, {channel_id, port_id})
+    }
 
 
 }

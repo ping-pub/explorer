@@ -7,7 +7,8 @@
     "parameters": "Parameters",
     "uptime": "Uptime",
     "state-sync": "State Sync",
-    "cosmwasm": "Cosmwasm"
+    "cosmwasm": "Cosmwasm",
+    "ibc": "IBC"
   },
   "index": {
     "slogan": "Ping Dashboard is not just an explorer but also a wallet and more ... 🛠",

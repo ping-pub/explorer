@@ -47,19 +47,23 @@ export const DEFAULT: RequestRegistry = {
     tx_txs_block: { url: "/cosmos/tx/v1beta1/txs/block/{height}", adapter },
     tx_hash: { url: "/cosmos/tx/v1beta1/txs/{hash}", adapter },
 
-    mint_inflation: { url: "/cosmos/mint/v1beta1/inflation", adapter},
-    mint_params: { url: "/cosmos/mint/v1beta1/params", adapter},
-    mint_annual_provisions: { url: "/cosmos/mint/v1beta1/annual_provisions", adapter},
+    mint_inflation: { url: "/cosmos/mint/v1beta1/inflation", adapter },
+    mint_params: { url: "/cosmos/mint/v1beta1/params", adapter },
+    mint_annual_provisions: { url: "/cosmos/mint/v1beta1/annual_provisions", adapter },
 
     // ibc
     ibc_app_ica_controller_params: { url: "/ibc/apps/interchain_accounts/controller/v1/params", adapter },
-    ibc_app_ica_host_params: { url: "/ibc​/apps​/interchain_accounts​/host​/v1​/params", adapter},
-    ibc_app_transfer_escrow_address: { url: "/ibc/apps/transfer/v1/channels/{channel_id}/ports/{port_id}/escrow_address", adapter},
-    ibc_app_transfer_denom_traces: { url: "/ibc/apps/transfer/v1/denom_traces", adapter},
-    ibc_app_transfer_denom_traces_hash: { url: "/ibc/apps/transfer/v1/denom_traces/{hash}", adapter},
-    ibc_core_channel_channels: { url: "/ibc/core/channel/v1/channels", adapter},
-    ibc_core_channel_channels_next_sequence: { url: "/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/next_sequence", adapter},
-    ibc_core_channel_channels_acknowledgements: { url: "/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_acknowledgements", adapter}
+    ibc_app_ica_host_params: { url: "/ibc​/apps​/interchain_accounts​/host​/v1​/params", adapter },
+    ibc_app_transfer_escrow_address: { url: "/ibc/apps/transfer/v1/channels/{channel_id}/ports/{port_id}/escrow_address", adapter },
+    ibc_app_transfer_denom_traces: { url: "/ibc/apps/transfer/v1/denom_traces", adapter },
+    ibc_app_transfer_denom_traces_hash: { url: "/ibc/apps/transfer/v1/denom_traces/{hash}", adapter },
+    ibc_core_channel_channels: { url: "/ibc/core/channel/v1/channels", adapter },
+    ibc_core_channel_channels_next_sequence: { url: "/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/next_sequence", adapter },
+    ibc_core_channel_channels_acknowledgements: { url: "/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_acknowledgements", adapter },
+    ibc_core_channel_connections_channels: { url: "/ibc/core/channel/v1/connections/{connection_id}/channels", adapter },
+    ibc_core_connection_connections: { url: "/ibc/core/connection/v1/connections", adapter },
+    ibc_core_connection_connections_connection_id: { url: "/ibc/core/connection/v1/connections/{connection_id}", adapter },
+    ibc_core_connection_connections_connection_id_client_state: { url: "/ibc/core/connection/v1/connections/{connection_id}/client_state", adapter }
 };
 
 export const VERSION_REGISTRY: Registry = {
