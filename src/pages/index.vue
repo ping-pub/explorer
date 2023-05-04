@@ -29,7 +29,7 @@ const chain = useBlockchain()
       <h1 class="text-primary text-3xl md:text-6xl font-bold mr-2">
         Ping dashboard
       </h1>
-      <div class="badge badge-info badge-outline mt-1 text-sm md:mt-5">Beta</div>
+      <div class="badge badge-info badge-outline mt-1 text-sm md:mt-8">Beta</div>
     </div>
     <div class="text-center text-base">
       <p class="mb-1">
