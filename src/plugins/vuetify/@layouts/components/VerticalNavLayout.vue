@@ -1,5 +1,6 @@
 <script lang="ts">
-import type { PropType } from 'vue'
+import type { PropType} from 'vue'
+import {h} from 'vue'
 import { useLayouts } from '@layouts'
 import { VerticalNav } from '@layouts/components'
 import type { VerticalNavItems } from '@layouts/types'
@@ -101,17 +102,20 @@ export default defineComponent({
       )
 
       // 👉 Footer
-      const footer = h(
-        'footer',
-        { class: 'layout-footer' },
-        [
-          h(
-            'div',
-            { class: 'footer-content-container' },
-            slots.footer?.(),
-          ),
-        ],
-      )
+      // const footer = h(
+      //   'footer',
+      //   { class: 'layout-footer' },
+      //   [
+      //     h(
+      //       'div',
+      //       { class: 'footer-content-container' },
+      //       slots.footer?.(),
+      //     ),
+      //   ],
+      // )
+
+      const footer = h('footer',{},slots.footer?.())
+      
 
       // 👉 Overlay
       const layoutOverlay = h(
