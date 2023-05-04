@@ -1,13 +1,13 @@
 import { fetchData } from '@/libs';
 import { DEFAULT } from '@/libs'
-import { adapter, type Request, type RequestRegistry } from './registry';
+import { adapter, withCustomAdapter, type Request, type RequestRegistry, type Registry, type AbstractRegistry } from './registry';
 
-export class CosmosRestClient {
+export class BaseRestClient<R extends AbstractRegistry> {
     endpoint: string;
-    registry: RequestRegistry;
-    constructor(endpoint: string, registry?: RequestRegistry) {
+    registry: R;
+    constructor(endpoint: string, registry: R) {
         this.endpoint = endpoint
-        this.registry =  registry || DEFAULT
+        this.registry = registry
     }
     async request<T>(request: Request<T>, args: Record<string, any>, query="") {
         let url = `${this.endpoint}${request.url}${query}`
@@ -16,6 +16,9 @@ export class CosmosRestClient {
         })
         return fetchData<T>(url, adapter)
     }
+}
+
+export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     // Auth Module
     async getAuthAccounts() {
         return this.request(this.registry.auth_accounts, {})

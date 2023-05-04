@@ -5,6 +5,7 @@ import { useRouter } from "vue-router";
 import { CosmosRestClient } from "@/libs/client";
 import { useBankStore, useBaseStore, useGovStore, useMintStore, useStakingStore } from ".";
 import { useBlockModule } from "@/modules/[chain]/block/block";
+import { DEFAULT } from "@/libs";
 
 export const useBlockchain = defineStore("blockchain", {
   state: () => {
@@ -110,7 +111,7 @@ export const useBlockchain = defineStore("blockchain", {
     async setRestEndpoint(endpoint: Endpoint) {
       this.connErr = ''
       this.endpoint = endpoint
-      this.rpc = new CosmosRestClient(endpoint.address)
+      this.rpc = new CosmosRestClient(endpoint.address, DEFAULT)
     },
     setCurrent(name: string) {
       this.chainName = name
