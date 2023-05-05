@@ -21,6 +21,7 @@ module.exports = {
       {
         light: {
           ...require('daisyui/src/colors/themes')['[data-theme=light]'],
+          primary: '#666cff',
           info: '#666CFF',
           'base-content': '#e9eaeb'
         },
@@ -28,6 +29,7 @@ module.exports = {
       {
         dark: {
           ...require('daisyui/src/colors/themes')['[data-theme=dark]'],
+          primary: '#666cff',
           info: '#666CFF',
           'base-100': '#2a334c',
           'base-content': '#373f57'
