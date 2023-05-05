@@ -11,34 +11,28 @@ module.exports = {
         primary: '#666cff',
         main: 'var(--text-main)',
         secondary: 'var(--text-secondary)',
-        card: 'var(--bg-card)',
-        hover: 'var(--bg-hover)',
         active: 'var(--bg-active)',
       },
     },
   },
-  plugins: [
-    require("daisyui")
-  ],
+  plugins: [require('daisyui')],
   daisyui: {
     themes: [
       {
-        myTheme: {
-          info: "#666CFF",
-        }
-      },
-      {
         light: {
-          ...require("daisyui/src/colors/themes")["[data-theme=light]"],
-          info: "#666CFF",
-        }
+          ...require('daisyui/src/colors/themes')['[data-theme=light]'],
+          info: '#666CFF',
+          'base-content': '#e9eaeb'
+        },
       },
       {
         dark: {
-          ...require("daisyui/src/colors/themes")["[data-theme=dark]"],
-          info: "#666CFF",
-        }
+          ...require('daisyui/src/colors/themes')['[data-theme=dark]'],
+          info: '#666CFF',
+          'base-100': '#2a334c',
+          'base-content': '#373f57'
+        },
       },
     ],
-  }
+  },
 };

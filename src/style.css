@@ -6,16 +6,12 @@
   :root {
     --text-main: #333;
     --text-secondary: #4b525d;
-    --bg-card: #fff;
     --bg-active: #fbfbfc;
-    --bg-hover: #eee;
   }
 
   html.dark {
     --text-main: #f7f7f7;
     --text-secondary: #6f6e84;
-    --bg-card: #28334e;
     --bg-active: #242b40;
-    --bg-hover: #303044;
   }
 }

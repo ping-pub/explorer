@@ -22,13 +22,13 @@ watch(locale, (val) => {
   document.documentElement.setAttribute('lang', val as string);
 });
 
-const currentLang = ref([localStorage.getItem('lang') || 'en']);
+const currentLang = ref(localStorage.getItem('lang') || 'en');
 </script>
 
 <template>
   <div class="dropdown dropdown-end">
     <label tabindex="0" class="btn btn-ghost btn-circle btn-sm mx-1">
-      <Icon icon="mdi-translate" style="font-size: 24px" />
+      <Icon icon="mdi-translate" class="text-2xl" />
     </label>
     <ul
       tabindex="0"
@@ -36,6 +36,8 @@ const currentLang = ref([localStorage.getItem('lang') || 'en']);
     >
       <li v-for="lang in props.languages" :key="lang.i18nLang">
         <a
+          class="hover:bg-base-content"
+          :class="{ 'text-primary': currentLang === lang.i18nLang }"
           @click="
             locale = lang.i18nLang;
             $emit('change', lang.i18nLang);
