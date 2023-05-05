@@ -6,7 +6,6 @@ import { computed } from '@vue/reactivity';
 import { onBeforeRouteUpdate } from 'vue-router';
 const props = defineProps(['height', 'chain']);
 
-const store = useBlockModule()
 const store = useBlockModule();
 store.fetchBlock(props.height);
 const tab = ref('summary');
