@@ -142,132 +142,134 @@ const rank = function (position: number) {
 };
 </script>
 <template>
-  <div class="flex items-center justify-between">
-    <div class="tabs tabs-boxed bg-transparent mb-4">
-      <a
-        class="tab text-gray-400"
-        :class="{ 'tab-active': tab === 'active' }"
-        @click="tab = 'active'"
-        >Active</a
-      >
-      <a
-        class="tab text-gray-400"
-        :class="{ 'tab-active': tab === 'inactive' }"
-        @click="tab = 'inactive'"
-        >Inactive</a
-      >
-    </div>
-
-    <div class="text-lg font-semibold">
-      {{ list.length }}/{{ staking.params.max_validators }}
-    </div>
-  </div>
   <div>
-    <VCard>
-      <VTable class="text-no-wrap table-header-bg rounded-0">
-        <thead>
-          <tr>
-            <th scope="col" style="width: 3rem">#</th>
-            <th scope="col">VALIDATOR</th>
-            <th scope="col" class="text-right">VOTING POWER</th>
-            <th scope="col" class="text-right">24h CHANGES</th>
-            <th scope="col" class="text-right">COMMISSION</th>
-            <th scope="col">ACTIONS</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(v, i) in list" :key="v.operator_address">
-            <!-- 👉 rank -->
-            <td>
-              <VChip label :color="rank(i)">
-                {{ i + 1 }}
-              </VChip>
-            </td>
+    <div class="flex items-center justify-between">
+      <div class="tabs tabs-boxed bg-transparent mb-4">
+        <a
+          class="tab text-gray-400"
+          :class="{ 'tab-active': tab === 'active' }"
+          @click="tab = 'active'"
+          >Active</a
+        >
+        <a
+          class="tab text-gray-400"
+          :class="{ 'tab-active': tab === 'inactive' }"
+          @click="tab = 'inactive'"
+          >Inactive</a
+        >
+      </div>
 
-            <!-- 👉 Validator -->
-            <td>
-              <div
-                class="d-flex align-center overflow-hidden"
-                style="max-width: 400px"
-              >
-                <VAvatar
-                  variant="tonal"
-                  class="me-3"
-                  size="34"
-                  icon="mdi-help-circle-outline"
-                  :image="logo(v.description?.identity)"
-                />
+      <div class="text-lg font-semibold">
+        {{ list.length }}/{{ staking.params.max_validators }}
+      </div>
+    </div>
+    <div>
+      <VCard>
+        <VTable class="text-no-wrap table-header-bg rounded-0">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 3rem">#</th>
+              <th scope="col">VALIDATOR</th>
+              <th scope="col" class="text-right">VOTING POWER</th>
+              <th scope="col" class="text-right">24h CHANGES</th>
+              <th scope="col" class="text-right">COMMISSION</th>
+              <th scope="col">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(v, i) in list" :key="v.operator_address">
+              <!-- 👉 rank -->
+              <td>
+                <VChip label :color="rank(i)">
+                  {{ i + 1 }}
+                </VChip>
+              </td>
+
+              <!-- 👉 Validator -->
+              <td>
+                <div
+                  class="d-flex align-center overflow-hidden"
+                  style="max-width: 400px"
+                >
+                  <VAvatar
+                    variant="tonal"
+                    class="me-3"
+                    size="34"
+                    icon="mdi-help-circle-outline"
+                    :image="logo(v.description?.identity)"
+                  />
+                  <div class="d-flex flex-column">
+                    <h6 class="text-sm text-primary">
+                      <RouterLink
+                        :to="{
+                          name: 'chain-staking-validator',
+                          params: { validator: v.operator_address },
+                        }"
+                        class="font-weight-medium user-list-name"
+                      >
+                        {{ v.description?.moniker }}
+                      </RouterLink>
+                    </h6>
+                    <span class="text-xs">{{
+                      v.description?.website || v.description?.identity || '-'
+                    }}</span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- 👉 Voting Power -->
+              <td class="text-right">
                 <div class="d-flex flex-column">
-                  <h6 class="text-sm text-primary">
-                    <RouterLink
-                      :to="{
-                        name: 'chain-staking-validator',
-                        params: { validator: v.operator_address },
-                      }"
-                      class="font-weight-medium user-list-name"
-                    >
-                      {{ v.description?.moniker }}
-                    </RouterLink>
+                  <h6 class="text-sm font-weight-medium">
+                    {{
+                      format.formatToken(
+                        {
+                          amount: parseInt(v.tokens).toString(),
+                          denom: staking.params.bond_denom,
+                        },
+                        true,
+                        '0,0'
+                      )
+                    }}
                   </h6>
                   <span class="text-xs">{{
-                    v.description?.website || v.description?.identity || '-'
+                    format.calculatePercent(
+                      v.delegator_shares,
+                      staking.totalPower
+                    )
                   }}</span>
                 </div>
-              </div>
-            </td>
-
-            <!-- 👉 Voting Power -->
-            <td class="text-right">
-              <div class="d-flex flex-column">
-                <h6 class="text-sm font-weight-medium">
-                  {{
-                    format.formatToken(
-                      {
-                        amount: parseInt(v.tokens).toString(),
-                        denom: staking.params.bond_denom,
-                      },
-                      true,
-                      '0,0'
-                    )
-                  }}
-                </h6>
-                <span class="text-xs">{{
-                  format.calculatePercent(
-                    v.delegator_shares,
-                    staking.totalPower
+              </td>
+              <!-- 👉 24h Changes -->
+              <td
+                class="text-right text-xs"
+                :class="change24Color(v.consensus_pubkey)"
+              >
+                {{ change24Text(v.consensus_pubkey) }}
+                <VChip label v-if="v.jailed" color="error">Jailed</VChip>
+              </td>
+              <!-- 👉 commission -->
+              <td class="text-right">
+                {{
+                  format.formatCommissionRate(
+                    v.commission?.commission_rates?.rate
                   )
-                }}</span>
-              </div>
-            </td>
-            <!-- 👉 24h Changes -->
-            <td
-              class="text-right text-xs"
-              :class="change24Color(v.consensus_pubkey)"
-            >
-              {{ change24Text(v.consensus_pubkey) }}
-              <VChip label v-if="v.jailed" color="error">Jailed</VChip>
-            </td>
-            <!-- 👉 commission -->
-            <td class="text-right">
-              {{
-                format.formatCommissionRate(
-                  v.commission?.commission_rates?.rate
-                )
-              }}
-            </td>
-            <!-- 👉 Action -->
-            <td>
-              {{ 2 }}
-            </td>
-          </tr>
-        </tbody>
-      </VTable>
-      <VDivider />
-      <VCardActions class="py-2">
-        <VChip label color="error">Top 33%</VChip>
-        <VChip label color="warning" class="mx-2">Top 67%</VChip>
-      </VCardActions>
-    </VCard>
+                }}
+              </td>
+              <!-- 👉 Action -->
+              <td>
+                {{ 2 }}
+              </td>
+            </tr>
+          </tbody>
+        </VTable>
+        <VDivider />
+        <VCardActions class="py-2">
+          <VChip label color="error">Top 33%</VChip>
+          <VChip label color="warning" class="mx-2">Top 67%</VChip>
+        </VCardActions>
+      </VCard>
+    </div>
   </div>
 </template>
 
