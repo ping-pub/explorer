@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { defineEmits, ref } from 'vue'
+import { defineEmits, ref, watch } from 'vue'
 import type { Anchor } from 'vuetify/lib/components';
 import type { I18nLanguage } from '@layouts/types';
 
@@ -17,16 +17,15 @@ interface Props {
   location?: Anchor;
 }
 
-let { locale } = useI18n({ useScope: 'global' });
-
-watch(locale, (val) => {
+let locale = ref(useI18n({ useScope: 'global' }).locale)
+watch(locale, (val: string) => {
   document.documentElement.setAttribute('lang', val as string);
 });
 
 let currentLang = ref(localStorage.getItem('lang') || 'en');
 
 function changeLang(lang: string){
-  locale = lang
+  locale.value = lang
   currentLang.value = lang
   emit('change', lang)
 }
