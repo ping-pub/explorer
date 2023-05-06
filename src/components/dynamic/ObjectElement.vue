@@ -6,7 +6,7 @@ const props = defineProps(["value"]);
 
 </script>
 <template>
-    <VTable>
+    <table class="table">
         <tbody>
             <tr v-for="(v, k) of value">
                 <td class="text-capitalize" style="max-width: 200px;">{{ k }}</td>
@@ -15,5 +15,5 @@ const props = defineProps(["value"]);
                 </td>
             </tr>
         </tbody>
-    </VTable>
+    </table>
 </template>

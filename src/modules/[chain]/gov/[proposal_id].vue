@@ -140,17 +140,26 @@ const abstain = computed(()=> {
 
 <template>
 <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4">
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
         <h2 class="card-title flex flex-col md:justify-between md:flex-row">
             <p class="truncate w-full">{{ proposal_id }}. {{ proposal.content?.title }} </p>
-            <VChip label :color="color" class="justify-self-end">{{ status }}</VChip>
+            <div 
+                class="badge badge-ghost"
+                :class="
+                    color === 'success'
+                    ? 'text-yes'
+                    : color === 'error'
+                    ? 'text-no'
+                    : 'text-info'
+                "
+            >{{ status }}</div>
         </h2>
         <div class="">
             <ObjectElement :value="proposal.content"/>
         </div>
     </div>
 
-    <!-- <VCard>
+    <VCard>
         <VCardItem>
         <VCardTitle>
             {{ proposal_id }}. {{ proposal.content?.title }} <VChip label :color="color" class="float-right">{{ status }}</VChip>
@@ -158,7 +167,7 @@ const abstain = computed(()=> {
             <ObjectElement :value="proposal.content"/>
         </VCardItem>
     </VCard>
-     -->
+    
     <VRow class="my-5">
         <VCol cols=12 md="4">
             <VCard class="h-100">
