@@ -24,7 +24,7 @@
         >License</a
       >
       <a
-        class="link link-info no-underline"
+        class="link link-primary no-underline"
         href="https://github.com/ping-pub/explorer"
         target="noopener noreferrer"
         >Github</a
