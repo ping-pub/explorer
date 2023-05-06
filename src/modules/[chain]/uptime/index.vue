@@ -1,24 +1,29 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import {fromBase64, fromBech32, fromHex, toBase64, toBech32, toHex} from '@cosmjs/encoding'
+import { ref, onMounted, computed, watchEffect } from 'vue';
+import { fromHex, toBase64 } from '@cosmjs/encoding'
 import { useFormatter, useStakingStore, useBaseStore, useBlockchain } from '@/stores';
 import UptimeBar from '@/components/UptimeBar.vue';
-import type { Commit } from '@/types'
+import type { Block, Commit } from '@/types'
 import { consensusPubkeyToHexAddress, valconsToBase64 } from "@/libs";
+import type { SigningInfo } from '@/types/slashing';
 
 const props = defineProps(['chain'])
 
 const stakingStore = useStakingStore();
 const baseStore = useBaseStore();
 const chainStore = useBlockchain()
-const format = useFormatter();
-const latest = ref({})
+const latest = ref({} as Block)
 const commits = ref([] as Commit[]);
 const keyword = ref("")
 const live = ref(true);
 
-const signingInfo = ref({})
+// storage local favorite validator ids
+const local = ref((JSON.parse(localStorage.getItem("uptime-validators") || "{}")) as Record<string, string[]>)
+const selected = ref(local.value[chainStore.chainName] as string[]) // favorite validators on selected blockchain
 
+const signingInfo = ref({} as Record<string, SigningInfo>)
+
+// filter validators by keywords
 const validators = computed(()=> {
   if(keyword) return stakingStore.validators.filter(x => x.description.moniker.indexOf(keyword.value) > -1)
   return stakingStore.validators
@@ -36,14 +41,12 @@ onMounted(() => {
       for (let i = height - 1; i > height - 50; i -= 1) {
         if (i > height - 48) {
           promise = promise.then(() => new Promise((resolve, reject) => {
-            baseStore.fetchBlock(i).then((x) => {
-              commits.value.unshift(x.block.last_commit)
-              if(live.value) {
-                resolve()
-              } else {
-                reject()
-              }
-            })
+            if(live.value) { // continue only if the page is living
+              baseStore.fetchBlock(i).then((x) => {
+                commits.value.unshift(x.block.last_commit)
+                  resolve()
+              })
+            }
           }))
         }
       }
@@ -61,6 +64,11 @@ onUnmounted(() => {
   live.value = false
 })
 
+watchEffect(() => {
+  local.value[chainStore.chainName] = selected.value
+  localStorage.setItem("uptime-validators", JSON.stringify(local.value))
+})
+
 </script>
 
 <template>
@@ -72,17 +80,24 @@ onUnmounted(() => {
         </VCard>
       </VCol>
       <VCol cols="12" md="8" class=""> 
-        <VTextField v-model="keyword" label="Keywords to filter validators" variant="outlined"/>
-        
+        <VTextField v-model="keyword" label="Keywords to filter validators" variant="outlined">
+          <template v-slot:append>
+            <VBtn><VIcon icon="mdi-star"/><span class="d-none d-md-block">Favorite</span></VBtn>
+          </template>
+        </VTextField>     
       </VCol>
     </VRow>
     
     <VRow>
-      <VCol v-for="(v, i) in validators" cols="12" md="3" xl="2" class="py-1">
+      <VCol v-for="(v, i) in validators" cols="12" md="3" xl="2" class="py-0">
         <div class="d-flex justify-between">
-          <span class="text-truncate"> {{i + 1}}. <RouterLink class="" :to="`/${props.chain}/staking/${v.operator_address}`"> {{v.description.moniker}} </RouterLink></span> 
-          <VChip v-if="Number(signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter || 0) > 0" size="small" class="mb-1" label color="error">{{ signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter }}</VChip>
-          <VChip v-else size="small" class="mb-1" label color="success">{{ signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter }}</VChip>
+          <VCheckbox v-model="selected" color="warning" :value="v.operator_address">
+              <template v-slot:label>
+                <span class="text-truncate">{{i + 1}}. {{v.description.moniker}}</span>
+              </template>
+            </VCheckbox>
+          <VChip v-if="Number(signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter || 0) > 0" size="small" class="mt-1" label color="error">{{ signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter }}</VChip>
+          <VChip v-else size="small" class="mt-1" label color="success">{{ signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]?.missed_blocks_counter }}</VChip>
         </div>
         <UptimeBar :blocks="commits" :validator="toBase64(fromHex(consensusPubkeyToHexAddress(v.consensus_pubkey)))" />
       </VCol>

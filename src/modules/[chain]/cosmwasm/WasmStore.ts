@@ -1,6 +1,5 @@
 import { BaseRestClient } from "@/libs/client";
 import { adapter, type AbstractRegistry, type Request } from "@/libs/registry";
-import type { PaginabledAccounts } from "@/types";
 import { defineStore } from "pinia";
 import type { CodeInfo, ContractInfo, PaginabledCodeInfos, PaginabledContractHistory, PaginabledContracts, PaginabledContractStates, WasmParam } from "./types";
 import { toBase64 } from "@cosmjs/encoding";

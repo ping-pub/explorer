@@ -1,11 +1,10 @@
-import type { AuthAccount, Block, Coin, NodeInfo, PaginabledAccounts, PaginatedTendermintValidator,} from "@/types";
+import type { AuthAccount, Block, ClientStateWithProof, Coin, ConnectionWithProof, DenomTrace, NodeInfo, PaginabledAccounts, PaginatedIBCChannels, PaginatedIBCConnections, PaginatedTendermintValidator,} from "@/types";
 import type { BankParams, PaginatedBalances, PaginatedDenomMetadata, PaginatedSupply } from "@/types/bank";
 import type { DistributionParams, PaginatedSlashes } from "@/types/distribution";
 import type { GovParams, GovProposal, GovVote, PaginatedProposalDeposit, PaginatedProposalVotes, PaginatedProposals, Tally } from "@/types/gov";
 import type { PaginatedSigningInfo } from "@/types/slashing";
 import type { Delegation, PaginatedDelegations, PaginatedRedelegations, PaginatedUnbonding, PaginatedValdiators, StakingParam, StakingPool, Validator } from "@/types/staking";
 import type { PaginatedTxs, Tx, TxResponse } from "@/types/tx";
-import semver from "semver";
 
 
 export interface Request<T> {
@@ -86,15 +85,22 @@ export interface RequestRegistry extends AbstractRegistry {
   ibc_app_transfer_escrow_address: Request<any>;
   ibc_app_transfer_denom_traces: Request<any>;
   ibc_app_transfer_denom_traces_hash: Request<{
-    "denom_trace": {
-      "path": "string",
-      "base_denom": "string"
+    denom_trace: DenomTrace
+  }>;
+  ibc_core_channel_channels: Request<PaginatedIBCChannels>;
+  ibc_core_channel_channels_next_sequence: Request<{
+    next_sequence_receive: string,
+    proof: string,
+    proof_height: {
+      revision_number: string,
+      revision_height: string
     }
   }>;
-  ibc_core_channel_channels: Request<any>;
-  ibc_core_channel_channels_next_sequence: Request<any>;
   ibc_core_channel_channels_acknowledgements: Request<any>;
-
+  ibc_core_channel_connections_channels: Request<PaginatedIBCChannels>;
+  ibc_core_connection_connections:  Request<PaginatedIBCConnections>;
+  ibc_core_connection_connections_connection_id: Request<ConnectionWithProof>;
+  ibc_core_connection_connections_connection_id_client_state: Request<ClientStateWithProof>;
 
 }
 

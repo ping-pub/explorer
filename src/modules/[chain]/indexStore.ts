@@ -168,7 +168,7 @@ export const useIndexModule = defineStore('module-index', {
                     title: 'Community Pool',
                     color: 'primary',
                     icon: 'mdi-bank',
-                    stats: formatter.formatTokens(this.communityPool),
+                    stats: formatter.formatTokens(this.communityPool?.filter(x => x.denom === staking.params.bond_denom)),
                     change: 0,
                 },
             ]

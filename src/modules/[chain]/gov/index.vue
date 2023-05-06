@@ -6,7 +6,12 @@ const tab = ref('2');
 const store = useGovStore();
 
 onMounted(() => {
-  store.fetchProposals('2');
+  store.fetchProposals('2').then(x => {
+    if(x.proposals.length ===0 ) {
+      tab.value = "3"
+      store.fetchProposals('3')
+    }
+  });
 });
 
 const changeTab = (val: '2' | '3' | '4') => {
