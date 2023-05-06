@@ -303,21 +303,5 @@ const processList = computed(()=>{
         </table>
         <VBtn v-if="votePage.next_key" block variant="outlined" @click="loadMore()" :disabled="loading">Load more</VBtn>
     </div>
-    <!-- <VCard>
-        <VCardItem>
-            <VCardTitle>
-                Votes
-            </VCardTitle>
-            <VTable>
-                <tbody>
-                    <tr v-for="x in votes">
-                        <td>{{ x.voter }}</td>
-                        <td>{{ x.option }}</td>
-                    </tr>
-                </tbody>
-            </VTable>
-            <VBtn v-if="votePage.next_key" block variant="outlined" @click="loadMore()" :disabled="loading">Load more</VBtn>
-        </VCardItem>
-    </VCard> -->
 </div>
 </template>

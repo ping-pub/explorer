@@ -41,7 +41,7 @@ function color(v: string) {
 </script>
 <template>
     <div>
-        <div class="bg-white py-24 sm:py-32">
+        <div class="px-4 pt-3 pb-4 bg-base-100  rounded mb-4 shadow py-24 sm:py-32">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <dl class="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
                 <div class="mx-auto flex max-w-xs flex-col gap-y-4">
@@ -60,9 +60,10 @@ function color(v: string) {
                 </dl>
             </div>                        
         </div>
-        <VCard class="my-2">
-            <VCardTitle>IBC Client State</VCardTitle>
-            <VCardText>
+
+        <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+            <h2 class="card-title">IBC Client State </h2>
+            <div class="text-sm">
                 <br>update after expiry: {{ clientState.client_state?.allow_update_after_expiry }}
                 <br>allow_update_after_misbehaviour: {{ clientState.client_state?.allow_update_after_misbehaviour }}
                 <br>trust_level: {{ clientState.client_state?.trust_level?.numerator }}/{{ clientState.client_state?.trust_level?.denominator }}
@@ -73,14 +74,20 @@ function color(v: string) {
                 <br>type: {{ clientState.client_state?.['@type'] }}
                 <br>upgrade_path: {{ clientState.client_state?.upgrade_path }}
                 <br> {{ clientState.client_state?.max_clock_drift }}
-            </VCardText>
-        </VCard>
+            </div>
+        </div>
 
-        <VCard class="my-2">
-            <VCardTitle>Channels</VCardTitle>
-            <VTable>
+        <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+            <h2 class="card-title">Channels </h2>
+            <table class="table w-full mt-4">
                 <thead>
-                    <tr><th>Channel Id</th><th>Port Id</th><th>Counterparty</th><th>Hops</th><th>Version</th><th>Ordering</th><th>State</th></tr>
+                    <tr><th>Channel Id</th>
+                        <th>Port Id</th>
+                        <th>Counterparty</th>
+                        <th>Hops</th>
+                        <th>Version</th>
+                        <th>Ordering</th>
+                        <th>State</th></tr>
                 </thead>
                 <tbody>
                     <tr v-for="v in channels">
@@ -93,7 +100,7 @@ function color(v: string) {
                         <td><VChip :color="color(v.state)">{{ v.state }}</VChip></td>
                     </tr>
                 </tbody>
-            </VTable>
-        </VCard> 
+            </table>
+         </div>
     </div>
 </template>

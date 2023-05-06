@@ -60,7 +60,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
     </div>
 
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
       <h2 class="card-title flex flex-row justify-between">
         Last Commit
       </h2>
