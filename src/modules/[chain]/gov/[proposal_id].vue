@@ -189,13 +189,6 @@ const processList = computed(()=>{
         <!-- lg:flex-[2_2_0%] -->
         <div class="h-max bg-base-100 px-4 pt-3 pb-4 rounded shadow lg:col-span-2">
             <h2 class="card-title">Timeline</h2>
-           <!-- <ul class="steps steps-vertical">
-            <li data-content="" class="step step-neutral">Step 1</li>
-            <li data-content="" class="step step-neutral">Step 1</li>
-            <li data-content="" class="step step-neutral">Step 1</li>
-            <li data-content="" class="step step-neutral">Step 1</li>
-
-           </ul> -->
            <VTimeline
                         class="mt-2"
                         side="end"
@@ -298,7 +291,19 @@ const processList = computed(()=>{
         </div>
     </div>
     
-    <VCard>
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+        <h2 class="card-title">Votes</h2>
+        <table class="table  w-full ">
+            <tbody>
+                <tr v-for="(item,index) of votes" :key="index">
+                    <td>{{ item.voter }}</td>
+                    <td>{{ item.option }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <VBtn v-if="votePage.next_key" block variant="outlined" @click="loadMore()" :disabled="loading">Load more</VBtn>
+    </div>
+    <!-- <VCard>
         <VCardItem>
             <VCardTitle>
                 Votes
@@ -313,6 +318,6 @@ const processList = computed(()=>{
             </VTable>
             <VBtn v-if="votePage.next_key" block variant="outlined" @click="loadMore()" :disabled="loading">Load more</VBtn>
         </VCardItem>
-    </VCard>
+    </VCard> -->
 </div>
 </template>
