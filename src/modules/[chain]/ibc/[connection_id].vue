@@ -79,28 +79,30 @@ function color(v: string) {
 
         <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
             <h2 class="card-title">Channels </h2>
-            <table class="table w-full mt-4">
-                <thead>
-                    <tr><th>Channel Id</th>
-                        <th>Port Id</th>
-                        <th>Counterparty</th>
-                        <th>Hops</th>
-                        <th>Version</th>
-                        <th>Ordering</th>
-                        <th>State</th></tr>
-                </thead>
-                <tbody>
-                    <tr v-for="v in channels">
-                        <td><a href="#" @click="loadChannel(v.channel_id, v.port_id)">{{ v.channel_id }}</a></td>
-                        <td>{{ v.port_id }}</td>
-                        <td>{{ v.counterparty?.port_id }}/{{ v.counterparty?.channel_id }}</td>
-                        <td>{{ v.connection_hops.join(", ") }} </td>
-                        <td>{{ v.version }} </td>
-                        <td>{{ v.ordering }}</td>
-                        <td><VChip :color="color(v.state)">{{ v.state }}</VChip></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="overflow-x-auto"></div>
+                <table class="table w-full mt-4">
+                    <thead>
+                        <tr><th style="position: relative;">Channel Id</th>
+                            <th>Port Id</th>
+                            <th>Counterparty</th>
+                            <th>Hops</th>
+                            <th>Version</th>
+                            <th>Ordering</th>
+                            <th>State</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="v in channels">
+                            <td><a href="#" @click="loadChannel(v.channel_id, v.port_id)">{{ v.channel_id }}</a></td>
+                            <td>{{ v.port_id }}</td>
+                            <td>{{ v.counterparty?.port_id }}/{{ v.counterparty?.channel_id }}</td>
+                            <td>{{ v.connection_hops.join(", ") }} </td>
+                            <td>{{ v.version }} </td>
+                            <td>{{ v.ordering }}</td>
+                            <td><VChip :color="color(v.state)">{{ v.state }}</VChip></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
          </div>
     </div>
 </template>

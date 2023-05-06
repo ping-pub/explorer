@@ -31,7 +31,7 @@ const format = useFormatter();
       <table class="table w-full">
         <thead>
           <tr>
-            <th>Height</th>
+            <th style="position: relative;">Height</th>
             <th>Hash</th>
             <th>Proposer</th>
             <th>Txs</th>
@@ -61,7 +61,7 @@ const format = useFormatter();
       <table class="table w-full">
         <thead>
           <tr>
-            <th>Hash</th>
+            <th style="position: relative;">Hash</th>
             <th>Messages</th>
             <th>Fees</th>
           </tr>

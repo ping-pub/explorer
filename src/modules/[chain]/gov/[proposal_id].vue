@@ -293,15 +293,18 @@ const processList = computed(()=>{
     
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
         <h2 class="card-title">Votes</h2>
-        <table class="table  w-full ">
-            <tbody>
-                <tr v-for="(item,index) of votes" :key="index">
-                    <td>{{ item.voter }}</td>
-                    <td>{{ item.option }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <VBtn v-if="votePage.next_key" block variant="outlined" @click="loadMore()" :disabled="loading">Load more</VBtn>
+        <div class="overflow-x-auto">
+            <table class="table  w-full ">
+                <tbody>
+                    <tr v-for="(item,index) of votes" :key="index">
+                        <td>{{ item.voter }}</td>
+                        <td>{{ item.option }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <VBtn v-if="votePage.next_key" block variant="outlined" @click="loadMore()" :disabled="loading">Load more</VBtn>
+        </div>
     </div>
 </div>
 </template>

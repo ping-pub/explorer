@@ -23,22 +23,24 @@ function color(v: string) {
 </script>
 <template>
     <div>
-        <VCard>
-            <VCardTitle>IBC Connections</VCardTitle>
-            <VTable>
-                <thead>
-                    <tr><th>Connection Id</th><th>Connection</th><th>Delay Period</th><th>State</th></tr>
-                </thead>
-                <tbody>
-                    <tr v-for="v in list">
-                        <td><RouterLink :to="`/${chain}/ibc/${v.id}`">{{ v.id }}</RouterLink></td>
-                        <td>{{ v.client_id }} {{ v.id }} <br> {{v.counterparty.client_id }} {{ v.counterparty.connection_id }} </td>
-                        <td>{{ v.delay_period }}</td>
-                        <td><VChip :color="color(v.state)">{{ v.state }}</VChip></td>
-                    </tr>
-                </tbody>
-            </VTable>
-        </VCard> 
+        <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+            <h2 class="card-title">IBC Connections</h2>
+            <div class="overflow-x-auto mt-4">
+                <table class="table w-full">
+                    <thead>
+                        <tr><th style="position: relative;">Connection Id</th><th>Connection</th><th>Delay Period</th><th>State</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="v in list">
+                            <td><RouterLink :to="`/${chain}/ibc/${v.id}`">{{ v.id }}</RouterLink></td>
+                            <td>{{ v.client_id }} {{ v.id }} <br> {{v.counterparty.client_id }} {{ v.counterparty.connection_id }} </td>
+                            <td>{{ v.delay_period }}</td>
+                            <td><VChip :color="color(v.state)">{{ v.state }}</VChip></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> 
+        </div> 
     </div>
 </template>
 
