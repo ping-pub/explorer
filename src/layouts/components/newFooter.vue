@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer items-center p-4 text-base">
+  <footer class="footer items-center p-4 text-base mb-4">
     <div class="items-center grid-flow-col">
       &copy;
       {{ new Date().getFullYear() }}
@@ -7,7 +7,7 @@
       <img src="../../assets/images/heart.svg" />
       By
       <a
-        class="link link-info no-underline"
+        class="link link-primary no-underline"
         href="https://ping.pub"
         target="_blank"
         rel="noopener noreferrer"
@@ -18,7 +18,7 @@
       class="grid-flow-col gap-4 md:place-self-center md:justify-self-end hidden md:grid"
     >
       <a
-        class="link link-info no-underline"
+        class="link link-primary no-underline"
         href="https://github.com/ping-pub/explorer/blob/master/LICENSE"
         target="noopener noreferrer"
         >License</a

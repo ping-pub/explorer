@@ -59,7 +59,7 @@ const statusMap: Record<string, string> = {
               : 'text-info'
           "
         >
-          <div
+          <divÏ
             class="w-1 h-1 rounded-full mr-2"
             :class="
               statusMap?.[item?.status] === 'PASSED'
@@ -68,7 +68,7 @@ const statusMap: Record<string, string> = {
                 ? 'bg-no'
                 : 'bg-info'
             "
-          ></div>
+          ></divÏ>
           <div class="text-xs">
             {{ statusMap?.[item?.status] || item?.status }}
           </div>
