@@ -100,8 +100,11 @@ const total = computed(()=> {
 })
 
 const turnout = computed(() => {
+    if (total.value > 0) {
     const bonded = useStakingStore().pool?.bonded_tokens || "1"
     return format.percent(total.value / Number(bonded))
+    }
+    return 0
 })
 
 const yes = computed(()=> {
@@ -135,75 +138,58 @@ const abstain = computed(()=> {
     }
     return 0
 })
+const processList = computed(()=>{
+    return [
+        {name: 'Turnout', value : turnout.value, class: 'bg-info' },
+        {name: 'Yes', value : yes.value, class: 'bg-success' },
+        {name: 'No', value : no.value, class: 'bg-error' },
+        {name: 'No With Veto', value : veto.value, class: 'bg-primary' },
+        {name: 'Abstain', value : abstain.value, class: 'bg-warning' }
+    ]
+})
 
 </script>
 
 <template>
 <div>
-    <VCard>
-        <VCardItem>
-        <VCardTitle>
-            {{ proposal_id }}. {{ proposal.content?.title }} <VChip label :color="color" class="float-right">{{ status }}</VChip>
-        </VCardTitle>
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+        <h2 class="card-title flex flex-col md:justify-between md:flex-row">
+            <p class="truncate w-full">{{ proposal_id }}. {{ proposal.content?.title }} </p>
+            <div 
+                class="badge badge-ghost"
+                :class="
+                    color === 'success'
+                    ? 'text-yes'
+                    : color === 'error'
+                    ? 'text-no'
+                    : 'text-info'
+                "
+            >{{ status }}</div>
+        </h2>
+        <div class="">
             <ObjectElement :value="proposal.content"/>
-        </VCardItem>
-    </VCard>
-    
-    <VRow class="my-5">
-        <VCol cols=12 md="4">
-            <VCard class="h-100">
-                <VCardItem>
-                    <VCardTitle>Tally</VCardTitle>
-                    <label>Turnout</label>
-                    <v-progress-linear
-                        :model-value="turnout"
-                        height="25"
-                        color="info"
-                        >
-                        <strong>{{ turnout }}</strong>
-                    </v-progress-linear>
-                    <label>Yes</label>
-                    <v-progress-linear
-                        :model-value="yes"
-                        height="25"
-                        color="success"
-                        >
-                        <strong>{{ yes }}</strong>
-                    </v-progress-linear>
-                    <label>No</label>
-                    <v-progress-linear
-                        :model-value="no"
-                        height="25"
-                        color="error"
-                        >
-                        <strong>{{ no }}</strong>
-                    </v-progress-linear>
-                    <label>No With Veto</label>
-                    <v-progress-linear
-                        :model-value="veto"
-                        height="25"
-                        color="primary"
-                        >
-                        <strong>{{ veto }}</strong>
-                    </v-progress-linear>
-                    <label>Abstain</label>
-                    <v-progress-linear
-                        :model-value="abstain"
-                        height="25"
-                        color="dark"
-                        >
-                        <strong>{{ abstain }}</strong>
-                    </v-progress-linear>
-                </VCardItem>
-            </VCard>
-        </VCol>
-        <VCol cols=12 md="8">
-            <VCard>
-                <VCardItem>
-                    <VCardTitle>
-                        Timeline
-                    </VCardTitle>
-                    <VTimeline
+        </div>
+    </div>
+    <!-- grid lg:grid-cols-3 auto-rows-max-->
+    <!-- flex-col lg:flex-row flex -->
+    <div class="gap-4 mb-4 grid lg:grid-cols-3 auto-rows-max ">
+        <!-- flex-1 -->
+        <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow ">
+            <h2 class="card-title">Tally</h2>
+            <div v-for="(item,index) of processList" :key="index">
+                <label class="block">{{item.name }}</label>
+                <div class="h-6 w-full relative">
+                    <div class="absolute inset-x-0 inset-y-0 w-full opacity-10" :class="`${item.class}`"></div>
+                    <div class="absolute inset-x-0 inset-y-0" :class="`${item.class}`" :style="`width: ${item.value}`"></div>
+                    <strong class="absolute inset-x-0 inset-y-0 text-center">{{ item.value }}</strong>
+                </div>
+            </div>
+        </div>
+        <!-- lg:col-span-2 -->
+        <!-- lg:flex-[2_2_0%] -->
+        <div class="h-max bg-base-100 px-4 pt-3 pb-4 rounded shadow lg:col-span-2">
+            <h2 class="card-title">Timeline</h2>
+           <VTimeline
                         class="mt-2"
                         side="end"
                         align="start"
@@ -301,12 +287,23 @@ const abstain = computed(()=> {
                             </p>
                         </VTimelineItem>
                     </VTimeline>
-                </VCardItem>
-            </VCard>
-        </VCol>
-    </VRow>
+           
+        </div>
+    </div>
     
-    <VCard>
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+        <h2 class="card-title">Votes</h2>
+        <table class="table  w-full ">
+            <tbody>
+                <tr v-for="(item,index) of votes" :key="index">
+                    <td>{{ item.voter }}</td>
+                    <td>{{ item.option }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <VBtn v-if="votePage.next_key" block variant="outlined" @click="loadMore()" :disabled="loading">Load more</VBtn>
+    </div>
+    <!-- <VCard>
         <VCardItem>
             <VCardTitle>
                 Votes
@@ -321,6 +318,6 @@ const abstain = computed(()=> {
             </VTable>
             <VBtn v-if="votePage.next_key" block variant="outlined" @click="loadMore()" :disabled="loading">Load more</VBtn>
         </VCardItem>
-    </VCard>
+    </VCard> -->
 </div>
 </template>

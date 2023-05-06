@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useThemeConfig } from '@core/composable/useThemeConfig';
 import type { ThemeSwitcherTheme } from '@layouts/types';
+import { Icon } from '@iconify/vue';
 import { onMounted, watch } from 'vue';
 
 const props = defineProps<{
@@ -50,10 +51,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <IconBtn @click="changeTheme">
-    <VIcon :icon="props.themes[currentThemeIndex].icon" />
-    <VTooltip activator="parent" open-delay="1000">
-      <span class="text-capitalize">{{ currentThemeName }}</span>
-    </VTooltip>
-  </IconBtn>
+  <div class="tooltip tooltip-bottom delay-1000" :data-tip="currentThemeName">
+    <button
+      class="btn btn-ghost btn-circle btn-sm mx-1"
+      @click="changeTheme"
+    >
+      <Icon :icon="props.themes[currentThemeIndex].icon" class="text-2xl" />
+    </button>
+  </div>
 </template>

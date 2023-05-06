@@ -2,7 +2,7 @@
 import { useGovStore } from '@/stores';
 import ProposalListItem from '@/components/ProposalListItem.vue';
 import { ref, onMounted } from 'vue';
-const tab = ref('');
+const tab = ref('2');
 const store = useGovStore();
 
 onMounted(() => {
@@ -13,33 +13,41 @@ onMounted(() => {
     }
   });
 });
+
+const changeTab = (val: '2' | '3' | '4') => {
+  tab.value = val;
+  store.fetchProposals(val);
+};
 </script>
 <template>
   <div>
-    <VTabs v-model="tab" class="v-tabs-pill">
-      <VTab value="2">Voting</VTab>
-      <VTab value="3" @click="store.fetchProposals('3')">Passed</VTab>
-      <VTab value="4" @click="store.fetchProposals('4')">Rejected</VTab>
-    </VTabs>
-    <VWindow v-model="tab" class="mt-5">
-      <VWindowItem value="2">
-        <ProposalListItem :proposals="store?.proposals['2']" />
-      </VWindowItem>
-
-      <VWindowItem value="3">
-        <ProposalListItem :proposals="store?.proposals['3']" />
-      </VWindowItem>
-
-      <VWindowItem value="4">
-        <ProposalListItem :proposals="store?.proposals['4']" />
-      </VWindowItem>
-    </VWindow>
+    <div class="tabs tabs-boxed bg-transparent mb-4">
+      <a
+        class="tab text-gray-400 uppercase"
+        :class="{ 'tab-active': tab === '2' }"
+        @click="changeTab('2')"
+        >Voting</a
+      >
+      <a
+        class="tab text-gray-400 uppercase"
+        :class="{ 'tab-active': tab === '3' }"
+        @click="changeTab('3')"
+        >Passed</a
+      >
+      <a
+        class="tab text-gray-400 uppercase"
+        :class="{ 'tab-active': tab === '4' }"
+        @click="changeTab('4')"
+        >Rejected</a
+      >
+    </div>
+    <ProposalListItem :proposals="store?.proposals[tab]" />
   </div>
 </template>
 <route>
-    {
-      meta: {
-        i18n: 'governance'
-      }
+  {
+    meta: {
+      i18n: 'governance'
     }
-  </route>
+  }
+</route>

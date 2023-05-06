@@ -25,7 +25,7 @@ function calculateValue(value: any){
 </script>
 <template>
   <div
-    class="bg-card px-4 pt-3 pb-4 rounded mt-5"
+    class="bg-base-100 px-4 pt-3 pb-4 rounded mt-5"
     v-if="props.cardItem?.items && props.cardItem?.items?.length > 0"
   >
     <div class="text-base mb-3 text-main">{{ props.cardItem?.title }}</div>
