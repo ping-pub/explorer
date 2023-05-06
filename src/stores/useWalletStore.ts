@@ -1,13 +1,9 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
 export const useWalletStore = defineStore('walletStore', {
-    state: () => {
-        return {
-        }
-    },
-    getters: {
-
-    },
-    actions: {
-    }
-})
+  state: () => {
+    return {};
+  },
+  getters: {},
+  actions: {},
+});

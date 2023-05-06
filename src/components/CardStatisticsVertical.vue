@@ -21,7 +21,13 @@ const isPositive = controlledComputed(
 <template>
   <VCard class="h-full flex-col content-between">
     <VCardText class="d-flex align-center justify-between">
-      <VAvatar v-if="props.icon" rounded size="38" variant="tonal" :color="props.color">
+      <VAvatar
+        v-if="props.icon"
+        rounded
+        size="38"
+        variant="tonal"
+        :color="props.color"
+      >
         <VIcon :icon="props.icon" size="24" />
       </VAvatar>
 

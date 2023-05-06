@@ -1,19 +1,18 @@
-import { defineStore } from "pinia";
-import { useBlockchain } from "./useBlockchain";
+import { defineStore } from 'pinia';
+import { useBlockchain } from './useBlockchain';
 
 export const useDistributionStore = defineStore('distributionStore', {
-    state: () => {
-        return {
-        }
+  state: () => {
+    return {};
+  },
+  getters: {
+    blockchain() {
+      return useBlockchain();
     },
-    getters: {
-        blockchain() {
-            return useBlockchain()
-        }
+  },
+  actions: {
+    async fetchCommunityPool() {
+      return this.blockchain.rpc.getDistributionCommunityPool();
     },
-    actions: {
-        async fetchCommunityPool() {
-            return this.blockchain.rpc.getDistributionCommunityPool()
-        }
-    }
-})
+  },
+});

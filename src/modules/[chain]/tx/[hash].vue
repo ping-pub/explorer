@@ -6,58 +6,99 @@ import type { Tx, TxResponse } from '@/types';
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 
-const props = defineProps(['hash', 'chain'])
+const props = defineProps(['hash', 'chain']);
 
-const blockchain = useBlockchain()
-const format = useFormatter()
-const tx = ref({} as {
+const blockchain = useBlockchain();
+const format = useFormatter();
+const tx = ref(
+  {} as {
     tx: Tx;
-    tx_response: TxResponse
-})
-if(props.hash) {
-    blockchain.rpc.getTx(props.hash).then(x => tx.value = x)
+    tx_response: TxResponse;
+  }
+);
+if (props.hash) {
+  blockchain.rpc.getTx(props.hash).then((x) => (tx.value = x));
 }
 const messages = computed(() => {
-    return tx.value.tx?.body?.messages||[]
-})
+  return tx.value.tx?.body?.messages || [];
+});
 </script>
 <template>
-    <div>
-        <VCard v-if="tx.tx_response" title="Summary">
-            <VCardItem class="pt-0">
-            <VTable>
-                <tbody>
-                    <tr><td>Tx Hash</td><td>{{ tx.tx_response.txhash }}</td></tr>
-                    <tr><td>Height</td><td><RouterLink :to="`/${props.chain}/block/${tx.tx_response.height}`">{{ tx.tx_response.height }}</RouterLink></td></tr>
-                    <tr><td>Status</td><td>
-                        <VChip v-if="tx.tx_response.code === 0" color="success">Success</VChip>
-                        <span v-else><VChip color="error">Failded</VChip></span>
-                    </td></tr>
-                    <tr><td>Time</td><td>{{ tx.tx_response.timestamp }} ({{ format.toDay(tx.tx_response.timestamp, "from") }})</td></tr>
-                    <tr><td>Gas</td><td>{{ tx.tx_response.gas_used }} / {{ tx.tx_response.gas_wanted }}</td></tr>
-                    <tr><td>Fee</td><td>{{ format.formatTokens(tx.tx?.auth_info?.fee?.amount, true, '0,0.[00]') }}</td></tr>
-                    <tr><td>Memo</td><td>{{ tx.tx.body.memo }}</td></tr>
-                </tbody>
-            </VTable>
-            </VCardItem>
-        </VCard>
+  <div>
+    <VCard v-if="tx.tx_response" title="Summary">
+      <VCardItem class="pt-0">
+        <VTable>
+          <tbody>
+            <tr>
+              <td>Tx Hash</td>
+              <td>{{ tx.tx_response.txhash }}</td>
+            </tr>
+            <tr>
+              <td>Height</td>
+              <td>
+                <RouterLink
+                  :to="`/${props.chain}/block/${tx.tx_response.height}`"
+                  >{{ tx.tx_response.height }}</RouterLink
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td>
+                <VChip v-if="tx.tx_response.code === 0" color="success"
+                  >Success</VChip
+                >
+                <span v-else><VChip color="error">Failded</VChip></span>
+              </td>
+            </tr>
+            <tr>
+              <td>Time</td>
+              <td>
+                {{ tx.tx_response.timestamp }} ({{
+                  format.toDay(tx.tx_response.timestamp, 'from')
+                }})
+              </td>
+            </tr>
+            <tr>
+              <td>Gas</td>
+              <td>
+                {{ tx.tx_response.gas_used }} / {{ tx.tx_response.gas_wanted }}
+              </td>
+            </tr>
+            <tr>
+              <td>Fee</td>
+              <td>
+                {{
+                  format.formatTokens(
+                    tx.tx?.auth_info?.fee?.amount,
+                    true,
+                    '0,0.[00]'
+                  )
+                }}
+              </td>
+            </tr>
+            <tr>
+              <td>Memo</td>
+              <td>{{ tx.tx.body.memo }}</td>
+            </tr>
+          </tbody>
+        </VTable>
+      </VCardItem>
+    </VCard>
 
-        <VCard :title="`Messages: (${messages.length})`" class="my-5">
-            <VCardItem class="pt-0" style="border-top: 2px dotted gray;">
-                <div v-for="(msg, i) in messages">
-                    <div><DynamicComponent :value="msg" /></div>                  
-                </div>
-                <div v-if="messages.length === 0">
-                    No messages
-                </div>
-            </VCardItem>
-        </VCard>
+    <VCard :title="`Messages: (${messages.length})`" class="my-5">
+      <VCardItem class="pt-0" style="border-top: 2px dotted gray">
+        <div v-for="(msg, i) in messages">
+          <div><DynamicComponent :value="msg" /></div>
+        </div>
+        <div v-if="messages.length === 0">No messages</div>
+      </VCardItem>
+    </VCard>
 
-        <VCard title="JSON">
-            <VCardItem class="pt-0">
-                <vue-json-pretty :data="tx" :deep="3"/>
-            </VCardItem>
-        </VCard>
-        
-    </div>
+    <VCard title="JSON">
+      <VCardItem class="pt-0">
+        <vue-json-pretty :data="tx" :deep="3" />
+      </VCardItem>
+    </VCard>
+  </div>
 </template>

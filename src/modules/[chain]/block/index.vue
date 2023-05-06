@@ -31,7 +31,7 @@ const format = useFormatter();
       <table class="table w-full">
         <thead>
           <tr>
-            <th style="position: relative;">Height</th>
+            <th style="position: relative">Height</th>
             <th>Hash</th>
             <th>Proposer</th>
             <th>Txs</th>
@@ -57,11 +57,14 @@ const format = useFormatter();
       </table>
     </div>
 
-    <div v-show="tab === 'transactions'" class="bg-base-100 rounded overflow-x-auto">
+    <div
+      v-show="tab === 'transactions'"
+      class="bg-base-100 rounded overflow-x-auto"
+    >
       <table class="table w-full">
         <thead>
           <tr>
-            <th style="position: relative;">Hash</th>
+            <th style="position: relative">Hash</th>
             <th>Messages</th>
             <th>Fees</th>
           </tr>
@@ -73,7 +76,7 @@ const format = useFormatter();
                 item.hash
               }}</RouterLink>
             </td>
-            <td>{{ format.messages(item.tx.body.messages) }}</td>
+            <td>{{ format.messages(item.tx.body.messages as any) }}</td>
             <td>{{ format.formatTokens(item.tx.authInfo.fee?.amount) }}</td>
           </tr>
         </tbody>

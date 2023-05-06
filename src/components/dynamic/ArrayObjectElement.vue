@@ -6,33 +6,44 @@ const props = defineProps({
   value: { type: null as any },
   thead: {
     type: Boolean,
-    default: true
-  }
-})
+    default: true,
+  },
+});
 
 const header = computed(() => {
-  if(props.value && props.value.length > 0) {
-    return Object.keys(props.value[0])
+  if (props.value && props.value.length > 0) {
+    return Object.keys(props.value[0]);
   }
-  return []
-})
-
+  return [];
+});
 </script>
 <template>
-  <VTable v-if="header.length > 0" density="compact" height="300px" fixed-header hover>
+  <VTable
+    v-if="header.length > 0"
+    density="compact"
+    height="300px"
+    fixed-header
+    hover
+  >
     <thead v-if="thead">
       <tr>
-        <th v-for="(item, index) in header" :key="index" class="text-left text-capitalize">{{ item }}</th>
+        <th
+          v-for="(item, index) in header"
+          :key="index"
+          class="text-left text-capitalize"
+        >
+          {{ item }}
+        </th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="(item, index) in value" :key="index">
-        <td v-for="(el, key) in header" :key="key"> <DynamicComponent :value="item[el]" /></td>
+        <td v-for="(el, key) in header" :key="key">
+          <DynamicComponent :value="item[el]" />
+        </td>
       </tr>
     </tbody>
   </VTable>
 
-  <div v-else class="h-[300px]">
-
-  </div>
+  <div v-else class="h-[300px]"></div>
 </template>

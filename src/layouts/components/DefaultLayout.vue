@@ -67,7 +67,7 @@ blockchain.$subscribe((m, s) => {
         <NavBarNotifications class="hidden md:inline-block" />
         <NavBarI18n class="hidden md:inline-block" />
         <NavbarThemeSwitcher class="hidden md:inline-block" />
-        <ConnectWallet class="md:inline-block"/>
+        <ConnectWallet class="md:inline-block" />
       </div>
     </template>
 

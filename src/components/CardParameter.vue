@@ -1,26 +1,26 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { useFormatter } from "@/stores";
+import { useFormatter } from '@/stores';
 const props = defineProps({
   cardItem: {
     type: Object as PropType<{ title: string; items: Array<any> }>,
   },
 });
 
-const formatter = useFormatter()
-function calculateValue(value: any){
-  if (Array.isArray(value) ){
-    return (value[0] && value[0].amount)|| '-'
+const formatter = useFormatter();
+function calculateValue(value: any) {
+  if (Array.isArray(value)) {
+    return (value[0] && value[0].amount) || '-';
   }
-  const newValue =  Number(value)
-  if(`${newValue}` === 'NaN' || typeof(value) === 'boolean'){
-    return value
+  const newValue = Number(value);
+  if (`${newValue}` === 'NaN' || typeof value === 'boolean') {
+    return value;
   }
-  
+
   if (newValue < 1 && newValue > 0) {
-    return formatter.formatDecimalToPercent(value)
+    return formatter.formatDecimalToPercent(value);
   }
-  return newValue
+  return newValue;
 }
 </script>
 <template>

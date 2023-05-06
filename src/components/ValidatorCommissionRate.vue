@@ -1,44 +1,61 @@
 <script setup lang="ts">
-import VueApexCharts from 'vue3-apexcharts'
-import { useTheme } from 'vuetify'
-import { hexToRgb } from '@/plugins/vuetify/@layouts/utils'
+import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
+import { hexToRgb } from '@/plugins/vuetify/@layouts/utils';
 import { computed, type PropType } from 'vue';
 import { useFormatter } from '@/stores';
-import type { CommissionRate } from '@/types'
+import type { CommissionRate } from '@/types';
 
 const props = defineProps({
-  commission: { type: Object as PropType<CommissionRate>},
-})
+  commission: { type: Object as PropType<CommissionRate> },
+});
 
-let rate = computed(() => Number(props.commission?.commission_rates.rate || 0) * 100)
-let change = computed(() => Number(props.commission?.commission_rates.max_change_rate || 0) * 100)
-let max = computed(() => Number(props.commission?.commission_rates.max_rate || 1) * 100)
-
+let rate = computed(
+  () => Number(props.commission?.commission_rates.rate || 0) * 100
+);
+let change = computed(
+  () => Number(props.commission?.commission_rates.max_change_rate || 0) * 100
+);
+let max = computed(
+  () => Number(props.commission?.commission_rates.max_rate || 1) * 100
+);
 
 // const rate = 15 // props.commision?.commissionRates.rate
 // const change = 15
 // const max = 20
 
-const left = rate
-const right = computed(() => max.value - rate.value)
+const left = rate;
+const right = computed(() => max.value - rate.value);
 
-const s1 = computed(() => left.value > change.value ? left.value - change.value : 0 )
-const s2 = computed(() => left.value > change.value ? change.value: left.value)
-const s3 = 2
-const s4 = computed(() => right.value > change.value? change.value: right.value)
-const s5 = computed(() => right.value > change.value? right.value - change.value: 0)
+const s1 = computed(() =>
+  left.value > change.value ? left.value - change.value : 0
+);
+const s2 = computed(() =>
+  left.value > change.value ? change.value : left.value
+);
+const s3 = 2;
+const s4 = computed(() =>
+  right.value > change.value ? change.value : right.value
+);
+const s5 = computed(() =>
+  right.value > change.value ? right.value - change.value : 0
+);
 
-const series = computed(() => [s1.value, s2.value, s3, s4.value, s5.value])
+const series = computed(() => [s1.value, s2.value, s3, s4.value, s5.value]);
 
-const vuetifyTheme = useTheme()
-const format = useFormatter()
+const vuetifyTheme = useTheme();
+const format = useFormatter();
 
 const chartConfig = computed(() => {
-  const themeColors = vuetifyTheme.current.value.colors
-  const variableTheme = vuetifyTheme.current.value.variables
+  const themeColors = vuetifyTheme.current.value.colors;
+  const variableTheme = vuetifyTheme.current.value.variables;
 
-  const secondaryText = `rgba(${hexToRgb(String(themeColors['on-background']))},${variableTheme['medium-emphasis-opacity']})`
-  const primaryText = `rgba(${hexToRgb(String(themeColors['on-background']))},${variableTheme['high-emphasis-opacity']})`
+  const secondaryText = `rgba(${hexToRgb(
+    String(themeColors['on-background'])
+  )},${variableTheme['medium-emphasis-opacity']})`;
+  const primaryText = `rgba(${hexToRgb(String(themeColors['on-background']))},${
+    variableTheme['high-emphasis-opacity']
+  })`;
 
   return {
     chart: {
@@ -54,8 +71,18 @@ const chartConfig = computed(() => {
     legend: { show: false },
     tooltip: { enabled: false },
     dataLabels: { enabled: false },
-    stroke: { width: 3, lineCap: 'round', colors: ['rgba(var(--v-theme-surface), 1)'] },
-    labels: ['Available', 'Daily Change', 'Commission Rate', 'Daily Change', 'Available'],
+    stroke: {
+      width: 3,
+      lineCap: 'round',
+      colors: ['rgba(var(--v-theme-surface), 1)'],
+    },
+    labels: [
+      'Available',
+      'Daily Change',
+      'Commission Rate',
+      'Daily Change',
+      'Available',
+    ],
     states: {
       hover: {
         filter: { type: 'none' },
@@ -90,7 +117,7 @@ const chartConfig = computed(() => {
               label: 'Commission Rate',
               fontSize: '1rem',
               color: secondaryText,
-              formatter: ( ) => `${rate.value}%`,
+              formatter: () => `${rate.value}%`,
             },
           },
         },
@@ -104,13 +131,18 @@ const chartConfig = computed(() => {
         },
       },
     ],
-  }
-})
-
+  };
+});
 </script>
 
 <template>
-  <VCard title="Commission Rate" :subtitle="`Updated at ${format.toDay(props.commission?.update_time, 'short')}`">
+  <VCard
+    title="Commission Rate"
+    :subtitle="`Updated at ${format.toDay(
+      props.commission?.update_time,
+      'short'
+    )}`"
+  >
     <VCardText>
       <VueApexCharts
         type="donut"
@@ -121,15 +153,15 @@ const chartConfig = computed(() => {
 
       <div class="d-flex align-center justify-center flex-wrap mx-2 gap-x-6">
         <div class="d-flex align-center gap-2">
-          <VBadge dot color="success"/>
+          <VBadge dot color="success" />
           <span class="mt-1 text-caption">Rate:{{ rate }}%</span>
         </div>
         <div class="d-flex align-center gap-2">
-          <VBadge dot color="success" style="opacity:0.2"/>
+          <VBadge dot color="success" style="opacity: 0.2" />
           <span class="mt-1 text-caption">24h: ±{{ change }}%</span>
         </div>
         <div class="d-flex align-center gap-2">
-          <VBadge dot color="secondary"/>
+          <VBadge dot color="secondary" />
           <span class="mt-1 text-caption">Max:{{ max }}%</span>
         </div>
       </div>

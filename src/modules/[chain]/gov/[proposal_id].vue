@@ -6,8 +6,6 @@ import { ref , reactive} from 'vue';
 import Countdown from '@/components/Countdown.vue';
 import { computed } from '@vue/reactivity';
 
-
-
 const props = defineProps(["proposal_id", "chain"]);
 const proposal = ref({} as GovProposal)
 const format = useFormatter()
@@ -147,7 +145,6 @@ const processList = computed(()=>{
         {name: 'Abstain', value : abstain.value, class: 'bg-warning' }
     ]
 })
-
 </script>
 
 <template>
