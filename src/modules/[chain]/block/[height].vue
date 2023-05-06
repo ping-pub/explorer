@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Icon } from '@iconify/vue';
 import TxsElement from '@/components/dynamic/TxsElement.vue';
 import { useBlockModule } from './block';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
@@ -20,47 +21,50 @@ onBeforeRouteUpdate(async (to, from, next) => {
     next();
   }
 });
+
 </script>
 <template>
   <div>
-    <VCard>
-      <VCardTitle class="d-flex justify-space-between">
-        <span class="mt-2">#{{ store.current.block?.header?.height }}</span>
-        <span v-if="props.height" class="mt-2">
-          <VBtn
-            size="32"
-            :to="`/${store.blockchain.chainName}/block/${height - 1}`"
-            class="mr-2"
-            ><VIcon icon="mdi-arrow-left"
-          /></VBtn>
-          <VBtn
-            size="32"
-            :to="`/${store.blockchain.chainName}/block/${height + 1}`"
-            ><VIcon icon="mdi-arrow-right"
-          /></VBtn>
-        </span>
-      </VCardTitle>
-      <VCardItem class="pt-0">
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <h2 class="card-title flex flex-row justify-between">
+        <p class="">#{{ store.current.block?.header?.height }}</p>
+        <div class=""  v-if="props.height">
+          <RouterLink :to="`/${store.blockchain.chainName}/block/${height - 1}`" 
+            class="btn btn-primary btn-sm p-1 text-2xl mr-2">
+            <Icon icon="mdi-arrow-left" class="w-full h-full"/>
+          </RouterLink>
+          <RouterLink :to="`/${store.blockchain.chainName}/block/${height + 1}`"
+            class="btn btn-primary btn-sm p-1 text-2xl">
+            <Icon icon="mdi-arrow-right"/>
+          </RouterLink>
+        </div>
+      </h2>
+      <div>
         <DynamicComponent :value="store.current.block_id" />
-      </VCardItem>
-    </VCard>
+      </div>
+    </div>
 
-    <VCard title="Block Header" class="my-5">
-      <VCardItem class="pt-0">
-        <DynamicComponent :value="store.current.block?.header" />
-      </VCardItem>
-    </VCard>
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <h2 class="card-title flex flex-row justify-between">
+        Block Header
+      </h2>
+      <DynamicComponent :value="store.current.block?.header" />
+    </div>
 
-    <VCard title="Transactions">
-      <VCardItem class="pt-0">
-        <TxsElement :value="store.current.block?.data?.txs" />
-      </VCardItem>
-    </VCard>
+    
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <h2 class="card-title flex flex-row justify-between">
+        Transactions
+      </h2>
+      <TxsElement :value="store.current.block?.data?.txs" />
+    </div>
 
-    <VCard title="Last Commit" class="mt-5">
-      <VCardItem class="pt-0">
-        <DynamicComponent :value="store.current.block?.last_commit" />
-      </VCardItem>
-    </VCard>
+
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <h2 class="card-title flex flex-row justify-between">
+        Last Commit
+      </h2>
+      <DynamicComponent :value="store.current.block?.last_commit" />
+    </div>
   </div>
 </template>

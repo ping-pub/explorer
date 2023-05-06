@@ -27,8 +27,8 @@ const format = useFormatter();
       >
     </div>
 
-    <div v-if="tab === 'blocks'" class="bg-base-100 rounded">
-      <VTable>
+    <div v-show="tab === 'blocks'" class="bg-base-100 rounded overflow-x-auto">
+      <table class="table w-full">
         <thead>
           <tr>
             <th>Height</th>
@@ -54,11 +54,11 @@ const format = useFormatter();
             <td>{{ format.toDay(item.block?.header?.time, 'from') }}</td>
           </tr>
         </tbody>
-      </VTable>
+      </table>
     </div>
 
-    <div class="bg-base-100 rounded" v-if="tab === 'transactions'">
-      <VTable>
+    <div v-show="tab === 'transactions'" class="bg-base-100 rounded overflow-x-auto">
+      <table class="table w-full">
         <thead>
           <tr>
             <th>Hash</th>
@@ -77,7 +77,7 @@ const format = useFormatter();
             <td>{{ format.formatTokens(item.tx.authInfo.fee?.amount) }}</td>
           </tr>
         </tbody>
-      </VTable>
+      </table>
       <div class="p-4">
         <v-alert
           type="info"
