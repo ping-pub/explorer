@@ -176,9 +176,9 @@ const processList = computed(()=>{
             <div v-for="(item,index) of processList" :key="index">
                 <label class="block">{{item.name }}</label>
                 <div class="h-6 w-full relative">
-                    <div class="absolute inset-x-0 inset-y-0 w-full opacity-10" :class="`${item.class}`"></div>
-                    <div class="absolute inset-x-0 inset-y-0" :class="`${item.class}`" :style="`width: ${item.value}`"></div>
-                    <strong class="absolute inset-x-0 inset-y-0 text-center">{{ item.value }}</strong>
+                    <div class="absolute inset-x-0 inset-y-0 w-full opacity-10 rounded-sm" :class="`${item.class}`"></div>
+                    <div class="absolute inset-x-0 inset-y-0 rounded-sm" :class="`${item.class}`" :style="`width: ${item.value}`"></div>
+                    <p class="absolute inset-x-0 inset-y-0 text-center text-sm text-[#666] dark:text-[#eee] flex items-center justify-center">{{ item.value }}</p>
                 </div>
             </div>
         </div>
