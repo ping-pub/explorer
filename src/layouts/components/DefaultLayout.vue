@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Icon } from '@iconify/vue';
 import { useThemeConfig } from '@/plugins/vuetify/@core/composable/useThemeConfig';
 
 // Components
@@ -51,18 +52,18 @@ blockchain.$subscribe((m, s) => {
   <VerticalNavLayout :nav-items="blockchain.computedChainMenu">
     <!-- 👉 navbar -->
     <template #navbar="{ toggleVerticalOverlayNavActive }">
-      <div class="d-flex h-100 align-center">
-        <IconBtn
-          v-if="isLessThanOverlayNavBreakpoint(windowWidth)"
-          class="ms-n3"
+      <div class="flex items-center py-3">
+        <div
+          class="text-2xl pr-3 cursor-pointer xl:hidden"
           @click="toggleVerticalOverlayNavActive(true)"
         >
-          <VIcon icon="mdi-menu" />
-        </IconBtn>
+          <Icon icon="mdi-menu" />
+        </div>
 
         <UserProfile />
 
-        <VSpacer />
+        <div class="flex-1"></div>
+
         <!-- <NavSearchBar />-->
         <NavBarNotifications class="hidden md:inline-block" />
         <NavBarI18n class="hidden md:inline-block" />
