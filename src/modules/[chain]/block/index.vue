@@ -27,11 +27,11 @@ const format = useFormatter();
       >
     </div>
 
-    <div v-if="tab === 'blocks'" class="bg-base-100 rounded">
-      <VTable>
+    <div v-show="tab === 'blocks'" class="bg-base-100 rounded overflow-x-auto">
+      <table class="table w-full">
         <thead>
           <tr>
-            <th>Height</th>
+            <th style="position: relative">Height</th>
             <th>Hash</th>
             <th>Proposer</th>
             <th>Txs</th>
@@ -39,7 +39,7 @@ const format = useFormatter();
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in store.recents">
+          <tr v-for="(item,index) of store.recents" :key="index">
             <td class="text-sm text-primary">
               <RouterLink
                 :to="`/${props.chain}/block/${item.block?.header?.height}`"
@@ -54,36 +54,41 @@ const format = useFormatter();
             <td>{{ format.toDay(item.block?.header?.time, 'from') }}</td>
           </tr>
         </tbody>
-      </VTable>
+      </table>
     </div>
 
-    <div class="bg-base-100 rounded" v-if="tab === 'transactions'">
-      <VTable>
+    <div
+      v-show="tab === 'transactions'"
+      class="bg-base-100 rounded overflow-x-auto"
+    >
+      <table class="table w-full">
         <thead>
           <tr>
-            <th>Hash</th>
+            <th style="position: relative">Hash</th>
             <th>Messages</th>
             <th>Fees</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in store.txsInRecents">
+          <tr v-for="(item,index) of store.txsInRecents" :key="index">
             <td>
               <RouterLink :to="`/${props.chain}/tx/${item.hash}`">{{
                 item.hash
               }}</RouterLink>
             </td>
-            <td>{{ format.messages(item.tx.body.messages) }}</td>
+            <td>{{ format.messages(item.tx.body.messages as any) }}</td>
             <td>{{ format.formatTokens(item.tx.authInfo.fee?.amount) }}</td>
           </tr>
         </tbody>
-      </VTable>
+      </table>
       <div class="p-4">
-        <v-alert
-          type="info"
-          text="Only show txs in recent blocks"
-          variant="tonal"
-        ></v-alert>
+        <div class="alert relative bg-transparent">
+          <div class="alert  absolute inset-x-0 inset-y-0 w-full h-full bg-info opacity-10"></div>
+          <div class="text-info">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>Only show txs in recent blocks</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -25,12 +25,18 @@ const format = useFormatter();
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
 
 blockchain.$subscribe((m, s) => {
-  if (!Array.isArray(m.events) && ['chainName', 'endpoint'].includes(m.events.key)) {
+  if (
+    !Array.isArray(m.events) &&
+    ['chainName', 'endpoint'].includes(m.events.key)
+  ) {
     store.loadDashboard();
   }
 });
 function shortName(name: string, id: string) {
-  return name.toLowerCase().startsWith('ibc/') || name.toLowerCase().startsWith('0x') ? id : name;
+  return name.toLowerCase().startsWith('ibc/') ||
+    name.toLowerCase().startsWith('0x')
+    ? id
+    : name;
 }
 </script>
 
@@ -47,27 +53,51 @@ function shortName(name: string, id: string) {
             </VCardTitle>
             <VCardSubtitle>
               Rank:
-              <VChip color="error" size="x-small">#{{ coinInfo.market_cap_rank }}</VChip>
+              <VChip color="error" size="x-small"
+                >#{{ coinInfo.market_cap_rank }}</VChip
+              >
             </VCardSubtitle>
           </VCardItem>
           <VDivider />
           <VCardItem>
-            <VBtn variant="text" size="small" :href="store.homepage" prependIcon="mdi-web">
+            <VBtn
+              variant="text"
+              size="small"
+              :href="store.homepage"
+              prependIcon="mdi-web"
+            >
               Website
             </VBtn>
-            <VBtn variant="text" size="small" :href="store.twitter" prependIcon="mdi-twitter">
+            <VBtn
+              variant="text"
+              size="small"
+              :href="store.twitter"
+              prependIcon="mdi-twitter"
+            >
               Twitter
             </VBtn>
-            <VBtn variant="text" size="small" :href="store.telegram" prependIcon="mdi-telegram">
+            <VBtn
+              variant="text"
+              size="small"
+              :href="store.telegram"
+              prependIcon="mdi-telegram"
+            >
               Telegram
             </VBtn>
-            <VBtn variant="text" size="small" :href="store.github" prependIcon="mdi-github">
+            <VBtn
+              variant="text"
+              size="small"
+              :href="store.github"
+              prependIcon="mdi-github"
+            >
               Github
             </VBtn>
           </VCardItem>
           <VCardItem>
             <!-- SECTION upgrade plan banner -->
-            <div class="plan-upgrade-banner d-flex bg-light-secondary rounded align-center pa-3">
+            <div
+              class="plan-upgrade-banner d-flex bg-light-secondary rounded align-center pa-3"
+            >
               <h3 class="plan-details me-3" :class="store.priceColor">
                 {{ store.priceChange }}
                 <small>%</small>
@@ -102,7 +132,10 @@ function shortName(name: string, id: string) {
                       }}
                     </VListItemSubtitle>
                     <template #append>
-                      <span class="ml-3" :class="`text-${store.tickerColor(item.trust_score)}`">
+                      <span
+                        class="ml-3"
+                        :class="`text-${store.tickerColor(item.trust_score)}`"
+                      >
                         {{ item.converted_last.usd }}
                       </span>
                     </template>
@@ -119,9 +152,13 @@ function shortName(name: string, id: string) {
                 <span class="text-h5">{{ ticker.converted_last.usd }}</span>
               </div>
             </div>
-            <!-- !SECTION -->
             <VSpacer />
-            <VBtn block :color="store.trustColor" class="mt-3" :href="ticker.trade_url">
+            <VBtn
+              block
+              :color="store.trustColor"
+              class="mt-3"
+              :href="ticker.trade_url"
+            >
               Buy {{ coinInfo.symbol || '' }}
             </VBtn>
           </VCardItem>
@@ -134,10 +171,15 @@ function shortName(name: string, id: string) {
       </VRow>
       <VDivider />
       <VCardText style="max-height: 250px; overflow: auto">
-        <MdEditor :model-value="coinInfo.description?.en" previewOnly></MdEditor>
+        <MdEditor
+          :model-value="coinInfo.description?.en"
+          previewOnly
+        ></MdEditor>
       </VCardText>
       <VCardItem>
-        <VChip v-for="tag in coinInfo.categories" size="x-small" class="mr-2">{{ tag }}</VChip>
+        <VChip v-for="tag in coinInfo.categories" size="x-small" class="mr-2">{{
+          tag
+        }}</VChip>
       </VCardItem>
     </VCard>
 
@@ -154,10 +196,14 @@ function shortName(name: string, id: string) {
       <VCardItem>
         <ProposalListItem :proposals="store?.proposals" />
       </VCardItem>
-      <VCardText v-if="store.proposals.length === 0">No active proposals</VCardText>
+      <VCardText v-if="store.proposals.length === 0"
+        >No active proposals</VCardText
+      >
     </VCard>
 
-    <VBtn block color="secondary" variant="outlined" class="mt-5">Connect Wallet</VBtn>
+    <VBtn block color="secondary" variant="outlined" class="mt-5"
+      >Connect Wallet</VBtn
+    >
   </div>
 </template>
 

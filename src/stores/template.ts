@@ -1,13 +1,9 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
 export const useStoreName = defineStore('bankstore', {
-    state: () => {
-        return {
-        }
-    },
-    getters: {
-
-    },
-    actions: {
-    }
-})
+  state: () => {
+    return {};
+  },
+  getters: {},
+  actions: {},
+});

@@ -6,8 +6,6 @@ import { ref , reactive} from 'vue';
 import Countdown from '@/components/Countdown.vue';
 import { computed } from '@vue/reactivity';
 
-
-
 const props = defineProps(["proposal_id", "chain"]);
 const proposal = ref({} as GovProposal)
 const format = useFormatter()
@@ -147,7 +145,6 @@ const processList = computed(()=>{
         {name: 'Abstain', value : abstain.value, class: 'bg-warning' }
     ]
 })
-
 </script>
 
 <template>
@@ -179,9 +176,9 @@ const processList = computed(()=>{
             <div v-for="(item,index) of processList" :key="index">
                 <label class="block">{{item.name }}</label>
                 <div class="h-6 w-full relative">
-                    <div class="absolute inset-x-0 inset-y-0 w-full opacity-10" :class="`${item.class}`"></div>
-                    <div class="absolute inset-x-0 inset-y-0" :class="`${item.class}`" :style="`width: ${item.value}`"></div>
-                    <strong class="absolute inset-x-0 inset-y-0 text-center">{{ item.value }}</strong>
+                    <div class="absolute inset-x-0 inset-y-0 w-full opacity-10 rounded-sm" :class="`${item.class}`"></div>
+                    <div class="absolute inset-x-0 inset-y-0 rounded-sm" :class="`${item.class}`" :style="`width: ${item.value}`"></div>
+                    <p class="absolute inset-x-0 inset-y-0 text-center text-sm text-[#666] dark:text-[#eee] flex items-center justify-center">{{ item.value }}</p>
                 </div>
             </div>
         </div>
@@ -293,31 +290,18 @@ const processList = computed(()=>{
     
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
         <h2 class="card-title">Votes</h2>
-        <table class="table  w-full ">
-            <tbody>
-                <tr v-for="(item,index) of votes" :key="index">
-                    <td>{{ item.voter }}</td>
-                    <td>{{ item.option }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <VBtn v-if="votePage.next_key" block variant="outlined" @click="loadMore()" :disabled="loading">Load more</VBtn>
-    </div>
-    <!-- <VCard>
-        <VCardItem>
-            <VCardTitle>
-                Votes
-            </VCardTitle>
-            <VTable>
+        <div class="overflow-x-auto">
+            <table class="table  w-full ">
                 <tbody>
-                    <tr v-for="x in votes">
-                        <td>{{ x.voter }}</td>
-                        <td>{{ x.option }}</td>
+                    <tr v-for="(item,index) of votes" :key="index">
+                        <td>{{ item.voter }}</td>
+                        <td>{{ item.option }}</td>
                     </tr>
                 </tbody>
-            </VTable>
+            </table>
+
             <VBtn v-if="votePage.next_key" block variant="outlined" @click="loadMore()" :disabled="loading">Load more</VBtn>
-        </VCardItem>
-    </VCard> -->
+        </div>
+    </div>
 </div>
 </template>

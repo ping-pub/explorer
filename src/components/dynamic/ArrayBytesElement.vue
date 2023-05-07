@@ -2,9 +2,8 @@
 import { fromBase64, toBase64 } from '@cosmjs/encoding';
 
 const props = defineProps({
-  value: { type: Array<Uint8Array>},
-})
-
+  value: { type: Array<Uint8Array> },
+});
 </script>
 <template>
   <div>

@@ -1,61 +1,101 @@
-import type { AuthAccount, Block, ClientStateWithProof, Coin, ConnectionWithProof, DenomTrace, NodeInfo, PaginabledAccounts, PaginatedIBCChannels, PaginatedIBCConnections, PaginatedTendermintValidator,} from "@/types";
-import type { BankParams, PaginatedBalances, PaginatedDenomMetadata, PaginatedSupply } from "@/types/bank";
-import type { DistributionParams, PaginatedSlashes } from "@/types/distribution";
-import type { GovParams, GovProposal, GovVote, PaginatedProposalDeposit, PaginatedProposalVotes, PaginatedProposals, Tally } from "@/types/gov";
-import type { PaginatedSigningInfo } from "@/types/slashing";
-import type { Delegation, PaginatedDelegations, PaginatedRedelegations, PaginatedUnbonding, PaginatedValdiators, StakingParam, StakingPool, Validator } from "@/types/staking";
-import type { PaginatedTxs, Tx, TxResponse } from "@/types/tx";
-
+import type {
+  AuthAccount,
+  Block,
+  ClientStateWithProof,
+  Coin,
+  ConnectionWithProof,
+  DenomTrace,
+  NodeInfo,
+  PaginabledAccounts,
+  PaginatedIBCChannels,
+  PaginatedIBCConnections,
+  PaginatedTendermintValidator,
+} from '@/types';
+import type {
+  BankParams,
+  PaginatedBalances,
+  PaginatedDenomMetadata,
+  PaginatedSupply,
+} from '@/types/bank';
+import type {
+  DistributionParams,
+  PaginatedSlashes,
+} from '@/types/distribution';
+import type {
+  GovParams,
+  GovProposal,
+  GovVote,
+  PaginatedProposalDeposit,
+  PaginatedProposalVotes,
+  PaginatedProposals,
+  Tally,
+} from '@/types/gov';
+import type { PaginatedSigningInfo } from '@/types/slashing';
+import type {
+  Delegation,
+  PaginatedDelegations,
+  PaginatedRedelegations,
+  PaginatedUnbonding,
+  PaginatedValdiators,
+  StakingParam,
+  StakingPool,
+  Validator,
+} from '@/types/staking';
+import type { PaginatedTxs, Tx, TxResponse } from '@/types/tx';
 
 export interface Request<T> {
-  url: string,
-  adapter: (source: any) => T
+  url: string;
+  adapter: (source: any) => T;
 }
 
 export interface AbstractRegistry {
-  [key: string]: Request<any>
+  [key: string]: Request<any>;
 }
 
 // use snake style, since the all return object use snake style.
 export interface RequestRegistry extends AbstractRegistry {
-  auth_params: Request<any>
+  auth_params: Request<any>;
   auth_accounts: Request<PaginabledAccounts>;
-  auth_account_address: Request<{account: AuthAccount}>;
+  auth_account_address: Request<{ account: AuthAccount }>;
 
   bank_params: Request<BankParams>;
   bank_balances_address: Request<PaginatedBalances>;
   bank_denoms_metadata: Request<PaginatedDenomMetadata>;
   bank_supply: Request<PaginatedSupply>;
-  bank_supply_by_denom: Request<{amount: Coin}>;
+  bank_supply_by_denom: Request<{ amount: Coin }>;
 
   distribution_params: Request<DistributionParams>;
-  distribution_validator_commission: Request<{commission?: {commission?: Coin[]}}>;
-  distribution_validator_outstanding_rewards: Request<{rewards?: {rewards?: Coin[]}}>;
+  distribution_validator_commission: Request<{
+    commission?: { commission?: Coin[] };
+  }>;
+  distribution_validator_outstanding_rewards: Request<{
+    rewards?: { rewards?: Coin[] };
+  }>;
   distribution_validator_slashes: Request<PaginatedSlashes>;
-  distribution_community_pool: Request<{pool: Coin[]}>;
+  distribution_community_pool: Request<{ pool: Coin[] }>;
   distribution_delegator_rewards: Request<any>;
 
-  mint_inflation: Request<{inflation: string}>;
+  mint_inflation: Request<{ inflation: string }>;
   mint_params: Request<{
     params: {
-      mint_denom: string,
-      blocks_per_year: string
-    }
+      mint_denom: string;
+      blocks_per_year: string;
+    };
   }>;
-  mint_annual_provisions: Request<{annual_provisions: string}>
+  mint_annual_provisions: Request<{ annual_provisions: string }>;
 
   slashing_params: Request<any>;
   slashing_signing_info: Request<PaginatedSigningInfo>;
-  
+
   gov_params_voting: Request<GovParams>;
   gov_params_tally: Request<GovParams>;
   gov_params_deposit: Request<GovParams>;
   gov_proposals: Request<PaginatedProposals>;
-  gov_proposals_proposal_id: Request<{proposal: GovProposal}>;
+  gov_proposals_proposal_id: Request<{ proposal: GovProposal }>;
   gov_proposals_deposits: Request<PaginatedProposalDeposit>;
-  gov_proposals_tally: Request<{tally: Tally}>;
+  gov_proposals_tally: Request<{ tally: Tally }>;
   gov_proposals_votes: Request<PaginatedProposalVotes>;
-  gov_proposals_votes_voter: Request<{vote: GovVote}>;
+  gov_proposals_votes_voter: Request<{ vote: GovVote }>;
 
   staking_deletations: Request<PaginatedDelegations>;
   staking_delegator_redelegations: Request<PaginatedRedelegations>;
@@ -64,9 +104,11 @@ export interface RequestRegistry extends AbstractRegistry {
   staking_params: Request<StakingParam>;
   staking_pool: Request<StakingPool>;
   staking_validators: Request<PaginatedValdiators>;
-  staking_validators_address: Request<{validator: Validator}>;
+  staking_validators_address: Request<{ validator: Validator }>;
   staking_validators_delegations: Request<PaginatedDelegations>;
-  staking_validators_delegations_delegator: Request<{delegation_response: Delegation}>;
+  staking_validators_delegations_delegator: Request<{
+    delegation_response: Delegation;
+  }>;
   staking_validators_delegations_unbonding_delegations: Request<PaginatedUnbonding>;
 
   base_tendermint_abci_query: Request<any>;
@@ -78,45 +120,50 @@ export interface RequestRegistry extends AbstractRegistry {
 
   tx_txs: Request<PaginatedTxs>;
   tx_txs_block: Request<Tx>;
-  tx_hash: Request<{tx: Tx, tx_response: TxResponse}>;
+  tx_hash: Request<{ tx: Tx; tx_response: TxResponse }>;
 
   ibc_app_ica_controller_params: Request<any>;
-  ibc_app_ica_host_params: Request<any>
+  ibc_app_ica_host_params: Request<any>;
   ibc_app_transfer_escrow_address: Request<any>;
   ibc_app_transfer_denom_traces: Request<any>;
   ibc_app_transfer_denom_traces_hash: Request<{
-    denom_trace: DenomTrace
+    denom_trace: DenomTrace;
   }>;
   ibc_core_channel_channels: Request<PaginatedIBCChannels>;
   ibc_core_channel_channels_next_sequence: Request<{
-    next_sequence_receive: string,
-    proof: string,
+    next_sequence_receive: string;
+    proof: string;
     proof_height: {
-      revision_number: string,
-      revision_height: string
-    }
+      revision_number: string;
+      revision_height: string;
+    };
   }>;
   ibc_core_channel_channels_acknowledgements: Request<any>;
   ibc_core_channel_connections_channels: Request<PaginatedIBCChannels>;
-  ibc_core_connection_connections:  Request<PaginatedIBCConnections>;
+  ibc_core_connection_connections: Request<PaginatedIBCConnections>;
   ibc_core_connection_connections_connection_id: Request<ConnectionWithProof>;
   ibc_core_connection_connections_connection_id_client_state: Request<ClientStateWithProof>;
-
 }
 
 export function adapter<T>(source: any): T {
-  return source
+  return source;
 }
 
 export interface Registry {
   [key: string]: RequestRegistry;
 }
 
-export function withCustomAdapter<T extends RequestRegistry>(target: T, source?: Partial<T>): T {
-  return source ? Object.assign({}, target, source): target;
+export function withCustomAdapter<T extends RequestRegistry>(
+  target: T,
+  source?: Partial<T>
+): T {
+  return source ? Object.assign({}, target, source) : target;
 }
 
-export function findConfigByName(name: string, registry: Registry): RequestRegistry {
+export function findConfigByName(
+  name: string,
+  registry: Registry
+): RequestRegistry {
   const url = registry[name];
   if (!url) {
     throw new Error(`Unsupported version or name: ${name}`);
@@ -125,7 +172,10 @@ export function findConfigByName(name: string, registry: Registry): RequestRegis
   return url;
 }
 
-export function findConfigByVersion(version: string, registry: Registry): RequestRegistry {
+export function findConfigByVersion(
+  version: string,
+  registry: Registry
+): RequestRegistry {
   let closestVersion: string | null = null;
 
   for (const key in registry) {

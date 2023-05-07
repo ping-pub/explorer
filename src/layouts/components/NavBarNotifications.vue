@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import Notifications from '@core/components/Notifications.vue'
-import type { Notification } from '@layouts/types'
+import Notifications from '@core/components/Notifications.vue';
+import type { Notification } from '@layouts/types';
 
 // Images
-import avatar3 from '@images/avatars/avatar-3.png'
-import avatar4 from '@images/avatars/avatar-4.png'
-import avatar5 from '@images/avatars/avatar-5.png'
-import paypal from '@images/svg/paypal.svg'
+import avatar3 from '@images/avatars/avatar-3.png';
+import avatar4 from '@images/avatars/avatar-4.png';
+import avatar5 from '@images/avatars/avatar-5.png';
+import paypal from '@images/svg/paypal.svg';
 
 const notifications = ref<Notification[]>([
   {
@@ -50,32 +50,29 @@ const notifications = ref<Notification[]>([
     time: '19 Mar',
     isRead: false,
   },
-])
+]);
 
 const removeNotification = (notificationId: number) => {
   notifications.value.forEach((item, index) => {
-    if (notificationId === item.id)
-      notifications.value.splice(index, 1)
-  })
-}
+    if (notificationId === item.id) notifications.value.splice(index, 1);
+  });
+};
 
 const markRead = (notificationId: number[]) => {
-  notifications.value.forEach(item => {
-    notificationId.forEach(id => {
-      if (id === item.id)
-        item.isRead = true
-    })
-  })
-}
+  notifications.value.forEach((item) => {
+    notificationId.forEach((id) => {
+      if (id === item.id) item.isRead = true;
+    });
+  });
+};
 
 const markUnRead = (notificationId: number[]) => {
-  notifications.value.forEach(item => {
-    notificationId.forEach(id => {
-      if (id === item.id)
-        item.isRead = false
-    })
-  })
-}
+  notifications.value.forEach((item) => {
+    notificationId.forEach((id) => {
+      if (id === item.id) item.isRead = false;
+    });
+  });
+};
 </script>
 
 <template>

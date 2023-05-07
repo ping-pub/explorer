@@ -2,18 +2,21 @@
 import { controlledComputed } from '@vueuse/shared';
 
 interface Props {
-  title: string
-  color?: string
-  icon: string
-  stats: number
-  change?: number
+  title: string;
+  color?: string;
+  icon: string;
+  stats: number;
+  change?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   color: 'primary',
-})
+});
 
-const isPositive = controlledComputed(() => props.change, () => Math.sign(props.change||0) === 1)
+const isPositive = controlledComputed(
+  () => props.change,
+  () => Math.sign(props.change || 0) === 1
+);
 </script>
 
 <template>
@@ -26,16 +29,13 @@ const isPositive = controlledComputed(() => props.change, () => Math.sign(props.
         variant="tonal"
         class="me-4"
       >
-        <VIcon
-          :icon="props.icon"
-          size="24"
-        />
+        <VIcon :icon="props.icon" size="24" />
       </VAvatar>
 
       <div class="d-flex flex-column">
         <div class="d-flex align-center flex-wrap">
           <h6 class="text-h6">
-            {{ (props.stats) }}
+            {{ props.stats }}
           </h6>
           <div
             v-if="props.change"

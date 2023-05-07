@@ -1,19 +1,22 @@
 <script setup lang="ts">
 interface Props {
-  title: string
-  subtitle: string
-  stats: string
-  change: number
-  image: string
-  imgWidth: number
-  color?: string
+  title: string;
+  subtitle: string;
+  stats: string;
+  change: number;
+  image: string;
+  imgWidth: number;
+  color?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   color: 'primary',
-})
+});
 
-const isPositive = controlledComputed(() => props.change, () => Math.sign(props.change) === 1)
+const isPositive = controlledComputed(
+  () => props.change,
+  () => Math.sign(props.change) === 1
+);
 </script>
 
 <template>
@@ -47,11 +50,7 @@ const isPositive = controlledComputed(() => props.change, () => Math.sign(props.
     <VSpacer />
 
     <div class="illustrator-img">
-      <VImg
-        v-if="props.image"
-        :src="props.image"
-        :width="props.imgWidth"
-      />
+      <VImg v-if="props.image" :src="props.image" :width="props.imgWidth" />
     </div>
   </VCard>
 </template>

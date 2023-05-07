@@ -15,17 +15,28 @@ const props = defineProps({
 });
 const total = computed(() => props.pool?.bonded_tokens);
 const format = useFormatter();
-const yes = computed(() => format.calculatePercent(props.tally?.yes, total.value));
-const no = computed(() => format.calculatePercent(props.tally?.no, total.value));
-const abstain = computed(() => format.calculatePercent(props.tally?.abstain, total.value));
-const veto = computed(() => format.calculatePercent(props.tally?.no_with_veto, total.value));
+const yes = computed(() =>
+  format.calculatePercent(props.tally?.yes, total.value)
+);
+const no = computed(() =>
+  format.calculatePercent(props.tally?.no, total.value)
+);
+const abstain = computed(() =>
+  format.calculatePercent(props.tally?.abstain, total.value)
+);
+const veto = computed(() =>
+  format.calculatePercent(props.tally?.no_with_veto, total.value)
+);
 </script>
 
 <template>
   <div class="progress rounded-full h-1 text-xs flex items-center">
     <div class="h-1 bg-yes" :style="`width: ${yes}`"></div>
     <div class="h-1 bg-no" :style="`width: ${no}`"></div>
-    <div class="h-1" :style="`width: ${veto}; background-color: #B71C1C;`"></div>
+    <div
+      class="h-1"
+      :style="`width: ${veto}; background-color: #B71C1C;`"
+    ></div>
     <div class="h-1 bg-secondary" :style="`width: ${abstain}`"></div>
   </div>
 </template>

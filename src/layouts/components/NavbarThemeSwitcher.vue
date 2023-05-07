@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { ThemeSwitcherTheme } from '@layouts/types'
-import NewThemeSwitcher from '@/components/ThemeSwitcher.vue'
+import type { ThemeSwitcherTheme } from '@layouts/types';
+import NewThemeSwitcher from '@/components/ThemeSwitcher.vue';
 const themes: ThemeSwitcherTheme[] = [
   {
     name: 'system',
@@ -14,11 +14,11 @@ const themes: ThemeSwitcherTheme[] = [
     name: 'dark',
     icon: 'mdi-weather-night',
   },
-]
+];
 </script>
 
 <template>
   <div>
-    <NewThemeSwitcher :themes="themes"/>
+    <NewThemeSwitcher :themes="themes" />
   </div>
 </template>
