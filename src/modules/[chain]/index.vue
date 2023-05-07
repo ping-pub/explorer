@@ -59,7 +59,7 @@ function shortName(name: string, id: string) {
             </VCardSubtitle>
           </VCardItem>
           <VDivider />
-          <VCardItem>
+          <div class="mt-4 pl-4">
             <VBtn
               variant="text"
               size="small"
@@ -92,7 +92,7 @@ function shortName(name: string, id: string) {
             >
               Github
             </VBtn>
-          </VCardItem>
+          </div>
           <VCardItem>
             <!-- SECTION upgrade plan banner -->
             <div
@@ -153,14 +153,14 @@ function shortName(name: string, id: string) {
               </div>
             </div>
             <VSpacer />
-            <VBtn
-              block
+            <a
               :color="store.trustColor"
-              class="mt-3"
+              class="mt-5 text-white btn btn-success w-full flex items-center"
               :href="ticker.trade_url"
+              target="_blank"
             >
               Buy {{ coinInfo.symbol || '' }}
-            </VBtn>
+            </a>
           </VCardItem>
         </VCol>
         <VCol md="7">
@@ -169,18 +169,21 @@ function shortName(name: string, id: string) {
           </VCardItem>
         </VCol>
       </VRow>
-      <VDivider />
-      <VCardText style="max-height: 250px; overflow: auto">
+      <div class="h-[1px] w-full bg-gray-100 dark:bg-[#384059]"></div>
+      <div class="max-h-[250px] overflow-auto p-4 text-sm">
         <MdEditor
           :model-value="coinInfo.description?.en"
           previewOnly
         ></MdEditor>
-      </VCardText>
-      <VCardItem>
-        <VChip v-for="tag in coinInfo.categories" size="x-small" class="mr-2">{{
-          tag
-        }}</VChip>
-      </VCardItem>
+      </div>
+      <div class="mx-4 flex flex-wrap items-center">
+        <div
+          v-for="tag in coinInfo.categories"
+          class="mr-2 mb-4 text-xs bg-gray-100 dark:bg-[#384059] px-3 rounded-full py-1"
+        >
+          {{ tag }}
+        </div>
+      </div>
     </VCard>
 
     <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
@@ -201,9 +204,11 @@ function shortName(name: string, id: string) {
       >
     </VCard>
 
-    <VBtn block color="secondary" variant="outlined" class="mt-5"
-      >Connect Wallet</VBtn
+    <div
+      class="btn btn-primary w-full mt-5 flex items-center bg-transparent text-primary hover:bg-gray-100 hover:bg-transparent"
     >
+      Connect Wallet
+    </div>
   </div>
 </template>
 
