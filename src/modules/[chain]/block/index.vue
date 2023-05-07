@@ -39,7 +39,7 @@ const format = useFormatter();
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in store.recents">
+          <tr v-for="(item,index) of store.recents" :key="index">
             <td class="text-sm text-primary">
               <RouterLink
                 :to="`/${props.chain}/block/${item.block?.header?.height}`"
@@ -70,7 +70,7 @@ const format = useFormatter();
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in store.txsInRecents">
+          <tr v-for="(item,index) of store.txsInRecents" :key="index">
             <td>
               <RouterLink :to="`/${props.chain}/tx/${item.hash}`">{{
                 item.hash
@@ -82,11 +82,13 @@ const format = useFormatter();
         </tbody>
       </table>
       <div class="p-4">
-        <v-alert
-          type="info"
-          text="Only show txs in recent blocks"
-          variant="tonal"
-        ></v-alert>
+        <div class="alert relative bg-transparent">
+          <div class="alert  absolute inset-x-0 inset-y-0 w-full h-full bg-info opacity-10"></div>
+          <div class="text-info">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>Only show txs in recent blocks</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
