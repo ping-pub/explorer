@@ -7,8 +7,8 @@ const props = defineProps({
 </script>
 <template>
   <div>
-    <div v-for="v in props.value">
-      {{ toBase64(v) }}
+    <div v-for="(item,index) of props.value" :key="index">
+      {{ toBase64(item) }}
     </div>
   </div>
 </template>

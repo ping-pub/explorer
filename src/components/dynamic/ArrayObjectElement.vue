@@ -18,32 +18,34 @@ const header = computed(() => {
 });
 </script>
 <template>
-  <VTable
-    v-if="header.length > 0"
-    density="compact"
-    height="300px"
-    fixed-header
-    hover
-  >
-    <thead v-if="thead">
-      <tr>
-        <th
-          v-for="(item, index) in header"
-          :key="index"
-          class="text-left text-capitalize"
-        >
-          {{ item }}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(item, index) in value" :key="index">
-        <td v-for="(el, key) in header" :key="key">
-          <DynamicComponent :value="item[el]" />
-        </td>
-      </tr>
-    </tbody>
-  </VTable>
+  <div class="overflow-x-auto">
+    <VTable
+      v-if="header.length > 0"
+      density="compact"
+      height="300px"
+      fixed-header
+      hover
+    >
+      <thead v-if="thead">
+        <tr>
+          <th
+            v-for="(item, index) in header"
+            :key="index"
+            class="text-left text-capitalize"
+          >
+            {{ item }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in value" :key="index">
+          <td v-for="(el, key) in header" :key="key">
+            <DynamicComponent :value="item[el]" />
+          </td>
+        </tr>
+      </tbody>
+    </VTable>
 
-  <div v-else class="h-[300px]"></div>
+    <div v-else class="h-[300px]"></div>
+  </div>
 </template>
