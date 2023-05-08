@@ -66,27 +66,28 @@ const comLinks = [
 
 <template>
   <div>
-    <VCard v-if="coinInfo && coinInfo.name" class="mb-5">
-      <VRow>
-        <VCol md="5">
-          <VCardItem>
-            <VCardTitle>
-              {{ coinInfo.name }} (<span class="uppercase">{{
-                coinInfo.symbol
-              }}</span
-              >)
-            </VCardTitle>
-            <VCardSubtitle>
-              Rank:
-              <div
-                class="badge text-xs badge-error bg-[#fcebea] dark:bg-[#41384d] text-red-400"
-              >
-                #{{ coinInfo.market_cap_rank }}
-              </div>
-            </VCardSubtitle>
-          </VCardItem>
-          <div class="h-[1px] w-full bg-gray-100 dark:bg-[#384059]"></div>
-          <div class="mt-4 pl-4 flex items-center">
+    <div
+      v-if="coinInfo && coinInfo.name"
+      class="bg-base-100 rounded shadow mb-4"
+    >
+      <div class="flex p-4">
+        <div class="flex-1 mr-10">
+          <div class="text-xl font-semibold text-main">
+            {{ coinInfo.name }} (<span class="uppercase">{{
+              coinInfo.symbol
+            }}</span
+            >)
+          </div>
+          <div class="text-xs mt-2">
+            Rank:
+            <div
+              class="badge text-xs badge-error bg-[#fcebea] dark:bg-[#41384d] text-red-400"
+            >
+              #{{ coinInfo.market_cap_rank }}
+            </div>
+          </div>
+
+          <div class="mt-4 flex items-center">
             <a
               v-for="(item, index) of comLinks"
               :key="index"
@@ -97,66 +98,65 @@ const comLinks = [
               <span class="ml-1 text-sm uppercase">{{ item?.name }}</span>
             </a>
           </div>
-          <VCardItem>
-            <!-- SECTION upgrade plan banner -->
-            <div
-              class="plan-upgrade-banner d-flex bg-light-secondary rounded align-center pa-3"
-            >
-              <h3 class="plan-details me-3" :class="store.priceColor">
-                {{ store.priceChange }}
-                <small>%</small>
-              </h3>
 
-              <VMenu open-on-hover>
-                <template #activator="{ props }">
-                  <div class="d-flex flex-column align-start" v-bind="props">
-                    <h3 class="text-base font-weight-semibold">
+          <div>
+            <div class="dropdown dropdown-hover w-full mt-[16px] md:mt-[32px]">
+              <label>
+                <div
+                  class="bg-gray-100 dark:bg-[#384059] flex items-center justify-between px-4 py-2 cursor-pointer rounded"
+                >
+                  <div>
+                    <div
+                      class="font-semibold text-xl text-[#666] dark:text-white"
+                    >
                       {{ ticker?.market?.name || '' }}
-                    </h3>
-                    <span class="text-primary text-xs">
+                    </div>
+                    <div class="text-info text-sm">
                       {{ shortName(ticker?.base, ticker.coin_id) }}/{{
                         shortName(ticker?.target, ticker.target_coin_id)
                       }}
-                    </span>
+                    </div>
                   </div>
-                </template>
-                <VList style="max-height: 300px">
-                  <VListItem
-                    v-for="(item, i) in store.coinInfo.tickers"
-                    :key="i"
-                    rounded
-                    @click="store.selectTicker(i)"
-                  >
-                    <template #prepend></template>
-                    <!-- eslint-disable-next-line vue/no-v-text-v-html-on-component -->
-                    <VListItemTitle v-text="item.market.name" />
-                    <VListItemSubtitle>
-                      {{ shortName(item?.base, item.coin_id) }}/{{
-                        shortName(item?.target, item.target_coin_id)
-                      }}
-                    </VListItemSubtitle>
-                    <template #append>
-                      <span
-                        class="ml-3"
-                        :class="`text-${store.tickerColor(item.trust_score)}`"
+
+                  <div class="text-right">
+                    <div
+                      class="text-xl font-semibold text-[#666] dark:text-white"
+                    >
+                      ${{ ticker.converted_last.usd }}
+                    </div>
+                    <div class="text-sm" :class="store.priceColor">
+                      {{ store.priceChange }}%
+                    </div>
+                  </div>
+                </div>
+              </label>
+              <div class="dropdown-content pt-1">
+                <div class="h-64 overflow-auto w-full shadow rounded">
+                  <ul class="menu w-full bg-gray-100 rounded dark:bg-[#384059]">
+                    <li
+                      v-for="(item, index) in store.coinInfo.tickers"
+                      :key="index"
+                      @click="store.selectTicker(index)"
+                    >
+                      <div
+                        class="flex items-center justify-between hover:bg-base-100"
                       >
-                        {{ item.converted_last.usd }}
-                      </span>
-                    </template>
-                  </VListItem>
-                </VList>
-              </VMenu>
+                        <div class="text-main text-sm">
+                          {{ shortName(item?.base, item.coin_id) }}/{{
+                            shortName(item?.target, item.target_coin_id)
+                          }}
+                        </div>
 
-              <VSpacer />
-
-              <div class="d-flex align-center">
-                <sub>
-                  <h6 class="text-xs font-weight-regular">$</h6>
-                </sub>
-                <span class="text-h5">{{ ticker.converted_last.usd }}</span>
+                        <div class="text-base text-main">
+                          ${{ item.converted_last.usd }}
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-            <VSpacer />
+
             <a
               :color="store.trustColor"
               class="mt-5 text-white btn btn-success w-full flex items-center"
@@ -165,14 +165,13 @@ const comLinks = [
             >
               Buy {{ coinInfo.symbol || '' }}
             </a>
-          </VCardItem>
-        </VCol>
-        <VCol md="7">
-          <VCardItem>
-            <PriceMarketChart />
-          </VCardItem>
-        </VCol>
-      </VRow>
+          </div>
+        </div>
+
+        <div class="flex-1 hidden md:block">
+          <PriceMarketChart />
+        </div>
+      </div>
       <div class="h-[1px] w-full bg-gray-100 dark:bg-[#384059]"></div>
       <div class="max-h-[250px] overflow-auto p-4 text-sm">
         <MdEditor
@@ -188,7 +187,7 @@ const comLinks = [
           {{ tag }}
         </div>
       </div>
-    </VCard>
+    </div>
 
     <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
       <div v-for="item in store.stats">
@@ -215,12 +214,6 @@ const comLinks = [
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.card-box {
-  border: 1px solid rgb(var(--v-theme-primary));
-}
-</style>
 
 <route>
   {

@@ -27,27 +27,31 @@ const series = computed(() => {
   ];
 });
 
-function changeChart(type: string){
-  kind.value = type
+function changeChart(type: string) {
+  kind.value = type;
 }
 </script>
 
 <template>
   <div class="tabs tabs-boxed bg-transparent justify-end">
-    <a class="tab mr-2 text-gray-400 uppercase" 
-      :class="{'tab-active': kind ==='price' }"
-      @click="changeChart('price')">
+    <a
+      class="tab text-xs mr-2 text-gray-400 uppercase"
+      :class="{ 'tab-active': kind === 'price' }"
+      @click="changeChart('price')"
+    >
       Price
     </a>
-    <a class="tab text-gray-400 uppercase" 
-      :class="{'tab-active': kind ==='volume' }"
-      @click="changeChart('volume')">
+    <a
+      class="tab text-xs text-gray-400 uppercase"
+      :class="{ 'tab-active': kind === 'volume' }"
+      @click="changeChart('volume')"
+    >
       Volume
     </a>
   </div>
   <VueApexCharts
     type="area"
-    height="261"
+    height="230"
     :options="chartConfig"
     :series="series"
   />
