@@ -32,7 +32,7 @@ wasmStore.wasmClient.getWasmCodeList().then((x) => {
             <td>
               <RouterLink
                 :to="`/${props.chain}/cosmwasm/${v.code_id}/contracts`"
-                ><div class="text-truncate" style="max-width: 200px">
+                ><div class="text-truncate text-primary" style="max-width: 200px">
                   {{ v.data_hash }}
                 </div></RouterLink
               >

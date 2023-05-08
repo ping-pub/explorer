@@ -36,7 +36,7 @@ function color(v: string) {
           </thead>
           <tbody>
             <tr v-for="v in list">
-              <td>
+              <td class="text-primary">
                 <RouterLink :to="`/${chain}/ibc/${v.id}`">{{
                   v.id
                 }}</RouterLink>
