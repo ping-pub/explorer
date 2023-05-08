@@ -14,13 +14,13 @@ wasmStore.wasmClient.getWasmCodeList().then((x) => {
 });
 </script>
 <template>
-  <div>
-    <VCard>
-      <VCardTitle>Cosmos Wasm Smart Contracts</VCardTitle>
-      <VTable>
+  <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <h2 class="card-title truncate w-full">Cosmos Wasm Smart Contracts</h2>
+    <div class="overflow-x-auto">
+      <table class="table w-full mt-4 text-sm">
         <thead>
           <tr>
-            <th>Code Id</th>
+            <th style="position: relative;">Code Id</th>
             <th>Code Hash</th>
             <th>Creator</th>
             <th>Permissions</th>
@@ -47,8 +47,8 @@ wasmStore.wasmClient.getWasmCodeList().then((x) => {
             </td>
           </tr>
         </tbody>
-      </VTable>
-    </VCard>
+      </table>
+    </div>
   </div>
 </template>
 
