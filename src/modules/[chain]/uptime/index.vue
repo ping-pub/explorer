@@ -91,8 +91,8 @@ watchEffect(() => {
   <div>
     <VRow>
       <VCol cols="12" md="4">
-        <VCard class="h-full self-center d-flex p-4">
-          <div class="self-center">
+        <VCard>
+          <div class="h-full self-center d-flex p-4">
             Current Height: {{ latest.block?.header?.height }}
           </div>
         </VCard>
