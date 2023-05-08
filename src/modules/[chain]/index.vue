@@ -2,6 +2,7 @@
 import MdEditor from 'md-editor-v3';
 import PriceMarketChart from '@/components/charts/PriceMarketChart.vue';
 
+import { Icon } from '@iconify/vue';
 import { useBlockchain, useFormatter } from '@/stores';
 import { onMounted, ref } from 'vue';
 import { useIndexModule } from './indexStore';
@@ -38,6 +39,29 @@ function shortName(name: string, id: string) {
     ? id
     : name;
 }
+
+const comLinks = [
+  {
+    name: 'Website',
+    icon: 'mdi-web',
+    href: store.homepage,
+  },
+  {
+    name: 'Twitter',
+    icon: 'mdi-twitter',
+    href: store.twitter,
+  },
+  {
+    name: 'Telegram',
+    icon: 'mdi-telegram',
+    href: store.telegram,
+  },
+  {
+    name: 'Github',
+    icon: 'mdi-github',
+    href: store.github,
+  },
+];
 </script>
 
 <template>
@@ -47,51 +71,31 @@ function shortName(name: string, id: string) {
         <VCol md="5">
           <VCardItem>
             <VCardTitle>
-              {{ coinInfo.name }} (
-              <span class="text-uppercase">{{ coinInfo.symbol }}</span>
-              )
+              {{ coinInfo.name }} (<span class="uppercase">{{
+                coinInfo.symbol
+              }}</span
+              >)
             </VCardTitle>
             <VCardSubtitle>
               Rank:
-              <VChip color="error" size="x-small"
-                >#{{ coinInfo.market_cap_rank }}</VChip
+              <div
+                class="badge text-xs badge-error bg-[#fcebea] dark:bg-[#41384d] text-red-400"
               >
+                #{{ coinInfo.market_cap_rank }}
+              </div>
             </VCardSubtitle>
           </VCardItem>
-          <VDivider />
-          <div class="mt-4 pl-4">
-            <VBtn
-              variant="text"
-              size="small"
-              :href="store.homepage"
-              prependIcon="mdi-web"
+          <div class="h-[1px] w-full bg-gray-100 dark:bg-[#384059]"></div>
+          <div class="mt-4 pl-4 flex items-center">
+            <a
+              v-for="(item, index) of comLinks"
+              :key="index"
+              :href="item.href"
+              class="link link-primary px-2 py-1 rounded-sm no-underline hover:text-primary hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center"
             >
-              Website
-            </VBtn>
-            <VBtn
-              variant="text"
-              size="small"
-              :href="store.twitter"
-              prependIcon="mdi-twitter"
-            >
-              Twitter
-            </VBtn>
-            <VBtn
-              variant="text"
-              size="small"
-              :href="store.telegram"
-              prependIcon="mdi-telegram"
-            >
-              Telegram
-            </VBtn>
-            <VBtn
-              variant="text"
-              size="small"
-              :href="store.github"
-              prependIcon="mdi-github"
-            >
-              Github
-            </VBtn>
+              <Icon :icon="item?.icon" />
+              <span class="ml-1 text-sm uppercase">{{ item?.name }}</span>
+            </a>
           </div>
           <VCardItem>
             <!-- SECTION upgrade plan banner -->
@@ -192,17 +196,17 @@ function shortName(name: string, id: string) {
       </div>
     </div>
 
-    <VCard class="my-5">
-      <VCardItem class="pb-0">
-        <VCardTitle>Active Proposals</VCardTitle>
-      </VCardItem>
-      <VCardItem>
+    <div class="bg-base-100 rounded mt-4 shadow">
+      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-secondary">
+        Active Proposals
+      </div>
+      <div class="px-4 pb-4">
         <ProposalListItem :proposals="store?.proposals" />
-      </VCardItem>
-      <VCardText v-if="store.proposals.length === 0"
-        >No active proposals</VCardText
-      >
-    </VCard>
+      </div>
+      <div class="pl-4 pb-8 py-4" v-if="store.proposals?.length === 0">
+        No active proposals
+      </div>
+    </div>
 
     <div
       class="btn btn-primary w-full mt-5 flex items-center bg-transparent text-primary hover:bg-gray-100 hover:bg-transparent"
