@@ -93,29 +93,39 @@ const result = ref('');
 </script>
 <template>
   <div>
-    <VCard>
-      <VCardTitle>Contract List of Code: {{ props.code_id }}</VCardTitle>
-      <VTable>
-        <thead>
-          <tr>
-            <th>Contract List</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="v in response.contracts">
-            <td>{{ v }}</td>
-            <td>
-              <VBtn size="small" @click="showInfo(v)">contract</VBtn>
-              <VBtn size="small" @click="showState(v)" class="ml-2"
-                >States</VBtn
-              >
-              <VBtn size="small" @click="showQuery(v)" class="ml-2">Query</VBtn>
-            </td>
-          </tr>
-        </tbody>
-      </VTable>
-    </VCard>
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <h2 class="card-title truncate w-full">Contract List of Code: {{ props.code_id }}</h2>
+      <div class="overflow-x-auto">
+        <table class="table  w-full mt-4">
+          <thead>
+            <tr>
+              <th style="position: relative;">Contract List</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="v in response.contracts">
+              <td>{{ v }}</td>
+              <td>
+                <button
+                  class="btn btn-primary btn-sm text-xs mr-2"
+                  @click="showInfo(v)"
+                  >contract</button>
+                <button
+                  class="btn btn-primary btn-sm text-xs mr-2"
+                  @click="showState(v)"
+                >States</button>
+                <button
+                  class="btn btn-primary btn-sm text-xs"
+                  @click="showQuery(v)"
+                >Query</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+   
     <v-dialog v-model="infoDialog" width="auto">
       <v-card>
         <VCardTitle>Contract Detail</VCardTitle>

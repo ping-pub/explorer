@@ -291,7 +291,7 @@ const processList = computed(()=>{
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
         <h2 class="card-title">Votes</h2>
         <div class="overflow-x-auto">
-            <table class="table  w-full ">
+            <table class="table  w-full">
                 <tbody>
                     <tr v-for="(item,index) of votes" :key="index">
                         <td>{{ item.voter }}</td>

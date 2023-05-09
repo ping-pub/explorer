@@ -21,31 +21,33 @@ const format = useFormatter();
 const chain = useBlockchain();
 </script>
 <template>
-  <VTable density="compact" v-if="txs.length > 0">
-    <thead>
-      <tr>
-        <th>Hash</th>
-        <th>Msgs</th>
-        <th>Memo</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="item in txs">
-        <td>
-          <RouterLink :to="`/${chain.chainName}/tx/${item.hash}`">{{
-            item.hash
-          }}</RouterLink>
-        </td>
-        <td>
-          {{
-            format.messages(
-              item.tx.body.messages.map((x) => ({ '@type': x.typeUrl }))
-            )
-          }}
-        </td>
-        <td>{{ item.tx.body.memo }}</td>
-      </tr>
-    </tbody>
-  </VTable>
-  <div v-else>[]</div>
+  <div class="overflow-x-auto mt-4">
+    <table class="table w-full" density="compact" v-if="txs.length > 0">
+      <thead>
+        <tr>
+          <th style="position: relative">Hash</th>
+          <th>Msgs</th>
+          <th>Memo</th>
+        </tr>
+      </thead>
+      <tbody class="text-sm">
+        <tr v-for="item in txs">
+          <td>
+            <RouterLink :to="`/${chain.chainName}/tx/${item.hash}`">{{
+              item.hash
+            }}</RouterLink>
+          </td>
+          <td>
+            {{
+              format.messages(
+                item.tx.body.messages.map((x) => ({ '@type': x.typeUrl }))
+              )
+            }}
+          </td>
+          <td>{{ item.tx.body.memo }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div v-else>[]</div>
+  </div>
 </template>
