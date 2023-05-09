@@ -216,6 +216,7 @@ const comLinks = [
       </div>
     </div>
 
+    <ping-connect-wallet class="mt-5" :chain-id="'juno-1'" :hd-path="`m/44'/118/0'/0/0`" />
     <div
       class="btn btn-primary w-full mt-5 flex items-center bg-transparent text-primary hover:bg-gray-100 hover:bg-transparent"
     >
