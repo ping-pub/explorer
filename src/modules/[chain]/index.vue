@@ -142,6 +142,9 @@ const comLinks = [
                         class="flex items-center justify-between hover:bg-base-100"
                       >
                         <div class="text-main text-sm">
+                          {{ item?.market?.name }}
+                        </div>
+                        <div class="text-main text-sm">
                           {{ shortName(item?.base, item.coin_id) }}/{{
                             shortName(item?.target, item.target_coin_id)
                           }}
