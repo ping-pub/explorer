@@ -6711,7 +6711,7 @@ pify@^3.0.0:
 
 "ping-widget@git+https://github.com/ping-pub/widget.git":
   version "0.0.5"
-  resolved "git+https://github.com/ping-pub/widget.git#2c4bf89ba35ea6cb6ecbfe07e32f70ba8089e9bc"
+  resolved "git+https://github.com/ping-pub/widget.git#7ce4842101089476d915027f58021088afef9cb8"
   dependencies:
     "@cosmjs/amino" "^0.30.1"
     "@cosmjs/ledger-amino" "^0.30.1"

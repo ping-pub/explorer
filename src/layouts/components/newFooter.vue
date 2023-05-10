@@ -31,4 +31,13 @@
       >
     </div>
   </footer>
+  <div class="footer-modal">
+    <ping-connect-wallet :chain-id="'juno-1'" :hd-path="`m/44'/118/0'/0/0`" />
+  </div>
 </template>
+
+<style>
+.footer-modal .ping-connect-btn {
+  display: none;
+}
+</style>
