@@ -12,6 +12,7 @@ const dashboard = useDashboard();
 
 dashboard.$subscribe((mutation, state) => {
   localStorage.setItem('favorite', JSON.stringify(state.favorite));
+  dashboard.loadingPrices()
 });
 const keywords = ref('');
 const chains = computed(() => {
@@ -23,7 +24,6 @@ const chains = computed(() => {
     return Object.values(dashboard.chains);
   }
 });
-const chain = useBlockchain();
 </script>
 <template>
   <div class="">

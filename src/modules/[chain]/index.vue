@@ -67,7 +67,20 @@ const comLinks = [
 ];
 
 // wallet box
-
+const change = computed(() => {
+  const token = walletStore.balanceOfStakingToken
+  return token? format.priceChanges(token.denom) : 0
+})
+const color= computed(() => {
+  switch(true) {
+    case change.value > 0: 
+      return "text-green-600"
+    case change.value === 0:
+      return "text-grey-500"
+    case change.value < 0:
+      return "text-red-600"
+  }
+})
 </script>
 
 <template>
@@ -228,8 +241,10 @@ const comLinks = [
         <span v-if="walletStore.currentAddress" class="float-right font-light text-sm">More</span>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-4 auto-cols-auto gap-4 px-4 pb-8 py-4">
-        <div class="bg-base-100">{{ format.formatToken(walletStore.balanceOfStakingToken) }}</div>
-        <div class="bg-base-100">{{ format.formatToken(walletStore.stakingAmount) }}</div>
+        <div class="bg-base-100">{{ format.formatToken(walletStore.balanceOfStakingToken) }}
+          <br><span :class="color">{{ format.showChanges(change) }}<small>%</small></span>{{ format.tokenValue(walletStore.balanceOfStakingToken) }}</div>
+        <div class="bg-base-100">{{ format.formatToken(walletStore.stakingAmount) }}
+        <br> {{ format.tokenValue(walletStore.stakingAmount) }}</div>
         <div class="bg-base-100">{{ format.formatToken(walletStore.rewardAmount) }}</div>
         <div class="bg-base-100">{{ format.formatToken(walletStore.unbondingAmount) }}</div>
       </div>
