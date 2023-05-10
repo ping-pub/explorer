@@ -6709,28 +6709,9 @@ pify@^3.0.0:
   resolved "https://registry.npmjs.org/pify/-/pify-3.0.0.tgz"
   integrity sha512-C3FsVNH1udSEX48gGX1xfvwTWfsYWj5U+8/uK15BGzIGrKoUpghX8hWZwa/OFnakBiiVNmBvemTJR5mcy7iPcg==
 
-ping-widget@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/ping-widget/-/ping-widget-0.0.4.tgz#b42487cca64fe0be1a4e89c6f300630e3bcae987"
-  integrity sha512-FLzhgd/b+QZt2H7TucmLu8ZXiQh6Op07Usw78XlXBYVwXFtaI5PisKXzV6TftkEa5l8Q1YKMA5d8a8FwLe17HA==
-  dependencies:
-    "@cosmjs/amino" "^0.30.1"
-    "@cosmjs/ledger-amino" "^0.30.1"
-    "@cosmjs/proto-signing" "^0.30.1"
-    "@cosmjs/stargate" "^0.30.1"
-    "@ledgerhq/hw-transport-web-ble" "^6.27.13"
-    "@tharsis/address-converter" "^0.1.8"
-    "@tharsis/eip712" "^0.2.4"
-    "@tharsis/proto" "^0.1.20"
-    "@tharsis/transactions" "^0.2.6"
-    cross-fetch "^3.1.5"
-    daisyui "^2.51.6"
-    vue "^3.2.47"
-    vue3-webcomponent-wrapper "^0.2.0"
-
 "ping-widget@git+https://github.com/ping-pub/widget.git":
-  version "0.0.4"
-  resolved "git+https://github.com/ping-pub/widget.git#e91a2626cd3bf4534d40476f0be29f777c2b7c16"
+  version "0.0.5"
+  resolved "git+https://github.com/ping-pub/widget.git#2c4bf89ba35ea6cb6ecbfe07e32f70ba8089e9bc"
   dependencies:
     "@cosmjs/amino" "^0.30.1"
     "@cosmjs/ledger-amino" "^0.30.1"
