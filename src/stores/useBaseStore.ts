@@ -56,10 +56,10 @@ export const useBaseStore = defineStore('baseStore', {
     },
 
     async fetchValidatorByHeight(height?: number, offset = 0) {
-      return this.blockchain.rpc.getBaseValidatorsetAt(String(height));
+      return this.blockchain.rpc.getBaseValidatorsetAt(String(height), offset);
     },
     async fetchLatestValidators(offset = 0) {
-      return this.blockchain.rpc.getBaseValidatorsetLatest();
+      return this.blockchain.rpc.getBaseValidatorsetLatest(offset);
     },
     async fetchBlock(height?: number) {
       return this.blockchain.rpc.getBaseBlockAt(String(height));

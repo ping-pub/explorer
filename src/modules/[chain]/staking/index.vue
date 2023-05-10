@@ -16,45 +16,69 @@ const tab = ref('active');
 const unbondList = ref([] as Validator[]);
 const base = useBaseStore();
 onMounted(() => {
-  fetchChange(0);
   staking.fetchInacitveValdiators().then((x) => {
     unbondList.value = x;
   });
 });
 
-function fetchChange(offset: number) {
-  const base = useBaseStore();
-  const diff = 86400000 / base.blocktime;
-  // base.fetchAbciInfo().then(h => {
-  //   // console.log('block:', h)
-  //   base.fetchValidatorByHeight(h.lastBlockHeight, offset).then(x => {
-  //     x.validators.forEach(v => {
-  //       if(v.pubkey) latest.value[pubkeyToAddress(v.pubkey.algorithm, v.pubkey.data)] = Number(v.votingPower)
-  //     })
-  //   })
-  //   const height = Number(h.lastBlockHeight) - diff
-  //   base.fetchValidatorByHeight(height > 0 ? height : 1, offset).then(old => {
-  //     old.validators.forEach(v => {
-  //       if(v.pubkey) yesterday.value[pubkeyToAddress(v.pubkey.algorithm, v.pubkey.data)] = Number(v.votingPower)
-  //     })
-  //     // console.log(Object.keys(yesterday.value).map(x => x.toUpperCase()))
-  //   })
-  // })
+async function fetchChange() {
+  console.log('fetch changes')
+  let page = 0
+
+  let height = Number(base.latest?.block?.header?.height || 0)
+  if (height > 14400) {
+    height -= 14400
+  } else {
+    height = 1
+  }
+  // voting power in 24h ago
+  while(page < staking.validators.length && height > 0) {
+    await base.fetchValidatorByHeight(height, page).then(x => {
+      x.validators.forEach(v => {
+        yesterday.value[v.pub_key.key] = Number(v.voting_power)
+      })
+    })
+    page += 100
+  }
+
+  page = 0
+  // voting power for now
+  while(page < staking.validators.length) {
+    await base.fetchLatestValidators(page).then(x => {
+      x.validators.forEach(v => {
+        latest.value[v.pub_key.key] = Number(v.voting_power)
+      })
+    })
+    page += 100
+  }
 }
+
+fetchChange();
+
+const changes = computed(() => {
+  const changes = {} as Record<string, number>
+  Object.keys(latest.value).forEach(k => {
+    const l = latest.value[k] || 0
+    const y = yesterday.value[k] || 0
+    changes[k] = l - y
+  })
+  return changes
+})
 
 const change24 = (key: Key) => {
   // console.log('hex key:', consensusPubkeyToHexAddress(key))
   const txt = key.key;
-  const n: number = latest.value[txt];
-  const o: number = yesterday.value[txt];
-  // console.log( txt, n, o)
-  return n > 0 && o > 0 ? n - o : 0;
+  // const n: number = latest.value[txt];
+  // const o: number = yesterday.value[txt];
+  // // console.log( txt, n, o)
+  // return n > 0 && o > 0 ? n - o : 0;
+  return changes.value[txt]
 };
 
 const change24Text = (key?: Key) => {
   if (!key) return '';
   const v = change24(key);
-  return v !== 0 ? format.numberAndSign(v) : '';
+  return v !== 0 ? format.showChanges(v) : '';
 };
 
 const change24Color = (key?: Key) => {

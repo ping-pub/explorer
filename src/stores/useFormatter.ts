@@ -167,6 +167,7 @@ export const useFormatter = defineStore('formatter', {
       );
       return validator?.description?.moniker;
     },
+    // find validator by operator address
     validatorFromBech32(address: string) {
       if (!address) return address;
       const validator = this.staking.validators.find(
