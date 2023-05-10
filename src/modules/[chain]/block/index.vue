@@ -97,7 +97,8 @@ const format = useFormatter();
 <route>
     {
       meta: {
-        i18n: 'blocks'
+        i18n: 'blocks',
+        order: 5
       }
     }
   </route>

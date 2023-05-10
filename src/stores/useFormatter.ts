@@ -11,7 +11,8 @@ import { useStakingStore } from './useStakingStore';
 import { fromBase64, fromBech32, fromHex, toHex } from '@cosmjs/encoding';
 import { consensusPubkeyToHexAddress } from '@/libs';
 import { useBankStore } from './useBankStore';
-import type { DenomTrace } from '@/types';
+import type { Coin, DenomTrace } from '@/types';
+import { useDashboard } from './useDashboard';
 
 dayjs.extend(localeData);
 dayjs.extend(duration);
@@ -52,6 +53,9 @@ export const useFormatter = defineStore('formatter', {
     useBank() {
       return useBankStore();
     },
+    dashboard() {
+      return useDashboard()
+    }
   },
   actions: {
     async fetchDenomTrace(denom: string) {
@@ -63,6 +67,33 @@ export const useFormatter = defineStore('formatter', {
         this.ibcDenoms[hash] = trace;
       }
       return trace;
+    },
+    priceInfo(denom: string) {
+      const id = this.dashboard.coingecko[denom]?.coinId
+      const prices = this.dashboard.prices[id]
+      return prices
+    },
+    price(denom: string, currency = "usd") {
+      const info = this.priceInfo(denom);
+      console.log("info", info, denom)
+      return info? info[currency]||0 : 0
+    },
+    priceChanges(denom: string, currency="usd"): number {
+      const info = this.priceInfo(denom);
+      return info? info[`${currency}_24h_change`]||0 : 0
+    },
+    showChanges(v: number) {
+      return numeral(v).format("+0,0.[00]")
+    },
+    tokenValue(token: Coin) {
+      // find the symbol, 
+      const symbol = this.dashboard.coingecko[token.denom]?.symbol || "" 
+      // convert denomation to to symbol
+      const exponent = this.dashboard.coingecko[symbol.toLowerCase()]?.exponent || 0
+      // cacualte amount of symbol
+      const amount = Number(token.amount) / (10 ** exponent)
+      const value = amount * this.price(token.denom)
+      return numeral(value).format('0,0.[00]')
     },
     formatTokenAmount(token: { denom: string; amount: string }) {
       return this.formatToken(token, false);
@@ -136,6 +167,7 @@ export const useFormatter = defineStore('formatter', {
       );
       return validator?.description?.moniker;
     },
+    // find validator by operator address
     validatorFromBech32(address: string) {
       if (!address) return address;
       const validator = this.staking.validators.find(

@@ -55,7 +55,8 @@ onMounted(() => {
 <route>
 {
   meta: {
-    i18n: 'parameters'
+    i18n: 'parameters',
+    order: 10
   }
 }
 </route>

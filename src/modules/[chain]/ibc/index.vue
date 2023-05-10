@@ -70,7 +70,8 @@ function color(v: string) {
 <route>
     {
       meta: {
-        i18n: 'ibc'
+        i18n: 'ibc',
+        order: 8
       }
     }
 </route>

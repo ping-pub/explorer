@@ -193,13 +193,17 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getBaseNodeInfo() {
     return this.request(this.registry.base_tendermint_node_info, {});
   }
-  async getBaseValidatorsetAt(height: string | number) {
+  async getBaseValidatorsetAt(height: string | number, offset: number) {
+    console.log("offset", offset)
+    const query = `?pagination.limit=100&pagination.offset=${offset}`
     return this.request(this.registry.base_tendermint_validatorsets_height, {
       height,
-    });
+    }, query);
   }
-  async getBaseValidatorsetLatest() {
-    return this.request(this.registry.base_tendermint_validatorsets_latest, {});
+  async getBaseValidatorsetLatest(offset: number) {
+    console.log(offset)
+    const query = `?pagination.limit=100&pagination.offset=${offset}`
+    return this.request(this.registry.base_tendermint_validatorsets_latest, {}, query);
   }
   // tx
   async getTxsBySender(sender: string) {

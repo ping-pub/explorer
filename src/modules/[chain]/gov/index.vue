@@ -47,7 +47,8 @@ const changeTab = (val: '2' | '3' | '4') => {
 <route>
   {
     meta: {
-      i18n: 'governance'
+      i18n: 'governance',
+      order: 2
     }
   }
 </route>

@@ -2,6 +2,9 @@
 import { useWalletStore } from '@/stores';
 
 const walletStore = useWalletStore();
+walletStore.$subscribe((m, s) => {
+  console.log(m, s);
+});
 </script>
 
 <template>
@@ -10,7 +13,10 @@ const walletStore = useWalletStore();
       walletStore.currentAddress
     }}</span>
 
-    <label v-else for="PingConnectWallet" class="btn btn-sm ml-4 ping-connect-btn"
+    <label
+      v-else
+      for="PingConnectWallet"
+      class="btn btn-sm ml-4 ping-connect-btn"
       >Connect Wallet</label
     >
   </div>

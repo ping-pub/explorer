@@ -234,6 +234,8 @@ export const useDashboard = defineStore('dashboard', {
       favorite: fav as string[],
       favoriteMap: favMap as Record<string, boolean>,
       chains: {} as Record<string, ChainConfig>,
+      prices: {},
+      coingecko: {} as Record<string, {coinId: string, exponent: number, symbol: string}>,
     };
   },
   getters: {
@@ -245,6 +247,28 @@ export const useDashboard = defineStore('dashboard', {
     initial() {
       this.loadingFromLocal();
       // this.loadingFromRegistry()
+    },
+    loadingPrices() {
+      const coinIds = [] as string[]
+      Object.keys(this.favoriteMap).forEach(k => {
+        if(this.chains[k]) this.chains[k].assets.forEach(a => {
+          if(a.coingecko_id !== undefined) {
+            coinIds.push(a.coingecko_id)
+            a.denom_units.forEach(u => {
+              this.coingecko[u.denom] = {
+                coinId: a.coingecko_id || '',
+                exponent: u.exponent,
+                symbol: a.symbol
+              }
+            })
+          } 
+        })
+      })
+
+      const currencies = ['usd, cny'] // usd,cny,eur,jpy,krw,sgd,hkd
+      get(`https://api.coingecko.com/api/v3/simple/price?include_24hr_change=true&vs_currencies=${currencies.join(',')}&ids=${coinIds.join(",")}`).then(x => {
+        this.prices = x
+      })
     },
     async loadingFromRegistry() {
       if (this.status === LoadingStatus.Empty) {
@@ -274,12 +298,14 @@ export const useDashboard = defineStore('dashboard', {
         for (let i = 0; i < this.favorite.length; i++) {
           if (!blockchain.chainName && this.chains[this.favorite[i]]) {
             blockchain.setCurrent(this.favorite[i]);
+            break
           }
         }
         if (!blockchain.chainName) {
           const [first] = Object.keys(this.chains);
           blockchain.setCurrent(first);
         }
+        this.loadingPrices()
       }
     },
     setConfigSource(newSource: ConfigSource) {

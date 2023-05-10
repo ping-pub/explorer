@@ -68,8 +68,9 @@ export const useBlockchain = defineStore('blockchain', {
                 to: { path: x.path.replace(':chain', this.chainName) },
                 icon: { icon: 'mdi-chevron-right', size: '22' },
                 i18n: true,
+                order: Number(x.meta.order || 100)
               }))
-              .sort((a, b) => a.to.path.length - b.to.path.length),
+              .sort((a, b) => a.order - b.order),
           },
         ];
       }
