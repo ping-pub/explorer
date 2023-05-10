@@ -73,7 +73,13 @@ export interface RequestRegistry extends AbstractRegistry {
   }>;
   distribution_validator_slashes: Request<PaginatedSlashes>;
   distribution_community_pool: Request<{ pool: Coin[] }>;
-  distribution_delegator_rewards: Request<any>;
+  distribution_delegator_rewards: Request<{
+    rewards: {
+      validator_address: string, 
+      reward: Coin[]
+    }[],
+    total: Coin[]
+  }>;
 
   mint_inflation: Request<{ inflation: string }>;
   mint_params: Request<{
