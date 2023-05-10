@@ -11,27 +11,30 @@ export const useWalletStore = defineStore('walletStore', {
       return useBlockchain();
     },
     connectedWallet() {
-      const chainStore = useBlockchain()
-      const key = chainStore.defaultHDPath
+      const chainStore = useBlockchain();
+      const key = chainStore.defaultHDPath;
 
-      const connected = JSON.parse(localStorage.getItem(key)||"{}")
-      return connected
+      const connected = JSON.parse(localStorage.getItem(key) || '{}');
+      return connected;
     },
     currentAddress() {
-      const {prefix, data} = fromBech32(this.connectedWallet.cosmosAddress);
-      const chainStore = useBlockchain()
-      return toBech32(chainStore.current?.bech32Prefix || prefix, data)
-    }
+      if (!this.connectedWallet?.cosmosAddress) return '';
+      const { prefix, data } = fromBech32(this.connectedWallet.cosmosAddress);
+      const chainStore = useBlockchain();
+      return toBech32(chainStore.current?.bech32Prefix || prefix, data);
+    },
   },
   actions: {
     myBalance() {
-      return this.blockchain.rpc.getBankBalances(this.currentAddress)
+      return this.blockchain.rpc.getBankBalances(this.currentAddress);
     },
     myDelegations() {
-      return this.blockchain.rpc.getStakingDelegations(this.currentAddress)
+      return this.blockchain.rpc.getStakingDelegations(this.currentAddress);
     },
     myUnbonding() {
-      return this.blockchain.rpc.getStakingDelegatorUnbonding(this.currentAddress)
-    }
+      return this.blockchain.rpc.getStakingDelegatorUnbonding(
+        this.currentAddress
+      );
+    },
   },
 });
