@@ -12,7 +12,8 @@ const dashboard = useDashboard();
 
 dashboard.$subscribe((mutation, state) => {
   localStorage.setItem('favorite', JSON.stringify(state.favorite));
-  dashboard.loadingPrices()
+  // TODO: cause endless loop
+  // dashboard.loadingPrices()
 });
 const keywords = ref('');
 const chains = computed(() => {

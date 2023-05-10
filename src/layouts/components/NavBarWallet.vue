@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useBlockchain, useWalletStore } from '@/stores';
+import { useWalletStore } from '@/stores';
 
-const walletStore = useWalletStore()
+const walletStore = useWalletStore();
 walletStore.$subscribe((m, s) => {
-    console.log(m, s)
-})
+  console.log(m, s);
+});
 </script>
 
 <template>
   <div>
-    <span v-if="walletStore.currentAddress">{{ walletStore.currentAddress }}</span>
-    <ping-connect-wallet class="mt-5" :chain-id="'juno-1'" :hd-path="`m/44'/118/0'/0/0`" />
+    <span v-if="walletStore.currentAddress">{{
+      walletStore.currentAddress
+    }}</span>
+
+    <label
+      v-else
+      for="PingConnectWallet"
+      class="btn btn-sm ml-4 ping-connect-btn"
+      >Connect Wallet</label
+    >
   </div>
 </template>

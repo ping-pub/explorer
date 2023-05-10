@@ -136,7 +136,16 @@ function color(v: string) {
             <td>{{ v.version }}</td>
             <td>{{ v.ordering }}</td>
             <td>
-              <VChip :color="color(v.state)">{{ v.state }}</VChip>
+              <div 
+                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit"
+                  :class="`text-${color(v.state)}`"
+                >
+                  <span 
+                    class="inset-x-0 inset-y-0 opacity-10 absolute"
+                    :class="`bg-${color(v.state)}`"
+                  ></span>
+                  {{ v.state }}
+                </div>
             </td>
           </tr>
         </tbody>
