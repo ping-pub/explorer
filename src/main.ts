@@ -11,6 +11,7 @@ import '@/plugins/vuetify/styles/styles.scss';
 import '@/style.css';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+import LazyLoad from 'lazy-load-vue3';
 // import router from "@/plugins/vuetify/router";
 import router from './router';
 import { useBaseStore } from './stores/useBaseStore';
@@ -25,7 +26,7 @@ app.use(vuetify);
 app.use(createPinia());
 app.use(layoutsPlugin);
 app.use(router);
-
+app.use(LazyLoad, { component: true });
 // Mount vue app
 app.mount('#app');
 
