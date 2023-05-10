@@ -15,6 +15,7 @@ import { VerticalNavLayout } from '@layouts';
 import NavBarI18n from './NavBarI18n.vue';
 import NavSearchBar from './NavSearchBar.vue';
 import NavBarNotifications from './NavBarNotifications.vue';
+import NavBarWallet from './NavBarWallet.vue';
 import TheCustomizer from '@/plugins/vuetify/@core/components/TheCustomizer.vue';
 import Breadcrumbs from './Breadcrumbs.vue';
 import { useBlockchain } from '@/stores';
@@ -68,7 +69,7 @@ blockchain.$subscribe((m, s) => {
         <NavBarNotifications class="hidden md:inline-block" />
         <NavBarI18n class="hidden md:inline-block" />
         <NavbarThemeSwitcher class="hidden md:inline-block" />
-        <ConnectWallet class="md:inline-block" />
+        <NavBarWallet class="md:inline-block" />
       </div>
     </template>
 

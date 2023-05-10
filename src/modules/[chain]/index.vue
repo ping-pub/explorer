@@ -3,7 +3,7 @@ import MdEditor from 'md-editor-v3';
 import PriceMarketChart from '@/components/charts/PriceMarketChart.vue';
 
 import { Icon } from '@iconify/vue';
-import { useBlockchain, useFormatter } from '@/stores';
+import { useBlockchain, useFormatter, useWalletStore } from '@/stores';
 import { onMounted, ref } from 'vue';
 import { useIndexModule } from './indexStore';
 import { computed } from '@vue/reactivity';
@@ -13,6 +13,7 @@ import ProposalListItem from '@/components/ProposalListItem.vue';
 
 const blockchain = useBlockchain();
 const store = useIndexModule();
+const walletStore = useWalletStore()
 
 const coinInfo = computed(() => {
   return store.coinInfo;
@@ -62,6 +63,9 @@ const comLinks = [
     href: store.github,
   },
 ];
+
+// wallet box
+
 </script>
 
 <template>
@@ -216,12 +220,24 @@ const comLinks = [
       </div>
     </div>
 
-    <ping-connect-wallet class="mt-5" :chain-id="'juno-1'" :hd-path="`m/44'/118/0'/0/0`" />
-    <div
-      class="btn btn-primary w-full mt-5 flex items-center bg-transparent text-primary hover:bg-gray-100 hover:bg-transparent"
-    >
-      Connect Wallet
+    <div class="bg-transparent rounded mt-4 border-2 border-primary">
+      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-secondary">
+        {{ walletStore.currentAddress || "Not Connected" }}
+        <span v-if="walletStore.currentAddress" class="float-right font-light text-sm">More</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 auto-cols-auto gap-4 px-4 pb-8 py-4">
+        <div class="bg-base-100">1</div>
+        <div class="bg-base-100">2</div>
+        <div class="bg-base-100">1</div>
+        <div class="bg-base-100">2</div>
+      </div>
+
+      <div>
+
+      </div>
     </div>
+
+
   </div>
 </template>
 
