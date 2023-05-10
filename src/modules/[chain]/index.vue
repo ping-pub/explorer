@@ -14,6 +14,7 @@ import ProposalListItem from '@/components/ProposalListItem.vue';
 const blockchain = useBlockchain();
 const store = useIndexModule();
 const walletStore = useWalletStore()
+const format = useFormatter()
 
 const coinInfo = computed(() => {
   return store.coinInfo;
@@ -21,9 +22,9 @@ const coinInfo = computed(() => {
 
 onMounted(() => {
   store.loadDashboard();
+  walletStore.loadMyAsset()
 });
 
-const format = useFormatter();
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
 
 blockchain.$subscribe((m, s) => {
@@ -32,6 +33,7 @@ blockchain.$subscribe((m, s) => {
     ['chainName', 'endpoint'].includes(m.events.key)
   ) {
     store.loadDashboard();
+    walletStore.loadMyAsset()
   }
 });
 function shortName(name: string, id: string) {
@@ -226,10 +228,16 @@ const comLinks = [
         <span v-if="walletStore.currentAddress" class="float-right font-light text-sm">More</span>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-4 auto-cols-auto gap-4 px-4 pb-8 py-4">
-        <div class="bg-base-100">1</div>
-        <div class="bg-base-100">2</div>
-        <div class="bg-base-100">1</div>
-        <div class="bg-base-100">2</div>
+        <div class="bg-base-100">{{ format.formatToken(walletStore.balanceOfStakingToken) }}</div>
+        <div class="bg-base-100">{{ format.formatToken(walletStore.stakingAmount) }}</div>
+        <div class="bg-base-100">{{ format.formatToken(walletStore.rewardAmount) }}</div>
+        <div class="bg-base-100">{{ format.formatToken(walletStore.unbondingAmount) }}</div>
+      </div>
+
+      <div>
+        <div v-for="v in walletStore.delegations">
+          {{ v }}
+        </div>
       </div>
 
       <div>
