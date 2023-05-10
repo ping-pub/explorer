@@ -58,6 +58,7 @@ export interface ChainConfig {
   prettyName: string;
   bech32Prefix: string;
   chainId: string;
+  coinType: string;
   assets: Asset[];
   themeColor?: string;
   endpoints: {
@@ -127,6 +128,7 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
   }));
   conf.bech32Prefix = lc.addr_prefix;
   conf.chainName = lc.chain_name;
+  conf.coinType = lc.coin_type;
   conf.prettyName = lc.chain_name;
   conf.endpoints = {
     rest: apiConverter(lc.api),
