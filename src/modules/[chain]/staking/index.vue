@@ -3,7 +3,7 @@ import { useBaseStore, useFormatter, useStakingStore } from '@/stores';
 import { toBase64, toHex } from '@cosmjs/encoding';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, type DebuggerEvent } from 'vue';
-import { consensusPubkeyToHexAddress } from '@/libs';
+import { Icon } from '@iconify/vue';
 import type { Key, Validator } from '@/types';
 const staking = useStakingStore();
 const format = useFormatter();
@@ -43,11 +43,9 @@ function fetchChange(offset: number) {
 }
 
 const change24 = (key: Key) => {
-  // console.log('hex key:', consensusPubkeyToHexAddress(key))
   const txt = key.key;
   const n: number = latest.value[txt];
   const o: number = yesterday.value[txt];
-  // console.log( txt, n, o)
   return n > 0 && o > 0 ? n - o : 0;
 };
 
@@ -181,24 +179,35 @@ const rank = function (position: number) {
           <tr v-for="(v, i) in list" :key="v.operator_address">
             <!-- 👉 rank -->
             <td>
-              <VChip label :color="rank(i)">
+              <div 
+                class="text-xs truncate relative py-2 px-4 rounded-full w-fit"
+                :class="`text-${rank(i)}`"
+              >
+                <span 
+                  class="inset-x-0 inset-y-0 opacity-10 absolute"
+                  :class="`bg-${rank(i)}`"
+                ></span>
                 {{ i + 1 }}
-              </VChip>
+              </div>
             </td>
-
             <!-- 👉 Validator -->
             <td>
               <div
                 class="d-flex align-center overflow-hidden"
                 style="max-width: 400px"
               >
-                <VAvatar
-                  variant="tonal"
-                  class="me-3"
-                  size="34"
-                  icon="mdi-help-circle-outline"
-                  :image="logo(v.description?.identity)"
-                />
+                <div class="avatar mr-4 relative w-9 rounded-full overflow-hidden">
+                  <div class="w-9 rounded-full bg-gray-400 absolute opacity-10"></div>
+                  <div class="w-9 rounded-full">
+                     <img 
+                      v-if="logo(v.description?.identity) !== ''" 
+                      :src="logo(v.description?.identity)" 
+                      class="object-contain"
+                    />
+                    <Icon v-else class="text-4xl" :icon="`mdi-help-circle-outline`"/>
+                  </div>
+                </div>
+               
                 <div class="d-flex flex-column">
                   <h6 class="text-sm text-primary">
                     <RouterLink
@@ -247,7 +256,14 @@ const rank = function (position: number) {
               :class="change24Color(v.consensus_pubkey)"
             >
               {{ change24Text(v.consensus_pubkey) }}
-              <VChip label v-if="v.jailed" color="error">Jailed</VChip>
+              <div v-if="v.jailed"
+                class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-error"
+              >
+                <span 
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-error"
+                ></span>
+                Jailed
+              </div>
             </td>
             <!-- 👉 commission -->
             <td class="text-right">

@@ -7,6 +7,7 @@ import {
   useStakingStore,
 } from '@/stores';
 import { onMounted, computed, ref } from 'vue';
+import { Icon } from '@iconify/vue';
 import ValidatorCommissionRate from '@/components/ValidatorCommissionRate.vue';
 import {
   consensusPubkeyToHexAddress,
@@ -132,31 +133,49 @@ onMounted(() => {
 </script>
 <template>
   <div>
-    <VCard class="card-box">
-      <VCardItem>
-        <VRow>
-          <VCol cols="12" md="6">
-            <div class="d-flex pl-2">
-              <VAvatar
+    <div style="border-width:1px" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow border-indigo-500">
+      <div class="flex flex-col lg:flex-row">
+        <div class="flex-1">
+          <div class="flex">
+            <!-- avator -->
+            <!-- <VAvatar
                 icon="mdi-help-circle-outline"
                 :image="avatars[identity]"
                 size="90"
                 rounded
                 variant="outlined"
                 color="secondary"
-              />
-              <div class="mx-2">
-                <h4>{{ v.description?.moniker }}</h4>
-                <div class="text-sm mb-2">
-                  {{ v.description?.identity || '-' }}
-                </div>
-                <VBtn>Delegate</VBtn>
+              /> -->
+            <div
+              class="avatar mr-4 relative w-24 rounded-lg overflow-hidden"
+            >
+              <div
+                class="w-24 rounded-lg  absolute opacity-10"
+              ></div>
+              <div class="w-24 rounded-lg">
+                <img
+                  v-if="avatars[identity] !== 'undefined'"
+                  :src="`https://s3.amazonaws.com/keybase_processed_uploads/${avatars[identity]}`"
+                  class="object-contain"
+                />
+                <Icon
+                  v-else
+                  class="text-4xl"
+                  :icon="`mdi-help-circle-outline`"
+                />
               </div>
             </div>
-            <VSpacer />
-            <VCardText>
-              <p class="text-md">About Us</p>
-              <VList class="card-list">
+            <div class="mx-2">
+              <h4>{{ v.description?.moniker }}</h4>
+              <div class="text-sm mb-2">
+                {{ v.description?.identity || '-' }}
+              </div>
+              <button class="btn btn-primary btn-sm w-full">Delegate</button>
+            </div>
+          </div>
+          <div class="m-4 text-sm">
+            <p class="text-md">About Us</p>
+            <VList class="card-list">
                 <VListItem prepend-icon="mdi-web">
                   <span>Website: </span
                   ><span> {{ v.description?.website || '-' }}</span>
@@ -166,9 +185,8 @@ onMounted(() => {
                   ><span> {{ v.description?.security_contact }}</span>
                 </VListItem>
               </VList>
-
-              <p class="text-md mt-3">Validator Status</p>
-              <VList class="card-list">
+            <p class="text-md mt-3">Validator Status</p>
+            <VList class="card-list">
                 <VListItem prepend-icon="mdi-shield-account-outline">
                   <span>Status: </span
                   ><span>
@@ -179,10 +197,10 @@ onMounted(() => {
                   <span>Jailed: </span><span> {{ v.jailed || '-' }} </span>
                 </VListItem>
               </VList>
-            </VCardText>
-          </VCol>
-          <VCol cols="12" md="6">
-            <div class="d-flex flex-column py-3 justify-space-between">
+          </div>
+        </div>
+        <div class="flex-1">
+          <div class="d-flex flex-column py-3 justify-space-between">
               <div class="d-flex">
                 <VAvatar
                   color="secondary"
@@ -272,12 +290,11 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-          </VCol>
-        </VRow>
-        <VDivider />
-        <VCardText>{{ v.description?.details }}</VCardText>
-      </VCardItem>
-    </VCard>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="text-sm px-4">{{ v.description?.details }}</div>
+    </div>
 
     <VRow class="mt-3">
       <VCol md="4" sm="12" class="h-100">
