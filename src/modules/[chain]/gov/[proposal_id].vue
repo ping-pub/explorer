@@ -300,7 +300,13 @@ const processList = computed(()=>{
                 </tbody>
             </table>
 
-            <VBtn v-if="votePage.next_key" block variant="outlined" @click="loadMore()" :disabled="loading">Load more</VBtn>
+            <button
+                v-if="votePage.next_key" 
+                @click="loadMore()"
+                :disabled="loading"
+                class="btn btn-outline btn-primary w-full"
+                style="border: 1px solid hsl(var(--p));"
+            >Load more</button>
         </div>
     </div>
 </div>

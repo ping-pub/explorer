@@ -38,8 +38,8 @@ const format = useFormatter();
             <th>Time</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="(item,index) of store.recents" :key="index">
+        <tbody  v-if="store.recents &&  store.recents.length > 0" >
+          <tr v-for="(item, index) in store.recents" :key="index">
             <td class="text-sm text-primary">
               <RouterLink
                 :to="`/${props.chain}/block/${item.block?.header?.height}`"
@@ -69,8 +69,8 @@ const format = useFormatter();
             <th>Fees</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="(item,index) of store.txsInRecents" :key="index">
+        <tbody v-if="store.txsInRecents &&  store.txsInRecents.length > 0" >
+          <tr v-for="(item,index) in store.txsInRecents" :index="index">
             <td>
               <RouterLink :to="`/${props.chain}/tx/${item.hash}`">{{
                 item.hash

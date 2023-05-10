@@ -71,7 +71,7 @@ const comLinks = [
       class="bg-base-100 rounded shadow mb-4"
     >
       <div class="flex p-4">
-        <div class="flex-1 mr-10">
+        <div class="">
           <div class="text-xl font-semibold text-main">
             {{ coinInfo.name }} (<span class="uppercase">{{
               coinInfo.symbol
@@ -100,7 +100,9 @@ const comLinks = [
           </div>
 
           <div>
-            <div class="dropdown dropdown-hover w-full mt-[16px] md:mt-[32px]">
+            <div
+              class="dropdown dropdown-hover w-full md:w-[400px] mt-[16px] md:mt-[36px]"
+            >
               <label>
                 <div
                   class="bg-gray-100 dark:bg-[#384059] flex items-center justify-between px-4 py-2 cursor-pointer rounded"
@@ -131,7 +133,9 @@ const comLinks = [
                 </div>
               </label>
               <div class="dropdown-content pt-1">
-                <div class="h-64 overflow-auto w-full shadow rounded">
+                <div
+                  class="h-64 overflow-auto w-full md:w-[400px] shadow rounded"
+                >
                   <ul class="menu w-full bg-gray-100 rounded dark:bg-[#384059]">
                     <li
                       v-for="(item, index) in store.coinInfo.tickers"
@@ -141,10 +145,15 @@ const comLinks = [
                       <div
                         class="flex items-center justify-between hover:bg-base-100"
                       >
-                        <div class="text-main text-sm">
-                          {{ shortName(item?.base, item.coin_id) }}/{{
-                            shortName(item?.target, item.target_coin_id)
-                          }}
+                        <div class="flex-1">
+                          <div class="text-main text-sm">
+                            {{ item?.market?.name }}
+                          </div>
+                          <div class="text-sm text-gray-500 dark:text-gray-400">
+                            {{ shortName(item?.base, item.coin_id) }}/{{
+                              shortName(item?.target, item.target_coin_id)
+                            }}
+                          </div>
                         </div>
 
                         <div class="text-base text-main">
@@ -159,7 +168,7 @@ const comLinks = [
 
             <a
               :color="store.trustColor"
-              class="mt-5 text-white btn btn-success w-full flex items-center"
+              class="mt-5 text-white btn btn-success w-full md:w-[400px] flex items-center"
               :href="ticker.trade_url"
               target="_blank"
             >
@@ -207,6 +216,7 @@ const comLinks = [
       </div>
     </div>
 
+    <ping-connect-wallet class="mt-5" :chain-id="'juno-1'" :hd-path="`m/44'/118/0'/0/0`" />
     <div
       class="btn btn-primary w-full mt-5 flex items-center bg-transparent text-primary hover:bg-gray-100 hover:bg-transparent"
     >

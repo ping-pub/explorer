@@ -1,4 +1,5 @@
 /* eslint-disable import/order */
+import 'ping-widget';
 import '@/plugins/vuetify/@iconify/icons-bundle';
 import App from '@/App.vue';
 import layoutsPlugin from '@/plugins/vuetify/layouts';

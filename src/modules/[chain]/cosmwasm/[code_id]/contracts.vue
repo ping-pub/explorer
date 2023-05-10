@@ -139,6 +139,7 @@ const result = ref('');
         </v-card-actions>
       </v-card>
     </v-dialog>
+
     <v-dialog v-model="stateDialog" width="auto">
       <v-card>
         <VCardTitle>Contract States</VCardTitle>
@@ -159,6 +160,7 @@ const result = ref('');
         </v-card-actions>
       </v-card>
     </v-dialog>
+    
     <v-dialog v-model="queryDialog" width="auto">
       <v-card>
         <VCardTitle>Query Contract</VCardTitle>
