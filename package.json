@@ -39,7 +39,7 @@
     "md-editor-v3": "^2.8.1",
     "numeral": "^2.0.6",
     "osmojs": "^14.0.0-rc.0",
-    "ping-widget": "^0.0.4",
+    "ping-widget": "git+https://github.com/ping-pub/widget.git",
     "pinia": "^2.0.28",
     "postcss": "^8.4.23",
     "prismjs": "^1.29.0",
