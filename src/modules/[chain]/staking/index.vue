@@ -276,7 +276,8 @@ const rank = function (position: number) {
 <route>
   {
     meta: {
-      i18n: 'staking'
+      i18n: 'staking',
+      order: 3
     }
   }
 </route>

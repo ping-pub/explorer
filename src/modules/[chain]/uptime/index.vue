@@ -162,7 +162,8 @@ watchEffect(() => {
 <route>
   {
     meta: {
-      i18n: 'uptime'
+      i18n: 'uptime',
+      order: 8
     }
   }
 </route>

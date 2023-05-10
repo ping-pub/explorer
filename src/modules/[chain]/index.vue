@@ -267,7 +267,8 @@ const color= computed(() => {
 <route>
   {
     meta: {
-      i18n: 'dashboard'
+      i18n: 'dashboard',
+      order: 1,
     }
   }
 </route>
