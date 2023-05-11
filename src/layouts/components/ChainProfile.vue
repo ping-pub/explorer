@@ -82,15 +82,17 @@ chainStore.$subscribe((m, s) => {
         </div>
       </div>
     </div>
-    <div>
+    <div class="flex-1 w-0">
       <div
-        class="capitalize text-base font-semibold text-gray-600 dark:text-gray-200"
+        class="capitalize whitespace-nowrap text-base font-semibold text-gray-600 dark:text-gray-200"
       >
         {{
           baseStore.latest.block?.header?.chain_id || chainStore.chainName || ''
         }}
       </div>
-      <div class="text-xs text-gray-500 dark:text-gray-400">
+      <div
+        class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap hidden lg:block"
+      >
         {{ chainStore.connErr || chainStore.endpoint.address }}
       </div>
     </div>

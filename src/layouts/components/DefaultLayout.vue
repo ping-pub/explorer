@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { Icon } from '@iconify/vue';
+import { ref } from 'vue';
 import { useThemeConfig } from '@/plugins/vuetify/@core/composable/useThemeConfig';
 
 // Components
@@ -30,15 +31,21 @@ blockchain.$subscribe((m, s) => {
     blockchain.initial();
   }
 });
+
+const sidebarShow = ref(false);
 </script>
 
 <template>
   <div class="">
-    <div class="w-64 fixed left-0 top-0 bottom-0 overflow-auto bg-base-100">
+    <!-- sidebar -->
+    <div
+      class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-gray-700"
+      :class="{ block: sidebarShow, 'hidden xl:block': !sidebarShow }"
+    >
       <div class="flex items-center pl-4 py-4 mb-1">
         <img class="w-10 h-10" src="../../assets/logo.svg" />
         <h1 class="flex-1 ml-3 text-2xl font-bold dark:text-white">Ping.pub</h1>
-        <div class="pr-4 cursor-pointer xl:hidden">
+        <div class="pr-4 cursor-pointer xl:hidden" @click="sidebarShow = false">
           <Icon icon="mdi-close" class="text-3xl" />
         </div>
       </div>
@@ -63,7 +70,7 @@ blockchain.$subscribe((m, s) => {
             />
             <img
               v-if="item?.icon?.image"
-              v-lazy="item?.icon?.image"
+              :src="item?.icon?.image"
               class="w-6 h-6 rounded-full mr-3"
             />
             <div
@@ -82,16 +89,28 @@ blockchain.$subscribe((m, s) => {
             <div class="menu bg-base-100 w-full">
               <RouterLink
                 v-for="(el, key) of item?.children"
+                @click="sidebarShow = false"
                 :key="key"
                 class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
                 :to="el?.to"
+                :class="{
+                  'bg-primary':
+                    $route.path === el?.to?.path && item?.title !== 'Favorite',
+                }"
               >
                 <img
                   v-if="el?.icon?.image"
-                  v-lazy="el?.icon?.image"
+                  :src="el?.icon?.image"
                   class="w-6 h-6 rounded-full mr-3"
                 />
-                <div class="text-base text-gray-500 dark:text-gray-300">
+                <div
+                  class="text-base text-gray-500 dark:text-gray-300"
+                  :class="{
+                    'text-white':
+                      $route.path === el?.to?.path &&
+                      item?.title !== 'Favorite',
+                  }"
+                >
                   {{ $t(el?.title) }}
                 </div>
               </RouterLink>
@@ -102,6 +121,7 @@ blockchain.$subscribe((m, s) => {
         <RouterLink
           :to="item?.to"
           v-if="item?.title && !item?.children?.length"
+          @click="sidebarShow = false"
           class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <Icon
@@ -115,7 +135,7 @@ blockchain.$subscribe((m, s) => {
           />
           <img
             v-if="item?.icon?.image"
-            v-lazy="item?.icon?.image"
+            :src="item?.icon?.image"
             class="w-6 h-6 rounded-full mr-3"
           />
           <div
@@ -138,15 +158,21 @@ blockchain.$subscribe((m, s) => {
         </div>
       </div>
     </div>
-    <div class="ml-64 px-5">
-      <div class="flex items-center py-3">
-        <div class="text-2xl pr-3 cursor-pointer xl:hidden">
+    <div class="xl:ml-64 px-5">
+      <!-- header -->
+      <div
+        class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10 mt-4 shadow"
+      >
+        <div
+          class="text-2xl pr-3 cursor-pointer xl:hidden"
+          @click="sidebarShow = true"
+        >
           <Icon icon="mdi-menu" />
         </div>
 
         <UserProfile />
 
-        <div class="flex-1"></div>
+        <div class="flex-1 w-0"></div>
 
         <!-- <NavSearchBar />-->
         <NavBarNotifications class="hidden md:inline-block" />

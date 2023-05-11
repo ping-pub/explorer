@@ -8,7 +8,6 @@ module.exports = {
         yes: '#3fb68b',
         no: '#ff5353',
         info: '#00b2ff',
-        primary: '#666cff',
         main: 'var(--text-main)',
         secondary: 'var(--text-secondary)',
         active: 'var(--bg-active)',
