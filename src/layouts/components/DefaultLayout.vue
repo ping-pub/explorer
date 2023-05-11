@@ -50,40 +50,18 @@ blockchain.$subscribe((m, s) => {
 </script>
 
 <template>
-  <div>
-    <div class="flex items-center py-3 px-5">
-      <div class="text-2xl pr-3 cursor-pointer xl:hidden">
-        <Icon icon="mdi-menu" />
+  <div class="">
+    <div class="w-64 fixed left-0 top-0 bottom-0 overflow-auto">
+      <div v-for="(item, index) of blockchain.computedChainMenu" :key="index">
+        <div>{{ item?.title }}</div>
+        <div v-for="(el, key) of item?.children" :key="key">
+          {{ el?.title }}
+        </div>
       </div>
-
-      <UserProfile />
-
-      <div class="flex-1"></div>
-
-      <!-- <NavSearchBar />-->
-      <NavBarNotifications class="hidden md:inline-block" />
-      <NavBarI18n class="hidden md:inline-block" />
-      <NavbarThemeSwitcher class="hidden md:inline-block" />
-      <NavBarWallet class="md:inline-block" />
     </div>
-
-    <!-- 👉 Pages -->
-    <RouterView v-slot="{ Component }">
-      <Transition :name="appRouteTransition" mode="out-in">
-        <Component :is="Component" />
-      </Transition>
-    </RouterView>
-
-    <newFooter />
-  </div>
-  <VerticalNavLayout :nav-items="blockchain.computedChainMenu">
-    <!-- 👉 navbar -->
-    <template #navbar="{ toggleVerticalOverlayNavActive }">
+    <div class="ml-64 px-5">
       <div class="flex items-center py-3">
-        <div
-          class="text-2xl pr-3 cursor-pointer xl:hidden"
-          @click="toggleVerticalOverlayNavActive(true)"
-        >
+        <div class="text-2xl pr-3 cursor-pointer xl:hidden">
           <Icon icon="mdi-menu" />
         </div>
 
@@ -97,56 +75,15 @@ blockchain.$subscribe((m, s) => {
         <NavbarThemeSwitcher class="hidden md:inline-block" />
         <NavBarWallet class="md:inline-block" />
       </div>
-    </template>
 
-    <!-- 👉 Pages -->
-    <RouterView v-slot="{ Component }">
-      <Transition :name="appRouteTransition" mode="out-in">
-        <Component :is="Component" />
-      </Transition>
-    </RouterView>
+      <!-- 👉 Pages -->
+      <RouterView v-slot="{ Component }">
+        <Transition :name="appRouteTransition" mode="out-in">
+          <Component :is="Component" />
+        </Transition>
+      </RouterView>
 
-    <!-- 👉 Footer -->
-    <template #footer>
-      <!-- <Footer /> -->
       <newFooter />
-    </template>
-
-    <!-- 👉 Customizer -->
-    <!-- <TheCustomizer />  -->
-  </VerticalNavLayout>
+    </div>
+  </div>
 </template>
-
-<style lang="scss">
-@keyframes rotate-180 {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(180deg);
-  }
-}
-
-@keyframes rotate-back-180 {
-  from {
-    transform: rotate(180deg);
-  }
-
-  to {
-    transform: rotate(0deg);
-  }
-}
-
-.layout-vertical-nav {
-  .nav-header {
-    .header-action {
-      animation-duration: 0s;
-      animation-duration: 0.35s;
-      animation-fill-mode: forwards;
-      animation-name: v-bind(verticalNavHeaderActionAnimationName);
-      transform: rotate(0deg);
-    }
-  }
-}
-</style>
