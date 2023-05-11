@@ -13,8 +13,8 @@ import ProposalListItem from '@/components/ProposalListItem.vue';
 
 const blockchain = useBlockchain();
 const store = useIndexModule();
-const walletStore = useWalletStore()
-const format = useFormatter()
+const walletStore = useWalletStore();
+const format = useFormatter();
 
 const coinInfo = computed(() => {
   return store.coinInfo;
@@ -22,7 +22,7 @@ const coinInfo = computed(() => {
 
 onMounted(() => {
   store.loadDashboard();
-  walletStore.loadMyAsset()
+  walletStore.loadMyAsset();
 });
 
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
@@ -33,7 +33,7 @@ blockchain.$subscribe((m, s) => {
     ['chainName', 'endpoint'].includes(m.events.key)
   ) {
     store.loadDashboard();
-    walletStore.loadMyAsset()
+    walletStore.loadMyAsset();
   }
 });
 function shortName(name: string, id: string) {
@@ -68,19 +68,19 @@ const comLinks = [
 
 // wallet box
 const change = computed(() => {
-  const token = walletStore.balanceOfStakingToken
-  return token? format.priceChanges(token.denom) : 0
-})
-const color= computed(() => {
-  switch(true) {
-    case change.value > 0: 
-      return "text-green-600"
+  const token = walletStore.balanceOfStakingToken;
+  return token ? format.priceChanges(token.denom) : 0;
+});
+const color = computed(() => {
+  switch (true) {
+    case change.value > 0:
+      return 'text-green-600';
     case change.value === 0:
-      return "text-grey-500"
+      return 'text-grey-500';
     case change.value < 0:
-      return "text-red-600"
+      return 'text-red-600';
   }
-})
+});
 </script>
 
 <template>
@@ -235,18 +235,59 @@ const color= computed(() => {
       </div>
     </div>
 
-    <div class="bg-transparent rounded mt-4 border-2 border-primary">
+    <div class="bg-base-100 rounded mt-4 shadow">
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-secondary">
-        {{ walletStore.currentAddress || "Not Connected" }}
-        <span v-if="walletStore.currentAddress" class="float-right font-light text-sm">More</span>
+        {{ walletStore.currentAddress || 'Not Connected' }}
+        <span
+          v-if="walletStore.currentAddress"
+          class="float-right font-light text-sm"
+          >More</span
+        >
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-4 auto-cols-auto gap-4 px-4 pb-8 py-4">
-        <div class="bg-base-100">{{ format.formatToken(walletStore.balanceOfStakingToken) }}
-          <br><span :class="color">{{ format.showChanges(change) }}<small>%</small></span>{{ format.tokenValue(walletStore.balanceOfStakingToken) }}</div>
-        <div class="bg-base-100">{{ format.formatToken(walletStore.stakingAmount) }}
-        <br> {{ format.tokenValue(walletStore.stakingAmount) }}</div>
-        <div class="bg-base-100">{{ format.formatToken(walletStore.rewardAmount) }}</div>
-        <div class="bg-base-100">{{ format.formatToken(walletStore.unbondingAmount) }}</div>
+      <div
+        class="grid grid-cols-1 md:grid-cols-4 auto-cols-auto gap-4 px-4 pb-6"
+      >
+        <div class="bg-gray-100 dark:bg-base-content rounded-sm px-4 py-3">
+          <div class="text-sm mb-1">Balance</div>
+          <div class="text-lg font-semibold text-main">
+            {{ format.formatToken(walletStore.balanceOfStakingToken) }}
+          </div>
+          <div class="text-sm">
+            <span :class="color"
+              >{{ format.showChanges(change) }}<small>%</small>
+            </span>
+            <span class="ml-1">{{
+              format.tokenValue(walletStore.balanceOfStakingToken)
+            }}</span>
+          </div>
+        </div>
+        <div class="bg-gray-100 dark:bg-base-content rounded-sm px-4 py-3">
+          <div class="text-sm mb-1">Staking</div>
+          <div class="text-lg font-semibold text-main">
+            {{ format.formatToken(walletStore.stakingAmount) }}
+          </div>
+          <div class="text-sm">
+            {{ format.tokenValue(walletStore.stakingAmount) }}
+          </div>
+        </div>
+        <div class="bg-gray-100 dark:bg-base-content rounded-sm px-4 py-3">
+          <div class="text-sm mb-1">Reward</div>
+          <div class="text-lg font-semibold text-main">
+            {{ format.formatToken(walletStore.rewardAmount) }}
+          </div>
+          <div class="text-sm">
+            {{ format.tokenValue(walletStore.rewardAmount) }}
+          </div>
+        </div>
+        <div class="bg-gray-100 dark:bg-base-content rounded-sm px-4 py-3">
+          <div class="text-sm mb-1">Unbonding</div>
+          <div class="text-lg font-semibold text-main">
+            {{ format.formatToken(walletStore.unbondingAmount) }}
+          </div>
+          <div class="text-sm">
+            {{ format.tokenValue(walletStore.unbondingAmount) }}
+          </div>
+        </div>
       </div>
 
       <div>
@@ -255,12 +296,8 @@ const color= computed(() => {
         </div>
       </div>
 
-      <div>
-
-      </div>
+      <div></div>
     </div>
-
-
   </div>
 </template>
 
