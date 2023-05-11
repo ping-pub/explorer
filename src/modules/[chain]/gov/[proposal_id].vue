@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import ObjectElement from '@/components/dynamic/ObjectElement.vue';
-import { useBaseStore, useFormatter, useGovStore, useStakingStore } from '@/stores';
+import { useBaseStore, useFormatter, useGovStore, useStakingStore, useTxDialog } from '@/stores';
 import type { GovProposal, GovVote, PaginabledAccounts, PaginatedProposalDeposit, PaginatedProposalVotes, Pagination } from '@/types';
 import { ref , reactive} from 'vue';
 import Countdown from '@/components/Countdown.vue';
@@ -10,6 +10,8 @@ const props = defineProps(["proposal_id", "chain"]);
 const proposal = ref({} as GovProposal)
 const format = useFormatter()
 const store = useGovStore()
+const dialog = useTxDialog()
+
 store.fetchProposal(props.proposal_id).then((res) => {
     const proposalDetail = reactive(res.proposal)
     // when status under the voting, final_tally_result are no data, should request fetchTally
@@ -181,6 +183,10 @@ const processList = computed(()=>{
                     <p class="absolute inset-x-0 inset-y-0 text-center text-sm text-[#666] dark:text-[#eee] flex items-center justify-center">{{ item.value }}</p>
                 </div>
             </div>
+            <div>
+                <label for="vote" class="btn btn-primary float-right btn-sm mx-1" @click="dialog.open('vote', {proposal_id})">Vote</label>
+                <label for="deposit" class="btn btn-primary float-right btn-sm mx-1" @click="dialog.open('deposit', {proposal_id})">Deposit</label>
+            </div>
         </div>
         <!-- lg:col-span-2 -->
         <!-- lg:flex-[2_2_0%] -->
@@ -284,7 +290,6 @@ const processList = computed(()=>{
                             </p>
                         </VTimelineItem>
                     </VTimeline>
-           
         </div>
     </div>
     

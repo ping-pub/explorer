@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useBlockchain, useFormatter, useStakingStore } from '@/stores';
+import { useBlockchain, useFormatter, useStakingStore, useTxDialog } from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import DonutChart from '@/components/charts/DonutChart.vue';
 import { computed, ref } from '@vue/reactivity';
@@ -17,6 +17,7 @@ const props = defineProps(['address', 'chain']);
 
 const blockchain = useBlockchain();
 const stakingStore = useStakingStore();
+const dialog = useTxDialog();
 const format = useFormatter();
 const account = ref({} as AuthAccount);
 const txs = ref({} as TxResponse[]);
@@ -112,6 +113,10 @@ loadAccount(props.address);
           </VCol>
           <VCol cols="12" md="8">
             <VList class="card-list">
+              <VListItem>
+                <label for="transfer" class="btn btn-primary float-right btn-sm" @click="dialog.open('transfer', {chain_name: blockchain.current?.prettyName})">transfer</label>
+                <label for="send" class="btn btn-primary float-right btn-sm" @click="dialog.open('send', {})">Send</label>
+              </VListItem>
               <VListItem v-for="v in balances">
                 <template #prepend>
                   <VAvatar rounded variant="tonal" size="35" color="info">
@@ -203,7 +208,13 @@ loadAccount(props.address);
 
     <VCard class="my-5">
       <VCardItem>
-        <VCardTitle>Delegations</VCardTitle>
+        <VCardTitle>
+          Delegations
+          <div>
+            <label for="delegate" class="btn btn-primary float-right btn-sm" @click="dialog.open('delegate', {})">Delegate</label>
+            <label for="withdraw" class="btn btn-primary float-right btn-sm" @click="dialog.open('withdraw', {})">Withdraw</label>
+          </div>
+        </VCardTitle>
         <VTable>
           <thead>
             <tr>
@@ -234,7 +245,11 @@ loadAccount(props.address);
                   )
                 }}
               </td>
-              <td>action</td>
+              <td>
+                <label for="delegate" class="btn btn-primary float-right btn-sm" @click="dialog.open('delegate', {validator_address: v.delegation.validator_address})">delegate</label>
+                <label for="redelegate" class="btn btn-primary float-right btn-sm" @click="dialog.open('redelegate', {validator_address: v.delegation.validator_address})">Redelegate</label>
+                <label for="unbond" class="btn btn-primary float-right btn-sm" @click="dialog.open('unbond', {validator_address: v.delegation.validator_address})">Unbond</label>
+              </td>
             </tr>
           </tbody>
         </VTable>

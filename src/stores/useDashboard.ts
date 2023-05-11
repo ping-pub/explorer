@@ -93,6 +93,7 @@ export interface LocalConfig {
   min_tx_fee: string;
   rpc: string[] | Endpoint[];
   sdk_version: string;
+  registry_name?: string;
 }
 
 function apiConverter(api: any[]) {
@@ -129,7 +130,7 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
   conf.bech32Prefix = lc.addr_prefix;
   conf.chainName = lc.chain_name;
   conf.coinType = lc.coin_type;
-  conf.prettyName = lc.chain_name;
+  conf.prettyName = lc.registry_name || lc.chain_name;
   conf.endpoints = {
     rest: apiConverter(lc.api),
     rpc: apiConverter(lc.rpc),

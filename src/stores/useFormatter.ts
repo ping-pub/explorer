@@ -75,7 +75,6 @@ export const useFormatter = defineStore('formatter', {
     },
     price(denom: string, currency = "usd") {
       const info = this.priceInfo(denom);
-      console.log("info", info, denom)
       return info? info[currency]||0 : 0
     },
     priceChanges(denom: string, currency="usd"): number {

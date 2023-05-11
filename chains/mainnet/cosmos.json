@@ -24,6 +24,7 @@
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "cosmos",
+    "registry_name": "cosmoshub",
     "logo": "/logos/cosmos.svg",
     "assets": [{
         "base": "uatom",
