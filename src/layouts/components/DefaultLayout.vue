@@ -50,6 +50,32 @@ blockchain.$subscribe((m, s) => {
 </script>
 
 <template>
+  <div>
+    <div class="flex items-center py-3 px-5">
+      <div class="text-2xl pr-3 cursor-pointer xl:hidden">
+        <Icon icon="mdi-menu" />
+      </div>
+
+      <UserProfile />
+
+      <div class="flex-1"></div>
+
+      <!-- <NavSearchBar />-->
+      <NavBarNotifications class="hidden md:inline-block" />
+      <NavBarI18n class="hidden md:inline-block" />
+      <NavbarThemeSwitcher class="hidden md:inline-block" />
+      <NavBarWallet class="md:inline-block" />
+    </div>
+
+    <!-- 👉 Pages -->
+    <RouterView v-slot="{ Component }">
+      <Transition :name="appRouteTransition" mode="out-in">
+        <Component :is="Component" />
+      </Transition>
+    </RouterView>
+
+    <newFooter />
+  </div>
   <VerticalNavLayout :nav-items="blockchain.computedChainMenu">
     <!-- 👉 navbar -->
     <template #navbar="{ toggleVerticalOverlayNavActive }">
