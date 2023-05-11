@@ -5,6 +5,7 @@ import {
   useFormatter,
   useMintStore,
   useStakingStore,
+  useTxDialog,
 } from '@/stores';
 import { onMounted, computed, ref } from 'vue';
 import { Icon } from '@iconify/vue';
@@ -22,6 +23,7 @@ const props = defineProps(['validator', 'chain']);
 const staking = useStakingStore();
 const blockchain = useBlockchain();
 const format = useFormatter();
+const dialog = useTxDialog();
 
 const validator: string = props.validator;
 
@@ -170,7 +172,7 @@ onMounted(() => {
               <div class="text-sm mb-2">
                 {{ v.description?.identity || '-' }}
               </div>
-              <button class="btn btn-primary btn-sm w-full">Delegate</button>
+              <label for="delegate" class="btn btn-primary btn-sm w-full" @click="dialog.open('delegate', {validator_address: v.operator_address})">Delegate</label>
             </div>
           </div>
           <div class="m-4 text-sm">
@@ -307,12 +309,9 @@ onMounted(() => {
           <VCardTitle>Commissions & Rewards</VCardTitle>
           <VCardItem class="pt-0 pb-0">
             <div class="overflow-auto" style="max-height: 280px">
-              <VCardSubtitle
-                >Commissions
-                <VBtn size="small" class="float-right" variant="text"
-                  >Withdraw</VBtn
-                ></VCardSubtitle
-              >
+              <VCardSubtitle>
+                Commissions
+              </VCardSubtitle>
               <VDivider class="mb-2"></VDivider>
               <VChip
                 v-for="(i, k) in commission"
@@ -337,6 +336,7 @@ onMounted(() => {
                 {{ format.formatToken2(i) }}
               </VChip>
             </div>
+            <label for="withdraw_commission" class="btn btn-primary mt-2 w-full btn-sm" @click="dialog.open('withdraw_commission', {validator_address: v.operator_address})">Withdraw</label>
           </VCardItem>
         </VCard>
       </VCol>

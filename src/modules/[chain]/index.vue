@@ -3,7 +3,7 @@ import MdEditor from 'md-editor-v3';
 import PriceMarketChart from '@/components/charts/PriceMarketChart.vue';
 
 import { Icon } from '@iconify/vue';
-import { useBlockchain, useFormatter, useWalletStore } from '@/stores';
+import { useBlockchain, useFormatter, useTxDialog, useWalletStore } from '@/stores';
 import { onMounted, ref } from 'vue';
 import { useIndexModule } from './indexStore';
 import { computed } from '@vue/reactivity';
@@ -15,6 +15,7 @@ const blockchain = useBlockchain();
 const store = useIndexModule();
 const walletStore = useWalletStore()
 const format = useFormatter()
+const dialog = useTxDialog()
 
 const coinInfo = computed(() => {
   return store.coinInfo;

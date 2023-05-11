@@ -1,12 +1,13 @@
 <script lang="ts" setup>
-import { useBaseStore, useFormatter, useStakingStore } from '@/stores';
-import { toBase64, toHex } from '@cosmjs/encoding';
+import { useBaseStore, useFormatter, useStakingStore, useTxDialog } from '@/stores';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, type DebuggerEvent } from 'vue';
 import { Icon } from '@iconify/vue';
 import type { Key, Validator } from '@/types';
+
 const staking = useStakingStore();
 const format = useFormatter();
+const dialog = useTxDialog()
 
 const cache = JSON.parse(localStorage.getItem('avatars') || '{}');
 const avatars = ref(cache || {});
@@ -22,7 +23,6 @@ onMounted(() => {
 });
 
 async function fetchChange() {
-  console.log('fetch changes');
   let page = 0;
 
   let height = Number(base.latest?.block?.header?.height || 0);
@@ -309,7 +309,7 @@ const rank = function (position: number) {
               </td>
               <!-- 👉 Action -->
               <td>
-                {{ 2 }}
+                <label for="delegate" class="btn btn-xs bg-primary" @click="dialog.open('delegate', {validator_address: v.operator_address})">Delegate</label>
               </td>
             </tr>
           </tbody>

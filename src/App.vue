@@ -4,6 +4,7 @@ import { useThemeConfig } from '@/plugins/vuetify/@core/composable/useThemeConfi
 import { hexToRgb } from '@/plugins/vuetify/@layouts/utils';
 import { themeChange } from 'theme-change';
 import { onMounted } from 'vue';
+import TxDialog from './components/TxDialog.vue';
 const {
   syncInitialLoaderTheme,
   syncVuetifyThemeWithTheme: syncConfigThemeWithVuetifyTheme,
@@ -30,6 +31,7 @@ onMounted(() => {
       )}`"
     >
       <RouterView />
+      <TxDialog/>
     </VApp>
   </VLocaleProvider>
 </template>

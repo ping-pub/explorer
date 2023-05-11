@@ -10,3 +10,4 @@ export * from './useStakingStore';
 export * from './useDistributionStore';
 export * from './useParamsStore';
 export * from './useWalletStore';
+export * from './useTxDialog';
