@@ -15,3 +15,17 @@
     --bg-active: #242b40;
   }
 }
+
+.collapse-title,
+:where(.collapse > input[type='checkbox']) {
+  padding: 0;
+  padding-right: 0;
+  min-height: unset;
+}
+
+.collapse-open :where(.collapse-content),
+.collapse:focus:not(.collapse-close) :where(.collapse-content),
+.collapse:not(.collapse-close)
+  :where(input[type='checkbox']:checked ~ .collapse-content) {
+  padding-bottom: 0;
+}

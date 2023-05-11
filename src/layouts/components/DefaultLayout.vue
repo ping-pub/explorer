@@ -11,7 +11,6 @@ import UserProfile from '@/layouts/components/ChainProfile.vue';
 import { useDashboard } from '@/stores/useDashboard';
 
 // @layouts plugin
-import { VerticalNavLayout } from '@layouts';
 import NavBarI18n from './NavBarI18n.vue';
 import NavSearchBar from './NavSearchBar.vue';
 import NavBarNotifications from './NavBarNotifications.vue';
@@ -20,23 +19,7 @@ import TheCustomizer from '@/plugins/vuetify/@core/components/TheCustomizer.vue'
 import Breadcrumbs from './Breadcrumbs.vue';
 import { useBlockchain } from '@/stores';
 
-const {
-  appRouteTransition,
-  isLessThanOverlayNavBreakpoint,
-  isVerticalNavCollapsed,
-} = useThemeConfig();
-const { width: windowWidth } = useWindowSize();
-
-// ℹ️ Provide animation name for vertical nav collapse icon.
-const verticalNavHeaderActionAnimationName = ref<
-  null | 'rotate-180' | 'rotate-back-180'
->(null);
-
-watch(isVerticalNavCollapsed, (val) => {
-  verticalNavHeaderActionAnimationName.value = val
-    ? 'rotate-180'
-    : 'rotate-back-180';
-});
+const { appRouteTransition } = useThemeConfig();
 
 const dashboard = useDashboard();
 dashboard.initial();
@@ -51,11 +34,107 @@ blockchain.$subscribe((m, s) => {
 
 <template>
   <div class="">
-    <div class="w-64 fixed left-0 top-0 bottom-0 overflow-auto">
+    <div class="w-64 fixed left-0 top-0 bottom-0 overflow-auto bg-base-100">
+      <div class="flex items-center pl-4 py-4 mb-1">
+        <img class="w-10 h-10" src="../../assets/logo.svg" />
+        <h1 class="flex-1 ml-3 text-2xl font-bold dark:text-white">Ping.pub</h1>
+        <div class="pr-4 cursor-pointer xl:hidden">
+          <Icon icon="mdi-close" class="text-3xl" />
+        </div>
+      </div>
       <div v-for="(item, index) of blockchain.computedChainMenu" :key="index">
-        <div>{{ item?.title }}</div>
-        <div v-for="(el, key) of item?.children" :key="key">
-          {{ el?.title }}
+        <div
+          v-if="item?.title && item?.children?.length"
+          class="collapse"
+          :class="{ 'collapse-arrow': item?.children?.length > 0 }"
+        >
+          <input type="checkbox" />
+          <div
+            class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          >
+            <Icon
+              v-if="item?.icon?.icon"
+              :icon="item?.icon?.icon"
+              class="text-xl mr-2"
+              :class="{
+                'text-yellow-500': item?.title === 'Favorite',
+                'text-blue-500': item?.title !== 'Favorite',
+              }"
+            />
+            <img
+              v-if="item?.icon?.image"
+              v-lazy="item?.icon?.image"
+              class="w-6 h-6 rounded-full mr-3"
+            />
+            <div
+              class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200"
+            >
+              {{ item?.title }}
+            </div>
+            <div
+              v-if="item?.badgeContent"
+              class="mr-6 badge badge-sm badge-primary"
+            >
+              {{ item?.badgeContent }}
+            </div>
+          </div>
+          <div class="collapse-content">
+            <div class="menu bg-base-100 w-full">
+              <RouterLink
+                v-for="(el, key) of item?.children"
+                :key="key"
+                class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
+                :to="el?.to"
+              >
+                <img
+                  v-if="el?.icon?.image"
+                  v-lazy="el?.icon?.image"
+                  class="w-6 h-6 rounded-full mr-3"
+                />
+                <div class="text-base text-gray-500 dark:text-gray-300">
+                  {{ $t(el?.title) }}
+                </div>
+              </RouterLink>
+            </div>
+          </div>
+        </div>
+
+        <RouterLink
+          :to="item?.to"
+          v-if="item?.title && !item?.children?.length"
+          class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
+        >
+          <Icon
+            v-if="item?.icon?.icon"
+            :icon="item?.icon?.icon"
+            class="text-xl mr-2"
+            :class="{
+              'text-yellow-500': item?.title === 'Favorite',
+              'text-blue-500': item?.title !== 'Favorite',
+            }"
+          />
+          <img
+            v-if="item?.icon?.image"
+            v-lazy="item?.icon?.image"
+            class="w-6 h-6 rounded-full mr-3"
+          />
+          <div
+            class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200"
+          >
+            {{ item?.title }}
+          </div>
+          <div
+            v-if="item?.badgeContent"
+            class="mr-6 badge badge-sm badge-primary"
+          >
+            {{ item?.badgeContent }}
+          </div>
+        </RouterLink>
+        <div
+          v-if="item?.heading"
+          class="px-4 text-sm pt-4 text-gray-400 pb-2 uppercase"
+        >
+          {{ item?.heading }}
         </div>
       </div>
     </div>
