@@ -247,7 +247,7 @@ const color = computed(() => {
       <div
         class="grid grid-cols-1 md:grid-cols-4 auto-cols-auto gap-4 px-4 pb-6"
       >
-        <div class="bg-gray-100 dark:bg-base-content rounded-sm px-4 py-3">
+        <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">Balance</div>
           <div class="text-lg font-semibold text-main">
             {{ format.formatToken(walletStore.balanceOfStakingToken) }}
@@ -261,7 +261,7 @@ const color = computed(() => {
             }}</span>
           </div>
         </div>
-        <div class="bg-gray-100 dark:bg-base-content rounded-sm px-4 py-3">
+        <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">Staking</div>
           <div class="text-lg font-semibold text-main">
             {{ format.formatToken(walletStore.stakingAmount) }}
@@ -270,7 +270,7 @@ const color = computed(() => {
             {{ format.tokenValue(walletStore.stakingAmount) }}
           </div>
         </div>
-        <div class="bg-gray-100 dark:bg-base-content rounded-sm px-4 py-3">
+        <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">Reward</div>
           <div class="text-lg font-semibold text-main">
             {{ format.formatToken(walletStore.rewardAmount) }}
@@ -279,7 +279,7 @@ const color = computed(() => {
             {{ format.tokenValue(walletStore.rewardAmount) }}
           </div>
         </div>
-        <div class="bg-gray-100 dark:bg-base-content rounded-sm px-4 py-3">
+        <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">Unbonding</div>
           <div class="text-lg font-semibold text-main">
             {{ format.formatToken(walletStore.unbondingAmount) }}
