@@ -44,7 +44,7 @@ const sidebarShow = ref(false);
     >
       <div class="flex items-center pl-4 py-4 mb-1">
         <img class="w-10 h-10" src="../../assets/logo.svg" />
-        <h1 class="flex-1 ml-3 text-2xl font-bold dark:text-white">Ping.pub</h1>
+        <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">Ping.pub</h1>
         <div class="pr-4 cursor-pointer xl:hidden" @click="sidebarShow = false">
           <Icon icon="mdi-close" class="text-3xl" />
         </div>
