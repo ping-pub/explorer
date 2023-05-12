@@ -136,35 +136,27 @@ const chartConfig = computed(() => {
 </script>
 
 <template>
-  <VCard
-    title="Commission Rate"
-    :subtitle="`Updated at ${format.toDay(
-      props.commission?.update_time,
-      'short'
-    )}`"
-  >
-    <VCardText>
-      <VueApexCharts
-        type="donut"
-        height="257"
-        :options="chartConfig"
-        :series="series"
-      />
-
-      <div class="flex items-center justify-center flex-wrap mx-2 gap-x-6">
-        <div class="flex items-center gap-2">
+  <div class="bg-base-100 rounded shadow p-4">
+    <div class="text-lg text-main font-semibold mb-1">Commission Rate</div>
+    <div class="text-sm text-gray-500 dark:text-gray-400">
+      {{ `Updated at ${format.toDay(props.commission?.update_time, 'short')}` }}
+    </div>
+    <VueApexCharts type="donut" :options="chartConfig" :series="series" />
+    <div>
+      <div class="flex items-center justify-center flex-wrap gap-x-3">
+        <div class="flex items-center gap-x-2">
           <div class="bg-success w-[6px] h-[6px] rounded-full"></div>
           <span class="text-caption">Rate:{{ rate }}%</span>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-x-2">
           <div class="bg-success w-[6px] h-[6px] rounded-full opacity-60"></div>
           <span class="text-caption">24h: ±{{ change }}%</span>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-x-2">
           <div class="bg-secondary w-[6px] h-[6px] rounded-full"></div>
           <span class="text-caption">Max:{{ max }}%</span>
         </div>
       </div>
-    </VCardText>
-  </VCard>
+    </div>
+  </div>
 </template>

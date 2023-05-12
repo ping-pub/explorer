@@ -135,10 +135,7 @@ onMounted(() => {
 </script>
 <template>
   <div>
-    <div
-      style="border-width: 1px"
-      class="bg-base-100 px-4 pt-3 pb-4 rounded shadow border-indigo-500"
-    >
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow border-indigo-500">
       <div class="flex flex-col lg:flex-row">
         <div class="flex-1">
           <div class="flex">
@@ -325,10 +322,7 @@ onMounted(() => {
               <div
                 v-for="(i, k) in rewards"
                 :key="`reward-${k}`"
-                color="success"
-                label
-                variant="outlined"
-                class="mr-1 mb-1 badge"
+                class="mr-1 mb-1 badge text-xs"
               >
                 {{ format.formatToken2(i) }}
               </div>
@@ -346,44 +340,47 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div md="4" sm="12">
-        <VCard title="Addresses" class="h-100">
-          <VList class="pt-0">
-            <VListItem>
-              <VListItemTitle>Account</VListItemTitle>
-              <VListItemSubtitle class="text-caption text-primary"
-                ><RouterLink :to="`/${chain}/account/${addresses.account}`">{{
-                  addresses.account
-                }}</RouterLink></VListItemSubtitle
+      <div>
+        <div class="h-100 bg-base-100 rounded shadow">
+          <div class="px-4 pt-4 mb-2 text-main font-lg font-semibold">
+            Addresses
+          </div>
+          <div class="px-4">
+            <div class="mb-3">
+              <div class="text-sm">Account</div>
+              <RouterLink
+                class="text-xs text-primary"
+                :to="`/${chain}/account/${addresses.account}`"
               >
-            </VListItem>
-            <VListItem>
-              <VListItemTitle>Operator Address</VListItemTitle>
-              <VListItemSubtitle class="text-caption">{{
-                v.operator_address
-              }}</VListItemSubtitle>
-            </VListItem>
-            <VListItem>
-              <VListItemTitle>Hex Address</VListItemTitle>
-              <VListItemSubtitle class="text-caption">{{
-                addresses.hex
-              }}</VListItemSubtitle>
-            </VListItem>
-            <VListItem>
-              <VListItemTitle>Signer Address</VListItemTitle>
-              <VListItemSubtitle class="text-caption">{{
-                addresses.valCons
-              }}</VListItemSubtitle>
-            </VListItem>
-          </VList>
-        </VCard>
+                {{ addresses.account }}
+              </RouterLink>
+            </div>
+            <div class="mb-3">
+              <div class="text-sm">Operator Address</div>
+              <div class="text-xs">
+                {{ v.operator_address }}
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="text-sm">Hex Address</div>
+              <div class="text-xs">{{ addresses.hex }}</div>
+            </div>
+            <div>
+              <div class="text-sm">Signer Address</div>
+              <div class="text-xs">{{ addresses.valCons }}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <VCard title="Transactions" class="mt-5">
-      <VCardItem class="pt-0">
-        <VTable>
+    <div class="mt-5 bg-base-100 shadow rounded p-4">
+      <div class="text-lg mb-4 font-semibold">Transactions</div>
+      <div class="rounded overflow-auto">
+        <table class="table validatore-table w-full">
           <thead>
-            <th class="text-left pl-4">Height</th>
+            <th class="text-left pl-4" style="position: relative; z-index: 2">
+              Height
+            </th>
             <th class="text-left pl-4">Hash</th>
             <th class="text-left pl-4" width="40%">Messages</th>
             <th class="text-left pl-4">Time</th>
@@ -399,24 +396,30 @@ onMounted(() => {
                 {{ item.txhash }}
               </td>
               <td>
-                {{ format.messages(item.tx.body.messages) }}
-                <VIcon
-                  v-if="item.code === 0"
-                  icon="mdi-check"
-                  color="success"
-                ></VIcon>
-                <VIcon v-else icon="mdi-multiply" color="error"></VIcon>
+                <div class="flex items-center">
+                  <span class="mr-2">{{
+                    format.messages(item.tx.body.messages)
+                  }}</span>
+                  <Icon
+                    v-if="item.code === 0"
+                    icon="mdi-check"
+                    class="text-yes"
+                  />
+                  <Icon v-else icon="mdi-multiply" class="text-no" />
+                </div>
               </td>
               <td width="150">{{ format.toDay(item.timestamp, 'from') }}</td>
             </tr>
           </tbody>
-        </VTable>
-      </VCardItem>
-    </VCard>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
+
 <style>
-.card-list {
-  --v-card-list-gap: 10px;
+.validatore-table.table :where(th, td) {
+  padding: 0.6rem 1rem;
+  font-size: 14px;
 }
 </style>
