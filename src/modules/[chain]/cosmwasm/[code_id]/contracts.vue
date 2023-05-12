@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { fromHex } from '@cosmjs/encoding';
 import { useWasmStore } from '../WasmStore';
 import { ref } from 'vue';
 import type {
@@ -8,7 +7,6 @@ import type {
   PaginabledContracts,
 } from '../types';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
-import type CustomRadiosVue from '@/plugins/vuetify/@core/components/CustomRadios.vue';
 import type { CustomInputContent } from '@/plugins/vuetify/@core/types';
 import { useFormatter } from '@/stores';
 

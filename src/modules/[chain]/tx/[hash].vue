@@ -31,8 +31,8 @@ const messages = computed(() => {
     >
       <h2 class="card-title truncate mb-2">Summary</h2>
       <div class="overflow-auto-x">
-      <table class="table text-sm">
-        <tbody>
+        <table class="table text-sm">
+          <tbody>
             <tr>
               <td>Tx Hash</td>
               <td>{{ tx.tx_response.txhash }}</td>
@@ -52,13 +52,17 @@ const messages = computed(() => {
                 <VChip color="primary">oioio</VChip>
                 <div
                   class="text-xs truncate relative py-2 px-4 rounded-full w-fit mr-2"
-                  :class="`text-${tx.tx_response.code === 0 ? 'success': 'error'}`"
+                  :class="`text-${
+                    tx.tx_response.code === 0 ? 'success' : 'error'
+                  }`"
                 >
-                  <span 
+                  <span
                     class="inset-x-0 inset-y-0 opacity-10 absolute"
-                    :class="`bg-${tx.tx_response.code === 0 ? 'success': 'error'}`"
+                    :class="`bg-${
+                      tx.tx_response.code === 0 ? 'success' : 'error'
+                    }`"
                   ></span>
-                  {{ tx.tx_response.code === 0 ? 'Success': 'Failded' }}
+                  {{ tx.tx_response.code === 0 ? 'Success' : 'Failded' }}
                 </div>
               </td>
             </tr>
@@ -95,14 +99,15 @@ const messages = computed(() => {
           </tbody>
         </table>
       </div>
-
     </div>
 
     <div
       v-if="tx.tx_response"
       class="bg-base-100 px-4 pt-3 pb-4 rounded shadow mb-4"
     >
-      <h2 class="card-title truncate mb-2">Messages: ({{messages.length}})</h2>
+      <h2 class="card-title truncate mb-2">
+        Messages: ({{ messages.length }})
+      </h2>
       <div class="divider"></div>
       <div v-for="(msg, i) in messages">
         <div><DynamicComponent :value="msg" /></div>
@@ -110,7 +115,6 @@ const messages = computed(() => {
       <div v-if="messages.length === 0">No messages</div>
     </div>
 
-    
     <div
       v-if="tx.tx_response"
       class="bg-base-100 px-4 pt-3 pb-4 rounded shadow"
@@ -118,6 +122,5 @@ const messages = computed(() => {
       <h2 class="card-title truncate mb-2">JSON</h2>
       <vue-json-pretty :data="tx" :deep="3" />
     </div>
-
   </div>
 </template>
