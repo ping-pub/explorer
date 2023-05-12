@@ -231,14 +231,14 @@ const rank = function (position: number) {
                   style="max-width: 400px"
                 >
                   <div
-                    class="avatar mr-4 relative w-9 rounded-full overflow-hidden"
+                    class="avatar mr-4 relative w-8 h-8 rounded-full overflow-hidden"
                   >
                     <div
-                      class="w-9 rounded-full bg-gray-400 absolute opacity-10"
+                      class="w-8 h-8 rounded-full bg-gray-400 absolute opacity-10"
                     ></div>
-                    <div class="w-9 rounded-full">
+                    <div class="w-8 h-8 rounded-full">
                       <img
-                        v-if="logo(v.description?.identity) !== ''"
+                        v-if="v.description?.identity"
                         v-lazy="logo(v.description?.identity)"
                         class="object-contain"
                       />
@@ -366,7 +366,7 @@ const rank = function (position: number) {
 
 <style>
 .staking-table.table :where(th, td) {
-  padding: 6px 5px;
+  padding: 8px 5px;
   background: transparent;
 }
 </style>

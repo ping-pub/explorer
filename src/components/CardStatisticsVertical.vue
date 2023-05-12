@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
+
 interface Props {
   title: string;
   color?: string;
@@ -19,40 +21,40 @@ const isPositive = controlledComputed(
 </script>
 
 <template>
-  <VCard class="h-full flex-col content-between">
-    <VCardText class="d-flex align-center justify-between">
-      <VAvatar
+  <div class="bg-base-100 shadow rounded p-4">
+    <div class="flex items-center justify-between">
+      <div
         v-if="props.icon"
-        rounded
-        size="38"
-        variant="tonal"
-        :color="props.color"
+        class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center"
       >
-        <VIcon :icon="props.icon" size="24" />
-      </VAvatar>
+        <Icon :class="[`text-${props?.color}`]" :icon="props.icon" size="32" />
+        <div
+          class="absolute top-0 left-0 bottom-0 right-0 opacity-20"
+          :class="[`bg-${props?.color}`]"
+        ></div>
+      </div>
 
       <div
         v-if="props.change"
         :class="isPositive ? 'text-success' : 'text-error'"
-        class="d-flex align-center text-sm font-weight-medium mt-n4"
+        class="flex items-center text-sm font-semibold"
       >
         <span>{{ isPositive ? `+${props.change}` : props.change }}%</span>
-
-        <VIcon :icon="isPositive ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
+        <Icon :icon="isPositive ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
       </div>
-    </VCardText>
+    </div>
 
-    <VCardText class="d-flex flex-col">
-      <h6 class="text-h6 me-2 mt-2 mb-1">
+    <div class="">
+      <h6 class="text-lg font-semibold mt-2 mb-1">
         {{ props.stats }}
       </h6>
       <p class="text-sm">
         {{ props.title }}
       </p>
 
-      <VChip v-if="props.subtitle" size="x-small" class="font-weight-medium">
+      <div v-if="props.subtitle" size="x-small" class="font-semibold">
         <span class="text-truncate">{{ props.subtitle }}</span>
-      </VChip>
-    </VCardText>
-  </VCard>
+      </div>
+    </div>
+  </div>
 </template>
