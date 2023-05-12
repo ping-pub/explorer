@@ -14,10 +14,10 @@ const i18nCompLanguages: I18nLanguage[] = [
     label: '中文',
     i18nLang: 'cn',
   },
-  {
-    label: 'Arabic',
-    i18nLang: 'ar',
-  },
+  // {
+  //   label: 'Arabic',
+  //   i18nLang: 'ar',
+  // },
 ];
 
 const handleLangChange = (lang: string) => {
