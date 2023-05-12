@@ -175,7 +175,8 @@ const sidebarShow = ref(false);
         <NavBarNotifications class="hidden md:inline-block" />
         <NavBarI18n class="hidden md:inline-block" />
         <NavbarThemeSwitcher class="hidden md:inline-block" />
-        <NavBarWallet class="md:inline-block" />
+
+        <NavBarWallet class="block truncate md:inline-block text-xs md:text-sm" />
       </div>
 
       <!-- 👉 Pages -->
