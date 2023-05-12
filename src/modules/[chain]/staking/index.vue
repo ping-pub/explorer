@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import { useBaseStore, useFormatter, useStakingStore, useTxDialog } from '@/stores';
+import {
+  useBaseStore,
+  useFormatter,
+  useStakingStore,
+  useTxDialog,
+} from '@/stores';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, type DebuggerEvent } from 'vue';
 import { Icon } from '@iconify/vue';
@@ -7,7 +12,7 @@ import type { Key, Validator } from '@/types';
 
 const staking = useStakingStore();
 const format = useFormatter();
-const dialog = useTxDialog()
+const dialog = useTxDialog();
 
 const cache = JSON.parse(localStorage.getItem('avatars') || '{}');
 const avatars = ref(cache || {});
@@ -218,7 +223,7 @@ const rank = function (position: number) {
               <!-- 👉 Validator -->
               <td>
                 <div
-                  class="d-flex align-center overflow-hidden"
+                  class="flex items-center overflow-hidden"
                   style="max-width: 400px"
                 >
                   <div
@@ -241,7 +246,7 @@ const rank = function (position: number) {
                     </div>
                   </div>
 
-                  <div class="d-flex flex-column">
+                  <div class="flex flex-col">
                     <h6 class="text-sm text-primary">
                       <RouterLink
                         :to="{
@@ -262,7 +267,7 @@ const rank = function (position: number) {
 
               <!-- 👉 Voting Power -->
               <td class="text-right">
-                <div class="d-flex flex-column">
+                <div class="flex flex-col">
                   <h6 class="text-sm font-weight-medium">
                     {{
                       format.formatToken(
@@ -309,7 +314,16 @@ const rank = function (position: number) {
               </td>
               <!-- 👉 Action -->
               <td>
-                <label for="delegate" class="btn btn-xs bg-primary" @click="dialog.open('delegate', {validator_address: v.operator_address})">Delegate</label>
+                <label
+                  for="delegate"
+                  class="btn btn-xs bg-primary"
+                  @click="
+                    dialog.open('delegate', {
+                      validator_address: v.operator_address,
+                    })
+                  "
+                  >Delegate</label
+                >
               </td>
             </tr>
           </tbody>
