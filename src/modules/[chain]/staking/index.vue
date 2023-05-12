@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import { useBaseStore, useFormatter, useStakingStore, useTxDialog } from '@/stores';
+import {
+  useBaseStore,
+  useFormatter,
+  useStakingStore,
+  useTxDialog,
+} from '@/stores';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, type DebuggerEvent } from 'vue';
 import { Icon } from '@iconify/vue';
@@ -7,7 +12,7 @@ import type { Key, Validator } from '@/types';
 
 const staking = useStakingStore();
 const format = useFormatter();
-const dialog = useTxDialog()
+const dialog = useTxDialog();
 
 const cache = JSON.parse(localStorage.getItem('avatars') || '{}');
 const avatars = ref(cache || {});
@@ -189,7 +194,7 @@ const rank = function (position: number) {
 
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
       <div class="overflow-x-auto">
-        <table class="table w-full">
+        <table class="table staking-table w-full">
           <thead>
             <tr>
               <th scope="col" style="width: 3rem; position: relative">#</th>
@@ -201,11 +206,15 @@ const rank = function (position: number) {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(v, i) in list" :key="v.operator_address">
+            <tr
+              v-for="(v, i) in list"
+              :key="v.operator_address"
+              class="hover:bg-gray-100 dark:hover:bg-[#384059]"
+            >
               <!-- 👉 rank -->
               <td>
                 <div
-                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit"
+                  class="text-xs truncate relative px-2 py-1 rounded-full w-fit"
                   :class="`text-${rank(i)}`"
                 >
                   <span
@@ -218,18 +227,18 @@ const rank = function (position: number) {
               <!-- 👉 Validator -->
               <td>
                 <div
-                  class="d-flex align-center overflow-hidden"
+                  class="flex items-center overflow-hidden"
                   style="max-width: 400px"
                 >
                   <div
-                    class="avatar mr-4 relative w-9 rounded-full overflow-hidden"
+                    class="avatar mr-4 relative w-8 h-8 rounded-full overflow-hidden"
                   >
                     <div
-                      class="w-9 rounded-full bg-gray-400 absolute opacity-10"
+                      class="w-8 h-8 rounded-full bg-gray-400 absolute opacity-10"
                     ></div>
-                    <div class="w-9 rounded-full">
+                    <div class="w-8 h-8 rounded-full">
                       <img
-                        v-if="logo(v.description?.identity) !== ''"
+                        v-if="v.description?.identity"
                         v-lazy="logo(v.description?.identity)"
                         class="object-contain"
                       />
@@ -241,7 +250,7 @@ const rank = function (position: number) {
                     </div>
                   </div>
 
-                  <div class="d-flex flex-column">
+                  <div class="flex flex-col">
                     <h6 class="text-sm text-primary">
                       <RouterLink
                         :to="{
@@ -262,7 +271,7 @@ const rank = function (position: number) {
 
               <!-- 👉 Voting Power -->
               <td class="text-right">
-                <div class="d-flex flex-column">
+                <div class="flex flex-col">
                   <h6 class="text-sm font-weight-medium">
                     {{
                       format.formatToken(
@@ -309,7 +318,16 @@ const rank = function (position: number) {
               </td>
               <!-- 👉 Action -->
               <td>
-                <label for="delegate" class="btn btn-xs bg-primary" @click="dialog.open('delegate', {validator_address: v.operator_address})">Delegate</label>
+                <label
+                  for="delegate"
+                  class="btn btn-xs bg-primary"
+                  @click="
+                    dialog.open('delegate', {
+                      validator_address: v.operator_address,
+                    })
+                  "
+                  >Delegate</label
+                >
               </td>
             </tr>
           </tbody>
@@ -345,3 +363,10 @@ const rank = function (position: number) {
     }
   }
 </route>
+
+<style>
+.staking-table.table :where(th, td) {
+  padding: 8px 5px;
+  background: transparent;
+}
+</style>

@@ -1,9 +1,4 @@
 <script lang="ts" setup>
-import { toBase64 } from '@cosmjs/encoding';
-import type { PropType } from 'vue';
-import { computed } from '@vue/reactivity';
-import DynamicComponentVue from './DynamicComponent.vue';
-import { select } from './index';
 import ArrayBytesElement from './ArrayBytesElement.vue';
 import ArrayObjectElement from './ArrayObjectElement.vue';
 import TextElement from './TextElement.vue';

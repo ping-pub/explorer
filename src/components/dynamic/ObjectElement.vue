@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import DynamicComponent from './DynamicComponent.vue';
 import { select } from './index';
 
 const props = defineProps(['value']);

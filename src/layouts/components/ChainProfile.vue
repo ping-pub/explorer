@@ -16,7 +16,7 @@ chainStore.$subscribe((m, s) => {
       <div tabindex="0" class="p-1 relative mr-3 cursor-pointer">
         <img v-lazy="chainStore.logo" class="w-9 h-9 rounded-full" />
         <div
-          class="w-2 h-2 rounded-full bg-yes absolute right-0 bottom-0"
+          class="w-2 h-2 rounded-full bg-yes absolute right-0 bottom-0 shadow"
         ></div>
       </div>
       <div

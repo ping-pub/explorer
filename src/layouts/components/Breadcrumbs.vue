@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useBlockchain } from '@/stores/useBlockchain';
+import { Icon } from '@iconify/vue';
 import { computed } from '@vue/reactivity';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
@@ -20,10 +21,10 @@ const items = computed(() => [
 <template>
   <div class="d-flex flex-rows align-center">
     <span class="text-h5 mr-3">{{ moduleName }}</span>
-    <v-icon icon="mdi-dots-vertical" />
+    <Icon icon="mdi-dots-vertical"/>
     <VBreadcrumbs :items="items">
       <template v-slot:divider>
-        <v-icon icon="mdi-chevron-right"></v-icon>
+        <Icon icon="mdi-chevron-right"/>
       </template>
     </VBreadcrumbs>
   </div>

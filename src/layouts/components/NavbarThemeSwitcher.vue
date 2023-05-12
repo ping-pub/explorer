@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { ThemeSwitcherTheme } from '@layouts/types';
 import NewThemeSwitcher from '@/components/ThemeSwitcher.vue';
-const themes: ThemeSwitcherTheme[] = [
+const themes: Array<{ name: string; icon: string }> = [
   {
     name: 'system',
     icon: 'mdi-laptop',

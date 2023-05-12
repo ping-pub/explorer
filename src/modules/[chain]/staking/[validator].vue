@@ -135,29 +135,18 @@ onMounted(() => {
 </script>
 <template>
   <div>
-    <div style="border-width:1px" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow border-indigo-500">
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow border-indigo-500">
       <div class="flex flex-col lg:flex-row">
         <div class="flex-1">
           <div class="flex">
-            <!-- avator -->
-            <!-- <VAvatar
-                icon="mdi-help-circle-outline"
-                :image="avatars[identity]"
-                size="90"
-                rounded
-                variant="outlined"
-                color="secondary"
-              /> -->
-            <div
-              class="avatar mr-4 relative w-24 rounded-lg overflow-hidden"
-            >
-              <div
-                class="w-24 rounded-lg  absolute opacity-10"
-              ></div>
+            <div class="avatar mr-4 relative w-24 rounded-lg overflow-hidden">
+              <div class="w-24 rounded-lg absolute opacity-10"></div>
               <div class="w-24 rounded-lg">
                 <img
                   v-if="avatars[identity] !== 'undefined'"
-                  :src="`https://s3.amazonaws.com/keybase_processed_uploads/${avatars[identity]}`"
+                  v-lazy="
+                    `https://s3.amazonaws.com/keybase_processed_uploads/${avatars[identity]}`
+                  "
                   class="object-contain"
                 />
                 <Icon
@@ -172,212 +161,226 @@ onMounted(() => {
               <div class="text-sm mb-2">
                 {{ v.description?.identity || '-' }}
               </div>
-              <label for="delegate" class="btn btn-primary btn-sm w-full" @click="dialog.open('delegate', {validator_address: v.operator_address})">Delegate</label>
+              <label
+                for="delegate"
+                class="btn btn-primary btn-sm w-full"
+                @click="
+                  dialog.open('delegate', {
+                    validator_address: v.operator_address,
+                  })
+                "
+                >Delegate</label
+              >
             </div>
           </div>
           <div class="m-4 text-sm">
             <p class="text-md">About Us</p>
             <VList class="card-list">
-                <VListItem prepend-icon="mdi-web">
-                  <span>Website: </span
-                  ><span> {{ v.description?.website || '-' }}</span>
-                </VListItem>
-                <VListItem prepend-icon="mdi-email-outline">
-                  <span>Contact: </span
-                  ><span> {{ v.description?.security_contact }}</span>
-                </VListItem>
-              </VList>
+              <VListItem prepend-icon="mdi-web">
+                <span>Website: </span
+                ><span> {{ v.description?.website || '-' }}</span>
+              </VListItem>
+              <VListItem prepend-icon="mdi-email-outline">
+                <span>Contact: </span
+                ><span> {{ v.description?.security_contact }}</span>
+              </VListItem>
+            </VList>
             <p class="text-md mt-3">Validator Status</p>
             <VList class="card-list">
-                <VListItem prepend-icon="mdi-shield-account-outline">
-                  <span>Status: </span
-                  ><span>
-                    {{ String(v.status).replace('BOND_STATUS_', '') }}
-                  </span>
-                </VListItem>
-                <VListItem prepend-icon="mdi-shield-alert-outline">
-                  <span>Jailed: </span><span> {{ v.jailed || '-' }} </span>
-                </VListItem>
-              </VList>
+              <VListItem prepend-icon="mdi-shield-account-outline">
+                <span>Status: </span
+                ><span>
+                  {{ String(v.status).replace('BOND_STATUS_', '') }}
+                </span>
+              </VListItem>
+              <VListItem prepend-icon="mdi-shield-alert-outline">
+                <span>Jailed: </span><span> {{ v.jailed || '-' }} </span>
+              </VListItem>
+            </VList>
           </div>
         </div>
         <div class="flex-1">
           <div class="d-flex flex-column py-3 justify-space-between">
-              <div class="d-flex">
-                <VAvatar
-                  color="secondary"
-                  rounded
-                  variant="outlined"
-                  icon="mdi-coin"
-                ></VAvatar>
-                <div class="ml-3 d-flex flex-column justify-center">
-                  <h4>
-                    {{
-                      format.formatToken2({
-                        amount: v.tokens,
-                        denom: staking.params.bond_denom,
-                      })
-                    }}
-                  </h4>
-                  <span class="text-sm">Total Bonded Tokens</span>
-                </div>
-              </div>
-              <div class="d-flex">
-                <VAvatar
-                  color="secondary"
-                  rounded
-                  variant="outlined"
-                  icon="mdi-percent"
-                ></VAvatar>
-                <div class="ml-3 d-flex flex-column justify-center">
-                  <h4>
-                    {{ format.formatToken(selfBonded.balance) }} ({{
-                      selfRate
-                    }})
-                  </h4>
-                  <span class="text-sm">Self Bonded</span>
-                </div>
-              </div>
-
-              <div class="d-flex">
-                <VAvatar
-                  color="secondary"
-                  rounded
-                  variant="outlined"
-                  icon="mdi-account-tie"
-                ></VAvatar>
-                <div class="ml-3 d-flex flex-column justify-center">
-                  <h4>
-                    {{ v.min_self_delegation }} {{ staking.params.bond_denom }}
-                  </h4>
-                  <span class="text-sm">Min Self Delegation:</span>
-                </div>
-              </div>
-              <div class="d-flex">
-                <VAvatar
-                  color="secondary"
-                  rounded
-                  variant="outlined"
-                  icon="mdi-finance"
-                ></VAvatar>
-                <div class="ml-3 d-flex flex-column justify-center">
-                  <h4>{{ apr }}</h4>
-                  <span class="text-sm">Annual Profit</span>
-                </div>
-              </div>
-
-              <div class="d-flex">
-                <VAvatar
-                  color="secondary"
-                  rounded
-                  variant="outlined"
-                  icon="mdi-stairs-up"
-                ></VAvatar>
-                <div class="ml-3 d-flex flex-column justify-center">
-                  <h4>{{ v.unbonding_height }}</h4>
-                  <span class="text-sm">Unbonding Height</span>
-                </div>
-              </div>
-
-              <div class="d-flex">
-                <VAvatar
-                  color="secondary"
-                  rounded
-                  variant="outlined"
-                  icon="mdi-clock"
-                ></VAvatar>
-                <div class="ml-3 d-flex flex-column justify-center">
-                  <h4>{{ format.toDay(v.unbonding_time, 'from') }}</h4>
-                  <span class="text-sm">Unbonding Time</span>
-                </div>
+            <div class="d-flex">
+              <VAvatar
+                color="secondary"
+                rounded
+                variant="outlined"
+                icon="mdi-coin"
+              ></VAvatar>
+              <div class="ml-3 d-flex flex-column justify-center">
+                <h4>
+                  {{
+                    format.formatToken2({
+                      amount: v.tokens,
+                      denom: staking.params.bond_denom,
+                    })
+                  }}
+                </h4>
+                <span class="text-sm">Total Bonded Tokens</span>
               </div>
             </div>
+            <div class="d-flex">
+              <VAvatar
+                color="secondary"
+                rounded
+                variant="outlined"
+                icon="mdi-percent"
+              ></VAvatar>
+              <div class="ml-3 d-flex flex-column justify-center">
+                <h4>
+                  {{ format.formatToken(selfBonded.balance) }} ({{ selfRate }})
+                </h4>
+                <span class="text-sm">Self Bonded</span>
+              </div>
+            </div>
+
+            <div class="d-flex">
+              <VAvatar
+                color="secondary"
+                rounded
+                variant="outlined"
+                icon="mdi-account-tie"
+              ></VAvatar>
+              <div class="ml-3 d-flex flex-column justify-center">
+                <h4>
+                  {{ v.min_self_delegation }} {{ staking.params.bond_denom }}
+                </h4>
+                <span class="text-sm">Min Self Delegation:</span>
+              </div>
+            </div>
+            <div class="d-flex">
+              <VAvatar
+                color="secondary"
+                rounded
+                variant="outlined"
+                icon="mdi-finance"
+              ></VAvatar>
+              <div class="ml-3 d-flex flex-column justify-center">
+                <h4>{{ apr }}</h4>
+                <span class="text-sm">Annual Profit</span>
+              </div>
+            </div>
+
+            <div class="d-flex">
+              <VAvatar
+                color="secondary"
+                rounded
+                variant="outlined"
+                icon="mdi-stairs-up"
+              ></VAvatar>
+              <div class="ml-3 d-flex flex-column justify-center">
+                <h4>{{ v.unbonding_height }}</h4>
+                <span class="text-sm">Unbonding Height</span>
+              </div>
+            </div>
+
+            <div class="d-flex">
+              <VAvatar
+                color="secondary"
+                rounded
+                variant="outlined"
+                icon="mdi-clock"
+              ></VAvatar>
+              <div class="ml-3 d-flex flex-column justify-center">
+                <h4>{{ format.toDay(v.unbonding_time, 'from') }}</h4>
+                <span class="text-sm">Unbonding Time</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="divider"></div>
       <div class="text-sm px-4">{{ v.description?.details }}</div>
     </div>
 
-    <VRow class="mt-3">
-      <VCol md="4" sm="12" class="h-100">
+    <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="h-100">
         <ValidatorCommissionRate
           :commission="v.commission"
         ></ValidatorCommissionRate>
-      </VCol>
-      <VCol md="4" sm="12">
-        <VCard class="h-100">
-          <VCardTitle>Commissions & Rewards</VCardTitle>
-          <VCardItem class="pt-0 pb-0">
+      </div>
+      <div>
+        <div class="h-100 bg-base-100 rounded shadow">
+          <div class="text-lg font-semibold text-main px-4 pt-4">
+            Commissions & Rewards
+          </div>
+          <div class="px-4 mt-1">
             <div class="overflow-auto" style="max-height: 280px">
-              <VCardSubtitle>
-                Commissions
-              </VCardSubtitle>
-              <VDivider class="mb-2"></VDivider>
-              <VChip
+              <div class="text-sm mb-2">Commissions</div>
+              <div
                 v-for="(i, k) in commission"
                 :key="`reward-${k}`"
                 color="info"
                 label
                 variant="outlined"
-                class="mr-1 mb-1"
+                class="mr-1 mb-1 badge text-xs"
               >
                 {{ format.formatToken2(i) }}
-              </VChip>
-              <VCardSubtitle class="mt-2">Outstanding Rewards</VCardSubtitle>
-              <VDivider class="mb-2"></VDivider>
-              <VChip
+              </div>
+              <div class="text-sm mb-2 mt-2">Outstanding Rewards</div>
+              <div
                 v-for="(i, k) in rewards"
                 :key="`reward-${k}`"
-                color="success"
-                label
-                variant="outlined"
-                class="mr-1 mb-1"
+                class="mr-1 mb-1 badge text-xs"
               >
                 {{ format.formatToken2(i) }}
-              </VChip>
+              </div>
             </div>
-            <label for="withdraw_commission" class="btn btn-primary mt-2 w-full btn-sm" @click="dialog.open('withdraw_commission', {validator_address: v.operator_address})">Withdraw</label>
-          </VCardItem>
-        </VCard>
-      </VCol>
-      <VCol md="4" sm="12">
-        <VCard title="Addresses" class="h-100">
-          <VList class="pt-0">
-            <VListItem>
-              <VListItemTitle>Account</VListItemTitle>
-              <VListItemSubtitle class="text-caption text-primary"
-                ><RouterLink :to="`/${chain}/account/${addresses.account}`">{{
-                  addresses.account
-                }}</RouterLink></VListItemSubtitle
+            <label
+              for="withdraw_commission"
+              class="btn btn-primary mt-4 w-full btn-sm"
+              @click="
+                dialog.open('withdraw_commission', {
+                  validator_address: v.operator_address,
+                })
+              "
+              >Withdraw</label
+            >
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="h-100 bg-base-100 rounded shadow">
+          <div class="px-4 pt-4 mb-2 text-main font-lg font-semibold">
+            Addresses
+          </div>
+          <div class="px-4">
+            <div class="mb-3">
+              <div class="text-sm">Account</div>
+              <RouterLink
+                class="text-xs text-primary"
+                :to="`/${chain}/account/${addresses.account}`"
               >
-            </VListItem>
-            <VListItem>
-              <VListItemTitle>Operator Address</VListItemTitle>
-              <VListItemSubtitle class="text-caption">{{
-                v.operator_address
-              }}</VListItemSubtitle>
-            </VListItem>
-            <VListItem>
-              <VListItemTitle>Hex Address</VListItemTitle>
-              <VListItemSubtitle class="text-caption">{{
-                addresses.hex
-              }}</VListItemSubtitle>
-            </VListItem>
-            <VListItem>
-              <VListItemTitle>Signer Address</VListItemTitle>
-              <VListItemSubtitle class="text-caption">{{
-                addresses.valCons
-              }}</VListItemSubtitle>
-            </VListItem>
-          </VList>
-        </VCard>
-      </VCol>
-    </VRow>
-    <VCard title="Transactions" class="mt-5">
-      <VCardItem class="pt-0">
-        <VTable>
+                {{ addresses.account }}
+              </RouterLink>
+            </div>
+            <div class="mb-3">
+              <div class="text-sm">Operator Address</div>
+              <div class="text-xs">
+                {{ v.operator_address }}
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="text-sm">Hex Address</div>
+              <div class="text-xs">{{ addresses.hex }}</div>
+            </div>
+            <div>
+              <div class="text-sm">Signer Address</div>
+              <div class="text-xs">{{ addresses.valCons }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-5 bg-base-100 shadow rounded p-4">
+      <div class="text-lg mb-4 font-semibold">Transactions</div>
+      <div class="rounded overflow-auto">
+        <table class="table validatore-table w-full">
           <thead>
-            <th class="text-left pl-4">Height</th>
+            <th class="text-left pl-4" style="position: relative; z-index: 2">
+              Height
+            </th>
             <th class="text-left pl-4">Hash</th>
             <th class="text-left pl-4" width="40%">Messages</th>
             <th class="text-left pl-4">Time</th>
@@ -393,24 +396,30 @@ onMounted(() => {
                 {{ item.txhash }}
               </td>
               <td>
-                {{ format.messages(item.tx.body.messages) }}
-                <VIcon
-                  v-if="item.code === 0"
-                  icon="mdi-check"
-                  color="success"
-                ></VIcon>
-                <VIcon v-else icon="mdi-multiply" color="error"></VIcon>
+                <div class="flex items-center">
+                  <span class="mr-2">{{
+                    format.messages(item.tx.body.messages)
+                  }}</span>
+                  <Icon
+                    v-if="item.code === 0"
+                    icon="mdi-check"
+                    class="text-yes"
+                  />
+                  <Icon v-else icon="mdi-multiply" class="text-no" />
+                </div>
               </td>
               <td width="150">{{ format.toDay(item.timestamp, 'from') }}</td>
             </tr>
           </tbody>
-        </VTable>
-      </VCardItem>
-    </VCard>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
+
 <style>
-.card-list {
-  --v-card-list-gap: 10px;
+.validatore-table.table :where(th, td) {
+  padding: 0.6rem 1rem;
+  font-size: 14px;
 }
 </style>

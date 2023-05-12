@@ -1,8 +1,14 @@
 <script lang="ts" setup>
-import { useBlockchain, useFormatter, useStakingStore, useTxDialog } from '@/stores';
+import {
+  useBlockchain,
+  useFormatter,
+  useStakingStore,
+  useTxDialog,
+} from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import DonutChart from '@/components/charts/DonutChart.vue';
 import { computed, ref } from '@vue/reactivity';
+import { Icon } from '@iconify/vue';
 import 'vue-json-pretty/lib/styles.css';
 import type {
   AuthAccount,
@@ -85,24 +91,168 @@ loadAccount(props.address);
 </script>
 <template>
   <div v-if="account">
-    <VCard>
-      <VList>
-        <VListItem>
-          <template #prepend>
-            <VAvatar rounded variant="tonal" size="45" color="primary">
-              <VIcon icon="mdi-qrcode" />
-            </VAvatar>
-          </template>
+    <!-- address -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <div class="d-flex items-center">
+        <!-- img -->
+        <div class="inline-flex relative w-11 h-11 rounded-md">
+          <div
+            class="w-11 h-11 absolute rounded-md opacity-10 bg-primary"
+          ></div>
+          <div
+            class="w-full inline-flex items-center align-middle flex-none justify-center"
+          >
+            <Icon
+              icon="mdi-qrcode"
+              class="text-primary"
+              style="width: 27px; height: 27px"
+            />
+          </div>
+        </div>
+        <!-- content -->
+        <div class="flex flex-1 flex-col truncate pl-4">
+          <h2 class="text-sm card-title">Address:</h2>
+          <span class="text-xs truncate"> {{ address }}</span>
+        </div>
+      </div>
+    </div>
 
-          <VListItemTitle class="text-sm font-weight-semibold">
-            Address:
-          </VListItemTitle>
-          <VListItemSubtitle class="text-xs">
-            {{ address }}
-          </VListItemSubtitle>
-        </VListItem>
-      </VList>
-    </VCard>
+    <!-- Assets -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <h2 class="card-title mb-4">Assets</h2>
+      <div class="grid md:grid-cols-3">
+        <div class="md:col-span-1">
+          <DonutChart :series="totalAmountByCategory" :labels="labels" />
+        </div>
+        <div class="mt-4 md:col-span-2 md:mt-0 md:ml-4">
+          <!-- button -->
+          <div class="d-flex justify-end mb-4">
+            <label
+              for="send"
+              class="btn btn-primary btn-sm mr-2"
+              @click="dialog.open('send', {})"
+              >Send</label
+            >
+            <label
+              for="transfer"
+              class="btn btn-primary btn-sm"
+              @click="
+                dialog.open('transfer', {
+                  chain_name: blockchain.current?.prettyName,
+                })
+              "
+              >transfer</label
+            >
+          </div>
+          <!--  -->
+          <div class="">
+            <VListItem v-for="v in balances">
+              <template #prepend>
+                <VAvatar rounded variant="tonal" size="35" color="info">
+                  <VIcon icon="mdi-account-cash" size="20" />
+                </VAvatar>
+              </template>
+              <VListItemTitle class="text-sm font-weight-semibold">
+                {{ format.formatToken(v) }}
+              </VListItemTitle>
+              <VListItemSubtitle class="text-xs"> ≈${{ 0 }} </VListItemSubtitle>
+              <template #append>
+                <div
+                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                >
+                  <span
+                    class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                  ></span>
+                  {{ format.calculatePercent(v.amount, totalAmount) }}
+                </div>
+              </template>
+            </VListItem>
+            <VListItem v-for="v in delegations">
+              <template #prepend>
+                <VAvatar rounded variant="tonal" size="35" color="warning">
+                  <VIcon icon="mdi-user-clock" size="20" />
+                </VAvatar>
+              </template>
+
+              <VListItemTitle class="text-sm font-weight-semibold">
+                {{ format.formatToken(v.balance) }}
+              </VListItemTitle>
+              <VListItemSubtitle class="text-xs"> ≈${{ 0 }} </VListItemSubtitle>
+              <template #append>
+                <div
+                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                >
+                  <span
+                    class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                  ></span>
+                  {{ format.calculatePercent(v.balance.amount, totalAmount) }}
+                </div>
+              </template>
+            </VListItem>
+            <VListItem v-for="v in rewards.total">
+              <template #prepend>
+                <VAvatar rounded variant="tonal" size="35" color="success">
+                  <VIcon icon="mdi-account-arrow-up" size="20" />
+                </VAvatar>
+              </template>
+
+              <VListItemTitle class="text-sm font-weight-semibold">
+                {{ format.formatToken(v) }}
+              </VListItemTitle>
+              <VListItemSubtitle class="text-xs"> ≈${{ 0 }} </VListItemSubtitle>
+              <template #append>
+                <div
+                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                >
+                  <span
+                    class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                  ></span>
+                  {{ format.calculatePercent(v.amount, totalAmount) }}
+                </div>
+              </template>
+            </VListItem>
+
+            <div class="flex items-center px-4">
+              <div
+                class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
+              >
+                <Icon
+                  icon="mdi-account-arrow-right"
+                  class="text-error"
+                  size="20"
+                />
+                <div
+                  class="absolute top-0 bottom-0 left-0 right-0 bg-error opacity-20"
+                ></div>
+              </div>
+
+              <div class="flex-1">
+                <div class="text-base font-semibold">
+                  {{
+                    format.formatToken({
+                      amount: String(unbondingTotal),
+                      denom: stakingStore.params.bond_denom,
+                    })
+                  }}
+                </div>
+                <div class="text-sm">≈${{ 0 }}</div>
+              </div>
+              <div
+                class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+              >
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                ></span>
+                {{ format.calculatePercent(unbondingTotal, totalAmount) }}
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+          {{ totalAmount }}
+        </div>
+      </div>
+    </div>
 
     <VCard class="mt-5">
       <VCardTitle>Assets</VCardTitle>
@@ -114,8 +264,22 @@ loadAccount(props.address);
           <VCol cols="12" md="8">
             <VList class="card-list">
               <VListItem>
-                <label for="transfer" class="btn btn-primary float-right btn-sm" @click="dialog.open('transfer', {chain_name: blockchain.current?.prettyName})">transfer</label>
-                <label for="send" class="btn btn-primary float-right btn-sm" @click="dialog.open('send', {})">Send</label>
+                <label
+                  for="transfer"
+                  class="btn btn-primary float-right btn-sm"
+                  @click="
+                    dialog.open('transfer', {
+                      chain_name: blockchain.current?.prettyName,
+                    })
+                  "
+                  >transfer</label
+                >
+                <label
+                  for="send"
+                  class="btn btn-primary float-right btn-sm"
+                  @click="dialog.open('send', {})"
+                  >Send</label
+                >
               </VListItem>
               <VListItem v-for="v in balances">
                 <template #prepend>
@@ -130,9 +294,14 @@ loadAccount(props.address);
                   ≈${{ 0 }}
                 </VListItemSubtitle>
                 <template #append>
-                  <VChip color="primary">{{
-                    format.calculatePercent(v.amount, totalAmount)
-                  }}</VChip>
+                  <div
+                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                  >
+                    <span
+                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                    ></span>
+                    {{ format.calculatePercent(v.amount, totalAmount) }}
+                  </div>
                 </template>
               </VListItem>
               <VListItem v-for="v in delegations">
@@ -149,9 +318,14 @@ loadAccount(props.address);
                   ≈${{ 0 }}
                 </VListItemSubtitle>
                 <template #append>
-                  <VChip color="primary">{{
-                    format.calculatePercent(v.balance.amount, totalAmount)
-                  }}</VChip>
+                  <div
+                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                  >
+                    <span
+                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                    ></span>
+                    {{ format.calculatePercent(v.balance.amount, totalAmount) }}
+                  </div>
                 </template>
               </VListItem>
               <VListItem v-for="v in rewards.total">
@@ -168,9 +342,14 @@ loadAccount(props.address);
                   ≈${{ 0 }}
                 </VListItemSubtitle>
                 <template #append>
-                  <VChip color="primary">{{
-                    format.calculatePercent(v.amount, totalAmount)
-                  }}</VChip>
+                  <div
+                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                  >
+                    <span
+                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                    ></span>
+                    {{ format.calculatePercent(v.amount, totalAmount) }}
+                  </div>
                 </template>
               </VListItem>
 
@@ -193,9 +372,14 @@ loadAccount(props.address);
                   ≈${{ 0 }}
                 </VListItemSubtitle>
                 <template #append>
-                  <VChip color="primary">{{
-                    format.calculatePercent(unbondingTotal, totalAmount)
-                  }}</VChip>
+                  <div
+                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                  >
+                    <span
+                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                    ></span>
+                    {{ format.calculatePercent(unbondingTotal, totalAmount) }}
+                  </div>
                 </template>
               </VListItem>
             </VList>
@@ -206,25 +390,34 @@ loadAccount(props.address);
       </VCardItem>
     </VCard>
 
-    <VCard class="my-5">
-      <VCardItem>
-        <VCardTitle>
-          Delegations
-          <div>
-            <label for="delegate" class="btn btn-primary float-right btn-sm" @click="dialog.open('delegate', {})">Delegate</label>
-            <label for="withdraw" class="btn btn-primary float-right btn-sm" @click="dialog.open('withdraw', {})">Withdraw</label>
-          </div>
-        </VCardTitle>
-        <VTable>
+    <!-- Delegations -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <h2 class="card-title mb-4">Delegations</h2>
+      <div class="d-flex justify-end mb-4">
+        <label
+          for="delegate"
+          class="btn btn-primary btn-sm mr-2"
+          @click="dialog.open('delegate', {})"
+          >Delegate</label
+        >
+        <label
+          for="withdraw"
+          class="btn btn-primary btn-sm"
+          @click="dialog.open('withdraw', {})"
+          >Withdraw</label
+        >
+      </div>
+      <div class="overdflow-x-auto">
+        <table class="table w-full">
           <thead>
             <tr>
-              <th>Validator</th>
+              <th style="position: relative">Validator</th>
               <th>Delegation</th>
               <th>Rewards</th>
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="text-sm">
             <tr v-for="v in delegations">
               <td class="text-caption text-primary">
                 <RouterLink
@@ -246,28 +439,62 @@ loadAccount(props.address);
                 }}
               </td>
               <td>
-                <label for="delegate" class="btn btn-primary float-right btn-sm" @click="dialog.open('delegate', {validator_address: v.delegation.validator_address})">delegate</label>
-                <label for="redelegate" class="btn btn-primary float-right btn-sm" @click="dialog.open('redelegate', {validator_address: v.delegation.validator_address})">Redelegate</label>
-                <label for="unbond" class="btn btn-primary float-right btn-sm" @click="dialog.open('unbond', {validator_address: v.delegation.validator_address})">Unbond</label>
+                <div class="d-flex justify-end">
+                  <label
+                    for="delegate"
+                    class="btn btn-primary btn-sm mr-2"
+                    @click="
+                      dialog.open('delegate', {
+                        validator_address: v.delegation.validator_address,
+                      })
+                    "
+                    >delegate</label
+                  >
+                  <label
+                    for="redelegate"
+                    class="btn btn-primary btn-sm mr-2"
+                    @click="
+                      dialog.open('redelegate', {
+                        validator_address: v.delegation.validator_address,
+                      })
+                    "
+                    >Redelegate</label
+                  >
+                  <label
+                    for="unbond"
+                    class="btn btn-primary btn-sm"
+                    @click="
+                      dialog.open('unbond', {
+                        validator_address: v.delegation.validator_address,
+                      })
+                    "
+                    >Unbond</label
+                  >
+                </div>
               </td>
             </tr>
           </tbody>
-        </VTable>
-      </VCardItem>
-    </VCard>
-    <VCard class="my-5" v-if="unbonding && unbonding.length > 0">
-      <VCardItem>
-        <VCardTitle>Unbonding Delegations</VCardTitle>
-        <VTable>
+        </table>
+      </div>
+    </div>
+
+    <!-- Unbonding Delegations -->
+    <div
+      class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow"
+      v-if="unbonding && unbonding.length > 0"
+    >
+      <h2 class="card-title mb-4">Unbonding Delegations</h2>
+      <div class="overflow-x-auto">
+        <table class="table">
           <thead>
             <tr>
-              <th>Creation Height</th>
+              <th style="position: relative">Creation Height</th>
               <th>Initial Balance</th>
               <th>Balance</th>
               <th>Completion Time</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="text-sm">
             <div v-for="v in unbonding">
               <tr>
                 <td class="text-caption text-primary">
@@ -309,22 +536,24 @@ loadAccount(props.address);
               </tr>
             </div>
           </tbody>
-        </VTable>
-      </VCardItem>
-    </VCard>
-    <VCard class="my-5">
-      <VCardItem>
-        <VCardTitle>Transactions</VCardTitle>
-        <VTable>
+        </table>
+      </div>
+    </div>
+
+    <!-- Transactions -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <h2 class="card-title mb-4">Transactions</h2>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
           <thead>
             <tr>
-              <th>Height</th>
+              <th style="position: relative">Height</th>
               <th>Hash</th>
               <th>Messages</th>
               <th>Time</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="text-sm">
             <tr v-for="v in txs">
               <td class="text-sm text-primary">
                 <RouterLink :to="`/${chain}/block/${v.height}`">{{
@@ -346,15 +575,15 @@ loadAccount(props.address);
               <td>{{ format.toDay(v.timestamp, 'from') }}</td>
             </tr>
           </tbody>
-        </VTable>
-      </VCardItem>
-    </VCard>
-    <VCard>
-      <VCardItem>
-        <VCardTitle>Account</VCardTitle>
-        <DynamicComponent :value="account" />
-      </VCardItem>
-    </VCard>
+        </table>
+      </div>
+    </div>
+
+    <!-- Account -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <h2 class="card-title mb-4">Account</h2>
+      <DynamicComponent :value="account" />
+    </div>
   </div>
   <div v-else>Account does not exists on chain</div>
 </template>

@@ -39,9 +39,7 @@ onMounted(() => {
 <template>
   <div>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title truncate mb-2">
-        What's State Sync?
-      </h2>
+      <h2 class="card-title truncate mb-2">What's State Sync?</h2>
       <div class="text-sm">
         The Tendermint Core 0.34 release includes support for state sync, which
         allows a new node to join a network by fetching a snapshot of the
@@ -58,14 +56,17 @@ onMounted(() => {
     </div>
 
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title truncate mb-2">Starting New Node From State Sync</h2>
+      <h2 class="card-title truncate mb-2">
+        Starting New Node From State Sync
+      </h2>
       <div class="text-sm">
         1. Install Binary ({{ appName }} Version:
         {{ nodeInfo.application_version?.version || '' }})
         <br />
         We need to install the binary first and make sure that the version is
         the one currently in use on mainnet.
-        <br /> <br />
+        <br />
+        <br />
         2. Enable State Sync<br />
         We can configure Tendermint to use state sync in
         $DAEMON_HOME/config/config.toml.
@@ -86,7 +87,7 @@ onMounted(() => {
       <div class="text-sm">
         To make state sync works, we can enable snapshot in
         $DAEMON_HOME/config/app.toml
-        <br/><br/>
+        <br /><br />
         <VTextarea
           auto-grow
           model-value="[state-sync]

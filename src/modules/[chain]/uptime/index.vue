@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, computed, watchEffect } from 'vue';
 import { fromHex, toBase64 } from '@cosmjs/encoding';
+import { Icon } from '@iconify/vue';
 import {
   useFormatter,
   useStakingStore,
@@ -88,35 +89,23 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div>
-    <VRow>
-      <VCol cols="12" md="4">
-        <VCard class="h-full self-center d-flex p-4">
-          <div class="self-center">
-            Current Height: {{ latest.block?.header?.height }}
-          </div>
-        </VCard>
-      </VCol>
-      <VCol cols="12" md="8" class="">
-        <VTextField
-          v-model="keyword"
-          label="Keywords to filter validators"
-          variant="outlined"
-        >
-          <template v-slot:append>
-            <VBtn
-              ><VIcon icon="mdi-star" /><span class="d-none d-md-block"
-                >Favorite</span
-              ></VBtn
-            >
-          </template>
-        </VTextField>
-      </VCol>
-    </VRow>
+  <div class="bg-base-100 px-5 pt-5">
+    <div class="flex items-center gap-x-4">
+      <div class="text-main text-lg">Current Height: {{ latest.block?.header?.height }}</div>
+      <input
+        type="text"
+        v-model="keyword"
+        placeholder="Keywords to filter validators"
+        class="input input-sm w-full flex-1"
+      />
+      <button class="btn btn-primary btn-sm">
+        <Icon icon="mdi-star" class="mr-2 text-lg" /> <span class="">Favorite</span>
+      </button>
+    </div>
 
-    <VRow>
-      <VCol v-for="(v, i) in validators" cols="12" md="3" xl="2" class="py-0">
-        <div class="d-flex justify-between">
+    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
+      <div v-for="(v, i) in validators">
+        <div class="flex items-center justify-between">
           <VCheckbox
             v-model="selected"
             color="warning"
@@ -128,26 +117,26 @@ watchEffect(() => {
               >
             </template>
           </VCheckbox>
-          <VChip
+          <div
             v-if="
               Number(
                 signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]
                   ?.missed_blocks_counter || 0
               ) > 0
             "
-            size="small"
-            class="mt-1"
-            label
-            color="error"
-            >{{
+            class="badge badge-error badge-sm text-white"
+          >
+            {{
               signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]
                 ?.missed_blocks_counter
-            }}</VChip
-          >
-          <VChip v-else size="small" class="mt-1" label color="success">{{
-            signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]
-              ?.missed_blocks_counter
-          }}</VChip>
+            }}
+          </div>
+          <div v-else class="mt-1 badge badge-sm text-white bg-yes">
+            {{
+              signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]
+                ?.missed_blocks_counter
+            }}
+          </div>
         </div>
         <UptimeBar
           :blocks="commits"
@@ -155,8 +144,10 @@ watchEffect(() => {
             toBase64(fromHex(consensusPubkeyToHexAddress(v.consensus_pubkey)))
           "
         />
-      </VCol>
-    </VRow>
+      </div>
+    </div>
+
+    <div class="h-6"></div>
   </div>
 </template>
 <route>

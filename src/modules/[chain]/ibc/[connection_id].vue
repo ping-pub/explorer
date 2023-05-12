@@ -1,12 +1,6 @@
 <script lang="ts" setup>
-import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
-import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
-import type {
-  ClientStateWithProof,
-  Connection,
-  ClientState,
-  Channel,
-} from '@/types';
+import { useBaseStore, useBlockchain } from '@/stores';
+import type { Connection, ClientState, Channel } from '@/types';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
 
@@ -136,16 +130,16 @@ function color(v: string) {
             <td>{{ v.version }}</td>
             <td>{{ v.ordering }}</td>
             <td>
-              <div 
-                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit"
-                  :class="`text-${color(v.state)}`"
-                >
-                  <span 
-                    class="inset-x-0 inset-y-0 opacity-10 absolute"
-                    :class="`bg-${color(v.state)}`"
-                  ></span>
-                  {{ v.state }}
-                </div>
+              <div
+                class="text-xs truncate relative py-2 px-4 rounded-full w-fit"
+                :class="`text-${color(v.state)}`"
+              >
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute"
+                  :class="`bg-${color(v.state)}`"
+                ></span>
+                {{ v.state }}
+              </div>
             </td>
           </tr>
         </tbody>

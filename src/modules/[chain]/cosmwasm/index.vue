@@ -20,7 +20,7 @@ wasmStore.wasmClient.getWasmCodeList().then((x) => {
       <table class="table w-full mt-4 text-sm">
         <thead>
           <tr>
-            <th style="position: relative;">Code Id</th>
+            <th style="position: relative">Code Id</th>
             <th>Code Hash</th>
             <th>Creator</th>
             <th>Permissions</th>

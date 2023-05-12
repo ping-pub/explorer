@@ -25,9 +25,13 @@ const messages = computed(() => {
 </script>
 <template>
   <div>
-    <VCard v-if="tx.tx_response" title="Summary">
-      <VCardItem class="pt-0">
-        <VTable>
+    <div
+      v-if="tx.tx_response"
+      class="bg-base-100 px-4 pt-3 pb-4 rounded shadow mb-4"
+    >
+      <h2 class="card-title truncate mb-2">Summary</h2>
+      <div class="overflow-auto-x">
+        <table class="table text-sm">
           <tbody>
             <tr>
               <td>Tx Hash</td>
@@ -45,10 +49,21 @@ const messages = computed(() => {
             <tr>
               <td>Status</td>
               <td>
-                <VChip v-if="tx.tx_response.code === 0" color="success"
-                  >Success</VChip
+                <VChip color="primary">oioio</VChip>
+                <div
+                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit mr-2"
+                  :class="`text-${
+                    tx.tx_response.code === 0 ? 'success' : 'error'
+                  }`"
                 >
-                <span v-else><VChip color="error">Failded</VChip></span>
+                  <span
+                    class="inset-x-0 inset-y-0 opacity-10 absolute"
+                    :class="`bg-${
+                      tx.tx_response.code === 0 ? 'success' : 'error'
+                    }`"
+                  ></span>
+                  {{ tx.tx_response.code === 0 ? 'Success' : 'Failded' }}
+                </div>
               </td>
             </tr>
             <tr>
@@ -82,23 +97,30 @@ const messages = computed(() => {
               <td>{{ tx.tx.body.memo }}</td>
             </tr>
           </tbody>
-        </VTable>
-      </VCardItem>
-    </VCard>
+        </table>
+      </div>
+    </div>
 
-    <VCard :title="`Messages: (${messages.length})`" class="my-5">
-      <VCardItem class="pt-0" style="border-top: 2px dotted gray">
-        <div v-for="(msg, i) in messages">
-          <div><DynamicComponent :value="msg" /></div>
-        </div>
-        <div v-if="messages.length === 0">No messages</div>
-      </VCardItem>
-    </VCard>
+    <div
+      v-if="tx.tx_response"
+      class="bg-base-100 px-4 pt-3 pb-4 rounded shadow mb-4"
+    >
+      <h2 class="card-title truncate mb-2">
+        Messages: ({{ messages.length }})
+      </h2>
+      <div class="divider"></div>
+      <div v-for="(msg, i) in messages">
+        <div><DynamicComponent :value="msg" /></div>
+      </div>
+      <div v-if="messages.length === 0">No messages</div>
+    </div>
 
-    <VCard title="JSON">
-      <VCardItem class="pt-0">
-        <vue-json-pretty :data="tx" :deep="3" />
-      </VCardItem>
-    </VCard>
+    <div
+      v-if="tx.tx_response"
+      class="bg-base-100 px-4 pt-3 pb-4 rounded shadow"
+    >
+      <h2 class="card-title truncate mb-2">JSON</h2>
+      <vue-json-pretty :data="tx" :deep="3" />
+    </div>
   </div>
 </template>
