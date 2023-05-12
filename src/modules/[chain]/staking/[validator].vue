@@ -147,7 +147,9 @@ onMounted(() => {
               <div class="w-24 rounded-lg">
                 <img
                   v-if="avatars[identity] !== 'undefined'"
-                  v-lazy="`https://s3.amazonaws.com/keybase_processed_uploads/${avatars[identity]}`"
+                  v-lazy="
+                    `https://s3.amazonaws.com/keybase_processed_uploads/${avatars[identity]}`
+                  "
                   class="object-contain"
                 />
                 <Icon
@@ -295,45 +297,45 @@ onMounted(() => {
       <div class="text-sm px-4">{{ v.description?.details }}</div>
     </div>
 
-    <VRow class="mt-3">
-      <VCol md="4" sm="12" class="h-100">
+    <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="h-100">
         <ValidatorCommissionRate
           :commission="v.commission"
         ></ValidatorCommissionRate>
-      </VCol>
-      <VCol md="4" sm="12">
-        <VCard class="h-100">
-          <VCardTitle>Commissions & Rewards</VCardTitle>
-          <VCardItem class="pt-0 pb-0">
+      </div>
+      <div>
+        <div class="h-100 bg-base-100 rounded shadow">
+          <div class="text-lg font-semibold text-main px-4 pt-4">
+            Commissions & Rewards
+          </div>
+          <div class="px-4 mt-1">
             <div class="overflow-auto" style="max-height: 280px">
-              <VCardSubtitle> Commissions </VCardSubtitle>
-              <VDivider class="mb-2"></VDivider>
-              <VChip
+              <div class="text-sm mb-2">Commissions</div>
+              <div
                 v-for="(i, k) in commission"
                 :key="`reward-${k}`"
                 color="info"
                 label
                 variant="outlined"
-                class="mr-1 mb-1"
+                class="mr-1 mb-1 badge text-xs"
               >
                 {{ format.formatToken2(i) }}
-              </VChip>
-              <VCardSubtitle class="mt-2">Outstanding Rewards</VCardSubtitle>
-              <VDivider class="mb-2"></VDivider>
-              <VChip
+              </div>
+              <div class="text-sm mb-2 mt-2">Outstanding Rewards</div>
+              <div
                 v-for="(i, k) in rewards"
                 :key="`reward-${k}`"
                 color="success"
                 label
                 variant="outlined"
-                class="mr-1 mb-1"
+                class="mr-1 mb-1 badge"
               >
                 {{ format.formatToken2(i) }}
-              </VChip>
+              </div>
             </div>
             <label
               for="withdraw_commission"
-              class="btn btn-primary mt-2 w-full btn-sm"
+              class="btn btn-primary mt-4 w-full btn-sm"
               @click="
                 dialog.open('withdraw_commission', {
                   validator_address: v.operator_address,
@@ -341,10 +343,10 @@ onMounted(() => {
               "
               >Withdraw</label
             >
-          </VCardItem>
-        </VCard>
-      </VCol>
-      <VCol md="4" sm="12">
+          </div>
+        </div>
+      </div>
+      <div md="4" sm="12">
         <VCard title="Addresses" class="h-100">
           <VList class="pt-0">
             <VListItem>
@@ -375,8 +377,8 @@ onMounted(() => {
             </VListItem>
           </VList>
         </VCard>
-      </VCol>
-    </VRow>
+      </div>
+    </div>
     <VCard title="Transactions" class="mt-5">
       <VCardItem class="pt-0">
         <VTable>

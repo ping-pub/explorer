@@ -209,7 +209,7 @@ const rank = function (position: number) {
             <tr
               v-for="(v, i) in list"
               :key="v.operator_address"
-              class="hover:bg-gray-100 dark:bg-[#384059]"
+              class="hover:bg-gray-100 dark:hover:bg-[#384059]"
             >
               <!-- 👉 rank -->
               <td>
