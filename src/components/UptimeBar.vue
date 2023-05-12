@@ -23,8 +23,8 @@ const bars = computed(() => {
 });
 </script>
 <template>
-  <div class="d-flex justify-evenly">
-    <span v-for="(b, i) in bars" :key="i" :class="b.color" style="width: 1.5%"
+  <div class="flex items-center justify-evenly">
+    <span v-for="(b, i) in bars" :key="i" :class="b.color" class="rounded" style="width: 1.5%"
       >&nbsp;
       <v-tooltip
         v-if="Number(b.height) > 0"
