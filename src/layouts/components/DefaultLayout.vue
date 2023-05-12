@@ -10,7 +10,6 @@ import UserProfile from '@/layouts/components/ChainProfile.vue';
 
 import { useDashboard } from '@/stores/useDashboard';
 
-// @layouts plugin
 import NavBarI18n from './NavBarI18n.vue';
 import NavBarNotifications from './NavBarNotifications.vue';
 import NavBarWallet from './NavBarWallet.vue';
