@@ -49,10 +49,17 @@ const messages = computed(() => {
             <tr>
               <td>Status</td>
               <td>
-                <VChip v-if="tx.tx_response.code === 0" color="success"
-                  >Success</VChip
+                <VChip color="primary">oioio</VChip>
+                <div
+                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit mr-2"
+                  :class="`text-${tx.tx_response.code === 0 ? 'success': 'error'}`"
                 >
-                <span v-else><VChip color="error">Failded</VChip></span>
+                  <span 
+                    class="inset-x-0 inset-y-0 opacity-10 absolute"
+                    :class="`bg-${tx.tx_response.code === 0 ? 'success': 'error'}`"
+                  ></span>
+                  {{ tx.tx_response.code === 0 ? 'Success': 'Failded' }}
+                </div>
               </td>
             </tr>
             <tr>

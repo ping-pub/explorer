@@ -130,9 +130,12 @@ loadAccount(props.address);
                   ≈${{ 0 }}
                 </VListItemSubtitle>
                 <template #append>
-                  <VChip color="primary">{{
-                    format.calculatePercent(v.amount, totalAmount)
-                  }}</VChip>
+                  <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2">
+                    <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>
+                    {{
+                      format.calculatePercent(v.amount, totalAmount)
+                    }}
+                  </div>
                 </template>
               </VListItem>
               <VListItem v-for="v in delegations">
@@ -149,9 +152,12 @@ loadAccount(props.address);
                   ≈${{ 0 }}
                 </VListItemSubtitle>
                 <template #append>
-                  <VChip color="primary">{{
-                    format.calculatePercent(v.balance.amount, totalAmount)
-                  }}</VChip>
+                  <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2">
+                    <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>
+                    {{
+                      format.calculatePercent(v.balance.amount, totalAmount)
+                    }}
+                  </div>
                 </template>
               </VListItem>
               <VListItem v-for="v in rewards.total">
@@ -168,9 +174,12 @@ loadAccount(props.address);
                   ≈${{ 0 }}
                 </VListItemSubtitle>
                 <template #append>
-                  <VChip color="primary">{{
-                    format.calculatePercent(v.amount, totalAmount)
-                  }}</VChip>
+                  <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2">
+                    <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>
+                    {{
+                      format.calculatePercent(v.amount, totalAmount)
+                    }}
+                  </div>
                 </template>
               </VListItem>
 
@@ -193,9 +202,12 @@ loadAccount(props.address);
                   ≈${{ 0 }}
                 </VListItemSubtitle>
                 <template #append>
-                  <VChip color="primary">{{
-                    format.calculatePercent(unbondingTotal, totalAmount)
-                  }}</VChip>
+                   <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2">
+                    <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>
+                    {{
+                      format.calculatePercent(unbondingTotal, totalAmount)
+                    }}
+                  </div>
                 </template>
               </VListItem>
             </VList>
