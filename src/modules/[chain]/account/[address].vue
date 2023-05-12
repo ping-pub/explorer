@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import { useBlockchain, useFormatter, useStakingStore, useTxDialog } from '@/stores';
+import {
+  useBlockchain,
+  useFormatter,
+  useStakingStore,
+  useTxDialog,
+} from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import DonutChart from '@/components/charts/DonutChart.vue';
 import { computed, ref } from '@vue/reactivity';
@@ -91,10 +96,18 @@ loadAccount(props.address);
       <div class="d-flex items-center">
         <!-- img -->
         <div class="inline-flex relative w-11 h-11 rounded-md">
-          <div class="w-11 h-11 absolute rounded-md opacity-10 bg-primary"></div>
-            <div class="w-full inline-flex items-center align-middle flex-none justify-center">
-             <Icon icon="mdi-qrcode" class="text-primary" style="width: 27px; height: 27px;"/>
-            </div>
+          <div
+            class="w-11 h-11 absolute rounded-md opacity-10 bg-primary"
+          ></div>
+          <div
+            class="w-full inline-flex items-center align-middle flex-none justify-center"
+          >
+            <Icon
+              icon="mdi-qrcode"
+              class="text-primary"
+              style="width: 27px; height: 27px"
+            />
+          </div>
         </div>
         <!-- content -->
         <div class="flex flex-1 flex-col truncate pl-4">
@@ -108,115 +121,136 @@ loadAccount(props.address);
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">Assets</h2>
       <div class="grid md:grid-cols-3">
-          <div class=" md:col-span-1">
-            <DonutChart :series="totalAmountByCategory" :labels="labels" />
+        <div class="md:col-span-1">
+          <DonutChart :series="totalAmountByCategory" :labels="labels" />
+        </div>
+        <div class="mt-4 md:col-span-2 md:mt-0 md:ml-4">
+          <!-- button -->
+          <div class="d-flex justify-end mb-4">
+            <label
+              for="send"
+              class="btn btn-primary btn-sm mr-2"
+              @click="dialog.open('send', {})"
+              >Send</label
+            >
+            <label
+              for="transfer"
+              class="btn btn-primary btn-sm"
+              @click="
+                dialog.open('transfer', {
+                  chain_name: blockchain.current?.prettyName,
+                })
+              "
+              >transfer</label
+            >
           </div>
-          <div class="mt-4 md:col-span-2 md:mt-0 md:ml-4">
-            <!-- button -->
-            <div class="d-flex justify-end mb-4">
-              <label for="send" class="btn btn-primary btn-sm mr-2" @click="dialog.open('send', {})">Send</label>
-              <label for="transfer" class="btn btn-primary btn-sm" @click="dialog.open('transfer', {chain_name: blockchain.current?.prettyName})">transfer</label>
-            </div>
-            <!--  -->
-            <VList class="card-list">    
-              <VListItem v-for="v in balances">
-                <template #prepend>
-                  <VAvatar rounded variant="tonal" size="35" color="info">
-                    <VIcon icon="mdi-account-cash" size="20" />
-                  </VAvatar>
-                </template>
-                <VListItemTitle class="text-sm font-weight-semibold">
-                  {{ format.formatToken(v) }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-xs">
-                  ≈${{ 0 }}
-                </VListItemSubtitle>
-                <template #append>
-                  <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2">
-                    <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>
-                    {{
-                      format.calculatePercent(v.amount, totalAmount)
-                    }}
-                  </div>
-                </template>
-              </VListItem>
-              <VListItem v-for="v in delegations">
-                <template #prepend>
-                  <VAvatar rounded variant="tonal" size="35" color="warning">
-                    <VIcon icon="mdi-user-clock" size="20" />
-                  </VAvatar>
-                </template>
+          <!--  -->
+          <div class="">
+            <VListItem v-for="v in balances">
+              <template #prepend>
+                <VAvatar rounded variant="tonal" size="35" color="info">
+                  <VIcon icon="mdi-account-cash" size="20" />
+                </VAvatar>
+              </template>
+              <VListItemTitle class="text-sm font-weight-semibold">
+                {{ format.formatToken(v) }}
+              </VListItemTitle>
+              <VListItemSubtitle class="text-xs"> ≈${{ 0 }} </VListItemSubtitle>
+              <template #append>
+                <div
+                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                >
+                  <span
+                    class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                  ></span>
+                  {{ format.calculatePercent(v.amount, totalAmount) }}
+                </div>
+              </template>
+            </VListItem>
+            <VListItem v-for="v in delegations">
+              <template #prepend>
+                <VAvatar rounded variant="tonal" size="35" color="warning">
+                  <VIcon icon="mdi-user-clock" size="20" />
+                </VAvatar>
+              </template>
 
-                <VListItemTitle class="text-sm font-weight-semibold">
-                  {{ format.formatToken(v.balance) }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-xs">
-                  ≈${{ 0 }}
-                </VListItemSubtitle>
-                <template #append>
-                  <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2">
-                    <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>
-                    {{
-                      format.calculatePercent(v.balance.amount, totalAmount)
-                    }}
-                  </div>
-                </template>
-              </VListItem>
-              <VListItem v-for="v in rewards.total">
-                <template #prepend>
-                  <VAvatar rounded variant="tonal" size="35" color="success">
-                    <VIcon icon="mdi-account-arrow-up" size="20" />
-                  </VAvatar>
-                </template>
+              <VListItemTitle class="text-sm font-weight-semibold">
+                {{ format.formatToken(v.balance) }}
+              </VListItemTitle>
+              <VListItemSubtitle class="text-xs"> ≈${{ 0 }} </VListItemSubtitle>
+              <template #append>
+                <div
+                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                >
+                  <span
+                    class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                  ></span>
+                  {{ format.calculatePercent(v.balance.amount, totalAmount) }}
+                </div>
+              </template>
+            </VListItem>
+            <VListItem v-for="v in rewards.total">
+              <template #prepend>
+                <VAvatar rounded variant="tonal" size="35" color="success">
+                  <VIcon icon="mdi-account-arrow-up" size="20" />
+                </VAvatar>
+              </template>
 
-                <VListItemTitle class="text-sm font-weight-semibold">
-                  {{ format.formatToken(v) }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-xs">
-                  ≈${{ 0 }}
-                </VListItemSubtitle>
-                <template #append>
-                  <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2">
-                    <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>
-                    {{
-                      format.calculatePercent(v.amount, totalAmount)
-                    }}
-                  </div>
-                </template>
-              </VListItem>
+              <VListItemTitle class="text-sm font-weight-semibold">
+                {{ format.formatToken(v) }}
+              </VListItemTitle>
+              <VListItemSubtitle class="text-xs"> ≈${{ 0 }} </VListItemSubtitle>
+              <template #append>
+                <div
+                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                >
+                  <span
+                    class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                  ></span>
+                  {{ format.calculatePercent(v.amount, totalAmount) }}
+                </div>
+              </template>
+            </VListItem>
 
-              <VListItem>
-                <template #prepend>
-                  <VAvatar rounded variant="tonal" size="35" color="error">
-                    <VIcon icon="mdi-account-arrow-right" size="20" />
-                  </VAvatar>
-                </template>
+            <div class="flex items-center px-4">
+              <div
+                class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
+              >
+                <Icon
+                  icon="mdi-account-arrow-right"
+                  class="text-error"
+                  size="20"
+                />
+                <div
+                  class="absolute top-0 bottom-0 left-0 right-0 bg-error opacity-20"
+                ></div>
+              </div>
 
-                <VListItemTitle class="text-sm font-weight-semibold">
+              <div class="flex-1">
+                <div class="text-base font-semibold">
                   {{
                     format.formatToken({
                       amount: String(unbondingTotal),
                       denom: stakingStore.params.bond_denom,
                     })
                   }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-xs">
-                  ≈${{ 0 }}
-                </VListItemSubtitle>
-                <template #append>
-                   <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2">
-                    <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>
-                    {{
-                      format.calculatePercent(unbondingTotal, totalAmount)
-                    }}
-                  </div>
-                </template>
-              </VListItem>
-            </VList>
-
-            <div class="divider"></div>
-            {{ totalAmount }}
+                </div>
+                <div class="text-sm">≈${{ 0 }}</div>
+              </div>
+              <div
+                class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+              >
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                ></span>
+                {{ format.calculatePercent(unbondingTotal, totalAmount) }}
+              </div>
+            </div>
           </div>
+
+          <div class="divider"></div>
+          {{ totalAmount }}
+        </div>
       </div>
     </div>
 
@@ -230,8 +264,22 @@ loadAccount(props.address);
           <VCol cols="12" md="8">
             <VList class="card-list">
               <VListItem>
-                <label for="transfer" class="btn btn-primary float-right btn-sm" @click="dialog.open('transfer', {chain_name: blockchain.current?.prettyName})">transfer</label>
-                <label for="send" class="btn btn-primary float-right btn-sm" @click="dialog.open('send', {})">Send</label>
+                <label
+                  for="transfer"
+                  class="btn btn-primary float-right btn-sm"
+                  @click="
+                    dialog.open('transfer', {
+                      chain_name: blockchain.current?.prettyName,
+                    })
+                  "
+                  >transfer</label
+                >
+                <label
+                  for="send"
+                  class="btn btn-primary float-right btn-sm"
+                  @click="dialog.open('send', {})"
+                  >Send</label
+                >
               </VListItem>
               <VListItem v-for="v in balances">
                 <template #prepend>
@@ -246,11 +294,13 @@ loadAccount(props.address);
                   ≈${{ 0 }}
                 </VListItemSubtitle>
                 <template #append>
-                  <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2">
-                    <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>
-                    {{
-                      format.calculatePercent(v.amount, totalAmount)
-                    }}
+                  <div
+                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                  >
+                    <span
+                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                    ></span>
+                    {{ format.calculatePercent(v.amount, totalAmount) }}
                   </div>
                 </template>
               </VListItem>
@@ -268,11 +318,13 @@ loadAccount(props.address);
                   ≈${{ 0 }}
                 </VListItemSubtitle>
                 <template #append>
-                  <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2">
-                    <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>
-                    {{
-                      format.calculatePercent(v.balance.amount, totalAmount)
-                    }}
+                  <div
+                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                  >
+                    <span
+                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                    ></span>
+                    {{ format.calculatePercent(v.balance.amount, totalAmount) }}
                   </div>
                 </template>
               </VListItem>
@@ -290,11 +342,13 @@ loadAccount(props.address);
                   ≈${{ 0 }}
                 </VListItemSubtitle>
                 <template #append>
-                  <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2">
-                    <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>
-                    {{
-                      format.calculatePercent(v.amount, totalAmount)
-                    }}
+                  <div
+                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                  >
+                    <span
+                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                    ></span>
+                    {{ format.calculatePercent(v.amount, totalAmount) }}
                   </div>
                 </template>
               </VListItem>
@@ -318,11 +372,13 @@ loadAccount(props.address);
                   ≈${{ 0 }}
                 </VListItemSubtitle>
                 <template #append>
-                   <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2">
-                    <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>
-                    {{
-                      format.calculatePercent(unbondingTotal, totalAmount)
-                    }}
+                  <div
+                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                  >
+                    <span
+                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
+                    ></span>
+                    {{ format.calculatePercent(unbondingTotal, totalAmount) }}
                   </div>
                 </template>
               </VListItem>
@@ -338,14 +394,24 @@ loadAccount(props.address);
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">Delegations</h2>
       <div class="d-flex justify-end mb-4">
-        <label for="delegate" class="btn btn-primary btn-sm mr-2" @click="dialog.open('delegate', {})">Delegate</label>
-        <label for="withdraw" class="btn btn-primary btn-sm" @click="dialog.open('withdraw', {})">Withdraw</label>
+        <label
+          for="delegate"
+          class="btn btn-primary btn-sm mr-2"
+          @click="dialog.open('delegate', {})"
+          >Delegate</label
+        >
+        <label
+          for="withdraw"
+          class="btn btn-primary btn-sm"
+          @click="dialog.open('withdraw', {})"
+          >Withdraw</label
+        >
       </div>
       <div class="overdflow-x-auto">
         <table class="table w-full">
           <thead>
             <tr>
-              <th style="position:relative">Validator</th>
+              <th style="position: relative">Validator</th>
               <th>Delegation</th>
               <th>Rewards</th>
               <th>Action</th>
@@ -374,9 +440,36 @@ loadAccount(props.address);
               </td>
               <td>
                 <div class="d-flex justify-end">
-                  <label for="delegate" class="btn btn-primary btn-sm mr-2" @click="dialog.open('delegate', {validator_address: v.delegation.validator_address})">delegate</label>
-                  <label for="redelegate" class="btn btn-primary btn-sm mr-2 " @click="dialog.open('redelegate', {validator_address: v.delegation.validator_address})">Redelegate</label>
-                  <label for="unbond" class="btn btn-primary btn-sm" @click="dialog.open('unbond', {validator_address: v.delegation.validator_address})">Unbond</label>
+                  <label
+                    for="delegate"
+                    class="btn btn-primary btn-sm mr-2"
+                    @click="
+                      dialog.open('delegate', {
+                        validator_address: v.delegation.validator_address,
+                      })
+                    "
+                    >delegate</label
+                  >
+                  <label
+                    for="redelegate"
+                    class="btn btn-primary btn-sm mr-2"
+                    @click="
+                      dialog.open('redelegate', {
+                        validator_address: v.delegation.validator_address,
+                      })
+                    "
+                    >Redelegate</label
+                  >
+                  <label
+                    for="unbond"
+                    class="btn btn-primary btn-sm"
+                    @click="
+                      dialog.open('unbond', {
+                        validator_address: v.delegation.validator_address,
+                      })
+                    "
+                    >Unbond</label
+                  >
                 </div>
               </td>
             </tr>
@@ -386,8 +479,8 @@ loadAccount(props.address);
     </div>
 
     <!-- Unbonding Delegations -->
-    <div 
-      class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow"  
+    <div
+      class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow"
       v-if="unbonding && unbonding.length > 0"
     >
       <h2 class="card-title mb-4">Unbonding Delegations</h2>
@@ -395,7 +488,7 @@ loadAccount(props.address);
         <table class="table">
           <thead>
             <tr>
-              <th style="position: relative;">Creation Height</th>
+              <th style="position: relative">Creation Height</th>
               <th>Initial Balance</th>
               <th>Balance</th>
               <th>Completion Time</th>
@@ -447,14 +540,14 @@ loadAccount(props.address);
       </div>
     </div>
 
-     <!-- Transactions -->
+    <!-- Transactions -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">Transactions</h2>
       <div class="overflow-x-auto">
-        <table class="table w-full ">
+        <table class="table w-full">
           <thead>
             <tr>
-              <th style="position: relative;">Height</th>
+              <th style="position: relative">Height</th>
               <th>Hash</th>
               <th>Messages</th>
               <th>Time</th>
