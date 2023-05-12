@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { getLogo, useDashboard } from '@/stores/useDashboard';
+import { useDashboard } from '@/stores/useDashboard';
 import { computed } from 'vue';
 import { Icon } from '@iconify/vue';
 

@@ -23,20 +23,16 @@ const bars = computed(() => {
 });
 </script>
 <template>
-  <div class="flex items-center justify-evenly">
-    <span
-      v-for="(b, i) in bars"
-      :key="i"
-      :class="b.color"
-      class="rounded"
-      style="width: 1.5%"
-      >&nbsp;
-      <v-tooltip
-        v-if="Number(b.height) > 0"
-        activator="parent"
-        location="top"
-        >{{ b.height }}</v-tooltip
-      >
-    </span>
+  <div class="d-flex items-center justify-evenly">
+    <div class="cursor-default"  v-for="(item, index) in bars" :key="index">
+      <div class="tooltip" :data-tip="item.height">
+        <span
+          :class="item.color"
+          class="rounded"
+          style="width: 1.5%"
+        >&nbsp;
+        </span>
+      </div>
+    </div>
   </div>
 </template>
