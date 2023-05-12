@@ -11,62 +11,90 @@ chainStore.$subscribe((m, s) => {
 </script>
 
 <template>
-  <VListItem class="m-0 p-0">
-    <template #prepend>
-      <VBadge
-        dot
-        location="bottom right"
-        offset-x="3"
-        offset-y="3"
-        bordered
-        color="success"
-        class="mr-2"
+  <div class="flex items-center">
+    <div class="dropdown">
+      <div tabindex="0" class="p-1 relative mr-3 cursor-pointer">
+        <img v-lazy="chainStore.logo" class="w-9 h-9 rounded-full" />
+        <div
+          class="w-2 h-2 rounded-full bg-yes absolute right-0 bottom-0"
+        ></div>
+      </div>
+      <div
+        class="dropdown-content menu shadow bg-base-100 rounded-box max-h-[300px] overflow-auto"
       >
-        <VAvatar class="cursor-pointer" color="primary" variant="tonal">
-          <VImg :src="chainStore.logo" />
+        <div>
+          <!-- rest -->
+          <div
+            class="px-4 py-2 text-sm text-gray-400"
+            v-if="chainStore.current?.endpoints?.rest"
+          >
+            Rest Endpoint
+          </div>
+          <div tabindex="0">
+            <div
+              v-for="(item, index) in chainStore.current?.endpoints?.rest"
+              @click="chainStore.setRestEndpoint(item)"
+              class="px-4 py-2 hover:bg-gray-100 dark:bg-[#384059] cursor-pointer"
+              :key="index"
+            >
+              <div class="flex flex-col items-start">
+                <div class="flex items-center justify-between w-full">
+                  <div class="text-gray-500 dark:text-gray-200 capitalize">
+                    {{ item.provider }}
+                  </div>
 
-          <!-- SECTION Menu -->
-          <VMenu activator="parent" location="bottom start" offset="14px">
-            <VList>
-              <!-- 👉 Rest -->
-              <VListSubheader
-                v-if="chainStore.current?.endpoints?.rest"
-                title="Rest Endpoint"
-              />
-              <VListItem
-                v-for="i in chainStore.current?.endpoints?.rest"
-                link
-                @click="chainStore.setRestEndpoint(i)"
-              >
-                <VListItemTitle
-                  >{{ i.provider }}
-                  <VIcon
-                    v-if="i.address === chainStore.endpoint?.address"
-                    icon="mdi-check"
-                    color="success"
-                /></VListItemTitle>
-                <VListItemSubtitle>{{ i.address }}</VListItemSubtitle>
-              </VListItem>
+                  <span
+                    v-if="item.address === chainStore.endpoint?.address"
+                    class="bg-yes inline-block h-2 w-2 rounded-full"
+                  />
+                </div>
+                <div class="text-gray-400 text-xs whitespace-nowrap">
+                  {{ item.address }}
+                </div>
+              </div>
+            </div>
+          </div>
 
-              <VListSubheader
-                v-if="chainStore.current?.endpoints?.grpc"
-                title="gRPC Endpoint"
-              />
-              <VListItem v-for="i in chainStore.current?.endpoints?.grpc" link>
-                <VListItemTitle>{{ i.provider }}</VListItemTitle>
-                <VListItemSubtitle>{{ i.address }}</VListItemSubtitle>
-              </VListItem>
-            </VList>
-          </VMenu>
-          <!-- !SECTION -->
-        </VAvatar>
-      </VBadge>
-    </template>
-    <VListItemTitle>{{
-      baseStore.latest.block?.header?.chain_id || chainStore.chainName || ''
-    }}</VListItemTitle>
-    <VListItemSubtitle>
-      {{ chainStore.connErr || chainStore.endpoint.address }}</VListItemSubtitle
-    >
-  </VListItem>
+          <!-- grpc -->
+          <div
+            class="px-4 py-2 text-sm text-gray-400"
+            v-if="chainStore.current?.endpoints?.grpc"
+          >
+            gRPC Endpoint
+          </div>
+          <ul tabindex="0">
+            <li
+              v-for="(item, index) in chainStore.current?.endpoints?.grpc"
+              :key="index"
+            >
+              <div class="flex flex-col items-start">
+                <div class="flex items-center justify-between w-full">
+                  <p class="text-gray-500 dark:text-gray-200 capitalize">
+                    {{ item?.provider }}
+                  </p>
+                </div>
+                <div class="text-gray-400 text-xs whitespace-nowrap">
+                  {{ item?.address }}
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-1 w-0">
+      <div
+        class="capitalize whitespace-nowrap text-base font-semibold text-gray-600 dark:text-gray-200"
+      >
+        {{
+          baseStore.latest.block?.header?.chain_id || chainStore.chainName || ''
+        }}
+      </div>
+      <div
+        class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap hidden lg:block"
+      >
+        {{ chainStore.connErr || chainStore.endpoint.address }}
+      </div>
+    </div>
+  </div>
 </template>

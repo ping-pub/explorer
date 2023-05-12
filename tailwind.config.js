@@ -8,7 +8,6 @@ module.exports = {
         yes: '#3fb68b',
         no: '#ff5353',
         info: '#00b2ff',
-        primary: '#666cff',
         main: 'var(--text-main)',
         secondary: 'var(--text-secondary)',
         active: 'var(--bg-active)',
@@ -22,7 +21,6 @@ module.exports = {
         light: {
           ...require('daisyui/src/colors/themes')['[data-theme=light]'],
           primary: '#666cff',
-          'base-content': '#e9eaeb',
         },
       },
       {
@@ -30,7 +28,6 @@ module.exports = {
           ...require('daisyui/src/colors/themes')['[data-theme=dark]'],
           primary: '#666cff',
           'base-100': '#2a334c',
-          'base-content': '#373f57',
         },
       },
     ],

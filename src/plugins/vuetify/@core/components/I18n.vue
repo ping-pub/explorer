@@ -45,7 +45,7 @@ function changeLang(lang: string){
     >
       <li v-for="lang in props.languages" :key="lang.i18nLang">
         <a
-          class="hover:bg-base-content"
+          class="hover:bg-gray-100 dark:hover:bg-[#373f59]"
           :class="{ 'text-primary': currentLang === lang.i18nLang }"
           @click="changeLang(lang.i18nLang)"
           >{{ lang.label }}</a
