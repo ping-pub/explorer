@@ -94,12 +94,14 @@ const result = ref('');
 <template>
   <div>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title truncate w-full">Contract List of Code: {{ props.code_id }}</h2>
+      <h2 class="card-title truncate w-full">
+        Contract List of Code: {{ props.code_id }}
+      </h2>
       <div class="overflow-x-auto">
-        <table class="table  w-full mt-4">
+        <table class="table w-full mt-4">
           <thead>
             <tr>
-              <th style="position: relative;">Contract List</th>
+              <th style="position: relative">Contract List</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -110,22 +112,28 @@ const result = ref('');
                 <button
                   class="btn btn-primary btn-sm text-xs mr-2"
                   @click="showInfo(v)"
-                  >contract</button>
+                >
+                  contract
+                </button>
                 <button
                   class="btn btn-primary btn-sm text-xs mr-2"
                   @click="showState(v)"
-                >States</button>
+                >
+                  States
+                </button>
                 <button
                   class="btn btn-primary btn-sm text-xs"
                   @click="showQuery(v)"
-                >Query</button>
+                >
+                  Query
+                </button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-   
+
     <v-dialog v-model="infoDialog" width="auto">
       <v-card>
         <VCardTitle>Contract Detail</VCardTitle>
@@ -160,7 +168,7 @@ const result = ref('');
         </v-card-actions>
       </v-card>
     </v-dialog>
-    
+
     <v-dialog v-model="queryDialog" width="auto">
       <v-card>
         <VCardTitle>Query Contract</VCardTitle>
