@@ -4,8 +4,7 @@ import { ref } from 'vue';
 import { useThemeConfig } from '@/plugins/vuetify/@core/composable/useThemeConfig';
 
 // Components
-// import Footer from '@/layouts/components/Footer.vue';
-import newFooter from '@/layouts/components/newFooter.vue';
+import newFooter from '@/layouts/components/NavFooter.vue';
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
 import UserProfile from '@/layouts/components/ChainProfile.vue';
 
@@ -13,11 +12,8 @@ import { useDashboard } from '@/stores/useDashboard';
 
 // @layouts plugin
 import NavBarI18n from './NavBarI18n.vue';
-import NavSearchBar from './NavSearchBar.vue';
 import NavBarNotifications from './NavBarNotifications.vue';
 import NavBarWallet from './NavBarWallet.vue';
-import TheCustomizer from '@/plugins/vuetify/@core/components/TheCustomizer.vue';
-import Breadcrumbs from './Breadcrumbs.vue';
 import { useBlockchain } from '@/stores';
 
 const { appRouteTransition } = useThemeConfig();
@@ -44,7 +40,9 @@ const sidebarShow = ref(false);
     >
       <div class="flex items-center pl-4 py-4 mb-1">
         <img class="w-10 h-10" src="../../assets/logo.svg" />
-        <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">Ping.pub</h1>
+        <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">
+          Ping.pub
+        </h1>
         <div class="pr-4 cursor-pointer xl:hidden" @click="sidebarShow = false">
           <Icon icon="mdi-close" class="text-3xl" />
         </div>

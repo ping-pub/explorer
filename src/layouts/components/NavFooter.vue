@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer items-center p-4 text-base mb-4">
+  <footer class="footer items-center p-4 text-sm mb-4">
     <div class="items-center grid-flow-col">
       &copy;
       {{ new Date().getFullYear() }}
