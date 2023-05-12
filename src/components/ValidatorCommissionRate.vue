@@ -151,18 +151,18 @@ const chartConfig = computed(() => {
         :series="series"
       />
 
-      <div class="d-flex align-center justify-center flex-wrap mx-2 gap-x-6">
-        <div class="d-flex align-center gap-2">
-          <VBadge dot color="success" />
-          <span class="mt-1 text-caption">Rate:{{ rate }}%</span>
+      <div class="flex items-center justify-center flex-wrap mx-2 gap-x-6">
+        <div class="flex items-center gap-2">
+          <div class="bg-success w-[6px] h-[6px] rounded-full"></div>
+          <span class="text-caption">Rate:{{ rate }}%</span>
         </div>
-        <div class="d-flex align-center gap-2">
-          <VBadge dot color="success" style="opacity: 0.2" />
-          <span class="mt-1 text-caption">24h: ±{{ change }}%</span>
+        <div class="flex items-center gap-2">
+          <div class="bg-success w-[6px] h-[6px] rounded-full opacity-60"></div>
+          <span class="text-caption">24h: ±{{ change }}%</span>
         </div>
-        <div class="d-flex align-center gap-2">
-          <VBadge dot color="secondary" />
-          <span class="mt-1 text-caption">Max:{{ max }}%</span>
+        <div class="flex items-center gap-2">
+          <div class="bg-secondary w-[6px] h-[6px] rounded-full"></div>
+          <span class="text-caption">Max:{{ max }}%</span>
         </div>
       </div>
     </VCardText>
