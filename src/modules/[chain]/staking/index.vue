@@ -194,7 +194,7 @@ const rank = function (position: number) {
 
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
       <div class="overflow-x-auto">
-        <table class="table w-full">
+        <table class="table staking-table w-full">
           <thead>
             <tr>
               <th scope="col" style="width: 3rem; position: relative">#</th>
@@ -206,11 +206,15 @@ const rank = function (position: number) {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(v, i) in list" :key="v.operator_address">
+            <tr
+              v-for="(v, i) in list"
+              :key="v.operator_address"
+              class="hover:bg-gray-100 dark:bg-[#384059]"
+            >
               <!-- 👉 rank -->
               <td>
                 <div
-                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit"
+                  class="text-xs truncate relative px-2 py-1 rounded-full w-fit"
                   :class="`text-${rank(i)}`"
                 >
                   <span
@@ -359,3 +363,10 @@ const rank = function (position: number) {
     }
   }
 </route>
+
+<style>
+.staking-table.table :where(th, td) {
+  padding: 6px 5px;
+  background: transparent;
+}
+</style>
