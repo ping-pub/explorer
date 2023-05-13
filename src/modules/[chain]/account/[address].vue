@@ -93,7 +93,7 @@ loadAccount(props.address);
   <div v-if="account">
     <!-- address -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <div class="d-flex items-center">
+      <div class="flex items-center">
         <!-- img -->
         <div class="inline-flex relative w-11 h-11 rounded-md">
           <div
@@ -126,7 +126,7 @@ loadAccount(props.address);
         </div>
         <div class="mt-4 md:col-span-2 md:mt-0 md:ml-4">
           <!-- button -->
-          <div class="d-flex justify-end mb-4">
+          <div class="flex justify-end mb-4">
             <label
               for="send"
               class="btn btn-primary btn-sm mr-2"
@@ -144,74 +144,96 @@ loadAccount(props.address);
               >transfer</label
             >
           </div>
-          <!--  -->
+          <!-- list-->
           <div class="">
-            <VListItem v-for="v in balances">
-              <template #prepend>
-                <VAvatar rounded variant="tonal" size="35" color="info">
-                  <VIcon icon="mdi-account-cash" size="20" />
-                </VAvatar>
-              </template>
-              <VListItemTitle class="text-sm font-weight-semibold">
-                {{ format.formatToken(v) }}
-              </VListItemTitle>
-              <VListItemSubtitle class="text-xs"> ≈${{ 0 }} </VListItemSubtitle>
-              <template #append>
+            <!--balances  -->
+            <div class="flex items-center px-4 mb-2" v-for="(balanceItem, index) in balances" :key="index">
+              <div
+                class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
+              >
+                <Icon
+                  icon="mdi-account-cash"
+                  class="text-info"
+                  size="20"
+                />
                 <div
-                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                >
-                  <span
-                    class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                  ></span>
-                  {{ format.calculatePercent(v.amount, totalAmount) }}
+                  class="absolute top-0 bottom-0 left-0 right-0 bg-info opacity-20"
+                ></div>
+              </div>
+              <div class="flex-1">
+                <div class="text-sm font-semibold">
+                  {{ format.formatToken(balanceItem) }}
                 </div>
-              </template>
-            </VListItem>
-            <VListItem v-for="v in delegations">
-              <template #prepend>
-                <VAvatar rounded variant="tonal" size="35" color="warning">
-                  <VIcon icon="mdi-user-clock" size="20" />
-                </VAvatar>
-              </template>
-
-              <VListItemTitle class="text-sm font-weight-semibold">
-                {{ format.formatToken(v.balance) }}
-              </VListItemTitle>
-              <VListItemSubtitle class="text-xs"> ≈${{ 0 }} </VListItemSubtitle>
-              <template #append>
+                <div class="text-xs">≈${{ 0 }}</div>
+              </div>
+              <div
+                class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+              >
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"
+                ></span>
+                {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
+              </div>
+            </div>
+            <!--delegations  -->
+            <div class="flex items-center px-4 mb-2" v-for="(delegationItem, index) in delegations" :key="index">
+              <div
+                class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
+              >
+                <Icon
+                  icon="mdi-user-clock"
+                  class="text-warning"
+                  size="20"
+                />
                 <div
-                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                >
-                  <span
-                    class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                  ></span>
-                  {{ format.calculatePercent(v.balance.amount, totalAmount) }}
+                  class="absolute top-0 bottom-0 left-0 right-0 bg-warning opacity-20"
+                ></div>
+              </div>
+              <div class="flex-1">
+                <div class="text-sm font-semibold">
+                {{ format.formatToken(delegationItem?.balance) }}
                 </div>
-              </template>
-            </VListItem>
-            <VListItem v-for="v in rewards.total">
-              <template #prepend>
-                <VAvatar rounded variant="tonal" size="35" color="success">
-                  <VIcon icon="mdi-account-arrow-up" size="20" />
-                </VAvatar>
-              </template>
-
-              <VListItemTitle class="text-sm font-weight-semibold">
-                {{ format.formatToken(v) }}
-              </VListItemTitle>
-              <VListItemSubtitle class="text-xs"> ≈${{ 0 }} </VListItemSubtitle>
-              <template #append>
+                <div class="text-xs">≈${{ 0 }}</div>
+              </div>
+              <div
+                class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+              >
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"
+                ></span>
+                {{ format.calculatePercent(delegationItem?.balance?.amount, totalAmount) }}
+              </div>
+            </div>
+            <!-- rewards.total -->
+            <div class="flex items-center px-4 mb-2" v-for="(rewardItem, index) in rewards.total" :key="index">
+              <div
+                class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
+              >
+                <Icon
+                  icon="mdi-account-arrow-up"
+                  class="text-success"
+                  size="20"
+                />
                 <div
-                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                >
-                  <span
-                    class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                  ></span>
-                  {{ format.calculatePercent(v.amount, totalAmount) }}
+                  class="absolute top-0 bottom-0 left-0 right-0 bg-success opacity-20"
+                ></div>
+              </div>
+              <div class="flex-1">
+                <div class="text-sm font-semibold">
+                  {{ format.formatToken(rewardItem) }}
                 </div>
-              </template>
-            </VListItem>
-
+                <div class="text-xs">≈${{ 0 }}</div>
+              </div>
+              <div
+                class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+              >
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"
+                ></span>
+                {{ format.calculatePercent(rewardItem.amount, totalAmount) }}
+              </div>
+            </div>
+            <!-- mdi-account-arrow-right -->
             <div class="flex items-center px-4">
               <div
                 class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
@@ -225,9 +247,8 @@ loadAccount(props.address);
                   class="absolute top-0 bottom-0 left-0 right-0 bg-error opacity-20"
                 ></div>
               </div>
-
               <div class="flex-1">
-                <div class="text-base font-semibold">
+                <div class="text-sm font-semibold">
                   {{
                     format.formatToken({
                       amount: String(unbondingTotal),
@@ -235,7 +256,7 @@ loadAccount(props.address);
                     })
                   }}
                 </div>
-                <div class="text-sm">≈${{ 0 }}</div>
+                <div class="text-xs">≈${{ 0 }}</div>
               </div>
               <div
                 class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
@@ -254,146 +275,10 @@ loadAccount(props.address);
       </div>
     </div>
 
-    <VCard class="mt-5">
-      <VCardTitle>Assets</VCardTitle>
-      <VCardItem>
-        <VRow>
-          <VCol cols="12" md="4">
-            <DonutChart :series="totalAmountByCategory" :labels="labels" />
-          </VCol>
-          <VCol cols="12" md="8">
-            <VList class="card-list">
-              <VListItem>
-                <label
-                  for="transfer"
-                  class="btn btn-primary float-right btn-sm"
-                  @click="
-                    dialog.open('transfer', {
-                      chain_name: blockchain.current?.prettyName,
-                    })
-                  "
-                  >transfer</label
-                >
-                <label
-                  for="send"
-                  class="btn btn-primary float-right btn-sm"
-                  @click="dialog.open('send', {})"
-                  >Send</label
-                >
-              </VListItem>
-              <VListItem v-for="v in balances">
-                <template #prepend>
-                  <VAvatar rounded variant="tonal" size="35" color="info">
-                    <VIcon icon="mdi-account-cash" size="20" />
-                  </VAvatar>
-                </template>
-                <VListItemTitle class="text-sm font-weight-semibold">
-                  {{ format.formatToken(v) }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-xs">
-                  ≈${{ 0 }}
-                </VListItemSubtitle>
-                <template #append>
-                  <div
-                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                  >
-                    <span
-                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                    ></span>
-                    {{ format.calculatePercent(v.amount, totalAmount) }}
-                  </div>
-                </template>
-              </VListItem>
-              <VListItem v-for="v in delegations">
-                <template #prepend>
-                  <VAvatar rounded variant="tonal" size="35" color="warning">
-                    <VIcon icon="mdi-user-clock" size="20" />
-                  </VAvatar>
-                </template>
-
-                <VListItemTitle class="text-sm font-weight-semibold">
-                  {{ format.formatToken(v.balance) }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-xs">
-                  ≈${{ 0 }}
-                </VListItemSubtitle>
-                <template #append>
-                  <div
-                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                  >
-                    <span
-                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                    ></span>
-                    {{ format.calculatePercent(v.balance.amount, totalAmount) }}
-                  </div>
-                </template>
-              </VListItem>
-              <VListItem v-for="v in rewards.total">
-                <template #prepend>
-                  <VAvatar rounded variant="tonal" size="35" color="success">
-                    <VIcon icon="mdi-account-arrow-up" size="20" />
-                  </VAvatar>
-                </template>
-
-                <VListItemTitle class="text-sm font-weight-semibold">
-                  {{ format.formatToken(v) }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-xs">
-                  ≈${{ 0 }}
-                </VListItemSubtitle>
-                <template #append>
-                  <div
-                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                  >
-                    <span
-                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                    ></span>
-                    {{ format.calculatePercent(v.amount, totalAmount) }}
-                  </div>
-                </template>
-              </VListItem>
-
-              <VListItem>
-                <template #prepend>
-                  <VAvatar rounded variant="tonal" size="35" color="error">
-                    <VIcon icon="mdi-account-arrow-right" size="20" />
-                  </VAvatar>
-                </template>
-
-                <VListItemTitle class="text-sm font-weight-semibold">
-                  {{
-                    format.formatToken({
-                      amount: String(unbondingTotal),
-                      denom: stakingStore.params.bond_denom,
-                    })
-                  }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-xs">
-                  ≈${{ 0 }}
-                </VListItemSubtitle>
-                <template #append>
-                  <div
-                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                  >
-                    <span
-                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                    ></span>
-                    {{ format.calculatePercent(unbondingTotal, totalAmount) }}
-                  </div>
-                </template>
-              </VListItem>
-            </VList>
-            <VDivider class="my-2"></VDivider>
-            {{ totalAmount }}
-          </VCol>
-        </VRow>
-      </VCardItem>
-    </VCard>
-
     <!-- Delegations -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">Delegations</h2>
-      <div class="d-flex justify-end mb-4">
+      <div class="flex justify-end mb-4">
         <label
           for="delegate"
           class="btn btn-primary btn-sm mr-2"
@@ -439,7 +324,7 @@ loadAccount(props.address);
                 }}
               </td>
               <td>
-                <div class="d-flex justify-end">
+                <div class="flex justify-end">
                   <label
                     for="delegate"
                     class="btn btn-primary btn-sm mr-2"
