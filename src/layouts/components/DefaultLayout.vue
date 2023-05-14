@@ -11,7 +11,6 @@ import UserProfile from '@/layouts/components/ChainProfile.vue';
 import { useDashboard } from '@/stores/useDashboard';
 
 import NavBarI18n from './NavBarI18n.vue';
-import NavBarNotifications from './NavBarNotifications.vue';
 import NavBarWallet from './NavBarWallet.vue';
 import { useBlockchain } from '@/stores';
 
@@ -64,7 +63,11 @@ const changeOpen = (index: Number) => {
             'collapse-close': index === 0 && !sidebarOpen,
           }"
         >
-          <input type="checkbox" class="cursor-pointer" @click="changeOpen(index)" />
+          <input
+            type="checkbox"
+            class="cursor-pointer"
+            @click="changeOpen(index)"
+          />
           <div
             class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
           >
@@ -190,6 +193,8 @@ const changeOpen = (index: Number) => {
         <NavBarWallet
           class="block truncate md:inline-block text-xs md:text-sm"
         />
+
+        
       </div>
 
       <!-- 👉 Pages -->
