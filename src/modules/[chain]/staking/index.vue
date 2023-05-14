@@ -82,7 +82,7 @@ const change24 = (key: Key) => {
 const change24Text = (key?: Key) => {
   if (!key) return '';
   const v = change24(key);
-  return v !== 0 ? format.showChanges(v) : '';
+  return v && v !== 0 ? format.showChanges(v) : '';
 };
 
 const change24Color = (key?: Key) => {
@@ -202,7 +202,7 @@ const rank = function (position: number) {
               <th scope="col" class="text-right">VOTING POWER</th>
               <th scope="col" class="text-right">24h CHANGES</th>
               <th scope="col" class="text-right">COMMISSION</th>
-              <th scope="col">ACTIONS</th>
+              <th scope="col" class="text-center">ACTIONS</th>
             </tr>
           </thead>
           <tbody>
@@ -298,18 +298,9 @@ const rank = function (position: number) {
                 :class="change24Color(v.consensus_pubkey)"
               >
                 {{ change24Text(v.consensus_pubkey) }}
-                <div
-                  v-if="v.jailed"
-                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-error"
-                >
-                  <span
-                    class="inset-x-0 inset-y-0 opacity-10 absolute bg-error"
-                  ></span>
-                  Jailed
-                </div>
               </td>
               <!-- 👉 commission -->
-              <td class="text-right">
+              <td class="text-right text-xs">
                 {{
                   format.formatCommissionRate(
                     v.commission?.commission_rates?.rate
@@ -317,8 +308,12 @@ const rank = function (position: number) {
                 }}
               </td>
               <!-- 👉 Action -->
-              <td>
+              <td class="text-center">
+                <div v-if="v.jailed" class="badge badge-error gap-2 text-white">
+                  Jailed
+                </div>
                 <label
+                  v-else
                   for="delegate"
                   class="btn btn-xs bg-primary"
                   @click="
@@ -326,8 +321,8 @@ const rank = function (position: number) {
                       validator_address: v.operator_address,
                     })
                   "
-                  >Delegate</label
-                >
+                  >Delegate</label>
+                  
               </td>
             </tr>
           </tbody>

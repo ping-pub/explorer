@@ -258,13 +258,10 @@ const color = computed(() => {
           <div class="text-lg font-semibold text-main">
             {{ format.formatToken(walletStore.balanceOfStakingToken) }}
           </div>
-          <div class="text-sm">
-            <span :class="color"
-              >{{ format.showChanges(change) }}<small>%</small>
+          <div class="text-sm" :class="color">
+            <span class="ml-1">
+              ${{ format.tokenValue(walletStore.balanceOfStakingToken) }}
             </span>
-            <span class="ml-1">{{
-              format.tokenValue(walletStore.balanceOfStakingToken)
-            }}</span>
           </div>
         </div>
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
@@ -272,8 +269,8 @@ const color = computed(() => {
           <div class="text-lg font-semibold text-main">
             {{ format.formatToken(walletStore.stakingAmount) }}
           </div>
-          <div class="text-sm">
-            {{ format.tokenValue(walletStore.stakingAmount) }}
+          <div class="text-sm" :class="color">
+            ${{ format.tokenValue(walletStore.stakingAmount) }}
           </div>
         </div>
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
@@ -281,8 +278,8 @@ const color = computed(() => {
           <div class="text-lg font-semibold text-main">
             {{ format.formatToken(walletStore.rewardAmount) }}
           </div>
-          <div class="text-sm">
-            {{ format.tokenValue(walletStore.rewardAmount) }}
+          <div class="text-sm" :class="color">
+            ${{ format.tokenValue(walletStore.rewardAmount) }}
           </div>
         </div>
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
@@ -290,8 +287,8 @@ const color = computed(() => {
           <div class="text-lg font-semibold text-main">
             {{ format.formatToken(walletStore.unbondingAmount) }}
           </div>
-          <div class="text-sm">
-            {{ format.tokenValue(walletStore.unbondingAmount) }}
+          <div class="text-sm" :class="color">
+            ${{ format.tokenValue(walletStore.unbondingAmount) }}
           </div>
         </div>
       </div>

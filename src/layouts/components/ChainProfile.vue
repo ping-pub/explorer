@@ -86,8 +86,8 @@ chainStore.$subscribe((m, s) => {
       <div
         class="capitalize whitespace-nowrap text-base font-semibold text-gray-600 dark:text-gray-200"
       >
-        {{
-          baseStore.latest.block?.header?.chain_id || chainStore.chainName || ''
+        #{{
+           baseStore.latest?.block?.header?.height || chainStore.chainName || ''
         }}
       </div>
       <div

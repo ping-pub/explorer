@@ -31,5 +31,5 @@ app.use(LazyLoad, { component: true });
 app.mount('#app');
 
 // fetch latest block every 6s
-// const blockStore = useBaseStore()
-// setInterval(() => {blockStore.fetchLatest()}, 6000)
+const blockStore = useBaseStore()
+setInterval(() => {blockStore.fetchLatest()}, 6000)

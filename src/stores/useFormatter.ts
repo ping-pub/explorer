@@ -211,12 +211,13 @@ export const useFormatter = defineStore('formatter', {
       }
       return dayjs(time).format('YYYY-MM-DD HH:mm:ss');
     },
-    messages(msgs: { '@type': string }[]) {
+    messages(msgs: { '@type'?: string, typeUrl?: string }[]) {
       if (msgs) {
         const sum: Record<string, number> = msgs
           .map((msg) => {
-            return msg['@type']
-              .substring(msg['@type'].lastIndexOf('.') + 1)
+            const msgType = msg['@type'] || msg.typeUrl || 'unknown'
+            return msgType
+              .substring(msgType.lastIndexOf('.') + 1)
               .replace('Msg', '');
           })
           .reduce((s, c) => {
