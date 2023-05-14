@@ -158,7 +158,7 @@ const sidebarShow = ref(false);
     <div class="xl:ml-64 px-5">
       <!-- header -->
       <div
-        class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10 mt-4 shadow"
+        class="flex items-center py-3 bg-base-100 mb-4 rounded px-4  top-0 z-10 mt-4 shadow"
       >
         <div
           class="text-2xl pr-3 cursor-pointer xl:hidden"
