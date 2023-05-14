@@ -26,6 +26,9 @@ export class BaseRestClient<R extends AbstractRegistry> {
 }
 
 export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
+  constructor(endpoint: string) {
+    super(endpoint, DEFAULT)
+  }
   // Auth Module
   async getAuthAccounts() {
     return this.request(this.registry.auth_accounts, {});

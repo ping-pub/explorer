@@ -9,10 +9,24 @@ walletStore.$subscribe((m, s) => {
 
 <template>
   <div>
-    <span v-if="walletStore.currentAddress">{{
-      walletStore.currentAddress
-    }}</span>
-
+      <div v-if="walletStore.currentAddress"
+            class="dropdown dropdown-hover ping-connect-dropdown"
+        >
+            <label tabindex="3" class="btn m-1" >{{ walletStore.shortAddress }}</label>
+            <ul
+                tabindex="3"
+                class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+                <li>
+                    <a>{{ walletStore.connectedWallet }}</a>
+                </li>
+                <li>
+                    <a>{{ walletStore.currentAddress }}</a>
+                </li>
+                <div class="divider"></div>
+                <li><a @click="walletStore.disconnect()">Disconnected</a></li>
+            </ul>
+        </div>
     <label
       v-else
       for="PingConnectWallet"

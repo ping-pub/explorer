@@ -2248,6 +2248,14 @@
     case "1.6.3"
     dotty "0.1.2"
 
+"@osmonauts/lcd@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@osmonauts/lcd/-/lcd-0.10.0.tgz#c982942dc13d7f6ab2a7873b289c7907e2169b14"
+  integrity sha512-PzmXk9x9MHyLn2fUztpAqWqvDmMiEJaQv/JcAoAOE8VdHrD9Hf/KWnE1RZtamuS2ngQRqvQPD0xotCGXW7eTxA==
+  dependencies:
+    "@babel/runtime" "^7.19.0"
+    axios "0.27.2"
+
 "@osmonauts/lcd@^0.8.0":
   version "0.8.0"
   resolved "https://registry.npmjs.org/@osmonauts/lcd/-/lcd-0.8.0.tgz"
@@ -6569,6 +6577,20 @@ osmojs@^14.0.0-rc.0:
     long "^5.2.0"
     protobufjs "^6.11.3"
 
+osmojs@^15.2.1:
+  version "15.2.1"
+  resolved "https://registry.yarnpkg.com/osmojs/-/osmojs-15.2.1.tgz#d9556d47ea77f95b400656d68f7a4ec69912c15a"
+  integrity sha512-hA4QOlEhs2h0tQPYld5EqH+GhyHVTc9Fye3BAAOlfc9++GQB127pFZdProCGFNvw4kJwHHzhQQtuE98tk1EejA==
+  dependencies:
+    "@babel/runtime" "^7.19.0"
+    "@cosmjs/amino" "0.29.3"
+    "@cosmjs/proto-signing" "0.29.3"
+    "@cosmjs/stargate" "0.29.3"
+    "@cosmjs/tendermint-rpc" "^0.29.3"
+    "@osmonauts/lcd" "^0.10.0"
+    long "^5.2.0"
+    protobufjs "^6.11.3"
+
 p-limit@^2.2.0:
   version "2.3.0"
   resolved "https://registry.npmjs.org/p-limit/-/p-limit-2.3.0.tgz"
@@ -6714,21 +6736,25 @@ pify@^3.0.0:
   resolved "https://registry.npmjs.org/pify/-/pify-3.0.0.tgz"
   integrity sha512-C3FsVNH1udSEX48gGX1xfvwTWfsYWj5U+8/uK15BGzIGrKoUpghX8hWZwa/OFnakBiiVNmBvemTJR5mcy7iPcg==
 
-"ping-widget@git+https://github.com/ping-pub/widget.git":
-  version "0.0.5"
-  resolved "git+https://github.com/ping-pub/widget.git#11de05f773e60430f332fb77b4a37e5ae8c681b2"
+ping-widget@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/ping-widget/-/ping-widget-0.0.7.tgz#441fdc03d1447a24bffb8233a2f55e734948820b"
+  integrity sha512-LbMBnXZUxh0goJXSyGHkM1kzdShmlHq5836QNGbIZFS6oSoCbKyYtbhVhR0l7BuqHpiYYpXbnUM+SN60yqOHVQ==
   dependencies:
     "@cosmjs/amino" "^0.30.1"
     "@cosmjs/ledger-amino" "^0.30.1"
     "@cosmjs/proto-signing" "^0.30.1"
     "@cosmjs/stargate" "^0.30.1"
     "@ledgerhq/hw-transport-web-ble" "^6.27.13"
+    "@ping-pub/chain-registry-client" "^0.0.25"
     "@tharsis/address-converter" "^0.1.8"
     "@tharsis/eip712" "^0.2.4"
     "@tharsis/proto" "^0.1.20"
     "@tharsis/transactions" "^0.2.6"
     cross-fetch "^3.1.5"
     daisyui "^2.51.6"
+    dayjs "^1.11.7"
+    osmojs "^15.2.1"
     vue "^3.2.47"
     vue3-webcomponent-wrapper "^0.2.0"
 
