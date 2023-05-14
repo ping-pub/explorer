@@ -71,6 +71,13 @@ export const useWalletStore = defineStore('walletStore', {
       const chainStore = useBlockchain();
       return toBech32(chainStore.current?.bech32Prefix || prefix, data);
     },
+    shortAddress() {
+      const address: string = this.currentAddress
+      if(address.length > 4) {
+        return `${address.substring(address.length -4)}`
+      }
+      return ""
+    }
   },
   actions: {
     async loadMyAsset() {
@@ -105,5 +112,12 @@ export const useWalletStore = defineStore('walletStore', {
         this.currentAddress
       );
     },
+    disconnect() {
+      const chainStore = useBlockchain();
+      const key = chainStore.defaultHDPath;
+
+      localStorage.removeItem(key);
+      this.$reset()
+    }
   },
 });

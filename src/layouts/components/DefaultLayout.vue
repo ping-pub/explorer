@@ -184,7 +184,6 @@ const changeOpen = (index: Number) => {
         <div class="flex-1 w-0"></div>
 
         <!-- <NavSearchBar />-->
-        <NavBarNotifications class="hidden md:inline-block" />
         <NavBarI18n class="hidden md:inline-block" />
         <NavbarThemeSwitcher class="hidden md:inline-block" />
 

@@ -45,10 +45,10 @@ const validators = computed(() => {
 
 onMounted(() => {
   live.value = true;
-  baseStore.fetchLatest().then((block) => {
-    latest.value = block;
-    commits.value.unshift(block.block.last_commit);
-    const height = Number(block.block.header?.height || 0);
+  baseStore.fetchLatest().then(b => {
+    latest.value = b;
+    commits.value.unshift(b.block.last_commit);
+    const height = Number(b.block.header?.height || 0);
     if (height > 0) {
       // constructs sequence for loading blocks
       let promise = Promise.resolve();
@@ -57,7 +57,7 @@ onMounted(() => {
           promise = promise.then(
             () =>
               new Promise((resolve, reject) => {
-                if (live.value) {
+                if (live.value && commits2.value.length < 50) {
                   // continue only if the page is living
                   baseStore.fetchBlock(i).then((x) => {
                     commits.value.unshift(x.block.last_commit);
@@ -78,9 +78,17 @@ onMounted(() => {
   });
 });
 
+const commits2 = computed(() => {
+  const la = baseStore.recents.map(b => b.block.last_commit)
+  const all = [...commits.value, ...la]
+  return all.length > 50 ? all.slice(all.length - 50): all
+})
+
+
 onUnmounted(() => {
   live.value = false;
 });
+
 
 watchEffect(() => {
   local.value[chainStore.chainName] = selected.value;
@@ -91,9 +99,6 @@ watchEffect(() => {
 <template>
   <div class="bg-base-100 px-5 pt-5">
     <div class="flex items-center gap-x-4">
-      <div class="text-main text-lg">
-        Current Height: {{ latest.block?.header?.height }}
-      </div>
       <input
         type="text"
         v-model="keyword"
@@ -136,7 +141,7 @@ watchEffect(() => {
                 ?.missed_blocks_counter
             }}
           </div>
-          <div v-else class="mt-1 badge badge-sm text-white bg-yes">
+          <div v-else class="mt-1 badge badge-sm text-white bg-yes border-0">
             {{
               signingInfo[consensusPubkeyToHexAddress(v.consensus_pubkey)]
                 ?.missed_blocks_counter
@@ -144,7 +149,7 @@ watchEffect(() => {
           </div>
         </div>
         <UptimeBar
-          :blocks="commits"
+          :blocks="commits2"
           :validator="
             toBase64(fromHex(consensusPubkeyToHexAddress(v.consensus_pubkey)))
           "
