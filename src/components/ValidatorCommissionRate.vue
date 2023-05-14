@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import VueApexCharts from 'vue3-apexcharts';
+import ApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
 import { hexToRgb } from '@/plugins/vuetify/@layouts/utils';
 import { computed, type PropType } from 'vue';
@@ -141,7 +141,7 @@ const chartConfig = computed(() => {
     <div class="text-sm text-gray-500 dark:text-gray-400">
       {{ `Updated at ${format.toDay(props.commission?.update_time, 'short')}` }}
     </div>
-    <VueApexCharts type="donut" :options="chartConfig" :series="series" />
+    <ApexCharts type="donut" :options="chartConfig" :series="series" />
     <div>
       <div class="flex items-center justify-center flex-wrap gap-x-3">
         <div class="flex items-center gap-x-2">

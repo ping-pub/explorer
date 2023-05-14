@@ -193,103 +193,103 @@ const processList = computed(()=>{
         <div class="h-max bg-base-100 px-4 pt-3 pb-4 rounded shadow lg:col-span-2">
             <h2 class="card-title">Timeline</h2>
            <VTimeline
-                        class="mt-2"
-                        side="end"
-                        align="start"
-                        line-inset="8"
-                        truncate-line="both"
-                        density="compact"
-                    >
-                        <VTimelineItem
-                        dot-color="error"
-                        size="x-small"
-                        >
-                        <!-- 👉 Header -->
-                        <div class="d-flex justify-space-between flex-wrap mb-3">
-                            <h6 class="text-base font-weight-medium me-3">
-                            Submited at: {{ format.toDay(proposal.submit_time) }}
-                            </h6>
-                            <small class="text-xs text-disabled my-1">{{ shortTime(proposal.submit_time) }}</small>
-                        </div>
-                        </VTimelineItem>
+                class="mt-2"
+                side="end"
+                align="start"
+                line-inset="8"
+                truncate-line="both"
+                density="compact"
+            >
+                <VTimelineItem
+                dot-color="error"
+                size="x-small"
+                >
+                <!-- 👉 Header -->
+                <div class="d-flex justify-space-between flex-wrap mb-3">
+                    <h6 class="text-base font-weight-medium me-3">
+                    Submited at: {{ format.toDay(proposal.submit_time) }}
+                    </h6>
+                    <small class="text-xs text-disabled my-1">{{ shortTime(proposal.submit_time) }}</small>
+                </div>
+                </VTimelineItem>
 
-                        <VTimelineItem
-                        size="x-small"
-                        dot-color="primary"
-                        >
-                        <!-- 👉 Header -->
-                        <div class="d-flex justify-space-between flex-wrap mb-3">
-                            <h6 class="text-base font-weight-medium me-3">
-                                Deposited at: {{ format.toDay(proposal.status==="PROPOSAL_STATUS_DEPOSIT_PERIOD"?proposal.deposit_end_time: proposal.voting_start_time) }}
-                            </h6>
-                            <small class="text-xs text-disabled text-no-wrap my-1">{{ shortTime(proposal.status==="PROPOSAL_STATUS_DEPOSIT_PERIOD"?proposal.deposit_end_time: proposal.voting_start_time) }}</small>
-                        </div>
+                <VTimelineItem
+                size="x-small"
+                dot-color="primary"
+                >
+                <!-- 👉 Header -->
+                <div class="d-flex justify-space-between flex-wrap mb-3">
+                    <h6 class="text-base font-weight-medium me-3">
+                        Deposited at: {{ format.toDay(proposal.status==="PROPOSAL_STATUS_DEPOSIT_PERIOD"?proposal.deposit_end_time: proposal.voting_start_time) }}
+                    </h6>
+                    <small class="text-xs text-disabled text-no-wrap my-1">{{ shortTime(proposal.status==="PROPOSAL_STATUS_DEPOSIT_PERIOD"?proposal.deposit_end_time: proposal.voting_start_time) }}</small>
+                </div>
 
-                        <p class="mb-0">
-                            <div v-for="x of deposit.deposits">
-                                {{ x.depositor }} {{ format.formatTokens(x.amount) }}
-                            </div>
-                        </p>
+                <p class="mb-0">
+                    <div v-for="x of deposit.deposits">
+                        {{ x.depositor }} {{ format.formatTokens(x.amount) }}
+                    </div>
+                </p>
 
-                        
-                        </VTimelineItem>
+                
+                </VTimelineItem>
 
-                        <VTimelineItem
-                        size="x-small"
-                        dot-color="success"
-                        >
-                        <!-- 👉 Header -->
-                        <div class="d-flex justify-space-between flex-wrap mb-3">
-                            <h6 class="text-base font-weight-medium me-3">
-                                Voting start from {{ format.toDay(proposal.voting_start_time) }}
-                            </h6>
-                            <small class="text-xs text-disabled text-no-wrap my-1">{{ shortTime(proposal.voting_start_time) }}</small>
-                        </div>
+                <VTimelineItem
+                size="x-small"
+                dot-color="success"
+                >
+                <!-- 👉 Header -->
+                <div class="d-flex justify-space-between flex-wrap mb-3">
+                    <h6 class="text-base font-weight-medium me-3">
+                        Voting start from {{ format.toDay(proposal.voting_start_time) }}
+                    </h6>
+                    <small class="text-xs text-disabled text-no-wrap my-1">{{ shortTime(proposal.voting_start_time) }}</small>
+                </div>
 
-                        <!-- 👉 Content -->
-                        <p class="mb-0">
-                            <Countdown :time="votingCountdown"/>
-                        </p>
-                        </VTimelineItem>
+                <!-- 👉 Content -->
+                <p class="mb-0">
+                    <Countdown :time="votingCountdown"/>
+                </p>
+                </VTimelineItem>
 
-                        <VTimelineItem
-                        size="x-small"
-                        dot-color="success"
-                        >
-                        <!-- 👉 Header -->
-                        <div class="d-flex justify-space-between flex-wrap mb-3">
-                            <h6 class="text-base font-weight-medium me-3">
-                                Voting end {{ format.toDay(proposal.voting_end_time) }}
-                            </h6>
-                            <small class="text-xs text-disabled text-no-wrap my-1">{{ shortTime(proposal.voting_end_time) }}</small>
-                        </div>
+                <VTimelineItem
+                size="x-small"
+                dot-color="success"
+                >
+                <!-- 👉 Header -->
+                <div class="d-flex justify-space-between flex-wrap mb-3">
+                    <h6 class="text-base font-weight-medium me-3">
+                        Voting end {{ format.toDay(proposal.voting_end_time) }}
+                    </h6>
+                    <small class="text-xs text-disabled text-no-wrap my-1">{{ shortTime(proposal.voting_end_time) }}</small>
+                </div>
 
-                        <!-- 👉 Content -->
-                        <p class="mb-0">
-                            Current Status: {{ proposal.status }}
-                        </p>
-                        </VTimelineItem>
-                        <VTimelineItem
-                            v-if="proposal.content && proposal.content['@type'].endsWith('SoftwareUpgradeProposal')"
-                            size="x-small"
-                            dot-color="success"
-                        >
-                            <!-- 👉 Header -->
-                            <div class="d-flex justify-space-between flex-wrap mb-3">
-                                <h6 class="text-base font-weight-medium me-3">
-                                    Upgrade Plan: 
-                                    <span v-if="Number(proposal.content?.plan?.height||'0') > 0"> (EST)</span>
-                                    <span v-else>{{ format.toDay(proposal.content?.plan?.time) }}</span>
-                                </h6>
-                                <small class="text-xs text-disabled text-no-wrap my-1">{{ shortTime(proposal.voting_end_time) }}</small>
-                            </div>
+                <!-- 👉 Content -->
+                <p class="mb-0">
+                    Current Status: {{ proposal.status }}
+                </p>
+                </VTimelineItem>
+                <VTimelineItem
+                    v-if="proposal.content && proposal.content['@type'].endsWith('SoftwareUpgradeProposal')"
+                    size="x-small"
+                    dot-color="success"
+                >
+                    <!-- 👉 Header -->
+                    <div class="d-flex justify-space-between flex-wrap mb-3">
+                        <h6 class="text-base font-weight-medium me-3">
+                            Upgrade Plan: 
+                            <span v-if="Number(proposal.content?.plan?.height||'0') > 0"> (EST)</span>
+                            <span v-else>{{ format.toDay(proposal.content?.plan?.time) }}</span>
+                        </h6>
+                        <small class="text-xs text-disabled text-no-wrap my-1">{{ shortTime(proposal.voting_end_time) }}</small>
+                    </div>
 
-                            <!-- 👉 Content -->
-                            <p class="mb-0">
-                                <Countdown :time="upgradeCountdown"/>
-                            </p>
-                        </VTimelineItem>
-                    </VTimeline>
+                    <!-- 👉 Content -->
+                    <p class="mb-0">
+                        <Countdown :time="upgradeCountdown"/>
+                    </p>
+                </VTimelineItem>
+            </VTimeline>
         </div>
     </div>
     

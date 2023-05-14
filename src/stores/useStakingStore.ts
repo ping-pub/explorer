@@ -47,14 +47,16 @@ export const useStakingStore = defineStore('stakingStore', {
       );
     },
     async fetchParams() {
-      const response = await this.blockchain.rpc.getStakingParams();
-      if (response.params) this.params = response.params;
+      const response = await this.blockchain.rpc?.getStakingParams();
+      if (response?.params) this.params = response.params;
       return this.params;
     },
     async fetchPool() {
-      const response = await this.blockchain.rpc.getStakingPool();
-      response.pool.bonded_tokens;
-      this.pool = response.pool;
+      const response = await this.blockchain.rpc?.getStakingPool();
+      if (response) {
+        response.pool.bonded_tokens;
+        this.pool = response.pool;
+      }
     },
     async fetchAcitveValdiators() {
       return this.fetchValidators('BOND_STATUS_BONDED');
@@ -69,13 +71,13 @@ export const useStakingStore = defineStore('stakingStore', {
       validatorAddr: string,
       delegatorAddr: string
     ) {
-      return await this.blockchain.rpc.getStakingValidatorsDelegationsDelegator(
+      return await this.blockchain.rpc?.getStakingValidatorsDelegationsDelegator(
         validatorAddr,
         delegatorAddr
       );
     },
     async fetchValidators(status: string) {
-      return this.blockchain.rpc.getStakingValidators(status).then((res) => {
+      return this.blockchain.rpc?.getStakingValidators(status).then((res) => {
         const vals = res.validators.sort(
           (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
         );

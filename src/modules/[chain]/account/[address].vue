@@ -147,15 +147,15 @@ loadAccount(props.address);
           <!-- list-->
           <div class="">
             <!--balances  -->
-            <div class="flex items-center px-4 mb-2" v-for="(balanceItem, index) in balances" :key="index">
+            <div
+              class="flex items-center px-4 mb-2"
+              v-for="(balanceItem, index) in balances"
+              :key="index"
+            >
               <div
                 class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
               >
-                <Icon
-                  icon="mdi-account-cash"
-                  class="text-info"
-                  size="20"
-                />
+                <Icon icon="mdi-account-cash" class="text-info" size="20" />
                 <div
                   class="absolute top-0 bottom-0 left-0 right-0 bg-info opacity-20"
                 ></div>
@@ -176,22 +176,22 @@ loadAccount(props.address);
               </div>
             </div>
             <!--delegations  -->
-            <div class="flex items-center px-4 mb-2" v-for="(delegationItem, index) in delegations" :key="index">
+            <div
+              class="flex items-center px-4 mb-2"
+              v-for="(delegationItem, index) in delegations"
+              :key="index"
+            >
               <div
                 class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
               >
-                <Icon
-                  icon="mdi-user-clock"
-                  class="text-warning"
-                  size="20"
-                />
+                <Icon icon="mdi-user-clock" class="text-warning" size="20" />
                 <div
                   class="absolute top-0 bottom-0 left-0 right-0 bg-warning opacity-20"
                 ></div>
               </div>
               <div class="flex-1">
                 <div class="text-sm font-semibold">
-                {{ format.formatToken(delegationItem?.balance) }}
+                  {{ format.formatToken(delegationItem?.balance) }}
                 </div>
                 <div class="text-xs">≈${{ 0 }}</div>
               </div>
@@ -201,11 +201,20 @@ loadAccount(props.address);
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"
                 ></span>
-                {{ format.calculatePercent(delegationItem?.balance?.amount, totalAmount) }}
+                {{
+                  format.calculatePercent(
+                    delegationItem?.balance?.amount,
+                    totalAmount
+                  )
+                }}
               </div>
             </div>
             <!-- rewards.total -->
-            <div class="flex items-center px-4 mb-2" v-for="(rewardItem, index) in rewards.total" :key="index">
+            <div
+              class="flex items-center px-4 mb-2"
+              v-for="(rewardItem, index) in rewards.total"
+              :key="index"
+            >
               <div
                 class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
               >
@@ -450,12 +459,12 @@ loadAccount(props.address);
               </td>
               <td>
                 {{ format.messages(v.tx.body.messages) }}
-                <VIcon
+                <Icon
                   v-if="v.code === 0"
                   icon="mdi-check"
-                  color="success"
-                ></VIcon>
-                <VIcon v-else icon="mdi-multiply" color="error"></VIcon>
+                  class="text-success text-lg"
+                />
+                <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </td>
               <td>{{ format.toDay(v.timestamp, 'from') }}</td>
             </tr>
@@ -470,10 +479,5 @@ loadAccount(props.address);
       <DynamicComponent :value="account" />
     </div>
   </div>
-  <div v-else>Account does not exists on chain</div>
+  <div v-else class="text-no text-sm">Account does not exists on chain</div>
 </template>
-<style lang="scss" scoped>
-.card-list {
-  --v-card-list-gap: 5px;
-}
-</style>

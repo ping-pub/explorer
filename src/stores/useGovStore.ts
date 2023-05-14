@@ -29,10 +29,10 @@ export const useGovStore = defineStore('govStore', {
       if (!this.loading[status]) {
         this.loading[status] = LoadingStatus.Loading;
         const proposals = reactive(
-          await this.blockchain.rpc.getGovProposals(status)
+          await this.blockchain.rpc?.getGovProposals(status)
         );
         if (status === '2') {
-          proposals.proposals.forEach(async (x1) => {
+          proposals?.proposals?.forEach(async (x1) => {
             await this.fetchTally(x1.proposal_id).then((res) => {
               x1.final_tally_result = res?.tally;
             });

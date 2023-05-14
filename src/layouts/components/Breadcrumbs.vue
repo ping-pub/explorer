@@ -21,10 +21,10 @@ const items = computed(() => [
 <template>
   <div class="d-flex flex-rows align-center">
     <span class="text-h5 mr-3">{{ moduleName }}</span>
-    <Icon icon="mdi-dots-vertical"/>
+    <Icon icon="mdi-dots-vertical" />
     <VBreadcrumbs :items="items">
       <template v-slot:divider>
-        <Icon icon="mdi-chevron-right"/>
+        <Icon icon="mdi-chevron-right" />
       </template>
     </VBreadcrumbs>
   </div>

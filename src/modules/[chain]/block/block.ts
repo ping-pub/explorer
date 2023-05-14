@@ -55,13 +55,13 @@ export const useBlockModule = defineStore('blockModule', {
       });
     },
     async fetchLatest() {
-      this.latest = await this.blockchain.rpc.getBaseBlockLatest();
+      this.latest = await this.blockchain.rpc?.getBaseBlockLatest();
       if (this.recents.length >= 50) this.recents.shift();
       this.recents.push(this.latest);
       return this.latest;
     },
     async fetchBlock(height: string) {
-      this.current = await this.blockchain.rpc.getBaseBlockAt(height);
+      this.current = await this.blockchain.rpc?.getBaseBlockAt(height);
       return this.current;
     },
   },

@@ -142,14 +142,14 @@ export const useIndexModule = defineStore('module-index', {
           title: 'Height',
           color: 'primary',
           icon: 'mdi-pound',
-          stats: String(base.latest.block?.header?.height || 0),
+          stats: String(base?.latest?.block?.header?.height || 0),
           change: 0,
         },
         {
           title: 'Validators',
           color: 'error',
           icon: 'mdi-human-queue',
-          stats: String(base.latest.block?.last_commit?.signatures.length || 0),
+          stats: String(base?.latest?.block?.last_commit?.signatures.length || 0),
           change: 0,
         },
         {
@@ -198,9 +198,9 @@ export const useIndexModule = defineStore('module-index', {
       useDistributionStore()
         .fetchCommunityPool()
         .then((x) => {
-          this.communityPool = x.pool
-            .filter((t) => t.denom.length < 10)
-            .map((t) => ({
+          this.communityPool = x?.pool
+            ?.filter((t) => t.denom.length < 10)
+            ?.map((t) => ({
               amount: String(parseInt(t.amount)),
               denom: t.denom,
             }));

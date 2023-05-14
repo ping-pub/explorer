@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import VueApexCharts from 'vue3-apexcharts';
+import ApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
 import { getDonutChartConfig } from './apexChartConfig';
 
@@ -13,7 +13,7 @@ const expenseRationChartConfig = computed(() =>
 </script>
 
 <template>
-  <VueApexCharts
+  <ApexCharts
     type="donut"
     height="410"
     :options="expenseRationChartConfig"

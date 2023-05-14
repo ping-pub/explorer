@@ -49,7 +49,7 @@ const messages = computed(() => {
             <tr>
               <td>Status</td>
               <td>
-                <VChip color="primary">oioio</VChip>
+                <div class="badge badge-primary badge-sm">oioio</div>
                 <div
                   class="text-xs truncate relative py-2 px-4 rounded-full w-fit mr-2"
                   :class="`text-${
