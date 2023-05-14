@@ -37,7 +37,8 @@
 </template>
 
 <style>
-.footer-modal .ping-connect-btn {
+.footer-modal .ping-connect-btn,
+.footer-modal .ping-connect-dropdown {
   display: none;
 }
 </style>
