@@ -1,7 +1,10 @@
 import { defineStore } from 'pinia';
 import { useBlockchain } from '@/stores';
+import { decodeTxRaw, type DecodedTxRaw } from '@cosmjs/proto-signing';
 import dayjs from 'dayjs';
 import type { Block } from '@/types';
+import { hashTx } from '@/libs';
+import { fromBase64 } from '@cosmjs/encoding';
 
 export const useBaseStore = defineStore('baseStore', {
   state: () => {
@@ -29,6 +32,26 @@ export const useBaseStore = defineStore('baseStore', {
     blockchain() {
       return useBlockchain();
     },
+    txsInRecents() {
+      const txs = [] as { height: string, hash: string; tx: DecodedTxRaw }[];
+      this.recents.forEach((b) =>
+        b.block?.data?.txs.forEach((tx: string) => {
+          if (tx) {
+            const raw = fromBase64(tx)
+            try {
+              txs.push({
+                height: b.block.header.height,
+                hash: hashTx(raw),
+                tx: decodeTxRaw(raw),
+              });
+            } catch (e) {
+              console.error(e)
+            }
+          }
+        })
+      );
+      return txs;
+    },
   },
   actions: {
     async initial() {
@@ -48,10 +71,13 @@ export const useBaseStore = defineStore('baseStore', {
         this.earlest = this.latest;
         this.recents = [];
       }
-      if (this.recents.length >= 50) {
-        this.recents.pop();
+      //check if the block exists in recents
+      if(this.recents.findIndex(x => x.block_id.hash === this.latest.block_id.hash) === -1 ) {
+        if (this.recents.length >= 50) {
+          this.recents.pop();
+        }
+        this.recents.push(this.latest);
       }
-      this.recents.push(this.latest);
       return this.latest;
     },
 
@@ -61,7 +87,7 @@ export const useBaseStore = defineStore('baseStore', {
     async fetchLatestValidators(offset = 0) {
       return this.blockchain.rpc.getBaseValidatorsetLatest(offset);
     },
-    async fetchBlock(height?: number) {
+    async fetchBlock(height?: number|string) {
       return this.blockchain.rpc.getBaseBlockAt(String(height));
     },
     async fetchAbciInfo() {

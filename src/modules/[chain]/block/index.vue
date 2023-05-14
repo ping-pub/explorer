@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import { useBlockModule } from './block';
 import { computed, ref } from '@vue/reactivity';
-import { useFormatter } from '@/stores';
+import { useBaseStore, useFormatter } from '@/stores';
 const props = defineProps(['height', 'chain']);
 
-const store = useBlockModule();
-// store.fetchBlock(props.height)
 const tab = ref('blocks');
+
+const base = useBaseStore()
 
 const format = useFormatter();
 </script>
@@ -38,8 +37,8 @@ const format = useFormatter();
             <th>Time</th>
           </tr>
         </thead>
-        <tbody  v-if="store.recents &&  store.recents.length > 0" >
-          <tr v-for="(item, index) in store.recents" :key="index">
+        <tbody  v-if="base.recents &&  base.recents.length > 0" >
+          <tr v-for="(item, index) in base.recents" :key="index">
             <td class="text-sm text-primary">
               <RouterLink
                 :to="`/${props.chain}/block/${item.block?.header?.height}`"
@@ -64,19 +63,21 @@ const format = useFormatter();
       <table class="table w-full">
         <thead>
           <tr>
+            <th style="position: relative">Height</th>
             <th style="position: relative">Hash</th>
             <th>Messages</th>
             <th>Fees</th>
           </tr>
         </thead>
-        <tbody v-if="store.txsInRecents &&  store.txsInRecents.length > 0" >
-          <tr v-for="(item,index) in store.txsInRecents" :index="index">
-            <td>
+        <tbody >
+          <tr v-for="(item,index) in base.txsInRecents" :index="index">
+            <td>{{ item.height }}</td>
+            <td class="text-xs truncate" width="50%">
               <RouterLink :to="`/${props.chain}/tx/${item.hash}`">{{
                 item.hash
               }}</RouterLink>
             </td>
-            <td>{{ format.messages(item.tx.body.messages as any) }}</td>
+            <td>{{ format.messages(item.tx.body.messages) }}</td>
             <td>{{ format.formatTokens(item.tx.authInfo.fee?.amount) }}</td>
           </tr>
         </tbody>
