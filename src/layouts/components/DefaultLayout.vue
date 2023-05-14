@@ -28,6 +28,13 @@ blockchain.$subscribe((m, s) => {
 });
 
 const sidebarShow = ref(false);
+const sidebarOpen = ref(true);
+
+const changeOpen = (index: Number) => {
+  if (index === 0) {
+    sidebarOpen.value = !sidebarOpen.value;
+  }
+};
 </script>
 
 <template>
@@ -49,10 +56,15 @@ const sidebarShow = ref(false);
       <div v-for="(item, index) of blockchain.computedChainMenu" :key="index">
         <div
           v-if="item?.title && item?.children?.length"
+          :tabindex="index"
           class="collapse"
-          :class="{ 'collapse-arrow': item?.children?.length > 0 }"
+          :class="{
+            'collapse-arrow': item?.children?.length > 0,
+            'collapse-open': index === 0 && sidebarOpen,
+            'collapse-close': index === 0 && !sidebarOpen,
+          }"
         >
-          <input type="checkbox" />
+          <input type="checkbox" class="cursor-pointer" @click="changeOpen(index)" />
           <div
             class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
           >
@@ -176,7 +188,9 @@ const sidebarShow = ref(false);
         <NavBarI18n class="hidden md:inline-block" />
         <NavbarThemeSwitcher class="hidden md:inline-block" />
 
-        <NavBarWallet class="block truncate md:inline-block text-xs md:text-sm" />
+        <NavBarWallet
+          class="block truncate md:inline-block text-xs md:text-sm"
+        />
       </div>
 
       <!-- 👉 Pages -->
