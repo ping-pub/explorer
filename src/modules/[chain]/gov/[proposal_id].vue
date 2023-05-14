@@ -10,9 +10,7 @@ import {
 import type {
   GovProposal,
   GovVote,
-  PaginabledAccounts,
   PaginatedProposalDeposit,
-  PaginatedProposalVotes,
   Pagination,
 } from '@/types';
 import { ref, reactive } from 'vue';
