@@ -3,6 +3,7 @@ import { useBaseStore, useBlockchain } from '@/stores';
 import type { Connection, ClientState, Channel } from '@/types';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
+import { Icon } from '@iconify/vue';
 
 const props = defineProps(['chain', 'connection_id']);
 const chainStore = useBlockchain();
@@ -43,36 +44,39 @@ function color(v: string) {
   <div>
     <div class="px-4 pt-3 pb-4 bg-base-100 rounded mb-4 shadow py-24 sm:py-32">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <dl
-          class="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3"
-        >
-          <div class="mx-auto flex max-w-xs flex-col gap-y-4">
-            <dt class="text-base leading-7 text-gray-600">
-              {{ conn.client_id }} {{ props.connection_id }}
-            </dt>
-            <dd
-              class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl"
-            >
-              {{ baseStore.latest?.block?.header?.chain_id }}
-            </dd>
+        <dl class="grid grid-cols-1 gap-x-8 text-center lg:grid-cols-3">
+          <div class="mx-auto flex items-center">
+            <div>
+              <div
+                class="order-first text-3xl font-semibold tracking-tight text-main mb-1"
+              >
+                {{ baseStore.latest?.block?.header?.chain_id }}
+              </div>
+              <div class="text-sm text-gray-500 dark:text-gray-400">
+                {{ conn.client_id }} {{ props.connection_id }}
+              </div>
+            </div>
           </div>
-          <div class="mx-auto flex max-w-xs flex-col gap-y-4">
-            <dt class="text-base leading-7 text-gray-600">{{ conn.state }}</dt>
-            <dd
-              class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl"
-            >
-              &lt;&gt;<VProgressLinear class="w-100" color="success" />
-            </dd>
+          <div class="mx-auto flex items-center">
+            <div>
+              <Icon icon="mdi:arrow-left-right" class="text-4xl mx-auto" />
+              <div
+                class="bg-success w-24 h-1 rounded-sm mt-1 mb-3 opacity-60"
+              ></div>
+              <div class="text-sm text-gray-500 dark:text-gray-400">
+                {{ conn.state }}
+              </div>
+            </div>
           </div>
-          <div class="mx-auto flex max-w-xs flex-col gap-y-4">
-            <dt class="text-base leading-7 text-gray-600">
-              {{ conn.counterparty?.connection_id }} {{ clientState.client_id }}
-            </dt>
-            <dd
-              class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl"
+          <div class="mx-auto">
+            <div
+              class="order-first text-3xl font-semibold tracking-tight text-main mb-2"
             >
               {{ clientState.client_state?.chain_id }}
-            </dd>
+            </div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+              {{ conn.counterparty?.connection_id }} {{ clientState.client_id }}
+            </div>
           </div>
         </dl>
       </div>
@@ -106,7 +110,7 @@ function color(v: string) {
       <table class="table w-full mt-4">
         <thead>
           <tr>
-            <th style="position: relative; z-index: 2;">Channel Id</th>
+            <th style="position: relative; z-index: 2">Channel Id</th>
             <th>Port Id</th>
             <th>Counterparty</th>
             <th>Hops</th>
