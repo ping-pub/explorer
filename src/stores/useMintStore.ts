@@ -17,14 +17,16 @@ export const useMintStore = defineStore('mintStore', {
       this.fetchInflation();
     },
     async fetchInflation() {
-      this.blockchain.rpc
-        .getMintInflation()
-        .then((x) => {
-          this.inflation = x.inflation;
-        })
-        .catch(() => {
+      try {
+        const res = await this.blockchain?.rpc?.getMintInflation().catch(() => {
           this.inflation = '0';
         });
+        if (res) {
+          this.inflation = res.inflation;
+        }
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 });

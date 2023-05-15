@@ -28,7 +28,7 @@ function color(v: string) {
         <table class="table w-full">
           <thead>
             <tr>
-              <th style="position: relative">Connection Id</th>
+              <th style="position: relative; z-index: 2;">Connection Id</th>
               <th>Connection</th>
               <th>Delay Period</th>
               <th>State</th>

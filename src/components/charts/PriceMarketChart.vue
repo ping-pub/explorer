@@ -1,17 +1,14 @@
 <script lang="ts" setup>
-import VueApexCharts from 'vue3-apexcharts';
+import ApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
-import {
-  getAreaChartSplineConfig,
-  getMarketPriceChartConfig,
-} from './apexChartConfig';
+import { getMarketPriceChartConfig } from './apexChartConfig';
 import { useIndexModule } from '@/modules/[chain]/indexStore';
 import { computed, ref } from '@vue/reactivity';
 
 const store = useIndexModule();
 const vuetifyTheme = useTheme();
 const chartConfig = computed(() => {
-  const labels = store.marketData.prices.map((x) => x[0]);
+  const labels = store.marketData.prices.map((item: any) => item[0]);
   return getMarketPriceChartConfig(vuetifyTheme.current.value, labels);
 });
 const kind = ref('price');
@@ -21,8 +18,8 @@ const series = computed(() => {
       name: 'Price',
       data:
         kind.value === 'price'
-          ? store.marketData.prices.map((x) => x[1])
-          : store.marketData.total_volumes.map((x) => x[1]),
+          ? store.marketData.prices.map((item: any) => item[1])
+          : store.marketData.total_volumes.map((item: any) => item[1]),
     },
   ];
 });
@@ -49,7 +46,7 @@ function changeChart(type: string) {
       Volume
     </a>
   </div>
-  <VueApexCharts
+  <ApexCharts
     type="area"
     height="230"
     :options="chartConfig"

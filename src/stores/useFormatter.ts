@@ -54,8 +54,8 @@ export const useFormatter = defineStore('formatter', {
       return useBankStore();
     },
     dashboard() {
-      return useDashboard()
-    }
+      return useDashboard();
+    },
   },
   actions: {
     async fetchDenomTrace(denom: string) {
@@ -69,9 +69,9 @@ export const useFormatter = defineStore('formatter', {
       return trace;
     },
     priceInfo(denom: string) {
-      const id = this.dashboard.coingecko[denom]?.coinId
-      const prices = this.dashboard.prices[id]
-      return prices
+      const id = this.dashboard.coingecko[denom]?.coinId;
+      const prices = this.dashboard.prices[id];
+      return prices;
     },
     priceColor(denom: string, currency = "usd") {
       const change = this.priceChanges(denom, currency)
@@ -86,11 +86,11 @@ export const useFormatter = defineStore('formatter', {
     },
     price(denom: string, currency = "usd") {
       const info = this.priceInfo(denom);
-      return info? info[currency]||0 : 0
+      return info ? info[currency] || 0 : 0;
     },
-    priceChanges(denom: string, currency="usd"): number {
+    priceChanges(denom: string, currency = 'usd'): number {
       const info = this.priceInfo(denom);
-      return info? info[`${currency}_24h_change`]||0 : 0
+      return info ? info[`${currency}_24h_change`] || 0 : 0;
     },
     showChanges(v: number) {
       return v!==0 ? numeral(v).format("+0,0.[00]"): ""
@@ -103,7 +103,8 @@ export const useFormatter = defineStore('formatter', {
       // find the symbol, 
       const symbol = this.dashboard.coingecko[token.denom]?.symbol || "" 
       // convert denomation to to symbol
-      const exponent = this.dashboard.coingecko[symbol.toLowerCase()]?.exponent || 0
+      const exponent =
+        this.dashboard.coingecko[symbol.toLowerCase()]?.exponent || 0;
       // cacualte amount of symbol
       const amount = Number(token.amount) / (10 ** exponent)
       const value = amount * this.price(token.denom)
@@ -131,7 +132,7 @@ export const useFormatter = defineStore('formatter', {
       fmt = '0.0a',
       mode = 'local'
     ): string {
-      if (token && token.amount) {
+      if (token && token.amount && token?.denom) {
         let amount = Number(token.amount);
         let denom = token.denom;
 
@@ -241,11 +242,11 @@ export const useFormatter = defineStore('formatter', {
       }
       return dayjs(time).format('YYYY-MM-DD HH:mm:ss');
     },
-    messages(msgs: { '@type'?: string, typeUrl?: string }[]) {
+    messages(msgs: { '@type'?: string; typeUrl?: string }[]) {
       if (msgs) {
         const sum: Record<string, number> = msgs
           .map((msg) => {
-            const msgType = msg['@type'] || msg.typeUrl || 'unknown'
+            const msgType = msg['@type'] || msg.typeUrl || 'unknown';
             return msgType
               .substring(msgType.lastIndexOf('.') + 1)
               .replace('Msg', '');

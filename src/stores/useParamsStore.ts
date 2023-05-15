@@ -203,19 +203,19 @@ export const useParamStore = defineStore('paramstore', {
       console.log('handleAbciInfo', this.nodeVersion.items);
     },
     async getBaseTendermintBlockLatest() {
-      return await this.blockchain.rpc.getBaseBlockLatest();
+      return await this.blockchain.rpc?.getBaseBlockLatest();
     },
     async getMintParam() {
-      return await this.blockchain.rpc.getMintParam();
+      return await this.blockchain.rpc?.getMintParam();
     },
     async getStakingParams() {
-      return await this.blockchain.rpc.getStakingParams();
+      return await this.blockchain.rpc?.getStakingParams();
     },
     async getStakingPool() {
-      return await this.blockchain.rpc.getStakingPool();
+      return await this.blockchain.rpc?.getStakingPool();
     },
     async getBankTotal(denom: string) {
-      return await this.blockchain.rpc.getBankSupplyByDenom(denom);
+      return await this.blockchain.rpc?.getBankSupplyByDenom(denom);
       // if (compareVersions(this.config.sdk_version, '0.46.2') > 0) {
       //     return this.get(`/cosmos/bank/v1beta1/supply/by_denom?denom=${denom}`).then(data => commonProcess(data).amount)
       //   }
@@ -225,22 +225,22 @@ export const useParamStore = defineStore('paramstore', {
       //   return this.get(`/cosmos/bank/v1beta1/supply/${denom}`).then(data => commonProcess(data).amount)
     },
     async getSlashingParams() {
-      return await this.blockchain.rpc.getSlashingParams();
+      return await this.blockchain.rpc?.getSlashingParams();
     },
     async getDistributionParams() {
-      return await this.blockchain.rpc.getDistributionParams();
+      return await this.blockchain.rpc?.getDistributionParams();
     },
     async getGovParamsVoting() {
-      return await this.blockchain.rpc.getGovParamsVoting();
+      return await this.blockchain.rpc?.getGovParamsVoting();
     },
     async getGovParamsDeposit() {
-      return await this.blockchain.rpc.getGovParamsDeposit();
+      return await this.blockchain.rpc?.getGovParamsDeposit();
     },
     async getGovParamsTally() {
-      return await this.blockchain.rpc.getGovParamsTally();
+      return await this.blockchain.rpc?.getGovParamsTally();
     },
     async fetchAbciInfo() {
-      return this.blockchain.rpc.getBaseNodeInfo();
+      return this.blockchain.rpc?.getBaseNodeInfo();
     },
   },
 });

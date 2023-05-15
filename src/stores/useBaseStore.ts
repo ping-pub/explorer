@@ -33,11 +33,11 @@ export const useBaseStore = defineStore('baseStore', {
       return useBlockchain();
     },
     txsInRecents() {
-      const txs = [] as { height: string, hash: string; tx: DecodedTxRaw }[];
+      const txs = [] as { height: string; hash: string; tx: DecodedTxRaw }[];
       this.recents.forEach((b) =>
         b.block?.data?.txs.forEach((tx: string) => {
           if (tx) {
-            const raw = fromBase64(tx)
+            const raw = fromBase64(tx);
             try {
               txs.push({
                 height: b.block.header.height,
@@ -45,7 +45,7 @@ export const useBaseStore = defineStore('baseStore', {
                 tx: decodeTxRaw(raw),
               });
             } catch (e) {
-              console.error(e)
+              console.error(e);
             }
           }
         })
@@ -61,18 +61,22 @@ export const useBaseStore = defineStore('baseStore', {
       this.recents = [];
     },
     async fetchLatest() {
-      this.latest = await this.blockchain.rpc.getBaseBlockLatest();
+      this.latest = await this.blockchain.rpc?.getBaseBlockLatest();
       if (
         !this.earlest ||
-        this.earlest.block?.header?.chain_id !=
-          this.latest.block?.header?.chain_id
+        this.earlest?.block?.header?.chain_id !=
+          this.latest?.block?.header?.chain_id
       ) {
         //reset earlest and recents
         this.earlest = this.latest;
         this.recents = [];
       }
       //check if the block exists in recents
-      if(this.recents.findIndex(x => x.block_id.hash === this.latest.block_id.hash) === -1 ) {
+      if (
+        this.recents.findIndex(
+          (x) => x?.block_id?.hash === this.latest?.block_id?.hash
+        ) === -1
+      ) {
         if (this.recents.length >= 50) {
           this.recents.pop();
         }
@@ -87,7 +91,7 @@ export const useBaseStore = defineStore('baseStore', {
     async fetchLatestValidators(offset = 0) {
       return this.blockchain.rpc.getBaseValidatorsetLatest(offset);
     },
-    async fetchBlock(height?: number|string) {
+    async fetchBlock(height?: number | string) {
       return this.blockchain.rpc.getBaseBlockAt(String(height));
     },
     async fetchAbciInfo() {

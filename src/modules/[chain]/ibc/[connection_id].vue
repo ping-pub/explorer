@@ -106,7 +106,7 @@ function color(v: string) {
       <table class="table w-full mt-4">
         <thead>
           <tr>
-            <th style="position: relative">Channel Id</th>
+            <th style="position: relative; z-index: 2;">Channel Id</th>
             <th>Port Id</th>
             <th>Counterparty</th>
             <th>Hops</th>

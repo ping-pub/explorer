@@ -12,7 +12,7 @@ export const useDistributionStore = defineStore('distributionStore', {
   },
   actions: {
     async fetchCommunityPool() {
-      return this.blockchain.rpc.getDistributionCommunityPool();
+      return this.blockchain.rpc?.getDistributionCommunityPool();
     },
   },
 });

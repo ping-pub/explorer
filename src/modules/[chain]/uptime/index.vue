@@ -106,12 +106,15 @@ watchEffect(() => {
         class="input input-sm w-full flex-1"
       />
       <button class="btn btn-primary btn-sm">
-        <Icon icon="mdi-star" class="mr-2 text-lg" /> <span class="">Favorite</span>
+        <Icon icon="mdi-star" class="mr-2 text-lg" />
+        <span class="">Favorite</span>
       </button>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
-      <div v-for="(v, i) in validators">
+    <div
+      class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-x-4 mt-4"
+    >
+      <div v-for="(v, i) in validators" :key="i">
         <div class="flex items-center justify-between">
           <VCheckbox
             v-model="selected"
@@ -119,7 +122,7 @@ watchEffect(() => {
             :value="v.operator_address"
           >
             <template v-slot:label>
-              <span class="text-truncate"
+              <span class="text-truncate text-sm"
                 >{{ i + 1 }}. {{ v.description.moniker }}</span
               >
             </template>

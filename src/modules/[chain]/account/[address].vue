@@ -93,7 +93,7 @@ loadAccount(props.address);
   <div v-if="account">
     <!-- address -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <div class="d-flex items-center">
+      <div class="flex items-center">
         <!-- img -->
         <div class="inline-flex relative w-11 h-11 rounded-md">
           <div
@@ -126,7 +126,7 @@ loadAccount(props.address);
         </div>
         <div class="mt-4 md:col-span-2 md:mt-0 md:ml-4">
           <!-- button -->
-          <div class="d-flex justify-end mb-4">
+          <div class="flex justify-end mb-4 pr-5">
             <label
               for="send"
               class="btn btn-primary btn-sm mr-2"
@@ -144,74 +144,105 @@ loadAccount(props.address);
               >transfer</label
             >
           </div>
-          <!--  -->
+          <!-- list-->
           <div class="">
-            <VListItem v-for="v in balances">
-              <template #prepend>
-                <VAvatar rounded variant="tonal" size="35" color="info">
-                  <VIcon icon="mdi-account-cash" size="20" />
-                </VAvatar>
-              </template>
-              <VListItemTitle class="text-sm font-weight-semibold">
-                {{ format.formatToken(v) }}
-              </VListItemTitle>
-              <VListItemSubtitle class="text-xs"> ≈${{ 0 }} </VListItemSubtitle>
-              <template #append>
+            <!--balances  -->
+            <div
+              class="flex items-center px-4 mb-2"
+              v-for="(balanceItem, index) in balances"
+              :key="index"
+            >
+              <div
+                class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
+              >
+                <Icon icon="mdi-account-cash" class="text-info" size="20" />
                 <div
-                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                >
-                  <span
-                    class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                  ></span>
-                  {{ format.calculatePercent(v.amount, totalAmount) }}
+                  class="absolute top-0 bottom-0 left-0 right-0 bg-info opacity-20"
+                ></div>
+              </div>
+              <div class="flex-1">
+                <div class="text-sm font-semibold">
+                  {{ format.formatToken(balanceItem) }}
                 </div>
-              </template>
-            </VListItem>
-            <VListItem v-for="v in delegations">
-              <template #prepend>
-                <VAvatar rounded variant="tonal" size="35" color="warning">
-                  <VIcon icon="mdi-user-clock" size="20" />
-                </VAvatar>
-              </template>
-
-              <VListItemTitle class="text-sm font-weight-semibold">
-                {{ format.formatToken(v.balance) }}
-              </VListItemTitle>
-              <VListItemSubtitle class="text-xs"> ≈${{ 0 }} </VListItemSubtitle>
-              <template #append>
+                <div class="text-xs">≈${{ 0 }}</div>
+              </div>
+              <div
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
+              >
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"
+                ></span>
+                {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
+              </div>
+            </div>
+            <!--delegations  -->
+            <div
+              class="flex items-center px-4 mb-2"
+              v-for="(delegationItem, index) in delegations"
+              :key="index"
+            >
+              <div
+                class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
+              >
+                <Icon icon="mdi-user-clock" class="text-warning" size="20" />
                 <div
-                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                >
-                  <span
-                    class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                  ></span>
-                  {{ format.calculatePercent(v.balance.amount, totalAmount) }}
+                  class="absolute top-0 bottom-0 left-0 right-0 bg-warning opacity-20"
+                ></div>
+              </div>
+              <div class="flex-1">
+                <div class="text-sm font-semibold">
+                  {{ format.formatToken(delegationItem?.balance) }}
                 </div>
-              </template>
-            </VListItem>
-            <VListItem v-for="v in rewards.total">
-              <template #prepend>
-                <VAvatar rounded variant="tonal" size="35" color="success">
-                  <VIcon icon="mdi-account-arrow-up" size="20" />
-                </VAvatar>
-              </template>
-
-              <VListItemTitle class="text-sm font-weight-semibold">
-                {{ format.formatToken(v) }}
-              </VListItemTitle>
-              <VListItemSubtitle class="text-xs"> ≈${{ 0 }} </VListItemSubtitle>
-              <template #append>
+                <div class="text-xs">≈${{ 0 }}</div>
+              </div>
+              <div
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
+              >
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"
+                ></span>
+                {{
+                  format.calculatePercent(
+                    delegationItem?.balance?.amount,
+                    totalAmount
+                  )
+                }}
+              </div>
+            </div>
+            <!-- rewards.total -->
+            <div
+              class="flex items-center px-4 mb-2"
+              v-for="(rewardItem, index) in rewards.total"
+              :key="index"
+            >
+              <div
+                class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
+              >
+                <Icon
+                  icon="mdi-account-arrow-up"
+                  class="text-success"
+                  size="20"
+                />
                 <div
-                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                >
-                  <span
-                    class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                  ></span>
-                  {{ format.calculatePercent(v.amount, totalAmount) }}
+                  class="absolute top-0 bottom-0 left-0 right-0 bg-success opacity-20"
+                ></div>
+              </div>
+              <div class="flex-1">
+                <div class="text-sm font-semibold">
+                  {{ format.formatToken(rewardItem) }}
                 </div>
-              </template>
-            </VListItem>
-
+                <div class="text-xs">≈${{ 0 }}</div>
+              </div>
+              <div
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
+              >
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"
+                ></span>
+                {{ format.calculatePercent(rewardItem.amount, totalAmount) }}
+              </div>
+            </div>
+            <!-- mdi-account-arrow-right -->
             <div class="flex items-center px-4">
               <div
                 class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
@@ -225,9 +256,8 @@ loadAccount(props.address);
                   class="absolute top-0 bottom-0 left-0 right-0 bg-error opacity-20"
                 ></div>
               </div>
-
               <div class="flex-1">
-                <div class="text-base font-semibold">
+                <div class="text-sm font-semibold">
                   {{
                     format.formatToken({
                       amount: String(unbondingTotal),
@@ -235,10 +265,10 @@ loadAccount(props.address);
                     })
                   }}
                 </div>
-                <div class="text-sm">≈${{ 0 }}</div>
+                <div class="text-xs">≈${{ 0 }}</div>
               </div>
               <div
-                class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
               >
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
@@ -247,153 +277,17 @@ loadAccount(props.address);
               </div>
             </div>
           </div>
-
-          <div class="divider"></div>
-          {{ totalAmount }}
+          <div class="mt-4 text-lg font-semibold mr-5 pl-5 border-t pt-4">
+            {{ totalAmount }}
+          </div>
         </div>
       </div>
     </div>
 
-    <VCard class="mt-5">
-      <VCardTitle>Assets</VCardTitle>
-      <VCardItem>
-        <VRow>
-          <VCol cols="12" md="4">
-            <DonutChart :series="totalAmountByCategory" :labels="labels" />
-          </VCol>
-          <VCol cols="12" md="8">
-            <VList class="card-list">
-              <VListItem>
-                <label
-                  for="transfer"
-                  class="btn btn-primary float-right btn-sm"
-                  @click="
-                    dialog.open('transfer', {
-                      chain_name: blockchain.current?.prettyName,
-                    })
-                  "
-                  >transfer</label
-                >
-                <label
-                  for="send"
-                  class="btn btn-primary float-right btn-sm"
-                  @click="dialog.open('send', {})"
-                  >Send</label
-                >
-              </VListItem>
-              <VListItem v-for="v in balances">
-                <template #prepend>
-                  <VAvatar rounded variant="tonal" size="35" color="info">
-                    <VIcon icon="mdi-account-cash" size="20" />
-                  </VAvatar>
-                </template>
-                <VListItemTitle class="text-sm font-weight-semibold">
-                  {{ format.formatToken(v) }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-xs">
-                  ≈${{ 0 }}
-                </VListItemSubtitle>
-                <template #append>
-                  <div
-                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                  >
-                    <span
-                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                    ></span>
-                    {{ format.calculatePercent(v.amount, totalAmount) }}
-                  </div>
-                </template>
-              </VListItem>
-              <VListItem v-for="v in delegations">
-                <template #prepend>
-                  <VAvatar rounded variant="tonal" size="35" color="warning">
-                    <VIcon icon="mdi-user-clock" size="20" />
-                  </VAvatar>
-                </template>
-
-                <VListItemTitle class="text-sm font-weight-semibold">
-                  {{ format.formatToken(v.balance) }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-xs">
-                  ≈${{ 0 }}
-                </VListItemSubtitle>
-                <template #append>
-                  <div
-                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                  >
-                    <span
-                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                    ></span>
-                    {{ format.calculatePercent(v.balance.amount, totalAmount) }}
-                  </div>
-                </template>
-              </VListItem>
-              <VListItem v-for="v in rewards.total">
-                <template #prepend>
-                  <VAvatar rounded variant="tonal" size="35" color="success">
-                    <VIcon icon="mdi-account-arrow-up" size="20" />
-                  </VAvatar>
-                </template>
-
-                <VListItemTitle class="text-sm font-weight-semibold">
-                  {{ format.formatToken(v) }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-xs">
-                  ≈${{ 0 }}
-                </VListItemSubtitle>
-                <template #append>
-                  <div
-                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                  >
-                    <span
-                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                    ></span>
-                    {{ format.calculatePercent(v.amount, totalAmount) }}
-                  </div>
-                </template>
-              </VListItem>
-
-              <VListItem>
-                <template #prepend>
-                  <VAvatar rounded variant="tonal" size="35" color="error">
-                    <VIcon icon="mdi-account-arrow-right" size="20" />
-                  </VAvatar>
-                </template>
-
-                <VListItemTitle class="text-sm font-weight-semibold">
-                  {{
-                    format.formatToken({
-                      amount: String(unbondingTotal),
-                      denom: stakingStore.params.bond_denom,
-                    })
-                  }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-xs">
-                  ≈${{ 0 }}
-                </VListItemSubtitle>
-                <template #append>
-                  <div
-                    class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
-                  >
-                    <span
-                      class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                    ></span>
-                    {{ format.calculatePercent(unbondingTotal, totalAmount) }}
-                  </div>
-                </template>
-              </VListItem>
-            </VList>
-            <VDivider class="my-2"></VDivider>
-            {{ totalAmount }}
-          </VCol>
-        </VRow>
-      </VCardItem>
-    </VCard>
-
     <!-- Delegations -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">Delegations</h2>
-      <div class="d-flex justify-end mb-4">
+      <div class="flex justify-end mb-4">
         <label
           for="delegate"
           class="btn btn-primary btn-sm mr-2"
@@ -408,18 +302,18 @@ loadAccount(props.address);
         >
       </div>
       <div class="overdflow-x-auto">
-        <table class="table w-full">
+        <table class="table w-full text-sm table-zebra">
           <thead>
             <tr>
-              <th style="position: relative">Validator</th>
-              <th>Delegation</th>
-              <th>Rewards</th>
-              <th>Action</th>
+              <th class="py-3">Validator</th>
+              <th class="py-3">Delegation</th>
+              <th class="py-3">Rewards</th>
+              <th class="py-3">Action</th>
             </tr>
           </thead>
           <tbody class="text-sm">
-            <tr v-for="v in delegations">
-              <td class="text-caption text-primary">
+            <tr v-for="(v, index) in delegations" :key="index">
+              <td class="text-caption text-primary py-3">
                 <RouterLink
                   :to="`/${chain}/staking/${v.delegation.validator_address}`"
                   >{{
@@ -427,8 +321,10 @@ loadAccount(props.address);
                   }}</RouterLink
                 >
               </td>
-              <td>{{ format.formatToken(v.balance, true, '0,0.[00]') }}</td>
-              <td>
+              <td class="py-3">
+                {{ format.formatToken(v.balance, true, '0,0.[00]') }}
+              </td>
+              <td class="py-3">
                 {{
                   format.formatTokens(
                     rewards?.rewards?.find(
@@ -438,11 +334,11 @@ loadAccount(props.address);
                   )
                 }}
               </td>
-              <td>
-                <div class="d-flex justify-end">
+              <td class="py-3">
+                <div class="flex justify-end">
                   <label
                     for="delegate"
-                    class="btn btn-primary btn-sm mr-2"
+                    class="btn btn-primary btn-xs mr-2"
                     @click="
                       dialog.open('delegate', {
                         validator_address: v.delegation.validator_address,
@@ -452,7 +348,7 @@ loadAccount(props.address);
                   >
                   <label
                     for="redelegate"
-                    class="btn btn-primary btn-sm mr-2"
+                    class="btn btn-primary btn-xs mr-2"
                     @click="
                       dialog.open('redelegate', {
                         validator_address: v.delegation.validator_address,
@@ -462,7 +358,7 @@ loadAccount(props.address);
                   >
                   <label
                     for="unbond"
-                    class="btn btn-primary btn-sm"
+                    class="btn btn-primary btn-xs"
                     @click="
                       dialog.open('unbond', {
                         validator_address: v.delegation.validator_address,
@@ -485,19 +381,19 @@ loadAccount(props.address);
     >
       <h2 class="card-title mb-4">Unbonding Delegations</h2>
       <div class="overflow-x-auto">
-        <table class="table">
+        <table class="table text-sm w-full">
           <thead>
             <tr>
-              <th style="position: relative">Creation Height</th>
-              <th>Initial Balance</th>
-              <th>Balance</th>
-              <th>Completion Time</th>
+              <th class="py-3">Creation Height</th>
+              <th class="py-3">Initial Balance</th>
+              <th class="py-3">Balance</th>
+              <th class="py-3">Completion Time</th>
             </tr>
           </thead>
           <tbody class="text-sm">
-            <div v-for="v in unbonding">
+            <div v-for="(v, index) in unbonding" :key="index">
               <tr>
-                <td class="text-caption text-primary">
+                <td class="text-caption text-primary py-3">
                   <RouterLink
                     :to="`/${chain}/staking/${v.validator_address}`"
                     >{{
@@ -507,8 +403,8 @@ loadAccount(props.address);
                 </td>
               </tr>
               <tr v-for="entry in v.entries">
-                <td>{{ entry.creation_height }}</td>
-                <td>
+                <td class="py-3">{{ entry.creation_height }}</td>
+                <td class="py-3">
                   {{
                     format.formatToken(
                       {
@@ -520,7 +416,7 @@ loadAccount(props.address);
                     )
                   }}
                 </td>
-                <td>
+                <td class="py-3">
                   {{
                     format.formatToken(
                       {
@@ -532,7 +428,9 @@ loadAccount(props.address);
                     )
                   }}
                 </td>
-                <td>{{ format.toDay(entry.completion_time, 'to') }}</td>
+                <td class="py-3">
+                  {{ format.toDay(entry.completion_time, 'to') }}
+                </td>
               </tr>
             </div>
           </tbody>
@@ -544,35 +442,37 @@ loadAccount(props.address);
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">Transactions</h2>
       <div class="overflow-x-auto">
-        <table class="table w-full">
+        <table class="table w-full text-sm">
           <thead>
             <tr>
-              <th style="position: relative">Height</th>
-              <th>Hash</th>
-              <th>Messages</th>
-              <th>Time</th>
+              <th class="py-3">Height</th>
+              <th class="py-3">Hash</th>
+              <th class="py-3">Messages</th>
+              <th class="py-3">Time</th>
             </tr>
           </thead>
           <tbody class="text-sm">
-            <tr v-for="v in txs">
-              <td class="text-sm text-primary">
+            <tr v-for="(v, index) in txs" :key="index">
+              <td class="text-sm text-primary py-3">
                 <RouterLink :to="`/${chain}/block/${v.height}`">{{
                   v.height
                 }}</RouterLink>
               </td>
-              <td class="text-truncate" style="max-width: 200px">
+              <td class="text-truncate py-3" style="max-width: 200px">
                 {{ v.txhash }}
               </td>
-              <td>
-                {{ format.messages(v.tx.body.messages) }}
-                <VIcon
+              <td class="flex items-center py-3">
+                <div class="mr-2">
+                  {{ format.messages(v.tx.body.messages) }}
+                </div>
+                <Icon
                   v-if="v.code === 0"
                   icon="mdi-check"
-                  color="success"
-                ></VIcon>
-                <VIcon v-else icon="mdi-multiply" color="error"></VIcon>
+                  class="text-success text-lg"
+                />
+                <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </td>
-              <td>{{ format.toDay(v.timestamp, 'from') }}</td>
+              <td class="py-3">{{ format.toDay(v.timestamp, 'from') }}</td>
             </tr>
           </tbody>
         </table>
@@ -585,10 +485,5 @@ loadAccount(props.address);
       <DynamicComponent :value="account" />
     </div>
   </div>
-  <div v-else>Account does not exists on chain</div>
+  <div v-else class="text-no text-sm">Account does not exists on chain</div>
 </template>
-<style lang="scss" scoped>
-.card-list {
-  --v-card-list-gap: 5px;
-}
-</style>
