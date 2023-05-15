@@ -29,3 +29,8 @@
   :where(input[type='checkbox']:checked ~ .collapse-content) {
   padding-bottom: 0;
 }
+
+.table th:first-child {
+  position: relative;
+  z-index: 2;
+}

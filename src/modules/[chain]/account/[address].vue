@@ -126,7 +126,7 @@ loadAccount(props.address);
         </div>
         <div class="mt-4 md:col-span-2 md:mt-0 md:ml-4">
           <!-- button -->
-          <div class="flex justify-end mb-4">
+          <div class="flex justify-end mb-4 pr-5">
             <label
               for="send"
               class="btn btn-primary btn-sm mr-2"
@@ -167,7 +167,7 @@ loadAccount(props.address);
                 <div class="text-xs">≈${{ 0 }}</div>
               </div>
               <div
-                class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
               >
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"
@@ -196,7 +196,7 @@ loadAccount(props.address);
                 <div class="text-xs">≈${{ 0 }}</div>
               </div>
               <div
-                class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
               >
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"
@@ -234,7 +234,7 @@ loadAccount(props.address);
                 <div class="text-xs">≈${{ 0 }}</div>
               </div>
               <div
-                class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
               >
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"
@@ -268,7 +268,7 @@ loadAccount(props.address);
                 <div class="text-xs">≈${{ 0 }}</div>
               </div>
               <div
-                class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-primary mr-2"
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
               >
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
@@ -277,9 +277,9 @@ loadAccount(props.address);
               </div>
             </div>
           </div>
-
-          <div class="divider"></div>
-          {{ totalAmount }}
+          <div class="mt-4 text-lg font-semibold mr-5 pl-5 border-t pt-4">
+            {{ totalAmount }}
+          </div>
         </div>
       </div>
     </div>
@@ -302,18 +302,18 @@ loadAccount(props.address);
         >
       </div>
       <div class="overdflow-x-auto">
-        <table class="table w-full">
+        <table class="table w-full text-sm table-zebra">
           <thead>
             <tr>
-              <th style="position: relative; z-index: 2;">Validator</th>
-              <th>Delegation</th>
-              <th>Rewards</th>
-              <th>Action</th>
+              <th class="py-3">Validator</th>
+              <th class="py-3">Delegation</th>
+              <th class="py-3">Rewards</th>
+              <th class="py-3">Action</th>
             </tr>
           </thead>
           <tbody class="text-sm">
-            <tr v-for="v in delegations">
-              <td class="text-caption text-primary">
+            <tr v-for="(v, index) in delegations" :key="index">
+              <td class="text-caption text-primary py-3">
                 <RouterLink
                   :to="`/${chain}/staking/${v.delegation.validator_address}`"
                   >{{
@@ -321,8 +321,10 @@ loadAccount(props.address);
                   }}</RouterLink
                 >
               </td>
-              <td>{{ format.formatToken(v.balance, true, '0,0.[00]') }}</td>
-              <td>
+              <td class="py-3">
+                {{ format.formatToken(v.balance, true, '0,0.[00]') }}
+              </td>
+              <td class="py-3">
                 {{
                   format.formatTokens(
                     rewards?.rewards?.find(
@@ -332,11 +334,11 @@ loadAccount(props.address);
                   )
                 }}
               </td>
-              <td>
+              <td class="py-3">
                 <div class="flex justify-end">
                   <label
                     for="delegate"
-                    class="btn btn-primary btn-sm mr-2"
+                    class="btn btn-primary btn-xs mr-2"
                     @click="
                       dialog.open('delegate', {
                         validator_address: v.delegation.validator_address,
@@ -346,7 +348,7 @@ loadAccount(props.address);
                   >
                   <label
                     for="redelegate"
-                    class="btn btn-primary btn-sm mr-2"
+                    class="btn btn-primary btn-xs mr-2"
                     @click="
                       dialog.open('redelegate', {
                         validator_address: v.delegation.validator_address,
@@ -356,7 +358,7 @@ loadAccount(props.address);
                   >
                   <label
                     for="unbond"
-                    class="btn btn-primary btn-sm"
+                    class="btn btn-primary btn-xs"
                     @click="
                       dialog.open('unbond', {
                         validator_address: v.delegation.validator_address,
@@ -379,19 +381,19 @@ loadAccount(props.address);
     >
       <h2 class="card-title mb-4">Unbonding Delegations</h2>
       <div class="overflow-x-auto">
-        <table class="table">
+        <table class="table text-sm w-full">
           <thead>
             <tr>
-              <th style="position: relative; z-index: 2;">Creation Height</th>
-              <th>Initial Balance</th>
-              <th>Balance</th>
-              <th>Completion Time</th>
+              <th class="py-3">Creation Height</th>
+              <th class="py-3">Initial Balance</th>
+              <th class="py-3">Balance</th>
+              <th class="py-3">Completion Time</th>
             </tr>
           </thead>
           <tbody class="text-sm">
-            <div v-for="v in unbonding">
+            <div v-for="(v, index) in unbonding" :key="index">
               <tr>
-                <td class="text-caption text-primary">
+                <td class="text-caption text-primary py-3">
                   <RouterLink
                     :to="`/${chain}/staking/${v.validator_address}`"
                     >{{
@@ -401,8 +403,8 @@ loadAccount(props.address);
                 </td>
               </tr>
               <tr v-for="entry in v.entries">
-                <td>{{ entry.creation_height }}</td>
-                <td>
+                <td class="py-3">{{ entry.creation_height }}</td>
+                <td class="py-3">
                   {{
                     format.formatToken(
                       {
@@ -414,7 +416,7 @@ loadAccount(props.address);
                     )
                   }}
                 </td>
-                <td>
+                <td class="py-3">
                   {{
                     format.formatToken(
                       {
@@ -426,7 +428,9 @@ loadAccount(props.address);
                     )
                   }}
                 </td>
-                <td>{{ format.toDay(entry.completion_time, 'to') }}</td>
+                <td class="py-3">
+                  {{ format.toDay(entry.completion_time, 'to') }}
+                </td>
               </tr>
             </div>
           </tbody>
@@ -438,27 +442,29 @@ loadAccount(props.address);
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">Transactions</h2>
       <div class="overflow-x-auto">
-        <table class="table w-full">
+        <table class="table w-full text-sm">
           <thead>
             <tr>
-              <th style="position: relative">Height</th>
-              <th>Hash</th>
-              <th>Messages</th>
-              <th>Time</th>
+              <th class="py-3">Height</th>
+              <th class="py-3">Hash</th>
+              <th class="py-3">Messages</th>
+              <th class="py-3">Time</th>
             </tr>
           </thead>
           <tbody class="text-sm">
-            <tr v-for="v in txs">
-              <td class="text-sm text-primary">
+            <tr v-for="(v, index) in txs" :key="index">
+              <td class="text-sm text-primary py-3">
                 <RouterLink :to="`/${chain}/block/${v.height}`">{{
                   v.height
                 }}</RouterLink>
               </td>
-              <td class="text-truncate" style="max-width: 200px">
+              <td class="text-truncate py-3" style="max-width: 200px">
                 {{ v.txhash }}
               </td>
-              <td>
-                {{ format.messages(v.tx.body.messages) }}
+              <td class="flex items-center py-3">
+                <div class="mr-2">
+                  {{ format.messages(v.tx.body.messages) }}
+                </div>
                 <Icon
                   v-if="v.code === 0"
                   icon="mdi-check"
@@ -466,7 +472,7 @@ loadAccount(props.address);
                 />
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </td>
-              <td>{{ format.toDay(v.timestamp, 'from') }}</td>
+              <td class="py-3">{{ format.toDay(v.timestamp, 'from') }}</td>
             </tr>
           </tbody>
         </table>
