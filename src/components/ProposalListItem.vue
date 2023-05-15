@@ -112,9 +112,9 @@ const statusMap: Record<string, string> = {
       >
         <RouterLink
           :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
-          class="text-main text-base mb-1 flex justify-between hover:text-indigo-400 truncate"
+          class="text-main text-base mb-1 flex justify-between hover:text-indigo-400"
         >
-          <div>{{ item?.content?.title }}</div>
+          <div class="flex-1 w-0 truncate mr-4">{{ item?.content?.title }}</div>
 
           <div>#{{ item?.proposal_id }}</div>
         </RouterLink>
