@@ -83,24 +83,53 @@ function color(v: string) {
     </div>
 
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title">IBC Client State</h2>
-      <div class="text-sm">
-        <br />update after expiry:
-        {{ clientState.client_state?.allow_update_after_expiry }}
-        <br />allow_update_after_misbehaviour:
-        {{ clientState.client_state?.allow_update_after_misbehaviour }}
-        <br />trust_level:
-        {{ clientState.client_state?.trust_level?.numerator }}/{{
-          clientState.client_state?.trust_level?.denominator
-        }}
-        <br />trusting_period: {{ clientState.client_state?.trusting_period }}
-        <br />unbonding_period:
-        {{ clientState.client_state?.unbonding_period }} <br />frozen_height:
-        {{ clientState.client_state?.frozen_height }} <br />latest_height:
-        {{ clientState.client_state?.latest_height }} <br />type:
-        {{ clientState.client_state?.['@type'] }} <br />upgrade_path:
-        {{ clientState.client_state?.upgrade_path }} <br />
-        {{ clientState.client_state?.max_clock_drift }}
+      <h2 class="card-title mb-4">IBC Client State</h2>
+      <div class="overflow-x-auto">
+        <table class="table text-sm w-full">
+          <tbody>
+            <tr>
+              <td class="w-52">update after expiry:</td>
+              <td>{{ clientState.client_state?.allow_update_after_expiry }}</td>
+            </tr>
+            <tr>
+              <td class="w-52">allow_update_after_misbehaviour:</td>
+              <td>{{ clientState.client_state?.allow_update_after_misbehaviour }}</td>
+            </tr>
+            <tr>
+              <td class="w-52">trust_level:</td>
+              <td> {{ clientState.client_state?.trust_level?.numerator }}/{{
+                  clientState.client_state?.trust_level?.denominator}}</td>
+            </tr>
+            <tr>
+              <td class="w-52">trusting_period:</td>
+              <td>{{ clientState.client_state?.trusting_period }}</td>
+            </tr>
+            <tr>
+              <td class="w-52">unbonding_period:</td>
+              <td> {{ clientState.client_state?.unbonding_period }}</td>
+            </tr>
+            <tr>
+              <td class="w-52">frozen_height:</td>
+              <td>{{ clientState.client_state?.frozen_height }} </td>
+            </tr>
+            <tr>
+              <td class="w-52">latest_height:</td>
+              <td>{{ clientState.client_state?.latest_height }}</td>
+            </tr>
+            <tr>
+              <td class="w-52">type:</td>
+              <td>{{ clientState.client_state?.['@type'] }}</td>
+            </tr>
+            <tr>
+              <td class="w-52">upgrade_path:</td>
+              <td>{{ clientState.client_state?.upgrade_path }} </td>
+            </tr>
+            <tr>
+              <td class="w-52">max_clock_drift:</td>
+              <td>{{ clientState.client_state?.max_clock_drift }} </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
