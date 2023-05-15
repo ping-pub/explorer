@@ -8,6 +8,7 @@ import {
   useFormatter,
   useTxDialog,
   useWalletStore,
+  useStakingStore,
 } from '@/stores';
 import { onMounted, ref } from 'vue';
 import { useIndexModule } from './indexStore';
@@ -21,6 +22,7 @@ const store = useIndexModule();
 const walletStore = useWalletStore();
 const format = useFormatter();
 const dialog = useTxDialog();
+const stakingStore = useStakingStore();
 
 const coinInfo = computed(() => {
   return store.coinInfo;
@@ -230,7 +232,7 @@ const color = computed(() => {
     </div>
 
     <div class="bg-base-100 rounded mt-4 shadow">
-      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-secondary">
+      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         Active Proposals
       </div>
       <div class="px-4 pb-4">
@@ -242,7 +244,7 @@ const color = computed(() => {
     </div>
 
     <div class="bg-base-100 rounded mt-4 shadow">
-      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-secondary">
+      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         {{ walletStore.currentAddress || 'Not Connected' }}
         <span
           v-if="walletStore.currentAddress"
@@ -293,13 +295,58 @@ const color = computed(() => {
         </div>
       </div>
 
-      <div>
-        <div v-for="v in walletStore.delegations">
-          {{ v }}
-        </div>
+      <div class="px-4 pb-4">
+        <table class="table table-compact w-full table-zebra">
+          <thead>
+            <tr>
+              <th>Validator</th>
+              <th>Delegations</th>
+              <th>Rewards</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in walletStore.delegations" :key="index">
+              <td>
+                {{
+                  format.validatorFromBech32(
+                    item?.delegation?.validator_address
+                  )
+                }}
+              </td>
+              <td>{{ format.formatToken(item?.balance) }}</td>
+              <td>
+                {{
+                  format.formatToken({
+                    denom: item?.balance?.denom,
+                    amount: item?.delegation?.shares,
+                  })
+                }}
+              </td>
+              <td>
+                <div>
+                  <button
+                    class="btn btn-xs btn-primary btn-ghost text-primary rounded-sm mr-2"
+                  >
+                    Delegate
+                  </button>
+                  <button
+                    class="btn btn-xs btn-primary btn-ghost text-primary rounded-sm"
+                  >
+                    Withdraw Rewards
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <div></div>
+      <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
+        <button class="btn btn-success text-white">Send</button>
+        <button class="btn btn-info text-white">Receive</button>
+        <button class="btn btn-primary text-white">Convert</button>
+      </div>
     </div>
   </div>
 </template>

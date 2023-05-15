@@ -1,29 +1,30 @@
 <script setup lang="ts">
 import { useWalletStore } from '@/stores';
-import {ref, computed} from 'vue'
+import { ref, computed } from 'vue';
 const walletStore = useWalletStore();
 walletStore.$subscribe((m, s) => {
   console.log(m, s);
 });
-let showCopyToast = ref(0)
-async function copyAdress(address: string){
+let showCopyToast = ref(0);
+async function copyAdress(address: string) {
   try {
     await navigator.clipboard.writeText(address);
-    showCopyToast.value = 1
-    setTimeout(()=>{
-      showCopyToast.value = 0
-    },1000)
-    /* Resolved - 文本被成功复制到剪贴板 */
+    showCopyToast.value = 1;
+    setTimeout(() => {
+      showCopyToast.value = 0;
+    }, 1000);
   } catch (err) {
-    showCopyToast.value = 2
-    setTimeout(()=>{
-      showCopyToast.value = 0
-    },1000)
+    showCopyToast.value = 2;
+    setTimeout(() => {
+      showCopyToast.value = 0;
+    }, 1000);
   }
 }
-const tipMsg = computed(()=> {
-  return showCopyToast.value === 2 ? {class: 'error', msg: 'Copy Error!'}: {class: 'success', msg: 'Copy Success!'}
-})
+const tipMsg = computed(() => {
+  return showCopyToast.value === 2
+    ? { class: 'error', msg: 'Copy Error!' }
+    : { class: 'success', msg: 'Copy Success!' };
+});
 </script>
 
 <template>
@@ -68,14 +69,14 @@ const tipMsg = computed(()=> {
         >
       </div>
     </div>
-    <div class="toast" v-show="showCopyToast===1">
+    <div class="toast" v-show="showCopyToast === 1">
       <div class="alert alert-success">
         <div class="text-sm">
           <span>{{ tipMsg.msg }}</span>
         </div>
       </div>
     </div>
-    <div class="toast" v-show="showCopyToast===2">
+    <div class="toast" v-show="showCopyToast === 2">
       <div class="alert alert-error">
         <div class="text-sm">
           <span>{{ tipMsg.msg }}</span>
