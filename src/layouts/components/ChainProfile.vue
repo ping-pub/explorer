@@ -83,13 +83,15 @@ chainStore.$subscribe((m, s) => {
       </div>
     </div>
     <div class="flex-1 w-0">
-      <div
+      <Transition name="fade" mode="out-in" appear>
+      <div :key="baseStore.latest?.block?.header?.height || chainStore.chainName || ''"
         class="capitalize whitespace-nowrap text-base font-semibold text-gray-600 dark:text-gray-200"
       >
         #{{
            baseStore.latest?.block?.header?.height || chainStore.chainName || ''
         }}
       </div>
+      </Transition>
       <div
         class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap hidden lg:block"
       >
@@ -98,3 +100,14 @@ chainStore.$subscribe((m, s) => {
     </div>
   </div>
 </template>
+<style>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>

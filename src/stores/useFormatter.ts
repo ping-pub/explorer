@@ -73,7 +73,18 @@ export const useFormatter = defineStore('formatter', {
       const prices = this.dashboard.prices[id];
       return prices;
     },
-    price(denom: string, currency = 'usd') {
+    priceColor(denom: string, currency = "usd") {
+      const change = this.priceChanges(denom, currency)
+      switch (true) {
+        case change > 0:
+          return "text-success"
+        case change < 0:
+          return "text-error"
+        default:
+          return ""
+      }
+    },
+    price(denom: string, currency = "usd") {
       const info = this.priceInfo(denom);
       return info ? info[currency] || 0 : 0;
     },
@@ -82,18 +93,22 @@ export const useFormatter = defineStore('formatter', {
       return info ? info[`${currency}_24h_change`] || 0 : 0;
     },
     showChanges(v: number) {
-      return numeral(v).format('+0,0.[00]');
+      return v!==0 ? numeral(v).format("+0,0.[00]"): ""
     },
-    tokenValue(token: Coin) {
-      // find the symbol,
-      const symbol = this.dashboard.coingecko[token.denom]?.symbol || '';
+    tokenValue(token?: Coin) {
+      return token ? numeral(this.formatTokenAmount(token)).format('0,0.[00]') : ""
+    },
+    tokenValueNumber(token?: Coin) {
+      if(!token) return 0
+      // find the symbol, 
+      const symbol = this.dashboard.coingecko[token.denom]?.symbol || "" 
       // convert denomation to to symbol
       const exponent =
         this.dashboard.coingecko[symbol.toLowerCase()]?.exponent || 0;
       // cacualte amount of symbol
-      const amount = Number(token.amount) / 10 ** exponent;
-      const value = amount * this.price(token.denom);
-      return numeral(value).format('0,0.[00]');
+      const amount = Number(token.amount) / (10 ** exponent)
+      const value = amount * this.price(token.denom)
+      return value
     },
     formatTokenAmount(token: { denom: string; amount: string }) {
       return this.formatToken(token, false);
@@ -101,10 +116,21 @@ export const useFormatter = defineStore('formatter', {
     formatToken2(token: { denom: string; amount: string }, withDenom = true) {
       return this.formatToken(token, true, '0,0.[00]');
     },
+    findGlobalAssetConfig(denom: string) {
+      const chains = Object.values(this.dashboard.chains)
+      for ( let i =0; i < chains.length; i++ ) {
+        const conf = chains[i].assets.find(a => a.base === denom)
+        if(conf) {
+          return conf
+        }
+      }
+      return null
+    },
     formatToken(
-      token: { denom: string; amount: string },
+      token?: { denom: string; amount: string },
       withDenom = true,
-      fmt = '0.0a'
+      fmt = '0.0a',
+      mode = 'local'
     ): string {
       if (token && token.amount && token?.denom) {
         let amount = Number(token.amount);
@@ -117,9 +143,10 @@ export const useFormatter = defineStore('formatter', {
           }
         }
 
-        const conf = this.blockchain.current?.assets?.find(
+        const conf = mode === 'local'? this.blockchain.current?.assets?.find(
           (x) => x.base === token.denom || x.base.denom === token.denom
-        );
+        ): this.findGlobalAssetConfig(token.denom)
+
         if (conf) {
           let unit = { exponent: 6, denom: '' };
           // find the max exponent for display

@@ -72,7 +72,6 @@ export const useIndexModule = defineStore('module-index', {
         total_volumes: [] as number[],
       },
       communityPool: [] as { amount: string; denom: string }[],
-      proposals: {} as PaginatedProposals,
       tally: {} as Record<string, Tally>,
     };
   },
@@ -128,6 +127,11 @@ export const useIndexModule = defineStore('module-index', {
     pool() {
       const staking = useStakingStore();
       return staking.pool;
+    },
+
+    proposals() {
+      const gov = useGovStore()
+      return gov.proposals['2']
     },
 
     stats() {
@@ -205,10 +209,10 @@ export const useIndexModule = defineStore('module-index', {
               denom: t.denom,
             }));
         });
-      const gov = useGovStore();
-      gov.fetchProposals('2').then((x) => {
-        this.proposals = x;
-      });
+      // const gov = useGovStore();
+      // gov.fetchProposals('2').then((x) => {
+      //   this.proposals = x;
+      // });
     },
     tickerColor(color: string) {
       return colorMap(color);
