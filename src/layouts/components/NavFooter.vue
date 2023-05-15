@@ -1,3 +1,11 @@
+<script setup lang="ts">
+import { useWalletStore } from '@/stores';
+const walletStore = useWalletStore();
+function walletStateChange(res:any){
+  console.log(res.detail?.value, 8888888)
+  walletStore.setConnectedWallet(res.detail?.value)
+}
+</script>
 <template>
   <footer class="footer items-center p-4 text-sm mb-4">
     <div class="items-center grid-flow-col">
@@ -32,7 +40,7 @@
     </div>
   </footer>
   <div class="footer-modal">
-    <ping-connect-wallet :chain-id="'juno-1'" :hd-path="`m/44'/118/0'/0/0`" />
+    <ping-connect-wallet :chain-id="'juno-1'" :hd-path="`m/44'/118/0'/0/0`" @change="walletStateChange"/>
   </div>
 </template>
 

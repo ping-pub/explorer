@@ -25,6 +25,12 @@ const tipMsg = computed(() => {
     ? { class: 'error', msg: 'Copy Error!' }
     : { class: 'success', msg: 'Copy Success!' };
 });
+
+const addressChange = computed(() => {
+  return walletStore?.currentAddress || walletStore?.walletIsConnected
+    ? true
+    : false;
+});
 </script>
 
 <template>
