@@ -110,6 +110,7 @@ const changeOpen = (index: Number) => {
                     $route.path === el?.to?.path && item?.title !== 'Favorite',
                 }"
               >
+                <Icon icon="mdi:chevron-right" class="mr-2 ml-3"/>
                 <img
                   v-if="el?.icon?.image"
                   :src="el?.icon?.image"
