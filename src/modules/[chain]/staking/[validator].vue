@@ -136,7 +136,7 @@ onMounted(() => {
 <template>
   <div>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow border-indigo-500">
-      <div class="flex flex-col lg:flex-row">
+      <div class="flex flex-col lg:flex-row pt-2 pb-1">
         <div class="flex-1">
           <div class="flex">
             <div class="avatar mr-4 relative w-24 rounded-lg overflow-hidden">
@@ -158,7 +158,7 @@ onMounted(() => {
             </div>
             <div class="mx-2">
               <h4>{{ v.description?.moniker }}</h4>
-              <div class="text-sm mb-2">
+              <div class="text-sm mb-4">
                 {{ v.description?.identity || '-' }}
               </div>
               <label
@@ -174,41 +174,46 @@ onMounted(() => {
             </div>
           </div>
           <div class="m-4 text-sm">
-            <p class="text-md">About Us</p>
-            <VList class="card-list">
-              <VListItem prepend-icon="mdi-web">
-                <span>Website: </span
-                ><span> {{ v.description?.website || '-' }}</span>
-              </VListItem>
-              <VListItem prepend-icon="mdi-email-outline">
-                <span>Contact: </span
-                ><span> {{ v.description?.security_contact }}</span>
-              </VListItem>
-            </VList>
-            <p class="text-md mt-3">Validator Status</p>
-            <VList class="card-list">
-              <VListItem prepend-icon="mdi-shield-account-outline">
+            <p class="text-sm mb-3">About Us</p>
+            <div class="card-list">
+              <div class="flex items-center mb-2">
+                <Icon icon="mdi-web" class="text-xl mr-1" />
+                <span>Website: </span>
+                <span> {{ v.description?.website || '-' }}</span>
+              </div>
+              <div class="flex items-center">
+                <Icon icon="mdi-email-outline" class="text-xl mr-1" />
+                <span>Contact: </span>
+                <span> {{ v.description?.security_contact }}</span>
+              </div>
+            </div>
+            <p class="text-sm mt-4 mb-3">Validator Status</p>
+            <div class="card-list">
+              <div class="flex items-center mb-2">
+                <Icon icon="mdi-shield-account-outline" class="text-xl mr-1" />
                 <span>Status: </span
                 ><span>
                   {{ String(v.status).replace('BOND_STATUS_', '') }}
                 </span>
-              </VListItem>
-              <VListItem prepend-icon="mdi-shield-alert-outline">
-                <span>Jailed: </span><span> {{ v.jailed || '-' }} </span>
-              </VListItem>
-            </VList>
+              </div>
+              <div class="flex items-center">
+                <Icon icon="mdi-shield-alert-outline" class="text-xl mr-1" />
+                <span>Jailed: </span>
+                <span> {{ v.jailed || '-' }} </span>
+              </div>
+            </div>
           </div>
         </div>
         <div class="flex-1">
-          <div class="d-flex flex-column py-3 justify-space-between">
-            <div class="d-flex">
-              <VAvatar
-                color="secondary"
-                rounded
-                variant="outlined"
-                icon="mdi-coin"
-              ></VAvatar>
-              <div class="ml-3 d-flex flex-column justify-center">
+          <div class="flex flex-col justify-between">
+            <div class="flex mb-2">
+              <div
+                class="flex items-center justify-center rounded w-10 h-10"
+                style="border: 1px solid #666"
+              >
+                <Icon icon="mdi-coin" class="text-3xl" />
+              </div>
+              <div class="ml-3 flex flex-col justify-center">
                 <h4>
                   {{
                     format.formatToken2({
@@ -220,14 +225,14 @@ onMounted(() => {
                 <span class="text-sm">Total Bonded Tokens</span>
               </div>
             </div>
-            <div class="d-flex">
-              <VAvatar
-                color="secondary"
-                rounded
-                variant="outlined"
-                icon="mdi-percent"
-              ></VAvatar>
-              <div class="ml-3 d-flex flex-column justify-center">
+            <div class="flex mb-2">
+              <div
+                class="flex items-center justify-center rounded w-10 h-10"
+                style="border: 1px solid #666"
+              >
+                <Icon icon="mdi-percent" class="text-3xl" />
+              </div>
+              <div class="ml-3 flex flex-col justify-center">
                 <h4>
                   {{ format.formatToken(selfBonded.balance) }} ({{ selfRate }})
                 </h4>
@@ -235,13 +240,14 @@ onMounted(() => {
               </div>
             </div>
 
-            <div class="d-flex">
-              <VAvatar
-                color="secondary"
-                rounded
-                variant="outlined"
-                icon="mdi-account-tie"
-              ></VAvatar>
+            <div class="flex mb-2">
+              <div
+                class="flex items-center justify-center rounded w-10 h-10"
+                style="border: 1px solid #666"
+              >
+                <Icon icon="mdi-account-tie" class="text-3xl" />
+              </div>
+
               <div class="ml-3 d-flex flex-column justify-center">
                 <h4>
                   {{ v.min_self_delegation }} {{ staking.params.bond_denom }}
@@ -249,40 +255,40 @@ onMounted(() => {
                 <span class="text-sm">Min Self Delegation:</span>
               </div>
             </div>
-            <div class="d-flex">
-              <VAvatar
-                color="secondary"
-                rounded
-                variant="outlined"
-                icon="mdi-finance"
-              ></VAvatar>
-              <div class="ml-3 d-flex flex-column justify-center">
+            <div class="flex mb-2">
+              <div
+                class="flex items-center justify-center rounded w-10 h-10"
+                style="border: 1px solid #666"
+              >
+                <Icon icon="mdi-finance" class="text-3xl" />
+              </div>
+              <div class="ml-3 flex flex-col justify-center">
                 <h4>{{ apr }}</h4>
                 <span class="text-sm">Annual Profit</span>
               </div>
             </div>
 
-            <div class="d-flex">
-              <VAvatar
-                color="secondary"
-                rounded
-                variant="outlined"
-                icon="mdi-stairs-up"
-              ></VAvatar>
-              <div class="ml-3 d-flex flex-column justify-center">
+            <div class="flex mb-2">
+              <div
+                class="flex items-center justify-center rounded w-10 h-10"
+                style="border: 1px solid #666"
+              >
+                <Icon icon="mdi-stairs-up" class="text-3xl" />
+              </div>
+              <div class="ml-3 flex flex-col justify-center">
                 <h4>{{ v.unbonding_height }}</h4>
                 <span class="text-sm">Unbonding Height</span>
               </div>
             </div>
 
-            <div class="d-flex">
-              <VAvatar
-                color="secondary"
-                rounded
-                variant="outlined"
-                icon="mdi-clock"
-              ></VAvatar>
-              <div class="ml-3 d-flex flex-column justify-center">
+            <div class="flex mb-2">
+              <div
+                class="flex items-center justify-center rounded w-10 h-10"
+                style="border: 1px solid #666"
+              >
+                <Icon icon="mdi-clock" class="text-3xl" />
+              </div>
+              <div class="ml-3 flex flex-col justify-center">
                 <h4>{{ format.toDay(v.unbonding_time, 'from') }}</h4>
                 <span class="text-sm">Unbonding Time</span>
               </div>
@@ -290,8 +296,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div class="divider"></div>
-      <div class="text-sm px-4">{{ v.description?.details }}</div>
+      <div class="text-sm px-4 pt-3 border-t">{{ v.description?.details }}</div>
     </div>
 
     <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -378,7 +383,7 @@ onMounted(() => {
       <div class="rounded overflow-auto">
         <table class="table validatore-table w-full">
           <thead>
-            <th class="text-left pl-4" style="position: relative; z-index: 2;">
+            <th class="text-left pl-4" style="position: relative; z-index: 2">
               Height
             </th>
             <th class="text-left pl-4">Hash</th>
