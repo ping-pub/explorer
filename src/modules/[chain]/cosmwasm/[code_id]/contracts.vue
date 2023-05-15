@@ -29,7 +29,7 @@ const selected = ref('');
 function showInfo(address: string) {
   wasmStore.wasmClient.getWasmContracts(address).then((x) => {
     info.value = x.contract_info;
-    infoDialog.value = true;
+    // infoDialog.value = true;
   });
 }
 function showState(address: string) {
@@ -99,20 +99,21 @@ const result = ref('');
         <table class="table w-full mt-4">
           <thead>
             <tr>
-              <th style="position: relative; z-index: 2;">Contract List</th>
+              <th style="position: relative; z-index: 2">Contract List</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="v in response.contracts">
+            <tr v-for="(v, index) in response.contracts" :key="index">
               <td>{{ v }}</td>
               <td>
-                <button
-                  class="btn btn-primary btn-sm text-xs mr-2"
+                <label
                   @click="showInfo(v)"
+                  for="modal-contract-detail"
+                  class="btn btn-primary btn-sm text-xs mr-2"
+                  >contract</label
                 >
-                  contract
-                </button>
+
                 <button
                   class="btn btn-primary btn-sm text-xs mr-2"
                   @click="showState(v)"
@@ -132,19 +133,25 @@ const result = ref('');
       </div>
     </div>
 
-    <v-dialog v-model="infoDialog" width="auto">
-      <v-card>
-        <VCardTitle>Contract Detail</VCardTitle>
-        <v-card-text>
-          <DynamicComponent :value="info" />
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" block @click="infoDialog = false"
-            >Close Dialog</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <input type="checkbox" id="modal-contract-detail" class="modal-toggle" />
+    <label for="modal-contract-detail" class="modal cursor-pointer">
+      <label class="modal-box relative p-2" for="">
+        <div>
+          <div class="flex items-center justify-between px-3 pt-2">
+            <div class="text-lg">Contract Detail</div>
+            <label
+              @click="infoDialog = false"
+              for="modal-contract-detail"
+              class="btn btn-sm btn-circle"
+              >✕</label
+            >
+          </div>
+          <div>
+            <DynamicComponent :value="info" />
+          </div>
+        </div>
+      </label>
+    </label>
 
     <v-dialog v-model="stateDialog" width="auto">
       <v-card>
