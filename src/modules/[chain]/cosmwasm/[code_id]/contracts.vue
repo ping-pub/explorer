@@ -99,7 +99,7 @@ const result = ref('');
         <table class="table w-full mt-4">
           <thead>
             <tr>
-              <th style="position: relative">Contract List</th>
+              <th style="position: relative; z-index: 2;">Contract List</th>
               <th>Actions</th>
             </tr>
           </thead>

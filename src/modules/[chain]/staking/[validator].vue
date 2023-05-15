@@ -378,7 +378,7 @@ onMounted(() => {
       <div class="rounded overflow-auto">
         <table class="table validatore-table w-full">
           <thead>
-            <th class="text-left pl-4" style="position: relative; z-index: 2">
+            <th class="text-left pl-4" style="position: relative; z-index: 2;">
               Height
             </th>
             <th class="text-left pl-4">Hash</th>

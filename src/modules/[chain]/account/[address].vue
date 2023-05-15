@@ -305,7 +305,7 @@ loadAccount(props.address);
         <table class="table w-full">
           <thead>
             <tr>
-              <th style="position: relative">Validator</th>
+              <th style="position: relative; z-index: 2;">Validator</th>
               <th>Delegation</th>
               <th>Rewards</th>
               <th>Action</th>
@@ -382,7 +382,7 @@ loadAccount(props.address);
         <table class="table">
           <thead>
             <tr>
-              <th style="position: relative">Creation Height</th>
+              <th style="position: relative; z-index: 2;">Creation Height</th>
               <th>Initial Balance</th>
               <th>Balance</th>
               <th>Completion Time</th>

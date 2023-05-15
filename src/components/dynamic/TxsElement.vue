@@ -25,7 +25,7 @@ const chain = useBlockchain();
     <table class="table w-full" density="compact" v-if="txs.length > 0">
       <thead>
         <tr>
-          <th style="position: relative">Hash</th>
+          <th style="position: relative; z-index: 2;">Hash</th>
           <th>Msgs</th>
           <th>Memo</th>
         </tr>
