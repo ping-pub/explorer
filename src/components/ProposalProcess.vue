@@ -30,14 +30,35 @@ const veto = computed(() =>
 </script>
 
 <template>
-  <div class="progress rounded-full h-1 text-xs flex items-center">
-    <div class="h-1 bg-yes" :style="`width: ${yes}`"></div>
-    <div class="h-1 bg-no" :style="`width: ${no}`"></div>
+  <div class="progress rounded-[3px] h-7 text-xs flex items-center">
     <div
-      class="h-1"
-      :style="`width: ${veto}; background-color: #B71C1C;`"
-    ></div>
-    <div class="h-1 bg-secondary" :style="`width: ${abstain}`"></div>
+      class="h-7 bg-yes flex items-center pl-2 text-white overflow-hidden"
+      :style="`width: ${yes}`"
+      :title="yes"
+    >
+      {{ yes }}
+    </div>
+    <div
+      class="h-7 bg-no flex items-center overflow-hidden"
+      :style="`width: ${no}`"
+      :title="no"
+    >
+      {{ no }}
+    </div>
+    <div
+      class="h-7 bg-[#B71C1C] flex items-center overflow-hidden"
+      :style="`width: ${veto};`"
+      :title="veto"
+    >
+      {{ veto }}
+    </div>
+    <div
+      class="h-7 bg-secondary flex items-center overflow-hidden"
+      :style="`width: ${abstain}`"
+      :title="abstain"
+    >
+      {{ abstain }}
+    </div>
   </div>
 </template>
 <style scoped>
