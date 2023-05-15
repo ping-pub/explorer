@@ -73,11 +73,11 @@ onMounted(() => {
         <br /><br />
         <VTextarea auto-grow :model-value="state"></VTextarea>
         <br />
-        3. Start the daemon: <code>{{ appName }} start</code>
+        3. Start the daemon: <code class="bg-base-200 text-gray-600 px-2 py-px mx-1 rounded shadow">{{ appName }} start</code>
         <br />
         If you are resetting node, run
-        <code>{{ appName }} unsafe-reset-all</code> or
-        <code>{{ appName }} tendermint unsafe-reset-all --home ~/.HOME</code>
+        <code class="bg-base-200 text-gray-600 px-2 py-px mx-1 rounded shadow">{{ appName }} unsafe-reset-all</code> or
+        <code class="bg-base-200 text-gray-600 px-2 py-px mx-1 rounded shadow">{{ appName }} tendermint unsafe-reset-all --home ~/.HOME</code>
         before you start the daemon.
       </div>
     </div>

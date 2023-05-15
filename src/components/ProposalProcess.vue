@@ -30,46 +30,35 @@ const veto = computed(() =>
 </script>
 
 <template>
-  <div class="grid grid-cols-4 gap-4 mb-3 text-sm">
-    <div class="flex items-center justify-between rounded-sm px-2 relative">
-      <div
-        class="bg-yes absolute top-0 bottom-0 left-0 right-0 rounded-sm opacity-20 dark:opacity-40"
-      ></div>
-      <div>YES</div>
-      <div class="text-gray-800 dark:text-gray-50">{{ yes }}</div>
-    </div>
-    <div class="flex items-center justify-between rounded-sm px-2 relative">
-      <div
-        class="bg-no absolute top-0 bottom-0 left-0 right-0 rounded-sm opacity-20 dark:opacity-40"
-      ></div>
-      <div>NO</div>
-      <div class="text-gray-800 dark:text-gray-50">{{ no }}</div>
-    </div>
-
-    <div class="flex items-center justify-between rounded-sm px-2 relative">
-      <div
-        class="bg-warning absolute top-0 bottom-0 left-0 right-0 rounded-sm opacity-20 dark:opacity-50"
-      ></div>
-      <div>No With Veto</div>
-      <div class="text-gray-800 dark:text-gray-50">{{ veto }}</div>
-    </div>
-
-    <div class="flex items-center justify-between rounded-sm px-2 relative">
-      <div
-        class="bg-gray-500 absolute top-0 bottom-0 left-0 right-0 rounded-sm opacity-20 dark:opacity-40"
-      ></div>
-      <div>Abstain</div>
-      <div class="text-gray-800 dark:text-gray-50">{{ abstain }}</div>
-    </div>
-  </div>
-  <div class="progress rounded-full h-1 text-xs flex items-center">
-    <div class="h-1 bg-yes" :style="`width: ${yes}`"></div>
-    <div class="h-1 bg-no" :style="`width: ${no}`"></div>
+  <div class="progress rounded-[3px] h-6 text-xs flex items-center">
     <div
-      class="h-1"
-      :style="`width: ${veto}; background-color: #B71C1C;`"
-    ></div>
-    <div class="h-1 bg-secondary" :style="`width: ${abstain}`"></div>
+      class="h-6 bg-yes flex items-center pl-2 text-white overflow-hidden"
+      :style="`width: ${yes}`"
+      :title="yes"
+    >
+      {{ yes }}
+    </div>
+    <div
+      class="h-6 bg-no flex items-center text-white overflow-hidden"
+      :style="`width: ${no}`"
+      :title="no"
+    >
+      {{ no }}
+    </div>
+    <div
+      class="h-6 bg-[#B71C1C] flex items-center text-white overflow-hidden"
+      :style="`width: ${veto};`"
+      :title="veto"
+    >
+      {{ veto }}
+    </div>
+    <div
+      class="h-6 bg-secondary flex items-center text-white overflow-hidden"
+      :style="`width: ${abstain}`"
+      :title="abstain"
+    >
+      {{ abstain }}
+    </div>
   </div>
 </template>
 <style scoped>

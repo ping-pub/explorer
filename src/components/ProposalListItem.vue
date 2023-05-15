@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useBlockchain, useFormatter, useStakingStore } from '@/stores';
+import { select } from '@/components/dynamic/index';
 import type { PaginatedProposals } from '@/types';
 import ProposalProcess from './ProposalProcess.vue';
 import type { PropType } from 'vue';
@@ -26,64 +27,201 @@ const statusMap: Record<string, string> = {
 </script>
 <template>
   <div class="bg-white dark:bg-[#28334e] rounded text-sm">
-    <RouterLink
-      :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
-      v-for="(item, index) in proposals?.proposals"
-      :key="index"
-      class="py-4 px-4 hover:bg-gray-100 dark:hover:bg-[#353f5a] block rounded cursor-pointer"
-    >
-      <div class="grid grid-cols-6 md:grid-cols-11 flex-1">
-        <div class="text-main dark:text-white mb-3">
-          #{{ item?.proposal_id }}
-        </div>
+    <table class="table-compact w-full table-fixed hidden lg:table">
+      <tbody>
+        <tr v-for="(item, index) in proposals?.proposals" :key="index">
+          <td class="px-4 w-20">
+            <label
+              for="proposal-detail-modal"
+              class="text-main text-base hover:text-indigo-400 cursor-pointer"
+            >
+              #{{ item?.proposal_id }}</label
+            >
+            <input
+              type="checkbox"
+              id="proposal-detail-modal"
+              class="modal-toggle"
+            />
+            <div class="modal modal-bottom sm:modal-middle">
+              <div class="modal-box">
+                <h3 class="font-bold text-lg">Description</h3>
+                <p class="py-4">
+                  <Component
+                    v-if="item.content?.description"
+                    :is="select(item.content?.description, 'horizontal')"
+                    :value="item.content?.description"
+                  ></Component>
+                </p>
+                <div class="modal-action">
+                  <label
+                    for="proposal-detail-modal"
+                    class="btn btn-sm btn-primary"
+                    >Close</label
+                  >
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="w-[35%]">
+            <div>
+              <RouterLink
+                :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
+                class="text-main text-base mb-1 block hover:text-indigo-400 truncate"
+              >
+                {{ item?.content?.title }}
+              </RouterLink>
+              <div
+                class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
+              >
+                {{ showType(item.content['@type']) }}
+              </div>
+            </div>
+          </td>
+          <td class="w-[25%]">
+            <ProposalProcess
+              :pool="staking.pool"
+              :tally="item.final_tally_result"
+            ></ProposalProcess>
+          </td>
+          <td>
+            <div class="pl-4">
+              <div
+                class="flex items-center"
+                :class="
+                  statusMap?.[item?.status] === 'PASSED'
+                    ? 'text-yes'
+                    : statusMap?.[item?.status] === 'REJECTED'
+                    ? 'text-no'
+                    : 'text-info'
+                "
+              >
+                <div
+                  class="w-1 h-1 rounded-full mr-2"
+                  :class="
+                    statusMap?.[item?.status] === 'PASSED'
+                      ? 'bg-yes'
+                      : statusMap?.[item?.status] === 'REJECTED'
+                      ? 'bg-no'
+                      : 'bg-info'
+                  "
+                ></div>
+                <div class="text-xs">
+                  {{ statusMap?.[item?.status] || item?.status }}
+                </div>
+              </div>
+              <div
+                class="truncate col-span-2 md:col-span-1 text-xs text-gray-500 dark:text-gray-400 text-right md:flex md:justify-start"
+              >
+                {{ format.toDay(item.voting_end_time, 'from') }}
+              </div>
+            </div>
+          </td>
 
-        <div class="col-span-5 md:pr-10 text-main dark:text-white truncate">
-          {{ item?.content?.title }}
-        </div>
+          <td>
+            <div>
+              <button class="btn btn-xs btn-primary rounded-sm">Vote</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-        <div class="col-span-3 mb-3 truncate">
-          <div
-            class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs"
+    <div class="lg:hidden">
+      <div
+        v-for="(item, index) in proposals?.proposals"
+        :key="index"
+        class="px-4 py-4"
+      >
+        <div
+          class="text-main text-base mb-1 flex justify-between hover:text-indigo-400"
+        >
+          <RouterLink
+            :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
+            class="flex-1 w-0 truncate mr-4"
+            >{{ item?.content?.title }}</RouterLink
           >
-            {{ showType(item.content['@type']) }}
+          <label
+            for="proposal-detail-modals"
+            class="text-main text-base hover:text-indigo-400 cursor-pointer"
+          >
+            #{{ item?.proposal_id }}</label
+          >
+          <input
+            type="checkbox"
+            id="proposal-detail-modals"
+            class="modal-toggle"
+          />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">Description</h3>
+              <p class="py-4">
+                <Component
+                  v-if="item.content?.description"
+                  :is="select(item.content?.description, 'horizontal')"
+                  :value="item.content?.description"
+                ></Component>
+              </p>
+              <div class="modal-action">
+                <label
+                  for="proposal-detail-modals"
+                  class="btn btn-sm btn-primary"
+                  >Close</label
+                >
+              </div>
+            </div>
           </div>
         </div>
 
-        <div
-          class="flex items-center mb-3"
-          :class="
-            statusMap?.[item?.status] === 'PASSED'
-              ? 'text-yes'
-              : statusMap?.[item?.status] === 'REJECTED'
-              ? 'text-no'
-              : 'text-info'
-          "
-        >
+        <div class="grid grid-cols-4 mt-2 mb-2">
+          <div class="col-span-2">
+            <div
+              class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
+            >
+              {{ showType(item.content['@type']) }}
+            </div>
+          </div>
           <div
-            class="w-1 h-1 rounded-full mr-2"
+            class="flex items-center"
             :class="
               statusMap?.[item?.status] === 'PASSED'
-                ? 'bg-yes'
+                ? 'text-yes'
                 : statusMap?.[item?.status] === 'REJECTED'
-                ? 'bg-no'
-                : 'bg-info'
+                ? 'text-no'
+                : 'text-info'
             "
-          ></div>
-          <div class="text-xs">
-            {{ statusMap?.[item?.status] || item?.status }}
+          >
+            <div
+              class="w-1 h-1 rounded-full mr-2"
+              :class="
+                statusMap?.[item?.status] === 'PASSED'
+                  ? 'bg-yes'
+                  : statusMap?.[item?.status] === 'REJECTED'
+                  ? 'bg-no'
+                  : 'bg-info'
+              "
+            ></div>
+            <div class="text-xs flex items-center">
+              {{ statusMap?.[item?.status] || item?.status }}
+            </div>
+          </div>
+          <div
+            class="truncate text-xs text-gray-500 dark:text-gray-400 flex items-center justify-end"
+          >
+            {{ format.toDay(item.voting_end_time, 'from') }}
           </div>
         </div>
 
-        <div
-          class="truncate mb-3 col-span-2 md:col-span-1 text-xs text-gray-500 dark:text-gray-400 text-right md:flex md:justify-start"
-        >
-          {{ format.toDay(item.voting_end_time, 'from') }}
+        <div>
+          <ProposalProcess
+            :pool="staking.pool"
+            :tally="item.final_tally_result"
+          ></ProposalProcess>
+        </div>
+
+        <div class="mt-4">
+          <button class="btn btn-xs btn-primary rounded-sm px-4">Vote</button>
         </div>
       </div>
-      <ProposalProcess
-        :pool="staking.pool"
-        :tally="item.final_tally_result"
-      ></ProposalProcess>
-    </RouterLink>
+    </div>
   </div>
 </template>

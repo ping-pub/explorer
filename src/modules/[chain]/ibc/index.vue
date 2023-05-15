@@ -25,31 +25,31 @@ function color(v: string) {
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
       <h2 class="card-title">IBC Connections</h2>
       <div class="overflow-x-auto mt-4">
-        <table class="table w-full">
+        <table class="table w-full table-zebra">
           <thead>
             <tr>
-              <th style="position: relative; z-index: 2;">Connection Id</th>
-              <th>Connection</th>
-              <th>Delay Period</th>
-              <th>State</th>
+              <th class="py-3">Connection Id</th>
+              <th class="py-3">Connection</th>
+              <th class="py-3">Delay Period</th>
+              <th class="py-3">State</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="v in list">
-              <td>
-                <RouterLink :to="`/${chain}/ibc/${v.id}`">{{
-                  v.id
-                }}</RouterLink>
+            <tr v-for="(v, index) in list" :key="index">
+              <td class="py-2">
+                <RouterLink :to="`/${chain}/ibc/${v.id}`" class="text-primary">
+                  {{ v.id }}
+                </RouterLink>
               </td>
-              <td>
+              <td class="py-2">
                 {{ v.client_id }} {{ v.id }} <br />
                 {{ v.counterparty.client_id }}
                 {{ v.counterparty.connection_id }}
               </td>
-              <td>{{ v.delay_period }}</td>
-              <td>
+              <td class="py-2">{{ v.delay_period }}</td>
+              <td class="py-2">
                 <div
-                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit"
+                  class="text-xs truncate relative py-1 px-3 rounded-full w-fit"
                   :class="`text-${color(v.state)}`"
                 >
                   <span
