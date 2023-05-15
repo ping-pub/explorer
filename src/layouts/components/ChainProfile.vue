@@ -5,7 +5,7 @@ const baseStore = useBaseStore();
 chainStore.initial();
 chainStore.$subscribe((m, s) => {
   if (!Array.isArray(m.events) && m.events.key === 'endpoint') {
-    chainStore.initial();
+    // chainStore.initial();
   }
 });
 </script>
