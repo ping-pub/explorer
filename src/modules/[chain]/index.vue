@@ -344,7 +344,9 @@ const color = computed(() => {
 
       <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
         <button class="btn btn-success text-white">Send</button>
-        <button class="btn btn-info text-white">Receive</button>
+        <RouterLink to="/wallet/receive" class="btn btn-info text-white"
+          >Receive</RouterLink
+        >
         <button class="btn btn-primary text-white">Convert</button>
       </div>
     </div>
