@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useBlockchain, useFormatter, useStakingStore } from '@/stores';
+import { select } from '@/components/dynamic/index';
 import type { PaginatedProposals } from '@/types';
 import ProposalProcess from './ProposalProcess.vue';
 import type { PropType } from 'vue';
@@ -30,12 +31,36 @@ const statusMap: Record<string, string> = {
       <tbody>
         <tr v-for="(item, index) in proposals?.proposals" :key="index">
           <td class="px-4 w-20">
-            <RouterLink
-              class="text-main text-base hover:text-indigo-400"
-              :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
+            <label
+              for="proposal-detail-modal"
+              class="text-main text-base hover:text-indigo-400 cursor-pointer"
             >
-              #{{ item?.proposal_id }}
-            </RouterLink>
+              #{{ item?.proposal_id }}</label
+            >
+            <input
+              type="checkbox"
+              id="proposal-detail-modal"
+              class="modal-toggle"
+            />
+            <div class="modal modal-bottom sm:modal-middle">
+              <div class="modal-box">
+                <h3 class="font-bold text-lg">Description</h3>
+                <p class="py-4">
+                  <Component
+                    v-if="item.content?.description"
+                    :is="select(item.content?.description, 'horizontal')"
+                    :value="item.content?.description"
+                  ></Component>
+                </p>
+                <div class="modal-action">
+                  <label
+                    for="proposal-detail-modal"
+                    class="btn btn-sm btn-primary"
+                    >Close</label
+                  >
+                </div>
+              </div>
+            </div>
           </td>
           <td class="w-[35%]">
             <div>
@@ -94,9 +119,6 @@ const statusMap: Record<string, string> = {
 
           <td>
             <div>
-              <button class="btn btn-xs btn-primary rounded-sm mr-3">
-                Detail
-              </button>
               <button class="btn btn-xs btn-primary rounded-sm">Vote</button>
             </div>
           </td>
@@ -110,14 +132,45 @@ const statusMap: Record<string, string> = {
         :key="index"
         class="px-4 py-4"
       >
-        <RouterLink
-          :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
+        <div
           class="text-main text-base mb-1 flex justify-between hover:text-indigo-400"
         >
-          <div class="flex-1 w-0 truncate mr-4">{{ item?.content?.title }}</div>
-
-          <div>#{{ item?.proposal_id }}</div>
-        </RouterLink>
+          <RouterLink
+            :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
+            class="flex-1 w-0 truncate mr-4"
+            >{{ item?.content?.title }}</RouterLink
+          >
+          <label
+            for="proposal-detail-modals"
+            class="text-main text-base hover:text-indigo-400 cursor-pointer"
+          >
+            #{{ item?.proposal_id }}</label
+          >
+          <input
+            type="checkbox"
+            id="proposal-detail-modals"
+            class="modal-toggle"
+          />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">Description</h3>
+              <p class="py-4">
+                <Component
+                  v-if="item.content?.description"
+                  :is="select(item.content?.description, 'horizontal')"
+                  :value="item.content?.description"
+                ></Component>
+              </p>
+              <div class="modal-action">
+                <label
+                  for="proposal-detail-modals"
+                  class="btn btn-sm btn-primary"
+                  >Close</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div class="grid grid-cols-4 mt-2 mb-2">
           <div class="col-span-2">
@@ -166,9 +219,6 @@ const statusMap: Record<string, string> = {
         </div>
 
         <div class="mt-4">
-          <button class="btn btn-xs btn-primary rounded-sm mr-3 px-4">
-            Detail
-          </button>
           <button class="btn btn-xs btn-primary rounded-sm px-4">Vote</button>
         </div>
       </div>
