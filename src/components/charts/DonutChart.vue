@@ -20,3 +20,9 @@ const expenseRationChartConfig = computed(() =>
     :series="series"
   />
 </template>
+
+<script lang="ts">
+export default {
+    name: 'DonetChart',
+};
+</script>

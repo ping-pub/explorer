@@ -2,15 +2,17 @@
 import { CosmosRestClient } from '@/libs/client';
 import type { Coin, Delegation } from '@/types';
 import { ref } from 'vue';
-import { scanLocalKeys } from './utils';
+import { scanLocalKeys, type AccountEntry } from './utils';
 import { fromBech32, toBase64 } from '@cosmjs/encoding';
 import { computed } from 'vue';
 import { useFormatter } from '@/stores';
+import DonutChart from '@/components/charts/DonutChart.vue';
 
 const format = useFormatter()
 const conf = ref(JSON.parse(localStorage.getItem("imported-addresses") || "{}") as Record<string, AccountEntry[]>)
 const balances = ref({} as Record<string, Coin[]>)
 const delegations = ref({} as Record<string, Delegation[]>)
+const tokenMeta = ref({} as Record<string, AccountEntry>)
 
 scanLocalKeys().forEach(wallet => {
   const { data } = fromBech32(wallet.cosmosAddress)
@@ -22,10 +24,17 @@ scanLocalKeys().forEach(wallet => {
     if (x.endpoint) {
       const client = CosmosRestClient.newDefault(x.endpoint)
       client.getBankBalances(x.address).then(res => {
-        balances.value[x.address] = res.balances.filter(x => x.denom.length < 10)
+        const bal = res.balances.filter(x => x.denom.length < 10)
+        balances.value[x.address] = bal
+        bal.forEach(b => {
+          tokenMeta.value[b.denom] = x
+        })
       })
       client.getStakingDelegations(x.address).then(res => {
         delegations.value[x.address] = res.delegation_responses
+        res.delegation_responses.forEach(del => {
+          tokenMeta.value[del.balance.denom] = x
+        })
       })
     }
   })
@@ -35,19 +44,25 @@ const tokenValues = computed(() => {
   const values = {} as Record<string, number>
   Object.values(balances.value).forEach(b => {
     b.forEach(coin => {
-      if(values[coin.denom]) {
-        values[coin.denom] += format.tokenValueNumber(coin)
-      } else {
-        values[coin.denom] = format.tokenValueNumber(coin)
+      const v = format.tokenValueNumber(coin)
+      if(v) {
+        if (values[coin.denom]) {
+          values[coin.denom] += v
+        } else {
+          values[coin.denom] = v
+        }
       }
     })
   })
   Object.values(delegations.value).forEach(b => {
     b.forEach(d => {
-      if(values[d.balance.denom]) {
-        values[d.balance.denom] += format.tokenValueNumber(d.balance)
-      } else {
-        values[d.balance.denom] = format.tokenValueNumber(d.balance)
+      const v = format.tokenValueNumber(d.balance)
+      if(v) {
+        if (values[d.balance.denom]) {
+          values[d.balance.denom] += v
+        } else {
+          values[d.balance.denom] = v
+        }
       }
     })
   })
@@ -56,6 +71,20 @@ const tokenValues = computed(() => {
 
 const totalValue = computed(() => {
   return Object.values(tokenValues.value).reduce((a, s) => (a + s), 0)
+})
+
+const tokenList = computed(() => {
+  const list = [] as { denom: string, value: number, logo: string, chainName: string, percentage: number }[]
+  Object.keys(tokenValues.value).map(x => {
+    list.push({
+      denom: x,
+      value: tokenValues.value[x],
+      chainName: tokenMeta.value[x]?.chainName,
+      logo: tokenMeta.value[x]?.logo,
+      percentage: tokenValues.value[x] / totalValue.value
+    })
+  })
+  return list.filter(x => x.value > 0).sort((a, b) => b.value - a.value)
 })
 
 
@@ -82,6 +111,34 @@ const totalValue = computed(() => {
       <div class="mt-5 flex lg:ml-4 lg:mt-0">
 
       </div>
+    </div>
+    <div class="bg-base-100">
+      <DonutChart :series="Object.values(tokenValues)" :labels="Object.keys(tokenValues)"/>
+      <table class="table w-100">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th class="text-right">Value</th>
+            <th class="text-right">Percent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="x in tokenList">
+            <td class="capitalize">
+              <div class="flex">
+                <div class="avatar">
+                  <div class="mask mask-squircle w-6 h-6 mr-2">
+                    <img :src="x.logo" :alt="x.chainName" />
+                  </div>
+                </div>
+                {{ x.chainName }}
+              </div>
+            </td>
+            <td class="text-right">${{ format.formatNumber(x.value) }}</td>
+            <td class="text-right">{{ format.percent(x.percentage) }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>

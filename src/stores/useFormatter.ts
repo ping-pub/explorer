@@ -216,6 +216,9 @@ export const useFormatter = defineStore('formatter', {
     percent(decimal?: string | number) {
       return decimal ? numeral(decimal).format('0.[00]%') : '-';
     },
+    formatNumber(input: number, fmt = '0.[00]') {
+      return numeral(input).format(fmt)
+    },
     numberAndSign(input: number, fmt = '+0,0') {
       return numeral(input).format(fmt);
     },
