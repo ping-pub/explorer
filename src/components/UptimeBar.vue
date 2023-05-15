@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { Commit } from '@/types';
+import { computed, type PropType } from 'vue';
 
 const props = defineProps({
   blocks: { type: Array as PropType<Commit[]> },
@@ -8,6 +9,7 @@ const props = defineProps({
 
 const bars = computed(() => {
   const uptime = Array(50).fill({ height: 0, color: 'bg-secondary' });
+  if(!props.blocks) return uptime
   props.blocks.forEach((element) => {
     const has = element.signatures?.findIndex(
       (sig) => sig.validator_address === props.validator
@@ -29,10 +31,14 @@ const bars = computed(() => {
         <span
           :class="item.color"
           class="rounded"
-          style="width: 1.5%"
+          style="width: 1.3%"
         >&nbsp;
         </span>
       </div>
     </div>
   </div>
 </template>
+
+<style>
+  
+</style>

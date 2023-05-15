@@ -49,9 +49,8 @@ const messages = computed(() => {
             <tr>
               <td>Status</td>
               <td>
-                <div class="badge badge-primary badge-sm">oioio</div>
                 <div
-                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit mr-2"
+                  class="text-xs truncate relative py-2 px-4 w-fit mr-2"
                   :class="`text-${
                     tx.tx_response.code === 0 ? 'success' : 'error'
                   }`"

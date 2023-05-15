@@ -30,7 +30,8 @@ const local = ref(
     string[]
   >
 );
-const selected = ref(local.value[chainStore.chainName] as string[]); // favorite validators on selected blockchain
+const currentPined = local.value[chainStore.chainName]
+const selected = ref(currentPined || []); // favorite validators on selected blockchain
 
 const signingInfo = ref({} as Record<string, SigningInfo>);
 
@@ -49,7 +50,7 @@ onMounted(() => {
     latest.value = b;
     commits.value.unshift(b.block.last_commit);
     const height = Number(b.block.header?.height || 0);
-    if (height > 0) {
+    if (height === 0) {
       // constructs sequence for loading blocks
       let promise = Promise.resolve();
       for (let i = height - 1; i > height - 50; i -= 1) {
@@ -84,7 +85,6 @@ const commits2 = computed(() => {
   return all.length > 50 ? all.slice(all.length - 50): all
 })
 
-
 onUnmounted(() => {
   live.value = false;
 });
@@ -110,23 +110,18 @@ watchEffect(() => {
         <span class="">Favorite</span>
       </button>
     </div>
-
     <div
-      class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-x-4 mt-4"
+      class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-x-4 mt-4"
     >
-      <div v-for="(v, i) in validators" :key="i">
-        <div class="flex items-center justify-between">
-          <VCheckbox
-            v-model="selected"
-            color="warning"
-            :value="v.operator_address"
-          >
-            <template v-slot:label>
-              <span class="text-truncate text-sm"
-                >{{ i + 1 }}. {{ v.description.moniker }}</span
-              >
-            </template>
-          </VCheckbox>
+      <div v-for="(v, i) in validators" :key="i" >
+        <div class="flex items-center justify-between py-0">
+          <label class="text-truncate text-sm">
+            <input type="checkbox"
+              v-model="selected"
+              :value="v.operator_address"
+            />
+            <span class="ml-1 text-black dark:text-white">{{ i + 1 }}.{{ v.description.moniker }}</span>
+          </label>
           <div
             v-if="
               Number(

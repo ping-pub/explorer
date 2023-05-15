@@ -155,7 +155,7 @@ const processList = computed(() => {
     { name: 'Turnout', value: turnout.value, class: 'bg-info' },
     { name: 'Yes', value: yes.value, class: 'bg-success' },
     { name: 'No', value: no.value, class: 'bg-error' },
-    { name: 'No With Veto', value: veto.value, class: 'bg-primary' },
+    { name: 'No With Veto', value: veto.value, class: 'bg-red-800' },
     { name: 'Abstain', value: abstain.value, class: 'bg-warning' },
   ];
 });

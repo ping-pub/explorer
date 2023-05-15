@@ -8,7 +8,7 @@ const props = defineProps(['value']);
     <table class="table w-full text-sm">
       <tbody>
         <tr v-for="(v, k) of value">
-          <td class="text-capitalize" style="max-width: 200px">{{ k }}</td>
+          <td class="text-capitalize" style="max-width: 100px">{{ String(k).replaceAll("_", " ") }}</td>
           <td>
             <div
               class="overflow-hidden w-auto whitespace-normal"

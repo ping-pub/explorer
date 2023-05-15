@@ -315,7 +315,7 @@ const rank = function (position: number) {
                 <label
                   v-else
                   for="delegate"
-                  class="btn btn-xs bg-primary"
+                  class="btn btn-xs bg-primary capitalize"
                   @click="
                     dialog.open('delegate', {
                       validator_address: v.operator_address,
