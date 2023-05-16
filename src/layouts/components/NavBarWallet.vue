@@ -5,6 +5,9 @@ const walletStore = useWalletStore();
 walletStore.$subscribe((m, s) => {
   console.log(m, s);
 });
+function walletStateChange(res: any) {
+  walletStore.setConnectedWallet(res.detail?.value);
+}
 let showCopyToast = ref(0);
 async function copyAdress(address: string) {
   try {
@@ -89,6 +92,7 @@ const addressChange = computed(() => {
         </div>
       </div>
     </div>
+    
   </div>
   <label
     v-if="!walletStore?.currentAddress"
@@ -96,4 +100,20 @@ const addressChange = computed(() => {
     class="btn btn-sm ml-4 ping-connect-btn"
     >Connect Wallet</label
   >
+  <div class="footer-modal">
+    <Teleport to="body">
+      <ping-connect-wallet
+        :chain-id="'juno-1'"
+        :hd-path="`m/44'/118/0'/0/0`"
+        @change="walletStateChange"
+      />
+    </Teleport>
+  </div>
 </template>
+
+<style>
+.footer-modal .ping-connect-btn,
+.footer-modal .ping-connect-dropdown {
+  display: none;
+}
+</style>

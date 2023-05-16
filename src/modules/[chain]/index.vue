@@ -89,6 +89,12 @@ const color = computed(() => {
       return 'text-red-600';
   }
 });
+const endpoint = 'https://juno-api.polkachu.com';
+const params = JSON.stringify({
+  proposal_id: '1',
+  validator_address: 'junovaloper1jxv0u20scum4trha72c7ltfgfqef6nscm9pmg2',
+  chain_name: 'juno',
+});
 </script>
 
 <template>
@@ -350,8 +356,17 @@ const color = computed(() => {
         <RouterLink to="/wallet/receive" class="btn btn-info text-white"
           >Receive</RouterLink
         >
-        <button class="btn btn-primary text-white">Convert</button>
+        <label for="PingTokenConvert" class="btn btn-primary text-white"
+          >Convert</label
+        >
       </div>
+      <Teleport to="body">
+        <ping-token-convert
+          chain-name="juno"
+          :endpoint="endpoint"
+          :params="params"
+        ></ping-token-convert>
+      </Teleport>
     </div>
   </div>
 </template>
