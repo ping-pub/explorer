@@ -162,7 +162,7 @@ function changeTab(v: string) {
             <td>{{ signing?.start_height }}</td>
             <td>{{ signing?.index_offset }}</td>
             <td>
-              <span class="badge badge-sm text-white" :class="Number(signing?.missed_blocks_counter) < 10?'badge-success':'badge-error'">{{ signing?.missed_blocks_counter }}</span>
+              <span v-if="signing" class="badge badge-sm text-white" :class="Number(signing?.missed_blocks_counter) < 10?'badge-success':'badge-error'">{{ signing?.missed_blocks_counter }}</span>
             </td>
             <td><span v-if="signing && signing.jailed_until.startsWith('1970')">{{ format.percent(Number(signing.index_offset)/(latest-Number(signing.start_height))) }}</span></td>
             <td><span v-if="signing && !signing.jailed_until.startsWith('1970')">
