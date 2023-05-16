@@ -316,7 +316,6 @@ const color = computed(() => {
               </td>
               <td>{{ format.formatToken(item?.balance) }}</td>
               <td>
-                {{ item }}
                 {{
                   format.formatToken({
                     denom: item?.balance?.denom,
