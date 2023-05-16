@@ -55,12 +55,12 @@ const messages = computed(() => {
                     tx.tx_response.code === 0 ? 'success' : 'error'
                   }`"
                 >
-                <VCard
+                <span
                     class="inset-x-0 inset-y-0 opacity-10 absolute"
                     :class="`bg-${
                       tx.tx_response.code === 0 ? 'success' : 'error'
                     }`"
-                  ></VCard>
+                  ></span>
                   {{ tx.tx_response.code === 0 ? 'Success' : 'Failded' }}
                 </div>
               </td>
