@@ -10,6 +10,15 @@ const blockchain = useBlockchain();
 const base = useBaseStore();
 const nodeInfo = ref({} as NodeInfo);
 
+const height = ref(Number(base.latest.block?.header?.height|| 2001))
+const hash = ref(toHex(fromBase64(base.latest.block_id.hash)))
+
+if(height.value > 2000) {
+  height.value = Math.round((height.value - 2000) / 1000) * 1000
+  base.fetchBlock(height.value).then(res => {
+    hash.value = toHex(fromBase64(res.block_id.hash)).toUpperCase()
+  })
+}
 const state = computed(() => {
   const rpcs = blockchain.current?.endpoints?.rpc
     ?.map((x) => x.address)
@@ -17,10 +26,8 @@ const state = computed(() => {
   return `[statesync]
 enable = true
 rpc_servers = "${rpcs}"
-trust_height = ${base.latest.block?.header?.height || 'loading'}
-trust_hash = "${
-    base.latest.block_id ? toHex(fromBase64(base.latest.block_id?.hash)) : ''
-  }"
+trust_height = ${height.value || 'loading'}
+trust_hash = "${hash.value}"
 trust_period = "168h"  # 2/3 of unbonding time"
 `;
 });
@@ -31,7 +38,6 @@ const appName = computed(() => {
 
 onMounted(() => {
   blockchain.rpc.getBaseNodeInfo().then((x) => {
-    console.log('node info', x);
     nodeInfo.value = x;
   });
 });

@@ -49,24 +49,22 @@ onMounted(() => {
     latest.value = Number(b.block.header.height);
     commits.value.unshift(b.block.last_commit);
     const height = Number(b.block.header?.height || 0);
-    if (height === 0) {
+    if (height > 50) {
       // constructs sequence for loading blocks
       let promise = Promise.resolve();
       for (let i = height - 1; i > height - 50; i -= 1) {
-        if (i > height - 48) {
-          promise = promise.then(
-            () =>
-              new Promise((resolve, reject) => {
-                if (live.value && commits2.value.length < 50) {
-                  // continue only if the page is living
-                  baseStore.fetchBlock(i).then((x) => {
-                    commits.value.unshift(x.block.last_commit);
-                    resolve();
-                  });
-                }
-              })
-          );
-        }
+        promise = promise.then(
+          () =>
+            new Promise((resolve, reject) => {
+              if (live.value && commits2.value.length < 50) {
+                // continue only if the page is living
+                baseStore.fetchBlock(i).then((x) => {
+                  commits.value.unshift(x.block.last_commit);
+                  resolve();
+                });
+              }
+            })
+        );
       }
     }
   });
@@ -143,28 +141,26 @@ function changeTab(v: string) {
 
       <div :class="tab === '3'?'':'hidden'">
         <table class="table table-compact w-full mt-5">
-          <thead>
+          <thead class=" capitalize">
             <tr>
-              <td rowspan="2">Validator</td>
-              <td rowspan="2">Start Height</td>
-              <td rowspan="2">Signed Blocks</td>
-              <td colspan="2">Missing blocks</td>
-              <td rowspan="2">Last Jailed Time</td>
-              <td rowspan="2">Tombstoned</td>
-            </tr>
-            <tr>
-              <td>In Window</td>
-              <td>Over All</td>
+              <td>Validator</td>
+              <td>Start Height</td>
+              <td>Signed Precommits</td>
+              <td>Missing blocks</td>
+              <td>Last Jailed Time</td>
+              <td>Tombstoned</td>
             </tr>
           </thead>
           <tr v-for="({v, signing}, i) in list">
             <td>{{ i+1 }}. {{ v.description.moniker }}</td>
             <td>{{ signing?.start_height }}</td>
-            <td>{{ signing?.index_offset }}</td>
+            <td>
+              {{ signing?.index_offset }}
+              <span v-if="signing && signing.jailed_until.startsWith('1970')" class="badge badge-sm">{{ format.percent(Number(signing.index_offset)/(latest-Number(signing.start_height))) }}</span>
+            </td>
             <td>
               <span v-if="signing" class="badge badge-sm text-white" :class="Number(signing?.missed_blocks_counter) < 10?'badge-success':'badge-error'">{{ signing?.missed_blocks_counter }}</span>
             </td>
-            <td><span v-if="signing && signing.jailed_until.startsWith('1970')">{{ format.percent(Number(signing.index_offset)/(latest-Number(signing.start_height))) }}</span></td>
             <td><span v-if="signing && !signing.jailed_until.startsWith('1970')">
               <div class="tooltip" :data-tip="format.toDay(signing?.jailed_until, 'long')">
                 <span>{{ format.toDay(signing?.jailed_until, "from") }}</span>
