@@ -317,10 +317,13 @@ const color = computed(() => {
               <td>{{ format.formatToken(item?.balance) }}</td>
               <td>
                 {{
-                  format.formatToken({
-                    denom: item?.balance?.denom,
-                    amount: item?.delegation?.shares,
-                  })
+                  format.formatToken(
+                    walletStore?.rewards?.rewards?.find(
+                      (el) =>
+                        el?.validator_address ===
+                        item?.delegation?.validator_address
+                    )?.reward?.[0]
+                  )
                 }}
               </td>
               <td>
