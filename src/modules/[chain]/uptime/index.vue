@@ -23,16 +23,6 @@ const commits = ref([] as Commit[]);
 const keyword = ref('');
 const live = ref(true);
 
-// storage local favorite validator ids
-const local = ref(
-  JSON.parse(localStorage.getItem('uptime-validators') || '{}') as Record<
-    string,
-    string[]
-  >
-);
-const currentPined = local.value[chainStore.chainName]
-const selected = ref(currentPined || []); // favorite validators on selected blockchain
-
 const signingInfo = ref({} as Record<string, SigningInfo>);
 
 // filter validators by keywords
@@ -90,10 +80,17 @@ onUnmounted(() => {
 });
 
 
-watchEffect(() => {
-  local.value[chainStore.chainName] = selected.value;
-  localStorage.setItem('uptime-validators', JSON.stringify(local.value));
-});
+// watchEffect((x) => {
+//   const list = selected.value.map(x => {
+//     const val = stakingStore.validators.find(v => v.operator_address === x)
+//     return {
+//       name: val?.description.moniker || "",
+//       address: x
+//     }
+//   })
+//   local.value[chainStore.chainName] = list;
+//   localStorage.setItem('uptime-validators', JSON.stringify(local.value));
+// });
 </script>
 
 <template>
@@ -105,10 +102,10 @@ watchEffect(() => {
         placeholder="Keywords to filter validators"
         class="input input-sm w-full flex-1"
       />
-      <button class="btn btn-primary btn-sm">
+      <RouterLink class="btn btn-primary btn-sm" :to="`/${chain}/uptime/overview`">
         <Icon icon="mdi-star" class="mr-2 text-lg" />
         <span class="">Favorite</span>
-      </button>
+      </RouterLink>
     </div>
     <div
       class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-x-4 mt-4"
@@ -116,10 +113,6 @@ watchEffect(() => {
       <div v-for="(v, i) in validators" :key="i" >
         <div class="flex items-center justify-between py-0">
           <label class="text-truncate text-sm">
-            <input type="checkbox"
-              v-model="selected"
-              :value="v.operator_address"
-            />
             <span class="ml-1 text-black dark:text-white">{{ i + 1 }}.{{ v.description.moniker }}</span>
           </label>
           <div
