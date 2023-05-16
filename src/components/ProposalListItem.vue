@@ -4,6 +4,7 @@ import { select } from '@/components/dynamic/index';
 import type { PaginatedProposals } from '@/types';
 import ProposalProcess from './ProposalProcess.vue';
 import type { PropType } from 'vue';
+import { ref } from 'vue';
 
 defineProps({
   proposals: { type: Object as PropType<PaginatedProposals> },
@@ -25,7 +26,7 @@ const statusMap: Record<string, string> = {
   PROPOSAL_STATUS_REJECTED: 'REJECTED',
 };
 
-const proposalInfo = ref()
+const proposalInfo = ref();
 </script>
 <template>
   <div class="bg-white dark:bg-[#28334e] rounded text-sm">
@@ -181,9 +182,13 @@ const proposalInfo = ref()
     </div>
 
     <input type="checkbox" id="proposal-detail-modal" class="modal-toggle" />
-    <label for="proposal-detail-modal"  class="modal sm:modal-middle">
+    <label for="proposal-detail-modal" class="modal sm:modal-middle">
       <label class="modal-box relative" for="">
-        <label for="proposal-detail-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+        <label
+          for="proposal-detail-modal"
+          class="btn btn-sm btn-circle absolute right-2 top-2"
+          >✕</label
+        >
         <h3 class="font-bold text-lg">Description</h3>
         <p class="py-4">
           <Component
