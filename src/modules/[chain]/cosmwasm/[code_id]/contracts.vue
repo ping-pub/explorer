@@ -160,20 +160,22 @@ const result = ref('');
             <div class="text-lg">Contract States</div>
             <label
               @click="infoDialog = false"
-              for="modal-contract-detail"
+              for="modal-contract-states"
               class="btn btn-sm btn-circle"
               >✕</label
             >
           </div>
-          <div>
-            <div v-for="(v, index) in state.models" :key="index" class="mb-2">
-              <div class="text-base mb-1">
-                {{ format.hexToString(v.key) }}
-              </div>
-              <div class="text-sm" :title="format.base64ToString(v.value)">
-                {{ format.base64ToString(v.value) }}
-              </div>
-            </div>
+          <div class="overflow-auto">
+            <table class="table table-compact w-full text-sm">
+              <tr v-for="(v, index) in state.models" :key="index">
+                <td class="">
+                  {{ format.hexToString(v.key) }}
+                </td>
+                <td class="" :title="format.base64ToString(v.value)">
+                  {{ format.base64ToString(v.value) }}
+                </td>
+              </tr>
+            </table>
           </div>
         </div>
       </label>
@@ -183,8 +185,8 @@ const result = ref('');
     <label for="modal-contract-states" class="modal cursor-pointer">
       <label class="modal-box relative p-2" for="">
         <div>
-          <div class="flex items-center justify-between px-3 pt-2">
-            <div class="text-lg">Query Contract</div>
+          <div class="flex items-center justify-between px-3 pt-2 mb-4">
+            <div class="text-lg font-semibold">Query Contract</div>
             <label
               @click="infoDialog = false"
               for="modal-contract-query"
@@ -192,20 +194,42 @@ const result = ref('');
               >✕</label
             >
           </div>
-          <div>
+          <div class="px-3">
             <div>
-              <CustomRadios
-                v-model:selected-radio="selectedRadio"
-                :radio-content="radioContent"
-                :grid-column="{ sm: '6', cols: '12' }"
-              />
+              <div class="grid grid-cols-2 gap-4 mb-4">
+                <div
+                  class="form-control border rounded px-4"
+                  v-for="(item, index) of radioContent"
+                  :key="index"
+                  :class="{ 'pt-2': index === 0 }"
+                >
+                  <label
+                    class="label cursor-pointer justify-start"
+                    @click="selectedRadio = item?.value"
+                  >
+                    <input
+                      type="radio"
+                      name="radio-10"
+                      class="radio radio-sm radio-primary mr-4"
+                      :checked="item?.value === selectedRadio"
+                      style="border: 1px solid #d2d6dc"
+                    />
+                    <div>
+                      <div class="text-base font-semibold">
+                        {{ item?.title }}
+                      </div>
+                      <div class="text-xs">{{ item?.desc }}</div>
+                    </div>
+                  </label>
+                </div>
+              </div>
 
               <VTextarea v-model="query" label="Query String" class="my-2" />
               <VTextarea v-model="result" label="Result" />
             </div>
-            <div>
+            <div class="mt-4 mb-4">
               <button
-                class="btn btn-success btn-sm px-4"
+                class="btn btn-success px-4 text-white"
                 @click="queryContract()"
               >
                 Query Contract

@@ -110,11 +110,15 @@ const changeOpen = (index: Number) => {
                     $route.path === el?.to?.path && item?.title !== 'Favorite',
                 }"
               >
-                <Icon icon="mdi:chevron-right" class="mr-2 ml-3"/>
+                <Icon
+                  v-if="!el?.icon?.image"
+                  icon="mdi:chevron-right"
+                  class="mr-2 ml-3"
+                />
                 <img
                   v-if="el?.icon?.image"
                   :src="el?.icon?.image"
-                  class="w-6 h-6 rounded-full mr-3"
+                  class="w-6 h-6 rounded-full mr-3 ml-4"
                 />
                 <div
                   class="text-base text-gray-500 dark:text-gray-300"
@@ -194,8 +198,6 @@ const changeOpen = (index: Number) => {
         <NavBarWallet
           class="block truncate md:inline-block text-xs md:text-sm"
         />
-
-        
       </div>
 
       <!-- 👉 Pages -->
