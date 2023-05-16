@@ -1,14 +1,19 @@
 <script lang="ts" setup>
-import { useBlockchain, useFormatter, useStakingStore } from '@/stores';
+import {
+  useBlockchain,
+  useFormatter,
+  useStakingStore,
+  useWalletStore,
+  useTxDialog
+} from '@/stores';
 import { select } from '@/components/dynamic/index';
 import type { PaginatedProposals } from '@/types';
 import ProposalProcess from './ProposalProcess.vue';
 import type { PropType } from 'vue';
 import { ref } from 'vue';
-
+const dialog = useTxDialog();
 defineProps({
   proposals: { type: Object as PropType<PaginatedProposals> },
-    votable: { type: Boolean, default: false }
 });
 
 const format = useFormatter();
@@ -26,17 +31,23 @@ const statusMap: Record<string, string> = {
   PROPOSAL_STATUS_PASSED: 'PASSED',
   PROPOSAL_STATUS_REJECTED: 'REJECTED',
 };
+const voterStatusMap: Record<string, string> = {
+  No_With_Veto: '',
+  VOTE_OPTION_YES: 'success',
+  VOTE_OPTION_NO: 'error',
+  VOTE_OPTION_ABSTAIN: 'warning',
+};
 
 const proposalInfo = ref();
 </script>
 <template>
   <div class="bg-white dark:bg-[#28334e] rounded text-sm">
-    <table class="table-compact w-full table-fixed lg:table">
+    <table class="table-compact w-full table-fixed hidden lg:table">
       <tbody>
         <tr v-for="(item, index) in proposals?.proposals" :key="index">
           <td class="px-4 w-20">
             <label
-              for=""
+              for="proposal-detail-modal"
               class="text-main text-base hover:text-indigo-400 cursor-pointer"
               @click="proposalInfo = item"
             >
@@ -98,9 +109,25 @@ const proposalInfo = ref();
             </div>
           </td>
 
-          <td v-if="votable">
-            <div>
-              <button class="btn btn-xs btn-primary rounded-sm">Vote</button>
+          <td v-if="statusMap?.[item?.status] === 'VOTING'">
+            <div class="" v-show="item?.voterStatus === 'No With Veto'">
+              <label
+                for="vote"
+                class="btn btn-xs btn-primary rounded-sm"
+                @click="dialog.open('vote', { proposal_id: item?.proposal_id })"
+                >Vote</label
+              >
+              <div
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit"
+                :class="`text-${voterStatusMap?.[item?.voterStatus]}`"
+                v-show="item?.voterStatus !== 'No With Veto'"
+              >
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute"
+                  :class="`bg-${voterStatusMap?.[item?.voterStatus]}`"
+                ></span>
+                {{ item?.voterStatus }}
+              </div>
             </div>
           </td>
         </tr>
@@ -176,8 +203,26 @@ const proposalInfo = ref();
           ></ProposalProcess>
         </div>
 
-        <div class="mt-4">
-          <button class="btn btn-xs btn-primary rounded-sm px-4">Vote</button>
+        <div class="mt-4" v-if="statusMap?.[item?.status] === 'VOTING'">
+          <div class="" v-show="item?.voterStatus === 'No With Veto'">
+              <label
+                for="vote"
+                class="btn btn-xs btn-primary rounded-sm"
+                @click="dialog.open('vote', { proposal_id: item?.proposal_id })"
+                >Vote</label
+              >
+              <div
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit"
+                :class="`text-${voterStatusMap?.[item?.voterStatus]}`"
+                v-show="item?.voterStatus !== 'No With Veto'"
+              >
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute"
+                  :class="`bg-${voterStatusMap?.[item?.voterStatus]}`"
+                ></span>
+                {{ item?.voterStatus }}
+              </div>
+            </div>
         </div>
       </div>
     </div>
