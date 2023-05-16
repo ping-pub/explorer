@@ -7,6 +7,7 @@ import type { PropType } from 'vue';
 
 defineProps({
   proposals: { type: Object as PropType<PaginatedProposals> },
+    votable: { type: Boolean, default: false }
 });
 
 const format = useFormatter();
@@ -27,40 +28,16 @@ const statusMap: Record<string, string> = {
 </script>
 <template>
   <div class="bg-white dark:bg-[#28334e] rounded text-sm">
-    <table class="table-compact w-full table-fixed hidden lg:table">
+    <table class="table-compact w-full table-fixed lg:table">
       <tbody>
         <tr v-for="(item, index) in proposals?.proposals" :key="index">
           <td class="px-4 w-20">
             <label
-              for="proposal-detail-modal"
+              for=""
               class="text-main text-base hover:text-indigo-400 cursor-pointer"
             >
               #{{ item?.proposal_id }}</label
             >
-            <input
-              type="checkbox"
-              id="proposal-detail-modal"
-              class="modal-toggle"
-            />
-            <div class="modal modal-bottom sm:modal-middle">
-              <div class="modal-box">
-                <h3 class="font-bold text-lg">Description</h3>
-                <p class="py-4">
-                  <Component
-                    v-if="item.content?.description"
-                    :is="select(item.content?.description, 'horizontal')"
-                    :value="item.content?.description"
-                  ></Component>
-                </p>
-                <div class="modal-action">
-                  <label
-                    for="proposal-detail-modal"
-                    class="btn btn-sm btn-primary"
-                    >Close</label
-                  >
-                </div>
-              </div>
-            </div>
           </td>
           <td class="w-[35%]">
             <div>
@@ -117,7 +94,7 @@ const statusMap: Record<string, string> = {
             </div>
           </td>
 
-          <td>
+          <td v-if="votable">
             <div>
               <button class="btn btn-xs btn-primary rounded-sm">Vote</button>
             </div>
