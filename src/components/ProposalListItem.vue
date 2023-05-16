@@ -24,6 +24,8 @@ const statusMap: Record<string, string> = {
   PROPOSAL_STATUS_PASSED: 'PASSED',
   PROPOSAL_STATUS_REJECTED: 'REJECTED',
 };
+
+const proposalInfo = ref()
 </script>
 <template>
   <div class="bg-white dark:bg-[#28334e] rounded text-sm">
@@ -34,33 +36,10 @@ const statusMap: Record<string, string> = {
             <label
               for="proposal-detail-modal"
               class="text-main text-base hover:text-indigo-400 cursor-pointer"
+              @click="proposalInfo = item"
             >
               #{{ item?.proposal_id }}</label
             >
-            <input
-              type="checkbox"
-              id="proposal-detail-modal"
-              class="modal-toggle"
-            />
-            <div class="modal modal-bottom sm:modal-middle">
-              <div class="modal-box">
-                <h3 class="font-bold text-lg">Description</h3>
-                <p class="py-4">
-                  <Component
-                    v-if="item.content?.description"
-                    :is="select(item.content?.description, 'horizontal')"
-                    :value="item.content?.description"
-                  ></Component>
-                </p>
-                <div class="modal-action">
-                  <label
-                    for="proposal-detail-modal"
-                    class="btn btn-sm btn-primary"
-                    >Close</label
-                  >
-                </div>
-              </div>
-            </div>
           </td>
           <td class="w-[35%]">
             <div>
@@ -143,33 +122,10 @@ const statusMap: Record<string, string> = {
           <label
             for="proposal-detail-modals"
             class="text-main text-base hover:text-indigo-400 cursor-pointer"
+            @click="proposalInfo = item"
           >
             #{{ item?.proposal_id }}</label
           >
-          <input
-            type="checkbox"
-            id="proposal-detail-modals"
-            class="modal-toggle"
-          />
-          <div class="modal modal-bottom sm:modal-middle">
-            <div class="modal-box">
-              <h3 class="font-bold text-lg">Description</h3>
-              <p class="py-4">
-                <Component
-                  v-if="item.content?.description"
-                  :is="select(item.content?.description, 'horizontal')"
-                  :value="item.content?.description"
-                ></Component>
-              </p>
-              <div class="modal-action">
-                <label
-                  for="proposal-detail-modals"
-                  class="btn btn-sm btn-primary"
-                  >Close</label
-                >
-              </div>
-            </div>
-          </div>
         </div>
 
         <div class="grid grid-cols-4 mt-2 mb-2">
@@ -223,5 +179,20 @@ const statusMap: Record<string, string> = {
         </div>
       </div>
     </div>
+
+    <input type="checkbox" id="proposal-detail-modal" class="modal-toggle" />
+    <label for="proposal-detail-modal"  class="modal sm:modal-middle">
+      <label class="modal-box relative" for="">
+        <label for="proposal-detail-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+        <h3 class="font-bold text-lg">Description</h3>
+        <p class="py-4">
+          <Component
+            v-if="proposalInfo?.content?.description"
+            :is="select(proposalInfo?.content?.description, 'horizontal')"
+            :value="proposalInfo?.content?.description"
+          ></Component>
+        </p>
+      </label>
+    </label>
   </div>
 </template>
