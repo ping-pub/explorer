@@ -316,6 +316,7 @@ const color = computed(() => {
               </td>
               <td>{{ format.formatToken(item?.balance) }}</td>
               <td>
+                {{ item }}
                 {{
                   format.formatToken({
                     denom: item?.balance?.denom,
@@ -343,7 +344,7 @@ const color = computed(() => {
       </div>
 
       <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
-        <button class="btn btn-success text-white">Send</button>
+        <label for="send" class="btn btn-success text-white">Send</label>
         <RouterLink to="/wallet/receive" class="btn btn-info text-white"
           >Receive</RouterLink
         >
