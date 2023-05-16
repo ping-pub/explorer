@@ -41,7 +41,7 @@ const changeTab = (val: '2' | '3' | '4') => {
         >Rejected</a
       >
     </div>
-    <ProposalListItem :proposals="store?.proposals[tab]" />
+    <ProposalListItem :proposals="store?.proposals[tab]" :votable="tab === '2'" />
   </div>
 </template>
 <route>

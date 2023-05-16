@@ -8,6 +8,7 @@ import { ref } from 'vue';
 
 defineProps({
   proposals: { type: Object as PropType<PaginatedProposals> },
+    votable: { type: Boolean, default: false }
 });
 
 const format = useFormatter();
@@ -30,12 +31,12 @@ const proposalInfo = ref();
 </script>
 <template>
   <div class="bg-white dark:bg-[#28334e] rounded text-sm">
-    <table class="table-compact w-full table-fixed hidden lg:table">
+    <table class="table-compact w-full table-fixed lg:table">
       <tbody>
         <tr v-for="(item, index) in proposals?.proposals" :key="index">
           <td class="px-4 w-20">
             <label
-              for="proposal-detail-modal"
+              for=""
               class="text-main text-base hover:text-indigo-400 cursor-pointer"
               @click="proposalInfo = item"
             >
@@ -97,7 +98,7 @@ const proposalInfo = ref();
             </div>
           </td>
 
-          <td>
+          <td v-if="votable">
             <div>
               <button class="btn btn-xs btn-primary rounded-sm">Vote</button>
             </div>

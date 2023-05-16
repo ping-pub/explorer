@@ -98,7 +98,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getGovParamsTally() {
     return this.request(this.registry.gov_params_tally, {});
   }
-  async getGovProposals(status: string, limit = 50) {
+  async getGovProposals(status: string, limit = 20) {
     const query =
       '?proposal_status={status}&pagination.limit={limit}&pagination.reverse=true&pagination.key=';
     return this.request(this.registry.gov_proposals, { status, limit }, query);
