@@ -120,7 +120,7 @@ const proposalInfo = ref()
             >{{ item?.content?.title }}</RouterLink
           >
           <label
-            for="proposal-detail-modals"
+            for="proposal-detail-modal"
             class="text-main text-base hover:text-indigo-400 cursor-pointer"
             @click="proposalInfo = item"
           >
