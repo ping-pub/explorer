@@ -39,7 +39,7 @@ const messages = computed(() => {
             </tr>
             <tr>
               <td>Height</td>
-              <td>
+              <td class="text-primary">
                 <RouterLink
                   :to="`/${props.chain}/block/${tx.tx_response.height}`"
                   >{{ tx.tx_response.height }}</RouterLink
@@ -55,12 +55,12 @@ const messages = computed(() => {
                     tx.tx_response.code === 0 ? 'success' : 'error'
                   }`"
                 >
-                  <span
+                <VCard
                     class="inset-x-0 inset-y-0 opacity-10 absolute"
                     :class="`bg-${
                       tx.tx_response.code === 0 ? 'success' : 'error'
                     }`"
-                  ></span>
+                  ></VCard>
                   {{ tx.tx_response.code === 0 ? 'Success' : 'Failded' }}
                 </div>
               </td>

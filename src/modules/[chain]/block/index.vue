@@ -71,8 +71,12 @@ const format = useFormatter();
         </thead>
         <tbody >
           <tr v-for="(item,index) in base.txsInRecents" :index="index">
-            <td>{{ item.height }}</td>
-            <td class="text-xs truncate" width="50%">
+            <td class="text-sm text-primary">
+              <RouterLink
+                :to="`/${props.chain}/block/${item.height}`"
+                >{{ item.height }}</RouterLink
+              ></td>
+            <td class="truncate text-primary" width="50%">
               <RouterLink :to="`/${props.chain}/tx/${item.hash}`">{{
                 item.hash
               }}</RouterLink>
