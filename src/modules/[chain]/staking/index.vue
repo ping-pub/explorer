@@ -58,8 +58,6 @@ async function fetchChange() {
   }
 }
 
-fetchChange();
-
 const changes = computed(() => {
   const changes = {} as Record<string, number>;
   Object.keys(latest.value).forEach((k) => {
@@ -92,12 +90,6 @@ const change24Color = (key?: Key) => {
   if (v < 0) return 'text-error';
 };
 
-const update = (m: DebuggerEvent) => {
-  if (m.key === 'validators') {
-    loadAvatars();
-  }
-};
-
 const list = computed(() => {
   return tab.value === 'active' ? staking.validators : unbondList.value;
   // return staking.validators
@@ -107,11 +99,13 @@ const loadAvatars = () => {
   // fetch avatar from keybase
   let promise = Promise.resolve();
   staking.validators.forEach((item) => {
+    console.log(item.description)
     promise = promise.then(
       () =>
         new Promise((resolve) => {
           const identity = item.description?.identity;
           if (identity && !avatars.value[identity]) {
+            console.log("loading:", identity)
             staking.keybase(identity).then((d) => {
               if (Array.isArray(d.them) && d.them.length > 0) {
                 const uri = String(d.them[0]?.pictures?.primary?.url).replace(
@@ -136,15 +130,6 @@ const loadAvatars = () => {
   });
 };
 
-staking.$subscribe((m, s) => {
-  if (Array.isArray(m.events)) {
-    m.events.forEach((x) => {
-      update(x);
-    });
-  } else {
-    update(m.events);
-  }
-});
 const logo = (identity?: string) => {
   if (!identity) return '';
   const url = avatars.value[identity] || '';
@@ -168,6 +153,10 @@ const rank = function (position: number) {
       return 'primary';
   }
 };
+
+fetchChange();
+loadAvatars();
+
 </script>
 <template>
   <div>
