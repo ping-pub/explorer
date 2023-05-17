@@ -44,7 +44,8 @@ export interface GovProposal {
     "total_deposit": Coin[],
     "voting_start_time": string,
     "voting_end_time": string,
-    "is_expedited": boolean
+    "is_expedited": boolean,
+    "voterStatus"?: string,
 }
 
 export interface Tally {

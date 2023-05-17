@@ -29,17 +29,14 @@ const selected = ref('');
 function showInfo(address: string) {
   wasmStore.wasmClient.getWasmContracts(address).then((x) => {
     info.value = x.contract_info;
-    // infoDialog.value = true;
   });
 }
 function showState(address: string) {
   wasmStore.wasmClient.getWasmContractStates(address).then((x) => {
     state.value = x;
-    stateDialog.value = true;
   });
 }
 function showQuery(address: string) {
-  queryDialog.value = true;
   selected.value = address;
   query.value = '';
   result.value = '';
@@ -114,18 +111,20 @@ const result = ref('');
                   >contract</label
                 >
 
-                <button
+                <label
                   class="btn btn-primary btn-sm text-xs mr-2"
+                  for="modal-contract-states"
                   @click="showState(v)"
                 >
                   States
-                </button>
-                <button
+                </label>
+                <label
+                  for="modal-contract-query"
                   class="btn btn-primary btn-sm text-xs"
                   @click="showQuery(v)"
                 >
                   Query
-                </button>
+                </label>
               </td>
             </tr>
           </tbody>
@@ -153,47 +152,92 @@ const result = ref('');
       </label>
     </label>
 
-    <v-dialog v-model="stateDialog" width="auto">
-      <v-card>
-        <VCardTitle>Contract States</VCardTitle>
-        <VList>
-          <VListItem v-for="v in state.models">
-            <VListItemTitle>
-              {{ format.hexToString(v.key) }}
-            </VListItemTitle>
-            <VListItemSubtitle :title="format.base64ToString(v.value)">
-              {{ format.base64ToString(v.value) }}
-            </VListItemSubtitle>
-          </VListItem>
-        </VList>
-        <v-card-actions>
-          <v-btn color="primary" block @click="stateDialog = false"
-            >Close Dialog</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <input type="checkbox" id="modal-contract-states" class="modal-toggle" />
+    <label for="modal-contract-states" class="modal cursor-pointer">
+      <label class="modal-box relative p-2" for="">
+        <div>
+          <div class="flex items-center justify-between px-3 pt-2">
+            <div class="text-lg">Contract States</div>
+            <label
+              @click="infoDialog = false"
+              for="modal-contract-states"
+              class="btn btn-sm btn-circle"
+              >✕</label
+            >
+          </div>
+          <div class="overflow-auto">
+            <table class="table table-compact w-full text-sm">
+              <tr v-for="(v, index) in state.models" :key="index">
+                <td class="">
+                  {{ format.hexToString(v.key) }}
+                </td>
+                <td class="" :title="format.base64ToString(v.value)">
+                  {{ format.base64ToString(v.value) }}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </label>
+    </label>
 
-    <v-dialog v-model="queryDialog" width="auto">
-      <v-card>
-        <VCardTitle>Query Contract</VCardTitle>
-        <v-card-text>
-          <CustomRadios
-            v-model:selected-radio="selectedRadio"
-            :radio-content="radioContent"
-            :grid-column="{ sm: '6', cols: '12' }"
-          />
+    <input type="checkbox" id="modal-contract-query" class="modal-toggle" />
+    <label for="modal-contract-states" class="modal cursor-pointer">
+      <label class="modal-box relative p-2" for="">
+        <div>
+          <div class="flex items-center justify-between px-3 pt-2 mb-4">
+            <div class="text-lg font-semibold">Query Contract</div>
+            <label
+              @click="infoDialog = false"
+              for="modal-contract-query"
+              class="btn btn-sm btn-circle"
+              >✕</label
+            >
+          </div>
+          <div class="px-3">
+            <div>
+              <div class="grid grid-cols-2 gap-4 mb-4">
+                <div
+                  class="form-control border rounded px-4"
+                  v-for="(item, index) of radioContent"
+                  :key="index"
+                  :class="{ 'pt-2': index === 0 }"
+                >
+                  <label
+                    class="label cursor-pointer justify-start"
+                    @click="selectedRadio = item?.value"
+                  >
+                    <input
+                      type="radio"
+                      name="radio-10"
+                      class="radio radio-sm radio-primary mr-4"
+                      :checked="item?.value === selectedRadio"
+                      style="border: 1px solid #d2d6dc"
+                    />
+                    <div>
+                      <div class="text-base font-semibold">
+                        {{ item?.title }}
+                      </div>
+                      <div class="text-xs">{{ item?.desc }}</div>
+                    </div>
+                  </label>
+                </div>
+              </div>
 
-          <VTextarea v-model="query" label="Query String" class="my-2" />
-          <VTextarea v-model="result" label="Result" />
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" @click="queryDialog = false"
-            >Close Dialog</v-btn
-          >
-          <v-btn color="success" @click="queryContract()">Query Contract</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+              <VTextarea v-model="query" label="Query String" class="my-2" />
+              <VTextarea v-model="result" label="Result" />
+            </div>
+            <div class="mt-4 mb-4">
+              <button
+                class="btn btn-success px-4 text-white"
+                @click="queryContract()"
+              >
+                Query Contract
+              </button>
+            </div>
+          </div>
+        </div>
+      </label>
+    </label>
   </div>
 </template>

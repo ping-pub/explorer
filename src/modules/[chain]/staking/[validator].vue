@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {
-  useBankStore,
   useBlockchain,
   useFormatter,
   useMintStore,
@@ -9,7 +8,7 @@ import {
 } from '@/stores';
 import { onMounted, computed, ref } from 'vue';
 import { Icon } from '@iconify/vue';
-import ValidatorCommissionRate from '@/components/ValidatorCommissionRate.vue';
+import CommissionRate from '@/components/ValidatorCommissionRate.vue';
 import {
   consensusPubkeyToHexAddress,
   operatorAddressToAccount,
@@ -303,9 +302,7 @@ onMounted(() => {
 
     <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="h-100">
-        <ValidatorCommissionRate
-          :commission="v.commission"
-        ></ValidatorCommissionRate>
+        <CommissionRate :commission="v.commission"></CommissionRate>
       </div>
       <div>
         <div class="h-100 bg-base-100 rounded shadow">

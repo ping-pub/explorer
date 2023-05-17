@@ -25,7 +25,7 @@ function color(v: string) {
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
       <h2 class="card-title">IBC Connections</h2>
       <div class="overflow-x-auto mt-4">
-        <table class="table w-full table-zebra">
+        <table class="table table-compact w-full table-zebra">
           <thead>
             <tr>
               <th class="py-3">Connection Id</th>
@@ -49,7 +49,7 @@ function color(v: string) {
               <td class="py-2">{{ v.delay_period }}</td>
               <td class="py-2">
                 <div
-                  class="text-xs truncate relative py-1 px-3 rounded-full w-fit"
+                  class="text-xs truncate relative py-[2px] px-3 rounded-full w-fit"
                   :class="`text-${color(v.state)}`"
                 >
                   <span

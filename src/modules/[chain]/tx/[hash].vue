@@ -3,7 +3,7 @@ import { useBlockchain, useFormatter } from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { computed, ref } from '@vue/reactivity';
 import type { Tx, TxResponse } from '@/types';
-import VueJsonPretty from 'vue-json-pretty';
+import JsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 
 const props = defineProps(['hash', 'chain']);
@@ -119,7 +119,7 @@ const messages = computed(() => {
       class="bg-base-100 px-4 pt-3 pb-4 rounded shadow"
     >
       <h2 class="card-title truncate mb-2">JSON</h2>
-      <vue-json-pretty :data="tx" :deep="3" />
+      <JsonPretty :data="tx" :deep="3" />
     </div>
   </div>
 </template>

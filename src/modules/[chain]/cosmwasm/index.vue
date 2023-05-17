@@ -17,10 +17,10 @@ wasmStore.wasmClient.getWasmCodeList().then((x) => {
   <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
     <h2 class="card-title truncate w-full">Cosmos Wasm Smart Contracts</h2>
     <div class="overflow-x-auto">
-      <table class="table w-full mt-4 text-sm">
+      <table class="table table-compact w-full mt-4 text-sm">
         <thead>
           <tr>
-            <th style="position: relative; z-index: 2;">Code Id</th>
+            <th>Code Id</th>
             <th>Code Hash</th>
             <th>Creator</th>
             <th>Permissions</th>
@@ -32,10 +32,11 @@ wasmStore.wasmClient.getWasmCodeList().then((x) => {
             <td>
               <RouterLink
                 :to="`/${props.chain}/cosmwasm/${v.code_id}/contracts`"
-                ><div class="text-truncate" style="max-width: 200px">
-                  {{ v.data_hash }}
-                </div></RouterLink
+                class="text-truncate max-w-[200px] block text-primary"
+                :title="v.data_hash"
               >
+                {{ v.data_hash }}
+              </RouterLink>
             </td>
             <td>{{ v.creator }}</td>
             <td>

@@ -1,13 +1,19 @@
 <script lang="ts" setup>
-import { useBlockchain, useFormatter, useStakingStore } from '@/stores';
+import {
+  useBlockchain,
+  useFormatter,
+  useStakingStore,
+  useWalletStore,
+  useTxDialog
+} from '@/stores';
 import { select } from '@/components/dynamic/index';
 import type { PaginatedProposals } from '@/types';
 import ProposalProcess from './ProposalProcess.vue';
 import type { PropType } from 'vue';
-
+import { ref } from 'vue';
+const dialog = useTxDialog();
 defineProps({
   proposals: { type: Object as PropType<PaginatedProposals> },
-    votable: { type: Boolean, default: false }
 });
 
 const format = useFormatter();
@@ -25,16 +31,25 @@ const statusMap: Record<string, string> = {
   PROPOSAL_STATUS_PASSED: 'PASSED',
   PROPOSAL_STATUS_REJECTED: 'REJECTED',
 };
+const voterStatusMap: Record<string, string> = {
+  No_With_Veto: '',
+  VOTE_OPTION_YES: 'success',
+  VOTE_OPTION_NO: 'error',
+  VOTE_OPTION_ABSTAIN: 'warning',
+};
+
+const proposalInfo = ref();
 </script>
 <template>
   <div class="bg-white dark:bg-[#28334e] rounded text-sm">
-    <table class="table-compact w-full table-fixed lg:table">
+    <table class="table-compact w-full table-fixed hidden lg:table">
       <tbody>
         <tr v-for="(item, index) in proposals?.proposals" :key="index">
           <td class="px-4 w-20">
             <label
-              for=""
+              for="proposal-detail-modal"
               class="text-main text-base hover:text-indigo-400 cursor-pointer"
+              @click="proposalInfo = item"
             >
               #{{ item?.proposal_id }}</label
             >
@@ -94,9 +109,25 @@ const statusMap: Record<string, string> = {
             </div>
           </td>
 
-          <td v-if="votable">
-            <div>
-              <button class="btn btn-xs btn-primary rounded-sm">Vote</button>
+          <td v-if="statusMap?.[item?.status] === 'VOTING'">
+            <div class="" v-show="item?.voterStatus === 'No With Veto'">
+              <label
+                for="vote"
+                class="btn btn-xs btn-primary rounded-sm"
+                @click="dialog.open('vote', { proposal_id: item?.proposal_id })"
+                >Vote</label
+              >
+              <div
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit"
+                :class="`text-${voterStatusMap?.[item?.voterStatus]}`"
+                v-show="item?.voterStatus !== 'No With Veto'"
+              >
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute"
+                  :class="`bg-${voterStatusMap?.[item?.voterStatus]}`"
+                ></span>
+                {{ item?.voterStatus }}
+              </div>
             </div>
           </td>
         </tr>
@@ -118,35 +149,12 @@ const statusMap: Record<string, string> = {
             >{{ item?.content?.title }}</RouterLink
           >
           <label
-            for="proposal-detail-modals"
+            for="proposal-detail-modal"
             class="text-main text-base hover:text-indigo-400 cursor-pointer"
+            @click="proposalInfo = item"
           >
             #{{ item?.proposal_id }}</label
           >
-          <input
-            type="checkbox"
-            id="proposal-detail-modals"
-            class="modal-toggle"
-          />
-          <div class="modal modal-bottom sm:modal-middle">
-            <div class="modal-box">
-              <h3 class="font-bold text-lg">Description</h3>
-              <p class="py-4">
-                <Component
-                  v-if="item.content?.description"
-                  :is="select(item.content?.description, 'horizontal')"
-                  :value="item.content?.description"
-                ></Component>
-              </p>
-              <div class="modal-action">
-                <label
-                  for="proposal-detail-modals"
-                  class="btn btn-sm btn-primary"
-                  >Close</label
-                >
-              </div>
-            </div>
-          </div>
         </div>
 
         <div class="grid grid-cols-4 mt-2 mb-2">
@@ -195,10 +203,47 @@ const statusMap: Record<string, string> = {
           ></ProposalProcess>
         </div>
 
-        <div class="mt-4">
-          <button class="btn btn-xs btn-primary rounded-sm px-4">Vote</button>
+        <div class="mt-4" v-if="statusMap?.[item?.status] === 'VOTING'">
+          <div class="" v-show="item?.voterStatus === 'No With Veto'">
+              <label
+                for="vote"
+                class="btn btn-xs btn-primary rounded-sm"
+                @click="dialog.open('vote', { proposal_id: item?.proposal_id })"
+                >Vote</label
+              >
+              <div
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit"
+                :class="`text-${voterStatusMap?.[item?.voterStatus]}`"
+                v-show="item?.voterStatus !== 'No With Veto'"
+              >
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute"
+                  :class="`bg-${voterStatusMap?.[item?.voterStatus]}`"
+                ></span>
+                {{ item?.voterStatus }}
+              </div>
+            </div>
         </div>
       </div>
     </div>
+
+    <input type="checkbox" id="proposal-detail-modal" class="modal-toggle" />
+    <label for="proposal-detail-modal" class="modal sm:modal-middle">
+      <label class="modal-box relative" for="">
+        <label
+          for="proposal-detail-modal"
+          class="btn btn-sm btn-circle absolute right-2 top-2"
+          >✕</label
+        >
+        <h3 class="font-bold text-lg">Description</h3>
+        <p class="py-4">
+          <Component
+            v-if="proposalInfo?.content?.description"
+            :is="select(proposalInfo?.content?.description, 'horizontal')"
+            :value="proposalInfo?.content?.description"
+          ></Component>
+        </p>
+      </label>
+    </label>
   </div>
 </template>

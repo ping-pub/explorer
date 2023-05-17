@@ -23,7 +23,6 @@ const walletStore = useWalletStore();
 const format = useFormatter();
 const dialog = useTxDialog();
 const stakingStore = useStakingStore();
-
 const coinInfo = computed(() => {
   return store.coinInfo;
 });
@@ -32,7 +31,6 @@ onMounted(() => {
   store.loadDashboard();
   walletStore.loadMyAsset();
 });
-
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
 
 blockchain.$subscribe((m, s) => {
@@ -246,10 +244,11 @@ const color = computed(() => {
     <div class="bg-base-100 rounded mt-4 shadow">
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         {{ walletStore.currentAddress || 'Not Connected' }}
-        <span
+        <RouterLink
           v-if="walletStore.currentAddress"
-          class="float-right font-light text-sm"
-          >More</span
+          class="float-right font-light text-sm cursor-pointert link link-primary no-underline font-medium"
+          to="/wallet/portfolio"
+          >More</RouterLink
         >
       </div>
       <div
@@ -317,10 +316,13 @@ const color = computed(() => {
               <td>{{ format.formatToken(item?.balance) }}</td>
               <td>
                 {{
-                  format.formatToken({
-                    denom: item?.balance?.denom,
-                    amount: item?.delegation?.shares,
-                  })
+                  format.formatToken(
+                    walletStore?.rewards?.rewards?.find(
+                      (el) =>
+                        el?.validator_address ===
+                        item?.delegation?.validator_address
+                    )?.reward?.[0]
+                  )
                 }}
               </td>
               <td>
@@ -343,12 +345,21 @@ const color = computed(() => {
       </div>
 
       <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
-        <button class="btn btn-success text-white">Send</button>
+        <label for="send" class="btn btn-success text-white">Send</label>
         <RouterLink to="/wallet/receive" class="btn btn-info text-white"
           >Receive</RouterLink
         >
-        <button class="btn btn-primary text-white">Convert</button>
+        <label for="PingTokenConvert" class="btn btn-primary text-white"
+          >Convert</label
+        >
       </div>
+      <Teleport to="body">
+        <ping-token-convert
+          :chain-name="blockchain?.chainName"
+          :endpoint="blockchain?.endpoint?.address"
+          :params="walletStore?.connectedWallet?.hdPath"
+        ></ping-token-convert>
+      </Teleport>
     </div>
   </div>
 </template>

@@ -85,7 +85,7 @@ function color(v: string) {
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">IBC Client State</h2>
       <div class="overflow-x-auto">
-        <table class="table text-sm w-full">
+        <table class="table table-compact text-sm w-full">
           <tbody>
             <tr>
               <td class="w-52">update after expiry:</td>
@@ -93,12 +93,17 @@ function color(v: string) {
             </tr>
             <tr>
               <td class="w-52">allow_update_after_misbehaviour:</td>
-              <td>{{ clientState.client_state?.allow_update_after_misbehaviour }}</td>
+              <td>
+                {{ clientState.client_state?.allow_update_after_misbehaviour }}
+              </td>
             </tr>
             <tr>
               <td class="w-52">trust_level:</td>
-              <td> {{ clientState.client_state?.trust_level?.numerator }}/{{
-                  clientState.client_state?.trust_level?.denominator}}</td>
+              <td>
+                {{ clientState.client_state?.trust_level?.numerator }}/{{
+                  clientState.client_state?.trust_level?.denominator
+                }}
+              </td>
             </tr>
             <tr>
               <td class="w-52">trusting_period:</td>
@@ -106,11 +111,11 @@ function color(v: string) {
             </tr>
             <tr>
               <td class="w-52">unbonding_period:</td>
-              <td> {{ clientState.client_state?.unbonding_period }}</td>
+              <td>{{ clientState.client_state?.unbonding_period }}</td>
             </tr>
             <tr>
               <td class="w-52">frozen_height:</td>
-              <td>{{ clientState.client_state?.frozen_height }} </td>
+              <td>{{ clientState.client_state?.frozen_height }}</td>
             </tr>
             <tr>
               <td class="w-52">latest_height:</td>
@@ -122,11 +127,11 @@ function color(v: string) {
             </tr>
             <tr>
               <td class="w-52">upgrade_path:</td>
-              <td>{{ clientState.client_state?.upgrade_path }} </td>
+              <td>{{ clientState.client_state?.upgrade_path }}</td>
             </tr>
             <tr>
               <td class="w-52">max_clock_drift:</td>
-              <td>{{ clientState.client_state?.max_clock_drift }} </td>
+              <td>{{ clientState.client_state?.max_clock_drift }}</td>
             </tr>
           </tbody>
         </table>

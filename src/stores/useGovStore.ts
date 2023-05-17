@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { useBlockchain } from './useBlockchain';
 import type { PageRequest, PaginatedProposals } from '@/types';
 import { LoadingStatus } from './useDashboard';
+import { useWalletStore } from './useWalletStore'
 import { reactive } from 'vue';
 
 export const useGovStore = defineStore('govStore', {
@@ -20,6 +21,9 @@ export const useGovStore = defineStore('govStore', {
     blockchain() {
       return useBlockchain();
     },
+    walletstore() {
+      return useWalletStore();
+    }
   },
   actions: {
     initial() {
@@ -34,12 +38,24 @@ export const useGovStore = defineStore('govStore', {
           await this.blockchain.rpc?.getGovProposals(status)
         );
         if (status === '2') {
-          proposals?.proposals?.forEach(async (x1) => {
-            await this.fetchTally(x1.proposal_id).then((res) => {
-              x1.final_tally_result = res?.tally;
+          proposals?.proposals?.forEach((item) => {
+            this.fetchTally(item.proposal_id).then((res) => {
+              item.final_tally_result = res?.tally;
             });
+            if (this.walletstore.currentAddress) {
+              try {
+                this.fetchProposalVotesVoter(item.proposal_id,this.walletstore.currentAddress).then((res) => {
+                  item.voterStatus = res?.vote?.option || 'No With Veto'
+                });
+              } catch (error) {
+                item.voterStatus = 'No With Veto'
+              }
+            } else {
+              item.voterStatus = 'No With Veto'
+            }
           });
         }
+        
         this.loading[status] = LoadingStatus.Loaded;
         this.proposals[status] = proposals;
       }
@@ -61,6 +77,9 @@ export const useGovStore = defineStore('govStore', {
     },
     async fetchProposalVotes(proposalId: string, next_key?: string) {
       return this.blockchain.rpc.getGovProposalVotes(proposalId, next_key);
+    },
+    async fetchProposalVotesVoter(proposalId: string, voter: string) {
+      return this.blockchain.rpc.getGovProposalVotesVoter(proposalId, voter);
     },
   },
 });
