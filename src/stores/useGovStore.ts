@@ -41,20 +41,15 @@ export const useGovStore = defineStore('govStore', {
           proposals?.proposals?.forEach(async (item) => {
             await this.fetchTally(item.proposal_id).then((res) => {
               item.final_tally_result = res?.tally;
-              // 
-             
             });
-            if (this.walletstore.connectedWallet?.cosmosAddress) {
+            if (this.walletstore.currentAddress) {
               try {
                 await this.fetchProposalVotesVoter(item.proposal_id,this.walletstore.currentAddress).then((res) => {
-                  console.log(res, 'fdfsds')
-                  // VOTE_OPTION_YES VOTE_OPTION_NO VOTE_OPTION_ABSTAIN
                   item.voterStatus = res?.vote?.option || 'No With Veto'
                 });
               } catch (error) {
                 item.voterStatus = 'No With Veto'
               }
-              console.log(this.walletstore.connectedWallet, 'this.walletstore.connectedWallet')
             } else {
               item.voterStatus = 'No With Veto'
             }

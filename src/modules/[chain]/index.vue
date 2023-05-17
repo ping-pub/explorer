@@ -23,7 +23,6 @@ const walletStore = useWalletStore();
 const format = useFormatter();
 const dialog = useTxDialog();
 const stakingStore = useStakingStore();
-
 const coinInfo = computed(() => {
   return store.coinInfo;
 });
@@ -32,7 +31,6 @@ onMounted(() => {
   store.loadDashboard();
   walletStore.loadMyAsset();
 });
-
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
 
 blockchain.$subscribe((m, s) => {
@@ -88,12 +86,6 @@ const color = computed(() => {
     case change.value < 0:
       return 'text-red-600';
   }
-});
-const endpoint = 'https://juno-api.polkachu.com';
-const params = JSON.stringify({
-  proposal_id: '1',
-  validator_address: 'junovaloper1jxv0u20scum4trha72c7ltfgfqef6nscm9pmg2',
-  chain_name: 'juno',
 });
 </script>
 
@@ -363,9 +355,9 @@ const params = JSON.stringify({
       </div>
       <Teleport to="body">
         <ping-token-convert
-          chain-name="juno"
-          :endpoint="endpoint"
-          :params="params"
+          :chain-name="blockchain?.chainName"
+          :endpoint="blockchain?.endpoint?.address"
+          :params="walletStore?.connectedWallet?.hdPath"
         ></ping-token-convert>
       </Teleport>
     </div>
