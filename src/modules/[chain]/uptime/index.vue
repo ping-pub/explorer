@@ -107,7 +107,7 @@ function changeTab(v: string) {
         @click="changeTab('2')"
         >Blocks</a
       >
-      <RouterLink :to="`/${chain}/uptime/overview`">
+      <RouterLink :to="`/${chain}/uptime/customize`">
       <a
         class="tab text-gray-400 capitalize"
         >Customize</a
@@ -117,10 +117,6 @@ function changeTab(v: string) {
       <div class="flex items-center gap-x-4">
         <input type="text" v-model="keyword" placeholder="Keywords to filter validators"
           class="input input-sm w-full flex-1" />
-        <RouterLink class="btn btn-primary btn-sm" :to="`/${chain}/uptime/overview`">
-          <Icon icon="mdi-star" class="mr-2 text-lg" />
-          <span class="">Favorite</span>
-        </RouterLink>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-x-4 mt-4" :class="tab === '2'?'':'hidden'">
         <div v-for="({v, signing, hex}, i) in list" :key="i">
