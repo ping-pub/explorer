@@ -38,13 +38,13 @@ export const useGovStore = defineStore('govStore', {
           await this.blockchain.rpc?.getGovProposals(status)
         );
         if (status === '2') {
-          proposals?.proposals?.forEach(async (item) => {
-            await this.fetchTally(item.proposal_id).then((res) => {
+          proposals?.proposals?.forEach((item) => {
+            this.fetchTally(item.proposal_id).then((res) => {
               item.final_tally_result = res?.tally;
             });
             if (this.walletstore.currentAddress) {
               try {
-                await this.fetchProposalVotesVoter(item.proposal_id,this.walletstore.currentAddress).then((res) => {
+                this.fetchProposalVotesVoter(item.proposal_id,this.walletstore.currentAddress).then((res) => {
                   item.voterStatus = res?.vote?.option || 'No With Veto'
                 });
               } catch (error) {
