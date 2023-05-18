@@ -30,7 +30,7 @@ import type {
   PaginatedProposals,
   Tally,
 } from '@/types/gov';
-import type { PaginatedSigningInfo } from '@/types/slashing';
+import type { PaginatedSigningInfo, SlashingParam } from '@/types/slashing';
 import type {
   Delegation,
   PaginatedDelegations,
@@ -90,7 +90,7 @@ export interface RequestRegistry extends AbstractRegistry {
   }>;
   mint_annual_provisions: Request<{ annual_provisions: string }>;
 
-  slashing_params: Request<any>;
+  slashing_params: Request<{params: SlashingParam}>;
   slashing_signing_info: Request<PaginatedSigningInfo>;
 
   gov_params_voting: Request<GovParams>;

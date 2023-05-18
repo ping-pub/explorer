@@ -15,6 +15,7 @@ import {
   useGovStore,
   useMintStore,
   useStakingStore,
+  useWalletStore,
 } from '.';
 import { useBlockModule } from '@/modules/[chain]/block/block';
 import { DEFAULT } from '@/libs';
@@ -67,7 +68,7 @@ export const useBlockchain = defineStore('blockchain', {
             icon: { image: this.current.logo, size: '22' },
             i18n: false,
             badgeContent: this.isConsumerChain? 'Consumer': undefined,
-            badgeClass: 'bg-secondary',
+            badgeClass: 'bg-warning',
             children: routes
               .filter((x) => x.meta.i18n) // defined menu name
               .filter((x) => !this.current?.features || this.current.features.includes(String(x.meta.i18n))) // filter none-custom module
@@ -124,6 +125,7 @@ export const useBlockchain = defineStore('blockchain', {
       //     const { global } = useTheme();
       //     global.current
       // }
+      useWalletStore().$reset()
       await this.randomSetupEndpoint();
       await useStakingStore().init();
       useBankStore().initial();

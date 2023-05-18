@@ -22,7 +22,7 @@ const header = computed(() => {
     <VTable
       v-if="header.length > 0"
       density="compact"
-      height="300px"
+      :height="value.length > 5? '300px': ''"
       fixed-header
       hover
     >

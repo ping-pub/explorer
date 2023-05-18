@@ -1,7 +1,7 @@
 {
   "module": {
     "dashboard": "Dashboard",
-    "blocks": "Blocks&Transaction",
+    "blocks": "Blocks",
     "staking": "Staking",
     "governance": "Governance",
     "parameters": "Parameters",
