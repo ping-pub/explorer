@@ -148,7 +148,7 @@ function changeTab(v: string) {
             </tr>
           </thead>
           <tr v-for="({v, signing}, i) in list">
-            <td>{{ i+1 }}. {{ v.description.moniker }}</td>
+            <td><div class="truncate max-w-sm">{{ i+1 }}. {{ v.description.moniker }}</div></td>
             <td>{{ signing?.start_height }}</td>
             <td>
               {{ signing?.index_offset }}

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const useStoreName = defineStore('bankstore', {
+export const useStoreName = defineStore('template', {
   state: () => {
     return {};
   },

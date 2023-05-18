@@ -99,13 +99,11 @@ const loadAvatars = () => {
   // fetch avatar from keybase
   let promise = Promise.resolve();
   staking.validators.forEach((item) => {
-    console.log(item.description)
     promise = promise.then(
       () =>
         new Promise((resolve) => {
           const identity = item.description?.identity;
           if (identity && !avatars.value[identity]) {
-            console.log("loading:", identity)
             staking.keybase(identity).then((d) => {
               if (Array.isArray(d.them) && d.them.length > 0) {
                 const uri = String(d.them[0]?.pictures?.primary?.url).replace(

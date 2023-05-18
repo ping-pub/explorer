@@ -11,7 +11,7 @@ const base = useBaseStore();
 const nodeInfo = ref({} as NodeInfo);
 
 const height = ref(Number(base.latest.block?.header?.height|| 2001))
-const hash = ref(toHex(fromBase64(base.latest.block_id.hash)))
+const hash = ref("")
 
 if(height.value > 2000) {
   height.value = Math.round((height.value - 2000) / 1000) * 1000

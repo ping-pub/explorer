@@ -27,7 +27,7 @@ const format = useFormatter();
     </div>
 
     <div v-show="tab === 'blocks'" class="bg-base-100 rounded overflow-x-auto">
-      <table class="table w-full">
+      <table class="table w-full table-compact">
         <thead>
           <tr>
             <th style="position: relative; z-index: 2;">Height</th>
@@ -60,7 +60,7 @@ const format = useFormatter();
       v-show="tab === 'transactions'"
       class="bg-base-100 rounded overflow-x-auto"
     >
-      <table class="table w-full">
+      <table class="table w-full table-compact">
         <thead>
           <tr>
             <th style="position: relative; z-index: 2;">Height</th>

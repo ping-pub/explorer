@@ -61,6 +61,7 @@ export interface ChainConfig {
   coinType: string;
   assets: Asset[];
   themeColor?: string;
+  features?: string[]
   endpoints: {
     rest?: Endpoint[];
     rpc?: Endpoint[];
@@ -74,12 +75,18 @@ export interface ChainConfig {
   };
   exponent: string;
   excludes?: string;
+  providerChain: {
+    api: Endpoint[]
+  };
 }
 
 export interface LocalConfig {
   addr_prefix: string;
   alias: string;
   api: string[] | Endpoint[];
+  provider_chain: {
+    api: string[] | Endpoint[]
+  }
   assets: {
     base: string;
     coingecko_id: string;
@@ -90,10 +97,12 @@ export interface LocalConfig {
   chain_name: string;
   coin_type: string;
   logo: string;
+  theme_color?: string;
   min_tx_fee: string;
   rpc: string[] | Endpoint[];
   sdk_version: string;
   registry_name?: string;
+  features?: string[];
 }
 
 function apiConverter(api: any[]) {
@@ -135,6 +144,12 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
     rest: apiConverter(lc.api),
     rpc: apiConverter(lc.rpc),
   };
+  if(lc.provider_chain) {
+    conf.providerChain = {
+      api: apiConverter(lc.provider_chain.api)
+    }
+  }
+  conf.features = lc.features
   conf.logo = lc.logo;
   return conf;
 }
