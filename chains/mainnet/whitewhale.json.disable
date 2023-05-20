@@ -1,0 +1,20 @@
+{
+  "chain_name": "whitewhale",
+  "api": ["https://whitewhale-api.polkachu.com:443"],
+  "rpc": ["https://whitewhale-rpc.polkachu.com:443"],
+  "snapshot_provider": "",
+  "sdk_version": "0.46.9",
+  "coin_type": "118",
+  "min_tx_fee": "8000",
+  "addr_prefix": "migaloo",
+  "logo": "/logos/whitewhale.png",
+  "assets": [
+    {
+      "base": "uwhale",
+      "symbol": "WHALE",
+      "exponent": "6",
+      "coingecko_id": "white-whale",
+      "logo": "/logos/whale.png"
+    }
+  ]
+}

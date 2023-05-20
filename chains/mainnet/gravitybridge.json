@@ -13,7 +13,7 @@
         "base": "ugraviton",
         "symbol": "GRAVITON",
         "exponent": "6",
-        "coingecko_id": "", 
+        "coingecko_id": "graviton", 
         "logo": "/logos/gravity-bridge.png"
     }]
 }

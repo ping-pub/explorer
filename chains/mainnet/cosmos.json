@@ -1,30 +1,15 @@
 {
     "chain_name": "cosmos",
     "api": [
-        "https://api-cosmoshub-ia.cosmosia.notional.ventures"
+        "https://api-cosmoshub-ia.cosmosia.notional.ventures",
+        "https://lcd-cosmoshub.blockapsis.com:443",
+        "https://cosmos.api.ping.pub"
     ],
-    "rpc": [{
-        "address": "http://rpc-cosmoshub.freshstaking.com:26657/",
-        "provider": "FreshSTAKING"
-    },
-    {
-        "address": "https://cosmos-rpc.polkachu.com/",
-        "provider": "Polkachu"
-    },
-    
-    {
-        "address": "https://rpc.cosmoshub.strange.love/",
-        "provider": "strangelove-ventures"
-    },
-    {
-        "address": "https://rpc-cosmoshub.whispernode.com/",
-        "provider": "WhisperNode🤐"
-    }],
+    "rpc": ["https://rpc.cosmos.network:443", "https://cosmos-rpc.icycro.org", "https://rpc.cosmos.dragonstake.io"],
     "sdk_version": "0.45.1",
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "cosmos",
-    "registry_name": "cosmoshub",
     "logo": "/logos/cosmos.svg",
     "assets": [{
         "base": "uatom",
