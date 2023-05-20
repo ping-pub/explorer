@@ -13,16 +13,17 @@ import { useDashboard } from '@/stores/useDashboard';
 import NavBarI18n from './NavBarI18n.vue';
 import NavBarWallet from './NavBarWallet.vue';
 import { useBlockchain } from '@/stores';
-import { computed } from 'vue';
 
 const { appRouteTransition } = useThemeConfig();
 
 const dashboard = useDashboard();
 dashboard.initial();
 const blockchain = useBlockchain();
-// blockchain.initial()
+
+const current = ref("")
 blockchain.$subscribe((m, s) => {
-  if (!Array.isArray(m.events) && m.events && m.events.key === 'chainName') {
+  if(current.value != s.chainName) {
+    current.value = s.chainName
     blockchain.initial();
   }
 });
