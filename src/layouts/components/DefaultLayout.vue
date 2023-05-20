@@ -22,7 +22,7 @@ dashboard.initial();
 const blockchain = useBlockchain();
 // blockchain.initial()
 blockchain.$subscribe((m, s) => {
-  if (!Array.isArray(m.events) && m.events.key === 'chainName') {
+  if (!Array.isArray(m.events) && m.events && m.events.key === 'chainName') {
     blockchain.initial();
   }
 });

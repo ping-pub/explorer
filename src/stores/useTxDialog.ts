@@ -34,6 +34,8 @@ export const useTxDialog = defineStore('txDialogStore', {
         this.sender = this.walletAddress;
         this.endpoint = this.currentEndpoint || "";
         this.params = JSON.stringify(param)
+
+        // console.log("dialog:", this.$state)
     }
   },
 });

@@ -44,7 +44,7 @@ const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
 blockchain.$subscribe((m, s) => {
   if (
     !Array.isArray(m.events) &&
-    ['chainName', 'endpoint'].includes(m.events.key)
+    ['chainName', 'endpoint'].includes(m.events?.key || "")
   ) {
     store.loadDashboard();
     walletStore.loadMyAsset();
