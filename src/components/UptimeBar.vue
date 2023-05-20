@@ -17,7 +17,7 @@ const bars = computed(() => {
     // console.log(has, props.validato, element)
     uptime.push({
       height: element.height,
-      color: has > -1 ? 'bg-success' : 'bg-error',
+      color: has > -1 ? 'bg-green-500' : 'bg-red-500',
     });
     uptime.shift();
   });
@@ -26,12 +26,11 @@ const bars = computed(() => {
 </script>
 <template>
   <div class="d-flex items-center justify-evenly">
-    <div class="cursor-default"  v-for="(item, index) in bars" :key="index">
+    <div class="cursor-default" v-for="(item, index) in bars" :key="index">
       <div class="tooltip" :data-tip="item.height">
         <span
           :class="item.color"
-          class="rounded"
-          style="width: 1.3%"
+          style="width: 1.2%"
         >&nbsp;
         </span>
       </div>
