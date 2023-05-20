@@ -6808,10 +6808,10 @@ pify@^3.0.0:
   resolved "https://registry.npmjs.org/pify/-/pify-3.0.0.tgz"
   integrity sha512-C3FsVNH1udSEX48gGX1xfvwTWfsYWj5U+8/uK15BGzIGrKoUpghX8hWZwa/OFnakBiiVNmBvemTJR5mcy7iPcg==
 
-ping-widget@^0.0.15:
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/ping-widget/-/ping-widget-0.0.15.tgz#b15698ab7649fc8bd2318d7488366f3b30bcf5c6"
-  integrity sha512-aWUJwtwWbL7AXsAXpzQX8G5IQgGbhV5EM96wmcEez9Wp/UbwJ5BYOj8fdVDdW4yjzScnJ35R9KnHlpoOhzlF0g==
+ping-widget@^0.0.16:
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/ping-widget/-/ping-widget-0.0.16.tgz#d9c40eacb75eff3b6c52fede3d62d50024c9cafd"
+  integrity sha512-5KJA9i8cA25Qx5L5LPYXrQdMWZ2mj8SIGN02zthhhnoxPUxxptvEfYPQpLcttwpW9zkqYzENc4XHg9+mVKcn7A==
   dependencies:
     "@cosmjs/amino" "^0.30.1"
     "@cosmjs/ledger-amino" "^0.30.1"
