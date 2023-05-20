@@ -235,10 +235,10 @@ const showDiscord = window.location.host.search("ping.pub") > -1
 
         <!-- <NavSearchBar />-->
         <NavBarI18n class="hidden md:!inline-block" />
-        <NavbarThemeSwitcher class="hidden md:!inline-block" />
+        <NavbarThemeSwitcher class="!inline-block" />
 
         <NavBarWallet
-          class="block truncate md:!inline-block text-xs md:!text-sm"
+          class="hidden truncate md:!inline-block text-xs md:!text-sm"
         />
       </div>
 
