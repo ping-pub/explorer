@@ -34,3 +34,10 @@
   position: relative;
   z-index: 2;
 }
+
+
+@media (min-width: 1280px){
+    .force-block{
+      display: block !important;
+  }
+}

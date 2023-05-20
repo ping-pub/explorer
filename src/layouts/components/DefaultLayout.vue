@@ -41,7 +41,7 @@ const changeOpen = (index: Number) => {
     <!-- sidebar -->
     <div
       class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-gray-700"
-      :class="{ block: sidebarShow, 'hidden xl:block': !sidebarShow }"
+      :class="{ block: sidebarShow, 'hidden force-block': !sidebarShow }"
     >
       <div class="flex items-center pl-4 py-4 mb-1">
         <img class="w-10 h-10" src="../../assets/logo.svg" />
