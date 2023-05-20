@@ -42,7 +42,7 @@ const proposalInfo = ref();
 </script>
 <template>
   <div class="bg-white dark:bg-[#28334e] rounded text-sm">
-    <table class="table-compact w-full table-fixed hidden lg:table">
+    <table class="table-compact w-full table-fixed hidden lg:!table">
       <tbody>
         <tr v-for="(item, index) in proposals?.proposals" :key="index">
           <td class="px-4 w-20">
@@ -102,7 +102,7 @@ const proposalInfo = ref();
                 </div>
               </div>
               <div
-                class="truncate col-span-2 md:col-span-1 text-xs text-gray-500 dark:text-gray-400 text-right md:flex md:justify-start"
+                class="truncate col-span-2 md:!col-span-1 text-xs text-gray-500 dark:text-gray-400 text-right md:!flex md:!justify-start"
               >
                 {{ format.toDay(item.voting_end_time, 'from') }}
               </div>
@@ -134,7 +134,7 @@ const proposalInfo = ref();
       </tbody>
     </table>
 
-    <div class="lg:hidden">
+    <div class="lg:!hidden">
       <div
         v-for="(item, index) in proposals?.proposals"
         :key="index"
@@ -228,7 +228,7 @@ const proposalInfo = ref();
     </div>
 
     <input type="checkbox" id="proposal-detail-modal" class="modal-toggle" />
-    <label for="proposal-detail-modal" class="modal sm:modal-middle">
+    <label for="proposal-detail-modal" class="modal sm:!modal-middle">
       <label class="modal-box relative" for="">
         <label
           for="proposal-detail-modal"

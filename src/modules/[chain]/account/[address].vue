@@ -120,11 +120,11 @@ loadAccount(props.address);
     <!-- Assets -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">Assets</h2>
-      <div class="grid md:grid-cols-3">
-        <div class="md:col-span-1">
+      <div class="grid md:!grid-cols-3">
+        <div class="md:!col-span-1">
           <DonutChart :series="totalAmountByCategory" :labels="labels" />
         </div>
-        <div class="mt-4 md:col-span-2 md:mt-0 md:ml-4">
+        <div class="mt-4 md:!col-span-2 md:!mt-0 md:!ml-4">
           <!-- button -->
           <div class="flex justify-end mb-4 pr-5">
             <label

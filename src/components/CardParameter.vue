@@ -30,7 +30,7 @@ function calculateValue(value: any) {
   >
     <div class="text-base mb-3 text-main">{{ props.cardItem?.title }}</div>
     <div
-      class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-4"
+      class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4"
     >
       <div
         v-for="(item, index) of props.cardItem?.items"

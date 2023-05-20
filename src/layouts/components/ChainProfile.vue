@@ -93,7 +93,7 @@ chainStore.$subscribe((m, s) => {
       </div>
       </Transition>
       <div
-        class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap hidden lg:block"
+        class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap hidden lg:!block"
       >
         {{ chainStore.connErr || chainStore.endpoint.address }}
       </div>

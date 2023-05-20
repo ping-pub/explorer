@@ -122,10 +122,10 @@ async function addAddress(acc: AccountEntry) {
 <template>
   <div>
     <div class="overflow-x-auto w-full card ">
-      <div class="lg:flex lg:items-center lg:justify-between bg-base-100 p-5">
+      <div class="lg:!flex lg:!items-center lg:!justify-between bg-base-100 p-5">
         <div class="min-w-0 flex-1">
-          <h2 class="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">Accounts</h2>
-          <div class="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
+          <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">Accounts</h2>
+          <div class="mt-1 flex flex-col sm:!mt-0 sm:!flex-row sm:!flex-wrap sm:!space-x-6">
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
                 aria-hidden="true">
@@ -139,8 +139,8 @@ async function addAddress(acc: AccountEntry) {
             </div>
           </div>
         </div>
-        <div class="mt-5 flex lg:ml-4 lg:mt-0">
-          <span class="hidden sm:block">
+        <div class="mt-5 flex lg:!ml-4 lg:!mt-0">
+          <span class="hidden sm:!block">
             <a href="#address-modal"
               class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
@@ -154,7 +154,7 @@ async function addAddress(acc: AccountEntry) {
             </a>
           </span>
 
-          <span class="ml-3 hidden sm:block">
+          <span class="ml-3 hidden sm:!block">
             <button type="button"
               class="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm"
               @click="toggleEdit">
@@ -196,7 +196,7 @@ async function addAddress(acc: AccountEntry) {
                   </div>
                   <div>
                     <div class="font-bold capitalize">{{ acc.chainName }}</div>
-                    <div class="text-sm opacity-50 hidden md:block">{{ acc.address }}</div>
+                    <div class="text-sm opacity-50 hidden md:!block">{{ acc.address }}</div>
                   </div>
                 </div>
               </RouterLink>
@@ -258,7 +258,7 @@ async function addAddress(acc: AccountEntry) {
                   </div>
                   <div>
                     <div class="font-bold capitalize">{{ acc.chainName }}</div>
-                    <div class="text-sm opacity-50 hidden md:block">{{ acc.address }}</div>
+                    <div class="text-sm opacity-50 hidden md:!block">{{ acc.address }}</div>
                   </div>
                 </div>
           </td>
