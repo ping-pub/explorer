@@ -4,6 +4,7 @@ import { TransitionExpand, VerticalNavLink } from '@layouts/components'
 import { themeConfig as config } from '@themeConfig'
 import type { NavGroup } from '@layouts/types'
 import { isNavGroupActive, openGroups } from '@layouts/utils'
+import { ref } from 'vue'
 
 const props = defineProps<{
   item: NavGroup

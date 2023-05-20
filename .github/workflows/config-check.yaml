@@ -1,0 +1,21 @@
+
+name: Config Checker
+
+on:
+  # push:
+  #   branches: [ master ]
+  pull_request:
+   # branches: [ master ]
+   paths:
+      - 'chains/mainnet/**'
+      - 'chains/testnet/**'
+
+jobs:
+  deploy:
+    name: Check Blockchain Config
+    runs-on: ubuntu-latest
+    steps:
+    - name: Git Checkout Latest
+      uses: actions/checkout@v3
+    - name: Check Chain Configs
+      uses: ping-pub/ping-dashboard-config-checker@v1.0

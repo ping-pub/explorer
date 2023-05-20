@@ -9,6 +9,7 @@ import {
   useTxDialog,
   useWalletStore,
   useStakingStore,
+useParamStore,
 } from '@/stores';
 import { onMounted, ref } from 'vue';
 import { useIndexModule } from './indexStore';
@@ -16,6 +17,9 @@ import { computed } from '@vue/reactivity';
 
 import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
 import ProposalListItem from '@/components/ProposalListItem.vue';
+import ArrayObjectElement from '@/components/dynamic/ArrayObjectElement.vue'
+
+const props = defineProps(['chain']);
 
 const blockchain = useBlockchain();
 const store = useIndexModule();
@@ -23,6 +27,7 @@ const walletStore = useWalletStore();
 const format = useFormatter();
 const dialog = useTxDialog();
 const stakingStore = useStakingStore();
+const paramStore = useParamStore()
 const coinInfo = computed(() => {
   return store.coinInfo;
 });
@@ -30,6 +35,9 @@ const coinInfo = computed(() => {
 onMounted(() => {
   store.loadDashboard();
   walletStore.loadMyAsset();
+  paramStore.handleAbciInfo()
+  // if(!(coinInfo.value && coinInfo.value.name)) {
+  // }
 });
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
 
@@ -40,6 +48,7 @@ blockchain.$subscribe((m, s) => {
   ) {
     store.loadDashboard();
     walletStore.loadMyAsset();
+    paramStore.handleAbciInfo()
   }
 });
 function shortName(name: string, id: string) {
@@ -100,8 +109,7 @@ const color = computed(() => {
           <div class="text-xl font-semibold text-main">
             {{ coinInfo.name }} (<span class="uppercase">{{
               coinInfo.symbol
-            }}</span
-            >)
+            }}</span>)
           </div>
           <div class="text-xs mt-2">
             Rank:
@@ -229,7 +237,7 @@ const color = computed(() => {
       </div>
     </div>
 
-    <div class="bg-base-100 rounded mt-4 shadow">
+    <div v-if="blockchain.supportModule('governance')" class="bg-base-100 rounded mt-4 shadow">
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         Active Proposals
       </div>
@@ -246,8 +254,8 @@ const color = computed(() => {
         {{ walletStore.currentAddress || 'Not Connected' }}
         <RouterLink
           v-if="walletStore.currentAddress"
-          class="float-right font-light text-sm cursor-pointert link link-primary no-underline font-medium"
-          to="/wallet/portfolio"
+          class="float-right text-sm cursor-pointert link link-primary no-underline font-medium"
+          :to="`/${chain}/account/${walletStore.currentAddress}`"
           >More</RouterLink
         >
       </div>
@@ -294,7 +302,7 @@ const color = computed(() => {
         </div>
       </div>
 
-      <div class="px-4 pb-4">
+      <div v-if="walletStore.delegations.length > 0" class="px-4 pb-4">
         <table class="table table-compact w-full table-zebra">
           <thead>
             <tr>
@@ -316,27 +324,28 @@ const color = computed(() => {
               <td>{{ format.formatToken(item?.balance) }}</td>
               <td>
                 {{
-                  format.formatToken(
+                  format.formatTokens(
                     walletStore?.rewards?.rewards?.find(
                       (el) =>
                         el?.validator_address ===
                         item?.delegation?.validator_address
-                    )?.reward?.[0]
-                  )
+                    )?.reward)
                 }}
               </td>
               <td>
                 <div>
-                  <button
+                  <label for="delegate"
                     class="btn btn-xs btn-primary btn-ghost text-primary rounded-sm mr-2"
+                    @click="dialog.open('delegate', { validator_address: item.delegation.validator_address})"
                   >
                     Delegate
-                  </button>
-                  <button
+                  </label>
+                  <label for="withdraw"
                     class="btn btn-xs btn-primary btn-ghost text-primary rounded-sm"
+                    @click="dialog.open('withdraw', { validator_address: item.delegation.validator_address})"
                   >
                     Withdraw Rewards
-                  </button>
+                  </label>
                 </div>
               </td>
             </tr>
@@ -345,13 +354,9 @@ const color = computed(() => {
       </div>
 
       <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
-        <label for="send" class="btn btn-success text-white">Send</label>
-        <RouterLink to="/wallet/receive" class="btn btn-info text-white"
-          >Receive</RouterLink
-        >
-        <label for="PingTokenConvert" class="btn btn-primary text-white"
-          >Convert</label
-        >
+        <label for="PingTokenConvert" class="btn btn-primary text-white">Convert</label>
+        <label for="send" class="btn btn-success text-white" @click="dialog.open('send', {})">Send</label>
+        <RouterLink to="/wallet/receive" class="btn btn-info text-white">Receive</RouterLink>
       </div>
       <Teleport to="body">
         <ping-token-convert
@@ -360,6 +365,21 @@ const color = computed(() => {
           :params="walletStore?.connectedWallet?.hdPath"
         ></ping-token-convert>
       </Teleport>
+    </div>
+
+    <div class="bg-base-100 rounded mt-4 shadow">
+      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
+        Application
+      </div>
+      <!-- Application Version -->
+      <ArrayObjectElement :value="paramStore.appVersion?.items" :thead="false" />
+    </div>
+
+    <div v-if="!store.coingeckoId" class="bg-base-100 rounded mt-4 shadow">
+      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
+        Node Information
+      </div>
+      <ArrayObjectElement :value="paramStore.nodeVersion?.items" :thead="false" />
     </div>
   </div>
 </template>

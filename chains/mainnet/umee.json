@@ -1,9 +1,9 @@
 {
     "chain_name": "umee",
-    "api": ["https://api.barnacle.mainnet.network.umee.cc:443"],
-    "rpc": ["https://rpc.barnacle.mainnet.network.umee.cc:443"],
+    "api": ["https://umee-api.polkachu.com:443"],
+    "rpc": ["https://umee-rpc.polkachu.com:443"],
     "snapshot_provider": "",
-    "sdk_version": "0.46.2",
+    "sdk_version": "0.46.11",
     "coin_type": "118",
     "min_tx_fee": "8000",
     "addr_prefix": "umee",

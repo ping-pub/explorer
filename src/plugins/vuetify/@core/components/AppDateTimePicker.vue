@@ -12,6 +12,7 @@ import { filterInputProps, makeVInputProps } from 'vuetify/lib/components/VInput
 import { filterInputAttrs } from 'vuetify/lib/util/helpers'
 
 import { useThemeConfig } from '@core/composable/useThemeConfig'
+import { ref } from 'vue'
 
 const props = defineProps({
   ...makeVInputProps({

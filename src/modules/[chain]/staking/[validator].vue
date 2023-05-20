@@ -55,7 +55,6 @@ staking
 const txs = ref({} as PaginatedTxs);
 
 blockchain.rpc.getTxsBySender(addresses.value.account).then((x) => {
-  console.log('txs', x);
   txs.value = x;
 });
 
@@ -77,14 +76,19 @@ const selfRate = computed(() => {
   }
   return '-';
 });
-
+const logo = (identity?: string) => {
+  if (!identity) return '';
+  const url = avatars.value[identity] || '';
+  return url.startsWith('http')
+    ? url
+    : `https://s3.amazonaws.com/keybase_processed_uploads/${url}`;
+};
 onMounted(() => {
   if (validator) {
     staking.fetchValidator(validator).then((res) => {
       v.value = res.validator;
       identity.value = res.validator?.description?.identity || '';
       if (identity.value && !avatars.value[identity.value]) {
-        console.log(identity.value, avatars);
         staking.keybase(identity.value).then((d) => {
           if (Array.isArray(d.them) && d.them.length > 0) {
             const uri = String(d.them[0]?.pictures?.primary?.url).replace(
@@ -143,9 +147,7 @@ onMounted(() => {
               <div class="w-24 rounded-lg">
                 <img
                   v-if="avatars[identity] !== 'undefined'"
-                  v-lazy="
-                    `https://s3.amazonaws.com/keybase_processed_uploads/${avatars[identity]}`
-                  "
+                  v-lazy="logo(identity)"
                   class="object-contain"
                 />
                 <Icon
@@ -394,8 +396,10 @@ onMounted(() => {
                   item.height
                 }}</RouterLink>
               </td>
-              <td class="text-truncate" style="max-width: 200px">
+              <td class="text-truncate text-primary" style="max-width: 200px">
+                <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
                 {{ item.txhash }}
+              </RouterLink>
               </td>
               <td>
                 <div class="flex items-center">

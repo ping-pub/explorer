@@ -155,7 +155,7 @@ function color(v: string) {
           <tr v-for="v in list">
             <td class=" capitalize">{{ v.chainName }}</td>
             <td>{{ v.v.name }}</td>
-            <td><span class="badge " :class="color( v.sigingInfo?.missed_blocks_counter)">{{ v.sigingInfo?.missed_blocks_counter }}</span></td>
+            <td><span v-if="v.sigingInfo" class="badge " :class="color( v.sigingInfo?.missed_blocks_counter)">{{ v.sigingInfo?.missed_blocks_counter }}</span></td>
             <td><span v-if="v.sigingInfo">{{ Number(v.sigingInfo.index_offset) - Number(v.sigingInfo.start_height) }}</span></td>
             <td>
               <div v-if="v.sigingInfo && !v.sigingInfo?.jailed_until.startsWith('1970')" class="text-xs flex flex-col">

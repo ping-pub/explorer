@@ -156,7 +156,6 @@ export const useParamStore = defineStore('paramstore', {
       //     this.chain.items[chainIndex].value = `${percent(res)}%`
       // })
       const res = await this.getMintParam();
-      console.log(res, 'mint');
     },
     async handleSlashingParams() {
       const res = await this.getSlashingParams();
@@ -200,7 +199,6 @@ export const useParamStore = defineStore('paramstore', {
       this.nodeVersion.items = Object.entries(res.default_node_info).map(
         ([key, value]) => ({ subtitle: key, value: value })
       );
-      console.log('handleAbciInfo', this.nodeVersion.items);
     },
     async getBaseTendermintBlockLatest() {
       return await this.blockchain.rpc?.getBaseBlockLatest();

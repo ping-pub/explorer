@@ -3,6 +3,9 @@ import { useBlockchain } from './useBlockchain';
 
 import { get } from '@/libs/http';
 import type { StakingParam, StakingPool, Validator } from '@/types';
+import { CosmosRestClient } from '@/libs/client';
+import { consensusPubkeyToHexAddress, valconsToBase64 } from '@/libs';
+import { toHex, fromBase64 } from '@cosmjs/encoding';
 
 export const useStakingStore = defineStore('stakingStore', {
   state: () => {
@@ -77,6 +80,20 @@ export const useStakingStore = defineStore('stakingStore', {
       );
     },
     async fetchValidators(status: string) {
+      if(this.blockchain.isConsumerChain) {
+        if(this.blockchain.current?.providerChain.api && this.blockchain.current.providerChain.api.length > 0) {
+          const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address)
+          // const vals = await client.getBaseValidatorsetLatest(0) 
+          const res = await client.getStakingValidators(status)
+          const proVals = res.validators.sort(
+            (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
+          )
+          if (status === 'BOND_STATUS_BONDED') {
+            this.validators = proVals;
+          }
+          return proVals
+        }
+      }
       return this.blockchain.rpc?.getStakingValidators(status).then((res) => {
         const vals = res.validators.sort(
           (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
@@ -89,3 +106,5 @@ export const useStakingStore = defineStore('stakingStore', {
     },
   },
 });
+
+

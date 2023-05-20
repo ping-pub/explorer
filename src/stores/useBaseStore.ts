@@ -78,7 +78,7 @@ export const useBaseStore = defineStore('baseStore', {
         ) === -1
       ) {
         if (this.recents.length >= 50) {
-          this.recents.pop();
+          this.recents.shift();
         }
         this.recents.push(this.latest);
       }

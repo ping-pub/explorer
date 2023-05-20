@@ -1,0 +1,17 @@
+<html>
+<head>
+   <title>Widget Test</title> 
+   <script src="https://unpkg.com/ping-widget@latest/dist/ping-widget.js" type="module" ></script>
+</head>
+<body>
+    <div class="p-5">
+    <div>
+    <ping-connect-wallet chain-id="kava_2222-10" hd-path="m/44'/118/0'/0/0"/>
+    </div>
+    <div>
+        <label for="PingTokenConvert" class="btn">Buy Kava</label>
+        <ping-token-convert chain-name="kava" endpoint="https://api.data.kava.io" hd-path="m/44'/118/0'/0/0"/>
+    </div>
+    </div>
+</body>
+</html>

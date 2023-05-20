@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { ref, onMounted, computed, watchEffect } from 'vue';
 import { fromHex, toBase64 } from '@cosmjs/encoding';
-import { Icon } from '@iconify/vue';
 import {
   useFormatter,
   useStakingStore,
@@ -9,9 +8,8 @@ import {
   useBlockchain,
 } from '@/stores';
 import UptimeBar from '@/components/UptimeBar.vue';
-import type { Block, Commit } from '@/types';
+import type { Commit, SlashingParam, SigningInfo } from '@/types';
 import { consensusPubkeyToHexAddress, valconsToBase64 } from '@/libs';
-import type { SigningInfo } from '@/types/slashing';
 
 const props = defineProps(['chain']);
 
@@ -23,9 +21,11 @@ const latest = ref(0);
 const commits = ref([] as Commit[]);
 const keyword = ref('');
 const live = ref(true);
+const slashingParam = ref({} as SlashingParam)
 
 const signingInfo = ref({} as Record<string, SigningInfo>);
 
+const filterOptout =ref(false)
 // filter validators by keywords
 const validators = computed(() => {
   if (keyword)
@@ -36,37 +36,45 @@ const validators = computed(() => {
 });
 
 const list = computed(() => {
-  return validators.value.map(v => ({
-    v, 
-    signing: signingInfo.value[consensusPubkeyToHexAddress(v.consensus_pubkey)],
-    hex: toBase64(fromHex(consensusPubkeyToHexAddress(v.consensus_pubkey)))
-  }))
+  const window = Number(slashingParam.value.signed_blocks_window|| 0)
+  const vset = validators.value.map(v => {
+    const signing = signingInfo.value[consensusPubkeyToHexAddress(v.consensus_pubkey)]
+    return {
+      v, 
+      signing,
+      hex: toBase64(fromHex(consensusPubkeyToHexAddress(v.consensus_pubkey))),
+      uptime: signing && window > 0 ? (window - Number(signing.missed_blocks_counter)) / window: undefined
+    }})
+  return filterOptout.value? vset.filter(x => x.signing) : vset
 })
 
 onMounted(() => {
   live.value = true;
-  baseStore.fetchLatest().then(b => {
+  
+  baseStore.fetchLatest().then(l => {
+    let b = l
+    if(baseStore.recents?.findIndex(x => x.block_id.hash === l.block_id.hash) > -1 ) {
+      b = baseStore.recents?.at(0) || l
+    }
     latest.value = Number(b.block.header.height);
     commits.value.unshift(b.block.last_commit);
     const height = Number(b.block.header?.height || 0);
-    if (height === 0) {
+    if (height > 50) {
       // constructs sequence for loading blocks
       let promise = Promise.resolve();
       for (let i = height - 1; i > height - 50; i -= 1) {
-        if (i > height - 48) {
-          promise = promise.then(
-            () =>
-              new Promise((resolve, reject) => {
-                if (live.value && commits2.value.length < 50) {
-                  // continue only if the page is living
-                  baseStore.fetchBlock(i).then((x) => {
-                    commits.value.unshift(x.block.last_commit);
-                    resolve();
-                  });
-                }
-              })
-          );
-        }
+        promise = promise.then(
+          () =>
+            new Promise((resolve, reject) => {
+              if (live.value && commits2.value.length < 50) {
+                // continue only if the page is living
+                baseStore.fetchBlock(i).then((x) => {
+                  commits.value.unshift(x.block.last_commit);
+                  resolve();
+                });
+              }
+            })
+        );
       }
     }
   });
@@ -76,6 +84,10 @@ onMounted(() => {
       signingInfo.value[valconsToBase64(i.address)] = i;
     });
   });
+
+  chainStore.rpc.getSlashingParams().then(x => {
+    slashingParam.value = x.params
+  })
 });
 
 const commits2 = computed(() => {
@@ -91,7 +103,6 @@ const tab = ref("3")
 function changeTab(v: string) {
   tab.value = v
 }
-
 </script>
 
 <template>
@@ -109,7 +120,7 @@ function changeTab(v: string) {
         @click="changeTab('2')"
         >Blocks</a
       >
-      <RouterLink :to="`/${chain}/uptime/overview`">
+      <RouterLink :to="`/${chain}/uptime/customize`">
       <a
         class="tab text-gray-400 capitalize"
         >Customize</a
@@ -117,12 +128,12 @@ function changeTab(v: string) {
     </div>
     <div class="bg-base-100 px-5 pt-5">
       <div class="flex items-center gap-x-4">
+        <label v-if="chainStore.isConsumerChain" class="text-center">
+          <input type="checkbox" v-model="filterOptout" class="checkbox"/>
+          Only Consumer Set
+        </label>
         <input type="text" v-model="keyword" placeholder="Keywords to filter validators"
           class="input input-sm w-full flex-1" />
-        <RouterLink class="btn btn-primary btn-sm" :to="`/${chain}/uptime/overview`">
-          <Icon icon="mdi-star" class="mr-2 text-lg" />
-          <span class="">Favorite</span>
-        </RouterLink>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-x-4 mt-4" :class="tab === '2'?'':'hidden'">
         <div v-for="({v, signing, hex}, i) in list" :key="i">
@@ -130,10 +141,10 @@ function changeTab(v: string) {
             <label class="text-truncate text-sm">
               <span class="ml-1 text-black dark:text-white">{{ i + 1 }}.{{ v.description.moniker }}</span>
             </label>
-            <div v-if="Number(signing?.missed_blocks_counter || 0) > 10" class="badge badge-error badge-sm text-white">
+            <div v-if="Number(signing?.missed_blocks_counter || 0) > 10" class="badge badge-sm bg-transparent border-0 text-red-500">
               {{ signing?.missed_blocks_counter }}
             </div>
-            <div v-else class="mt-1 badge badge-sm text-white bg-yes border-0">
+            <div v-else class="badge badge-sm bg-transparent text-green-600 border-0">
               {{ signing?.missed_blocks_counter }}
             </div>
           </div>
@@ -143,35 +154,40 @@ function changeTab(v: string) {
 
       <div :class="tab === '3'?'':'hidden'">
         <table class="table table-compact w-full mt-5">
-          <thead>
+          <thead class=" capitalize">
             <tr>
-              <td rowspan="2">Validator</td>
-              <td rowspan="2">Start Height</td>
-              <td rowspan="2">Signed Blocks</td>
-              <td colspan="2">Missing blocks</td>
-              <td rowspan="2">Last Jailed Time</td>
-              <td rowspan="2">Tombstoned</td>
-            </tr>
-            <tr>
-              <td>In Window</td>
-              <td>Over All</td>
+              <td>Validator</td>
+              <td class="text-right">Uptime</td>
+              <td>Last Jailed Time</td>
+              <td class="text-right">Signed Precommits</td>
+              <td class="text-right">Start Height</td>
+              <td>Tombstoned</td>
             </tr>
           </thead>
-          <tr v-for="({v, signing}, i) in list">
-            <td>{{ i+1 }}. {{ v.description.moniker }}</td>
-            <td>{{ signing?.start_height }}</td>
-            <td>{{ signing?.index_offset }}</td>
-            <td>
-              <span class="badge badge-sm text-white" :class="Number(signing?.missed_blocks_counter) < 10?'badge-success':'badge-error'">{{ signing?.missed_blocks_counter }}</span>
+          <tr v-for="({v, signing, uptime}, i) in list" class="hover">
+            <td><div class="truncate max-w-sm">{{ i+1 }}. {{ v.description.moniker }}</div></td>
+            <td class="text-right">
+              <span v-if="signing" class="" :class="uptime && uptime > 0.95 ? 'text-green-500':'text-red-500'"><div class="tooltip" :data-tip="`${signing.missed_blocks_counter} missing blocks`"> {{ format.percent(uptime) }} </div> </span>
             </td>
-            <td><span v-if="signing && signing.jailed_until.startsWith('1970')">{{ format.percent(Number(signing.index_offset)/(latest-Number(signing.start_height))) }}</span></td>
             <td><span v-if="signing && !signing.jailed_until.startsWith('1970')">
               <div class="tooltip" :data-tip="format.toDay(signing?.jailed_until, 'long')">
                 <span>{{ format.toDay(signing?.jailed_until, "from") }}</span>
               </div>
             </span></td>
+            <td class="text-right text-xs">
+              {{ signing?.index_offset }}<br>       
+              <span v-if="signing && signing.jailed_until.startsWith('1970')" class="text-xs">{{ format.percent(Number(signing.index_offset)/(latest-Number(signing.start_height))) }}</span>
+      
+            </td>
+            <td class="text-right">{{ signing?.start_height }}</td>
             <td class=" capitalize">{{ signing?.tombstoned }}</td>
           </tr>
+          <tfoot>
+            <tr>
+              <td colspan="2" class="text-right"> Minimum uptime per window: <span class="lowercase tooltip" :data-tip="`Window size: ${ slashingParam.signed_blocks_window }`"><span class="ml-2 btn btn-error btn-xs">{{ format.percent(slashingParam.min_signed_per_window) }}</span> </span></td>
+              <td colspan="8"></td>
+            </tr>
+          </tfoot>
         </table>
       </div>
 

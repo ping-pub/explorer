@@ -1,13 +1,14 @@
 {
   "module": {
     "dashboard": "Dashboard",
-    "blocks": "Blocks&Transaction",
+    "blocks": "Blocks",
     "staking": "Staking",
     "governance": "Governance",
     "parameters": "Parameters",
     "uptime": "Uptime",
     "state-sync": "State Sync",
     "cosmwasm": "Cosmwasm",
+    "widget": "Widgets",
     "ibc": "IBC"
   },
   "index": {

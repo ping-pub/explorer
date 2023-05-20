@@ -1,0 +1,17 @@
+{
+  "chain_name": "nois",
+  "api": ["https://nois-api.polkachu.com"],
+  "rpc": ["https://nois-rpc.polkachu.com"],
+  "sdk_version": "0.45.14",
+  "addr_prefix": "nois",
+  "min_tx_fee": "5000",
+  "logo": "/logos/nois.png",
+  "assets": [
+    {
+      "symbol": "NOIS",
+      "base": "unois",
+      "exponent": 6,
+      "logo": "/logos/nois.png"
+    }
+  ]
+}

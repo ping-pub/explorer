@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { useTheme } from 'vuetify';
 import {
   useDashboard,
   type ChainConfig,
@@ -14,6 +15,7 @@ import {
   useGovStore,
   useMintStore,
   useStakingStore,
+  useWalletStore,
 } from '.';
 import { useBlockModule } from '@/modules/[chain]/block/block';
 import { DEFAULT } from '@/libs';
@@ -50,6 +52,10 @@ export const useBlockchain = defineStore('blockchain', {
     dashboard() {
       return useDashboard();
     },
+    isConsumerChain() {
+      // @ts-ignore
+      return this.current && this.current.providerChain 
+    },
     computedChainMenu() {
       let currNavItem: VerticalNavItems = [];
 
@@ -61,8 +67,11 @@ export const useBlockchain = defineStore('blockchain', {
             title: this.current?.prettyName || this.chainName || '',
             icon: { image: this.current.logo, size: '22' },
             i18n: false,
+            badgeContent: this.isConsumerChain? 'Consumer': undefined,
+            badgeClass: 'bg-error',
             children: routes
-              .filter((x) => x.meta.i18n)
+              .filter((x) => x.meta.i18n) // defined menu name
+              .filter((x) => !this.current?.features || this.current.features.includes(String(x.meta.i18n))) // filter none-custom module
               .map((x) => ({
                 title: `module.${x.meta.i18n}`,
                 to: { path: x.path.replace(':chain', this.chainName) },
@@ -112,6 +121,11 @@ export const useBlockchain = defineStore('blockchain', {
   },
   actions: {
     async initial() {
+      // this.current?.themeColor {
+      //     const { global } = useTheme();
+      //     global.current
+      // }
+      useWalletStore().$reset()
       await this.randomSetupEndpoint();
       await useStakingStore().init();
       useBankStore().initial();
@@ -146,5 +160,8 @@ export const useBlockchain = defineStore('blockchain', {
         this.chainName = name;
       }
     },
+    supportModule(mod: string) {
+      return !this.current?.features || this.current.features.includes(mod)
+    }
   },
 });

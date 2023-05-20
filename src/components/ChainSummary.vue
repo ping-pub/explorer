@@ -32,7 +32,7 @@ const addFavor = (e: Event) => {
     <div class="w-8 h-8 rounded-full overflow-hidden">
       <img :src="conf.logo" />
     </div>
-    <div class="font-semibold ml-4 text-base flex-1">
+    <div class="font-semibold ml-4 text-base flex-1 truncate">
       {{ conf?.prettyName || props.name }}
     </div>
     <div

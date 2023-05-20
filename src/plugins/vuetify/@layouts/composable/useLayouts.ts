@@ -1,8 +1,9 @@
 import type { MaybeRef } from '@vueuse/shared'
-import type { Ref } from 'vue'
+import { computed, unref, type Ref, ref, watch } from 'vue'
 import { AppContentLayoutNav, NavbarType } from '../enums'
 import { themeConfig as config } from '@themeConfig'
 import { injectionKeyIsVerticalNavHovered } from '@layouts'
+import { useRoute } from 'vue-router'
 
 export const useLayouts = () => {
   const navbarType = computed({
