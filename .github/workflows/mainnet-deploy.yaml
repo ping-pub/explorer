@@ -22,7 +22,7 @@ jobs:
       run: yarn install --ignore-engines
 
     - name: Build
-      run: yarn run vue-cli-service build
+      run: yarn build-only
 
     - name: Deploy
       run: cp -rf ./dist/* /var/www/html/
