@@ -9,7 +9,7 @@ import { loadFonts } from '@/plugins/vuetify/webfontloader';
 import '@/plugins/vuetify/@core/scss/template/index.scss';
 import '@/plugins/vuetify/styles/styles.scss';
 import '@/style.css';
-import { createApp } from 'vue';
+import { createApp, ref } from 'vue';
 import { createPinia } from 'pinia';
 import LazyLoad from 'lazy-load-vue3';
 // import router from "@/plugins/vuetify/router";
@@ -32,4 +32,10 @@ app.mount('#app');
 
 // fetch latest block every 6s
 const blockStore = useBaseStore()
-setInterval(() => {blockStore.fetchLatest()}, 6000)
+const requestCounter = ref(0)
+setInterval(() => {
+    requestCounter.value += 1
+    if(requestCounter.value < 5) { // max allowed request
+        blockStore.fetchLatest().finally(() => requestCounter.value -= 1)
+    } 
+}, 6000)

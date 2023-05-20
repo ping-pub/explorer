@@ -10,7 +10,9 @@ const base = useBaseStore()
 const format = useFormatter();
 
 const list = computed(() => {
-  return base.recents.reverse()
+  // const recents = base.recents
+  // return recents.sort((a, b) => (Number(b.block.header.height) - Number(a.block.header.height)))
+  return base.recents
 })
 </script>
 <template>
@@ -45,10 +47,10 @@ const list = computed(() => {
             {{ format.toDay(item.block?.header?.time, 'from') }}
           </span>
         </div>
-        <div class="flex justify-between">
-          <p class="mt-2 hidden text-sm sm:block truncate">
-            {{ format.validator(item.block?.header?.proposer_address) }}
-          </p>
+        <div class="flex justify-between tooltip" data-tip="Block Proposor">
+          <div class="mt-2 hidden text-sm sm:block truncate">
+              <span>{{ format.validator(item.block?.header?.proposer_address) }}</span>
+          </div>
           <span class="text-right mt-1 whitespace-nowrap"> {{ item.block?.data?.txs.length }} txs </span>
         </div>
       </RouterLink>

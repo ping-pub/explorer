@@ -6,7 +6,6 @@ import {
   useStakingStore,
   useBaseStore,
   useBlockchain,
-useParamStore,
 } from '@/stores';
 import UptimeBar from '@/components/UptimeBar.vue';
 import type { Commit, SlashingParam, SigningInfo } from '@/types';
@@ -52,7 +51,11 @@ const list = computed(() => {
 onMounted(() => {
   live.value = true;
   
-  baseStore.fetchLatest().then(b => {
+  baseStore.fetchLatest().then(l => {
+    let b = l
+    if(baseStore.recents?.findIndex(x => x.block_id.hash === l.block_id.hash) > -1 ) {
+      b = baseStore.recents?.at(0) || l
+    }
     latest.value = Number(b.block.header.height);
     commits.value.unshift(b.block.last_commit);
     const height = Number(b.block.header?.height || 0);
@@ -138,10 +141,10 @@ function changeTab(v: string) {
             <label class="text-truncate text-sm">
               <span class="ml-1 text-black dark:text-white">{{ i + 1 }}.{{ v.description.moniker }}</span>
             </label>
-            <div v-if="Number(signing?.missed_blocks_counter || 0) > 10" class="badge badge-error badge-sm text-white">
+            <div v-if="Number(signing?.missed_blocks_counter || 0) > 10" class="badge badge-sm bg-transparent border-0 text-red-500">
               {{ signing?.missed_blocks_counter }}
             </div>
-            <div v-else class="mt-1 badge badge-sm text-white bg-yes border-0">
+            <div v-else class="badge badge-sm bg-transparent text-green-600 border-0">
               {{ signing?.missed_blocks_counter }}
             </div>
           </div>
