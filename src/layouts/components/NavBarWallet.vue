@@ -98,7 +98,7 @@ const addressChange = computed(() => {
   <label
     v-if="!walletStore?.currentAddress"
     for="PingConnectWallet"
-    class="btn btn-sm ml-4 ping-connect-btn"
+    class="btn btn-sm ml-4"
     >Connect Wallet</label
   >
   <div class="footer-modal">
