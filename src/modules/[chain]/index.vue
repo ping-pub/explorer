@@ -201,7 +201,7 @@ const color = computed(() => {
 
             <a
               :color="store.trustColor"
-              class="mt-5 text-white btn btn-success w-full md:!w-[400px] flex items-center"
+              class="mt-5 !text-white btn !bg-yes !border-yes w-full md:!w-[400px] flex items-center"
               :href="ticker.trade_url"
               target="_blank"
             >
@@ -355,8 +355,8 @@ const color = computed(() => {
 
       <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
         <label for="PingTokenConvert" class="btn btn-primary text-white">Convert</label>
-        <label for="send" class="btn btn-success text-white" @click="dialog.open('send', {})">Send</label>
-        <RouterLink to="/wallet/receive" class="btn btn-info text-white">Receive</RouterLink>
+        <label for="send" class="btn !bg-yes !border-yes text-white" @click="dialog.open('send', {})">Send</label>
+        <RouterLink to="/wallet/receive" class="btn !bg-info !border-info text-white">Receive</RouterLink>
       </div>
       <Teleport to="body">
         <ping-token-convert

@@ -16,7 +16,7 @@ const qrcode = useQRCode(walletStore.currentAddress);
       {{ walletStore.currentAddress }}
     </div>
     <div class="mt-4 mb-4">
-      <button class="btn btn-success text-white px-10">Go To Pay</button>
+      <button class="btn !bg-yes !border-yes text-white px-10">Go To Pay</button>
     </div>
   </div>
 </template>
