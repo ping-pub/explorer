@@ -29,7 +29,7 @@ const selectChain = ref(chainStore.chainName)
 const validators = ref(stakingStore.validators)
 const keyword = ref("")
 
-if(local.value) Object.keys(local.value).map(chainName => {
+function loadSigningInfo(chainName: string) {
   const chain = dashboard.chains[chainName]
   if(chain && chain.endpoints.rest) {
     const client = CosmosRestClient.newDefault(chain.endpoints.rest[0].address)
@@ -37,15 +37,17 @@ if(local.value) Object.keys(local.value).map(chainName => {
       signingInfo.value[chainName] = resp.info
     })
   }
-  if(chainName === selectChain.value) {
-    const vals = local.value[chainName]
-    if(vals) {
-      selected.value = vals.map(x => x.address)
-    }
-  }
-
-  return chain
+}
+if(local.value) Object.keys(local.value).map(chainName => {
+  loadSigningInfo(chainName)
 })
+
+function initial() {
+  const vals = local.value[selectChain.value]
+  if(vals) {
+    selected.value = vals.map(x => x.address)
+  }
+}
 
 const filterValidators = computed(() => {
   if(keyword.value) {
@@ -74,6 +76,9 @@ const list = computed(() => {
 })
 
 function add() {
+  if(!signingInfo.value[selectChain.value]) {
+    loadSigningInfo(selectChain.value)
+  }
   const newList = [] as { name: string; address: string; }[]
   selected.value.forEach(x => {
     const validator = validators.value.find(v => (consensusPubkeyToHexAddress(v.consensus_pubkey) === x))
@@ -84,6 +89,7 @@ function add() {
   })
   if(!local.value) local.value = {}
   local.value[selectChain.value] = newList
+
   localStorage.setItem("uptime-validators", JSON.stringify(local.value))
 }
 
@@ -140,22 +146,24 @@ function color(v: string) {
           
         </div>
       </div>
-      <table class="table w-full">
+      <table class="table table-compact w-full">
         <thead>
           <tr>
+            <th>#</th>
             <th>Blockchain</th>
             <th>Validator</th>
-            <th>Missing Blocks</th>
             <th>Signed Blocks</th>
             <th>Last Jailed Time</th>
             <th>Tombstoned</th>
+            <th>Missing Blocks</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="v in list">
+          <tr v-for="(v, i) in list" class="hover">
+            <td>{{ i+1 }}</td>
             <td class=" capitalize">{{ v.chainName }}</td>
             <td>{{ v.v.name }}</td>
-            <td><span v-if="v.sigingInfo" class="badge " :class="color( v.sigingInfo?.missed_blocks_counter)">{{ v.sigingInfo?.missed_blocks_counter }}</span></td>
             <td><span v-if="v.sigingInfo">{{ Number(v.sigingInfo.index_offset) - Number(v.sigingInfo.start_height) }}</span></td>
             <td>
               <div v-if="v.sigingInfo && !v.sigingInfo?.jailed_until.startsWith('1970')" class="text-xs flex flex-col">
@@ -164,6 +172,8 @@ function color(v: string) {
               </div>
             </td>
             <td class=" capitalize">{{ v.sigingInfo?.tombstoned }}</td>
+            <td><span v-if="v.sigingInfo" class="badge " :class="color( v.sigingInfo?.missed_blocks_counter)">{{ v.sigingInfo?.missed_blocks_counter }}</span></td>
+            <td class=""><RouterLink :to="`/${v.chainName}/uptime/#blocks`" class="btn btn-xs btn-primary">Blocks</RouterLink></td>
           </tr>
         </tbody>
       </table>
@@ -172,12 +182,11 @@ function color(v: string) {
     <label for="add-validator" class="btn btn-primary mt-5">Add Validators</label>
 
     <!-- Put this part before </body> tag -->
-    <input type="checkbox" id="add-validator" class="modal-toggle" />
+    <input type="checkbox" id="add-validator" class="modal-toggle" @change="initial" />
     <div class="modal">
       <div class="modal-box relative">
         <label for="add-validator" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
         <h3 class="text-lg font-bold">Add Validators</h3>
-        <div class="py-4 max-h-60 overflow-y-auto">
           <div class="form-control my-5 border-2">
             <div class="input-group input-group-md">
             <select v-model="selectChain" class="select select-bordered capitalize" @change="changeChain">
@@ -188,13 +197,15 @@ function color(v: string) {
               <input v-model="keyword" type="text" class="input w-full" placeholder="keywords to filter validator">
             </div>
           </div>
+        <div class="py-4 max-h-60 overflow-y-auto">
+          
           <table class="table table-compact w-full hover">
             <thead>
               <tr><th>Validator</th><th></th></tr>
             </thead>
             <tbody>
-              <tr v-for="v in filterValidators">
-                <td><label :for="v.operator_address"><div class=" w-full">{{ v.description.moniker }}</div></label></td>
+              <tr v-for="(v, i) in filterValidators">
+                <td><label :for="v.operator_address"><div class=" w-full">{{ i+1 }}. {{ v.description.moniker }}</div></label></td>
                 <td><input :id="v.operator_address" v-model="selected" class="checkbox" type="checkbox" :value="consensusPubkeyToHexAddress(v.consensus_pubkey)"/></td>
               </tr>
             </tbody>

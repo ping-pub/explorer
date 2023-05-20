@@ -99,7 +99,7 @@ const commits2 = computed(() => {
 onUnmounted(() => {
   live.value = false;
 });
-const tab = ref("3")
+const tab = ref(window.location.hash.search("block")>-1?"2":"3")
 function changeTab(v: string) {
   tab.value = v
 }
