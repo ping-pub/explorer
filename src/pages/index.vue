@@ -29,13 +29,13 @@ const chains = computed(() => {
 <template>
   <div class="">
     <div class="flex items-center justify-center mb-6 mt-10">
-      <div class="w-8 md:w-16 rounded-full mr-3">
+      <div class="w-8 md:!w-16 rounded-full mr-3">
         <img src="/logo.svg" />
       </div>
-      <h1 class="text-primary text-3xl md:text-6xl font-bold mr-2">
+      <h1 class="text-primary text-3xl md:!text-6xl font-bold mr-2">
         Ping dashboard
       </h1>
-      <div class="badge badge-primary badge-outline mt-1 text-sm md:mt-8">
+      <div class="badge badge-primary badge-outline mt-1 text-sm md:!mt-8">
         Beta
       </div>
     </div>
@@ -65,7 +65,7 @@ const chains = computed(() => {
     </VTextField>
 
     <div
-      class="grid grid-cols-2 gap-4 mt-6 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
+      class="grid grid-cols-2 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"
     >
       <ChainSummary
         v-for="(chain, index) in chains"

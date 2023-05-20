@@ -119,10 +119,10 @@ function color(v: string) {
 <template>
   <div>
     <div class="overflow-x-auto w-full card ">
-      <div class="lg:flex lg:items-center lg:justify-between bg-base-100 p-5">
+      <div class="lg:!flex lg:!items-center lg:!justify-between bg-base-100 p-5">
         <div class="min-w-0 flex-1">
-          <h2 class="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">My Validators</h2>
-          <div class="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
+          <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">My Validators</h2>
+          <div class="mt-1 flex flex-col sm:!mt-0 sm:!flex-row sm:!flex-wrap sm:!space-x-6">
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
                 aria-hidden="true">
@@ -136,7 +136,7 @@ function color(v: string) {
             </div>
           </div>
         </div>
-        <div class="mt-5 flex lg:ml-4 lg:mt-0">
+        <div class="mt-5 flex lg:!ml-4 lg:!mt-0">
           
         </div>
       </div>

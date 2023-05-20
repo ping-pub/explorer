@@ -16,7 +16,7 @@ onMounted(() => {
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded">
       <div class="text-base mb-3 text-main">{{ chain.title }}</div>
       <div
-        class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-4"
+        class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4"
       >
         <div
           v-for="(item, index) of chain.items"

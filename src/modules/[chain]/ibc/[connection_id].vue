@@ -42,9 +42,9 @@ function color(v: string) {
 </script>
 <template>
   <div>
-    <div class="px-4 pt-3 pb-4 bg-base-100 rounded mb-4 shadow py-24 sm:py-32">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <dl class="grid grid-cols-1 gap-x-8 text-center lg:grid-cols-3">
+    <div class="px-4 pt-3 pb-4 bg-base-100 rounded mb-4 shadow py-24 sm:!py-32">
+      <div class="mx-auto max-w-7xl px-6 lg:!px-8">
+        <dl class="grid grid-cols-1 gap-x-8 text-center lg:!grid-cols-3">
           <div class="mx-auto flex items-center">
             <div>
               <div

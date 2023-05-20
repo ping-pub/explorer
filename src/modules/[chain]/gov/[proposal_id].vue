@@ -164,7 +164,7 @@ const processList = computed(() => {
 <template>
   <div>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title flex flex-col md:justify-between md:flex-row">
+      <h2 class="card-title flex flex-col md:!justify-between md:!flex-row">
         <p class="truncate w-full">
           {{ proposal_id }}. {{ proposal.content?.title }}
         </p>
@@ -185,9 +185,9 @@ const processList = computed(() => {
         <ObjectElement :value="proposal.content" />
       </div>
     </div>
-    <!-- grid lg:grid-cols-3 auto-rows-max-->
-    <!-- flex-col lg:flex-row flex -->
-    <div class="gap-4 mb-4 grid lg:grid-cols-3 auto-rows-max">
+    <!-- grid lg:!!grid-cols-3 auto-rows-max-->
+    <!-- flex-col lg:!!flex-row flex -->
+    <div class="gap-4 mb-4 grid lg:!!grid-cols-3 auto-rows-max">
       <!-- flex-1 -->
       <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
         <h2 class="card-title mb-1">Tally</h2>
@@ -227,7 +227,7 @@ const processList = computed(() => {
       </div>
 
       <div
-        class="bg-base-100 px-4 pt-3 pb-5 rounded shadow lg:col-span-2"
+        class="bg-base-100 px-4 pt-3 pb-5 rounded shadow lg:!!col-span-2"
       >
         <h2 class="card-title">Timeline</h2>
 

@@ -139,7 +139,7 @@ onMounted(() => {
 <template>
   <div>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow border-indigo-500">
-      <div class="flex flex-col lg:flex-row pt-2 pb-1">
+      <div class="flex flex-col lg:!flex-row pt-2 pb-1">
         <div class="flex-1">
           <div class="flex">
             <div class="avatar mr-4 relative w-24 rounded-lg overflow-hidden">
@@ -300,7 +300,7 @@ onMounted(() => {
       <div class="text-sm px-4 pt-3 border-t">{{ v.description?.details }}</div>
     </div>
 
-    <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="mt-3 grid grid-cols-1 md:!grid-cols-3 gap-4">
       <div class="h-100">
         <CommissionRate :commission="v.commission"></CommissionRate>
       </div>

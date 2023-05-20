@@ -134,7 +134,7 @@ const color = computed(() => {
 
           <div>
             <div
-              class="dropdown dropdown-hover w-full md:w-[400px] mt-[16px] md:mt-[36px]"
+              class="dropdown dropdown-hover w-full md:!w-[400px] mt-[16px] md:!mt-[36px]"
             >
               <label>
                 <div
@@ -167,7 +167,7 @@ const color = computed(() => {
               </label>
               <div class="dropdown-content pt-1">
                 <div
-                  class="h-64 overflow-auto w-full md:w-[400px] shadow rounded"
+                  class="h-64 overflow-auto w-full md:!w-[400px] shadow rounded"
                 >
                   <ul class="menu w-full bg-gray-100 rounded dark:bg-[#384059]">
                     <li
@@ -201,7 +201,7 @@ const color = computed(() => {
 
             <a
               :color="store.trustColor"
-              class="mt-5 text-white btn btn-success w-full md:w-[400px] flex items-center"
+              class="mt-5 text-white btn btn-success w-full md:!w-[400px] flex items-center"
               :href="ticker.trade_url"
               target="_blank"
             >
@@ -210,7 +210,7 @@ const color = computed(() => {
           </div>
         </div>
 
-        <div class="flex-1 hidden md:block">
+        <div class="flex-1 hidden md:!block">
           <PriceMarketChart />
         </div>
       </div>
@@ -231,7 +231,7 @@ const color = computed(() => {
       </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+    <div class="grid grid-cols-2 gap-4 md:!grid-cols-3 lg:!grid-cols-6">
       <div v-for="item in store.stats">
         <CardStatisticsVertical v-bind="item" />
       </div>
@@ -260,7 +260,7 @@ const color = computed(() => {
         >
       </div>
       <div
-        class="grid grid-cols-1 md:grid-cols-4 auto-cols-auto gap-4 px-4 pb-6"
+        class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 px-4 pb-6"
       >
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">Balance</div>
