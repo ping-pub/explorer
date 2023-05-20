@@ -229,7 +229,7 @@ const result = ref('');
             </div>
             <div class="mt-4 mb-4">
               <button
-                class="btn btn-success px-4 text-white"
+                class="btn !btn-yes !border-yes px-4 text-white"
                 @click="queryContract()"
               >
                 Query Contract

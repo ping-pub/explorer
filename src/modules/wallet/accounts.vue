@@ -263,7 +263,7 @@ async function addAddress(acc: AccountEntry) {
                 </div>
           </td>
           <td class="text-right">
-            <span class="btn btn-success btn-xs text-white" @click="addAddress(acc)">
+            <span class="btn !bg-yes !border-yes btn-xs text-white" @click="addAddress(acc)">
               <Icon icon="mdi:plus"/>
             </span>
           </td>
