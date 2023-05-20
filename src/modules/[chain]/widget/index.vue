@@ -33,7 +33,7 @@ const hdPath = computed(() => {
       </div>
       <span class="text-base">Import global script </span>
         <div class="mockup-code my-2">
-            <pre data-prefix="1"><code>&lt;script src="https://unpkg.com/ping-widget@latest/dist/ping-widget.js"&gt;</code></pre>
+            <pre data-prefix="1"><code class="text-gray-400">&lt;script type="module" src="https://unpkg.com/ping-widget@latest/dist/ping-widget.js"&gt;</code></pre>
         </div>
     </div>
     <div class="bg-base-100 my-5 px-4 pt-3 pb-4 rounded shadow">
@@ -41,12 +41,13 @@ const hdPath = computed(() => {
       <div class="mt-4">
         <span class="text-base"> 1. Connect Wallet </span>
         <div class="mockup-code my-2">
-            <pre data-prefix=">"><code>&lt;ping-connect-wallet chain-id="{{ chainId }}" hd-path="{{ hdPath }}"/&gt;</code></pre>
+            <pre data-prefix=">"><code  class="text-gray-400">&lt;ping-connect-wallet chain-id="{{ chainId }}" hd-path="{{ hdPath }}"/&gt;</code></pre>
         </div>
 
         <span class="text-base"> 2. Osmosis Convert </span>
         <div class="mockup-code my-2">
-            <pre data-prefix=">"><code>&lt;ping-token-convert chain-name="{{ chainName }}" endpoint="{{endpoint}}" hd-path="hdPath"/&gt;</code></pre>
+            <pre data-prefix=">"><code class="text-gray-400">&lt;ping-token-convert chain-name="{{ chainName }}" endpoint="{{endpoint}}" hd-path="{{hdPath}}"/&gt;</code></pre>
+            <pre data-prefix=">"><code class="text-gray-400">&lt;label for="PingTokenConvert" class="btn btn-sm"&gt;Buy {{chainName.toUpperCase()}}&lt;/label&gt;</code></pre>
         </div>
       </div>
     </div>
@@ -57,7 +58,7 @@ const hdPath = computed(() => {
     {
       meta: {
         i18n: 'widget',
-        order: 9
+        order: 300
       }
     }
 </route>

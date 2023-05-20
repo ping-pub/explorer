@@ -9,6 +9,7 @@ import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '@layo
 
 import { themeConfig as config } from '@themeConfig'
 
+console.log("v nav")
 interface Props {
   tag?: string | Component
   navItems: VerticalNavItems

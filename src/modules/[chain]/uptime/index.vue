@@ -26,6 +26,7 @@ const slashingParam = ref({} as SlashingParam)
 
 const signingInfo = ref({} as Record<string, SigningInfo>);
 
+const filterOptout =ref(false)
 // filter validators by keywords
 const validators = computed(() => {
   if (keyword)
@@ -37,7 +38,7 @@ const validators = computed(() => {
 
 const list = computed(() => {
   const window = Number(slashingParam.value.signed_blocks_window|| 0)
-  return validators.value.map(v => {
+  const vset = validators.value.map(v => {
     const signing = signingInfo.value[consensusPubkeyToHexAddress(v.consensus_pubkey)]
     return {
       v, 
@@ -45,6 +46,7 @@ const list = computed(() => {
       hex: toBase64(fromHex(consensusPubkeyToHexAddress(v.consensus_pubkey))),
       uptime: signing && window > 0 ? (window - Number(signing.missed_blocks_counter)) / window: undefined
     }})
+  return filterOptout.value? vset.filter(x => x.signing) : vset
 })
 
 onMounted(() => {
@@ -98,7 +100,6 @@ const tab = ref("3")
 function changeTab(v: string) {
   tab.value = v
 }
-
 </script>
 
 <template>
@@ -124,6 +125,10 @@ function changeTab(v: string) {
     </div>
     <div class="bg-base-100 px-5 pt-5">
       <div class="flex items-center gap-x-4">
+        <label v-if="chainStore.isConsumerChain" class="text-center">
+          <input type="checkbox" v-model="filterOptout" class="checkbox"/>
+          Only Consumer Set
+        </label>
         <input type="text" v-model="keyword" placeholder="Keywords to filter validators"
           class="input input-sm w-full flex-1" />
       </div>
@@ -150,28 +155,28 @@ function changeTab(v: string) {
             <tr>
               <td>Validator</td>
               <td class="text-right">Uptime</td>
+              <td>Last Jailed Time</td>
               <td class="text-right">Signed Precommits</td>
               <td class="text-right">Start Height</td>
-              <td>Last Jailed Time</td>
               <td>Tombstoned</td>
             </tr>
           </thead>
           <tr v-for="({v, signing, uptime}, i) in list" class="hover">
             <td><div class="truncate max-w-sm">{{ i+1 }}. {{ v.description.moniker }}</div></td>
             <td class="text-right">
-              <span v-if="signing" class="" :class="uptime > 0.95 ? 'text-green-500':'text-red-500'"><div class="tooltip" :data-tip="`${signing.missed_blocks_counter} missing blocks`"> {{ format.percent(uptime) }} </div> </span>
+              <span v-if="signing" class="" :class="uptime && uptime > 0.95 ? 'text-green-500':'text-red-500'"><div class="tooltip" :data-tip="`${signing.missed_blocks_counter} missing blocks`"> {{ format.percent(uptime) }} </div> </span>
             </td>
+            <td><span v-if="signing && !signing.jailed_until.startsWith('1970')">
+              <div class="tooltip" :data-tip="format.toDay(signing?.jailed_until, 'long')">
+                <span>{{ format.toDay(signing?.jailed_until, "from") }}</span>
+              </div>
+            </span></td>
             <td class="text-right text-xs">
               {{ signing?.index_offset }}<br>       
               <span v-if="signing && signing.jailed_until.startsWith('1970')" class="text-xs">{{ format.percent(Number(signing.index_offset)/(latest-Number(signing.start_height))) }}</span>
       
             </td>
             <td class="text-right">{{ signing?.start_height }}</td>
-            <td><span v-if="signing && !signing.jailed_until.startsWith('1970')">
-              <div class="tooltip" :data-tip="format.toDay(signing?.jailed_until, 'long')">
-                <span>{{ format.toDay(signing?.jailed_until, "from") }}</span>
-              </div>
-            </span></td>
             <td class=" capitalize">{{ signing?.tombstoned }}</td>
           </tr>
           <tfoot>

@@ -8,6 +8,7 @@ export const openGroups = ref<string[]>([])
  * @param {Object, String} item navigation routeName or route Object provided in navigation data
  */
 export const getComputedNavLinkToProp = computed(() => (link: NavLink) => {
+  console.log(link)
   const props: NavLinkProps = {
     target: link.target,
     rel: link.rel,
