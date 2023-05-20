@@ -335,13 +335,13 @@ const color = computed(() => {
               <td>
                 <div>
                   <label for="delegate"
-                    class="btn btn-xs btn-primary btn-ghost text-primary rounded-sm mr-2"
+                    class="btn !btn-xs !btn-primary btn-ghost text-primary rounded-sm mr-2"
                     @click="dialog.open('delegate', { validator_address: item.delegation.validator_address})"
                   >
                     Delegate
                   </label>
                   <label for="withdraw"
-                    class="btn btn-xs btn-primary btn-ghost text-primary rounded-sm"
+                    class="btn !btn-xs !btn-primary btn-ghost text-primary rounded-sm"
                     @click="dialog.open('withdraw', { validator_address: item.delegation.validator_address})"
                   >
                     Withdraw Rewards
@@ -354,7 +354,7 @@ const color = computed(() => {
       </div>
 
       <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
-        <label for="PingTokenConvert" class="btn btn-primary text-white">Convert</label>
+        <label for="PingTokenConvert" class="btn btn-primary text-white">Swap</label>
         <label for="send" class="btn !bg-yes !border-yes text-white" @click="dialog.open('send', {})">Send</label>
         <RouterLink to="/wallet/receive" class="btn !bg-info !border-info text-white">Receive</RouterLink>
       </div>
@@ -369,7 +369,7 @@ const color = computed(() => {
 
     <div class="bg-base-100 rounded mt-4 shadow">
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
-        Application
+        Application Versions
       </div>
       <!-- Application Version -->
       <ArrayObjectElement :value="paramStore.appVersion?.items" :thead="false" />
