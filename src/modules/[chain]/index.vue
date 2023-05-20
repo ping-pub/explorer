@@ -41,11 +41,10 @@ onMounted(() => {
 });
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
 
+const currName = ref("")
 blockchain.$subscribe((m, s) => {
-  if (
-    !Array.isArray(m.events) &&
-    ['chainName', 'endpoint'].includes(m.events?.key || "")
-  ) {
+  if (s.chainName !== currName.value) {
+    currName.value = s.chainName
     store.loadDashboard();
     walletStore.loadMyAsset();
     paramStore.handleAbciInfo()
@@ -335,13 +334,13 @@ const color = computed(() => {
               <td>
                 <div>
                   <label for="delegate"
-                    class="btn !btn-xs !btn-primary btn-ghost text-primary rounded-sm mr-2"
+                    class="btn !btn-xs !btn-primary btn-ghost rounded-sm mr-2"
                     @click="dialog.open('delegate', { validator_address: item.delegation.validator_address})"
                   >
                     Delegate
                   </label>
                   <label for="withdraw"
-                    class="btn !btn-xs !btn-primary btn-ghost text-primary rounded-sm"
+                    class="btn !btn-xs !btn-primary btn-ghost rounded-sm"
                     @click="dialog.open('withdraw', { validator_address: item.delegation.validator_address})"
                   >
                     Withdraw Rewards
