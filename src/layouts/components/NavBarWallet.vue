@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useWalletStore } from '@/stores';
+import type { Icon } from '@iconify/vue';
 import { ref, computed } from 'vue';
 const walletStore = useWalletStore();
-walletStore.$subscribe((m, s) => {
-  console.log(m, s);
-});
+// walletStore.$subscribe((m, s) => {
+//   console.log(m, s);
+// });
 function walletStateChange(res: any) {
   walletStore.setConnectedWallet(res.detail?.value);
 }
@@ -105,7 +106,7 @@ const addressChange = computed(() => {
       <ping-connect-wallet
         :chain-id="'juno-1'"
         :hd-path="`m/44'/118/0'/0/0`"
-        @change="walletStateChange"
+        @connect="walletStateChange"
       />
     </Teleport>
   </div>

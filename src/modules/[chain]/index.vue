@@ -9,6 +9,7 @@ import {
   useTxDialog,
   useWalletStore,
   useStakingStore,
+useParamStore,
 } from '@/stores';
 import { onMounted, ref } from 'vue';
 import { useIndexModule } from './indexStore';
@@ -16,6 +17,7 @@ import { computed } from '@vue/reactivity';
 
 import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
 import ProposalListItem from '@/components/ProposalListItem.vue';
+import ArrayObjectElement from '@/components/dynamic/ArrayObjectElement.vue'
 
 const props = defineProps(['chain']);
 
@@ -25,6 +27,7 @@ const walletStore = useWalletStore();
 const format = useFormatter();
 const dialog = useTxDialog();
 const stakingStore = useStakingStore();
+const paramStore = useParamStore()
 const coinInfo = computed(() => {
   return store.coinInfo;
 });
@@ -32,6 +35,9 @@ const coinInfo = computed(() => {
 onMounted(() => {
   store.loadDashboard();
   walletStore.loadMyAsset();
+  paramStore.handleAbciInfo()
+  // if(!(coinInfo.value && coinInfo.value.name)) {
+  // }
 });
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
 
@@ -42,6 +48,7 @@ blockchain.$subscribe((m, s) => {
   ) {
     store.loadDashboard();
     walletStore.loadMyAsset();
+    paramStore.handleAbciInfo()
   }
 });
 function shortName(name: string, id: string) {
@@ -102,8 +109,7 @@ const color = computed(() => {
           <div class="text-xl font-semibold text-main">
             {{ coinInfo.name }} (<span class="uppercase">{{
               coinInfo.symbol
-            }}</span
-            >)
+            }}</span>)
           </div>
           <div class="text-xs mt-2">
             Rank:
@@ -359,6 +365,21 @@ const color = computed(() => {
           :params="walletStore?.connectedWallet?.hdPath"
         ></ping-token-convert>
       </Teleport>
+    </div>
+
+    <div class="bg-base-100 rounded mt-4 shadow">
+      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
+        Application
+      </div>
+      <!-- Application Version -->
+      <ArrayObjectElement :value="paramStore.appVersion?.items" :thead="false" />
+    </div>
+
+    <div v-if="!store.coingeckoId" class="bg-base-100 rounded mt-4 shadow">
+      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
+        Node Information
+      </div>
+      <ArrayObjectElement :value="paramStore.nodeVersion?.items" :thead="false" />
     </div>
   </div>
 </template>

@@ -200,6 +200,12 @@ export const useIndexModule = defineStore('module-index', {
         },
       ];
     },
+
+    coingeckoId() {
+      this.tickerIndex = 0;
+      const [firstAsset] = this.blockchain?.assets || [];
+      return firstAsset.coingecko_id
+    }
   },
   actions: {
     async loadDashboard() {
