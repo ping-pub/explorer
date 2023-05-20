@@ -174,10 +174,10 @@ function changeTab(v: string) {
                 <span>{{ format.toDay(signing?.jailed_until, "from") }}</span>
               </div>
             </span></td>
-            <td class="text-right text-xs">
-              {{ signing?.index_offset }}<br>       
-              <span v-if="signing && signing.jailed_until.startsWith('1970')" class="text-xs">{{ format.percent(Number(signing.index_offset)/(latest-Number(signing.start_height))) }}</span>
-      
+            <td class="text-xs text-right">
+               
+              <span v-if="signing && signing.jailed_until.startsWith('1970')" class="text-right">{{ format.percent(Number(signing.index_offset)/(latest-Number(signing.start_height))) }}</span>
+              {{ signing?.index_offset }} 
             </td>
             <td class="text-right">{{ signing?.start_height }}</td>
             <td class=" capitalize">{{ signing?.tombstoned }}</td>
