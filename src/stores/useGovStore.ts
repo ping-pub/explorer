@@ -32,10 +32,10 @@ export const useGovStore = defineStore('govStore', {
       this.fetchProposals("2");
     },
     async fetchProposals(status: string, pagination?: PageRequest) {
-      if (!this.loading[status]) {
+      //if (!this.loading[status]) {
         this.loading[status] = LoadingStatus.Loading;
         const proposals = reactive(
-          await this.blockchain.rpc?.getGovProposals(status)
+          await this.blockchain.rpc?.getGovProposals(status, pagination)
         );
         if (status === '2') {
           proposals?.proposals?.forEach((item) => {
@@ -44,7 +44,7 @@ export const useGovStore = defineStore('govStore', {
             });
             if (this.walletstore.currentAddress) {
               try {
-                this.fetchProposalVotesVoter(item.proposal_id,this.walletstore.currentAddress).then((res) => {
+                this.fetchProposalVotesVoter(item.proposal_id, this.walletstore.currentAddress).then((res) => {
                   item.voterStatus = res?.vote?.option || 'No With Veto'
                 });
               } catch (error) {
@@ -55,10 +55,10 @@ export const useGovStore = defineStore('govStore', {
             }
           });
         }
-        
+
         this.loading[status] = LoadingStatus.Loaded;
         this.proposals[status] = proposals;
-      }
+      //}
       return this.proposals[status];
     },
     async fetchParams() {

@@ -54,7 +54,7 @@ const proposalInfo = ref();
               #{{ item?.proposal_id }}</label
             >
           </td>
-          <td class="w-[35%]">
+          <td class="w-full">
             <div>
               <RouterLink
                 :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
@@ -69,13 +69,13 @@ const proposalInfo = ref();
               </div>
             </div>
           </td>
-          <td class="w-[25%]">
+          <td class="w-60">
             <ProposalProcess
               :pool="staking.pool"
               :tally="item.final_tally_result"
             ></ProposalProcess>
           </td>
-          <td>
+          <td class="w-36">
             <div class="pl-4">
               <div
                 class="flex items-center"
@@ -228,8 +228,8 @@ const proposalInfo = ref();
     </div>
 
     <input type="checkbox" id="proposal-detail-modal" class="modal-toggle" />
-    <label for="proposal-detail-modal" class="modal sm:!modal-middle">
-      <label class="modal-box relative" for="">
+    <label for="proposal-detail-modal" class="modal">
+      <label class="modal-box w-11/12 max-w-5xl" for="">
         <label
           for="proposal-detail-modal"
           class="btn btn-sm btn-circle absolute right-2 top-2"

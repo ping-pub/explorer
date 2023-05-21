@@ -8,6 +8,7 @@ import {
   type Registry,
   type AbstractRegistry,
 } from './registry';
+import { PageRequest } from '@/types';
 
 export class BaseRestClient<R extends AbstractRegistry> {
   endpoint: string;
@@ -98,10 +99,11 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getGovParamsTally() {
     return this.request(this.registry.gov_params_tally, {});
   }
-  async getGovProposals(status: string, limit = 20) {
-    const query =
-      '?proposal_status={status}&pagination.limit={limit}&pagination.reverse=true&pagination.key=';
-    return this.request(this.registry.gov_proposals, { status, limit }, query);
+  async getGovProposals(status: string, page?: PageRequest) {
+    if(!page) page = new PageRequest()
+    page.reverse = true
+    const query =`?proposal_status={status}&${page.toQueryString()}`;
+    return this.request(this.registry.gov_proposals, { status }, query);
   }
   async getGovProposal(proposal_id: string) {
     return this.request(this.registry.gov_proposals_proposal_id, {

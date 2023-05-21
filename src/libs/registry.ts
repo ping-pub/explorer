@@ -42,7 +42,7 @@ import type {
   Validator,
 } from '@/types/staking';
 import type { PaginatedTxs, Tx, TxResponse } from '@/types/tx';
-
+import semver from 'semver'
 export interface Request<T> {
   url: string;
   adapter: (source: any) => T;
