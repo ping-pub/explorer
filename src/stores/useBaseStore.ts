@@ -32,6 +32,9 @@ export const useBaseStore = defineStore('baseStore', {
     blockchain() {
       return useBlockchain();
     },
+    currentChainId(): string {
+      return this.latest.block?.header.chain_id || ""
+    },
     txsInRecents() {
       const txs = [] as { height: string; hash: string; tx: DecodedTxRaw }[];
       this.recents.forEach((b) =>

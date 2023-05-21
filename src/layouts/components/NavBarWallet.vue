@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { useWalletStore } from '@/stores';
+import { useBaseStore, useBlockchain, useWalletStore } from '@/stores';
 import type { Icon } from '@iconify/vue';
 import { ref, computed } from 'vue';
 const walletStore = useWalletStore();
+const chainStore = useBlockchain();
+const baseStore = useBaseStore()
 // walletStore.$subscribe((m, s) => {
 //   console.log(m, s);
 // });
@@ -30,11 +32,7 @@ const tipMsg = computed(() => {
     : { class: 'success', msg: 'Copy Success!' };
 });
 
-const addressChange = computed(() => {
-  return walletStore?.currentAddress || walletStore?.walletIsConnected
-    ? true
-    : false;
-});
+
 </script>
 
 <template>
@@ -104,8 +102,8 @@ const addressChange = computed(() => {
   <div class="footer-modal">
     <Teleport to="body">
       <ping-connect-wallet
-        :chain-id="'juno-1'"
-        :hd-path="`m/44'/118/0'/0/0`"
+        :chain-id="baseStore.currentChainId"
+        :hd-path="chainStore.defaultHDPath"
         @connect="walletStateChange"
       />
     </Teleport>
