@@ -199,14 +199,12 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return this.request(this.registry.base_tendermint_node_info, {});
   }
   async getBaseValidatorsetAt(height: string | number, offset: number) {
-    console.log("offset", offset)
     const query = `?pagination.limit=100&pagination.offset=${offset}`
     return this.request(this.registry.base_tendermint_validatorsets_height, {
       height,
     }, query);
   }
   async getBaseValidatorsetLatest(offset: number) {
-    console.log(offset)
     const query = `?pagination.limit=100&pagination.offset=${offset}`
     return this.request(this.registry.base_tendermint_validatorsets_latest, {}, query);
   }
@@ -239,8 +237,10 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
       hash,
     });
   }
-  async getIBCConnections() {
-    return this.request(this.registry.ibc_core_connection_connections, {});
+  async getIBCConnections(page?: PageRequest) {
+    if(!page) page = new PageRequest()
+    const query =`?${page.toQueryString()}`;
+    return this.request(this.registry.ibc_core_connection_connections, {}, query);
   }
   async getIBCConnectionsById(connection_id: string) {
     return this.request(

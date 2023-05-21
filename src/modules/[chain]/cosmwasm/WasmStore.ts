@@ -12,6 +12,7 @@ import type {
 } from './types';
 import { toBase64 } from '@cosmjs/encoding';
 import { useBlockchain } from '@/stores';
+import { PageRequest } from '@/types';
 
 export interface WasmRequestRegistry extends AbstractRegistry {
   cosmwasm_code: Request<PaginabledCodeInfos>;
@@ -59,14 +60,18 @@ export const DEFAULT: WasmRequestRegistry = {
 };
 
 class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
-  getWasmCodeList() {
-    return this.request(this.registry.cosmwasm_code, {});
+  getWasmCodeList(pr?: PageRequest) {
+    if(!pr) pr = new PageRequest()
+    const query = `?${pr.toQueryString()}`
+    return this.request(this.registry.cosmwasm_code, {}, query);
   }
   getWasmCodeById(code_id: string) {
     return this.request(this.registry.cosmwasm_code, { code_id }); // `code_id` is a param in above url
   }
-  getWasmCodeContracts(code_id: string) {
-    return this.request(this.registry.cosmwasm_code_id_contracts, { code_id });
+  getWasmCodeContracts(code_id: string, page?: PageRequest) {
+    if(!page) page = new PageRequest()
+    const query = `?${page.toQueryString()}`
+    return this.request(this.registry.cosmwasm_code_id_contracts, { code_id }, query);
   }
   getWasmParams() {
     return this.request(this.registry.cosmwasm_param, {});
@@ -93,10 +98,12 @@ class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
       { address, query_data }
     );
   }
-  getWasmContractStates(address: string) {
+  getWasmContractStates(address: string, pr: PageRequest) {    
+    if(!pr) pr = new PageRequest()
+    const query = `?${pr.toQueryString()}`
     return this.request(this.registry.cosmwasm_contract_address_state, {
       address,
-    });
+    }, query);
   }
 }
 

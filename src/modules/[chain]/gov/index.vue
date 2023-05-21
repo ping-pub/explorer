@@ -7,7 +7,6 @@ import { PageRequest } from '@/types';
 
 const tab = ref('2');
 const store = useGovStore();
-const pageNo = ref({} as Record<string, number>)
 const pageRequest = ref(new PageRequest())
 
 onMounted(() => {
@@ -26,7 +25,6 @@ const changeTab = (val: '2' | '3' | '4') => {
 };
 
 function page(p: number) {
-  pageNo.value[tab.value] = p
   pageRequest.value.setPage(p)
   store.fetchProposals(tab.value, pageRequest.value)
 }
@@ -55,7 +53,7 @@ function page(p: number) {
       >
     </div>
     <ProposalListItem :proposals="store?.proposals[tab]"/>
-    <PaginationBar :total="store?.proposals[tab]?.pagination?.total" :limit="pageRequest.limit" :current="pageNo[tab]" :load="page"/>
+    <PaginationBar :total="store?.proposals[tab]?.pagination?.total" :limit="pageRequest.limit" :callback="page"/>
   </div>
 </template>
 <route>

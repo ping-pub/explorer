@@ -9,15 +9,24 @@ import type {
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import type { CustomInputContent } from '@/plugins/vuetify/@core/types';
 import { useFormatter } from '@/stores';
+import PaginationBar from '@/components/PaginationBar.vue';
+import { PageRequest } from '@/types';
 
 const props = defineProps(['code_id', 'chain']);
 
+const pageRequest = ref(new PageRequest())
 const response = ref({} as PaginabledContracts);
 
 const wasmStore = useWasmStore();
-wasmStore.wasmClient.getWasmCodeContracts(props.code_id).then((x) => {
-  response.value = x;
-});
+function loadContract(pageNum: number) {
+  const pr = new PageRequest()
+  pr.setPage(pageNum)
+  wasmStore.wasmClient.getWasmCodeContracts(props.code_id, pr).then((x) => {
+    response.value = x;
+  });
+}
+loadContract(1)
+
 const format = useFormatter();
 const infoDialog = ref(false);
 const stateDialog = ref(false);
@@ -32,10 +41,17 @@ function showInfo(address: string) {
   });
 }
 function showState(address: string) {
-  wasmStore.wasmClient.getWasmContractStates(address).then((x) => {
+  selected.value = address
+  pageload(1)
+}
+
+function pageload(p: number) {
+  pageRequest.value.setPage(p)
+  wasmStore.wasmClient.getWasmContractStates(selected.value, pageRequest.value).then((x) => {
     state.value = x;
   });
 }
+
 function showQuery(address: string) {
   selected.value = address;
   query.value = '';
@@ -129,6 +145,7 @@ const result = ref('');
             </tr>
           </tbody>
         </table>
+        <PaginationBar :limit="50" :total="response.pagination?.total" :callback="loadContract"/>
       </div>
     </div>
 
@@ -154,7 +171,7 @@ const result = ref('');
 
     <input type="checkbox" id="modal-contract-states" class="modal-toggle" />
     <label for="modal-contract-states" class="modal cursor-pointer">
-      <label class="modal-box relative p-2" for="">
+      <label class="modal-box w-11/12 max-w-5xl" for="">
         <div>
           <div class="flex items-center justify-between px-3 pt-2">
             <div class="text-lg">Contract States</div>
@@ -168,22 +185,23 @@ const result = ref('');
           <div class="overflow-auto">
             <table class="table table-compact w-full text-sm">
               <tr v-for="(v, index) in state.models" :key="index">
-                <td class="">
-                  {{ format.hexToString(v.key) }}
+                <td class="text-right" :data-tip="format.hexToString(v.key)">
+                    <span class="font-bold float-right">{{ format.hexToString(v.key) }}</span>
                 </td>
-                <td class="" :title="format.base64ToString(v.value)">
+                <td class="text-left w-3/4" :title="format.base64ToString(v.value)">
                   {{ format.base64ToString(v.value) }}
                 </td>
               </tr>
-            </table>
+            </table>            
+            <PaginationBar :limit="pageRequest.limit" :total="state.pagination?.total" :callback="pageload"/>
           </div>
         </div>
       </label>
     </label>
 
     <input type="checkbox" id="modal-contract-query" class="modal-toggle" />
-    <label for="modal-contract-states" class="modal cursor-pointer">
-      <label class="modal-box relative p-2" for="">
+    <label for="modal-contract-query" class="modal cursor-pointer">
+      <label class="modal-box w-11/12 max-w-5xl" for="">
         <div>
           <div class="flex items-center justify-between px-3 pt-2 mb-4">
             <div class="text-lg font-semibold">Query Contract</div>

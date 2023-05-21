@@ -3,15 +3,23 @@ import { useBlockchain, useFormatter } from '@/stores';
 import { useWasmStore } from './WasmStore';
 import { ref } from 'vue';
 import type { PaginabledCodeInfos } from './types';
+import { PageRequest } from '@/types';
+import PaginationBar from '@/components/PaginationBar.vue';
 
 const props = defineProps(['chain']);
 
 const codes = ref({} as PaginabledCodeInfos);
 
+const pageRequest = ref(new PageRequest())
 const wasmStore = useWasmStore();
-wasmStore.wasmClient.getWasmCodeList().then((x) => {
-  codes.value = x;
-});
+
+function pageload(pageNum: number) {
+  pageRequest.value.setPage(pageNum)
+  wasmStore.wasmClient.getWasmCodeList(pageRequest.value).then((x) => {
+    codes.value = x;
+  });
+}
+pageload(1)
 </script>
 <template>
   <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
@@ -49,6 +57,7 @@ wasmStore.wasmClient.getWasmCodeList().then((x) => {
           </tr>
         </tbody>
       </table>
+      <PaginationBar :limit="pageRequest.limit" :total="codes.pagination?.total" :callback="pageload"/>
     </div>
   </div>
 </template>

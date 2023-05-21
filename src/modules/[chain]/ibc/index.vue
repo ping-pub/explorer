@@ -1,17 +1,27 @@
 <script lang="ts" setup>
+import PaginationBar from '@/components/PaginationBar.vue';
 import { useBlockchain, useFormatter } from '@/stores';
-import type { Connection } from '@/types';
+import { PageRequest, type Connection, type Pagination } from '@/types';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
 
 const props = defineProps(['chain']);
 const chainStore = useBlockchain();
 const list = ref([] as Connection[]);
+const pageRequest = ref(new PageRequest())
+const pageResponse = ref({} as Pagination)
+
 onMounted(() => {
-  chainStore.rpc.getIBCConnections().then((x) => {
-    list.value = x.connections;
-  });
+  pageload(1)
 });
+
+function pageload(p: number) {
+  pageRequest.value.setPage(p)
+  chainStore.rpc.getIBCConnections(pageRequest.value).then((x) => {
+    list.value = x.connections;
+    pageResponse.value = x.pagination
+  });
+}
 
 function color(v: string) {
   if (v && v.indexOf('_OPEN') > -1) {
@@ -62,6 +72,7 @@ function color(v: string) {
             </tr>
           </tbody>
         </table>
+        <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload"/>
       </div>
     </div>
   </div>
