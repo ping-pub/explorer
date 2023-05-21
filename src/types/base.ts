@@ -1,5 +1,4 @@
 import type { Key } from "./common"
-import type { Tx } from "./tx"
 
 export interface NodeInfo {
     default_node_info: {

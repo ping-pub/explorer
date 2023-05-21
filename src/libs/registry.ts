@@ -41,7 +41,7 @@ import type {
   StakingPool,
   Validator,
 } from '@/types/staking';
-import type { PaginatedTxs, Tx, TxResponse } from '@/types/tx';
+import type { PaginatedTxs, Tx, TxResponse } from '@/types';
 import semver from 'semver'
 export interface Request<T> {
   url: string;
