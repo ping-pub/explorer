@@ -1,0 +1,17 @@
+{
+    "chain_name": "cosmos",
+    "api": ["https://vega.api.ping.pub", "https://rest.seed-01.theta-testnet.polypore.xyz", "https://rest.seed-02.theta-testnet.polypore.xyz"],
+    "rpc": ["https://rpc.seed-01.theta-testnet.polypore.xyz", "https://rpc.seed-02.theta-testnet.polypore.xyz"],
+    "sdk_version": "0.45.1",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "cosmos",
+    "logo": "/logos/cosmos.svg",
+    "assets": [{
+        "base": "uatom",
+        "symbol": "ATOM",
+        "exponent": "6",
+        "coingecko_id": "cosmos", 
+        "logo": "/logos/cosmos.svg"
+    }]
+}

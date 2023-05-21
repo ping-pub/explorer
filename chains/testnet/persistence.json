@@ -1,0 +1,15 @@
+{
+    "chain_name": "test-core-1",
+    "api":"https://rest.testnet.persistence.one",
+    "sdk_version": "0.45.6",
+    "addr_prefix": "persistence",
+    "min_tx_fee": "3000",
+    "logo": "/logos/persistence.png",
+    "assets": [{
+        "base": "uxprt",
+        "symbol": "XPRT",
+        "exponent": "6",
+        "coingecko_id": "persistence", 
+        "logo": "/logos/persistence.png"
+    }]
+}
