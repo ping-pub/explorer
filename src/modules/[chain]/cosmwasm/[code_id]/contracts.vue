@@ -109,7 +109,7 @@ const result = ref('');
         Contract List of Code: {{ props.code_id }}
       </h2>
       <div class="overflow-x-auto">
-        <table class="table w-full mt-4">
+        <table class="table table-compact  w-full mt-4">
           <thead>
             <tr>
               <th style="position: relative; z-index: 2">Contract List</th>
@@ -117,7 +117,7 @@ const result = ref('');
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(v, index) in response.contracts" :key="index">
+            <tr v-for="(v, index) in response.contracts" :key="index" class="hover">
               <td>{{ v }}</td>
               <td>
                 <label
@@ -184,7 +184,7 @@ const result = ref('');
           </div>
           <div class="overflow-auto">
             <table class="table table-compact w-full text-sm">
-              <tr v-for="(v, index) in state.models" :key="index">
+              <tr v-for="(v, index) in state.models" :key="index" class="hover">
                 <td class="text-right" :data-tip="format.hexToString(v.key)">
                     <span class="font-bold float-right">{{ format.hexToString(v.key) }}</span>
                 </td>
