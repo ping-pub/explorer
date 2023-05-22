@@ -1,7 +1,7 @@
 {
     "chain_name": "regen",
     "coingecko": "regen",
-    "api": "https://regen.api.ping.pub",
+    "api": ["https://regen.stakesystems.io", "https://api-regen-ia.cosmosia.notional.ventures", "https://rest-regen.ecostake.com", "https://regen-lcd.easy2stake.com"],
     "rpc": ["http://public-rpc.regen.vitwit.com:26657", "https://regen.stakesystems.io:2053"],
     "snapshot_provider": "",
     "sdk_version": "0.46.2",
