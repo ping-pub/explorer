@@ -361,7 +361,7 @@ const color = computed(() => {
         <ping-token-convert
           :chain-name="blockchain?.chainName"
           :endpoint="blockchain?.endpoint?.address"
-          :params="walletStore?.connectedWallet?.hdPath"
+          :hd-path="walletStore?.connectedWallet?.hdPath"
         ></ping-token-convert>
       </Teleport>
     </div>
