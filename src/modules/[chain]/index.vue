@@ -103,8 +103,8 @@ const color = computed(() => {
       v-if="coinInfo && coinInfo.name"
       class="bg-base-100 rounded shadow mb-4"
     >
-      <div class="flex p-4">
-        <div class="">
+      <div class="grid grid-cols-2 md:grid-cols-3 p-4">
+        <div class="col-span-2 md:col-span-1">
           <div class="text-xl font-semibold text-main">
             {{ coinInfo.name }} (<span class="uppercase">{{
               coinInfo.symbol
@@ -119,7 +119,7 @@ const color = computed(() => {
             </div>
           </div>
 
-          <div class="mt-4 flex items-center">
+          <div class="my-4 flex flex-wrap items-center">
             <a
               v-for="(item, index) of comLinks"
               :key="index"
@@ -133,7 +133,7 @@ const color = computed(() => {
 
           <div>
             <div
-              class="dropdown dropdown-hover w-full md:!w-[400px] mt-[16px] md:!mt-[36px]"
+              class="dropdown dropdown-hover w-full"
             >
               <label>
                 <div
@@ -166,7 +166,7 @@ const color = computed(() => {
               </label>
               <div class="dropdown-content pt-1">
                 <div
-                  class="h-64 overflow-auto w-full md:!w-[400px] shadow rounded"
+                  class="h-64 overflow-auto w-full shadow rounded"
                 >
                   <ul class="menu w-full bg-gray-100 rounded dark:bg-[#384059]">
                     <li
@@ -200,7 +200,7 @@ const color = computed(() => {
 
             <a
               :color="store.trustColor"
-              class="mt-5 !text-white btn !bg-yes !border-yes w-full md:!w-[400px] flex items-center"
+              class="my-5 !text-white btn !bg-yes !border-yes w-full"
               :href="ticker.trade_url"
               target="_blank"
             >
@@ -209,7 +209,7 @@ const color = computed(() => {
           </div>
         </div>
 
-        <div class="flex-1 hidden md:!block">
+        <div class="col-span-2">
           <PriceMarketChart />
         </div>
       </div>
@@ -243,7 +243,7 @@ const color = computed(() => {
       <div class="px-4 pb-4">
         <ProposalListItem :proposals="store?.proposals" />
       </div>
-      <div class="pl-4 pb-8 py-4" v-if="store.proposals?.length === 0">
+      <div class="pb-8 text-center" v-if="store.proposals?.proposals?.length === 0">
         No active proposals
       </div>
     </div>

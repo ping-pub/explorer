@@ -152,7 +152,7 @@ function changeTab(v: string) {
         </div>
       </div>
 
-      <div :class="tab === '3'?'':'hidden'">
+      <div :class="tab === '3'?'':'hidden'" class=" overflow-hidden">
         <table class="table table-compact w-full mt-5">
           <thead class=" capitalize">
             <tr>

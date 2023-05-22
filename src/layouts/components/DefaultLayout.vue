@@ -6,7 +6,7 @@ import { useThemeConfig } from '@/plugins/vuetify/@core/composable/useThemeConfi
 // Components
 import newFooter from '@/layouts/components/NavFooter.vue';
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
-import UserProfile from '@/layouts/components/ChainProfile.vue';
+import ChainProfile from '@/layouts/components/ChainProfile.vue';
 
 import { useDashboard } from '@/stores/useDashboard';
 
@@ -229,7 +229,7 @@ const showDiscord = window.location.host.search("ping.pub") > -1
           <Icon icon="mdi-menu" />
         </div>
 
-        <UserProfile />
+        <ChainProfile />
 
         <div class="flex-1 w-0"></div>
 

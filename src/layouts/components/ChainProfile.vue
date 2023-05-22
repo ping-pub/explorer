@@ -15,40 +15,49 @@ chainStore.initial();
         ></div>
       </div>
       <div
-        class="dropdown-content menu shadow bg-base-100 rounded-box max-h-[300px] overflow-auto"
+        class="dropdown-content w-80 menu shadow bg-base-200 rounded-box max-h-[300px] overflow-auto"
       >
-        <div>
-          <!-- rest -->
-          <div
-            class="px-4 py-2 text-sm text-gray-400"
-            v-if="chainStore.current?.endpoints?.rest"
-          >
-            Rest Endpoint
+        <!-- rest -->
+        <div class="px-4 py-2 text-sm text-gray-400">
+            Information
+        </div>
+        <div class="w-full hover:bg-gray-100 dark:bg-[#384059]">
+          <div class="py-2 px-4">
+            Chain Id: {{ baseStore.latest.block?.header.chain_id }}
           </div>
-          <div tabindex="0">
-            <div
-              v-for="(item, index) in chainStore.current?.endpoints?.rest"
-              @click="chainStore.setRestEndpoint(item)"
-              class="px-4 py-2 hover:bg-gray-100 dark:bg-[#384059] cursor-pointer"
-              :key="index"
-            >
-              <div class="flex flex-col items-start">
-                <div class="flex items-center justify-between w-full">
-                  <div class="text-gray-500 dark:text-gray-200 capitalize">
-                    {{ item.provider }}
-                  </div>
-
-                  <span
-                    v-if="item.address === chainStore.endpoint?.address"
-                    class="bg-yes inline-block h-2 w-2 rounded-full"
-                  />
-                </div>
-                <div class="text-gray-400 text-xs whitespace-nowrap">
-                  {{ item.address }}
-                </div>
+          <div class="py-2 px-4">
+            Height: {{ baseStore.latest.block?.header.height }}
+          </div>
+        </div>
+        <!-- rest -->
+        <div
+          class="px-4 py-2 text-sm text-gray-400"
+          v-if="chainStore.current?.endpoints?.rest"
+        >
+          Rest Endpoint
+        </div>
+        <div
+          v-for="(item, index) in chainStore.current?.endpoints?.rest"
+          @click="chainStore.setRestEndpoint(item)"
+          class="px-4 py-2 w-full hover:bg-gray-100 dark:bg-[#384059] cursor-pointer"
+          :key="index"
+        >
+          <div class="flex flex-col items-start">
+            <div class="flex items-center justify-between w-full">
+              <div class="text-gray-500 dark:text-gray-200 capitalize">
+                {{ item.provider }}
               </div>
+
+              <span
+                v-if="item.address === chainStore.endpoint?.address"
+                class="bg-yes inline-block h-2 w-2 rounded-full"
+              />
+            </div>
+            <div class="text-gray-400 text-xs whitespace-nowrap">
+              {{ item.address }}
             </div>
           </div>
+        </div>
 
           <!-- grpc -->
           <div
@@ -74,13 +83,12 @@ chainStore.initial();
               </div>
             </li>
           </ul>
-        </div>
       </div>
     </div>
     <div class="flex-1 w-0">
       <Transition name="fade" mode="out-in" appear>
       <div :key="baseStore.latest?.block?.header?.height || chainStore.chainName || ''"
-        class="capitalize whitespace-nowrap text-base font-semibold text-gray-600 dark:text-gray-200"
+        class="capitalize whitespace-nowrap text-base font-semibold text-gray-600 dark:text-gray-200 hidden md:!block"
       >
         #{{
            baseStore.latest?.block?.header?.height || chainStore.chainName || ''
@@ -88,7 +96,7 @@ chainStore.initial();
       </div>
       </Transition>
       <div
-        class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap hidden lg:!block"
+        class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap hidden md:!block"
       >
         {{ chainStore.connErr || chainStore.endpoint.address }}
       </div>
