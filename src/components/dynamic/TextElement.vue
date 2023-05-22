@@ -33,7 +33,7 @@ const text = computed(() => {
     previewOnly
     class="md-editor-recover"
   ></MdEditor>
-  <span v-else>{{ text }}-</span>
+  <span v-else>{{ text }}</span>
 </template>
 
 <style lang="scss">
