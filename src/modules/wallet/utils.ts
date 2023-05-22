@@ -31,9 +31,8 @@ export function scanCompatibleAccounts() {
     const dashboard = useDashboard()
     const available = [] as AccountEntry[]
     scanLocalKeys().forEach(wallet => {
-      dashboard.favorite.forEach(chainName => {
-        const chain = dashboard.chains[chainName]
-        if (chain && wallet.hdPath.indexOf(chain.coinType) === 6) {
+      Object.values(dashboard.chains).forEach(chain => {
+        if (wallet.hdPath.indexOf(chain.coinType) === 6) {
           const { data } = fromBech32(wallet.cosmosAddress)
           available.push({
             chainName: chain.chainName,
