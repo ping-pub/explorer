@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useBaseStore, useBlockchain, useWalletStore } from '@/stores';
-import type { Icon } from '@iconify/vue';
+import { Icon } from '@iconify/vue';
 import { ref, computed } from 'vue';
 const walletStore = useWalletStore();
 const chainStore = useBlockchain();
@@ -97,7 +97,7 @@ const tipMsg = computed(() => {
     v-if="!walletStore?.currentAddress"
     for="PingConnectWallet"
     class="btn btn-sm ml-4"
-    >Connect Wallet</label
+    ><Icon icon="mdi:wallet"/><span class="ml-1 hidden md:block">Connect Wallet</span></label
   >
   <div class="footer-modal">
     <Teleport to="body">
