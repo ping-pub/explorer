@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useFormatter } from '@/stores';
 import MdEditor from 'md-editor-v3';
+import { computed } from 'vue';
 
 const props = defineProps(['value']);
 const format = useFormatter();
@@ -13,6 +14,17 @@ function isMD() {
   }
   return false;
 }
+
+const text = computed(() => {
+  if(!props.value) return ""
+  const v = props.value
+  switch(true) {
+    case v.length === 28 && v.endsWith("="): {
+      return format.validator(v)
+    }
+  }
+  return v
+})
 </script>
 <template>
   <MdEditor
@@ -21,7 +33,7 @@ function isMD() {
     previewOnly
     class="md-editor-recover"
   ></MdEditor>
-  <span v-else>{{ value }}</span>
+  <span v-else>{{ text }}-</span>
 </template>
 
 <style lang="scss">
