@@ -1,0 +1,17 @@
+{
+    "chain_name": "dyson-protocol",
+    "api": ["https://dys-api.dysonprotocol.com", "https://dys-api.dyson.lol"], 
+    "rpc": ["https://dys-tm.dysonprotocol.com","https://dys-tm.dyson.lol"],
+    "sdk_version": "0.46.7",
+    "coin_type": "118",
+    "min_tx_fee": "10",
+    "assets": [{
+        "base": "dys",
+        "symbol": "DYS",
+        "exponent": "0",
+        "coingecko_id": "", 
+        "logo": "https://dys.dysonprotocol.com/static/dys-inverted.svg"
+    }],
+    "addr_prefix": "dys",
+    "logo": "https://dys.dysonprotocol.com/static/dys-inverted.svg"
+}
