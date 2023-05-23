@@ -1,5 +1,6 @@
 {
     "chain_name": "cosmos",
+    "registry_name": "cosmoshub",
     "api": [
         "https://api-cosmoshub-ia.cosmosia.notional.ventures",
         "https://lcd-cosmoshub.blockapsis.com:443"
