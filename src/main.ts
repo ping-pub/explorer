@@ -38,4 +38,4 @@ setInterval(() => {
     if(requestCounter.value < 5) { // max allowed request
         blockStore.fetchLatest().finally(() => requestCounter.value -= 1)
     } 
-}, 18000)
+}, 6000)
