@@ -1,9 +1,9 @@
 {
-    "chain_name": "quasar",
+    "chain_name": "Quasar Test",
     "coingecko": "",
-    "api": ["https://quasar-testnet-api.polkachu.com","https://quasar-testnet-api.swiss-staking.ch"],
-    "rpc": ["https://quasar-testnet-rpc.polkachu.com","https://quasar-testnet-rpc.swiss-staking.ch","https://questnet.quasar-finance.rhinostake.com"],
-    "sdk_version": "0.46.4",
+    "api": ["https://quasar-testnet-api.polkachu.com"],
+    "rpc": ["https://quasar-testnet-rpc.polkachu.com"],
+    "sdk_version": "0.45.14",
     "coin_type": 118,
     "min_tx_fee": "8000",
     "addr_prefix": "quasar",
@@ -15,20 +15,6 @@
         "exponent": 6,
         "coingecko_id": "",
         "logo": "/logos/quasar.png"
-      },
-      {
-        "base": "uayy",
-        "symbol": "AYY",
-        "exponent": 6,
-        "coingecko_id": "",
-        "logo": ""
-      },
-      {
-        "base": "uoro",
-        "symbol": "ORO",
-        "exponent": 6,
-        "coingecko_id": "",
-        "logo": ""
       }
     ]
 }
