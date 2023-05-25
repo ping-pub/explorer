@@ -78,6 +78,13 @@ export interface ChainConfig {
   providerChain: {
     api: Endpoint[]
   };
+  // keplr config
+  keplrFeatures?: string[],
+  keplrPriceStep?: {
+    low: number,
+    average: number,
+    high: number,
+  },
 }
 
 export interface LocalConfig {
@@ -103,6 +110,12 @@ export interface LocalConfig {
   sdk_version: string;
   registry_name?: string;
   features?: string[];
+  keplr_price_step?: {
+    low: number,
+    average: number,
+    high: number,
+  },
+  keplr_features: string[],
 }
 
 function apiConverter(api: any[]) {
@@ -151,6 +164,8 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
   }
   conf.features = lc.features
   conf.logo = lc.logo;
+  conf.keplrFeatures = lc.keplr_features;
+  conf.keplrPriceStep = lc.keplr_price_step;
   return conf;
 }
 
