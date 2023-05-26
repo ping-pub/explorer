@@ -224,9 +224,7 @@ async function addAddress(acc: AccountEntry) {
         </tbody>
         <tfoot>
           <th colspan="10">
-            <div v-if="editable">
-
-            </div>
+            <RouterLink to="/wallet/keplr"> Add chain to Keplr </RouterLink>
           </th>
         </tfoot>
       </table>

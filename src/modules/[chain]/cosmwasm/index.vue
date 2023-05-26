@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useBlockchain, useFormatter } from '@/stores';
+import { useBlockchain, useFormatter, useTxDialog } from '@/stores';
 import { useWasmStore } from './WasmStore';
 import { ref } from 'vue';
 import type { PaginabledCodeInfos } from './types';
@@ -12,6 +12,7 @@ const codes = ref({} as PaginabledCodeInfos);
 
 const pageRequest = ref(new PageRequest())
 const wasmStore = useWasmStore();
+const dialog = useTxDialog()
 
 function pageload(pageNum: number) {
   pageRequest.value.setPage(pageNum)
@@ -57,7 +58,15 @@ pageload(1)
           </tr>
         </tbody>
       </table>
-      <PaginationBar :limit="pageRequest.limit" :total="codes.pagination?.total" :callback="pageload"/>
+      <div class="flex justify-between">
+        <PaginationBar :limit="pageRequest.limit" :total="codes.pagination?.total" :callback="pageload"/>
+        <label
+            for="wasm_store_code"
+            class="btn btn-primary my-5"
+            @click="dialog.open('wasm_store_code', {})"
+            >Upload Smart Contract</label
+          >
+      </div>
     </div>
   </div>
 </template>

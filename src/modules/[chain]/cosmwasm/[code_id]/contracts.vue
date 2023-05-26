@@ -8,7 +8,7 @@ import type {
 } from '../types';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import type { CustomInputContent } from '@/plugins/vuetify/@core/types';
-import { useFormatter } from '@/stores';
+import { useFormatter, useTxDialog } from '@/stores';
 import PaginationBar from '@/components/PaginationBar.vue';
 import { PageRequest } from '@/types';
 
@@ -27,6 +27,7 @@ function loadContract(pageNum: number) {
 }
 loadContract(1)
 
+const dialog = useTxDialog()
 const format = useFormatter();
 const infoDialog = ref(false);
 const stateDialog = ref(false);
@@ -136,16 +137,22 @@ const result = ref('');
                 </label>
                 <label
                   for="modal-contract-query"
-                  class="btn btn-primary btn-sm text-xs"
+                  class="btn btn-primary btn-sm text-xs mr-2"
                   @click="showQuery(v)"
                 >
                   Query
+                </label>
+                <label for="wasm_execute_contract" class="btn btn-primary btn-sm text-xs" @click="dialog.open('wasm_execute_contract', {contract: v})">
+                  Execute
                 </label>
               </td>
             </tr>
           </tbody>
         </table>
-        <PaginationBar :limit="50" :total="response.pagination?.total" :callback="loadContract"/>
+        <div class="flex justify-between">
+          <PaginationBar :limit="50" :total="response.pagination?.total" :callback="loadContract"/>
+          <label for="wasm_instantiate_contract" class="btn btn-primary my-5" @click="dialog.open('wasm_instantiate_contract', {codeId: props.code_id})">Instantiate Contract</label>
+        </div>   
       </div>
     </div>
 
@@ -192,7 +199,7 @@ const result = ref('');
                   {{ format.base64ToString(v.value) }}
                 </td>
               </tr>
-            </table>            
+            </table>
             <PaginationBar :limit="pageRequest.limit" :total="state.pagination?.total" :callback="pageload"/>
           </div>
         </div>

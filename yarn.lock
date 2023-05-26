@@ -3076,7 +3076,7 @@
     "@vue/compiler-dom" "3.2.47"
     "@vue/shared" "3.2.47"
 
-"@vue/devtools-api@^6.2.1", "@vue/devtools-api@^6.4.5", "@vue/devtools-api@^6.5.0":
+"@vue/devtools-api@^6.2.1", "@vue/devtools-api@^6.4.5":
   version "6.5.0"
   resolved "https://registry.npmjs.org/@vue/devtools-api/-/devtools-api-6.5.0.tgz"
   integrity sha512-o9KfBeaBmCKl10usN4crU53fYtC1r7jJwdGKjPT24t348rHxgfpZ0xL3Xm/gLUYnc0oTp8LAmrxOeLyu6tbk2Q==
@@ -4845,6 +4845,11 @@ fb-watchman@^2.0.0:
   integrity sha512-p5161BqbuCaSnB8jIbzQHOlpgsPmK5rJVDfDKO91Axs5NC1uu3HRQm6wt9cd9/+GtQQIO53JdGXXoyDpTAsgYA==
   dependencies:
     bser "2.1.1"
+
+fflate@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/fflate/-/fflate-0.8.0.tgz#f93ad1dcbe695a25ae378cf2386624969a7cda32"
+  integrity sha512-FAdS4qMuFjsJj6XHbBaZeXOgaypXp8iw/Tpyuq/w3XA41jjLHT8NPA+n7czH/DDhdncq0nAyDZmPeWXh2qmdIg==
 
 figures@^2.0.0:
   version "2.0.0"
@@ -6950,10 +6955,10 @@ pify@^3.0.0:
   resolved "https://registry.npmjs.org/pify/-/pify-3.0.0.tgz"
   integrity sha512-C3FsVNH1udSEX48gGX1xfvwTWfsYWj5U+8/uK15BGzIGrKoUpghX8hWZwa/OFnakBiiVNmBvemTJR5mcy7iPcg==
 
-ping-widget@^0.0.19:
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/ping-widget/-/ping-widget-0.0.19.tgz#61ac216963a4b6bed3a525890ccd35fa64644c0e"
-  integrity sha512-Yl1P8+cgiXCLsFHJJpP/Cy8eL+5j4xtWGSF1sAwJKj2UfVCJHGqFO2ih+caEx5I6wYQYwZTzqDYUjco5SADNaA==
+ping-widget@^0.0.20:
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/ping-widget/-/ping-widget-0.0.20.tgz#768979566462284ca69bf78901c25f4adbc8613b"
+  integrity sha512-bndLcLs5YDEHXXXglODwO1oLr5PANPOfVojPyLaUq41z2eBmFJ4hum+yqKLvsWLSaNnEJSv/gleeA1gutj4ogw==
   dependencies:
     "@cosmjs/amino" "^0.30.1"
     "@cosmjs/cosmwasm-stargate" "^0.30.1"
@@ -6972,8 +6977,8 @@ ping-widget@^0.0.19:
     cross-fetch "^3.1.5"
     daisyui "^2.51.6"
     dayjs "^1.11.7"
+    fflate "^0.8.0"
     osmojs "^15.2.1"
-    pinia "^2.0.36"
     vue "^3.2.47"
     vue3-webcomponent-wrapper "^0.2.0"
 
@@ -6984,14 +6989,6 @@ pinia@^2.0.28:
   dependencies:
     "@vue/devtools-api" "^6.4.5"
     vue-demi "*"
-
-pinia@^2.0.36:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/pinia/-/pinia-2.1.1.tgz#542c6bb8a7c27b342082f431bccd6124b63c5b55"
-  integrity sha512-Y2CgpcUtD8Ogdvo5LW5g20ykSZgnVDMgTSZFr40EvO6HB8axQk+0lHa1UrRah9wworFaxjovwRlY/wRICWj/KQ==
-  dependencies:
-    "@vue/devtools-api" "^6.5.0"
-    vue-demi ">=0.14.2"
 
 pirates@^4.0.1, pirates@^4.0.4:
   version "4.0.5"
@@ -8626,11 +8623,6 @@ vue-demi@>=0.14.0:
   version "0.14.1"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.14.1.tgz#1ed9af03a27642762bfed83d8750805302d0398d"
   integrity sha512-rt+yuCtXvscYot9SQQj3WKZJVSriPNqVkpVBNEHPzSgBv7QIYzsS410VqVgvx8f9AAPgjg+XPKvmV3vOqqkJQQ==
-
-vue-demi@>=0.14.2:
-  version "0.14.3"
-  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.14.3.tgz#5c7375527ad32580a7d8d28ee322bc059dbc1b99"
-  integrity sha512-aknytzARm7U20nMhvOdfa5IRiS+oyATtd55s3fICsT7wEtN/qoOiOINsNsNJjeZCOsPNOGS4p1yDOwH9cTxgjg==
 
 vue-eslint-parser@^9.0.0, vue-eslint-parser@^9.0.1:
   version "9.1.0"
