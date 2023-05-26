@@ -1,0 +1,19 @@
+{
+    "chain_name": "tenet",
+    "coingecko": "",
+    "api": ["https://tenet-api.lavenderfive.com"],
+    "rpc": ["https://tendermint-1.rpc.tenet.org:443,https://tendermint-2.rpc.tenet.org:443","https://tenet-rpc.lavenderfive.com"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.9-ledger",
+    "coin_type": "60",
+    "min_tx_fee": "20000000000",
+    "addr_prefix": "tenet",
+    "logo": "/logos/tenet.webp",
+    "assets": [{
+        "base": "atenet",
+        "symbol": "TENET",
+        "exponent": "18",
+        "coingecko_id": "",
+        "logo": "/logos/tenet.webp"
+    }]
+}
