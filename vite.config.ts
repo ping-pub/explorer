@@ -15,7 +15,18 @@ import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) =>
+            [
+              'ping-connect-wallet',
+              'ping-token-convert',
+              'ping-tx-dialog',
+            ].includes(tag),
+        },
+      },
+    }),
     vueJsx(),
     vuetify({
       styles: {

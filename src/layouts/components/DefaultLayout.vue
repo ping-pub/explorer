@@ -20,10 +20,10 @@ const dashboard = useDashboard();
 dashboard.initial();
 const blockchain = useBlockchain();
 
-const current = ref("")
+const current = ref('');
 blockchain.$subscribe((m, s) => {
-  if(current.value != s.chainName) {
-    current.value = s.chainName
+  if (current.value != s.chainName) {
+    current.value = s.chainName;
     blockchain.initial();
   }
 });
@@ -36,7 +36,7 @@ const changeOpen = (index: Number) => {
     sidebarOpen.value = !sidebarOpen.value;
   }
 };
-const showDiscord = window.location.host.search("ping.pub") > -1
+const showDiscord = window.location.host.search('ping.pub') > -1;
 </script>
 
 <template>
@@ -51,7 +51,10 @@ const showDiscord = window.location.host.search("ping.pub") > -1
         <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">
           Ping.pub
         </h1>
-        <div class="pr-4 cursor-pointer xl:!hidden" @click="sidebarShow = false">
+        <div
+          class="pr-4 cursor-pointer xl:!hidden"
+          @click="sidebarShow = false"
+        >
           <Icon icon="mdi-close" class="text-3xl" />
         </div>
       </div>
@@ -95,7 +98,8 @@ const showDiscord = window.location.host.search("ping.pub") > -1
             </div>
             <div
               v-if="item?.badgeContent"
-              class="mr-6 badge badge-sm" :class="item?.badgeClass"
+              class="mr-6 badge badge-sm"
+              :class="item?.badgeClass"
             >
               {{ item?.badgeContent }}
             </div>
@@ -165,7 +169,8 @@ const showDiscord = window.location.host.search("ping.pub") > -1
           </div>
           <div
             v-if="item?.badgeContent"
-            class="mr-6 badge badge-sm" :class="item?.badgeClass"
+            class="mr-6 badge badge-sm"
+            :class="item?.badgeClass"
           >
             {{ item?.badgeContent }}
           </div>
@@ -181,37 +186,67 @@ const showDiscord = window.location.host.search("ping.pub") > -1
         <div class="px-4 text-sm pt-4 text-gray-400 pb-2 uppercase">
           Sponsors
         </div>
-        <a href="https://osmosis.zone" class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
-          <img src="https://ping.pub/logos/osmosis.jpg" class="w-6 h-6 rounded-full mr-3"/>
-          <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200">
+        <a
+          href="https://osmosis.zone"
+          class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
+        >
+          <img
+            src="https://ping.pub/logos/osmosis.jpg"
+            class="w-6 h-6 rounded-full mr-3"
+          />
+          <div
+            class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200"
+          >
             Osmosis
           </div>
         </a>
-        <a href="https://becole.com" class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
-          <img src="https://becole.com/static/logo/logo_becole.png" class="w-6 h-6 rounded-full mr-3"/>
-          <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200">
+        <a
+          href="https://becole.com"
+          class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
+        >
+          <img
+            src="https://becole.com/static/logo/logo_becole.png"
+            class="w-6 h-6 rounded-full mr-3"
+          />
+          <div
+            class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200"
+          >
             Becole
           </div>
         </a>
 
-        <div class="px-4 text-sm pt-4 text-gray-400 pb-2 uppercase">
-          Links
-        </div>
-        <a href="https://twitter.com/ping_pub" class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
-          <Icon icon="mdi:twitter" class="text-xl mr-2"/>
-          <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200">
+        <div class="px-4 text-sm pt-4 text-gray-400 pb-2 uppercase">Links</div>
+        <a
+          href="https://twitter.com/ping_pub"
+          class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
+        >
+          <Icon icon="mdi:twitter" class="text-xl mr-2" />
+          <div
+            class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200"
+          >
             Twitter
           </div>
         </a>
-        <a v-if="showDiscord" href="https://discord.com/invite/CmjYVSr6GW" class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
-          <Icon icon="mdi:discord" class="text-xl mr-2"/>
-          <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200">
+        <a
+          v-if="showDiscord"
+          href="https://discord.com/invite/CmjYVSr6GW"
+          class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
+        >
+          <Icon icon="mdi:discord" class="text-xl mr-2" />
+          <div
+            class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200"
+          >
             Discord
           </div>
         </a>
-        <a href="https://github.com/ping-pub/explorer/discussions" class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
-          <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2"/>
-          <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200">
+        <a
+          href="https://github.com/ping-pub/explorer/discussions"
+          class="collapse-title px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
+        >
+          <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
+          <div
+            class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200"
+          >
             FAQ
           </div>
         </a>
@@ -237,9 +272,7 @@ const showDiscord = window.location.host.search("ping.pub") > -1
         <NavBarI18n class="hidden md:!inline-block" />
         <NavbarThemeSwitcher class="!inline-block" />
 
-        <NavBarWallet
-          class="hidden truncate md:!inline-block text-xs md:!text-sm"
-        />
+        <NavBarWallet />
       </div>
 
       <!-- 👉 Pages -->

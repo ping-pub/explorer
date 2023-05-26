@@ -4,7 +4,7 @@ import { Icon } from '@iconify/vue';
 import { ref, computed } from 'vue';
 const walletStore = useWalletStore();
 const chainStore = useBlockchain();
-const baseStore = useBaseStore()
+const baseStore = useBaseStore();
 // walletStore.$subscribe((m, s) => {
 //   console.log(m, s);
 // });
@@ -31,29 +31,31 @@ const tipMsg = computed(() => {
     ? { class: 'error', msg: 'Copy Error!' }
     : { class: 'success', msg: 'Copy Success!' };
 });
-
-
 </script>
 
 <template>
-  <div
-    class="dropdown dropdown-hover dropdown-end"
-  >
-    <label tabindex="0" class="btn btn-sm m-1 lowercase">
-      <Icon icon="mdi:wallet"/>
+  <div class="dropdown dropdown-hover dropdown-end">
+    <label
+      tabindex="0"
+      class="btn btn-sm m-1 lowercase hidden truncate md:!inline-flex text-xs md:!text-sm"
+    >
+      <Icon icon="mdi:wallet" />
       <span class="ml-1 hidden md:block">
-        {{ walletStore.shortAddress || "Wallet" }}</span>
+        {{ walletStore.shortAddress || 'Wallet' }}</span
+      >
     </label>
     <div
       tabindex="0"
       class="dropdown-content menu shadow p-2 bg-base-100 rounded w-64 overflow-auto"
     >
-    <label
-      v-if="!walletStore?.currentAddress"
-      for="PingConnectWallet"
-      class="btn btn-sm"
-      ><Icon icon="mdi:wallet"/><span class="ml-1 hidden md:block">Connect Wallet</span></label
-    >
+      <label
+        v-if="!walletStore?.currentAddress"
+        for="PingConnectWallet"
+        class="btn btn-sm"
+        ><Icon icon="mdi:wallet" /><span class="ml-1 hidden md:block"
+          >Connect Wallet</span
+        ></label
+      >
       <div class="px-2 mb-1 text-gray-500 dark:text-gray-400 font-semibold">
         {{ walletStore.connectedWallet?.wallet }}
       </div>
@@ -100,17 +102,14 @@ const tipMsg = computed(() => {
         </div>
       </div>
     </div>
-    
   </div>
-  <div class="footer-modal">
-    <Teleport to="body">
-      <ping-connect-wallet
-        :chain-id="baseStore.currentChainId"
-        :hd-path="chainStore.defaultHDPath"
-        @connect="walletStateChange"
-      />
-    </Teleport>
-  </div>
+  <Teleport to="body">
+    <ping-connect-wallet
+      :chain-id="baseStore.currentChainId"
+      :hd-path="chainStore.defaultHDPath"
+      @connect="walletStateChange"
+    />
+  </Teleport>
 </template>
 
 <style>
