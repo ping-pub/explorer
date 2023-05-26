@@ -1,8 +1,8 @@
 {
     "chain_name": "tenet",
     "coingecko": "",
-    "api": ["https://aura-api.lavenderfive.com", "https://api.tenet.org"],
-    "rpc": ["https://aura-rpc.lavenderfive.com", "https://rpc.tenet.org"],
+    "api": ["https://tenet-api.lavenderfive.com", "https://api.tenet.org"],
+    "rpc": ["https://tenet-rpc.lavenderfive.com", "https://rpc.tenet.org"],
     "snapshot_provider": "",
     "sdk_version": "0.46.9-ledger",
     "coin_type": "60",
