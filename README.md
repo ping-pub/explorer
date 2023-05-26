@@ -17,23 +17,17 @@
 
 `Ping Dashboard` is a light explorer for Cosmos-based Blockchains.  https://ping.pub .
 
-## What is the difference between Ping explorer and other explorers? 
+## What sets Ping Dashboard apart from other explorers?
+**Ping Dashboard** stands out by providing a real-time exploration of blockchain data without relying on caching or pre-processing. It exclusively fetches data from the Cosmos full node via LCD/RPC endpoints, ensuring a truly authentic experience. This approach is referred to as the "Light Explorer."
 
-`Ping Dashboard` is designed to explore blockchain data as real as possible, therefore there is no cache, no pre-processing. `Ping Dashboard` only fetch data from Cosmos full node via LCD/RPC endpoints. We call it "Light Explorer".
+## Are you interested in listing your blockchain on Ping Dashboard?
+Initially, **Ping Dashboard** offers free listing for the first 100 blockchains. However, starting from the 101st blockchain, there will be associated fees.
 
-## Do you want to list your blockchain on ping.pub?
+## Why does Ping Dashboard rely on official/trusted third-party public LCD/RPC servers?
+There are two primary reasons for this choice:
 
-Submit your pull request [here](./src/chains), We will add your chains as soon as possible. It is **FREE** (You must have 10+ independent validators on your chain).
-
-We remain neutral to all chains, and we do not comment on their market prospects, technical risks, or investment risks. The only condition we list on ping.pub is if there are ten validators, and we cannot determine if these validators are controlled by the same entity.
-
-## Why Ping explorer use official/trusted third party public LCD/rpc server? 
-
-There are two main reasons:
-
-   - Trust, in a decentralized system, anything controlled by one entity cannot be trusted. So we decided to build with the community.
-   - Limited resources: `Ping Dashboard` will list hundreds of cosmos-based blockchains in the future, and it is impossible for our team to run validators or full nodes for all of them.
-
+ - Trust: In a decentralized system, it is crucial to avoid relying solely on a single entity. By utilizing official/trusted third-party public LCD/RPC servers, Ping Dashboard ensures that the data is sourced from a network of trusted participants.
+ - Limited Resources: As Ping Dashboard plans to list hundreds of Cosmos-based blockchains in the future, it is impractical for the Ping team to operate validators or full nodes for all of them. Leveraging trusted third-party servers allows for more efficient resource allocation.
 
 ## Donation
 
@@ -43,10 +37,6 @@ Your donation will help us make better products. Thanks in advance.
 ```
 0x88BFec573Dd3E4b7d2E6BfD4D0D6B11F843F8aa1
 ```
-
- - You can donate any token in the Cosmos ecosystem: [here](https://ping.pub/coffee)
-
-> If you are an individual please do not donate more than $10, a cup of coffee means a lot to us.
 
 #### Donations from project
 
