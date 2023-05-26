@@ -1,7 +1,7 @@
 {
     "chain_name": "tenet",
     "coingecko": "",
-    "api": ["https://tenet-api.lavenderfive.com", "https://api.tenet.org"],
+    "api": ["https://tenet-api.lavenderfive.com"],
     "rpc": ["https://tenet-rpc.lavenderfive.com", "https://rpc.tenet.org"],
     "snapshot_provider": "",
     "sdk_version": "0.46.9-ledger",
