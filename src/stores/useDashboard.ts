@@ -265,7 +265,7 @@ export const useDashboard = defineStore('dashboard', {
       favorite: fav as string[],
       favoriteMap: favMap as Record<string, boolean>,
       chains: {} as Record<string, ChainConfig>,
-      prices: {},
+      prices: {} as Record<string, any>,
       coingecko: {} as Record<string, {coinId: string, exponent: number, symbol: string}>,
     };
   },

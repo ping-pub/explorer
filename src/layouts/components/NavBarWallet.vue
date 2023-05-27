@@ -84,7 +84,7 @@ const tipMsg = computed(() => {
           v-if="walletStore.currentAddress"
           class="block py-2 px-2 hover:bg-gray-100 dark:hover:bg-[#353f5a] rounded cursor-pointer"
           @click="walletStore.disconnect()"
-          >Disconnected</a
+          >Disconnect</a
         >
       </div>
     </div>

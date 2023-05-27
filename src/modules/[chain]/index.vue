@@ -267,9 +267,7 @@ const color = computed(() => {
             {{ format.formatToken(walletStore.balanceOfStakingToken) }}
           </div>
           <div class="text-sm" :class="color">
-            <span class="ml-1">
-              ${{ format.tokenValue(walletStore.balanceOfStakingToken) }}
-            </span>
+            ${{ format.tokenValue(walletStore.balanceOfStakingToken) }}
           </div>
         </div>
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
@@ -355,7 +353,8 @@ const color = computed(() => {
       <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
         <label for="PingTokenConvert" class="btn btn-primary text-white">Swap</label>
         <label for="send" class="btn !bg-yes !border-yes text-white" @click="dialog.open('send', {})">Send</label>
-        <RouterLink to="/wallet/receive" class="btn !bg-info !border-info text-white">Receive</RouterLink>
+        <label for="delegate" class="btn !bg-info !border-info text-white" @click="dialog.open('delegate', {})">Delegate</label>
+        <RouterLink to="/wallet/receive" class="btn !bg-info !border-info text-white hidden">Receive</RouterLink>
       </div>
       <Teleport to="body">
         <ping-token-convert

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { computed } from '@vue/reactivity';
 import ObjectElement from '@/components/dynamic/ObjectElement.vue';
 import {
   useBaseStore,
@@ -7,21 +8,24 @@ import {
   useStakingStore,
   useTxDialog,
 } from '@/stores';
-import type {
-  GovProposal,
-  GovVote,
-  PaginatedProposalDeposit,
-  Pagination,
+import {
+PageRequest,
+  type GovProposal,
+  type GovVote,
+  type PaginatedProposalDeposit,
+  type Pagination,
 } from '@/types';
 import { ref, reactive } from 'vue';
 import Countdown from '@/components/Countdown.vue';
-import { computed } from '@vue/reactivity';
+import PaginationBar from '@/components/PaginationBar.vue'
+import { fromBech32, toHex } from '@cosmjs/encoding';
 
 const props = defineProps(['proposal_id', 'chain']);
 const proposal = ref({} as GovProposal);
 const format = useFormatter();
 const store = useGovStore();
 const dialog = useTxDialog();
+const stakingStore = useStakingStore();
 
 store.fetchProposal(props.proposal_id).then((res) => {
   const proposalDetail = reactive(res.proposal);
@@ -53,26 +57,13 @@ const deposit = ref({} as PaginatedProposalDeposit);
 store.fetchProposalDeposits(props.proposal_id).then((x) => (deposit.value = x));
 
 const votes = ref({} as GovVote[]);
-const votePage = ref({} as Pagination);
-const loading = ref(false);
+const pageRequest = ref(new PageRequest())
+const pageResponse = ref({} as Pagination)
 
 store.fetchProposalVotes(props.proposal_id).then((x) => {
   votes.value = x.votes;
-  votePage.value = x.pagination;
+  pageResponse.value = x.pagination;
 });
-
-function loadMore() {
-  if (votePage.value.next_key) {
-    loading.value = true;
-    store
-      .fetchProposalVotes(props.proposal_id, votePage.value.next_key)
-      .then((x) => {
-        votes.value = votes.value.concat(x.votes);
-        votePage.value = x.pagination;
-        loading.value = false;
-      });
-  }
-}
 
 function shortTime(v: string) {
   if (v) {
@@ -113,7 +104,7 @@ const total = computed(() => {
 
 const turnout = computed(() => {
   if (total.value > 0) {
-    const bonded = useStakingStore().pool?.bonded_tokens || '1';
+    const bonded = stakingStore.pool?.bonded_tokens || '1';
     return format.percent(total.value / Number(bonded));
   }
   return 0;
@@ -159,6 +150,23 @@ const processList = computed(() => {
     { name: 'Abstain', value: abstain.value, class: 'bg-warning' },
   ];
 });
+
+function showValidatorName(voter: string) {
+  const {data} = fromBech32(voter)
+  const hex = toHex(data)
+  const v = stakingStore.validators.find( x => toHex(fromBech32(x.operator_address).data) === hex)
+  return v? v.description.moniker : voter
+}
+
+function pageload(p: number) {
+  pageRequest.value.setPage(p)
+  store
+      .fetchProposalVotes(props.proposal_id, pageRequest.value)
+      .then((x) => {
+        votes.value = x.votes;
+        pageResponse.value = x.pagination;
+      });
+}
 </script>
 
 <template>
@@ -325,7 +333,7 @@ const processList = computed(() => {
         <table class="table w-full table-zebra">
           <tbody>
             <tr v-for="(item, index) of votes" :key="index">
-              <td class="py-2 text-sm">{{ item.voter }}</td>
+              <td class="py-2 text-sm">{{ showValidatorName(item.voter) }}</td>
               <td
                 class="py-2 text-sm"
                 :class="{
@@ -333,20 +341,12 @@ const processList = computed(() => {
                   'text-gray-400': item.option === 'VOTE_OPTION_ABSTAIN',
                 }"
               >
-                {{ item.option }}
+                {{ String(item.option).replace("VOTE_OPTION_", "") }}
               </td>
             </tr>
           </tbody>
         </table>
-
-        <button
-          @click="loadMore()"
-          v-if="votePage.next_key"
-          :disabled="loading"
-          class="btn btn-outline btn-primary w-full mt-4"
-        >
-          Load more
-        </button>
+        <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload"/>
       </div>
     </div>
   </div>

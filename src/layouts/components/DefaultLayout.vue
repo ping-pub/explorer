@@ -128,7 +128,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
                   class="w-6 h-6 rounded-full mr-3 ml-4"
                 />
                 <div
-                  class="text-base text-gray-500 dark:text-gray-300"
+                  class="text-base capitalize text-gray-500 dark:text-gray-300"
                   :class="{
                     'text-white':
                       $route.path === el?.to?.path &&

@@ -69,7 +69,7 @@ export const useFormatter = defineStore('formatter', {
       return trace;
     },
     priceInfo(denom: string) {
-      const id = this.dashboard.coingecko[denom]?.coinId;
+      const id = this.dashboard.coingecko[denom]?.coinId || "";
       const prices = this.dashboard.prices[id];
       return prices;
     },
@@ -96,7 +96,10 @@ export const useFormatter = defineStore('formatter', {
       return v!==0 ? numeral(v).format("+0,0.[00]"): ""
     },
     tokenValue(token?: Coin) {
-      return token ? numeral(this.formatTokenAmount(token)).format('0,0.[00]') : ""
+      if(token) {
+        return numeral(this.tokenValueNumber(token)).format("0,0.[00]")
+      }
+      return ""
     },
     tokenValueNumber(token?: Coin) {
       if(!token) return 0
@@ -129,7 +132,7 @@ export const useFormatter = defineStore('formatter', {
     formatToken(
       token?: { denom: string; amount: string },
       withDenom = true,
-      fmt = '0.0a',
+      fmt = '0,0.[0]',
       mode = 'local'
     ): string {
       if (token && token.amount && token?.denom) {

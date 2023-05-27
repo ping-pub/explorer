@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, computed, watchEffect } from 'vue';
+import { ref, onMounted, computed, onUnmounted } from 'vue';
 import { fromHex, toBase64 } from '@cosmjs/encoding';
 import {
   useFormatter,

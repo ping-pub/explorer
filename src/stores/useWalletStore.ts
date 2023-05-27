@@ -42,8 +42,9 @@ export const useWalletStore = defineStore('walletStore', {
       );
     },
     stakingAmount() {
+      const stakingStore = useStakingStore();
       let amt = 0;
-      let denom = '';
+      let denom = stakingStore.params.bond_denom;
       this.delegations.forEach((i) => {
         amt += Number(i.balance.amount);
         denom = i.balance.denom;
