@@ -9,7 +9,7 @@ import {
   useTxDialog,
 } from '@/stores';
 import {
-PageRequest,
+  PageRequest,
   type GovProposal,
   type GovVote,
   type PaginatedProposalDeposit,
@@ -17,7 +17,7 @@ PageRequest,
 } from '@/types';
 import { ref, reactive } from 'vue';
 import Countdown from '@/components/Countdown.vue';
-import PaginationBar from '@/components/PaginationBar.vue'
+import PaginationBar from '@/components/PaginationBar.vue';
 import { fromBech32, toHex } from '@cosmjs/encoding';
 
 const props = defineProps(['proposal_id', 'chain']);
@@ -57,8 +57,8 @@ const deposit = ref({} as PaginatedProposalDeposit);
 store.fetchProposalDeposits(props.proposal_id).then((x) => (deposit.value = x));
 
 const votes = ref({} as GovVote[]);
-const pageRequest = ref(new PageRequest())
-const pageResponse = ref({} as Pagination)
+const pageRequest = ref(new PageRequest());
+const pageResponse = ref({} as Pagination);
 
 store.fetchProposalVotes(props.proposal_id).then((x) => {
   votes.value = x.votes;
@@ -152,20 +152,20 @@ const processList = computed(() => {
 });
 
 function showValidatorName(voter: string) {
-  const {data} = fromBech32(voter)
-  const hex = toHex(data)
-  const v = stakingStore.validators.find( x => toHex(fromBech32(x.operator_address).data) === hex)
-  return v? v.description.moniker : voter
+  const { data } = fromBech32(voter);
+  const hex = toHex(data);
+  const v = stakingStore.validators.find(
+    (x) => toHex(fromBech32(x.operator_address).data) === hex
+  );
+  return v ? v.description.moniker : voter;
 }
 
 function pageload(p: number) {
-  pageRequest.value.setPage(p)
-  store
-      .fetchProposalVotes(props.proposal_id, pageRequest.value)
-      .then((x) => {
-        votes.value = x.votes;
-        pageResponse.value = x.pagination;
-      });
+  pageRequest.value.setPage(p);
+  store.fetchProposalVotes(props.proposal_id, pageRequest.value).then((x) => {
+    votes.value = x.votes;
+    pageResponse.value = x.pagination;
+  });
 }
 </script>
 
@@ -209,7 +209,9 @@ function pageload(p: number) {
             <div
               class="absolute inset-x-0 inset-y-0 rounded-sm"
               :class="`${item.class}`"
-              :style="`width: ${item.value}`"
+              :style="`width: ${
+                item.value === '-' || item.value === 'NaN%' ? '0%' : item.value
+              }`"
             ></div>
             <p
               class="absolute inset-x-0 inset-y-0 text-center text-sm text-[#666] dark:text-[#eee] flex items-center justify-center"
@@ -234,9 +236,7 @@ function pageload(p: number) {
         </div>
       </div>
 
-      <div
-        class="bg-base-100 px-4 pt-3 pb-5 rounded shadow lg:!!col-span-2"
-      >
+      <div class="bg-base-100 px-4 pt-3 pb-5 rounded shadow lg:!!col-span-2">
         <h2 class="card-title">Timeline</h2>
 
         <div class="px-1">
@@ -341,12 +341,16 @@ function pageload(p: number) {
                   'text-gray-400': item.option === 'VOTE_OPTION_ABSTAIN',
                 }"
               >
-                {{ String(item.option).replace("VOTE_OPTION_", "") }}
+                {{ String(item.option).replace('VOTE_OPTION_', '') }}
               </td>
             </tr>
           </tbody>
         </table>
-        <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload"/>
+        <PaginationBar
+          :limit="pageRequest.limit"
+          :total="pageResponse.total"
+          :callback="pageload"
+        />
       </div>
     </div>
   </div>
