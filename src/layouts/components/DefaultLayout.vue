@@ -37,7 +37,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
 </script>
 
 <template>
-  <div class="">
+  <div class="bg-gray-100 dark:bg-[#171d30]">
     <!-- sidebar -->
     <div
       class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-gray-700"
@@ -158,9 +158,9 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
         </a>
       </div>
     </div>
-    <div class="xl:!ml-64 px-5">
+    <div class="xl:!ml-64 px-5 pt-4">
       <!-- header -->
-      <div class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10 mt-4 shadow">
+      <div class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10 shadow">
         <div class="text-2xl pr-3 cursor-pointer xl:!hidden" @click="sidebarShow = true">
           <Icon icon="mdi-menu" />
         </div>
