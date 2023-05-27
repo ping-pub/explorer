@@ -44,7 +44,7 @@ function changeEndpoint(item: Endpoint) {
     </label>
     <div
       tabindex="0"
-      class="dropdown-content w-80 menu shadow bg-base-200 rounded-box max-h-[300px] overflow-auto"
+      class="dropdown-content w-80 menu shadow bg-base-200 rounded-box overflow-auto"
     >
       <!-- rest -->
       <div
