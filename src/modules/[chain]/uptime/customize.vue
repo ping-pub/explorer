@@ -124,7 +124,7 @@ function color(v: string) {
 
 <template>
   <div>
-    <div class="overflow-x-auto w-full card ">
+    <div class="overflow-x-auto w-full">
       <div class="lg:!flex lg:!items-center lg:!justify-between bg-base-100 p-5">
         <div class="min-w-0 flex-1">
           <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">My Validators</h2>

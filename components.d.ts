@@ -7,7 +7,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AddAuthenticatorAppDialog: typeof import('./src/plugins/vuetify/@core/components/AddAuthenticatorAppDialog.vue')['default']
     AddEditAddressDialog: typeof import('./src/plugins/vuetify/@core/components/AddEditAddressDialog.vue')['default']
     AppBarSearch: typeof import('./src/plugins/vuetify/@core/components/AppBarSearch.vue')['default']
     AppCardActions: typeof import('./src/plugins/vuetify/@core/components/AppCardActions.vue')['default']
@@ -43,7 +42,6 @@ declare module '@vue/runtime-core' {
     Shortcuts: typeof import('./src/plugins/vuetify/@core/components/Shortcuts.vue')['default']
     TheCustomizer: typeof import('./src/plugins/vuetify/@core/components/TheCustomizer.vue')['default']
     ThemeSwitcher: typeof import('./src/plugins/vuetify/@core/components/ThemeSwitcher.vue')['default']
-    TwoFactorAuthDialog: typeof import('./src/plugins/vuetify/@core/components/TwoFactorAuthDialog.vue')['default']
     UserInfoEditDialog: typeof import('./src/plugins/vuetify/@core/components/UserInfoEditDialog.vue')['default']
     UserUpgradePlanDialog: typeof import('./src/plugins/vuetify/@core/components/UserUpgradePlanDialog.vue')['default']
   }

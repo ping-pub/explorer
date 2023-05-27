@@ -10,51 +10,37 @@ const store = useGovStore();
 const pageRequest = ref(new PageRequest())
 
 onMounted(() => {
-  store.fetchProposals('2').then((x) => {
-    if (x?.proposals?.length === 0) {
-      tab.value = '3';
-      store.fetchProposals('3');
-    }
-    store.fetchProposals('3');
-    store.fetchProposals('4');
-  });
+    store.fetchProposals('2').then((x) => {
+        if (x?.proposals?.length === 0) {
+            tab.value = '3';
+            store.fetchProposals('3');
+        }
+        store.fetchProposals('3');
+        store.fetchProposals('4');
+    });
 });
 
 const changeTab = (val: '2' | '3' | '4') => {
-  tab.value = val;
+    tab.value = val;
 };
 
 function page(p: number) {
-  pageRequest.value.setPage(p)
-  store.fetchProposals(tab.value, pageRequest.value)
+    pageRequest.value.setPage(p)
+    store.fetchProposals(tab.value, pageRequest.value)
 }
 
 </script>
 <template>
-  <div>
-    <div class="tabs tabs-boxed bg-transparent mb-4 text-center">
-      <a
-        class="tab text-gray-400 uppercase"
-        :class="{ 'tab-active': tab === '2' }"
-        @click="changeTab('2')"
-        >Voting</a
-      >
-      <a
-        class="tab text-gray-400 uppercase"
-        :class="{ 'tab-active': tab === '3' }"
-        @click="changeTab('3')"
-        >Passed</a
-      >
-      <a
-        class="tab text-gray-400 uppercase"
-        :class="{ 'tab-active': tab === '4' }"
-        @click="changeTab('4')"
-        >Rejected</a
-      >
+    <div>
+        <div class="tabs tabs-boxed bg-transparent mb-4 text-center">
+            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === '2' }" @click="changeTab('2')">Voting</a>
+            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === '3' }" @click="changeTab('3')">Passed</a>
+            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === '4' }"
+                @click="changeTab('4')">Rejected</a>
+        </div>
+        <ProposalListItem :proposals="store?.proposals[tab]" />
+        <PaginationBar :total="store?.proposals[tab]?.pagination?.total" :limit="pageRequest.limit" :callback="page" />
     </div>
-    <ProposalListItem :proposals="store?.proposals[tab]"/>
-    <PaginationBar :total="store?.proposals[tab]?.pagination?.total" :limit="pageRequest.limit" :callback="page"/>
-  </div>
 </template>
 <route>
   {
