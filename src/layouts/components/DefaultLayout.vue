@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
-import { useThemeConfig } from '@/plugins/vuetify/@core/composable/useThemeConfig';
 
 // Components
 import newFooter from '@/layouts/components/NavFooter.vue';
@@ -9,12 +8,10 @@ import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
 import ChainProfile from '@/layouts/components/ChainProfile.vue';
 
 import { useDashboard } from '@/stores/useDashboard';
+import { useBlockchain } from '@/stores';
 
 import NavBarI18n from './NavBarI18n.vue';
 import NavBarWallet from './NavBarWallet.vue';
-import { useBlockchain } from '@/stores';
-
-const { appRouteTransition } = useThemeConfig();
 
 const dashboard = useDashboard();
 dashboard.initial();
@@ -277,7 +274,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
 
       <!-- 👉 Pages -->
       <RouterView v-slot="{ Component }">
-        <Transition :name="appRouteTransition" mode="out-in">
+        <Transition mode="out-in">
           <Component :is="Component" />
         </Transition>
       </RouterView>

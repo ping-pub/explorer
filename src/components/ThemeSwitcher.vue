@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { useThemeConfig } from '@core/composable/useThemeConfig';
 import type { ThemeSwitcherTheme } from '@layouts/types';
 import { Icon } from '@iconify/vue';
-import { onMounted, watch } from 'vue';
+import { onMounted, watch, ref } from 'vue';
 
 const props = defineProps<{
   themes: ThemeSwitcherTheme[];
 }>();
 
-const { theme } = useThemeConfig();
+const theme = ref('light');
 const {
   state: currentThemeName,
   next: getNextThemeName,
