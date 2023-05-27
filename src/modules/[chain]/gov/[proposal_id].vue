@@ -18,12 +18,14 @@ PageRequest,
 import { ref, reactive } from 'vue';
 import Countdown from '@/components/Countdown.vue';
 import PaginationBar from '@/components/PaginationBar.vue'
+import { fromBech32, toHex } from '@cosmjs/encoding';
 
 const props = defineProps(['proposal_id', 'chain']);
 const proposal = ref({} as GovProposal);
 const format = useFormatter();
 const store = useGovStore();
 const dialog = useTxDialog();
+const stakingStore = useStakingStore();
 
 store.fetchProposal(props.proposal_id).then((res) => {
   const proposalDetail = reactive(res.proposal);
@@ -102,7 +104,7 @@ const total = computed(() => {
 
 const turnout = computed(() => {
   if (total.value > 0) {
-    const bonded = useStakingStore().pool?.bonded_tokens || '1';
+    const bonded = stakingStore.pool?.bonded_tokens || '1';
     return format.percent(total.value / Number(bonded));
   }
   return 0;
@@ -148,6 +150,13 @@ const processList = computed(() => {
     { name: 'Abstain', value: abstain.value, class: 'bg-warning' },
   ];
 });
+
+function showValidatorName(voter: string) {
+  const {data} = fromBech32(voter)
+  const hex = toHex(data)
+  const v = stakingStore.validators.find( x => toHex(fromBech32(x.operator_address).data) === hex)
+  return v? v.description.moniker : voter
+}
 
 function pageload(p: number) {
   pageRequest.value.setPage(p)
@@ -324,7 +333,7 @@ function pageload(p: number) {
         <table class="table w-full table-zebra">
           <tbody>
             <tr v-for="(item, index) of votes" :key="index">
-              <td class="py-2 text-sm">{{ item.voter }}</td>
+              <td class="py-2 text-sm">{{ showValidatorName(item.voter) }}</td>
               <td
                 class="py-2 text-sm"
                 :class="{
@@ -332,7 +341,7 @@ function pageload(p: number) {
                   'text-gray-400': item.option === 'VOTE_OPTION_ABSTAIN',
                 }"
               >
-                {{ item.option }}
+                {{ String(item.option).replace("VOTE_OPTION_", "") }}
               </td>
             </tr>
           </tbody>

@@ -267,9 +267,7 @@ const color = computed(() => {
             {{ format.formatToken(walletStore.balanceOfStakingToken) }}
           </div>
           <div class="text-sm" :class="color">
-            <span class="ml-1">
-              ${{ format.tokenValue(walletStore.balanceOfStakingToken) }}
-            </span>
+            ${{ format.tokenValue(walletStore.balanceOfStakingToken) }}
           </div>
         </div>
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">

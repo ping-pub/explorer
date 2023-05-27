@@ -115,19 +115,11 @@ const proposalInfo = ref();
                 for="vote"
                 class="btn btn-xs btn-primary rounded-sm"
                 @click="dialog.open('vote', { proposal_id: item?.proposal_id })"
-                >Vote</label
+                >
+                  <span v-if="item?.voterStatus">{{ item?.voterStatus.replace("VOTE_OPTION_", "")}}</span>  
+                  <span v-else>Vote</span>
+                </label
               >
-              <div
-                class="text-xs truncate relative py-1 px-3 rounded-full w-fit"
-                :class="`text-${voterStatusMap?.[item?.voterStatus]}`"
-                v-show="item?.voterStatus !== 'No With Veto'"
-              >
-                <span
-                  class="inset-x-0 inset-y-0 opacity-10 absolute"
-                  :class="`bg-${voterStatusMap?.[item?.voterStatus]}`"
-                ></span>
-                {{ item?.voterStatus }}
-              </div>
             </div>
           </td>
         </tr>
