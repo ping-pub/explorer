@@ -64,7 +64,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
                             'text-blue-500': item?.title !== 'Favorite',
                         }" />
                         <img v-if="item?.icon?.image" :src="item?.icon?.image" class="w-6 h-6 rounded-full mr-3" />
-                        <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                        <div class="text-sm capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
                             {{ item?.title }}
                         </div>
                         <div v-if="item?.badgeContent" class="mr-6 badge badge-sm" :class="item?.badgeClass">
@@ -104,10 +104,10 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
                         'text-blue-500': item?.title !== 'Favorite',
                     }" />
                     <img v-if="item?.icon?.image" :src="item?.icon?.image" class="w-6 h-6 rounded-full mr-3" />
-                    <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                    <div class="text-sm capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
                         {{ item?.title }}
                     </div>
-                    <div v-if="item?.badgeContent" class="mr-6 badge badge-sm" :class="item?.badgeClass">
+                    <div v-if="item?.badgeContent" class=" badge badge-sm" :class="item?.badgeClass">
                         {{ item?.badgeContent }}
                     </div>
                 </RouterLink>
@@ -122,14 +122,14 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
                 <a href="https://osmosis.zone"
                     class="collapse-title px-4 flex items-center py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]">
                     <img src="https://ping.pub/logos/osmosis.jpg" class="w-6 h-6 rounded-full mr-3" />
-                    <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">
+                    <div class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200">
                         Osmosis
                     </div>
                 </a>
                 <a href="https://becole.com"
-                    class="collapse-title px-4 flex items-center py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]">
+                    class="collapse-title px-4 flex items-center py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]">
                     <img src="https://becole.com/static/logo/logo_becole.png" class="w-6 h-6 rounded-full mr-3" />
-                    <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">
+                    <div class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200">
                         Becole
                     </div>
                 </a>
