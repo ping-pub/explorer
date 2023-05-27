@@ -365,19 +365,21 @@ const color = computed(() => {
       </Teleport>
     </div>
 
-    <div class="bg-base-100 rounded mt-4 shadow">
+    <div class="bg-base-100 rounded mt-4">
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         Application Versions
       </div>
       <!-- Application Version -->
       <ArrayObjectElement :value="paramStore.appVersion?.items" :thead="false" />
+      <div class="h-4"></div>
     </div>
 
-    <div v-if="!store.coingeckoId" class="bg-base-100 rounded mt-4 shadow">
+    <div v-if="!store.coingeckoId" class="bg-base-100 rounded mt-4">
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         Node Information
       </div>
-      <ArrayObjectElement :value="paramStore.nodeVersion?.items" :thead="false" />
+      <ArrayObjectElement :value="paramStore.nodeVersion?.items" :thead="false" />      
+      <div class="h-4"></div>
     </div>
   </div>
 </template>

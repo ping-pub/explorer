@@ -85,6 +85,8 @@ function changeEndpoint(item: Endpoint) {
           Height: {{ baseStore.latest.block?.header.height }}
         </div>
       </div>
+      <!-- bottom-->
+      <div class="px-4 py-2">&nbsp;</div>
     </div>
   </div>
 </template>
