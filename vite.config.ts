@@ -61,7 +61,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ['vuetify'],
     entries: ['./src/**/*.vue'],
   },
 });
