@@ -1,15 +1,13 @@
 <script lang="ts" setup>
 import ApexCharts from 'vue3-apexcharts';
-import { useTheme } from 'vuetify';
 import { getMarketPriceChartConfig } from './apexChartConfig';
 import { useIndexModule } from '@/modules/[chain]/indexStore';
 import { computed, ref } from '@vue/reactivity';
 
 const store = useIndexModule();
-const vuetifyTheme = useTheme();
 const chartConfig = computed(() => {
   const labels = store.marketData.prices.map((item: any) => item[0]);
-  return getMarketPriceChartConfig(vuetifyTheme.current.value, labels);
+  return getMarketPriceChartConfig(window.localStorage.getItem('theme') || 'dark', labels);
 });
 const kind = ref('price');
 const series = computed(() => {
@@ -31,25 +29,14 @@ function changeChart(type: string) {
 
 <template>
   <div class="tabs tabs-boxed bg-transparent justify-end">
-    <a
-      class="tab text-xs mr-2 text-gray-400 uppercase"
-      :class="{ 'tab-active': kind === 'price' }"
-      @click="changeChart('price')"
-    >
+    <a class="tab text-xs mr-2 text-gray-400 uppercase" :class="{ 'tab-active': kind === 'price' }"
+      @click="changeChart('price')">
       Price
     </a>
-    <a
-      class="tab text-xs text-gray-400 uppercase"
-      :class="{ 'tab-active': kind === 'volume' }"
-      @click="changeChart('volume')"
-    >
+    <a class="tab text-xs text-gray-400 uppercase" :class="{ 'tab-active': kind === 'volume' }"
+      @click="changeChart('volume')">
       Volume
     </a>
   </div>
-  <ApexCharts
-    type="area"
-    height="230"
-    :options="chartConfig"
-    :series="series"
-  />
+  <ApexCharts type="area" height="230" :options="chartConfig" :series="series" />
 </template>

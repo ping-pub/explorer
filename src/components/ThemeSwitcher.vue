@@ -7,7 +7,7 @@ const props = defineProps<{
   themes: ThemeSwitcherTheme[];
 }>();
 
-const theme = ref('light');
+const theme = ref(window.localStorage.getItem('theme') || 'dark');
 const {
   state: currentThemeName,
   next: getNextThemeName,
@@ -37,6 +37,7 @@ const changeMode = (val: 'dark' | 'light' | 'system') => {
     document.documentElement.classList.remove('dark');
   }
   document.documentElement.setAttribute('data-theme', value);
+  window.localStorage.setItem('theme', value);
 };
 // Update icon if theme is changed from other sources
 watch(theme, (val: 'dark' | 'light' | 'system') => {

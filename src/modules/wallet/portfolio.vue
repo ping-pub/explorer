@@ -114,7 +114,7 @@ const tokenList = computed(() => {
     </div>
     <div class="bg-base-100">
       <DonutChart :series="Object.values(tokenValues)" :labels="Object.keys(tokenValues)"/>
-      <table class="table w-100">
+      <table class="table w-full">
         <thead>
           <tr>
             <th>Token</th>
