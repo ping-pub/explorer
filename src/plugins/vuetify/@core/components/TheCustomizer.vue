@@ -86,7 +86,7 @@ const headerValues = computed(() => {
       class="app-customizer"
     >
       <!-- 👉 Header -->
-      <div class="customizer-heading d-flex align-center justify-space-between">
+      <div class="customizer-heading flex align-center justify-space-between">
         <div>
           <h6 class="text-h6">
             THEME CUSTOMIZER
@@ -149,13 +149,13 @@ const headerValues = computed(() => {
           <h6 class="mt-3 text-base font-weight-regular">
             Primary Color
           </h6>
-          <div class="d-flex gap-x-4 mt-2">
+          <div class="flex gap-x-4 mt-2">
             <div
               v-for="(color, index) in colors"
               :key="color"
               style="width: 2.5rem; height: 2.5rem; border-radius: 0.5rem; transition: all 0.25s ease;"
               :style="{ backgroundColor: getBoxColor(initialThemeColors[color], index) }"
-              class="cursor-pointer d-flex align-center justify-center"
+              class="cursor-pointer flex align-center justify-center"
               :class="{ 'elevation-4': vuetifyTheme.current.value.colors.primary === getBoxColor(initialThemeColors[color], index) }"
               @click="setPrimaryColor(getBoxColor(initialThemeColors[color], index))"
             >
@@ -219,7 +219,7 @@ const headerValues = computed(() => {
             />
           </VRadioGroup>
           <!-- 👉 Navbar blur -->
-          <div class="d-flex align-center justify-space-between">
+          <div class="flex align-center justify-space-between">
             <VLabel
               for="customizer-navbar-blur"
               class="text-high-emphasis"
@@ -258,7 +258,7 @@ const headerValues = computed(() => {
           <!-- 👉 Collapsed Menu -->
           <div
             v-if="appContentLayoutNav === AppContentLayoutNav.Vertical"
-            class="d-flex align-center justify-space-between"
+            class="flex align-center justify-space-between"
           >
             <VLabel
               for="customizer-menu-collapsed"
@@ -278,7 +278,7 @@ const headerValues = computed(() => {
           <!-- 👉 Semi Dark Menu -->
           <div
             class="align-center justify-space-between"
-            :class="vuetifyTheme.global.name.value === 'light' && appContentLayoutNav === AppContentLayoutNav.Vertical ? 'd-flex' : 'd-none'"
+            :class="vuetifyTheme.global.name.value === 'light' && appContentLayoutNav === AppContentLayoutNav.Vertical ? 'flex' : 'd-none'"
           >
             <VLabel
               for="customizer-menu-semi-dark"
@@ -300,7 +300,7 @@ const headerValues = computed(() => {
         <!-- SECTION MISC -->
         <CustomizerSection title="MISC">
           <!-- 👉 RTL -->
-          <div class="d-flex align-center justify-space-between">
+          <div class="flex align-center justify-space-between">
             <VLabel
               for="customizer-rtl"
               class="text-high-emphasis"
@@ -321,7 +321,7 @@ const headerValues = computed(() => {
             <VRow>
               <VCol
                 cols="5"
-                class="d-flex align-center"
+                class="flex align-center"
               >
                 <VLabel
                   for="route-transition"

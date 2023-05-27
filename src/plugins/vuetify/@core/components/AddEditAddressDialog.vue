@@ -109,7 +109,7 @@ const addressTypes = [
 --v-border-opacity: 1;"
               @click="selectedAddress = type.title"
             >
-              <div class="d-flex align-center font-weight-medium gap-2 text-xl mb-1">
+              <div class="flex align-center font-weight-medium gap-2 text-xl mb-1">
                 <VIcon
                   size="24"
                   :icon="type.icon"

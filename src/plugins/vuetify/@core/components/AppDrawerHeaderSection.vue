@@ -11,7 +11,7 @@ defineEmits<Emit>()
 </script>
 
 <template>
-  <div class="px-5 py-3 d-flex align-center bg-var-theme-background">
+  <div class="px-5 py-3 flex align-center bg-var-theme-background">
     <h3 class="font-weight-medium text-xl">
       {{ props.title }}
     </h3>

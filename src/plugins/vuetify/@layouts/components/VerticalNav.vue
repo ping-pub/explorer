@@ -74,7 +74,7 @@ const handleNavScroll = (evt: Event) => {
     <!-- 👉 Header -->
     <div class="nav-header">
       <slot name="nav-header">
-        <RouterLink to="/" class="app-logo d-flex align-center gap-x-2 app-title-wrapper">
+        <RouterLink to="/" class="app-logo flex align-center gap-x-2 app-title-wrapper">
           <VNodeRenderer :nodes="config.app.logo" />
 
           <Transition name="vertical-nav-app-title">

@@ -141,7 +141,7 @@ const resolveCategories = (val: string) => {
 
           <!-- 👉 Append Inner -->
           <template #append-inner>
-            <div class="d-flex align-center mt-n1">
+            <div class="flex align-center mt-n1">
               <div
                 class="text-base text-disabled cursor-pointer me-2"
                 @click="clearSearchAndCloseDialog"
@@ -274,12 +274,12 @@ const resolveCategories = (val: string) => {
         >
           <slot name="noData">
             <VCardText class="h-100">
-              <div class="app-bar-search-suggestions d-flex flex-column align-center justify-center text-high-emphasis h-100">
+              <div class="app-bar-search-suggestions flex flex-column align-center justify-center text-high-emphasis h-100">
                 <VIcon
                   size="75"
                   icon="mdi-file-remove-outline"
                 />
-                <div class="d-flex align-center flex-wrap justify-center gap-2 text-h6 my-3">
+                <div class="flex align-center flex-wrap justify-center gap-2 text-h6 my-3">
                   <span>No Result For </span>
                   <span>"{{ searchQuery }}"</span>
                 </div>
@@ -287,7 +287,7 @@ const resolveCategories = (val: string) => {
                   v-if="props.noDataSuggestion"
                   class="mt-8"
                 >
-                  <span class="d-flex justify-center text-disabled">Try searching for</span>
+                  <span class="flex justify-center text-disabled">Try searching for</span>
                   <h6
                     v-for="suggestion in props.noDataSuggestion"
                     :key="suggestion.title"

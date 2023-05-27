@@ -93,7 +93,7 @@ const referAndEarnSteps = [
           Enter your friend's email address and invite them to join Materio 😍
         </p>
         <VForm
-          class="d-flex align-center gap-4"
+          class="flex align-center gap-4"
           @submit.prevent="() => {}"
         >
           <VTextField
@@ -114,7 +114,7 @@ const referAndEarnSteps = [
           You can also copy and send it or share it on your social media. 🚀
         </p>
         <VForm
-          class="d-flex align-center flex-wrap gap-3"
+          class="flex align-center flex-wrap gap-3"
           @submit.prevent="() => {}"
         >
           <VTextField
@@ -129,7 +129,7 @@ const referAndEarnSteps = [
             </template>
           </VTextField>
 
-          <div class="d-flex gap-3">
+          <div class="flex gap-3">
             <VBtn
               icon
               class="rounded"

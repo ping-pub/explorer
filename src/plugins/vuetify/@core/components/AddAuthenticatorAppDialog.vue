@@ -72,7 +72,7 @@ const resetAuthCode = () => {
             class="mb-4"
           />
 
-          <div class="d-flex justify-end flex-wrap gap-3">
+          <div class="flex justify-end flex-wrap gap-3">
             <VBtn
               color="secondary"
               variant="tonal"

@@ -204,7 +204,7 @@ const dialogVisibleUpdate = (val: boolean) => {
             <!-- 👉 Submit and Cancel -->
             <VCol
               cols="12"
-              class="d-flex flex-wrap justify-center gap-4"
+              class="flex flex-wrap justify-center gap-4"
             >
               <VBtn type="submit">
                 Submit

@@ -83,7 +83,7 @@ const pricingPlans = [
   </div>
 
   <!-- 👉 Annual and monthly price toggler -->
-  <div class="d-flex align-center justify-center mx-auto py-10">
+  <div class="flex align-center justify-center mx-auto py-10">
     <VLabel
       for="pricing-plan-toggle"
       class="me-2"
@@ -162,7 +162,7 @@ const pricingPlans = [
 
         <!-- 👉 Plan price  -->
         <VCardText class="position-relative text-center">
-          <div class="d-flex justify-center align-center">
+          <div class="flex justify-center align-center">
             <sup class="text-sm font-weight-medium me-1">$</sup>
             <h1 class="text-5xl font-weight-medium text-primary">
               {{ annualMonthlyPlanPriceToggler ? Math.floor(Number(plan.yearlyPrice) / 12) : plan.monthlyPrice }}

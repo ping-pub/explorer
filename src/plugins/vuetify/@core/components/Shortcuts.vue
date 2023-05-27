@@ -32,7 +32,7 @@ const router = useRouter()
       <VCard
         width="340"
         max-height="560"
-        class="d-flex flex-column"
+        class="flex flex-column"
       >
         <VCardItem class="py-4">
           <VCardTitle>Shortcuts</VCardTitle>

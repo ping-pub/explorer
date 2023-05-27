@@ -249,7 +249,7 @@ onMounted(() => {
                 <Icon icon="mdi-account-tie" class="text-3xl" />
               </div>
 
-              <div class="ml-3 d-flex flex-column justify-center">
+              <div class="ml-3 flex flex-column justify-center">
                 <h4>
                   {{ v.min_self_delegation }} {{ staking.params.bond_denom }}
                 </h4>

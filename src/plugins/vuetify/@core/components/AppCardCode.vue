@@ -53,8 +53,8 @@ const { copy, copied } = useClipboard({ source: computed(() => props.code[prefer
       <div v-show="isCodeShown">
         <VDivider />
 
-        <VCardText class="d-flex gap-y-3 flex-column">
-          <div class="d-flex justify-end">
+        <VCardText class="flex gap-y-3 flex-column">
+          <div class="flex justify-end">
             <VBtnToggle
               v-model="preferredCodeLanguage"
               mandatory

@@ -52,7 +52,7 @@ const resetPhoneNumber = () => {
             class="mb-4"
           />
 
-          <div class="d-flex flex-wrap justify-end gap-3">
+          <div class="flex flex-wrap justify-end gap-3">
             <VBtn
               color="secondary"
               variant="tonal"

@@ -36,7 +36,7 @@ watch(selectedOption, () => {
           class="custom-input custom-radio rounded cursor-pointer"
           :class="selectedOption === item.value ? 'active' : ''"
         >
-          <div class="d-flex flex-column align-center text-center gap-2">
+          <div class="flex flex-column align-center text-center gap-2">
             <VIcon
               size="32"
               :icon="item.icon"

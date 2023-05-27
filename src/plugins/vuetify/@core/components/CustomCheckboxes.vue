@@ -42,7 +42,7 @@ watch(selectedOption, () => {
           />
         </div>
         <div class="flex-grow-1">
-          <div class="d-flex align-center mb-1">
+          <div class="flex align-center mb-1">
             <h6 class="cr-title text-base">
               {{ item.title }}
             </h6>

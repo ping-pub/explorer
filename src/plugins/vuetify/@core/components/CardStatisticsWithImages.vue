@@ -31,7 +31,7 @@ const isPositive = controlledComputed(() => props.change, () => Math.sign(props.
         {{ props.subtitle }}
       </VChip>
 
-      <div class="d-flex align-center flex-wrap">
+      <div class="flex align-center flex-wrap">
         <h5 class="text-h5 me-2">
           {{ props.stats }}
         </h5>

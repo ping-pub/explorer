@@ -18,7 +18,7 @@ const isPositive = controlledComputed(() => props.change, () => Math.sign(props.
 
 <template>
   <VCard>
-    <VCardText class="d-flex align-center">
+    <VCardText class="flex align-center">
       <VAvatar
         size="40"
         rounded
@@ -32,8 +32,8 @@ const isPositive = controlledComputed(() => props.change, () => Math.sign(props.
         />
       </VAvatar>
 
-      <div class="d-flex flex-column">
-        <div class="d-flex align-center flex-wrap">
+      <div class="flex flex-column">
+        <div class="flex align-center flex-wrap">
           <h6 class="text-h6">
             {{ kFormatter(props.stats) }}
           </h6>

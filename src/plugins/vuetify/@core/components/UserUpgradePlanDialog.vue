@@ -46,7 +46,7 @@ const plansList = [
         </VCardSubtitle>
       </VCardItem>
 
-      <VCardText class="d-flex align-center flex-wrap flex-sm-nowrap px-15">
+      <VCardText class="flex align-center flex-wrap flex-sm-nowrap px-15">
         <VSelect
           v-model="selectedPlan"
           label="Choose Plan"
@@ -67,8 +67,8 @@ const plansList = [
         <p class="font-weight-medium mb-2">
           User current plan is standard plan
         </p>
-        <div class="d-flex justify-space-between flex-wrap">
-          <div class="d-flex align-center me-3">
+        <div class="flex justify-space-between flex-wrap">
+          <div class="flex align-center me-3">
             <sup class="text-primary">$</sup>
             <h3 class="text-h3 font-weight-semibold text-primary">
               99

@@ -17,7 +17,7 @@ const isPositive = controlledComputed(() => props.change, () => Math.sign(props.
 
 <template>
   <VCard>
-    <VCardText class="d-flex align-center">
+    <VCardText class="flex align-center">
       <VAvatar
         v-if="props.icon"
         rounded
@@ -36,7 +36,7 @@ const isPositive = controlledComputed(() => props.change, () => Math.sign(props.
       <div
         v-if="props.change"
         :class="isPositive ? 'text-success' : 'text-error'"
-        class="d-flex align-center text-sm font-weight-medium mt-n4"
+        class="flex align-center text-sm font-weight-medium mt-n4"
       >
         <span>{{ isPositive ? `+${props.change}` : props.change }}%</span>
 

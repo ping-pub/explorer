@@ -61,7 +61,7 @@ const markAllReadOrUnread = () => {
         offset="14px"
         :close-on-content-click="false"
       >
-        <VCard class="d-flex flex-column">
+        <VCard class="flex flex-column">
           <!-- 👉 Header -->
           <VCardItem class="notification-section">
             <VCardTitle class="text-lg">
@@ -123,7 +123,7 @@ const markAllReadOrUnread = () => {
 
                   <!-- Slot: Append -->
                   <template #append>
-                    <div class="d-flex flex-column align-center gap-4">
+                    <div class="flex flex-column align-center gap-4">
                       <VBadge
                         dot
                         :color="notification.isRead ? 'primary' : '#a8aaae'"
