@@ -1,4 +1,3 @@
-/* eslint-disable import/order */
 import 'ping-widget';
 import App from '@/App.vue';
 import i18n from '@/plugins/i18n';
