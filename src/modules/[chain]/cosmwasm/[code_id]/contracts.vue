@@ -121,28 +121,17 @@ const result = ref('');
             <tr v-for="(v, index) in response.contracts" :key="index" class="hover">
               <td>{{ v }}</td>
               <td>
-                <label
-                  @click="showInfo(v)"
-                  for="modal-contract-detail"
-                  class="btn btn-primary btn-sm text-xs mr-2"
-                  >contract</label
-                >
+                <label @click="showInfo(v)" for="modal-contract-detail"
+                  class="btn btn-primary btn-xs text-xs mr-2">contract</label>
 
-                <label
-                  class="btn btn-primary btn-sm text-xs mr-2"
-                  for="modal-contract-states"
-                  @click="showState(v)"
-                >
+                <label class="btn btn-primary btn-xs text-xs mr-2" for="modal-contract-states" @click="showState(v)">
                   States
                 </label>
-                <label
-                  for="modal-contract-query"
-                  class="btn btn-primary btn-sm text-xs mr-2"
-                  @click="showQuery(v)"
-                >
+                <label for="modal-contract-query" class="btn btn-primary btn-xs text-xs mr-2" @click="showQuery(v)">
                   Query
                 </label>
-                <label for="wasm_execute_contract" class="btn btn-primary btn-sm text-xs" @click="dialog.open('wasm_execute_contract', {contract: v})">
+                <label for="wasm_execute_contract" class="btn btn-primary btn-xs text-xs"
+                  @click="dialog.open('wasm_execute_contract', { contract: v })">
                   Execute
                 </label>
               </td>
@@ -150,9 +139,10 @@ const result = ref('');
           </tbody>
         </table>
         <div class="flex justify-between">
-          <PaginationBar :limit="50" :total="response.pagination?.total" :callback="loadContract"/>
-          <label for="wasm_instantiate_contract" class="btn btn-primary my-5" @click="dialog.open('wasm_instantiate_contract', {codeId: props.code_id})">Instantiate Contract</label>
-        </div>   
+          <PaginationBar :limit="50" :total="response.pagination?.total" :callback="loadContract" />
+          <label for="wasm_instantiate_contract" class="btn btn-primary my-5"
+            @click="dialog.open('wasm_instantiate_contract', { codeId: props.code_id })">Instantiate Contract</label>
+        </div>
       </div>
     </div>
 
@@ -162,12 +152,7 @@ const result = ref('');
         <div>
           <div class="flex items-center justify-between px-3 pt-2">
             <div class="text-lg">Contract Detail</div>
-            <label
-              @click="infoDialog = false"
-              for="modal-contract-detail"
-              class="btn btn-sm btn-circle"
-              >✕</label
-            >
+            <label @click="infoDialog = false" for="modal-contract-detail" class="btn btn-sm btn-circle">✕</label>
           </div>
           <div>
             <DynamicComponent :value="info" />
@@ -180,27 +165,22 @@ const result = ref('');
     <label for="modal-contract-states" class="modal cursor-pointer">
       <label class="modal-box w-11/12 max-w-5xl" for="">
         <div>
-          <div class="flex items-center justify-between px-3 pt-2">
+          <div class="flex items-center justify-between px-3 pt-2 mb-4">
             <div class="text-lg">Contract States</div>
-            <label
-              @click="infoDialog = false"
-              for="modal-contract-states"
-              class="btn btn-sm btn-circle"
-              >✕</label
-            >
+            <label @click="infoDialog = false" for="modal-contract-states" class="btn btn-sm btn-circle">✕</label>
           </div>
           <div class="overflow-auto">
             <table class="table table-compact w-full text-sm">
               <tr v-for="(v, index) in state.models" :key="index" class="hover">
-                <td class="text-right" :data-tip="format.hexToString(v.key)">
-                    <span class="font-bold float-right">{{ format.hexToString(v.key) }}</span>
+                <td class="" :data-tip="format.hexToString(v.key)">
+                  <span class="font-bold">{{ format.hexToString(v.key) }}</span>
                 </td>
                 <td class="text-left w-3/4" :title="format.base64ToString(v.value)">
                   {{ format.base64ToString(v.value) }}
                 </td>
               </tr>
             </table>
-            <PaginationBar :limit="pageRequest.limit" :total="state.pagination?.total" :callback="pageload"/>
+            <PaginationBar :limit="pageRequest.limit" :total="state.pagination?.total" :callback="pageload" />
           </div>
         </div>
       </label>
@@ -212,33 +192,16 @@ const result = ref('');
         <div>
           <div class="flex items-center justify-between px-3 pt-2 mb-4">
             <div class="text-lg font-semibold">Query Contract</div>
-            <label
-              @click="infoDialog = false"
-              for="modal-contract-query"
-              class="btn btn-sm btn-circle"
-              >✕</label
-            >
+            <label @click="infoDialog = false" for="modal-contract-query" class="btn btn-sm btn-circle">✕</label>
           </div>
           <div class="px-3">
             <div>
               <div class="grid grid-cols-2 gap-4 mb-4">
-                <div
-                  class="form-control border rounded px-4"
-                  v-for="(item, index) of radioContent"
-                  :key="index"
-                  :class="{ 'pt-2': index === 0 }"
-                >
-                  <label
-                    class="label cursor-pointer justify-start"
-                    @click="selectedRadio = item?.value"
-                  >
-                    <input
-                      type="radio"
-                      name="radio-10"
-                      class="radio radio-sm radio-primary mr-4"
-                      :checked="item?.value === selectedRadio"
-                      style="border: 1px solid #d2d6dc"
-                    />
+                <div class="form-control border rounded px-4" v-for="(item, index) of radioContent" :key="index"
+                  :class="{ 'pt-2': index === 0 }">
+                  <label class="label cursor-pointer justify-start" @click="selectedRadio = item?.value">
+                    <input type="radio" name="radio-10" class="radio radio-sm radio-primary mr-4"
+                      :checked="item?.value === selectedRadio" style="border: 1px solid #d2d6dc" />
                     <div>
                       <div class="text-base font-semibold">
                         {{ item?.title }}
@@ -253,10 +216,7 @@ const result = ref('');
               <VTextarea v-model="result" label="Result" />
             </div>
             <div class="mt-4 mb-4">
-              <button
-                class="btn !btn-yes !border-yes px-4 text-white"
-                @click="queryContract()"
-              >
+              <button class="btn !btn-yes !border-yes px-4 text-white" @click="queryContract()">
                 Query Contract
               </button>
             </div>

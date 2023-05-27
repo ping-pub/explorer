@@ -131,7 +131,7 @@ function changeTab(v: string) {
             <div class="grid grid-cols-4 gap-x-4 mt-4" :class="tab === '2' ? '' : 'hidden'">
                 <div v-for="({ v, signing, hex }, i) in list" :key="i">
                     <div class="flex items-center justify-between py-0">
-                        <label class="text-truncate text-sm">
+                        <label class="truncate text-sm">
                             <span class="ml-1 text-black dark:text-white">{{ i + 1 }}.{{ v.description.moniker }}</span>
                         </label>
                         <div v-if="Number(signing?.missed_blocks_counter || 0) > 10"

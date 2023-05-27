@@ -344,7 +344,7 @@ onMounted(() => {
                   item.height
                 }}</RouterLink>
               </td>
-              <td class="text-truncate text-primary" style="max-width: 200px">
+              <td class="truncate text-primary" style="max-width: 200px">
                 <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
                   {{ item.txhash }}
                 </RouterLink>

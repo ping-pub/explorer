@@ -53,7 +53,7 @@ const isPositive = controlledComputed(
       </p>
 
       <div v-if="props.subtitle" size="x-small" class="font-semibold">
-        <span class="text-truncate">{{ props.subtitle }}</span>
+        <span class="truncate">{{ props.subtitle }}</span>
       </div>
     </div>
   </div>
