@@ -64,7 +64,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
                             'text-blue-500': item?.title !== 'Favorite',
                         }" />
                         <img v-if="item?.icon?.image" :src="item?.icon?.image" class="w-6 h-6 rounded-full mr-3" />
-                        <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200">
+                        <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
                             {{ item?.title }}
                         </div>
                         <div v-if="item?.badgeContent" class="mr-6 badge badge-sm" :class="item?.badgeClass">
@@ -104,7 +104,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
                         'text-blue-500': item?.title !== 'Favorite',
                     }" />
                     <img v-if="item?.icon?.image" :src="item?.icon?.image" class="w-6 h-6 rounded-full mr-3" />
-                    <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200">
+                    <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
                         {{ item?.title }}
                     </div>
                     <div v-if="item?.badgeContent" class="mr-6 badge badge-sm" :class="item?.badgeClass">
