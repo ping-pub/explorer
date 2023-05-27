@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { computed } from '@vue/reactivity';
 import ObjectElement from '@/components/dynamic/ObjectElement.vue';
 import {
   useBaseStore,
@@ -7,15 +8,16 @@ import {
   useStakingStore,
   useTxDialog,
 } from '@/stores';
-import type {
-  GovProposal,
-  GovVote,
-  PaginatedProposalDeposit,
-  Pagination,
+import {
+PageRequest,
+  type GovProposal,
+  type GovVote,
+  type PaginatedProposalDeposit,
+  type Pagination,
 } from '@/types';
 import { ref, reactive } from 'vue';
 import Countdown from '@/components/Countdown.vue';
-import { computed } from '@vue/reactivity';
+import PaginationBar from '@/components/PaginationBar.vue'
 
 const props = defineProps(['proposal_id', 'chain']);
 const proposal = ref({} as GovProposal);
@@ -53,26 +55,13 @@ const deposit = ref({} as PaginatedProposalDeposit);
 store.fetchProposalDeposits(props.proposal_id).then((x) => (deposit.value = x));
 
 const votes = ref({} as GovVote[]);
-const votePage = ref({} as Pagination);
-const loading = ref(false);
+const pageRequest = ref(new PageRequest())
+const pageResponse = ref({} as Pagination)
 
 store.fetchProposalVotes(props.proposal_id).then((x) => {
   votes.value = x.votes;
-  votePage.value = x.pagination;
+  pageResponse.value = x.pagination;
 });
-
-function loadMore() {
-  if (votePage.value.next_key) {
-    loading.value = true;
-    store
-      .fetchProposalVotes(props.proposal_id, votePage.value.next_key)
-      .then((x) => {
-        votes.value = votes.value.concat(x.votes);
-        votePage.value = x.pagination;
-        loading.value = false;
-      });
-  }
-}
 
 function shortTime(v: string) {
   if (v) {
@@ -159,6 +148,16 @@ const processList = computed(() => {
     { name: 'Abstain', value: abstain.value, class: 'bg-warning' },
   ];
 });
+
+function pageload(p: number) {
+  pageRequest.value.setPage(p)
+  store
+      .fetchProposalVotes(props.proposal_id, pageRequest.value)
+      .then((x) => {
+        votes.value = x.votes;
+        pageResponse.value = x.pagination;
+      });
+}
 </script>
 
 <template>
@@ -338,15 +337,7 @@ const processList = computed(() => {
             </tr>
           </tbody>
         </table>
-
-        <button
-          @click="loadMore()"
-          v-if="votePage.next_key"
-          :disabled="loading"
-          class="btn btn-outline btn-primary w-full mt-4"
-        >
-          Load more
-        </button>
+        <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload"/>
       </div>
     </div>
   </div>

@@ -116,11 +116,11 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getGovProposalTally(proposal_id: string) {
     return this.request(this.registry.gov_proposals_tally, { proposal_id });
   }
-  async getGovProposalVotes(proposal_id: string, next_key?: string) {
-    return this.request(this.registry.gov_proposals_votes, {
-      proposal_id,
-      next_key,
-    });
+  async getGovProposalVotes(proposal_id: string, page?: PageRequest) {
+    if(!page) page = new PageRequest()
+    page.reverse = true
+    const query =`?proposal_status={status}&${page.toQueryString()}`;
+    return this.request(this.registry.gov_proposals_votes, { proposal_id }, query);
   }
   async getGovProposalVotesVoter(proposal_id: string, voter: string) {
     return this.request(this.registry.gov_proposals_votes_voter, {

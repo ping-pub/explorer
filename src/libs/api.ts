@@ -66,7 +66,7 @@ export const DEFAULT: RequestRegistry = {
     adapter,
   },
   gov_proposals_votes: {
-    url: '/cosmos/gov/v1beta1/proposals/{proposal_id}/votes?pagination.key={next_key}',
+    url: '/cosmos/gov/v1beta1/proposals/{proposal_id}/votes',
     adapter,
   },
   gov_proposals_votes_voter: {

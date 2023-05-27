@@ -110,7 +110,7 @@ const proposalInfo = ref();
           </td>
 
           <td v-if="statusMap?.[item?.status] === 'VOTING'" class="w-40">
-            <div class="" v-show="item?.voterStatus === 'No With Veto'">
+            <div class="">
               <label
                 for="vote"
                 class="btn btn-xs btn-primary rounded-sm"
