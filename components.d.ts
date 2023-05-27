@@ -40,7 +40,6 @@ declare module '@vue/runtime-core' {
     ReferAndEarnDialog: typeof import('./src/plugins/vuetify/@core/components/ReferAndEarnDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    ShareProjectDialog: typeof import('./src/plugins/vuetify/@core/components/ShareProjectDialog.vue')['default']
     Shortcuts: typeof import('./src/plugins/vuetify/@core/components/Shortcuts.vue')['default']
     TheCustomizer: typeof import('./src/plugins/vuetify/@core/components/TheCustomizer.vue')['default']
     ThemeSwitcher: typeof import('./src/plugins/vuetify/@core/components/ThemeSwitcher.vue')['default']
