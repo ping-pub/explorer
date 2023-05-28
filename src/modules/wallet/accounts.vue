@@ -2,15 +2,18 @@
 import { CosmosRestClient } from '@/libs/client';
 import { useDashboard, useFormatter } from '@/stores';
 import type { Coin, Delegation } from '@/types';
-import { fromBech32, toBase64, toBech32 } from '@cosmjs/encoding';
+import { fromBech32, toBase64, toBech32, toHex } from '@cosmjs/encoding';
 import { Icon } from '@iconify/vue';
 import { computed } from 'vue';
 import { ref } from 'vue';
-import { scanLocalKeys, type AccountEntry, scanCompatibleAccounts } from './utils';
+import { scanLocalKeys, type AccountEntry, scanCompatibleAccounts, type LocalKey } from './utils';
 
 const dashboard = useDashboard()
 const format = useFormatter()
 const editable = ref(false) // to edit addresses
+const source = ref('wallet'); // values: wallet, imported, address
+const sourceAddress = ref('') //
+const selectedSource = ref({} as LocalKey) // 
 function toggleEdit() {
   editable.value = !editable.value
 }
@@ -19,10 +22,12 @@ const conf = ref(JSON.parse(localStorage.getItem("imported-addresses") || "{}") 
 const balances = ref({} as Record<string, Coin[]>)
 const delegations = ref({} as Record<string, Delegation[]>)
 
+// auto import current connected wallet.
 scanLocalKeys().forEach(wallet => {
   const { data } = fromBech32(wallet.cosmosAddress)
   const walletKey = toBase64(data)
   let imported = conf.value[walletKey]
+  console.log('imported:', imported)
   // save the default address to local storage
   if (!imported) {
     imported = []
@@ -81,14 +86,52 @@ const addresses = computed(() => {
   return accounts.value.map(x => (x.address))
 })
 
+const sourceOptions = computed(() => {
+  // scan all connected wallet
+  const keys = scanLocalKeys()
+  // all existed keys
+  Object.values(conf.value).forEach(x => {
+    const [first] = x
+    if (first) {
+      const { data } = fromBech32(first.address)
+      const hex = toHex(data)
+      if (keys.findIndex(k => toHex(fromBech32(k.cosmosAddress).data) === hex) === -1) {
+        keys.push({
+          cosmosAddress: first.address,
+          hdPath: `m/44/${first.coinType}/0'/0/0`
+        })
+      }
+    }
+  })
+  // address
+  if (sourceAddress.value) {
+    const { prefix, data } = fromBech32(sourceAddress.value)
+    const chain = Object.values(dashboard.chains).find(x => x.bech32Prefix === prefix)
+    if (chain) {
+      keys.push({
+        cosmosAddress: sourceAddress.value,
+        hdPath: `m/44/${chain.coinType}/0'/0/0`
+      })
+    }
+  }
+  if (!selectedSource.value.cosmosAddress && keys.length > 0) {
+    selectedSource.value = keys[0]
+  }
+  return keys
+})
+
 const availableAccount = computed(() => {
-  return scanCompatibleAccounts().filter(x => !addresses.value.includes(x.address))
+  if (selectedSource.value.cosmosAddress) {
+    return scanCompatibleAccounts([selectedSource.value]).filter(x => !addresses.value.includes(x.address))
+  }
+  return []
 })
 
 function removeAddress(addr: string) {
   const newConf = {} as Record<string, AccountEntry[]>
   Object.keys(conf.value).forEach(key => {
-    newConf[key] = conf.value[key].filter(x => x.address !== addr)
+    const acc = conf.value[key].filter(x => x.address !== addr)
+    if (acc.length > 0) newConf[key] = acc
   })
   conf.value = newConf
   localStorage.setItem("imported-addresses", JSON.stringify(conf.value))
@@ -96,23 +139,36 @@ function removeAddress(addr: string) {
 
 async function addAddress(acc: AccountEntry) {
   console.log('add', acc)
-  const {data} = fromBech32(acc.address)
+  const { data } = fromBech32(acc.address)
   const key = toBase64(data)
 
-  if(conf.value[key]) {
+  if (conf.value[key]) {
+    // existed
+    if (conf.value[key].findIndex(x => x.address === acc.address) > -1) {
+      return
+    }
     conf.value[key].push(acc)
   } else {
     conf.value[key] = [acc]
   }
 
-  if(acc.endpoint) {
+  // also add chain to favorite
+  if(!dashboard?.favoriteMap?.[acc.chainName]) {
+    dashboard.favoriteMap[acc.chainName] = true
+    window.localStorage.setItem(
+      'favoriteMap',
+      JSON.stringify(dashboard.favoriteMap)
+    );
+  }
+
+  if (acc.endpoint) {
     const client = CosmosRestClient.newDefault(acc.endpoint)
     client.getBankBalances(acc.address).then(res => {
       balances.value[acc.address] = res.balances.filter(x => x.denom.length < 10)
     })
     client.getStakingDelegations(acc.address).then(res => {
       delegations.value[acc.address] = res.delegation_responses
-    }) 
+    })
   }
 
   localStorage.setItem("imported-addresses", JSON.stringify(conf.value))
@@ -169,9 +225,10 @@ async function addAddress(acc: AccountEntry) {
           </span>
         </div>
       </div>
-      <table class="table w-full">
+
+      <table class="table table-compact w-full">
         <!-- head -->
-        <thead>
+        <thead class="rounded-none">
           <tr>
             <th v-if="editable"></th>
             <th>Account</th>
@@ -186,11 +243,11 @@ async function addAddress(acc: AccountEntry) {
             <td v-if="editable">
               <Icon icon="mdi:close-box" class="text-error" @click="removeAddress(acc.address)"></Icon>
             </td>
-            <td>
+            <td class="px-4">
               <RouterLink :to="`/${acc.chainName}/account/${acc.address}`">
                 <div class="flex items-center space-x-2">
                   <div class="avatar">
-                    <div class="mask mask-squircle w-12 h-12">
+                    <div class="mask mask-squircle w-8 h-8">
                       <img :src="acc.logo" :alt="acc.address" />
                     </div>
                   </div>
@@ -232,45 +289,56 @@ async function addAddress(acc: AccountEntry) {
     <!-- Put this part before </body> tag -->
     <div class="modal" id="address-modal">
       <div class="modal-box">
-        <h3 class="font-bold text-lg">Import Accounts 
-          <div class="dropdown dropdown-hover">
-          <label tabindex="0" class="text-info">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <h3 class="font-bold text-lg mb-2">Derive Account From Address
+          
+        </h3>
+
+        <div>
+          <label class="input-group input-group-sm w-full">
+          <span>Connected</span>
+          <select v-model="selectedSource" class="select select-bordered select-sm w-3/4">
+            <option v-for="source in sourceOptions" :value="source">
+              <span class=" overflow-hidden">{{ source.cosmosAddress }}</span>
+            </option>
+          </select>
           </label>
-          <div tabindex="0" class="card compact dropdown-content dark:bg-info-content bg-slate-300 shadow rounded-box w-64">
-            <div class="card-body">
-              <p>Only shows blockchains on your favorite list</p>
-            </div>
-          </div>
+          <label class="input-group input-group-sm my-2">
+            <span>Custom</span>
+            <input v-model="sourceAddress" class="input input-bordered w-full input-sm"
+            placeholder="Input an address" />
+          </label>
         </div>
-      </h3>
-      <p class="py-4 max-h-60 overflow-y-auto">
-      <table>
-        <tr v-for="acc in availableAccount" >
-          <td>
-            <div class="flex items-center space-x-2">
+        <div class="py-4 max-h-72 overflow-y-auto">
+          <table class="table table-compact">
+            <tr v-for="acc in availableAccount">
+              <td>
+                <div class="flex items-center space-x-2">
                   <div class="avatar">
                     <div class="mask mask-squircle w-8 h-8">
                       <img :src="acc.logo" :alt="acc.address" />
                     </div>
                   </div>
                   <div>
-                    <div class="font-bold capitalize">{{ acc.chainName }}</div>
+                    <div class="tooltip" :class="acc.compatiable?'tooltip-success':'tooltip-error'" :data-tip="`Coin Type: ${acc.coinType}`">
+                      <div class="font-bold capitalize" :class="acc.compatiable?'text-green-500':'text-red-500'">
+                        {{ acc.chainName }}
+                      </div>
+                    </div>
                     <div class="text-xs opacity-50 hidden md:!block">{{ acc.address }}</div>
                   </div>
                 </div>
-          </td>
-          <td class="text-right">
-            <span class="btn !bg-yes !border-yes btn-xs text-white" @click="addAddress(acc)">
-              <Icon icon="mdi:plus"/>
-            </span>
-          </td>
-        </tr>
-      </table>
-      </p>
-      <div class="modal-action">
-        <a href="#" class="btn">Close</a>
-      </div>
+              </td>
+              <td class="text-right">
+                <span class="btn !bg-yes !border-yes btn-xs text-white" @click="addAddress(acc)">
+                  <Icon icon="mdi:plus" />
+                </span>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-action mt-2 mb-0">
+          <a href="#" class="btn btn-primary btn-sm">Close</a>
+        </div>
     </div>
   </div>
 </div></template>
