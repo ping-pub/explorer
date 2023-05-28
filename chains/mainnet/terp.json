@@ -10,7 +10,7 @@
     "addr_prefix": "terp",
     "logo": "/logos/terp-network.jpg",
     "assets": [{
-        "base": "uterpx",
+        "base": "uterp",
         "symbol": "TERP",
         "exponent": "6",
         "coingecko_id": "",
