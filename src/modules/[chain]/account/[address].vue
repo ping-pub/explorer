@@ -458,7 +458,7 @@ loadAccount(props.address);
                   v.height
                 }}</RouterLink>
               </td>
-              <td class="text-truncate text-primary py-3" style="max-width: 200px">
+              <td class="truncate text-primary py-3" style="max-width: 200px">
                 <RouterLink :to="`/${chain}/tx/${v.txhash}`">
                 {{ v.txhash }}
               </RouterLink>

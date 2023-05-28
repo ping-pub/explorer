@@ -9,7 +9,7 @@ import {
   useTxDialog,
   useWalletStore,
   useStakingStore,
-useParamStore,
+  useParamStore,
 } from '@/stores';
 import { onMounted, ref } from 'vue';
 import { useIndexModule } from './indexStore';
@@ -99,10 +99,7 @@ const color = computed(() => {
 
 <template>
   <div>
-    <div
-      v-if="coinInfo && coinInfo.name"
-      class="bg-base-100 rounded shadow mb-4"
-    >
+    <div v-if="coinInfo && coinInfo.name" class="bg-base-100 rounded shadow mb-4">
       <div class="grid grid-cols-2 md:grid-cols-3 p-4">
         <div class="col-span-2 md:col-span-1">
           <div class="text-xl font-semibold text-main">
@@ -112,37 +109,26 @@ const color = computed(() => {
           </div>
           <div class="text-xs mt-2">
             Rank:
-            <div
-              class="badge text-xs badge-error bg-[#fcebea] dark:bg-[#41384d] text-red-400"
-            >
+            <div class="badge text-xs badge-error bg-[#fcebea] dark:bg-[#41384d] text-red-400">
               #{{ coinInfo.market_cap_rank }}
             </div>
           </div>
 
           <div class="my-4 flex flex-wrap items-center">
-            <a
-              v-for="(item, index) of comLinks"
-              :key="index"
-              :href="item.href"
-              class="link link-primary px-2 py-1 rounded-sm no-underline hover:text-primary hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center"
-            >
+            <a v-for="(item, index) of comLinks" :key="index" :href="item.href"
+              class="link link-primary px-2 py-1 rounded-sm no-underline hover:text-primary hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center">
               <Icon :icon="item?.icon" />
               <span class="ml-1 text-sm uppercase">{{ item?.name }}</span>
             </a>
           </div>
 
           <div>
-            <div
-              class="dropdown dropdown-hover w-full"
-            >
+            <div class="dropdown dropdown-hover w-full">
               <label>
                 <div
-                  class="bg-gray-100 dark:bg-[#384059] flex items-center justify-between px-4 py-2 cursor-pointer rounded"
-                >
+                  class="bg-gray-100 dark:bg-[#384059] flex items-center justify-between px-4 py-2 cursor-pointer rounded">
                   <div>
-                    <div
-                      class="font-semibold text-xl text-[#666] dark:text-white"
-                    >
+                    <div class="font-semibold text-xl text-[#666] dark:text-white">
                       {{ ticker?.market?.name || '' }}
                     </div>
                     <div class="text-info text-sm">
@@ -153,9 +139,7 @@ const color = computed(() => {
                   </div>
 
                   <div class="text-right">
-                    <div
-                      class="text-xl font-semibold text-[#666] dark:text-white"
-                    >
+                    <div class="text-xl font-semibold text-[#666] dark:text-white">
                       ${{ ticker.converted_last.usd }}
                     </div>
                     <div class="text-sm" :class="store.priceColor">
@@ -165,18 +149,10 @@ const color = computed(() => {
                 </div>
               </label>
               <div class="dropdown-content pt-1">
-                <div
-                  class="h-64 overflow-auto w-full shadow rounded"
-                >
+                <div class="h-64 overflow-auto w-full shadow rounded">
                   <ul class="menu w-full bg-gray-100 rounded dark:bg-[#384059]">
-                    <li
-                      v-for="(item, index) in store.coinInfo.tickers"
-                      :key="index"
-                      @click="store.selectTicker(index)"
-                    >
-                      <div
-                        class="flex items-center justify-between hover:bg-base-100"
-                      >
+                    <li v-for="(item, index) in store.coinInfo.tickers" :key="index" @click="store.selectTicker(index)">
+                      <div class="flex items-center justify-between hover:bg-base-100">
                         <div class="flex-1">
                           <div class="text-main text-sm">
                             {{ item?.market?.name }}
@@ -198,12 +174,8 @@ const color = computed(() => {
               </div>
             </div>
 
-            <a
-              :color="store.trustColor"
-              class="my-5 !text-white btn !bg-yes !border-yes w-full"
-              :href="ticker.trade_url"
-              target="_blank"
-            >
+            <a :color="store.trustColor" class="my-5 !text-white btn !bg-yes !border-yes w-full" :href="ticker.trade_url"
+              target="_blank">
               Buy {{ coinInfo.symbol || '' }}
             </a>
           </div>
@@ -215,23 +187,18 @@ const color = computed(() => {
       </div>
       <div class="h-[1px] w-full bg-gray-100 dark:bg-[#384059]"></div>
       <div class="max-h-[250px] overflow-auto p-4 text-sm">
-        <MdEditor
-          :model-value="coinInfo.description?.en"
-          previewOnly
-        ></MdEditor>
+        <MdEditor :model-value="coinInfo.description?.en" previewOnly></MdEditor>
       </div>
       <div class="mx-4 flex flex-wrap items-center">
-        <div
-          v-for="tag in coinInfo.categories"
-          class="mr-2 mb-4 text-xs bg-gray-100 dark:bg-[#384059] px-3 rounded-full py-1"
-        >
+        <div v-for="tag in coinInfo.categories"
+          class="mr-2 mb-4 text-xs bg-gray-100 dark:bg-[#384059] px-3 rounded-full py-1">
           {{ tag }}
         </div>
       </div>
     </div>
 
     <div class="grid grid-cols-2 gap-4 md:!grid-cols-3 lg:!grid-cols-6">
-      <div v-for="item in store.stats">
+      <div v-for="(item, key) in store.stats" :key="key">
         <CardStatisticsVertical v-bind="item" />
       </div>
     </div>
@@ -251,16 +218,11 @@ const color = computed(() => {
     <div class="bg-base-100 rounded mt-4 shadow">
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         {{ walletStore.currentAddress || 'Not Connected' }}
-        <RouterLink
-          v-if="walletStore.currentAddress"
+        <RouterLink v-if="walletStore.currentAddress"
           class="float-right text-sm cursor-pointert link link-primary no-underline font-medium"
-          :to="`/${chain}/account/${walletStore.currentAddress}`"
-          >More</RouterLink
-        >
+          :to="`/${chain}/account/${walletStore.currentAddress}`">More</RouterLink>
       </div>
-      <div
-        class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 px-4 pb-6"
-      >
+      <div class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 px-4 pb-6">
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">Balance</div>
           <div class="text-lg font-semibold text-main">
@@ -331,16 +293,12 @@ const color = computed(() => {
               </td>
               <td>
                 <div>
-                  <label for="delegate"
-                    class="btn !btn-xs !btn-primary btn-ghost rounded-sm mr-2"
-                    @click="dialog.open('delegate', { validator_address: item.delegation.validator_address})"
-                  >
+                  <label for="delegate" class="btn !btn-xs !btn-primary btn-ghost rounded-sm mr-2"
+                    @click="dialog.open('delegate', { validator_address: item.delegation.validator_address })">
                     Delegate
                   </label>
-                  <label for="withdraw"
-                    class="btn !btn-xs !btn-primary btn-ghost rounded-sm"
-                    @click="dialog.open('withdraw', { validator_address: item.delegation.validator_address})"
-                  >
+                  <label for="withdraw" class="btn !btn-xs !btn-primary btn-ghost rounded-sm"
+                    @click="dialog.open('withdraw', { validator_address: item.delegation.validator_address })">
                     Withdraw Rewards
                   </label>
                 </div>
@@ -353,15 +311,13 @@ const color = computed(() => {
       <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
         <label for="PingTokenConvert" class="btn btn-primary text-white">Swap</label>
         <label for="send" class="btn !bg-yes !border-yes text-white" @click="dialog.open('send', {})">Send</label>
-        <label for="delegate" class="btn !bg-info !border-info text-white" @click="dialog.open('delegate', {})">Delegate</label>
+        <label for="delegate" class="btn !bg-info !border-info text-white"
+          @click="dialog.open('delegate', {})">Delegate</label>
         <RouterLink to="/wallet/receive" class="btn !bg-info !border-info text-white hidden">Receive</RouterLink>
       </div>
       <Teleport to="body">
-        <ping-token-convert
-          :chain-name="blockchain?.current?.prettyName"
-          :endpoint="blockchain?.endpoint?.address"
-          :hd-path="walletStore?.connectedWallet?.hdPath"
-        ></ping-token-convert>
+        <ping-token-convert :chain-name="blockchain?.current?.prettyName" :endpoint="blockchain?.endpoint?.address"
+          :hd-path="walletStore?.connectedWallet?.hdPath"></ping-token-convert>
       </Teleport>
     </div>
 

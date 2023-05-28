@@ -12,6 +12,13 @@ module.exports = {
         secondary: 'var(--text-secondary)',
         active: 'var(--bg-active)',
       },
+      borderRadius: {
+        none: '0',
+        xs: '.125rem',
+        sm: '.25rem',
+        DEFAULT: '.5rem',
+        lg: '.75rem',
+      },
     },
   },
   plugins: [require('daisyui')],

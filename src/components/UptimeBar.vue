@@ -25,7 +25,7 @@ const bars = computed(() => {
 });
 </script>
 <template>
-  <div class="d-flex items-center justify-evenly">
+  <div class="flex items-center justify-evenly">
     <div class="cursor-default" v-for="(item, index) in bars" :key="index">
       <div class="tooltip" :data-tip="item.height">
         <span

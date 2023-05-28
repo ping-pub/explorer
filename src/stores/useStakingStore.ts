@@ -57,7 +57,6 @@ export const useStakingStore = defineStore('stakingStore', {
     async fetchPool() {
       const response = await this.blockchain.rpc?.getStakingPool();
       if (response) {
-        response.pool.bonded_tokens;
         this.pool = response.pool;
       }
     },

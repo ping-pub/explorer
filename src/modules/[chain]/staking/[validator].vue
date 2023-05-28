@@ -145,16 +145,8 @@ onMounted(() => {
             <div class="avatar mr-4 relative w-24 rounded-lg overflow-hidden">
               <div class="w-24 rounded-lg absolute opacity-10"></div>
               <div class="w-24 rounded-lg">
-                <img
-                  v-if="avatars[identity] !== 'undefined'"
-                  v-lazy="logo(identity)"
-                  class="object-contain"
-                />
-                <Icon
-                  v-else
-                  class="text-4xl"
-                  :icon="`mdi-help-circle-outline`"
-                />
+                <img v-if="avatars[identity] !== 'undefined'" v-lazy="logo(identity)" class="object-contain" />
+                <Icon v-else class="text-4xl" :icon="`mdi-help-circle-outline`" />
               </div>
             </div>
             <div class="mx-2">
@@ -162,16 +154,11 @@ onMounted(() => {
               <div class="text-sm mb-4">
                 {{ v.description?.identity || '-' }}
               </div>
-              <label
-                for="delegate"
-                class="btn btn-primary btn-sm w-full"
-                @click="
-                  dialog.open('delegate', {
-                    validator_address: v.operator_address,
-                  })
-                "
-                >Delegate</label
-              >
+              <label for="delegate" class="btn btn-primary btn-sm w-full" @click="
+                dialog.open('delegate', {
+                  validator_address: v.operator_address,
+                })
+                ">Delegate</label>
             </div>
           </div>
           <div class="m-4 text-sm">
@@ -192,8 +179,7 @@ onMounted(() => {
             <div class="card-list">
               <div class="flex items-center mb-2">
                 <Icon icon="mdi-shield-account-outline" class="text-xl mr-1" />
-                <span>Status: </span
-                ><span>
+                <span>Status: </span><span>
                   {{ String(v.status).replace('BOND_STATUS_', '') }}
                 </span>
               </div>
@@ -208,10 +194,7 @@ onMounted(() => {
         <div class="flex-1">
           <div class="flex flex-col justify-between">
             <div class="flex mb-2">
-              <div
-                class="flex items-center justify-center rounded w-10 h-10"
-                style="border: 1px solid #666"
-              >
+              <div class="flex items-center justify-center rounded w-10 h-10" style="border: 1px solid #666">
                 <Icon icon="mdi-coin" class="text-3xl" />
               </div>
               <div class="ml-3 flex flex-col justify-center">
@@ -227,10 +210,7 @@ onMounted(() => {
               </div>
             </div>
             <div class="flex mb-2">
-              <div
-                class="flex items-center justify-center rounded w-10 h-10"
-                style="border: 1px solid #666"
-              >
+              <div class="flex items-center justify-center rounded w-10 h-10" style="border: 1px solid #666">
                 <Icon icon="mdi-percent" class="text-3xl" />
               </div>
               <div class="ml-3 flex flex-col justify-center">
@@ -242,14 +222,11 @@ onMounted(() => {
             </div>
 
             <div class="flex mb-2">
-              <div
-                class="flex items-center justify-center rounded w-10 h-10"
-                style="border: 1px solid #666"
-              >
+              <div class="flex items-center justify-center rounded w-10 h-10" style="border: 1px solid #666">
                 <Icon icon="mdi-account-tie" class="text-3xl" />
               </div>
 
-              <div class="ml-3 d-flex flex-column justify-center">
+              <div class="ml-3 flex flex-column justify-center">
                 <h4>
                   {{ v.min_self_delegation }} {{ staking.params.bond_denom }}
                 </h4>
@@ -257,10 +234,7 @@ onMounted(() => {
               </div>
             </div>
             <div class="flex mb-2">
-              <div
-                class="flex items-center justify-center rounded w-10 h-10"
-                style="border: 1px solid #666"
-              >
+              <div class="flex items-center justify-center rounded w-10 h-10" style="border: 1px solid #666">
                 <Icon icon="mdi-finance" class="text-3xl" />
               </div>
               <div class="ml-3 flex flex-col justify-center">
@@ -270,10 +244,7 @@ onMounted(() => {
             </div>
 
             <div class="flex mb-2">
-              <div
-                class="flex items-center justify-center rounded w-10 h-10"
-                style="border: 1px solid #666"
-              >
+              <div class="flex items-center justify-center rounded w-10 h-10" style="border: 1px solid #666">
                 <Icon icon="mdi-stairs-up" class="text-3xl" />
               </div>
               <div class="ml-3 flex flex-col justify-center">
@@ -283,10 +254,7 @@ onMounted(() => {
             </div>
 
             <div class="flex mb-2">
-              <div
-                class="flex items-center justify-center rounded w-10 h-10"
-                style="border: 1px solid #666"
-              >
+              <div class="flex items-center justify-center rounded w-10 h-10" style="border: 1px solid #666">
                 <Icon icon="mdi-clock" class="text-3xl" />
               </div>
               <div class="ml-3 flex flex-col justify-center">
@@ -304,75 +272,55 @@ onMounted(() => {
       <div class="h-100">
         <CommissionRate :commission="v.commission"></CommissionRate>
       </div>
-      <div>
-        <div class="h-100 bg-base-100 rounded shadow">
-          <div class="text-lg font-semibold text-main px-4 pt-4">
-            Commissions & Rewards
-          </div>
-          <div class="px-4 mt-1">
-            <div class="overflow-auto" style="max-height: 280px">
-              <div class="text-sm mb-2">Commissions</div>
-              <div
-                v-for="(i, k) in commission"
-                :key="`reward-${k}`"
-                color="info"
-                label
-                variant="outlined"
-                class="mr-1 mb-1 badge text-xs"
-              >
-                {{ format.formatToken2(i) }}
-              </div>
-              <div class="text-sm mb-2 mt-2">Outstanding Rewards</div>
-              <div
-                v-for="(i, k) in rewards"
-                :key="`reward-${k}`"
-                class="mr-1 mb-1 badge text-xs"
-              >
-                {{ format.formatToken2(i) }}
-              </div>
+      <div class="h-100 bg-base-100 rounded shadow relative">
+        <div class="text-lg font-semibold text-main px-4 pt-4">
+          Commissions & Rewards
+        </div>
+        <div class="px-4 mt-1">
+          <div class="overflow-auto" style="max-height: 280px">
+            <div class="text-sm mb-2">Commissions</div>
+            <div v-for="(i, k) in commission" :key="`reward-${k}`" color="info" label variant="outlined"
+              class="mr-1 mb-1 badge text-xs">
+              {{ format.formatToken2(i) }}
             </div>
-            <label
-              for="withdraw_commission"
-              class="btn btn-primary mt-4 w-full btn-sm"
-              @click="
-                dialog.open('withdraw_commission', {
-                  validator_address: v.operator_address,
-                })
-              "
-              >Withdraw</label
-            >
+            <div class="text-sm mb-2 mt-2">Outstanding Rewards</div>
+            <div v-for="(i, k) in rewards" :key="`reward-${k}`" class="mr-1 mb-1 badge text-xs">
+              {{ format.formatToken2(i) }}
+            </div>
+          </div>
+          <div class="absolute bottom-6 left-0 right-0 px-4">
+            <label for="withdraw_commission" class="btn btn-primary w-full" @click="
+              dialog.open('withdraw_commission', {
+                validator_address: v.operator_address,
+              })
+              ">Withdraw</label>
           </div>
         </div>
       </div>
-      <div>
-        <div class="h-100 bg-base-100 rounded shadow">
-          <div class="px-4 pt-4 mb-2 text-main font-lg font-semibold">
-            Addresses
+      <div class="h-100 bg-base-100 rounded shadow">
+        <div class="px-4 pt-4 mb-2 text-main font-lg font-semibold">
+          Addresses
+        </div>
+        <div class="px-4">
+          <div class="mb-3">
+            <div class="text-sm">Account</div>
+            <RouterLink class="text-xs text-primary" :to="`/${chain}/account/${addresses.account}`">
+              {{ addresses.account }}
+            </RouterLink>
           </div>
-          <div class="px-4">
-            <div class="mb-3">
-              <div class="text-sm">Account</div>
-              <RouterLink
-                class="text-xs text-primary"
-                :to="`/${chain}/account/${addresses.account}`"
-              >
-                {{ addresses.account }}
-              </RouterLink>
+          <div class="mb-3">
+            <div class="text-sm">Operator Address</div>
+            <div class="text-xs">
+              {{ v.operator_address }}
             </div>
-            <div class="mb-3">
-              <div class="text-sm">Operator Address</div>
-              <div class="text-xs">
-                {{ v.operator_address }}
-              </div>
-            </div>
-            <div class="mb-3">
-              <div class="text-sm">Hex Address</div>
-              <div class="text-xs">{{ addresses.hex }}</div>
-            </div>
-            <div>
-              <div class="text-sm">Signer Address</div>
-              <div class="text-xs">{{ addresses.valCons }}</div>
-            </div>
+          </div>
+          <div class="mb-3">
+            <div class="text-sm">Hex Address</div>
+            <div class="text-xs">{{ addresses.hex }}</div>
+          </div>
+          <div>
+            <div class="text-sm">Signer Address</div>
+            <div class="text-xs">{{ addresses.valCons }}</div>
           </div>
         </div>
       </div>
@@ -396,21 +344,17 @@ onMounted(() => {
                   item.height
                 }}</RouterLink>
               </td>
-              <td class="text-truncate text-primary" style="max-width: 200px">
+              <td class="truncate text-primary" style="max-width: 200px">
                 <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
-                {{ item.txhash }}
-              </RouterLink>
+                  {{ item.txhash }}
+                </RouterLink>
               </td>
               <td>
                 <div class="flex items-center">
                   <span class="mr-2">{{
                     format.messages(item.tx.body.messages)
                   }}</span>
-                  <Icon
-                    v-if="item.code === 0"
-                    icon="mdi-check"
-                    class="text-yes"
-                  />
+                  <Icon v-if="item.code === 0" icon="mdi-check" class="text-yes" />
                   <Icon v-else icon="mdi-multiply" class="text-no" />
                 </div>
               </td>

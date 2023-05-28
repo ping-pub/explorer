@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { useTheme } from 'vuetify';
 import {
   useDashboard,
   type ChainConfig,
@@ -42,11 +41,11 @@ export const useBlockchain = defineStore('blockchain', {
       return this.current?.logo || '';
     },
     defaultHDPath(): string {
-      const cointype = this.current?.coinType || "118"
+      const cointype = this.current?.coinType || '118';
       // if(cointype === "60") {
       //   return `m/44'/${cointype}`
       // }
-      return `m/44'/${cointype}/0'/0/0`
+      return `m/44'/${cointype}/0'/0/0`;
       //return "connected-wallet"
     },
     dashboard() {
@@ -54,7 +53,7 @@ export const useBlockchain = defineStore('blockchain', {
     },
     isConsumerChain() {
       // @ts-ignore
-      return this.current && this.current.providerChain 
+      return this.current && this.current.providerChain;
     },
     computedChainMenu() {
       let currNavItem: VerticalNavItems = [];
@@ -67,17 +66,21 @@ export const useBlockchain = defineStore('blockchain', {
             title: this.current?.prettyName || this.chainName || '',
             icon: { image: this.current.logo, size: '22' },
             i18n: false,
-            badgeContent: this.isConsumerChain? 'Consumer': undefined,
+            badgeContent: this.isConsumerChain ? 'Consumer' : undefined,
             badgeClass: 'bg-error',
             children: routes
               .filter((x) => x.meta.i18n) // defined menu name
-              .filter((x) => !this.current?.features || this.current.features.includes(String(x.meta.i18n))) // filter none-custom module
+              .filter(
+                (x) =>
+                  !this.current?.features ||
+                  this.current.features.includes(String(x.meta.i18n))
+              ) // filter none-custom module
               .map((x) => ({
                 title: `module.${x.meta.i18n}`,
                 to: { path: x.path.replace(':chain', this.chainName) },
                 icon: { icon: 'mdi-chevron-right', size: '22' },
                 i18n: true,
-                order: Number(x.meta.order || 100)
+                order: Number(x.meta.order || 100),
               }))
               .sort((a, b) => a.order - b.order),
           },
@@ -125,7 +128,7 @@ export const useBlockchain = defineStore('blockchain', {
       //     const { global } = useTheme();
       //     global.current
       // }
-      useWalletStore().$reset()
+      useWalletStore().$reset();
       await this.randomSetupEndpoint();
       await useStakingStore().init();
       useBankStore().initial();
@@ -136,9 +139,9 @@ export const useBlockchain = defineStore('blockchain', {
     },
 
     async randomSetupEndpoint() {
-      const end = localStorage.getItem(`endpoint-${this.chainName}`)
-      if(end) {
-        this.setRestEndpoint(JSON.parse(end))
+      const end = localStorage.getItem(`endpoint-${this.chainName}`);
+      if (end) {
+        this.setRestEndpoint(JSON.parse(end));
       } else {
         const all = this.current?.endpoints?.rest;
         if (all) {
@@ -153,15 +156,18 @@ export const useBlockchain = defineStore('blockchain', {
       this.connErr = '';
       this.endpoint = endpoint;
       this.rpc = new CosmosRestClient(endpoint.address, DEFAULT);
-      localStorage.setItem(`endpoint-${this.chainName}`, JSON.stringify(endpoint))
+      localStorage.setItem(
+        `endpoint-${this.chainName}`,
+        JSON.stringify(endpoint)
+      );
     },
     setCurrent(name: string) {
-      if(name !== this.chainName) {
+      if (name !== this.chainName) {
         this.chainName = name;
       }
     },
     supportModule(mod: string) {
-      return !this.current?.features || this.current.features.includes(mod)
-    }
+      return !this.current?.features || this.current.features.includes(mod);
+    },
   },
 });

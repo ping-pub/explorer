@@ -46,14 +46,14 @@ const isPositive = controlledComputed(
 
     <div class="">
       <h6 class="text-lg font-semibold mt-2 mb-1">
-        {{ props.stats }}
+        {{ props.stats || '-'}}
       </h6>
       <p class="text-sm">
         {{ props.title }}
       </p>
 
       <div v-if="props.subtitle" size="x-small" class="font-semibold">
-        <span class="text-truncate">{{ props.subtitle }}</span>
+        <span class="truncate">{{ props.subtitle }}</span>
       </div>
     </div>
   </div>
