@@ -18,7 +18,7 @@ const header = computed(() => {
 });
 </script>
 <template>
-  <div class="overflow-x-auto p-4">
+  <div class="overflow-auto h-[500px] p-4">
     <div
       v-if="header.length > 0"
       class="table table-compact w-full"
@@ -35,7 +35,7 @@ const header = computed(() => {
             :key="index"
             class="text-left text-capitalize"
           >
-            {{ item }}
+            {{ item }} 
           </th>
         </tr>
       </thead>

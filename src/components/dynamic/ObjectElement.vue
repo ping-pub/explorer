@@ -4,11 +4,16 @@ import { select } from './index';
 const props = defineProps(['value']);
 </script>
 <template>
-  <div class="overflow-x-auto">
+  <div class="overflow-auto">
     <table class="table table-compact w-full text-sm">
       <tbody>
         <tr v-for="(v, k) of value">
-          <td class="text-capitalize whitespace-break-spaces w-1/5" style="min-width: 180px;">{{ String(k).replaceAll("_", " ") }}</td>
+          <td
+            class="text-capitalize whitespace-break-spaces w-1/5"
+            style="min-width: 180px"
+          >
+            {{ String(k).replaceAll('_', ' ') }}
+          </td>
           <td>
             <div
               class="overflow-hidden w-auto whitespace-normal"
