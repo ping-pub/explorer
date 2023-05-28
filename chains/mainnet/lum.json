@@ -1,8 +1,8 @@
 {
     "chain_name": "lum-network",
     "coingecko": "lum-network",
-    "api": ["https://api-lum.degeno.de", "https://node0.mainnet.lum.network/rest"],
-    "rpc": ["https://rpc-lum.degeno.de:443", "https://node0.mainnet.lum.network:443/rpc"],
+    "api": ["https://node0.mainnet.lum.network/rest", "https://lumnetwork-api.lavenderfive.com"],
+    "rpc": ["https://node0.mainnet.lum.network:443/rpc", "https://lumnetwork-rpc.lavenderfive.com:443"],
     "snapshot_provider": "",
     "sdk_version": "0.44.5",
     "coin_type": "880",
