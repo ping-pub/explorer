@@ -17,7 +17,7 @@ export const useWalletStore = defineStore('walletStore', {
       delegations: [] as Delegation[],
       unbonding: [] as UnbondingResponses[],
       rewards: {} as DelegatorRewards,
-      walletIsConnected: {} as WalletConnected | null
+      walletIsConnected: {} as WalletConnected
     };
   },
   getters: {
