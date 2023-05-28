@@ -37,7 +37,7 @@ const tipMsg = computed(() => {
   <div class="dropdown dropdown-hover dropdown-end">
     <label
       tabindex="0"
-      class="btn btn-sm m-1 lowercase hidden truncate md:!inline-flex text-xs md:!text-sm"
+      class="btn btn-sm btn-primary m-1 lowercase hidden truncate md:!inline-flex text-xs md:!text-sm"
     >
       <Icon icon="mdi:wallet" />
       <span class="ml-1 hidden md:block">
@@ -51,7 +51,7 @@ const tipMsg = computed(() => {
       <label
         v-if="!walletStore?.currentAddress"
         for="PingConnectWallet"
-        class="btn btn-sm"
+        class="btn btn-sm btn-primary"
         ><Icon icon="mdi:wallet" /><span class="ml-1 hidden md:block"
           >Connect Wallet</span
         ></label
