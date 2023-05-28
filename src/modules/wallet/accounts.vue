@@ -11,7 +11,6 @@ import { scanLocalKeys, type AccountEntry, scanCompatibleAccounts, type LocalKey
 const dashboard = useDashboard()
 const format = useFormatter()
 const editable = ref(false) // to edit addresses
-const source = ref('wallet'); // values: wallet, imported, address
 const sourceAddress = ref('') //
 const selectedSource = ref({} as LocalKey) // 
 function toggleEdit() {
@@ -22,44 +21,21 @@ const conf = ref(JSON.parse(localStorage.getItem("imported-addresses") || "{}") 
 const balances = ref({} as Record<string, Coin[]>)
 const delegations = ref({} as Record<string, Delegation[]>)
 
-// auto import current connected wallet.
-scanLocalKeys().forEach(wallet => {
-  const { data } = fromBech32(wallet.cosmosAddress)
-  const walletKey = toBase64(data)
-  let imported = conf.value[walletKey]
-  console.log('imported:', imported)
-  // save the default address to local storage
-  if (!imported) {
-    imported = []
-    dashboard.favorite.forEach(x => {
-      const chain = dashboard.chains[x]
-      if (chain && wallet.hdPath.indexOf(chain.coinType) === 6) {
-        imported.push({
-          chainName: chain.chainName,
-          logo: chain.logo,
-          address: toBech32(chain.bech32Prefix, data),
-          coinType: chain.coinType,
-          endpoint: chain.endpoints.rest?.at(0)?.address
-        })
+// load balances
+Object.values(conf.value).forEach(imported => {
+  let promise = Promise.resolve()
+  for(let i = 0;i < imported.length; i++) {
+    promise = promise.then(() => new Promise((resolve) => {
+      // continue only if the page is living
+      if(imported[i].endpoint) {
+        loadBalances(imported[i].endpoint || "", imported[i].address).finally(()=> resolve())
+      } else {
+        resolve()
       }
-    })
-    conf.value[walletKey] = imported;
-    localStorage.setItem("imported-addresses", JSON.stringify(conf.value))
+    }))
   }
-  // load balance & delegations
-  imported.forEach(x => {
-    if (x.endpoint) {
-      const client = CosmosRestClient.newDefault(x.endpoint)
-      client.getBankBalances(x.address).then(res => {
-        balances.value[x.address] = res.balances.filter(x => x.denom.length < 10)
-      })
-      client.getStakingDelegations(x.address).then(res => {
-        delegations.value[x.address] = res.delegation_responses
-      })
-    }
-  })
-})
 
+})
 
 const accounts = computed(() => {
   let a = [] as AccountEntry[]
@@ -74,6 +50,8 @@ const accounts = computed(() => {
           denom = b.balance.denom
         })
         entry.delegation = { amount: String(amount), denom }
+      }else{
+        entry.delegation = undefined
       }
       entry.balances = balances.value[entry.address]
     })
@@ -138,7 +116,6 @@ function removeAddress(addr: string) {
 }
 
 async function addAddress(acc: AccountEntry) {
-  console.log('add', acc)
   const { data } = fromBech32(acc.address)
   const key = toBase64(data)
 
@@ -162,16 +139,20 @@ async function addAddress(acc: AccountEntry) {
   }
 
   if (acc.endpoint) {
-    const client = CosmosRestClient.newDefault(acc.endpoint)
-    client.getBankBalances(acc.address).then(res => {
-      balances.value[acc.address] = res.balances.filter(x => x.denom.length < 10)
-    })
-    client.getStakingDelegations(acc.address).then(res => {
-      delegations.value[acc.address] = res.delegation_responses
-    })
+    loadBalances(acc.endpoint, acc.address)
   }
 
   localStorage.setItem("imported-addresses", JSON.stringify(conf.value))
+}
+
+async function loadBalances(endpoint:string, address: string) {
+  const client = CosmosRestClient.newDefault(endpoint)
+  await client.getBankBalances(address).then(res => {
+      balances.value[address] = res.balances.filter(x => x.denom.length < 10)
+    })
+  await client.getStakingDelegations(address).then(res => {
+      delegations.value[address] = res.delegation_responses
+    })
 }
 
 </script>

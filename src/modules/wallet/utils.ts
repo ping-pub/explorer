@@ -31,11 +31,9 @@ export function scanLocalKeys() {
   return connected
 }
 
-
 export function scanCompatibleAccounts(keys: LocalKey[]) {
   const dashboard = useDashboard()
   const available = [] as AccountEntry[]
-  console.log("from keys:", keys)
   keys.forEach(wallet => {
     Object.values(dashboard.chains).forEach(chain => {
       const { data } = fromBech32(wallet.cosmosAddress)
@@ -49,6 +47,5 @@ export function scanCompatibleAccounts(keys: LocalKey[]) {
       })
     })
   })
-  console.log(available)
   return available
 }
