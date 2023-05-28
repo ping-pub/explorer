@@ -99,7 +99,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
             </div>
             <div
               v-if="item?.badgeContent"
-              class="mr-6 badge badge-sm"
+              class="mr-6 badge badge-sm text-white"
               :class="item?.badgeClass"
             >
               {{ item?.badgeContent }}
@@ -175,7 +175,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
           </div>
           <div
             v-if="item?.badgeContent"
-            class="badge badge-sm"
+            class="badge badge-sm text-white"
             :class="item?.badgeClass"
           >
             {{ item?.badgeContent }}

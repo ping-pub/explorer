@@ -9,6 +9,7 @@ import type {
   WalletConnected,
 } from '@/types';
 import { useStakingStore } from './useStakingStore';
+import router from '@/router'
 
 export const useWalletStore = defineStore('walletStore', {
   state: () => {
@@ -133,6 +134,10 @@ export const useWalletStore = defineStore('walletStore', {
       this.walletIsConnected = value || {}
       // JSON.parse(localStorage.getItem(key) || '{}');
       return this.walletIsConnected
+    },
+    suggestChain() {
+      // const router = useRouter()
+      router.push({path: '/wallet/keplr'})
     }
   },
 });
