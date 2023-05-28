@@ -5476,10 +5476,10 @@ pify@^3.0.0:
   resolved "https://registry.npmjs.org/pify/-/pify-3.0.0.tgz"
   integrity sha512-C3FsVNH1udSEX48gGX1xfvwTWfsYWj5U+8/uK15BGzIGrKoUpghX8hWZwa/OFnakBiiVNmBvemTJR5mcy7iPcg==
 
-ping-widget@^0.0.28:
-  version "0.0.28"
-  resolved "https://registry.yarnpkg.com/ping-widget/-/ping-widget-0.0.28.tgz#f232284556c3527e874b8d410f5e7fede8845c11"
-  integrity sha512-iCitfqYSfT/BqP83UpMr9qQrd/ukwMfJDVtIaupj9e5l+BhSc9XHhzg5URpH4wRlNvhr3jqmAVuq0KZASX6Hsw==
+ping-widget@^0.0.29:
+  version "0.0.29"
+  resolved "https://registry.yarnpkg.com/ping-widget/-/ping-widget-0.0.29.tgz#c1b251e381677360c517fc71a9f3b78b1444c417"
+  integrity sha512-gqKQuqPpo1cKkqE4EOlVleW9LKefjwtYr7nl/uQdiLjwAlRvJt7dA5fddfyEQaTk1CrdARS9aj+VrHiZx+SxkA==
   dependencies:
     "@cosmjs/amino" "^0.30.1"
     "@cosmjs/cosmwasm-stargate" "^0.30.1"
