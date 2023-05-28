@@ -24,11 +24,11 @@ const delegations = ref({} as Record<string, Delegation[]>)
 // load balances
 Object.values(conf.value).forEach(imported => {
   let promise = Promise.resolve()
-  for(let i = 0;i < imported.length; i++) {
+  for (let i = 0; i < imported.length; i++) {
     promise = promise.then(() => new Promise((resolve) => {
       // continue only if the page is living
-      if(imported[i].endpoint) {
-        loadBalances(imported[i].endpoint || "", imported[i].address).finally(()=> resolve())
+      if (imported[i].endpoint) {
+        loadBalances(imported[i].endpoint || "", imported[i].address).finally(() => resolve())
       } else {
         resolve()
       }
@@ -50,7 +50,7 @@ const accounts = computed(() => {
           denom = b.balance.denom
         })
         entry.delegation = { amount: String(amount), denom }
-      }else{
+      } else {
         entry.delegation = undefined
       }
       entry.balances = balances.value[entry.address]
@@ -130,7 +130,7 @@ async function addAddress(acc: AccountEntry) {
   }
 
   // also add chain to favorite
-  if(!dashboard?.favoriteMap?.[acc.chainName]) {
+  if (!dashboard?.favoriteMap?.[acc.chainName]) {
     dashboard.favoriteMap[acc.chainName] = true
     window.localStorage.setItem(
       'favoriteMap',
@@ -145,14 +145,14 @@ async function addAddress(acc: AccountEntry) {
   localStorage.setItem("imported-addresses", JSON.stringify(conf.value))
 }
 
-async function loadBalances(endpoint:string, address: string) {
+async function loadBalances(endpoint: string, address: string) {
   const client = CosmosRestClient.newDefault(endpoint)
   await client.getBankBalances(address).then(res => {
-      balances.value[address] = res.balances.filter(x => x.denom.length < 10)
-    })
+    balances.value[address] = res.balances.filter(x => x.denom.length < 10)
+  })
   await client.getStakingDelegations(address).then(res => {
-      delegations.value[address] = res.delegation_responses
-    })
+    delegations.value[address] = res.delegation_responses
+  })
 }
 
 </script>
@@ -177,33 +177,7 @@ async function loadBalances(endpoint:string, address: string) {
           </div>
         </div>
         <div class="mt-5 flex lg:!ml-4 lg:!mt-0">
-          <span class="hidden sm:!block">
-            <a href="#address-modal"
-              class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-              <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
-                aria-hidden="true">
-                <path
-                  d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z" />
-                <path
-                  d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z" />
-              </svg>
-              Import
-            </a>
-          </span>
 
-          <span class="ml-3 hidden sm:!block">
-            <button type="button"
-              class="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm"
-              @click="toggleEdit">
-
-              <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
-                aria-hidden="true">
-                <path
-                  d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
-              </svg>
-              Edit
-            </button>
-          </span>
         </div>
       </div>
 
@@ -262,7 +236,33 @@ async function loadBalances(endpoint:string, address: string) {
         </tbody>
         <tfoot>
           <th colspan="10">
-            <RouterLink to="/wallet/keplr"> Add chain to Keplr </RouterLink>
+            <div class="flex justify-between">
+              <span class="hidden sm:!block">
+                <button type="button"
+                  class="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm"
+                  @click="toggleEdit">
+
+                  <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
+                    aria-hidden="true">
+                    <path
+                      d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
+                  </svg>
+                  Edit
+                </button>
+                <a href="#address-modal"
+                  class="inline-flex items-center ml-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                  <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
+                    aria-hidden="true">
+                    <path
+                      d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z" />
+                    <path
+                      d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z" />
+                  </svg>
+                  Import
+                </a>
+              </span>
+              <RouterLink to="/wallet/keplr" class="btn btn-sm"> Add chain to Keplr </RouterLink>
+            </div>
           </th>
         </tfoot>
       </table>
@@ -271,22 +271,21 @@ async function loadBalances(endpoint:string, address: string) {
     <div class="modal" id="address-modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg mb-2">Derive Account From Address
-          
+
         </h3>
 
         <div>
           <label class="input-group input-group-sm w-full">
-          <span>Connected</span>
-          <select v-model="selectedSource" class="select select-bordered select-sm w-3/4">
-            <option v-for="source in sourceOptions" :value="source">
-              <span class=" overflow-hidden">{{ source.cosmosAddress }}</span>
-            </option>
-          </select>
+            <span>Connected</span>
+            <select v-model="selectedSource" class="select select-bordered select-sm w-3/4">
+              <option v-for="source in sourceOptions" :value="source">
+                <span class=" overflow-hidden">{{ source.cosmosAddress }}</span>
+              </option>
+            </select>
           </label>
           <label class="input-group input-group-sm my-2">
             <span>Custom</span>
-            <input v-model="sourceAddress" class="input input-bordered w-full input-sm"
-            placeholder="Input an address" />
+            <input v-model="sourceAddress" class="input input-bordered w-full input-sm" placeholder="Input an address" />
           </label>
         </div>
         <div class="py-4 max-h-72 overflow-y-auto">
@@ -300,8 +299,9 @@ async function loadBalances(endpoint:string, address: string) {
                     </div>
                   </div>
                   <div>
-                    <div class="tooltip" :class="acc.compatiable?'tooltip-success':'tooltip-error'" :data-tip="`Coin Type: ${acc.coinType}`">
-                      <div class="font-bold capitalize" :class="acc.compatiable?'text-green-500':'text-red-500'">
+                    <div class="tooltip" :class="acc.compatiable ? 'tooltip-success' : 'tooltip-error'"
+                      :data-tip="`Coin Type: ${acc.coinType}`">
+                      <div class="font-bold capitalize" :class="acc.compatiable ? 'text-green-500' : 'text-red-500'">
                         {{ acc.chainName }}
                       </div>
                     </div>
@@ -320,6 +320,7 @@ async function loadBalances(endpoint:string, address: string) {
         <div class="modal-action mt-2 mb-0">
           <a href="#" class="btn btn-primary btn-sm">Close</a>
         </div>
+      </div>
     </div>
   </div>
-</div></template>
+</template>
