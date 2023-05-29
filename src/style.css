@@ -34,7 +34,3 @@ html[data-theme='dark'] {
   position: relative;
   z-index: 2;
 }
-
-.btn {
-  @apply rounded;
-}

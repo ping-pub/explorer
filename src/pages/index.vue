@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Icon } from '@iconify/vue';
 import {
   useDashboard,
   LoadingStatus,
@@ -6,14 +7,11 @@ import {
 } from '@/stores/useDashboard';
 import ChainSummary from '@/components/ChainSummary.vue';
 import { computed, ref } from 'vue';
-import { useBlockchain } from '@/stores';
 
 const dashboard = useDashboard();
 
 dashboard.$subscribe((mutation, state) => {
   localStorage.setItem('favorite', JSON.stringify(state.favorite));
-  // TODO: cause endless loop
-  // dashboard.loadingPrices()
 });
 const keywords = ref('');
 const chains = computed(() => {
@@ -28,7 +26,7 @@ const chains = computed(() => {
 </script>
 <template>
   <div class="">
-    <div class="flex items-center justify-center mb-6 mt-10">
+    <div class="flex items-center justify-center mb-6 mt-14">
       <div class="w-8 md:!w-16 rounded-full mr-3">
         <img src="/logo.svg" />
       </div>
@@ -52,17 +50,11 @@ const chains = computed(() => {
       <progress class="progress progress-info w-80 h-1"></progress>
     </div>
 
-    <VTextField
-      v-model="keywords"
-      variant="underlined"
-      :placeholder="$t('index.search_placeholder')"
-      style="max-width: 300px"
-      app
-    >
-      <template #append-inner>
-        {{ chains.length }}/{{ dashboard.length }}
-      </template>
-    </VTextField>
+    <div class="flex items-center rounded-full bg-base-100  border border-gray-200 dark:border-gray-700 mt-10">
+      <Icon icon="mdi:magnify" class="text-2xl text-gray-400 ml-3"/>
+      <input :placeholder="$t('index.search_placeholder')" class="px-4 h-10 bg-transparent flex-1 outline-none text-base" v-model="keywords" />
+      <div class="px-4 text-base">{{ chains.length }}/{{ dashboard.length }}</div>
+    </div>
 
     <div
       class="grid grid-cols-2 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"

@@ -10,39 +10,42 @@ export interface AccountEntry {
   endpoint?: string,
   delegation?: Coin,
   balances?: Coin[],
+  compatiable?: boolean,
+}
+
+export interface LocalKey {
+  cosmosAddress: string, hdPath: string
 }
 
 export function scanLocalKeys() {
-    const connected = [] as {cosmosAddress: string, hdPath: string}[]
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i)
-      if (key?.startsWith("m/44")) {
-        const wallet = JSON.parse(localStorage.getItem(key) || "")
-        if (wallet) {
-          connected.push(wallet)
-        }
+  const connected = [] as LocalKey[]
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i)
+    if (key?.startsWith("m/44")) {
+      const wallet = JSON.parse(localStorage.getItem(key) || "")
+      if (wallet) {
+        connected.push(wallet)
       }
     }
-    return connected
   }
+  return connected
+}
 
-  
-export function scanCompatibleAccounts() {
-    const dashboard = useDashboard()
-    const available = [] as AccountEntry[]
-    scanLocalKeys().forEach(wallet => {
-      Object.values(dashboard.chains).forEach(chain => {
-        if (wallet.hdPath.indexOf(chain.coinType) === 6) {
-          const { data } = fromBech32(wallet.cosmosAddress)
-          available.push({
-            chainName: chain.chainName,
-            logo: chain.logo,
-            address: toBech32(chain.bech32Prefix, data),
-            coinType: chain.coinType,
-            endpoint: chain.endpoints.rest?.at(0)?.address
-          })
-        }
+export function scanCompatibleAccounts(keys: LocalKey[]) {
+  const dashboard = useDashboard()
+  const available = [] as AccountEntry[]
+  keys.forEach(wallet => {
+    Object.values(dashboard.chains).forEach(chain => {
+      const { data } = fromBech32(wallet.cosmosAddress)
+      available.push({
+        chainName: chain.chainName,
+        logo: chain.logo,
+        address: toBech32(chain.bech32Prefix, data),
+        coinType: chain.coinType,
+        compatiable: wallet.hdPath.indexOf(chain.coinType) > 0,
+        endpoint: chain.endpoints.rest?.at(0)?.address
       })
     })
-    return available
-  }
+  })
+  return available
+}
