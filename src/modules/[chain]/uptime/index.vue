@@ -128,9 +128,11 @@ function changeTab(v: string) {
                 <input type="text" v-model="keyword" placeholder="Keywords to filter validators"
                     class="input input-sm w-full flex-1 border border-gray-200 dark:border-gray-600" />
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-4 mt-4" :class="tab === '2' ? '' : 'hidden'">
+            <!-- grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-4 mt-4 -->
+            <div class="flex flex-row flex-wrap gap-x-4 mt-4" :class="tab === '2' ? '' : 'hidden'">
                 <div v-for="({ v, signing, hex }, i) in list" :key="i">
-                    <div class="flex items-center justify-between py-0">
+                    <!-- flex items-center justify-between py-0 -->
+                    <div class="flex items-center justify-between py-0 w-72">
                         <label class="truncate text-sm">
                             <span class="ml-1 text-black dark:text-white">{{ i + 1 }}.{{ v.description.moniker }}</span>
                         </label>
