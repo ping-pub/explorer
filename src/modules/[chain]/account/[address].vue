@@ -312,7 +312,7 @@ loadAccount(props.address);
           >Withdraw</label
         >
       </div>
-      <div class="overdflow-x-auto">
+      <div class="overflow-x-auto">
         <table class="table w-full text-sm table-zebra">
           <thead>
             <tr>
