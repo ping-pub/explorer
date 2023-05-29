@@ -1,6 +1,7 @@
 <template>
+  <div class="h-10 bg-gray-100 dark:bg-[#171d30] w-full"></div>
   <footer
-    class="footer items-center pt-4  pb-8 text-sm bg-gray-100 dark:bg-[#171d30] sticky bottom-0 z-10 mt-8"
+    class="footer items-center h-10 text-sm bg-gray-100 dark:bg-[#171d30] fixed bottom-0 pr-14 pl-4 z-10"
   >
     <div class="items-center grid-flow-col">
       &copy;
