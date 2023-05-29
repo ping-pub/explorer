@@ -1,5 +1,7 @@
 <template>
-  <footer class="footer items-center p-4 text-sm mb-4">
+  <footer
+    class="footer items-center pt-4  pb-8 text-sm bg-gray-100 dark:bg-[#171d30] sticky bottom-0 z-10 mt-8"
+  >
     <div class="items-center grid-flow-col">
       &copy;
       {{ new Date().getFullYear() }}
@@ -31,6 +33,4 @@
       >
     </div>
   </footer>
-  
 </template>
-
