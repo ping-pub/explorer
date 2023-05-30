@@ -80,10 +80,10 @@ const tipMsg = computed(() => {
           to="/wallet/portfolio"
           >Portfolio</RouterLink
         >
-        <div v-if="walletStore.currentAddress" class="divider mt-1 mb-1"></div>
+        <div v-if="walletStore.currentAddress" class="divider mt-1 mb-1 hidden md:block"></div>
         <a
           v-if="walletStore.currentAddress"
-          class="py-1 px-1 block md:!py-2 md:!px-2 hover:bg-gray-100 dark:hover:bg-[#353f5a] rounded cursor-pointer"
+          class="hidden md:block py-1 px-1 md:!py-2 md:!px-2 hover:bg-gray-100 dark:hover:bg-[#353f5a] rounded cursor-pointer"
           @click="walletStore.disconnect()"
           >Disconnect</a
         >
