@@ -164,7 +164,9 @@ loadAccount(props.address);
                 <div class="text-sm font-semibold">
                   {{ format.formatToken(balanceItem) }}
                 </div>
-                <div class="text-xs">≈${{ 0 }}</div>
+                <div class="text-xs">
+                  ≈${{ format.tokenValue(balanceItem) }}
+                </div>
               </div>
               <div
                 class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
@@ -193,7 +195,9 @@ loadAccount(props.address);
                 <div class="text-sm font-semibold">
                   {{ format.formatToken(delegationItem?.balance) }}
                 </div>
-                <div class="text-xs">≈${{ 0 }}</div>
+                <div class="text-xs">
+                  ≈${{ format.tokenValue(delegationItem?.balance) }}
+                </div>
               </div>
               <div
                 class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
@@ -231,7 +235,7 @@ loadAccount(props.address);
                 <div class="text-sm font-semibold">
                   {{ format.formatToken(rewardItem) }}
                 </div>
-                <div class="text-xs">≈${{ 0 }}</div>
+                <div class="text-xs">≈${{ format.tokenValue(rewardItem) }}</div>
               </div>
               <div
                 class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
@@ -265,7 +269,14 @@ loadAccount(props.address);
                     })
                   }}
                 </div>
-                <div class="text-xs">≈${{ 0 }}</div>
+                <div class="text-xs">
+                  ≈${{
+                    format.tokenValue({
+                      amount: String(unbondingTotal),
+                      denom: stakingStore.params.bond_denom,
+                    })
+                  }}
+                </div>
               </div>
               <div
                 class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
@@ -301,7 +312,7 @@ loadAccount(props.address);
           >Withdraw</label
         >
       </div>
-      <div class="overdflow-x-auto">
+      <div class="overflow-x-auto">
         <table class="table w-full text-sm table-zebra">
           <thead>
             <tr>
@@ -460,8 +471,8 @@ loadAccount(props.address);
               </td>
               <td class="truncate text-primary py-3" style="max-width: 200px">
                 <RouterLink :to="`/${chain}/tx/${v.txhash}`">
-                {{ v.txhash }}
-              </RouterLink>
+                  {{ v.txhash }}
+                </RouterLink>
               </td>
               <td class="flex items-center py-3">
                 <div class="mr-2">

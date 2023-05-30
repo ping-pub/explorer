@@ -10,7 +10,7 @@ const baseStore = useBaseStore();
 
 const expenseRationChartConfig = computed(() => {
     const theme = baseStore.theme;
-    getDonutChartConfig(theme, props.labels);
+    getDonutChartConfig(theme, props?.labels);
 });
 </script>
 
