@@ -263,7 +263,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
         </a>
       </div>
     </div>
-    <div class="xl:!ml-64 px-5 pt-4">
+    <div class="xl:!ml-64 px-5 pt-4 min-h-screen">
       <!-- header -->
       <div
         class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10 shadow"
@@ -295,5 +295,6 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
 
       <newFooter />
     </div>
+   
   </div>
 </template>
