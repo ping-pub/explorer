@@ -11,6 +11,7 @@ const baseStore = useBaseStore();
 const conn = ref({} as Connection);
 const clientState = ref({} as { client_id: string; client_state: ClientState });
 const channels = ref([] as Channel[]);
+
 onMounted(() => {
   if (props.connection_id) {
     chainStore.rpc.getIBCConnectionsById(props.connection_id).then((x) => {
@@ -41,15 +42,13 @@ function color(v: string) {
 }
 </script>
 <template>
-  <div>
-    <div class="px-4 pt-3 pb-4 bg-base-100 rounded mb-4 shadow py-24 sm:!py-32">
+  <div class="card card-bordered border-primary ml-4 rounded-t-md">
+    <div class="px-4 pt-3 pb-4 bg-base-100 rounded mb-4 shadow ">
       <div class="mx-auto max-w-7xl px-6 lg:!px-8">
-        <dl class="grid grid-cols-1 gap-x-8 text-center lg:!grid-cols-3">
+        <dl class="grid grid-cols-1 gap-x-6 text-center lg:!grid-cols-3">
           <div class="mx-auto flex items-center">
             <div>
-              <div
-                class="order-first text-3xl font-semibold tracking-tight text-main mb-1"
-              >
+              <div class="order-first text-3xl font-semibold tracking-tight text-main mb-1">
                 {{ baseStore.latest?.block?.header?.chain_id }}
               </div>
               <div class="text-sm text-gray-500 dark:text-gray-400">
@@ -60,18 +59,13 @@ function color(v: string) {
           <div class="mx-auto flex items-center">
             <div>
               <Icon icon="mdi:arrow-left-right" class="text-4xl mx-auto" />
-              <div
-                class="bg-success w-24 h-1 rounded-sm mt-1 mb-3 opacity-60"
-              ></div>
               <div class="text-sm text-gray-500 dark:text-gray-400">
                 {{ conn.state }}
               </div>
             </div>
           </div>
           <div class="mx-auto">
-            <div
-              class="order-first text-3xl font-semibold tracking-tight text-main mb-2"
-            >
+            <div class="order-first text-3xl font-semibold tracking-tight text-main mb-2">
               {{ clientState.client_state?.chain_id }}
             </div>
             <div class="text-sm text-gray-500 dark:text-gray-400">
@@ -138,50 +132,45 @@ function color(v: string) {
       </div>
     </div>
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow overflow-hidden">
       <h2 class="card-title">Channels</h2>
-      <div class="overflow-x-auto"></div>
-      <table class="table w-full mt-4">
-        <thead>
-          <tr>
-            <th style="position: relative; z-index: 2">Channel Id</th>
-            <th>Port Id</th>
-            <th>Counterparty</th>
-            <th>Hops</th>
-            <th>Version</th>
-            <th>Ordering</th>
-            <th>State</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="v in channels">
-            <td>
-              <a href="#" @click="loadChannel(v.channel_id, v.port_id)">{{
-                v.channel_id
-              }}</a>
-            </td>
-            <td>{{ v.port_id }}</td>
-            <td>
-              {{ v.counterparty?.port_id }}/{{ v.counterparty?.channel_id }}
-            </td>
-            <td>{{ v.connection_hops.join(', ') }}</td>
-            <td>{{ v.version }}</td>
-            <td>{{ v.ordering }}</td>
-            <td>
-              <div
-                class="text-xs truncate relative py-2 px-4 rounded-full w-fit"
-                :class="`text-${color(v.state)}`"
-              >
-                <span
-                  class="inset-x-0 inset-y-0 opacity-10 absolute"
-                  :class="`bg-${color(v.state)}`"
-                ></span>
-                {{ v.state }}
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="overflow-auto">
+        <table class="table w-full mt-4">
+          <thead>
+            <tr>
+              <th style="position: relative; z-index: 2">Channel Id</th>
+              <th>Port Id</th>
+              <th>Counterparty</th>
+              <th>Hops</th>
+              <th>Version</th>
+              <th>Ordering</th>
+              <th>State</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="v in channels">
+              <td>
+                <a href="#" @click="loadChannel(v.channel_id, v.port_id)">{{
+                  v.channel_id
+                }}</a>
+              </td>
+              <td>{{ v.port_id }}</td>
+              <td>
+                {{ v.counterparty?.port_id }}/{{ v.counterparty?.channel_id }}
+              </td>
+              <td>{{ v.connection_hops.join(', ') }}</td>
+              <td>{{ v.version }}</td>
+              <td>{{ v.ordering }}</td>
+              <td>
+                <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit" :class="`text-${color(v.state)}`">
+                  <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${color(v.state)}`"></span>
+                  {{ v.state }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
