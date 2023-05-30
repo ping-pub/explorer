@@ -152,7 +152,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
           :to="item?.to"
           v-if="item?.title && !item?.children?.length && item?.to"
           @click="sidebarShow = false"
-          class=" cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <Icon
             v-if="item?.icon?.icon"
@@ -210,7 +210,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
         <a
           href="https://becole.com"
           target="_blank"
-          class="py-2 px-4 flex items-center  cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <img
             src="https://becole.com/static/logo/logo_becole.png"

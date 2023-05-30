@@ -20,7 +20,7 @@ const hdPath = computed(() => {
   <div>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
       <h2 class="card-title">Initial Setting</h2>
-      <div class="my-4 grid grid-flow-col auto-cols-max ">
+      <div class="my-4 grid grid-flow-col auto-cols-max  overflow-auto">
         <div class="form-control">
             <div class="input-group">
                 <span>Endpoint</span>

@@ -216,8 +216,9 @@ const color = computed(() => {
     </div>
 
     <div class="bg-base-100 rounded mt-4 shadow">
-      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
-        {{ walletStore.currentAddress || 'Not Connected' }}
+      <div class="flex items-center px-4 pt-4 pb-2 text-lg font-semibold text-main">
+        <span class="truncate" >{{ walletStore.currentAddress || 'Not Connected' }}</span>
+        
         <RouterLink v-if="walletStore.currentAddress"
           class="float-right text-sm cursor-pointert link link-primary no-underline font-medium"
           :to="`/${chain}/account/${walletStore.currentAddress}`">More</RouterLink>
