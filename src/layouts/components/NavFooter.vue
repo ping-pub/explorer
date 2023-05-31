@@ -1,8 +1,8 @@
 <template>
-  <div class="h-10 bg-gray-100 dark:bg-[#171d30] w-full"></div>
+  <div class="h-12 bg-gray-100 dark:bg-[#171d30] w-full"></div>
   <!-- footer -->
   <footer
-    class="flex sm:!flex-row flex-col items-center h-10 text-sm bg-gray-100 dark:bg-[#171d30] py-2 z-10 w-full"
+    class="flex sm:!flex-row flex-col items-center h-12 text-sm bg-gray-100 dark:bg-[#171d30] py-2 z-10 w-full"
   >
     <div class="flex flex-1">
       &copy;&nbsp;
