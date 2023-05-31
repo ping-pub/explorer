@@ -54,7 +54,7 @@ function color(v: string) {
                   <div class="text-xs truncate relative py-[2px] px-3 rounded-full w-fit"
                     :class="`text-${color(v.state)}`">
                     <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${color(v.state)}`"></span>
-                    {{ v.state }}
+                    {{ String(v.state).replace("STATE_", "") }}
                   </div>
                 </td>
               </tr>
