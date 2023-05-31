@@ -18,7 +18,7 @@
       >
     </div>
     <div
-      class="grid-flow-col gap-4 md:!place-self-end lg:!place-self-center hidden sm:!grid"
+      class="grid-flow-col gap-4 sm:!place-self-center hidden sm:!grid"
     >
       <a
         class="link link-primary no-underline"
