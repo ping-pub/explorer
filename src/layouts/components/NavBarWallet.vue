@@ -53,7 +53,7 @@ const tipMsg = computed(() => {
         v-if="!walletStore?.currentAddress"
         for="PingConnectWallet"
         class="btn btn-sm btn-primary"
-        ><Icon icon="mdi:wallet" /><span class="ml-1 hidden md:block"
+        ><Icon icon="mdi:wallet" /><span class="ml-1 block"
           >Connect Wallet</span
         ></label
       >
@@ -80,10 +80,10 @@ const tipMsg = computed(() => {
           to="/wallet/portfolio"
           >Portfolio</RouterLink
         >
-        <div v-if="walletStore.currentAddress" class="divider mt-1 mb-1 hidden md:block"></div>
+        <div v-if="walletStore.currentAddress" class="divider mt-1 mb-1"></div>
         <a
           v-if="walletStore.currentAddress"
-          class="hidden md:block py-1 px-1 md:!py-2 md:!px-2 hover:bg-gray-100 dark:hover:bg-[#353f5a] rounded cursor-pointer"
+          class="block py-1 px-1 md:!py-2 md:!px-2 hover:bg-gray-100 dark:hover:bg-[#353f5a] rounded cursor-pointer"
           @click="walletStore.disconnect()"
           >Disconnect</a
         >

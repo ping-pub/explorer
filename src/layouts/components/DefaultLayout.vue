@@ -263,7 +263,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
         </a>
       </div>
     </div>
-    <div class="xl:!ml-64 px-5 pt-4 min-h-screen">
+    <div class="xl:!ml-64 px-5 pt-4">
       <!-- header -->
       <div
         class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10 shadow"
@@ -287,14 +287,15 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
       </div>
 
       <!-- 👉 Pages -->
-      <RouterView v-slot="{ Component }">
-        <Transition mode="out-in">
-          <Component :is="Component" />
-        </Transition>
-      </RouterView>
+      <div style="min-height: calc(100vh - 180px);">
+        <RouterView v-slot="{ Component }">
+          <Transition mode="out-in">
+            <Component :is="Component" />
+          </Transition>
+        </RouterView>
+      </div>
 
       <newFooter />
     </div>
-   
   </div>
 </template>
