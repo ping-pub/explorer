@@ -95,6 +95,10 @@ const color = computed(() => {
       return 'text-red-600';
   }
 });
+
+function updateState() {
+  walletStore.loadMyAsset()
+}
 </script>
 
 <template>
@@ -216,9 +220,8 @@ const color = computed(() => {
     </div>
 
     <div class="bg-base-100 rounded mt-4 shadow">
-      <div class="flex items-center px-4 pt-4 pb-2 text-lg font-semibold text-main">
+      <div class="flex justify-between px-4 pt-4 pb-2 text-lg font-semibold text-main">
         <span class="truncate" >{{ walletStore.currentAddress || 'Not Connected' }}</span>
-        
         <RouterLink v-if="walletStore.currentAddress"
           class="float-right text-sm cursor-pointert link link-primary no-underline font-medium"
           :to="`/${chain}/account/${walletStore.currentAddress}`">More</RouterLink>
@@ -295,11 +298,11 @@ const color = computed(() => {
               <td>
                 <div>
                   <label for="delegate" class="btn !btn-xs !btn-primary btn-ghost rounded-sm mr-2"
-                    @click="dialog.open('delegate', { validator_address: item.delegation.validator_address })">
+                    @click="dialog.open('delegate', { validator_address: item.delegation.validator_address }, updateState)">
                     Delegate
                   </label>
                   <label for="withdraw" class="btn !btn-xs !btn-primary btn-ghost rounded-sm"
-                    @click="dialog.open('withdraw', { validator_address: item.delegation.validator_address })">
+                    @click="dialog.open('withdraw', { validator_address: item.delegation.validator_address }, updateState)">
                     Withdraw Rewards
                   </label>
                 </div>
@@ -311,9 +314,9 @@ const color = computed(() => {
 
       <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
         <label for="PingTokenConvert" class="btn btn-primary text-white">Swap</label>
-        <label for="send" class="btn !bg-yes !border-yes text-white" @click="dialog.open('send', {})">Send</label>
+        <label for="send" class="btn !bg-yes !border-yes text-white" @click="dialog.open('send', {}, updateState)">Send</label>
         <label for="delegate" class="btn !bg-info !border-info text-white"
-          @click="dialog.open('delegate', {})">Delegate</label>
+          @click="dialog.open('delegate', {}, updateState)">Delegate</label>
         <RouterLink to="/wallet/receive" class="btn !bg-info !border-info text-white hidden">Receive</RouterLink>
       </div>
       <Teleport to="body">

@@ -9,7 +9,7 @@ import {
 import { useDistributionStore } from '@/stores/useDistributionStore';
 import { useMintStore } from '@/stores/useMintStore';
 import { useStakingStore } from '@/stores/useStakingStore';
-import type { GovProposal, PaginatedProposals, Tally } from '@/types';
+import type { Tally } from '@/types';
 import numeral from 'numeral';
 import { defineStore } from 'pinia';
 
