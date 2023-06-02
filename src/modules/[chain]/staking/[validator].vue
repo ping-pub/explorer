@@ -342,12 +342,15 @@ const tipMsg = computed(() => {
       <div class="h-100">
         <CommissionRate :commission="v.commission"></CommissionRate>
       </div>
-      <div class="h-100 bg-base-100 rounded shadow relative">
+      <div class="h-100 bg-base-100 rounded shadow relative overflow-auto">
         <div class="text-lg font-semibold text-main px-4 pt-4">
           Commissions & Rewards
         </div>
-        <div class="px-4 mt-1">
-          <div class="overflow-auto" style="max-height: 280px">
+        <div
+          class="px-4 mt-1 flex flex-col justify-between pb-4"
+          style="height: calc(100% - 50px)"
+        >
+          <div class="overflow-auto flex-1">
             <div class="text-sm mb-2">Commissions</div>
             <div
               v-for="(i, k) in commission"
@@ -368,7 +371,7 @@ const tipMsg = computed(() => {
               {{ format.formatToken2(i) }}
             </div>
           </div>
-          <div class="absolute bottom-6 left-0 right-0 px-4">
+          <div class="">
             <label
               for="withdraw_commission"
               class="btn btn-primary w-full"
@@ -382,7 +385,7 @@ const tipMsg = computed(() => {
           </div>
         </div>
       </div>
-      <div class="h-100 bg-base-100 rounded shadow">
+      <div class="h-100 bg-base-100 rounded shadow overflow-x-auto">
         <div class="px-4 pt-4 mb-2 text-main font-lg font-semibold">
           Addresses
         </div>
