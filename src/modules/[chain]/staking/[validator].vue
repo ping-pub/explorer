@@ -389,7 +389,7 @@ const tipMsg = computed(() => {
         <div class="px-4 pt-4 mb-2 text-main font-lg font-semibold">
           Addresses
         </div>
-        <div class="px-4">
+        <div class="px-4 pb-4">
           <div class="mb-3">
             <div class="text-sm">Account</div>
             <RouterLink
