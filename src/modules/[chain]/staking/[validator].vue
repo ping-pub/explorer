@@ -135,6 +135,29 @@ onMounted(() => {
     });
   }
 });
+let showCopyToast = ref(0);
+const copyWebsite = async (url: string) => {
+  if (!url) {
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    showCopyToast.value = 1;
+    setTimeout(() => {
+      showCopyToast.value = 0;
+    }, 1000);
+  } catch (err) {
+    showCopyToast.value = 2;
+    setTimeout(() => {
+      showCopyToast.value = 0;
+    }, 1000);
+  }
+};
+const tipMsg = computed(() => {
+  return showCopyToast.value === 2
+    ? { class: 'error', msg: 'Copy Error!' }
+    : { class: 'success', msg: 'Copy Success!' };
+});
 </script>
 <template>
   <div>
@@ -145,8 +168,16 @@ onMounted(() => {
             <div class="avatar mr-4 relative w-24 rounded-lg overflow-hidden">
               <div class="w-24 rounded-lg absolute opacity-10"></div>
               <div class="w-24 rounded-lg">
-                <img v-if="avatars[identity] !== 'undefined'" v-lazy="logo(identity)" class="object-contain" />
-                <Icon v-else class="text-4xl" :icon="`mdi-help-circle-outline`" />
+                <img
+                  v-if="avatars[identity] !== 'undefined'"
+                  v-lazy="logo(identity)"
+                  class="object-contain"
+                />
+                <Icon
+                  v-else
+                  class="text-4xl"
+                  :icon="`mdi-help-circle-outline`"
+                />
               </div>
             </div>
             <div class="mx-2">
@@ -154,38 +185,59 @@ onMounted(() => {
               <div class="text-sm mb-4">
                 {{ v.description?.identity || '-' }}
               </div>
-              <label for="delegate" class="btn btn-primary btn-sm w-full" @click="
-                dialog.open('delegate', {
-                  validator_address: v.operator_address,
-                })
-                ">Delegate</label>
+              <label
+                for="delegate"
+                class="btn btn-primary btn-sm w-full"
+                @click="
+                  dialog.open('delegate', {
+                    validator_address: v.operator_address,
+                  })
+                "
+                >Delegate</label
+              >
             </div>
           </div>
           <div class="m-4 text-sm">
-            <p class="text-sm mb-3">About Us</p>
+            <p class="text-sm mb-3 font-medium">About Us</p>
             <div class="card-list">
               <div class="flex items-center mb-2">
                 <Icon icon="mdi-web" class="text-xl mr-1" />
-                <span>Website: </span>
-                <span> {{ v.description?.website || '-' }}</span>
+                <span class="font-bold mr-2">Website: </span>
+                <span
+                  :class="
+                    v?.description?.website
+                      ? 'cursor-pointer'
+                      : 'cursor-default'
+                  "
+                  @click="copyWebsite(v.description?.website || '')"
+                >
+                  {{ v.description?.website || '-' }}</span
+                >
+                <Icon
+                  icon="bxs:copy"
+                  class="text-xl ml-4 cursor-pointer"
+                  v-show="v?.description?.website"
+                  @click="copyWebsite(v.description?.website || '')"
+                />
               </div>
               <div class="flex items-center">
                 <Icon icon="mdi-email-outline" class="text-xl mr-1" />
-                <span>Contact: </span>
+                <span class="font-bold mr-2">Contact: </span>
                 <span> {{ v.description?.security_contact }}</span>
               </div>
             </div>
-            <p class="text-sm mt-4 mb-3">Validator Status</p>
+            <p class="text-sm mt-4 mb-3 font-medium">Validator Status</p>
             <div class="card-list">
               <div class="flex items-center mb-2">
                 <Icon icon="mdi-shield-account-outline" class="text-xl mr-1" />
-                <span>Status: </span><span>
+                <span class="font-bold mr-2">Status: </span
+                ><span>
                   {{ String(v.status).replace('BOND_STATUS_', '') }}
                 </span>
               </div>
               <div class="flex items-center">
                 <Icon icon="mdi-shield-alert-outline" class="text-xl mr-1" />
-                <span>Jailed: </span>
+                <span class="font-bold mr-2">Jailed: </span>
                 <span> {{ v.jailed || '-' }} </span>
               </div>
             </div>
@@ -194,7 +246,10 @@ onMounted(() => {
         <div class="flex-1">
           <div class="flex flex-col justify-between">
             <div class="flex mb-2">
-              <div class="flex items-center justify-center rounded w-10 h-10" style="border: 1px solid #666">
+              <div
+                class="flex items-center justify-center rounded w-10 h-10"
+                style="border: 1px solid #666"
+              >
                 <Icon icon="mdi-coin" class="text-3xl" />
               </div>
               <div class="ml-3 flex flex-col justify-center">
@@ -210,7 +265,10 @@ onMounted(() => {
               </div>
             </div>
             <div class="flex mb-2">
-              <div class="flex items-center justify-center rounded w-10 h-10" style="border: 1px solid #666">
+              <div
+                class="flex items-center justify-center rounded w-10 h-10"
+                style="border: 1px solid #666"
+              >
                 <Icon icon="mdi-percent" class="text-3xl" />
               </div>
               <div class="ml-3 flex flex-col justify-center">
@@ -222,7 +280,10 @@ onMounted(() => {
             </div>
 
             <div class="flex mb-2">
-              <div class="flex items-center justify-center rounded w-10 h-10" style="border: 1px solid #666">
+              <div
+                class="flex items-center justify-center rounded w-10 h-10"
+                style="border: 1px solid #666"
+              >
                 <Icon icon="mdi-account-tie" class="text-3xl" />
               </div>
 
@@ -234,7 +295,10 @@ onMounted(() => {
               </div>
             </div>
             <div class="flex mb-2">
-              <div class="flex items-center justify-center rounded w-10 h-10" style="border: 1px solid #666">
+              <div
+                class="flex items-center justify-center rounded w-10 h-10"
+                style="border: 1px solid #666"
+              >
                 <Icon icon="mdi-finance" class="text-3xl" />
               </div>
               <div class="ml-3 flex flex-col justify-center">
@@ -244,7 +308,10 @@ onMounted(() => {
             </div>
 
             <div class="flex mb-2">
-              <div class="flex items-center justify-center rounded w-10 h-10" style="border: 1px solid #666">
+              <div
+                class="flex items-center justify-center rounded w-10 h-10"
+                style="border: 1px solid #666"
+              >
                 <Icon icon="mdi-stairs-up" class="text-3xl" />
               </div>
               <div class="ml-3 flex flex-col justify-center">
@@ -254,7 +321,10 @@ onMounted(() => {
             </div>
 
             <div class="flex mb-2">
-              <div class="flex items-center justify-center rounded w-10 h-10" style="border: 1px solid #666">
+              <div
+                class="flex items-center justify-center rounded w-10 h-10"
+                style="border: 1px solid #666"
+              >
                 <Icon icon="mdi-clock" class="text-3xl" />
               </div>
               <div class="ml-3 flex flex-col justify-center">
@@ -279,21 +349,36 @@ onMounted(() => {
         <div class="px-4 mt-1">
           <div class="overflow-auto" style="max-height: 280px">
             <div class="text-sm mb-2">Commissions</div>
-            <div v-for="(i, k) in commission" :key="`reward-${k}`" color="info" label variant="outlined"
-              class="mr-1 mb-1 badge text-xs">
+            <div
+              v-for="(i, k) in commission"
+              :key="`reward-${k}`"
+              color="info"
+              label
+              variant="outlined"
+              class="mr-1 mb-1 badge text-xs"
+            >
               {{ format.formatToken2(i) }}
             </div>
             <div class="text-sm mb-2 mt-2">Outstanding Rewards</div>
-            <div v-for="(i, k) in rewards" :key="`reward-${k}`" class="mr-1 mb-1 badge text-xs">
+            <div
+              v-for="(i, k) in rewards"
+              :key="`reward-${k}`"
+              class="mr-1 mb-1 badge text-xs"
+            >
               {{ format.formatToken2(i) }}
             </div>
           </div>
           <div class="absolute bottom-6 left-0 right-0 px-4">
-            <label for="withdraw_commission" class="btn btn-primary w-full" @click="
-              dialog.open('withdraw_commission', {
-                validator_address: v.operator_address,
-              })
-              ">Withdraw</label>
+            <label
+              for="withdraw_commission"
+              class="btn btn-primary w-full"
+              @click="
+                dialog.open('withdraw_commission', {
+                  validator_address: v.operator_address,
+                })
+              "
+              >Withdraw</label
+            >
           </div>
         </div>
       </div>
@@ -304,7 +389,10 @@ onMounted(() => {
         <div class="px-4">
           <div class="mb-3">
             <div class="text-sm">Account</div>
-            <RouterLink class="text-xs text-primary" :to="`/${chain}/account/${addresses.account}`">
+            <RouterLink
+              class="text-xs text-primary"
+              :to="`/${chain}/account/${addresses.account}`"
+            >
               {{ addresses.account }}
             </RouterLink>
           </div>
@@ -354,7 +442,11 @@ onMounted(() => {
                   <span class="mr-2">{{
                     format.messages(item.tx.body.messages)
                   }}</span>
-                  <Icon v-if="item.code === 0" icon="mdi-check" class="text-yes" />
+                  <Icon
+                    v-if="item.code === 0"
+                    icon="mdi-check"
+                    class="text-yes"
+                  />
                   <Icon v-else icon="mdi-multiply" class="text-no" />
                 </div>
               </td>
@@ -362,6 +454,20 @@ onMounted(() => {
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+    <div class="toast" v-show="showCopyToast === 1">
+      <div class="alert alert-success">
+        <div class="text-xs md:!text-sm">
+          <span>{{ tipMsg.msg }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="toast" v-show="showCopyToast === 2">
+      <div class="alert alert-error">
+        <div class="text-xs md:!text-sm">
+          <span>{{ tipMsg.msg }}</span>
+        </div>
       </div>
     </div>
   </div>
