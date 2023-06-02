@@ -275,13 +275,12 @@ const result = ref('');
                   </label>
                 </div>
               </div>
-
-              <VTextarea v-model="query" label="Query String" class="my-2" />
-              <VTextarea v-model="result" label="Result" />
+              <textarea v-model="query" placeholder="Query String, {}" label="Query String" class="my-2 textarea textarea-bordered w-full" />
+              <textarea v-model="result" readonly placeholder="Query Result" label="Result" class="textarea textarea-bordered w-full" />
             </div>
-            <div class="mt-4 mb-4">
+            <div class="mt-4 mb-4 text-center">
               <button
-                class="btn !btn-yes !border-yes px-4 text-white"
+                class="btn btn-primary px-4 text-white"
                 @click="queryContract()"
               >
                 Query Contract

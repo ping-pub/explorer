@@ -87,7 +87,11 @@ function loadAccount(address: string) {
     });
   });
 }
-loadAccount(props.address);
+
+
+function updateEvent() {
+  loadAccount(props.address);
+}
 </script>
 <template>
   <div v-if="account">
@@ -130,7 +134,7 @@ loadAccount(props.address);
             <label
               for="send"
               class="btn btn-primary btn-sm mr-2"
-              @click="dialog.open('send', {})"
+              @click="dialog.open('send', {}, updateEvent)"
               >Send</label
             >
             <label
@@ -139,7 +143,7 @@ loadAccount(props.address);
               @click="
                 dialog.open('transfer', {
                   chain_name: blockchain.current?.prettyName,
-                })
+                }, updateEvent)
               "
               >transfer</label
             >
@@ -302,13 +306,13 @@ loadAccount(props.address);
         <label
           for="delegate"
           class="btn btn-primary btn-sm mr-2"
-          @click="dialog.open('delegate', {})"
+          @click="dialog.open('delegate', {}, updateEvent)"
           >Delegate</label
         >
         <label
           for="withdraw"
           class="btn btn-primary btn-sm"
-          @click="dialog.open('withdraw', {})"
+          @click="dialog.open('withdraw', {}, updateEvent)"
           >Withdraw</label
         >
       </div>
@@ -353,7 +357,7 @@ loadAccount(props.address);
                     @click="
                       dialog.open('delegate', {
                         validator_address: v.delegation.validator_address,
-                      })
+                      }, updateEvent)
                     "
                     >delegate</label
                   >
@@ -363,7 +367,7 @@ loadAccount(props.address);
                     @click="
                       dialog.open('redelegate', {
                         validator_address: v.delegation.validator_address,
-                      })
+                      }, updateEvent)
                     "
                     >Redelegate</label
                   >
@@ -373,7 +377,7 @@ loadAccount(props.address);
                     @click="
                       dialog.open('unbond', {
                         validator_address: v.delegation.validator_address,
-                      })
+                      }, updateEvent)
                     "
                     >Unbond</label
                   >

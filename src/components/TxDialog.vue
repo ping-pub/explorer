@@ -8,5 +8,7 @@ const store = useTxDialog();
     :sender="store.sender"
     :endpoint="store.endpoint"
     :params="store.params"
+    @view="store.view"
+    @confirmed="store.confirmed"
   ></ping-tx-dialog>
 </template>
