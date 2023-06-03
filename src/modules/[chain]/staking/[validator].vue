@@ -203,22 +203,16 @@ const tipMsg = computed(() => {
               <div class="flex items-center mb-2">
                 <Icon icon="mdi-web" class="text-xl mr-1" />
                 <span class="font-bold mr-2">Website: </span>
-                <span
+                <a
+                  :href="v?.description?.website || '#'"
                   :class="
                     v?.description?.website
                       ? 'cursor-pointer'
                       : 'cursor-default'
                   "
-                  @click="copyWebsite(v.description?.website || '')"
                 >
-                  {{ v.description?.website || '-' }}</span
-                >
-                <Icon
-                  icon="bxs:copy"
-                  class="text-xl ml-4 cursor-pointer"
-                  v-show="v?.description?.website"
-                  @click="copyWebsite(v.description?.website || '')"
-                />
+                  {{ v.description?.website || '-' }}
+                </a>
               </div>
               <div class="flex items-center">
                 <Icon icon="mdi-email-outline" class="text-xl mr-1" />
@@ -287,7 +281,7 @@ const tipMsg = computed(() => {
                 <Icon icon="mdi-account-tie" class="text-3xl" />
               </div>
 
-              <div class="ml-3 flex flex-column justify-center">
+              <div class="ml-3 flex flex-col">
                 <h4>
                   {{ v.min_self_delegation }} {{ staking.params.bond_denom }}
                 </h4>
@@ -312,7 +306,7 @@ const tipMsg = computed(() => {
                 class="flex items-center justify-center rounded w-10 h-10"
                 style="border: 1px solid #666"
               >
-                <Icon icon="mdi-stairs-up" class="text-3xl" />
+                <Icon icon="mdi:arrow-down-bold-circle-outline" class="text-3xl" />
               </div>
               <div class="ml-3 flex flex-col justify-center">
                 <h4>{{ v.unbonding_height }}</h4>
@@ -328,7 +322,8 @@ const tipMsg = computed(() => {
                 <Icon icon="mdi-clock" class="text-3xl" />
               </div>
               <div class="ml-3 flex flex-col justify-center">
-                <h4>{{ format.toDay(v.unbonding_time, 'from') }}</h4>
+                <h4 v-if="v.unbonding_time && !v.unbonding_time.startsWith('1970')">{{ format.toDay(v.unbonding_time, 'from') }}</h4>
+                <h4 v-else>-</h4>
                 <span class="text-sm">Unbonding Time</span>
               </div>
             </div>
@@ -339,10 +334,10 @@ const tipMsg = computed(() => {
     </div>
 
     <div class="mt-3 grid grid-cols-1 md:!grid-cols-3 gap-4">
-      <div class="h-100">
+      <div>
         <CommissionRate :commission="v.commission"></CommissionRate>
       </div>
-      <div class="h-100 bg-base-100 rounded shadow relative overflow-auto">
+      <div class="bg-base-100 rounded shadow relative overflow-auto">
         <div class="text-lg font-semibold text-main px-4 pt-4">
           Commissions & Rewards
         </div>
@@ -385,13 +380,20 @@ const tipMsg = computed(() => {
           </div>
         </div>
       </div>
-      <div class="h-100 bg-base-100 rounded shadow overflow-x-auto">
+      <div class="bg-base-100 rounded shadow overflow-x-auto">
         <div class="px-4 pt-4 mb-2 text-main font-lg font-semibold">
           Addresses
         </div>
         <div class="px-4 pb-4">
           <div class="mb-3">
-            <div class="text-sm">Account</div>
+            <div class="text-sm flex">Account 
+              <Icon
+                  icon="mdi:content-copy"
+                  class="ml-2 cursor-pointer"
+                  v-show="addresses.account"
+                  @click="copyWebsite(addresses.account || '')"
+                />
+              </div>
             <RouterLink
               class="text-xs text-primary"
               :to="`/${chain}/account/${addresses.account}`"
@@ -400,18 +402,49 @@ const tipMsg = computed(() => {
             </RouterLink>
           </div>
           <div class="mb-3">
-            <div class="text-sm">Operator Address</div>
+            <div class="text-sm flex">Operator Address
+              <Icon
+                  icon="mdi:content-copy"
+                  class="ml-2 cursor-pointer"
+                  v-show="v.operator_address"
+                  @click="copyWebsite(v.operator_address || '')"
+                /></div>
             <div class="text-xs">
               {{ v.operator_address }}
             </div>
           </div>
           <div class="mb-3">
-            <div class="text-sm">Hex Address</div>
+            <div class="text-sm flex">Hex Address
+              <Icon
+                  icon="mdi:content-copy"
+                  class="ml-2 cursor-pointer"
+                  v-show="addresses.hex"
+                  @click="copyWebsite(addresses.hex || '')"
+                />
+              </div>
             <div class="text-xs">{{ addresses.hex }}</div>
           </div>
-          <div>
-            <div class="text-sm">Signer Address</div>
+          <div class="mb-3">
+            <div class="text-sm flex">Signer Address
+              <Icon
+                  icon="mdi:content-copy"
+                  class="ml-2 cursor-pointer"
+                  v-show="addresses.valCons"
+                  @click="copyWebsite(addresses.valCons || '')"
+                />
+              </div>
             <div class="text-xs">{{ addresses.valCons }}</div>
+          </div>
+          <div>
+            <div class="text-sm flex">Consensus Public Key
+              <Icon
+                  icon="mdi:content-copy"
+                  class="ml-2 cursor-pointer"
+                  v-show="v.consensus_pubkey"
+                  @click="copyWebsite(JSON.stringify(v.consensus_pubkey) || '')"
+                />
+              </div>
+            <div class="text-xs">{{ v.consensus_pubkey }}</div>
           </div>
         </div>
       </div>
