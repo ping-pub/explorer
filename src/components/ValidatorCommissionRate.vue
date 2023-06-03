@@ -46,6 +46,7 @@ const chartConfig = computed(() => {
 
     return {
         chart: {
+            width: '200px',
             sparkline: { enabled: false },
         },
         colors: ['rgba(109,120,141,0.2)', 'rgba(114,225,40,0.2)', 'rgba(114,225,40,1)', 'rgba(114,225,40,0.2)', 'rgba(109,120,141,0.2)'],
@@ -122,7 +123,9 @@ const chartConfig = computed(() => {
         <div class="text-sm text-gray-500 dark:text-gray-400">
             {{ `Updated at ${format.toDay(props.commission?.update_time, 'short')}` }}
         </div>
-        <ApexCharts type="donut" :options="chartConfig" :series="series" />
+        <div class="w-80 m-auto">
+            <ApexCharts type="donut" :options="chartConfig" :series="series" />
+        </div>
         <div>
             <div class="flex items-center justify-center flex-wrap gap-x-3">
                 <div class="flex items-center gap-x-2">
