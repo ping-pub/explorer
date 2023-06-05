@@ -121,8 +121,15 @@ console.log(chainStore.current?.endpoints?.rpc, 9998888, chainStore.rpc);
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
       <div class="flex flex-1 flex-col truncate">
         <!-- format(updatetime) -->
-        <h2 class="text-sm card-title text-error">Updated at {{  }}</h2>
+        <h2 class="text-sm card-title text-error">Updated at {{}}</h2>
         <!-- <span class="text-xs truncate"> 8</span> -->
+      </div>
+      <div class="divider"></div>
+      <div>
+        <button class="btn btn-ms btn-primary"></button> Proposer Signed
+        <button class="btn btn-ms"></button> Proposer Not Signed
+        <button class="btn btn-ms btn-success"></button> Signed
+        <button class="btn btn-ms btn-secondary"></button> Not Signed
       </div>
     </div>
   </div>
