@@ -1,0 +1,19 @@
+{
+    "chain_id":"origin_1170-1",
+    "chain_name": "Uptick Origin",
+    "api": "https://rest.origin.uptick.network",
+    "sdk_version": "v0.46.9",
+    "coin_type": "60",
+    "min_tx_fee": "40000",
+    "addr_prefix": "uptick",
+    "logo": "https://file.uptick.network/file/image/dNOLswid7dGe29CFhPp3Ow.png",
+    "assets": [
+        {
+            "base": "auoc",
+            "symbol": "UOC",
+            "exponent": "18",
+            "coingecko_id": "Uptick Origin",
+            "logo": "https://file.uptick.network/file/image/dNOLswid7dGe29CFhPp3Ow.png"
+        }
+    ]
+}
