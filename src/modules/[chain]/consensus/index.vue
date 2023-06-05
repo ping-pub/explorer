@@ -36,7 +36,7 @@ console.log(chainStore.current?.endpoints?.rpc, 9998888, chainStore.rpc);
             class="input input-bordered input-md w-full"
             v-model="rpc"
           /> -->
-          <select v-model="rpc" class="select select-bordered flex-1">
+          <select v-model="rpc" class="select select-bordered w-full flex-1">
             <option v-for="(item, index) in rpcList" :key="index">
               {{ item?.address }}/consensus_state
             </option>
@@ -130,6 +130,30 @@ console.log(chainStore.current?.endpoints?.rpc, 9998888, chainStore.rpc);
         <button class="btn btn-ms"></button> Proposer Not Signed
         <button class="btn btn-ms btn-success"></button> Signed
         <button class="btn btn-ms btn-secondary"></button> Not Signed
+      </div>
+    </div>
+
+    <!-- alert-info -->
+    <div
+      class="text-[#00cfe8] bg-[rgba(0,207,232,0.12)] rounded shadow mt-4 alert-info"
+    >
+      <div
+        class="drop-shadow-md px-4 pt-2 pb-2"
+        style="box-shadow: rgba(0, 207, 232, 0.4) 0px 6px 15px -7px"
+      >
+        <h2 class="text-base font-semibold">Tips</h2>
+      </div>
+      <div class="px-4 py-4">
+        <ul style="list-style-type: disc;" class="pl-8">
+          <li>
+            This tool is useful for validators to monitor who is onboard during
+            an upgrade
+          </li>
+          <li>
+            If you want to change the default rpc endpoint. make sure that
+            "https" and "CORS" are enabled on your server.
+          </li>
+        </ul>
       </div>
     </div>
   </div>
