@@ -3,7 +3,7 @@
     "api":[ "https://api.noria-testnet.stake-take.com" ],
     "rpc":[ "https://rpc.noria-testnet.stake-take.com" ],
     "snapshot_provider": "",
-    "sdk_version": "0.45.4",
+    "sdk_version": "0.47.2",
     "coin_type": 118,
     "min_tx_fee": "0",
     "addr_prefix": "noria",
