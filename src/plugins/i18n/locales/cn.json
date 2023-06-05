@@ -5,7 +5,8 @@
     "staking": "质押生息",
     "governance": "社区治理",
     "parameters": "参数",
-    "uptime": "状态"
+    "uptime": "状态",
+    "consensus": "Consensus"
   },
   "index": {
     "slogan": "Ping Dashboard 是一个区块链浏览器，也是一个网页钱包，还有更多 ... 🛠",
