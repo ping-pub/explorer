@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import fetch from 'cross-fetch'
 import { onMounted, ref } from 'vue';
 import {
   useBaseStore,
@@ -10,14 +11,52 @@ import {
 const chainStore = useBlockchain();
 const dashboard = useDashboard();
 const stakingStore = useStakingStore();
-const rpcList = ref(chainStore.current?.endpoints?.rpc || []);
-const httpstatus = 300;
-const httpStatusText = 'error';
+const rpcList = ref(
+  chainStore.current?.endpoints?.rpc || [{ address: '', provider: '' }]
+);
 let rpc = ref('');
+const validators = ref(stakingStore.validators);
+
+let httpstatus = ref(200);
+let httpStatusText = ref('');
+let roundState = {};
+
 onMounted(() => {
   stakingStore.init();
+  rpc.value = rpcList.value[0].address + '/consensus_state';
+  fetchPosition();
+  console.log(stakingStore.rpc, 'stakingStore', validators);
 });
 console.log(chainStore.current?.endpoints?.rpc, 9998888, chainStore.rpc);
+
+function onChange() {
+  httpstatus.value = 200;
+  httpStatusText.value = '';
+  roundState = {};
+}
+async function fetchPosition () {
+  const dumpurl = rpc.value.replace('consensus_state', 'dump_consensus_state');
+  console.log(dumpurl, 'dumpurl')
+  try {
+    const response = await fetch(dumpurl);
+    console.log(3333, 'data');
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log(data, 'data');
+  } catch (error) {}
+  console.log(dumpurl, 'dumpurl');
+  // fetch(dumpurl)
+  //   .then((data) => {
+  //     httpstatus.value = data.status;
+  //     httpStatusText.value = data.httpStatusText;
+  //     return data.json();
+  //   })
+  //   .then((res) => {
+  //     positions = res.result.round_state.validators.validators;
+  //   });
+}
 </script>
 
 <template>
@@ -41,14 +80,14 @@ console.log(chainStore.current?.endpoints?.rpc, 9998888, chainStore.rpc);
               {{ item?.address }}/consensus_state
             </option>
           </select>
-          <button class="btn btn-primary">Monitor</button>
+          <button class="btn btn-primary" @click="onChange">Monitor</button>
         </label>
       </div>
       <div v-if="httpstatus !== 200" class="text-error mt-1">
         {{ httpstatus }}: {{ httpStatusText }}
       </div>
     </div>
-    <!--  -->
+    <!-- cards -->
     <div class="mt-4">
       <div class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 pb-4">
         <div
@@ -117,7 +156,7 @@ console.log(chainStore.current?.endpoints?.rpc, 9998888, chainStore.rpc);
       </div>
     </div>
 
-    <!--  -->
+    <!-- update -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
       <div class="flex flex-1 flex-col truncate">
         <!-- format(updatetime) -->
@@ -144,7 +183,7 @@ console.log(chainStore.current?.endpoints?.rpc, 9998888, chainStore.rpc);
         <h2 class="text-base font-semibold">Tips</h2>
       </div>
       <div class="px-4 py-4">
-        <ul style="list-style-type: disc;" class="pl-8">
+        <ul style="list-style-type: disc" class="pl-8">
           <li>
             This tool is useful for validators to monitor who is onboard during
             an upgrade
