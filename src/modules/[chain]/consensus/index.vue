@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import fetch from 'cross-fetch'
+import fetch from 'cross-fetch';
 import { onMounted, ref } from 'vue';
 import {
   useBaseStore,
@@ -20,12 +20,19 @@ const validators = ref(stakingStore.validators);
 let httpstatus = ref(200);
 let httpStatusText = ref('');
 let roundState = {};
+let rate = ref('');
+let height = ref('')
+let round = ref('')
+let step = ref('')
+
+let updatetime = ref(new Date())
 
 onMounted(() => {
   stakingStore.init();
   rpc.value = rpcList.value[0].address + '/consensus_state';
   fetchPosition();
   console.log(stakingStore.rpc, 'stakingStore', validators);
+  update()
 });
 console.log(chainStore.current?.endpoints?.rpc, 9998888, chainStore.rpc);
 
@@ -34,9 +41,9 @@ function onChange() {
   httpStatusText.value = '';
   roundState = {};
 }
-async function fetchPosition () {
+async function fetchPosition() {
   const dumpurl = rpc.value.replace('consensus_state', 'dump_consensus_state');
-  console.log(dumpurl, 'dumpurl')
+  console.log(dumpurl, 'dumpurl');
   try {
     const response = await fetch(dumpurl);
     console.log(3333, 'data');
@@ -57,6 +64,45 @@ async function fetchPosition () {
   //     positions = res.result.round_state.validators.validators;
   //   });
 }
+
+async function update() {
+  rate.value = '0%';
+  updatetime.value = new Date();
+  if (httpstatus.value === 200) {
+    fetch(rpc.value)
+      .then((data) => {
+        httpstatus.value = data.status;
+        httpStatusText = data.httpStatusText;
+        return data.json();
+      })
+      .then((res) => {
+        roundState = res.result.round_state;
+        const raw = roundState['height/round/step']?.split('/');
+        // eslint-disable-next-line prefer-destructuring
+        height.value = raw[0];
+        // eslint-disable-next-line prefer-destructuring
+        round.value = raw[1];
+        // eslint-disable-next-line prefer-destructuring
+        step.value = raw[2];
+
+        // find the highest onboard rate
+        roundState.height_vote_set.forEach((element) => {
+          const rates = Number(
+            element.prevotes_bit_array.substring(
+              element.prevotes_bit_array.length - 4
+            )
+          );
+          if (rates > 0) {
+            rate.value = `${(rates * 100).toFixed()}%`;
+          }
+        });
+      })
+      .catch((err) => {
+        httpstatus.value = 500;
+        httpStatusText = err;
+      });
+  }
+}
 </script>
 
 <template>
@@ -64,9 +110,9 @@ async function fetchPosition () {
     <!--  -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
       <!-- @click="changeMode()" -->
-      <div v-for="(item, index) in rpcList" :key="index">
+      <!-- <div v-for="(item, index) in rpcList" :key="index">
         {{ item?.address }}
-      </div>
+      </div> -->
       <div class="form-control">
         <label class="input-group input-group-md w-full flex">
           <!-- <input
@@ -110,7 +156,7 @@ async function fetchPosition () {
           class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
-            <h4 class="text-lg font-semibold text-main">{{ 0 }}%</h4>
+            <h4 class="text-lg font-semibold text-main">{{ 0 }}</h4>
             <span class="text-md">Height</span>
           </div>
           <div class="avatar placeholder">
@@ -126,7 +172,7 @@ async function fetchPosition () {
           class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
-            <h4 class="text-lg font-semibold text-main">{{ 0 }}%</h4>
+            <h4 class="text-lg font-semibold text-main">{{ 0 }}</h4>
             <span class="text-md">Round</span>
           </div>
           <div class="avatar placeholder">
@@ -142,7 +188,7 @@ async function fetchPosition () {
           class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
-            <h4 class="text-lg font-semibold text-main">{{ 0 }}%</h4>
+            <h4 class="text-lg font-semibold text-main">{{ 0 }}</h4>
             <span class="text-md">Step</span>
           </div>
           <div class="avatar placeholder">
@@ -164,11 +210,11 @@ async function fetchPosition () {
         <!-- <span class="text-xs truncate"> 8</span> -->
       </div>
       <div class="divider"></div>
-      <div>
-        <button class="btn btn-ms btn-primary"></button> Proposer Signed
-        <button class="btn btn-ms"></button> Proposer Not Signed
-        <button class="btn btn-ms btn-success"></button> Signed
-        <button class="btn btn-ms btn-secondary"></button> Not Signed
+      <div class="flex">
+        <button class="btn btn-xs btn-primary px-4 mr-1"></button> Proposer Signed
+        <button class="btn btn-xs px-4 ml-2 mr-1"></button> Proposer Not Signed
+        <button class="btn btn-xs btn-success px-4 ml-2 mr-1"></button> Signed
+        <button class="btn btn-xs btn-secondary px-4 ml-2"></button> Not Signed
       </div>
     </div>
 
