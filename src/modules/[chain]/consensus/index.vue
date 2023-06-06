@@ -318,10 +318,10 @@ async function update() {
   </div>
 </template>
 
-<route>
+<!-- <route>
   {
     meta: {
       i18n: 'consensus',
     }
   }
-</route>
+</route> -->
