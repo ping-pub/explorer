@@ -12,6 +12,7 @@ const format = useFormatter();
 const chainStore = useBlockchain();
 const dashboard = useDashboard();
 const stakingStore = useStakingStore();
+import { consensusPubkeyToHexAddress } from '@/libs';
 const rpcList = ref(
   chainStore.current?.endpoints?.rpc || [{ address: '', provider: '' }]
 );
@@ -47,10 +48,22 @@ const newTime = computed(() => {
   return format.toDay(updatetime.value || '', 'time');
 });
 
+const vals = computed(() => {
+  return validators.value.map((x) => {
+    const x2 = x;
+    x2.hex = consensusPubkeyToHexAddress(x.consensus_pubkey);
+    return x2;
+  });
+});
+
 function showName(i, text) {
   if (text === 'nil-Vote') {
-    if (positions[i]) {
-      const val = validators.value.find((x) => x.hex === positions[i].address);
+    if (positions.value?.[i]?.address) {
+      console.log(validators.value, 9999);
+      const val = vals.value.find(
+        (x) => x.hex === positions.value?.[i]?.address
+      );
+      console.log('valvalllllllllllllllll', val);
       return val?.description?.moniker || i;
     }
     return i;
@@ -244,7 +257,7 @@ async function update() {
           <div class="text-xs">Round: {{ item.round }}</div>
           <div class="text-xs">{{ item.prevotes_bit_array }}</div>
           <small></small>
-          <div>
+          <div class="flex flex-wrap">
             <span
               class="badge"
               v-for="(pre, i) in item.prevotes"
