@@ -5,6 +5,7 @@ import { ref } from 'vue';
 // Components
 import newFooter from '@/layouts/components/NavFooter.vue';
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
+import NavbarSearch from '@/layouts/components/NavbarSearch.vue';
 import ChainProfile from '@/layouts/components/ChainProfile.vue';
 
 import { useDashboard } from '@/stores/useDashboard';
@@ -282,7 +283,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
         <!-- <NavSearchBar />-->
         <NavBarI18n class="hidden md:!inline-block" />
         <NavbarThemeSwitcher class="!inline-block" />
-
+        <NavbarSearch class="!inline-block" />
         <NavBarWallet />
       </div>
 
