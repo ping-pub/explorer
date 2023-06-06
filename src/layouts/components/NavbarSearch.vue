@@ -37,14 +37,20 @@ function confirm() {
   if (!Object.values(routeParams?.params).includes(key)) {
     if (height.test(key)) {
       vueRouters.push({ path: `/${current}/block/${key}` });
-      closeSearchModal();
+      setTimeout(() => {
+        closeSearchModal();
+      }, 1000);
     } else if (txhash.test(key)) {
       vueRouters.push({ path: `/${current}/tx/${key}` });
-      closeSearchModal();
+      setTimeout(() => {
+        closeSearchModal();
+      }, 1000);
       //     this.$router.push({ name: 'transaction', params: { chain: c.chain_name, hash: key } })
     } else if (addr.test(key)) {
       vueRouters.push({ path: `/${current}/account/${key}` });
-      closeSearchModal();
+      setTimeout(() => {
+        closeSearchModal();
+      }, 1000);
     } else {
       errorMessage.value = 'The input not recognized';
     }
@@ -102,6 +108,12 @@ function confirm() {
                 v-model="searchQuery"
                 placeholder="Height/Transaction/Account Address"
               />
+              <div
+                class="mt-2 text-right text-sm text-error"
+                v-show="errorMessage"
+              >
+                {{ errorMessage }}
+              </div>
             </div>
           </div>
           <!-- foot -->
