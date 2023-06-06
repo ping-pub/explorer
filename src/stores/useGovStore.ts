@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { useBlockchain } from './useBlockchain';
 import type { PageRequest, PaginatedProposals } from '@/types';
 import { LoadingStatus } from './useDashboard';
-import { useWalletStore } from './useWalletStore'
+import { useWalletStore } from './useWalletStore';
 import { reactive } from 'vue';
 
 export const useGovStore = defineStore('govStore', {
@@ -23,41 +23,49 @@ export const useGovStore = defineStore('govStore', {
     },
     walletstore() {
       return useWalletStore();
-    }
+    },
   },
   actions: {
     initial() {
-      this.$reset()
+      this.$reset();
       this.fetchParams();
-      this.fetchProposals("2");
+      this.fetchProposals('2');
     },
     async fetchProposals(status: string, pagination?: PageRequest) {
       //if (!this.loading[status]) {
-        this.loading[status] = LoadingStatus.Loading;
-        const proposals = reactive(
-          await this.blockchain.rpc?.getGovProposals(status, pagination)
-        );
-        if (status === '2') {
-          proposals?.proposals?.forEach((item) => {
-            this.fetchTally(item.proposal_id).then((res) => {
-              item.final_tally_result = res?.tally;
-            });
-            if (this.walletstore.currentAddress) {
-              try {
-                this.fetchProposalVotesVoter(item.proposal_id, this.walletstore.currentAddress).then((res) => {
-                  item.voterStatus = res?.vote?.option || 'No With Veto'
-                });
-              } catch (error) {
-                item.voterStatus = 'No With Veto'
-              }
-            } else {
-              item.voterStatus = 'No With Veto'
-            }
+      this.loading[status] = LoadingStatus.Loading;
+      const proposals = reactive(
+        await this.blockchain.rpc?.getGovProposals(status, pagination)
+      );
+      if (status === '2') {
+        proposals?.proposals?.forEach((item) => {
+          this.fetchTally(item.proposal_id).then((res) => {
+            item.final_tally_result = res?.tally;
           });
-        }
+          if (this.walletstore.currentAddress) {
+            try {
+              this.fetchProposalVotesVoter(
+                item.proposal_id,
+                this.walletstore.currentAddress
+              )
+                .then((res) => {
+                  item.voterStatus = res?.vote?.option || 'VOTE_OPTION_NO_WITH_VETO'
+                  // 'No With Veto';
+                })
+                .catch((reject) => {
+                  item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO'
+                });
+            } catch (error) {
+              item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO'
+            }
+          } else {
+            item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO'
+          }
+        });
+      }
 
-        this.loading[status] = LoadingStatus.Loaded;
-        this.proposals[status] = proposals;
+      this.loading[status] = LoadingStatus.Loaded;
+      this.proposals[status] = proposals;
       //}
       return this.proposals[status];
     },

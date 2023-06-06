@@ -8,6 +8,7 @@ import {
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import DonutChart from '@/components/charts/DonutChart.vue';
 import { computed, ref } from '@vue/reactivity';
+import { onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
 import 'vue-json-pretty/lib/styles.css';
 import type {
@@ -33,7 +34,9 @@ const balances = ref([] as Coin[]);
 const unbonding = ref([] as UnbondingResponses[]);
 const unbondingTotal = ref(0);
 const chart = {};
-
+onMounted(() => {
+  loadAccount(props.address);
+});
 const totalAmountByCategory = computed(() => {
   let sumDel = 0;
   delegations.value?.forEach((x) => {
@@ -88,7 +91,6 @@ function loadAccount(address: string) {
   });
 }
 
-
 function updateEvent() {
   loadAccount(props.address);
 }
@@ -141,9 +143,13 @@ function updateEvent() {
               for="transfer"
               class="btn btn-primary btn-sm"
               @click="
-                dialog.open('transfer', {
-                  chain_name: blockchain.current?.prettyName,
-                }, updateEvent)
+                dialog.open(
+                  'transfer',
+                  {
+                    chain_name: blockchain.current?.prettyName,
+                  },
+                  updateEvent
+                )
               "
               >transfer</label
             >
@@ -355,9 +361,13 @@ function updateEvent() {
                     for="delegate"
                     class="btn btn-primary btn-xs mr-2"
                     @click="
-                      dialog.open('delegate', {
-                        validator_address: v.delegation.validator_address,
-                      }, updateEvent)
+                      dialog.open(
+                        'delegate',
+                        {
+                          validator_address: v.delegation.validator_address,
+                        },
+                        updateEvent
+                      )
                     "
                     >delegate</label
                   >
@@ -365,9 +375,13 @@ function updateEvent() {
                     for="redelegate"
                     class="btn btn-primary btn-xs mr-2"
                     @click="
-                      dialog.open('redelegate', {
-                        validator_address: v.delegation.validator_address,
-                      }, updateEvent)
+                      dialog.open(
+                        'redelegate',
+                        {
+                          validator_address: v.delegation.validator_address,
+                        },
+                        updateEvent
+                      )
                     "
                     >Redelegate</label
                   >
@@ -375,9 +389,13 @@ function updateEvent() {
                     for="unbond"
                     class="btn btn-primary btn-xs"
                     @click="
-                      dialog.open('unbond', {
-                        validator_address: v.delegation.validator_address,
-                      }, updateEvent)
+                      dialog.open(
+                        'unbond',
+                        {
+                          validator_address: v.delegation.validator_address,
+                        },
+                        updateEvent
+                      )
                     "
                     >Unbond</label
                   >

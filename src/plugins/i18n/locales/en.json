@@ -9,7 +9,8 @@
     "state-sync": "State Sync",
     "cosmwasm": "Cosmwasm",
     "widget": "Widgets",
-    "ibc": "IBC"
+    "ibc": "IBC",
+    "consensus": "Consensus"
   },
   "index": {
     "slogan": "Ping Dashboard is not just an explorer but also a wallet and more ... 🛠",

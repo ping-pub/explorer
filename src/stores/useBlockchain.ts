@@ -35,6 +35,7 @@ export const useBlockchain = defineStore('blockchain', {
   },
   getters: {
     current(): ChainConfig | undefined {
+      console.log(this.dashboard.chains[this.chainName], 'jljfkj')
       return this.dashboard.chains[this.chainName];
     },
     logo(): string {
