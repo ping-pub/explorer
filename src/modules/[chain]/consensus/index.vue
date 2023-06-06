@@ -248,37 +248,24 @@ async function update() {
     <!-- update -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
       <div class="flex flex-1 flex-col truncate">
-        <!-- format(updatetime) -->
         <h2 class="text-sm card-title text-error">
           Updated at {{ newTime || '' }}
         </h2>
-        <!-- <span class="text-xs truncate"> 8</span> -->
         <div v-for="item in roundState.height_vote_set" :key="item.round">
           <div class="text-xs">Round: {{ item.round }}</div>
           <div class="text-xs">{{ item.prevotes_bit_array }}</div>
           <small></small>
           <div class="flex flex-wrap">
-            <span
+            <div
               class="badge"
               v-for="(pre, i) in item.prevotes"
               :key="i"
               size="sm"
               style="margin: 2px"
             >
-              {{ showName(i, pre) }}</span
+              <span>{{ showName(i, pre) }}</span></div
             >
           </div>
-          <!-- <b-card-body class="px-0">
-            <b-badge
-              v-for="(pre, i) in item.prevotes"
-              :key="i"
-              size="sm"
-              style="margin: 2px"
-              :variant="color(i, pre)"
-            >
-              <small class="small">{{ showName(i, pre) }}</small>
-            </b-badge>
-          </b-card-body> -->
         </div>
       </div>
       <div class="divider"></div>
