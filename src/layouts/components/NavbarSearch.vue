@@ -1,17 +1,15 @@
 <script lang="ts" setup>
 import { Icon } from '@iconify/vue';
-import { onMounted, ref, computed, onUnmounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useBlockchain } from '@/stores';
 const vueRouters = useRouter();
 const blockStore = useBlockchain();
-let searchModalShow = ref(true);
+let searchModalShow = ref(false);
 let searchQuery = ref('');
 let errorMessage = ref('');
-onMounted(() => {
-  console.log(blockStore.current, '9090909');
-});
+onMounted(() => {});
 
 function closeSearchModal() {
   searchModalShow.value = false;
@@ -27,14 +25,14 @@ function preventClick(event: any) {
 function confirm() {
   errorMessage.value = '';
   const key = searchQuery.value;
-  if (!key){
+  if (!key) {
     errorMessage.value = 'Please enter a value!';
-    return
+    return;
   }
   const height = /^\d+$/;
   const txhash = /^[A-Z\d]{64}$/;
   const addr = /^[a-z]+1[a-z\d]{38,58}$/;
- 
+
   const current = blockStore?.current?.chainName || '';
   const routeParams = vueRouters?.currentRoute?.value;
 
