@@ -100,7 +100,7 @@ async function fetchPosition() {
     positions.value = data.result.round_state.validators.validators;
   } catch (error) {
     httpstatus.value = error?.status || 500;
-    httpStatusText.value = error?.message||'Error';
+    httpStatusText.value = error?.message || 'Error';
   }
 }
 
@@ -237,7 +237,10 @@ async function update() {
       </div>
     </div>
     <!-- update -->
-    <div class="bg-base-100 p-4 rounded shadow" v-if="roundState['height/round/step']">
+    <div
+      class="bg-base-100 p-4 rounded shadow"
+      v-if="roundState['height/round/step']"
+    >
       <div class="flex flex-1 flex-col truncate">
         <h2 class="text-sm card-title text-error mb-6">
           Updated at {{ newTime || '' }}
@@ -266,13 +269,26 @@ async function update() {
         </div>
       </div>
       <div class="divider"></div>
-      <div class="flex">
-        <button class="btn btn-xs btn-primary px-4 mr-1"></button> Proposer
-        Signed
-        <button class="btn btn-xs btn-warning px-4 ml-2 mr-1"></button> Proposer
-        Not Signed
-        <button class="btn btn-xs btn-success px-4 ml-2 mr-1"></button> Signed
-        <button class="btn btn-xs btn-neutral px-4 ml-2"></button> Not Signed
+      <!--  -->
+      <div class="flex flex-col md:!flex-row">
+        <div class="flex mr-1 mb-1">
+          <button class="btn btn-xs btn-primary px-4 w-[34px]"></button>
+          <span class="mx-1">Proposer Signed</span>
+        </div>
+        <div class="flex mr-1 mb-1">
+          <button class="btn btn-xs btn-warning px-4 w-[34px]"></button>
+          <span class="mx-1">Proposer Not Signed</span>
+        </div>
+
+        <div class="flex mr-1 mb-1">
+          <button class="btn btn-xs btn-success px-4 w-[34px]"></button>
+          <span class="mx-1">Signed</span>
+        </div>
+
+        <div class="flex mr-1 mb-1">
+          <button class="btn btn-xs btn-neutral px-4 w-[34px]"></button>
+          <span class="mx-1">Not Signed</span>
+        </div>
       </div>
     </div>
 
