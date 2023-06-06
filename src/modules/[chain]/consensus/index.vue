@@ -31,7 +31,8 @@ let positions = ref([]);
 onMounted(() => {
   stakingStore.init();
   rpc.value =
-    'https://rpc-osmosis-ia.cosmosia.notional.ventures/consensus_state';
+    'https://rpc-osmosis-ia.cosmosia.notional.ventures:443/consensus_state';
+  // 'https://rpc-osmosis-ia.cosmosia.notional.ventures/consensus_state';
   // rpcList.value[0].address + '/consensus_state';
   fetchPosition();
   console.log(stakingStore.rpc, 'stakingStore', validators);
@@ -46,11 +47,25 @@ const newTime = computed(() => {
   return format.toDay(updatetime.value || '', 'time');
 });
 
+function showName(i, text) {
+  if (text === 'nil-Vote') {
+    if (positions[i]) {
+      const val = validators.value.find((x) => x.hex === positions[i].address);
+      return val?.description?.moniker || i;
+    }
+    return i;
+  }
+  const txt = text.substring(text.indexOf(':') + 1, text.indexOf(' '));
+  const sig = text.split(' ');
+  const val = validators.value.find((x) => x.hex.startsWith(txt));
+  return `${val?.description?.moniker || txt} - ${sig[2]}`;
+}
 function onChange() {
   httpstatus.value = 200;
   httpStatusText.value = '';
   roundState = {};
 }
+
 async function fetchPosition() {
   let dumpurl = rpc.value.replace('consensus_state', 'dump_consensus_state');
   try {
@@ -90,8 +105,8 @@ async function update() {
         return data.json();
       })
       .then((res) => {
-        console.log(5555, 999, res);
         roundState = res.result.round_state;
+        console.log(5555, 999, res, roundState);
         const raw = roundState['height/round/step']?.split('/');
         // eslint-disable-next-line prefer-destructuring
         height.value = raw[0];
@@ -101,7 +116,7 @@ async function update() {
         step.value = raw[2];
 
         // find the highest onboard rate
-        roundState.height_vote_set.forEach((element) => {
+        roundState?.height_vote_set?.forEach((element) => {
           const rates = Number(
             element.prevotes_bit_array.substring(
               element.prevotes_bit_array.length - 4
@@ -225,6 +240,33 @@ async function update() {
           Updated at {{ newTime || '' }}
         </h2>
         <!-- <span class="text-xs truncate"> 8</span> -->
+        <div v-for="item in roundState.height_vote_set" :key="item.round">
+          <div class="text-xs">Round: {{ item.round }}</div>
+          <div class="text-xs">{{ item.prevotes_bit_array }}</div>
+          <small></small>
+          <div>
+            <span
+              class="badge"
+              v-for="(pre, i) in item.prevotes"
+              :key="i"
+              size="sm"
+              style="margin: 2px"
+            >
+              {{ showName(i, pre) }}</span
+            >
+          </div>
+          <!-- <b-card-body class="px-0">
+            <b-badge
+              v-for="(pre, i) in item.prevotes"
+              :key="i"
+              size="sm"
+              style="margin: 2px"
+              :variant="color(i, pre)"
+            >
+              <small class="small">{{ showName(i, pre) }}</small>
+            </b-badge>
+          </b-card-body> -->
+        </div>
       </div>
       <div class="divider"></div>
       <div class="flex">
