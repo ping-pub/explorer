@@ -73,6 +73,12 @@ function showName(i, text) {
   const val = validators.value.find((x) => x.hex.startsWith(txt));
   return `${val?.description?.moniker || txt} - ${sig[2]}`;
 }
+function color(i, txt) {
+  if (i === roundState?.proposer?.index) {
+    return txt === 'nil-Vote' ? 'dark' : 'primary';
+  }
+  return txt === 'nil-Vote' ? 'secondary' : 'success';
+}
 function onChange() {
   httpstatus.value = 200;
   httpStatusText.value = '';
@@ -246,25 +252,27 @@ async function update() {
     </div>
 
     <!-- update -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+    <div class="bg-base-100 p-4 rounded shadow">
       <div class="flex flex-1 flex-col truncate">
-        <h2 class="text-sm card-title text-error">
+        <h2 class="text-sm card-title text-error mb-6">
           Updated at {{ newTime || '' }}
         </h2>
         <div v-for="item in roundState.height_vote_set" :key="item.round">
-          <div class="text-xs">Round: {{ item.round }}</div>
-          <div class="text-xs">{{ item.prevotes_bit_array }}</div>
-          <small></small>
-          <div class="flex flex-wrap">
+          <div class="text-xs mb-1">Round: {{ item.round }}</div>
+          <div class="text-xs break-words">{{ item.prevotes_bit_array }}</div>
+
+          <div class="flex flex-wrap py-6">
             <div
               class="badge"
               v-for="(pre, i) in item.prevotes"
               :key="i"
               size="sm"
               style="margin: 2px"
+              :class="[color(i, pre) === 'dark' ? '' : `bg-${color(i, pre)} border-[${color(i, pre)}]`]"
             >
-              <span>{{ showName(i, pre) }}</span></div
-            >
+              {{ color(i, pre) }} ???
+              <span>{{ showName(i, pre) }}</span>
+            </div>
           </div>
         </div>
       </div>
