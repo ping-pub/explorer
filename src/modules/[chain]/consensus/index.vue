@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import fetch from 'cross-fetch';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import {
   useBaseStore,
   useBlockchain,
@@ -8,6 +8,7 @@ import {
   useDashboard,
   useStakingStore,
 } from '@/stores';
+const format = useFormatter();
 const chainStore = useBlockchain();
 const dashboard = useDashboard();
 const stakingStore = useStakingStore();
@@ -21,20 +22,29 @@ let httpstatus = ref(200);
 let httpStatusText = ref('');
 let roundState = {};
 let rate = ref('');
-let height = ref('')
-let round = ref('')
-let step = ref('')
-
-let updatetime = ref(new Date())
-
+let height = ref('');
+let round = ref('');
+let step = ref('');
+let timer = null;
+let updatetime = ref(new Date());
+let positions = ref([]);
 onMounted(() => {
   stakingStore.init();
-  rpc.value = rpcList.value[0].address + '/consensus_state';
+  rpc.value =
+    'https://rpc-osmosis-ia.cosmosia.notional.ventures/consensus_state';
+  // rpcList.value[0].address + '/consensus_state';
   fetchPosition();
   console.log(stakingStore.rpc, 'stakingStore', validators);
-  update()
+  update();
+  timer = setInterval(() => {
+    update();
+  }, 6000);
 });
 console.log(chainStore.current?.endpoints?.rpc, 9998888, chainStore.rpc);
+
+const newTime = computed(() => {
+  return format.toDay(updatetime.value || '', 'time');
+});
 
 function onChange() {
   httpstatus.value = 200;
@@ -42,15 +52,18 @@ function onChange() {
   roundState = {};
 }
 async function fetchPosition() {
-  const dumpurl = rpc.value.replace('consensus_state', 'dump_consensus_state');
-  console.log(dumpurl, 'dumpurl');
+  let dumpurl = rpc.value.replace('consensus_state', 'dump_consensus_state');
   try {
     const response = await fetch(dumpurl);
-    console.log(3333, 'data');
+    console.log(3333, 'data', response);
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
     }
+    httpstatus.value = response.status;
+    httpStatusText.value = response.statusText;
+
     const data = await response.json();
+    positions.value = data.result.round_state.validators.validators;
     console.log(data, 'data');
   } catch (error) {}
   console.log(dumpurl, 'dumpurl');
@@ -71,11 +84,13 @@ async function update() {
   if (httpstatus.value === 200) {
     fetch(rpc.value)
       .then((data) => {
+        console.log(data, 'tataass');
         httpstatus.value = data.status;
-        httpStatusText = data.httpStatusText;
+        httpStatusText.value = data.statusText;
         return data.json();
       })
       .then((res) => {
+        console.log(5555, 999, res);
         roundState = res.result.round_state;
         const raw = roundState['height/round/step']?.split('/');
         // eslint-disable-next-line prefer-destructuring
@@ -99,7 +114,7 @@ async function update() {
       })
       .catch((err) => {
         httpstatus.value = 500;
-        httpStatusText = err;
+        httpStatusText.value = err;
       });
   }
 }
@@ -140,7 +155,7 @@ async function update() {
           class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
-            <h4 class="text-lg font-semibold text-main">{{ 0 }}%</h4>
+            <h4 class="text-lg font-semibold text-main">{{ rate }}</h4>
             <span class="text-md">Onboard Rate</span>
           </div>
           <div class="avatar placeholder">
@@ -156,7 +171,7 @@ async function update() {
           class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
-            <h4 class="text-lg font-semibold text-main">{{ 0 }}</h4>
+            <h4 class="text-lg font-semibold text-main">{{ height }}</h4>
             <span class="text-md">Height</span>
           </div>
           <div class="avatar placeholder">
@@ -172,7 +187,7 @@ async function update() {
           class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
-            <h4 class="text-lg font-semibold text-main">{{ 0 }}</h4>
+            <h4 class="text-lg font-semibold text-main">{{ round }}</h4>
             <span class="text-md">Round</span>
           </div>
           <div class="avatar placeholder">
@@ -188,7 +203,7 @@ async function update() {
           class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
-            <h4 class="text-lg font-semibold text-main">{{ 0 }}</h4>
+            <h4 class="text-lg font-semibold text-main">{{ step }}</h4>
             <span class="text-md">Step</span>
           </div>
           <div class="avatar placeholder">
@@ -206,13 +221,16 @@ async function update() {
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
       <div class="flex flex-1 flex-col truncate">
         <!-- format(updatetime) -->
-        <h2 class="text-sm card-title text-error">Updated at {{}}</h2>
+        <h2 class="text-sm card-title text-error">
+          Updated at {{ newTime || '' }}
+        </h2>
         <!-- <span class="text-xs truncate"> 8</span> -->
       </div>
       <div class="divider"></div>
       <div class="flex">
-        <button class="btn btn-xs btn-primary px-4 mr-1"></button> Proposer Signed
-        <button class="btn btn-xs px-4 ml-2 mr-1"></button> Proposer Not Signed
+        <button class="btn btn-xs btn-primary px-4 mr-1"></button> Proposer
+        Signed <button class="btn btn-xs px-4 ml-2 mr-1"></button> Proposer Not
+        Signed
         <button class="btn btn-xs btn-success px-4 ml-2 mr-1"></button> Signed
         <button class="btn btn-xs btn-secondary px-4 ml-2"></button> Not Signed
       </div>
