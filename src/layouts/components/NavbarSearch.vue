@@ -26,11 +26,15 @@ function preventClick(event: any) {
 }
 function confirm() {
   errorMessage.value = '';
-
+  const key = searchQuery.value;
+  if (!key){
+    errorMessage.value = 'Please enter a value!';
+    return
+  }
   const height = /^\d+$/;
   const txhash = /^[A-Z\d]{64}$/;
   const addr = /^[a-z]+1[a-z\d]{38,58}$/;
-  const key = searchQuery.value;
+ 
   const current = blockStore?.current?.chainName || '';
   const routeParams = vueRouters?.currentRoute?.value;
 
