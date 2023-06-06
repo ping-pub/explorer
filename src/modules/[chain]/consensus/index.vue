@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import fetch from 'cross-fetch';
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, onUnmounted } from 'vue';
 import {
-  useBaseStore,
   useBlockchain,
   useFormatter,
   useDashboard,
@@ -21,7 +20,7 @@ const validators = ref(stakingStore.validators);
 
 let httpstatus = ref(200);
 let httpStatusText = ref('');
-let roundState = {};
+let roundState = ref({} as any);
 let rate = ref('');
 let height = ref('');
 let round = ref('');
@@ -31,8 +30,8 @@ let updatetime = ref(new Date());
 let positions = ref([]);
 onMounted(() => {
   stakingStore.init();
-  rpc.value =
-    'https://rpc-osmosis-ia.cosmosia.notional.ventures:443/consensus_state';
+  rpc.value = rpcList.value[0].address + '/consensus_state';
+  // 'https://rpc-osmosis-ia.cosmosia.notional.ventures:443/consensus_state';
   // 'https://rpc-osmosis-ia.cosmosia.notional.ventures/consensus_state';
   // rpcList.value[0].address + '/consensus_state';
   fetchPosition();
@@ -42,7 +41,9 @@ onMounted(() => {
     update();
   }, 6000);
 });
-console.log(chainStore.current?.endpoints?.rpc, 9998888, chainStore.rpc);
+onUnmounted(() => {
+  timer = null;
+});
 
 const newTime = computed(() => {
   return format.toDay(updatetime.value || '', 'time');
@@ -59,37 +60,40 @@ const vals = computed(() => {
 function showName(i, text) {
   if (text === 'nil-Vote') {
     if (positions.value?.[i]?.address) {
-      console.log(validators.value, 9999);
       const val = vals.value.find(
         (x) => x.hex === positions.value?.[i]?.address
       );
-      console.log('valvalllllllllllllllll', val);
       return val?.description?.moniker || i;
     }
     return i;
   }
   const txt = text.substring(text.indexOf(':') + 1, text.indexOf(' '));
   const sig = text.split(' ');
-  const val = validators.value.find((x) => x.hex.startsWith(txt));
+  const val = validators.value.find((x) => x?.hex?.startsWith(txt));
   return `${val?.description?.moniker || txt} - ${sig[2]}`;
 }
 function color(i, txt) {
-  if (i === roundState?.proposer?.index) {
-    return txt === 'nil-Vote' ? 'dark' : 'primary';
+  if (i === roundState.value?.proposer?.index) {
+    return txt === 'nil-Vote' ? 'warning' : 'primary';
   }
-  return txt === 'nil-Vote' ? 'secondary' : 'success';
+  return txt === 'nil-Vote' ? 'neutral' : 'success';
 }
 function onChange() {
   httpstatus.value = 200;
   httpStatusText.value = '';
-  roundState = {};
+  roundState.value = {};
+  timer = null;
+  fetchPosition();
+  update();
+  timer = setInterval(() => {
+    update();
+  }, 6000);
 }
 
 async function fetchPosition() {
   let dumpurl = rpc.value.replace('consensus_state', 'dump_consensus_state');
   try {
     const response = await fetch(dumpurl);
-    console.log(3333, 'data', response);
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
     }
@@ -98,18 +102,11 @@ async function fetchPosition() {
 
     const data = await response.json();
     positions.value = data.result.round_state.validators.validators;
-    console.log(data, 'data');
-  } catch (error) {}
+  } catch (error) {
+    httpstatus.value = error?.status || 500;
+    httpStatusText.value = 'Error';
+  }
   console.log(dumpurl, 'dumpurl');
-  // fetch(dumpurl)
-  //   .then((data) => {
-  //     httpstatus.value = data.status;
-  //     httpStatusText.value = data.httpStatusText;
-  //     return data.json();
-  //   })
-  //   .then((res) => {
-  //     positions = res.result.round_state.validators.validators;
-  //   });
 }
 
 async function update() {
@@ -118,15 +115,13 @@ async function update() {
   if (httpstatus.value === 200) {
     fetch(rpc.value)
       .then((data) => {
-        console.log(data, 'tataass');
         httpstatus.value = data.status;
         httpStatusText.value = data.statusText;
         return data.json();
       })
       .then((res) => {
-        roundState = res.result.round_state;
-        console.log(5555, 999, res, roundState);
-        const raw = roundState['height/round/step']?.split('/');
+        roundState.value = res.result.round_state;
+        const raw = roundState?.value?.['height/round/step']?.split('/');
         // eslint-disable-next-line prefer-destructuring
         height.value = raw[0];
         // eslint-disable-next-line prefer-destructuring
@@ -135,7 +130,7 @@ async function update() {
         step.value = raw[2];
 
         // find the highest onboard rate
-        roundState?.height_vote_set?.forEach((element) => {
+        roundState.value?.height_vote_set?.forEach((element) => {
           const rates = Number(
             element.prevotes_bit_array.substring(
               element.prevotes_bit_array.length - 4
@@ -158,10 +153,6 @@ async function update() {
   <div>
     <!--  -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
-      <!-- @click="changeMode()" -->
-      <!-- <div v-for="(item, index) in rpcList" :key="index">
-        {{ item?.address }}
-      </div> -->
       <div class="form-control">
         <label class="input-group input-group-md w-full flex">
           <!-- <input
@@ -183,7 +174,7 @@ async function update() {
       </div>
     </div>
     <!-- cards -->
-    <div class="mt-4">
+    <div class="mt-4" v-if="roundState['height/round/step']">
       <div class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 pb-4">
         <div
           class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
@@ -250,9 +241,8 @@ async function update() {
         </div>
       </div>
     </div>
-
     <!-- update -->
-    <div class="bg-base-100 p-4 rounded shadow">
+    <div class="bg-base-100 p-4 rounded shadow" v-if="roundState['height/round/step']">
       <div class="flex flex-1 flex-col truncate">
         <h2 class="text-sm card-title text-error mb-6">
           Updated at {{ newTime || '' }}
@@ -268,9 +258,13 @@ async function update() {
               :key="i"
               size="sm"
               style="margin: 2px"
-              :class="[color(i, pre) === 'dark' ? '' : `bg-${color(i, pre)} border-[${color(i, pre)}]`]"
+              :class="[
+                `btn-${color(i, pre)} border-${color(i, pre)} !bg-${color(
+                  i,
+                  pre
+                )}`,
+              ]"
             >
-              {{ color(i, pre) }} ???
               <span>{{ showName(i, pre) }}</span>
             </div>
           </div>
@@ -279,10 +273,11 @@ async function update() {
       <div class="divider"></div>
       <div class="flex">
         <button class="btn btn-xs btn-primary px-4 mr-1"></button> Proposer
-        Signed <button class="btn btn-xs px-4 ml-2 mr-1"></button> Proposer Not
         Signed
+        <button class="btn btn-xs btn-warning px-4 ml-2 mr-1"></button> Proposer
+        Not Signed
         <button class="btn btn-xs btn-success px-4 ml-2 mr-1"></button> Signed
-        <button class="btn btn-xs btn-secondary px-4 ml-2"></button> Not Signed
+        <button class="btn btn-xs btn-neutral px-4 ml-2"></button> Not Signed
       </div>
     </div>
 
