@@ -31,11 +31,7 @@ let positions = ref([]);
 onMounted(() => {
   stakingStore.init();
   rpc.value = rpcList.value[0].address + '/consensus_state';
-  // 'https://rpc-osmosis-ia.cosmosia.notional.ventures:443/consensus_state';
-  // 'https://rpc-osmosis-ia.cosmosia.notional.ventures/consensus_state';
-  // rpcList.value[0].address + '/consensus_state';
   fetchPosition();
-  console.log(stakingStore.rpc, 'stakingStore', validators);
   update();
   timer = setInterval(() => {
     update();
@@ -104,9 +100,8 @@ async function fetchPosition() {
     positions.value = data.result.round_state.validators.validators;
   } catch (error) {
     httpstatus.value = error?.status || 500;
-    httpStatusText.value = 'Error';
+    httpStatusText.value = error?.message||'Error';
   }
-  console.log(dumpurl, 'dumpurl');
 }
 
 async function update() {

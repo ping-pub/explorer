@@ -88,7 +88,6 @@ export const useStakingStore = defineStore('stakingStore', {
             (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
           )
           if (status === 'BOND_STATUS_BONDED') {
-            console.log(proVals, 'proVals')
             this.validators = proVals;
           }
           return proVals
