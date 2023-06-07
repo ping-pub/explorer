@@ -272,21 +272,21 @@ async function update() {
       <!--  -->
       <div class="flex flex-col md:!flex-row">
         <div class="flex mr-1 mb-1">
-          <button class="btn btn-xs btn-primary px-4 w-[34px]"></button>
+          <button class="btn btn-xs !btn-primary px-4 w-[34px]"></button>
           <span class="mx-1">Proposer Signed</span>
         </div>
         <div class="flex mr-1 mb-1">
-          <button class="btn btn-xs btn-warning px-4 w-[34px]"></button>
+          <button class="btn btn-xs !btn-warning px-4 w-[34px]"></button>
           <span class="mx-1">Proposer Not Signed</span>
         </div>
 
         <div class="flex mr-1 mb-1">
-          <button class="btn btn-xs btn-success px-4 w-[34px]"></button>
+          <button class="btn btn-xs !btn-success px-4 w-[34px]"></button>
           <span class="mx-1">Signed</span>
         </div>
 
         <div class="flex mr-1 mb-1">
-          <button class="btn btn-xs btn-neutral px-4 w-[34px]"></button>
+          <button class="btn btn-xs !btn-neutral px-4 w-[34px]"></button>
           <span class="mx-1">Not Signed</span>
         </div>
       </div>
@@ -318,10 +318,10 @@ async function update() {
   </div>
 </template>
 
-<!-- <route>
+<route>
   {
     meta: {
       i18n: 'consensus',
     }
   }
-</route> -->
+</route>
