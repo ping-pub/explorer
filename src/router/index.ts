@@ -1,6 +1,8 @@
 import { useBlockchain } from "@/stores";
-import { setupLayouts } from "virtual:generated-layouts";
 import { createRouter, createWebHistory } from "vue-router";
+// @ts-ignore
+import { setupLayouts } from "virtual:generated-layouts";
+// @ts-ignore
 import routes from "~pages";
 
 const router = createRouter({

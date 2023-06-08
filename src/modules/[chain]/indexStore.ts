@@ -9,7 +9,7 @@ import {
 import { useDistributionStore } from '@/stores/useDistributionStore';
 import { useMintStore } from '@/stores/useMintStore';
 import { useStakingStore } from '@/stores/useStakingStore';
-import type { Tally } from '@/types';
+import type { Coin, Tally } from '@/types';
 import numeral from 'numeral';
 import { defineStore } from 'pinia';
 
@@ -175,6 +175,7 @@ export const useIndexModule = defineStore('module-index', {
           color: 'warning',
           icon: 'mdi-lock',
           stats: formatter.formatTokenAmount({
+            // @ts-ignore
             amount: this.pool.bonded_tokens,
             denom: staking.params.bond_denom,
           }),
@@ -192,8 +193,9 @@ export const useIndexModule = defineStore('module-index', {
           color: 'primary',
           icon: 'mdi-bank',
           stats: formatter.formatTokens(
+            // @ts-ignore
             this.communityPool?.filter(
-              (x) => x.denom === staking.params.bond_denom
+              (x: Coin) => x.denom === staking.params.bond_denom
             )
           ),
           change: 0,
@@ -203,6 +205,7 @@ export const useIndexModule = defineStore('module-index', {
 
     coingeckoId() {
       this.tickerIndex = 0;
+      // @ts-ignore
       const [firstAsset] = this.blockchain?.assets || [];
       return firstAsset.coingecko_id
     }

@@ -5,7 +5,7 @@ import {
   type Endpoint,
   EndpointType,
 } from './useDashboard';
-import type { VerticalNavItems } from '@/@layouts/types';
+import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '@/layouts/types';
 import { useRouter } from 'vue-router';
 import { CosmosRestClient } from '@/libs/client';
 import {
@@ -107,7 +107,7 @@ export const useBlockchain = defineStore('blockchain', {
       // combine all together
       return [
         ...currNavItem,
-        { heading: 'Ecosystem' },
+        { heading: 'Ecosystem' } as NavSectionTitle,
         {
           title: 'Favorite',
           children: favNavItems,
@@ -115,7 +115,7 @@ export const useBlockchain = defineStore('blockchain', {
           badgeClass: 'bg-primary',
           i18n: true,
           icon: { icon: 'mdi-star', size: '22' },
-        },
+        } as NavGroup,
         {
           title: 'All Blockchains',
           to: { path: '/' },
@@ -123,7 +123,7 @@ export const useBlockchain = defineStore('blockchain', {
           badgeClass: 'bg-primary',
           i18n: true,
           icon: { icon: 'mdi-grid', size: '22' },
-        },
+        } as NavLink,
       ];
     },
   },

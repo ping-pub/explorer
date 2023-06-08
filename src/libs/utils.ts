@@ -51,9 +51,10 @@ export function formatTokenAmount(
   tokenDenom = 'uatom',
   format = true
 ) {
-  const denom = tokenDenom?.denom_trace
-    ? tokenDenom?.denom_trace?.base_denom
-    : tokenDenom;
+  const denom = typeof tokenDenom === 'string'
+    ? tokenDenom
+    // @ts-ignore
+    : tokenDenom?.denom_trace?.base_denom;
   let amount = 0;
   const asset = assets.find((a: any) => a.base === denom);
   let exp = asset
@@ -77,60 +78,6 @@ export function numberWithCommas(x: any) {
   const parts = x.toString().split('.');
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return parts.join('.');
-}
-
-export function tokenFormatter(tokens: any, denoms = {}, decimal = 2) {
-  if (Array.isArray(tokens)) {
-    return tokens.map((t) => formatToken(t, denoms, decimal)).join(', ');
-  }
-  return formatToken(tokens, denoms, 2);
-}
-export function formatToken(
-  token: any,
-  IBCDenom = {},
-  decimals = 2,
-  withDenom = true
-) {
-  if (token) {
-    const denom = IBCDenom[token.denom] || token.denom;
-    if (withDenom) {
-      return `${formatTokenAmount(
-        token.amount,
-        decimals,
-        denom
-      )} ${formatTokenDenom(denom)}`;
-    }
-    return formatTokenAmount(token.amount, decimals, denom);
-  }
-  return token;
-}
-export function formatTokenDenom(tokenDenom: any) {
-  if (tokenDenom && tokenDenom.code === undefined) {
-    let denom = tokenDenom.denom_trace
-      ? tokenDenom.denom_trace.base_denom
-      : tokenDenom;
-    const chains = getLocalChains();
-    const selected = localStorage.getItem('selected_chain');
-    const selChain = chains[selected];
-    const nativeAsset = selChain.assets.find((a) => a.base === denom);
-    if (nativeAsset) {
-      denom = nativeAsset.symbol;
-    } else {
-      const config = Object.values(chains);
-      config.forEach((x) => {
-        if (x.assets) {
-          const asset = x.assets.find((a) => a.base === denom);
-          if (asset) denom = asset.symbol;
-        }
-      });
-    }
-    return denom.length > 10
-      ? `${denom.substring(0, 7).toUpperCase()}..${denom.substring(
-          denom.length - 3
-        )}`
-      : denom.toUpperCase();
-  }
-  return '';
 }
 
 export function isToken(value: string) {

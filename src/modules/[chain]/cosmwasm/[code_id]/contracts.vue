@@ -158,7 +158,7 @@ const result = ref('');
         </table>
         <div class="flex justify-between">
           <PaginationBar
-            :limit="50"
+            :limit="pageRequest.limit"
             :total="response.pagination?.total"
             :callback="loadContract"
           />

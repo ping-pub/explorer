@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+import { controlledComputed } from '@vueuse/core'
 
 interface Props {
   title: string;

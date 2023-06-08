@@ -13,6 +13,7 @@ import { useBlockchain } from '@/stores';
 
 import NavBarI18n from './NavBarI18n.vue';
 import NavBarWallet from './NavBarWallet.vue';
+import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '../types';
 
 const dashboard = useDashboard();
 dashboard.initial();
@@ -35,6 +36,20 @@ const changeOpen = (index: Number) => {
   }
 };
 const showDiscord = window.location.host.search('ping.pub') > -1;
+
+function isNavGroup(nav: VerticalNavItems | any): nav is NavGroup {
+   return (<NavGroup>nav).children !== undefined;
+}
+function isNavLink(nav: VerticalNavItems | any): nav is NavLink {
+   return (<NavLink>nav).to !== undefined;
+}
+function isNavTitle(nav: VerticalNavItems | any): nav is NavSectionTitle {
+   return (<NavSectionTitle>nav).heading !== undefined;
+}
+function selected(route: any, nav: NavLink) {
+  const b = route.path === nav.to?.path || route.path.startsWith(nav.to?.path) && nav.title.indexOf('dashboard') === -1
+  return b
+}
 </script>
 
 <template>
@@ -45,10 +60,12 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
       :class="{ block: sidebarShow, 'hidden xl:!block': !sidebarShow }"
     >
       <div class="flex items-center pl-4 py-4 mb-1">
-        <img class="w-10 h-10" src="../../assets/logo.svg" />
-        <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">
-          Ping.pub
-        </h1>
+        <RouterLink to="/" class="flex items-center">
+          <img class="w-10 h-10" src="../../assets/logo.svg" />
+          <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">
+            Ping.pub
+          </h1>
+        </RouterLink>
         <div
           class="pr-4 cursor-pointer xl:!hidden"
           @click="sidebarShow = false"
@@ -62,7 +79,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
         class="px-2"
       >
         <div
-          v-if="item?.title && item?.children?.length"
+          v-if="isNavGroup(item)"
           :tabindex="index"
           class="collapse"
           :class="{
@@ -107,17 +124,15 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
             </div>
           </div>
           <div class="collapse-content">
-            <div class="menu bg-base-100 w-full">
+            <div v-for="(el, key) of item?.children" class="menu bg-base-100 w-full">
               <RouterLink
-                v-for="(el, key) of item?.children"
+                v-if="isNavLink(el)"
                 @click="sidebarShow = false"
-                :key="key"
                 class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
-                :to="el?.to"
                 :class="{
-                  '!bg-primary':
-                    $route.path === el?.to?.path && item?.title !== 'Favorite',
+                  '!bg-primary': selected($route, el),
                 }"
+                :to="el.to"
               >
                 <Icon
                   v-if="!el?.icon?.image"
@@ -137,9 +152,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
                 <div
                   class="text-base capitalize text-gray-500 dark:text-gray-300"
                   :class="{
-                    'text-white':
-                      $route.path === el?.to?.path &&
-                      item?.title !== 'Favorite',
+                    'text-white': item?.title !== 'Favorite',
                   }"
                 >
                   {{ item?.title === 'Favorite' ? el?.title : $t(el?.title) }}
@@ -150,8 +163,8 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
         </div>
 
         <RouterLink
+          v-if="isNavLink(item)"
           :to="item?.to"
-          v-if="item?.title && !item?.children?.length && item?.to"
           @click="sidebarShow = false"
           class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
@@ -183,7 +196,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
           </div>
         </RouterLink>
         <div
-          v-if="item?.heading"
+          v-if="isNavTitle(item)"
           class="px-4 text-sm text-gray-400 pb-2 uppercase"
         >
           {{ item?.heading }}

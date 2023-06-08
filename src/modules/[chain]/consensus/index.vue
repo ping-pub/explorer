@@ -7,11 +7,12 @@ import {
   useDashboard,
   useStakingStore,
 } from '@/stores';
+import { consensusPubkeyToHexAddress } from '@/libs';
+
 const format = useFormatter();
 const chainStore = useBlockchain();
 const dashboard = useDashboard();
 const stakingStore = useStakingStore();
-import { consensusPubkeyToHexAddress } from '@/libs';
 const rpcList = ref(
   chainStore.current?.endpoints?.rpc || [{ address: '', provider: '' }]
 );
@@ -42,21 +43,24 @@ onUnmounted(() => {
 });
 
 const newTime = computed(() => {
-  return format.toDay(updatetime.value || '', 'time');
+  return format.toDay(updatetime.value?.toDateString(), 'time');
 });
 
 const vals = computed(() => {
   return validators.value.map((x) => {
     const x2 = x;
+    // @ts-ignore
     x2.hex = consensusPubkeyToHexAddress(x.consensus_pubkey);
     return x2;
   });
 });
 
-function showName(i, text) {
+function showName(i:number, text: string) {
   if (text === 'nil-Vote') {
+    // @ts-ignore
     if (positions.value?.[i]?.address) {
       const val = vals.value.find(
+        // @ts-ignore
         (x) => x.hex === positions.value?.[i]?.address
       );
       return val?.description?.moniker || i;
@@ -65,10 +69,11 @@ function showName(i, text) {
   }
   const txt = text.substring(text.indexOf(':') + 1, text.indexOf(' '));
   const sig = text.split(' ');
+  // @ts-ignore
   const val = validators.value.find((x) => x?.hex?.startsWith(txt));
   return `${val?.description?.moniker || txt} - ${sig[2]}`;
 }
-function color(i, txt) {
+function color(i: number, txt: string) {
   if (i === roundState.value?.proposer?.index) {
     return txt === 'nil-Vote' ? 'warning' : 'primary';
   }
@@ -99,7 +104,9 @@ async function fetchPosition() {
     const data = await response.json();
     positions.value = data.result.round_state.validators.validators;
   } catch (error) {
+    // @ts-ignore
     httpstatus.value = error?.status || 500;
+    // @ts-ignore
     httpStatusText.value = error?.message || 'Error';
   }
 }
@@ -125,7 +132,7 @@ async function update() {
         step.value = raw[2];
 
         // find the highest onboard rate
-        roundState.value?.height_vote_set?.forEach((element) => {
+        roundState.value?.height_vote_set?.forEach((element: any) => {
           const rates = Number(
             element.prevotes_bit_array.substring(
               element.prevotes_bit_array.length - 4
