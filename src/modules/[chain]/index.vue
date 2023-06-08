@@ -201,7 +201,7 @@ function updateState() {
       </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-4 md:!grid-cols-3 lg:!grid-cols-6">
+    <div class="grid grid-cols-1 gap-4 md:!grid-cols-3 lg:!grid-cols-6">
       <div v-for="(item, key) in store.stats" :key="key">
         <CardStatisticsVertical v-bind="item" />
       </div>
