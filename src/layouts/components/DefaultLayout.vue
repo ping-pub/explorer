@@ -13,7 +13,7 @@ import { useBlockchain } from '@/stores';
 
 import NavBarI18n from './NavBarI18n.vue';
 import NavBarWallet from './NavBarWallet.vue';
-import type { NavGroup, NavLink, NavSectionTitle } from '../types';
+import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '../types';
 
 const dashboard = useDashboard();
 dashboard.initial();
@@ -37,14 +37,18 @@ const changeOpen = (index: Number) => {
 };
 const showDiscord = window.location.host.search('ping.pub') > -1;
 
-function isNavGroup(nav: NavGroup | NavLink | NavSectionTitle | any): nav is NavGroup {
+function isNavGroup(nav: VerticalNavItems | any): nav is NavGroup {
    return (<NavGroup>nav).children !== undefined;
 }
-function isNavLink(nav: NavGroup | NavLink | NavSectionTitle | any): nav is NavLink {
+function isNavLink(nav: VerticalNavItems | any): nav is NavLink {
    return (<NavLink>nav).to !== undefined;
 }
-function isNavTitle(nav: NavGroup | NavLink | NavSectionTitle | any): nav is NavSectionTitle {
+function isNavTitle(nav: VerticalNavItems | any): nav is NavSectionTitle {
    return (<NavSectionTitle>nav).heading !== undefined;
+}
+function selected(route: any, nav: NavLink) {
+  const b = route.path === nav.to?.path || route.path.startsWith(nav.to?.path) && nav.title.indexOf('dashboard') === -1
+  return b
 }
 </script>
 
@@ -118,17 +122,15 @@ function isNavTitle(nav: NavGroup | NavLink | NavSectionTitle | any): nav is Nav
             </div>
           </div>
           <div class="collapse-content">
-            <div class="menu bg-base-100 w-full">
+            <div v-for="(el, key) of item?.children" class="menu bg-base-100 w-full">
               <RouterLink
-                v-for="(el, key) of item?.children"
+                v-if="isNavLink(el)"
                 @click="sidebarShow = false"
-                :key="key"
                 class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
-                :to="el?.to"
                 :class="{
-                  '!bg-primary':
-                    $route.path === el?.to?.path && item?.title !== 'Favorite',
+                  '!bg-primary': selected($route, el),
                 }"
+                :to="el.to"
               >
                 <Icon
                   v-if="!el?.icon?.image"
@@ -148,9 +150,7 @@ function isNavTitle(nav: NavGroup | NavLink | NavSectionTitle | any): nav is Nav
                 <div
                   class="text-base capitalize text-gray-500 dark:text-gray-300"
                   :class="{
-                    'text-white':
-                      $route.path === el?.to?.path &&
-                      item?.title !== 'Favorite',
+                    'text-white': item?.title !== 'Favorite',
                   }"
                 >
                   {{ item?.title === 'Favorite' ? el?.title : $t(el?.title) }}
@@ -161,8 +161,8 @@ function isNavTitle(nav: NavGroup | NavLink | NavSectionTitle | any): nav is Nav
         </div>
 
         <RouterLink
+          v-if="isNavLink(item)"
           :to="item?.to"
-          v-if="isNavGroup(item)"
           @click="sidebarShow = false"
           class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >

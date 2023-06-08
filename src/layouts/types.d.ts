@@ -37,21 +37,22 @@ export interface Icon {
 export interface NavLink extends NavLinkProps {
     title: string
     icon?: Icon
-    badgeContent?: string
+    badgeContent?: string | number
     badgeClass?: string
     disable?: boolean
     order?: number
 }
 
 // 👉 Vertical nav group
-export interface NavGroup extends NavLinkProps {
+export interface NavGroup {
     title: string
     icon?: Icon
-    badgeContent?: string
+    badgeContent?: string | number
     badgeClass?: string
     children: (NavLink | NavGroup)[]
     disable?: boolean
     order?: number
+    i18n?: boolean
 }
 
 export declare type VerticalNavItems = (NavLink | NavGroup | NavSectionTitle)[]
