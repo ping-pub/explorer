@@ -9,6 +9,7 @@
     "min_tx_fee": "800",
     "addr_prefix": "osmo",
     "logo": "/logos/osmosis.jpg",
+    // "theme_color": "99 40% 21%",
     "assets": [{
         "base": "uosmo",
         "symbol": "OSMO",
