@@ -147,6 +147,7 @@ export const useFormatter = defineStore('formatter', {
         }
 
         const conf = mode === 'local'? this.blockchain.current?.assets?.find(
+          // @ts-ignore
           (x) => x.base === token.denom || x.base.denom === token.denom
         ): this.findGlobalAssetConfig(token.denom)
 
@@ -226,7 +227,7 @@ export const useFormatter = defineStore('formatter', {
     numberAndSign(input: number, fmt = '+0,0') {
       return numeral(input).format(fmt);
     },
-    toDay(time?: string, format = 'long') {
+    toDay(time?: string | number, format = 'long') {
       if (!time) return '';
       if (format === 'long') {
         return dayjs(time).format('YYYY-MM-DD HH:mm');

@@ -17,7 +17,7 @@ export const useWalletStore = defineStore('walletStore', {
       balances: [] as Coin[],
       delegations: [] as Delegation[],
       unbonding: [] as UnbondingResponses[],
-      rewards: {} as DelegatorRewards,
+      rewards: {total: [], rewards: []} as DelegatorRewards,
       walletIsConnected: {} as WalletConnected
     };
   },
@@ -28,7 +28,7 @@ export const useWalletStore = defineStore('walletStore', {
     connectedWallet() {
       const chainStore = useBlockchain();
       const key = chainStore.defaultHDPath;
-      let connected = this.walletIsConnected
+      let connected = {} as WalletConnected
       if (!this.walletIsConnected?.cosmosAddress){
         connected = JSON.parse(localStorage.getItem(key) || '{}');
       }
@@ -54,8 +54,9 @@ export const useWalletStore = defineStore('walletStore', {
     },
     rewardAmount() {
       const stakingStore = useStakingStore();
+      // @ts-ignore
       const reward = this.rewards.total?.find(
-        (x) => x.denom === stakingStore.params.bond_denom
+        (x: Coin) => x.denom === stakingStore.params.bond_denom
       );
       return reward || { amount: '0', denom: stakingStore.params.bond_denom };
     },
@@ -125,7 +126,6 @@ export const useWalletStore = defineStore('walletStore', {
       console.log(key, 'key')
       console.log(localStorage.getItem(key))
       localStorage.removeItem(key);
-      this.walletIsConnected = null
       this.$reset()
     },
     setConnectedWallet(value: any) {

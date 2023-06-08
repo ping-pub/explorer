@@ -5,7 +5,7 @@ import {
   type Endpoint,
   EndpointType,
 } from './useDashboard';
-import type { VerticalNavItems } from '@/@layouts/types';
+import type { VerticalNavItems } from '@/layouts/types';
 import { useRouter } from 'vue-router';
 import { CosmosRestClient } from '@/libs/client';
 import {

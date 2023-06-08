@@ -13,6 +13,7 @@ import { useBlockchain } from '@/stores';
 
 import NavBarI18n from './NavBarI18n.vue';
 import NavBarWallet from './NavBarWallet.vue';
+import type { NavGroup, NavLink, NavSectionTitle } from '../types';
 
 const dashboard = useDashboard();
 dashboard.initial();
@@ -35,6 +36,16 @@ const changeOpen = (index: Number) => {
   }
 };
 const showDiscord = window.location.host.search('ping.pub') > -1;
+
+function isNavGroup(nav: NavGroup | NavLink | NavSectionTitle | any): nav is NavGroup {
+   return (<NavGroup>nav).children !== undefined;
+}
+function isNavLink(nav: NavGroup | NavLink | NavSectionTitle | any): nav is NavLink {
+   return (<NavLink>nav).to !== undefined;
+}
+function isNavTitle(nav: NavGroup | NavLink | NavSectionTitle | any): nav is NavSectionTitle {
+   return (<NavSectionTitle>nav).heading !== undefined;
+}
 </script>
 
 <template>
@@ -62,7 +73,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
         class="px-2"
       >
         <div
-          v-if="item?.title && item?.children?.length"
+          v-if="isNavGroup(item)"
           :tabindex="index"
           class="collapse"
           :class="{
@@ -151,7 +162,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
 
         <RouterLink
           :to="item?.to"
-          v-if="item?.title && !item?.children?.length && item?.to"
+          v-if="isNavGroup(item)"
           @click="sidebarShow = false"
           class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
@@ -183,7 +194,7 @@ const showDiscord = window.location.host.search('ping.pub') > -1;
           </div>
         </RouterLink>
         <div
-          v-if="item?.heading"
+          v-if="isNavTitle(item)"
           class="px-4 text-sm text-gray-400 pb-2 uppercase"
         >
           {{ item?.heading }}

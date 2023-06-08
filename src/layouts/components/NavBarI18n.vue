@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import { Icon } from '@iconify/vue';
+import { useI18n } from 'vue-i18n';
+
 const i18nLangs: Array<{ label: string; i18nLang: string }> = [
     {
         label: 'English',
@@ -13,7 +15,7 @@ const i18nLangs: Array<{ label: string; i18nLang: string }> = [
 ];
 
 let locale = ref(useI18n({ useScope: 'global' }).locale);
-watch(locale, (val: string) => {
+watch(locale, (val) => {
     document.documentElement.setAttribute('lang', val as string);
 });
 

@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 
 const props = defineProps({
-    total: { type: Number },
+    total: { type: String },
     limit: { type: Number },
     callback: { type: Function, required: true },
 });
@@ -10,12 +10,13 @@ const current = ref(1)
 const showSize = 3
 const pages = computed(() => {
     const pages: { color: string, page: number }[] = []
-    if (props.total && props.limit && props.total > props.limit) {
+    const total = Number(props.total || 0)
+    if (total > 0 && props.limit && total > props.limit) {
         let page = 0
         while (true) {
-            if (page * props.limit > props.total) break
+            if (page * props.limit > total) break
             page += 1
-            if (props.total / props.limit > 10 && page > showSize && page < (props.total / props.limit - showSize + 1)) {
+            if (total / props.limit > 10 && page > showSize && page < (total / props.limit - showSize + 1)) {
                 if (!(page >= current.value - 1 && page <= current.value + 1)) {
                     continue
                 }
