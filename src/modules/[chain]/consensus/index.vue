@@ -1,17 +1,11 @@
 <script lang="ts" setup>
 import fetch from 'cross-fetch';
 import { onMounted, ref, computed, onUnmounted } from 'vue';
-import {
-  useBlockchain,
-  useFormatter,
-  useDashboard,
-  useStakingStore,
-} from '@/stores';
+import { useBlockchain, useFormatter, useStakingStore } from '@/stores';
 import { consensusPubkeyToHexAddress } from '@/libs';
 
 const format = useFormatter();
 const chainStore = useBlockchain();
-const dashboard = useDashboard();
 const stakingStore = useStakingStore();
 const rpcList = ref(
   chainStore.current?.endpoints?.rpc || [{ address: '', provider: '' }]
@@ -29,25 +23,29 @@ let step = ref('');
 let timer = null;
 let updatetime = ref(new Date());
 let positions = ref([]);
-onMounted(() => {
-  stakingStore.init();
+let validatorsData = ref([] as any);
+onMounted(async () => {
+  // stakingStore.init();
+
+  validatorsData.value = await stakingStore.fetchAcitveValdiators();
+  console.log(validatorsData.value, 'data');
   rpc.value = rpcList.value[0].address + '/consensus_state';
   fetchPosition();
   update();
   timer = setInterval(() => {
     update();
-  }, 6000);
+  }, 60000000);
 });
 onUnmounted(() => {
   timer = null;
 });
 
 const newTime = computed(() => {
-  return format.toDay(updatetime.value?.toDateString(), 'time');
+  return format.toDay(updatetime.value, 'time');
 });
 
 const vals = computed(() => {
-  return validators.value.map((x) => {
+  return validatorsData.value.map((x: any) => {
     const x2 = x;
     // @ts-ignore
     x2.hex = consensusPubkeyToHexAddress(x.consensus_pubkey);
@@ -55,7 +53,7 @@ const vals = computed(() => {
   });
 });
 
-function showName(i:number, text: string) {
+function showName(i: number, text: string) {
   if (text === 'nil-Vote') {
     // @ts-ignore
     if (positions.value?.[i]?.address) {
@@ -77,7 +75,7 @@ function color(i: number, txt: string) {
   if (i === roundState.value?.proposer?.index) {
     return txt === 'nil-Vote' ? 'warning' : 'primary';
   }
-  return txt === 'nil-Vote' ? 'neutral' : 'success';
+  return txt === 'nil-Vote' ? 'gray-700' : 'success';
 }
 function onChange() {
   httpstatus.value = 200;
@@ -258,17 +256,12 @@ async function update() {
 
           <div class="flex flex-wrap py-6">
             <div
-              class="badge"
+              class="inline-flex items-center justify-center w-fit rounded-3xl h-5 text-sm px-2 text-slate-200 leading-5"
               v-for="(pre, i) in item.prevotes"
               :key="i"
               size="sm"
               style="margin: 2px"
-              :class="[
-                `btn-${color(i, pre)} border-${color(i, pre)} !bg-${color(
-                  i,
-                  pre
-                )}`,
-              ]"
+              :class="[`bg-${color(i, pre)}`]"
             >
               <span>{{ showName(i, pre) }}</span>
             </div>
@@ -279,21 +272,21 @@ async function update() {
       <!--  -->
       <div class="flex flex-col md:!flex-row">
         <div class="flex mr-1 mb-1">
-          <button class="btn btn-xs !btn-primary px-4 w-[34px]"></button>
+          <div class="px-4 w-[34px] h-6 rounded-lg bg-primary"></div>
           <span class="mx-1">Proposer Signed</span>
         </div>
         <div class="flex mr-1 mb-1">
-          <button class="btn btn-xs !btn-warning px-4 w-[34px]"></button>
+          <div class="px-4 w-[34px] h-6 rounded-lg bg-warning"></div>
           <span class="mx-1">Proposer Not Signed</span>
         </div>
 
         <div class="flex mr-1 mb-1">
-          <button class="btn btn-xs !btn-success px-4 w-[34px]"></button>
+          <div class="px-4 w-[34px] h-6 rounded-lg bg-success"></div>
           <span class="mx-1">Signed</span>
         </div>
 
         <div class="flex mr-1 mb-1">
-          <button class="btn btn-xs !btn-neutral px-4 w-[34px]"></button>
+          <div class="px-4 w-[34px] h-6 rounded-lg bg-gray-700"></div>
           <span class="mx-1">Not Signed</span>
         </div>
       </div>
