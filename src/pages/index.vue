@@ -26,7 +26,7 @@ const chains = computed(() => {
 </script>
 <template>
   <div class="">
-    <div class="flex flex-col md:flex-row items-center justify-center mb-6 mt-14 gap-3">
+    <div class="flex md:!flex-row flex-col items-center justify-center mb-6 mt-14 gap-2">
       <div class="w-16 rounded-full">
         <img src="/logo.svg" />
       </div>
