@@ -26,15 +26,13 @@ let positions = ref([]);
 let validatorsData = ref([] as any);
 onMounted(async () => {
   // stakingStore.init();
-
   validatorsData.value = await stakingStore.fetchAcitveValdiators();
-  console.log(validatorsData.value, 'data');
   rpc.value = rpcList.value[0].address + '/consensus_state';
   fetchPosition();
   update();
   timer = setInterval(() => {
     update();
-  }, 60000000);
+  }, 6000);
 });
 onUnmounted(() => {
   timer = null;
