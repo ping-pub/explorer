@@ -31,6 +31,8 @@ export const useWalletStore = defineStore('walletStore', {
       let connected = {} as WalletConnected
       if (!this.walletIsConnected?.cosmosAddress){
         connected = JSON.parse(localStorage.getItem(key) || '{}');
+      } else {
+        connected = this.walletIsConnected
       }
       return connected
     },
@@ -123,8 +125,6 @@ export const useWalletStore = defineStore('walletStore', {
     disconnect() {
       const chainStore = useBlockchain();
       const key = chainStore.defaultHDPath;
-      console.log(key, 'key')
-      console.log(localStorage.getItem(key))
       localStorage.removeItem(key);
       this.$reset()
     },
