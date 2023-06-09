@@ -18,7 +18,7 @@ export const useWalletStore = defineStore('walletStore', {
       delegations: [] as Delegation[],
       unbonding: [] as UnbondingResponses[],
       rewards: {total: [], rewards: []} as DelegatorRewards,
-      walletIsConnected: {} as WalletConnected
+      wallet: {} as WalletConnected
     };
   },
   getters: {
@@ -26,12 +26,13 @@ export const useWalletStore = defineStore('walletStore', {
       return useBlockchain();
     },
     connectedWallet() {
+      // @ts-ignore
+      if(this.wallet.cosmosAddress) return this.wallet
+      console.log("orrect", this.wallet)
       const chainStore = useBlockchain();
       const key = chainStore.defaultHDPath;
-      let connected = {} as WalletConnected
-      if (!this.walletIsConnected?.cosmosAddress){
-        connected = JSON.parse(localStorage.getItem(key) || '{}');
-      }
+      const connected = JSON.parse(localStorage.getItem(key) || '{}');
+      console.log("connected:", connected)
       return connected
     },
     balanceOfStakingToken(): Coin {
@@ -62,7 +63,6 @@ export const useWalletStore = defineStore('walletStore', {
     },
     unbondingAmount() {
       let amt = 0;
-      let denom = '';
       this.unbonding.forEach((i) => {
         i.entries.forEach((e) => {
           amt += Number(e.balance);
@@ -123,17 +123,11 @@ export const useWalletStore = defineStore('walletStore', {
     disconnect() {
       const chainStore = useBlockchain();
       const key = chainStore.defaultHDPath;
-      console.log(key, 'key')
-      console.log(localStorage.getItem(key))
       localStorage.removeItem(key);
       this.$reset()
     },
-    setConnectedWallet(value: any) {
-      const chainStore = useBlockchain();
-      const key = chainStore.defaultHDPath;
-      this.walletIsConnected = value || {}
-      // JSON.parse(localStorage.getItem(key) || '{}');
-      return this.walletIsConnected
+    setConnectedWallet(value: WalletConnected) {
+      if(value) this.wallet = value 
     },
     suggestChain() {
       // const router = useRouter()
