@@ -31,7 +31,7 @@ function confirm() {
   }
   const height = /^\d+$/;
   const txhash = /^[A-Z\d]{64}$/;
-  const addr = /^[a-z]+1[a-z\d]{38,58}$/;
+  const addr = /^[a-z\d]+1[a-z\d]{38,58}$/;
 
   const current = blockStore?.current?.chainName || '';
   const routeParams = vueRouters?.currentRoute?.value;
