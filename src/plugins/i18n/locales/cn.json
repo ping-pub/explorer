@@ -6,7 +6,9 @@
     "governance": "社区治理",
     "parameters": "参数",
     "uptime": "状态",
-    "consensus": "Consensus"
+    "consensus": "共识引擎",
+    "supply": "资产供应量",
+    "account": "账户列表"
   },
   "index": {
     "slogan": "Ping Dashboard 是一个区块链浏览器，也是一个网页钱包，还有更多 ... 🛠",
