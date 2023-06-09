@@ -152,7 +152,7 @@ function selected(route: any, nav: NavLink) {
                 <div
                   class="text-base capitalize text-gray-500 dark:text-gray-300"
                   :class="{
-                    'text-white': item?.title !== 'Favorite',
+                    '!text-white': selected($route, el),
                   }"
                 >
                   {{ item?.title === 'Favorite' ? el?.title : $t(el?.title) }}
