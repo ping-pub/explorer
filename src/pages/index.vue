@@ -26,7 +26,7 @@ const chains = computed(() => {
 </script>
 <template>
   <div class="">
-    <div class="flex flex-col md:flex-row items-center justify-center mb-6 mt-14 gap-3">
+    <div class="flex md:!flex-row flex-col items-center justify-center mb-6 mt-14 gap-2">
       <div class="w-16 rounded-full">
         <img src="/logo.svg" />
       </div>
@@ -53,7 +53,7 @@ const chains = computed(() => {
     <div class="flex items-center rounded-lg bg-base-100  border border-gray-200 dark:border-gray-700 mt-10">
       <Icon icon="mdi:magnify" class="text-2xl text-gray-400 ml-3"/>
       <input :placeholder="$t('index.search_placeholder')" class="px-4 h-10 bg-transparent flex-1 outline-none text-base" v-model="keywords" />
-      <div class="px-4 text-base hidden md:block">{{ chains.length }}/{{ dashboard.length }}</div>
+      <div class="px-4 text-base hidden md:!block">{{ chains.length }}/{{ dashboard.length }}</div>
     </div>
 
     <div

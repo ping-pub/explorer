@@ -23,7 +23,10 @@ export const useTxDialog = defineStore('txDialogStore', {
     },
     blockchain() {
       return useBlockchain()
-    }
+    },
+    hdPaths() {
+      return useBlockchain().defaultHDPath
+    },
   },
   actions: {
     setParams(param: any) {

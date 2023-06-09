@@ -48,11 +48,7 @@ export const useBlockchain = defineStore('blockchain', {
     },
     defaultHDPath(): string {
       const cointype = this.current?.coinType || '118';
-      // if(cointype === "60") {
-      //   return `m/44'/${cointype}`
-      // }
       return `m/44'/${cointype}/0'/0/0`;
-      //return "connected-wallet"
     },
     dashboard() {
       return useDashboard();
