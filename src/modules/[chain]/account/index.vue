@@ -75,12 +75,3 @@ function showPubkey(v: any) {
         <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload" />
     </div>
 </template>
-
-<route>
-    {
-      meta: {
-        i18n: 'account',
-        order: 16
-      }
-    }
-  </route>
