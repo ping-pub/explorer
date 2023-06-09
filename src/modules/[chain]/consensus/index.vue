@@ -20,7 +20,7 @@ let rate = ref('');
 let height = ref('');
 let round = ref('');
 let step = ref('');
-let timer = null;
+let timer = null as any;
 let updatetime = ref(new Date());
 let positions = ref([]);
 let validatorsData = ref([] as any);
@@ -30,14 +30,19 @@ onMounted(async () => {
   rpc.value = rpcList.value[0].address + '/consensus_state';
   fetchPosition();
   update();
+  clearTime()
   timer = setInterval(() => {
     update();
   }, 6000);
 });
 onUnmounted(() => {
-  timer = null;
+  clearTime();
 });
 
+function clearTime() {
+  clearInterval(timer);
+  timer = null;
+}
 const newTime = computed(() => {
   return format.toDay(updatetime.value, 'time');
 });
@@ -79,7 +84,7 @@ function onChange() {
   httpstatus.value = 200;
   httpStatusText.value = '';
   roundState.value = {};
-  timer = null;
+  clearTime();
   fetchPosition();
   update();
   timer = setInterval(() => {
