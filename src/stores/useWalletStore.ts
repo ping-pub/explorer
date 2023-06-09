@@ -28,11 +28,9 @@ export const useWalletStore = defineStore('walletStore', {
     connectedWallet() {
       // @ts-ignore
       if(this.wallet.cosmosAddress) return this.wallet
-      console.log("orrect", this.wallet)
       const chainStore = useBlockchain();
       const key = chainStore.defaultHDPath;
       const connected = JSON.parse(localStorage.getItem(key) || '{}');
-      console.log("connected:", connected)
       return connected
     },
     balanceOfStakingToken(): Coin {

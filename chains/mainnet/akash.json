@@ -7,6 +7,7 @@
     "sdk_version": "0.45.4",
     "coin_type": "118",
     "min_tx_fee": "8000",
+    "theme_color": "#ce4747",
     "assets": [{
         "base": "uakt",
         "symbol": "AKT",

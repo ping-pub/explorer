@@ -8,6 +8,7 @@
     "min_tx_fee": "800",
     "addr_prefix": "stride",
     "logo": "/logos/stride.png",
+    "theme_color": "#e91179",
     "assets": [{
         "base": "ustrd",
         "symbol": "STRD",
