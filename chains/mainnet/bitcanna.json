@@ -7,6 +7,7 @@
     "sdk_version": "0.45.10",
     "coin_type": "118",
     "min_tx_fee": "420",
+    "theme_color": "#00b786",
     "assets": [{
         "base": "ubcna",
         "symbol": "BCNA",

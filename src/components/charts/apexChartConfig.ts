@@ -1,4 +1,7 @@
+import { useBlockchain } from '@/stores';
 import numeral from 'numeral';
+
+const chainStore = useBlockchain()
 
 const themeColors = (theme: string) => {
   if (theme === 'light') {
@@ -9,7 +12,7 @@ const themeColors = (theme: string) => {
         surface: '#FFFFFF',
         'surface-variant': '#424242',
         'on-surface-variant': '#EEEEEE',
-        primary: '#666CFF',
+        primary: chainStore.current?.themeColor || '#666CFF',
         'primary-darken-1': '#3700B3',
         secondary: '#6D788D',
         'secondary-darken-1': '#018786',
@@ -89,7 +92,7 @@ const themeColors = (theme: string) => {
       surface: '#30334E',
       'surface-variant': '#BDBDBD',
       'on-surface-variant': '#424242',
-      primary: '#666CFF',
+      primary: chainStore.current?.themeColor || '#666CFF',
       'primary-darken-1': '#3700B3',
       secondary: '#6D788D',
       'secondary-darken-1': '#03DAC5',

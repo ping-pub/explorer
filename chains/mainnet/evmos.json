@@ -8,6 +8,7 @@
     "min_tx_fee": "5000000000000000",
     "addr_prefix": "evmos",
     "logo": "/logos/evmos.png",
+    "theme_color": "#ed4e33",
     "keplr_features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
     "assets": [{
         "base": "aevmos",
