@@ -20,7 +20,7 @@ let rate = ref('');
 let height = ref('');
 let round = ref('');
 let step = ref('');
-let timer = null;
+let timer = null as any;
 let updatetime = ref(new Date());
 let positions = ref([]);
 let validatorsData = ref([] as any);
@@ -28,16 +28,21 @@ onMounted(async () => {
   // stakingStore.init();
   validatorsData.value = await stakingStore.fetchAcitveValdiators();
   rpc.value = rpcList.value[0].address + '/consensus_state';
-  fetchPosition();
+  await fetchPosition();
   update();
+  clearTime()
   timer = setInterval(() => {
     update();
   }, 6000);
 });
 onUnmounted(() => {
-  timer = null;
+  clearTime();
 });
 
+function clearTime() {
+  clearInterval(timer);
+  timer = null;
+}
 const newTime = computed(() => {
   return format.toDay(updatetime.value, 'time');
 });
@@ -75,12 +80,12 @@ function color(i: number, txt: string) {
   }
   return txt === 'nil-Vote' ? 'gray-700' : 'success';
 }
-function onChange() {
+async function onChange () {
   httpstatus.value = 200;
   httpStatusText.value = '';
   roundState.value = {};
-  timer = null;
-  fetchPosition();
+  clearTime();
+  await fetchPosition();
   update();
   timer = setInterval(() => {
     update();
@@ -94,6 +99,7 @@ async function fetchPosition() {
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
     }
+
     httpstatus.value = response.status;
     httpStatusText.value = response.statusText;
 
@@ -110,6 +116,7 @@ async function fetchPosition() {
 async function update() {
   rate.value = '0%';
   updatetime.value = new Date();
+  console.log(httpstatus, 'httpstatus')
   if (httpstatus.value === 200) {
     fetch(rpc.value)
       .then((data) => {
