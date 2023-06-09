@@ -102,3 +102,68 @@ export function isHexAddress(v: any) {
   // return re.test(v)
   return v.length === 28;
 }
+
+export function hexToRgb(hex: string) {
+  // remove '#'
+  hex = hex.replace('#', '');
+  // red
+  const r = parseInt(hex.substring(0, 2), 16);
+  // green
+  const g = parseInt(hex.substring(2, 4), 16);
+  // blue
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  return {
+    color: 'rgb(' + r + ', ' + g + ', ' + b + ')',
+    r,
+    g,
+    b,
+  };
+}
+
+export function rgbToHsl(color: string) {
+  color = color.replace('rgb(', '');
+  color = color.replace(')', '');
+  const colorList = color.split(',') || [0, 0, 0];
+  // console.log(colorList, 'colorList')
+  const r = parseInt(colorList?.[0]) / 255;
+  const g = parseInt(colorList?.[1]) / 255;
+  const b = parseInt(colorList?.[2]) / 255;
+  // console.log(r,g,b, '88')
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h,
+    s,
+    l = (max + min) / 2;
+
+  if (max == min) {
+    h = 0;
+    s = 0;
+  } else {
+    var d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
+    }
+    h = h / 6;
+  }
+
+  h = Math.round(h * 360);
+  s = Math.round(s * 100);
+  l = Math.round(l * 100);
+  return {
+    color: 'hsl(' + h + ', ' + s + '%, ' + l + '%)',
+    value: h + ' ' + s + ' ' + l,
+    h,
+    s,
+    l,
+  };
+}

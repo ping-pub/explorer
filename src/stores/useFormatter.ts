@@ -227,7 +227,7 @@ export const useFormatter = defineStore('formatter', {
     numberAndSign(input: number, fmt = '+0,0') {
       return numeral(input).format(fmt);
     },
-    toDay(time?: string | number, format = 'long') {
+    toDay(time?: string | number| Date, format = 'long') {
       if (!time) return '';
       if (format === 'long') {
         return dayjs(time).format('YYYY-MM-DD HH:mm');

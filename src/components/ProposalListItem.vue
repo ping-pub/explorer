@@ -162,30 +162,7 @@ const proposalInfo = ref();
               {{ showType(item.content['@type']) }}
             </div>
           </div>
-          <div
-            class="flex items-center"
-            :class="
-              statusMap?.[item?.status] === 'PASSED'
-                ? 'text-yes'
-                : statusMap?.[item?.status] === 'REJECTED'
-                ? 'text-no'
-                : 'text-info'
-            "
-          >
-            <div
-              class="w-1 h-1 rounded-full mr-2"
-              :class="
-                statusMap?.[item?.status] === 'PASSED'
-                  ? 'bg-yes'
-                  : statusMap?.[item?.status] === 'REJECTED'
-                  ? 'bg-no'
-                  : 'bg-info'
-              "
-            ></div>
-            <div class="text-xs flex items-center">
-              {{ statusMap?.[item?.status] || item?.status }}
-            </div>
-          </div>
+
           <div
             class="truncate text-xs text-gray-500 dark:text-gray-400 flex items-center justify-end"
           >
@@ -201,7 +178,31 @@ const proposalInfo = ref();
         </div>
 
         <div class="mt-4" v-if="statusMap?.[item?.status] === 'VOTING'">
-          <div class="">
+          <div class="flex justify-between">
+            <div
+              class="flex items-center"
+              :class="
+                statusMap?.[item?.status] === 'PASSED'
+                  ? 'text-yes'
+                  : statusMap?.[item?.status] === 'REJECTED'
+                  ? 'text-no'
+                  : 'text-info'
+              "
+            >
+              <div
+                class="w-1 h-1 rounded-full mr-2"
+                :class="
+                  statusMap?.[item?.status] === 'PASSED'
+                    ? 'bg-yes'
+                    : statusMap?.[item?.status] === 'REJECTED'
+                    ? 'bg-no'
+                    : 'bg-info'
+                "
+              ></div>
+              <div class="text-xs flex items-center">
+                {{ statusMap?.[item?.status] || item?.status }}
+              </div>
+            </div>
             <label
               for="vote"
               class="btn btn-xs btn-primary rounded-sm"
@@ -217,6 +218,7 @@ const proposalInfo = ref();
 
               <span v-else>Vote</span></label
             >
+           
           </div>
         </div>
       </div>
