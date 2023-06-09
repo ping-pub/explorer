@@ -8,6 +8,7 @@
     "min_tx_fee": "3000",
     "addr_prefix": "desmos",
     "logo": "/logos/desmos.png",
+    "theme_color": "#ed6c53",
     "assets": [{
         "base": "udsm",
         "symbol": "DSM",
