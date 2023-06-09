@@ -31,8 +31,6 @@ export const useWalletStore = defineStore('walletStore', {
       let connected = {} as WalletConnected
       if (!this.walletIsConnected?.cosmosAddress){
         connected = JSON.parse(localStorage.getItem(key) || '{}');
-      } else {
-        connected = this.walletIsConnected
       }
       return connected
     },
