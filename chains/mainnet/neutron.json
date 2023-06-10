@@ -17,6 +17,6 @@
         "logo": "/logos/neutron.svg"
     }],
     "addr_prefix": "neutron",
-    "theme_color": "",
+    "theme_color": "#000000",
     "logo": "/logos/neutron.svg"
 }
