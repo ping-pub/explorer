@@ -11,9 +11,6 @@ import { useBlockchain } from '@/stores';
 
 const dashboard = useDashboard();
 
-dashboard.$subscribe((mutation, state) => {
-  localStorage.setItem('favorite', JSON.stringify(state.favorite));
-});
 const keywords = ref('');
 const chains = computed(() => {
   if (keywords.value) {
