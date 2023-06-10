@@ -5675,10 +5675,10 @@ ping-widget@^0.0.33:
     vue "^3.2.47"
     vue3-webcomponent-wrapper "^0.2.0"
 
-ping-widget@^0.0.39:
-  version "0.0.39"
-  resolved "https://registry.yarnpkg.com/ping-widget/-/ping-widget-0.0.39.tgz#53e8807186f363c08c4921e50aa972a8be0b7a7c"
-  integrity sha512-2PRXs+CNOA5G6Qq3bQeIENctj9h1v9ZBNfP1GQJYHfsFcAXAW0JcKcdPwbX7kEyx9gYNctUIB6NkUflHeLWAsg==
+ping-widget@^0.0.40:
+  version "0.0.40"
+  resolved "https://registry.yarnpkg.com/ping-widget/-/ping-widget-0.0.40.tgz#e72f4381bd55cdc3b6bcfe7a15210d130a708b01"
+  integrity sha512-RIJ9vRA2v7ZQTsRwbUef9tSFWBH6fuCfspXc58zsLtc0yNC/kc6/C6HglNhi5wCpFWbMi+fl6Ea+GP2Jl+8iqw==
   dependencies:
     "@cosmjs/amino" "^0.30.1"
     "@cosmjs/cosmwasm-stargate" "^0.30.1"

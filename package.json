@@ -35,7 +35,7 @@
     "md-editor-v3": "^2.8.1",
     "numeral": "^2.0.6",
     "osmojs": "^14.0.0-rc.0",
-    "ping-widget": "^0.0.39",
+    "ping-widget": "^0.0.40",
     "pinia": "^2.0.28",
     "postcss": "^8.4.23",
     "qrcode": "^1.5.3",
