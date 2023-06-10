@@ -252,18 +252,14 @@ export enum ConfigSource {
 
 export const useDashboard = defineStore('dashboard', {
   state: () => {
-    const fav = JSON.parse(
-      localStorage.getItem('favorite') || '["cosmoshub", "osmosis"]'
-    );
     const favMap = JSON.parse(
       localStorage.getItem('favoriteMap') ||
-        '{"cosmoshub":true, "osmosis":true}'
+        '{"cosmos":true, "osmosis":true}'
     );
     return {
       status: LoadingStatus.Empty,
       source: ConfigSource.MainnetCosmosDirectory,
       networkType: NetworkType.Mainnet,
-      favorite: fav as string[],
       favoriteMap: favMap as Record<string, boolean>,
       chains: {} as Record<string, ChainConfig>,
       prices: {} as Record<string, any>,
@@ -330,9 +326,10 @@ export const useDashboard = defineStore('dashboard', {
     setupDefault() {
       if (this.length > 0) {
         const blockchain = useBlockchain();
-        for (let i = 0; i < this.favorite.length; i++) {
-          if (!blockchain.chainName && this.chains[this.favorite[i]]) {
-            blockchain.setCurrent(this.favorite[i]);
+        const keys = Object.keys(this.favoriteMap)
+        for (let i = 0; i < keys.length; i++) {
+          if (!blockchain.chainName && this.chains[keys[i]] && this.favoriteMap[keys[i]]) {
+            blockchain.setCurrent(keys[i]);
             break
           }
         }
