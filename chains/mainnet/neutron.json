@@ -1,7 +1,7 @@
 {
     "chain_name": "neutron",
-    "api": ["https://neutron-api.lavenderfive.com/"],
-    "rpc": ["https://neutron-rpc.lavenderfive.com"],
+    "api": ["https://neutron-api.polkachu.com/"],
+    "rpc": ["https://neutron-rpc.polkachu.com/"],
     "provider_chain": {
         "api": ["https://api-cosmoshub-ia.cosmosia.notional.ventures"]
     },
