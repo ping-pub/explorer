@@ -1,6 +1,6 @@
 {
     "chain_name": "neutron",
-    "api": ["https://rest-kralum.neutron-1.neutron.org", "https://api.novel.remedy.tm.p2p.org", "https://lcd-neutron.whispernode.com", "http://api.neutron.nodestake.top","https://neutron-api.lavenderfive.com/"],
+    "api": ["https://neutron-api.lavenderfive.com/"],
     "rpc": ["https://neutron-rpc.lavenderfive.com"],
     "provider_chain": {
         "api": ["https://api-cosmoshub-ia.cosmosia.notional.ventures"]
