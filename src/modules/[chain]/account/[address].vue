@@ -67,7 +67,22 @@ const totalAmount = computed(() => {
 });
 
 const totalValue = computed(() => {
-  return 0;
+  let value = 0;
+  delegations.value?.forEach((x) => {
+    value += format.tokenValueNumber(x.balance);
+  });
+  rewards.value?.total?.forEach((x) => {
+    value += format.tokenValueNumber(x);
+  });
+  balances.value?.forEach((x) => {
+    value += format.tokenValueNumber(x);
+  });
+  unbonding.value?.forEach((x) => {
+    x.entries?.forEach((y) => {
+      value += format.tokenValueNumber({amount: y.balance, denom: stakingStore.params.bond_denom});
+    });
+  });
+  return format.formatNumber(value, '0,0.00');
 });
 
 
