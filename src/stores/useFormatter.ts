@@ -236,6 +236,10 @@ export const useFormatter = defineStore('formatter', {
     numberAndSign(input: number, fmt = '+0,0') {
       return numeral(input).format(fmt);
     },
+    toLocaleDate(time?: string | number | Date) {
+      if(!time) return ""
+      return new Date(time).toLocaleString(navigator.language)
+    },
     toDay(time?: string | number| Date, format = 'long') {
       if (!time) return '';
       if (format === 'long') {

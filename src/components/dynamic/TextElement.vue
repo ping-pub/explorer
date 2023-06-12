@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { useFormatter } from '@/stores';
+import { isBech32Address } from '@/libs/utils';
+import { useBlockchain, useFormatter } from '@/stores';
 import MdEditor from 'md-editor-v3';
 import { computed } from 'vue';
 
+const chainStore = useBlockchain()
 const props = defineProps(['value']);
 const format = useFormatter();
 function isMD() {
@@ -15,16 +17,26 @@ function isMD() {
   return false;
 }
 
+function isAddress() {
+  return isBech32Address(props.value) && String(props.value).indexOf('valoper1') === -1
+}
+
 const text = computed(() => {
   if(!props.value) return ""
   const v = props.value
   switch(true) {
     case v.length === 28 && v.endsWith("="): {
-      return format.validator(v)
+      return format.validator(v) || v
+    }
+    // 2023-06-12T03:09:38.253756368Z
+    case v.search(/^[1-9]\d{3}-\d{1,2}-\d{1,2}T\d{1,2}:\d{2}:\d{2}[.\d]*Z$/g) > -1: {
+      return new Date(v).toLocaleString(navigator.language)
     }
   }
   return v
 })
+
+
 </script>
 <template>
   <MdEditor
@@ -33,6 +45,7 @@ const text = computed(() => {
     previewOnly
     class="md-editor-recover"
   ></MdEditor>
+  <RouterLink v-else-if="isAddress()" :to="`/${chainStore.chainName}/account/${text}`">{{ text }}</RouterLink>
   <span v-else>{{ text }}</span>
 </template>
 

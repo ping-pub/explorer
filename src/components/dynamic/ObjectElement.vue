@@ -9,7 +9,7 @@ const props = defineProps(['value']);
       <tbody>
         <tr v-for="(v, k) of value">
           <td
-            class="text-capitalize whitespace-break-spaces w-1/5"
+            class="capitalize whitespace-break-spaces w-1/5"
             style="min-width: 180px"
           >
             {{ String(k).replaceAll('_', ' ') }}

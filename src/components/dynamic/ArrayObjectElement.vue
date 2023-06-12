@@ -18,16 +18,8 @@ const header = computed(() => {
 });
 </script>
 <template>
-  <div class="overflow-auto h-[500px] p-4">
-    <div
-      v-if="header.length > 0"
-      class="table table-compact w-full"
-      density="compact"
-      :height="value.length > 5? '300px': ''"
-      fixed-header
-      hover
-     
-    >
+  <div class="overflow-auto p-4 " :class=" value.length > 5 ? 'h-[500px]': ''">
+    <table class="table table-compact w-full">
       <thead v-if="thead">
         <tr>
           <th
@@ -46,8 +38,6 @@ const header = computed(() => {
           </td>
         </tr>
       </tbody>
-    </div>
-
-    <div v-else class="h-[300px]"></div>
+    </table>
   </div>
 </template>

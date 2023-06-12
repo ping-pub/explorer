@@ -3,7 +3,7 @@ import TextElement from './TextElement.vue';
 import ArrayElement from './ArrayElement.vue';
 import UInt8Array from './UInt8Array.vue';
 import NumberElement from './NumberElement.vue';
-import TxsElement from './TxsElement.vue';
+import TokenElement from './TokenElement.vue';
 import ObjectHorizontalElement from './ObjectHorizontalElement.vue';
 import Long from 'long';
 
@@ -31,6 +31,9 @@ function selectObject(v: Object, direct?: string) {
       return UInt8Array;
     case Array.isArray(v):
       return ArrayElement;
+    case v && Object.keys(v).includes('amount') && Object.keys(v).includes('denom'): {
+      return TokenElement;
+    }
     case direct === 'horizontal':
       return ObjectHorizontalElement;
     default:
