@@ -56,7 +56,7 @@ const messages = computed(() => {
                         <tr>
                             <td>Time</td>
                             <td>
-                                {{ tx.tx_response.timestamp }} ({{
+                                {{ format.toLocaleDate(tx.tx_response.timestamp) }} ({{
                                     format.toDay(tx.tx_response.timestamp, 'from')
                                 }})
                             </td>
@@ -92,9 +92,8 @@ const messages = computed(() => {
             <h2 class="card-title truncate mb-2">
                 Messages: ({{ messages.length }})
             </h2>
-            <div class="divider"></div>
             <div v-for="(msg, i) in messages">
-                <div>
+                <div class="border border-slate-400 rounded-md mt-4">
                     <DynamicComponent :value="msg" />
                 </div>
             </div>
