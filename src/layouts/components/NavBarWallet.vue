@@ -108,7 +108,7 @@ const tipMsg = computed(() => {
     <ping-connect-wallet
       :chain-id="baseStore.currentChainId"
       :hd-path="chainStore.defaultHDPath"
-      :prefix="chainStore.current?.bech32Prefix"
+      :addr-prefix="chainStore.current?.bech32Prefix||'cosmos'"
       @connect="walletStateChange"
       @keplr-config="walletStore.suggestChain()"
     />

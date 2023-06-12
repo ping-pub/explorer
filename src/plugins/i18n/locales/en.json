@@ -10,7 +10,9 @@
     "cosmwasm": "Cosmwasm",
     "widget": "Widgets",
     "ibc": "IBC",
-    "consensus": "Consensus"
+    "consensus": "Consensus",
+    "supply": "Supply",
+    "account": "Accounts"
   },
   "index": {
     "slogan": "Ping Dashboard is not just an explorer but also a wallet and more ... 🛠",

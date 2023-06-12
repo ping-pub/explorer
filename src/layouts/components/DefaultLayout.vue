@@ -117,7 +117,7 @@ function selected(route: any, nav: NavLink) {
             </div>
             <div
               v-if="item?.badgeContent"
-              class="mr-6 badge badge-sm text-white"
+              class="mr-6 badge badge-sm text-white border-none"
               :class="item?.badgeClass"
             >
               {{ item?.badgeContent }}
@@ -189,7 +189,7 @@ function selected(route: any, nav: NavLink) {
           </div>
           <div
             v-if="item?.badgeContent"
-            class="badge badge-sm text-white"
+            class="badge badge-sm text-white border-none" 
             :class="item?.badgeClass"
           >
             {{ item?.badgeContent }}

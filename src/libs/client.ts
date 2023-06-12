@@ -31,8 +31,10 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return new CosmosRestClient(endpoint, DEFAULT)
   }
   // Auth Module
-  async getAuthAccounts() {
-    return this.request(this.registry.auth_accounts, {});
+  async getAuthAccounts(page?: PageRequest) {
+    if(!page) page = new PageRequest()
+    const query =`?${page.toQueryString()}`;
+    return this.request(this.registry.auth_accounts, {}, query);
   }
   async getAuthAccount(address: string) {
     return this.request(this.registry.auth_account_address, { address });
@@ -47,8 +49,9 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getBankDenomMetadata() {
     return this.request(this.registry.bank_denoms_metadata, {});
   }
-  async getBankSupply() {
-    return this.request(this.registry.bank_supply, {});
+  async getBankSupply(page?: PageRequest) {    if(!page) page = new PageRequest()
+    const query =`?${page.toQueryString()}`;
+    return this.request(this.registry.bank_supply, {}, query);
   }
   async getBankSupplyByDenom(denom: string) {
     return this.request(this.registry.bank_supply_by_denom, { denom });

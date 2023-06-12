@@ -1,11 +1,11 @@
 {
     "chain_name": "neutron",
-    "api": ["https://neutron-api.lavenderfive.com/"],
-    "rpc": ["https://neutron-rpc.lavenderfive.com"],
+    "api": ["https://neutron-api.polkachu.com/"],
+    "rpc": ["https://neutron-rpc.polkachu.com/"],
     "provider_chain": {
         "api": ["https://api-cosmoshub-ia.cosmosia.notional.ventures"]
     },
-    "features": ["dashboard", "blocks", "ibc", "cosmwasm", "uptime", "parameters", "state-sync"],
+    "features": ["dashboard", "blocks", "ibc", "cosmwasm", "uptime", "parameters", "state-sync", "consensus", "supply", "widget"],
     "sdk_version": "0.45.1",
     "coin_type": "118",
     "min_tx_fee": "8000",
@@ -17,6 +17,6 @@
         "logo": "/logos/neutron.svg"
     }],
     "addr_prefix": "neutron",
-    "theme_color": "",
+    "theme_color": "#000000",
     "logo": "/logos/neutron.svg"
 }
