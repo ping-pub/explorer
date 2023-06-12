@@ -11,7 +11,6 @@ const props = defineProps({
     :time="time > 0 ? time : 0"
     v-slot="{ days, hours, minutes, seconds }"
   >
-    Time Remaining：{{ days }} days, {{ hours }} hours, {{ minutes }} minutes,
-    {{ seconds }} seconds.
+    {{ days }} days {{ hours }} hours {{ minutes }} minutes {{ seconds }} seconds
   </Countdown>
 </template>

@@ -19,6 +19,7 @@ import type {
   UnbondingResponses,
 } from '@/types';
 import type { Coin } from '@cosmjs/amino';
+import Countdown from '@/components/Countdown.vue';
 
 const props = defineProps(['address', 'chain']);
 
@@ -64,6 +65,11 @@ const labels = ['Balance', 'Delegation', 'Reward', 'Unbonding'];
 const totalAmount = computed(() => {
   return totalAmountByCategory.value.reduce((p, c) => c + p, 0);
 });
+
+const totalValue = computed(() => {
+  return 0;
+});
+
 
 function loadAccount(address: string) {
   blockchain.rpc.getAuthAccount(address).then((x) => {
@@ -125,14 +131,10 @@ function updateEvent() {
 
     <!-- Assets -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4">Assets</h2>
-      <div class="grid md:!grid-cols-3">
-        <div class="md:!col-span-1">
-          <DonutChart :series="totalAmountByCategory" :labels="labels" />
-        </div>
-        <div class="mt-4 md:!col-span-2 md:!mt-0 md:!ml-4">
-          <!-- button -->
-          <div class="flex justify-end mb-4 pr-5">
+      <div class="flex justify-between">
+        <h2 class="card-title mb-4">Assets</h2>
+        <!-- button -->
+        <div class="flex justify-end mb-4 pr-5">
             <label
               for="send"
               class="btn btn-primary btn-sm mr-2"
@@ -154,6 +156,12 @@ function updateEvent() {
               >transfer</label
             >
           </div>
+      </div>
+      <div class="grid md:!grid-cols-3">
+        <div class="md:!col-span-1">
+          <DonutChart :series="totalAmountByCategory" :labels="labels" />
+        </div>
+        <div class="mt-4 md:!col-span-2 md:!mt-0 md:!ml-4">          
           <!-- list-->
           <div class="">
             <!--balances  -->
@@ -299,7 +307,7 @@ function updateEvent() {
             </div>
           </div>
           <div class="mt-4 text-lg font-semibold mr-5 pl-5 border-t pt-4">
-            {{ totalAmount }}
+            Total Value: ${{ totalValue }}
           </div>
         </div>
       </div>
@@ -307,20 +315,22 @@ function updateEvent() {
 
     <!-- Delegations -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4">Delegations</h2>
-      <div class="flex justify-end mb-4">
-        <label
-          for="delegate"
-          class="btn btn-primary btn-sm mr-2"
-          @click="dialog.open('delegate', {}, updateEvent)"
-          >Delegate</label
-        >
-        <label
-          for="withdraw"
-          class="btn btn-primary btn-sm"
-          @click="dialog.open('withdraw', {}, updateEvent)"
-          >Withdraw</label
-        >
+      <div class="flex justify-between">
+        <h2 class="card-title mb-4">Delegations</h2>
+        <div class="flex justify-end mb-4">
+          <label
+            for="delegate"
+            class="btn btn-primary btn-sm mr-2"
+            @click="dialog.open('delegate', {}, updateEvent)"
+            >Delegate</label
+          >
+          <label
+            for="withdraw"
+            class="btn btn-primary btn-sm"
+            @click="dialog.open('withdraw', {}, updateEvent)"
+            >Withdraw</label
+          >
+        </div>
       </div>
       <div class="overflow-x-auto">
         <table class="table w-full text-sm table-zebra">
@@ -338,12 +348,12 @@ function updateEvent() {
                 <RouterLink
                   :to="`/${chain}/staking/${v.delegation.validator_address}`"
                   >{{
-                    format.validatorFromBech32(v.delegation.validator_address)
+                    format.validatorFromBech32(v.delegation.validator_address) || v.delegation.validator_address
                   }}</RouterLink
                 >
               </td>
               <td class="py-3">
-                {{ format.formatToken(v.balance, true, '0,0.[00]') }}
+                {{ format.formatToken(v.balance, true, '0,0.[000000]') }}
               </td>
               <td class="py-3">
                 {{
@@ -356,7 +366,7 @@ function updateEvent() {
                 }}
               </td>
               <td class="py-3">
-                <div class="flex justify-end">
+                <div v-if="v.balance" class="flex justify-end">
                   <label
                     for="delegate"
                     class="btn btn-primary btn-xs mr-2"
@@ -423,14 +433,13 @@ function updateEvent() {
               <th class="py-3">Completion Time</th>
             </tr>
           </thead>
-          <tbody class="text-sm">
-            <div v-for="(v, index) in unbonding" :key="index">
+          <tbody class="text-sm" v-for="(v, index) in unbonding" :key="index">
               <tr>
-                <td class="text-caption text-primary py-3">
+                <td class="text-caption text-primary py-3 bg-slate-200" colspan="10">
                   <RouterLink
                     :to="`/${chain}/staking/${v.validator_address}`"
                     >{{
-                      format.validatorFromBech32(v.validator_address)
+                      v.validator_address
                     }}</RouterLink
                   >
                 </td>
@@ -462,11 +471,10 @@ function updateEvent() {
                   }}
                 </td>
                 <td class="py-3">
-                  {{ format.toDay(entry.completion_time, 'to') }}
+                  <Countdown :time="new Date(entry.completion_time).getTime() - new Date().getTime()" />
                 </td>
               </tr>
-            </div>
-          </tbody>
+          </tbody>          
         </table>
       </div>
     </div>

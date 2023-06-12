@@ -280,7 +280,7 @@ export const useDashboard = defineStore('dashboard', {
       const coinIds = [] as string[]
       Object.keys(this.favoriteMap).forEach(k => {
         if(this.chains[k]) this.chains[k].assets.forEach(a => {
-          if(a.coingecko_id !== undefined) {
+          if(a.coingecko_id !== undefined && a.coingecko_id.length > 0) {
             coinIds.push(a.coingecko_id)
             a.denom_units.forEach(u => {
               this.coingecko[u.denom] = {
