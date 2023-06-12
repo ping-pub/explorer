@@ -9,22 +9,22 @@ const props = defineProps(['series', 'labels']);
 const baseStore = useBaseStore();
 
 const expenseRationChartConfig = computed(() => {
-    const theme = baseStore.theme;
-    getDonutChartConfig(theme, props?.labels);
+  const theme = baseStore.theme;
+  return getDonutChartConfig(theme, props?.labels);
 });
 </script>
 
 <template>
-    <ApexCharts
-        type="donut"
-        height="410"
-        :options="expenseRationChartConfig"
-        :series="series"
-    />
+  <ApexCharts
+    type="donut"
+    height="410"
+    :options="expenseRationChartConfig"
+    :series="series"
+  />
 </template>
 
 <script lang="ts">
 export default {
-    name: 'DonetChart',
+  name: 'DonetChart',
 };
 </script>

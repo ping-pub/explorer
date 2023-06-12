@@ -166,7 +166,7 @@ const themeColors = (theme: string) => {
   };
 };
 // 👉 Colors variables
-const colorVariables = (theme: string) => {
+export const colorVariables = (theme: string) => {
   if (theme === 'light') {
     return {
       themeSecondaryTextColor: 'rgba(76,78,100,0.6)',
