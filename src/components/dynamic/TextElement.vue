@@ -2,7 +2,8 @@
 import { isBech32Address } from '@/libs/utils';
 import { useBlockchain, useFormatter } from '@/stores';
 import MdEditor from 'md-editor-v3';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import nameMatcha from '@leapwallet/name-matcha'
 
 const chainStore = useBlockchain()
 const props = defineProps(['value']);
@@ -36,6 +37,13 @@ const text = computed(() => {
   return v
 })
 
+const names = ref([] as {name?: string | null, provider?: string}[])
+
+onMounted(() => {
+  if(isAddress()) nameMatcha.lookupAll(props.value).then(re => {
+    names.value = Object.keys(re).map(key => ({name: re[key], provider: key})).filter( x => x.name)
+  })
+})
 
 </script>
 <template>
@@ -45,7 +53,15 @@ const text = computed(() => {
     previewOnly
     class="md-editor-recover"
   ></MdEditor>
-  <RouterLink v-else-if="isAddress()" :to="`/${chainStore.chainName}/account/${text}`">{{ text }}</RouterLink>
+  <span v-else-if="isAddress()" class="flex">
+    <RouterLink :to="`/${chainStore.chainName}/account/${text}`">{{ text }}</RouterLink>
+    <div v-for="{name, provider} in names">
+      <span class="text-xs truncate relative py-1 px-2 p2-4 w-fit ml-2 rounded text-success tooltip" :data-tip="provider" :title="provider">
+        <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-success"></span>
+        <button>{{ name }}</button>
+      </span>
+    </div>
+  </span>  
   <span v-else>{{ text }}</span>
 </template>
 
