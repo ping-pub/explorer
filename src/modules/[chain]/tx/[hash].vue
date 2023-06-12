@@ -36,8 +36,8 @@ const messages = computed(() => {
                         </tr>
                         <tr>
                             <td>Height</td>
-                            <td class="text-primary">
-                                <RouterLink :to="`/${props.chain}/block/${tx.tx_response.height}`">{{ tx.tx_response.height
+                            <td>
+                                <RouterLink :to="`/${props.chain}/block/${tx.tx_response.height}`" class="text-primary dark:invert">{{ tx.tx_response.height
                                 }}
                                 </RouterLink>
                             </td>

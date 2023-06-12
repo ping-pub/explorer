@@ -46,7 +46,7 @@ function color(v: string) {
             <tbody>
               <tr v-for="(v, index) in list" :key="index">
                 <td class="py-2">
-                  <RouterLink :to="`/${chain}/ibc/connection/${v.id}`" class="text-primary">
+                  <RouterLink :to="`/${chain}/ibc/connection/${v.id}`" class="text-primary dark:invert">
                     {{ v.id }}
                   </RouterLink>
                 </td>

@@ -248,7 +248,7 @@ loadAvatars();
                                     </div>
 
                                     <div class="flex flex-col">
-                                        <h6 class="text-sm text-primary">
+                                        <h6 class="text-sm text-primary dark:invert">
                                             <RouterLink
                                                 :to="{
                                                     name: 'chain-staking-validator',
