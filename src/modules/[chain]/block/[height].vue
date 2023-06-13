@@ -14,6 +14,7 @@ const props = defineProps(['height', 'chain']);
 const store = useBaseStore();
 const format = useFormatter()
 const current = ref({} as Block)
+const target =ref(Number(props.height||0))
 
 const height = computed(() => {
   return Number(current.value.block?.header?.height || props.height || 0);
@@ -22,8 +23,8 @@ const height = computed(() => {
 const isFutureBlock = computed({
   get: () => {
     const latest = store.latest?.block?.header.height
-    const isFuture = latest ? Number(props.height) > Number(latest): true
-    if(!isFuture) store.fetchBlock(props.height).then(x => current.value = x)
+    const isFuture = latest ? target.value > Number(latest): true
+    if(!isFuture && !current.value.block_id) store.fetchBlock(target.value).then(x => current.value = x)
     return isFuture
   },
   set: val => {
@@ -33,7 +34,7 @@ const isFutureBlock = computed({
 
 const remainingBlocks = computed(() => {
   const latest = store.latest?.block?.header.height
-  return latest ? Number(props.height) - Number(latest) : 0
+  return latest ? Number(target.value) - Number(latest) : 0
 })
 
 const estimateTime = computed(() => {
@@ -44,6 +45,13 @@ const estimateTime = computed(() => {
 const estimateDate = computed(() => {
   return new Date(new Date().getTime() + estimateTime.value)
 })
+
+const edit = ref(false)
+const newHeight = ref(props.height)
+function updateTarget() {
+  target.value = Number(newHeight.value)
+  console.log(target.value)
+}
 
 onBeforeRouteUpdate(async (to, from, next) => {
   if (from.path !== to.path) {
@@ -56,20 +64,31 @@ onBeforeRouteUpdate(async (to, from, next) => {
   <div>
     <div v-if="isFutureBlock" class="text-center pt-28">
       <Countdown :time="estimateTime" css="text-5xl font-sans md:mx-5"/>
-      <div class="my-5">Estimated Time: {{ format.toLocaleDate(estimateDate) }}</div>
+      <div class="my-5">Estimated Time: <span class="text-xl font-bold">{{ format.toLocaleDate(estimateDate) }}</span></div>
       <div class="pt-10 flex justify-center">
         <table class="table table-compact rounded-lg">
           <tbody>
-            <tr class="hover">
-              <td>Countdown For Block:</td><td class="text-right"><span class=" ml-40">#{{ height }}</span></td>
+            <tr class="hover cursor-pointer" @click="edit = !edit">
+              <td>Countdown For Block:</td><td class="text-right"><span class=" ml-40">{{ target }}</span></td>
             </tr>
-            <tr class="hover">
+            <tr v-if="edit">
+              <td colspan="2" class="text-center">
+                <h3 class="text-lg font-bold">Input A New Target Block Number</h3>
+                <p class="py-4">
+                  <div class="join">
+                    <input class="input input-bordered join-item" v-model="newHeight" type="number" />
+                    <button class="btn btn-primary join-item" @click="updateTarget()">Update</button>
+                  </div>
+                </p>
+              </td>
+            </tr>
+            <tr>
               <td>Current Height:</td><td class="text-right">#{{ store.latest?.block?.header.height }}</td>
             </tr>
-            <tr class="hover">
+            <tr>
               <td>Remaining Blocks:</td><td class="text-right">{{ remainingBlocks }}</td>
             </tr>
-            <tr class="hover">
+            <tr>
               <td>Average Block Time:</td><td class="text-right">{{ (store.blocktime/1000).toFixed(1) }}s</td>
             </tr>
           </tbody>
