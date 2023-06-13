@@ -198,16 +198,16 @@ function updateEvent() {
                   {{ format.formatToken(balanceItem) }}
                 </div>
                 <div class="text-xs">
-                  ≈${{ format.tokenValue(balanceItem) }}
+                  {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
                 </div>
               </div>
               <div
-                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
               >
                 <span
-                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"
                 ></span>
-                {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
+                ${{ format.tokenValue(balanceItem) }}                
               </div>
             </div>
             <!--delegations  -->
@@ -233,10 +233,10 @@ function updateEvent() {
                 </div>
               </div>
               <div
-                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
               >
                 <span
-                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"
                 ></span>
                 {{
                   format.calculatePercent(
@@ -268,15 +268,15 @@ function updateEvent() {
                 <div class="text-sm font-semibold">
                   {{ format.formatToken(rewardItem) }}
                 </div>
-                <div class="text-xs">≈${{ format.tokenValue(rewardItem) }}</div>
+                <div class="text-xs">{{ format.calculatePercent(rewardItem.amount, totalAmount) }}</div>
               </div>
               <div
-                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
               >
                 <span
-                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"
-                ></span>
-                {{ format.calculatePercent(rewardItem.amount, totalAmount) }}
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary  dark:invert text-sm"
+                ></span>${{ format.tokenValue(rewardItem) }}
+                
               </div>
             </div>
             <!-- mdi-account-arrow-right -->
@@ -303,25 +303,22 @@ function updateEvent() {
                   }}
                 </div>
                 <div class="text-xs">
-                  ≈${{
-                    format.tokenValue({
-                      amount: String(unbondingTotal),
-                      denom: stakingStore.params.bond_denom,
-                    })
-                  }}
+                  {{ format.calculatePercent(unbondingTotal, totalAmount) }}
                 </div>
               </div>
               <div
-                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2"
+                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
               >
-                <span
-                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"
-                ></span>
-                {{ format.calculatePercent(unbondingTotal, totalAmount) }}
+                <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert"></span>
+                ${{format.tokenValue({
+                      amount: String(unbondingTotal),
+                      denom: stakingStore.params.bond_denom,
+                    })
+                  }}                
               </div>
             </div>
           </div>
-          <div class="mt-4 text-lg font-semibold mr-5 pl-5 border-t pt-4">
+          <div class="mt-4 text-lg font-semibold mr-5 pl-5 border-t pt-4 text-right">
             Total Value: ${{ totalValue }}
           </div>
         </div>
@@ -358,6 +355,7 @@ function updateEvent() {
             </tr>
           </thead>
           <tbody class="text-sm">
+            <tr v-if="delegations.length === 0"><td colspan="10"><div class="text-center">No Delegations</div></td></tr>
             <tr v-for="(v, index) in delegations" :key="index">
               <td class="text-caption text-primary py-3">
                 <RouterLink
@@ -509,13 +507,13 @@ function updateEvent() {
           </thead>
           <tbody class="text-sm">
             <tr v-for="(v, index) in txs" :key="index">
-              <td class="text-sm text-primary py-3">
-                <RouterLink :to="`/${chain}/block/${v.height}`">{{
+              <td class="text-sm py-3">
+                <RouterLink :to="`/${chain}/block/${v.height}`" class="text-primary dark:invert">{{
                   v.height
                 }}</RouterLink>
               </td>
-              <td class="truncate text-primary py-3" style="max-width: 200px">
-                <RouterLink :to="`/${chain}/tx/${v.txhash}`">
+              <td class="truncate py-3" style="max-width: 200px">
+                <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
                   {{ v.txhash }}
                 </RouterLink>
               </td>
@@ -530,7 +528,7 @@ function updateEvent() {
                 />
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </td>
-              <td class="py-3">{{ format.toDay(v.timestamp, 'from') }}</td>
+              <td class="py-3">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{ format.toDay(v.timestamp, 'from') }})</span> </td>
             </tr>
           </tbody>
         </table>

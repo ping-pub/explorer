@@ -166,9 +166,9 @@ function color(v: string) {
             <td>{{ v.v.name }}</td>
             <td><span v-if="v.sigingInfo">{{ Number(v.sigingInfo.index_offset) - Number(v.sigingInfo.start_height) }}</span></td>
             <td>
-              <div v-if="v.sigingInfo && !v.sigingInfo?.jailed_until.startsWith('1970')" class="text-xs flex flex-col">
+              <div v-if="v.sigingInfo && !v.sigingInfo?.jailed_until.startsWith('1970')" class="text-xs flex flex-wrap">
+                <div class="mt-1">{{ format.toLocaleDate(v.sigingInfo?.jailed_until) }}</div>
                 <div class="badge">{{ format.toDay(v.sigingInfo.jailed_until, 'from') }}</div>
-                <div>{{v.sigingInfo?.jailed_until }}</div>
               </div>
             </td>
             <td class=" capitalize">{{ v.sigingInfo?.tombstoned }}</td>
