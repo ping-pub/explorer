@@ -32,39 +32,18 @@
       "logo": "/logos/axelar.svg"
     },
     {
-      "base": "uusdc",
-      "symbol": "axlUSDC",
+      "base": "uausdc",
+      "symbol": "aUSDC",
       "exponent": "6",
       "coingecko_id": "usd-coin",
       "logo": "/logos/usdc.svg"
     },
     {
-      "base": "uusdt",
-      "symbol": "axlUSDT",
-      "exponent": "6",
-      "coingecko_id": "tether",
-      "logo": "/logos/usdt.svg"
-    },
-    {
-      "base": "dai-wei",
-      "symbol": "axlDAI",
-      "exponent": "18",
-      "coingecko_id": "dai",
-      "logo": "/logos/dai.svg"
-    },
-    {
-      "base": "weth-wei",
+      "base": "eth-wei",
       "symbol": "axlWETH",
       "exponent": "18",
       "coingecko_id": "ethereum",
       "logo": "/logos/weth.svg"
-    },
-    {
-      "base": "wmatic-wei",
-      "symbol": "axlWMATIC",
-      "exponent": "18",
-      "coingecko_id": "matic-network",
-      "logo": "/logos/wmatic.svg"
     },
     {
       "base": "wavax-wei",
