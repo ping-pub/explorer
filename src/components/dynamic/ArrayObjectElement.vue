@@ -19,15 +19,15 @@ const header = computed(() => {
 </script>
 <template>
   <div class="overflow-auto p-4 " :class=" value.length > 5 ? 'h-[500px]': ''">
-    <table class="table table-compact w-full">
+    <table class="table table-compact table-pin-rows w-full">
       <thead v-if="thead">
         <tr>
           <th
             v-for="(item, index) in header"
             :key="index"
-            class="text-left text-capitalize"
+            class="text-left capitalize"
           >
-            {{ item }} 
+            {{ item }} -
           </th>
         </tr>
       </thead>
