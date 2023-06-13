@@ -1,0 +1,79 @@
+{
+  "chain_name": "axelar",
+  "api": [
+    "https://lcd-axelar-testnet.imperator.co",
+    "https://axelartest-lcd.quickapi.com",
+    "https://axelar-rest-1.staketab.org",
+    "https://axelar-testnet-lcd.qubelabs.io",
+    "https://axelar-lcd.qubelabs.io",
+    "https://axelar-rest.chainode.tech",
+    "https://axelar-lcd.quantnode.tech",
+    "https://axelar-testnet-api.polkachu.com"
+  ],
+  "rpc": [
+    "https://rpc-axelar-testnet.imperator.co:443",
+    "https://axelartest-rpc.quickapi.com",
+    "https://axelar-rpc-1.staketab.org:443",
+    "https://axelar-testnet-rpc.qubelabs.io",
+    "https://axelartest-lcd.quantnode.tech",
+    "https://axelar-testnet-rpc.polkachu.com"
+  ],
+  "snapshot_provider": "",
+  "sdk_version": "0.45.11",
+  "coin_type": "118",
+  "min_tx_fee": "800",
+  "addr_prefix": "axelar",
+  "logo": "/logos/axelar.svg",
+  "theme_color": "#161723",
+  "assets": [
+    {
+      "base": "uaxl",
+      "symbol": "AXL",
+      "exponent": "6",
+      "coingecko_id": "axelar",
+      "logo": "/logos/axelar.svg"
+    },
+    {
+      "base": "uusdc",
+      "symbol": "axlUSDC",
+      "exponent": "6",
+      "coingecko_id": "usd-coin",
+      "logo": "/logos/usdc.svg"
+    },
+    {
+      "base": "uusdt",
+      "symbol": "axlUSDT",
+      "exponent": "6",
+      "coingecko_id": "tether",
+      "logo": "/logos/usdt.svg"
+    },
+    {
+      "base": "dai-wei",
+      "symbol": "axlDAI",
+      "exponent": "18",
+      "coingecko_id": "dai",
+      "logo": "/logos/dai.svg"
+    },
+    {
+      "base": "weth-wei",
+      "symbol": "axlWETH",
+      "exponent": "18",
+      "coingecko_id": "ethereum",
+      "logo": "/logos/weth.svg"
+    },
+    {
+      "base": "wmatic-wei",
+      "symbol": "axlWMATIC",
+      "exponent": "18",
+      "coingecko_id": "matic-network",
+      "logo": "/logos/wmatic.svg"
+    },
+    {
+      "base": "wavax-wei",
+      "symbol": "axlWAVAX",
+      "exponent": "18",
+      "coingecko_id": "avalanche-2",
+      "logo": "/logos/wavax.svg"
+    }
+  ]
+}
