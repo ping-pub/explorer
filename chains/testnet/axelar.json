@@ -28,28 +28,28 @@
       "base": "uaxl",
       "symbol": "AXL",
       "exponent": "6",
-      "coingecko_id": "axelar",
+      "coingecko_id": "",
       "logo": "/logos/axelar.svg"
     },
     {
       "base": "uausdc",
       "symbol": "aUSDC",
       "exponent": "6",
-      "coingecko_id": "usd-coin",
+      "coingecko_id": "",
       "logo": "/logos/usdc.svg"
     },
     {
       "base": "eth-wei",
       "symbol": "axlWETH",
       "exponent": "18",
-      "coingecko_id": "ethereum",
+      "coingecko_id": "",
       "logo": "/logos/weth.svg"
     },
     {
       "base": "wavax-wei",
       "symbol": "axlWAVAX",
       "exponent": "18",
-      "coingecko_id": "avalanche-2",
+      "coingecko_id": "",
       "logo": "/logos/wavax.svg"
     }
   ]
