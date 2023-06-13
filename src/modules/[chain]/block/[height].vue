@@ -14,7 +14,7 @@ const props = defineProps(['height', 'chain']);
 const store = useBaseStore();
 const format = useFormatter()
 const current = ref({} as Block)
-const target =ref(Number(props.height||0))
+const target = ref(Number(props.height || 0))
 
 const height = computed(() => {
   return Number(current.value.block?.header?.height || props.height || 0);
@@ -23,8 +23,8 @@ const height = computed(() => {
 const isFutureBlock = computed({
   get: () => {
     const latest = store.latest?.block?.header.height
-    const isFuture = latest ? target.value > Number(latest): true
-    if(!isFuture && !current.value.block_id) store.fetchBlock(target.value).then(x => current.value = x)
+    const isFuture = latest ? target.value > Number(latest) : true
+    if (!isFuture && !current.value.block_id) store.fetchBlock(target.value).then(x => current.value = x)
     return isFuture
   },
   set: val => {
@@ -63,36 +63,44 @@ onBeforeRouteUpdate(async (to, from, next) => {
 <template>
   <div>
     <div v-if="isFutureBlock" class="text-center pt-28">
-      <Countdown :time="estimateTime" css="text-5xl font-sans md:mx-5"/>
-      <div class="my-5">Estimated Time: <span class="text-xl font-bold">{{ format.toLocaleDate(estimateDate) }}</span></div>
-      <div class="pt-10 flex justify-center">
-        <table class="table table-compact rounded-lg">
-          <tbody>
-            <tr class="hover cursor-pointer" @click="edit = !edit">
-              <td>Countdown For Block:</td><td class="text-right"><span class=" ml-40">{{ target }}</span></td>
-            </tr>
-            <tr v-if="edit">
-              <td colspan="2" class="text-center">
-                <h3 class="text-lg font-bold">Input A New Target Block Number</h3>
-                <p class="py-4">
+      <div v-if="remainingBlocks > 0">
+        <Countdown :time="estimateTime" css="text-5xl font-sans md:mx-5" />
+        <div class="my-5">Estimated Time: <span class="text-xl font-bold">{{ format.toLocaleDate(estimateDate) }}</span>
+        </div>
+        <div class="pt-10 flex justify-center">
+          <table class="table table-compact rounded-lg">
+            <tbody>
+              <tr class="hover cursor-pointer" @click="edit = !edit">
+                <td>Countdown For Block:</td>
+                <td class="text-right"><span class=" ml-40">{{ target }}</span></td>
+              </tr>
+              <tr v-if="edit">
+                <td colspan="2" class="text-center">
+                  <h3 class="text-lg font-bold">Input A New Target Block Number</h3>
+                  <p class="py-4">
                   <div class="join">
                     <input class="input input-bordered join-item" v-model="newHeight" type="number" />
                     <button class="btn btn-primary join-item" @click="updateTarget()">Update</button>
                   </div>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>Current Height:</td><td class="text-right">#{{ store.latest?.block?.header.height }}</td>
-            </tr>
-            <tr>
-              <td>Remaining Blocks:</td><td class="text-right">{{ remainingBlocks }}</td>
-            </tr>
-            <tr>
-              <td>Average Block Time:</td><td class="text-right">{{ (store.blocktime/1000).toFixed(1) }}s</td>
-            </tr>
-          </tbody>
-        </table>
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td>Current Height:</td>
+                <td class="text-right">#{{ store.latest?.block?.header.height }}</td>
+              </tr>
+              <tr>
+                <td>Remaining Blocks:</td>
+                <td class="text-right">{{ remainingBlocks }}</td>
+              </tr>
+              <tr>
+                <td>Average Block Time:</td>
+                <td class="text-right">{{ (store.blocktime / 1000).toFixed(1) }}s</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </div>
     <div v-else>
@@ -129,6 +137,5 @@ onBeforeRouteUpdate(async (to, from, next) => {
         <h2 class="card-title flex flex-row justify-between">Last Commit</h2>
         <DynamicComponent :value="current.block?.last_commit" />
       </div>
-    </div>
   </div>
-</template>
+</div></template>
