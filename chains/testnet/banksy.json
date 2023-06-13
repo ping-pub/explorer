@@ -1,7 +1,7 @@
 {
   "chain_name": "banksy-testnet-2",
-  "api": ["https://composable-api.polkachu.com"],
-  "rpc": ["https://composable-rpc.polkachu.com"],
+  "api": ["https://composable-testnet-api.polkachu.com/"],
+  "rpc": ["https://composable-testnet-rpc.polkachu.com/"],
   "coingecko": "",
   "snapshot_provider": "",
   "sdk_version": "0.37.0",
