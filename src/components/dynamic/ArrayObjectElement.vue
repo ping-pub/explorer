@@ -27,7 +27,7 @@ const header = computed(() => {
             :key="index"
             class="text-left capitalize"
           >
-            {{ item }} -
+            {{ item.replace(/_/g, ' ') }}
           </th>
         </tr>
       </thead>
