@@ -13,7 +13,7 @@ import type { Coin, Tally } from '@/types';
 import numeral from 'numeral';
 import { defineStore } from 'pinia';
 
-function colorMap(color: string) {
+export function colorMap(color: string) {
   switch (color) {
     case 'yellow':
       return 'warning';
@@ -128,7 +128,7 @@ export const useIndexModule = defineStore('module-index', {
     trustColor(): string {
       if(!this.coinInfo?.tickers) return ""
       const change = this.coinInfo?.tickers[this.tickerIndex]?.trust_score;
-      return colorMap(change);
+      return `btn-${colorMap(change)}`;
     },
 
     pool() {

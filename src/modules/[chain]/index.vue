@@ -12,7 +12,7 @@ import {
   useParamStore,
 } from '@/stores';
 import { onMounted, ref } from 'vue';
-import { useIndexModule } from './indexStore';
+import { useIndexModule, colorMap } from './indexStore';
 import { computed } from '@vue/reactivity';
 
 import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
@@ -99,6 +99,10 @@ const color = computed(() => {
 function updateState() {
   walletStore.loadMyAsset()
 }
+
+function trustColor(v: string) {
+  return `text-${colorMap(v)}`
+}
 </script>
 
 <template>
@@ -158,7 +162,7 @@ function updateState() {
                     <li v-for="(item, index) in store.coinInfo.tickers" :key="index" @click="store.selectTicker(index)">
                       <div class="flex items-center justify-between hover:bg-base-100">
                         <div class="flex-1">
-                          <div class="text-main text-sm">
+                          <div class="text-main text-sm" :class="trustColor(item.trust_score)">
                             {{ item?.market?.name }}
                           </div>
                           <div class="text-sm text-gray-500 dark:text-gray-400">
@@ -169,7 +173,7 @@ function updateState() {
                         </div>
 
                         <div class="text-base text-main">
-                          ${{ item.converted_last.usd }}
+                           ${{ item.converted_last.usd }}
                         </div>
                       </div>
                     </li>
@@ -178,7 +182,7 @@ function updateState() {
               </div>
             </div>
 
-            <a :color="store.trustColor" class="my-5 !text-white btn !bg-yes !border-yes w-full" :href="ticker.trade_url"
+            <a class="my-5 !text-white btn w-full" :class="store.trustColor" :href="ticker.trade_url"
               target="_blank">
               Buy {{ coinInfo.symbol || '' }}
             </a>
