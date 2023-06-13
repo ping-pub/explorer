@@ -90,9 +90,28 @@ const change24Color = (key?: Key) => {
     if (v < 0) return 'text-error';
 };
 
+const calculateRank = function (position: number) {
+    let sum = 0;
+    for (let i = 0; i < position; i++) {
+        sum += Number(staking.validators[i]?.delegator_shares);
+    }
+    const percent = sum / staking.totalPower;
+
+    switch (true) {
+        case tab.value === 'active' && percent < 0.33:
+            return 'error';
+        case tab.value === 'active' && percent < 0.67:
+            return 'warning';
+        default:
+            return 'primary';
+    }
+};
+
 const list = computed(() => {
-    return tab.value === 'active' ? staking.validators : unbondList.value;
-    // return staking.validators
+    if (tab.value === 'active') {
+        return staking.validators.map((x, i) => ({v: x, rank: calculateRank(i)}));
+    }
+    return unbondList.value.map((x, i) => ({v: x, rank: 'primary'}));
 });
 
 const loadAvatars = () => {
@@ -136,22 +155,6 @@ const logo = (identity?: string) => {
     return url.startsWith('http')
         ? url
         : `https://s3.amazonaws.com/keybase_processed_uploads/${url}`;
-};
-const rank = function (position: number) {
-    let sum = 0;
-    for (let i = 0; i < position; i++) {
-        sum += Number(staking.validators[i]?.delegator_shares);
-    }
-    const percent = sum / staking.totalPower;
-
-    switch (true) {
-        case tab.value === 'active' && percent < 0.33:
-            return 'error';
-        case tab.value === 'active' && percent < 0.67:
-            return 'warning';
-        default:
-            return 'primary';
-    }
 };
 
 fetchChange();
@@ -200,7 +203,7 @@ loadAvatars();
                     </thead>
                     <tbody>
                         <tr
-                            v-for="(v, i) in list"
+                            v-for="({v, rank}, i) in list"
                             :key="v.operator_address"
                             class="hover:bg-gray-100 dark:hover:bg-[#384059]"
                         >
@@ -208,11 +211,11 @@ loadAvatars();
                             <td>
                                 <div
                                     class="text-xs truncate relative px-2 py-1 rounded-full w-fit"
-                                    :class="`text-${rank(i)}`"
+                                    :class="`text-${rank}`"
                                 >
                                     <span
                                         class="inset-x-0 inset-y-0 opacity-10 absolute"
-                                        :class="`bg-${rank(i)}`"
+                                        :class="`bg-${rank}`"
                                     ></span>
                                     {{ i + 1 }}
                                 </div>
@@ -321,7 +324,7 @@ loadAvatars();
                                     Jailed
                                 </div>
                                 <label
-                                    v-else
+                                    v-else-if="rank !== 'error'"
                                     for="delegate"
                                     class="btn btn-xs btn-primary rounded-sm capitalize"
                                     @click="
