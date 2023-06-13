@@ -506,6 +506,7 @@ function updateEvent() {
             </tr>
           </thead>
           <tbody class="text-sm">
+            <tr v-if="txs.length === 0"><td colspan="10"><div class="text-center">No Transactions</div></td></tr>
             <tr v-for="(v, index) in txs" :key="index">
               <td class="text-sm py-3">
                 <RouterLink :to="`/${chain}/block/${v.height}`" class="text-primary dark:invert">{{
