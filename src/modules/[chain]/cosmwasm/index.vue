@@ -48,7 +48,7 @@ pageload(1)
                         <td>
                             {{ v.instantiate_permission?.permission }}
                             <span>{{ v.instantiate_permission?.address }}
-                                {{ v.instantiate_permission.addresses.join(', ') }}</span>
+                                {{ v.instantiate_permission?.addresses.join(', ') }}</span>
                         </td>
                     </tr>
                 </tbody>
