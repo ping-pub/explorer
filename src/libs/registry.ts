@@ -155,36 +155,46 @@ export function adapter<T>(source: any): T {
   return source;
 }
 
-export interface Registry {
+export interface ApiProfileRegistry {
   [key: string]: RequestRegistry;
 }
 
-export function withCustomAdapter<T extends RequestRegistry>(
+export function withCustomRequest<T extends RequestRegistry>(
   target: T,
   source?: Partial<T>
 ): T {
   return source ? Object.assign({}, target, source) : target;
 }
 
-export function findConfigByName(
+// SDK Version Profile Registry
+export const VERSION_REGISTRY: ApiProfileRegistry = {};
+// ChainName Profile Registory
+export const NAME_REGISTRY: ApiProfileRegistry = {};
+
+export function registryVersionProfile(version: string, requests: RequestRegistry) {
+  VERSION_REGISTRY[version] = requests
+}
+
+export function registryChainProfile(version: string, requests: RequestRegistry) {
+  NAME_REGISTRY[version] = requests
+}
+export function findApiProfileByChain(
   name: string,
-  registry: Registry
 ): RequestRegistry {
-  const url = registry[name];
-  if (!url) {
-    throw new Error(`Unsupported version or name: ${name}`);
-  }
+  const url = NAME_REGISTRY[name];
+  // if (!url) {
+  //   throw new Error(`Unsupported version or name: ${name}`);
+  // }
 
   return url;
 }
 
-export function findConfigByVersion(
+export function findApiProfileBySDKVersion(
   version: string,
-  registry: Registry
 ): RequestRegistry {
   let closestVersion: string | null = null;
 
-  for (const key in registry) {
+  for (const key in VERSION_REGISTRY) {
     if (semver.satisfies(key, version)) {
       if (!closestVersion || semver.gt(key, closestVersion)) {
         closestVersion = key;
@@ -198,5 +208,5 @@ export function findConfigByVersion(
 
   console.log(`Closest version to ${version}: ${closestVersion}`);
 
-  return registry[closestVersion];
+  return VERSION_REGISTRY[closestVersion];
 }

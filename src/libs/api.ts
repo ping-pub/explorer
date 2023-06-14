@@ -1,8 +1,6 @@
 import {
   type RequestRegistry,
-  type Registry,
   adapter,
-  withCustomAdapter,
 } from './registry';
 
 export const DEFAULT: RequestRegistry = {
@@ -192,12 +190,4 @@ export const DEFAULT: RequestRegistry = {
     url: '/ibc/core/connection/v1/connections/{connection_id}/client_state',
     adapter,
   },
-};
-
-export const VERSION_REGISTRY: Registry = {
-  '0.46.1': DEFAULT,
-};
-
-export const NAME_REGISTRY: Registry = {
-  evmos: withCustomAdapter(DEFAULT, {}),
 };
