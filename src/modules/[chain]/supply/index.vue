@@ -32,7 +32,7 @@ function pageload(p: number) {
 
 </script>
 <template>
-    <div>
+    <div class="overflow-auto">
         <table class="table table-compact">
             <thead>
                 <tr>
