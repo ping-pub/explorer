@@ -8,8 +8,6 @@ export interface AccountEntry {
   address: string,
   coinType: string,
   endpoint?: string,
-  delegation?: Coin,
-  balances?: Coin[],
   compatiable?: boolean,
 }
 

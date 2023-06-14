@@ -52,6 +52,12 @@ export interface Coin {
     denom: string;
 }
 
+export interface CoinWithPrice extends Coin {
+    value?: number;
+    price?: number;
+    change24h?: number    
+}
+
 export interface UptimeStatus {
     height: number;
     filled: boolean;

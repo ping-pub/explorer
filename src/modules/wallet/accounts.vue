@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { CosmosRestClient } from '@/libs/client';
 import { useDashboard, useFormatter } from '@/stores';
-import type { Coin, Delegation } from '@/types';
+import type { Coin, CoinWithPrice, Delegation } from '@/types';
 import { fromBech32, toBase64, toBech32, toHex } from '@cosmjs/encoding';
 import { Icon } from '@iconify/vue';
 import { computed } from 'vue';
@@ -28,10 +28,11 @@ const conf = ref(
     AccountEntry[]
   >
 );
-const balances = ref({} as Record<string, Coin[]>);
+const balances = ref({} as Record<string, CoinWithPrice[]>);
 const delegations = ref({} as Record<string, Delegation[]>);
 
-// load balances
+// initial loading queue 
+// load balances 
 Object.values(conf.value).forEach((imported) => {
   let promise = Promise.resolve();
   for (let i = 0; i < imported.length; i++) {
@@ -53,36 +54,73 @@ Object.values(conf.value).forEach((imported) => {
 });
 
 const accounts = computed(() => {
-  let a = [] as AccountEntry[];
+  let a = [] as {
+    account: AccountEntry;
+    delegation: CoinWithPrice;
+    balances: CoinWithPrice[];
+  }[];
   Object.values(conf.value).forEach((x) => {
-    x.forEach((entry) => {
-      const delegation = delegations.value[entry.address];
-      if (delegation && delegation.length > 0) {
-        let amount = 0;
-        let denom = '';
-        delegation.forEach((b) => {
-          amount += Number(b.balance.amount);
-          denom = b.balance.denom;
+    const composition = x.map((entry) => {
+      const d = delegations.value[entry.address];
+      let delegation = { } as CoinWithPrice
+      if (d && d.length > 0) {
+        d.forEach((b) => {
+          delegation.amount = (Number(b.balance.amount) + Number( delegation.amount || 0)).toFixed()
+          delegation.denom = b.balance.denom;
         });
-        entry.delegation = { amount: String(amount), denom };
-      } else {
-        entry.delegation = undefined;
+        delegation.value = format.tokenValueNumber(delegation)
+        delegation.change24h = format.priceChanges(delegation.denom)
       }
-      entry.balances = balances.value[entry.address];
+      return {
+        account: entry,
+        delegation,
+        balances: balances.value[entry.address]
+        ? balances.value[entry.address].map(x => {
+          const value = format.tokenValueNumber(x)
+          return {
+          amount: x.amount, 
+          denom: x.denom, 
+          value, 
+          change24h: format.priceChanges(x.denom)
+        }
+      })
+        : []
+      }
     });
-    a = a.concat(x);
+    a = a.concat(composition);
   });
   return a;
 });
 
 const addresses = computed(() => {
-  return accounts.value.map((x) => x.address);
+  return accounts.value.map((x) => x.account.address);
 });
 
+const totalValue = computed(() => {
+  return accounts.value.reduce((s, e) => {
+    s += e.delegation.value || 0
+    e.balances.forEach(b => {
+      s += b.value || 0
+    })
+    return s
+  }, 0)
+})
+
+const totalChange= computed(() => {
+  return accounts.value.reduce((s, e) => {
+    s += (e.delegation.change24h || 0) * (e.delegation.value || 0) / 100
+    e.balances.forEach(b => {
+      s += (b.change24h || 0) * (b.value || 0) / 100
+    })
+    return s
+  }, 0)
+})
+
+// Adding Model Boxes
 const sourceOptions = computed(() => {
   // scan all connected wallet
   const keys = scanLocalKeys();
-  // all existed keys
+  // parser options from all existed keys
   Object.values(conf.value).forEach((x) => {
     const [first] = x;
     if (first) {
@@ -100,7 +138,7 @@ const sourceOptions = computed(() => {
       }
     }
   });
-  // address
+  // parse options from an given address
   if (sourceAddress.value) {
     const { prefix, data } = fromBech32(sourceAddress.value);
     const chain = Object.values(dashboard.chains).find(
@@ -128,6 +166,8 @@ const availableAccount = computed(() => {
   return [];
 });
 
+// helper functions
+// remove address from the list
 function removeAddress(addr: string) {
   const newConf = {} as Record<string, AccountEntry[]>;
   Object.keys(conf.value).forEach((key) => {
@@ -138,6 +178,7 @@ function removeAddress(addr: string) {
   localStorage.setItem('imported-addresses', JSON.stringify(conf.value));
 }
 
+// add address to the local list
 async function addAddress(acc: AccountEntry) {
   const { data } = fromBech32(acc.address);
   const key = toBase64(data);
@@ -168,6 +209,7 @@ async function addAddress(acc: AccountEntry) {
   localStorage.setItem('imported-addresses', JSON.stringify(conf.value));
 }
 
+// load balances for an address
 async function loadBalances(endpoint: string, address: string) {
   const client = CosmosRestClient.newDefault(endpoint);
   await client.getBankBalances(address).then((res) => {
@@ -213,7 +255,11 @@ async function loadBalances(endpoint: string, address: string) {
             </div>
           </div>
         </div>
-        <div class="mt-5 flex lg:!ml-4 lg:!mt-0"></div>
+        <div class="mt-5 flex flex-col lg:!ml-4 lg:!mt-0 text-right"> 
+          <span>Total Value</span>
+          <span class="text-xl text-success font-bold">${{ format.formatNumber(totalValue, '0,0.[00]') }}</span>
+          <span class="text-sm" :class="format.color(totalChange)">{{ format.formatNumber(totalChange, '+0,0.[00]') }}</span>
+        </div>
       </div>
       <div class="overflow-x-auto">
         <table class="table table-compact w-full">
@@ -229,38 +275,38 @@ async function loadBalances(endpoint: string, address: string) {
           </thead>
           <tbody>
             <!-- row 1 -->
-            <tr v-for="acc in accounts">
+            <tr v-for="{account, balances, delegation} in accounts">
               <td v-if="editable">
                 <Icon
                   icon="mdi:close-box"
                   class="text-error"
-                  @click="removeAddress(acc.address)"
+                  @click="removeAddress(account.address)"
                 ></Icon>
               </td>
               <td class="px-4">
-                <RouterLink :to="`/${acc.chainName}/account/${acc.address}`">
+                <RouterLink :to="`/${account.chainName}/account/${account.address}`">
                   <div class="flex items-center space-x-2">
                     <div class="avatar">
                       <div class="mask mask-squircle w-8 h-8">
-                        <img :src="acc.logo" :alt="acc.address" />
+                        <img :src="account.logo" :alt="account.address" />
                       </div>
                     </div>
                     <div>
                       <div class="font-bold capitalize">
-                        {{ acc.chainName }}
+                        {{ account.chainName }}
                       </div>
                       <div class="text-sm opacity-50 hidden md:!block">
-                        {{ acc.address }}
+                        {{ account.address }}
                       </div>
                     </div>
                   </div>
                 </RouterLink>
               </td>
               <td>
-                <div v-if="acc.delegation">
+                <div v-if="delegation">
                   {{
                     format.formatToken(
-                      acc.delegation,
+                      delegation,
                       true,
                       '0,0.[0000]',
                       'all'
@@ -268,23 +314,23 @@ async function loadBalances(endpoint: string, address: string) {
                   }}
                   <div
                     class="text-xs"
-                    :class="format.priceColor(acc.delegation.denom)"
+                    :class="format.priceColor(delegation.denom)"
                   >
-                    ${{ format.tokenValue(acc.delegation) }}
+                    ${{ format.formatNumber(delegation.value, '0,0.[00]') }}
                   </div>
                 </div>
               </td>
               <td>
-                <div class="flex">
-                  <span v-for="b in acc.balances" class="mr-1">
-                    {{ format.formatToken(b, true, '0,0.[0000]', 'all') }}
+                  <ul tabindex="0" >
+                    <li v-for="b in balances">
+                      {{ format.formatToken(b, true, '0,0.[0000]', 'all') }}
                     <div class="text-xs" :class="format.priceColor(b.denom)">
-                      ${{ format.tokenValue(b) }} ({{
-                        format.showChanges(format.priceChanges(b.denom))
+                      ${{ format.formatNumber(b.value, '0,0.[00]') }} ({{
+                        format.formatNumber(b.change24h, '+0.[0]')
                       }}%)
                     </div>
-                  </span>
-                </div>
+                  </li>
+                  </ul>             
               </td>
               <th>
                 <button class="btn btn-ghost btn-xs hidden">details</button>
@@ -332,7 +378,7 @@ async function loadBalances(endpoint: string, address: string) {
                     Import
                   </a>
                 </span>
-                <RouterLink to="/wallet/keplr" class="btn btn-sm">
+                <RouterLink to="/wallet/keplr" class="btn btn-sm btn-primary">
                   Add chain to Keplr
                 </RouterLink>
               </div>

@@ -4,13 +4,12 @@ import {
   adapter,
   type Request,
   type RequestRegistry,
-  type Registry,
   type AbstractRegistry,
   findApiProfileByChain,
   registryChainProfile,
   withCustomRequest,
 } from './registry';
-import { PageRequest } from '@/types';
+import { PageRequest,type Coin } from '@/types';
 import { CUSTOM } from './custom_api/evmos'
 
 export class BaseRestClient<R extends AbstractRegistry> {
@@ -69,7 +68,8 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     try{
        supply = await this.request(this.registry.bank_supply_by_denom, { denom });
     } catch(err) {
-      supply = await this.request({url: "/cosmos/bank/v1beta1/supply/by_denom?denom={denom}", adapter }, { denom });
+      // will move this to sdk version profile later
+      supply = await this.request({url: "/cosmos/bank/v1beta1/supply/by_denom?denom={denom}", adapter } as Request<{ amount: Coin }>, { denom });
     }
     return supply
   }

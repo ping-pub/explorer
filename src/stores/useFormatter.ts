@@ -73,8 +73,7 @@ export const useFormatter = defineStore('formatter', {
       const prices = this.dashboard.prices[id];
       return prices;
     },
-    priceColor(denom: string, currency = "usd") {
-      const change = this.priceChanges(denom, currency)
+    color(change: number) {
       switch (true) {
         case change > 0:
           return "text-success"
@@ -83,6 +82,10 @@ export const useFormatter = defineStore('formatter', {
         default:
           return ""
       }
+    },
+    priceColor(denom: string, currency = "usd") {
+      const change = this.priceChanges(denom, currency)
+      return this.color(change)
     },
     price(denom: string, currency = "usd") {
       if(!denom || denom.length < 2) return 0
@@ -93,7 +96,7 @@ export const useFormatter = defineStore('formatter', {
       const info = this.priceInfo(denom);
       return info ? info[`${currency}_24h_change`] || 0 : 0;
     },
-    showChanges(v: number) {
+    showChanges(v?: number) {
       return v!==0 ? numeral(v).format("+0,0.[00]"): ""
     },
     tokenValue(token?: Coin) {
@@ -137,6 +140,42 @@ export const useFormatter = defineStore('formatter', {
         }
       }
       return null
+    },
+    tokenDisplayNumber(
+      token?: { denom: string; amount: string },
+      mode = 'all'
+    ) {
+      if (token && token.amount && token?.denom) {
+        let amount = Number(token.amount);
+        let denom = token.denom;
+
+        if (denom && denom.startsWith('ibc/')) {
+          let ibcDenom = this.ibcDenoms[denom.replace('ibc/', '')];
+          if (ibcDenom) {
+            denom = ibcDenom.base_denom;
+          }
+        }
+
+        const conf = mode === 'local'? this.blockchain.current?.assets?.find(
+          // @ts-ignore
+          (x) => x.base === token.denom || x.base.denom === token.denom
+        ): this.findGlobalAssetConfig(token.denom)
+
+        if (conf) {
+          let unit = { exponent: 6, denom: '' };
+          // find the max exponent for display
+          conf.denom_units.forEach((x) => {
+            if (x.exponent >= unit.exponent) {
+              unit = x;
+            }
+          });
+          if (unit && unit.exponent > 0) {
+            amount = amount / Math.pow(10, unit.exponent || 6);
+          }
+        }
+        return amount;
+      }
+      return 0;
     },
     formatToken(
       token?: { denom: string; amount: string },
@@ -230,7 +269,8 @@ export const useFormatter = defineStore('formatter', {
     percent(decimal?: string | number) {
       return decimal ? numeral(decimal).format('0.[00]%') : '-';
     },
-    formatNumber(input: number, fmt = '0.[00]') {
+    formatNumber(input?: number, fmt = '0.[00]') {
+      if(!input) return ""
       return numeral(input).format(fmt)
     },
     numberAndSign(input: number, fmt = '+0,0') {
