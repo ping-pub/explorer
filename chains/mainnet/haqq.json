@@ -1,14 +1,8 @@
 {
   "chain_name": "haqq",
   "coingecko": "",
-  "api": [
-    "https://rest.cosmos.testedge2.haqq.network/",
-    "https://te2-s1-sdk.haqq.sh"
-  ],
-  "rpc": [
-    "https://rpc.tm.testedge2.haqq.network/",
-    "https://te2-s1-tm.haqq.sh"
-  ],
+  "api": ["https://rest.cosmos.haqq.network/", "https://m-s1-sdk.haqq.sh"],
+  "rpc": ["https://rpc.tm.haqq.network/", "https://m-s1-tm.haqq.sh"],
   "snapshot_provider": "",
   "sdk_version": "0.46.10",
   "coin_type": "60",
@@ -24,7 +18,7 @@
   "assets": [
     {
       "base": "aISLM",
-      "symbol": "ISLMT",
+      "symbol": "ISLM",
       "exponent": "18",
       "coingecko_id": "",
       "logo": "/logos/islm.svg"
