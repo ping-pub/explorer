@@ -267,7 +267,7 @@ async function loadBalances(endpoint: string, address: string) {
           <thead class="rounded-none">
             <tr>
               <th v-if="editable"></th>
-              <th>Account</th>
+              <th class="hidden md:block">Account</th>
               <th>Delegation</th>
               <th>Balance</th>
               <th></th>
@@ -283,7 +283,7 @@ async function loadBalances(endpoint: string, address: string) {
                   @click="removeAddress(account.address)"
                 ></Icon>
               </td>
-              <td class="px-4">
+              <td class="px-4 hidden md:block">
                 <RouterLink :to="`/${account.chainName}/account/${account.address}`">
                   <div class="flex items-center space-x-2">
                     <div class="avatar">
@@ -340,7 +340,7 @@ async function loadBalances(endpoint: string, address: string) {
           <tfoot>
             <th colspan="10">
               <div class="flex justify-between">
-                <span class="hidden sm:!block">
+                <span>
                   <button
                     type="button"
                     class="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm"
@@ -378,7 +378,7 @@ async function loadBalances(endpoint: string, address: string) {
                     Import
                   </a>
                 </span>
-                <RouterLink to="/wallet/keplr" class="btn btn-sm btn-primary">
+                <RouterLink to="/wallet/keplr" class="btn btn-sm btn-primary hidden md:block">
                   Add chain to Keplr
                 </RouterLink>
               </div>
