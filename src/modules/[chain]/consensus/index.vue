@@ -116,7 +116,6 @@ async function fetchPosition() {
 async function update() {
   rate.value = '0%';
   updatetime.value = new Date();
-  console.log(httpstatus, 'httpstatus')
   if (httpstatus.value === 200) {
     fetch(rpc.value)
       .then((data) => {
