@@ -62,10 +62,10 @@ onBeforeRouteUpdate(async (to, from, next) => {
 </script>
 <template>
   <div>
-    <div v-if="isFutureBlock" class="text-center pt-28">
+    <div v-if="isFutureBlock" class="text-center">
       <div v-if="remainingBlocks > 0">
-        <div class="text-primary font-bold text-lg md: my-8">#{{ target }}</div>
-        <Countdown :time="estimateTime" css="text-5xl font-sans md:mx-5" />
+        <div class="text-primary font-bold text-lg my-10">#{{ target }}</div>
+        <Countdown :time="estimateTime" css="md:!text-5xl font-sans md:mx-5" />
         <div class="my-5">Estimated Time: <span class="text-xl font-bold">{{ format.toLocaleDate(estimateDate) }}</span>
         </div>
         <div class="pt-10 flex justify-center">
@@ -73,7 +73,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
             <tbody>
               <tr class="hover cursor-pointer" @click="edit = !edit">
                 <td>Countdown For Block:</td>
-                <td class="text-right"><span class=" ml-40">{{ target }}</span></td>
+                <td class="text-right"><span class="md:!ml-40">{{ target }}</span></td>
               </tr>
               <tr v-if="edit">
                 <td colspan="2" class="text-center">
