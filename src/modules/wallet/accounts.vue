@@ -311,7 +311,7 @@ async function loadBalances(endpoint: string, address: string) {
             <div v-for="x in subaccounts">
               <li v-if="x.delegation.amount">
                 <a>
-                  <img :src="x.account.logo" class="w-8 h-8 mr-2" />
+                  <img :src="x.account.logo" class="w-6 h-6 mr-2" />
                   <span class="font-bold">{{ format.formatToken(x.delegation, true, '0,0.[00]', 'all') }} <br><span
                       class="text-xs" :class="format.color(x.delegation.change24h)">{{
                         format.formatNumber(x.delegation.change24h, '+0.[00]') }}%</span></span>
@@ -330,7 +330,7 @@ async function loadBalances(endpoint: string, address: string) {
             <div v-for="s in subaccounts">
               <li v-for="x in s.balances">
                 <a>
-                  <img :src="s.account.logo" class="w-8 h-8 mr-2" />
+                  <img :src="s.account.logo" class="w-6 h-6 mr-2" />
                   <span class="font-bold">{{ format.formatToken(x, true, '0,0.[00]', 'all') }} <br><span
                       class="text-xs" :class="format.color(x.change24h)">{{ format.formatNumber(x.change24h, '+0.[00]')
                       }}%</span></span>
