@@ -149,7 +149,7 @@ function changeTab(v: string) {
       </div>
       <!-- grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-4 mt-4 -->
       <div
-        class="flex flex-row flex-wrap gap-x-4 mt-4"
+        class="flex flex-row flex-wrap gap-x-4 mt-4 justify-center"
         :class="tab === '2' ? '' : 'hidden'"
       >
         <div v-for="({ v, signing, hex }, i) in list" :key="i">

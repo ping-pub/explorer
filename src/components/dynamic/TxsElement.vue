@@ -48,6 +48,6 @@ const chain = useBlockchain();
         </tr>
       </tbody>
     </table>
-    <div v-else>[]</div>
+    <div v-else class="text-center">No Transactions</div>
   </div>
 </template>
