@@ -18,7 +18,7 @@
       >
     </div>
     <div
-      class="hidden md:block"
+      class="hidden md:!block"
     >
       <a
         class="link link-primary no-underline mr-4"

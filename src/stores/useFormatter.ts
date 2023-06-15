@@ -73,7 +73,8 @@ export const useFormatter = defineStore('formatter', {
       const prices = this.dashboard.prices[id];
       return prices;
     },
-    color(change: number) {
+    color(change?: number) {
+      if(!change) return ""
       switch (true) {
         case change > 0:
           return "text-success"
