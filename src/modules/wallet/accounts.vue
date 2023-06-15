@@ -261,7 +261,7 @@ async function loadBalances(endpoint: string, address: string) {
     </div>
 
     <div class="overflow-x-auto">
-      <div v-for="{ key, subaccounts } in accounts" class="bg-base-100 rounded-xl my-5 p-5">
+      <div v-for="{ key, subaccounts } in accounts" class="bg-base-100 rounded-xl my-5 py-5 px-2">
         <div class="flex justify-self-center">
           <div class="mr-2 p-2">
             <svg :fill="chainStore.current?.themeColor || '#666CFF'" height="28px" width="28px" version="1.1" id="Capa_1"
@@ -287,7 +287,7 @@ async function loadBalances(endpoint: string, address: string) {
             </svg>
           </div>
           <div>
-            <div class=" font-bold overflow-hidden">{{ key }}</div>
+            <div class=" max-w-md overflow-hidden"><div class="font-bold">{{ key }}</div></div>
             <div class="dropdown">
               <label tabindex="0" class="">{{ subaccounts.length }} addresses</label>
               <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box z-50">
@@ -295,9 +295,9 @@ async function loadBalances(endpoint: string, address: string) {
                 <a>
                   <img :src="x.account.logo" class="w-8 h-8 mr-2" />
                   <span class="font-bold capitalize">{{ x.account.chainName }} <br>
-                    <span class="text-xs font-normal">{{ x.account.address }}</span>
+                    <span class="text-xs font-normal sm:w-16 sm:overflow-hidden">{{ x.account.address }}</span>
                   </span>
-                  <label class="btn btn-error btn-xs" @click="removeAddress(x.account.address)">Remove</label>
+                  <label class=" btn btn-xs !btn-error" @click="removeAddress(x.account.address)">Remove</label>
                 </a>
               </li>
               </ul>
@@ -344,7 +344,7 @@ async function loadBalances(endpoint: string, address: string) {
         </div>
       </div>
 
-      <div class=" text-center bg-base-100 rounded-xl p-4">
+      <div class=" text-center bg-base-100 rounded-xl my-4 p-4">
         <a href="#address-modal"
           class="inline-flex items-center ml-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
           <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
