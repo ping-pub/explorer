@@ -287,7 +287,7 @@ async function loadBalances(endpoint: string, address: string) {
             </svg>
           </div>
           <div>
-            <div class=" font-bold">{{ key }}</div>
+            <div class=" font-bold overflow-hidden">{{ key }}</div>
             <div class="dropdown">
               <label tabindex="0" class="">{{ subaccounts.length }} addresses</label>
               <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box z-50">

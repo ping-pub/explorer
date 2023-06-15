@@ -70,16 +70,16 @@ onMounted(() => {
         We can configure Tendermint to use state sync in
         $DAEMON_HOME/config/config.toml.
         <br /><br />
-        <div class="mockup-code my-2">
-            <pre data-prefix=">"><code class="text-gray-400">[state-sync]</code></pre>
-            <pre data-prefix=">"><code class="text-gray-400">enable = true</code></pre>
-            <pre data-prefix=">"><code class="text-gray-400"></code></pre>
-            <pre data-prefix=">"><code class="text-gray-400">rpc_servers = "{{ rpcs }}"</code></pre>
-            <pre data-prefix=">"><code class="text-gray-400">trust_height = {{ height }} </code></pre>
-            <pre data-prefix=">"><code class="text-gray-400">trust_hash = "{{hash}}"</code></pre>
-            <pre data-prefix=">"><code class="text-gray-400"></code></pre>
+        <div class="mockup-code bg-base-200 my-2">
+            <pre data-prefix=">"><code class="text-gray-800 dark:invert">[state-sync]</code></pre>
+            <pre data-prefix=">"><code class="text-gray-800 dark:invert">enable = true</code></pre>
+            <pre data-prefix=">"><code class="text-gray-800"></code></pre>
+            <pre data-prefix=">"><code class="text-gray-800 dark:invert">rpc_servers = "{{ rpcs }}"</code></pre>
+            <pre data-prefix=">"><code class="text-gray-800 dark:invert">trust_height = {{ height }} </code></pre>
+            <pre data-prefix=">"><code class="text-gray-800 dark:invert">trust_hash = "{{hash}}"</code></pre>
+            <pre data-prefix=">"><code class="text-gray-800 dark:invert"></code></pre>
             <pre data-prefix=">"><code class="text-green-400"># 2/3 of unbonding time</code></pre>
-            <pre data-prefix=">"><code class="text-gray-400">trust_period = "168h"</code></pre>
+            <pre data-prefix=">"><code class="text-gray-800 dark:invert">trust_period = "168h"</code></pre>
         </div>
         <br />
         3. Start the daemon: <code class="bg-base-200 text-gray-600 px-2 py-px mx-1 rounded shadow">{{ appName }} start</code>
@@ -97,14 +97,14 @@ onMounted(() => {
         To make state sync works, we can enable snapshot in
         $DAEMON_HOME/config/app.toml
         <br /><br />
-        <div class="mockup-code my-2">
-            <pre data-prefix=">"><code class="text-gray-400">[state-sync]</code></pre>
+        <div class="mockup-code bg-base-200 my-2">
+            <pre data-prefix=">"><code class="text-gray-800 dark:invert">[state-sync]</code></pre>
             <pre data-prefix=">"><code class="text-green-400"># snapshot-interval specifies the block interval at which local state sync snapshots are</code></pre>
             <pre data-prefix=">"><code class="text-green-400"># taken (0 to disable). Must be a multiple of pruning-keep-every.</code></pre>
-            <pre data-prefix=">"><code class="text-gray-400">snapshot-interval = 1000</code></pre>
-            <pre data-prefix=">"><code class="text-gray-400"></code></pre>
+            <pre data-prefix=">"><code class="text-gray-800 dark:invert">snapshot-interval = 1000</code></pre>
+            <pre data-prefix=">"><code class="text-gray-800 dark:invert"></code></pre>
             <pre data-prefix=">"><code class="text-green-400"># snapshot-keep-recent specifies the number of recent snapshots to keep and serve (0 to keep all). Each snapshot is about 500MiB</code></pre>
-            <pre data-prefix=">"><code class="text-gray-400">snapshot-keep-recent = 2</code></pre>
+            <pre data-prefix=">"><code class="text-gray-800 dark:invert">snapshot-keep-recent = 2</code></pre>
         </div>
       </div>
     </div>
