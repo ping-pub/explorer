@@ -5,7 +5,7 @@
     "https://axelartest-lcd.quickapi.com",
     "https://axelar-rest-1.staketab.org",
     "https://axelar-testnet-lcd.qubelabs.io",
-    "https://axelar-lcd.quantnode.tech",
+    "https://axelartest-lcd.quantnode.tech",
     "https://axelar-testnet-api.polkachu.com"
   ],
   "rpc": [
@@ -13,7 +13,7 @@
     "https://axelartest-rpc.quickapi.com",
     "https://axelar-rpc-1.staketab.org:443",
     "https://axelar-testnet-rpc.qubelabs.io",
-    "https://axelartest-lcd.quantnode.tech",
+    "https://axelartest-rpc.quantnode.tech",
     "https://axelar-testnet-rpc.polkachu.com"
   ],
   "snapshot_provider": "",
