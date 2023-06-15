@@ -124,7 +124,7 @@ function selected(route: any, nav: NavLink) {
             </div>
           </div>
           <div class="collapse-content">
-            <div v-for="(el, key) of item?.children" class="menu bg-base-100 w-full">
+            <div v-for="(el, key) of item?.children" class="menu bg-base-100 w-full !p-0">
               <RouterLink
                 v-if="isNavLink(el)"
                 @click="sidebarShow = false"

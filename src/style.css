@@ -20,10 +20,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.menu {
-  padding: 0.15rem;
-}
-
 :root {
   --text-main: #333;
   --text-secondary: #4b525d;
