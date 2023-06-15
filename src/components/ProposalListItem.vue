@@ -226,7 +226,7 @@ const proposalInfo = ref();
 
     <input type="checkbox" id="proposal-detail-modal" class="modal-toggle" />
     <label for="proposal-detail-modal" class="modal">
-      <label class="modal-box w-11/12 max-w-5xl" for="">
+      <label class="modal-box !w-11/12 !max-w-5xl" for="">
         <label
           for="proposal-detail-modal"
           class="btn btn-sm btn-circle absolute right-2 top-2"
