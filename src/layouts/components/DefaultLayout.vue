@@ -147,7 +147,9 @@ function selected(route: any, nav: NavLink) {
                 <img
                   v-if="el?.icon?.image"
                   :src="el?.icon?.image"
-                  class="w-6 h-6 rounded-full mr-3 ml-4"
+                  class="w-6 h-6 rounded-full mr-3 ml-4 " :class="{
+                  'border border-gray-300 bg-white': selected($route, el),
+                }"
                 />
                 <div
                   class="text-base capitalize text-gray-500 dark:text-gray-300"
@@ -180,7 +182,7 @@ function selected(route: any, nav: NavLink) {
           <img
             v-if="item?.icon?.image"
             :src="item?.icon?.image"
-            class="w-6 h-6 rounded-full mr-3"
+            class="w-6 h-6 rounded-full mr-3 border border-blue-100"
           />
           <div
             class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap"

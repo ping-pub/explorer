@@ -18,8 +18,8 @@ const header = computed(() => {
 });
 </script>
 <template>
-  <div class="overflow-auto p-4 " :class=" value.length > 5 ? 'h-[500px]': ''">
-    <table class="table table-compact table-pin-rows w-full">
+  <div class="overflow-auto max-h-96 ">
+    <table class="table table-xs table-compact table-pin-rows w-full">
       <thead v-if="thead">
         <tr>
           <th

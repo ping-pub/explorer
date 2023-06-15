@@ -106,7 +106,7 @@ export function isHexAddress(v: any) {
 export function isBech32Address(v?: string) {
   if(!v) return ""
   const pattern = /^[a-z\d]+1[a-z\d]{38}$/g
-  return v.search(pattern) > -1
+  return String(v).search(pattern) > -1
 }
 
 export function hexToRgb(hex: string) {

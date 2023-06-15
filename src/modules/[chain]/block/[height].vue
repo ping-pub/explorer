@@ -64,11 +64,12 @@ onBeforeRouteUpdate(async (to, from, next) => {
   <div>
     <div v-if="isFutureBlock" class="text-center pt-28">
       <div v-if="remainingBlocks > 0">
+        <div class="text-primary font-bold text-lg md: my-8">#{{ target }}</div>
         <Countdown :time="estimateTime" css="text-5xl font-sans md:mx-5" />
         <div class="my-5">Estimated Time: <span class="text-xl font-bold">{{ format.toLocaleDate(estimateDate) }}</span>
         </div>
         <div class="pt-10 flex justify-center">
-          <table class="table table-compact rounded-lg">
+          <table class="table w-max rounded-lg bg-base-100">
             <tbody>
               <tr class="hover cursor-pointer" @click="edit = !edit">
                 <td>Countdown For Block:</td>

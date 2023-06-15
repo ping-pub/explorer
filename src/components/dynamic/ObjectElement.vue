@@ -15,10 +15,7 @@ const props = defineProps(['value']);
             {{ String(k).replaceAll('_', ' ') }}
           </td>
           <td>
-            <div
-              class="overflow-hidden w-auto whitespace-normal"
-              style="max-width: 1000px"
-            >
+            <div class="overflow-hidden w-auto whitespace-normal" >
               <Component
                 v-if="v"
                 :is="select(v, 'horizontal')"

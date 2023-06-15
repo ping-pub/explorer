@@ -25,7 +25,7 @@ function isAddress() {
 
 const text = computed(() => {
   if(!props.value) return ""
-  const v = props.value
+  const v = String(props.value)
   switch(true) {
     case v.length === 28 && v.endsWith("="): {
       return format.validator(v) || v
