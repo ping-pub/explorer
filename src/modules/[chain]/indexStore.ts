@@ -128,7 +128,7 @@ export const useIndexModule = defineStore('module-index', {
     trustColor(): string {
       if(!this.coinInfo?.tickers) return ""
       const change = this.coinInfo?.tickers[this.tickerIndex]?.trust_score;
-      return `btn-${colorMap(change)}`;
+      return change;
     },
 
     pool() {

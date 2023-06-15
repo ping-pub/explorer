@@ -103,6 +103,25 @@ function updateState() {
 function trustColor(v: string) {
   return `text-${colorMap(v)}`
 }
+
+const quantity = ref(100)
+const qty = computed({
+  get: () => {
+    return parseFloat(quantity.value.toFixed(6))
+  },
+  set: val => {
+    quantity.value = val
+  }
+})
+const amount = computed({
+  get: () => {
+    return quantity.value * ticker.value.converted_last.usd || 0
+  },
+  set: val => {
+    quantity.value = val / ticker.value.converted_last.usd || 0
+  }
+})
+
 </script>
 
 <template>
@@ -182,10 +201,42 @@ function trustColor(v: string) {
               </div>
             </div>
 
-            <a class="my-5 !text-white btn w-full" :class="store.trustColor" :href="ticker.trade_url"
-              target="_blank">
-              Buy {{ coinInfo.symbol || '' }}
-            </a>
+            <div class="flex">
+              <label class="btn btn-primary px-1 my-5 mr-2" for="calculator">
+                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect x="4" y="2" width="16" height="20" rx="2"></rect> <line x1="8" x2="16" y1="6" y2="6"></line> <line x1="16" x2="16" y1="14" y2="18"></line> <path d="M16 10h.01"></path> <path d="M12 10h.01"></path> <path d="M8 10h.01"></path> <path d="M12 14h.01"></path> <path d="M8 14h.01"></path> <path d="M12 18h.01"></path> <path d="M8 18h.01"></path> </g></svg>
+              </label>
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="calculator" class="modal-toggle" />
+              <div class="modal">
+                <div class="modal-box">
+                  <h3 class="text-lg font-bold">Price Calculator</h3>
+                  <div class="flex flex-col w-full mt-5">
+                    <div class="grid h-20 flex-grow card rounded-box place-items-center">
+                      <div class="join w-full">
+                        <label class="join-item btn">
+                          <span class="uppercase">{{ coinInfo.symbol }}</span>
+                        </label>
+                        <input type="number" v-model="qty" min="0" placeholder="Input a number" class="input grow input-bordered join-item" />
+                      </div>
+                    </div>
+                    <div class="divider">=</div>
+                    <div class="grid h-20 flex-grow card rounded-box place-items-center">
+                      <div class="join w-full">
+                        <label class="join-item btn">
+                          <span>USD</span>
+                        </label>
+                        <input type="number" v-model="amount" min="0" placeholder="Input amount" class="join-item grow input input-bordered" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <label class="modal-backdrop" for="calculator">Close</label>
+              </div>
+              <a class="my-5 !text-white btn grow" :class="{'btn-success': store.trustColor === 'green', 'btn-warning': store.trustColor === 'yellow'}" :href="ticker.trade_url"
+                target="_blank">
+                Buy {{ coinInfo.symbol || '' }}
+              </a>
+            </div>
           </div>
         </div>
 
