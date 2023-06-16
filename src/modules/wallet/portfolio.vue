@@ -25,12 +25,7 @@ const tokenMeta = ref({} as Record<string, AccountEntry>);
 const loading = ref(0)
 const loaded = ref(0)
 
-scanLocalKeys().forEach((wallet) => {
-  const { data } = fromBech32(wallet.cosmosAddress);
-  const walletKey = toBase64(data);
-  let imported = conf.value[walletKey];
-
-  // load balance & delegations
+Object.values(conf.value).forEach((imported) => {
   if (imported)
     imported.forEach((x) => {
       if (x.endpoint && x.address) {
