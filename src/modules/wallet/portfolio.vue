@@ -110,7 +110,6 @@ const tokenList = computed(() => {
 
 const priceloading = ref(false)
 const prices = ref([])
-const coinIds = ref({} as Record<string, string>)
 const tokenQty = computed(() => {
   const values = {} as Record<string, { coinId: string, qty: number }>;
   Object.values(balances.value).forEach((b) => {
@@ -146,9 +145,7 @@ watchEffect(() => {
       priceloading.value = true
       get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=14d&locale=en`)
         .then(res => {
-          console.log("response: ", res)
           prices.value = res
-          res.forEach((x: any) => console.log(x.sparkline_in_7d.price.length))
         })
     }
   }
@@ -169,7 +166,7 @@ const changeData = computed(() => {
 
   for (let i = 0; i < width; i++) {
     for (let j = 0; j < vals.length; j++) {
-      sum[i] += vals[j][i] || 0
+      sum[i] += vals.at(j)?.at(i) || 0
     }
   }
 
@@ -204,7 +201,7 @@ const chartConfig = computed(() => {
               <path
                 d="M3 15.055v-.684c.126.053.255.1.39.142 2.092.642 4.313.987 6.61.987 2.297 0 4.518-.345 6.61-.987.135-.041.264-.089.39-.142v.684c0 1.347-.985 2.53-2.363 2.686a41.454 41.454 0 01-9.274 0C3.985 17.585 3 16.402 3 15.055z" />
             </svg>
-            Manage all your assets in one page
+            Track all your assets in one page
           </div>
         </div>
       </div>
@@ -226,7 +223,7 @@ const chartConfig = computed(() => {
 
       <div class="overflow-x-auto mt-4">
         <table class="table w-full">
-          <thead>
+          <thead class="bg-base-200">
             <tr>
               <th>Token</th>
               <th class="text-right">Value</th>
@@ -254,8 +251,11 @@ const chartConfig = computed(() => {
 
       </div>
       <div class="p-4 text-center" v-if="tokenList.length === 0">
-        No Data, <RouterLink to="./account" class="btn btn-link">Import Address</RouterLink>
+        No Data
       </div>
+    </div>
+    <div class="text-center my-5 bg-base-200">
+      <RouterLink to="./account" class="btn btn-link">Add More Asset</RouterLink>
     </div>
   </div>
 </template>

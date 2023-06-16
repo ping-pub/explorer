@@ -266,15 +266,6 @@ export const getDonutChartConfig = (
   theme: string,
   labels: string[]
 ) => {
-  // const donutColors = {
-  //   series1: '#fdd835',
-  //   series2: '#00d4bd',
-  //   series3: '#826bf8',
-  //   series4: '#32baff',
-  //   series5: '#ffa1a1',
-  // };
-
-  console.log(donutColors)
 
   const { themeSecondaryTextColor, themePrimaryTextColor } =
     colorVariables(theme);
