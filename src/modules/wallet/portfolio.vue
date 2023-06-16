@@ -1,12 +1,15 @@
 <script lang="ts" setup>
 import { CosmosRestClient } from '@/libs/client';
 import type { Coin, Delegation } from '@/types';
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { scanLocalKeys, type AccountEntry } from './utils';
 import { fromBech32, toBase64 } from '@cosmjs/encoding';
 import { computed } from 'vue';
-import { useFormatter } from '@/stores';
+import { useBaseStore, useFormatter } from '@/stores';
 import DonutChart from '@/components/charts/DonutChart.vue';
+import ApexCharts from 'vue3-apexcharts';
+import { get } from '@/libs';
+import { getMarketPriceChartConfig } from '@/components/charts/apexChartConfig';
 
 const format = useFormatter();
 const conf = ref(
@@ -19,6 +22,9 @@ const balances = ref({} as Record<string, Coin[]>);
 const delegations = ref({} as Record<string, Delegation[]>);
 const tokenMeta = ref({} as Record<string, AccountEntry>);
 
+const loading = ref(0)
+const loaded = ref(0)
+
 scanLocalKeys().forEach((wallet) => {
   const { data } = fromBech32(wallet.cosmosAddress);
   const walletKey = toBase64(data);
@@ -28,16 +34,19 @@ scanLocalKeys().forEach((wallet) => {
   if (imported)
     imported.forEach((x) => {
       if (x.endpoint && x.address) {
+        loading.value += 1
         const client = CosmosRestClient.newDefault(x.endpoint);
         client.getBankBalances(x.address).then((res) => {
           const bal = res.balances.filter((x) => x.denom.length < 10);
-          if(bal) balances.value[x.address || ""] = bal;
+          if (bal) balances.value[x.address || ""] = bal;
           bal.forEach((b) => {
             tokenMeta.value[b.denom] = x;
           });
+        }).finally(() => {
+          loaded.value += 1
         });
         client.getStakingDelegations(x.address).then((res) => {
-          if(res && res.delegation_responses) delegations.value[x.address || ""] = res.delegation_responses;
+          if (res && res.delegation_responses) delegations.value[x.address || ""] = res.delegation_responses;
           res.delegation_responses.forEach((del) => {
             tokenMeta.value[del.balance.denom] = x;
           });
@@ -99,37 +108,103 @@ const tokenList = computed(() => {
   return list.filter((x) => x.value > 0).sort((a, b) => b.value - a.value);
 });
 
+const priceloading = ref(false)
+const prices = ref([])
+const coinIds = ref({} as Record<string, string>)
+const tokenQty = computed(() => {
+  const values = {} as Record<string, { coinId: string, qty: number }>;
+  Object.values(balances.value).forEach((b) => {
+    b.forEach((coin) => {
+      const v = format.tokenDisplayNumber(coin);
+      if (v) {
+        if (values[coin.denom]) {
+          values[coin.denom].qty += v;
+        } else {
+          values[coin.denom] = { qty: v, coinId: format.findGlobalAssetConfig(coin.denom)?.coingecko_id || "" };
+        }
+      }
+    });
+  });
+  Object.values(delegations.value).forEach((b) => {
+    b.forEach((d) => {
+      const v = format.tokenDisplayNumber(d.balance);
+      if (v) {
+        if (values[d.balance.denom]) {
+          values[d.balance.denom].qty += v;
+        } else {
+          values[d.balance.denom] = { qty: v, coinId: format.findGlobalAssetConfig(d.balance.denom)?.coingecko_id || "" };
+        }
+      }
+    });
+  });
+  return values;
+});
+watchEffect(() => {
+  if (loading.value > 0 && loading.value === loaded.value) {
+    if (!priceloading.value) {
+      const ids = Object.values(tokenQty.value).map(x => x.coinId).join(',')
+      priceloading.value = true
+      get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=14d&locale=en`)
+        .then(res => {
+          console.log("response: ", res)
+          prices.value = res
+          res.forEach((x: any) => console.log(x.sparkline_in_7d.price.length))
+        })
+    }
+  }
+})
+
+const changeData = computed(() => {
+  const vals = Object.keys(tokenQty.value).map(denom => {
+    const token = tokenQty.value[denom]
+    const marketData: any = prices.value.find((x: any) => x.id === token.coinId)
+    if (marketData) {
+      return marketData.sparkline_in_7d?.price.map((p: number) => p * token.qty) as number[]
+    }
+    return []
+  }).filter(x => x.length > 0)
+
+  const width = vals.at(0)?.length || 0
+  const sum = new Array(width).fill(0)
+
+  for (let i = 0; i < width; i++) {
+    for (let j = 0; j < vals.length; j++) {
+      sum[i] += vals[j][i] || 0
+    }
+  }
+
+  return [{ name: "value", data: sum }]
+})
+
+const baseStore = useBaseStore();
+const chartConfig = computed(() => {
+  const theme = baseStore.theme;
+  const labels = [] as any[]
+  const time = new Date().getTime()
+  for (let i = 0; i < 168; i++) { // only works for 14d
+    labels.unshift(time - i * 2 * 60 * 60 * 1000)
+  }
+  return getMarketPriceChartConfig(theme, labels);
+});
 </script>
 <template>
   <div class="overflow-x-auto w-full card">
-
     <div class="lg:!flex lg:!items-center lg:!justify-between bg-base-100 p-5">
       <div class="min-w-0 flex-1">
-        <h2
-          class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight"
-        >
+        <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">
           Portfolio
         </h2>
-        <div
-          class="mt-1 flex flex-col sm:!mt-0 sm:!flex-row sm:!flex-wrap sm:!space-x-6"
-        >
+        <div class="mt-1 flex flex-col sm:!mt-0 sm:!flex-row sm:!flex-wrap sm:!space-x-6">
           <div class="mt-2 flex items-center text-sm text-gray-500">
-            <svg
-              class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                fill-rule="evenodd"
+            <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
+              aria-hidden="true">
+              <path fill-rule="evenodd"
                 d="M6 3.75A2.75 2.75 0 018.75 1h2.5A2.75 2.75 0 0114 3.75v.443c.572.055 1.14.122 1.706.2C17.053 4.582 18 5.75 18 7.07v3.469c0 1.126-.694 2.191-1.83 2.54-1.952.599-4.024.921-6.17.921s-4.219-.322-6.17-.921C2.694 12.73 2 11.665 2 10.539V7.07c0-1.321.947-2.489 2.294-2.676A41.047 41.047 0 016 4.193V3.75zm6.5 0v.325a41.622 41.622 0 00-5 0V3.75c0-.69.56-1.25 1.25-1.25h2.5c.69 0 1.25.56 1.25 1.25zM10 10a1 1 0 00-1 1v.01a1 1 0 001 1h.01a1 1 0 001-1V11a1 1 0 00-1-1H10z"
-                clip-rule="evenodd"
-              />
+                clip-rule="evenodd" />
               <path
-                d="M3 15.055v-.684c.126.053.255.1.39.142 2.092.642 4.313.987 6.61.987 2.297 0 4.518-.345 6.61-.987.135-.041.264-.089.39-.142v.684c0 1.347-.985 2.53-2.363 2.686a41.454 41.454 0 01-9.274 0C3.985 17.585 3 16.402 3 15.055z"
-              />
+                d="M3 15.055v-.684c.126.053.255.1.39.142 2.092.642 4.313.987 6.61.987 2.297 0 4.518-.345 6.61-.987.135-.041.264-.089.39-.142v.684c0 1.347-.985 2.53-2.363 2.686a41.454 41.454 0 01-9.274 0C3.985 17.585 3 16.402 3 15.055z" />
             </svg>
-            Manage all your assets in one page 
+            Manage all your assets in one page
           </div>
         </div>
       </div>
@@ -138,12 +213,17 @@ const tokenList = computed(() => {
         <div class="text-success font-bold">${{ format.formatNumber(totalValue, '0,0.[00]') }}</div>
       </div>
     </div>
-    <div  class="bg-base-100">
-      <DonutChart
-        v-if="tokenList"
-        :series="Object.values(tokenValues)"
-        :labels="Object.keys(tokenValues).map(x => format.tokenDisplayDenom(x)?.toUpperCase())"
-      />
+    <div class="bg-base-100">
+      <div v-if="tokenList" class="grid grid-cols-1 md:grid-cols-3">
+        <div>
+          <DonutChart  height="280" :series="Object.values(tokenValues)"
+            :labels="Object.keys(tokenValues).map(x => format.tokenDisplayDenom(x)?.toUpperCase())" />
+        </div>
+        <div class="md:col-span-2">
+          <ApexCharts type="area" height="280" :options="chartConfig" :series="changeData" />
+        </div>
+      </div>
+
       <div class="overflow-x-auto mt-4">
         <table class="table w-full">
           <thead>
@@ -155,7 +235,7 @@ const tokenList = computed(() => {
           </thead>
           <tbody>
             <tr v-for="(x, index) in tokenList" :key="index">
-              <td >
+              <td>
                 <div class="flex gap-1 text-xs items-center">
                   <div class="avatar">
                     <div class="mask mask-squircle w-6 h-6 mr-2">
@@ -171,7 +251,7 @@ const tokenList = computed(() => {
             </tr>
           </tbody>
         </table>
-        
+
       </div>
       <div class="p-4 text-center" v-if="tokenList.length === 0">
         No Data, <RouterLink to="./account" class="btn btn-link">Import Address</RouterLink>
