@@ -7,15 +7,16 @@ import type {
   PaginabledContracts,
 } from '../types';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
-import { useFormatter, useTxDialog } from '@/stores';
+import { useBankStore, useBlockchain, useFormatter, useTxDialog } from '@/stores';
 import PaginationBar from '@/components/PaginationBar.vue';
-import { PageRequest } from '@/types';
+import { PageRequest, type PaginatedBalances } from '@/types';
 
 const props = defineProps(['code_id', 'chain']);
 
 const pageRequest = ref(new PageRequest());
 const response = ref({} as PaginabledContracts);
 
+const chainStore = useBlockchain()
 const wasmStore = useWasmStore();
 function loadContract(pageNum: number) {
   const pr = new PageRequest();
@@ -32,11 +33,17 @@ const infoDialog = ref(false);
 const info = ref({} as ContractInfo);
 const state = ref({} as PaginabledContractStates);
 const selected = ref('');
+const balances = ref({} as PaginatedBalances)
 
 function showInfo(address: string) {
   wasmStore.wasmClient.getWasmContracts(address).then((x) => {
     info.value = x.contract_info;
   });
+}
+function showFunds(address: string) {
+  chainStore.rpc.getBankBalances(address).then(res => {
+    balances.value = res
+  })
 }
 function showState(address: string) {
   selected.value = address;
@@ -128,9 +135,14 @@ const result = ref('');
                   @click="showInfo(v)"
                   for="modal-contract-detail"
                   class="btn btn-primary btn-xs text-xs mr-2"
-                  >contract</label
+                  >Contract</label
                 >
-
+                <label
+                  @click="showFunds(v)"
+                  for="modal-contract-funds"
+                  class="btn btn-primary btn-xs text-xs mr-2"
+                  >Funds</label
+                >
                 <label
                   class="btn btn-primary btn-xs text-xs mr-2"
                   for="modal-contract-states"
@@ -178,7 +190,7 @@ const result = ref('');
 
     <input type="checkbox" id="modal-contract-detail" class="modal-toggle" />
     <label for="modal-contract-detail" class="modal cursor-pointer">
-      <label class="modal-box relative p-2" for="">
+      <label class="modal-box !w-11/12 !max-w-5xl relative p-2" for="">
         <div>
           <div class="flex items-center justify-between px-3 pt-2">
             <div class="text-lg">Contract Detail</div>
@@ -196,6 +208,28 @@ const result = ref('');
       </label>
     </label>
 
+    <input type="checkbox" id="modal-contract-funds" class="modal-toggle" />
+    <label for="modal-contract-funds" class="modal cursor-pointer">
+      <label class="modal-box relative p-2" for="">
+        <div>
+          <div class="flex items-center justify-between px-3 pt-2">
+            <div class="text-lg">Contract Balances</div>
+            <label
+              for="modal-contract-funds"
+              class="btn btn-sm btn-circle"
+              >✕</label
+            >
+          </div>
+          <ul class="menu mt-5">
+            <li v-for="b in balances.balances" >
+              <a class="flex justify-between"><span>{{ format.formatToken(b) }}</span> {{ b.amount }} </a>
+            </li>
+            <li v-if="balances.pagination?.total === '0'" class="my-10 text-center"> No Escrowed Assets</li>
+          </ul>
+        </div>
+      </label>
+    </label>
+
     <input type="checkbox" id="modal-contract-states" class="modal-toggle" />
     <label for="modal-contract-states" class="modal cursor-pointer">
       <label class="modal-box !w-11/12 !max-w-5xl" for="">
@@ -203,7 +237,6 @@ const result = ref('');
           <div class="flex items-center justify-between px-3 pt-2 mb-4">
             <div class="text-lg">Contract States</div>
             <label
-              @click="infoDialog = false"
               for="modal-contract-states"
               class="btn btn-sm btn-circle"
               >✕</label
@@ -240,7 +273,6 @@ const result = ref('');
           <div class="flex items-center justify-between px-3 pt-2 mb-4">
             <div class="text-lg font-semibold">Query Contract</div>
             <label
-              @click="infoDialog = false"
               for="modal-contract-query"
               class="btn btn-sm btn-circle"
               >✕</label
