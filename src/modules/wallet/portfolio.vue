@@ -2,8 +2,7 @@
 import { CosmosRestClient } from '@/libs/client';
 import type { Coin, Delegation } from '@/types';
 import { ref, watchEffect } from 'vue';
-import { scanLocalKeys, type AccountEntry } from './utils';
-import { fromBech32, toBase64 } from '@cosmjs/encoding';
+import type { AccountEntry } from './utils';
 import { computed } from 'vue';
 import { useBaseStore, useFormatter } from '@/stores';
 import DonutChart from '@/components/charts/DonutChart.vue';
