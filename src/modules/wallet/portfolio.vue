@@ -27,17 +27,17 @@ scanLocalKeys().forEach((wallet) => {
   // load balance & delegations
   if (imported)
     imported.forEach((x) => {
-      if (x.endpoint) {
+      if (x.endpoint && x.address) {
         const client = CosmosRestClient.newDefault(x.endpoint);
         client.getBankBalances(x.address).then((res) => {
           const bal = res.balances.filter((x) => x.denom.length < 10);
-          balances.value[x.address] = bal;
+          if(bal) balances.value[x.address || ""] = bal;
           bal.forEach((b) => {
             tokenMeta.value[b.denom] = x;
           });
         });
         client.getStakingDelegations(x.address).then((res) => {
-          delegations.value[x.address] = res.delegation_responses;
+          if(res && res.delegation_responses) delegations.value[x.address || ""] = res.delegation_responses;
           res.delegation_responses.forEach((del) => {
             tokenMeta.value[del.balance.denom] = x;
           });
@@ -98,9 +98,11 @@ const tokenList = computed(() => {
   });
   return list.filter((x) => x.value > 0).sort((a, b) => b.value - a.value);
 });
+
 </script>
 <template>
   <div class="overflow-x-auto w-full card">
+
     <div class="lg:!flex lg:!items-center lg:!justify-between bg-base-100 p-5">
       <div class="min-w-0 flex-1">
         <h2
@@ -127,18 +129,22 @@ const tokenList = computed(() => {
                 d="M3 15.055v-.684c.126.053.255.1.39.142 2.092.642 4.313.987 6.61.987 2.297 0 4.518-.345 6.61-.987.135-.041.264-.089.39-.142v.684c0 1.347-.985 2.53-2.363 2.686a41.454 41.454 0 01-9.274 0C3.985 17.585 3 16.402 3 15.055z"
               />
             </svg>
-            Manage all your assets in one page {{ totalValue }}
+            Manage all your assets in one page 
           </div>
         </div>
       </div>
-      <div class="mt-5 flex lg:!ml-4 lg:!mt-0"></div>
+      <div class="mt-5 lg:!ml-4 lg:!mt-0 text-right">
+        <div>Total Value</div>
+        <div class="text-success font-bold">${{ format.formatNumber(totalValue, '0,0.[00]') }}</div>
+      </div>
     </div>
-    <div class="bg-base-100">
+    <div  class="bg-base-100">
       <DonutChart
+        v-if="tokenList"
         :series="Object.values(tokenValues)"
-        :labels="Object.keys(tokenValues)"
+        :labels="Object.keys(tokenValues).map(x => format.tokenDisplayDenom(x)?.toUpperCase())"
       />
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto mt-4">
         <table class="table w-full">
           <thead>
             <tr>
@@ -149,25 +155,26 @@ const tokenList = computed(() => {
           </thead>
           <tbody>
             <tr v-for="(x, index) in tokenList" :key="index">
-              <td class="capitalize">
-                <div class="flex">
+              <td >
+                <div class="flex gap-1 text-xs items-center">
                   <div class="avatar">
                     <div class="mask mask-squircle w-6 h-6 mr-2">
                       <img :src="x.logo" :alt="x.chainName" />
                     </div>
                   </div>
-                  {{ x.chainName }}
+                  <span class="uppercase font-bold text-lg">{{ format.tokenDisplayDenom(x.denom) }}</span> @
+                  <span class="capitalize ">{{ x.chainName }} </span>
                 </div>
               </td>
-              <td class="text-right">${{ format.formatNumber(x.value) }}</td>
+              <td class="text-right">${{ format.formatNumber(x.value, '0,0.[00]') }}</td>
               <td class="text-right">{{ format.percent(x.percentage) }}</td>
             </tr>
           </tbody>
         </table>
         
       </div>
-      <div class="p-4 text-center" v-show="tokenList?.length ===0">
-        No Data
+      <div class="p-4 text-center" v-if="tokenList.length === 0">
+        No Data, <RouterLink to="./account" class="btn btn-link">Import Address</RouterLink>
       </div>
     </div>
   </div>

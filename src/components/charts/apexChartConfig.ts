@@ -258,17 +258,23 @@ export const getMarketPriceChartConfig = (
     },
   };
 };
+
+// const donutColors = Array.from({length: 19}, () => (`#${Math.floor(Math.random()*16777215+100000).toString(16)}`))
+const donutColors = ['#c2992c', '#aa1cdb', '#83b0ad', '#bac470', '#cd1bb3', '#f65f30', '#5cfc8a', '#14aced', '#bf725b', '#2e9d9', '#2d5087', '#acfe3e', '#bbf511', '#53cd60', '#5d842d', '#61cd7c', '#c5cf75', '#ad5eb', '#164731']
+
 export const getDonutChartConfig = (
   theme: string,
   labels: string[]
 ) => {
-  const donutColors = {
-    series1: '#fdd835',
-    series2: '#00d4bd',
-    series3: '#826bf8',
-    series4: '#32baff',
-    series5: '#ffa1a1',
-  };
+  // const donutColors = {
+  //   series1: '#fdd835',
+  //   series2: '#00d4bd',
+  //   series3: '#826bf8',
+  //   series4: '#32baff',
+  //   series5: '#ffa1a1',
+  // };
+
+  console.log(donutColors)
 
   const { themeSecondaryTextColor, themePrimaryTextColor } =
     colorVariables(theme);
@@ -276,12 +282,13 @@ export const getDonutChartConfig = (
   return {
     stroke: { width: 0 },
     labels,
-    colors: [
-      donutColors.series1,
-      donutColors.series5,
-      donutColors.series3,
-      donutColors.series2,
-    ],
+    colors: donutColors,
+    // colors: [
+    //   donutColors.series1,
+    //   donutColors.series5,
+    //   donutColors.series3,
+    //   donutColors.series2,
+    // ],
     dataLabels: {
       enabled: true,
       formatter: (val: string) => `${parseInt(val, 10)}%`,

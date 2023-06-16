@@ -142,6 +142,30 @@ export const useFormatter = defineStore('formatter', {
       }
       return null
     },
+    tokenDisplayDenom(denom?: string) {
+      if (denom) {
+        if (denom && denom.startsWith('ibc/')) {
+          let ibcDenom = this.ibcDenoms[denom.replace('ibc/', '')];
+          if (ibcDenom) {
+            denom = ibcDenom.base_denom;
+          }
+        }
+
+        const conf = this.findGlobalAssetConfig(denom)
+
+        if (conf) {
+          let unit = { exponent: 6, denom: '' };
+          // find the max exponent for display
+          conf.denom_units.forEach((x) => {
+            if (x.exponent >= unit.exponent) {
+              unit = x;
+            }
+          });          
+          return unit.denom;
+        }
+        return denom;
+      }
+    },
     tokenDisplayNumber(
       token?: { denom: string; amount: string },
       mode = 'all'
