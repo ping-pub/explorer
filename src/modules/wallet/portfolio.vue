@@ -59,7 +59,7 @@ const tokenValues = computed(() => {
   const values = {} as Record<string, number>;
   Object.values(balances.value).forEach((b) => {
     b.forEach((coin) => {
-      const v = format.tokenValueNumber(coin);
+      const v = parseFloat(format.tokenValueNumber(coin).toFixed(2));
       if (v) {
         if (values[coin.denom]) {
           values[coin.denom] += v;
@@ -71,7 +71,7 @@ const tokenValues = computed(() => {
   });
   Object.values(delegations.value).forEach((b) => {
     b.forEach((d) => {
-      const v = format.tokenValueNumber(d.balance);
+      const v = parseFloat(format.tokenValueNumber(d.balance).toFixed(2));
       if (v) {
         if (values[d.balance.denom]) {
           values[d.balance.denom] += v;
