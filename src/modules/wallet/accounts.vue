@@ -16,12 +16,9 @@ import {
 const dashboard = useDashboard();
 const chainStore = useBlockchain()
 const format = useFormatter();
-const editable = ref(false); // to edit addresses
 const sourceAddress = ref(''); //
 const selectedSource = ref({} as LocalKey); //
-function toggleEdit() {
-  editable.value = !editable.value;
-}
+const importStep = ref('step1')
 
 const conf = ref(
   JSON.parse(localStorage.getItem('imported-addresses') || '{}') as Record<
@@ -363,10 +360,10 @@ async function loadBalances(endpoint: string, address: string) {
     <!-- Put this part before </body> tag -->
     <div class="modal" id="address-modal">
       <div class="modal-box">
+        <a href="#" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</a>
         <h3 class="font-bold text-lg mb-2">Derive Account From Address</h3>
-
-        <div>
-          <label class="input-group input-group-sm w-full">
+        <div v-show="importStep === 'step1'">
+          <label class="hidden input-group input-group-sm w-full">
             <span>Connected</span>
             <select v-model="selectedSource" class="select select-bordered select-sm w-3/4">
               <option v-for="source in sourceOptions" :value="source">
@@ -374,12 +371,16 @@ async function loadBalances(endpoint: string, address: string) {
               </option>
             </select>
           </label>
-          <label class="input-group input-group-sm my-2">
-            <span>Custom</span>
-            <input v-model="sourceAddress" class="input input-bordered w-full input-sm" placeholder="Input an address" />
+          <ul class="menu">
+            <li v-for="source in sourceOptions" @click="selectedSource = source; importStep = 'step2'">
+              <a><label class="overflow-hidden flex flex-col"><div class=" font-bold">{{ source.cosmosAddress }} </div><div class="text-xs">{{ source.hdPath }}</div></label></a>
+            </li>
+          </ul>
+          <label class="my-2 p-2">
+            <input v-model="sourceAddress" class="input input-bordered w-full input-sm" placeholder="Input an address" @change="importStep = 'step2'" />
           </label>
         </div>
-        <div class="py-4 max-h-72 overflow-y-auto">
+        <div v-show="importStep === 'step2'" class="py-4 max-h-72 overflow-y-auto">
           <table class="table table-compact">
             <tr v-for="acc in availableAccount">
               <td>
@@ -412,7 +413,7 @@ async function loadBalances(endpoint: string, address: string) {
           </table>
         </div>
         <div class="modal-action mt-2 mb-0">
-          <a href="#" class="btn btn-primary btn-sm">Close</a>
+          <a href="#" class="btn btn-primary btn-sm" @click="importStep = 'step1'">Close</a>
         </div>
       </div>
     </div>
