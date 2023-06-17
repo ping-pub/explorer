@@ -307,7 +307,7 @@ async function loadBalances(endpoint: string, address: string) {
           <ul class="!menu bg-base-200 w-full rounded-box ">
             <div v-for="x in subaccounts">
               <li v-if="x.delegation.amount">
-                <a>
+                <RouterLink :to="`/${x.account.chainName}/account/${x.account.address}`">
                   <img :src="x.account.logo" class="w-6 h-6 mr-2" />
                   <span class="font-bold">{{ format.formatToken(x.delegation, true, '0,0.[00]', 'all') }} <br><span
                       class="text-xs" :class="format.color(x.delegation.change24h)">{{
@@ -316,7 +316,7 @@ async function loadBalances(endpoint: string, address: string) {
                       class="text-xs" :class="format.color(x.delegation.change24h)">{{
                         format.formatNumber((x.delegation.change24h || 0) * (x.delegation.value || 0) / 100, '+0,0.[00]')
                       }}</span></span>
-                </a>
+                </RouterLink>                
               </li>
             </div>
           </ul>
@@ -326,7 +326,7 @@ async function loadBalances(endpoint: string, address: string) {
           <ul class="!menu bg-base-200 w-full rounded-box ">
             <div v-for="s in subaccounts">
               <li v-for="x in s.balances">
-                <a>
+                <RouterLink :to="`/${s.account.chainName}/account/${s.account.address}`">
                   <img :src="s.account.logo" class="w-6 h-6 mr-2" />
                   <span class="font-bold">{{ format.formatToken(x, true, '0,0.[00]', 'all') }} <br><span
                       class="text-xs" :class="format.color(x.change24h)">{{ format.formatNumber(x.change24h, '+0.[00]')
@@ -334,7 +334,7 @@ async function loadBalances(endpoint: string, address: string) {
                   <span class="float-right text-right">${{ format.formatNumber(x.value, '0,0.[00]') }}<br><span
                       class="text-xs" :class="format.color(x.change24h)">{{ format.formatNumber((x.change24h || 0) *
                         (x.value || 0) / 100, '+0,0.[00]') }}</span></span>
-                </a>
+                </RouterLink>
               </li>
             </div>
           </ul>

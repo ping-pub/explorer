@@ -229,7 +229,12 @@ function updateEvent() {
                   {{ format.formatToken(delegationItem?.balance) }}
                 </div>
                 <div class="text-xs">
-                  ≈${{ format.tokenValue(delegationItem?.balance) }}
+                  {{
+                    format.calculatePercent(
+                      delegationItem?.balance?.amount,
+                      totalAmount
+                    )
+                  }}
                 </div>
               </div>
               <div
@@ -238,12 +243,7 @@ function updateEvent() {
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"
                 ></span>
-                {{
-                  format.calculatePercent(
-                    delegationItem?.balance?.amount,
-                    totalAmount
-                  )
-                }}
+                ${{ format.tokenValue(delegationItem?.balance) }}                
               </div>
             </div>
             <!-- rewards.total -->
