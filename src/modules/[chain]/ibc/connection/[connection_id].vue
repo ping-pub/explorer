@@ -4,10 +4,12 @@ import { useBaseStore, useBlockchain } from '@/stores';
 import type { Connection, ClientState, Channel } from '@/types';
 import { computed, onMounted } from 'vue';
 import { ref } from 'vue';
+import { useIBCModule } from '../connStore';
 
 const props = defineProps(['chain', 'connection_id']);
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
+const ibcStore = useIBCModule()
 const conn = ref({} as Connection);
 const clientState = ref({} as { client_id: string; client_state: ClientState });
 const channels = ref([] as Channel[]);
@@ -160,7 +162,6 @@ function color(v: string) {
 
       </div>
     </div>
-
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow overflow-hidden">
       <h2 class="card-title">Channels</h2>
       <div class="overflow-auto">
@@ -178,6 +179,20 @@ function color(v: string) {
             </tr>
           </thead>
           <tbody>
+            <tr v-for="v in ibcStore.registryChannels">
+              <td>
+                <div class="flex gap-1">
+                <label class="btn btn-xs" @click="fetchSendingTxs(v[ibcStore.sourceField].channel_id, v[ibcStore.sourceField].port_id)">Out</label>
+                <label class="btn btn-xs" @click="fetchRecevingTxs(v[ibcStore.sourceField].channel_id, v[ibcStore.sourceField].port_id)">In</label>
+                </div>
+              </td>
+              <td>
+                <a href="#">{{
+                  v[ibcStore.sourceField].channel_id
+                }}</a>
+              </td>
+              <td>{{ v[ibcStore.sourceField].port_id }}</td>
+            </tr>
             <tr v-for="v in channels">
               <td>
                 <div class="flex gap-1">
