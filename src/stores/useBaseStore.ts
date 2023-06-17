@@ -61,7 +61,7 @@ export const useBaseStore = defineStore('baseStore', {
                     }
                 })
             );
-            return txs;
+            return txs.sort((a, b) => {return Number(b.height) - Number(a.height)});
         },
     },
     actions: {

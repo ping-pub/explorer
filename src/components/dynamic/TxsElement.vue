@@ -9,12 +9,10 @@ const props = defineProps({
 });
 
 const txs = computed(() => {
-  return (
-    props.value?.map((x) => ({
-      hash: hashTx(fromBase64(x)),
-      tx: decodeTxRaw(fromBase64(x)),
-    })) || []
-  );
+  return props.value?.map((x) => ({
+    hash: hashTx(fromBase64(x)),
+    tx: decodeTxRaw(fromBase64(x)),
+  })) || []
 });
 
 const format = useFormatter();
