@@ -1,8 +1,8 @@
 {
     "chain_name": "juno",
     "coingecko": "juno-network",
-    "api": ["https://api-juno-ia.cosmosia.notional.ventures", "https://juno-api.polkachu.com", "https://lcd-juno.itastakers.com"],
-    "rpc": ["https://rpc-juno-ia.cosmosia.notional.ventures:443", "https://juno-rpc.polkachu.com:443", "https://rpc-juno.itastakers.com:443", "https://rpc-juno.itastakers.com:443"],
+    "api": ["https://api-juno-ia.cosmosia.notional.ventures", "https://juno-api.polkachu.com", "https://lcd-juno.itastakers.com", "https://rest-juno.goldenratiostaking.net"],
+    "rpc": ["https://rpc-juno-ia.cosmosia.notional.ventures:443", "https://juno-rpc.polkachu.com:443", "https://rpc-juno.itastakers.com:443", "https://rpc-juno.itastakers.com:443", "https://rpc-juno.goldenratiostaking.net"],
     "snapshot_provider": "",
     "sdk_version": "0.45.8",
     "coin_type": "118",
