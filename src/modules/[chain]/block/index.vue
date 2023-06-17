@@ -51,7 +51,7 @@ const list = computed(() => {
 
         <div v-show="tab === 'transactions'" class="bg-base-100 rounded overflow-x-auto">
             <table class="table w-full table-compact">
-                <thead>
+                <thead class="bg-base-200">
                     <tr>
                         <th style="position: relative; z-index: 2;">Height</th>
                         <th style="position: relative; z-index: 2;">Hash</th>
@@ -60,7 +60,7 @@ const list = computed(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, index) in base.txsInRecents" :index="index">
+                    <tr v-for="(item, index) in base.txsInRecents" :index="index" class="hover">
                         <td class="text-sm text-primary">
                             <RouterLink :to="`/${props.chain}/block/${item.height}`">{{ item.height }}</RouterLink>
                         </td>
