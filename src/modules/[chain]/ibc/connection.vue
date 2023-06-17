@@ -2,14 +2,19 @@
 import PaginationBar from '@/components/PaginationBar.vue';
 import { useBlockchain, useFormatter } from '@/stores';
 import { PageRequest, type Connection, type Pagination } from '@/types';
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { ref } from 'vue';
+
+import ChainRegistryClient from '@ping-pub/chain-registry-client';
+import type { IBCPath } from '@ping-pub/chain-registry-client/dist/types';
+import router from '@/router';
 
 const props = defineProps(['chain']);
 const chainStore = useBlockchain();
 const list = ref([] as Connection[]);
 const pageRequest = ref(new PageRequest())
 const pageResponse = ref({} as Pagination)
+const tab = ref('registry');
 
 onMounted(() => {
   pageload(1)
@@ -20,61 +25,66 @@ function pageload(p: number) {
   chainStore.rpc.getIBCConnections(pageRequest.value).then((x) => {
     list.value = x.connections;
     pageResponse.value = x.pagination
+    if(x.pagination.total && Number(x.pagination.total) > 0) {
+      showConnection(0)
+    }
   });
 }
 
-function color(v: string) {
-  if (v && v.indexOf('_OPEN') > -1) {
-    return 'success';
-  }
-  return 'warning';
+// Common IBC connections
+const paths = ref([] as IBCPath[])
+const client = new ChainRegistryClient();
+client.fetchIBCPaths().then(res => {
+  paths.value = res
+});
+const connectionId = ref(undefined)
+const commonIBCs = computed(() => {
+  const a = paths.value.filter(x => x.path.search(chainStore.current?.prettyName || chainStore.chainName) > -1)
+  if (a.length === 0) tab.value === 'favorite'
+  return a
+})
+
+function fetchConnection(path: string) {
+  client.fetchIBCPathInfo(path).then(res => {
+    const connId = res.chain_1.chain_name === chainStore.current?.prettyName || chainStore.chainName ?
+      res.chain_1.connection_id : res.chain_2.connection_id
+    showConnection(connId)
+  })
 }
+
+function showConnection(connId?: string | number) {
+  const path = `/${props.chain}/ibc/connection/${connId || `connection-${connectionId.value || 0}`}`
+  router.push(path)
+}
+
 </script>
 <template>
   <div>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
-      <h2 class="card-title py-4">IBC Connections</h2>
-      <div class="flex">
-        <div class="">
-          <table class="table table-compact w-full table-zebra">
-            <thead>
-              <tr>
-                <th class="py-3">Connection Id</th>
-                <th class="py-3">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(v, index) in list" :key="index">
-                <td class="py-2">
-                  <RouterLink :to="`/${chain}/ibc/connection/${v.id}`" class="text-primary dark:invert">
-                    {{ v.id }}
-                  </RouterLink>
-                </td>
-                <td class="py-2">
-                  <div class="text-xs truncate relative py-[2px] px-3 rounded-full w-fit"
-                    :class="`text-${color(v.state)}`">
-                    <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${color(v.state)}`"></span>
-                    {{ String(v.state).replace("STATE_", "") }}
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="grow overflow-auto">
-          <router-view :key="$route.fullPath"></router-view>
+      <div class="flex flex-wrap gap-4  items-center">
+        <h2 class="card-title py-4">IBC Connections</h2>
+        <div class="tabs tabs-boxed">
+          <a class="tab" :class="{ 'tab-active': tab === 'registry' }" @click="tab = 'registry'">Registry</a>
+          <a class="tab" :class="{ 'tab-active': tab === 'favorite' }" @click="tab = 'favorite'">Favorite</a>
         </div>
       </div>
-      <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload" />
+      <div>
+        <div v-show="tab === 'registry'" class="flex flex-wrap gap-1 p-4 ">
+          <span v-for="s in commonIBCs" class="btn btn-xs btn-link mr-1" @click="fetchConnection(s.path)">{{ s.from }}
+            &#x21cc; {{ s.to }}</span>
+        </div>
+        <div v-show="tab === 'favorite'" class="flex flex-wrap gap-1 p-4 ">
+          <div class="join border border-primary">
+            <button class="join-item px-2">Connection Id:</button>
+            <input v-model="connectionId" type=number class="input input-bordered w-40 join-item" min="0"
+              :max="pageResponse.total || 0" :placeholder="`0~${pageResponse.total}`" />
+            <button class="join-item btn  btn-primary" @click="showConnection()">apply</button>
+          </div>
+        </div>
+      </div>
+      <div class="overflow-auto mt-5">
+        <router-view :key="$route.fullPath"></router-view>
+      </div>
     </div>
   </div>
 </template>
-
-<route>
-    {
-      meta: {
-        i18n: 'ibc',
-        order: 9
-      }
-    }
-</route>

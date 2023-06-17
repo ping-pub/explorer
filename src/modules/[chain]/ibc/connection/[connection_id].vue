@@ -1,9 +1,9 @@
 <script lang="ts" setup>
+import { formatSeconds } from '@/libs/utils';
 import { useBaseStore, useBlockchain } from '@/stores';
 import type { Connection, ClientState, Channel } from '@/types';
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { ref } from 'vue';
-import { Icon } from '@iconify/vue';
 
 const props = defineProps(['chain', 'connection_id']);
 const chainStore = useBlockchain();
@@ -12,17 +12,21 @@ const conn = ref({} as Connection);
 const clientState = ref({} as { client_id: string; client_state: ClientState });
 const channels = ref([] as Channel[]);
 
+const connId = computed(() => {
+  return props.connection_id || 0
+})
+
 onMounted(() => {
-  if (props.connection_id) {
-    chainStore.rpc.getIBCConnectionsById(props.connection_id).then((x) => {
+  if (connId.value) {
+    chainStore.rpc.getIBCConnectionsById(connId.value).then((x) => {
       conn.value = x.connection;
     });
     chainStore.rpc
-      .getIBCConnectionsClientState(props.connection_id)
+      .getIBCConnectionsClientState(connId.value)
       .then((x) => {
         clientState.value = x.identified_client_state;
       });
-    chainStore.rpc.getIBCConnectionsChannels(props.connection_id).then((x) => {
+    chainStore.rpc.getIBCConnectionsChannels(connId.value).then((x) => {
       channels.value = x.channels;
     });
   }
@@ -34,6 +38,17 @@ function loadChannel(channel: string, port: string) {
   });
 }
 
+function fetchSendingTxs(channel: string, port: string) {
+  chainStore.rpc.getTxs("?&pagination.reverse=true&events=send_packet.packet_src_channel='${channel}'&events=send_packet.packet_src_port='${port}'", { channel, port }).then(res => {
+    console.log(res)
+  })
+}
+function fetchRecevingTxs(channel: string, port: string) {
+  chainStore.rpc.getTxs("?&pagination.reverse=true&events=recv_packet.packet_dst_channel='${channel}'&events=recv_packet.packet_dst_port='${port}'", { channel, port }).then(res => {
+    console.log(res)
+  })
+}
+
 function color(v: string) {
   if (v && v.indexOf('_OPEN') > -1) {
     return 'success';
@@ -42,8 +57,8 @@ function color(v: string) {
 }
 </script>
 <template>
-  <div class="card card-bordered border-primary ml-4 rounded-t-md">
-    <div class="px-4 pt-3 pb-4 bg-base-100 rounded mb-4 shadow ">
+  <div class="">
+    <div class="px-4 pt-3 pb-4 bg-base-200 rounded mb-4 shadow ">
       <div class="mx-auto max-w-7xl px-6 lg:!px-8">
         <dl class="grid grid-cols-1 gap-x-6 text-center lg:!grid-cols-3">
           <div class="mx-auto flex items-center">
@@ -57,9 +72,9 @@ function color(v: string) {
             </div>
           </div>
           <div class="mx-auto flex items-center">
-            <div>
-              <Icon icon="mdi:arrow-left-right" class="text-4xl mx-auto" />
-              <div class="text-sm text-gray-500 dark:text-gray-400">
+            <div :class="{ 'text-success': conn.state?.indexOf('_OPEN') > -1 }">
+              <span class="text-lg rounded-full">&#x21cc;</span>
+              <div class=" text-c">
                 {{ conn.state }}
               </div>
             </div>
@@ -77,22 +92,18 @@ function color(v: string) {
     </div>
 
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4">IBC Client State</h2>
-      <div class="overflow-x-auto">
-        <table class="table table-compact text-sm w-full">
+      <h2 class="card-title mb-4 overflow-hidden">IBC Client <span class="ml-2 text-sm">{{
+        clientState.client_state?.['@type'] }}</span></h2>
+      <div class="overflow-x-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+        <table class="table table-sm capitalize">
+          <thead class="bg-base-200">
+            <tr>
+              <td colspan="3">Trust Parameters</td>
+            </tr>
+          </thead>
           <tbody>
             <tr>
-              <td class="w-52">update after expiry:</td>
-              <td>{{ clientState.client_state?.allow_update_after_expiry }}</td>
-            </tr>
-            <tr>
-              <td class="w-52">allow_update_after_misbehaviour:</td>
-              <td>
-                {{ clientState.client_state?.allow_update_after_misbehaviour }}
-              </td>
-            </tr>
-            <tr>
-              <td class="w-52">trust_level:</td>
+              <td class="w-52">trust level:</td>
               <td>
                 {{ clientState.client_state?.trust_level?.numerator }}/{{
                   clientState.client_state?.trust_level?.denominator
@@ -100,35 +111,53 @@ function color(v: string) {
               </td>
             </tr>
             <tr>
-              <td class="w-52">trusting_period:</td>
-              <td>{{ clientState.client_state?.trusting_period }}</td>
+              <td class="w-52">trusting period:</td>
+              <td>{{ formatSeconds(clientState.client_state?.trusting_period) }}</td>
             </tr>
             <tr>
-              <td class="w-52">unbonding_period:</td>
-              <td>{{ clientState.client_state?.unbonding_period }}</td>
+              <td class="w-52">unbonding period:</td>
+              <td>{{ formatSeconds(clientState.client_state?.unbonding_period) }}</td>
             </tr>
             <tr>
-              <td class="w-52">frozen_height:</td>
+              <td class="w-52">max clock drift:</td>
+              <td>{{ formatSeconds(clientState.client_state?.max_clock_drift) }}</td>
+            </tr>
+            <tr>
+              <td class="w-52">frozen height:</td>
               <td>{{ clientState.client_state?.frozen_height }}</td>
             </tr>
             <tr>
-              <td class="w-52">latest_height:</td>
+              <td class="w-52">latest height:</td>
               <td>{{ clientState.client_state?.latest_height }}</td>
-            </tr>
-            <tr>
-              <td class="w-52">type:</td>
-              <td>{{ clientState.client_state?.['@type'] }}</td>
-            </tr>
-            <tr>
-              <td class="w-52">upgrade_path:</td>
-              <td>{{ clientState.client_state?.upgrade_path }}</td>
-            </tr>
-            <tr>
-              <td class="w-52">max_clock_drift:</td>
-              <td>{{ clientState.client_state?.max_clock_drift }}</td>
             </tr>
           </tbody>
         </table>
+        <table class="table table-sm text-sm w-full capitalize">
+          <thead class="bg-base-200">
+            <tr>
+              <td colspan="2">Upgrade Parameters</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="2">
+                <div class="flex justify-between"><span>allow update after expiry:</span> <span>{{
+                  clientState.client_state?.allow_update_after_expiry }}</span></div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <div class="flex justify-between"><span>allow update after misbehaviour: </span> <span>{{
+                  clientState.client_state?.allow_update_after_misbehaviour }}</span></div>
+              </td>
+            </tr>
+            <tr>
+              <td class="w-52">upgrade path:</td>
+              <td class="text-right">{{ clientState.client_state?.upgrade_path.join(', ') }}</td>
+            </tr>
+          </tbody>
+        </table>
+
       </div>
     </div>
 
@@ -138,17 +167,24 @@ function color(v: string) {
         <table class="table w-full mt-4">
           <thead>
             <tr>
+              <th>Txs</th>
               <th style="position: relative; z-index: 2">Channel Id</th>
               <th>Port Id</th>
+              <th>State</th>
               <th>Counterparty</th>
               <th>Hops</th>
               <th>Version</th>
               <th>Ordering</th>
-              <th>State</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="v in channels">
+              <td>
+                <div class="flex gap-1">
+                <label class="btn btn-xs" @click="fetchSendingTxs(v.channel_id, v.port_id)">Out</label>
+                <label class="btn btn-xs" @click="fetchRecevingTxs(v.channel_id, v.port_id)">In</label>
+                </div>
+              </td>
               <td>
                 <a href="#" @click="loadChannel(v.channel_id, v.port_id)">{{
                   v.channel_id
@@ -156,17 +192,17 @@ function color(v: string) {
               </td>
               <td>{{ v.port_id }}</td>
               <td>
-                {{ v.counterparty?.port_id }}/{{ v.counterparty?.channel_id }}
-              </td>
-              <td>{{ v.connection_hops.join(', ') }}</td>
-              <td>{{ v.version }}</td>
-              <td>{{ v.ordering }}</td>
-              <td>
                 <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit" :class="`text-${color(v.state)}`">
                   <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${color(v.state)}`"></span>
                   {{ v.state }}
                 </div>
               </td>
+              <td>
+                {{ v.counterparty?.port_id }}/{{ v.counterparty?.channel_id }}
+              </td>
+              <td>{{ v.connection_hops.join(', ') }}</td>
+              <td>{{ v.version }}</td>
+              <td>{{ v.ordering }}</td>
             </tr>
           </tbody>
         </table>

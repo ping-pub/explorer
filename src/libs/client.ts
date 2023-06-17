@@ -233,6 +233,13 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     const query = `?pagination.reverse=true&events=message.sender='${sender}'`;
     return this.request(this.registry.tx_txs, {}, query);
   }
+  // query ibc sending msgs
+  // ?&pagination.reverse=true&events=send_packet.packet_src_channel='${channel}'&events=send_packet.packet_src_port='${port}'
+  // query ibc receiving msgs
+  // ?&pagination.reverse=true&events=recv_packet.packet_dst_channel='${channel}'&events=recv_packet.packet_dst_port='${port}'
+  async getTxs(query: string, params: any) {
+    return this.request(this.registry.tx_txs, params, query);
+  }
   async getTxsAt(height: string | number) {
     return this.request(this.registry.tx_txs_block, { height });
   }

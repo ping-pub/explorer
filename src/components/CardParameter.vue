@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { useFormatter } from '@/stores';
+import { formatSeconds } from '@/libs/utils';
 const props = defineProps({
   cardItem: {
     type: Object as PropType<{ title: string; items: Array<any> }>,
@@ -13,17 +14,7 @@ function calculateValue(value: any) {
     return (value[0] && value[0].amount) || '-';
   }
   if(String(value).search(/^\d+s$/g) > -1) {
-    const duration = Number(value.replace(/s/, ''))
-    if(duration > 24*60*60) {
-      return `${duration / ( 24 * 60 * 60)} days`
-    }
-    if(duration > 60*60) {
-      return `${duration / (60 * 60)} hours`
-    }    
-    if(duration > 60) {
-      return `${duration / 60} mins`
-    }
-    return duration
+    return formatSeconds(value)
   }
   const newValue = Number(value);
   if (`${newValue}` === 'NaN' || typeof value === 'boolean') {
