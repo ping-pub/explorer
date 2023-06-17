@@ -8,9 +8,10 @@
         "https://api-cosmoshub.pupmos.network",
         "https://cosmos-rest.publicnode.com",
         "https://cosmos-rest.staketab.org",
-        "https://api.cosmos.nodestake.top"
+        "https://api.cosmos.nodestake.top",
+        "https://rest-cosmoshub.goldenratiostaking.net"
     ],
-    "rpc": ["https://rpc.cosmos.network:443", "https://cosmos-rpc.icycro.org", "https://rpc.cosmos.dragonstake.io"],
+    "rpc": ["https://rpc.cosmos.network:443", "https://cosmos-rpc.icycro.org", "https://rpc.cosmos.dragonstake.io", "https://rpc-cosmoshub.goldenratiostaking.net"],
     "sdk_version": "0.45.1",
     "coin_type": "118",
     "min_tx_fee": "800",
