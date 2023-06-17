@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 
 import {useBlockchain} from '@/stores'
 import ChainRegistryClient from '@ping-pub/chain-registry-client';
-import type { IBCPath } from '@ping-pub/chain-registry-client/dist/types';
+import type { IBCPath, IBCInfo,  } from '@ping-pub/chain-registry-client/dist/types';
 import type { Channel } from '@/types';
 import router from '@/router';
 
@@ -11,24 +11,24 @@ export const useIBCModule = defineStore('module-ibc', {
   state: () => {
     return {
       paths: [] as IBCPath[],
-      connectionId: "",
-      registryConf: {},
+      connectionId: "" as string,
+      registryConf: {} as IBCInfo,
     };
   },
   getters: {
     chain() {
       return useBlockchain()
     },
-    commonIBCs() {
-      return this.paths.filter(x => x.path.search(this.chain.current?.prettyName || this.chain.chainName) > -1)
+    commonIBCs(): any {
+      return this.paths.filter((x: IBCPath) => x.path.search(this.chain.current?.prettyName || this.chain.chainName) > -1)
     },
-    sourceField() {
+    sourceField(): string {
       return this.registryConf?.chain_1?.chain_name === this.chain.current?.prettyName || this.chain.chainName ? 'chain_1': 'chain_2'
     },
-    destField() {
+    destField() : string {
       return this.registryConf?.chain_1?.chain_name === this.chain.current?.prettyName || this.chain.chainName ? 'chain_2': 'chain_1'
     },
-    registryChannels() {
+    registryChannels(): any {
       return this.registryConf.channels
     }
   },
@@ -50,7 +50,7 @@ export const useIBCModule = defineStore('module-ibc', {
     },
     showConnection(connId?: string | number) {
       if(!connId) {
-        this.registryConf = {}
+        this.registryConf = {} as any
       }
       const path = `/${this.chain.chainName}/ibc/connection/${connId || `connection-${this.connectionId || 0}`}`
       router.push(path)
