@@ -41,6 +41,7 @@ const hdPath = computed(() => {
       <div class="mt-4">
         <span class="text-base"> 1. Connect Wallet </span>
         <div class="mockup-code bg-base-200 my-2">
+            <pre data-prefix=">"><code class="text-green-400">&lt;!-- This widget is optional. --&gt; </code></pre>
             <pre data-prefix=">"><code  class="text-gray-800 dark:invert">&lt;ping-connect-wallet chain-id="{{ chainId }}" hd-path="{{ hdPath }}"/&gt;</code></pre>
         </div>
 
