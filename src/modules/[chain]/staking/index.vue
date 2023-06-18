@@ -1,18 +1,25 @@
 <script lang="ts" setup>
 import {
     useBaseStore,
+    useBlockchain,
+    useDistributionStore,
     useFormatter,
+    useMintStore,
     useStakingStore,
     useTxDialog,
 } from '@/stores';
 import { computed } from '@vue/reactivity';
-import { onMounted, ref, type DebuggerEvent } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue';
-import type { Key, Validator } from '@/types';
+import type { Key, SlashingParam, Validator } from '@/types';
+import { formatSeconds}  from '@/libs/utils'
 
 const staking = useStakingStore();
+const base = useBaseStore();
 const format = useFormatter();
 const dialog = useTxDialog();
+const chainStore = useBlockchain();
+const mintStore = useMintStore()
 
 const cache = JSON.parse(localStorage.getItem('avatars') || '{}');
 const avatars = ref(cache || {});
@@ -20,11 +27,15 @@ const latest = ref({} as Record<string, number>);
 const yesterday = ref({} as Record<string, number>);
 const tab = ref('active');
 const unbondList = ref([] as Validator[]);
-const base = useBaseStore();
+const slashing =ref({} as SlashingParam)
+
 onMounted(() => {
-    staking.fetchInacitveValdiators().then((x) => {
-        unbondList.value = x;
+    staking.fetchInacitveValdiators().then((res) => {
+        unbondList.value = res;
     });
+    chainStore.rpc.getSlashingParams().then(res => {
+        slashing.value = res.params
+    })
 });
 
 async function fetchChange() {
@@ -107,9 +118,23 @@ const calculateRank = function (position: number) {
     }
 };
 
+function isFeatured(endpoints: string[], who?: {website?: string, moniker: string }) {
+    if(!endpoints || !who) return false
+    return endpoints.findIndex(x => who.website && who.website?.substring(0, who.website?.lastIndexOf('.')).endsWith(x) || who?.moniker?.toLowerCase().search(x) > -1) > -1
+}
+
 const list = computed(() => {
     if (tab.value === 'active') {
         return staking.validators.map((x, i) => ({v: x, rank: calculateRank(i)}));
+    } else if (tab.value === 'featured') {
+        const endpoint = chainStore.current?.endpoints?.rest?.map(x => x.provider)
+        if(endpoint) {
+            endpoint.push('ping')
+            return staking.validators
+                .filter(x => isFeatured(endpoint, x.description))
+                .map((x, i) => ({v: x, rank: 'primary'}));
+        }
+        return []        
     }
     return unbondList.value.map((x, i) => ({v: x, rank: 'primary'}));
 });
@@ -161,9 +186,67 @@ fetchChange();
 loadAvatars();
 </script>
 <template>
+<div>
+    <div class="bg-base-100 rounded-lg grid sm:grid-cols-1 md:grid-cols-4 p-4" >    
+        <div class="flex">
+            <span>
+                <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                    <Icon class="text-success" icon="mdi:trending-up" size="32" />
+                    <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-success"></div>
+                </div>
+            </span>
+            <span>
+                <div class="font-bold">{{ format.percent(mintStore.inflation) }}</div>
+                <div class="text-xs">Infalation</div>
+            </span>
+        </div>
+        <div class="flex">
+            <span>
+                <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                    <Icon class="text-primary" icon="mdi:lock-open-outline" size="32" />
+                    <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-primary"></div>
+                </div>
+            </span>
+            <span>
+                <div class="font-bold">{{ formatSeconds(staking.params?.unbonding_time) }}</div>
+                <div class="text-xs">Unbonding Time</div>
+            </span>
+        </div> 
+        <div class="flex">
+            <span>
+                <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                    <Icon class="text-error" icon="mdi:alert-octagon-outline" size="32" />
+                    <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-error"></div>
+                </div>
+            </span>
+            <span>
+            <div class="font-bold">{{ format.percent(slashing.slash_fraction_double_sign) }}</div>
+            <div class="text-xs">Double Sign Slashing</div>
+            </span>
+        </div> 
+        <div class="flex">
+            <span>
+                <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                    <Icon class="text-error" icon="mdi:pause" size="32" />
+                    <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-error"></div>
+                </div>
+            </span>
+            <span>
+            <div class="font-bold">{{ format.percent(slashing.slash_fraction_downtime) }}</div>
+            <div class="text-xs">Downtime Slashing</div>
+            </span>
+        </div>  
+    </div>
+
     <div>
-        <div class="flex items-center justify-between">
-            <div class="tabs tabs-boxed bg-transparent mb-4">
+        <div class="flex items-center justify-between py-1">
+            <div class="tabs tabs-boxed bg-transparent">
+                <a
+                    class="tab text-gray-400"
+                    :class="{ 'tab-active': tab === 'featured' }"
+                    @click="tab = 'featured'"
+                    >Popular</a
+                >
                 <a
                     class="tab text-gray-400"
                     :class="{ 'tab-active': tab === 'active' }"
@@ -235,11 +318,7 @@ loadAvatars();
                                         <div class="w-8 h-8 rounded-full">
                                             <img
                                                 v-if="v.description?.identity"
-                                                v-lazy="
-                                                    logo(
-                                                        v.description?.identity
-                                                    )
-                                                "
+                                                :src="logo(v.description?.identity )"
                                                 class="object-contain"
                                             />
                                             <Icon
@@ -247,6 +326,7 @@ loadAvatars();
                                                 class="text-4xl"
                                                 :icon="`mdi-help-circle-outline`"
                                             />
+                                            
                                         </div>
                                     </div>
 
@@ -342,7 +422,7 @@ loadAvatars();
             </div>
 
             <div class="divider"></div>
-            <div class="flex flex-row">
+            <div class="flex flex-row items-center">
                 <div
                     class="text-xs truncate relative py-2 px-4 rounded-md w-fit text-error mr-2"
                 >
@@ -359,9 +439,13 @@ loadAvatars();
                     ></span>
                     Top 67%
                 </div>
+                <div class="text-xs hidden md:!block pl-2">
+                    Delegating to lower-rank validators will increase the overall security of the network
+                </div>
             </div>
         </div>
     </div>
+</div>
 </template>
 
 <route>
