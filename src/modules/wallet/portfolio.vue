@@ -21,8 +21,42 @@ const balances = ref({} as Record<string, Coin[]>);
 const delegations = ref({} as Record<string, Delegation[]>);
 const tokenMeta = ref({} as Record<string, AccountEntry>);
 
+const priceloading = ref(false)
+const currency = ref('cny')
+const prices = ref([] as {
+  id: string,
+  symbol: string,
+  name: string,
+  image: string,
+  current_price: number,
+  market_cap: number,
+  market_cap_rank: number,
+  fully_diluted_valuation: number,
+  total_volume: number, high_24h: number,
+  low_24h: number,
+  price_change_24h: number, price_change_percentage_24h: number, market_cap_change_24h: number,
+  market_cap_change_percentage_24h: number,
+  circulating_supply: number, total_supply: number,
+  max_supply: number,
+  ath: number,
+  ath_change_percentage: number,
+  ath_date: string,
+  atl: string,
+  atl_change_percentage: number,
+  atl_date: string, roi: string, last_updated: string,
+  sparkline_in_7d: { prices: number[] }
+}[])
+
 const loading = ref(0)
 const loaded = ref(0)
+watchEffect(() => {
+  if (loading.value > 0 && loading.value === loaded.value) {
+    if (!priceloading.value) {
+      priceloading.value = true
+      loadPrice()
+    }
+  }
+})
 
 Object.values(conf.value).forEach((imported) => {
   if (imported)
@@ -49,61 +83,6 @@ Object.values(conf.value).forEach((imported) => {
     });
 });
 
-const tokenValues = computed(() => {
-  const values = {} as Record<string, number>;
-  Object.values(balances.value).forEach((b) => {
-    b.forEach((coin) => {
-      const v = parseFloat(format.tokenValueNumber(coin).toFixed(2));
-      if (v) {
-        if (values[coin.denom]) {
-          values[coin.denom] += v;
-        } else {
-          values[coin.denom] = v;
-        }
-      }
-    });
-  });
-  Object.values(delegations.value).forEach((b) => {
-    b.forEach((d) => {
-      const v = parseFloat(format.tokenValueNumber(d.balance).toFixed(2));
-      if (v) {
-        if (values[d.balance.denom]) {
-          values[d.balance.denom] += v;
-        } else {
-          values[d.balance.denom] = v;
-        }
-      }
-    });
-  });
-  return values;
-});
-
-const totalValue = computed(() => {
-  return Object.values(tokenValues.value).reduce((a, s) => a + s, 0);
-});
-
-const tokenList = computed(() => {
-  const list = [] as {
-    denom: string;
-    value: number;
-    logo: string;
-    chainName: string;
-    percentage: number;
-  }[];
-  Object.keys(tokenValues.value).map((x) => {
-    list.push({
-      denom: x,
-      value: tokenValues.value[x],
-      chainName: tokenMeta.value[x]?.chainName,
-      logo: tokenMeta.value[x]?.logo,
-      percentage: tokenValues.value[x] / totalValue.value,
-    });
-  });
-  return list.filter((x) => x.value > 0).sort((a, b) => b.value - a.value);
-});
-
-const priceloading = ref(false)
-const prices = ref([])
 const tokenQty = computed(() => {
   const values = {} as Record<string, { coinId: string, qty: number }>;
   Object.values(balances.value).forEach((b) => {
@@ -132,23 +111,61 @@ const tokenQty = computed(() => {
   });
   return values;
 });
-watchEffect(() => {
-  if (loading.value > 0 && loading.value === loaded.value) {
-    if (!priceloading.value) {
-      const ids = Object.values(tokenQty.value).map(x => x.coinId).join(',')
-      priceloading.value = true
-      get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=14d&locale=en`)
-        .then(res => {
-          prices.value = res
-        })
-    }
-  }
-})
 
+const tokenValues = computed(() => {
+  const values = {} as Record<string, number>;
+  Object.keys(tokenQty.value).forEach(k => {
+    const x = tokenQty.value[k]
+    const marketData = prices.value.find((p: any) => p.id === x.coinId)
+    values[k] = marketData? x.qty * marketData.current_price : 0
+  })
+  return values;
+});
+
+const totalValue = computed(() => {
+  return Object.values(tokenValues.value).reduce((a, s) => a + s, 0);
+});
+
+const tokenList = computed(() => {
+  const list = [] as {
+    denom: string;
+    value: number;
+    logo: string;
+    chainName: string;
+    percentage: number;
+  }[];
+  Object.keys(tokenValues.value).map((x) => {
+    list.push({
+      denom: x,
+      value: tokenValues.value[x],
+      chainName: tokenMeta.value[x]?.chainName,
+      logo: tokenMeta.value[x]?.logo,
+      percentage: tokenValues.value[x] / totalValue.value,
+    });
+  });
+  return list.filter((x) => x.value > 0).sort((a, b) => b.value - a.value);
+});
+
+function loadPrice() {
+  const ids = Object.values(tokenQty.value).map(x => x.coinId).join(',')
+  get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency.value}&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=14d&locale=en`)
+    .then(res => {
+      prices.value = res
+    })
+}
+const totalChangeIn24 = computed(() => {
+  return Object.values(tokenQty.value).map(x => {
+    const marketData = prices.value.find((p: any) => p.id === x.coinId)
+    if (marketData)
+      return x.qty * (marketData.price_change_24h || 0)
+    return 0
+  }).reduce((s, c) => s + c, 0)
+})
+// Compute data for trend chart
 const changeData = computed(() => {
   const vals = Object.keys(tokenQty.value).map(denom => {
     const token = tokenQty.value[denom]
-    const marketData: any = prices.value.find((x: any) => x.id === token.coinId)
+    const marketData: any = prices.value.find((x) => x.id === token.coinId)
     if (marketData) {
       return marketData.sparkline_in_7d?.price.map((p: number) => p * token.qty) as number[]
     }
@@ -177,37 +194,57 @@ const chartConfig = computed(() => {
   }
   return getMarketPriceChartConfig(theme, labels);
 });
+
+const currencySign = computed(() => {
+  switch(currency.value) {
+    case 'usd': return '$'
+    case 'cny': return '¥'
+    case 'eur': return '€'
+    case 'hkd': return 'HK$'
+    case 'jpy': return '¥'
+    case 'sdg': return 'S$'
+    case 'krw': return '₩'
+    case 'btc': return 'BTC'
+    case 'eth': return 'ETH'
+  }
+  return '$'
+})
 </script>
 <template>
-  <div class="overflow-x-auto w-full card">
-    <div class="lg:!flex lg:!items-center lg:!justify-between bg-base-100 p-5">
-      <div class="min-w-0 flex-1">
+  <div class="overflow-x-auto w-full rounded-lg">
+    <div class="flex flex-wrap justify-between bg-base-100 p-5">
+      <div class="min-w-0">
         <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">
           Portfolio
         </h2>
-        <div class="mt-1 flex flex-col sm:!mt-0 sm:!flex-row sm:!flex-wrap sm:!space-x-6">
-          <div class="mt-2 flex items-center text-sm text-gray-500">
-            <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
-              aria-hidden="true">
-              <path fill-rule="evenodd"
-                d="M6 3.75A2.75 2.75 0 018.75 1h2.5A2.75 2.75 0 0114 3.75v.443c.572.055 1.14.122 1.706.2C17.053 4.582 18 5.75 18 7.07v3.469c0 1.126-.694 2.191-1.83 2.54-1.952.599-4.024.921-6.17.921s-4.219-.322-6.17-.921C2.694 12.73 2 11.665 2 10.539V7.07c0-1.321.947-2.489 2.294-2.676A41.047 41.047 0 016 4.193V3.75zm6.5 0v.325a41.622 41.622 0 00-5 0V3.75c0-.69.56-1.25 1.25-1.25h2.5c.69 0 1.25.56 1.25 1.25zM10 10a1 1 0 00-1 1v.01a1 1 0 001 1h.01a1 1 0 001-1V11a1 1 0 00-1-1H10z"
-                clip-rule="evenodd" />
-              <path
-                d="M3 15.055v-.684c.126.053.255.1.39.142 2.092.642 4.313.987 6.61.987 2.297 0 4.518-.345 6.61-.987.135-.041.264-.089.39-.142v.684c0 1.347-.985 2.53-2.363 2.686a41.454 41.454 0 01-9.274 0C3.985 17.585 3 16.402 3 15.055z" />
-            </svg>
-            Track all your assets in one page
+        <div>
+          <div class="flex items-center text-sm text-gray-500">
+            Currency: <select v-model="currency" @change="loadPrice" class="ml-1 uppercase">
+              <option>usd</option>
+              <option>cny</option>
+              <option>eur</option>
+              <option>hkd</option>
+              <option>jpy</option>
+              <option>sgd</option>
+              <option>krw</option>
+              <option>btc</option>
+              <option>eth</option>
+            </select>
           </div>
         </div>
       </div>
-      <div class="mt-5 lg:!ml-4 lg:!mt-0 text-right">
+      <div class="text-right">
         <div>Total Value</div>
-        <div class="text-success font-bold">${{ format.formatNumber(totalValue, '0,0.[00]') }}</div>
+        <div class="text-success font-bold">{{ currencySign }} {{ format.formatNumber(totalValue, '0,0.[00]') }}</div>
+        <div class="text-xs" :class="{ 'text-success': totalChangeIn24 > 0, 'text-error': totalChangeIn24 < 0 }">
+          {{ format.formatNumber(totalChangeIn24, '+0,0.[00]') }}
+        </div>
       </div>
     </div>
     <div class="bg-base-100">
       <div v-if="tokenList" class="grid grid-cols-1 md:grid-cols-3">
         <div>
-          <DonutChart  height="280" :series="Object.values(tokenValues)"
+          <DonutChart height="280" :series="Object.values(tokenValues)"
             :labels="Object.keys(tokenValues).map(x => format.tokenDisplayDenom(x)?.toUpperCase())" />
         </div>
         <div class="md:col-span-2">
@@ -237,7 +274,7 @@ const chartConfig = computed(() => {
                   <span class="capitalize ">{{ x.chainName }} </span>
                 </div>
               </td>
-              <td class="text-right">${{ format.formatNumber(x.value, '0,0.[00]') }}</td>
+              <td class="text-right">{{ currencySign }}{{ format.formatNumber(x.value, '0,0.[00]') }}</td>
               <td class="text-right">{{ format.percent(x.percentage) }}</td>
             </tr>
           </tbody>

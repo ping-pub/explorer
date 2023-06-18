@@ -228,14 +228,14 @@ async function loadBalances(endpoint: string, address: string) {
 </script>
 <template>
   <div>
-    <div class="overflow-x-auto w-full card">
-      <div class="lg:!flex lg:!items-center lg:!justify-between bg-base-100 p-5">
-        <div class="min-w-0 flex-1">
+    <div class="overflow-x-auto w-full rounded-lg">
+      <div class="flex flex-wrap justify-between bg-base-100 p-5">
+        <div class="min-w-0">
           <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">
             Accounts
           </h2>
           <div class="mt-1 flex flex-col sm:!mt-0 sm:!flex-row sm:!flex-wrap sm:!space-x-6">
-            <div class="mt-2 flex items-center text-sm text-gray-500">
+            <div class="mt-2 items-center text-sm text-gray-500 hidden md:!flex">
               <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
                 aria-hidden="true">
                 <path fill-rule="evenodd"
@@ -248,7 +248,7 @@ async function loadBalances(endpoint: string, address: string) {
             </div>
           </div>
         </div>
-        <div class="mt-5 flex flex-col lg:!ml-4 lg:!mt-0 text-right">
+        <div class="flex flex-col text-right">
           <span>Total Value</span>
           <span class="text-xl text-success font-bold">${{ format.formatNumber(totalValue, '0,0.[00]') }}</span>
           <span class="text-sm" :class="format.color(totalChange)">{{ format.formatNumber(totalChange, '+0,0.[00]')
@@ -286,7 +286,7 @@ async function loadBalances(endpoint: string, address: string) {
           <div>
             <div class=" max-w-md overflow-hidden"><div class="font-bold">{{ key }}</div></div>
             <div class="dropdown">
-              <label tabindex="0" class="">{{ subaccounts.length }} addresses</label>
+              <label tabindex="0" class=" cursor-pointer">{{ subaccounts.length }} addresses</label>
               <ul tabindex="0" class=" -left-14 dropdown-content menu p-2 shadow bg-base-200 rounded-box z-50">
                 <li v-for="x in subaccounts">
                 <a>
@@ -301,10 +301,9 @@ async function loadBalances(endpoint: string, address: string) {
             </div>
           </div>
         </div>
-        <div class="divider"></div>
+        <div class="p-4 bg-base-200 mt-2">Delegations</div>
         <div>
-          <div class="my-4 ml-6">Delegations</div>
-          <ul class="!menu bg-base-200 w-full rounded-box ">
+          <ul class="!menu w-full">
             <div v-for="x in subaccounts">
               <li v-if="x.delegation.amount">
                 <RouterLink :to="`/${x.account.chainName}/account/${x.account.address}`">
@@ -321,9 +320,9 @@ async function loadBalances(endpoint: string, address: string) {
             </div>
           </ul>
         </div>
+        <div class="p-4 bg-base-200">Balances</div>
         <div>
-          <div class="my-4 ml-6">Balances</div>
-          <ul class="!menu bg-base-200 w-full rounded-box ">
+          <ul class="!menu w-full">
             <div v-for="s in subaccounts">
               <li v-for="x in s.balances">
                 <RouterLink :to="`/${s.account.chainName}/account/${s.account.address}`">
