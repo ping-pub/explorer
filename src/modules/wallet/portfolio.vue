@@ -22,7 +22,8 @@ const delegations = ref({} as Record<string, Delegation[]>);
 const tokenMeta = ref({} as Record<string, AccountEntry>);
 
 const priceloading = ref(false)
-const currency = ref('cny')
+const currency = ref(localStorage.getItem('currency') || 'usd')
+
 const prices = ref([] as {
   id: string,
   symbol: string,
@@ -147,6 +148,7 @@ const tokenList = computed(() => {
 });
 
 function loadPrice() {
+  localStorage.setItem('currency', currency.value)
   const ids = Object.values(tokenQty.value).map(x => x.coinId).join(',')
   get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency.value}&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=14d&locale=en`)
     .then(res => {
@@ -218,7 +220,7 @@ const currencySign = computed(() => {
           Portfolio
         </h2>
         <div>
-          <div class="flex items-center text-sm text-gray-500">
+          <div class="flex items-center text-sm">
             Currency: <select v-model="currency" @change="loadPrice" class="ml-1 uppercase">
               <option>usd</option>
               <option>cny</option>
