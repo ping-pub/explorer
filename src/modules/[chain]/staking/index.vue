@@ -125,18 +125,18 @@ function isFeatured(endpoints: string[], who?: {website?: string, moniker: strin
 
 const list = computed(() => {
     if (tab.value === 'active') {
-        return staking.validators.map((x, i) => ({v: x, rank: calculateRank(i)}));
+        return staking.validators.map((x, i) => ({v: x, rank: calculateRank(i), logo: logo(x.description.identity)}));
     } else if (tab.value === 'featured') {
         const endpoint = chainStore.current?.endpoints?.rest?.map(x => x.provider)
         if(endpoint) {
             endpoint.push('ping')
             return staking.validators
                 .filter(x => isFeatured(endpoint, x.description))
-                .map((x, i) => ({v: x, rank: 'primary'}));
+                .map((x, i) => ({v: x, rank: 'primary', logo: logo(x.description.identity)}));
         }
         return []        
     }
-    return unbondList.value.map((x, i) => ({v: x, rank: 'primary'}));
+    return unbondList.value.map((x, i) => ({v: x, rank: 'primary', logo: logo(x.description.identity)}));
 });
 
 const loadAvatars = () => {
@@ -175,7 +175,7 @@ const loadAvatars = () => {
 };
 
 const logo = (identity?: string) => {
-    if (!identity) return '';
+    if (!identity || !avatars.value[identity]) return '';
     const url = avatars.value[identity] || '';
     return url.startsWith('http')
         ? url
@@ -286,7 +286,7 @@ loadAvatars();
                     </thead>
                     <tbody>
                         <tr
-                            v-for="({v, rank}, i) in list"
+                            v-for="({v, rank, logo}, i) in list"
                             :key="v.operator_address"
                             class="hover:bg-gray-100 dark:hover:bg-[#384059]"
                         >
@@ -317,8 +317,8 @@ loadAvatars();
                                         ></div>
                                         <div class="w-8 h-8 rounded-full">
                                             <img
-                                                v-if="v.description?.identity"
-                                                :src="logo(v.description?.identity )"
+                                                v-if="logo"
+                                                :src="logo"
                                                 class="object-contain"
                                             />
                                             <Icon
