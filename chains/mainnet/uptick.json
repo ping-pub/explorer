@@ -1,7 +1,7 @@
 {
     "chain_id":"uptick_117-1",
-    "chain_name": "uptick-network-mainnet",
-    "api": "https://rest.uptick.network",
+    "chain_name": ["uptick-network-mainnet","https://api.uptick.nodestake.top"]
+    "api": ["https://rest.uptick.network","https://rpc.uptick.nodestake.top"]
     "sdk_version": "v0.46.0",
     "coin_type": "60",
     "min_tx_fee": "40000",
