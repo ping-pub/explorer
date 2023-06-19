@@ -307,7 +307,7 @@ loadAvatars();
                             <td>
                                 <div
                                     class="flex items-center overflow-hidden"
-                                    style="max-width: 400px"
+                                    style="max-width: 300px"
                                 >
                                     <div
                                         class="avatar mr-4 relative w-8 h-8 rounded-full overflow-hidden"
@@ -331,7 +331,7 @@ loadAvatars();
                                     </div>
 
                                     <div class="flex flex-col">
-                                        <h6 class="text-sm text-primary dark:invert">
+                                        <span class="text-sm text-primary dark:invert whitespace-nowrap overflow-hidden">
                                             <RouterLink
                                                 :to="{
                                                     name: 'chain-staking-validator',
@@ -340,11 +340,11 @@ loadAvatars();
                                                             v.operator_address,
                                                     },
                                                 }"
-                                                class="font-weight-medium user-list-name"
+                                                class="font-weight-medium"
                                             >
                                                 {{ v.description?.moniker }}
                                             </RouterLink>
-                                        </h6>
+                                        </span>
                                         <span class="text-xs">{{
                                             v.description?.website ||
                                             v.description?.identity ||
@@ -357,7 +357,7 @@ loadAvatars();
                             <!-- 👉 Voting Power -->
                             <td class="text-right">
                                 <div class="flex flex-col">
-                                    <h6 class="text-sm font-weight-medium">
+                                    <h6 class="text-sm font-weight-medium whitespace-nowrap ">
                                         {{
                                             format.formatToken(
                                                 {
