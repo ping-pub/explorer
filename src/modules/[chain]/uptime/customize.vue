@@ -179,7 +179,9 @@ function color(v: string) {
       </table>
     </div>
     
-    <label for="add-validator" class="btn btn-primary mt-5">Add Validators</label>
+    <div class="text-center">
+      <label for="add-validator" class="btn btn-primary mt-5">Add Validators</label>
+    </div>
 
     <!-- Put this part before </body> tag -->
     <input type="checkbox" id="add-validator" class="modal-toggle" @change="initial" />
@@ -212,7 +214,7 @@ function color(v: string) {
           </table>
         </div>
         <div class="modal-action">
-          <label for="add-validator" class="btn" @click="add">add</label>
+          <label class="btn btn-primary" @click="add">add</label>
         </div>
       </div>
     </div>
