@@ -120,7 +120,7 @@ const calculateRank = function (position: number) {
 
 function isFeatured(endpoints: string[], who?: {website?: string, moniker: string }) {
     if(!endpoints || !who) return false
-    return endpoints.findIndex(x => who.website && who.website?.substring(0, who.website?.lastIndexOf('.')).endsWith(x) || who?.moniker?.toLowerCase().search(x) > -1) > -1
+    return endpoints.findIndex(x => who.website && who.website?.substring(0, who.website?.lastIndexOf('.')).endsWith(x) || who?.moniker?.toLowerCase().search(x.toLowerCase()) > -1) > -1
 }
 
 const list = computed(() => {
@@ -128,6 +128,7 @@ const list = computed(() => {
         return staking.validators.map((x, i) => ({v: x, rank: calculateRank(i), logo: logo(x.description.identity)}));
     } else if (tab.value === 'featured') {
         const endpoint = chainStore.current?.endpoints?.rest?.map(x => x.provider)
+        console.log(endpoint)
         if(endpoint) {
             endpoint.push('ping')
             return staking.validators
