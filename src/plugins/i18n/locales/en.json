@@ -12,15 +12,23 @@
     "ibc": "IBC",
     "consensus": "Consensus",
     "supply": "Supply",
-    "account": "Accounts"
+    "account": "Accounts",
+    "ecosystem": "Ecosystem",
+    "favorite": "Favorite",
+    "add_to_favorite": "Add to favorite",
+    "all_blockchains": "All Blockchain",
+    "sponsors": "Sponsors",
+    "links": "Links"
   },
-  "index": {
+  "pages": {
+    "title": "Ping Dashboard",
+    "title_all": "404",
+    "tag": "Beta",
+    "tag_all": "Page Not Found",
     "slogan": "Ping Dashboard is not just an explorer but also a wallet and more ... 🛠",
+    "description": "Cosmos Ecosystem Blockchains 🚀",
     "search_placeholder": "Search Chain",
-    "add_to_favorite": "Add to favorite"
-  },
-  "Ecosystem": "Ecosystem",
-  "All Blockchains": "All Blockchain",
-  "Favorite": "Favorite"
-  
+    "description_all": "We couldn't find the page you are looking for.",
+    "btn_index": "Back to Home"
+  }
 }

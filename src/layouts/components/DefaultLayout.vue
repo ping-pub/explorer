@@ -206,7 +206,7 @@ function selected(route: any, nav: NavLink) {
       </div>
       <div class="px-2">
         <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
-          Sponsors
+          {{ $t('module.sponsors') }}
         </div>
         <a
           href="https://osmosis.zone"
@@ -239,7 +239,7 @@ function selected(route: any, nav: NavLink) {
           </div>
         </a>
 
-        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">Links</div>
+        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">{{ $t('module.links') }}</div>
         <a
           href="https://twitter.com/ping_pub"
           target="_blank"
