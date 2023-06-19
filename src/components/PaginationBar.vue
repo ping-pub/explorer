@@ -37,7 +37,7 @@ function gotoPage(pageNum: number) {
 
 </script>
 <template>
-    <div class="my-5">
+    <div class="my-5 text-center">
         <div v-if="total && limit" class="btn-group">
             <button v-for="{ page, color } in pages" :key="page"
                 class="btn bg-gray-100 text-gray-500 hover:text-white border-none dark:bg-gray-800 dark:text-white" :class="{
