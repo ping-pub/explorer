@@ -3,12 +3,13 @@
     "coingecko": "",
     "api": [
         "https://rest.8ball.info",
-        "https://api-8ball.nodeist.net"
-
+        "https://api-8ball.nodeist.net",
+        "https://api.8ball.nodestake.top"
     ],
     "rpc": [
         "https://rpc.8ball.info",
-        "https://rpc-8ball.nodeist.net"
+        "https://rpc-8ball.nodeist.net",
+        "https://rpc.8ball.nodestake.top"
     ],
     "snapshot_provider": "",
     "coin_type": "118",
