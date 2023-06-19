@@ -2,7 +2,6 @@
 import {
     useBaseStore,
     useBlockchain,
-    useDistributionStore,
     useFormatter,
     useMintStore,
     useStakingStore,
@@ -128,7 +127,6 @@ const list = computed(() => {
         return staking.validators.map((x, i) => ({v: x, rank: calculateRank(i), logo: logo(x.description.identity)}));
     } else if (tab.value === 'featured') {
         const endpoint = chainStore.current?.endpoints?.rest?.map(x => x.provider)
-        console.log(endpoint)
         if(endpoint) {
             endpoint.push('ping')
             return staking.validators
