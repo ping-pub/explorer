@@ -97,5 +97,27 @@
     "tips": "Tips",
     "tips_description_1": "This tool is useful for validators to monitor who is onboard during an upgrade",
     "tips_description_2": "If you want to change the default rpc endpoint. make sure that `https` and `CORS` are enabled on your server."
+  },
+  "cosmwasm": {
+    "title": "Cosmos Wasm Smart Contracts",
+    "code_id": "Code Id",
+    "code_hash": "Code Hash",
+    "creator": "Creator",
+    "permissions": "Permissions",
+    "btn_up_sc": "Upload Smart Contract",
+    "contract_list_code": "Contract List of Code",
+    "contract_list": "Contract List",
+    "btn_contract": "Contract",
+    "btn_funds": "Funds",
+    "btn_states": "States",
+    "btn_fees": "Fees",
+    "btn_query": "Query",
+    "btn_execute": "Execute",
+    "instantiate_contract": "Instantiate Contract",
+    "contract_detail": "Contract Detail",
+    "contract_balances": "Contract Balances",
+    "no_escrowed_assets": "No Escrowed Assets",
+    "contract_states": "Contract States",
+    "query_contract": "Query Contract"
   }
 }
