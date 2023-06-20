@@ -170,7 +170,7 @@ async function update() {
               {{ item?.address }}/consensus_state
             </option>
           </select>
-          <button class="btn btn-primary" @click="onChange">Monitor</button>
+          <button class="btn btn-primary" @click="onChange">{{ $t('consensus.monitor') }}</button>
         </label>
       </div>
       <div v-if="httpstatus !== 200" class="text-error mt-1">
@@ -185,13 +185,13 @@ async function update() {
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ rate }}</h4>
-            <span class="text-md">Onboard Rate</span>
+            <span class="text-md">{{ $t('consensus.onboard_rate') }}</span>
           </div>
           <div class="avatar placeholder">
             <div
               class="bg-rose-100 text-neutral-content rounded-full w-12 h-12"
             >
-              <span class="text-2xl text-error font-semibold">O</span>
+              <span class="text-2xl text-error font-semibold">{{ $t('consensus.o') }}</span>
             </div>
           </div>
         </div>
@@ -201,13 +201,13 @@ async function update() {
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ height }}</h4>
-            <span class="text-md">Height</span>
+            <span class="text-md">{{ $t('account.height') }}</span>
           </div>
           <div class="avatar placeholder">
             <div
               class="bg-green-100 text-neutral-content rounded-full w-12 h-12"
             >
-              <span class="text-2xl text-success font-semibold">H</span>
+              <span class="text-2xl text-success font-semibold">{{ $t('consensus.h') }}</span>
             </div>
           </div>
         </div>
@@ -217,13 +217,13 @@ async function update() {
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ round }}</h4>
-            <span class="text-md">Round</span>
+            <span class="text-md">{{ $t('consensus.round') }}</span>
           </div>
           <div class="avatar placeholder">
             <div
               class="bg-violet-100 text-neutral-content rounded-full w-12 h-12"
             >
-              <span class="text-2xl text-primary font-semibold">R</span>
+              <span class="text-2xl text-primary font-semibold">{{ $t('consensus.r') }}</span>
             </div>
           </div>
         </div>
@@ -233,13 +233,13 @@ async function update() {
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ step }}</h4>
-            <span class="text-md">Step</span>
+            <span class="text-md">{{ $t('consensus.step') }}</span>
           </div>
           <div class="avatar placeholder">
             <div
               class="bg-blue-100 text-neutral-content rounded-full w-12 h-12"
             >
-              <span class="text-2xl text-info font-semibold">S</span>
+              <span class="text-2xl text-info font-semibold">{{ $t('consensus.s') }}</span>
             </div>
           </div>
         </div>
@@ -252,10 +252,10 @@ async function update() {
     >
       <div class="flex flex-1 flex-col truncate">
         <h2 class="text-sm card-title text-error mb-6">
-          Updated at {{ newTime || '' }}
+          {{ $t('consensus.updated_at') }} {{ newTime || '' }}
         </h2>
         <div v-for="item in roundState.height_vote_set" :key="item.round">
-          <div class="text-xs mb-1">Round: {{ item.round }}</div>
+          <div class="text-xs mb-1">{{ $t('consensus.round') }}: {{ item.round }}</div>
           <div class="text-xs break-words">{{ item.prevotes_bit_array }}</div>
 
           <div class="flex flex-wrap py-6">
@@ -277,21 +277,21 @@ async function update() {
       <div class="flex flex-col md:!flex-row">
         <div class="flex mr-1 mb-1">
           <div class="px-4 w-[34px] h-6 rounded-lg bg-primary"></div>
-          <span class="mx-1">Proposer Signed</span>
+          <span class="mx-1">{{ $t('consensus.proposer_sign') }}</span>
         </div>
         <div class="flex mr-1 mb-1">
           <div class="px-4 w-[34px] h-6 rounded-lg bg-warning"></div>
-          <span class="mx-1">Proposer Not Signed</span>
+          <span class="mx-1">{{ $t('consensus.proposer_not_sign') }}</span>
         </div>
 
         <div class="flex mr-1 mb-1">
           <div class="px-4 w-[34px] h-6 rounded-lg bg-success"></div>
-          <span class="mx-1">Signed</span>
+          <span class="mx-1">{{ $t('consensus.sign') }}</span>
         </div>
 
         <div class="flex mr-1 mb-1">
           <div class="px-4 w-[34px] h-6 rounded-lg bg-gray-700"></div>
-          <span class="mx-1">Not Signed</span>
+          <span class="mx-1">{{ $t('consensus.not_sign') }}</span>
         </div>
       </div>
     </div>
@@ -304,17 +304,15 @@ async function update() {
         class="drop-shadow-md px-4 pt-2 pb-2"
         style="box-shadow: rgba(0, 207, 232, 0.4) 0px 6px 15px -7px"
       >
-        <h2 class="text-base font-semibold">Tips</h2>
+        <h2 class="text-base font-semibold">{{ $t('consensus.tips') }}</h2>
       </div>
       <div class="px-4 py-4">
         <ul style="list-style-type: disc" class="pl-8">
           <li>
-            This tool is useful for validators to monitor who is onboard during
-            an upgrade
+            {{ $t('consensus.tips_description_1') }}
           </li>
           <li>
-            If you want to change the default rpc endpoint. make sure that
-            "https" and "CORS" are enabled on your server.
+            {{ $t('consensus.tips_description_2') }}
           </li>
         </ul>
       </div>

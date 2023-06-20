@@ -79,5 +79,23 @@
     "future": "Future",
     "fees": "Fees",
     "only_tx": "Only show txs in recent blocks"
+  },
+  "consensus": {
+    "monitor": "Monitor",
+    "onboard_rate": "Onboard Rate",
+    "o": "O",
+    "h": "H",
+    "r": "R",
+    "s": "S",
+    "round": "Round",
+    "step": "Step",
+    "updated_at": "Updated at",
+    "proposer_sign": "Proposer Signed",
+    "proposer_not_sign": "Proposer Not Signed",
+    "sign": "Signed",
+    "not_sign": "Not Signed",
+    "tips": "Tips",
+    "tips_description_1": "This tool is useful for validators to monitor who is onboard during an upgrade",
+    "tips_description_2": "If you want to change the default rpc endpoint. make sure that `https` and `CORS` are enabled on your server."
   }
 }
