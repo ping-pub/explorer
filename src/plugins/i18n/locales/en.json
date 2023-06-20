@@ -119,5 +119,21 @@
     "no_escrowed_assets": "No Escrowed Assets",
     "contract_states": "Contract States",
     "query_contract": "Query Contract"
+  },
+  "gov": {
+    "voting": "Voting",
+    "passed": "Passed",
+    "rejected": "Rejected",
+    "tally": "Tally",
+    "btn_vote": "Vote",
+    "btn_deposit": "Deposit",
+    "timeline": "Timeline",
+    "submit_at": "Submited at",
+    "deposited_at": "Deposited at",
+    "vote_start_from": "Voting start from",
+    "vote_end": "Voting end",
+    "current_status": "Current Status",
+    "upgrade_plan": "Upgrade Plan",
+    "votes": "Votes"
   }
 }
