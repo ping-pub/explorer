@@ -213,7 +213,7 @@ const currencySign = computed(() => {
 })
 </script>
 <template>
-  <div class="overflow-x-auto w-full rounded-lg">
+  <div class="overflow-x-auto w-full rounded-md">
     <div class="flex flex-wrap justify-between bg-base-100 p-5">
       <div class="min-w-0">
         <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">

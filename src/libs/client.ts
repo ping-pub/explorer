@@ -6,11 +6,12 @@ import {
   type RequestRegistry,
   type AbstractRegistry,
   findApiProfileByChain,
+  findApiProfileBySDKVersion,
   registryChainProfile,
+  registryVersionProfile,
   withCustomRequest,
 } from './registry';
 import { PageRequest,type Coin } from '@/types';
-import { CUSTOM } from './custom_api/evmos'
 
 export class BaseRestClient<R extends AbstractRegistry> {
   endpoint: string;
@@ -28,15 +29,37 @@ export class BaseRestClient<R extends AbstractRegistry> {
   }
 }
 
+// dynamic all custom request implementations
+function registeCustomRequest() {
+  const extensions: Record<string, any> = import.meta.glob('./clients/*.ts', { eager: true });
+  Object.values(extensions).forEach(m => {
+    if(m.store === 'version') {
+      registryVersionProfile(m.name, withCustomRequest(DEFAULT, m.requests))
+    } else {
+      registryChainProfile(m.name, withCustomRequest(DEFAULT, m.requests));
+    }
+  });
+}
+    
+registeCustomRequest()
+
 export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   static newDefault(endpoint: string) {
     return new CosmosRestClient(endpoint, DEFAULT)
   }
 
   static newStrategy(endpoint: string, chain: any) {
-    registryChainProfile('evmos', withCustomRequest(DEFAULT, CUSTOM))
-    const re = findApiProfileByChain(chain.chainName)
-    return new CosmosRestClient(endpoint, re || DEFAULT)
+    
+    let req
+    if(chain) {
+      // find by name first
+      req = findApiProfileByChain(chain.chainName)
+      // if not found. try sdk version
+      if(!req && chain.versions?.cosmosSdk) {
+        req = findApiProfileBySDKVersion(chain.versions?.cosmosSdk)
+      }
+    }
+    return new CosmosRestClient(endpoint, req || DEFAULT)
   }
 
   // Auth Module

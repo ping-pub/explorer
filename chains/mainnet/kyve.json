@@ -1,7 +1,7 @@
 {
     "chain_name": "kyve",
-    "api": ["https://api-explorer.kyve.network:443"], 
-    "rpc": ["https://rpc-eu-1.kyve.network:443","https://rpc-us-1.kyve.network:443"],
+    "api": ["https://api-explorer.kyve.network:443","https://api.kyve.nodestake.top"], 
+    "rpc": ["https://rpc-eu-1.kyve.network:443","https://rpc-us-1.kyve.network:443","https://rpc.kyve.nodestake.top"],
     "snapshot_provider": "",
     "sdk_version": "0.46.10",
     "coin_type": "118",

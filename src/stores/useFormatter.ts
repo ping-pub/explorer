@@ -350,7 +350,7 @@ export const useFormatter = defineStore('formatter', {
       }
     },
     multiLine(v: string) {
-      return v ? v.replaceAll('\\n', '\n') : '';
+      return v ? v.replace(/\\n|\\r/g, '\n') : '';
     },
     hexToString(hex: string) {
       if (hex) {

@@ -149,6 +149,9 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
       { denom: x.symbol.toLowerCase(), exponent: Number(x.exponent) },
     ],
   }));
+  conf.versions = {
+    cosmosSdk: lc.sdk_version
+  }
   conf.bech32Prefix = lc.addr_prefix;
   conf.chainName = lc.chain_name;
   conf.coinType = lc.coin_type;

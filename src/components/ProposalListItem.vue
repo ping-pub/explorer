@@ -62,6 +62,7 @@ const proposalInfo = ref();
                 {{ item?.content?.title }}
               </RouterLink>
               <div
+                v-if="item.content"
                 class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
               >
                 {{ showType(item.content['@type']) }}
@@ -157,6 +158,7 @@ const proposalInfo = ref();
         <div class="grid grid-cols-4 mt-2 mb-2">
           <div class="col-span-2">
             <div
+              v-if="item.content"
               class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
             >
               {{ showType(item.content['@type']) }}
