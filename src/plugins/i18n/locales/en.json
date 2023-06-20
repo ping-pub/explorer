@@ -64,5 +64,20 @@
     "messages": "Messages",
     "time": "Time",
     "error": "Account does not exists on chain"
+  },
+  "block": {
+    "estimated_time": "Estimated Time",
+    "countdown_for_block": "Countdown For Block",
+    "countdown_for_block_input": "Input A New Target Block Number",
+    "btn_update": "Update",
+    "current_height": "Current Height",
+    "remaining_blocks": "Remaining Blocks",
+    "average_block_time": "Average Block Time",
+    "block_header": "Block Header",
+    "last_commit": "Last Commit",
+    "recent": "Recent",
+    "future": "Future",
+    "fees": "Fees",
+    "only_tx": "Only show txs in recent blocks"
   }
 }
