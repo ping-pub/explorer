@@ -52,16 +52,17 @@ function loadChannel(channel: string, port: string) {
 }
 
 function pageload(pageNum: number) {
-  page.value.setPage(pageNum)
   if (direction.value === 'In') {
-    fetchSendingTxs(channel_id.value, port_id.value)
+    fetchSendingTxs(channel_id.value, port_id.value, pageNum)
   } else {
-    fetchSendingTxs(channel_id.value, port_id.value)
+    fetchSendingTxs(channel_id.value, port_id.value, pageNum)
   }
 
 }
 
-function fetchSendingTxs(channel: string, port: string) {
+function fetchSendingTxs(channel: string, port: string, pageNum = 0) {
+
+  page.value.setPage(pageNum)
   loading.value = true
   direction.value = 'Out'
   channel_id.value = channel
@@ -72,7 +73,8 @@ function fetchSendingTxs(channel: string, port: string) {
   })
     .finally(() => loading.value = false)
 }
-function fetchRecevingTxs(channel: string, port: string) {
+function fetchRecevingTxs(channel: string, port: string, pageNum = 0) {
+  page.value.setPage(pageNum)
   loading.value = true
   direction.value = 'In'
   channel_id.value = channel
