@@ -53,9 +53,9 @@ function loadChannel(channel: string, port: string) {
 
 function pageload(pageNum: number) {
   if (direction.value === 'In') {
-    fetchSendingTxs(channel_id.value, port_id.value, pageNum)
+    fetchSendingTxs(channel_id.value, port_id.value, pageNum -1)
   } else {
-    fetchSendingTxs(channel_id.value, port_id.value, pageNum)
+    fetchSendingTxs(channel_id.value, port_id.value, pageNum -1)
   }
 
 }
