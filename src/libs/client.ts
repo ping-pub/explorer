@@ -252,16 +252,18 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return this.request(this.registry.base_tendermint_validatorsets_latest, {}, query);
   }
   // tx
-  async getTxsBySender(sender: string) {
-    const query = `?pagination.reverse=true&events=message.sender='${sender}'`;
+  async getTxsBySender(sender: string, page?: PageRequest) {
+    if(!page) page = new PageRequest()
+    const query = `?order_by=ORDER_BY_DESC&events=message.sender='${sender}'`;
     return this.request(this.registry.tx_txs, {}, query);
   }
   // query ibc sending msgs
   // ?&pagination.reverse=true&events=send_packet.packet_src_channel='${channel}'&events=send_packet.packet_src_port='${port}'
   // query ibc receiving msgs
   // ?&pagination.reverse=true&events=recv_packet.packet_dst_channel='${channel}'&events=recv_packet.packet_dst_port='${port}'
-  async getTxs(query: string, params: any) {
-    return this.request(this.registry.tx_txs, params, query);
+  async getTxs(query: string, params: any, page?: PageRequest) {
+    if(!page) page = new PageRequest()    
+    return this.request(this.registry.tx_txs, params, `${query}&${page.toQueryString()}`);
   }
   async getTxsAt(height: string | number) {
     return this.request(this.registry.tx_txs_block, { height });
