@@ -162,6 +162,10 @@
     "hops": "Hops",
     "version": "Version",
     "ordering": "Ordering",
+    "height": "Height",
+    "txhash": "Tx Hash",
+    "messages": "Messages",
+    "time": "Time",
     "btn_out": "Out",
     "btn_in": "In"
   },

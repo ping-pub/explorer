@@ -1,14 +1,17 @@
 <script lang="ts" setup>
 import { formatSeconds } from '@/libs/utils';
-import { useBaseStore, useBlockchain } from '@/stores';
-import type { Connection, ClientState, Channel } from '@/types';
+import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
+import { type Connection, type ClientState, type Channel, PageRequest, type TxResponse, type PaginatedTxs } from '@/types';
 import { computed, onMounted } from 'vue';
 import { ref } from 'vue';
 import { useIBCModule } from '../connStore';
+import PaginationBar from '@/components/PaginationBar.vue';
+import { Icon } from '@iconify/vue';
 
 const props = defineProps(['chain', 'connection_id']);
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
+const format = useFormatter();
 const ibcStore = useIBCModule()
 const conn = ref({} as Connection);
 const clientState = ref({} as { client_id: string; client_state: ClientState });
@@ -17,6 +20,14 @@ const channels = ref([] as Channel[]);
 const connId = computed(() => {
   return props.connection_id || 0
 })
+
+const loading = ref(false)
+const txs = ref({} as PaginatedTxs)
+const direction = ref('')
+const channel_id = ref('')
+const port_id = ref('')
+const page = ref(new PageRequest())
+page.value.limit = 5
 
 onMounted(() => {
   if (connId.value) {
@@ -40,15 +51,39 @@ function loadChannel(channel: string, port: string) {
   });
 }
 
-function fetchSendingTxs(channel: string, port: string) {
-  chainStore.rpc.getTxs("?&pagination.reverse=true&events=send_packet.packet_src_channel='${channel}'&events=send_packet.packet_src_port='${port}'", { channel, port }).then(res => {
-    console.log(res)
-  })
+function pageload(pageNum: number) {
+  if (direction.value === 'In') {
+    fetchSendingTxs(channel_id.value, port_id.value, pageNum -1)
+  } else {
+    fetchSendingTxs(channel_id.value, port_id.value, pageNum -1)
+  }
+
 }
-function fetchRecevingTxs(channel: string, port: string) {
-  chainStore.rpc.getTxs("?&pagination.reverse=true&events=recv_packet.packet_dst_channel='${channel}'&events=recv_packet.packet_dst_port='${port}'", { channel, port }).then(res => {
-    console.log(res)
+
+function fetchSendingTxs(channel: string, port: string, pageNum = 0) {
+
+  page.value.setPage(pageNum)
+  loading.value = true
+  direction.value = 'Out'
+  channel_id.value = channel
+  port_id.value = port
+  txs.value = {} as PaginatedTxs
+  chainStore.rpc.getTxs("?order_by=ORDER_BY_DESC&events=send_packet.packet_src_channel='{channel}'&events=send_packet.packet_src_port='{port}'", { channel, port }, page.value).then(res => {
+    txs.value = res
   })
+    .finally(() => loading.value = false)
+}
+function fetchRecevingTxs(channel: string, port: string, pageNum = 0) {
+  page.value.setPage(pageNum)
+  loading.value = true
+  direction.value = 'In'
+  channel_id.value = channel
+  port_id.value = port
+  txs.value = {} as PaginatedTxs
+  chainStore.rpc.getTxs("?order_by=ORDER_BY_DESC&events=recv_packet.packet_dst_channel='{channel}'&events=recv_packet.packet_dst_port='{port}'", { channel, port }, page.value).then(res => {
+    txs.value = res
+  })
+    .finally(() => loading.value = false)
 }
 
 function color(v: string) {
@@ -182,8 +217,18 @@ function color(v: string) {
             <tr v-for="v in ibcStore.registryChannels">
               <td>
                 <div class="flex gap-1">
-                <label class="btn btn-xs" @click="fetchSendingTxs(v[ibcStore.sourceField].channel_id, v[ibcStore.sourceField].port_id)">{{ $t('ibc.btn_out') }}</label>
-                <label class="btn btn-xs" @click="fetchRecevingTxs(v[ibcStore.sourceField].channel_id, v[ibcStore.sourceField].port_id)">{{ $t('ibc.btn_in') }}</label>
+                  <button class="btn btn-xs"
+                    @click="fetchSendingTxs(v[ibcStore.sourceField].channel_id, v[ibcStore.sourceField].port_id)"
+                    :disabled="loading">
+                    <span v-if="loading" class="loading loading-spinner loading-sm"></span>
+                    {{ $t('ibc.btn_out') }}
+                  </button>
+                  <button class="btn btn-xs"
+                    @click="fetchRecevingTxs(v[ibcStore.sourceField].channel_id, v[ibcStore.sourceField].port_id)"
+                    :disabled="loading">
+                    <span v-if="loading" class="loading loading-spinner loading-sm"></span>
+                    {{ $t('ibc.btn_in') }}
+                  </button>
                 </div>
               </td>
               <td>
@@ -196,8 +241,14 @@ function color(v: string) {
             <tr v-for="v in channels">
               <td>
                 <div class="flex gap-1">
-                <label class="btn btn-xs" @click="fetchSendingTxs(v.channel_id, v.port_id)">{{ $t('ibc.btn_out') }}</label>
-                <label class="btn btn-xs" @click="fetchRecevingTxs(v.channel_id, v.port_id)">{{ $t('ibc.btn_in') }}</label>
+                  <button class="btn btn-xs" @click="fetchSendingTxs(v.channel_id, v.port_id)" :disabled="loading">
+                    <span v-if="loading" class="loading loading-spinner loading-sm"></span>
+                    {{ $t('ibc.btn_out') }}
+                  </button>
+                  <button class="btn btn-xs" @click="fetchRecevingTxs(v.channel_id, v.port_id)" :disabled="loading">
+                    <span v-if="loading" class="loading loading-spinner loading-sm"></span>
+                    {{ $t('ibc.btn_in') }}
+                  </button>
                 </div>
               </td>
               <td>
@@ -222,6 +273,38 @@ function color(v: string) {
           </tbody>
         </table>
       </div>
+    </div>
+    <div v-if="channel_id">
+      <h3 class=" card-title capitalize">Transactions ({{ channel_id }} {{ port_id }} {{ direction }}) </h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <td> {{ $t('ibc.height') }}</td>
+            <td>{{ $t('ibc.txhash') }}</td>
+            <td> {{ $t('ibc.messages') }}</td>
+            <td>{{ $t('ibc.time') }}</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="resp in txs?.tx_responses">
+            <td>{{ resp.height }}</td>
+            <td>
+              <div class="text-xs truncate text-primary dark:invert">
+                <RouterLink :to="`/${chainStore.chainName}/tx/${resp.txhash}`">{{ resp.txhash }}</RouterLink>
+              </div>
+            </td>
+            <td>
+              <div class="flex">
+                {{ format.messages(resp.tx.body.messages) }}
+                <Icon v-if="resp.code === 0" icon="mdi-check" class="text-success text-lg" />
+                <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
+              </div>
+            </td>
+            <td>{{ format.toLocaleDate(resp.timestamp) }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <PaginationBar :limit="page.limit" :total="txs.pagination?.total" :callback="pageload" />
     </div>
   </div>
 </template>
