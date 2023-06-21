@@ -127,7 +127,7 @@ function color(v: string) {
     <div class="overflow-x-auto w-full">
       <div class="lg:!flex lg:!items-center lg:!justify-between bg-base-100 p-5">
         <div class="min-w-0 flex-1">
-          <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">My Validators</h2>
+          <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">{{ $t('uptime.my_validators') }}</h2>
           <div class="mt-1 flex flex-col sm:!mt-0 sm:!flex-row sm:!flex-wrap sm:!space-x-6">
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
@@ -138,7 +138,7 @@ function color(v: string) {
                 <path
                   d="M3 15.055v-.684c.126.053.255.1.39.142 2.092.642 4.313.987 6.61.987 2.297 0 4.518-.345 6.61-.987.135-.041.264-.089.39-.142v.684c0 1.347-.985 2.53-2.363 2.686a41.454 41.454 0 01-9.274 0C3.985 17.585 3 16.402 3 15.055z" />
               </svg>
-              Add validators you want to monitor
+              {{ $t('uptime.add_validators_monitor') }}
             </div>
           </div>
         </div>
@@ -149,13 +149,13 @@ function color(v: string) {
       <table class="table table-compact w-full">
         <thead>
           <tr>
-            <th>#</th>
+            <th>{{ $t('uptime.no') }}</th>
             <th>Blockchain</th>
-            <th>Validator</th>
-            <th>Signed Blocks</th>
-            <th>Last Jailed Time</th>
-            <th>Tombstoned</th>
-            <th>Missing Blocks</th>
+            <th>{{ $t('account.validator') }}</th>
+            <th>{{ $t('uptime.signed_blocks') }}</th>
+            <th>{{ $t('uptime.last_jailed_time') }}</th>
+            <th>{{ $t('uptime.tombstoned') }}</th>
+            <th>{{ $t('uptime.missing_blocks') }}</th>
             <th></th>
           </tr>
         </thead>
@@ -173,14 +173,14 @@ function color(v: string) {
             </td>
             <td class=" capitalize">{{ v.sigingInfo?.tombstoned }}</td>
             <td><span v-if="v.sigingInfo" class="badge " :class="color( v.sigingInfo?.missed_blocks_counter)">{{ v.sigingInfo?.missed_blocks_counter }}</span></td>
-            <td class=""><RouterLink :to="`/${v.chainName}/uptime/#blocks`" class="btn btn-xs btn-primary">Blocks</RouterLink></td>
+            <td class=""><RouterLink :to="`/${v.chainName}/uptime/#blocks`" class="btn btn-xs btn-primary">{{ $t('module.blocks') }}</RouterLink></td>
           </tr>
         </tbody>
       </table>
     </div>
     
     <div class="text-center">
-      <label for="add-validator" class="btn btn-primary mt-5">Add Validators</label>
+      <label for="add-validator" class="btn btn-primary mt-5">{{ $t('uptime.add_validators') }}</label>
     </div>
 
     <!-- Put this part before </body> tag -->
@@ -188,7 +188,7 @@ function color(v: string) {
     <div class="modal">
       <div class="modal-box relative">
         <label for="add-validator" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-        <h3 class="text-lg font-bold">Add Validators</h3>
+        <h3 class="text-lg font-bold">{{ $t('uptime.add_validators') }}</h3>
           <div class="form-control my-5 border-2">
             <div class="input-group input-group-md">
             <select v-model="selectChain" class="select select-bordered capitalize" @change="changeChain">
@@ -203,7 +203,7 @@ function color(v: string) {
           
           <table class="table table-compact w-full hover">
             <thead>
-              <tr><th>Validator</th><th></th></tr>
+              <tr><th>{{ $t('account.validator') }}</th><th></th></tr>
             </thead>
             <tbody>
               <tr v-for="(v, i) in filterValidators">
@@ -214,7 +214,7 @@ function color(v: string) {
           </table>
         </div>
         <div class="modal-action">
-          <label class="btn btn-primary" @click="add">add</label>
+          <label class="btn btn-primary" @click="add">{{ $t('uptime.add') }}</label>
         </div>
       </div>
     </div>

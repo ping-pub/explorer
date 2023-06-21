@@ -226,5 +226,22 @@
     "fee": "Fee",
     "memo": "Memo",
     "no_messages": "No messages"
+  },
+  "uptime": {
+    "overall": "Overall",
+    "customize": "Customize",
+    "only_consumer_set": "Only Consumer Set",
+    "last_jailed_time": "Last Jailed Time",
+    "signed_precommits": "Signed Precommits",
+    "start_height": "Start Height",
+    "tombstoned": "Tombstoned",
+    "minimum_uptime": "Minimum uptime per window",
+    "my_validators": "My Validators",
+    "add_validators_monitor": "Add validators you want to monitor",
+    "no": "No",
+    "signed_blocks": "Signed Blocks",
+    "missing_blocks": "Missing Blocks",
+    "add_validators": "Add Validators",
+    "add": "Add"
   }
 }
