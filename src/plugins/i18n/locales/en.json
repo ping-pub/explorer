@@ -243,5 +243,13 @@
     "missing_blocks": "Missing Blocks",
     "add_validators": "Add Validators",
     "add": "Add"
+  },
+  "widget": {
+    "title": "Initial Setting",
+    "endpoint": "Endpoint",
+    "select_endpoint": "Select Endpoint",
+    "text_1": "Import global script",
+    "text_2": "Connect Wallet",
+    "text_3": "Osmosis Convert"
   }
 }

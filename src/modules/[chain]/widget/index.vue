@@ -19,33 +19,33 @@ const hdPath = computed(() => {
 <template>
   <div>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
-      <h2 class="card-title">Initial Setting</h2>
+      <h2 class="card-title">{{ $t('widget.title') }}</h2>
       <div class="my-4 grid grid-flow-col auto-cols-max  overflow-auto">
         <div class="form-control">
             <div class="input-group">
-                <span>Endpoint</span>
+                <span>{{ $t('widget.endpoint') }}</span>
                 <select v-model="endpoint" class="select select-bordered w-fit">
-                <option disabled selected>Select Endpoint</option>
+                <option disabled selected>{{ $t('widget.select_endpoint') }}</option>
                 <option v-for="v in chainStore.current?.endpoints.rest" :value="v.address">{{ v.address }}</option>
                 </select>
             </div>
         </div>
       </div>
-      <span class="text-base">Import global script </span>
+      <span class="text-base">{{ $t('widget.text_1') }}</span>
         <div class="mockup-code bg-base-200 my-2">
             <pre data-prefix="1"><code class="text-gray-800 dark:invert">&lt;script type="module" src="https://unpkg.com/ping-widget@latest/dist/ping-widget.js"&gt;</code></pre>
         </div>
     </div>
     <div class="bg-base-100 my-5 px-4 pt-3 pb-4 rounded shadow">
-      <h2 class="card-title">Widgets</h2>
+      <h2 class="card-title">{{ $t('module.widget') }}</h2>
       <div class="mt-4">
-        <span class="text-base"> 1. Connect Wallet </span>
+        <span class="text-base"> 1. {{ $t('widget.text_2') }}</span>
         <div class="mockup-code bg-base-200 my-2">
             <pre data-prefix=">"><code class="text-green-400">&lt;!-- This widget is optional. --&gt; </code></pre>
             <pre data-prefix=">"><code  class="text-gray-800 dark:invert">&lt;ping-connect-wallet chain-id="{{ chainId }}" hd-path="{{ hdPath }}"/&gt;</code></pre>
         </div>
 
-        <span class="text-base"> 2. Osmosis Convert </span>
+        <span class="text-base"> 2. {{ $t('widget.text_3') }}</span>
         <div class="mockup-code bg-base-200 my-2">
             <pre data-prefix=">"><code class=" text-gray-800 dark:invert">&lt;ping-token-convert chain-name="{{ chainName }}" endpoint="{{endpoint}}" hd-path="{{hdPath}}"/&gt;</code></pre>
             <pre data-prefix=">"><code class="text-gray-800 dark:invert">&lt;label for="PingTokenConvert" class="btn btn-sm"&gt;Buy {{chainName.toUpperCase()}}&lt;/label&gt;</code></pre>
