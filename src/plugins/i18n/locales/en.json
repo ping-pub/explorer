@@ -251,5 +251,21 @@
     "text_1": "Import global script",
     "text_2": "Connect Wallet",
     "text_3": "Osmosis Convert"
+  },
+  "index": {
+    "rank": "Rank",
+    "price_calculator": "Price Calculator",
+    "close": "Close",
+    "buy": "Buy",
+    "active_proposals": "Active Proposals",
+    "no_active_proposals": "No active proposals",
+    "more": "More",
+    "reward": "Reward",
+    "unbonding": "Unbonding",
+    "btn_withdraw_reward": "Withdraw Rewards",
+    "btn_swap": "Swap",
+    "receive": "Receive",
+    "app_versions": "Application Versions",
+    "node_info": "Node Information"
   }
 }
