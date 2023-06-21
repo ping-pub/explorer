@@ -116,7 +116,7 @@ export function formatSeconds(value?: string) {
     return `${(duration / ( 24 * 60 * 60)).toFixed()} days`
   }
   if(duration > 60*60) {
-    return `${duration / (60 * 60).toFixed()} hours`
+    return `${(duration / (60 * 60)).toFixed()} hours`
   }    
   if(duration > 60) {
     return `${duration / 60} mins`
