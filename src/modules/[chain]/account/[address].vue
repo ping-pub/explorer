@@ -138,7 +138,7 @@ function updateEvent() {
         </div>
         <!-- content -->
         <div class="flex flex-1 flex-col truncate pl-4">
-          <h2 class="text-sm card-title">Address:</h2>
+          <h2 class="text-sm card-title">{{ $t('account.address') }}:</h2>
           <span class="text-xs truncate"> {{ address }}</span>
         </div>
       </div>
@@ -147,14 +147,14 @@ function updateEvent() {
     <!-- Assets -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <div class="flex justify-between">
-        <h2 class="card-title mb-4">Assets</h2>
+        <h2 class="card-title mb-4">{{ $t('account.assets') }}</h2>
         <!-- button -->
         <div class="flex justify-end mb-4 pr-5">
             <label
               for="send"
               class="btn btn-primary btn-sm mr-2"
               @click="dialog.open('send', {}, updateEvent)"
-              >Send</label
+              >{{ $t('account.btn_send') }}</label
             >
             <label
               for="transfer"
@@ -168,7 +168,7 @@ function updateEvent() {
                   updateEvent
                 )
               "
-              >transfer</label
+              >{{ $t('account.btn_transfer') }}</label
             >
           </div>
       </div>
@@ -319,7 +319,7 @@ function updateEvent() {
             </div>
           </div>
           <div class="mt-4 text-lg font-semibold mr-5 pl-5 border-t pt-4 text-right">
-            Total Value: ${{ totalValue }}
+            {{ $t('account.total_value') }}: ${{ totalValue }}
           </div>
         </div>
       </div>
@@ -328,19 +328,19 @@ function updateEvent() {
     <!-- Delegations -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <div class="flex justify-between">
-        <h2 class="card-title mb-4">Delegations</h2>
+        <h2 class="card-title mb-4">{{ $t('account.delegations') }}</h2>
         <div class="flex justify-end mb-4">
           <label
             for="delegate"
             class="btn btn-primary btn-sm mr-2"
             @click="dialog.open('delegate', {}, updateEvent)"
-            >Delegate</label
+            >{{ $t('account.btn_delegate') }}</label
           >
           <label
             for="withdraw"
             class="btn btn-primary btn-sm"
             @click="dialog.open('withdraw', {}, updateEvent)"
-            >Withdraw</label
+            >{{ $t('account.btn_withdraw') }}</label
           >
         </div>
       </div>
@@ -348,14 +348,14 @@ function updateEvent() {
         <table class="table w-full text-sm table-zebra">
           <thead>
             <tr>
-              <th class="py-3">Validator</th>
-              <th class="py-3">Delegation</th>
-              <th class="py-3">Rewards</th>
-              <th class="py-3">Action</th>
+              <th class="py-3">{{ $t('account.validator') }}</th>
+              <th class="py-3">{{ $t('account.delegation') }}</th>
+              <th class="py-3">{{ $t('account.rewards') }}</th>
+              <th class="py-3">{{ $t('account.action') }}</th>
             </tr>
           </thead>
           <tbody class="text-sm">
-            <tr v-if="delegations.length === 0"><td colspan="10"><div class="text-center">No Delegations</div></td></tr>
+            <tr v-if="delegations.length === 0"><td colspan="10"><div class="text-center">{{ $t('account.no_delegations') }}</div></td></tr>
             <tr v-for="(v, index) in delegations" :key="index">
               <td class="text-caption text-primary py-3">
                 <RouterLink
@@ -392,7 +392,7 @@ function updateEvent() {
                         updateEvent
                       )
                     "
-                    >delegate</label
+                    >{{ $t('account.btn_delegate') }}</label
                   >
                   <label
                     for="redelegate"
@@ -406,7 +406,7 @@ function updateEvent() {
                         updateEvent
                       )
                     "
-                    >Redelegate</label
+                    >{{ $t('account.btn_redelegate') }}</label
                   >
                   <label
                     for="unbond"
@@ -420,7 +420,7 @@ function updateEvent() {
                         updateEvent
                       )
                     "
-                    >Unbond</label
+                    >{{ $t('account.btn_unbond') }}</label
                   >
                 </div>
               </td>
@@ -435,15 +435,15 @@ function updateEvent() {
       class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow"
       v-if="unbonding && unbonding.length > 0"
     >
-      <h2 class="card-title mb-4">Unbonding Delegations</h2>
+      <h2 class="card-title mb-4">{{ $t('account.unbonding_delegations') }}</h2>
       <div class="overflow-x-auto">
         <table class="table text-sm w-full">
           <thead>
             <tr>
-              <th class="py-3">Creation Height</th>
-              <th class="py-3">Initial Balance</th>
-              <th class="py-3">Balance</th>
-              <th class="py-3">Completion Time</th>
+              <th class="py-3">{{ $t('account.creation_height') }}</th>
+              <th class="py-3">{{ $t('account.initial_balance') }}</th>
+              <th class="py-3">{{ $t('account.balance') }}</th>
+              <th class="py-3">{{ $t('account.completion_time') }}</th>
             </tr>
           </thead>
           <tbody class="text-sm" v-for="(v, index) in unbonding" :key="index">
@@ -494,19 +494,19 @@ function updateEvent() {
 
     <!-- Transactions -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4">Transactions</h2>
+      <h2 class="card-title mb-4">{{ $t('account.transactions') }}</h2>
       <div class="overflow-x-auto">
         <table class="table w-full text-sm">
           <thead>
             <tr>
-              <th class="py-3">Height</th>
-              <th class="py-3">Hash</th>
-              <th class="py-3">Messages</th>
-              <th class="py-3">Time</th>
+              <th class="py-3">{{ $t('account.height') }}</th>
+              <th class="py-3">{{ $t('account.hash') }}</th>
+              <th class="py-3">{{ $t('account.messages') }}</th>
+              <th class="py-3">{{ $t('account.time') }}</th>
             </tr>
           </thead>
           <tbody class="text-sm">
-            <tr v-if="txs.length === 0"><td colspan="10"><div class="text-center">No Transactions</div></td></tr>
+            <tr v-if="txs.length === 0"><td colspan="10"><div class="text-center">{{ $t('account.no_transactions') }}</div></td></tr>
             <tr v-for="(v, index) in txs" :key="index">
               <td class="text-sm py-3">
                 <RouterLink :to="`/${chain}/block/${v.height}`" class="text-primary dark:invert">{{
@@ -538,9 +538,9 @@ function updateEvent() {
 
     <!-- Account -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4">Account</h2>
+      <h2 class="card-title mb-4">{{ $t('account.acc') }}</h2>
       <DynamicComponent :value="account" />
     </div>
   </div>
-  <div v-else class="text-no text-sm">Account does not exists on chain</div>
+  <div v-else class="text-no text-sm">{{ $t('account.error') }}</div>
 </template>

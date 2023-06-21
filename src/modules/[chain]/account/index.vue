@@ -57,11 +57,11 @@ function showPubkey(v: any) {
         <table class="table table-compact">
             <thead>
                 <tr>
-                    <td>Type</td>
-                    <td>Address</td>
-                    <td>Account Number</td>
-                    <td>Sequence</td>
-                    <td>Public Key</td>
+                    <td>{{ $t('account.type') }}</td>
+                    <td>{{ $t('account.address') }}</td>
+                    <td>{{ $t('account.acc_num') }}</td>
+                    <td>{{ $t('account.sequence') }}</td>
+                    <td>{{ $t('account.pub_key') }}</td>
                 </tr>
             </thead>
             <tr v-for="acc in accounts">
