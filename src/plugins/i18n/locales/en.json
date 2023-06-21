@@ -201,5 +201,22 @@
     "hex_addr": "Hex Address",
     "signer_addr": "Signer Address",
     "consensus_pub_key": "Consensus Public Key"
+  },
+  "statesync": {
+    "title": "What's State Sync?",
+    "title_2": "Starting New Node From State Sync",
+    "title_3": "Enable Snapshot For State Sync",
+    "description": "The Tendermint Core 0.34 release includes support for state sync, which allows a new node to join a network by fetching a snapshot of the application state at a recent height instead of fetching and replaying all historical blocks. This can reduce the time needed to sync with the network from days to minutes. Click",
+    "here": "Here",
+    "version": "Version",
+    "for_more_info": "For more infomation",
+    "text_1": "Install Binary",
+    "text_1_1": "We need to install the binary first and make sure that the version is the one currently in use on mainnet",
+    "text_2": "Enable State Sync",
+    "text_2_1": "We can configure Tendermint to use state sync in $DAEMON_HOME/config/config.toml",
+    "text_3": "Start the daemon",
+    "text_3_1": "If you are resetting node, run",
+    "text_3_2": "before you start the daemon",
+    "text_title_3": "To make state sync works, we can enable snapshot in $DAEMON_HOME/config/app.toml"
   }
 }
