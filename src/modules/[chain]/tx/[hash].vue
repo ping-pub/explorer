@@ -26,16 +26,16 @@ const messages = computed(() => {
 <template>
     <div>
         <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow mb-4">
-            <h2 class="card-title truncate mb-2">Summary</h2>
+            <h2 class="card-title truncate mb-2">{{ $t('tx.title') }}</h2>
             <div class="overflow-auto-x">
                 <table class="table text-sm">
                     <tbody>
                         <tr>
-                            <td>Tx Hash</td>
+                            <td>{{ $t('tx.tx_hash') }}</td>
                             <td>{{ tx.tx_response.txhash }}</td>
                         </tr>
                         <tr>
-                            <td>Height</td>
+                            <td>{{ $t('account.height') }}</td>
                             <td>
                                 <RouterLink :to="`/${props.chain}/block/${tx.tx_response.height}`" class="text-primary dark:invert">{{ tx.tx_response.height
                                 }}
@@ -43,7 +43,7 @@ const messages = computed(() => {
                             </td>
                         </tr>
                         <tr>
-                            <td>Status</td>
+                            <td>{{ $t('staking.status') }}</td>
                             <td>
                                 <div class="text-xs truncate relative py-2 px-4 w-fit mr-2 rounded" :class="`text-${tx.tx_response.code === 0 ? 'success' : 'error'
                                     }`">
@@ -54,7 +54,7 @@ const messages = computed(() => {
                             </td>
                         </tr>
                         <tr>
-                            <td>Time</td>
+                            <td>{{ $t('account.time') }}</td>
                             <td>
                                 {{ format.toLocaleDate(tx.tx_response.timestamp) }} ({{
                                     format.toDay(tx.tx_response.timestamp, 'from')
@@ -62,13 +62,13 @@ const messages = computed(() => {
                             </td>
                         </tr>
                         <tr>
-                            <td>Gas</td>
+                            <td>{{ $t('tx.gas') }}</td>
                             <td>
                                 {{ tx.tx_response.gas_used }} / {{ tx.tx_response.gas_wanted }}
                             </td>
                         </tr>
                         <tr>
-                            <td>Fee</td>
+                            <td>{{ $t('tx.fee') }}</td>
                             <td>
                                 {{
                                     format.formatTokens(
@@ -80,7 +80,7 @@ const messages = computed(() => {
                             </td>
                         </tr>
                         <tr>
-                            <td>Memo</td>
+                            <td>{{ $t('tx.memo') }}</td>
                             <td>{{ tx.tx.body.memo }}</td>
                         </tr>
                     </tbody>
@@ -90,14 +90,14 @@ const messages = computed(() => {
 
         <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow mb-4">
             <h2 class="card-title truncate mb-2">
-                Messages: ({{ messages.length }})
+                {{ $t('account.messages') }}: ({{ messages.length }})
             </h2>
             <div v-for="(msg, i) in messages">
                 <div class="border border-slate-400 rounded-md mt-4">
                     <DynamicComponent :value="msg" />
                 </div>
             </div>
-            <div v-if="messages.length === 0">No messages</div>
+            <div v-if="messages.length === 0">{{ $t('tx.no_messages') }}</div>
         </div>
 
         <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">

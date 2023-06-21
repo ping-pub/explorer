@@ -218,5 +218,13 @@
     "text_3_1": "If you are resetting node, run",
     "text_3_2": "before you start the daemon",
     "text_title_3": "To make state sync works, we can enable snapshot in $DAEMON_HOME/config/app.toml"
+  },
+  "tx": {
+    "title": "Summary",
+    "tx_hash": "Tx Hash",
+    "gas": "Gas",
+    "fee": "Fee",
+    "memo": "Memo",
+    "no_messages": "No messages"
   }
 }
