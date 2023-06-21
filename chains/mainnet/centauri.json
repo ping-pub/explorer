@@ -1,5 +1,5 @@
 {
-    "chain_name": "Composable",
+    "chain_name": "Centauri",
     "api": ["https://composable-api.polkachu.com","https://api.composable.nodestake.top"],
     "rpc": ["https://composable-rpc.polkachu.com","https://rpc.composable.nodestake.top"],
     "coingecko": "",
@@ -7,7 +7,7 @@
     "sdk_version": "0.47.1",
     "coin_type": "118",
     "min_tx_fee": "500",
-    "addr_prefix": "banksy",
+    "addr_prefix": "centauri",
     "logo": "/logos/composable.jpg",
     "assets": [{
         "base": "ppica",

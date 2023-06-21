@@ -1,5 +1,5 @@
 {
-  "chain_name": "banksy-testnet-2",
+  "chain_name": "centauritestnet",
   "api": ["https://composable-testnet-api.polkachu.com/"],
   "rpc": ["https://composable-testnet-rpc.polkachu.com/"],
   "coingecko": "",
@@ -7,7 +7,7 @@
   "sdk_version": "0.37.0",
   "coin_type": "118",
   "min_tx_fee": "500",
-  "addr_prefix": "banksy",
+  "addr_prefix": "centauri",
   "logo": "/logos/composable.jpg",
   "assets": [{
     "base": "ppica",
@@ -15,5 +15,6 @@
     "exponent": "12",
     "coingecko_id": "",
     "logo": "/logos/composable.jpg"
-  }]
+  }
+  ]
 }
