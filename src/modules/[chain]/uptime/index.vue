@@ -122,23 +122,23 @@ function changeTab(v: string) {
         class="tab text-gray-400 capitalize"
         :class="{ 'tab-active': tab === '3' }"
         @click="changeTab('3')"
-        >Overall</a
+        >{{ $t('uptime.overall') }}</a
       >
       <a
         class="tab text-gray-400 capitalize"
         :class="{ 'tab-active': tab === '2' }"
         @click="changeTab('2')"
-        >Blocks</a
+        >{{ $t('module.blocks') }}</a
       >
       <RouterLink :to="`/${chain}/uptime/customize`">
-        <a class="tab text-gray-400 capitalize">Customize</a>
+        <a class="tab text-gray-400 capitalize">{{ $t('uptime.customize') }}</a>
       </RouterLink>
     </div>
     <div class="bg-base-100 px-5 pt-5">
       <div class="flex items-center gap-x-4">
         <label v-if="chainStore.isConsumerChain" class="text-center">
           <input type="checkbox" v-model="filterOptout" class="checkbox" />
-          Only Consumer Set
+          {{ $t('uptime.only_consumer_set') }}
         </label>
         <input
           type="text"
@@ -180,12 +180,12 @@ function changeTab(v: string) {
         <table class="table table-compact w-full mt-5">
           <thead class="capitalize">
             <tr>
-              <td>Validator</td>
-              <td class="text-right">Uptime</td>
-              <td>Last Jailed Time</td>
-              <td class="text-right">Signed Precommits</td>
-              <td class="text-right">Start Height</td>
-              <td>Tombstoned</td>
+              <td>{{ $t('account.validator') }}</td>
+              <td class="text-right">{{ $t('module.uptime') }}</td>
+              <td>{{ $t('uptime.last_jailed_time') }}</td>
+              <td class="text-right">{{ $t('uptime.signed_precommits') }}</td>
+              <td class="text-right">{{ $t('uptime.start_height') }}</td>
+              <td>{{ $t('uptime.tombstoned') }}</td>
             </tr>
           </thead>
           <tr v-for="({ v, signing, uptime }, i) in list" class="hover">
@@ -239,7 +239,7 @@ function changeTab(v: string) {
           <tfoot>
             <tr>
               <td colspan="2" class="text-right">
-                Minimum uptime per window:
+                {{ $t('uptime.minimum_uptime') }}:
                 <span
                   class="lowercase tooltip"
                   :data-tip="`Window size: ${slashingParam.signed_blocks_window}`"

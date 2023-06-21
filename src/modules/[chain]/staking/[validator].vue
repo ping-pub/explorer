@@ -193,16 +193,16 @@ const tipMsg = computed(() => {
                     validator_address: v.operator_address,
                   })
                 "
-                >Delegate</label
+                >{{ $t('account.btn_delegate') }}</label
               >
             </div>
           </div>
           <div class="m-4 text-sm">
-            <p class="text-sm mb-3 font-medium">About Us</p>
+            <p class="text-sm mb-3 font-medium">{{ $t('staking.about_us') }}</p>
             <div class="card-list">
               <div class="flex items-center mb-2">
                 <Icon icon="mdi-web" class="text-xl mr-1" />
-                <span class="font-bold mr-2">Website: </span>
+                <span class="font-bold mr-2">{{ $t('staking.website') }}: </span>
                 <a
                   :href="v?.description?.website || '#'"
                   :class="
@@ -216,22 +216,22 @@ const tipMsg = computed(() => {
               </div>
               <div class="flex items-center">
                 <Icon icon="mdi-email-outline" class="text-xl mr-1" />
-                <span class="font-bold mr-2">Contact: </span>
+                <span class="font-bold mr-2">{{ $t('staking.contact') }}: </span>
                 <span> {{ v.description?.security_contact }}</span>
               </div>
             </div>
-            <p class="text-sm mt-4 mb-3 font-medium">Validator Status</p>
+            <p class="text-sm mt-4 mb-3 font-medium">{{ $t('staking.validator_status') }}</p>
             <div class="card-list">
               <div class="flex items-center mb-2">
                 <Icon icon="mdi-shield-account-outline" class="text-xl mr-1" />
-                <span class="font-bold mr-2">Status: </span
+                <span class="font-bold mr-2">{{ $t('staking.status') }}: </span
                 ><span>
                   {{ String(v.status).replace('BOND_STATUS_', '') }}
                 </span>
               </div>
               <div class="flex items-center">
                 <Icon icon="mdi-shield-alert-outline" class="text-xl mr-1" />
-                <span class="font-bold mr-2">Jailed: </span>
+                <span class="font-bold mr-2">{{ $t('staking.jailed') }}: </span>
                 <span> {{ v.jailed || '-' }} </span>
               </div>
             </div>
@@ -255,7 +255,7 @@ const tipMsg = computed(() => {
                     })
                   }}
                 </h4>
-                <span class="text-sm">Total Bonded Tokens</span>
+                <span class="text-sm">{{ $t('staking.total_bonded') }}</span>
               </div>
             </div>
             <div class="flex mb-2">
@@ -269,7 +269,7 @@ const tipMsg = computed(() => {
                 <h4>
                   {{ format.formatToken(selfBonded.balance) }} ({{ selfRate }})
                 </h4>
-                <span class="text-sm">Self Bonded</span>
+                <span class="text-sm">{{ $t('staking.self_bonded') }}</span>
               </div>
             </div>
 
@@ -285,7 +285,7 @@ const tipMsg = computed(() => {
                 <h4>
                   {{ v.min_self_delegation }} {{ staking.params.bond_denom }}
                 </h4>
-                <span class="text-sm">Min Self Delegation:</span>
+                <span class="text-sm">{{ $t('staking.min_self') }}</span>
               </div>
             </div>
             <div class="flex mb-2">
@@ -297,7 +297,7 @@ const tipMsg = computed(() => {
               </div>
               <div class="ml-3 flex flex-col justify-center">
                 <h4>{{ apr }}</h4>
-                <span class="text-sm">Annual Profit</span>
+                <span class="text-sm">{{ $t('staking.annual_profit') }}</span>
               </div>
             </div>
 
@@ -310,7 +310,7 @@ const tipMsg = computed(() => {
               </div>
               <div class="ml-3 flex flex-col justify-center">
                 <h4>{{ v.unbonding_height }}</h4>
-                <span class="text-sm">Unbonding Height</span>
+                <span class="text-sm">{{ $t('staking.unbonding_height') }}</span>
               </div>
             </div>
 
@@ -324,7 +324,7 @@ const tipMsg = computed(() => {
               <div class="ml-3 flex flex-col justify-center">
                 <h4 v-if="v.unbonding_time && !v.unbonding_time.startsWith('1970')">{{ format.toDay(v.unbonding_time, 'from') }}</h4>
                 <h4 v-else>-</h4>
-                <span class="text-sm">Unbonding Time</span>
+                <span class="text-sm">{{ $t('staking.unbonding_time') }}</span>
               </div>
             </div>
           </div>
@@ -339,14 +339,14 @@ const tipMsg = computed(() => {
       </div>
       <div class="bg-base-100 rounded shadow relative overflow-auto">
         <div class="text-lg font-semibold text-main px-4 pt-4">
-          Commissions & Rewards
+          {{ $t('staking.commissions_&_rewards') }}
         </div>
         <div
           class="px-4 mt-1 flex flex-col justify-between pb-4"
           style="height: calc(100% - 50px)"
         >
           <div class="overflow-auto flex-1">
-            <div class="text-sm mb-2">Commissions</div>
+            <div class="text-sm mb-2">{{ $t('staking.commissions') }}</div>
             <div
               v-for="(i, k) in commission"
               :key="`reward-${k}`"
@@ -357,7 +357,7 @@ const tipMsg = computed(() => {
             >
               {{ format.formatToken2(i) }}
             </div>
-            <div class="text-sm mb-2 mt-2">Outstanding Rewards</div>
+            <div class="text-sm mb-2 mt-2">{{ $t('staking.outstanding') }} {{ $t('account.rewards') }}</div>
             <div
               v-for="(i, k) in rewards"
               :key="`reward-${k}`"
@@ -375,18 +375,18 @@ const tipMsg = computed(() => {
                   validator_address: v.operator_address,
                 })
               "
-              >Withdraw</label
+              >{{ $t('account.btn_withdraw') }}</label
             >
           </div>
         </div>
       </div>
       <div class="bg-base-100 rounded shadow overflow-x-auto">
         <div class="px-4 pt-4 mb-2 text-main font-lg font-semibold">
-          Addresses
+          {{ $t('staking.addresses') }}
         </div>
         <div class="px-4 pb-4">
           <div class="mb-3">
-            <div class="text-sm flex">Account 
+            <div class="text-sm flex">{{ $t('staking.account_addr') }} 
               <Icon
                   icon="mdi:content-copy"
                   class="ml-2 cursor-pointer"
@@ -402,7 +402,7 @@ const tipMsg = computed(() => {
             </RouterLink>
           </div>
           <div class="mb-3">
-            <div class="text-sm flex">Operator Address
+            <div class="text-sm flex">{{ $t('staking.operator_addr') }}
               <Icon
                   icon="mdi:content-copy"
                   class="ml-2 cursor-pointer"
@@ -414,7 +414,7 @@ const tipMsg = computed(() => {
             </div>
           </div>
           <div class="mb-3">
-            <div class="text-sm flex">Hex Address
+            <div class="text-sm flex">{{ $t('staking.hex_addr') }}
               <Icon
                   icon="mdi:content-copy"
                   class="ml-2 cursor-pointer"
@@ -425,7 +425,7 @@ const tipMsg = computed(() => {
             <div class="text-xs">{{ addresses.hex }}</div>
           </div>
           <div class="mb-3">
-            <div class="text-sm flex">Signer Address
+            <div class="text-sm flex">{{ $t('staking.signer_addr') }}
               <Icon
                   icon="mdi:content-copy"
                   class="ml-2 cursor-pointer"
@@ -436,7 +436,7 @@ const tipMsg = computed(() => {
             <div class="text-xs">{{ addresses.valCons }}</div>
           </div>
           <div>
-            <div class="text-sm flex">Consensus Public Key
+            <div class="text-sm flex">{{ $t('staking.consensus_pub_key') }}
               <Icon
                   icon="mdi:content-copy"
                   class="ml-2 cursor-pointer"
@@ -450,16 +450,16 @@ const tipMsg = computed(() => {
       </div>
     </div>
     <div class="mt-5 bg-base-100 shadow rounded p-4">
-      <div class="text-lg mb-4 font-semibold">Transactions</div>
+      <div class="text-lg mb-4 font-semibold">{{ $t('account.transactions') }}</div>
       <div class="rounded overflow-auto">
         <table class="table validatore-table w-full">
           <thead>
             <th class="text-left pl-4" style="position: relative; z-index: 2">
-              Height
+              {{ $t('account.height') }}
             </th>
-            <th class="text-left pl-4">Hash</th>
-            <th class="text-left pl-4" width="40%">Messages</th>
-            <th class="text-left pl-4">Time</th>
+            <th class="text-left pl-4">{{ $t('account.hash') }}</th>
+            <th class="text-left pl-4" width="40%">{{ $t('account.messages') }}</th>
+            <th class="text-left pl-4">{{ $t('account.time') }}</th>
           </thead>
           <tbody>
             <tr v-for="(item, i) in txs.tx_responses">
