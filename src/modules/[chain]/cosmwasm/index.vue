@@ -24,15 +24,15 @@ pageload(1)
 </script>
 <template>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-        <h2 class="card-title truncate w-full">Cosmos Wasm Smart Contracts</h2>
+        <h2 class="card-title truncate w-full">{{ $t('cosmwasm.title') }}</h2>
         <div class="overflow-x-auto">
             <table class="table table-compact w-full mt-4 text-sm">
                 <thead>
                     <tr>
-                        <th>Code Id</th>
-                        <th>Code Hash</th>
-                        <th>Creator</th>
-                        <th>Permissions</th>
+                        <th>{{ $t('cosmwasm.code_id') }}</th>
+                        <th>{{ $t('cosmwasm.code_hash') }}</th>
+                        <th>{{ $t('cosmwasm.creator') }}</th>
+                        <th>{{ $t('cosmwasm.permissions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,9 +55,7 @@ pageload(1)
             </table>
             <div class="flex justify-between">
                 <PaginationBar :limit="pageRequest.limit" :total="codes.pagination?.total" :callback="pageload" />
-                <label for="wasm_store_code" class="btn btn-primary my-5" @click="dialog.open('wasm_store_code', {})">Upload
-                    Smart
-                    Contract</label>
+                <label for="wasm_store_code" class="btn btn-primary my-5" @click="dialog.open('wasm_store_code', {})">{{ $t('cosmwasm.btn_up_sc') }}</label>
             </div>
         </div>
     </div>

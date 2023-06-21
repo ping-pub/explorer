@@ -48,17 +48,17 @@ const chainStore = useBlockchain()
         </svg>
       </div>
       <h1 class="text-primary dark:invert text-3xl md:!text-6xl font-bold">
-        Ping Dashboard
+        {{ $t('pages.title') }}
       </h1>
       <div class="badge badge-primary badge-outline dark:invert mt-1 text-sm md:!mt-8">
-        Beta
+        {{ $t('pages.tag') }}
       </div>
     </div>
     <div class="text-center text-base">
       <p class="mb-1">
-        {{ $t('index.slogan') }}
+        {{ $t('pages.slogan') }}
       </p>
-      <h2 class="mb-6">Cosmos Ecosystem Blockchains 🚀</h2>
+      <h2 class="mb-6">{{ $t('pages.description') }}</h2>
     </div>
     <div
       v-if="dashboard.status !== LoadingStatus.Loaded"
@@ -69,7 +69,7 @@ const chainStore = useBlockchain()
 
     <div class="flex items-center rounded-lg bg-base-100  border border-gray-200 dark:border-gray-700 mt-10">
       <Icon icon="mdi:magnify" class="text-2xl text-gray-400 ml-3"/>
-      <input :placeholder="$t('index.search_placeholder')" class="px-4 h-10 bg-transparent flex-1 outline-none text-base" v-model="keywords" />
+      <input :placeholder="$t('pages.search_placeholder')" class="px-4 h-10 bg-transparent flex-1 outline-none text-base" v-model="keywords" />
       <div class="px-4 text-base hidden md:!block">{{ chains.length }}/{{ dashboard.length }}</div>
     </div>
 

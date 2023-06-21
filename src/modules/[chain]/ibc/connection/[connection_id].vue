@@ -94,18 +94,18 @@ function color(v: string) {
     </div>
 
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4 overflow-hidden">IBC Client <span class="ml-2 text-sm">{{
+      <h2 class="card-title mb-4 overflow-hidden">{{ $t('ibc.title_2') }}<span class="ml-2 text-sm">{{
         clientState.client_state?.['@type'] }}</span></h2>
       <div class="overflow-x-auto grid grid-cols-1 md:grid-cols-2 gap-4">
         <table class="table table-sm capitalize">
           <thead class="bg-base-200">
             <tr>
-              <td colspan="3">Trust Parameters</td>
+              <td colspan="3">{{ $t('ibc.trust_parameters') }}</td>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="w-52">trust level:</td>
+              <td class="w-52">{{ $t('ibc.trust_level') }}:</td>
               <td>
                 {{ clientState.client_state?.trust_level?.numerator }}/{{
                   clientState.client_state?.trust_level?.denominator
@@ -113,23 +113,23 @@ function color(v: string) {
               </td>
             </tr>
             <tr>
-              <td class="w-52">trusting period:</td>
+              <td class="w-52">{{ $t('ibc.trusting_period') }}:</td>
               <td>{{ formatSeconds(clientState.client_state?.trusting_period) }}</td>
             </tr>
             <tr>
-              <td class="w-52">unbonding period:</td>
+              <td class="w-52">{{ $t('ibc.unbonding_period') }}:</td>
               <td>{{ formatSeconds(clientState.client_state?.unbonding_period) }}</td>
             </tr>
             <tr>
-              <td class="w-52">max clock drift:</td>
+              <td class="w-52">{{ $t('ibc.max_clock_drift') }}:</td>
               <td>{{ formatSeconds(clientState.client_state?.max_clock_drift) }}</td>
             </tr>
             <tr>
-              <td class="w-52">frozen height:</td>
+              <td class="w-52">{{ $t('ibc.frozen_height') }}:</td>
               <td>{{ clientState.client_state?.frozen_height }}</td>
             </tr>
             <tr>
-              <td class="w-52">latest height:</td>
+              <td class="w-52">{{ $t('ibc.latest_height') }}:</td>
               <td>{{ clientState.client_state?.latest_height }}</td>
             </tr>
           </tbody>
@@ -137,24 +137,24 @@ function color(v: string) {
         <table class="table table-sm text-sm w-full capitalize">
           <thead class="bg-base-200">
             <tr>
-              <td colspan="2">Upgrade Parameters</td>
+              <td colspan="2">{{ $t('ibc.upgrade_parameters') }}</td>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td colspan="2">
-                <div class="flex justify-between"><span>allow update after expiry:</span> <span>{{
+                <div class="flex justify-between"><span>{{ $t('ibc.allow_update_after_expiry') }}:</span> <span>{{
                   clientState.client_state?.allow_update_after_expiry }}</span></div>
               </td>
             </tr>
             <tr>
               <td colspan="2">
-                <div class="flex justify-between"><span>allow update after misbehaviour: </span> <span>{{
+                <div class="flex justify-between"><span>{{ $t('ibc.allow_update_after_misbehaviour') }}: </span> <span>{{
                   clientState.client_state?.allow_update_after_misbehaviour }}</span></div>
               </td>
             </tr>
             <tr>
-              <td class="w-52">upgrade path:</td>
+              <td class="w-52">{{ $t('ibc.upgrade_path') }}:</td>
               <td class="text-right">{{ clientState.client_state?.upgrade_path.join(', ') }}</td>
             </tr>
           </tbody>
@@ -163,27 +163,27 @@ function color(v: string) {
       </div>
     </div>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow overflow-hidden">
-      <h2 class="card-title">Channels</h2>
+      <h2 class="card-title">{{ $t('ibc.channels') }}</h2>
       <div class="overflow-auto">
         <table class="table w-full mt-4">
           <thead>
             <tr>
-              <th>Txs</th>
-              <th style="position: relative; z-index: 2">Channel Id</th>
-              <th>Port Id</th>
-              <th>State</th>
-              <th>Counterparty</th>
-              <th>Hops</th>
-              <th>Version</th>
-              <th>Ordering</th>
+              <th>{{ $t('ibc.txs') }}</th>
+              <th style="position: relative; z-index: 2">{{ $t('ibc.channel_id') }}</th>
+              <th>{{ $t('ibc.port_id') }}</th>
+              <th>{{ $t('ibc.state') }}</th>
+              <th>{{ $t('ibc.counterparty') }}</th>
+              <th>{{ $t('ibc.hops') }}</th>
+              <th>{{ $t('ibc.version') }}</th>
+              <th>{{ $t('ibc.ordering') }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="v in ibcStore.registryChannels">
               <td>
                 <div class="flex gap-1">
-                <label class="btn btn-xs" @click="fetchSendingTxs(v[ibcStore.sourceField].channel_id, v[ibcStore.sourceField].port_id)">Out</label>
-                <label class="btn btn-xs" @click="fetchRecevingTxs(v[ibcStore.sourceField].channel_id, v[ibcStore.sourceField].port_id)">In</label>
+                <label class="btn btn-xs" @click="fetchSendingTxs(v[ibcStore.sourceField].channel_id, v[ibcStore.sourceField].port_id)">{{ $t('ibc.btn_out') }}</label>
+                <label class="btn btn-xs" @click="fetchRecevingTxs(v[ibcStore.sourceField].channel_id, v[ibcStore.sourceField].port_id)">{{ $t('ibc.btn_in') }}</label>
                 </div>
               </td>
               <td>
@@ -196,8 +196,8 @@ function color(v: string) {
             <tr v-for="v in channels">
               <td>
                 <div class="flex gap-1">
-                <label class="btn btn-xs" @click="fetchSendingTxs(v.channel_id, v.port_id)">Out</label>
-                <label class="btn btn-xs" @click="fetchRecevingTxs(v.channel_id, v.port_id)">In</label>
+                <label class="btn btn-xs" @click="fetchSendingTxs(v.channel_id, v.port_id)">{{ $t('ibc.btn_out') }}</label>
+                <label class="btn btn-xs" @click="fetchRecevingTxs(v.channel_id, v.port_id)">{{ $t('ibc.btn_in') }}</label>
                 </div>
               </td>
               <td>
