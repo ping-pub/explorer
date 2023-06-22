@@ -218,7 +218,7 @@ const tipMsg = computed(() => {
                 <Icon icon="mdi-email-outline" class="text-xl mr-1" />
                 <span class="font-bold mr-2">{{ $t('staking.contact') }}: </span>
                 <a
-                  v-if="v?.description?.security_contact"
+                  v-if="v.description?.security_contact"
                   :href="'mailto:' + v.description.security_contact || '#' "
                   class="cursor-pointer"
                 >
