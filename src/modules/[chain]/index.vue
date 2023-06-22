@@ -333,11 +333,13 @@ const amount = computed({
           <tbody>
             <tr v-for="(item, index) in walletStore.delegations" :key="index">
               <td>
+                <RouterLink class="link link-primary no-underline" :to="`/${chain}/staking/${item?.delegation?.validator_address}`">
                 {{
                   format.validatorFromBech32(
                     item?.delegation?.validator_address
                   )
                 }}
+                </RouterLink>
               </td>
               <td>{{ format.formatToken(item?.balance) }}</td>
               <td>

@@ -217,7 +217,13 @@ const tipMsg = computed(() => {
               <div class="flex items-center">
                 <Icon icon="mdi-email-outline" class="text-xl mr-1" />
                 <span class="font-bold mr-2">{{ $t('staking.contact') }}: </span>
-                <span> {{ v.description?.security_contact }}</span>
+                <a
+                  v-if="v?.description?.security_contact"
+                  :href="'mailto:' + v.description.security_contact || '#' "
+                  class="cursor-pointer"
+                >
+                  {{ v.description?.security_contact || '-' }}
+                </a>
               </div>
             </div>
             <p class="text-sm mt-4 mb-3 font-medium">{{ $t('staking.validator_status') }}</p>
