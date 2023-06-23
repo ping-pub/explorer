@@ -1,8 +1,8 @@
 {
     "chain_name": "lumenx",
     "coingecko": "",
-    "api": ["https://api.lumenx.chaintools.tech:443","https://api-lumenx.cryptonet.pl:443"],
-    "rpc": ["https://rpc.lumenx.chaintools.tech:443","https://rpc-lumenx.cryptonet.pl:443"],
+    "api": ["https://api-lumenx.cryptonet.pl/"],
+    "rpc": ["https://rpc-lumenx.cryptonet.pl/"],
     "snapshot_provider": "",
     "sdk_version": "0.45.5",
     "coin_type": "118",
