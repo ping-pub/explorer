@@ -194,7 +194,7 @@ function pageload(p: number) {
       <div class="">
         <ObjectElement :value="proposal.content" />
       </div>
-      <div v-if="proposal.summary">
+      <div v-if="proposal.summary && !proposal.content?.description">
         <MdEditor
           :model-value="format.multiLine(proposal.summary)"
           previewOnly
