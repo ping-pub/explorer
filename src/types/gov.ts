@@ -21,11 +21,13 @@ export interface GovParams {
 }
 
 export interface GovProposal {
+  title?: string;
+  summary?: string;
   proposal_id: string;
   content: {
     '@type': string;
-    title: string;
-    description: string;
+    title?: string;
+    description?: string;
     plan?: {
       height?: string | number;
       time?: string | number;

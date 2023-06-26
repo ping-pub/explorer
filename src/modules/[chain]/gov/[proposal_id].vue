@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed } from '@vue/reactivity';
+import MdEditor from 'md-editor-v3';
 import ObjectElement from '@/components/dynamic/ObjectElement.vue';
 import {
   useBaseStore,
@@ -19,6 +20,7 @@ import { ref, reactive } from 'vue';
 import Countdown from '@/components/Countdown.vue';
 import PaginationBar from '@/components/PaginationBar.vue';
 import { fromBech32, toHex } from '@cosmjs/encoding';
+
 
 const props = defineProps(['proposal_id', 'chain']);
 const proposal = ref({} as GovProposal);
@@ -174,7 +176,7 @@ function pageload(p: number) {
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title flex flex-col md:!justify-between md:!flex-row">
         <p class="truncate w-full">
-          {{ proposal_id }}. {{ proposal.content?.title }}
+          {{ proposal_id }}. {{ proposal.title || proposal.content?.title }}
         </p>
         <div
           class="badge badge-ghost"
@@ -191,6 +193,13 @@ function pageload(p: number) {
       </h2>
       <div class="">
         <ObjectElement :value="proposal.content" />
+      </div>
+      <div v-if="proposal.summary">
+        <MdEditor
+          :model-value="format.multiLine(proposal.summary)"
+          previewOnly
+          class="md-editor-recover"
+        ></MdEditor>
       </div>
     </div>
     <!-- grid lg:!!grid-cols-3 auto-rows-max-->

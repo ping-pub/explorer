@@ -3,7 +3,7 @@
     "coingecko": "desmos",
     "api": ["https://api.mainnet.desmos.network", "https://desmos-api.lavenderfive.com"],
     "rpc": ["https://rpc.mainnet.desmos.network:443", "https://desmos-rpc.lavenderfive.com:443"],
-    "sdk_version": "0.45.8",
+    "sdk_version": "0.47.3",
     "coin_type": "118",
     "min_tx_fee": "3000",
     "addr_prefix": "desmos",

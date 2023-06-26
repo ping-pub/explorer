@@ -59,6 +59,8 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
         req = findApiProfileBySDKVersion(chain.versions?.cosmosSdk)
       }
     }
+    console.log("====================")
+    console.log(req, chain)
     return new CosmosRestClient(endpoint, req || DEFAULT)
   }
 

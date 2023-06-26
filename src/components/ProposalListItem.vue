@@ -59,7 +59,7 @@ const proposalInfo = ref();
                 :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
                 class="text-main text-base mb-1 block hover:text-indigo-400 truncate"
               >
-                {{ item?.content?.title }}
+                {{ item?.content?.title || item?.title }}
               </RouterLink>
               <div
                 v-if="item.content"
@@ -144,7 +144,7 @@ const proposalInfo = ref();
           <RouterLink
             :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
             class="flex-1 w-0 truncate mr-4"
-            >{{ item?.content?.title }}</RouterLink
+            >{{ item?.content?.title || item?.title }}</RouterLink
           >
           <label
             for="proposal-detail-modal"
@@ -237,9 +237,9 @@ const proposalInfo = ref();
         <h3 class="font-bold text-lg">Description</h3>
         <p class="py-4">
           <Component
-            v-if="proposalInfo?.content?.description"
-            :is="select(proposalInfo?.content?.description, 'horizontal')"
-            :value="proposalInfo?.content?.description"
+            v-if="proposalInfo?.content?.description || proposalInfo?.summary"
+            :is="select(proposalInfo?.content?.description || proposalInfo?.summary, 'horizontal')"
+            :value="proposalInfo?.content?.description || proposalInfo?.summary"
           >
           </Component>
         </p>

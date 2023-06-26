@@ -17,7 +17,7 @@ export const name = 'v0.46.7'
 
 function proposalAdapter(p: any): GovProposal {
     if(p) {
-        if(p.messages) p.content = p.messages[0].content
+        if(p.messages) p.content = p.messages[0].content || p.messages[0]
         p.proposal_id = p.id
         p.final_tally_result = {
             yes: p.final_tally_result?.yes_count,
