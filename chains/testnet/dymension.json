@@ -1,0 +1,20 @@
+{
+  "chain_name": "dYmension",
+  "coingecko": "",
+  "api": ["https://dymension-testnet-rest.brocha.in"],
+  "rpc": ["https://dymension-testnet-rpc.brocha.in"],
+  "snapshot_provider": "",
+  "coin_type": 118,
+  "sdk_version": "0.45.9",
+  "addr_prefix": "jkl",
+  "logo": "/logos/dymension.png",
+  "assets": [
+    {
+      "base": "udym",
+      "symbol": "DYM",
+      "exponent": 6,
+      "coingecko_id": "dymension",
+      "logo": "/logos/dymension.png"
+    }
+  ]
+}

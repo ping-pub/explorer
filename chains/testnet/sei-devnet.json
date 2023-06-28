@@ -1,0 +1,21 @@
+{
+  "chain_name": "SEI Devnet",
+  "coingecko": "",
+  "api": ["https://sei-devnet-rest.brocha.in"],
+  "rpc": ["https://sei-devnet-rpc.brocha.in"],
+  "snapshot_provider": "",
+  "sdk_version": "0.45.4",
+  "coin_type": 505,
+  "min_tx_fee": "800",
+  "addr_prefix": "sei",
+  "logo": "/logos/sei.png",
+  "assets": [
+    {
+      "base": "usei",
+      "symbol": "SEI",
+      "exponent": 6,
+      "coingecko_id": "",
+      "logo": "/logos/sei.png"
+    }
+  ]
+}

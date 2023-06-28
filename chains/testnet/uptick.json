@@ -1,8 +1,8 @@
 {
   "chain_name": "Uptick",
   "coingecko": "",
-  "api": ["https://uptick-rest.brocha.in"],
-  "rpc": ["https://uptick-rpc.brocha.in"],
+  "api": ["https://uptick-testnet-rest.brocha.in"],
+  "rpc": ["https://uptick-testnet-rpc.brocha.in"],
   "snapshot_provider": "",
   "sdk_version": "0.45.4",
   "coin_type": 118,
