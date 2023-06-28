@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 26.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 45.000008 45.000004" xml:space="preserve"
+   sodipodi:docname="rebus.svg" width="45.000008" height="45.000004" inkscape:version="1.2 (dc2aeda, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+   <defs id="defs28" />
+   <sodipodi:namedview id="namedview26" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25"
+      inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1"
+      showgrid="false" inkscape:zoom="25.675" inkscape:cx="16.222006" inkscape:cy="22.843233"
+      inkscape:window-width="1998" inkscape:window-height="1307" inkscape:window-x="2240" inkscape:window-y="25"
+      inkscape:window-maximized="0" inkscape:current-layer="Layer_1" />
+   <style type="text/css" id="style2">
+      .st0 {
+         fill: none;
+         stroke: url(#SVGID_1_);
+         stroke-width: 4;
+      }
+
+      .st1 {
+         fill: none;
+         stroke: url(#SVGID_00000023967877148028026810000012382901828739814059_);
+         stroke-width: 4;
+      }
+
+      .st2 {
+         fill: none;
+         stroke: url(#SVGID_00000175310240082212398910000003939603809950819262_);
+         stroke-width: 4;
+      }
+   </style>
+   <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="6.2481999" y1="82.106697" x2="41.542301"
+      y2="73.283203" gradientTransform="matrix(1,0,0,-1,2.849798,104.44)">
+      <stop offset="0" style="stop-color:#5084E9" id="stop4" />
+      <stop offset="1" style="stop-color:#6F50E9" id="stop6" />
+   </linearGradient>
+   <path class="st0"
+      d="m 35.939798,35.940001 c -5.08,5.08 -13.31,5.08 -18.38,0 -5.08,-5.08 -5.08,-13.31 0,-18.38 5.08,-5.08 13.31,-5.08 18.38,0 5.07,5.07 5.07,13.3 0,18.38 z"
+      id="path9" style="stroke:url(#SVGID_1_)" />
+   <linearGradient id="SVGID_00000000932848388497676060000001502878789852903571_" gradientUnits="userSpaceOnUse"
+      x1="-2.2372" y1="90.592102" x2="33.0569" y2="81.7686" gradientTransform="matrix(1,0,0,-1,2.849798,104.44)">
+      <stop offset="0" style="stop-color:#E95062" id="stop11" />
+      <stop offset="1" style="stop-color:#E950D0" id="stop13" />
+   </linearGradient>
+   <path style="fill:none;stroke:url(#SVGID_00000000932848388497676060000001502878789852903571_);stroke-width:4"
+      d="m 27.449798,27.450001 c -5.08,5.08 -13.31,5.08 -18.38,0 -5.08,-5.08 -5.08,-13.31 0,-18.3799995 5.08,-5.08 13.31,-5.08 18.38,0 5.08,5.0699995 5.08,13.3099995 0,18.3799995 z"
+      id="path16" />
+   <linearGradient id="SVGID_00000167388691677059180570000001499504047513356178_" gradientUnits="userSpaceOnUse"
+      x1="6.9969001" y1="85.101799" x2="32.3083" y2="78.773903" gradientTransform="matrix(1,0,0,-1,2.849798,104.44)">
+      <stop offset="0" style="stop-color:#5084E9" id="stop18" />
+      <stop offset="1" style="stop-color:#E95062" id="stop20" />
+   </linearGradient>
+   <path style="fill:none;stroke:url(#SVGID_00000167388691677059180570000001499504047513356178_);stroke-width:4"
+      d="m 27.449798,27.450001 c -3.54,3.54 -8.63,4.62 -13.11,3.21 -1.41,-4.48 -0.34,-9.56 3.21,-13.11 3.54,-3.54 8.63,-4.62 13.11,-3.21 1.41,4.48 0.34,9.57 -3.21,13.11 z"
+      id="path23" />
+</svg>

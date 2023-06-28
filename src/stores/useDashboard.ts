@@ -169,7 +169,7 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
   conf.logo = lc.logo;
   conf.keplrFeatures = lc.keplr_features;
   conf.keplrPriceStep = lc.keplr_price_step;
-  conf.themeColor = lc.theme_color;
+  conf.themeColor = "#b553ff"// lc.theme_color;
   return conf;
 }
 
