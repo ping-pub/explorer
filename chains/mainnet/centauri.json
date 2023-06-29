@@ -1,7 +1,7 @@
 {
     "chain_name": "Centauri",
-    "api": ["https://composable-api.polkachu.com","https://api.composable.nodestake.top"],
-    "rpc": ["https://composable-rpc.polkachu.com","https://rpc.composable.nodestake.top"],
+    "api": ["https://api-composable-ia.cosmosia.notional.ventures","https://composable-api.polkachu.com","https://api.composable.nodestake.top"],
+    "rpc": ["https://rpc-composable-ia.cosmosia.notional.ventures","https://composable-rpc.polkachu.com","https://rpc.composable.nodestake.top"],
     "coingecko": "",
     "snapshot_provider": "",
     "sdk_version": "0.47.1",
