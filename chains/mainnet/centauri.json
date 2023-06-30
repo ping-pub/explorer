@@ -1,5 +1,5 @@
 {
-    "chain_name": "Centauri",
+    "chain_name": "composable",
     "api": ["https://api-composable-ia.cosmosia.notional.ventures","https://composable-api.polkachu.com","https://api.composable.nodestake.top"],
     "rpc": ["https://rpc-composable-ia.cosmosia.notional.ventures","https://composable-rpc.polkachu.com","https://rpc.composable.nodestake.top"],
     "coingecko": "",
