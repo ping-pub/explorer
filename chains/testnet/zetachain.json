@@ -2,12 +2,10 @@
   "chain_name": "zetachain",
   "coingecko": "",
   "api": [
-    "https://zetachain-athens.blockpi.network/lcd/v1/public",
-    "https://zetachain-testnet.nodejumper.io:1317"
+    "https://zetachain-athens.blockpi.network/lcd/v1/public"
   ],
   "rpc": [
-    "https://zetachain-athens.blockpi.network/rpc/v1/public",
-    "https://zetachain-testnet.nodejumper.io:26657"
+    "https://zetachain-athens.blockpi.network/rpc/v1/public"
   ],
   "snapshot_provider": "",
   "sdk_version": "0.46.8",
