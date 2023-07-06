@@ -4,12 +4,20 @@
         {
             "address": "https://api.qwoyn.studio", 
             "provider": "Qwoyn Studios"
+        },
+        {
+            "address": "https://api.qwoyn.nodestake.top", 
+            "provider": "NodeStake"
         }
     ], 
     "rpc": [
         {
             "address": "https://api.qwoyn.studio", 
             "provider": "Qwoyn Studios"
+        },
+        {
+            "address": "https://rpc.qwoyn.nodestake.top", 
+            "provider": "NodeStake"
         }
     ],
     "sdk_version": "0.47.3",
