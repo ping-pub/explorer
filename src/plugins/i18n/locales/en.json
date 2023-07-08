@@ -133,6 +133,13 @@
     "vote_start_from": "Voting start from",
     "vote_end": "Voting end",
     "current_status": "Current Status",
+    "proposal_statuses": {
+      "PROPOSAL_STATUS_DEPOSIT_PERIOD": "Deposit period",
+      "PROPOSAL_STATUS_VOTING_PERIOD": "Voting period",
+      "PROPOSAL_STATUS_PASSED": "Passed",
+      "PROPOSAL_STATUS_REJECTED": "Rejected",
+      "PROPOSAL_STATUS_FAILED": "Failed"
+    },
     "upgrade_plan": "Upgrade Plan",
     "votes": "Votes"
   },
