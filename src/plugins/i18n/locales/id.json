@@ -133,6 +133,13 @@
       "vote_start_from": "Voting dimulai dari",
       "vote_end": "Voting berakhir",
       "current_status": "Status Saat Ini",
+      "proposal_statuses": {
+        "PROPOSAL_STATUS_DEPOSIT_PERIOD": "Periode Deposit",
+        "PROPOSAL_STATUS_VOTING_PERIOD": "Periode Pemungutan Suara",
+        "PROPOSAL_STATUS_PASSED": "Disetujui",
+        "PROPOSAL_STATUS_REJECTED": "Ditolak",
+        "PROPOSAL_STATUS_FAILED": "Gagal"
+      },
       "upgrade_plan": "Peningkatan Rencana",
       "votes": "Suara"
     },
