@@ -303,7 +303,7 @@ function pageload(p: number) {
               </div>
             </div>
             <div class="pl-5 text-sm">
-              {{ $t('gov.current_status') }}: {{ proposal.status }}
+              {{ $t('gov.current_status') }}: {{ $t(`gov.proposal_statuses.${proposal.status}`) }}
             </div>
           </div>
 
