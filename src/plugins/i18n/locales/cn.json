@@ -134,6 +134,13 @@
     "vote_start_from": "开始投票时间",
     "vote_end": "投票截止时间",
     "current_status": "当前状态",
+    "proposal_statuses": {
+      "PROPOSAL_STATUS_DEPOSIT_PERIOD": "存款期",
+      "PROPOSAL_STATUS_VOTING_PERIOD": "投票期",
+      "PROPOSAL_STATUS_PASSED": "通过",
+      "PROPOSAL_STATUS_REJECTED": "被拒绝",
+      "PROPOSAL_STATUS_FAILED": "失败"
+    },
     "upgrade_plan": "升级计划",
     "votes": "投票"
   },
