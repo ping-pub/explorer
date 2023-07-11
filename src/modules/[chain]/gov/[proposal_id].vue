@@ -344,6 +344,7 @@ function pageload(p: number) {
             <tr v-for="(item, index) of votes" :key="index">
               <td class="py-2 text-sm">{{ showValidatorName(item.voter) }}</td>
               <td
+                v-if="item.option"
                 class="py-2 text-sm"
                 :class="{
                   'text-yes': item.option === 'VOTE_OPTION_YES',
@@ -351,6 +352,12 @@ function pageload(p: number) {
                 }"
               >
                 {{ String(item.option).replace('VOTE_OPTION_', '') }}
+              </td>
+              <td
+                v-if="item.options"
+                class="py-2 text-sm"
+              >
+                {{ item.options.map(x => `${x.option.replace('VOTE_OPTION_', '')}:${format.percent(x.weight)}`).join(', ') }}
               </td>
             </tr>
           </tbody>
