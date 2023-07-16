@@ -178,7 +178,7 @@
     "btn_in": "进"
   },
   "staking": {
-    "infalation": "通胀率",
+    "inflation": "通胀率",
     "unbonding_time": "赎回时间",
     "double_sign_slashing": "双签惩罚",
     "downtime_slashing": "离线惩罚",

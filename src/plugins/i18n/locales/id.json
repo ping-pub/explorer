@@ -177,7 +177,7 @@
       "btn_in": "Masuk"
     },
     "staking": {
-      "infalation": "Inflasi",
+      "inflation": "Inflasi",
       "unbonding_time": "Waktu Pembatalan Tautan",
       "double_sign_slashing": "Pemotongan Ganda Tanda Tangan",
       "downtime_slashing": "Pemotongan Downtime",
