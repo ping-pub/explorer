@@ -1,8 +1,8 @@
 {
     "chain_name": "terp",
     "coingecko": "",
-    "api": ["https://lcd.terpnetwork.hexnodes.co","https://api.terp.nodestake.top"],
-    "rpc": ["https://rpc.terpnetwork.hexnodes.co","https://rpc.terp.nodestake.top"],
+    "api": ["https://terp-mainnet-api.itrocket.net","https://lcd.terpnetwork.hexnodes.co","https://api.terp.nodestake.top"],
+    "rpc": ["https://terp-mainnet-rpc.itrocket.net","https://rpc.terpnetwork.hexnodes.co","https://rpc.terp.nodestake.top"],
     "snapshot_provider": "",
     "sdk_version": "0.47.1",
     "coin_type": "118",
