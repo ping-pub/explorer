@@ -177,7 +177,7 @@
     "btn_in": "In"
   },
   "staking": {
-    "infalation": "Infalation",
+    "inflation": "Inflation",
     "unbonding_time": "Unbonding Time",
     "double_sign_slashing": "Double Sign Slashing",
     "downtime_slashing": "Downtime Slashing",

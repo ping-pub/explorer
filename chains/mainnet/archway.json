@@ -6,15 +6,16 @@
         "https://api.archway.nodestake.top"
     ],
     "rpc": [
-        "https://rpc.mainnet.archway.io",
-        "https://rpc-1.archway.nodes.guru",
-        "https://rpc.archway.nodestake.top"
+        "https://rpc.mainnet.archway.io:443",
+        "https://rpc-1.archway.nodes.guru/",
+        "https://rpc.archway.nodestake.top/"
     ],
     "snapshot_provider": "https://snapshots.archway.tech/",
     "sdk_version": "v0.45.16",
     "coin_type": "118",
     "min_tx_fee": "",
     "addr_prefix": "archway",
+    "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/archway/images/archway.png",
     "assets": [
         {
             "base": "aarch",
