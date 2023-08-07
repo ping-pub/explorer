@@ -14,8 +14,8 @@ const pages = computed(() => {
     if (total > 0 && props.limit && total > props.limit) {
         let page = 0
         while (true) {
-            if (page * props.limit > total) break
             page += 1
+            if (page * props.limit > total) break
             if (total / props.limit > 10 && page > showSize && page < (total / props.limit - showSize + 1)) {
                 if (!(page >= current.value - 1 && page <= current.value + 1)) {
                     continue

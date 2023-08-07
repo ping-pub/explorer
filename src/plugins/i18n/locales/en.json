@@ -113,6 +113,7 @@
     "btn_fees": "Fees",
     "btn_query": "Query",
     "btn_execute": "Execute",
+    "btn_transactions": "Txs",
     "instantiate_contract": "Instantiate Contract",
     "contract_detail": "Contract Detail",
     "contract_balances": "Contract Balances",
