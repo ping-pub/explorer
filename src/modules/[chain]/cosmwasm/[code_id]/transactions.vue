@@ -6,17 +6,20 @@ import { Icon } from '@iconify/vue';
 import { onMounted, ref } from 'vue';
 import { useWasmStore } from '../WasmStore';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
+import { useRoute } from 'vue-router';
 
 const chainStore = useBlockchain();
 const format = useFormatter();
 const wasmStore = useWasmStore();
-const address = "osmo1yg8930mj8pk288lmkjex0qz85mj8wgtns5uzwyn2hs25pwdnw42sf745wc"
+
+const route  = useRoute()
 const page = ref(new PageRequest())
 
 const txs = ref<PaginatedTxs>({ txs: [], tx_responses: [], pagination: { total: "0" } });
 const info = ref<any>(null);
 
 onMounted(() => {
+    const address = String(route.query.contract)
     wasmStore.wasmClient.getWasmContracts(address).then((x) => {
         info.value = x.contract_info;
     });
@@ -27,6 +30,7 @@ onMounted(() => {
 
 function pageload(pageNum: number) {
     page.value.setPage(pageNum)
+    const address = String(route.query.contract)
     chainStore.rpc.getTxs("?order_by=2&events=execute._contract_address='{address}'", { address }, page.value).then(res => {
         txs.value = res
     })
