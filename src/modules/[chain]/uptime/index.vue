@@ -153,7 +153,7 @@ function changeTab(v: string) {
         :class="tab === '2' ? '' : 'hidden'"
       >
         <div v-for="({ v, signing, hex }, i) in list" :key="i">
-          <div class="flex items-center justify-between py-0 w-72">
+          <div class="flex items-center justify-between py-0 w-76">
             <label class="truncate text-sm">
               <span class="ml-1 text-black dark:text-white"
                 >{{ i + 1 }}.{{ v.description.moniker }}</span
