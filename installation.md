@@ -1,14 +1,23 @@
 # Prerequisites
 
-1. Node and Yarn - Aquired using Node Version Manager (https://github.com/nvm-sh/nvm)
+1. Node and Yarn - Acquired using Node Version Manager (https://github.com/nvm-sh/nvm)
 
 # Quick Install for Prerequisites
 
 1. Install Node Version Manager
 ```sh
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+```
+2. Install the latest version of NodeJS
+```sh
 nvm install node # "node" is an alias for the latest version
+```
+3. Install the latest version of NPM for Node
+```sh
 nvm install-latest-npm # get the latest supported npm version on the current node version
+```
+4. Install Yarn
+```sh
 npm install --global yarn
 ```
 
