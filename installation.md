@@ -1,6 +1,16 @@
-# Prerequisite
-1. Node, https://nodejs.org 
-2. Yarn,  https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
+# Prerequisites
+
+1. Node and Yarn - Aquired using Node Version Manager (https://github.com/nvm-sh/nvm)
+
+# Quick Install for Prerequisites
+
+1. Install Node Version Manager
+```sh
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+nvm install node # "node" is an alias for the latest version
+nvm install-latest-npm # get the latest supported npm version on the current node version
+npm install --global yarn
+```
 
 # Installation:
 
