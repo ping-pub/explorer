@@ -30,6 +30,7 @@ const bars = computed(() => {
       <div class="tooltip" 
           :data-tip="item.height" 
           :class="item.color"
+          style="width: 4px;"
       >
         &nbsp;
       </div>
