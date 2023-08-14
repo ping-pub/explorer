@@ -1,8 +1,8 @@
 {
   "chain_name": "haqq",
   "coingecko": "",
-  "api": ["https://rest.cosmos.haqq.network/", "https://m-s1-sdk.haqq.sh","https://api.haqq.nodestake.top"],
-  "rpc": ["https://rpc.tm.haqq.network/", "https://m-s1-tm.haqq.sh","https://rpc.haqq.nodestake.top"],
+  "api": ["https://rest.cosmos.haqq.network/", "https://m-s1-sdk.haqq.sh", "https://haqq-rest.publicnode.com"],
+  "rpc": ["https://rpc.tm.haqq.network/", "https://m-s1-tm.haqq.sh", "https://haqq-rpc.publicnode.com/"],
   "snapshot_provider": "",
   "sdk_version": "0.46.10",
   "coin_type": "60",
