@@ -153,7 +153,7 @@ function changeTab(v: string) {
         :class="tab === '2' ? '' : 'hidden'"
       >
         <div v-for="({ v, signing, hex }, i) in list" :key="i">
-          <div class="flex items-center justify-between py-0 w-72">
+          <div class="flex items-center justify-between py-0 w-[298px]">
             <label class="truncate text-sm">
               <span class="ml-1 text-black dark:text-white"
                 >{{ i + 1 }}.{{ v.description.moniker }}</span
@@ -161,13 +161,13 @@ function changeTab(v: string) {
             </label>
             <div
               v-if="Number(signing?.missed_blocks_counter || 0) > 10"
-              class="badge badge-sm bg-transparent border-0 text-red-500"
+              class="badge badge-sm bg-transparent border-0 text-red-500 font-bold"
             >
               {{ signing?.missed_blocks_counter }}
             </div>
             <div
               v-else
-              class="badge badge-sm bg-transparent text-green-600 border-0"
+              class="badge badge-sm bg-transparent text-green-600 border-0 font-bold"
             >
               {{ signing?.missed_blocks_counter }}
             </div>
