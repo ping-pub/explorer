@@ -7,7 +7,7 @@ import type {
   PaginabledContracts,
 } from '../types';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
-import { useBankStore, useBlockchain, useFormatter, useTxDialog } from '@/stores';
+import { useBlockchain, useFormatter, useTxDialog } from '@/stores';
 import PaginationBar from '@/components/PaginationBar.vue';
 import { PageRequest, type PaginatedBalances } from '@/types';
 
@@ -159,11 +159,17 @@ const result = ref('');
                 </label>
                 <label
                   for="wasm_execute_contract"
-                  class="btn btn-primary btn-xs text-xs"
+                  class="btn btn-primary btn-xs text-xs mr-2"
                   @click="dialog.open('wasm_execute_contract', { contract: v })"
                 >
                 {{ $t('cosmwasm.btn_execute') }}
                 </label>
+                <RouterLink
+                  :to="`transactions?contract=${v}`"
+                  class="btn btn-primary btn-xs text-xs"
+                >
+                {{ $t('cosmwasm.btn_transactions') }}
+                </RouterLink>
               </td>
             </tr>
           </tbody>

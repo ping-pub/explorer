@@ -13,7 +13,7 @@
         "base": "ppica",
         "symbol": "PICA",
         "exponent": "12",
-        "coingecko_id": "",
+        "coingecko_id": "picasso",
         "logo": "/logos/composable.jpg"
     }]
   }

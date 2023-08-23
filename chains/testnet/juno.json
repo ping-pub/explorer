@@ -1,8 +1,8 @@
 {
     "chain_name": "juno",
-    "api": ["https://api.uni.junonetwork.io"],
-    "rpc": [""],
-    "sdk_version": "0.46.1",
+    "api": ["https://api.uni.junonetwork.io", "https://uni-api.reece.sh"],
+    "rpc": ["https://uni-rpc.reece.sh"],
+    "sdk_version": "0.47.3",
     "coin_type": "118",
     "min_tx_fee": "3000",
     "addr_prefix": "juno",
