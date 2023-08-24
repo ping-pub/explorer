@@ -404,7 +404,7 @@ loadAvatars();
                                 {{ $t('staking.jailed') }}
                                 </div>
                                 <label
-                                    v-else-if="rank !== 'error'"
+                                    v-else
                                     for="delegate"
                                     class="btn btn-xs btn-primary rounded-sm capitalize"
                                     @click="
