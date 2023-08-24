@@ -1,17 +1,17 @@
 {
     "chain_name": "side",
     "registry_name": "SIDE",
-    "api": ["https://testnet-rest.side.exchange/"], 
-    "rpc": ["https://testnet-rpc.side.exchange/"],
+    "api": ["https://testnet-rest.side.one/"], 
+    "rpc": ["https://testnet-rpc.side.one/"],
     "sdk_version": "0.46.4",
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "side",
     "logo": "/logos/side.jpeg",
     "assets": [{
-        "base": "aside",
+        "base": "uside",
         "symbol": "SIDE",
-        "exponent": "18", 
+        "exponent": "6", 
         "coingecko_id": "",
         "logo": "/logos/side.jpeg"
     }]
