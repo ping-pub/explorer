@@ -38,7 +38,7 @@
     "logo": "https://dl.airtable.com/.attachments/e54f814bba8c0f9af8a3056020210de0/2d1155fb/cosmos-hub.svg"
 }
 ```
-- **chain_name** the name to identify the chain on ping.pub, would be better to use the same one as regitstry
+- **chain_name** the name to identify the chain on ping.pub, would be better to use the same one as registry
 - **api** the rest api endpoint.(make sure that CORS is enabled: `Allow-Control-Allow-Origin: *`)
 - **rpc** the rpc endpoint, make sure that the port is added. rpc endpoint is only used for state sync. it's optional.
 - **assets** Native Assets on blockchain. 
