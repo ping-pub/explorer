@@ -3,7 +3,7 @@
     "api": ["https://api.cvn.io"],
     "rpc": ["https://rpc.cvn.io"],
     "snapshot_provider": "",
-    "sdk_version": "0.46.13",
+    "sdk_version": "0.46.0",
     "coin_type": "60",
     "min_tx_fee": "5000000000000000",
     "addr_prefix": "cvn",
