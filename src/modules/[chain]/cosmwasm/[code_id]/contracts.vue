@@ -21,9 +21,20 @@ const wasmStore = useWasmStore();
 function loadContract(pageNum: number) {
   const pr = new PageRequest();
   pr.setPage(pageNum);
-  wasmStore.wasmClient.getWasmCodeContracts(props.code_id, pr).then((x) => {
-    response.value = x;
-  });
+  if(String(props.code_id).search(/^[\d]+$/) > -1){
+    // query with code id
+    wasmStore.wasmClient.getWasmCodeContracts(props.code_id, pr).then((x) => {
+      response.value = x;
+    })
+  } else {
+    // query by creator
+    wasmStore.wasmClient.getWasmContractsByCreator(props.code_id, pr).then((x) => {
+      response.value = {
+        contracts: x.contract_addresses,
+        pagination: x.pagination,
+      };
+    })
+  }
 }
 loadContract(1);
 

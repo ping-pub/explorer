@@ -27,6 +27,7 @@ export interface WasmRequestRegistry extends AbstractRegistry {
   cosmwasm_contract_address_raw_query_data: Request<any>;
   cosmwasm_contract_address_smart_query_data: Request<any>;
   cosmwasm_contract_address_state: Request<PaginabledContractStates>;
+  cosmwasm_wasm_contracts_creator: Request<PaginabledContracts>;
 }
 
 export const DEFAULT: WasmRequestRegistry = {
@@ -57,6 +58,10 @@ export const DEFAULT: WasmRequestRegistry = {
     url: '/cosmwasm/wasm/v1/contract/{address}/state',
     adapter,
   },
+  cosmwasm_wasm_contracts_creator: {
+    url: '/cosmwasm/wasm/v1/contracts/creator/{creator_address}',
+    adapter,
+  },
 };
 
 class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
@@ -78,6 +83,11 @@ class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
   }
   getWasmContracts(address: string) {
     return this.request(this.registry.cosmwasm_contract_address, { address });
+  }
+  getWasmContractsByCreator(creator_address: string, page?: PageRequest) {    
+    if(!page) page = new PageRequest()
+    const query = `?${page.toQueryString()}`
+    return this.request(this.registry.cosmwasm_wasm_contracts_creator, { creator_address }, query);
   }
   getWasmContractHistory(address: string) {
     return this.request(this.registry.cosmwasm_contract_address_history, {
