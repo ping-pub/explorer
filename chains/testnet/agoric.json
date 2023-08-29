@@ -21,8 +21,8 @@
       "logo": "https://raw.githubusercontent.com/Agoric/agoric-sdk/master/packages/wallet/ui/public/tokens/BLD.svg"
     },
     {
-      "symbol": "RUN",
-      "base": "urun",
+      "symbol": "IST",
+      "base": "uist",
       "exponent": 6,
       "coingecko_id": "agoric",
       "logo": "https://raw.githubusercontent.com/Agoric/agoric-sdk/master/packages/wallet/ui/public/tokens/RUN.svg"
