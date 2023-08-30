@@ -51,7 +51,7 @@ We have two methods to load token metadata for token unit conversion:
 
 ## Loading from a REST endpoint (recommended).
    
-you can define the metadata in the `bank` -> `metadata` section of the blockchain's genesis file.
+you can define the metadata in the `bank` -> `metadata` section of the blockchain's genesis file. if you don't define, the `[]` will return.
 
 ```json
 {
