@@ -45,6 +45,49 @@
 
 Endpoint providers will be listed in the "Popular" tab of the staking.
 
+# Token Unit conversion
+
+We have two methods to load token metadata for token unit conversion:
+
+## Loading from a REST endpoint (recommended).
+   
+you can define the metadata in the `bank` -> `metadata` section of the blockchain's genesis file.
+
+```json
+{
+  "name": "atom",
+  "description": "The native staking token of the Cosmos Hub.",
+  "denom_units": [
+    {
+      "denom": "uatom",
+      "exponent": 0,
+      "aliases": [
+        "microatom"
+      ],
+    },
+    {
+      "denom": "matom",
+      "exponent": 3,
+      "aliases": [
+        "milliatom"
+      ]
+    },
+    {
+      "denom": "atom",
+      "exponent": 6,
+    }
+  ],
+  "base": "uatom",
+  "display": "atom",
+}
+```
+you can see more details here:
+https://github.com/cosmos/cosmos-sdk/blob/main/docs/architecture/adr-024-coin-metadata.md
+
+## Loading from Cosmos Registry:
+
+https://github.com/cosmos/chain-registry
+
 # Test 
 
 please add these check points in comments with your PR, and adding your test result by clicking the checkbox of each line
