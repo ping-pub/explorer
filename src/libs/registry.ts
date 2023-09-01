@@ -149,6 +149,7 @@ export interface RequestRegistry extends AbstractRegistry {
   ibc_core_connection_connections: Request<PaginatedIBCConnections>;
   ibc_core_connection_connections_connection_id: Request<ConnectionWithProof>;
   ibc_core_connection_connections_connection_id_client_state: Request<ClientStateWithProof>;
+  interchain_security_ccv_provider_validator_consumer_addr: Request<{consumer_address: string}>
 }
 
 export function adapter<T>(source: any): T {

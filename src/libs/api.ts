@@ -190,4 +190,8 @@ export const DEFAULT: RequestRegistry = {
     url: '/ibc/core/connection/v1/connections/{connection_id}/client_state',
     adapter,
   },
+  interchain_security_ccv_provider_validator_consumer_addr: {
+    url: '/interchain_security/ccv/provider/validator_consumer_addr?provider_address={provider_address}&chain_id={chain_id}',
+    adapter,
+  },
 };

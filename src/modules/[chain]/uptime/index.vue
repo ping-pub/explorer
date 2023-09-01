@@ -9,7 +9,7 @@ import {
 } from '@/stores';
 import UptimeBar from '@/components/UptimeBar.vue';
 import type { Commit, SlashingParam, SigningInfo } from '@/types';
-import { consensusPubkeyToHexAddress, valconsToBase64 } from '@/libs';
+import { consensusPubkeyToHexAddress, pubKeyToValcons, valconsToBase64 } from '@/libs';
 
 const props = defineProps(['chain']);
 
@@ -25,7 +25,6 @@ const slashingParam = ref({} as SlashingParam);
 
 const signingInfo = ref({} as Record<string, SigningInfo>);
 
-const filterOptout = ref(false);
 // filter validators by keywords
 const validators = computed(() => {
   if (keyword)
@@ -36,26 +35,47 @@ const validators = computed(() => {
 });
 
 const list = computed(() => {
-  const window = Number(slashingParam.value.signed_blocks_window || 0);
-  const vset = validators.value.map((v) => {
-    const signing =
-      signingInfo.value[consensusPubkeyToHexAddress(v.consensus_pubkey)];
-    return {
-      v,
-      signing,
-      hex: toBase64(fromHex(consensusPubkeyToHexAddress(v.consensus_pubkey))),
-      uptime:
-        signing && window > 0
-          ? (window - Number(signing.missed_blocks_counter)) / window
-          : undefined,
-    };
-  });
-  return filterOptout.value ? vset.filter((x) => x.signing) : vset;
+  if(chainStore.isConsumerChain) {
+    stakingStore.loadKeyRotationFromLocalstorage(baseStore.latest?.block?.header?.chain_id)
+
+    const window = Number(slashingParam.value.signed_blocks_window || 0);
+    const vset = validators.value.map((v) => {
+      
+      const hexAddress = stakingStore.findRotatedHexAddress(v.consensus_pubkey)
+      const signing =
+        signingInfo.value[hexAddress];
+      return {
+        v,
+        signing,
+        hex: toBase64(fromHex(hexAddress)),
+        uptime:
+          signing && window > 0
+            ? (window - Number(signing.missed_blocks_counter)) / window
+            : undefined,
+      };
+    });
+    return vset;
+  } else {
+    const window = Number(slashingParam.value.signed_blocks_window || 0);
+    const vset = validators.value.map((v) => {
+      const signing =
+        signingInfo.value[consensusPubkeyToHexAddress(v.consensus_pubkey)];
+      return {
+        v,
+        signing,
+        hex: toBase64(fromHex(consensusPubkeyToHexAddress(v.consensus_pubkey))),
+        uptime:
+          signing && window > 0
+            ? (window - Number(signing.missed_blocks_counter)) / window
+            : undefined,
+      };
+    });
+    return vset;
+  }
 });
 
 onMounted(() => {
   live.value = true;
-
   baseStore.fetchLatest().then((l) => {
     let b = l;
     if (
@@ -113,6 +133,10 @@ const tab = ref('2');
 function changeTab(v: string) {
   tab.value = v;
 }
+
+function fetchAllKeyRotation() {
+  stakingStore.fetchAllKeyRotation(baseStore.latest?.block?.header?.chain_id)
+}
 </script>
 
 <template>
@@ -136,16 +160,19 @@ function changeTab(v: string) {
     </div>
     <div class="bg-base-100 px-5 pt-5">
       <div class="flex items-center gap-x-4">
-        <label v-if="chainStore.isConsumerChain" class="text-center">
-          <input type="checkbox" v-model="filterOptout" class="checkbox" />
-          {{ $t('uptime.only_consumer_set') }}
-        </label>
         <input
           type="text"
           v-model="keyword"
           placeholder="Keywords to filter validators"
           class="input input-sm w-full flex-1 border border-gray-200 dark:border-gray-600"
         />
+        <button v-if="chainStore.isConsumerChain" class="btn btn-sm btn-primary" @click="fetchAllKeyRotation">Load Rotated Keys</button>
+      </div>
+
+      <div v-if="chainStore.isConsumerChain && Object.keys(stakingStore.keyRotation).length === 0"
+        class="alert alert-warning my-4"
+      >
+        Note: Please load rotated keys to see the correct uptime
       </div>
       <!-- grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-4 mt-4 -->
       <div

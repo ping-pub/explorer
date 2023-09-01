@@ -326,4 +326,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
       port_id,
     });
   }
+  async getInterchainSecurityValidatorRotatedKey(chain_id: string, provider_address: string) {
+    return this.request(this.registry.interchain_security_ccv_provider_validator_consumer_addr, {chain_id, provider_address});
+  }
 }
