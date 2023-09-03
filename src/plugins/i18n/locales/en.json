@@ -4,6 +4,7 @@
     "blocks": "Blocks",
     "staking": "Staking",
     "governance": "Governance",
+    "group": "Group",
     "parameters": "Parameters",
     "uptime": "Uptime",
     "state-sync": "State Sync",
