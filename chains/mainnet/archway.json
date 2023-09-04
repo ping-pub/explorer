@@ -3,12 +3,14 @@
     "api": [
         "https://api.mainnet.archway.io",
         "https://api-1.archway.nodes.guru",
-        "https://api.archway.nodestake.top"
+        "https://api.archway.nodestake.top",
+        "https://archway.api.trivium.network:1317"
     ],
     "rpc": [
         "https://rpc.mainnet.archway.io:443",
         "https://rpc-1.archway.nodes.guru/",
-        "https://rpc.archway.nodestake.top/"
+        "https://rpc.archway.nodestake.top/",
+        "https://archway.api.trivium.network:26657"
     ],
     "snapshot_provider": "https://snapshots.archway.tech/",
     "sdk_version": "v0.45.16",
