@@ -93,9 +93,9 @@ async function onChange () {
 }
 
 async function fetchPosition() {
-  // let dumpurl = rpc.value.replace('consensus_state', 'dump_consensus_state');
+  let dumpurl = rpc.value.replace('consensus_state', 'dump_consensus_state');
   try {
-    const response = await fetch(rpc.value);
+    const response = await fetch(dumpurl);
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
     }
