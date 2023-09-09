@@ -3,7 +3,7 @@ name: Deploy to ping.pub
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master2 ]
   # pull_request:
   #   branches: [ master ]
 
