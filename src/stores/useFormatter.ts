@@ -43,6 +43,7 @@ export const useFormatter = defineStore('formatter', {
     return {
       ibcDenoms: {} as Record<string, DenomTrace>,
       ibcMetadata: {} as Record<string, Asset>,
+      loading: [] as string[],
     };
   },
   getters: {
@@ -71,7 +72,9 @@ export const useFormatter = defineStore('formatter', {
       return trace;
     },
     async fetchDenomMetadata(denom: string) {
-      const asset = await get(`https://metadata.ping.pug/metadata/${denom}`) as Asset
+      if(this.loading.includes(denom)) return 
+      this.loading.push(denom)
+      const asset = await get(`https://metadata.ping.pub/metadata/${denom}`) as Asset
       this.ibcMetadata[denom] = asset
     },
     priceInfo(denom: string) {
@@ -138,6 +141,7 @@ export const useFormatter = defineStore('formatter', {
     formatToken2(token: { denom: string; amount: string }, withDenom = true) {
       return this.formatToken(token, true, '0,0.[00]');
     },
+    
     findGlobalAssetConfig(denom: string) {
       const chains = Object.values(this.dashboard.chains)
       for ( let i =0; i < chains.length; i++ ) {
@@ -149,6 +153,7 @@ export const useFormatter = defineStore('formatter', {
       }
       return undefined
     },
+
     tokenDisplayDenom(denom?: string) {
       if (denom) {
         let asset: Asset | undefined;
@@ -158,7 +163,10 @@ export const useFormatter = defineStore('formatter', {
           if(!asset) {
             // update ibc metadata if not exits in local cache
             this.fetchDenomMetadata(ibcDenom)
+          } else {
+            console.log("ibc metadata", asset)
           }
+
         } else {
           asset = this.findGlobalAssetConfig(denom)
         }
@@ -184,20 +192,20 @@ export const useFormatter = defineStore('formatter', {
         let amount = Number(token.amount);
         let denom = token.denom;
 
-        if (denom && denom.startsWith('ibc/')) {
-          let ibcDenom = this.ibcDenoms[denom.replace('ibc/', '')];
-          if (ibcDenom) {
-            denom = ibcDenom.base_denom;
-          }
-        }
-
-        const conf = mode === 'local'? this.blockchain.current?.assets?.find(
+        let conf = mode === 'local'? this.blockchain.current?.assets?.find(
           // @ts-ignore
           (x) => x.base === token.denom || x.base.denom === token.denom
         ): this.findGlobalAssetConfig(token.denom)
 
+        if (denom && denom.startsWith('ibc/')) {
+          conf = this.ibcMetadata[denom.replace('ibc/', '')];
+          if (!conf) {
+            this.fetchDenomMetadata(denom.replace('ibc/', ''))
+          }
+        }
+
         if (conf) {
-          let unit = { exponent: 6, denom: '' };
+          let unit = { exponent: 0, denom: '' };
           // find the max exponent for display
           conf.denom_units.forEach((x) => {
             if (x.exponent >= unit.exponent) {
@@ -222,20 +230,20 @@ export const useFormatter = defineStore('formatter', {
         let amount = Number(token.amount);
         let denom = token.denom;
 
-        if (denom && denom.startsWith('ibc/')) {
-          let ibcDenom = this.ibcDenoms[denom.replace('ibc/', '')];
-          if (ibcDenom) {
-            denom = ibcDenom.base_denom;
-          }
-        }
-
-        const conf = mode === 'local'? this.blockchain.current?.assets?.find(
+        let conf = mode === 'local'? this.blockchain.current?.assets?.find(
           // @ts-ignore
           (x) => x.base === token.denom || x.base.denom === token.denom
         ): this.findGlobalAssetConfig(token.denom)
 
+        if (denom && denom.startsWith('ibc/')) {
+          conf = this.ibcMetadata[denom.replace('ibc/', '')];
+          if (!conf) {
+            this.fetchDenomMetadata(denom.replace('ibc/', ''))
+          }
+        }
+
         if (conf) {
-          let unit = { exponent: 6, denom: '' };
+          let unit = { exponent: 0, denom: '' };
           // find the max exponent for display
           conf.denom_units.forEach((x) => {
             if (x.exponent >= unit.exponent) {
