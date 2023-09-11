@@ -16,7 +16,7 @@ export const useNFTModule = defineStore('module-nft', {
       return useBlockchain()
     },
     client() {
-      const client = new NFTRestClient(this.chain.rest, DEFAULT)
+      const client = new NFTRestClient("", DEFAULT)
       return client
     }
   },
