@@ -9,10 +9,11 @@ import utc from 'dayjs/plugin/utc';
 import localeData from 'dayjs/plugin/localeData';
 import { useStakingStore } from './useStakingStore';
 import { fromBase64, fromBech32, fromHex, toHex } from '@cosmjs/encoding';
-import { consensusPubkeyToHexAddress } from '@/libs';
+import { consensusPubkeyToHexAddress, get } from '@/libs';
 import { useBankStore } from './useBankStore';
 import type { Coin, DenomTrace } from '@/types';
 import { useDashboard } from './useDashboard';
+import type { Asset } from '@ping-pub/chain-registry-client/dist/types'
 
 dayjs.extend(localeData);
 dayjs.extend(duration);
@@ -41,6 +42,7 @@ export const useFormatter = defineStore('formatter', {
   state: () => {
     return {
       ibcDenoms: {} as Record<string, DenomTrace>,
+      ibcMetadata: {} as Record<string, Asset>,
     };
   },
   getters: {
@@ -67,6 +69,10 @@ export const useFormatter = defineStore('formatter', {
         this.ibcDenoms[hash] = trace;
       }
       return trace;
+    },
+    async fetchDenomMetadata(denom: string) {
+      const asset = await get(`https://metadata.ping.pug/metadata/${denom}`) as Asset
+      this.ibcMetadata[denom] = asset
     },
     priceInfo(denom: string) {
       const id = this.dashboard.coingecko[denom]?.coinId || "";
@@ -135,28 +141,32 @@ export const useFormatter = defineStore('formatter', {
     findGlobalAssetConfig(denom: string) {
       const chains = Object.values(this.dashboard.chains)
       for ( let i =0; i < chains.length; i++ ) {
-        const conf = chains[i].assets.find(a => a.base === denom)
+        const assets = chains[i].assets
+        const conf = assets.find(a => a.base === denom)
         if(conf) {
           return conf
         }
       }
-      return null
+      return undefined
     },
     tokenDisplayDenom(denom?: string) {
       if (denom) {
+        let asset: Asset | undefined;
         if (denom && denom.startsWith('ibc/')) {
-          let ibcDenom = this.ibcDenoms[denom.replace('ibc/', '')];
-          if (ibcDenom) {
-            denom = ibcDenom.base_denom;
+           const ibcDenom = denom.replace('ibc/', '')
+           asset = this.ibcMetadata[ibcDenom];
+          if(!asset) {
+            // update ibc metadata if not exits in local cache
+            this.fetchDenomMetadata(ibcDenom)
           }
+        } else {
+          asset = this.findGlobalAssetConfig(denom)
         }
 
-        const conf = this.findGlobalAssetConfig(denom)
-
-        if (conf) {
-          let unit = { exponent: 6, denom: '' };
+        if (asset) {
+          let unit = { exponent: 0, denom: '' };
           // find the max exponent for display
-          conf.denom_units.forEach((x) => {
+          asset.denom_units.forEach((x) => {
             if (x.exponent >= unit.exponent) {
               unit = x;
             }
