@@ -1,0 +1,44 @@
+{
+  "chain_name": "xion-testnet-1",
+  "coingecko": "XION",
+  "api": [
+    {"provider": "burnt", "address": "https://api.xion-testnet-1.burnt.com"}
+  ],
+  "rpc": [
+    {"provider": "burnt", "address": "https://rpc.xion-testnet-1.burnt.com:443"}
+  ],
+  "snapshot_provider": "5a6101778428024311120c9d24721b5765db8351@rpc.xion-testnet-1.burnt.com:26656",
+  "sdk_version": "0.47.3",
+  "coin_type": "118",
+  "min_tx_fee": "800",
+  "addr_prefix": "xion",
+  "logo": "https://www.polkachu.com/images/chains/xion.png",
+  "assets": [
+    {
+      "base": "uxion",
+      "symbol": "XION",
+      "exponent": "6",
+      "coingecko_id": "xion",
+      "logo": "https://www.polkachu.com/images/chains/xion.png"
+    },
+    {
+      "base": "ibc/D934516FBE457F3A98AFABD87E0EFF7F95A15325C191EA8CDD7763C702FDDEC2",
+      "symbol": "AXL",
+      "exponent": "6",
+      "coingecko_id": "axelar",
+      "logo": "https://images.ctfassets.net/mjqoq33y05of/6eCdgxArb4F62MPUb4hqnr/9f701bb72329dfffa0f0f43f2d8915b3/Axelar_Logo_Symbol_Black-min.png"
+    },
+    {
+      "base": "ibc/92E0120F15D037353CFB73C14651FC8930ADC05B93100FD7754D3A689E53B333",
+      "symbol": "OSMO",
+      "exponent": "6",
+      "coingecko_id": "osmosis",
+      "logo": "https://uploads-ssl.webflow.com/62f34c32e8660c273054c17c/62fb88deb0724e6faa63376c_osmosis%20logo.png"
+    }
+  ],
+  "keplr_features": [
+    "ibc-go",
+    "ibc-transfer",
+    "no-legacy-stdTx"
+  ]
+}
