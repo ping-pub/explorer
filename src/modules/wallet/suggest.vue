@@ -95,8 +95,14 @@ async function initParamsForKeplr() {
 async function initSnap() {
     const chain = selected.value
     const [token] = chain.assets
+
+    if(!chain.endpoints?.rest?.at(0)) throw new Error("Endpoint does not set");
+    const client = CosmosRestClient.newDefault(chain.endpoints.rest?.at(0)?.address || "")
+    const b = await client.getBaseBlockLatest()   
+    const chainId = b.block.header.chain_id
+
     conf.value = JSON.stringify({
-        chainId: chain.chainId,
+        chainId,
         chainName: chain.chainName,
         bech32Config: {
             bech32PrefixAccAddr: chain.bech32Prefix,
