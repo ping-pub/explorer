@@ -10,7 +10,7 @@ import DonutChart from '@/components/charts/DonutChart.vue';
 import { computed, ref } from '@vue/reactivity';
 import { onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
-import 'vue-json-pretty/lib/styles.css';
+
 import type {
   AuthAccount,
   Delegation,
