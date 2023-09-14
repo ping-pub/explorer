@@ -51,6 +51,7 @@
     "btn_unbond": "Unbond",
     "validator": "Validator",
     "delegation": "Delegation",
+    "delegator": "Delegator",
     "rewards": "Rewards",
     "action": "Action",
     "unbonding_delegations": "Unbonding Delegations",
@@ -217,7 +218,10 @@
     "operator_addr": "Operator Address",
     "hex_addr": "Hex Address",
     "signer_addr": "Signer Address",
-    "consensus_pub_key": "Consensus Public Key"
+    "consensus_pub_key": "Consensus Public Key",
+    "liquid_staking": "Liquid Staking",
+    "liquid_staking_shares":"Liquid Shares",
+    "validator_bond_share":"Validator Bonded"
   },
   "statesync": {
     "title": "What's State Sync?",

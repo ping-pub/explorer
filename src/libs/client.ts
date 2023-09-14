@@ -204,10 +204,17 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
       validator_addr,
     });
   }
-  async getStakingValidatorsDelegations(validator_addr: string) {
+  async getStakingValidatorsDelegations(validator_addr: string, page?: PageRequest) {
+    if(!page) {
+      page = new PageRequest()
+      // page.reverse = true
+      page.count_total = true
+      page.offset = 0
+    } 
+    const query =`?${page.toQueryString()}`;
     return this.request(this.registry.staking_validators_delegations, {
       validator_addr,
-    });
+    }, query);
   }
   async getStakingValidatorsDelegationsDelegator(
     validator_addr: string,
