@@ -138,10 +138,10 @@ export const DEFAULT: RequestRegistry = {
   tx_txs_block: { url: '/cosmos/tx/v1beta1/txs/block/{height}', adapter },
   tx_hash: { url: '/cosmos/tx/v1beta1/txs/{hash}', adapter },
 
-  mint_inflation: { url: '/cosmos/mint/v1beta1/inflation', adapter },
-  mint_params: { url: '/cosmos/mint/v1beta1/params', adapter },
+  mint_inflation: { url: '/xion/mint/v1/inflation', adapter },
+  mint_params: { url: '/xion/mint/v1/params', adapter },
   mint_annual_provisions: {
-    url: '/cosmos/mint/v1beta1/annual_provisions',
+    url: '/xion/mint/v1/annual_provisions',
     adapter,
   },
 
