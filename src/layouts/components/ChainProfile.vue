@@ -33,7 +33,7 @@ function changeEndpoint(item: Endpoint) {
             baseStore.latest?.block?.header?.height ||
             chainStore.chainName ||
             ''
-          }}
+          }} <span class="text-error">{{ baseStore.connected ? '' : 'disconnected' }}</span>
         </div>
         <div
           class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap hidden md:!block"
