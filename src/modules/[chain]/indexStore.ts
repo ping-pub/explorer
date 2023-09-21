@@ -157,6 +157,13 @@ export const useIndexModule = defineStore('module-index', {
           change: 0,
         },
         {
+          title: 'Transactions',
+          color: 'primary',
+          icon: 'mdi-pound',
+          stats: String(base?.latest?.block?.header?.height || 0),
+          change: 0,
+        },
+        {
           title: 'Validators',
           color: 'error',
           icon: 'mdi-human-queue',
@@ -186,18 +193,6 @@ export const useIndexModule = defineStore('module-index', {
           color: 'success',
           icon: 'mdi-chart-multiple',
           stats: formatter.formatDecimalToPercent(mintStore.inflation),
-          change: 0,
-        },
-        {
-          title: 'Community Pool',
-          color: 'primary',
-          icon: 'mdi-bank',
-          stats: formatter.formatTokens(
-            // @ts-ignore
-            this.communityPool?.filter(
-              (x: Coin) => x.denom === staking.params.bond_denom
-            )
-          ),
           change: 0,
         },
       ];
