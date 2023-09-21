@@ -12,14 +12,14 @@
   "coin_type": "118",
   "min_tx_fee": "800",
   "addr_prefix": "xion",
-  "logo": "https://www.polkachu.com/images/chains/xion.png",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png",
   "assets": [
     {
       "base": "uxion",
       "symbol": "XION",
       "exponent": "6",
       "coingecko_id": "xion",
-      "logo": "https://www.polkachu.com/images/chains/xion.png"
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png"
     },
     {
       "base": "ibc/D934516FBE457F3A98AFABD87E0EFF7F95A15325C191EA8CDD7763C702FDDEC2",
@@ -33,7 +33,7 @@
       "symbol": "OSMO",
       "exponent": "6",
       "coingecko_id": "osmosis",
-      "logo": "https://uploads-ssl.webflow.com/62f34c32e8660c273054c17c/62fb88deb0724e6faa63376c_osmosis%20logo.png"
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png"
     }
   ],
   "keplr_features": [
