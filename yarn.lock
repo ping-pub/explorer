@@ -6765,11 +6765,6 @@ vue-i18n@^9.2.2:
     "@intlify/vue-devtools" "9.3.0"
     "@vue/devtools-api" "^6.5.0"
 
-vue-json-pretty@^2.2.4:
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/vue-json-pretty/-/vue-json-pretty-2.2.4.tgz#4c82fa78aeb987460c727c3b31e45a58f58d9c95"
-  integrity sha512-JX80b3QDrspcH43C53CdtYeq/froApQGSV5y43bEMWFj2LGOxB96aH1VmvrFA21nD1WTP6nwfFMQqGXuS4jyFQ==
-
 vue-json-viewer@3:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/vue-json-viewer/-/vue-json-viewer-3.0.4.tgz#c1d65515e57d4036defbbc18fa942d7fd5fb9a8b"
