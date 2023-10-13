@@ -1,0 +1,35 @@
+{
+    "chain_name": "qube",
+    "registry_name": "Qube Testnet",
+    "api": [
+        {"provider": "qlabs", "address": "https://smoggy-onesies-elk.cyclic.app/89.108.83.252:1317"}
+    ],
+    "rpc": [
+        {"provider": "qlabs", "address": "https://smoggy-onesies-elk.cyclic.app/89.108.83.252:26657"}
+    ],
+    "sdk_version": "0.45.15",
+    "coin_type": "60",
+    "min_tx_fee": "800",
+    "addr_prefix": "qube",
+    "logo": "https://apricot-grubby-booby-751.mypinata.cloud/ipfs/QmfJEqcjheC56qrs9cpW86RaGUW2xsJrB1suGWoZJScbXc",
+    "assets": [
+        {
+            "base": "uqube",
+            "symbol": "QUBE",
+            "exponent": "6",
+            "logo": "https://apricot-grubby-booby-751.mypinata.cloud/ipfs/QmfJEqcjheC56qrs9cpW86RaGUW2xsJrB1suGWoZJScbXc"
+        },
+        {
+            "base": "uusd",
+            "symbol": "USQ",
+            "exponent": "6",
+            "logo": "https://apricot-grubby-booby-751.mypinata.cloud/ipfs/QmcfLWPcB5MXxzc21jBktVVgnuXoCWNE5t19MUmLtdWSuw"
+        },
+        {
+            "base": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2",
+            "symbol": "ATOM",
+            "exponent": "6",
+            "logo": "https://cryptologos.cc/logos/cosmos-atom-logo.png"
+        }
+    ]
+}
