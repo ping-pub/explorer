@@ -11,6 +11,7 @@
     "coin_type": "60",
     "min_tx_fee": "800",
     "addr_prefix": "qube",
+    "theme_color": "#52b9f3",
     "logo": "https://apricot-grubby-booby-751.mypinata.cloud/ipfs/QmfJEqcjheC56qrs9cpW86RaGUW2xsJrB1suGWoZJScbXc",
     "assets": [
         {
