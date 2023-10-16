@@ -1,0 +1,31 @@
+.wrapper-citizen{
+    .ant-table-wrapper{
+
+        .ant-pagination-prev,.ant-pagination-next {
+            span{
+                display: flex;
+                justify-content: center;
+            }
+            background-color: white;
+        }
+        .ant-table-content{
+            min-height: 605px;
+        }
+        .ant-pagination-item{
+            background-color: white;
+        }
+        .ant-pagination-item a:hover{
+            border-radius: 6px;
+            border: 1px solid transparent;
+    
+            background-color: white;
+        }
+        .ant-pagination-item:hover{
+            border: 1px solid transparent;
+            border-radius: 6px;
+        }
+    }
+}
+.v-skeleton-loader{
+    background-color: #242b40 !important;
+}

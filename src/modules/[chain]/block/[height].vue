@@ -50,7 +50,6 @@ const edit = ref(false)
 const newHeight = ref(props.height)
 function updateTarget() {
   target.value = Number(newHeight.value)
-  console.log(target.value)
 }
 
 onBeforeRouteUpdate(async (to, from, next) => {

@@ -17,9 +17,7 @@ export interface Validator {
     "unbonding_height": string,
     "unbonding_time": string,
     "commission": CommissionRate,
-    "min_self_delegation": string,
-    "liquid_shares": string,
-    "validator_bond_shares": string
+    "min_self_delegation": string
 }
 
 export interface CommissionRate {

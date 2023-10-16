@@ -40,7 +40,7 @@ const voterStatusMap: Record<string, string> = {
 const proposalInfo = ref();
 </script>
 <template>
-  <div class="bg-white dark:bg-[#28334e] rounded text-sm">
+  <div class="bg-dark dark:bg-[#28334e] rounded text-sm">
     <table class="table-compact w-full table-fixed hidden lg:!table">
       <tbody>
         <tr v-for="(item, index) in proposals?.proposals" :key="index">

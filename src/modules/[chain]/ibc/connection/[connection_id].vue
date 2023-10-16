@@ -47,7 +47,6 @@ onMounted(() => {
 
 function loadChannel(channel: string, port: string) {
   chainStore.rpc.getIBCChannelNextSequence(channel, port).then((x) => {
-    console.log(x);
   });
 }
 

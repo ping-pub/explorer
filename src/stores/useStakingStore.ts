@@ -4,9 +4,8 @@ import { useBlockchain } from './useBlockchain';
 import { get } from '@/libs/http';
 import type { StakingParam, StakingPool, Validator } from '@/types';
 import { CosmosRestClient } from '@/libs/client';
-import { consensusPubkeyToHexAddress, pubKeyToValcons, valconsToBase64 } from '@/libs';
-import { toHex, fromBase64, toBase64, fromHex, fromBech32 } from '@cosmjs/encoding';
-import { useBaseStore } from './useBaseStore';
+import { consensusPubkeyToHexAddress, valconsToBase64 } from '@/libs';
+import { toHex, fromBase64 } from '@cosmjs/encoding';
 
 export const useStakingStore = defineStore('stakingStore', {
   state: () => {
@@ -25,7 +24,6 @@ export const useStakingStore = defineStore('stakingStore', {
         bonded_tokens: string;
         not_bonded_tokens: string;
       },
-      keyRotation: {} as Record<string, string>,
     };
   },
   getters: {
@@ -80,60 +78,11 @@ export const useStakingStore = defineStore('stakingStore', {
         delegatorAddr
       );
     },
-    async fetchKeyRotation(chain_id: string, validatorAddr: string ) : Promise<string> {
-      if(this.blockchain.isConsumerChain) {
-        if(this.blockchain.current?.providerChain.api && this.blockchain.current.providerChain.api.length > 0) {
-          const signatures = useBaseStore().latest?.block?.last_commit.signatures
-          if(signatures) {
-            // console.log(signatures)
-            const key = toBase64(fromHex(valconsToBase64(validatorAddr)))
-            const exists = signatures.findIndex((x) => x.validator_address === key)
-            if(exists < 0) {
-
-              const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address)
-              const res = await client.getInterchainSecurityValidatorRotatedKey(chain_id, validatorAddr);
-              if(res.consumer_address) {
-                this.keyRotation[validatorAddr] = res.consumer_address
-                localStorage.setItem(`key-rotation-${chain_id}`, JSON.stringify(this.keyRotation))
-              }
-              return res.consumer_address
-            }
-          }
-        }
-      }
-      return ""
-    },
-
-    async loadKeyRotationFromLocalstorage(chain_id: string) {
-      const keyRotation = localStorage.getItem(`key-rotation-${chain_id}`)
-      this.keyRotation = keyRotation ? JSON.parse(keyRotation) : {}
-    },
-
-    findRotatedHexAddress(key: {
-      "@type": string;
-      key: string;
-    }) {
-
-      const prefix  = "cosmos"
-      const conskey = pubKeyToValcons(key, prefix)
-      const rotated = this.keyRotation[conskey]
-      if(rotated) {
-        return valconsToBase64(rotated)
-      }
-      return consensusPubkeyToHexAddress(key)
-
-    },
-    async fetchAllKeyRotation(chain_id: string) {
-      for(const val of this.validators) {
-        const { prefix } = fromBech32(val.operator_address)
-        await this.fetchKeyRotation(chain_id, pubKeyToValcons(val.consensus_pubkey, prefix.replace('valoper','')))
-      }
-    },
     async fetchValidators(status: string) {
       if(this.blockchain.isConsumerChain) {
         if(this.blockchain.current?.providerChain.api && this.blockchain.current.providerChain.api.length > 0) {
           const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address)
-          // provider validators
+          // const vals = await client.getBaseValidatorsetLatest(0) 
           const res = await client.getStakingValidators(status)
           const proVals = res.validators.sort(
             (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
@@ -141,7 +90,6 @@ export const useStakingStore = defineStore('stakingStore', {
           if (status === 'BOND_STATUS_BONDED') {
             this.validators = proVals;
           }
-
           return proVals
         }
       }

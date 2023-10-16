@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import type { Block } from '@/types';
 import { hashTx } from '@/libs';
 import { fromBase64 } from '@cosmjs/encoding';
-import { useRouter } from 'vue-router';
 
 export const useBaseStore = defineStore('baseStore', {
     state: () => {
@@ -16,7 +15,6 @@ export const useBaseStore = defineStore('baseStore', {
             theme: (window.localStorage.getItem('theme') || 'dark') as
                 | 'light'
                 | 'dark',
-            connected: true,
         };
     },
     getters: {
@@ -68,18 +66,13 @@ export const useBaseStore = defineStore('baseStore', {
     },
     actions: {
         async initial() {
-            this.fetchLatest()
+            this.fetchLatest();
         },
         async clearRecentBlocks() {
             this.recents = [];
         },
         async fetchLatest() {
-            try{
-                this.latest = await this.blockchain.rpc?.getBaseBlockLatest();
-                this.connected = true
-            }catch(e) {
-                this.connected = false
-            }
+            this.latest = await this.blockchain.rpc?.getBaseBlockLatest();
             if (
                 !this.earlest ||
                 this.earlest?.block?.header?.chain_id !=

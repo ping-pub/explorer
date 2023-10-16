@@ -15,8 +15,7 @@ import {
   pubKeyToValcons,
   valoperToPrefix,
 } from '@/libs';
-import { PageRequest, type Coin, type Delegation, type PaginatedDelegations, type PaginatedTxs, type Validator } from '@/types';
-import PaginationBar from '@/components/PaginationBar.vue';
+import type { Coin, Delegation, PaginatedTxs, Validator } from '@/types';
 
 const props = defineProps(['validator', 'chain']);
 
@@ -24,7 +23,6 @@ const staking = useStakingStore();
 const blockchain = useBlockchain();
 const format = useFormatter();
 const dialog = useTxDialog();
-const page = new PageRequest();
 
 const validator: string = props.validator;
 
@@ -34,7 +32,6 @@ const avatars = ref(cache || {});
 const identity = ref('');
 const rewards = ref([] as Coin[] | undefined);
 const commission = ref([] as Coin[] | undefined);
-const delegations = ref({} as PaginatedDelegations)
 const addresses = ref(
   {} as {
     account: string;
@@ -136,11 +133,6 @@ onMounted(() => {
         }
       });
     });
-
-    // Disable delegations due to its bad performance
-    // Comment out the following code if you want to enable it
-    // pageload(1)
-
   }
 });
 let showCopyToast = ref(0);
@@ -166,13 +158,6 @@ const tipMsg = computed(() => {
     ? { class: 'error', msg: 'Copy Error!' }
     : { class: 'success', msg: 'Copy Success!' };
 });
-
-function pageload(p: number) {
-  page.setPage(p);
-  blockchain.rpc.getStakingValidatorsDelegations(validator, page).then(res => {
-      delegations.value = res
-  }) 
-}
 </script>
 <template>
   <div>
@@ -256,25 +241,10 @@ function pageload(p: number) {
                 <span> {{ v.jailed || '-' }} </span>
               </div>
             </div>
-            <p class="text-sm mt-4 mb-3 font-medium">{{ $t('staking.liquid_staking') }}</p>
-            <div class="card-list">
-              <div class="flex items-center mb-2">
-                <Icon icon="mdi-lock" class="text-xl mr-1" />
-                <span class="font-bold mr-2">{{ $t('staking.validator_bond_share') }}: </span>
-                <span> {{ format.formatToken( {amount: v.validator_bond_shares, denom: staking.params.bond_denom }, false) }} </span>
-              </div>
-              <div class="flex items-center">
-                <Icon icon="mdi-waves-arrow-right" class="text-xl mr-1" />
-                <span class="font-bold mr-2">{{ $t('staking.liquid_staking_shares') }}: </span>
-                <span>
-                  {{ format.formatToken( {amount: v.liquid_shares, denom: staking.params.bond_denom }, false) }}
-                </span>
-              </div>
-            </div>
           </div>
         </div>
         <div class="flex-1">
-          <div class="flex flex-col mt-10">
+          <div class="flex flex-col justify-between">
             <div class="flex mb-2">
               <div
                 class="flex items-center justify-center rounded w-10 h-10"
@@ -378,7 +348,7 @@ function pageload(p: number) {
           {{ $t('staking.commissions_&_rewards') }}
         </div>
         <div
-          class="px-4 mt-1 flex flex-col justify-between pb-4 max-h-72"
+          class="px-4 mt-1 flex flex-col justify-between pb-4"
           style="height: calc(100% - 50px)"
         >
           <div class="overflow-auto flex-1">
@@ -485,35 +455,6 @@ function pageload(p: number) {
         </div>
       </div>
     </div>
-
-    <div v-if="delegations.delegation_responses" class="mt-5 bg-base-100 shadow rounded p-4 ">
-      <div class="text-lg mb-4 font-semibold">{{ $t('account.delegations') }}
-        <span class="float-right"> {{ delegations.delegation_responses?.length || 0 }} / {{ delegations.pagination?.total || 0 }} </span>
-      </div>
-      <div class="rounded overflow-auto">
-        <table class="table validatore-table w-full">
-          <thead>
-            <th class="text-left pl-4" style="position: relative; z-index: 2">
-              {{ $t('account.delegator') }}
-            </th>
-            <th class="text-left pl-4">{{ $t('account.delegation') }}</th>
-          </thead>
-          <tbody>
-            <tr v-for="{balance, delegation} in delegations.delegation_responses">
-              <td class="text-sm text-primary">
-                {{ delegation.delegator_address }}
-              </td>
-              <td class="truncate text-primary">
-                {{ format.formatToken(balance)}}
-              </td>
-              
-            </tr>
-          </tbody>
-        </table>
-        <PaginationBar :total="delegations.pagination?.total" :limit="page.limit" :callback="pageload"/>
-      </div>
-    </div>
-
     <div class="mt-5 bg-base-100 shadow rounded p-4">
       <div class="text-lg mb-4 font-semibold">{{ $t('account.transactions') }}</div>
       <div class="rounded overflow-auto">

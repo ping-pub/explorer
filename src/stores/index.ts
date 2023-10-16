@@ -11,3 +11,6 @@ export * from './useDistributionStore';
 export * from './useParamsStore';
 export * from './useWalletStore';
 export * from './useTxDialog';
+export * from './useCitizen';
+export * from './useBlock';
+

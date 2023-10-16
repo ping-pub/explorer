@@ -1,0 +1,33 @@
+{
+    "nft-core": [
+      { "id": 1, "userName": "Citizen A","nftName":"Binance A" },
+      { "id": 2, "userName": "Citizen B","nftName":"Binance B" },
+      { "id": 3, "userName": "Citizen C","nftName":"Binance C" },
+      { "id": 4, "userName": "Citizen D","nftName":"Binance D" },     
+      { "id": 5, "userName": "Citizen E","nftName":"Binance E" },
+      { "id": 6, "userName": "Citizen F","nftName":"Binance F" },      
+      { "id": 7, "userName": "Citizen G","nftName":"Binance G" },
+      { "id": 8, "userName": "Citizen H","nftName":"Binance H" },      
+      { "id": 9, "userName": "Citizen J","nftName":"Binance J" },
+      { "id": 10, "userName": "Citizen K","nftName":"Binance N" },      
+      { "id": 11, "userName": "Citizen L","nftName":"Binance Z" },
+      { "id": 12, "userName": "Citizen M","nftName":"Binance X" },      
+      { "id": 13, "userName": "Citizen N","nftName":"Binance M" },
+      { "id": 14, "userName": "Citizen O","nftName":"Binance N" },      
+      { "id": 15, "userName": "Citizen P","nftName":"Binance Q" },
+      { "id": 16, "userName": "Citizen V","nftName":"Binance W" },      
+      { "id": 17, "userName": "Citizen Z","nftName":"Binance T" },
+      { "id": 18, "userName": "Citizen X","nftName":"Binance Y" },      
+      { "id": 19, "userName": "Citizen T","nftName":"Binance U" },
+      { "id": 20, "userName": "Citizen R","nftName":"Binance I" },      
+      { "id": 21, "userName": "Citizen Y","nftName":"Binance O" },
+      { "id": 22, "userName": "Citizen U","nftName":"Binance P" },      
+      { "id": 23, "userName": "Citizen Q","nftName":"Binance Z" },
+      { "id": 24, "userName": "Citizen W","nftName":"Binance X" }
+    ],
+    "pagination": [
+      {"totalRecords": 23,
+      "totalPage":2
+    }
+    ]
+  }
