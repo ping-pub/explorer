@@ -1,0 +1,22 @@
+.hide-skeleton {
+    .v-skeleton-loader__bone::after {
+        display: none !important;
+    }
+}
+.detail-blocks-page {
+
+    .v-skeleton-loader__list-item {
+        margin: 0;
+    }
+}
+
+.list-blocks-page {
+    .v-table{
+        border-radius: 5px;
+        tbody {
+            tr {
+                cursor: pointer;
+            }
+        }
+    }
+}

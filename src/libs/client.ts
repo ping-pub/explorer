@@ -204,17 +204,10 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
       validator_addr,
     });
   }
-  async getStakingValidatorsDelegations(validator_addr: string, page?: PageRequest) {
-    if(!page) {
-      page = new PageRequest()
-      // page.reverse = true
-      page.count_total = true
-      page.offset = 0
-    } 
-    const query =`?${page.toQueryString()}`;
+  async getStakingValidatorsDelegations(validator_addr: string) {
     return this.request(this.registry.staking_validators_delegations, {
       validator_addr,
-    }, query);
+    });
   }
   async getStakingValidatorsDelegationsDelegator(
     validator_addr: string,
@@ -332,8 +325,5 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
       channel_id,
       port_id,
     });
-  }
-  async getInterchainSecurityValidatorRotatedKey(chain_id: string, provider_address: string) {
-    return this.request(this.registry.interchain_security_ccv_provider_validator_consumer_addr, {chain_id, provider_address});
   }
 }

@@ -3,10 +3,8 @@ import { useBlockchain, useFormatter } from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { computed, ref } from '@vue/reactivity';
 import type { Tx, TxResponse } from '@/types';
-
-import { JsonViewer } from "vue3-json-viewer"
-// if you used v1.0.5 or latster ,you should add import "vue3-json-viewer/dist/index.css"
-import "vue3-json-viewer/dist/index.css";
+import JsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 
 const props = defineProps(['hash', 'chain']);
 
@@ -51,7 +49,7 @@ const messages = computed(() => {
                                     }`">
                                     <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${tx.tx_response.code === 0 ? 'success' : 'error'
                                         }`"></span>
-                                    {{ tx.tx_response.code === 0 ? 'Success' : 'Failed' }}
+                                    {{ tx.tx_response.code === 0 ? 'Success' : 'Failded' }}
                                 </div>
                             </td>
                         </tr>
@@ -104,7 +102,7 @@ const messages = computed(() => {
 
         <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
             <h2 class="card-title truncate mb-2">JSON</h2>
-            <JsonViewer :value="tx" copyable boxed sort expand-depth="5"/>
+            <JsonPretty :data="tx" :deep="3" />
         </div>
     </div>
 </template>

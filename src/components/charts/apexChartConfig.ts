@@ -187,15 +187,27 @@ export const getMarketPriceChartConfig = (
   theme: string,
   categories: string[]
 ) => {
+  console.log(theme)
   const { themeSecondaryTextColor, themeBorderColor, themeDisabledTextColor } =
     colorVariables(theme);
 
   return {
+    
     chart: {
       redrawOnParentResize: true,
       width: '100%',
       parentHeightOffset: 0,
-      toolbar: { show: false },
+    },
+    toolbar: {
+      show: true,
+      tools: {
+        zoom: true,
+        zoomin: true,
+        zoomout: true,
+        pan: false,
+        reset: true,
+      },
+      autoSelected: 'zoom', // Chọn mặc định hiển thị chức năng zoom
     },
     tooltip: {
       theme: 'dark',
@@ -258,7 +270,121 @@ export const getMarketPriceChartConfig = (
     },
   };
 };
-
+export const getChartDemo=()=>{
+  return{
+    series: [{
+      name: 'Income',
+      type: 'column',
+      data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
+    }, {
+      name: 'Cashflow',
+      type: 'column',
+      data: [1.1, 3, 3.1, 4, 4.1, 4.9, 6.5, 8.5]
+    }, {
+      name: 'Revenue',
+      type: 'line',
+      data: [20, 29, 37, 36, 44, 45, 50, 58]
+    }],
+      chart: {
+      height: 350,
+      type: 'line',
+      stacked: false
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      width: [1, 1, 4]
+    },
+    title: {
+      text: 'XYZ - Stock Analysis (2009 - 2016)',
+      align: 'left',
+      offsetX: 110
+    },
+    xaxis: {
+      categories: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016],
+    },
+    yaxis: [
+      {
+        axisTicks: {
+          show: true,
+        },
+        axisBorder: {
+          show: true,
+          color: '#008FFB'
+        },
+        labels: {
+          style: {
+            colors: '#008FFB',
+          }
+        },
+        title: {
+          text: "Income (thousand crores)",
+          style: {
+            color: '#008FFB',
+          }
+        },
+        tooltip: {
+          enabled: true
+        }
+      },
+      {
+        seriesName: 'Income',
+        opposite: true,
+        axisTicks: {
+          show: true,
+        },
+        axisBorder: {
+          show: true,
+          color: '#00E396'
+        },
+        labels: {
+          style: {
+            colors: '#00E396',
+          }
+        },
+        title: {
+          text: "Operating Cashflow (thousand crores)",
+          style: {
+            color: '#00E396',
+          }
+        },
+      },
+      {
+        seriesName: 'Revenue',
+        opposite: true,
+        axisTicks: {
+          show: true,
+        },
+        axisBorder: {
+          show: true,
+          color: '#FEB019'
+        },
+        labels: {
+          style: {
+            colors: '#FEB019',
+          },
+        },
+        title: {
+          text: "Revenue (thousand crores)",
+          style: {
+            color: '#FEB019',
+          }
+        }
+      },
+    ],
+    tooltip: {
+      fixed: {
+        enabled: true,
+        position: 'topLeft', // topRight, topLeft, bottomRight, bottomLeft
+        offsetY: 30,
+        offsetX: 60
+      },
+    },
+    legend: {
+      horizontalAlign: 'left',
+      offsetX: 40
+    }}}
 // const donutColors = Array.from({length: 19}, () => (`#${Math.floor(Math.random()*16777215+100000).toString(16)}`))
 const donutColors = ["#bbe81a", "#ff5f0b", "#43ebef", "#1999e5", "#230b2c", "#628be8", "#aa5343", "#c9fa89", "#e88ea8", "#72e4a2", "#38cd87", "#515e13", "#7bf8f5", "#83dd6e", "#e8b203", "#7d11d5", "#3e4927", "#f303e2", "#249493", "#50e5e6", "#11deb2", "#a2f9c7", "#2a7bdc", "#47383a", "#226da4", "#966319", "#1bdf99", "#f3ab0c", "#961f50", "#832efd", "#875287", "#4bebe7", "#1d3d2e", "#9caea4", "#2772f5", "#938bf1", "#6228a5", "#24fea5", "#c9bbc8", "#e27225", "#54bd9f", "#babb2d", "#bcf591", "#803b36", "#124f03"]
 

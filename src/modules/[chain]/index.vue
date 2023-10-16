@@ -40,7 +40,6 @@ onMounted(() => {
   // }
 });
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
-
 const currName = ref("")
 blockchain.$subscribe((m, s) => {
   if (s.chainName !== currName.value) {

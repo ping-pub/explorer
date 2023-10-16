@@ -26,7 +26,6 @@ const series = computed(() => {
         },
     ];
 });
-
 function changeChart(type: string) {
     kind.value = type;
 }

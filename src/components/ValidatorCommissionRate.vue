@@ -49,7 +49,7 @@ const chartConfig = computed(() => {
             width: '200px',
             sparkline: { enabled: false },
         },
-        colors: ['rgba(109,120,141,0.2)', 'rgba(114,225,40,0.2)', 'rgba(114,225,40,1)', 'rgba(114,225,40,0.2)', 'rgba(109,120,141,0.2)'],
+        colors: ['rgba(109,120,141,0.2)', 'rgba(114,225,40,0.2)', 'rgba(114,25,40,1)', 'rgba(114,225,40,0.2)', 'rgba(109,120,141,0.2)'],
         legend: { show: false },
         tooltip: { enabled: false },
         dataLabels: { enabled: false },

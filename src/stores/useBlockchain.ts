@@ -139,6 +139,7 @@ export const useBlockchain = defineStore('blockchain', {
       //     global.current
       // }
       useWalletStore().$reset();
+      await this.randomSetupEndpoint();
       await useStakingStore().init();
       useBankStore().initial();
       useBaseStore().initial();

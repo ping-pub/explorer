@@ -1,0 +1,61 @@
+.custom-table {
+    .ant-table-wrapper {
+        .ant-table {
+            .ant-table-container {
+                .ant-table-content {
+                    table {
+                        .ant-table-thead {}
+
+                        .ant-table-tbody {}
+                    }
+                }
+            }
+        }
+    }
+
+    .ant-pagination {
+        padding-top: 2rem;
+        text-align: right;
+
+        .ant-pagination-prev,
+        .ant-pagination-next {
+            span {
+                display: flex;
+                justify-content: center;
+            }
+
+            background-color: white;
+        }
+
+        .ant-pagination-item {
+            background-color: white;
+        }
+
+        .ant-pagination-jump-next-custom-icon,.ant-pagination-jump-prev-custom-icon {
+            .ant-pagination-item-container {
+                .ant-pagination-item-link-icon {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    color: white;
+                }
+                .ant-pagination-item-ellipsis {
+                    color: white;
+                }
+                height: 100%;
+            }
+
+
+        }
+
+        .ant-pagination-item:hover {
+            background-color: white;
+        }
+
+        .ant-pagination-item-active {
+            background-color: wheat !important;
+            border-color: transparent;
+        }
+    }
+}

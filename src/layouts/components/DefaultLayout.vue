@@ -1,35 +1,29 @@
 <script lang="ts" setup>
-import { Icon } from '@iconify/vue';
-import { ref } from 'vue';
+import { Icon } from "@iconify/vue";
+import { ref } from "vue";
 
 // Components
-import newFooter from '@/layouts/components/NavFooter.vue';
-import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
-import NavbarSearch from '@/layouts/components/NavbarSearch.vue';
-import ChainProfile from '@/layouts/components/ChainProfile.vue';
+import newFooter from "@/layouts/components/NavFooter.vue";
+import NavbarThemeSwitcher from "@/layouts/components/NavbarThemeSwitcher.vue";
+import NavbarSearch from "@/layouts/components/NavbarSearch.vue";
+import ChainProfile from "@/layouts/components/ChainProfile.vue";
 
-import { useDashboard } from '@/stores/useDashboard';
-import { useBlockchain } from '@/stores';
+import { useDashboard } from "@/stores/useDashboard";
+import { useBlockchain } from "@/stores";
 
-import NavBarI18n from './NavBarI18n.vue';
-import NavBarWallet from './NavBarWallet.vue';
-import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '../types';
+import NavBarI18n from "./NavBarI18n.vue";
+import NavBarWallet from "./NavBarWallet.vue";
+import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from "../types";
 
 const dashboard = useDashboard();
 dashboard.initial();
 const blockchain = useBlockchain();
-blockchain.randomSetupEndpoint();
 
-const current = ref(''); // the current chain
-const temp = ref('')
+const current = ref("");
 blockchain.$subscribe((m, s) => {
-  if(current.value ===s.chainName && temp.value != s.endpoint.address) {
-    temp.value = s.endpoint.address
-    blockchain.initial();
-  }
   if (current.value != s.chainName) {
     current.value = s.chainName;
-    blockchain.randomSetupEndpoint();
+    blockchain.initial();
   }
 });
 
@@ -41,20 +35,22 @@ const changeOpen = (index: Number) => {
     sidebarOpen.value = !sidebarOpen.value;
   }
 };
-const showDiscord = window.location.host.search('ping.pub') > -1;
+const showDiscord = window.location.host.search("ping.pub") > -1;
 
 function isNavGroup(nav: VerticalNavItems | any): nav is NavGroup {
-   return (<NavGroup>nav).children !== undefined;
+  return (<NavGroup>nav).children !== undefined;
 }
 function isNavLink(nav: VerticalNavItems | any): nav is NavLink {
-   return (<NavLink>nav).to !== undefined;
+  return (<NavLink>nav).to !== undefined;
 }
 function isNavTitle(nav: VerticalNavItems | any): nav is NavSectionTitle {
-   return (<NavSectionTitle>nav).heading !== undefined;
+  return (<NavSectionTitle>nav).heading !== undefined;
 }
 function selected(route: any, nav: NavLink) {
-  const b = route.path === nav.to?.path || route.path.startsWith(nav.to?.path) && nav.title.indexOf('dashboard') === -1
-  return b
+  const b =
+    route.path === nav.to?.path ||
+    (route.path.startsWith(nav.to?.path) && nav.title.indexOf("dashboard") === -1);
+  return b;
 }
 </script>
 
@@ -67,15 +63,10 @@ function selected(route: any, nav: NavLink) {
     >
       <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
         <RouterLink to="/" class="flex items-center">
-          <img class="w-10 h-10" src="../../assets/logo.svg" />
-          <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">
-            Ping.pub
-          </h1>
+          <img class="w-14 h-10" src="../../assets/logo.png" />
+          <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">BlockChain</h1>
         </RouterLink>
-        <div
-          class="pr-4 cursor-pointer xl:!hidden"
-          @click="sidebarShow = false"
-        >
+        <div class="pr-4 cursor-pointer xl:!hidden" @click="sidebarShow = false">
           <Icon icon="mdi-close" class="text-2xl" />
         </div>
       </div>
@@ -130,7 +121,11 @@ function selected(route: any, nav: NavLink) {
             </div>
           </div>
           <div class="collapse-content">
-            <div v-for="(el, key) of item?.children" class="menu bg-base-100 w-full !p-0">
+            <div
+              v-for="(el, key) of item?.children"
+              class="menu bg-base-100 w-full !p-0"
+              :key="key"
+            >
               <RouterLink
                 v-if="isNavLink(el)"
                 @click="sidebarShow = false"
@@ -146,16 +141,16 @@ function selected(route: any, nav: NavLink) {
                   class="mr-2 ml-3"
                   :class="{
                     'text-white':
-                      $route.path === el?.to?.path &&
-                      item?.title !== 'Favorite',
+                      $route.path === el?.to?.path && item?.title !== 'Favorite',
                   }"
                 />
                 <img
                   v-if="el?.icon?.image"
                   :src="el?.icon?.image"
-                  class="w-6 h-6 rounded-full mr-3 ml-4 " :class="{
-                  'border border-gray-300 bg-white': selected($route, el),
-                }"
+                  class="w-6 h-6 rounded-full mr-3 ml-4"
+                  :class="{
+                    'border border-gray-300 bg-white': selected($route, el),
+                  }"
                 />
                 <div
                   class="text-base capitalize text-gray-500 dark:text-gray-300"
@@ -163,13 +158,12 @@ function selected(route: any, nav: NavLink) {
                     '!text-white': selected($route, el),
                   }"
                 >
-                  {{ item?.title === 'Favorite' ? el?.title : $t(el?.title) }}
+                  {{ item?.title === "Favorite" ? el?.title : $t(el?.title) }}
                 </div>
               </RouterLink>
             </div>
           </div>
         </div>
-
         <RouterLink
           v-if="isNavLink(item)"
           :to="item?.to"
@@ -197,22 +191,125 @@ function selected(route: any, nav: NavLink) {
           </div>
           <div
             v-if="item?.badgeContent"
-            class="badge badge-sm text-white border-none" 
+            class="badge badge-sm text-white border-none"
             :class="item?.badgeClass"
           >
             {{ item?.badgeContent }}
           </div>
         </RouterLink>
-        <div
-          v-if="isNavTitle(item)"
-          class="px-4 text-sm text-gray-400 pb-2 uppercase"
-        >
+        <div v-if="isNavTitle(item)" class="px-4 text-sm text-gray-400 pb-2 uppercase">
           {{ item?.heading }}
         </div>
       </div>
+      <RouterLink to="/list-nft-core">
+        <div class="px-2">
+          <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">NFT Core</div>
+          <div
+            class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          >
+            <img
+              class="text-xl mr-3 iconify iconify--mdi"
+              src="../../assets/images/svg/citizen.svg"
+            />
+            <h1 class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200">
+              Get List NFT Core
+            </h1>
+          </div>
+        </div>
+      </RouterLink>
+      <RouterLink to="/check-bank">
+        <div
+          class="py-2 px-6 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+        >
+          <img
+            class="text-xl mr-3 iconify iconify--mdi"
+            src="../../assets/images/svg/citizen.svg"
+          />
+          <h1 class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200">
+            Check bank
+          </h1>
+        </div>
+      </RouterLink>
+      <RouterLink to="/validator">
+        <div class="px-2">
+          <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">Validator</div>
+          <div
+            class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          >
+            <img
+              class="text-xl mr-3 iconify iconify--mdi"
+              src="../../assets/images/svg/citizen.svg"
+            />
+            <h1 class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200">
+              Validator
+            </h1>
+          </div>
+        </div>
+      </RouterLink>
+      <RouterLink to="/blocks">
+        <div class="px-2">
+          <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">Block</div>
+          <div
+            class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          >
+            <img
+              class="text-xl mr-3 iconify iconify--mdi"
+              src="../../assets/images/svg/citizen.svg"
+            />
+            <h1 class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200">
+              Blocks
+            </h1>
+          </div>
+        </div>
+      </RouterLink>
+        <RouterLink to="/transaction">
+        <div class="px-2">
+          <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">Transaction</div>
+          <div
+            class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          >
+            <img
+              class="text-xl mr-3 iconify iconify--mdi"
+              src="../../assets/images/svg/citizen.svg"
+            />
+            <h1 class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200">
+              Transactions
+            </h1>
+          </div>
+        </div>
+      </RouterLink>
+      <RouterLink to="/citizen">
+        <div class="px-2">
+          <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">Citizen</div>
+          <div
+            class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          >
+            <img
+              class="text-xl mr-3 iconify iconify--mdi"
+              src="../../assets/images/svg/citizen.svg"
+            />
+            <h1 class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200">
+              List Citizen
+            </h1>
+          </div>
+        </div>
+      </RouterLink>
+      <RouterLink to="/quests">
+        <div
+          class="py-2 px-6 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+        >
+          <img
+            class="text-xl mr-3 iconify iconify--mdi"
+            src="../../assets/images/svg/citizen.svg"
+          />
+          <h1 class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200">
+            List Quests
+          </h1>
+        </div>
+      </RouterLink>
       <div class="px-2">
         <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
-          {{ $t('module.sponsors') }}
+          {{ $t("module.sponsors") }}
         </div>
         <a
           href="https://osmosis.zone"
@@ -223,9 +320,7 @@ function selected(route: any, nav: NavLink) {
             src="https://ping.pub/logos/osmosis.jpg"
             class="w-6 h-6 rounded-full mr-3"
           />
-          <div
-            class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200"
-          >
+          <div class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200">
             Osmosis
           </div>
         </a>
@@ -238,37 +333,21 @@ function selected(route: any, nav: NavLink) {
             src="https://becole.com/static/logo/logo_becole.png"
             class="w-6 h-6 rounded-full mr-3"
           />
-          <div
-            class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200"
-          >
+          <div class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200">
             Becole
           </div>
         </a>
 
-          <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
-            Tools
-          </div>
-          <RouterLink to="/wallet/suggest"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
-          >
-            <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
-            <div
-              class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200"
-            >
-              Wallet Helper
-            </div>
-          </RouterLink>
-
-        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">{{ $t('module.links') }}</div>
+        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
+          {{ $t("module.links") }}
+        </div>
         <a
           href="https://twitter.com/ping_pub"
           target="_blank"
           class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <Icon icon="mdi:twitter" class="text-xl mr-2" />
-          <div
-            class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200"
-          >
+          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">
             Twitter
           </div>
         </a>
@@ -279,9 +358,7 @@ function selected(route: any, nav: NavLink) {
           class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <Icon icon="mdi:discord" class="text-xl mr-2" />
-          <div
-            class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200"
-          >
+          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">
             Discord
           </div>
         </a>
@@ -291,9 +368,7 @@ function selected(route: any, nav: NavLink) {
           class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
-          <div
-            class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200"
-          >
+          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">
             FAQ
           </div>
         </a>
@@ -301,13 +376,8 @@ function selected(route: any, nav: NavLink) {
     </div>
     <div class="xl:!ml-64 px-3 pt-4">
       <!-- header -->
-      <div
-        class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10"
-      >
-        <div
-          class="text-2xl pr-3 cursor-pointer xl:!hidden"
-          @click="sidebarShow = true"
-        >
+      <div class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10">
+        <div class="text-2xl pr-3 cursor-pointer xl:!hidden" @click="sidebarShow = true">
           <Icon icon="mdi-menu" />
         </div>
 
@@ -323,7 +393,7 @@ function selected(route: any, nav: NavLink) {
       </div>
 
       <!-- 👉 Pages -->
-      <div style="min-height: calc(100vh - 180px);">
+      <div style="min-height: calc(100vh - 180px)">
         <RouterView v-slot="{ Component }">
           <Transition mode="out-in">
             <Component :is="Component" />

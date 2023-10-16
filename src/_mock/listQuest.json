@@ -1,0 +1,54 @@
+{
+    "quests":[
+        {
+            "id":1,"quest": "Play game 2 times","status":"false"
+        },
+        {
+            "id":2,"quest": "Follow on Tiktok","status":"true"
+        },{
+            "id":3,"quest": "Follow on Youtube","status":"false"
+        },{
+            "id":4,"quest": "Buy 2 USDT","status":"false"
+        },{
+            "id":5,"quest": "Swap 2 USDT","status":"true"
+        },{
+            "id":6,"quest": "Share SAW's Post","status":"true"
+        },{
+            "id":7,"quest": "Post 2 picture on SAW","status":"false"
+        },{
+            "id":8,"quest": "Post 2 picture on SAW","status":"true"
+        },{
+            "id":9,"quest": "Share SAW's Post","status":"true"
+        },{
+            "id":10,"quest": "Share SAW's Post","status":"false"
+        },{
+            "id":11,"quest": "Share SAW's Post","status":"false"
+        },{
+            "id":12,"quest": "Share SAW's Post","status":"false"
+        },{
+            "id":13,"quest": "Share SAW's Post","status":"true"
+        },{
+            "id":14,"quest": "Buy 2 USDT","status":"false"
+        },{
+            "id":15,"quest": "Buy 2 USDT","status":"true"
+        },{
+            "id":16,"quest": "Buy 2 USDT","status":"false"
+        },{
+            "id":17,"quest": "Follow on Youtube","status":"false"
+        },{
+            "id":18,"quest": "Play game 2 times","status":"false"
+        },{
+            "id":19,"quest": "Play game 2 times","status":"false"
+        },{
+            "id":20,"quest": "Follow on Youtube","status":"false"
+        },{
+            "id":21,"quest": "Play game 2 times","status":"true"
+        },{
+            "id":22,"quest": "Follow on Tiktok","status":"false"
+        },{
+            "id":23,"quest": "Follow on Tiktok","status":"true"
+        },{
+            "id":24,"quest": "Follow on Tiktok","status":"false"
+        }
+    ]
+}

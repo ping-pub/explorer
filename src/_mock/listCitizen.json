@@ -1,0 +1,33 @@
+{
+    "citizen": [
+      { "id": 1, "userName": "Citizen A","addressWallet":5435,"level": 1,"nftName":"Binance A","balance":"Balance1" },
+      { "id": 2, "userName": "Citizen B","addressWallet":641,"level": 25,"nftName":"Binance B","balance":"Balance2" },
+      { "id": 3, "userName": "Citizen C","addressWallet": 252657,"level": 6,"nftName":"Binance C","balance":"Balance3" },
+      { "id": 4, "userName": "Citizen D","addressWallet":46456423,"level": 7,"nftName":"Binance D","balance":"Balance4" },     
+      { "id": 5, "userName": "Citizen E","addressWallet":287456183,"level": 8,"nftName":"Binance E","balance":"Balance5" },
+      { "id": 6, "userName": "Citizen F","addressWallet":42334567,"level": 2,"nftName":"Binance F","balance":"Balance6" },      
+      { "id": 7, "userName": "Citizen G","addressWallet":456887,"level": 12,"nftName":"Binance G","balance":"Balance7" },
+      { "id": 8, "userName": "Citizen H","addressWallet":1231235,"level": 9,"nftName":"Binance H","balance":"Balance8" },      
+      { "id": 9, "userName": "Citizen J","addressWallet":2786876546453,"level": 17,"nftName":"Binance J","balance":"Balance9" },
+      { "id": 10, "userName": "Citizen K","addressWallet":789784,"level": 54,"nftName":"Binance N","balance":"Balance10" },      
+      { "id": 11, "userName": "Citizen L","addressWallet":456456,"level": 34,"nftName":"Binance Z","balance":"Balance11" },
+      { "id": 12, "userName": "Citizen M","addressWallet":456456,"level": 23,"nftName":"Binance X","balance":"Balance12" },      
+      { "id": 13, "userName": "Citizen N","addressWallet":231235,"level": 5,"nftName":"Binance M","balance":"Balance13" },
+      { "id": 14, "userName": "Citizen O","addressWallet":69,"level": 72,"nftName":"Binance N","balance":"Balance14" },      
+      { "id": 15, "userName": "Citizen P","addressWallet":39639396,"level": 18,"nftName":"Binance Q","balance":"Balance15" },
+      { "id": 16, "userName": "Citizen V","addressWallet":32588,"level": 17,"nftName":"Binance W","balance":"Balance16" },      
+      { "id": 17, "userName": "Citizen Z","addressWallet":147174,"level": 30,"nftName":"Binance T","balance":"Balance17" },
+      { "id": 18, "userName": "Citizen X","addressWallet":3576675,"level": 27,"nftName":"Binance Y","balance":"Balance18" },      
+      { "id": 19, "userName": "Citizen T","addressWallet":789789,"level": 1,"nftName":"Binance U","balance":"Balance19" },
+      { "id": 20, "userName": "Citizen R","addressWallet":7891238,"level": 3,"nftName":"Binance I","balance":"Balance20" },      
+      { "id": 21, "userName": "Citizen Y","addressWallet":4568,"level": 6,"nftName":"Binance O","balance":"Balance21" },
+      { "id": 22, "userName": "Citizen U","addressWallet":4550000,"level": 22,"nftName":"Binance P","balance":"Balance22" },      
+      { "id": 23, "userName": "Citizen Q","addressWallet":4575576,"level": 21,"nftName":"Binance Z","balance":"Balance23" },
+      { "id": 24, "userName": "Citizen W","addressWallet":56456,"level": 41,"nftName":"Binance X","balance":"Balance24" }
+    ],
+    "pagination": [
+      {"totalRecords": 23,
+      "totalPage":2
+    }
+    ]
+  }
