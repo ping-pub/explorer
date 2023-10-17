@@ -2,10 +2,10 @@
     "chain_name": "qube",
     "registry_name": "Qube Testnet",
     "api": [
-        {"provider": "qlabs", "address": "https://smoggy-onesies-elk.cyclic.app/89.108.83.252:1317"}
+        {"provider": "qlabs", "address": "https://gifted-rose-fez.cyclic.app/89.108.83.252:1317"}
     ],
     "rpc": [
-        {"provider": "qlabs", "address": "https://smoggy-onesies-elk.cyclic.app/89.108.83.252:26657"}
+        {"provider": "qlabs", "address": "https://gifted-rose-fez.cyclic.app/89.108.83.252:26657"}
     ],
     "sdk_version": "0.45.15",
     "coin_type": "60",
