@@ -29,8 +29,11 @@ const unbondList = ref([] as Validator[]);
 const slashing =ref({} as SlashingParam)
 
 onMounted(() => {
+    staking.fetchUnbondingValdiators().then((res) => {
+        unbondList.value = res.concat(unbondList.value);
+    });
     staking.fetchInacitveValdiators().then((res) => {
-        unbondList.value = res;
+        unbondList.value = unbondList.value.concat(res);
     });
     chainStore.rpc.getSlashingParams().then(res => {
         slashing.value = res.params
