@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import PaginationBar from '@/components/PaginationBar.vue';
-import { useBlockchain, useFormatter, useTxDialog } from '@/stores';
+import { useBaseStore, useBlockchain, useFormatter, useTxDialog } from '@/stores';
 import { PageRequest, type PaginatedBalances, type PaginatedTxs } from '@/types';
 import { Icon } from '@iconify/vue';
 import { onMounted, ref } from 'vue';
@@ -8,8 +8,10 @@ import { useWasmStore } from '../WasmStore';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { useRoute } from 'vue-router';
 import type { ContractInfo, PaginabledContractStates, PaginabledContracts } from '../types';
+import { post } from '@/libs';
 
 const chainStore = useBlockchain();
+const baseStore = useBaseStore();
 const format = useFormatter();
 const wasmStore = useWasmStore();
 
@@ -36,6 +38,9 @@ onMounted(() => {
     });
     chainStore.rpc.getTxs("?order_by=2&events=execute._contract_address='{address}'", { address }, page.value).then(res => {
         txs.value = res
+    })
+    post("https://prod.neutron.compiler.welldonestudio.io/verification/neutron", {"contractAddress": address, "chainId": baseStore.latest?.block.header.chain_id}).then(res => {
+        console.log("verification:", res)
     })
 })
 
@@ -193,6 +198,12 @@ const result = ref('');
             </table>
             <PaginationBar :limit="page.limit" :total="txs.pagination?.total" :callback="pageload" />
         </div>
+
+        <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+            <h2 class="card-title truncate w-full mt-4">Verification</h2>
+            
+        </div>
+
         <div>
             <input type="checkbox" id="modal-contract-funds" class="modal-toggle" />
             <label for="modal-contract-funds" class="modal cursor-pointer">
