@@ -4,6 +4,7 @@ import MdEditor from 'md-editor-v3';
 import ObjectElement from '@/components/dynamic/ObjectElement.vue';
 import {
   useBaseStore,
+  useBlockchain,
   useFormatter,
   useGovStore,
   useStakingStore,
@@ -28,6 +29,7 @@ const format = useFormatter();
 const store = useGovStore();
 const dialog = useTxDialog();
 const stakingStore = useStakingStore();
+const chainStore = useBlockchain();
 
 store.fetchProposal(props.proposal_id).then((res) => {
   const proposalDetail = reactive(res.proposal);
@@ -38,6 +40,20 @@ store.fetchProposal(props.proposal_id).then((res) => {
     });
   }
   proposal.value = proposalDetail;
+  // load origin params if the proposal is param change
+  if(proposalDetail.content?.changes) {
+    proposalDetail.content?.changes.forEach((item) => {  
+        chainStore.rpc.getParams(item.subspace, item.key).then((res) => {
+          if(proposal.value.content && res.param) {
+            if(proposal.value.content.origin){
+              proposal.value.content.origin.push(res.param);
+            } else {
+              proposal.value.content.origin = [res.param];
+            };
+          }
+        })
+    })
+  }
 });
 
 const color = computed(() => {
