@@ -28,7 +28,7 @@ export interface GovProposal {
     '@type': string;
     title?: string;
     description?: string;
-    origin?: any[]
+    current?: any[];
     changes?: any[];
     plan?: {
       height?: string | number;
