@@ -1,0 +1,28 @@
+{
+    "chain_name": "PRYSM",
+    "api": [
+        {
+            "address": "https://t-api.prysmchain.com", 
+            "provider": "PRYSM-core"
+        }
+    ], 
+    "rpc": [
+        {
+            "address": "https://t-rpc.prysmchain.com", 
+            "provider": "PRYSM-core"
+        }
+    ],
+    "sdk_version": "v0.45.2",
+    "coin_type": "60",
+    "min_tx_fee": "800",
+    "assets": [{
+        "base": "upym",
+        "symbol": "PYM",
+        "exponent": "6",
+        "coingecko_id": "prysm",
+        "logo": "/prysm.svg"
+    }],
+    "addr_prefix": "prysm",
+    "theme_color": "#ce4747",
+    "logo": "/prysm.svg"
+}
