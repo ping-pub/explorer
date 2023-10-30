@@ -255,14 +255,12 @@ export const useFormatter = defineStore('formatter', {
             denom = unit.denom.toUpperCase();
           }
         }
-
-        if(amount < 0.01) {
-          fmt = '0.[000000]'
-        }
         if(amount < 0.000001) {
           return `0 ${denom.substring(0, 10)}`;
         }
-        console.log("amount:", amount, numeral(amount).format(fmt))
+        if(amount < 0.01) {
+          fmt = '0.[000000]'
+        }
         return `${numeral(amount).format(fmt)} ${
           withDenom ? denom.substring(0, 10) : ''
         }`;
