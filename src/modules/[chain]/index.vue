@@ -159,15 +159,15 @@ const amount = computed({
                       {{ ticker?.market?.name || '' }}
                     </div>
                     <div class="text-info text-sm">
-                      {{ shortName(ticker?.base, ticker.coin_id) }}/{{
-                        shortName(ticker?.target, ticker.target_coin_id)
+                      {{ shortName(ticker?.base, ticker?.coin_id) }}/{{
+                        shortName(ticker?.target, ticker?.target_coin_id)
                       }}
                     </div>
                   </div>
 
                   <div class="text-right">
                     <div class="text-xl font-semibold text-[#666] dark:text-white">
-                      ${{ ticker.converted_last.usd }}
+                      ${{ ticker?.converted_last?.usd }}
                     </div>
                     <div class="text-sm" :class="store.priceColor">
                       {{ store.priceChange }}%
@@ -185,14 +185,14 @@ const amount = computed({
                             {{ item?.market?.name }}
                           </div>
                           <div class="text-sm text-gray-500 dark:text-gray-400">
-                            {{ shortName(item?.base, item.coin_id) }}/{{
-                              shortName(item?.target, item.target_coin_id)
+                            {{ shortName(item?.base, item?.coin_id) }}/{{
+                              shortName(item?.target, item?.target_coin_id)
                             }}
                           </div>
                         </div>
 
                         <div class="text-base text-main">
-                           ${{ item.converted_last.usd }}
+                           ${{ item?.converted_last?.usd }}
                         </div>
                       </div>
                     </li>
