@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useBlockchain, useFormatter } from '@/stores';
+import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { computed, ref } from '@vue/reactivity';
 import type { Tx, TxResponse } from '@/types';
@@ -11,6 +11,7 @@ import "vue3-json-viewer/dist/index.css";
 const props = defineProps(['hash', 'chain']);
 
 const blockchain = useBlockchain();
+const baseStore = useBaseStore();
 const format = useFormatter();
 const tx = ref(
     {} as {
@@ -104,7 +105,7 @@ const messages = computed(() => {
 
         <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
             <h2 class="card-title truncate mb-2">JSON</h2>
-            <JsonViewer :value="tx" copyable boxed sort expand-depth="5"/>
+            <JsonViewer :value="tx" :theme="baseStore.theme" style="background: transparent;" copyable boxed sort expand-depth="5"/>
         </div>
     </div>
 </template>
