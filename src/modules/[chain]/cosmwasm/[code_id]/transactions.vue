@@ -43,9 +43,7 @@ onMounted(() => {
     chainStore.rpc.getTxs("?order_by=2&events=execute._contract_address='{address}'", { address }, page.value).then(res => {
         txs.value = res
     })
-    post("https://prod.neutron.compiler.welldonestudio.io/verification/neutron", {"contractAddress": address, "chainId": baseStore.latest?.block.header.chain_id}).then(res => {
-        console.log("verification:", res)
-    })
+
 })
 
 function pageload(pageNum: number) {
