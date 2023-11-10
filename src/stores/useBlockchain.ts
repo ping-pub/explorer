@@ -147,18 +147,23 @@ export const useBlockchain = defineStore('blockchain', {
       useBlockModule().initial();
     },
 
-    async randomSetupEndpoint() {
-      const end = localStorage.getItem(`endpoint-${this.chainName}`);
+    randomEndpoint(chainName: string) : Endpoint | undefined {
+      const end = localStorage.getItem(`endpoint-${chainName}`);
       if (end) {
-        this.setRestEndpoint(JSON.parse(end));
+        return JSON.parse(end);
       } else {
         const all = this.current?.endpoints?.rest;
         if (all) {
           const rn = Math.random();
           const endpoint = all[Math.floor(rn * all.length)];
-          await this.setRestEndpoint(endpoint);
+          return endpoint
         }
       }
+    },
+
+    async randomSetupEndpoint() {
+      const endpoint = this.randomEndpoint(this.chainName)
+      if(endpoint) await this.setRestEndpoint(endpoint);
     },
 
     async setRestEndpoint(endpoint: Endpoint) {

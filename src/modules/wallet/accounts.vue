@@ -41,6 +41,7 @@ Object.values(conf.value).forEach((imported) => {
           // continue only if the page is living
           if (imported[i].endpoint) {
             loadBalances(
+              imported[i].chainName,
               imported[i].endpoint || '',
               imported[i].address
             ).finally(() => resolve());
@@ -170,15 +171,17 @@ async function addAddress(acc: AccountEntry) {
   }
 
   if (acc.endpoint) {
-    loadBalances(acc.endpoint, acc.address);
+    loadBalances(acc.chainName, acc.endpoint, acc.address);
   }
 
   localStorage.setItem('imported-addresses', JSON.stringify(conf.value));
 }
 
 // load balances for an address
-async function loadBalances(endpoint: string, address: string) {
-  const client = CosmosRestClient.newDefault(endpoint);
+async function loadBalances(chainName: string, endpoint: string, address: string) {
+  
+  const endpointObj = chainStore.randomEndpoint(chainName)
+  const client = CosmosRestClient.newDefault(endpointObj?.address || endpoint);
   await client.getBankBalances(address).then((res) => {
     balances.value[address] = res.balances.filter((x) => x.denom.length < 10);
   });
