@@ -48,12 +48,15 @@ const messages = computed(() => {
                         <tr>
                             <td>{{ $t('staking.status') }}</td>
                             <td>
-                                <div class="text-xs truncate relative py-2 px-4 w-fit mr-2 rounded" :class="`text-${tx.tx_response.code === 0 ? 'success' : 'error'
+                                <span class="text-xs truncate relative py-2 px-4 w-fit mr-2 rounded" :class="`text-${tx.tx_response.code === 0 ? 'success' : 'error'
                                     }`">
                                     <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${tx.tx_response.code === 0 ? 'success' : 'error'
                                         }`"></span>
                                     {{ tx.tx_response.code === 0 ? 'Success' : 'Failed' }}
-                                </div>
+                                </span>
+                                <span>
+                                    {{ tx.tx_response.code === 0 ? '' : tx?.tx_response?.raw_log }}
+                                </span>
                             </td>
                         </tr>
                         <tr>
