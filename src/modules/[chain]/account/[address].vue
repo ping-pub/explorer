@@ -20,6 +20,7 @@ import type {
 } from '@/types';
 import type { Coin } from '@cosmjs/amino';
 import Countdown from '@/components/Countdown.vue';
+import { fromBase64 } from '@cosmjs/encoding';
 
 const props = defineProps(['address', 'chain']);
 
@@ -570,7 +571,7 @@ function updateEvent() {
               </td>
               <td class="flex items-center py-3">
                 <div class="mr-2">
-                  {{ v.tx.body.messages.map(x => format.formatTokens(x.amount)).join(", ") }}
+                  {{ v.events.find(x => x.type==='coin_received')?.attributes.filter(x => x.key === 'YW1vdW50').map(x => String.fromCharCode(...fromBase64(x.value))).join(", ")}}
                 </div>
                 <Icon
                   v-if="v.code === 0"
