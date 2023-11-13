@@ -33,6 +33,8 @@
     "btn_index": "Back to Home"
   },
   "account": {
+    "amount": "Amount",
+    "received": "Recent Received",
     "type": "Type",
     "address": "Address",
     "acc": "Account",
