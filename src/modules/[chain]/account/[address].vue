@@ -571,7 +571,7 @@ function updateEvent() {
               </td>
               <td class="flex items-center py-3">
                 <div class="mr-2">
-                  {{ v.events.find(x => x.type==='coin_received')?.attributes.filter(x => x.key === 'YW1vdW50'||x.key === 'amount').map(x => String.fromCharCode(...fromBase64(x.value))).join(", ")}}
+                  {{ v.events.find(x => x.type==='coin_received')?.attributes.filter(x => x.key === 'YW1vdW50').map(x => String.fromCharCode(...fromBase64(x.value))).join(", ")}}
                 </div>
                 <Icon
                   v-if="v.code === 0"
