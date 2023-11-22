@@ -1,0 +1,22 @@
+{
+    "chain_name": "laconic_9000-1",
+    "registry_name": "laconic_9000-1",
+    "api": [
+        {"provider": "LX-one-tree-one-seven", "address": "http://console.laconic.com:1317"}
+    ],
+    "rpc": [
+        {"provider": "LX-tendermint-rpc", "address": "http://console.laconic.com:32912"}
+    ],
+    "sdk_version": "0.45.1",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "ethm",
+    "logo": "/logos/cosmos.svg",
+    "assets": [{
+        "base": "aphoton",
+        "symbol": "LNT",
+        "exponent": "6",
+        "coingecko_id": "cosmos", 
+        "logo": "/logos/cosmos.svg"
+    }]
+}
