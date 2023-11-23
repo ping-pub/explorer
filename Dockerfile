@@ -1,4 +1,4 @@
-iFROM node:lts-slim
+FROM node:lts-slim
 
 WORKDIR /app
 
@@ -8,4 +8,4 @@ RUN yarn --ignore-engines
 
 EXPOSE 5173
 
-CMD ["yarn", "serve"]
+CMD ["yarn", "serve", "--host"]
