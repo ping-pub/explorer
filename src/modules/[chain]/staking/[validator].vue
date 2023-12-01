@@ -203,20 +203,18 @@ function pageload(p: number) {
               <div class="w-24 rounded-lg absolute opacity-10"></div>
               <div class="w-24 rounded-lg">
                 <img
-                  v-if="avatars[identity] !== 'undefined'"
+                  v-if="identity && avatars[identity] !== 'undefined'"
                   v-lazy="logo(identity)"
                   class="object-contain"
                   @error="
                     (e) => {
-                      if (identity) {
-                        loadAvatar();
-                      }
+                      loadAvatar();
                     }
                   "
                 />
                 <Icon
                   v-else
-                  class="text-4xl"
+                  class="text-8xl"
                   :icon="`mdi-help-circle-outline`"
                 />
               </div>

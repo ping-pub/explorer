@@ -346,7 +346,7 @@ loadAvatars();
                                             />
                                             <Icon
                                                 v-else
-                                                class="text-4xl"
+                                                class="text-3xl"
                                                 :icon="`mdi-help-circle-outline`"
                                             />
                                             
