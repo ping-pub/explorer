@@ -164,17 +164,15 @@ const fetchAvatar = (identity: string) => {
   });
 };
 
-const loadAvatar = (validator: Validator) => {
-  const identity = validator.description?.identity;
-
-  if (identity) {
-    fetchAvatar(identity).then(() => {
-      localStorage.setItem('avatars', JSON.stringify(avatars.value));
-    });
-  }
+const loadAvatar = (identity: string) => {
+  // fetches avatar from keybase and stores it in localStorage
+  fetchAvatar(identity).then(() => {
+    localStorage.setItem('avatars', JSON.stringify(avatars.value));
+  });
 };
 
 const loadAvatars = () => {
+  // fetches all avatars from keybase and stores it in localStorage
   const promises = staking.validators.map((validator) => {
     const identity = validator.description?.identity;
 
@@ -340,7 +338,8 @@ loadAvatars();
                                                 class="object-contain"
                                                 @error="
                                                     (e) => {
-                                                        loadAvatar(v);
+                                                        const identity = v.description?.identity;
+                                                        if (identity) loadAvatar(identity);
                                                     }
                                                 "
                                             />

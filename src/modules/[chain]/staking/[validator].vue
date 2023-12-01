@@ -111,8 +111,9 @@ const fetchAvatar = (identity: string) => {
   });
 };
 
-const loadAvatar = () => {
-  fetchAvatar(identity.value).then(() => {
+const loadAvatar = (identity: string) => {
+  // fetches avatar from keybase and stores it in localStorage
+  fetchAvatar(identity).then(() => {
     localStorage.setItem('avatars', JSON.stringify(avatars.value));
   });
 };
@@ -122,7 +123,7 @@ onMounted(() => {
     staking.fetchValidator(validator).then((res) => {
       v.value = res.validator;
       identity.value = res.validator?.description?.identity || '';
-      if (identity.value && !avatars.value[identity.value]) loadAvatar();
+      if (identity.value && !avatars.value[identity.value]) loadAvatar(identity.value);
 
       const prefix = valoperToPrefix(v.value.operator_address) || '<Invalid>';
       addresses.value.hex = consensusPubkeyToHexAddress(
@@ -208,7 +209,7 @@ function pageload(p: number) {
                   class="object-contain"
                   @error="
                     (e) => {
-                      loadAvatar();
+                      loadAvatar(identity);
                     }
                   "
                 />
