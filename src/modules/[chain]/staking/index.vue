@@ -141,39 +141,54 @@ const list = computed(() => {
     return unbondList.value.map((x, i) => ({v: x, rank: 'primary', logo: logo(x.description.identity)}));
 });
 
-const loadAvatars = () => {
-    // fetch avatar from keybase
-    let promise = Promise.resolve();
-    staking.validators.forEach((item) => {
-        promise = promise.then(
-            () =>
-                new Promise((resolve) => {
-                    const identity = item.description?.identity;
-                    if (identity && !avatars.value[identity]) {
-                        staking.keybase(identity).then((d) => {
-                            if (Array.isArray(d.them) && d.them.length > 0) {
-                                const uri = String(
-                                    d.them[0]?.pictures?.primary?.url
-                                ).replace(
-                                    'https://s3.amazonaws.com/keybase_processed_uploads/',
-                                    ''
-                                );
-                                if (uri) {
-                                    avatars.value[identity] = uri;
-                                    localStorage.setItem(
-                                        'avatars',
-                                        JSON.stringify(avatars.value)
-                                    );
-                                }
-                            }
-                            resolve();
-                        });
-                    } else {
-                        resolve();
-                    }
-                })
-        );
+const fetchAvatar = (identity: string) => {
+  // fetch avatar from keybase
+  return new Promise<void>((resolve) => {
+    staking
+      .keybase(identity)
+      .then((d) => {
+        if (Array.isArray(d.them) && d.them.length > 0) {
+          const uri = String(d.them[0]?.pictures?.primary?.url).replace(
+            'https://s3.amazonaws.com/keybase_processed_uploads/',
+            ''
+          );
+
+          avatars.value[identity] = uri;
+          resolve();
+        } else throw new Error(`failed to fetch avatar for ${identity}`);
+      })
+      .catch((error) => {
+        // console.error(error); // uncomment this if you want the user to see which avatars failed to load.
+        resolve();
+      });
+  });
+};
+
+const loadAvatar = (validator: Validator) => {
+  const identity = validator.description?.identity;
+
+  if (identity) {
+    fetchAvatar(identity).then(() => {
+      localStorage.setItem('avatars', JSON.stringify(avatars.value));
     });
+  }
+};
+
+const loadAvatars = () => {
+  const promises = staking.validators.map((validator) => {
+    const identity = validator.description?.identity;
+
+    // Here we also check whether we haven't already fetched the avatar
+    if (identity && !avatars.value[identity]) {
+      return fetchAvatar(identity);
+    } else {
+      return Promise.resolve();
+    }
+  });
+
+  Promise.all(promises).then(() =>
+    localStorage.setItem('avatars', JSON.stringify(avatars.value))
+  );
 };
 
 const logo = (identity?: string) => {
@@ -313,7 +328,7 @@ loadAvatars();
                                     style="max-width: 300px"
                                 >
                                     <div
-                                        class="avatar mr-4 relative w-8 h-8 rounded-full overflow-hidden"
+                                        class="avatar mr-4 relative w-8 h-8 rounded-full"
                                     >
                                         <div
                                             class="w-8 h-8 rounded-full bg-gray-400 absolute opacity-10"
@@ -323,6 +338,11 @@ loadAvatars();
                                                 v-if="logo"
                                                 :src="logo"
                                                 class="object-contain"
+                                                @error="
+                                                    (e) => {
+                                                        loadAvatar(v);
+                                                    }
+                                                "
                                             />
                                             <Icon
                                                 v-else

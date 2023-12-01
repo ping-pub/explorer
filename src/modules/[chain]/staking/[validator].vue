@@ -79,6 +79,7 @@ const selfRate = computed(() => {
   }
   return '-';
 });
+
 const logo = (identity?: string) => {
   if (!identity) return '';
   const url = avatars.value[identity] || '';
@@ -86,25 +87,43 @@ const logo = (identity?: string) => {
     ? url
     : `https://s3.amazonaws.com/keybase_processed_uploads/${url}`;
 };
+
+const fetchAvatar = (identity: string) => {
+  // fetch avatar from keybase
+  return new Promise<void>((resolve) => {
+    staking
+      .keybase(identity)
+      .then((d) => {
+        if (Array.isArray(d.them) && d.them.length > 0) {
+          const uri = String(d.them[0]?.pictures?.primary?.url).replace(
+            'https://s3.amazonaws.com/keybase_processed_uploads/',
+            ''
+          );
+
+          avatars.value[identity] = uri;
+          resolve();
+        } else throw new Error(`failed to fetch avatar for ${identity}.`);
+      })
+      .catch((error) => {
+        // console.error(error); // uncomment this if you want the user to see if the avatar failed to load.
+        resolve();
+      });
+  });
+};
+
+const loadAvatar = () => {
+  fetchAvatar(identity.value).then(() => {
+    localStorage.setItem('avatars', JSON.stringify(avatars.value));
+  });
+};
+
 onMounted(() => {
   if (validator) {
     staking.fetchValidator(validator).then((res) => {
       v.value = res.validator;
       identity.value = res.validator?.description?.identity || '';
-      if (identity.value && !avatars.value[identity.value]) {
-        staking.keybase(identity.value).then((d) => {
-          if (Array.isArray(d.them) && d.them.length > 0) {
-            const uri = String(d.them[0]?.pictures?.primary?.url).replace(
-              'https://s3.amazonaws.com/keybase_processed_uploads/',
-              ''
-            );
-            if (uri) {
-              avatars.value[identity.value] = uri;
-              localStorage.setItem('avatars', JSON.stringify(avatars.value));
-            }
-          }
-        });
-      }
+      if (identity.value && !avatars.value[identity.value]) loadAvatar();
+
       const prefix = valoperToPrefix(v.value.operator_address) || '<Invalid>';
       addresses.value.hex = consensusPubkeyToHexAddress(
         v.value.consensus_pubkey
@@ -187,6 +206,13 @@ function pageload(p: number) {
                   v-if="avatars[identity] !== 'undefined'"
                   v-lazy="logo(identity)"
                   class="object-contain"
+                  @error="
+                    (e) => {
+                      if (identity) {
+                        loadAvatar();
+                      }
+                    }
+                  "
                 />
                 <Icon
                   v-else
