@@ -23,7 +23,7 @@ const chains = computed(() => {
 });
 
 const featured = computed(() => {
-  const names = ["cosmos", "osmosis", "akash", "celestia", "evmos"];
+  const names = ["cosmos", "osmosis", "akash", "celestia", "evmos", "injective"];
   return chains.value.filter(x => names.includes(x.chainName))
 })
 
