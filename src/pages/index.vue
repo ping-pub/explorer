@@ -21,6 +21,12 @@ const chains = computed(() => {
     return Object.values(dashboard.chains);
   }
 });
+
+const featured = computed(() => {
+  const names = ["cosmos", "osmosis", "akash", "celestia", "evmos"];
+  return chains.value.filter(x => names.includes(x.chainName))
+})
+
 const chainStore = useBlockchain()
 </script>
 <template>
@@ -65,6 +71,18 @@ const chainStore = useBlockchain()
       class="flex justify-center"
     >
       <progress class="progress progress-info w-80 h-1"></progress>
+    </div>
+
+    <div class="text-center font-bold h4 text-primary">Featured Blockchains</div>
+
+    <div
+      class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"
+    >
+    <ChainSummary
+        v-for="(chain, index) in featured"
+        :key="index"
+        :name="chain.chainName"
+      />
     </div>
 
     <div class="flex items-center rounded-lg bg-base-100  border border-gray-200 dark:border-gray-700 mt-10">
