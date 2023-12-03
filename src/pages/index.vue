@@ -71,11 +71,11 @@ const chainStore = useBlockchain()
       <progress class="progress progress-info w-80 h-1"></progress>
     </div>
 
-    <div class="text-center text-base mt-6 text-primary">
+    <div v-if="featured.length>0" class="text-center text-base mt-6 text-primary">
       <h2 class="mb-6"> Featured Blockchains 🔥 </h2>
     </div>
 
-    <div
+    <div v-if="featured.length>0"
       class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"
     >
     <ChainSummary
