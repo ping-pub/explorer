@@ -24,7 +24,9 @@ const chains = computed(() => {
 
 const featured = computed(() => {
   const names = ["cosmos", "osmosis", "akash", "celestia", "evmos", "injective"];
-  return chains.value.filter(x => names.includes(x.chainName))
+  return chains.value
+    .filter(x => names.includes(x.chainName))
+    .sort((a, b)=> (names.indexOf(a.chainName) - names.indexOf(b.chainName)))
 })
 
 const chainStore = useBlockchain()
@@ -56,15 +58,11 @@ const chainStore = useBlockchain()
       <h1 class="text-primary dark:invert text-3xl md:!text-6xl font-bold">
         {{ $t('pages.title') }}
       </h1>
-      <div class="badge badge-primary badge-outline dark:invert mt-1 text-sm md:!mt-8">
-        {{ $t('pages.tag') }}
-      </div>
     </div>
     <div class="text-center text-base">
       <p class="mb-1">
         {{ $t('pages.slogan') }}
       </p>
-      <h2 class="mb-6">{{ $t('pages.description') }}</h2>
     </div>
     <div
       v-if="dashboard.status !== LoadingStatus.Loaded"
@@ -73,7 +71,9 @@ const chainStore = useBlockchain()
       <progress class="progress progress-info w-80 h-1"></progress>
     </div>
 
-    <div class="text-center font-bold h4 text-primary">Featured Blockchains</div>
+    <div class="text-center text-base mt-6 text-primary">
+      <h2 class="mb-6"> Featured Blockchains 🔥 </h2>
+    </div>
 
     <div
       class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"
@@ -83,6 +83,10 @@ const chainStore = useBlockchain()
         :key="index"
         :name="chain.chainName"
       />
+    </div>
+
+    <div class="text-center text-base mt-6 text-primary">
+      <h2 class="mb-6">{{ $t('pages.description') }}</h2>
     </div>
 
     <div class="flex items-center rounded-lg bg-base-100  border border-gray-200 dark:border-gray-700 mt-10">
