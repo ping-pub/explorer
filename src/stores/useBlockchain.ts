@@ -41,7 +41,7 @@ export const useBlockchain = defineStore('blockchain', {
   },
   getters: {
     current(): ChainConfig | undefined {
-      return this.dashboard.chains[this.chainName];
+      return this.dashboard.getChainConfig(this.chainName);
     },
     logo(): string {
       return this.current?.logo || '';
@@ -99,7 +99,7 @@ export const useBlockchain = defineStore('blockchain', {
       // compute favorite menu
       const favNavItems: VerticalNavItems = [];
       Object.keys(this.dashboard.favoriteMap).forEach((name) => {
-        const ch = this.dashboard.chains[name];
+        const ch = this.dashboard.getChainConfig(name);
         if (ch && this.dashboard.favoriteMap?.[name]) {
           favNavItems.push({
             title: ch.prettyName || ch.chainName || name,

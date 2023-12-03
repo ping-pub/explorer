@@ -29,7 +29,7 @@ async function initParamsForKeplr() {
     const coinDecimals = chain.assets[0].denom_units.find(x => x.denom === chain.assets[0].symbol.toLowerCase())?.exponent || 6
     conf.value = JSON.stringify({
         chainId: chainid,
-        chainName: chain.chainName,
+        chainName: chain.prettyName,
         rpc: chain.endpoints?.rpc?.at(0)?.address,
         rest: chain.endpoints?.rest?.at(0)?.address,
         bip44: {

@@ -30,7 +30,7 @@ const validators = ref(stakingStore.validators)
 const keyword = ref("")
 
 function loadSigningInfo(chainName: string) {
-  const chain = dashboard.chains[chainName]
+  const chain = dashboard.getChainConfig(chainName)
   if(chain && chain.endpoints.rest) {
     const client = CosmosRestClient.newDefault(chain.endpoints.rest[0].address)
     client.getSlashingSigningInfos().then( resp => {
@@ -95,7 +95,7 @@ function add() {
 
 function changeChain() {
   validators.value = []
-  const endpoint = dashboard.chains[selectChain.value].endpoints.rest?.at(0)?.address
+  const endpoint = dashboard.getChainConfig(selectChain.value).endpoints.rest?.at(0)?.address
   if(!endpoint) return 
 
   const client = CosmosRestClient.newDefault(endpoint)
@@ -193,7 +193,7 @@ function color(v: string) {
             <div class="input-group input-group-md">
             <select v-model="selectChain" class="select select-bordered capitalize" @change="changeChain">
               <option v-for="v in dashboard.chains" :value="v.chainName">
-                {{ v.chainName }}
+                {{ v.prettyName }}
               </option>
             </select>
               <input v-model="keyword" type="text" class="input w-full" placeholder="keywords to filter validator">

@@ -15,9 +15,9 @@ router.beforeEach((to) => {
     const { chain } = to.params
     if(chain){
       const blockchain = useBlockchain()
-      if(chain !== blockchain.chainName) {
-        blockchain.setCurrent(chain.toString())
-      }
+      const lowercaseChain = chain.toString().toLowerCase();
+      if(lowercaseChain !== blockchain.chainName)
+        blockchain.setCurrent(lowercaseChain)
     } 
 })
 

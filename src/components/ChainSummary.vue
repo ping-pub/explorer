@@ -11,7 +11,7 @@ const props = defineProps({
 });
 
 const dashboardStore = useDashboard();
-const conf = computed(() => dashboardStore.chains[props.name] || {});
+const conf = computed(() => dashboardStore.getChainConfig(props.name) || {});
 
 const addFavor = (e: Event) => {
   e.stopPropagation();
