@@ -1,4 +1,4 @@
-import { useBlockchain } from "@/stores";
+import { useBlockchain, useDashboard } from "@/stores";
 import { createRouter, createWebHistory } from "vue-router";
 // @ts-ignore
 import { setupLayouts } from "virtual:generated-layouts";
@@ -15,10 +15,10 @@ router.beforeEach((to) => {
     const { chain } = to.params
     if(chain){
       const blockchain = useBlockchain()
-      const lowercaseChain = chain.toString().toLowerCase();
-      if(lowercaseChain !== blockchain.chainName)
-        blockchain.setCurrent(lowercaseChain)
-    } 
+      if(chain !== blockchain.chainName) {
+        blockchain.setCurrent(chain.toString())
+      }
+    }
 })
 
 // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards

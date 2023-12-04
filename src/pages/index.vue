@@ -17,7 +17,8 @@ const chains = computed(() => {
     const lowercaseKeywords = keywords.value.toLowerCase();
 
     return Object.values(dashboard.chains).filter(
-      (x: ChainConfig) => x.prettyName.toLowerCase().indexOf(lowercaseKeywords) > -1
+      (x: ChainConfig) => x.chainName.toLowerCase().indexOf(lowercaseKeywords) > -1 
+      || x.prettyName.toLowerCase().indexOf(lowercaseKeywords) > -1
     );
   } else {
     return Object.values(dashboard.chains);

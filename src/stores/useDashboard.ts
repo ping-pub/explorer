@@ -153,7 +153,7 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
     cosmosSdk: lc.sdk_version
   }
   conf.bech32Prefix = lc.addr_prefix;
-  conf.chainName = lc.chain_name.toLowerCase();
+  conf.chainName = lc.chain_name;
   conf.coinType = lc.coin_type;
   conf.prettyName = lc.registry_name || lc.chain_name;
   conf.endpoints = {
@@ -178,7 +178,7 @@ export function fromDirectory(source: DirectoryChain): ChainConfig {
   (conf.assets = source.assets),
     (conf.bech32Prefix = source.bech32_prefix),
     (conf.chainId = source.chain_id),
-    (conf.chainName = source.chain_name.toLowerCase()),
+    (conf.chainName = source.chain_name),
     (conf.prettyName = source.pretty_name),
     (conf.versions = {
       application: source.versions?.application_version || '',
@@ -275,9 +275,9 @@ export const useDashboard = defineStore('dashboard', {
     },
   },
   actions: {
-    initial() {
-      this.loadingFromLocal();
-      // this.loadingFromRegistry()
+    async initial() {
+      await this.loadingFromLocal();
+      // await this.loadingFromRegistry()
     },
     loadingPrices() {
       const coinIds = [] as string[]
@@ -308,7 +308,7 @@ export const useDashboard = defineStore('dashboard', {
         this.status = LoadingStatus.Loading;
         get(this.source).then((res) => {
           res.chains.forEach((x: DirectoryChain) => {
-            this.chains[x.chain_name.toLowerCase()] = fromDirectory(x);
+            this.chains[x.chain_name] = fromDirectory(x);
           });
           this.status = LoadingStatus.Loaded;
         });
@@ -323,7 +323,7 @@ export const useDashboard = defineStore('dashboard', {
           ? import.meta.glob('../../chains/mainnet/*.json', { eager: true })
           : import.meta.glob('../../chains/testnet/*.json', { eager: true });
       Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
-        this.chains[x.chain_name.toLowerCase()] = fromLocal(x);
+        this.chains[x.chain_name] = fromLocal(x);
       });
       this.setupDefault();
       this.status = LoadingStatus.Loaded;
@@ -335,7 +335,7 @@ export const useDashboard = defineStore('dashboard', {
           ? import.meta.glob('../../chains/mainnet/*.json', { eager: true })
           : import.meta.glob('../../chains/testnet/*.json', { eager: true });
       Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
-        config[x.chain_name.toLowerCase()] = fromLocal(x);
+        config[x.chain_name] = fromLocal(x);
       });
       return config
     },
@@ -360,8 +360,5 @@ export const useDashboard = defineStore('dashboard', {
       this.source = newSource;
       this.initial();
     },
-    getChainConfig(chainId: string): ChainConfig {
-      return this.chains[chainId.toLowerCase()];
-    }
   },
 });
