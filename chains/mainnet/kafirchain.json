@@ -1,0 +1,19 @@
+{
+    "chain_name": "kafirchain_4272528-1",
+    "api": ["https://froopyland.dymension.xyz/22/kafirchain_4272528-1/rest"],
+    "rpc": ["https://froopyland.dymension.xyz/22/kafirchain_4272528-1/rpc"],
+    "coingecko": "",
+    "snapshot_provider": "",
+    "sdk_version": "v0.1.0-rc10",
+    "coin_type": "60",
+    "min_tx_fee": "100",
+    "addr_prefix": "kafirchain",
+    "logo": "/logos/logo_kafirchain.png",
+    "assets": [{
+        "base": "uKFR",
+        "symbol": "KFR",
+        "exponent": "18",
+        "coingecko_id": "",
+        "logo": "/logos/logo_kafirchain.png"
+    }]
+  }
