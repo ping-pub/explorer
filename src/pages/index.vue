@@ -14,8 +14,11 @@ const dashboard = useDashboard();
 const keywords = ref('');
 const chains = computed(() => {
   if (keywords.value) {
+    const lowercaseKeywords = keywords.value.toLowerCase();
+
     return Object.values(dashboard.chains).filter(
-      (x: ChainConfig) => x.chainName.indexOf(keywords.value) > -1
+      (x: ChainConfig) => x.chainName.toLowerCase().indexOf(lowercaseKeywords) > -1 
+      || x.prettyName.toLowerCase().indexOf(lowercaseKeywords) > -1
     );
   } else {
     return Object.values(dashboard.chains);

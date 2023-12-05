@@ -175,9 +175,20 @@ export const useBlockchain = defineStore('blockchain', {
         JSON.stringify(endpoint)
       );
     },
-    setCurrent(name: string) {
-      if (name !== this.chainName) {
-        this.chainName = name;
+    async setCurrent(name: string) {
+      // Ensure chains are loaded due to asynchronous calls.
+      if(this.dashboard.length === 0) {
+        await this.dashboard.initial();
+      }
+
+      // Find the case-sensitive name for the chainName, else simply use the parameter-value.
+      const caseSensitiveName = 
+        Object.keys(this.dashboard.chains).find((x) => x.toLowerCase() === name.toLowerCase()) 
+        || name;
+
+      // Update chainName if needed
+      if (caseSensitiveName !== this.chainName) {
+        this.chainName = caseSensitiveName;
       }
     },
     supportModule(mod: string) {

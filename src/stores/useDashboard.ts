@@ -275,9 +275,9 @@ export const useDashboard = defineStore('dashboard', {
     },
   },
   actions: {
-    initial() {
-      this.loadingFromLocal();
-      // this.loadingFromRegistry()
+    async initial() {
+      await this.loadingFromLocal();
+      // await this.loadingFromRegistry()
     },
     loadingPrices() {
       const coinIds = [] as string[]
