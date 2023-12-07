@@ -2,7 +2,7 @@
 
  ![Ping Wallet](./public/logo.svg)
 
-<h1>Prysm Dashboard</h1>
+<h1>Prysm Testnet Dashboard</h1>
 
 **<h2>Prysm Testnet Dashboard functions as a cosmwasm interface, wallet, IBC registry and block-chain explorer for the Prysm testnet<h2></h2>**
 
