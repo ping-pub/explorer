@@ -9,10 +9,13 @@
 
 **Prysm Chain Testnet Dashboard URL - https://explorer.prysmchain.com/PRYSM**
 
+PRYSM**
 
 **RPC - ``https://t-rpc.prysmchain.com``**
 
  **REST - ``https://t-api.prysmchain.com``**
+
+**gRPC - ``https://t-grpc.prysmchain.com``**
 
 **Chain ID - ``prysm_100-1``**
 
