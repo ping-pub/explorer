@@ -176,19 +176,18 @@ export const useBlockchain = defineStore('blockchain', {
       );
     },
     async setCurrent(name: string) {
-      // Ensure chains are loaded due to asynchronous calls.
-      if(this.dashboard.length === 0) {
-        await this.dashboard.initial();
+      // Get caps-correct chains from local storage.
+      const localChains: Array<string> = JSON.parse(localStorage.getItem("chains") || "[]");
+
+      // If chains are found in localStorage, then attempt to find the caps-correct chain name.
+      if(localChains.length > 0) {
+        name = localChains.find((x) => x.toLowerCase() === name.toLowerCase()) 
+          || name;
       }
 
-      // Find the case-sensitive name for the chainName, else simply use the parameter-value.
-      const caseSensitiveName = 
-        Object.keys(this.dashboard.chains).find((x) => x.toLowerCase() === name.toLowerCase()) 
-        || name;
-
       // Update chainName if needed
-      if (caseSensitiveName !== this.chainName) {
-        this.chainName = caseSensitiveName;
+      if (name !== this.chainName) {
+        this.chainName = name;
       }
     },
     supportModule(mod: string) {

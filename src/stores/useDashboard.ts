@@ -275,9 +275,9 @@ export const useDashboard = defineStore('dashboard', {
     },
   },
   actions: {
-    async initial() {
-      await this.loadingFromLocal();
-      // await this.loadingFromRegistry()
+    initial() {
+      this.loadingFromLocal();
+      // this.loadingFromRegistry()
     },
     loadingPrices() {
       const coinIds = [] as string[]
@@ -312,6 +312,7 @@ export const useDashboard = defineStore('dashboard', {
           });
           this.status = LoadingStatus.Loaded;
         });
+        localStorage.setItem("chains", JSON.stringify(Object.keys(this.chains)));
       }
     },
     async loadingFromLocal() {
@@ -327,6 +328,7 @@ export const useDashboard = defineStore('dashboard', {
       });
       this.setupDefault();
       this.status = LoadingStatus.Loaded;
+      localStorage.setItem("chains", JSON.stringify(Object.keys(this.chains)));
     },
     async loadLocalConfig(network: NetworkType) {
       const config: Record<string, ChainConfig> = {} 
