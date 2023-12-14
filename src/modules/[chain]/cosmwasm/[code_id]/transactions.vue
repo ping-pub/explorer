@@ -13,6 +13,7 @@ import { post } from '@/libs';
 import { JsonViewer } from "vue3-json-viewer"
 // if you used v1.0.5 or latster ,you should add import "vue3-json-viewer/dist/index.css"
 import "vue3-json-viewer/dist/index.css";
+import WasmVerification from '@/components/WasmVerification.vue';
 
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
@@ -201,10 +202,7 @@ const result = ref({});
             <PaginationBar :limit="page.limit" :total="txs.pagination?.total" :callback="pageload" />
         </div>
 
-        <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-            <h2 class="card-title truncate w-full mt-4">Verification</h2>
-            
-        </div>
+        <WasmVerification v-if="contractAddress=='1'" :contract="contractAddress" class="hide"/>
 
         <div>
             <input type="checkbox" id="modal-contract-funds" class="modal-toggle" />
@@ -235,7 +233,7 @@ const result = ref({});
                             <label for="modal-contract-states" class="btn btn-sm btn-circle">✕</label>
                         </div>
                         <div class="overflow-auto">
-                            <JsonViewer :value="state.models?.map(v => ({key: format.hexToString(v.key), value: JSON.parse(format.base64ToString(v.value))}))" :theme="baseStore.theme" style="background: transparent;" copyable boxed sort :expand-depth="5"/>
+                            <JsonViewer :value="state.models?.map(v => ({key: format.hexToString(v.key), value: JSON.parse(format.base64ToString(v.value))}))||''" :theme="baseStore.theme||'dark'" style="background: transparent;" copyable boxed sort :expand-depth="5"/>
                             <PaginationBar :limit="pageRequest.limit" :total="state.pagination?.total"
                                 :callback="pageloadState" />
                         </div>
