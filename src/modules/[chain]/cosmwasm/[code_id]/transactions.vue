@@ -202,7 +202,7 @@ const result = ref({});
             <PaginationBar :limit="page.limit" :total="txs.pagination?.total" :callback="pageload" />
         </div>
 
-        <WasmVerification v-if="contractAddress=='1'" :contract="contractAddress" class="hide"/>
+        <WasmVerification :contract="contractAddress"/>
 
         <div>
             <input type="checkbox" id="modal-contract-funds" class="modal-toggle" />

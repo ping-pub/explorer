@@ -40,7 +40,7 @@ export async function post(url: string, data: any) {
     // credentials: 'same-origin', // redirect: 'follow', // manual, *follow, error
     // referrerPolicy: 'origin', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
     headers: {
-      'Content-Type': 'text/plain',
+      'Content-Type': 'application/json',
       Accept: '*/*',
       'Accept-Encoding': 'gzip, deflate, br',
     },

@@ -23,9 +23,9 @@ console.log("contract:", props.contract)
 
 onMounted(() => {
 
-    console.log("mounted", `${baseurl}/deploy-histories/neutron-1?contract=${props.contract}`, chainId.value)
-    get(`${baseurl}/deploy-histories/${chainId.value}?contract=${props.contract}`).then((x) => {
-        console.log("x:", x)
+    // console.log("mounted", `${baseurl}/deploy-histories/neutron?contract=${props.contract}`, chainId.value)
+    get(`${baseurl}/deploy-histories/neutron?contract=${props.contract}`).then((x) => {
+        console.log("verification:", x)
         verification.value = x
     }).catch(e => {
         console.error(e)
@@ -36,17 +36,22 @@ function verify() {
 
     const base = useBaseStore()
     const id =  base.latest?.block?.header?.chain_id || "unknown"
-    const data = {"contractAddress": props.contract, "chainId": "neutron"}
-    console.log(data)
+    const data = {"contractAddress": props.contract, "chainId": id}
+
     post(`${baseurl}/verification/neutron`, data).then((x)=> {
-        console.log("x", x)
+        verification.value = x.result
     })
 }
 </script>
 <template>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-        <h2 class="card-title truncate w-full mt-4">Verification {{ chainId }}</h2>
+        <h2 class="card-title truncate w-full mt-4">Verification</h2>
         <div><DynamicComponent :value="verification"/></div>
-        <button class="btn btn-primary" @click="verify">verify</button>
+        <div class="text-center">
+            <div v-if="Object.keys(verification).length == 0" >
+                <Icon icon="mdi:emoticon-sad-outline"></Icon>Haven't found verification
+            </div>
+            <button class="btn btn-primary mt-5" @click="verify">verify</button>
+        </div>
     </div>
 </template>
