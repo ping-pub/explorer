@@ -14,17 +14,14 @@ const baseurl = "https://prod.compiler.welldonestudio.io"
 
 const verification = ref({});
 
-const chainId = computed(() => {
-    const base = useBaseStore()
-    return base.latest?.block?.header?.chain_id || "unknown"
-}) 
-
-console.log("contract:", props.contract)
-
 onMounted(() => {
 
+    const base = useBaseStore()
+    const chainId = base.latest?.block?.header?.chain_id || "neutron-1"
     // console.log("mounted", `${baseurl}/deploy-histories/neutron?contract=${props.contract}`, chainId.value)
-    get(`${baseurl}/deploy-histories/neutron?contract=${props.contract}`).then((x) => {
+    const url = `${baseurl}/deploy-histories/${chainId}?contract=${props.contract}`
+    console.log("url:", url)
+    get(url).then((x) => {
         console.log("verification:", x)
         verification.value = x
     }).catch(e => {
@@ -39,7 +36,7 @@ function verify() {
     const data = {"contractAddress": props.contract, "chainId": id}
 
     post(`${baseurl}/verification/neutron`, data).then((x)=> {
-        verification.value = x.result
+        if(x.result) verification.value = x.result
     })
 }
 </script>
