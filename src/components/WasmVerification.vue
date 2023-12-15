@@ -45,7 +45,14 @@ function verify() {
 </script>
 <template>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-        <h2 class="card-title truncate w-full mt-4">Verification</h2>
+        <div class="flex justify-between">
+            <span><h2 class="card-title truncate w-full mt-4 text-left">Verification</h2></span>
+            <span class="avatar tooltip tooltip-left" data-tip="Powered By welldonestudio">
+                <div class="w-8 rounded">
+                    <img src="https://docs.welldonestudio.io/assets/images/welldone-610a90e2ebf1d86bc6ef3e1a0a18b0ef.gif" alt="Powered By welldonestudio" />
+                </div>
+            </span>
+        </div>
         <div><DynamicComponent :value="verification"/></div>
         <div class="text-center">
             <div v-if="Object.keys(verification).length == 0" >
