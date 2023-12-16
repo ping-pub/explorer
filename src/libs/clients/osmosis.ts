@@ -8,5 +8,11 @@ export const name = 'osmosis'
 
 // osmosis custom request
 export const requests: Partial<RequestRegistry> = {
-    mint_inflation: { url: 'https://public-osmosis-api.numia.xyz/apr?start_date=2023-11-27&end_date=2023-11-30', adapter: (data: any) => ({inflation: (Number(data.inflation_rate || 0)/ 100 ).toFixed(2)}) },
+    mint_inflation: { 
+        url: `https://public-osmosis-api.numia.xyz/apr?start_date=${new Date(new Date().getTime() - 186400*1000).toISOString().split('T')[0]}&end_date=${new Date().toISOString().split('T')[0]}`, 
+        adapter: (data: any) => {
+            const [first] = data
+            return {inflation: String(Number(first?.apr|| "0")/100.0)}
+        } 
+    },
 }
