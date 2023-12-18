@@ -46,7 +46,7 @@ function verify() {
             <span><h2 class="card-title truncate w-full mt-4 text-left">Verification</h2></span>
             <span class="avatar tooltip tooltip-left" data-tip="Powered By welldonestudio">
                 <div class="w-8 rounded">
-                    <img src="https://docs.welldonestudio.io/assets/images/welldone-610a90e2ebf1d86bc6ef3e1a0a18b0ef.gif" alt="Powered By welldonestudio" />
+                    <img src="../assets/images/welldone-logo.svg"  alt="Powered By welldonestudio"/>
                 </div>
             </span>
         </div>
