@@ -119,7 +119,8 @@
     "contract_balances": "合约余额",
     "no_escrowed_assets": "没有托管地址",
     "contract_states": "合约状态",
-    "query_contract": "查询合约"
+    "query_contract": "查询合约",
+    "tips_description_1": "This feature is available when deploying contracts via WELLDONE Code. For more information, please check the document at the link below."
   },
   "gov": {
     "voting": "投票中",
