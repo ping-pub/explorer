@@ -118,7 +118,8 @@
       "contract_balances": "Saldo Kontrak",
       "no_escrowed_assets": "Tidak Ada Aset yang Dititipkan",
       "contract_states": "Bagian Kontrak",
-      "query_contract": "Query Kontrak"
+      "query_contract": "Query Kontrak",
+      "tips_description_1": "This feature is available when deploying contracts via WELLDONE Code. For more information, please check the document at the link below."
     },
     "gov": {
       "voting": "Voting",
