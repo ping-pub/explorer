@@ -41,7 +41,7 @@ export const useGovStore = defineStore('govStore', {
       //filter spam proposals
       if(proposals?.proposals) {
         proposals.proposals = proposals.proposals.filter((item) => {
-          const title = item.content.title || item.title || ""
+          const title = item.content?.title || item.title || ""
           return title.toLowerCase().indexOf("airdrop")===-1
         });
       }
