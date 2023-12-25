@@ -21,7 +21,7 @@ export class BaseRestClient<R extends AbstractRegistry> {
     this.registry = registry;
   }
   async request<T>(request: Request<T>, args: Record<string, any>, query = '') {
-    let url = `${this.endpoint}${request.url}${query}`;
+    let url = `${request.url.startsWith("http")?'':this.endpoint}${request.url}${query}`;
     Object.keys(args).forEach((k) => {
       url = url.replace(`{${k}}`, args[k] || '');
     });
@@ -133,6 +133,10 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return this.request(this.registry.slashing_signing_info, {}, query);
   }
   // Gov
+  async getParams(subspace: string, key: string) {
+    console.log(this.registry.params, subspace, key)
+    return this.request(this.registry.params, {subspace, key});
+  }
   async getGovParamsVoting() {
     return this.request(this.registry.gov_params_voting, {});
   }
@@ -204,10 +208,17 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
       validator_addr,
     });
   }
-  async getStakingValidatorsDelegations(validator_addr: string) {
+  async getStakingValidatorsDelegations(validator_addr: string, page?: PageRequest) {
+    if(!page) {
+      page = new PageRequest()
+      // page.reverse = true
+      page.count_total = true
+      page.offset = 0
+    } 
+    const query =`?${page.toQueryString()}`;
     return this.request(this.registry.staking_validators_delegations, {
       validator_addr,
-    });
+    }, query);
   }
   async getStakingValidatorsDelegationsDelegator(
     validator_addr: string,

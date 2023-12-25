@@ -10,7 +10,7 @@ import DonutChart from '@/components/charts/DonutChart.vue';
 import { computed, ref } from '@vue/reactivity';
 import { onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
-import 'vue-json-pretty/lib/styles.css';
+
 import type {
   AuthAccount,
   Delegation,
@@ -20,6 +20,7 @@ import type {
 } from '@/types';
 import type { Coin } from '@cosmjs/amino';
 import Countdown from '@/components/Countdown.vue';
+import { fromBase64 } from '@cosmjs/encoding';
 
 const props = defineProps(['address', 'chain']);
 
@@ -32,6 +33,7 @@ const txs = ref({} as TxResponse[]);
 const delegations = ref([] as Delegation[]);
 const rewards = ref({} as DelegatorRewards);
 const balances = ref([] as Coin[]);
+const recentReceived = ref([] as TxResponse[]);
 const unbonding = ref([] as UnbondingResponses[]);
 const unbondingTotal = ref(0);
 const chart = {};
@@ -109,6 +111,11 @@ function loadAccount(address: string) {
         unbondingTotal.value += Number(z.balance);
       });
     });
+  });
+
+  const receivedQuery =  `?&pagination.reverse=true&events=coin_received.receiver='${address}'&pagination.limit=5`;
+  blockchain.rpc.getTxs(receivedQuery, {}).then((x) => {
+    recentReceived.value = x.tx_responses;
   });
 }
 
@@ -521,6 +528,50 @@ function updateEvent() {
               <td class="flex items-center py-3">
                 <div class="mr-2">
                   {{ format.messages(v.tx.body.messages) }}
+                </div>
+                <Icon
+                  v-if="v.code === 0"
+                  icon="mdi-check"
+                  class="text-success text-lg"
+                />
+                <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
+              </td>
+              <td class="py-3">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{ format.toDay(v.timestamp, 'from') }})</span> </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Received -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <h2 class="card-title mb-4">{{ $t('account.received') }}</h2>
+      <div class="overflow-x-auto">
+        <table class="table w-full text-sm">
+          <thead>
+            <tr>
+              <th class="py-3">{{ $t('account.height') }}</th>
+              <th class="py-3">{{ $t('account.hash') }}</th>
+              <th class="py-3">{{ $t('account.amount') }}</th>
+              <th class="py-3">{{ $t('account.time') }}</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm">
+            <tr v-if="recentReceived.length === 0"><td colspan="10"><div class="text-center">{{ $t('account.no_transactions') }}</div></td></tr>
+            <tr v-for="(v, index) in recentReceived" :key="index">
+              <td class="text-sm py-3">
+                <RouterLink :to="`/${chain}/block/${v.height}`" class="text-primary dark:invert">{{
+                  v.height
+                }}</RouterLink>
+              </td>
+              <td class="truncate py-3" style="max-width: 200px">
+                <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
+                  {{ v.txhash }}
+                </RouterLink>
+              </td>
+              <td class="flex items-center py-3">
+                <div class="mr-2">
+                  {{ v.events.find(x => x.type==='coin_received')?.attributes.filter(x => x.key === 'YW1vdW50').map(x => String.fromCharCode(...fromBase64(x.value))).join(", ")}}
                 </div>
                 <Icon
                   v-if="v.code === 0"

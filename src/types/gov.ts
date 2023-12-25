@@ -28,6 +28,8 @@ export interface GovProposal {
     '@type': string;
     title?: string;
     description?: string;
+    current?: any[];
+    changes?: any[];
     plan?: {
       height?: string | number;
       time?: string | number;

@@ -3,7 +3,7 @@ import type { Coin, Key, PaginatedResponse } from "./common"
 export interface Tx {
     "@type"?: string,
     "body": {
-        "messages": {"@type": string}[],
+        "messages": {"@type": string, "amount"?: Coin[]}[],
         "memo": string,
         "timeout_height": string,
         "extension_options": any[],

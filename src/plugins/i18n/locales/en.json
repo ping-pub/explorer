@@ -11,6 +11,7 @@
     "cosmwasm": "Cosmwasm",
     "widget": "Widgets",
     "ibc": "IBC",
+    "nft": "NFT",
     "consensus": "Consensus",
     "supply": "Supply",
     "account": "Accounts",
@@ -33,6 +34,8 @@
     "btn_index": "Back to Home"
   },
   "account": {
+    "amount": "Amount",
+    "received": "Recent Received",
     "type": "Type",
     "address": "Address",
     "acc": "Account",
@@ -51,6 +54,7 @@
     "btn_unbond": "Unbond",
     "validator": "Validator",
     "delegation": "Delegation",
+    "delegator": "Delegator",
     "rewards": "Rewards",
     "action": "Action",
     "unbonding_delegations": "Unbonding Delegations",
@@ -124,7 +128,8 @@
     "contract_balances": "Contract Balances",
     "no_escrowed_assets": "No Escrowed Assets",
     "contract_states": "Contract States",
-    "query_contract": "Query Contract"
+    "query_contract": "Query Contract",
+    "tips_description_1": "This feature is available when deploying contracts via WELLDONE Code. For more information, please check the document at the link below."
   },
   "gov": {
     "voting": "Voting",
@@ -217,7 +222,10 @@
     "operator_addr": "Operator Address",
     "hex_addr": "Hex Address",
     "signer_addr": "Signer Address",
-    "consensus_pub_key": "Consensus Public Key"
+    "consensus_pub_key": "Consensus Public Key",
+    "liquid_staking": "Liquid Staking",
+    "liquid_staking_shares":"Liquid Shares",
+    "validator_bond_share":"Validator Bonded"
   },
   "statesync": {
     "title": "What's State Sync?",

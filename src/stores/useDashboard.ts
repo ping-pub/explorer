@@ -275,9 +275,9 @@ export const useDashboard = defineStore('dashboard', {
     },
   },
   actions: {
-    initial() {
-      this.loadingFromLocal();
-      // this.loadingFromRegistry()
+    async initial() {
+      await this.loadingFromLocal();
+      // await this.loadingFromRegistry()
     },
     loadingPrices() {
       const coinIds = [] as string[]
@@ -327,6 +327,17 @@ export const useDashboard = defineStore('dashboard', {
       });
       this.setupDefault();
       this.status = LoadingStatus.Loaded;
+    },
+    async loadLocalConfig(network: NetworkType) {
+      const config: Record<string, ChainConfig> = {} 
+      const source: Record<string, LocalConfig> =
+        network === NetworkType.Mainnet
+          ? import.meta.glob('../../chains/mainnet/*.json', { eager: true })
+          : import.meta.glob('../../chains/testnet/*.json', { eager: true });
+      Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
+        config[x.chain_name] = fromLocal(x);
+      });
+      return config
     },
     setupDefault() {
       if (this.length > 0) {

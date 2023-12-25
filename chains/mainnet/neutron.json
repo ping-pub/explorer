@@ -1,7 +1,15 @@
 {
     "chain_name": "neutron",
-    "api": ["https://neutron-api.polkachu.com/","https://api.neutron.nodestake.top"],
-    "rpc": ["https://neutron-rpc.polkachu.com/","https://rpc.neutron.nodestake.top"],
+    "api": [
+        {"provider": "Polkachu", "address": "https://neutron-api.polkachu.com"},
+        {"provider": "NodeStake", "address": "https://api.neutron.nodestake.top"},
+        {"provider": "Allnodes", "address": "https://neutron-rest.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "Polkachu", "address": "https://neutron-rpc.polkachu.com"}, 
+        {"provider": "NodeStake", "address": "https://rpc.neutron.nodestake.top"},
+        {"provider": "Allnodes", "address": "https://neutron-rpc.publicnode.com:443"}
+    ],
     "provider_chain": {
         "api": ["https://api-cosmoshub-ia.cosmosia.notional.ventures"]
     },

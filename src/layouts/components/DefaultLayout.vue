@@ -18,12 +18,18 @@ import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '../ty
 const dashboard = useDashboard();
 dashboard.initial();
 const blockchain = useBlockchain();
+blockchain.randomSetupEndpoint();
 
-const current = ref('');
+const current = ref(''); // the current chain
+const temp = ref('')
 blockchain.$subscribe((m, s) => {
+  if(current.value ===s.chainName && temp.value != s.endpoint.address) {
+    temp.value = s.endpoint.address
+    blockchain.initial();
+  }
   if (current.value != s.chainName) {
     current.value = s.chainName;
-    blockchain.initial();
+    blockchain.randomSetupEndpoint();
   }
 });
 
@@ -224,6 +230,21 @@ function selected(route: any, nav: NavLink) {
           </div>
         </a>
         <a
+          href="https://celestia.org"
+          target="_blank"
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+        >
+          <img
+            src="https://ping.pub/logos/celestia.png"
+            class="w-6 h-6 rounded-full mr-3"
+          />
+          <div
+            class="text-sm capitalize flex-1 text-gray-600 dark:text-gray-200"
+          >
+            Celestia
+          </div>
+        </a>
+        <a
           href="https://becole.com"
           target="_blank"
           class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
@@ -238,6 +259,20 @@ function selected(route: any, nav: NavLink) {
             Becole
           </div>
         </a>
+
+          <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
+            Tools
+          </div>
+          <RouterLink to="/wallet/suggest"
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          >
+            <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
+            <div
+              class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200"
+            >
+              Wallet Helper
+            </div>
+          </RouterLink>
 
         <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">{{ $t('module.links') }}</div>
         <a

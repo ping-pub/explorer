@@ -17,6 +17,7 @@
     "@cosmjs/encoding": "^0.29.5",
     "@iconify/vue": "^4.1.0",
     "@intlify/unplugin-vue-i18n": "^0.8.2",
+    "@leapwallet/cosmos-snap-provider": "^0.1.20",
     "@leapwallet/name-matcha": "^1.1.0",
     "@osmonauts/lcd": "^0.8.0",
     "@ping-pub/chain-registry-client": "^0.0.25",
@@ -45,10 +46,10 @@
     "vite-plugin-vue-layouts": "^0.7.0",
     "vue": "^3.2.45",
     "vue-i18n": "^9.2.2",
-    "vue-json-pretty": "^2.2.4",
     "vue-prism-component": "^2.0.0",
     "vue-router": "^4.1.6",
     "vue3-apexcharts": "^1.4.1",
+    "vue3-json-viewer": "^2.2.2",
     "vue3-perfect-scrollbar": "^1.6.1"
   },
   "devDependencies": {
@@ -66,8 +67,9 @@
     "unplugin-auto-import": "^0.13.0",
     "unplugin-vue-components": "^0.23.0",
     "unplugin-vue-define-options": "1.1.4",
-    "vite": "^4.3.5",
+    "vite": "^4.4.9",
     "vite-plugin-pages": "^0.28.0",
+    "vue-json-viewer": "3",
     "vue-tsc": "^1.0.12"
   }
 }

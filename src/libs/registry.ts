@@ -124,6 +124,8 @@ export interface RequestRegistry extends AbstractRegistry {
   base_tendermint_validatorsets_latest: Request<PaginatedTendermintValidator>;
   base_tendermint_validatorsets_height: Request<PaginatedTendermintValidator>;
 
+  params: Request<{param: any}>;
+
   tx_txs: Request<PaginatedTxs>;
   tx_txs_block: Request<Tx>;
   tx_hash: Request<{ tx: Tx; tx_response: TxResponse }>;
