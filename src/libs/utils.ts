@@ -14,6 +14,22 @@ export const percent = (num: number) => {
   return parseFloat((num * 100).toFixed(2));
 };
 
+export function stringToUint8Array(str: string) {
+  const arr = [];
+  for (let i = 0, j = str.length; i < j; ++i) {
+    arr.push(str.charCodeAt(i));
+  }
+  return new Uint8Array(arr);
+}
+
+export function uint8ArrayToString(arr: Uint8Array) {
+  let str = '';
+  for (let i = 0, j = arr.length; i < j; ++i) {
+    str += String.fromCharCode(arr[i]);
+  }
+  return str;
+}
+
 const COUNT_ABBRS = [
   '',
   'K',
