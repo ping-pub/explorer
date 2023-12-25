@@ -1,6 +1,6 @@
 import type{ RequestRegistry } from '@/libs/registry'
 import { adapter } from '@/libs/registry'
-import { GovProposal, PaginatedProposals } from '@/types'
+import type { GovProposal, PaginatedProposals } from '@/types'
 // which registry is store
 export const store = 'name' // name or version
 // Blockchain Name
