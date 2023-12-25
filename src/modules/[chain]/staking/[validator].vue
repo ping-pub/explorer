@@ -224,7 +224,7 @@ function pagePowerEvents(page: number) {
 function mapEvents(events: {type: string, attributes: {key: string, value: string}[]}[]) {
   const attributes = events.filter(x => x.type=== selectedEventType.value).filter(x => x.attributes.findIndex(attr => attr.value === toBase64(stringToUint8Array(validator))) > -1).map(x => {
     // check if attributes need to decode
-    if(x.attributes.findIndex(a => a.value === `amount` || a.value === 'delegator_address') > -1) return x.attributes
+    if(x.attributes.findIndex(a => a.value === `amount`) > -1) return x.attributes
     const output = {} as {[key: string]: string }
     x.attributes.forEach(attr => {
       output[uint8ArrayToString(fromBase64(attr.key))] = uint8ArrayToString(fromBase64(attr.value))
@@ -672,7 +672,7 @@ function mapDelegators(messages: any[]) {
                   <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
                     <span class="mr-2">
                       {{ (selectedEventType === EventType.Delegate ? '+' : '-')}} {{
-                      mapEvents(item.events).map(x => x.amount).join(", ")
+                      mapEvents(item.events).map((x: any) => x.amount).join(", ")
                     }}</span>
                   </RouterLink>
                   <Icon
