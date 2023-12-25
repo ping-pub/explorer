@@ -643,7 +643,7 @@ function mapDelegators(messages: any[]) {
       <div class="text-lg mb-4 font-semibold">
         <div class="tabs tabs-boxed bg-transparent">
                 
-                <span class="mr-10">Power Events: </span>
+                <span class="mr-10">Voting Power Events: </span>
                 <a
                     class="tab text-gray-400"
                     :class="{ 'tab-active': selectedEventType === EventType.Delegate }"
