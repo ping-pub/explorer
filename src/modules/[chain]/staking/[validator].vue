@@ -205,7 +205,7 @@ enum EventType {
   Unbond = 'unbond',
 }
 
-const selectedEventType = ref(EventType.Unbond)
+const selectedEventType = ref(EventType.Delegate)
 
 function loadPowerEvents(p: number, type: EventType) {
   selectedEventType.value = type
@@ -220,13 +220,21 @@ function pagePowerEvents(page: number) {
     loadPowerEvents(page, selectedEventType.value)
 }
 
+pagePowerEvents(1)
 
 function mapEvents(events: {type: string, attributes: {key: string, value: string}[]}[]) {
-  const attributes = events.filter(x => x.type=== selectedEventType.value).filter(x => x.attributes.findIndex(attr => attr.value === toBase64(stringToUint8Array(validator))) > -1).map(x => {
+  const attributes = events
+    .filter(x => x.type=== selectedEventType.value)
+      .filter(x => x.attributes.findIndex(attr => attr.value === validator || attr.value === toBase64(stringToUint8Array(validator))) > -1)
+      .map(x => {
     // check if attributes need to decode
-    if(x.attributes.findIndex(a => a.value === `amount`) > -1) return x.attributes
     const output = {} as {[key: string]: string }
-    x.attributes.forEach(attr => {
+
+    if(x.attributes.findIndex(a => a.key === `amount`) > -1) {
+      x.attributes.forEach(attr => {
+        output[attr.key] = attr.value
+      })
+    } else x.attributes.forEach(attr => {
       output[uint8ArrayToString(fromBase64(attr.key))] = uint8ArrayToString(fromBase64(attr.value))
     })
     return output
