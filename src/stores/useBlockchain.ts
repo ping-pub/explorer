@@ -41,7 +41,13 @@ export const useBlockchain = defineStore('blockchain', {
   },
   getters: {
     current(): ChainConfig | undefined {
-      return this.dashboard.chains[this.chainName];
+      const chain = this.dashboard.chains[this.chainName]
+      // update chain config with dynamic updated sdk version
+      const sdkversion = localStorage.getItem(`sdk_version_${this.chainName}`)
+      if(sdkversion && chain?.versions) {
+        chain.versions.cosmosSdk = sdkversion;
+      }
+      return chain;
     },
     logo(): string {
       return this.current?.logo || '';
