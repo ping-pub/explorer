@@ -24,6 +24,7 @@ export interface GovProposal {
   title?: string;
   summary?: string;
   proposal_id: string;
+  metadata?: string;
   content: {
     '@type': string;
     title?: string;
