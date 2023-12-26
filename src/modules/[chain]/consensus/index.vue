@@ -254,7 +254,7 @@ async function update() {
         <h2 class="text-sm card-title text-error mb-6">
           {{ $t('consensus.updated_at') }} {{ newTime || '' }}
         </h2>
-        <div v-for="item in roundState.height_vote_set.reverse()" :key="item.round">
+        <div v-for="item in roundState.height_vote_set" :key="item.round">
           <div class="text-xs mb-1">{{ $t('consensus.round') }}: {{ item.round }}</div>
           <div class="text-xs break-words">{{ item.prevotes_bit_array }}</div>
 
