@@ -667,7 +667,7 @@ function mapDelegators(messages: any[]) {
           </thead>
           <tbody>
             <tr v-for="(item, i) in events.tx_responses">
-              <td class="pr-2 text-primary" style="max-width: 250px">
+              <td class="pr-2 truncate text-primary" style="max-width: 250px">
                 <RouterLink v-for="d in mapDelegators(item.tx?.body?.messages)" :to="`/${props.chain}/account/${d}`">
                   {{ d }}
                 </RouterLink> 
