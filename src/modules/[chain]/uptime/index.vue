@@ -10,7 +10,6 @@ import {
 import UptimeBar from '@/components/UptimeBar.vue';
 import type { Commit, SlashingParam, SigningInfo } from '@/types';
 import { consensusPubkeyToHexAddress, pubKeyToValcons, valconsToBase64 } from '@/libs';
-import { lazyKeyElSetMap } from 'lazy-load-vue3/types/listen';
 
 const props = defineProps(['chain']);
 
