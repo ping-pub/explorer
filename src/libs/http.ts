@@ -47,7 +47,7 @@ const policies = [
   'unsafe-url'
 ];
 export async function get(url: string) {
-  return (await fetch(url, {referrerPolicy: policies})).json();
+  return (await fetch(url, {referrerPolicy: 'unsafe-url'})).json();
 }
 
 export async function post(url: string, data: any) {
