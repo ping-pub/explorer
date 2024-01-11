@@ -66,9 +66,9 @@ export interface WasmRequestRegistry extends AbstractRegistry {
   
   export class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
     getWasmCodeList(pr?: PageRequest) {
-      if(!pr) pr = new PageRequest()
-      const query = `?${pr.toQueryString()}`
-      return this.request(this.registry.cosmwasm_code, {}, query);
+      // if(!pr) pr = new PageRequest()
+      // const query = `?${pr.toQueryString()}`
+      return this.request(this.registry.cosmwasm_code, {}, /*query*/);
     }
     getWasmCodeById(code_id: string) {
       return this.request(this.registry.cosmwasm_code, { code_id }); // `code_id` is a param in above url
