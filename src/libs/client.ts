@@ -163,10 +163,10 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getGovProposalTally(proposal_id: string) {
     return this.request(this.registry.gov_proposals_tally, { proposal_id }, undefined, (source: any) => {
       return {tally: {
-        yes: source.yes || source.yes_count,
-        abstain: source.abstain || source.abstain_count,
-        no: source.no || source.no_count,
-        no_with_veto: source.no_with_veto || source.no_with_veto_count,
+        yes: source.tally.yes || source.tally.yes_count,
+        abstain: source.tally.abstain || source.tally.abstain_count,
+        no: source.tally.no || source.tally.no_count,
+        no_with_veto: source.tally.no_with_veto || source.tally.no_with_veto_count,
       }};
     });
   }
