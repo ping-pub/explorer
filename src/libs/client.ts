@@ -20,7 +20,7 @@ export class BaseRestClient<R extends AbstractRegistry> {
     this.endpoint = endpoint;
     this.registry = registry;
   }
-  async request<T>(request: Request<T>, args: Record<string, any>, query = '', adapter: (source: any) => T = undefined) {
+  async request<T>(request: Request<T>, args: Record<string, any>, query = '', adapter?: (source: any) => T ) {
     let url = `${request.url.startsWith("http")?'':this.endpoint}${request.url}${query}`;
     Object.keys(args).forEach((k) => {
       url = url.replace(`{${k}}`, args[k] || '');
