@@ -1,0 +1,25 @@
+{
+  "chain_name": "Oraichain",
+  "registry_name": "oraichain",
+  "api": [
+    {
+      "provider": "Oraichain",
+      "address": "https://lcd.orai.io"
+    }
+  ],
+  "rpc": [{ "provider": "Oraichain", "address": "https://rpc.orai.io" }],
+  "sdk_version": "0.45.16",
+  "coin_type": "118",
+  "min_tx_fee": "800",
+  "addr_prefix": "orai",
+  "logo": "https://s2.coinmarketcap.com/static/img/coins/64x64/7533.png",
+  "assets": [
+    {
+      "base": "orai",
+      "symbol": "ORAI",
+      "exponent": "6",
+      "coingecko_id": "oraichain-token",
+      "logo": "https://s2.coinmarketcap.com/static/img/coins/64x64/7533.png"
+    }
+  ]
+}

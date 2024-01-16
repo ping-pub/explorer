@@ -111,7 +111,7 @@ export const useStakingStore = defineStore('stakingStore', {
               (x) => x.validator_address === key
             );
             if (exists < 0) {
-              const client = await CosmosRestClient.newDefault(
+              const client = CosmosRestClient.newDefault(
                 this.blockchain.current.providerChain.api[0].address
               );
               const res = await client.getInterchainSecurityValidatorRotatedKey(
@@ -162,13 +162,13 @@ export const useStakingStore = defineStore('stakingStore', {
           this.blockchain.current?.providerChain.api &&
           this.blockchain.current.providerChain.api.length > 0
         ) {
-          const client = await CosmosRestClient.newDefault(
+          const client = CosmosRestClient.newDefault(
             this.blockchain.current.providerChain.api[0].address
           );
           // provider validators
           const res = await client.getStakingValidators(status);
           const proVals = res.validators.sort(
-            (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
+            (a, b) => Number(b.delegatorShares) - Number(a.delegatorShares)
           );
           if (status === 'BOND_STATUS_BONDED') {
             this.validators = proVals;
@@ -179,7 +179,7 @@ export const useStakingStore = defineStore('stakingStore', {
       }
       return this.blockchain.rpc?.getStakingValidators(status).then((res) => {
         const vals = res.validators.sort(
-          (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
+          (a, b) => Number(b.delegatorShares) - Number(a.delegatorShares)
         );
         if (status === 'BOND_STATUS_BONDED') {
           this.validators = vals;

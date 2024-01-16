@@ -193,9 +193,7 @@ async function loadBalances(
   address: string
 ) {
   const endpointObj = chainStore.randomEndpoint(chainName);
-  const client = await CosmosRestClient.newDefault(
-    endpointObj?.address || endpoint
-  );
+  const client = CosmosRestClient.newDefault(endpointObj?.address || endpoint);
   const paginatedBalances = await client.getBankBalances(address);
   balances.value[address] = paginatedBalances.balances.filter(
     (x) => x.denom.length < 10

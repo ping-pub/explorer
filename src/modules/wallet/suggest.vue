@@ -42,7 +42,7 @@ function onchange() {
 async function initParamsForKeplr() {
   const chain = selected.value;
   if (!chain.endpoints?.rpc?.at(0)) throw new Error('Endpoint does not set');
-  const client = await CosmosRestClient.newDefault(
+  const client = CosmosRestClient.newDefault(
     chain.endpoints.rpc?.at(0)?.address || ''
   );
   const b = await client.getBaseBlockLatest();
@@ -112,7 +112,7 @@ async function initSnap() {
   const [token] = chain.assets;
 
   if (!chain.endpoints?.rpc?.at(0)) throw new Error('Endpoint does not set');
-  const client = await CosmosRestClient.newDefault(
+  const client = CosmosRestClient.newDefault(
     chain.endpoints.rpc?.at(0)?.address || ''
   );
   const b = await client.getBaseBlockLatest();

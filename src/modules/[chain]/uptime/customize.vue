@@ -37,9 +37,7 @@ const keyword = ref('');
 async function loadSigningInfo(chainName: string) {
   const chain = dashboard.chains[chainName];
   if (chain && chain.endpoints.rpc) {
-    const client = await CosmosRestClient.newDefault(
-      chain.endpoints.rpc[0].address
-    );
+    const client = CosmosRestClient.newDefault(chain.endpoints.rpc[0].address);
     const resp = await client.getSlashingSigningInfos();
     signingInfo.value[chainName] = resp.info;
   }
@@ -115,7 +113,7 @@ async function changeChain() {
     dashboard.chains[selectChain.value].endpoints.rpc?.at(0)?.address;
   if (!endpoint) return;
 
-  const client = await CosmosRestClient.newDefault(endpoint);
+  const client = CosmosRestClient.newDefault(endpoint);
   const x = await client.getStakingValidators('BOND_STATUS_BONDED');
   validators.value = x.validators;
 
