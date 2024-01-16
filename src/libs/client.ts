@@ -462,9 +462,9 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     //   this.registry.staking_validators_delegations_delegator,
     //   { validator_addr, delegator_addr }
     // );
-    const res = await this.queryClient.staking.delegatorValidator(
-      validator_addr,
-      delegator_addr
+    const res = await this.queryClient.staking.delegation(
+      delegator_addr,
+      validator_addr
     );
     console.log(res);
     return res;
@@ -498,9 +498,9 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return res;
     // return this.request(this.registry.base_tendermint_block_latest, {});
   }
-  async getBaseBlockAt(height: string | number) {
+  async getBaseBlockAt(height: string | number | undefined) {
     // return this.request(this.registry.base_tendermint_block_height, { height });
-    const res = await this.tmClient.block(Number(height));
+    const res = await this.tmClient.block(height ? Number(height) : undefined);
     console.log(res);
     return res;
   }
@@ -559,6 +559,8 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
       }),
       order_by: page?.reverse ? 'desc' : 'asc',
     });
+    console.log(res);
+    return res;
   }
   // query ibc sending msgs
   // ?&pagination.reverse=true&events=send_packet.packet_src_channel='${channel}'&events=send_packet.packet_src_port='${port}'

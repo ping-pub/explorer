@@ -10,6 +10,7 @@ import { useDistributionStore } from '@/stores/useDistributionStore';
 import { useMintStore } from '@/stores/useMintStore';
 import { useStakingStore } from '@/stores/useStakingStore';
 import type { Coin, Tally } from '@/types';
+import type { Pool } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
 import numeral from 'numeral';
 import { defineStore } from 'pinia';
 
@@ -148,8 +149,6 @@ export const useIndexModule = defineStore('module-index', {
       const mintStore = useMintStore();
       const formatter = useFormatter();
 
-      console.log('base', JSON.stringify(base, null, 2));
-
       return [
         {
           title: 'Height',
@@ -163,7 +162,7 @@ export const useIndexModule = defineStore('module-index', {
           color: 'error',
           icon: 'mdi-human-queue',
           stats: String(
-            base?.latest?.block?.last_commit?.signatures.length || 0
+            base?.latest?.block?.lastCommit?.signatures.length || 0
           ),
           change: 0,
         },
@@ -179,9 +178,8 @@ export const useIndexModule = defineStore('module-index', {
           color: 'warning',
           icon: 'mdi-lock',
           stats: formatter.formatTokenAmount({
-            // @ts-ignore
-            amount: this.pool.bonded_tokens,
-            denom: staking.params.bond_denom,
+            amount: this.pool.bondedTokens,
+            denom: staking.params.bondDenom,
           }),
           change: 0,
         },
@@ -199,7 +197,7 @@ export const useIndexModule = defineStore('module-index', {
           stats: formatter.formatTokens(
             // @ts-ignore
             this.communityPool?.filter(
-              (x: Coin) => x.denom === staking.params.bond_denom
+              (x: Coin) => x.denom === staking.params.bondDenom
             )
           ),
           change: 0,

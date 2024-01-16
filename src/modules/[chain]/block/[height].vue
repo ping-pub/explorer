@@ -8,12 +8,13 @@ import { onBeforeRouteUpdate } from 'vue-router';
 import { useBaseStore, useFormatter } from '@/stores';
 import type { Block } from '@/types';
 import Countdown from '@/components/Countdown.vue';
+import type { BlockResponse } from '@cosmjs/tendermint-rpc';
 
 const props = defineProps(['height', 'chain']);
 
 const store = useBaseStore();
 const format = useFormatter()
-const current = ref({} as Block)
+const current = ref({} as BlockResponse)
 const target = ref(Number(props.height || 0))
 
 const height = computed(() => {
@@ -24,7 +25,7 @@ const isFutureBlock = computed({
   get: () => {
     const latest = store.latest?.block?.header.height
     const isFuture = latest ? target.value > Number(latest) : true
-    if (!isFuture && !current.value.block_id) store.fetchBlock(target.value).then(x => current.value = x)
+    if (!isFuture && !current.value.blockId) store.fetchBlock(target.value).then(x => current.value = x)
     return isFuture
   },
   set: val => {
@@ -120,7 +121,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
           </div>
         </h2>
         <div>
-          <DynamicComponent :value="current.block_id" />
+          <DynamicComponent :value="current.blockId" />
         </div>
       </div>
 
@@ -131,12 +132,12 @@ onBeforeRouteUpdate(async (to, from, next) => {
 
       <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
         <h2 class="card-title flex flex-row justify-between">{{ $t('account.transactions') }}</h2>
-        <TxsElement :value="current.block?.data?.txs" />
+        <TxsElement :value="current.block?.txs" />
       </div>
 
       <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
         <h2 class="card-title flex flex-row justify-between">{{ $t('block.last_commit') }}</h2>
-        <DynamicComponent :value="current.block?.last_commit" />
+        <DynamicComponent :value="current.block?.lastCommit" />
       </div>
   </div>
 </div></template>

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { useBlockchain } from './useBlockchain';
 
 import { get } from '@/libs/http';
-import type { StakingParam, StakingPool, Validator } from '@/types';
+import type { StakingParam, StakingPool } from '@/types';
 import { CosmosRestClient } from '@/libs/client';
 import {
   consensusPubkeyToHexAddress,
@@ -18,31 +18,27 @@ import {
 } from '@cosmjs/encoding';
 import { useBaseStore } from './useBaseStore';
 import type { BondStatusString } from '@cosmjs/stargate/build/modules/staking/queries';
+import type { Duration } from 'cosmjs-types/google/protobuf/duration';
+import type {
+  Pool,
+  Validator,
+  Params,
+} from 'cosmjs-types/cosmos/staking/v1beta1/staking';
+import type { Any } from 'cosmjs-types/google/protobuf/any';
 
 export const useStakingStore = defineStore('stakingStore', {
   state: () => {
     return {
       validators: [] as Validator[],
-      params: {} as {
-        unbonding_time: string;
-        max_validators: number;
-        max_entries: number;
-        historical_entries: number;
-        bond_denom: string;
-        min_commission_rate: string;
-        min_self_delegation: string;
-      },
-      pool: {} as {
-        bonded_tokens: string;
-        not_bonded_tokens: string;
-      },
+      params: {} as Params,
+      pool: {} as Pool,
       keyRotation: {} as Record<string, string>,
     };
   },
   getters: {
     totalPower(): number {
       const sum = (s: number, e: Validator) => {
-        return s + parseInt(e.delegator_shares);
+        return s + parseInt(e.delegatorShares);
       };
       return this.validators ? this.validators.reduce(sum, 0) : 0;
     },
@@ -104,12 +100,14 @@ export const useStakingStore = defineStore('stakingStore', {
           this.blockchain.current.providerChain.api.length > 0
         ) {
           const signatures =
-            useBaseStore().latest?.block?.last_commit.signatures;
+            useBaseStore().latest?.block?.lastCommit?.signatures;
           if (signatures) {
             // console.log(signatures)
             const key = toBase64(fromHex(valconsToBase64(validatorAddr)));
             const exists = signatures.findIndex(
-              (x) => x.validator_address === key
+              (x) =>
+                x.validatorAddress &&
+                Buffer.from(x.validatorAddress).toString('base64') === key
             );
             if (exists < 0) {
               const client = CosmosRestClient.newDefault(
@@ -139,7 +137,7 @@ export const useStakingStore = defineStore('stakingStore', {
       this.keyRotation = keyRotation ? JSON.parse(keyRotation) : {};
     },
 
-    findRotatedHexAddress(key: { '@type': string; key: string }) {
+    findRotatedHexAddress(key: Any) {
       const prefix = 'cosmos';
       const conskey = pubKeyToValcons(key, prefix);
       const rotated = this.keyRotation[conskey];
@@ -150,10 +148,10 @@ export const useStakingStore = defineStore('stakingStore', {
     },
     async fetchAllKeyRotation(chain_id: string) {
       for (const val of this.validators) {
-        const { prefix } = fromBech32(val.operator_address);
+        const { prefix } = fromBech32(val.operatorAddress);
         await this.fetchKeyRotation(
           chain_id,
-          pubKeyToValcons(val.consensus_pubkey, prefix.replace('valoper', ''))
+          pubKeyToValcons(val.consensusPubkey!, prefix.replace('valoper', ''))
         );
       }
     },
