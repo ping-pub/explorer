@@ -44,10 +44,10 @@ const policies = [
   // 'strict-origin-when-cross-origin',
 
   // Full Referer for all requests, whether same- or cross-origin.
-  'unsafe-url'
+  'unsafe-url',
 ];
 export async function get(url: string) {
-  return (await fetch(url, {referrerPolicy: 'unsafe-url'})).json();
+  return (await fetch(url, { referrerPolicy: 'unsafe-url' })).json();
 }
 
 export async function post(url: string, data: any) {
@@ -63,6 +63,6 @@ export async function post(url: string, data: any) {
     },
     body: JSON.stringify(data), // body data type must match "Content-Type" header
   });
-  // const response = axios.post((config ? config.api : this.config.api) + url, data)
+  // const response = axios.post((config ? config.rpc : this.config.rpc) + url, data)
   return response.json(); // parses JSON response into native JavaScript objects
 }
