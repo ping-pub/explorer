@@ -25,6 +25,7 @@ import {
   // Tendermint34Client,
   WebsocketClient,
   type CometClient,
+  type AbciQueryParams,
 } from '@cosmjs/tendermint-rpc';
 import { DEFAULT } from '@/libs';
 import {
@@ -334,20 +335,30 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     // );
   }
   async getGovProposalVotes(proposal_id: string, page?: PageRequest) {
-    if (!page) page = new PageRequest();
-    page.reverse = true;
-    const query = `?proposal_status={status}&${page.toQueryString()}`;
-    return this.request(
-      this.registry.gov_proposals_votes,
-      { proposal_id },
-      query
-    );
+    // if (!page) page = new PageRequest();
+    // page.reverse = true;
+    // const query = `?proposal_status={status}&${page.toQueryString()}`;
+    // return this.request(
+    //   this.registry.gov_proposals_votes,
+    //   { proposal_id },
+    //   query
+    // );
+
+    const paginationKey = page?.key
+      ? Buffer.from(page.key, 'base64')
+      : undefined;
+    const res = await this.queryClient.gov.votes(proposal_id, paginationKey);
+    console.log(res);
+    return res;
   }
   async getGovProposalVotesVoter(proposal_id: string, voter: string) {
-    return this.request(this.registry.gov_proposals_votes_voter, {
-      proposal_id,
-      voter,
-    });
+    // return this.request(this.registry.gov_proposals_votes_voter, {
+    //   proposal_id,
+    //   voter,
+    // });
+    const res = await this.queryClient.gov.vote(proposal_id, voter);
+    console.log(res);
+    return res;
   }
   // staking
   async getStakingDelegations(delegator_addr: string) {
@@ -475,9 +486,9 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
 
   //tendermint
-  async getBaseAbciQuery() {
+  async getBaseAbciQuery(params: AbciQueryParams) {
     // return this.request(this.registry.base_tendermint_abci_query, {});
-    const res = await this.tmClient.abciInfo();
+    const res = await this.tmClient.abciQuery(params);
     console.log(res);
     return res;
   }
@@ -500,22 +511,35 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return res.nodeInfo;
   }
   async getBaseValidatorsetAt(height: string | number, offset: number) {
-    const query = `?pagination.limit=100&pagination.offset=${offset}`;
-    return this.request(
-      this.registry.base_tendermint_validatorsets_height,
-      {
-        height,
-      },
-      query
+    // const query = `?pagination.limit=100&pagination.offset=${offset}`;
+    // return this.request(
+    //   this.registry.base_tendermint_validatorsets_height,
+    //   {
+    //     height,
+    //   },
+    //   query
+    // );
+    // const per_page = 10;
+    // const page = Math.ceil(offset / per_page);
+
+    const res = await this.tmClient.validatorsAll(
+      Number(height)
+      // per_page,
+      // page,
     );
+    console.log(res);
+    return res;
   }
   async getBaseValidatorsetLatest(offset: number) {
-    const query = `?pagination.limit=100&pagination.offset=${offset}`;
-    return this.request(
-      this.registry.base_tendermint_validatorsets_latest,
-      {},
-      query
-    );
+    // const query = `?pagination.limit=100&pagination.offset=${offset}`;
+    // return this.request(
+    //   this.registry.base_tendermint_validatorsets_latest,
+    //   {},
+    //   query
+    // );
+    const res = await this.tmClient.validatorsAll();
+    console.log(res);
+    return res;
   }
   // tx
   async getTxsBySender(sender: string, page?: PageRequest) {
