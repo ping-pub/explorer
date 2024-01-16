@@ -1,0 +1,30 @@
+{
+  "chain_name": "OraiBtcMainnet",
+  "api": [
+    {
+      "address": "https://btc.lcd.orai.io",
+      "provider": "Oraichain"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://btc.rpc.orai.io",
+      "provider": "Oraichain"
+    }
+  ],
+  "sdk_version": "0.42.6",
+  "coin_type": "118",
+  "min_tx_fee": "800",
+  "assets": [
+    {
+      "base": "uoraibtc",
+      "symbol": "ORAIBTC",
+      "exponent": "6",
+      "coingecko_id": "bitcoin",
+      "logo": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png"
+    }
+  ],
+  "addr_prefix": "oraibtc",
+  "theme_color": "#ce4747",
+  "logo": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png"
+}
