@@ -28,7 +28,7 @@ export const useCoingecko = defineStore('coingecko', {
   actions: {
     getMarketChart(days = 30, coinId = 'cosmos') {
       return get(
-        `https://price.market.orai.io/coins/${coinId}/market_chart?vs_currency=usd&days=${days}`
+        `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}`
       );
     },
 
@@ -42,7 +42,7 @@ export const useCoingecko = defineStore('coingecko', {
       });
     },
     getCoinInfo(coinId: string) {
-      return get(`https://price.market.orai.io/coins/${coinId}`);
+      return get(`https://api.coingecko.com/api/v3/coins/${coinId}`);
     },
     setSecondaryCurrency(currency: string) {
       if (currency !== 'usd') {

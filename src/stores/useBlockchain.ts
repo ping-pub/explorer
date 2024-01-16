@@ -86,11 +86,18 @@ export const useBlockchain = defineStore('blockchain', {
             badgeClass: 'bg-error',
             children: routes
               .filter((x) => x.meta.i18n) // defined menu name
-              .filter(
-                (x) =>
+              .filter((x) => {
+                // shortcut to ignore cosmwasm
+                if (
+                  !this.current?.cosmwasmEnabled &&
+                  String(x.meta.i18n) === 'cosmwasm'
+                )
+                  return false;
+                return (
                   !this.current?.features ||
                   this.current.features.includes(String(x.meta.i18n))
-              ) // filter none-custom module
+                );
+              }) // filter none-custom module
               .map((x) => ({
                 title: `module.${x.meta.i18n}`,
                 to: { path: x.path.replace(':chain', this.chainName) },
@@ -102,6 +109,7 @@ export const useBlockchain = defineStore('blockchain', {
           },
         ];
       }
+
       // compute favorite menu
       const favNavItems: VerticalNavItems = [];
       Object.keys(this.dashboard.favoriteMap).forEach((name) => {
@@ -167,9 +175,9 @@ export const useBlockchain = defineStore('blockchain', {
       }
     },
 
-    async randomSetupEndpoint() {
+    randomSetupEndpoint() {
       const endpoint = this.randomEndpoint(this.chainName);
-      if (endpoint) await this.setRestEndpoint(endpoint);
+      if (endpoint) this.setRestEndpoint(endpoint);
     },
 
     setRestEndpoint(endpoint: Endpoint) {
@@ -199,6 +207,7 @@ export const useBlockchain = defineStore('blockchain', {
         this.chainName = caseSensitiveName;
       }
     },
+
     supportModule(mod: string) {
       return !this.current?.features || this.current.features.includes(mod);
     },

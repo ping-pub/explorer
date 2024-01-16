@@ -195,12 +195,12 @@ async function loadBalances(
   const endpointObj = chainStore.randomEndpoint(chainName);
   const client = CosmosRestClient.newDefault(endpointObj?.address || endpoint);
   const paginatedBalances = await client.getBankBalances(address);
-  balances.value[address] = paginatedBalances.balances.filter(
+  balances.value[address] = paginatedBalances.filter(
     (x) => x.denom.length < 10
   );
 
   const paginatedDelegations = await client.getStakingDelegations(address);
-  delegations.value[address] = paginatedDelegations.delegation_responses;
+  delegations.value[address] = paginatedDelegations.delegationResponses;
 }
 </script>
 <template>

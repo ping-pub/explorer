@@ -17,11 +17,12 @@ import {
   type IbcExtension,
   setupIbcExtension,
   setupSlashingExtension,
+  setupDistributionExtension,
 } from '@cosmjs/stargate';
 import {
   HttpClient,
   Tendermint37Client,
-  Tendermint34Client,
+  // Tendermint34Client,
   WebsocketClient,
   type CometClient,
 } from '@cosmjs/tendermint-rpc';
@@ -39,7 +40,11 @@ import {
 } from './registry';
 import { buildQuery } from '@cosmjs/tendermint-rpc/build/tendermint37/requests';
 import { PageRequest, type Coin } from '@/types';
-import type { SlashingExtension } from '@cosmjs/stargate/build/modules';
+import type {
+  DistributionExtension,
+  SlashingExtension,
+} from '@cosmjs/stargate/build/modules';
+import type { BondStatusString } from '@cosmjs/stargate/build/modules/staking/queries';
 
 export class BaseRestClient<R extends AbstractRegistry> {
   endpoint: string;
@@ -54,6 +59,7 @@ export class BaseRestClient<R extends AbstractRegistry> {
         GovExtension &
         IbcExtension &
         SlashingExtension &
+        DistributionExtension &
         TxExtension;
 
   constructor(endpoint: string, registry: R) {
@@ -78,6 +84,7 @@ export class BaseRestClient<R extends AbstractRegistry> {
       setupGovExtension,
       setupIbcExtension,
       setupSlashingExtension,
+      setupDistributionExtension,
       setupTxExtension
     );
   }
@@ -188,31 +195,63 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
   // Distribution Module
   async getDistributionParams() {
-    return this.request(this.registry.distribution_params, {});
+    // return this.request(this.registry.distribution_params, {});
+    const res = await this.queryClient.distribution.params();
+    console.log(res);
+    return res;
   }
   async getDistributionCommunityPool() {
-    return this.request(this.registry.distribution_community_pool, {});
+    // return this.request(this.registry.distribution_community_pool, {});
+    const res = await this.queryClient.distribution.communityPool();
+    console.log(res);
+    return res;
   }
   async getDistributionDelegatorRewards(delegator_addr: string) {
-    return this.request(this.registry.distribution_delegator_rewards, {
-      delegator_addr,
-    });
+    // return this.request(this.registry.distribution_delegator_rewards, {
+    //   delegator_addr,
+    // });
+    const res = await this.queryClient.distribution.delegationTotalRewards(
+      delegator_addr
+    );
+    console.log(res);
+    return res;
   }
   async getDistributionValidatorCommission(validator_address: string) {
-    return this.request(this.registry.distribution_validator_commission, {
-      validator_address,
-    });
+    // return this.request(this.registry.distribution_validator_commission, {
+    //   validator_address,
+    // });
+    const res = await this.queryClient.distribution.validatorCommission(
+      validator_address
+    );
+    console.log(res);
+    return res;
   }
   async getDistributionValidatorOutstandingRewards(validator_address: string) {
-    return this.request(
-      this.registry.distribution_validator_outstanding_rewards,
-      { validator_address }
+    // return this.request(
+    //   this.registry.distribution_validator_outstanding_rewards,
+    //   { validator_address }
+    // );
+    const res = await this.queryClient.distribution.validatorOutstandingRewards(
+      validator_address
     );
+    console.log(res);
+    return res;
   }
-  async getDistributionValidatorSlashes(validator_address: string) {
-    return this.request(this.registry.distribution_validator_slashes, {
+  async getDistributionValidatorSlashes(
+    validator_address: string,
+    starting_height: number,
+    ending_height: number
+  ) {
+    // return this.request(this.registry.distribution_validator_slashes, {
+    //   validator_address,
+    // });
+    const res = await this.queryClient.distribution.validatorSlashes(
       validator_address,
-    });
+      starting_height,
+      ending_height
+    );
+    console.log(res);
+    return res;
   }
   // Slashing
   async getSlashingParams() {
@@ -273,22 +312,26 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return this.request(this.registry.gov_proposals_deposits, { proposal_id });
   }
   async getGovProposalTally(proposal_id: string) {
-    return this.request(
-      this.registry.gov_proposals_tally,
-      { proposal_id },
-      undefined,
-      (source: any) => {
-        return {
-          tally: {
-            yes: source.tally.yes || source.tally.yes_count,
-            abstain: source.tally.abstain || source.tally.abstain_count,
-            no: source.tally.no || source.tally.no_count,
-            no_with_veto:
-              source.tally.no_with_veto || source.tally.no_with_veto_count,
-          },
-        };
-      }
-    );
+    const res = await this.queryClient.gov.tally(proposal_id);
+    console.log(res);
+    return res;
+
+    // return this.request(
+    //   this.registry.gov_proposals_tally,
+    //   { proposal_id },
+    //   undefined,
+    //   (source: any) => {
+    //     return {
+    //       tally: {
+    //         yes: source.tally.yes || source.tally.yes_count,
+    //         abstain: source.tally.abstain || source.tally.abstain_count,
+    //         no: source.tally.no || source.tally.no_count,
+    //         no_with_veto:
+    //           source.tally.no_with_veto || source.tally.no_with_veto_count,
+    //       },
+    //     };
+    //   }
+    // );
   }
   async getGovProposalVotes(proposal_id: string, page?: PageRequest) {
     if (!page) page = new PageRequest();
@@ -362,8 +405,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return res;
     // return this.request(this.registry.staking_pool, {});
   }
-  async getStakingValidators(status: string, limit = 200) {
-    // @ts-ignore
+  async getStakingValidators(status: BondStatusString, limit = 200) {
     const res = await this.queryClient.staking.validators(status);
     console.log(status, res);
     return res;

@@ -10,7 +10,7 @@ export const useBankStore = defineStore('bankstore', {
       supply: {} as Coin,
       balances: {} as Record<string, Coin[]>,
       totalSupply: { supply: [] as Coin[] },
-      ibcDenoms: {} as Record<string, DenomTrace>
+      ibcDenoms: {} as Record<string, DenomTrace>,
     };
   },
   getters: {
@@ -42,7 +42,7 @@ export const useBankStore = defineStore('bankstore', {
       let trace = this.ibcDenoms[hash];
       if (!trace) {
         trace = (await this.blockchain.rpc.getIBCAppTransferDenom(hash))
-          .denom_trace;
+          .denomTrace;
         this.ibcDenoms[hash] = trace;
       }
       return trace;

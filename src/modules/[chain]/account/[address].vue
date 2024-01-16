@@ -81,12 +81,14 @@ const totalValue = computed(() => {
   });
   unbonding.value?.forEach((x) => {
     x.entries?.forEach((y) => {
-      value += format.tokenValueNumber({amount: y.balance, denom: stakingStore.params.bond_denom});
+      value += format.tokenValueNumber({
+        amount: y.balance,
+        denom: stakingStore.params.bond_denom,
+      });
     });
   });
   return format.formatNumber(value, '0,0.00');
 });
-
 
 function loadAccount(address: string) {
   blockchain.rpc.getAuthAccount(address).then((x) => {
@@ -113,7 +115,7 @@ function loadAccount(address: string) {
     });
   });
 
-  const receivedQuery =  `?&pagination.reverse=true&events=coin_received.receiver='${address}'&pagination.limit=5`;
+  const receivedQuery = `?&pagination.reverse=true&events=coin_received.receiver='${address}'&pagination.limit=5`;
   blockchain.rpc.getTxs(receivedQuery, {}).then((x) => {
     recentReceived.value = x.tx_responses;
   });
@@ -123,11 +125,16 @@ function updateEvent() {
   loadAccount(props.address);
 }
 
-function mapAmount(events:{type: string, attributes: {key: string, value: string}[]}[]) {
-  if(!events) return []
-  return events.find(x => x.type==='coin_received')?.attributes
-    .filter(x => x.key === 'YW1vdW50'|| x.key === `amount`)
-    .map(x => x.key==='amount'? x.value : String.fromCharCode(...fromBase64(x.value)))
+function mapAmount(
+  events: { type: string; attributes: { key: string; value: string }[] }[]
+) {
+  if (!events) return [];
+  return events
+    .find((x) => x.type === 'coin_received')
+    ?.attributes.filter((x) => x.key === 'YW1vdW50' || x.key === `amount`)
+    .map((x) =>
+      x.key === 'amount' ? x.value : String.fromCharCode(...fromBase64(x.value))
+    );
 }
 </script>
 <template>
@@ -164,33 +171,33 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
         <h2 class="card-title mb-4">{{ $t('account.assets') }}</h2>
         <!-- button -->
         <div class="flex justify-end mb-4 pr-5">
-            <label
-              for="send"
-              class="btn btn-primary btn-sm mr-2"
-              @click="dialog.open('send', {}, updateEvent)"
-              >{{ $t('account.btn_send') }}</label
-            >
-            <label
-              for="transfer"
-              class="btn btn-primary btn-sm"
-              @click="
-                dialog.open(
-                  'transfer',
-                  {
-                    chain_name: blockchain.current?.prettyName,
-                  },
-                  updateEvent
-                )
-              "
-              >{{ $t('account.btn_transfer') }}</label
-            >
-          </div>
+          <label
+            for="send"
+            class="btn btn-primary btn-sm mr-2"
+            @click="dialog.open('send', {}, updateEvent)"
+            >{{ $t('account.btn_send') }}</label
+          >
+          <label
+            for="transfer"
+            class="btn btn-primary btn-sm"
+            @click="
+              dialog.open(
+                'transfer',
+                {
+                  chain_name: blockchain.current?.prettyName,
+                },
+                updateEvent
+              )
+            "
+            >{{ $t('account.btn_transfer') }}</label
+          >
+        </div>
       </div>
       <div class="grid md:!grid-cols-3">
         <div class="md:!col-span-1">
           <DonutChart :series="totalAmountByCategory" :labels="labels" />
         </div>
-        <div class="mt-4 md:!col-span-2 md:!mt-0 md:!ml-4">          
+        <div class="mt-4 md:!col-span-2 md:!mt-0 md:!ml-4">
           <!-- list-->
           <div class="">
             <!--balances  -->
@@ -221,7 +228,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"
                 ></span>
-                ${{ format.tokenValue(balanceItem) }}                
+                ${{ format.tokenValue(balanceItem) }}
               </div>
             </div>
             <!--delegations  -->
@@ -257,7 +264,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"
                 ></span>
-                ${{ format.tokenValue(delegationItem?.balance) }}                
+                ${{ format.tokenValue(delegationItem?.balance) }}
               </div>
             </div>
             <!-- rewards.total -->
@@ -282,15 +289,17 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 <div class="text-sm font-semibold">
                   {{ format.formatToken(rewardItem) }}
                 </div>
-                <div class="text-xs">{{ format.calculatePercent(rewardItem.amount, totalAmount) }}</div>
+                <div class="text-xs">
+                  {{ format.calculatePercent(rewardItem.amount, totalAmount) }}
+                </div>
               </div>
               <div
                 class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
               >
                 <span
-                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary  dark:invert text-sm"
-                ></span>${{ format.tokenValue(rewardItem) }}
-                
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"
+                ></span
+                >${{ format.tokenValue(rewardItem) }}
               </div>
             </div>
             <!-- mdi-account-arrow-right -->
@@ -323,16 +332,21 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
               <div
                 class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
               >
-                <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert"></span>
-                ${{format.tokenValue({
-                      amount: String(unbondingTotal),
-                      denom: stakingStore.params.bond_denom,
-                    })
-                  }}                
+                <span
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert"
+                ></span>
+                ${{
+                  format.tokenValue({
+                    amount: String(unbondingTotal),
+                    denom: stakingStore.params.bond_denom,
+                  })
+                }}
               </div>
             </div>
           </div>
-          <div class="mt-4 text-lg font-semibold mr-5 pl-5 border-t pt-4 text-right">
+          <div
+            class="mt-4 text-lg font-semibold mr-5 pl-5 border-t pt-4 text-right"
+          >
             {{ $t('account.total_value') }}: ${{ totalValue }}
           </div>
         </div>
@@ -369,13 +383,21 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
             </tr>
           </thead>
           <tbody class="text-sm">
-            <tr v-if="delegations.length === 0"><td colspan="10"><div class="text-center">{{ $t('account.no_delegations') }}</div></td></tr>
+            <tr v-if="delegations.length === 0">
+              <td colspan="10">
+                <div class="text-center">
+                  {{ $t('account.no_delegations') }}
+                </div>
+              </td>
+            </tr>
             <tr v-for="(v, index) in delegations" :key="index">
               <td class="text-caption text-primary py-3">
                 <RouterLink
                   :to="`/${chain}/staking/${v.delegation.validator_address}`"
                   >{{
-                    format.validatorFromBech32(v.delegation.validator_address) || v.delegation.validator_address
+                    format.validatorFromBech32(
+                      v.delegation.validator_address
+                    ) || v.delegation.validator_address
                   }}</RouterLink
                 >
               </td>
@@ -461,47 +483,52 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
             </tr>
           </thead>
           <tbody class="text-sm" v-for="(v, index) in unbonding" :key="index">
-              <tr>
-                <td class="text-caption text-primary py-3 bg-slate-200" colspan="10">
-                  <RouterLink
-                    :to="`/${chain}/staking/${v.validator_address}`"
-                    >{{
-                      v.validator_address
-                    }}</RouterLink
-                  >
-                </td>
-              </tr>
-              <tr v-for="entry in v.entries">
-                <td class="py-3">{{ entry.creation_height }}</td>
-                <td class="py-3">
-                  {{
-                    format.formatToken(
-                      {
-                        amount: entry.initial_balance,
-                        denom: stakingStore.params.bond_denom,
-                      },
-                      true,
-                      '0,0.[00]'
-                    )
-                  }}
-                </td>
-                <td class="py-3">
-                  {{
-                    format.formatToken(
-                      {
-                        amount: entry.balance,
-                        denom: stakingStore.params.bond_denom,
-                      },
-                      true,
-                      '0,0.[00]'
-                    )
-                  }}
-                </td>
-                <td class="py-3">
-                  <Countdown :time="new Date(entry.completion_time).getTime() - new Date().getTime()" />
-                </td>
-              </tr>
-          </tbody>          
+            <tr>
+              <td
+                class="text-caption text-primary py-3 bg-slate-200"
+                colspan="10"
+              >
+                <RouterLink :to="`/${chain}/staking/${v.validator_address}`">{{
+                  v.validator_address
+                }}</RouterLink>
+              </td>
+            </tr>
+            <tr v-for="entry in v.entries">
+              <td class="py-3">{{ entry.creation_height }}</td>
+              <td class="py-3">
+                {{
+                  format.formatToken(
+                    {
+                      amount: entry.initial_balance,
+                      denom: stakingStore.params.bond_denom,
+                    },
+                    true,
+                    '0,0.[00]'
+                  )
+                }}
+              </td>
+              <td class="py-3">
+                {{
+                  format.formatToken(
+                    {
+                      amount: entry.balance,
+                      denom: stakingStore.params.bond_denom,
+                    },
+                    true,
+                    '0,0.[00]'
+                  )
+                }}
+              </td>
+              <td class="py-3">
+                <Countdown
+                  :time="
+                    new Date(entry.completion_time).getTime() -
+                    new Date().getTime()
+                  "
+                />
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -520,15 +547,26 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
             </tr>
           </thead>
           <tbody class="text-sm">
-            <tr v-if="txs.length === 0"><td colspan="10"><div class="text-center">{{ $t('account.no_transactions') }}</div></td></tr>
+            <tr v-if="txs.length === 0">
+              <td colspan="10">
+                <div class="text-center">
+                  {{ $t('account.no_transactions') }}
+                </div>
+              </td>
+            </tr>
             <tr v-for="(v, index) in txs" :key="index">
               <td class="text-sm py-3">
-                <RouterLink :to="`/${chain}/block/${v.height}`" class="text-primary dark:invert">{{
-                  v.height
-                }}</RouterLink>
+                <RouterLink
+                  :to="`/${chain}/block/${v.height}`"
+                  class="text-primary dark:invert"
+                  >{{ v.height }}</RouterLink
+                >
               </td>
               <td class="truncate py-3" style="max-width: 200px">
-                <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
+                <RouterLink
+                  :to="`/${chain}/tx/${v.txhash}`"
+                  class="text-primary dark:invert"
+                >
                   {{ v.txhash }}
                 </RouterLink>
               </td>
@@ -543,7 +581,12 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 />
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </td>
-              <td class="py-3">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{ format.toDay(v.timestamp, 'from') }})</span> </td>
+              <td class="py-3">
+                {{ format.toLocaleDate(v.timestamp) }}
+                <span class="text-xs"
+                  >({{ format.toDay(v.timestamp, 'from') }})</span
+                >
+              </td>
             </tr>
           </tbody>
         </table>
@@ -564,21 +607,32 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
             </tr>
           </thead>
           <tbody class="text-sm">
-            <tr v-if="recentReceived.length === 0"><td colspan="10"><div class="text-center">{{ $t('account.no_transactions') }}</div></td></tr>
+            <tr v-if="recentReceived.length === 0">
+              <td colspan="10">
+                <div class="text-center">
+                  {{ $t('account.no_transactions') }}
+                </div>
+              </td>
+            </tr>
             <tr v-for="(v, index) in recentReceived" :key="index">
               <td class="text-sm py-3">
-                <RouterLink :to="`/${chain}/block/${v.height}`" class="text-primary dark:invert">{{
-                  v.height
-                }}</RouterLink>
+                <RouterLink
+                  :to="`/${chain}/block/${v.height}`"
+                  class="text-primary dark:invert"
+                  >{{ v.height }}</RouterLink
+                >
               </td>
               <td class="truncate py-3" style="max-width: 200px">
-                <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
+                <RouterLink
+                  :to="`/${chain}/tx/${v.txhash}`"
+                  class="text-primary dark:invert"
+                >
                   {{ v.txhash }}
                 </RouterLink>
               </td>
               <td class="flex items-center py-3">
                 <div class="mr-2">
-                  {{ mapAmount(v.events)?.join(", ")}}
+                  {{ mapAmount(v.events)?.join(', ') }}
                 </div>
                 <Icon
                   v-if="v.code === 0"
@@ -587,7 +641,12 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 />
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </td>
-              <td class="py-3">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{ format.toDay(v.timestamp, 'from') }})</span> </td>
+              <td class="py-3">
+                {{ format.toLocaleDate(v.timestamp) }}
+                <span class="text-xs"
+                  >({{ format.toDay(v.timestamp, 'from') }})</span
+                >
+              </td>
             </tr>
           </tbody>
         </table>

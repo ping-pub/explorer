@@ -21,7 +21,7 @@ async function initParamsForKeplr() {
     chain.endpoints.rpc?.at(0)?.address || ''
   );
   const b = await client.getBaseBlockLatest();
-  const chainid = b.block.header.chain_id;
+  const chainid = b.block.header.chainId;
 
   const gasPriceStep = chain.keplrPriceStep || {
     low: 0.01,

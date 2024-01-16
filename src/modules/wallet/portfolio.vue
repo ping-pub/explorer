@@ -70,31 +70,31 @@ watchEffect(() => {
 
 Object.values(conf.value).forEach((imported) => {
   if (imported)
-    imported.forEach((x) => {
+    imported.forEach(async (x) => {
       if (x.endpoint && x.address) {
         loading.value += 1;
         const endpoint = chainStore.randomEndpoint(x.chainName);
         const client = CosmosRestClient.newDefault(
           endpoint?.address || x.endpoint
         );
-        client
-          .getBankBalances(x.address)
-          .then((res) => {
-            const bal = res.balances.filter((x) => x.denom.length < 10);
-            if (bal) balances.value[x.address || ''] = bal;
-            bal.forEach((b) => {
-              tokenMeta.value[b.denom] = x;
-            });
-          })
-          .finally(() => {
-            loaded.value += 1;
-          });
-        client.getStakingDelegations(x.address).then((res) => {
-          if (res && res.delegation_responses)
-            delegations.value[x.address || ''] = res.delegation_responses;
-          res.delegation_responses.forEach((del) => {
-            tokenMeta.value[del.balance.denom] = x;
-          });
+        const coins = await client.getBankBalances(x.address);
+
+        const bal = coins.filter((x) => x.denom.length < 10);
+        if (bal) balances.value[x.address || ''] = bal;
+        bal.forEach((b) => {
+          tokenMeta.value[b.denom] = x;
+        });
+
+        loaded.value += 1;
+
+        const stakingDelegations = await client.getStakingDelegations(
+          x.address
+        );
+        if (stakingDelegations.delegationResponses)
+          delegations.value[x.address || ''] =
+            stakingDelegations.delegationResponses;
+        stakingDelegations.delegationResponses.forEach((del) => {
+          tokenMeta.value[del.balance.denom] = x;
         });
       }
     });
@@ -177,7 +177,7 @@ function loadPrice() {
     .map((x) => x.coinId)
     .join(',');
   get(
-    `https://price.market.orai.io/coins/markets?vs_currency=${currency.value}&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=14d&locale=en`
+    `hhttps://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency.value}&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=14d&locale=en`
   ).then((res) => {
     prices.value = res;
   });

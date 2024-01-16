@@ -17,6 +17,7 @@ import {
   fromBech32,
 } from '@cosmjs/encoding';
 import { useBaseStore } from './useBaseStore';
+import type { BondStatusString } from '@cosmjs/stargate/build/modules/staking/queries';
 
 export const useStakingStore = defineStore('stakingStore', {
   state: () => {
@@ -156,7 +157,7 @@ export const useStakingStore = defineStore('stakingStore', {
         );
       }
     },
-    async fetchValidators(status: string) {
+    async fetchValidators(status: BondStatusString) {
       if (this.blockchain.isConsumerChain) {
         if (
           this.blockchain.current?.providerChain.api &&
@@ -166,8 +167,8 @@ export const useStakingStore = defineStore('stakingStore', {
             this.blockchain.current.providerChain.api[0].address
           );
           // provider validators
-          const res = await client.getStakingValidators(status);
-          const proVals = res.validators.sort(
+          const validatorsRes = await client.getStakingValidators(status);
+          const proVals = validatorsRes.validators.sort(
             (a, b) => Number(b.delegatorShares) - Number(a.delegatorShares)
           );
           if (status === 'BOND_STATUS_BONDED') {
@@ -177,15 +178,16 @@ export const useStakingStore = defineStore('stakingStore', {
           return proVals;
         }
       }
-      return this.blockchain.rpc?.getStakingValidators(status).then((res) => {
-        const vals = res.validators.sort(
-          (a, b) => Number(b.delegatorShares) - Number(a.delegatorShares)
-        );
-        if (status === 'BOND_STATUS_BONDED') {
-          this.validators = vals;
-        }
-        return vals;
-      });
+      const validatorsRes = await this.blockchain.rpc?.getStakingValidators(
+        status
+      );
+      const vals = validatorsRes.validators.sort(
+        (a, b) => Number(b.delegatorShares) - Number(a.delegatorShares)
+      );
+      if (status === 'BOND_STATUS_BONDED') {
+        this.validators = vals;
+      }
+      return vals;
     },
   },
 });

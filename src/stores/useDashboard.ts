@@ -56,6 +56,7 @@ export interface DirectoryChain {
 export interface ChainConfig {
   chainName: string;
   prettyName: string;
+  cosmwasmEnabled: boolean;
   bech32Prefix: string;
   chainId: string;
   coinType: string;
@@ -105,6 +106,7 @@ export interface LocalConfig {
   logo: string;
   theme_color?: string;
   min_tx_fee: string;
+  cosmwasm_enabled: boolean;
   rpc: string[] | Endpoint[];
   sdk_version: string;
   registry_name?: string;
@@ -148,6 +150,7 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
       { denom: x.symbol.toLowerCase(), exponent: Number(x.exponent) },
     ],
   }));
+  conf.cosmwasmEnabled = lc.cosmwasm_enabled ?? false;
   conf.versions = {
     cosmosSdk: lc.sdk_version,
   };
@@ -173,6 +176,8 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
 
 export function fromDirectory(source: DirectoryChain): ChainConfig {
   const conf = {} as ChainConfig;
+  conf.cosmwasmEnabled = source.cosmwasm_enabled ?? false;
+
   (conf.assets = source.assets),
     (conf.bech32Prefix = source.bech32_prefix),
     (conf.chainId = source.chain_id),
@@ -330,6 +335,7 @@ export const useDashboard = defineStore('dashboard', {
       Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
         this.chains[x.chain_name] = fromLocal(x);
       });
+
       this.setupDefault();
       this.status = LoadingStatus.Loaded;
     },
