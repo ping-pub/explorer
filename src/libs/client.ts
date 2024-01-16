@@ -16,6 +16,7 @@ import {
   type GovProposalId,
   type IbcExtension,
   setupIbcExtension,
+  setupSlashingExtension,
 } from '@cosmjs/stargate';
 import {
   HttpClient,
@@ -38,6 +39,7 @@ import {
 } from './registry';
 import { buildQuery } from '@cosmjs/tendermint-rpc/build/tendermint37/requests';
 import { PageRequest, type Coin } from '@/types';
+import type { SlashingExtension } from '@cosmjs/stargate/build/modules';
 
 export class BaseRestClient<R extends AbstractRegistry> {
   endpoint: string;
@@ -51,6 +53,7 @@ export class BaseRestClient<R extends AbstractRegistry> {
         MintExtension &
         GovExtension &
         IbcExtension &
+        SlashingExtension &
         TxExtension;
 
   constructor(endpoint: string, registry: R) {
@@ -74,6 +77,7 @@ export class BaseRestClient<R extends AbstractRegistry> {
       setupMintExtension,
       setupGovExtension,
       setupIbcExtension,
+      setupSlashingExtension,
       setupTxExtension
     );
   }
@@ -138,11 +142,15 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return this.request(this.registry.auth_accounts, {}, query);
   }
   async getAuthAccount(address: string) {
-    return this.request(this.registry.auth_account_address, { address });
+    // return this.request(this.registry.auth_account_address, { address });
+    const res = await this.queryClient.auth.account(address);
+    console.log(res);
+    return res;
   }
   // Bank Module
   async getBankParams() {
     return this.request(this.registry.bank_params, {});
+    // const res = await this.queryClient.bank
   }
   async getBankBalances(address: string) {
     // return this.request(this.registry.bank_balances_address, { address });
@@ -208,11 +216,17 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
   // Slashing
   async getSlashingParams() {
-    return this.request(this.registry.slashing_params, {});
+    // return this.request(this.registry.slashing_params, {});
+    const res = await this.queryClient.slashing.params();
+    console.log(res);
+    return res;
   }
   async getSlashingSigningInfos() {
-    const query = '?pagination.limit=300';
-    return this.request(this.registry.slashing_signing_info, {}, query);
+    // const query = '?pagination.limit=300';
+    // return this.request(this.registry.slashing_signing_info, {}, query);
+    const res = await this.queryClient.slashing.signingInfos();
+    console.log(res);
+    return res;
   }
   // Gov
   async getParams(subspace: string, key: string) {
@@ -220,14 +234,20 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return this.request(this.registry.params, { subspace, key });
   }
   async getGovParamsVoting() {
-    return this.request(this.registry.gov_params_voting, {});
+    // return this.request(this.registry.gov_params_voting, {});
+    const res = await this.queryClient.gov.params('voting');
+    console.log(res);
+    return res;
   }
   async getGovParamsDeposit() {
-    return this.request(this.registry.gov_params_deposit, {});
+    // return this.request(this.registry.gov_params_deposit, {});
+    const res = await this.queryClient.gov.params('deposit');
+    console.log(res);
+    return res;
   }
-  async getGovParamsTally(proposal_id: GovProposalId) {
+  async getGovParamsTally() {
     // return this.request(this.registry.gov_params_tally, {});
-    const res = await this.queryClient.gov.tally(proposal_id);
+    const res = await this.queryClient.gov.params('tallying');
     console.log(res);
     return res;
   }
