@@ -13,10 +13,13 @@ import {
   setupGovExtension,
   type GovProposalId,
   type IbcExtension,
+  type AuthExtension,
+  type DistributionExtension,
   setupIbcExtension,
   setupSlashingExtension,
   setupDistributionExtension,
   createProtobufRpcClient,
+  setupAuthExtension,
 } from '@cosmjs/stargate';
 import {
   HttpClient,
@@ -40,38 +43,72 @@ import {
   withCustomRequest,
 } from './registry';
 import { buildQuery } from '@cosmjs/tendermint-rpc/build/tendermint37/requests';
-import { PageRequest, type Coin } from '@/types';
-import type {
-  DistributionExtension,
-  SlashingExtension,
-} from '@cosmjs/stargate/build/modules';
+import { PageRequest } from '@/types';
+import { PageRequest as CosmosPageRequest } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
 import type { BondStatusString } from '@cosmjs/stargate/build/modules/staking/queries';
 import type { ProposalStatus } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
 import { fromBase64 } from '@cosmjs/encoding';
 import {
   QueryAccountsResponse,
-  QueryClientImpl,
+  QueryClientImpl as AuthQueryClientImpl,
 } from 'cosmjs-types/cosmos/auth/v1beta1/query';
+import {
+  QueryVotesResponse,
+  QueryClientImpl as GovQueryClientImpl,
+  QueryProposalsResponse,
+} from 'cosmjs-types/cosmos/gov/v1beta1/query';
+
 import type { Any } from 'cosmjs-types/google/protobuf/any';
 import { BaseAccount } from 'cosmjs-types/cosmos/auth/v1beta1/auth';
+import type { SlashingExtension } from '@cosmjs/stargate/build/modules';
+import { longify } from '@cosmjs/stargate/build/queryclient';
 
-export interface AuthExtension {
-  readonly auth: {
-    readonly account: (address: string) => Promise<BaseAccount | undefined>;
-    readonly accounts: () => Promise<QueryAccountsResponse>;
+export interface ExtraExtension {
+  readonly extra: {
+    readonly accounts: (page?: PageRequest) => Promise<QueryAccountsResponse>;
+    readonly votes: (
+      proposalId: GovProposalId,
+      page?: PageRequest
+    ) => Promise<QueryVotesResponse>;
+    readonly proposals: (
+      proposalStatus: ProposalStatus,
+      page?: PageRequest
+    ) => Promise<QueryProposalsResponse>;
   };
 }
-function setupAuthExtension(base: QueryClient) {
+function setupExtraExtension(base: QueryClient) {
   const rpc = createProtobufRpcClient(base);
-  const queryService = new QueryClientImpl(rpc);
+  const authQueryService = new AuthQueryClientImpl(rpc);
+  const govQueryService = new GovQueryClientImpl(rpc);
   return {
-    auth: {
-      account: async (address: string) => {
-        const { account } = await queryService.Account({ address: address });
-        return account?.value ? BaseAccount.decode(account.value) : undefined;
+    extra: {
+      accounts: async (page?: PageRequest) => {
+        return await authQueryService.Accounts({
+          pagination: CosmosPageRequest.fromPartial({
+            key: page?.key ? fromBase64(page.key) : undefined,
+            reverse: page?.reverse ?? true,
+          }),
+        });
       },
-      accounts: async () => {
-        return await queryService.Accounts();
+      votes: async (proposalId: GovProposalId, page?: PageRequest) => {
+        return await govQueryService.Votes({
+          proposalId: longify(proposalId),
+          pagination: CosmosPageRequest.fromPartial({
+            key: page?.key ? fromBase64(page.key) : undefined,
+            reverse: page?.reverse ?? true,
+          }),
+        });
+      },
+      proposals: async (proposalStatus: ProposalStatus, page?: PageRequest) => {
+        return await govQueryService.Proposals({
+          proposalStatus,
+          voter: '',
+          depositor: '',
+          pagination: CosmosPageRequest.fromPartial({
+            key: page?.key ? fromBase64(page.key) : undefined,
+            reverse: page?.reverse ?? true,
+          }),
+        });
       },
     },
   };
@@ -91,7 +128,8 @@ export class BaseRestClient<R extends AbstractRegistry> {
         IbcExtension &
         SlashingExtension &
         DistributionExtension &
-        TxExtension;
+        TxExtension &
+        ExtraExtension;
 
   constructor(endpoint: string, registry: R) {
     this.endpoint = endpoint;
@@ -116,7 +154,8 @@ export class BaseRestClient<R extends AbstractRegistry> {
       setupIbcExtension,
       setupSlashingExtension,
       setupDistributionExtension,
-      setupTxExtension
+      setupTxExtension,
+      setupExtraExtension
     );
   }
 
@@ -178,7 +217,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     // if (!page) page = new PageRequest();
     // const query = `?${page.toQueryString()}`;
     // return this.request(this.registry.auth_accounts, {}, query);
-    const res = await this.queryClient.auth.accounts();
+    const res = await this.queryClient.extra.accounts(page);
     console.log(res);
     return res;
   }
@@ -301,8 +340,12 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
   // Gov
   async getParams(subspace: string, key: string) {
-    console.log(this.registry.params, subspace, key);
-    return this.request(this.registry.params, { subspace, key });
+    // console.log(this.registry.params, subspace, key);
+    // return this.request(this.registry.params, { subspace, key });
+    switch (subspace) {
+      case 'distribution':
+        return await this.getDistributionParams();
+    }
   }
   async getGovParamsVoting() {
     // return this.request(this.registry.gov_params_voting, {});
@@ -325,11 +368,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getGovProposals(status: ProposalStatus, page?: PageRequest) {
     if (!page) page = new PageRequest();
     page.reverse = true;
-    // const query = `?proposal_status={status}&${page.toQueryString()}`;
-    // return this.request(this.registry.gov_proposals, { status }, query);
-    const paginationKey = page?.key ? fromBase64(page.key) : undefined;
-
-    const res = this.queryClient.gov.proposals(status, '', '', paginationKey);
+    const res = this.queryClient.extra.proposals(status, page);
     console.log(res);
     return res;
   }
@@ -361,7 +400,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     //   }
     // );
   }
-  async getGovProposalVotes(proposal_id: string, page?: PageRequest) {
+  async getGovProposalVotes(proposal_id: GovProposalId, page?: PageRequest) {
     // if (!page) page = new PageRequest();
     // page.reverse = true;
     // const query = `?proposal_status={status}&${page.toQueryString()}`;
@@ -371,9 +410,9 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     //   query
     // );
 
-    const paginationKey = page?.key ? fromBase64(page.key) : undefined;
-    const res = await this.queryClient.gov.votes(proposal_id, paginationKey);
-    console.log(res);
+    // const paginationKey = page?.key ? fromBase64(page.key) : undefined;
+    const res = await this.queryClient.extra.votes(proposal_id, page);
+    console.log('vote', proposal_id, res);
     return res;
   }
   async getGovProposalVotesVoter(proposal_id: string, voter: string) {

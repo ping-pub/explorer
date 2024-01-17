@@ -51,7 +51,9 @@ const typeMap = Object.fromEntries(
   Object.entries(MsgType).map(([k, v]) => ['/' + v, k])
 );
 
-type TxType = keyof typeof MsgType;
+Object.assign(typeMap, {
+  '/cosmos.params.v1beta1.ParameterChangeProposal': 'ParameterChangeProposal',
+});
 
 const findType = (obj: any, type: string): any => {
   if (typeof obj !== 'object') return;

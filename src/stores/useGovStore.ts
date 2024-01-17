@@ -11,6 +11,7 @@ import {
   TextProposal,
 } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
 import type { QueryProposalsResponse } from 'cosmjs-types/cosmos/gov/v1beta1/query';
+import type { GovProposalId } from '@cosmjs/stargate';
 
 export const useGovStore = defineStore('govStore', {
   state: () => {
@@ -105,7 +106,7 @@ export const useGovStore = defineStore('govStore', {
     async fetchProposalDeposits(proposalId: string) {
       return await this.blockchain.rpc.getGovProposalDeposits(proposalId);
     },
-    async fetchProposalVotes(proposalId: string, page?: PageRequest) {
+    async fetchProposalVotes(proposalId: GovProposalId, page?: PageRequest) {
       return await this.blockchain.rpc.getGovProposalVotes(proposalId, page);
     },
     async fetchProposalVotesVoter(proposalId: string, voter: string) {

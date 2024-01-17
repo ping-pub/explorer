@@ -57,7 +57,7 @@ onMounted(() => {
       clientState.value = x.identifiedClientState;
       if (x.identifiedClientState?.clientState) {
         Object.assign(
-          clientState.value?.clientState!,
+          clientState.value!,
           TendermintClientState.decode(
             x.identifiedClientState?.clientState.value
           )
@@ -174,7 +174,7 @@ function color(v: string) {
             <div
               class="order-first text-3xl font-semibold tracking-tight text-main mb-2"
             >
-              {{ clientState?.clientState?.chainId }}
+              {{ clientState?.chainId }}
             </div>
             <div class="text-sm text-gray-500 dark:text-gray-400">
               {{ conn?.counterparty?.connectionId }} {{ clientState?.clientId }}
@@ -202,8 +202,8 @@ function color(v: string) {
             <tr>
               <td class="w-52">{{ $t('ibc.trust_level') }}:</td>
               <td>
-                {{ clientState?.clientState?.trustLevel.numerator }}/{{
-                  clientState.clientState?.trustLevel.denominator
+                {{ clientState?.trustLevel.numerator }}/{{
+                  clientState?.trustLevel.denominator
                 }}
               </td>
             </tr>
@@ -211,9 +211,7 @@ function color(v: string) {
               <td class="w-52">{{ $t('ibc.trusting_period') }}:</td>
               <td>
                 {{
-                  formatSeconds(
-                    clientState.clientState?.trustingPeriod.seconds.toString()
-                  )
+                  formatSeconds(clientState?.trustingPeriod.seconds.toString())
                 }}
               </td>
             </tr>
@@ -221,9 +219,7 @@ function color(v: string) {
               <td class="w-52">{{ $t('ibc.unbonding_period') }}:</td>
               <td>
                 {{
-                  formatSeconds(
-                    clientState.clientState?.unbondingPeriod.seconds.toString()
-                  )
+                  formatSeconds(clientState?.unbondingPeriod.seconds.toString())
                 }}
               </td>
             </tr>
@@ -231,26 +227,20 @@ function color(v: string) {
               <td class="w-52">{{ $t('ibc.max_clock_drift') }}:</td>
               <td>
                 {{
-                  formatSeconds(
-                    clientState.clientState?.maxClockDrift.seconds.toString()
-                  )
+                  formatSeconds(clientState?.maxClockDrift.seconds.toString())
                 }}
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.frozen_height') }}:</td>
               <td>
-                {{
-                  clientState.clientState?.frozenHeight.revisionHeight.toString()
-                }}
+                {{ clientState?.frozenHeight.revisionHeight.toString() }}
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.latest_height') }}:</td>
               <td>
-                {{
-                  clientState.clientState?.latestHeight.revisionHeight.toString()
-                }}
+                {{ clientState?.latestHeight.revisionHeight.toString() }}
               </td>
             </tr>
           </tbody>
@@ -266,9 +256,7 @@ function color(v: string) {
               <td colspan="2">
                 <div class="flex justify-between">
                   <span>{{ $t('ibc.allow_update_after_expiry') }}:</span>
-                  <span>{{
-                    clientState.clientState?.allowUpdateAfterExpiry
-                  }}</span>
+                  <span>{{ clientState?.allowUpdateAfterExpiry }}</span>
                 </div>
               </td>
             </tr>
@@ -276,16 +264,14 @@ function color(v: string) {
               <td colspan="2">
                 <div class="flex justify-between">
                   <span>{{ $t('ibc.allow_update_after_misbehaviour') }}: </span>
-                  <span>{{
-                    clientState.clientState?.allowUpdateAfterMisbehaviour
-                  }}</span>
+                  <span>{{ clientState?.allowUpdateAfterMisbehaviour }}</span>
                 </div>
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.upgrade_path') }}:</td>
               <td class="text-right">
-                {{ clientState.clientState?.upgradePath.join(', ') }}
+                {{ clientState?.upgradePath.join(', ') }}
               </td>
             </tr>
           </tbody>
@@ -389,11 +375,11 @@ function color(v: string) {
               <td>
                 <div
                   class="text-xs truncate relative py-2 px-4 rounded-full w-fit"
-                  :class="`text-${color(v.state)}`"
+                  :class="`text-${color(v.state.toString())}`"
                 >
                   <span
                     class="inset-x-0 inset-y-0 opacity-10 absolute"
-                    :class="`bg-${color(v.state)}`"
+                    :class="`bg-${color(v.state.toString())}`"
                   ></span>
                   {{ v.state }}
                 </div>

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed } from '@vue/reactivity';
+import { fromTimestamp } from 'cosmjs-types/helpers';
 import MdEditor from 'md-editor-v3';
 import ObjectElement from '@/components/dynamic/ObjectElement.vue';
 import {
@@ -21,15 +22,25 @@ import { ref, reactive } from 'vue';
 import Countdown from '@/components/Countdown.vue';
 import PaginationBar from '@/components/PaginationBar.vue';
 import { fromBech32, toHex } from '@cosmjs/encoding';
-import type { Vote } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
+import {
+  ProposalStatus,
+  proposalStatusToJSON,
+  VoteOption,
+  voteOptionToJSON,
+} from 'cosmjs-types/cosmos/gov/v1beta1/gov';
+import type { MsgSoftwareUpgrade } from 'cosmjs-types/cosmos/upgrade/v1beta1/tx';
+import type { Proposal, Vote } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
 import type { PageResponse } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
+import type { ParameterChangeProposal } from 'cosmjs-types/cosmos/params/v1beta1/params';
 import type {
   QueryDepositResponse,
   QueryDepositsResponse,
 } from 'cosmjs-types/cosmos/gov/v1beta1/query';
+import { decodeProto } from '@/components/dynamic';
+import type { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
 
 const props = defineProps(['proposal_id', 'chain']);
-const proposal = ref({} as GovProposal);
+const proposal = ref({} as Proposal);
 const format = useFormatter();
 const store = useGovStore();
 const dialog = useTxDialog();
@@ -38,22 +49,29 @@ const chainStore = useBlockchain();
 
 store.fetchProposal(props.proposal_id).then((res) => {
   const proposalDetail = reactive(res.proposal);
+  const changeProposal = decodeProto(
+    proposalDetail.content!
+  ) as ParameterChangeProposal;
+  Object.assign(proposalDetail.content!, changeProposal);
   // when status under the voting, final_tally_result are no data, should request fetchTally
-  if (res.proposal?.voterStatus === 'PROPOSAL_STATUS_VOTING_PERIOD') {
+  if (proposalDetail.status === ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD) {
+    // 'PROPOSAL_STATUS_VOTING_PERIOD') {
     store.fetchTally(props.proposal_id).then((tallRes) => {
       proposalDetail.finalTallyResult = tallRes.tally;
     });
   }
+
   proposal.value = proposalDetail;
+  console.log('fetchProposal', proposal.value);
   // load origin params if the proposal is param change
-  if (proposalDetail.content?.changes) {
-    proposalDetail.content?.changes.forEach((item) => {
+  if (changeProposal?.changes) {
+    changeProposal.changes.forEach((item) => {
       chainStore.rpc.getParams(item.subspace, item.key).then((res) => {
-        if (proposal.value.content && res.param) {
+        if (proposal.value.content && res?.params) {
           if (proposal.value.content.current) {
-            proposal.value.content.current.push(res.param);
+            proposal.value.content.current.push(res.params);
           } else {
-            proposal.value.content.current = [res.param];
+            proposal.value.content.current = [res.params];
           }
         }
       });
@@ -62,16 +80,22 @@ store.fetchProposal(props.proposal_id).then((res) => {
 });
 
 const color = computed(() => {
-  if (proposal.value.status === 'PROPOSAL_STATUS_PASSED') {
+  if (proposal.value.status === ProposalStatus.PROPOSAL_STATUS_PASSED) {
+    // 'PROPOSAL_STATUS_PASSED') {
     return 'success';
-  } else if (proposal.value.status === 'PROPOSAL_STATUS_REJECTED') {
+  } else if (
+    proposal.value.status === ProposalStatus.PROPOSAL_STATUS_REJECTED
+  ) {
     return 'error';
   }
   return '';
 });
 const status = computed(() => {
   if (proposal.value.status) {
-    return proposal.value.status.replace('PROPOSAL_STATUS_', '');
+    return proposalStatusToJSON(proposal.value.status).replace(
+      'PROPOSAL_STATUS_',
+      ''
+    );
   }
   return '';
 });
@@ -88,7 +112,7 @@ store.fetchProposalVotes(props.proposal_id).then((x) => {
   pageResponse.value = x.pagination;
 });
 
-function shortTime(v: string) {
+function shortTime(v: string | Date | Timestamp) {
   if (v) {
     return format.toDay(v, 'from');
   }
@@ -97,30 +121,36 @@ function shortTime(v: string) {
 
 const votingCountdown = computed((): number => {
   const now = new Date();
-  const end = new Date(proposal.value.voting_end_time);
+  const end = proposal.value.votingEndTime
+    ? fromTimestamp(proposal.value.votingEndTime)
+    : new Date();
   return end.getTime() - now.getTime();
 });
 
 const upgradeCountdown = computed((): number => {
-  const height = Number(proposal.value.content?.plan?.height || 0);
+  // @ts-ignore
+  const upgradeSoftware = proposal.value.content as MsgSoftwareUpgrade;
+  const height = Number(upgradeSoftware.plan?.height || 0);
   if (height > 0) {
     const base = useBaseStore();
     const current = Number(base.latest?.block?.header?.height || 0);
     return (height - current) * 6 * 1000;
   }
   const now = new Date();
-  const end = new Date(proposal.value.content?.plan?.time || '');
+  const end = upgradeSoftware.plan?.time
+    ? fromTimestamp(upgradeSoftware.plan?.time || '')
+    : new Date();
   return end.getTime() - now.getTime();
 });
 
 const total = computed(() => {
-  const tally = proposal.value.final_tally_result;
+  const tally = proposal.value.finalTallyResult;
   let sum = 0;
   if (tally) {
     sum += Number(tally.abstain || 0);
     sum += Number(tally.yes || 0);
     sum += Number(tally.no || 0);
-    sum += Number(tally.no_with_veto || 0);
+    sum += Number(tally.noWithVeto || 0);
   }
   return sum;
 });
@@ -135,7 +165,7 @@ const turnout = computed(() => {
 
 const yes = computed(() => {
   if (total.value > 0) {
-    const yes = proposal.value?.final_tally_result?.yes || 0;
+    const yes = proposal.value?.finalTallyResult?.yes || 0;
     return format.percent(Number(yes) / total.value);
   }
   return 0;
@@ -143,7 +173,7 @@ const yes = computed(() => {
 
 const no = computed(() => {
   if (total.value > 0) {
-    const value = proposal.value?.final_tally_result?.no || 0;
+    const value = proposal.value?.finalTallyResult?.no || 0;
     return format.percent(Number(value) / total.value);
   }
   return 0;
@@ -151,7 +181,7 @@ const no = computed(() => {
 
 const veto = computed(() => {
   if (total.value > 0) {
-    const value = proposal.value?.final_tally_result?.no_with_veto || 0;
+    const value = proposal.value?.finalTallyResult?.noWithVeto || 0;
     return format.percent(Number(value) / total.value);
   }
   return 0;
@@ -159,7 +189,7 @@ const veto = computed(() => {
 
 const abstain = computed(() => {
   if (total.value > 0) {
-    const value = proposal.value?.final_tally_result?.abstain || 0;
+    const value = proposal.value?.finalTallyResult?.abstain || 0;
     return format.percent(Number(value) / total.value);
   }
   return 0;
@@ -187,6 +217,7 @@ function pageload(p: number) {
   pageRequest.value.setPage(p);
   store.fetchProposalVotes(props.proposal_id, pageRequest.value).then((x) => {
     votes.value = x.votes;
+    console.log('vote', votes.value);
     pageResponse.value = x.pagination;
   });
 }
@@ -297,9 +328,11 @@ function metaItem(metadata: string | undefined): {
             <div class="w-2 h-2 rounded-full bg-error mr-3"></div>
             <div class="text-base flex-1 text-main">
               {{ $t('gov.submit_at') }}:
-              {{ format.toDay(proposal.submit_time) }}
+              {{ format.toDay(proposal.submitTime) }}
             </div>
-            <div class="text-sm">{{ shortTime(proposal.submit_time) }}</div>
+            <div class="text-sm">
+              {{ shortTime(proposal.submitTime) }}
+            </div>
           </div>
           <div class="flex items-center mb-4">
             <div class="w-2 h-2 rounded-full bg-primary mr-3"></div>
@@ -307,18 +340,20 @@ function metaItem(metadata: string | undefined): {
               {{ $t('gov.deposited_at') }}:
               {{
                 format.toDay(
-                  proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                    ? proposal.deposit_end_time
-                    : proposal.voting_start_time
+                  proposal.status ===
+                    ProposalStatus.PROPOSAL_STATUS_DEPOSIT_PERIOD
+                    ? proposal.depositEndTime
+                    : proposal.votingStartTime
                 )
               }}
             </div>
             <div class="text-sm">
               {{
                 shortTime(
-                  proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                    ? proposal.deposit_end_time
-                    : proposal.voting_start_time
+                  proposal.status ===
+                    ProposalStatus.PROPOSAL_STATUS_DEPOSIT_PERIOD
+                    ? proposal.depositEndTime
+                    : proposal.votingStartTime
                 )
               }}
             </div>
@@ -328,10 +363,10 @@ function metaItem(metadata: string | undefined): {
               <div class="w-2 h-2 rounded-full bg-yes mr-3"></div>
               <div class="text-base flex-1 text-main">
                 {{ $t('gov.vote_start_from') }}
-                {{ format.toDay(proposal.voting_start_time) }}
+                {{ format.toDay(proposal.votingStartTime) }}
               </div>
               <div class="text-sm">
-                {{ shortTime(proposal.voting_start_time) }}
+                {{ shortTime(proposal.votingStartTime) }}
               </div>
             </div>
             <div class="pl-5 text-sm mt-2">
@@ -343,10 +378,10 @@ function metaItem(metadata: string | undefined): {
               <div class="w-2 h-2 rounded-full bg-success mr-3"></div>
               <div class="text-base flex-1 text-main">
                 {{ $t('gov.vote_end') }}
-                {{ format.toDay(proposal.voting_end_time) }}
+                {{ format.toDay(proposal.votingEndTime) }}
               </div>
               <div class="text-sm">
-                {{ shortTime(proposal.voting_end_time) }}
+                {{ shortTime(proposal.votingEndTime) }}
               </div>
             </div>
             <div class="pl-5 text-sm">
@@ -358,7 +393,7 @@ function metaItem(metadata: string | undefined): {
           <div
             class="mt-4"
             v-if="
-              proposal?.content?.['@type']?.endsWith('SoftwareUpgradeProposal')
+              proposal?.content?.typeUrl.endsWith('SoftwareUpgradeProposal')
             "
           >
             <div class="flex items-center">
@@ -373,7 +408,7 @@ function metaItem(metadata: string | undefined): {
                 }}</span>
               </div>
               <div class="text-sm">
-                {{ shortTime(proposal.voting_end_time) }}
+                {{ shortTime(proposal.votingEndTime) }}
               </div>
             </div>
             <div class="pl-5 text-sm mt-2">
@@ -395,8 +430,9 @@ function metaItem(metadata: string | undefined): {
                 v-if="item.option"
                 class="py-2 text-sm"
                 :class="{
-                  'text-yes': item.option === 'VOTE_OPTION_YES',
-                  'text-gray-400': item.option === 'VOTE_OPTION_ABSTAIN',
+                  'text-yes': item.option === VoteOption.VOTE_OPTION_YES,
+                  'text-gray-400':
+                    item.option === VoteOption.VOTE_OPTION_ABSTAIN,
                 }"
               >
                 {{ String(item.option).replace('VOTE_OPTION_', '') }}
@@ -406,7 +442,7 @@ function metaItem(metadata: string | undefined): {
                   item.options
                     .map(
                       (x) =>
-                        `${x.option.replace(
+                        `${voteOptionToJSON(x.option).replace(
                           'VOTE_OPTION_',
                           ''
                         )}:${format.percent(x.weight)}`
@@ -419,7 +455,7 @@ function metaItem(metadata: string | undefined): {
         </table>
         <PaginationBar
           :limit="pageRequest.limit"
-          :total="pageResponse?.total.toString()"
+          :total="pageResponse?.total?.toString()"
           :callback="pageload"
         />
       </div>

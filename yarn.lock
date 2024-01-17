@@ -3360,31 +3360,7 @@ core-util-is@~1.0.0:
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.3.tgz#a6042d3634c2b27e9328f837b965fac83808db85"
   integrity sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==
 
-cosmjs-types@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/cosmjs-types/-/cosmjs-types-0.5.2.tgz#2d42b354946f330dfb5c90a87fdc2a36f97b965d"
-  integrity sha512-zxCtIJj8v3Di7s39uN4LNcN3HIE1z0B9Z0SPE8ZNQR0oSzsuSe1ACgxoFkvhkS7WBasCAFcglS11G2hyfd5tPg==
-  dependencies:
-    long "^4.0.0"
-    protobufjs "~6.11.2"
-
-cosmjs-types@^0.7.1:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/cosmjs-types/-/cosmjs-types-0.7.2.tgz#a757371abd340949c5bd5d49c6f8379ae1ffd7e2"
-  integrity sha512-vf2uLyktjr/XVAgEq0DjMxeAWh1yYREe7AMHDKd7EiHVqxBPCaBS+qEEQUkXbR9ndnckqr1sUG8BQhazh4X5lA==
-  dependencies:
-    long "^4.0.0"
-    protobufjs "~6.11.2"
-
-cosmjs-types@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/cosmjs-types/-/cosmjs-types-0.8.0.tgz#2ed78f3e990f770229726f95f3ef5bf9e2b6859b"
-  integrity sha512-Q2Mj95Fl0PYMWEhA2LuGEIhipF7mQwd9gTQ85DdP9jjjopeoGaDxvmPa5nakNzsq7FnO1DMTatXTAx6bxMH7Lg==
-  dependencies:
-    long "^4.0.0"
-    protobufjs "~6.11.2"
-
-cosmjs-types@^0.9.0:
+cosmjs-types@^0.5.2, cosmjs-types@^0.7.1, cosmjs-types@^0.8.0, cosmjs-types@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/cosmjs-types/-/cosmjs-types-0.9.0.tgz#c3bc482d28c7dfa25d1445093fdb2d9da1f6cfcc"
   integrity sha512-MN/yUe6mkJwHnCFfsNPeCfXVhyxHYW6c/xDUzrSbBycYzw++XvWDMJArXp2pLdgD6FQ8DW79vkPjeNKVrXaHeQ==
@@ -5832,7 +5808,7 @@ promised-io@*:
   resolved "https://registry.yarnpkg.com/promised-io/-/promised-io-0.3.6.tgz#04c0fea80772f7091dca0f114e30b3e3f7650126"
   integrity sha512-bNwZusuNIW4m0SPR8jooSyndD35ggirHlxVl/UhIaZD/F0OBv9ebfc6tNmbpZts3QXHggkjIBH8lvtnzhtcz0A==
 
-protobufjs@^6.11.3, protobufjs@^6.8.8, protobufjs@~6.11.2, protobufjs@~6.11.3:
+protobufjs@^6.11.3, protobufjs@^6.8.8, protobufjs@~6.11.3:
   version "6.11.4"
   resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.11.4.tgz#29a412c38bf70d89e537b6d02d904a6f448173aa"
   integrity sha512-5kQWPaJHi1WoCpjTGszzQ32PG2F4+wRY6BmAT4Vfw56Q2FZ4YZzK20xUYQH4YkfehY1e6QSICrJquM6xXZNcrw==

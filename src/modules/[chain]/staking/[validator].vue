@@ -519,7 +519,7 @@ function mapDelegators(messages: any[]) {
                       .startsWith('1970')
                   "
                 >
-                  {{ format.toDay(fromTimestamp(v.unbondingTime), 'from') }}
+                  {{ format.toDay(v.unbondingTime, 'from') }}
                 </h4>
                 <h4 v-else>-</h4>
                 <span class="text-sm">{{ $t('staking.unbonding_time') }}</span>

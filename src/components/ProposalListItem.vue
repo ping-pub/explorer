@@ -10,7 +10,6 @@ import type { PaginatedProposals } from '@/types';
 import ProposalProcess from './ProposalProcess.vue';
 import type { PropType } from 'vue';
 import { computed, ref } from 'vue';
-import { fromTimestamp } from 'cosmjs-types/helpers';
 import type { QueryProposalsResponse } from 'cosmjs-types/cosmos/gov/v1beta1/query';
 const dialog = useTxDialog();
 defineProps({
@@ -117,7 +116,7 @@ function metaItem(metadata: string | undefined): {
               <div
                 class="truncate col-span-2 md:!col-span-1 text-xs text-gray-500 dark:text-gray-400 text-right md:!flex md:!justify-start"
               >
-                {{ format.toDay(fromTimestamp(item.votingEndTime), 'from') }}
+                {{ format.toDay(item.votingEndTime, 'from') }}
               </div>
             </div>
           </td>
@@ -185,7 +184,7 @@ function metaItem(metadata: string | undefined): {
           <div
             class="truncate text-xs text-gray-500 dark:text-gray-400 flex items-center justify-end"
           >
-            {{ format.toDay(fromTimestamp(item.votingEndTime), 'from') }}
+            {{ format.toDay(item.votingEndTime, 'from') }}
           </div>
         </div>
 
