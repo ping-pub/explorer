@@ -2,6 +2,7 @@
 import ApexCharts from 'vue3-apexcharts';
 import { computed, type PropType } from 'vue';
 import { useFormatter } from '@/stores';
+import { fromTimestamp } from 'cosmjs-types/helpers';
 import type { CommissionRate } from '@/types';
 
 const props = defineProps({
@@ -128,7 +129,7 @@ const chartConfig = computed(() => {
     <div class="text-sm text-gray-500 dark:text-gray-400">
       {{
         `Updated at ${format.toDay(
-          Number(props.commission?.updateTime.seconds) * 1000,
+          fromTimestamp(props.commission?.updateTime),
           'short'
         )}`
       }}

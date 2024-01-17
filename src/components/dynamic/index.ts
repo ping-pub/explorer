@@ -1,3 +1,6 @@
+import * as injProto from '@injectivelabs/core-proto-ts';
+import { MsgType } from '@injectivelabs/ts-types';
+
 import ObjectElement from './ObjectElement.vue';
 import TextElement from './TextElement.vue';
 import ArrayElement from './ArrayElement.vue';
@@ -11,6 +14,7 @@ export function select(v: any, direct?: string) {
   // if(k === 'txs' && v) {
   //     return TxsElement
   // } else {
+
   const type = typeof v;
   switch (type) {
     case 'object':
@@ -31,7 +35,9 @@ function selectObject(v: Object, direct?: string) {
       return UInt8Array;
     case Array.isArray(v):
       return ArrayElement;
-    case v && Object.keys(v).includes('amount') && Object.keys(v).includes('denom'): {
+    case v &&
+      Object.keys(v).includes('amount') &&
+      Object.keys(v).includes('denom'): {
       return TokenElement;
     }
     case direct === 'horizontal':
@@ -40,3 +46,33 @@ function selectObject(v: Object, direct?: string) {
       return ObjectElement;
   }
 }
+
+const typeMap = Object.fromEntries(
+  Object.entries(MsgType).map(([k, v]) => ['/' + v, k])
+);
+
+type TxType = keyof typeof MsgType;
+
+const findType = (obj: any, type: string): any => {
+  if (typeof obj !== 'object') return;
+  const msg = obj[type];
+  if (msg && msg.decode) return msg;
+  for (const subObj of Object.values(obj)) {
+    const find = findType(subObj, type);
+    if (find) return find;
+  }
+};
+
+export const decodeProto = (msg: { typeUrl: string; value: Uint8Array }) => {
+  const type = typeMap[msg.typeUrl];
+  if (type) {
+    const obj = findType(injProto, type);
+    if (obj) {
+      const res = obj.decode(msg.value);
+      if (res.msgs) {
+        res.msgs = res.msgs.map(decodeProto);
+      }
+      return res;
+    }
+  }
+};

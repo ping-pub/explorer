@@ -26,6 +26,7 @@ import PaginationBar from '@/components/PaginationBar.vue';
 import { fromBase64, toBase64 } from '@cosmjs/encoding';
 import { stringToUint8Array, uint8ArrayToString } from '@/libs/utils';
 import type { TxSearchResponse } from '@cosmjs/tendermint-rpc';
+import { fromTimestamp } from 'cosmjs-types/helpers';
 import type {
   DelegationResponse,
   Validator,
@@ -513,14 +514,12 @@ function mapDelegators(messages: any[]) {
                 <h4
                   v-if="
                     v.unbondingTime &&
-                    !new Date(Number(v.unbondingTime.seconds) * 1000)
+                    !fromTimestamp(v.unbondingTime)
                       .toString()
                       .startsWith('1970')
                   "
                 >
-                  {{
-                    format.toDay(Number(v.unbondingTime.seconds) * 1000, 'from')
-                  }}
+                  {{ format.toDay(fromTimestamp(v.unbondingTime), 'from') }}
                 </h4>
                 <h4 v-else>-</h4>
                 <span class="text-sm">{{ $t('staking.unbonding_time') }}</span>

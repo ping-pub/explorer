@@ -2,6 +2,7 @@
 import DynamicComponent from './DynamicComponent.vue';
 import { ref } from 'vue';
 const props = defineProps(['value']);
+
 const tab = ref(Object.keys(props.value)[0] || '');
 
 const changeTab = (val: string) => {

@@ -50,6 +50,7 @@ export const useIBCModule = defineStore('module-ibc', {
     load() {
       const client = new ChainRegistryClient();
       client.fetchIBCPaths().then((res) => {
+        console.log('fetchIBCPaths', res);
         this.paths = res;
       });
     },

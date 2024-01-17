@@ -25,7 +25,10 @@ const isFutureBlock = computed({
   get: () => {
     const latest = store.latest?.block?.header.height
     const isFuture = latest ? target.value > Number(latest) : true
-    if (!isFuture && !current.value.blockId) store.fetchBlock(target.value).then(x => current.value = x)
+    if (!isFuture && !current.value.blockId) store.fetchBlock(target.value).then(x => {
+      current.value = x;
+      console.log('fetchBlock',x.block.txs);
+    })
     return isFuture
   },
   set: val => {
@@ -56,7 +59,10 @@ function updateTarget() {
 
 onBeforeRouteUpdate(async (to, from, next) => {
   if (from.path !== to.path) {
-    store.fetchBlock(String(to.params.height)).then(x => current.value = x);
+    store.fetchBlock(String(to.params.height)).then(x => {
+      current.value = x;
+      console.log('fetchBlock',x.block.txs);
+    });
     next();
   }
 });
