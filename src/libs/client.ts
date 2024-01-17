@@ -415,21 +415,21 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     // return this.request(this.registry.staking_params, {});
   }
   async getStakingPool() {
-    // try {
-    //   // const res = await this.queryClient.staking.pool();
-    //   const res = await this.request(this.registry.staking_pool, {});
-    //   console.log(res);
-    //   return res;
-    // } catch (error) {
-    //   console.log('error staking pool: ', error);
-    // }
-    return this.request(this.registry.staking_pool, {});
+    try {
+      const res = await this.queryClient.staking.pool();
+      // const res = await this.request(this.registry.staking_pool, {});
+      console.log(res);
+      return res;
+    } catch (error) {
+      console.log('error staking pool: ', error);
+    }
+    // return this.request(this.registry.staking_pool, {});
   }
   async getStakingValidators(status: BondStatusString, limit = 200) {
-    // const res = await this.queryClient.staking.validators(status);
-    // console.log(status, res);
-    // return res;
-    return this.request(this.registry.staking_validators, { status, limit });
+    const res = await this.queryClient.staking.validators(status);
+    console.log(status, res);
+    return res;
+    // return this.request(this.registry.staking_validators, { status, limit });
   }
   async getStakingValidator(validator_addr: string) {
     // return this.request(this.registry.staking_validators_address, {
