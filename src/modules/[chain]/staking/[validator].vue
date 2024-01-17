@@ -227,8 +227,12 @@ function loadPowerEvents(p: number, type: EventType) {
   page.setPageSize(5);
   blockchain.rpc
     .getTxs(
-      "?order_by=2&events={type}.validator='{validator}'",
-      { type: selectedEventType.value, validator },
+      [
+        {
+          key: `${selectedEventType.value}.validator`,
+          value: validator,
+        },
+      ],
       page
     )
     .then((res) => {
@@ -784,7 +788,7 @@ function mapDelegators(messages: any[]) {
                     'text-no': selectedEventType === EventType.Unbond,
                   }"
                 >
-                  <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
+                  <RouterLink :to="`/${props.chain}/tx/${item.hash}`">
                     <span class="mr-2">
                       {{ selectedEventType === EventType.Delegate ? '+' : '-' }}
                       {{
@@ -816,7 +820,7 @@ function mapDelegators(messages: any[]) {
           </tbody>
         </table>
         <PaginationBar
-          :total="events.pagination?.total"
+          :total="events.totalCount.toString()"
           :limit="page.limit"
           :callback="pagePowerEvents"
         />

@@ -14,22 +14,26 @@ import { ref } from 'vue';
 import { useIBCModule } from '../connStore';
 import PaginationBar from '@/components/PaginationBar.vue';
 import { Icon } from '@iconify/vue';
+import type { ConnectionEnd } from 'cosmjs-types/ibc/core/connection/v1/connection';
+import type { IdentifiedClientState } from 'cosmjs-types/ibc/core/client/v1/client';
+import type { IdentifiedChannel } from 'cosmjs-types/ibc/core/channel/v1/channel';
+import type { TxSearchResponse } from '@cosmjs/tendermint-rpc';
 
 const props = defineProps(['chain', 'connection_id']);
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
 const format = useFormatter();
 const ibcStore = useIBCModule();
-const conn = ref({} as Connection);
-const clientState = ref({} as { client_id: string; client_state: ClientState });
-const channels = ref([] as Channel[]);
+const conn = ref({} as ConnectionEnd | undefined);
+const clientState = ref({} as IdentifiedClientState | undefined);
+const channels = ref([] as IdentifiedChannel[]);
 
 const connId = computed(() => {
   return props.connection_id || 0;
 });
 
 const loading = ref(false);
-const txs = ref({} as PaginatedTxs);
+const txs = ref({} as TxSearchResponse);
 const direction = ref('');
 const channel_id = ref('');
 const port_id = ref('');
@@ -70,11 +74,19 @@ function fetchSendingTxs(channel: string, port: string, pageNum = 0) {
   direction.value = 'Out';
   channel_id.value = channel;
   port_id.value = port;
-  txs.value = {} as PaginatedTxs;
+  txs.value = {} as TxSearchResponse;
   chainStore.rpc
     .getTxs(
-      "?order_by=2&events=send_packet.packet_src_channel='{channel}'&events=send_packet.packet_src_port='{port}'",
-      { channel, port },
+      [
+        {
+          key: 'send_packet.packet_src_channel',
+          value: channel,
+        },
+        {
+          key: 'send_packet.packet_src_port',
+          value: port,
+        },
+      ],
       page.value
     )
     .then((res) => {
@@ -88,11 +100,19 @@ function fetchRecevingTxs(channel: string, port: string, pageNum = 0) {
   direction.value = 'In';
   channel_id.value = channel;
   port_id.value = port;
-  txs.value = {} as PaginatedTxs;
+  txs.value = {} as TxSearchResponse;
   chainStore.rpc
     .getTxs(
-      "?order_by=2&events=recv_packet.packet_dst_channel='{channel}'&events=recv_packet.packet_dst_port='{port}'",
-      { channel, port },
+      [
+        {
+          key: 'recv_packet.packet_dst_channel',
+          value: channel,
+        },
+        {
+          key: 'recv_packet.packet_dst_port',
+          value: port,
+        },
+      ],
       page.value
     )
     .then((res) => {
@@ -118,18 +138,20 @@ function color(v: string) {
               <div
                 class="order-first text-3xl font-semibold tracking-tight text-main mb-1"
               >
-                {{ baseStore.latest?.block?.header?.chain_id }}
+                {{ baseStore.latest?.block?.header?.chainId }}
               </div>
               <div class="text-sm text-gray-500 dark:text-gray-400">
-                {{ conn.client_id }} {{ props.connection_id }}
+                {{ conn?.clientId }} {{ props.connection_id }}
               </div>
             </div>
           </div>
           <div class="mx-auto flex items-center">
-            <div :class="{ 'text-success': conn.state?.indexOf('_OPEN') > -1 }">
+            <div
+              :class="{ 'text-success': conn?.state?.indexOf('_OPEN') > -1 }"
+            >
               <span class="text-lg rounded-full">&#x21cc;</span>
               <div class="text-c">
-                {{ conn.state }}
+                {{ conn?.state }}
               </div>
             </div>
           </div>
@@ -137,10 +159,10 @@ function color(v: string) {
             <div
               class="order-first text-3xl font-semibold tracking-tight text-main mb-2"
             >
-              {{ clientState.client_state?.chain_id }}
+              {{ clientState?.clientState?.value }}
             </div>
             <div class="text-sm text-gray-500 dark:text-gray-400">
-              {{ conn.counterparty?.connection_id }} {{ clientState.client_id }}
+              {{ conn?.counterparty?.connectionId }} {{ clientState?.clientId }}
             </div>
           </div>
         </dl>
@@ -151,7 +173,7 @@ function color(v: string) {
       <h2 class="card-title mb-4 overflow-hidden">
         {{ $t('ibc.title_2')
         }}<span class="ml-2 text-sm">{{
-          clientState.client_state?.['@type']
+          clientState?.clientState?.typeUrl
         }}</span>
       </h2>
       <div class="overflow-x-auto grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -165,36 +187,36 @@ function color(v: string) {
             <tr>
               <td class="w-52">{{ $t('ibc.trust_level') }}:</td>
               <td>
-                {{ clientState.client_state?.trust_level?.numerator }}/{{
-                  clientState.client_state?.trust_level?.denominator
+                {{ clientState?.clientState?.trust_level?.numerator }}/{{
+                  clientState.clientState?.trust_level?.denominator
                 }}
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.trusting_period') }}:</td>
               <td>
-                {{ formatSeconds(clientState.client_state?.trusting_period) }}
+                {{ formatSeconds(clientState.clientState?.trusting_period) }}
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.unbonding_period') }}:</td>
               <td>
-                {{ formatSeconds(clientState.client_state?.unbonding_period) }}
+                {{ formatSeconds(clientState.clientState?.unbonding_period) }}
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.max_clock_drift') }}:</td>
               <td>
-                {{ formatSeconds(clientState.client_state?.max_clock_drift) }}
+                {{ formatSeconds(clientState.clientState?.max_clock_drift) }}
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.frozen_height') }}:</td>
-              <td>{{ clientState.client_state?.frozen_height }}</td>
+              <td>{{ clientState.clientState?.frozen_height }}</td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.latest_height') }}:</td>
-              <td>{{ clientState.client_state?.latest_height }}</td>
+              <td>{{ clientState.clientState?.latest_height }}</td>
             </tr>
           </tbody>
         </table>
@@ -210,7 +232,7 @@ function color(v: string) {
                 <div class="flex justify-between">
                   <span>{{ $t('ibc.allow_update_after_expiry') }}:</span>
                   <span>{{
-                    clientState.client_state?.allow_update_after_expiry
+                    clientState.clientState?.allow_update_after_expiry
                   }}</span>
                 </div>
               </td>
@@ -220,7 +242,7 @@ function color(v: string) {
                 <div class="flex justify-between">
                   <span>{{ $t('ibc.allow_update_after_misbehaviour') }}: </span>
                   <span>{{
-                    clientState.client_state?.allow_update_after_misbehaviour
+                    clientState.clientState?.allow_update_after_misbehaviour
                   }}</span>
                 </div>
               </td>
@@ -228,7 +250,7 @@ function color(v: string) {
             <tr>
               <td class="w-52">{{ $t('ibc.upgrade_path') }}:</td>
               <td class="text-right">
-                {{ clientState.client_state?.upgrade_path.join(', ') }}
+                {{ clientState.clientState?.upgrade_path.join(', ') }}
               </td>
             </tr>
           </tbody>
@@ -301,7 +323,7 @@ function color(v: string) {
                 <div class="flex gap-1">
                   <button
                     class="btn btn-xs"
-                    @click="fetchSendingTxs(v.channel_id, v.port_id)"
+                    @click="fetchSendingTxs(v.channelId, v.portId)"
                     :disabled="loading"
                   >
                     <span
@@ -312,7 +334,7 @@ function color(v: string) {
                   </button>
                   <button
                     class="btn btn-xs"
-                    @click="fetchRecevingTxs(v.channel_id, v.port_id)"
+                    @click="fetchRecevingTxs(v.channelId, v.portId)"
                     :disabled="loading"
                   >
                     <span
@@ -324,11 +346,11 @@ function color(v: string) {
                 </div>
               </td>
               <td>
-                <a href="#" @click="loadChannel(v.channel_id, v.port_id)">{{
-                  v.channel_id
+                <a href="#" @click="loadChannel(v.channelId, v.portId)">{{
+                  v.channelId
                 }}</a>
               </td>
-              <td>{{ v.port_id }}</td>
+              <td>{{ v.portId }}</td>
               <td>
                 <div
                   class="text-xs truncate relative py-2 px-4 rounded-full w-fit"
@@ -342,9 +364,9 @@ function color(v: string) {
                 </div>
               </td>
               <td>
-                {{ v.counterparty?.port_id }}/{{ v.counterparty?.channel_id }}
+                {{ v.counterparty?.portId }}/{{ v.counterparty?.channelId }}
               </td>
-              <td>{{ v.connection_hops.join(', ') }}</td>
+              <td>{{ v.connectionHops.join(', ') }}</td>
               <td>{{ v.version }}</td>
               <td>{{ v.ordering }}</td>
             </tr>
@@ -366,7 +388,7 @@ function color(v: string) {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="resp in txs?.tx_responses">
+          <tr v-for="resp in txs?.txs">
             <td>{{ resp.height }}</td>
             <td>
               <div class="text-xs truncate text-primary dark:invert">
@@ -393,7 +415,7 @@ function color(v: string) {
       </table>
       <PaginationBar
         :limit="page.limit"
-        :total="txs.pagination?.total"
+        :total="txs.totalCount.toString()"
         :callback="pageload"
       />
     </div>

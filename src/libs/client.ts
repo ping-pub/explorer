@@ -25,6 +25,7 @@ import {
   WebsocketClient,
   type CometClient,
   type AbciQueryParams,
+  type QueryTag,
 } from '@cosmjs/tendermint-rpc';
 import { DEFAULT } from '@/libs';
 import {
@@ -577,25 +578,22 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     //   page.limit
     // }&pagination.offset=${page.offset || 0}`;
     // return this.request(this.registry.tx_txs, {}, query);
-    const res = await this.tmClient.txSearch({
-      query: buildQuery({
-        tags: [
-          {
-            key: 'message.sender',
-            value: sender,
-          },
-        ],
-      }),
-      order_by: page?.reverse ? 'desc' : 'asc',
-    });
-    console.log(res);
-    return res;
+
+    return await this.getTxs(
+      [
+        {
+          key: 'message.sender',
+          value: sender,
+        },
+      ],
+      page
+    );
   }
   // query ibc sending msgs
   // ?&pagination.reverse=true&events=send_packet.packet_src_channel='${channel}'&events=send_packet.packet_src_port='${port}'
   // query ibc receiving msgs
   // ?&pagination.reverse=true&events=recv_packet.packet_dst_channel='${channel}'&events=recv_packet.packet_dst_port='${port}'
-  async getTxs(query: string, params: any, page?: PageRequest) {
+  async getTxs(params?: QueryTag[], page?: PageRequest) {
     // if (!page) page = new PageRequest();
     // return this.request(
     //   this.registry.tx_txs,
@@ -603,7 +601,11 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     //   `${query}&${page.toQueryString()}`
     // );
     const res = await this.tmClient.txSearch({
-      query,
+      query: buildQuery({
+        tags: params,
+      }),
+      order_by: page?.reverse ? 'desc' : 'asc',
+      per_page: page?.limit,
     });
     console.log(res);
     return res;

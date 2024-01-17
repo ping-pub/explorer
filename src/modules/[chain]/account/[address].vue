@@ -11,16 +11,19 @@ import { computed, ref } from '@vue/reactivity';
 import { onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
 
-import type {
-  AuthAccount,
-  Delegation,
-  TxResponse,
-  DelegatorRewards,
-  UnbondingResponses,
+import {
+  type AuthAccount,
+  type Delegation,
+  type TxResponse,
+  type DelegatorRewards,
+  type UnbondingResponses,
+  PageRequest,
 } from '@/types';
 import type { Coin } from '@cosmjs/amino';
 import Countdown from '@/components/Countdown.vue';
 import { fromBase64 } from '@cosmjs/encoding';
+import type { UnbondingDelegation } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
+import type { BaseAccount } from 'cosmjs-types/cosmos/auth/v1beta1/auth';
 
 const props = defineProps(['address', 'chain']);
 
@@ -28,13 +31,13 @@ const blockchain = useBlockchain();
 const stakingStore = useStakingStore();
 const dialog = useTxDialog();
 const format = useFormatter();
-const account = ref({} as AuthAccount);
+const account = ref({} as BaseAccount | undefined);
 const txs = ref({} as TxResponse[]);
 const delegations = ref([] as Delegation[]);
 const rewards = ref({} as DelegatorRewards);
 const balances = ref([] as Coin[]);
 const recentReceived = ref([] as TxResponse[]);
-const unbonding = ref([] as UnbondingResponses[]);
+const unbonding = ref([] as UnbondingDelegation[]);
 const unbondingTotal = ref(0);
 const chart = {};
 onMounted(() => {
@@ -83,7 +86,7 @@ const totalValue = computed(() => {
     x.entries?.forEach((y) => {
       value += format.tokenValueNumber({
         amount: y.balance,
-        denom: stakingStore.params.bond_denom,
+        denom: stakingStore.params.bondDenom,
       });
     });
   });
@@ -92,33 +95,42 @@ const totalValue = computed(() => {
 
 function loadAccount(address: string) {
   blockchain.rpc.getAuthAccount(address).then((x) => {
-    account.value = x.account;
+    account.value = x;
   });
   blockchain.rpc.getTxsBySender(address).then((x) => {
-    txs.value = x.tx_responses;
+    txs.value = x.txs;
   });
   blockchain.rpc.getDistributionDelegatorRewards(address).then((x) => {
     rewards.value = x;
   });
   blockchain.rpc.getStakingDelegations(address).then((x) => {
-    delegations.value = x.delegation_responses;
+    delegations.value = x.delegationResponses;
   });
   blockchain.rpc.getBankBalances(address).then((x) => {
-    balances.value = x.balances;
+    balances.value = x;
   });
   blockchain.rpc.getStakingDelegatorUnbonding(address).then((x) => {
-    unbonding.value = x.unbonding_responses;
-    x.unbonding_responses?.forEach((y) => {
+    unbonding.value = x.unbondingResponses;
+    x.unbondingResponses?.forEach((y) => {
       y.entries.forEach((z) => {
         unbondingTotal.value += Number(z.balance);
       });
     });
   });
 
-  const receivedQuery = `?&pagination.reverse=true&events=coin_received.receiver='${address}'&pagination.limit=5`;
-  blockchain.rpc.getTxs(receivedQuery, {}).then((x) => {
-    recentReceived.value = x.tx_responses;
-  });
+  blockchain.rpc
+    .getTxs(
+      [
+        {
+          key: 'coin_received.receiver',
+          value: address,
+        },
+      ],
+      new PageRequest(5, true)
+    )
+    .then((x) => {
+      recentReceived.value = x.txs;
+    });
 }
 
 function updateEvent() {
