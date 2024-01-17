@@ -51,10 +51,6 @@ const typeMap = Object.fromEntries(
   Object.entries(MsgType).map(([k, v]) => ['/' + v, k])
 );
 
-Object.assign(typeMap, {
-  '/cosmos.params.v1beta1.ParameterChangeProposal': 'ParameterChangeProposal',
-});
-
 const findType = (obj: any, type: string): any => {
   if (typeof obj !== 'object') return;
   const msg = obj[type];
@@ -66,9 +62,10 @@ const findType = (obj: any, type: string): any => {
 };
 
 export const decodeProto = (msg: { typeUrl: string; value: Uint8Array }) => {
-  const type = typeMap[msg.typeUrl];
+  const type = typeMap[msg.typeUrl] ?? msg.typeUrl.split('.').pop();
   if (type) {
     const obj = findType(injProto, type);
+
     if (obj) {
       const res = obj.decode(msg.value);
       if (res.msgs) {
