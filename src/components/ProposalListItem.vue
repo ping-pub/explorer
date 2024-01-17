@@ -10,9 +10,10 @@ import type { PaginatedProposals } from '@/types';
 import ProposalProcess from './ProposalProcess.vue';
 import type { PropType } from 'vue';
 import { computed, ref } from 'vue';
+import type { QueryProposalsResponse } from 'cosmjs-types/cosmos/gov/v1beta1/query';
 const dialog = useTxDialog();
 defineProps({
-  proposals: { type: Object as PropType<PaginatedProposals> },
+  proposals: { type: Object as PropType<QueryProposalsResponse> },
 });
 
 const format = useFormatter();
@@ -39,10 +40,12 @@ const voterStatusMap: Record<string, string> = {
 
 const proposalInfo = ref();
 
-function metaItem(metadata: string|undefined): { title: string; summary: string } {
-  return metadata ? JSON.parse(metadata) : {}
+function metaItem(metadata: string | undefined): {
+  title: string;
+  summary: string;
+} {
+  return metadata ? JSON.parse(metadata) : {};
 }
-
 </script>
 <template>
   <div class="bg-white dark:bg-[#28334e] rounded text-sm">
@@ -55,29 +58,33 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
               class="text-main text-base hover:text-indigo-400 cursor-pointer"
               @click="proposalInfo = item"
             >
-              #{{ item?.proposal_id }}</label
+              #{{ item?.proposalId }}</label
             >
           </td>
           <td class="w-full">
             <div>
               <RouterLink
-                :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
+                :to="`/${chain.chainName}/gov/${item?.proposalId}`"
                 class="text-main text-base mb-1 block hover:text-indigo-400 truncate"
               >
-                {{ item?.content?.title || item?.title || metaItem(item?.metadata)?.title }}
+                {{
+                  item?.content?.title ||
+                  item?.title ||
+                  metaItem(item?.metadata)?.title
+                }}
               </RouterLink>
               <div
                 v-if="item.content"
                 class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
               >
-                {{ showType(item.content['@type']) }} 
+                {{ showType(item.content.typeUrl) }}
               </div>
             </div>
           </td>
           <td class="w-60">
             <ProposalProcess
               :pool="staking.pool"
-              :tally="item.final_tally_result"
+              :tally="item.finalTallyResult"
             ></ProposalProcess>
           </td>
           <td class="w-36">
@@ -109,7 +116,12 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
               <div
                 class="truncate col-span-2 md:!col-span-1 text-xs text-gray-500 dark:text-gray-400 text-right md:!flex md:!justify-start"
               >
-                {{ format.toDay(item.voting_end_time, 'from') }}
+                {{
+                  format.toDay(
+                    Number(item.votingEndTime.seconds) * 1000,
+                    'from'
+                  )
+                }}
               </div>
             </div>
           </td>
@@ -121,7 +133,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
                 class="btn btn-xs btn-primary rounded-sm"
                 @click="
                   dialog.open('vote', {
-                    proposal_id: item?.proposal_id,
+                    proposal_id: item?.proposalId,
                   })
                 "
               >
@@ -149,7 +161,11 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
           <RouterLink
             :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
             class="flex-1 w-0 truncate mr-4"
-            >{{ item?.content?.title || item?.title || metaItem(item?.metadata)?.title }}</RouterLink
+            >{{
+              item?.content?.title ||
+              item?.title ||
+              metaItem(item?.metadata)?.title
+            }}</RouterLink
           >
           <label
             for="proposal-detail-modal"
@@ -225,7 +241,6 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
 
               <span v-else>Vote</span></label
             >
-           
           </div>
         </div>
       </div>
@@ -242,9 +257,24 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
         <h3 class="font-bold text-lg">Description</h3>
         <p class="py-4">
           <Component
-            v-if="proposalInfo?.content?.description || proposalInfo?.summary || metaItem(proposalInfo?.metadata)?.summary"
-            :is="select(proposalInfo?.content?.description || proposalInfo?.summary || metaItem(proposalInfo?.metadata)?.summary, 'horizontal')"
-            :value="proposalInfo?.content?.description || proposalInfo?.summary || metaItem(proposalInfo?.metadata)?.summary"
+            v-if="
+              proposalInfo?.content?.description ||
+              proposalInfo?.summary ||
+              metaItem(proposalInfo?.metadata)?.summary
+            "
+            :is="
+              select(
+                proposalInfo?.content?.description ||
+                  proposalInfo?.summary ||
+                  metaItem(proposalInfo?.metadata)?.summary,
+                'horizontal'
+              )
+            "
+            :value="
+              proposalInfo?.content?.description ||
+              proposalInfo?.summary ||
+              metaItem(proposalInfo?.metadata)?.summary
+            "
           >
           </Component>
         </p>

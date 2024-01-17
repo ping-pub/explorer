@@ -10,6 +10,7 @@ import {
   ProposalStatus,
   TextProposal,
 } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
+import type { QueryProposalsResponse } from 'cosmjs-types/cosmos/gov/v1beta1/query';
 
 export const useGovStore = defineStore('govStore', {
   state: () => {
@@ -19,7 +20,7 @@ export const useGovStore = defineStore('govStore', {
         voting: {},
         tally: {},
       },
-      proposals: {} as Record<ProposalStatus, Proposal[]>,
+      proposals: {} as Record<ProposalStatus, QueryProposalsResponse>,
       loading: {} as Record<string, LoadingStatus>,
     };
   },
@@ -61,30 +62,32 @@ export const useGovStore = defineStore('govStore', {
           // this.fetchTally(item.proposalId.toString()).then((res) => {
           //   item.finalTallyResult = res?.tally;
           // });
-          // if (this.walletstore.currentAddress) {
-          //   try {
-          //     this.fetchProposalVotesVoter(
-          //       item.proposalId.toString(),
-          //       this.walletstore.currentAddress
-          //     )
-          //       .then((res) => {
-          //         item.status = res.vote.options[res.vote.options.length].option || 'VOTE_OPTION_NO_WITH_VETO';
-          //         // 'No With Veto';
-          //       })
-          //       .catch((reject) => {
-          //         item.status = 'VOTE_OPTION_NO_WITH_VETO';
-          //       });
-          //   } catch (error) {
-          //     item.status = 'VOTE_OPTION_NO_WITH_VETO';
-          //   }
-          // } else {
-          //   item.status = 'VOTE_OPTION_NO_WITH_VETO';
-          // }
+          if (this.walletstore.currentAddress) {
+            try {
+              this.fetchProposalVotesVoter(
+                item.proposalId.toString(),
+                this.walletstore.currentAddress
+              )
+                .then((res) => {
+                  item.voterStatus =
+                    res.vote.options[res.vote.options.length].option ||
+                    'VOTE_OPTION_NO_WITH_VETO';
+                  // 'No With Veto';
+                })
+                .catch((reject) => {
+                  item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO';
+                });
+            } catch (error) {
+              item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO';
+            }
+          } else {
+            item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO';
+          }
         });
       }
 
       this.loading[status] = LoadingStatus.Loaded;
-      this.proposals[status] = proposals.proposals;
+      this.proposals[status] = proposals;
       //}
       return this.proposals[status];
     },
