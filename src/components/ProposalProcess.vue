@@ -1,20 +1,20 @@
 <script lang="ts" setup>
 import { useFormatter } from '@/stores';
-import type { Tally } from '@/types';
 import { computed } from '@vue/reactivity';
+import type { TallyResult } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
 import type { PropType } from 'vue';
 
 const props = defineProps({
-  tally: { type: Object as PropType<Tally> },
+  tally: { type: Object as PropType<TallyResult> },
   pool: {
     type: Object as PropType<{
-      not_bonded_tokens: string;
-      bonded_tokens: string;
+      notBondedTokens: string;
+      bondedTokens: string;
     }>,
   },
 });
 console.log(props);
-const total = computed(() => props.pool?.bonded_tokens);
+const total = computed(() => props.pool?.bondedTokens);
 const format = useFormatter();
 const yes = computed(() =>
   format.calculatePercent(props.tally?.yes, total.value)
@@ -26,7 +26,7 @@ const abstain = computed(() =>
   format.calculatePercent(props.tally?.abstain, total.value)
 );
 const veto = computed(() =>
-  format.calculatePercent(props.tally?.no_with_veto, total.value)
+  format.calculatePercent(props.tally?.noWithVeto, total.value)
 );
 </script>
 

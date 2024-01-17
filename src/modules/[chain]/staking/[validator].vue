@@ -21,13 +21,16 @@ import {
   type Delegation,
   type PaginatedDelegations,
   type PaginatedTxs,
-  type Validator,
 } from '@/types';
 import PaginationBar from '@/components/PaginationBar.vue';
 import { fromBase64, toBase64 } from '@cosmjs/encoding';
 import { stringToUint8Array, uint8ArrayToString } from '@/libs/utils';
 import type { TxSearchResponse } from '@cosmjs/tendermint-rpc';
-import type { DelegationResponse } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
+import type {
+  DelegationResponse,
+  Validator,
+} from 'cosmjs-types/cosmos/staking/v1beta1/staking';
+import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
 
 const props = defineProps(['validator', 'chain']);
 
@@ -45,7 +48,7 @@ const avatars = ref(cache || {});
 const identity = ref('');
 const rewards = ref([] as Coin[] | undefined);
 const commission = ref([] as Coin[] | undefined);
-const delegations = ref({} as PaginatedDelegations);
+const delegations = ref({} as QueryValidatorDelegationsResponse);
 const addresses = ref(
   {} as {
     account: string;
@@ -73,7 +76,7 @@ blockchain.rpc.getTxsBySender(addresses.value.account).then((x) => {
 });
 
 const apr = computed(() => {
-  const rate = v.value.commission?.commission_rates.rate || 0;
+  const rate = v.value?.commission.commissionRates || 0;
   const inflation = useMintStore().inflation;
   if (Number(inflation)) {
     return format.percent((1 - Number(rate)) * Number(inflation));
@@ -137,12 +140,12 @@ onMounted(() => {
       if (identity.value && !avatars.value[identity.value])
         loadAvatar(identity.value);
 
-      const prefix = valoperToPrefix(v.value.operator_address) || '<Invalid>';
+      const prefix = valoperToPrefix(v.value.operatorAddress) || '<Invalid>';
       addresses.value.hex = consensusPubkeyToHexAddress(
-        v.value.consensus_pubkey
+        v.value.consensusPubkey
       );
       addresses.value.valCons = pubKeyToValcons(
-        v.value.consensus_pubkey,
+        v.value.consensusPubkey!,
         prefix
       );
     });
@@ -209,7 +212,7 @@ function pageload(p: number) {
     });
 }
 
-const events = ref({} as PaginatedTxs);
+const events = ref({} as TxSearchResponse);
 
 enum EventType {
   Delegate = 'delegate',
@@ -315,7 +318,7 @@ function mapDelegators(messages: any[]) {
                 class="btn btn-primary btn-sm w-full"
                 @click="
                   dialog.open('delegate', {
-                    validator_address: v.operator_address,
+                    validator_address: v.operatorAddress,
                   })
                 "
                 >{{ $t('account.btn_delegate') }}</label
@@ -347,11 +350,11 @@ function mapDelegators(messages: any[]) {
                   >{{ $t('staking.contact') }}:
                 </span>
                 <a
-                  v-if="v.description?.security_contact"
-                  :href="'mailto:' + v.description.security_contact || '#'"
+                  v-if="v.description?.securityContact"
+                  :href="'mailto:' + v.description.securityContact || '#'"
                   class="cursor-pointer"
                 >
-                  {{ v.description?.security_contact || '-' }}
+                  {{ v.description?.securityContact || '-' }}
                 </a>
               </div>
             </div>
@@ -385,7 +388,7 @@ function mapDelegators(messages: any[]) {
                   {{
                     format.formatToken(
                       {
-                        amount: v.validator_bond_shares,
+                        amount: v.delegatorShares,
                         denom: staking.params.bondDenom,
                       },
                       false
@@ -402,7 +405,7 @@ function mapDelegators(messages: any[]) {
                   {{
                     format.formatToken(
                       {
-                        amount: v.liquid_shares,
+                        amount: v.delegatorShares,
                         denom: staking.params.bondDenom,
                       },
                       false
@@ -459,7 +462,7 @@ function mapDelegators(messages: any[]) {
 
               <div class="ml-3 flex flex-col">
                 <h4>
-                  {{ v.min_self_delegation }} {{ staking.params.bondDenom }}
+                  {{ v.minSelfDelegation }} {{ staking.params.bondDenom }}
                 </h4>
                 <span class="text-sm">{{ $t('staking.min_self') }}</span>
               </div>
@@ -488,7 +491,7 @@ function mapDelegators(messages: any[]) {
                 />
               </div>
               <div class="ml-3 flex flex-col justify-center">
-                <h4>{{ v.unbonding_height }}</h4>
+                <h4>{{ v.unbondingHeight }}</h4>
                 <span class="text-sm">{{
                   $t('staking.unbonding_height')
                 }}</span>
@@ -505,10 +508,15 @@ function mapDelegators(messages: any[]) {
               <div class="ml-3 flex flex-col justify-center">
                 <h4
                   v-if="
-                    v.unbonding_time && !v.unbonding_time.startsWith('1970')
+                    v.unbondingTime &&
+                    !new Date(Number(v.unbondingTime.seconds) * 1000)
+                      .toString()
+                      .startsWith('1970')
                   "
                 >
-                  {{ format.toDay(v.unbonding_time, 'from') }}
+                  {{
+                    format.toDay(Number(v.unbondingTime.seconds) * 1000, 'from')
+                  }}
                 </h4>
                 <h4 v-else>-</h4>
                 <span class="text-sm">{{ $t('staking.unbonding_time') }}</span>
@@ -561,7 +569,7 @@ function mapDelegators(messages: any[]) {
               class="btn btn-primary w-full"
               @click="
                 dialog.open('withdraw_commission', {
-                  validator_address: v.operator_address,
+                  validator_address: v.operatorAddress,
                 })
               "
               >{{ $t('account.btn_withdraw') }}</label
@@ -597,12 +605,12 @@ function mapDelegators(messages: any[]) {
               <Icon
                 icon="mdi:content-copy"
                 class="ml-2 cursor-pointer"
-                v-show="v.operator_address"
-                @click="copyWebsite(v.operator_address || '')"
+                v-show="v.operatorAddress"
+                @click="copyWebsite(v.operatorAddress || '')"
               />
             </div>
             <div class="text-xs">
-              {{ v.operator_address }}
+              {{ v.operatorAddress }}
             </div>
           </div>
           <div class="mb-3">
@@ -635,24 +643,24 @@ function mapDelegators(messages: any[]) {
               <Icon
                 icon="mdi:content-copy"
                 class="ml-2 cursor-pointer"
-                v-show="v.consensus_pubkey"
-                @click="copyWebsite(JSON.stringify(v.consensus_pubkey) || '')"
+                v-show="v.consensusPubkey"
+                @click="copyWebsite(JSON.stringify(v.consensusPubkey) || '')"
               />
             </div>
-            <div class="text-xs">{{ v.consensus_pubkey }}</div>
+            <div class="text-xs">{{ v.consensusPubkey }}</div>
           </div>
         </div>
       </div>
     </div>
 
     <div
-      v-if="delegations.delegation_responses"
+      v-if="delegations.delegationResponses"
       class="mt-5 bg-base-100 shadow rounded p-4"
     >
       <div class="text-lg mb-4 font-semibold">
         {{ $t('account.delegations') }}
         <span class="float-right">
-          {{ delegations.delegation_responses?.length || 0 }} /
+          {{ delegations.delegationResponses?.length || 0 }} /
           {{ delegations.pagination?.total || 0 }}
         </span>
       </div>
@@ -666,13 +674,10 @@ function mapDelegators(messages: any[]) {
           </thead>
           <tbody>
             <tr
-              v-for="{
-                balance,
-                delegation,
-              } in delegations.delegation_responses"
+              v-for="{ balance, delegation } in delegations.delegationResponses"
             >
               <td class="text-sm text-primary">
-                {{ delegation.delegator_address }}
+                {{ delegation.delegatorAddress }}
               </td>
               <td class="truncate text-primary">
                 {{ format.formatToken(balance) }}
@@ -681,7 +686,7 @@ function mapDelegators(messages: any[]) {
           </tbody>
         </table>
         <PaginationBar
-          :total="delegations.pagination?.total"
+          :total="delegations.pagination?.total.toString()"
           :limit="page.limit"
           :callback="pageload"
         />
@@ -705,22 +710,20 @@ function mapDelegators(messages: any[]) {
             <th class="text-left pl-4">{{ $t('account.time') }}</th>
           </thead>
           <tbody>
-            <tr v-for="(item, i) in txs.tx_responses">
+            <tr v-for="(item, i) in txs.txs">
               <td class="text-sm text-primary">
                 <RouterLink :to="`/${props.chain}/block/${item.height}`">{{
                   item.height
                 }}</RouterLink>
               </td>
               <td class="truncate text-primary" style="max-width: 200px">
-                <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
-                  {{ item.txhash }}
+                <RouterLink :to="`/${props.chain}/tx/${item.hash}`">
+                  {{ item.hash }}
                 </RouterLink>
               </td>
               <td>
                 <div class="flex items-center">
-                  <span class="mr-2">{{
-                    format.messages(item.tx.body.messages)
-                  }}</span>
+                  <span class="mr-2">{{ format.messages(item.tx) }}</span>
                   <Icon
                     v-if="item.code === 0"
                     icon="mdi-check"
@@ -764,7 +767,7 @@ function mapDelegators(messages: any[]) {
             </th>
           </thead>
           <tbody>
-            <tr v-for="(item, i) in events.tx_responses">
+            <tr v-for="(item, i) in events.txs">
               <td class="pr-2 truncate text-primary" style="max-width: 250px">
                 <RouterLink
                   v-for="d in mapDelegators(item.tx?.body?.messages)"

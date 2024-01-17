@@ -1,11 +1,9 @@
 import { fetchData } from '@/libs';
 import {
   QueryClient,
-  setupAuthExtension,
   setupBankExtension,
   setupStakingExtension,
   setupTxExtension,
-  type AuthExtension,
   type BankExtension,
   type StakingExtension,
   type TxExtension,
@@ -18,6 +16,7 @@ import {
   setupIbcExtension,
   setupSlashingExtension,
   setupDistributionExtension,
+  createProtobufRpcClient,
 } from '@cosmjs/stargate';
 import {
   HttpClient,
@@ -48,6 +47,33 @@ import type {
 import type { BondStatusString } from '@cosmjs/stargate/build/modules/staking/queries';
 import type { ProposalStatus } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
 import { fromBase64 } from '@cosmjs/encoding';
+import {
+  QueryAccountsResponse,
+  QueryClientImpl,
+} from 'cosmjs-types/cosmos/auth/v1beta1/query';
+import type { Any } from 'cosmjs-types/google/protobuf/any';
+
+export interface AuthExtension {
+  readonly auth: {
+    readonly account: (address: string) => Promise<Any | undefined>;
+    readonly accounts: () => Promise<QueryAccountsResponse>;
+  };
+}
+function setupAuthExtension(base: QueryClient) {
+  const rpc = createProtobufRpcClient(base);
+  const queryService = new QueryClientImpl(rpc);
+  return {
+    auth: {
+      account: async (address: string) => {
+        const { account } = await queryService.Account({ address: address });
+        return account;
+      },
+      accounts: async () => {
+        return await queryService.Accounts();
+      },
+    },
+  };
+}
 
 export class BaseRestClient<R extends AbstractRegistry> {
   endpoint: string;
@@ -147,9 +173,12 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
 
   // Auth Module
   async getAuthAccounts(page?: PageRequest) {
-    if (!page) page = new PageRequest();
-    const query = `?${page.toQueryString()}`;
-    return this.request(this.registry.auth_accounts, {}, query);
+    // if (!page) page = new PageRequest();
+    // const query = `?${page.toQueryString()}`;
+    // return this.request(this.registry.auth_accounts, {}, query);
+    const res = await this.queryClient.auth.accounts();
+    console.log(res);
+    return res;
   }
   async getAuthAccount(address: string) {
     // return this.request(this.registry.auth_account_address, { address });

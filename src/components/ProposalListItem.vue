@@ -159,7 +159,7 @@ function metaItem(metadata: string | undefined): {
           class="text-main text-base mb-1 flex justify-between hover:text-indigo-400"
         >
           <RouterLink
-            :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
+            :to="`/${chain.chainName}/gov/${item?.proposalId.toString()}`"
             class="flex-1 w-0 truncate mr-4"
             >{{
               item?.content?.title ||
@@ -172,7 +172,7 @@ function metaItem(metadata: string | undefined): {
             class="text-main text-base hover:text-indigo-400 cursor-pointer"
             @click="proposalInfo = item"
           >
-            #{{ item?.proposal_id }}</label
+            #{{ item?.proposalId }}</label
           >
         </div>
 
@@ -182,21 +182,23 @@ function metaItem(metadata: string | undefined): {
               v-if="item.content"
               class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
             >
-              {{ showType(item.content['@type']) }}
+              {{ showType(item.content.typeUrl) }}
             </div>
           </div>
 
           <div
             class="truncate text-xs text-gray-500 dark:text-gray-400 flex items-center justify-end"
           >
-            {{ format.toDay(item.voting_end_time, 'from') }}
+            {{
+              format.toDay(Number(item.votingEndTime.seconds) * 1000, 'from')
+            }}
           </div>
         </div>
 
         <div>
           <ProposalProcess
             :pool="staking.pool"
-            :tally="item.final_tally_result"
+            :tally="item.finalTallyResult"
           ></ProposalProcess>
         </div>
 
@@ -231,7 +233,7 @@ function metaItem(metadata: string | undefined): {
               class="btn btn-xs btn-primary rounded-sm"
               @click="
                 dialog.open('vote', {
-                  proposal_id: item?.proposal_id,
+                  proposal_id: item?.proposalId,
                 })
               "
             >

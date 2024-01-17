@@ -70,16 +70,16 @@ export const useStakingStore = defineStore('stakingStore', {
       }
     },
     async fetchAcitveValdiators() {
-      return this.fetchValidators('BOND_STATUS_BONDED');
+      return await this.fetchValidators('BOND_STATUS_BONDED');
     },
     async fetchInacitveValdiators() {
-      return this.fetchValidators('BOND_STATUS_UNBONDED');
+      return await this.fetchValidators('BOND_STATUS_UNBONDED');
     },
     async fetchUnbondingValdiators() {
-      return this.fetchValidators('BOND_STATUS_UNBONDING');
+      return await this.fetchValidators('BOND_STATUS_UNBONDING');
     },
     async fetchValidator(validatorAddr: string) {
-      return this.blockchain.rpc.getStakingValidator(validatorAddr);
+      return await this.blockchain.rpc.getStakingValidator(validatorAddr);
     },
     async fetchValidatorDelegation(
       validatorAddr: string,

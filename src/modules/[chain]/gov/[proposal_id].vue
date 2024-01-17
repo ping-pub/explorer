@@ -33,9 +33,9 @@ const chainStore = useBlockchain();
 store.fetchProposal(props.proposal_id).then((res) => {
   const proposalDetail = reactive(res.proposal);
   // when status under the voting, final_tally_result are no data, should request fetchTally
-  if (res.proposal?.status === 'PROPOSAL_STATUS_VOTING_PERIOD') {
+  if (res.proposal?.voterStatus === 'PROPOSAL_STATUS_VOTING_PERIOD') {
     store.fetchTally(props.proposal_id).then((tallRes) => {
-      proposalDetail.final_tally_result = tallRes.tally;
+      proposalDetail.finalTallyResult = tallRes.tally;
     });
   }
   proposal.value = proposalDetail;
@@ -121,7 +121,7 @@ const total = computed(() => {
 
 const turnout = computed(() => {
   if (total.value > 0) {
-    const bonded = stakingStore.pool?.bonded_tokens || '1';
+    const bonded = stakingStore.pool?.bondedTokens || '1';
     return format.percent(total.value / Number(bonded));
   }
   return 0;
@@ -172,7 +172,7 @@ function showValidatorName(voter: string) {
   const { data } = fromBech32(voter);
   const hex = toHex(data);
   const v = stakingStore.validators.find(
-    (x) => toHex(fromBech32(x.operator_address).data) === hex
+    (x) => toHex(fromBech32(x.operatorAddress).data) === hex
   );
   return v ? v.description.moniker : voter;
 }
