@@ -17,6 +17,11 @@ import { Icon } from '@iconify/vue';
 import type { ConnectionEnd } from 'cosmjs-types/ibc/core/connection/v1/connection';
 import type { IdentifiedClientState } from 'cosmjs-types/ibc/core/client/v1/client';
 import type { IdentifiedChannel } from 'cosmjs-types/ibc/core/channel/v1/channel';
+import {
+  ClientState as TendermintClientState,
+  ConsensusState as TendermintConsensusState,
+} from 'cosmjs-types/ibc/lightclients/tendermint/v1/tendermint';
+import { State } from 'cosmjs-types/ibc/core/channel/v1/channel';
 import type { TxSearchResponse } from '@cosmjs/tendermint-rpc';
 
 const props = defineProps(['chain', 'connection_id']);
@@ -25,7 +30,9 @@ const baseStore = useBaseStore();
 const format = useFormatter();
 const ibcStore = useIBCModule();
 const conn = ref({} as ConnectionEnd | undefined);
-const clientState = ref({} as IdentifiedClientState | undefined);
+const clientState = ref(
+  {} as (IdentifiedClientState & TendermintClientState) | undefined
+);
 const channels = ref([] as IdentifiedChannel[]);
 
 const connId = computed(() => {
@@ -46,7 +53,17 @@ onMounted(() => {
       conn.value = x.connection;
     });
     chainStore.rpc.getIBCConnectionsClientState(connId.value).then((x) => {
+      // @ts-ignore
       clientState.value = x.identifiedClientState;
+      if (x.identifiedClientState?.clientState) {
+        Object.assign(
+          clientState.value?.clientState!,
+          TendermintClientState.decode(
+            x.identifiedClientState?.clientState.value
+          )
+        );
+      }
+      console.log('getIBCConnectionsClientState', clientState.value);
     });
     chainStore.rpc.getIBCConnectionsChannels(connId.value).then((x) => {
       channels.value = x.channels;
@@ -146,9 +163,7 @@ function color(v: string) {
             </div>
           </div>
           <div class="mx-auto flex items-center">
-            <div
-              :class="{ 'text-success': conn?.state?.indexOf('_OPEN') > -1 }"
-            >
+            <div :class="{ 'text-success': conn?.state === State.STATE_OPEN }">
               <span class="text-lg rounded-full">&#x21cc;</span>
               <div class="text-c">
                 {{ conn?.state }}
@@ -159,7 +174,7 @@ function color(v: string) {
             <div
               class="order-first text-3xl font-semibold tracking-tight text-main mb-2"
             >
-              {{ clientState?.clientState?.value }}
+              {{ clientState?.clientState?.chainId }}
             </div>
             <div class="text-sm text-gray-500 dark:text-gray-400">
               {{ conn?.counterparty?.connectionId }} {{ clientState?.clientId }}
@@ -187,36 +202,56 @@ function color(v: string) {
             <tr>
               <td class="w-52">{{ $t('ibc.trust_level') }}:</td>
               <td>
-                {{ clientState?.clientState?.trust_level?.numerator }}/{{
-                  clientState.clientState?.trust_level?.denominator
+                {{ clientState?.clientState?.trustLevel.numerator }}/{{
+                  clientState.clientState?.trustLevel.denominator
                 }}
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.trusting_period') }}:</td>
               <td>
-                {{ formatSeconds(clientState.clientState?.trusting_period) }}
+                {{
+                  formatSeconds(
+                    clientState.clientState?.trustingPeriod.seconds.toString()
+                  )
+                }}
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.unbonding_period') }}:</td>
               <td>
-                {{ formatSeconds(clientState.clientState?.unbonding_period) }}
+                {{
+                  formatSeconds(
+                    clientState.clientState?.unbondingPeriod.seconds.toString()
+                  )
+                }}
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.max_clock_drift') }}:</td>
               <td>
-                {{ formatSeconds(clientState.clientState?.max_clock_drift) }}
+                {{
+                  formatSeconds(
+                    clientState.clientState?.maxClockDrift.seconds.toString()
+                  )
+                }}
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.frozen_height') }}:</td>
-              <td>{{ clientState.clientState?.frozen_height }}</td>
+              <td>
+                {{
+                  clientState.clientState?.frozenHeight.revisionHeight.toString()
+                }}
+              </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.latest_height') }}:</td>
-              <td>{{ clientState.clientState?.latest_height }}</td>
+              <td>
+                {{
+                  clientState.clientState?.latestHeight.revisionHeight.toString()
+                }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -232,7 +267,7 @@ function color(v: string) {
                 <div class="flex justify-between">
                   <span>{{ $t('ibc.allow_update_after_expiry') }}:</span>
                   <span>{{
-                    clientState.clientState?.allow_update_after_expiry
+                    clientState.clientState?.allowUpdateAfterExpiry
                   }}</span>
                 </div>
               </td>
@@ -242,7 +277,7 @@ function color(v: string) {
                 <div class="flex justify-between">
                   <span>{{ $t('ibc.allow_update_after_misbehaviour') }}: </span>
                   <span>{{
-                    clientState.clientState?.allow_update_after_misbehaviour
+                    clientState.clientState?.allowUpdateAfterMisbehaviour
                   }}</span>
                 </div>
               </td>
@@ -250,7 +285,7 @@ function color(v: string) {
             <tr>
               <td class="w-52">{{ $t('ibc.upgrade_path') }}:</td>
               <td class="text-right">
-                {{ clientState.clientState?.upgrade_path.join(', ') }}
+                {{ clientState.clientState?.upgradePath.join(', ') }}
               </td>
             </tr>
           </tbody>
@@ -392,10 +427,9 @@ function color(v: string) {
             <td>{{ resp.height }}</td>
             <td>
               <div class="text-xs truncate text-primary dark:invert">
-                <RouterLink
-                  :to="`/${chainStore.chainName}/tx/${resp.txhash}`"
-                  >{{ resp.txhash }}</RouterLink
-                >
+                <RouterLink :to="`/${chainStore.chainName}/tx/${resp.hash}`">{{
+                  resp.hash
+                }}</RouterLink>
               </div>
             </td>
             <td>
