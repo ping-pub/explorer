@@ -8,6 +8,18 @@ import { fromBase64, toBase64 } from '@cosmjs/encoding';
 import { useRouter } from 'vue-router';
 import type { BlockResponse } from '@cosmjs/tendermint-rpc';
 
+const compareHashEqual = (
+  firstHash: Uint8Array,
+  secondHash: Uint8Array
+): boolean => {
+  for (let i = 0; i < firstHash.length; i++) {
+    if (firstHash[i] !== secondHash[i]) {
+      return false;
+    }
+  }
+  return true;
+};
+
 export const useBaseStore = defineStore('baseStore', {
   state: () => {
     return {

@@ -3,13 +3,14 @@ import { decodeTxRaw, type DecodedTxRaw } from '@cosmjs/proto-signing';
 import { useBlockchain } from '@/stores';
 import { hashTx } from '@/libs';
 import type { Block } from '@/types';
+import type { BlockResponse } from '@cosmjs/tendermint-rpc';
 
 export const useBlockModule = defineStore('blockModule', {
   state: () => {
     return {
-      latest: {} as Block,
-      current: {} as Block,
-      recents: [] as Block[],
+      latest: {} as BlockResponse,
+      current: {} as BlockResponse,
+      recents: [] as BlockResponse[],
     };
   },
   getters: {
@@ -23,7 +24,7 @@ export const useBlockModule = defineStore('blockModule', {
     txsInRecents() {
       const txs = [] as { hash: string; tx: DecodedTxRaw }[];
       this.recents.forEach((x) =>
-        x.block?.data?.txs.forEach((tx: Uint8Array) => {
+        x.block?.txs.forEach((tx: Uint8Array) => {
           if (tx) {
             try {
               txs.push({

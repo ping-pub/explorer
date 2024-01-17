@@ -186,11 +186,11 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getBankSupplyByDenom(denom: string) {
     let supply;
     try {
-      supply = this.queryClient?.bank.supplyOf(denom);
+      supply = await this.queryClient.bank.supplyOf(denom);
       console.log(supply);
     } catch (err) {
       // will move this to sdk version profile later
-      console.log(err);
+      console.log('err getting bank supply: ', err);
     }
     return supply;
   }
@@ -303,12 +303,10 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return res;
   }
   async getGovProposal(proposal_id: string) {
-    return this.request(this.registry.gov_proposals_proposal_id, {
-      proposal_id,
-    });
+    return this.queryClient.gov.proposal(proposal_id);
   }
   async getGovProposalDeposits(proposal_id: string) {
-    return this.request(this.registry.gov_proposals_deposits, { proposal_id });
+    return this.queryClient.gov.deposits(proposal_id);
   }
   async getGovProposalTally(proposal_id: string) {
     const res = await this.queryClient.gov.tally(proposal_id);
@@ -407,9 +405,14 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     // return this.request(this.registry.staking_params, {});
   }
   async getStakingPool() {
-    const res = await this.queryClient.staking.pool();
-    console.log(res);
-    return res;
+    try {
+      const res = await this.queryClient.staking.pool();
+      // const res = await this.request(this.registry.staking_pool, {});
+      console.log(res);
+      return res;
+    } catch (error) {
+      console.log('error staking pool: ', error);
+    }
     // return this.request(this.registry.staking_pool, {});
   }
   async getStakingValidators(status: BondStatusString, limit = 200) {
