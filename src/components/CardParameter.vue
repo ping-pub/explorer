@@ -10,17 +10,17 @@ const props = defineProps({
 });
 
 const formatter = useFormatter();
-function calculateValue(value: any, item: any) {
+function calculateValue(value: any) {
+  if (!value) return;
   if (value instanceof Uint8Array) return fromAscii(value);
   if (Array.isArray(value)) {
     return (value[0] && value[0].amount) || '-';
   }
 
-  if (typeof value === 'object' && 'seconds' in value) {
-    return value.seconds.toString() + ' seconds';
-  }
-
-  if (String(value).search(/^\d+s$/g) > -1) {
+  if (
+    (typeof value === 'object' && 'seconds' in value) ||
+    String(value).search(/^\d+s$/g) > -1
+  ) {
     return formatSeconds(value);
   }
   const newValue = Number(value);
@@ -57,7 +57,7 @@ function formatTitle(v: string) {
           {{ formatTitle(item?.subtitle) }}
         </div>
         <div class="text-base text-main">
-          {{ calculateValue(item?.value, item) }}
+          {{ calculateValue(item?.value) }}
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from '@vue/reactivity';
 import { useBaseStore, useFormatter } from '@/stores';
-import { fromAscii } from '@cosmjs/encoding';
+import { fromAscii, toBase64 } from '@cosmjs/encoding';
 const props = defineProps(['chain']);
 
 const tab = ref('blocks');
@@ -64,7 +64,10 @@ const list = computed(() => {
         <div class="flex justify-between tooltip" data-tip="Block Proposor">
           <div class="mt-2 hidden text-sm sm:!block truncate">
             <span>{{
-              format.validator(fromAscii(item.block?.header?.proposerAddress))
+              format.validator(
+                item.block?.header?.proposerAddress &&
+                  toBase64(item.block?.header?.proposerAddress)
+              )
             }}</span>
           </div>
           <span class="text-right mt-1 whitespace-nowrap">

@@ -2,7 +2,7 @@
 import { select, decodeProto } from './index';
 
 const props = defineProps(['value', 'direct']);
-if (props.value.typeUrl) {
+if (props.value?.typeUrl) {
   props.value.value = decodeProto(props.value);
 }
 </script>

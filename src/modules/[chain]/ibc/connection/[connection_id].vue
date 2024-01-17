@@ -210,25 +210,19 @@ function color(v: string) {
             <tr>
               <td class="w-52">{{ $t('ibc.trusting_period') }}:</td>
               <td>
-                {{
-                  formatSeconds(clientState?.trustingPeriod.seconds.toString())
-                }}
+                {{ formatSeconds(clientState?.trustingPeriod) }}
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.unbonding_period') }}:</td>
               <td>
-                {{
-                  formatSeconds(clientState?.unbondingPeriod.seconds.toString())
-                }}
+                {{ formatSeconds(clientState?.unbondingPeriod) }}
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.max_clock_drift') }}:</td>
               <td>
-                {{
-                  formatSeconds(clientState?.maxClockDrift.seconds.toString())
-                }}
+                {{ formatSeconds(clientState?.maxClockDrift) }}
               </td>
             </tr>
             <tr>

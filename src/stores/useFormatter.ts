@@ -332,7 +332,9 @@ export const useFormatter = defineStore('formatter', {
       return this.percent(rate);
     },
     percent(decimal?: string | number) {
-      return decimal ? numeral(decimal).format('0.[00]%') : '-';
+      return decimal
+        ? numeral(decimal).divide('1000000000000000000').format('0.[00]%')
+        : '-';
     },
     formatNumber(input?: number, fmt = '0.[00]') {
       if (!input) return '';
