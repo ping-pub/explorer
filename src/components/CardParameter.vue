@@ -2,6 +2,7 @@
 import type { PropType } from 'vue';
 import { useFormatter } from '@/stores';
 import { formatSeconds } from '@/libs/utils';
+import { fromAscii, toBase64 } from '@cosmjs/encoding';
 const props = defineProps({
   cardItem: {
     type: Object as PropType<{ title: string; items: Array<any> }>,
@@ -9,12 +10,18 @@ const props = defineProps({
 });
 
 const formatter = useFormatter();
-function calculateValue(value: any) {
+function calculateValue(value: any, item: any) {
+  if (value instanceof Uint8Array) return fromAscii(value);
   if (Array.isArray(value)) {
     return (value[0] && value[0].amount) || '-';
   }
-  if(String(value).search(/^\d+s$/g) > -1) {
-    return formatSeconds(value)
+
+  if (typeof value === 'object' && 'seconds' in value) {
+    return value.seconds.toString() + ' seconds';
+  }
+
+  if (String(value).search(/^\d+s$/g) > -1) {
+    return formatSeconds(value);
   }
   const newValue = Number(value);
   if (`${newValue}` === 'NaN' || typeof value === 'boolean') {
@@ -28,8 +35,8 @@ function calculateValue(value: any) {
 }
 
 function formatTitle(v: string) {
-  if(!v) return ""
-  return v.replace(/_/g, " ")
+  if (!v) return '';
+  return v.replace(/_/g, ' ');
 }
 </script>
 <template>
@@ -46,8 +53,12 @@ function formatTitle(v: string) {
         :key="index"
         class="rounded-sm bg-active px-4 py-2"
       >
-        <div class="text-xs mb-2 text-secondary capitalize">{{ formatTitle(item?.subtitle) }}</div>
-        <div class="text-base text-main">{{ calculateValue(item?.value) }}</div>
+        <div class="text-xs mb-2 text-secondary capitalize">
+          {{ formatTitle(item?.subtitle) }}
+        </div>
+        <div class="text-base text-main">
+          {{ calculateValue(item?.value, item) }}
+        </div>
       </div>
     </div>
   </div>
