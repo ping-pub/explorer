@@ -52,10 +52,11 @@ import {
   QueryClientImpl,
 } from 'cosmjs-types/cosmos/auth/v1beta1/query';
 import type { Any } from 'cosmjs-types/google/protobuf/any';
+import { BaseAccount } from 'cosmjs-types/cosmos/auth/v1beta1/auth';
 
 export interface AuthExtension {
   readonly auth: {
-    readonly account: (address: string) => Promise<Any | undefined>;
+    readonly account: (address: string) => Promise<BaseAccount | undefined>;
     readonly accounts: () => Promise<QueryAccountsResponse>;
   };
 }
@@ -66,7 +67,7 @@ function setupAuthExtension(base: QueryClient) {
     auth: {
       account: async (address: string) => {
         const { account } = await queryService.Account({ address: address });
-        return account;
+        return account?.value ? BaseAccount.decode(account.value) : undefined;
       },
       accounts: async () => {
         return await queryService.Accounts();
