@@ -117,12 +117,7 @@ function metaItem(metadata: string | undefined): {
               <div
                 class="truncate col-span-2 md:!col-span-1 text-xs text-gray-500 dark:text-gray-400 text-right md:!flex md:!justify-start"
               >
-                {{
-                  format.toDay(
-                    fromTimestamp(item.votingEndTime.seconds),
-                    'from'
-                  )
-                }}
+                {{ format.toDay(fromTimestamp(item.votingEndTime), 'from') }}
               </div>
             </div>
           </td>

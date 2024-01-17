@@ -21,6 +21,12 @@ import { ref, reactive } from 'vue';
 import Countdown from '@/components/Countdown.vue';
 import PaginationBar from '@/components/PaginationBar.vue';
 import { fromBech32, toHex } from '@cosmjs/encoding';
+import type { Vote } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
+import type { PageResponse } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
+import type {
+  QueryDepositResponse,
+  QueryDepositsResponse,
+} from 'cosmjs-types/cosmos/gov/v1beta1/query';
 
 const props = defineProps(['proposal_id', 'chain']);
 const proposal = ref({} as GovProposal);
@@ -70,12 +76,12 @@ const status = computed(() => {
   return '';
 });
 
-const deposit = ref({} as PaginatedProposalDeposit);
+const deposit = ref({} as QueryDepositsResponse);
 store.fetchProposalDeposits(props.proposal_id).then((x) => (deposit.value = x));
 
-const votes = ref({} as GovVote[]);
+const votes = ref({} as Vote[]);
 const pageRequest = ref(new PageRequest());
-const pageResponse = ref({} as Pagination);
+const pageResponse = ref({} as PageResponse | undefined);
 
 store.fetchProposalVotes(props.proposal_id).then((x) => {
   votes.value = x.votes;
@@ -413,7 +419,7 @@ function metaItem(metadata: string | undefined): {
         </table>
         <PaginationBar
           :limit="pageRequest.limit"
-          :total="pageResponse.total"
+          :total="pageResponse?.total.toString()"
           :callback="pageload"
         />
       </div>

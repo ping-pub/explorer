@@ -4,9 +4,10 @@ import { computed, type PropType } from 'vue';
 import { useFormatter } from '@/stores';
 import { fromTimestamp } from 'cosmjs-types/helpers';
 import type { CommissionRate } from '@/types';
+import type { Commission } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
 
 const props = defineProps({
-  commission: { type: Object as PropType<CommissionRate> },
+  commission: { type: Object as PropType<Commission> },
 });
 
 let rate = computed(
@@ -129,7 +130,7 @@ const chartConfig = computed(() => {
     <div class="text-sm text-gray-500 dark:text-gray-400">
       {{
         `Updated at ${format.toDay(
-          fromTimestamp(props.commission?.updateTime),
+          fromTimestamp(props.commission?.updateTime!),
           'short'
         )}`
       }}
