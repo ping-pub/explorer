@@ -46,6 +46,8 @@ import type {
   SlashingExtension,
 } from '@cosmjs/stargate/build/modules';
 import type { BondStatusString } from '@cosmjs/stargate/build/modules/staking/queries';
+import type { ProposalStatus } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
+import { fromBase64 } from '@cosmjs/encoding';
 
 export class BaseRestClient<R extends AbstractRegistry> {
   endpoint: string;
@@ -176,9 +178,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     // if (!page) page = new PageRequest();
     // const query = `?${page.toQueryString()}`;
     // return this.request(this.registry.bank_supply, {}, query);
-    const paginationKey = page?.key
-      ? Buffer.from(page.key, 'base64')
-      : undefined;
+    const paginationKey = page?.key ? fromBase64(page.key) : undefined;
     const res = await this.queryClient.bank.totalSupply(paginationKey);
     console.log(res);
     return res;
@@ -291,15 +291,13 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     console.log(res);
     return res;
   }
-  async getGovProposals(status: string, page?: PageRequest) {
+  async getGovProposals(status: ProposalStatus, page?: PageRequest) {
     if (!page) page = new PageRequest();
     page.reverse = true;
     // const query = `?proposal_status={status}&${page.toQueryString()}`;
     // return this.request(this.registry.gov_proposals, { status }, query);
-    const paginationKey = page?.key
-      ? Buffer.from(page.key, 'base64')
-      : undefined;
-    // @ts-ignore
+    const paginationKey = page?.key ? fromBase64(page.key) : undefined;
+
     const res = this.queryClient.gov.proposals(status, '', '', paginationKey);
     console.log(res);
     return res;
@@ -344,9 +342,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     //   query
     // );
 
-    const paginationKey = page?.key
-      ? Buffer.from(page.key, 'base64')
-      : undefined;
+    const paginationKey = page?.key ? fromBase64(page.key) : undefined;
     const res = await this.queryClient.gov.votes(proposal_id, paginationKey);
     console.log(res);
     return res;
@@ -626,9 +622,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     //   {},
     //   query
     // );
-    const paginationKey = page?.key
-      ? Buffer.from(page.key, 'base64')
-      : undefined;
+    const paginationKey = page?.key ? fromBase64(page.key) : undefined;
     const res = await this.queryClient.ibc.connection.connections(
       paginationKey
     );

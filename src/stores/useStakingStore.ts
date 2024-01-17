@@ -105,9 +105,7 @@ export const useStakingStore = defineStore('stakingStore', {
             // console.log(signatures)
             const key = toBase64(fromHex(valconsToBase64(validatorAddr)));
             const exists = signatures.findIndex(
-              (x) =>
-                x.validatorAddress &&
-                Buffer.from(x.validatorAddress).toString('base64') === key
+              (x) => x.validatorAddress && toBase64(x.validatorAddress) === key
             );
             if (exists < 0) {
               const client = CosmosRestClient.newDefault(

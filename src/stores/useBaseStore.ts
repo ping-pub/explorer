@@ -4,7 +4,7 @@ import { decodeTxRaw, type DecodedTxRaw } from '@cosmjs/proto-signing';
 import dayjs from 'dayjs';
 import type { Block } from '@/types';
 import { hashTx } from '@/libs';
-import { fromBase64 } from '@cosmjs/encoding';
+import { fromBase64, toBase64 } from '@cosmjs/encoding';
 import { useRouter } from 'vue-router';
 import type { BlockResponse } from '@cosmjs/tendermint-rpc';
 
@@ -101,8 +101,7 @@ export const useBaseStore = defineStore('baseStore', {
       if (
         this.recents.findIndex(
           (x) =>
-            Buffer.from(x?.blockId?.hash).toString('base64') ===
-            Buffer.from(this.latest?.blockId?.hash).toString('base64')
+            toBase64(x?.blockId?.hash) === toBase64(this.latest?.blockId?.hash)
         ) === -1
       ) {
         if (this.recents.length >= 50) {

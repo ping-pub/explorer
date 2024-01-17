@@ -1,9 +1,15 @@
 import { defineStore } from 'pinia';
+import { decodeTxRaw } from '@cosmjs/proto-signing';
 import { useBlockchain } from './useBlockchain';
 import type { PageRequest, PaginatedProposals } from '@/types';
 import { LoadingStatus } from './useDashboard';
 import { useWalletStore } from './useWalletStore';
 import { reactive } from 'vue';
+import { toBase64 } from '@cosmjs/encoding';
+import {
+  TextProposal,
+  type ProposalStatus,
+} from 'cosmjs-types/cosmos/gov/v1beta1/gov';
 
 export const useGovStore = defineStore('govStore', {
   state: () => {
@@ -29,9 +35,9 @@ export const useGovStore = defineStore('govStore', {
     initial() {
       this.$reset();
       this.fetchParams();
-      this.fetchProposals('2');
+      this.fetchProposals(2);
     },
-    async fetchProposals(status: string, pagination?: PageRequest) {
+    async fetchProposals(status: ProposalStatus, pagination?: PageRequest) {
       //if (!this.loading[status]) {
       this.loading[status] = LoadingStatus.Loading;
       const proposals = reactive(
@@ -41,16 +47,20 @@ export const useGovStore = defineStore('govStore', {
       //filter spam proposals
       if (proposals?.proposals) {
         proposals.proposals = proposals.proposals.filter((item) => {
-          const title = item.content?.title || item.title || '';
-          return title.toLowerCase().indexOf('airdrop') === -1;
+          if (item.content) {
+            const proposal = TextProposal.decode(item.content.value);
+            Object.assign(item.content, proposal);
+            return proposal.title.toLowerCase().indexOf('airdrop') === -1;
+          }
+          return true;
         });
       }
 
-      if (status === '2') {
+      if (status === 2) {
         proposals?.proposals?.forEach((item) => {
-          // this.fetchTally(item.proposalId.toString()).then((res) => {
-          //   item.finalTallyResult = res?.tally;
-          // });
+          this.fetchTally(item.proposalId.toString()).then((res) => {
+            item.finalTallyResult = res?.tally;
+          });
           if (this.walletstore.currentAddress) {
             try {
               this.fetchProposalVotesVoter(
@@ -87,16 +97,19 @@ export const useGovStore = defineStore('govStore', {
       return await this.blockchain.rpc.getGovProposalTally(proposalId);
     },
     async fetchProposal(proposalId: string) {
-      return this.blockchain.rpc.getGovProposal(proposalId);
+      return await this.blockchain.rpc.getGovProposal(proposalId);
     },
     async fetchProposalDeposits(proposalId: string) {
-      return this.blockchain.rpc.getGovProposalDeposits(proposalId);
+      return await this.blockchain.rpc.getGovProposalDeposits(proposalId);
     },
     async fetchProposalVotes(proposalId: string, page?: PageRequest) {
-      return this.blockchain.rpc.getGovProposalVotes(proposalId, page);
+      return await this.blockchain.rpc.getGovProposalVotes(proposalId, page);
     },
     async fetchProposalVotesVoter(proposalId: string, voter: string) {
-      return this.blockchain.rpc.getGovProposalVotesVoter(proposalId, voter);
+      return await this.blockchain.rpc.getGovProposalVotesVoter(
+        proposalId,
+        voter
+      );
     },
   },
 });
