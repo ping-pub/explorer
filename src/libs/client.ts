@@ -46,6 +46,7 @@ import type {
   SlashingExtension,
 } from '@cosmjs/stargate/build/modules';
 import type { BondStatusString } from '@cosmjs/stargate/build/modules/staking/queries';
+import type { ProposalStatus } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
 
 export class BaseRestClient<R extends AbstractRegistry> {
   endpoint: string;
@@ -186,11 +187,11 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getBankSupplyByDenom(denom: string) {
     let supply;
     try {
-      supply = this.queryClient?.bank.supplyOf(denom);
+      supply = await this.queryClient.bank.supplyOf(denom);
       console.log(supply);
     } catch (err) {
       // will move this to sdk version profile later
-      console.log(err);
+      console.log('err getting bank supply: ', err);
     }
     return supply;
   }
@@ -291,7 +292,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     console.log(res);
     return res;
   }
-  async getGovProposals(status: string, page?: PageRequest) {
+  async getGovProposals(status: ProposalStatus, page?: PageRequest) {
     if (!page) page = new PageRequest();
     page.reverse = true;
     // const query = `?proposal_status={status}&${page.toQueryString()}`;
@@ -300,17 +301,20 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
       ? Buffer.from(page.key, 'base64')
       : undefined;
     // @ts-ignore
-    const res = this.queryClient.gov.proposals(status, '', '', paginationKey);
+    const res = await this.queryClient.gov.proposals(
+      status,
+      '',
+      '',
+      paginationKey
+    );
     console.log(res);
     return res;
   }
   async getGovProposal(proposal_id: string) {
-    return this.request(this.registry.gov_proposals_proposal_id, {
-      proposal_id,
-    });
+    return this.queryClient.gov.proposal(proposal_id);
   }
   async getGovProposalDeposits(proposal_id: string) {
-    return this.request(this.registry.gov_proposals_deposits, { proposal_id });
+    return this.queryClient.gov.deposits(proposal_id);
   }
   async getGovProposalTally(proposal_id: string) {
     const res = await this.queryClient.gov.tally(proposal_id);
@@ -411,16 +415,21 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     // return this.request(this.registry.staking_params, {});
   }
   async getStakingPool() {
-    const res = await this.queryClient.staking.pool();
-    console.log(res);
-    return res;
-    // return this.request(this.registry.staking_pool, {});
+    // try {
+    //   // const res = await this.queryClient.staking.pool();
+    //   const res = await this.request(this.registry.staking_pool, {});
+    //   console.log(res);
+    //   return res;
+    // } catch (error) {
+    //   console.log('error staking pool: ', error);
+    // }
+    return this.request(this.registry.staking_pool, {});
   }
   async getStakingValidators(status: BondStatusString, limit = 200) {
-    const res = await this.queryClient.staking.validators(status);
-    console.log(status, res);
-    return res;
-    // return this.request(this.registry.staking_validators, { status, limit });
+    // const res = await this.queryClient.staking.validators(status);
+    // console.log(status, res);
+    // return res;
+    return this.request(this.registry.staking_validators, { status, limit });
   }
   async getStakingValidator(validator_addr: string) {
     // return this.request(this.registry.staking_validators_address, {

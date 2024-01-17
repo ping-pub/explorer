@@ -102,7 +102,7 @@ export const useParamStore = defineStore('paramstore', {
         //   this.syncing = false
         // }
         // this.latestTime = toDay(res.block.header.time, 'long')
-        this.latestTime = res.block.header.time;
+        this.latestTime = res.block.header.time.toDateString();
       } catch (error) {
         console.warn(error);
       }

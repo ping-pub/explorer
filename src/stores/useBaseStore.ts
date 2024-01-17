@@ -8,6 +8,18 @@ import { fromBase64 } from '@cosmjs/encoding';
 import { useRouter } from 'vue-router';
 import type { BlockResponse } from '@cosmjs/tendermint-rpc';
 
+const compareHashEqual = (
+  firstHash: Uint8Array,
+  secondHash: Uint8Array
+): boolean => {
+  for (let i = 0; i < firstHash.length; i++) {
+    if (firstHash[i] !== secondHash[i]) {
+      return false;
+    }
+  }
+  return true;
+};
+
 export const useBaseStore = defineStore('baseStore', {
   state: () => {
     return {
@@ -99,11 +111,9 @@ export const useBaseStore = defineStore('baseStore', {
       }
       //check if the block exists in recents
       if (
-        this.recents.findIndex(
-          (x) =>
-            Buffer.from(x?.blockId?.hash).toString('base64') ===
-            Buffer.from(this.latest?.blockId?.hash).toString('base64')
-        ) === -1
+        this.recents.findIndex((x) => {
+          return compareHashEqual(x.blockId.hash, this.latest.blockId.hash);
+        }) === -1
       ) {
         if (this.recents.length >= 50) {
           this.recents.shift();

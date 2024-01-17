@@ -4,6 +4,7 @@ import type { PageRequest, PaginatedProposals } from '@/types';
 import { LoadingStatus } from './useDashboard';
 import { useWalletStore } from './useWalletStore';
 import { reactive } from 'vue';
+import { Proposal, ProposalStatus } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
 
 export const useGovStore = defineStore('govStore', {
   state: () => {
@@ -13,7 +14,7 @@ export const useGovStore = defineStore('govStore', {
         voting: {},
         tally: {},
       },
-      proposals: {} as Record<string, PaginatedProposals>,
+      proposals: {} as Record<ProposalStatus, Proposal[]>,
       loading: {} as Record<string, LoadingStatus>,
     };
   },
@@ -29,9 +30,9 @@ export const useGovStore = defineStore('govStore', {
     initial() {
       this.$reset();
       this.fetchParams();
-      this.fetchProposals('2');
+      this.fetchProposals(ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD);
     },
-    async fetchProposals(status: string, pagination?: PageRequest) {
+    async fetchProposals(status: ProposalStatus, pagination?: PageRequest) {
       //if (!this.loading[status]) {
       this.loading[status] = LoadingStatus.Loading;
       const proposals = reactive(
@@ -46,35 +47,35 @@ export const useGovStore = defineStore('govStore', {
         });
       }
 
-      if (status === '2') {
+      if (status === ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD) {
         proposals?.proposals?.forEach((item) => {
           // this.fetchTally(item.proposalId.toString()).then((res) => {
           //   item.finalTallyResult = res?.tally;
           // });
-          if (this.walletstore.currentAddress) {
-            try {
-              this.fetchProposalVotesVoter(
-                item.proposalId.toString(),
-                this.walletstore.currentAddress
-              )
-                .then((res) => {
-                  item.status = res?.vote?.option || 'VOTE_OPTION_NO_WITH_VETO';
-                  // 'No With Veto';
-                })
-                .catch((reject) => {
-                  item.status = 'VOTE_OPTION_NO_WITH_VETO';
-                });
-            } catch (error) {
-              item.status = 'VOTE_OPTION_NO_WITH_VETO';
-            }
-          } else {
-            item.status = 'VOTE_OPTION_NO_WITH_VETO';
-          }
+          // if (this.walletstore.currentAddress) {
+          //   try {
+          //     this.fetchProposalVotesVoter(
+          //       item.proposalId.toString(),
+          //       this.walletstore.currentAddress
+          //     )
+          //       .then((res) => {
+          //         item.status = res.vote.options[res.vote.options.length].option || 'VOTE_OPTION_NO_WITH_VETO';
+          //         // 'No With Veto';
+          //       })
+          //       .catch((reject) => {
+          //         item.status = 'VOTE_OPTION_NO_WITH_VETO';
+          //       });
+          //   } catch (error) {
+          //     item.status = 'VOTE_OPTION_NO_WITH_VETO';
+          //   }
+          // } else {
+          //   item.status = 'VOTE_OPTION_NO_WITH_VETO';
+          // }
         });
       }
 
       this.loading[status] = LoadingStatus.Loaded;
-      this.proposals[status] = proposals;
+      this.proposals[status] = proposals.proposals;
       //}
       return this.proposals[status];
     },
