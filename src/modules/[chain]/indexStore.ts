@@ -170,7 +170,7 @@ export const useIndexModule = defineStore('module-index', {
           title: 'Supply',
           color: 'success',
           icon: 'mdi-currency-usd',
-          stats: formatter.formatTokenAmount(bank.supply),
+          stats: formatter.formatTokenAmount(bank.supply!),
           change: 0,
         },
         {
@@ -178,6 +178,7 @@ export const useIndexModule = defineStore('module-index', {
           color: 'warning',
           icon: 'mdi-lock',
           stats: formatter.formatTokenAmount({
+            // @ts-ignore
             amount: this.pool.bondedTokens,
             denom: staking.params.bondDenom,
           }),

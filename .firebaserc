@@ -1,0 +1,12 @@
+{
+  "projects": {},
+  "targets": {
+    "oraichain-dapp": {
+      "hosting": {
+        "oraichainscan": [
+          "oraichainscan"
+        ]
+      }
+    }
+  }
+}
