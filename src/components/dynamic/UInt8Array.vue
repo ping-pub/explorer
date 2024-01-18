@@ -12,7 +12,11 @@ const text = computed(() => {
     case 'base64':
       return toBase64(props.value);
     default:
-      return fromAscii(props.value);
+      try {
+        return fromAscii(props.value);
+      } catch {
+        return 'Invalid Utf8';
+      }
   }
 });
 function change(value: string) {
