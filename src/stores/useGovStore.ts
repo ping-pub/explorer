@@ -9,9 +9,22 @@ import {
   Proposal,
   ProposalStatus,
   TextProposal,
+  VoteOption,
 } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
 import type { QueryProposalsResponse } from 'cosmjs-types/cosmos/gov/v1beta1/query';
 import type { GovProposalId } from '@cosmjs/stargate';
+import type { PageResponse } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
+
+type ExtraProposal = Proposal & {
+  voterStatus: VoteOption;
+};
+
+export interface ExtraQueryProposalsResponse {
+  /** proposals defines all the requested governance proposals. */
+  proposals: ExtraProposal[];
+  /** pagination defines the pagination in the response. */
+  pagination?: PageResponse;
+}
 
 export const useGovStore = defineStore('govStore', {
   state: () => {
@@ -21,7 +34,7 @@ export const useGovStore = defineStore('govStore', {
         voting: {},
         tally: {},
       },
-      proposals: {} as Record<ProposalStatus, QueryProposalsResponse>,
+      proposals: {} as Record<ProposalStatus, ExtraQueryProposalsResponse>,
       loading: {} as Record<string, LoadingStatus>,
     };
   },
@@ -44,7 +57,7 @@ export const useGovStore = defineStore('govStore', {
       this.loading[status] = LoadingStatus.Loading;
       const proposals = reactive(
         await this.blockchain.rpc?.getGovProposals(status, pagination)
-      );
+      ) as ExtraQueryProposalsResponse;
 
       //filter spam proposals
       if (proposals?.proposals) {
@@ -72,17 +85,17 @@ export const useGovStore = defineStore('govStore', {
                 .then((res) => {
                   item.voterStatus =
                     res.vote.options[res.vote.options.length].option ||
-                    'VOTE_OPTION_NO_WITH_VETO';
+                    VoteOption.VOTE_OPTION_NO_WITH_VETO;
                   // 'No With Veto';
                 })
                 .catch((reject) => {
-                  item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO';
+                  item.voterStatus = VoteOption.VOTE_OPTION_NO_WITH_VETO;
                 });
             } catch (error) {
-              item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO';
+              item.voterStatus = VoteOption.VOTE_OPTION_NO_WITH_VETO;
             }
           } else {
-            item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO';
+            item.voterStatus = VoteOption.VOTE_OPTION_NO_WITH_VETO;
           }
         });
       }

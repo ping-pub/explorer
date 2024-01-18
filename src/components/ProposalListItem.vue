@@ -4,16 +4,20 @@ import {
   useFormatter,
   useStakingStore,
   useTxDialog,
+  type ExtraQueryProposalsResponse,
 } from '@/stores';
 import { select } from '@/components/dynamic/index';
 import type { PaginatedProposals } from '@/types';
 import ProposalProcess from './ProposalProcess.vue';
 import type { PropType } from 'vue';
 import { computed, ref } from 'vue';
-import type { QueryProposalsResponse } from 'cosmjs-types/cosmos/gov/v1beta1/query';
+import {
+  VoteOption,
+  voteOptionToJSON,
+} from 'cosmjs-types/cosmos/gov/v1beta1/gov';
 const dialog = useTxDialog();
 defineProps({
-  proposals: { type: Object as PropType<QueryProposalsResponse> },
+  proposals: { type: Object as PropType<ExtraQueryProposalsResponse> },
 });
 
 const format = useFormatter();
@@ -132,9 +136,17 @@ function metaItem(metadata: string | undefined): {
                   })
                 "
               >
-                <span v-if="item?.voterStatus !== 'VOTE_OPTION_NO_WITH_VETO'">{{
-                  item?.voterStatus?.replace('VOTE_OPTION_', '')
-                }}</span>
+                <span
+                  v-if="
+                    item?.voterStatus !== VoteOption.VOTE_OPTION_NO_WITH_VETO
+                  "
+                  >{{
+                    voteOptionToJSON(item?.voterStatus).replace(
+                      'VOTE_OPTION_',
+                      ''
+                    )
+                  }}</span
+                >
 
                 <span v-else>Vote</span>
               </label>
@@ -230,9 +242,15 @@ function metaItem(metadata: string | undefined): {
                 })
               "
             >
-              <span v-if="item?.voterStatus !== 'VOTE_OPTION_NO_WITH_VETO'">{{
-                item?.voterStatus?.replace('VOTE_OPTION_', '')
-              }}</span>
+              <span
+                v-if="item?.voterStatus !== VoteOption.VOTE_OPTION_NO_WITH_VETO"
+                >{{
+                  voteOptionToJSON(item?.voterStatus).replace(
+                    'VOTE_OPTION_',
+                    ''
+                  )
+                }}</span
+              >
 
               <span v-else>Vote</span></label
             >

@@ -1,4 +1,3 @@
-import { fetchData } from '@/libs';
 import {
   QueryClient,
   setupBankExtension,
@@ -29,12 +28,10 @@ import {
   type CometClient,
   type AbciQueryParams,
   type QueryTag,
+  type TxSearchParams,
 } from '@cosmjs/tendermint-rpc';
 import { DEFAULT } from '@/libs';
 import {
-  adapter,
-  type Request,
-  type RequestRegistry,
   type AbstractRegistry,
   findApiProfileByChain,
   findApiProfileBySDKVersion,
@@ -114,9 +111,8 @@ function setupExtraExtension(base: QueryClient) {
   };
 }
 
-export class BaseRestClient<R extends AbstractRegistry> {
+export class BaseRestClient {
   endpoint: string;
-  registry: R;
   protected readonly tmClient: CometClient;
   protected queryClient:
     | QueryClient &
@@ -131,9 +127,8 @@ export class BaseRestClient<R extends AbstractRegistry> {
         TxExtension &
         ExtraExtension;
 
-  constructor(endpoint: string, registry: R) {
+  constructor(endpoint: string) {
     this.endpoint = endpoint;
-    this.registry = registry;
 
     // init queryClient
     const useHttp =
@@ -158,21 +153,6 @@ export class BaseRestClient<R extends AbstractRegistry> {
       setupExtraExtension
     );
   }
-
-  async request<T>(
-    request: Request<T>,
-    args: Record<string, any>,
-    query = '',
-    adapter?: (source: any) => T
-  ) {
-    let url = `${request.url.startsWith('http') ? '' : this.endpoint}${
-      request.url
-    }${query}`;
-    Object.keys(args).forEach((k) => {
-      url = url.replace(`{${k}}`, args[k] || '');
-    });
-    return fetchData<T>(url, adapter || request.adapter);
-  }
 }
 
 // dynamic all custom request implementations
@@ -191,25 +171,25 @@ function registeCustomRequest() {
 
 registeCustomRequest();
 
-export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
+export class CosmosRestClient extends BaseRestClient {
   static newDefault(endpoint: string) {
-    return new CosmosRestClient(endpoint, DEFAULT);
+    return new CosmosRestClient(endpoint);
   }
 
   static newStrategy(endpoint: string, chain: any) {
-    let req;
-    if (chain) {
-      // find by name first
-      req = findApiProfileByChain(chain.chainName);
-      // if not found. try sdk version
-      if (!req && chain.versions?.cosmosSdk) {
-        req = findApiProfileBySDKVersion(
-          localStorage.getItem(`sdk_version_${chain.chainName}`) ||
-            chain.versions?.cosmosSdk
-        );
-      }
-    }
-    return new CosmosRestClient(endpoint, req || DEFAULT);
+    // let req;
+    // if (chain) {
+    //   // find by name first
+    //   req = findApiProfileByChain(chain.chainName);
+    //   // if not found. try sdk version
+    //   if (!req && chain.versions?.cosmosSdk) {
+    //     req = findApiProfileBySDKVersion(
+    //       localStorage.getItem(`sdk_version_${chain.chainName}`) ||
+    //         chain.versions?.cosmosSdk
+    //     );
+    //   }
+    // }
+    return new CosmosRestClient(endpoint);
   }
 
   // Auth Module
@@ -229,8 +209,9 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
   // Bank Module
   async getBankParams() {
-    return await this.request(this.registry.bank_params, {});
+    // return await this.request(this.registry.bank_params, {});
     // const res = await this.queryClient.bank
+    return {};
   }
   async getBankBalances(address: string) {
     // return this.request(this.registry.bank_balances_address, { address });
@@ -620,6 +601,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
       page
     );
   }
+
   // query ibc sending msgs
   // ?&pagination.reverse=true&events=send_packet.packet_src_channel='${channel}'&events=send_packet.packet_src_port='${port}'
   // query ibc receiving msgs
@@ -637,13 +619,24 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
       }),
       order_by: page?.reverse ? 'desc' : 'asc',
       per_page: page?.limit,
+      page:
+        page?.limit && page?.offset
+          ? Math.ceil(page.offset / page.limit)
+          : undefined,
     });
     console.log(res);
     return res;
   }
+
   async getTxsAt(height: string | number) {
-    return this.request(this.registry.tx_txs_block, { height });
+    return await this.getTxs([
+      {
+        key: 'block.height',
+        value: height.toString(),
+      },
+    ]);
   }
+
   async getTx(hash: string) {
     // return this.request(this.registry.tx_hash, { hash });
     const res = await this.queryClient.tx.getTx(hash);
@@ -759,9 +752,10 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     chain_id: string,
     provider_address: string
   ) {
-    return this.request(
-      this.registry.interchain_security_ccv_provider_validator_consumer_addr,
-      { chain_id, provider_address }
-    );
+    return {};
+    // return this.request(
+    //   this.registry.interchain_security_ccv_provider_validator_consumer_addr,
+    //   { chain_id, provider_address }
+    // );
   }
 }
