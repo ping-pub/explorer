@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { fromBase64, toBase64 } from '@cosmjs/encoding';
 import { decodeTxRaw } from '@cosmjs/proto-signing';
 import { computed } from '@vue/reactivity';
 import { hashTx } from '@/libs';

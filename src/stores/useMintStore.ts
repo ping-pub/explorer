@@ -22,7 +22,7 @@ export const useMintStore = defineStore('mintStore', {
           this.inflation = '0';
         });
         if (res) {
-          this.inflation = res.inflation;
+          this.inflation = res.toString();
         }
       } catch (e) {
         console.log(e);
