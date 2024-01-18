@@ -79,7 +79,7 @@ function showPubkey(v: any) {
     </table>
     <PaginationBar
       :limit="pageRequest.limit"
-      :total="pageResponse?.total"
+      :total="pageResponse?.total ? pageResponse?.total.toString() : '0'"
       :callback="pageload"
     />
   </div>

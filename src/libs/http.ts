@@ -1,5 +1,3 @@
-import fetch from 'cross-fetch';
-
 export async function fetchData<T>(
   url: string,
   adapter: (source: any) => T

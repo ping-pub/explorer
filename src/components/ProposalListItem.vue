@@ -71,11 +71,7 @@ function metaItem(metadata: string | undefined): {
                 :to="`/${chain.chainName}/gov/${item?.proposalId}`"
                 class="text-main text-base mb-1 block hover:text-indigo-400 truncate"
               >
-                {{
-                  item?.content?.title ||
-                  item?.title ||
-                  metaItem(item?.metadata)?.title
-                }}
+                {{ item?.content?.title }}
               </RouterLink>
               <div
                 v-if="item.content"
@@ -168,11 +164,7 @@ function metaItem(metadata: string | undefined): {
           <RouterLink
             :to="`/${chain.chainName}/gov/${item?.proposalId.toString()}`"
             class="flex-1 w-0 truncate mr-4"
-            >{{
-              item?.content?.title ||
-              item?.title ||
-              metaItem(item?.metadata)?.title
-            }}</RouterLink
+            >{{ item?.content?.title }}</RouterLink
           >
           <label
             for="proposal-detail-modal"

@@ -19,11 +19,18 @@ import {
   type UnbondingResponses,
   PageRequest,
 } from '@/types';
+import type { Event } from '@cosmjs/tendermint-rpc';
 import type { Coin } from '@cosmjs/amino';
 import Countdown from '@/components/Countdown.vue';
-import { fromBase64 } from '@cosmjs/encoding';
-import type { UnbondingDelegation } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
-import type { BaseAccount } from 'cosmjs-types/cosmos/auth/v1beta1/auth';
+import { fromAscii, fromBase64, toBase64, toHex } from '@cosmjs/encoding';
+import type {
+  DelegationResponse,
+  UnbondingDelegation,
+} from 'cosmjs-types/cosmos/staking/v1beta1/staking';
+import { BaseAccount } from 'cosmjs-types/cosmos/auth/v1beta1/auth';
+import type { ExtraTxResponse } from '@/libs/client';
+import type { QueryDelegationTotalRewardsResponse } from 'cosmjs-types/cosmos/distribution/v1beta1/query';
+import { fromTimestamp } from 'cosmjs-types/helpers';
 
 const props = defineProps(['address', 'chain']);
 
@@ -32,11 +39,11 @@ const stakingStore = useStakingStore();
 const dialog = useTxDialog();
 const format = useFormatter();
 const account = ref({} as BaseAccount | undefined);
-const txs = ref({} as TxResponse[]);
-const delegations = ref([] as Delegation[]);
-const rewards = ref({} as DelegatorRewards);
+const txs = ref({} as ExtraTxResponse[]);
+const delegations = ref([] as DelegationResponse[]);
+const rewards = ref({} as QueryDelegationTotalRewardsResponse);
 const balances = ref([] as Coin[]);
-const recentReceived = ref([] as TxResponse[]);
+const recentReceived = ref([] as ExtraTxResponse[]);
 const unbonding = ref([] as UnbondingDelegation[]);
 const unbondingTotal = ref(0);
 const chart = {};
@@ -95,7 +102,7 @@ const totalValue = computed(() => {
 
 function loadAccount(address: string) {
   blockchain.rpc.getAuthAccount(address).then((x) => {
-    account.value = x;
+    account.value = BaseAccount.decode(x?.value!);
   });
   blockchain.rpc.getTxsBySender(address).then((x) => {
     txs.value = x.txs;
@@ -137,15 +144,13 @@ function updateEvent() {
   loadAccount(props.address);
 }
 
-function mapAmount(
-  events: { type: string; attributes: { key: string; value: string }[] }[]
-) {
+function mapAmount(events: readonly Event[]) {
   if (!events) return [];
   return events
     .find((x) => x.type === 'coin_received')
-    ?.attributes.filter((x) => x.key === 'YW1vdW50' || x.key === `amount`)
+    ?.attributes.filter((x) => toBase64(x.key) === 'YW1vdW50')
     .map((x) =>
-      x.key === 'amount' ? x.value : String.fromCharCode(...fromBase64(x.value))
+      toBase64(x.key) === 'YW1vdW50' ? fromAscii(x.value) : toBase64(x.value)
     );
 }
 </script>
@@ -333,7 +338,7 @@ function mapAmount(
                   {{
                     format.formatToken({
                       amount: String(unbondingTotal),
-                      denom: stakingStore.params.bond_denom,
+                      denom: stakingStore.params.bondDenom,
                     })
                   }}
                 </div>
@@ -350,7 +355,7 @@ function mapAmount(
                 ${{
                   format.tokenValue({
                     amount: String(unbondingTotal),
-                    denom: stakingStore.params.bond_denom,
+                    denom: stakingStore.params.bondDenom,
                   })
                 }}
               </div>
@@ -405,11 +410,10 @@ function mapAmount(
             <tr v-for="(v, index) in delegations" :key="index">
               <td class="text-caption text-primary py-3">
                 <RouterLink
-                  :to="`/${chain}/staking/${v.delegation.validator_address}`"
+                  :to="`/${chain}/staking/${v.delegation.validatorAddress}`"
                   >{{
-                    format.validatorFromBech32(
-                      v.delegation.validator_address
-                    ) || v.delegation.validator_address
+                    format.validatorFromBech32(v.delegation.validatorAddress) ||
+                    v.delegation.validatorAddress
                   }}</RouterLink
                 >
               </td>
@@ -421,7 +425,7 @@ function mapAmount(
                   format.formatTokens(
                     rewards?.rewards?.find(
                       (x) =>
-                        x.validator_address === v.delegation.validator_address
+                        x.validatorAddress === v.delegation.validatorAddress
                     )?.reward
                   )
                 }}
@@ -435,7 +439,7 @@ function mapAmount(
                       dialog.open(
                         'delegate',
                         {
-                          validator_address: v.delegation.validator_address,
+                          validator_address: v.delegation.validatorAddress,
                         },
                         updateEvent
                       )
@@ -449,7 +453,7 @@ function mapAmount(
                       dialog.open(
                         'redelegate',
                         {
-                          validator_address: v.delegation.validator_address,
+                          validator_address: v.delegation.validatorAddress,
                         },
                         updateEvent
                       )
@@ -463,7 +467,7 @@ function mapAmount(
                       dialog.open(
                         'unbond',
                         {
-                          validator_address: v.delegation.validator_address,
+                          validator_address: v.delegation.validatorAddress,
                         },
                         updateEvent
                       )
@@ -500,19 +504,19 @@ function mapAmount(
                 class="text-caption text-primary py-3 bg-slate-200"
                 colspan="10"
               >
-                <RouterLink :to="`/${chain}/staking/${v.validator_address}`">{{
-                  v.validator_address
+                <RouterLink :to="`/${chain}/staking/${v.validatorAddress}`">{{
+                  v.validatorAddress
                 }}</RouterLink>
               </td>
             </tr>
             <tr v-for="entry in v.entries">
-              <td class="py-3">{{ entry.creation_height }}</td>
+              <td class="py-3">{{ entry.creationHeight }}</td>
               <td class="py-3">
                 {{
                   format.formatToken(
                     {
-                      amount: entry.initial_balance,
-                      denom: stakingStore.params.bond_denom,
+                      amount: entry.initialBalance,
+                      denom: stakingStore.params.bondDenom,
                     },
                     true,
                     '0,0.[00]'
@@ -524,7 +528,7 @@ function mapAmount(
                   format.formatToken(
                     {
                       amount: entry.balance,
-                      denom: stakingStore.params.bond_denom,
+                      denom: stakingStore.params.bondDenom,
                     },
                     true,
                     '0,0.[00]'
@@ -534,8 +538,9 @@ function mapAmount(
               <td class="py-3">
                 <Countdown
                   :time="
-                    new Date(entry.completion_time).getTime() -
-                    new Date().getTime()
+                    entry.completionTime &&
+                    fromTimestamp(entry.completionTime).getTime() -
+                      new Date().getTime()
                   "
                 />
               </td>
@@ -576,18 +581,18 @@ function mapAmount(
               </td>
               <td class="truncate py-3" style="max-width: 200px">
                 <RouterLink
-                  :to="`/${chain}/tx/${v.txhash}`"
+                  :to="`/${chain}/tx/${toHex(v.hash)}`"
                   class="text-primary dark:invert"
                 >
-                  {{ v.txhash }}
+                  {{ toBase64(v.hash) }}
                 </RouterLink>
               </td>
               <td class="flex items-center py-3">
                 <div class="mr-2">
-                  {{ format.messages(v.tx.body.messages) }}
+                  {{ format.messages(v.txRaw.body.messages) }}
                 </div>
                 <Icon
-                  v-if="v.code === 0"
+                  v-if="v.result.code === 0"
                   icon="mdi-check"
                   class="text-success text-lg"
                 />
@@ -636,18 +641,18 @@ function mapAmount(
               </td>
               <td class="truncate py-3" style="max-width: 200px">
                 <RouterLink
-                  :to="`/${chain}/tx/${v.txhash}`"
+                  :to="`/${chain}/tx/${toHex(v.hash)}`"
                   class="text-primary dark:invert"
                 >
-                  {{ v.txhash }}
+                  {{ toBase64(v.hash) }}
                 </RouterLink>
               </td>
               <td class="flex items-center py-3">
                 <div class="mr-2">
-                  {{ mapAmount(v.events)?.join(', ') }}
+                  {{ mapAmount(v.result.events)?.join(', ') }}
                 </div>
                 <Icon
-                  v-if="v.code === 0"
+                  v-if="v.result.code === 0"
                   icon="mdi-check"
                   class="text-success text-lg"
                 />

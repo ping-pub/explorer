@@ -21,6 +21,11 @@ import {
   setupAuthExtension,
 } from '@cosmjs/stargate';
 import {
+  type WasmExtension,
+  setupWasmExtension,
+} from '@cosmjs/cosmwasm-stargate';
+import type { Request } from './registry';
+import {
   HttpClient,
   Tendermint37Client,
   // Tendermint34Client,
@@ -29,8 +34,9 @@ import {
   type AbciQueryParams,
   type QueryTag,
   type TxSearchParams,
+  type TxResponse,
 } from '@cosmjs/tendermint-rpc';
-import { DEFAULT } from '@/libs';
+import { DEFAULT, fetchData } from '@/libs';
 import {
   type AbstractRegistry,
   findApiProfileByChain,
@@ -38,6 +44,7 @@ import {
   registryChainProfile,
   registryVersionProfile,
   withCustomRequest,
+  type RequestRegistry,
 } from './registry';
 import { buildQuery } from '@cosmjs/tendermint-rpc/build/tendermint37/requests';
 import { PageRequest } from '@/types';
@@ -54,11 +61,30 @@ import {
   QueryProposalsResponse,
 } from 'cosmjs-types/cosmos/gov/v1beta1/query';
 import {
+  QueryAllContractStateResponse,
+  QueryClientImpl as WasmQueryClientImpl,
+  QueryCodesResponse,
+  QueryContractsByCreatorResponse,
+  QueryParamsResponse as QueryWasmParamsResponse,
+} from 'cosmjs-types/cosmwasm/wasm/v1/query';
+import {
   QueryClientImpl as BankQueryClientImpl,
+  QueryParamsResponse as QueryBankParamsResponse,
   QueryTotalSupplyResponse,
 } from 'cosmjs-types/cosmos/bank/v1beta1/query';
 import type { SlashingExtension } from '@cosmjs/stargate/build/modules';
+import type { DecodedTxRaw } from '@cosmjs/proto-signing';
+import { decodeTxRaw } from '@cosmjs/proto-signing';
 import { longify } from '@cosmjs/stargate/build/queryclient';
+
+export type ExtraTxResponse = TxResponse & {
+  txRaw: DecodedTxRaw;
+  timestamp?: string;
+};
+export interface ExtraTxSearchResponse {
+  readonly txs: ExtraTxResponse[];
+  readonly totalCount: number;
+}
 
 export interface ExtraExtension {
   readonly extra: {
@@ -74,6 +100,17 @@ export interface ExtraExtension {
     readonly totalSupply: (
       page?: PageRequest
     ) => Promise<QueryTotalSupplyResponse>;
+    readonly listCode: (page?: PageRequest) => Promise<QueryCodesResponse>;
+    readonly wasmParams: () => Promise<QueryWasmParamsResponse>;
+    readonly bankParams: () => Promise<QueryBankParamsResponse>;
+    readonly contractsByCreator: (
+      address: string,
+      page?: PageRequest
+    ) => Promise<QueryContractsByCreatorResponse>;
+    readonly contractStates: (
+      address: string,
+      page?: PageRequest
+    ) => Promise<QueryAllContractStateResponse>;
   };
 }
 function setupExtraExtension(base: QueryClient) {
@@ -81,6 +118,7 @@ function setupExtraExtension(base: QueryClient) {
   const authQueryService = new AuthQueryClientImpl(rpc);
   const govQueryService = new GovQueryClientImpl(rpc);
   const bankQueryService = new BankQueryClientImpl(rpc);
+  const wasmQueryService = new WasmQueryClientImpl(rpc);
   return {
     extra: {
       accounts: async (page?: PageRequest) => {
@@ -107,12 +145,36 @@ function setupExtraExtension(base: QueryClient) {
           pagination: page?.toPagination(),
         });
       },
+      listCode: async (page?: PageRequest) => {
+        return await wasmQueryService.Codes({
+          pagination: page?.toPagination(),
+        });
+      },
+      wasmParams: async () => {
+        return await wasmQueryService.Params();
+      },
+      contractsByCreator: async (address: string, page?: PageRequest) => {
+        return await wasmQueryService.ContractsByCreator({
+          pagination: page?.toPagination(),
+          creatorAddress: address,
+        });
+      },
+      contractStates: async (address: string, page?: PageRequest) => {
+        return await wasmQueryService.AllContractState({
+          pagination: page?.toPagination(),
+          address,
+        });
+      },
+      bankParams: async () => {
+        return await bankQueryService.Params();
+      },
     },
   };
 }
 
-export class BaseRestClient {
+export class BaseRestClient<R extends AbstractRegistry> {
   endpoint: string;
+  registry: R;
   protected readonly tmClient: CometClient;
   protected queryClient:
     | QueryClient &
@@ -125,10 +187,12 @@ export class BaseRestClient {
         SlashingExtension &
         DistributionExtension &
         TxExtension &
+        WasmExtension &
         ExtraExtension;
 
-  constructor(endpoint: string) {
+  constructor(endpoint: string, registry: R) {
     this.endpoint = endpoint;
+    this.registry = registry;
 
     // init queryClient
     const useHttp =
@@ -150,8 +214,23 @@ export class BaseRestClient {
       setupSlashingExtension,
       setupDistributionExtension,
       setupTxExtension,
+      setupWasmExtension,
       setupExtraExtension
     );
+  }
+  async request<T>(
+    request: Request<T>,
+    args: Record<string, any>,
+    query = '',
+    adapter?: (source: any) => T
+  ) {
+    let url = `${request.url.startsWith('http') ? '' : this.endpoint}${
+      request.url
+    }${query}`;
+    Object.keys(args).forEach((k) => {
+      url = url.replace(`{${k}}`, args[k] || '');
+    });
+    return fetchData<T>(url, adapter || request.adapter);
   }
 }
 
@@ -171,25 +250,25 @@ function registeCustomRequest() {
 
 registeCustomRequest();
 
-export class CosmosRestClient extends BaseRestClient {
+export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   static newDefault(endpoint: string) {
-    return new CosmosRestClient(endpoint);
+    return new CosmosRestClient(endpoint, DEFAULT);
   }
 
   static newStrategy(endpoint: string, chain: any) {
-    // let req;
-    // if (chain) {
-    //   // find by name first
-    //   req = findApiProfileByChain(chain.chainName);
-    //   // if not found. try sdk version
-    //   if (!req && chain.versions?.cosmosSdk) {
-    //     req = findApiProfileBySDKVersion(
-    //       localStorage.getItem(`sdk_version_${chain.chainName}`) ||
-    //         chain.versions?.cosmosSdk
-    //     );
-    //   }
-    // }
-    return new CosmosRestClient(endpoint);
+    let req;
+    if (chain) {
+      // find by name first
+      req = findApiProfileByChain(chain.chainName);
+      // if not found. try sdk version
+      if (!req && chain.versions?.cosmosSdk) {
+        req = findApiProfileBySDKVersion(
+          localStorage.getItem(`sdk_version_${chain.chainName}`) ||
+            chain.versions?.cosmosSdk
+        );
+      }
+    }
+    return new CosmosRestClient(endpoint, req || DEFAULT);
   }
 
   // Auth Module
@@ -210,8 +289,8 @@ export class CosmosRestClient extends BaseRestClient {
   // Bank Module
   async getBankParams() {
     // return await this.request(this.registry.bank_params, {});
-    // const res = await this.queryClient.bank
-    return {};
+    const res = await this.queryClient.extra.bankParams();
+    return res;
   }
   async getBankBalances(address: string) {
     // return this.request(this.registry.bank_balances_address, { address });
@@ -606,7 +685,11 @@ export class CosmosRestClient extends BaseRestClient {
   // ?&pagination.reverse=true&events=send_packet.packet_src_channel='${channel}'&events=send_packet.packet_src_port='${port}'
   // query ibc receiving msgs
   // ?&pagination.reverse=true&events=recv_packet.packet_dst_channel='${channel}'&events=recv_packet.packet_dst_port='${port}'
-  async getTxs(params?: QueryTag[], page?: PageRequest) {
+  async getTxs(
+    params?: QueryTag[],
+    page?: PageRequest,
+    decodeRaw = true
+  ): Promise<ExtraTxSearchResponse> {
     // if (!page) page = new PageRequest();
     // return this.request(
     //   this.registry.tx_txs,
@@ -624,7 +707,15 @@ export class CosmosRestClient extends BaseRestClient {
           ? Math.ceil(page.offset / page.limit)
           : undefined,
     });
-    console.log(res);
+
+    if (decodeRaw) {
+      res.txs.forEach((tx, i) => {
+        // @ts-ignore
+        tx.txRaw = decodeTxRaw(tx.tx);
+      });
+    }
+    console.log('getTxs', res);
+    // @ts-ignore
     return res;
   }
 
@@ -752,7 +843,7 @@ export class CosmosRestClient extends BaseRestClient {
     chain_id: string,
     provider_address: string
   ) {
-    return {};
+    return { consumerAddress: '' };
     // return this.request(
     //   this.registry.interchain_security_ccv_provider_validator_consumer_addr,
     //   { chain_id, provider_address }

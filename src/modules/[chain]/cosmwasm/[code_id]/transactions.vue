@@ -6,29 +6,24 @@ import {
   useFormatter,
   useTxDialog,
 } from '@/stores';
-import {
-  PageRequest,
-  type PaginatedBalances,
-  type PaginatedTxs,
-} from '@/types';
+import { toBase64, toHex } from '@cosmjs/encoding';
+import { PageRequest } from '@/types';
 import { Icon } from '@iconify/vue';
 import { onMounted, ref } from 'vue';
 import { useWasmStore } from '../WasmStore';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { useRoute } from 'vue-router';
-import type {
-  ContractInfo,
-  PaginabledContractStates,
-  PaginabledContracts,
-} from '../types';
-import { post } from '@/libs';
-
+import { decodeTxRaw, type DecodedTxRaw } from '@cosmjs/proto-signing';
 import { JsonViewer } from 'vue3-json-viewer';
 // if you used v1.0.5 or latster ,you should add import "vue3-json-viewer/dist/index.css"
 import 'vue3-json-viewer/dist/index.css';
 import WasmVerification from '@/components/WasmVerification.vue';
-import type { TxSearchResponse } from '@cosmjs/tendermint-rpc';
+import type { TxResponse, TxSearchResponse } from '@cosmjs/tendermint-rpc';
 import type { Coin } from '@cosmjs/stargate';
+import type { QueryAllContractStateResponse } from 'cosmjs-types/cosmwasm/wasm/v1/query';
+import type { ContractInfo } from 'cosmjs-types/cosmwasm/wasm/v1/types';
+import { fromAscii } from '@cosmjs/encoding';
+import type { ExtraTxSearchResponse } from '@/libs/client';
 
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
@@ -38,14 +33,13 @@ const wasmStore = useWasmStore();
 const route = useRoute();
 const page = ref(new PageRequest());
 const pageRequest = ref(new PageRequest());
-const response = ref({} as PaginabledContracts);
 
-const txs = ref<TxSearchResponse>({ txs: [], totalCount: 0 });
+const txs = ref<ExtraTxSearchResponse>({ txs: [], totalCount: 0 });
 
 const dialog = useTxDialog();
 const infoDialog = ref(false);
-const info = ref({} as ContractInfo);
-const state = ref({} as PaginabledContractStates);
+const info = ref({} as ContractInfo | undefined);
+const state = ref({} as QueryAllContractStateResponse);
 const selected = ref('');
 const balances = ref({} as Coin[]);
 
@@ -54,13 +48,13 @@ const contractAddress = String(route.query.contract);
 onMounted(() => {
   const address = contractAddress;
   wasmStore.wasmClient.getWasmContracts(address).then((x) => {
-    info.value = x.contract_info;
+    info.value = x.contractInfo;
   });
   chainStore.rpc
     .getTxs(
       [
         {
-          key: 'execute._contract_address',
+          key: 'wasm._contract_address',
           value: address,
         },
       ],
@@ -78,7 +72,7 @@ function pageload(pageNum: number) {
     .getTxs(
       [
         {
-          key: 'execute._contract_address',
+          key: 'wasm._contract_address',
           value: address,
         },
       ],
@@ -245,23 +239,24 @@ const result = ref({});
             <td>{{ resp.height }}</td>
             <td>
               <div class="text-xs truncate text-primary dark:invert">
-                <RouterLink :to="`/${chainStore.chainName}/tx/${resp.hash}`"
-                  >{{ resp.hash }}
+                <RouterLink
+                  :to="`/${chainStore.chainName}/tx/${toHex(resp.hash)}`"
+                  >{{ toBase64(resp.hash) }}
                 </RouterLink>
               </div>
             </td>
             <td>
               <div class="flex">
-                {{ format.messages(resp.tx.body.messages) }}
+                {{ format.messages(resp.txRaw.body.messages) }}
                 <Icon
-                  v-if="resp.code === 0"
+                  v-if="resp.result.code === 0"
                   icon="mdi-check"
                   class="text-success text-lg"
                 />
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </div>
             </td>
-            <td>{{ format.toLocaleDate(resp.timestamp) }}</td>
+            <td>{{ format.toLocaleDate(resp?.timestamp) }}</td>
           </tr>
         </tbody>
       </table>
@@ -313,8 +308,8 @@ const result = ref({});
               <JsonViewer
                 :value="
                   state.models?.map((v) => ({
-                    key: format.hexToString(v.key),
-                    value: JSON.parse(format.base64ToString(v.value)),
+                    key: fromAscii(v.key),
+                    value: JSON.parse(fromAscii(v.value)),
                   })) || ''
                 "
                 :theme="baseStore.theme || 'dark'"
@@ -326,7 +321,11 @@ const result = ref({});
               />
               <PaginationBar
                 :limit="pageRequest.limit"
-                :total="state.pagination?.total"
+                :total="
+                  state.pagination?.total
+                    ? state.pagination.total.toString()
+                    : '0'
+                "
                 :callback="pageloadState"
               />
             </div>

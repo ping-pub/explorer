@@ -14,9 +14,11 @@ import {
 import type { QueryProposalsResponse } from 'cosmjs-types/cosmos/gov/v1beta1/query';
 import type { GovProposalId } from '@cosmjs/stargate';
 import type { PageResponse } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
+import type { Any } from 'cosmjs-types/google/protobuf/any';
 
 type ExtraProposal = Proposal & {
   voterStatus: VoteOption;
+  content: Any & TextProposal;
 };
 
 export interface ExtraQueryProposalsResponse {

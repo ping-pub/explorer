@@ -9,6 +9,7 @@ import DonutChart from '@/components/charts/DonutChart.vue';
 import ApexCharts from 'vue3-apexcharts';
 import { get } from '@/libs';
 import { getMarketPriceChartConfig } from '@/components/charts/apexChartConfig';
+import type { DelegationResponse } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
 
 const format = useFormatter();
 const conf = ref(
@@ -19,7 +20,7 @@ const conf = ref(
 );
 const chainStore = useBlockchain();
 const balances = ref({} as Record<string, Coin[]>);
-const delegations = ref({} as Record<string, Delegation[]>);
+const delegations = ref({} as Record<string, DelegationResponse[]>);
 const tokenMeta = ref({} as Record<string, AccountEntry>);
 
 const priceloading = ref(false);

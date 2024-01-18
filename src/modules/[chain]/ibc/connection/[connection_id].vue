@@ -23,6 +23,8 @@ import {
 } from 'cosmjs-types/ibc/lightclients/tendermint/v1/tendermint';
 import { State } from 'cosmjs-types/ibc/core/channel/v1/channel';
 import type { TxSearchResponse } from '@cosmjs/tendermint-rpc';
+import { toBase64, toHex } from '@cosmjs/encoding';
+import type { ExtraTxSearchResponse } from '@/libs/client';
 
 const props = defineProps(['chain', 'connection_id']);
 const chainStore = useBlockchain();
@@ -40,7 +42,7 @@ const connId = computed(() => {
 });
 
 const loading = ref(false);
-const txs = ref({} as TxSearchResponse);
+const txs = ref({} as ExtraTxSearchResponse);
 const direction = ref('');
 const channel_id = ref('');
 const port_id = ref('');
@@ -91,7 +93,7 @@ function fetchSendingTxs(channel: string, port: string, pageNum = 0) {
   direction.value = 'Out';
   channel_id.value = channel;
   port_id.value = port;
-  txs.value = {} as TxSearchResponse;
+  txs.value = {} as ExtraTxSearchResponse;
   chainStore.rpc
     .getTxs(
       [
@@ -117,7 +119,7 @@ function fetchRecevingTxs(channel: string, port: string, pageNum = 0) {
   direction.value = 'In';
   channel_id.value = channel;
   port_id.value = port;
-  txs.value = {} as TxSearchResponse;
+  txs.value = {} as ExtraTxSearchResponse;
   chainStore.rpc
     .getTxs(
       [
@@ -407,16 +409,17 @@ function color(v: string) {
             <td>{{ resp.height }}</td>
             <td>
               <div class="text-xs truncate text-primary dark:invert">
-                <RouterLink :to="`/${chainStore.chainName}/tx/${resp.hash}`">{{
-                  resp.hash
-                }}</RouterLink>
+                <RouterLink
+                  :to="`/${chainStore.chainName}/tx/${toHex(resp.hash)}`"
+                  >{{ toBase64(resp.hash) }}</RouterLink
+                >
               </div>
             </td>
             <td>
               <div class="flex">
-                {{ format.messages(resp.tx.body.messages) }}
+                {{ format.messages(resp.txRaw.body.messages) }}
                 <Icon
-                  v-if="resp.code === 0"
+                  v-if="resp.result.code === 0"
                   icon="mdi-check"
                   class="text-success text-lg"
                 />

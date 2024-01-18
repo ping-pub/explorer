@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { useBlockchain } from '@/stores';
 import { DEFAULT_VERSION, WasmRestClient } from './WasmClient';
-import { get, post } from '@/libs';
 
 export const useWasmStore = defineStore('module-wasm', {
   state: () => {

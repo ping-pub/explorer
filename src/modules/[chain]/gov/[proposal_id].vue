@@ -38,9 +38,17 @@ import type {
 } from 'cosmjs-types/cosmos/gov/v1beta1/query';
 import { decodeProto } from '@/components/dynamic';
 import type { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
+import type { Params } from 'cosmjs-types/cosmos/distribution/v1beta1/distribution';
+
+type ExtraProposal = Proposal & {
+  content: ParameterChangeProposal &
+    MsgSoftwareUpgrade & {
+      current: Params[];
+    };
+};
 
 const props = defineProps(['proposal_id', 'chain']);
-const proposal = ref({} as Proposal);
+const proposal = ref({} as ExtraProposal);
 const format = useFormatter();
 const store = useGovStore();
 const dialog = useTxDialog();
@@ -62,9 +70,10 @@ store.fetchProposal(props.proposal_id).then((res) => {
       proposalDetail.finalTallyResult = tallRes.tally;
     });
   }
-
+  // @ts-ignore
   proposal.value = proposalDetail;
   console.log('fetchProposal', proposal.value);
+
   // load origin params if the proposal is param change
   if (changeProposal?.changes) {
     changeProposal.changes.forEach((item) => {
@@ -240,11 +249,7 @@ function metaItem(metadata: string | undefined): {
       >
         <p class="truncate w-full">
           {{ proposal_id }}.
-          {{
-            proposal.title ||
-            proposal.content?.title ||
-            metaItem(proposal?.metadata)?.title
-          }}
+          {{ proposal.content?.title }}
         </p>
         <div
           class="badge badge-ghost"
@@ -262,18 +267,9 @@ function metaItem(metadata: string | undefined): {
       <div class="">
         <ObjectElement :value="proposal.content" />
       </div>
-      <div
-        v-if="
-          (proposal.summary && !proposal.content?.description) ||
-          metaItem(proposal?.metadata)?.summary
-        "
-      >
+      <div v-if="proposal.content?.description">
         <MdEditor
-          :model-value="
-            format.multiLine(
-              proposal.summary || metaItem(proposal?.metadata)?.summary
-            )
-          "
+          :model-value="format.multiLine(proposal.content?.description)"
           previewOnly
           class="md-editor-recover"
         ></MdEditor>
@@ -402,7 +398,7 @@ function metaItem(metadata: string | undefined): {
               <div class="w-2 h-2 rounded-full bg-warning mr-3"></div>
               <div class="text-base flex-1 text-main">
                 {{ $t('gov.upgrade_plan') }}:
-                <span v-if="Number(proposal.content?.plan?.height || '0') > 0">
+                <span v-if="Number(proposal.content.plan?.height || '0') > 0">
                   (EST)</span
                 >
                 <span v-else>{{

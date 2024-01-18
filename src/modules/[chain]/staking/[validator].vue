@@ -23,7 +23,7 @@ import {
   type PaginatedTxs,
 } from '@/types';
 import PaginationBar from '@/components/PaginationBar.vue';
-import { fromBase64, toBase64 } from '@cosmjs/encoding';
+import { fromAscii, fromBase64, toAscii, toBase64 } from '@cosmjs/encoding';
 import { stringToUint8Array, uint8ArrayToString } from '@/libs/utils';
 import type { TxSearchResponse } from '@cosmjs/tendermint-rpc';
 import { fromTimestamp } from 'cosmjs-types/helpers';
@@ -32,6 +32,8 @@ import type {
   Validator,
 } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
 import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
+import type { ExtraTxSearchResponse } from '@/libs/client';
+import type { Event } from '@cosmjs/tendermint-rpc';
 
 const props = defineProps(['validator', 'chain']);
 
@@ -70,7 +72,7 @@ staking
     }
   });
 
-const txs = ref({} as TxSearchResponse);
+const txs = ref({} as ExtraTxSearchResponse);
 
 blockchain.rpc.getTxsBySender(addresses.value.account).then((x) => {
   txs.value = x;
@@ -213,7 +215,7 @@ function pageload(p: number) {
     });
 }
 
-const events = ref({} as TxSearchResponse);
+const events = ref({} as ExtraTxSearchResponse);
 
 enum EventType {
   Delegate = 'delegate',
@@ -247,32 +249,30 @@ function pagePowerEvents(page: number) {
 
 pagePowerEvents(1);
 
-function mapEvents(
-  events: { type: string; attributes: { key: string; value: string }[] }[]
-) {
+function mapEvents(events: readonly Event[]) {
   const attributes = events
     .filter((x) => x.type === selectedEventType.value)
     .filter(
       (x) =>
-        x.attributes.findIndex(
-          (attr) =>
-            attr.value === validator ||
-            attr.value === toBase64(stringToUint8Array(validator))
-        ) > -1
+        x.attributes.findIndex((attr) => {
+          const base64Validator = toBase64(stringToUint8Array(validator));
+          return (
+            toBase64(attr.value) === base64Validator ||
+            toBase64(attr.value) === base64Validator
+          );
+        }) > -1
     )
     .map((x) => {
       // check if attributes need to decode
       const output = {} as { [key: string]: string };
 
-      if (x.attributes.findIndex((a) => a.key === `amount`) > -1) {
+      if (x.attributes.findIndex((a) => fromAscii(a.key) === `amount`) > -1) {
         x.attributes.forEach((attr) => {
-          output[attr.key] = attr.value;
+          output[fromAscii(attr.key)] = fromAscii(attr.value);
         });
       } else
         x.attributes.forEach((attr) => {
-          output[uint8ArrayToString(fromBase64(attr.key))] = uint8ArrayToString(
-            fromBase64(attr.value)
-          );
+          output[fromAscii(attr.key)] = fromAscii(attr.value);
         });
       return output;
     });
@@ -726,9 +726,11 @@ function mapDelegators(messages: any[]) {
               </td>
               <td>
                 <div class="flex items-center">
-                  <span class="mr-2">{{ format.messages(item.tx) }}</span>
+                  <span class="mr-2">{{
+                    format.messages(item.txRaw.body.messages)
+                  }}</span>
                   <Icon
-                    v-if="item.code === 0"
+                    v-if="item.result.code === 0"
                     icon="mdi-check"
                     class="text-yes"
                   />
@@ -773,7 +775,7 @@ function mapDelegators(messages: any[]) {
             <tr v-for="(item, i) in events.txs">
               <td class="pr-2 truncate text-primary" style="max-width: 250px">
                 <RouterLink
-                  v-for="d in mapDelegators(item.tx?.body?.messages)"
+                  v-for="d in mapDelegators(item.txRaw.body?.messages)"
                   :to="`/${props.chain}/account/${d}`"
                 >
                   {{ d }}
@@ -791,14 +793,14 @@ function mapDelegators(messages: any[]) {
                     <span class="mr-2">
                       {{ selectedEventType === EventType.Delegate ? '+' : '-' }}
                       {{
-                        mapEvents(item.events)
+                        mapEvents(item.result.events)
                           .map((x: any) => x.amount)
                           .join(', ')
                       }}</span
                     >
                   </RouterLink>
                   <Icon
-                    v-if="item.code === 0"
+                    v-if="item.result.code === 0"
                     icon="mdi-check"
                     class="text-yes"
                   />
