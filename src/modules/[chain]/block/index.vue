@@ -12,7 +12,6 @@ const format = useFormatter();
 
 const list = computed(() => {
   const recents = base.recents;
-  console.log('block', base.recents[0].block);
   return recents.sort(
     (a, b) => Number(b.block.header.height) - Number(a.block.header.height)
   );
