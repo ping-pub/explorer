@@ -58,7 +58,7 @@ function changeEndpoint(item: Endpoint) {
         class="px-4 py-2 text-sm text-gray-400"
         v-if="chainStore.current?.endpoints?.rpc"
       >
-        Rest Endpoint
+        RPC Endpoint
       </div>
       <div
         v-for="(item, index) in chainStore.current?.endpoints?.rpc"
