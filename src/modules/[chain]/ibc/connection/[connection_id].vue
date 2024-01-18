@@ -202,8 +202,8 @@ function color(v: string) {
             <tr>
               <td class="w-52">{{ $t('ibc.trust_level') }}:</td>
               <td>
-                {{ clientState?.trustLevel.numerator }}/{{
-                  clientState?.trustLevel.denominator
+                {{ clientState?.trustLevel?.numerator }}/{{
+                  clientState?.trustLevel?.denominator
                 }}
               </td>
             </tr>
@@ -228,13 +228,13 @@ function color(v: string) {
             <tr>
               <td class="w-52">{{ $t('ibc.frozen_height') }}:</td>
               <td>
-                {{ clientState?.frozenHeight.revisionHeight.toString() }}
+                {{ clientState?.frozenHeight?.revisionHeight.toString() }}
               </td>
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.latest_height') }}:</td>
               <td>
-                {{ clientState?.latestHeight.revisionHeight.toString() }}
+                {{ clientState?.latestHeight?.revisionHeight.toString() }}
               </td>
             </tr>
           </tbody>
@@ -265,7 +265,7 @@ function color(v: string) {
             <tr>
               <td class="w-52">{{ $t('ibc.upgrade_path') }}:</td>
               <td class="text-right">
-                {{ clientState?.upgradePath.join(', ') }}
+                {{ clientState?.upgradePath?.join(', ') }}
               </td>
             </tr>
           </tbody>

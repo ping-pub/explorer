@@ -44,7 +44,6 @@ import {
 } from './registry';
 import { buildQuery } from '@cosmjs/tendermint-rpc/build/tendermint37/requests';
 import { PageRequest } from '@/types';
-import { PageRequest as CosmosPageRequest } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
 import type { BondStatusString } from '@cosmjs/stargate/build/modules/staking/queries';
 import type { ProposalStatus } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
 import { fromBase64 } from '@cosmjs/encoding';
@@ -57,9 +56,10 @@ import {
   QueryClientImpl as GovQueryClientImpl,
   QueryProposalsResponse,
 } from 'cosmjs-types/cosmos/gov/v1beta1/query';
-
-import type { Any } from 'cosmjs-types/google/protobuf/any';
-import { BaseAccount } from 'cosmjs-types/cosmos/auth/v1beta1/auth';
+import {
+  QueryClientImpl as BankQueryClientImpl,
+  QueryTotalSupplyResponse,
+} from 'cosmjs-types/cosmos/bank/v1beta1/query';
 import type { SlashingExtension } from '@cosmjs/stargate/build/modules';
 import { longify } from '@cosmjs/stargate/build/queryclient';
 
@@ -74,16 +74,20 @@ export interface ExtraExtension {
       proposalStatus: ProposalStatus,
       page?: PageRequest
     ) => Promise<QueryProposalsResponse>;
+    readonly totalSupply: (
+      page?: PageRequest
+    ) => Promise<QueryTotalSupplyResponse>;
   };
 }
 function setupExtraExtension(base: QueryClient) {
   const rpc = createProtobufRpcClient(base);
   const authQueryService = new AuthQueryClientImpl(rpc);
   const govQueryService = new GovQueryClientImpl(rpc);
+  const bankQueryService = new BankQueryClientImpl(rpc);
   return {
     extra: {
       accounts: async (page?: PageRequest) => {
-        return await authQueryService.Accounts({
+        return authQueryService.Accounts({
           pagination: page?.toPagination(),
         });
       },
@@ -98,6 +102,11 @@ function setupExtraExtension(base: QueryClient) {
           proposalStatus,
           voter: '',
           depositor: '',
+          pagination: page?.toPagination(),
+        });
+      },
+      totalSupply: async (page?: PageRequest) => {
+        return await bankQueryService.TotalSupply({
           pagination: page?.toPagination(),
         });
       },
@@ -239,8 +248,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     // if (!page) page = new PageRequest();
     // const query = `?${page.toQueryString()}`;
     // return this.request(this.registry.bank_supply, {}, query);
-    const paginationKey = page?.key ? fromBase64(page.key) : undefined;
-    const res = await this.queryClient.bank.totalSupply(paginationKey);
+    const res = await this.queryClient.extra.totalSupply(page);
     console.log(res);
     return res;
   }

@@ -75,8 +75,8 @@ function pageload(p: number) {
               type="number"
               class="input input-bordered w-40 join-item"
               min="0"
-              :max="pageResponse?.total.toString()"
-              :placeholder="`0~${pageResponse?.total.toString()}`"
+              :max="pageResponse?.total ? pageResponse?.total.toString() : 0"
+              :placeholder="`0~${pageResponse?.total}`"
             />
             <button
               class="join-item btn btn-primary"
