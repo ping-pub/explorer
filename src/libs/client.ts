@@ -84,19 +84,13 @@ function setupExtraExtension(base: QueryClient) {
     extra: {
       accounts: async (page?: PageRequest) => {
         return await authQueryService.Accounts({
-          pagination: CosmosPageRequest.fromPartial({
-            key: page?.key ? fromBase64(page.key) : undefined,
-            reverse: page?.reverse ?? true,
-          }),
+          pagination: page?.toPagination(),
         });
       },
       votes: async (proposalId: GovProposalId, page?: PageRequest) => {
         return await govQueryService.Votes({
           proposalId: longify(proposalId),
-          pagination: CosmosPageRequest.fromPartial({
-            key: page?.key ? fromBase64(page.key) : undefined,
-            reverse: page?.reverse ?? true,
-          }),
+          pagination: page?.toPagination(),
         });
       },
       proposals: async (proposalStatus: ProposalStatus, page?: PageRequest) => {
@@ -104,10 +98,7 @@ function setupExtraExtension(base: QueryClient) {
           proposalStatus,
           voter: '',
           depositor: '',
-          pagination: CosmosPageRequest.fromPartial({
-            key: page?.key ? fromBase64(page.key) : undefined,
-            reverse: page?.reverse ?? true,
-          }),
+          pagination: page?.toPagination(),
         });
       },
     },
@@ -229,7 +220,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
   // Bank Module
   async getBankParams() {
-    return this.request(this.registry.bank_params, {});
+    return await this.request(this.registry.bank_params, {});
     // const res = await this.queryClient.bank
   }
   async getBankBalances(address: string) {
@@ -368,12 +359,12 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getGovProposals(status: ProposalStatus, page?: PageRequest) {
     if (!page) page = new PageRequest();
     page.reverse = true;
-    const res = this.queryClient.extra.proposals(status, page);
-    console.log(res);
+    const res = await this.queryClient.extra.proposals(status, page);
+    console.log('getGovProposals', res);
     return res;
   }
   async getGovProposal(proposal_id: string) {
-    return this.queryClient.gov.proposal(proposal_id);
+    return await this.queryClient.gov.proposal(proposal_id);
   }
   async getGovProposalDeposits(proposal_id: string) {
     return this.queryClient.gov.deposits(proposal_id);
