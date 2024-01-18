@@ -1,6 +1,7 @@
 <script lang="ts" setup>
+import { fromTimestamp } from 'cosmjs-types/helpers';
 import { ref, onMounted, computed, onUnmounted } from 'vue';
-import { fromHex, toBase64 } from '@cosmjs/encoding';
+import { fromAscii, fromHex, toBase64 } from '@cosmjs/encoding';
 import {
   useFormatter,
   useStakingStore,
@@ -8,8 +9,16 @@ import {
   useBlockchain,
 } from '@/stores';
 import UptimeBar from '@/components/UptimeBar.vue';
-import type { Commit, SlashingParam, SigningInfo } from '@/types';
-import { consensusPubkeyToHexAddress, pubKeyToValcons, valconsToBase64 } from '@/libs';
+import {
+  consensusPubkeyToHexAddress,
+  pubKeyToValcons,
+  valconsToBase64,
+} from '@/libs';
+import type { Commit } from '@cosmjs/tendermint-rpc';
+import type {
+  Params,
+  ValidatorSigningInfo,
+} from 'cosmjs-types/cosmos/slashing/v1beta1/slashing';
 
 const props = defineProps(['chain']);
 
@@ -21,9 +30,9 @@ const latest = ref(0);
 const commits = ref([] as Commit[]);
 const keyword = ref('');
 const live = ref(true);
-const slashingParam = ref({} as SlashingParam);
+const slashingParam = ref({} as Params);
 
-const signingInfo = ref({} as Record<string, SigningInfo>);
+const signingInfo = ref({} as Record<string, ValidatorSigningInfo>);
 
 // filter validators by keywords
 const validators = computed(() => {
@@ -35,38 +44,38 @@ const validators = computed(() => {
 });
 
 const list = computed(() => {
-  if(chainStore.isConsumerChain) {
-    stakingStore.loadKeyRotationFromLocalstorage(baseStore.latest?.block?.header?.chain_id)
+  if (chainStore.isConsumerChain) {
+    stakingStore.loadKeyRotationFromLocalstorage(
+      baseStore.latest?.block?.header?.chainId
+    );
 
-    const window = Number(slashingParam.value.signed_blocks_window || 0);
+    const window = Number(slashingParam.value.signedBlocksWindow || 0);
     const vset = validators.value.map((v) => {
-      
-      const hexAddress = stakingStore.findRotatedHexAddress(v.consensus_pubkey)
-      const signing =
-        signingInfo.value[hexAddress];
+      const hexAddress = stakingStore.findRotatedHexAddress(v.consensusPubkey!);
+      const signing = signingInfo.value[hexAddress];
       return {
         v,
         signing,
         hex: toBase64(fromHex(hexAddress)),
         uptime:
           signing && window > 0
-            ? (window - Number(signing.missed_blocks_counter)) / window
+            ? (window - Number(signing.missedBlocksCounter)) / window
             : undefined,
       };
     });
     return vset;
   } else {
-    const window = Number(slashingParam.value.signed_blocks_window || 0);
+    const window = Number(slashingParam.value.signedBlocksWindow || 0);
     const vset = validators.value.map((v) => {
       const signing =
-        signingInfo.value[consensusPubkeyToHexAddress(v.consensus_pubkey)];
+        signingInfo.value[consensusPubkeyToHexAddress(v.consensusPubkey)];
       return {
         v,
         signing,
-        hex: toBase64(fromHex(consensusPubkeyToHexAddress(v.consensus_pubkey))),
+        hex: toBase64(fromHex(consensusPubkeyToHexAddress(v.consensusPubkey))),
         uptime:
           signing && window > 0
-            ? (window - Number(signing.missed_blocks_counter)) / window
+            ? (window - Number(signing.missedBlocksCounter)) / window
             : undefined,
       };
     });
@@ -79,13 +88,14 @@ onMounted(() => {
   baseStore.fetchLatest().then((l) => {
     let b = l;
     if (
-      baseStore.recents?.findIndex((x) => x.block_id.hash === l.block_id.hash) >
-      -1
+      baseStore.recents?.findIndex(
+        (x) => x.block.header.height === l.block.header.height
+      ) > -1
     ) {
       b = baseStore.recents?.at(0) || l;
     }
     latest.value = Number(b.block.header.height);
-    commits.value.unshift(b.block.last_commit);
+    b.block.lastCommit && commits.value.unshift(b.block.lastCommit);
     const height = Number(b.block.header?.height || 0);
     if (height > 50) {
       // constructs sequence for loading blocks
@@ -97,7 +107,8 @@ onMounted(() => {
               if (live.value && commits2.value.length < 50) {
                 // continue only if the page is living
                 baseStore.fetchBlock(i).then((x) => {
-                  commits.value.unshift(x.block.last_commit);
+                  x.block.lastCommit &&
+                    commits.value.unshift(x.block.lastCommit);
                   resolve();
                 });
               }
@@ -123,11 +134,11 @@ function updateTotalSigningInfo() {
 }
 
 const commits2 = computed(() => {
-  const la = baseStore.recents.map((b) => b.block.last_commit);
+  const la = baseStore.recents.map((b) => b.block.lastCommit);
   // trigger update total signing info
-  if(la.length > 1 && Number(la.at(la.length-1)?.height|| 0) % 10 === 7) {
+  if (la.length > 1 && Number(la.at(la.length - 1)?.height || 0) % 10 === 7) {
     updateTotalSigningInfo();
-  };
+  }
   const all = [...commits.value, ...la];
   return all.length > 50 ? all.slice(all.length - 50) : all;
 });
@@ -143,7 +154,7 @@ function changeTab(v: string) {
 }
 
 function fetchAllKeyRotation() {
-  stakingStore.fetchAllKeyRotation(baseStore.latest?.block?.header?.chain_id)
+  stakingStore.fetchAllKeyRotation(baseStore.latest?.block?.header?.chainId);
 }
 </script>
 
@@ -174,10 +185,20 @@ function fetchAllKeyRotation() {
           placeholder="Keywords to filter validators"
           class="input input-sm w-full flex-1 border border-gray-200 dark:border-gray-600"
         />
-        <button v-if="chainStore.isConsumerChain" class="btn btn-sm btn-primary" @click="fetchAllKeyRotation">Load Rotated Keys</button>
+        <button
+          v-if="chainStore.isConsumerChain"
+          class="btn btn-sm btn-primary"
+          @click="fetchAllKeyRotation"
+        >
+          Load Rotated Keys
+        </button>
       </div>
 
-      <div v-if="chainStore.isConsumerChain && Object.keys(stakingStore.keyRotation).length === 0"
+      <div
+        v-if="
+          chainStore.isConsumerChain &&
+          Object.keys(stakingStore.keyRotation).length === 0
+        "
         class="alert alert-warning my-4"
       >
         Note: Please load rotated keys to see the correct uptime
@@ -195,16 +216,16 @@ function fetchAllKeyRotation() {
               >
             </label>
             <div
-              v-if="Number(signing?.missed_blocks_counter || 0) > 10"
+              v-if="Number(signing?.missedBlocksCounter || 0) > 10"
               class="badge badge-sm bg-transparent border-0 text-red-500 font-bold"
             >
-              {{ signing?.missed_blocks_counter }}
+              {{ signing?.missedBlocksCounter }}
             </div>
             <div
               v-else
               class="badge badge-sm bg-transparent text-green-600 border-0 font-bold"
             >
-              {{ signing?.missed_blocks_counter }}
+              {{ signing?.missedBlocksCounter }}
             </div>
           </div>
           <UptimeBar :blocks="commits2" :validator="hex" />
@@ -239,36 +260,48 @@ function fetchAllKeyRotation() {
               >
                 <div
                   class="tooltip"
-                  :data-tip="`${signing.missed_blocks_counter} missing blocks`"
+                  :data-tip="`${signing.missedBlocksCounter} missing blocks`"
                 >
                   {{ format.percent(uptime) }}
                 </div>
               </span>
             </td>
             <td>
-              <span v-if="signing && !signing.jailed_until.startsWith('1970')">
+              <span
+                v-if="
+                  signing?.jailedUntil &&
+                  !fromTimestamp(signing.jailedUntil)
+                    .toString()
+                    .startsWith('1970')
+                "
+              >
                 <div
                   class="tooltip"
-                  :data-tip="format.toDay(signing?.jailed_until, 'long')"
+                  :data-tip="format.toDay(signing?.jailedUntil, 'long')"
                 >
-                  <span>{{ format.toDay(signing?.jailed_until, 'from') }}</span>
+                  <span>{{ format.toDay(signing?.jailedUntil, 'from') }}</span>
                 </div>
               </span>
             </td>
             <td class="text-xs text-right">
               <span
-                v-if="signing && signing.jailed_until.startsWith('1970')"
+                v-if="
+                  signing?.jailedUntil &&
+                  fromTimestamp(signing.jailedUntil)
+                    .toString()
+                    .startsWith('1970')
+                "
                 class="text-right"
                 >{{
                   format.percent(
-                    Number(signing.index_offset) /
-                      (latest - Number(signing.start_height))
+                    Number(signing.indexOffset) /
+                      (latest - Number(signing.startHeight))
                   )
                 }}</span
               >
-              {{ signing?.index_offset }}
+              {{ signing?.indexOffset }}
             </td>
-            <td class="text-right">{{ signing?.start_height }}</td>
+            <td class="text-right">{{ signing?.startHeight }}</td>
             <td class="capitalize">{{ signing?.tombstoned }}</td>
           </tr>
           <tfoot>
@@ -277,9 +310,10 @@ function fetchAllKeyRotation() {
                 {{ $t('uptime.minimum_uptime') }}:
                 <span
                   class="lowercase tooltip"
-                  :data-tip="`Window size: ${slashingParam.signed_blocks_window}`"
+                  :data-tip="`Window size: ${slashingParam.signedBlocksWindow}`"
                   ><span class="ml-2 btn btn-error btn-xs">{{
-                    format.percent(slashingParam.min_signed_per_window)
+                    slashingParam.minSignedPerWindow &&
+                    format.percent(fromAscii(slashingParam.minSignedPerWindow))
                   }}</span>
                 </span>
               </td>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Commit } from '@/types';
+import type { Commit } from '@cosmjs/tendermint-rpc';
 import { computed, type PropType } from 'vue';
 
 const props = defineProps({
@@ -9,10 +9,10 @@ const props = defineProps({
 
 const bars = computed(() => {
   const uptime = Array(50).fill({ height: 0, color: 'bg-secondary' });
-  if(!props.blocks) return uptime
-  props.blocks.forEach((element) => {
+  if (!props.blocks) return uptime;
+  props.blocks.filter(Boolean).forEach((element) => {
     const has = element.signatures?.findIndex(
-      (sig) => sig.validator_address === props.validator
+      (sig) => sig.validatorAddress === props.validator
     );
     // console.log(has, props.validato, element)
     uptime.push({
@@ -27,10 +27,11 @@ const bars = computed(() => {
 <template>
   <div class="flex items-center justify-evenly gap-0.5">
     <div class="cursor-default" v-for="(item, index) in bars" :key="index">
-      <div class="tooltip" 
-          :data-tip="item.height" 
-          :class="item.color"
-          style="width: 4px;"
+      <div
+        class="tooltip"
+        :data-tip="item.height"
+        :class="item.color"
+        style="width: 4px"
       >
         &nbsp;
       </div>
@@ -38,6 +39,4 @@ const bars = computed(() => {
   </div>
 </template>
 
-<style>
-  
-</style>
+<style></style>

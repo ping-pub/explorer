@@ -360,7 +360,6 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     if (!page) page = new PageRequest();
     page.reverse = true;
     const res = await this.queryClient.extra.proposals(status, page);
-    console.log('getGovProposals', res);
     return res;
   }
   async getGovProposal(proposal_id: string) {
