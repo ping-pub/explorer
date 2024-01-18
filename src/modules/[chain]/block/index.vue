@@ -11,9 +11,11 @@ const base = useBaseStore();
 const format = useFormatter();
 
 const list = computed(() => {
-  // const recents = base.recents
-  // return recents.sort((a, b) => (Number(b.block.header.height) - Number(a.block.header.height)))
-  return base.recents;
+  const recents = base.recents;
+  console.log('block', base.recents[0].block);
+  return recents.sort(
+    (a, b) => Number(b.block.header.height) - Number(a.block.header.height)
+  );
 });
 </script>
 <template>
@@ -56,9 +58,7 @@ const list = computed(() => {
           <span
             class="rounded text-xs whitespace-nowrap font-medium text-green-600"
           >
-            {{
-              format.toDay(item.block?.header?.time.getMilliseconds(), 'from')
-            }}
+            {{ format.toDay(item.block?.header?.time.toString(), 'from') }}
           </span>
         </div>
         <div class="flex justify-between tooltip" data-tip="Block Proposor">
