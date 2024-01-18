@@ -123,6 +123,7 @@ export const useParamStore = defineStore('paramstore', {
       Promise.all([this.getStakingPool(), this.getBankTotal(bond_denom)]).then(
         (resArr) => {
           const pool = resArr[0]?.pool;
+          if (!pool) return;
           const amount = resArr[1]?.amount;
           const assets = this.blockchain.current?.assets;
           const bondedAndSupply = this.chain.items.findIndex(
