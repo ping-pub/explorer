@@ -23,6 +23,7 @@
     "@intlify/unplugin-vue-i18n": "^0.8.2",
     "@leapwallet/cosmos-snap-provider": "^0.1.20",
     "@leapwallet/name-matcha": "^1.1.0",
+    "@oraichain/oraiscan-widget": "^0.2.11",
     "@osmonauts/lcd": "^0.8.0",
     "@ping-pub/chain-registry-client": "^0.0.25",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
