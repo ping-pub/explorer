@@ -1,3 +1,4 @@
+import { fromBinary, type JsonObject } from '@cosmjs/cosmwasm-stargate';
 import { fromAscii, toBase64 } from '@cosmjs/encoding';
 import type { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
 
@@ -28,6 +29,18 @@ export const decodeBuffer = (value: Uint8Array) => {
   } catch {
     return toBase64(value);
   }
+};
+
+export const parseJSONRecursive = (value: JsonObject) => {
+  for (const k in value) {
+    if (typeof value[k] === 'string') {
+      try {
+        value[k] = fromBinary(value[k]);
+      } catch {}
+    }
+    if (typeof value[k] === 'object') parseJSONRecursive(value[k]);
+  }
+  return value;
 };
 
 export function stringToUint8Array(str: string) {

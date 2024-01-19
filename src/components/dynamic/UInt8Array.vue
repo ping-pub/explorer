@@ -1,7 +1,12 @@
 <script lang="ts" setup>
+import { useBaseStore } from '@/stores';
+import { JsonViewer } from 'vue3-json-viewer';
 import { fromAscii, toBase64, toHex } from '@cosmjs/encoding';
 import { computed } from '@vue/reactivity';
 import { ref } from 'vue';
+import { parseJSONRecursive } from '@/libs/utils';
+
+const baseStore = useBaseStore();
 
 const props = defineProps(['value']);
 const format = ref('base64');
@@ -13,7 +18,13 @@ const text = computed(() => {
       return toBase64(props.value);
     default:
       try {
-        return fromAscii(props.value);
+        const strValue = fromAscii(props.value);
+        try {
+          const jsonValue = JSON.parse(strValue);
+          return parseJSONRecursive(jsonValue);
+        } catch {
+          return strValue;
+        }
       } catch {
         return 'Invalid Utf8';
       }
@@ -28,7 +39,21 @@ function getClass(value: string) {
 </script>
 <template>
   <div>
-    <div>{{ text }}</div>
+    <div>
+      <JsonViewer
+        v-if="typeof text === 'object'"
+        :value="text"
+        :theme="baseStore.theme || 'dark'"
+        style="background: transparent"
+        copyable
+        boxed
+        sort
+        :expand-depth="5"
+      />
+      <span v-else>
+        {{ text }}
+      </span>
+    </div>
     <div class="btn-group mt-4" role="group">
       <button
         type="button"
