@@ -12,6 +12,7 @@ import type {
 } from './types';
 import { toAscii, toBase64 } from '@cosmjs/encoding';
 import type { PageRequest } from '@/types';
+import { useBlockchain } from '@/stores';
 
 export interface WasmRequestRegistry extends AbstractRegistry {
   cosmwasm_code: Request<PaginabledCodeInfos>;
@@ -68,6 +69,11 @@ export class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
     // if(!pr) pr = new PageRequest()
     // const query = `?${pr.toQueryString()}`
     // return this.request(this.registry.cosmwasm_code, {}, /*query*/);
+    const blockchain = useBlockchain();
+    if (blockchain.chainName === 'osmosis') {
+      page?.setCountTotal(false);
+    }
+
     const res = await this.queryClient.extra.listCode(page);
     return res;
   }

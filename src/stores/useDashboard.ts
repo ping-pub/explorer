@@ -150,7 +150,7 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
       { denom: x.symbol.toLowerCase(), exponent: Number(x.exponent) },
     ],
   }));
-  conf.cosmwasmEnabled = lc.cosmwasm_enabled ?? false;
+  conf.cosmwasmEnabled = lc.cosmwasm_enabled ?? true;
   conf.versions = {
     cosmosSdk: lc.sdk_version,
   };

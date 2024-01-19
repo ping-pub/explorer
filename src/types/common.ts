@@ -46,7 +46,7 @@ export class PageRequest {
   toPagination() {
     const pagination = CosmosPageRequest.fromPartial({
       key: this.key ? fromBase64(this.key) : undefined,
-      countTotal: true,
+      countTotal: this.count_total ?? true,
       offset: this.offset ? longify(this.offset) : undefined,
       limit: this.limit ? longify(this.limit) : undefined,
       reverse: this.reverse ?? true,
@@ -56,6 +56,10 @@ export class PageRequest {
 
   setPage(page: number) {
     if (page >= 1) this.offset = (page - 1) * this.limit;
+  }
+
+  setCountTotal(count: boolean) {
+    this.count_total = count;
   }
 
   setPageSize(size: number) {

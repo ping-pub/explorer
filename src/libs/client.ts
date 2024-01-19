@@ -1,65 +1,64 @@
+import { DEFAULT, fetchData } from '@/libs';
+import { PageRequest } from '@/types';
 import {
+  setupWasmExtension,
+  type WasmExtension,
+} from '@cosmjs/cosmwasm-stargate';
+import { fromBase64 } from '@cosmjs/encoding';
+import type { DecodedTxRaw } from '@cosmjs/proto-signing';
+import { decodeTxRaw } from '@cosmjs/proto-signing';
+import {
+  createProtobufRpcClient,
   QueryClient,
+  setupAuthExtension,
   setupBankExtension,
+  setupDistributionExtension,
+  setupGovExtension,
+  setupIbcExtension,
+  setupMintExtension,
+  setupSlashingExtension,
   setupStakingExtension,
   setupTxExtension,
+  type AuthExtension,
   type BankExtension,
-  type StakingExtension,
-  type TxExtension,
-  type MintExtension,
-  setupMintExtension,
+  type DistributionExtension,
   type GovExtension,
-  setupGovExtension,
   type GovProposalId,
   type IbcExtension,
-  type AuthExtension,
-  type DistributionExtension,
-  setupIbcExtension,
-  setupSlashingExtension,
-  setupDistributionExtension,
-  createProtobufRpcClient,
-  setupAuthExtension,
+  type MintExtension,
+  type StakingExtension,
+  type TxExtension,
 } from '@cosmjs/stargate';
-import {
-  type WasmExtension,
-  setupWasmExtension,
-} from '@cosmjs/cosmwasm-stargate';
-import type { Request } from './registry';
+import type { SlashingExtension } from '@cosmjs/stargate/build/modules';
+import type { BondStatusString } from '@cosmjs/stargate/build/modules/staking/queries';
+import { longify } from '@cosmjs/stargate/build/queryclient';
 import {
   HttpClient,
   Tendermint37Client,
-  // Tendermint34Client,
   WebsocketClient,
-  type CometClient,
   type AbciQueryParams,
+  type CometClient,
   type QueryTag,
-  type TxSearchParams,
   type TxResponse,
 } from '@cosmjs/tendermint-rpc';
-import { DEFAULT, fetchData } from '@/libs';
-import {
-  type AbstractRegistry,
-  findApiProfileByChain,
-  findApiProfileBySDKVersion,
-  registryChainProfile,
-  registryVersionProfile,
-  withCustomRequest,
-  type RequestRegistry,
-} from './registry';
 import { buildQuery } from '@cosmjs/tendermint-rpc/build/tendermint37/requests';
-import { PageRequest } from '@/types';
-import type { BondStatusString } from '@cosmjs/stargate/build/modules/staking/queries';
-import type { ProposalStatus } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
-import { fromBase64 } from '@cosmjs/encoding';
 import {
   QueryAccountsResponse,
   QueryClientImpl as AuthQueryClientImpl,
 } from 'cosmjs-types/cosmos/auth/v1beta1/query';
 import {
-  QueryVotesResponse,
+  QueryClientImpl as BankQueryClientImpl,
+  QueryParamsResponse as QueryBankParamsResponse,
+  QueryTotalSupplyResponse,
+} from 'cosmjs-types/cosmos/bank/v1beta1/query';
+import type { ProposalStatus } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
+import {
   QueryClientImpl as GovQueryClientImpl,
   QueryProposalsResponse,
+  QueryVotesResponse,
 } from 'cosmjs-types/cosmos/gov/v1beta1/query';
+import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
+import { QueryClientImpl as StakingQueryClientImpl } from 'cosmjs-types/cosmos/staking/v1beta1/query';
 import {
   QueryAllContractStateResponse,
   QueryClientImpl as WasmQueryClientImpl,
@@ -67,17 +66,16 @@ import {
   QueryContractsByCreatorResponse,
   QueryParamsResponse as QueryWasmParamsResponse,
 } from 'cosmjs-types/cosmwasm/wasm/v1/query';
+import type { Request } from './registry';
 import {
-  QueryClientImpl as BankQueryClientImpl,
-  QueryParamsResponse as QueryBankParamsResponse,
-  QueryTotalSupplyResponse,
-} from 'cosmjs-types/cosmos/bank/v1beta1/query';
-import type { SlashingExtension } from '@cosmjs/stargate/build/modules';
-import type { DecodedTxRaw } from '@cosmjs/proto-signing';
-import { decodeTxRaw } from '@cosmjs/proto-signing';
-import { longify } from '@cosmjs/stargate/build/queryclient';
-import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
-import { QueryClientImpl as StakingQueryClientImpl } from 'cosmjs-types/cosmos/staking/v1beta1/query';
+  findApiProfileByChain,
+  findApiProfileBySDKVersion,
+  registryChainProfile,
+  registryVersionProfile,
+  withCustomRequest,
+  type AbstractRegistry,
+  type RequestRegistry,
+} from './registry';
 
 export type ExtraTxResponse = TxResponse & {
   txRaw: DecodedTxRaw;
