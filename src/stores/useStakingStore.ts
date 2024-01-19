@@ -25,6 +25,7 @@ import type {
   Params,
 } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
 import type { Any } from 'cosmjs-types/google/protobuf/any';
+import type { JsonObject } from '@cosmjs/cosmwasm-stargate';
 
 export const useStakingStore = defineStore('stakingStore', {
   state: () => {
@@ -33,6 +34,7 @@ export const useStakingStore = defineStore('stakingStore', {
       params: {} as Params,
       pool: {} as Pool,
       keyRotation: {} as Record<string, string>,
+      identities: {} as Record<string, JsonObject>,
     };
   },
   getters: {
@@ -54,9 +56,12 @@ export const useStakingStore = defineStore('stakingStore', {
       return await this.fetchParams();
     },
     async keybase(identity: string) {
-      return get(
-        `https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`
-      );
+      if (!this.identities[identity]) {
+        this.identities[identity] = await get(
+          `https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`
+        );
+      }
+      return this.identities[identity];
     },
     async fetchParams() {
       const response = await this.blockchain.rpc?.getStakingParams();
@@ -115,14 +120,14 @@ export const useStakingStore = defineStore('stakingStore', {
                 chain_id,
                 validatorAddr
               );
-              if (res.consumer_address) {
-                this.keyRotation[validatorAddr] = res.consumer_address;
+              if (res.consumerAddress) {
+                this.keyRotation[validatorAddr] = res.consumerAddress;
                 localStorage.setItem(
                   `key-rotation-${chain_id}`,
                   JSON.stringify(this.keyRotation)
                 );
               }
-              return res.consumer_address;
+              return res.consumerAddress;
             }
           }
         }
