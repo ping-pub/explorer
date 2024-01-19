@@ -1,0 +1,52 @@
+{
+  "chain_name": "cosmos",
+  "registry_name": "cosmoshub",
+  "api": [
+    {
+      "provider": "notional",
+      "address": "https://api-cosmoshub-ia.cosmosia.notional.ventures"
+    },
+    {
+      "provider": "blockapsis",
+      "address": "https://lcd-cosmoshub.blockapsis.com:443"
+    },
+    {
+      "provider": "WhisperNode🤐",
+      "address": "https://lcd-cosmoshub.whispernode.com:443"
+    },
+    { "provider": "pupmos", "address": "https://api-cosmoshub.pupmos.network" },
+    {
+      "provider": "publicnode",
+      "address": "https://cosmos-rest.publicnode.com"
+    },
+    { "provider": "staketab", "address": "https://cosmos-rest.staketab.org" },
+    { "provider": "nodestake", "address": "https://api.cosmos.nodestake.top" },
+    {
+      "provider": "Golden Ratio Staking",
+      "address": "https://rest-cosmoshub.goldenratiostaking.net"
+    }
+  ],
+  "rpc": [
+    { "provider": "icycro", "address": "wss://cosmos-rpc.icycro.org" },
+    { "provider": "dragonstake", "address": "wss://rpc.cosmos.dragonstake.io" },
+    {
+      "provider": "Golden Ratio Staking",
+      "address": "wss://rpc-cosmoshub.goldenratiostaking.net"
+    }
+  ],
+  "cosmwasm_enabled": false,
+  "sdk_version": "0.45.1",
+  "coin_type": "118",
+  "min_tx_fee": "800",
+  "addr_prefix": "cosmos",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png",
+  "assets": [
+    {
+      "base": "uatom",
+      "symbol": "ATOM",
+      "exponent": "6",
+      "coingecko_id": "cosmos",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png"
+    }
+  ]
+}
