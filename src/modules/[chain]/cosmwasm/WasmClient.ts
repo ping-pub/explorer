@@ -144,6 +144,10 @@ export class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
     return res;
   }
   async getWasmContractStates(address: string, page: PageRequest) {
+    const blockchain = useBlockchain();
+    if (blockchain.chainName === 'osmosis') {
+      page.setCountTotal(false);
+    }
     const res = await this.queryClient.extra.contractStates(address, page);
     return res;
     // if(!pr) pr = new PageRequest()
