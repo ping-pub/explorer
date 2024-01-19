@@ -40,7 +40,7 @@ import { decodeProto } from '@/components/dynamic';
 import type { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
 import type { Params } from 'cosmjs-types/cosmos/distribution/v1beta1/distribution';
 
-type ExtraProposal = Proposal & {
+export type ExtraProposal = Proposal & {
   content: ParameterChangeProposal &
     MsgSoftwareUpgrade & {
       current: Params[];

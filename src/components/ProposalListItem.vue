@@ -4,10 +4,8 @@ import {
   useFormatter,
   useStakingStore,
   useTxDialog,
-  type ExtraQueryProposalsResponse,
 } from '@/stores';
 import { select } from '@/components/dynamic/index';
-import type { PaginatedProposals } from '@/types';
 import ProposalProcess from './ProposalProcess.vue';
 import type { PropType } from 'vue';
 import { computed, ref } from 'vue';
@@ -15,6 +13,7 @@ import {
   VoteOption,
   voteOptionToJSON,
 } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
+import type { ExtraQueryProposalsResponse } from '@/libs/client';
 const dialog = useTxDialog();
 defineProps({
   proposals: { type: Object as PropType<ExtraQueryProposalsResponse> },
@@ -71,7 +70,7 @@ function metaItem(metadata: string | undefined): {
                 :to="`/${chain.chainName}/gov/${item?.proposalId}`"
                 class="text-main text-base mb-1 block hover:text-indigo-400 truncate"
               >
-                {{ item?.content?.title }}
+                {{ item?.title }}
               </RouterLink>
               <div
                 v-if="item.content"
@@ -162,9 +161,10 @@ function metaItem(metadata: string | undefined): {
           class="text-main text-base mb-1 flex justify-between hover:text-indigo-400"
         >
           <RouterLink
-            :to="`/${chain.chainName}/gov/${item?.proposalId.toString()}`"
+            v-if="item?.proposalId"
+            :to="`/${chain.chainName}/gov/${item.proposalId.toString()}`"
             class="flex-1 w-0 truncate mr-4"
-            >{{ item?.content?.title }}</RouterLink
+            >{{ item?.title }}</RouterLink
           >
           <label
             for="proposal-detail-modal"

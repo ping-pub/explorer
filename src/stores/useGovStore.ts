@@ -1,32 +1,15 @@
-import { defineStore } from 'pinia';
-import { decodeTxRaw } from '@cosmjs/proto-signing';
-import { useBlockchain } from './useBlockchain';
-import type { PageRequest, PaginatedProposals } from '@/types';
-import { LoadingStatus } from './useDashboard';
-import { useWalletStore } from './useWalletStore';
-import { reactive } from 'vue';
+import type { ExtraQueryProposalsResponse } from '@/libs/client';
+import type { PageRequest } from '@/types';
+import type { GovProposalId } from '@cosmjs/stargate';
 import {
-  Proposal,
   ProposalStatus,
-  TextProposal,
   VoteOption,
 } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
-import type { QueryProposalsResponse } from 'cosmjs-types/cosmos/gov/v1beta1/query';
-import type { GovProposalId } from '@cosmjs/stargate';
-import type { PageResponse } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
-import type { Any } from 'cosmjs-types/google/protobuf/any';
-
-type ExtraProposal = Proposal & {
-  voterStatus: VoteOption;
-  content: Any & TextProposal;
-};
-
-export interface ExtraQueryProposalsResponse {
-  /** proposals defines all the requested governance proposals. */
-  proposals: ExtraProposal[];
-  /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
-}
+import { defineStore } from 'pinia';
+import { reactive } from 'vue';
+import { useBlockchain } from './useBlockchain';
+import { LoadingStatus } from './useDashboard';
+import { useWalletStore } from './useWalletStore';
 
 export const useGovStore = defineStore('govStore', {
   state: () => {
@@ -59,17 +42,12 @@ export const useGovStore = defineStore('govStore', {
       this.loading[status] = LoadingStatus.Loading;
       const proposals = reactive(
         await this.blockchain.rpc?.getGovProposals(status, pagination)
-      ) as ExtraQueryProposalsResponse;
+      );
 
       //filter spam proposals
       if (proposals?.proposals) {
         proposals.proposals = proposals.proposals.filter((item) => {
-          if (item.content) {
-            const proposal = TextProposal.decode(item.content.value);
-            Object.assign(item.content, proposal);
-            return proposal.title.toLowerCase().indexOf('airdrop') === -1;
-          }
-          return true;
+          return item?.title.toLowerCase().indexOf('airdrop') === -1;
         });
       }
 

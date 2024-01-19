@@ -51,12 +51,24 @@ import {
   QueryParamsResponse as QueryBankParamsResponse,
   QueryTotalSupplyResponse,
 } from 'cosmjs-types/cosmos/bank/v1beta1/query';
-import type { ProposalStatus } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
+import {
+  Proposal,
+  TextProposal,
+  VoteOption,
+  type ProposalStatus,
+} from 'cosmjs-types/cosmos/gov/v1beta1/gov';
+
+import { Proposal as ProposalV1 } from 'cosmjs-types/cosmos/gov/v1/gov';
+
 import {
   QueryClientImpl as GovQueryClientImpl,
   QueryProposalsResponse,
   QueryVotesResponse,
 } from 'cosmjs-types/cosmos/gov/v1beta1/query';
+import {
+  QueryClientImpl as GovQueryClientImplV1,
+  QueryProposalsResponse as QueryProposalsResponseV1,
+} from 'cosmjs-types/cosmos/gov/v1/query';
 import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
 import { QueryClientImpl as StakingQueryClientImpl } from 'cosmjs-types/cosmos/staking/v1beta1/query';
 import {
@@ -76,6 +88,11 @@ import {
   type AbstractRegistry,
   type RequestRegistry,
 } from './registry';
+import semver from 'semver';
+import type { ChainConfig } from '@/stores';
+import type { PageResponse } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
+
+export const DEFAULT_SDK_VERSION = '0.45.16';
 
 export type ExtraTxResponse = TxResponse & {
   txRaw: DecodedTxRaw;
@@ -84,6 +101,18 @@ export type ExtraTxResponse = TxResponse & {
 export interface ExtraTxSearchResponse {
   readonly txs: ExtraTxResponse[];
   readonly totalCount: number;
+}
+
+export type ExtraProposal = Proposal &
+  TextProposal & {
+    voterStatus: VoteOption;
+  };
+
+export interface ExtraQueryProposalsResponse {
+  /** proposals defines all the requested governance proposals. */
+  proposals: ExtraProposal[];
+  /** pagination defines the pagination in the response. */
+  pagination?: PageResponse;
 }
 
 export interface ExtraExtension {
@@ -97,6 +126,10 @@ export interface ExtraExtension {
       proposalStatus: ProposalStatus,
       page?: PageRequest
     ) => Promise<QueryProposalsResponse>;
+    readonly proposalsV1: (
+      proposalStatus: ProposalStatus,
+      page?: PageRequest
+    ) => Promise<QueryProposalsResponseV1>;
     readonly totalSupply: (
       page?: PageRequest
     ) => Promise<QueryTotalSupplyResponse>;
@@ -122,6 +155,7 @@ function setupExtraExtension(base: QueryClient) {
   const rpc = createProtobufRpcClient(base);
   const authQueryService = new AuthQueryClientImpl(rpc);
   const govQueryService = new GovQueryClientImpl(rpc);
+  const govQueryServiceV1 = new GovQueryClientImplV1(rpc);
   const bankQueryService = new BankQueryClientImpl(rpc);
   const wasmQueryService = new WasmQueryClientImpl(rpc);
   const stakingQueryService = new StakingQueryClientImpl(rpc);
@@ -140,6 +174,17 @@ function setupExtraExtension(base: QueryClient) {
       },
       proposals: async (proposalStatus: ProposalStatus, page?: PageRequest) => {
         return await govQueryService.Proposals({
+          proposalStatus,
+          voter: '',
+          depositor: '',
+          pagination: page?.toPagination(),
+        });
+      },
+      proposalsV1: async (
+        proposalStatus: ProposalStatus,
+        page?: PageRequest
+      ) => {
+        return await govQueryServiceV1.Proposals({
           proposalStatus,
           voter: '',
           depositor: '',
@@ -190,6 +235,7 @@ function setupExtraExtension(base: QueryClient) {
 export class BaseRestClient<R extends AbstractRegistry> {
   endpoint: string;
   registry: R;
+  version: string;
   protected readonly tmClient: CometClient;
   public queryClient:
     | QueryClient &
@@ -205,9 +251,10 @@ export class BaseRestClient<R extends AbstractRegistry> {
         WasmExtension &
         ExtraExtension;
 
-  constructor(endpoint: string, registry: R) {
+  constructor(endpoint: string, registry: R, version?: string) {
     this.endpoint = endpoint;
     this.registry = registry;
+    this.version = version ?? DEFAULT_SDK_VERSION;
 
     // init queryClient
     const useHttp =
@@ -267,10 +314,10 @@ registeCustomRequest();
 
 export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   static newDefault(endpoint: string) {
-    return new CosmosRestClient(endpoint, DEFAULT);
+    return new CosmosRestClient(endpoint, DEFAULT, DEFAULT_SDK_VERSION);
   }
 
-  static newStrategy(endpoint: string, chain: any) {
+  static newStrategy(endpoint: string, chain?: ChainConfig) {
     let req;
     if (chain) {
       // find by name first
@@ -283,7 +330,12 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
         );
       }
     }
-    return new CosmosRestClient(endpoint, req || DEFAULT);
+
+    return new CosmosRestClient(
+      endpoint,
+      req || DEFAULT,
+      chain?.versions.cosmosSdk ?? DEFAULT_SDK_VERSION
+    );
   }
 
   // Auth Module
@@ -433,11 +485,36 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     console.log(res);
     return res;
   }
-  async getGovProposals(status: ProposalStatus, page?: PageRequest) {
+  async getGovProposals(
+    status: ProposalStatus,
+    page?: PageRequest
+  ): Promise<ExtraQueryProposalsResponse> {
     if (!page) page = new PageRequest();
     page.reverse = true;
-    const res = await this.queryClient.extra.proposals(status, page);
-    return res;
+
+    // v1 for sdk version > 0.45
+    if (semver.gt(this.version, DEFAULT_SDK_VERSION)) {
+      const resV1 = await this.queryClient.extra.proposalsV1(status, page);
+      return {
+        // @ts-ignore
+        proposals: resV1.proposals.map((v) => {
+          return {
+            ...v,
+            proposalId: v.id,
+          };
+        }),
+        pagination: resV1.pagination,
+      };
+    } else {
+      const res = await this.queryClient.extra.proposals(status, page);
+      res?.proposals.forEach((item) => {
+        if (item.content) {
+          Object.assign(item, TextProposal.decode(item.content.value));
+        }
+      });
+
+      return res as ExtraQueryProposalsResponse;
+    }
   }
   async getGovProposal(proposal_id: string) {
     return await this.queryClient.gov.proposal(proposal_id);
