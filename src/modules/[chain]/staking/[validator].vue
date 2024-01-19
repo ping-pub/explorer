@@ -79,7 +79,7 @@ blockchain.rpc.getTxsBySender(addresses.value.account).then((x) => {
 });
 
 const apr = computed(() => {
-  const rate = v.value?.commission.commissionRates || 0;
+  const rate = v.value?.commission?.commissionRates || 0;
   const inflation = useMintStore().inflation;
   if (Number(inflation)) {
     return format.percent((1 - Number(rate)) * Number(inflation));
@@ -821,7 +821,7 @@ function mapDelegators(messages: any[]) {
           </tbody>
         </table>
         <PaginationBar
-          :total="events.totalCount.toString()"
+          :total="events.totalCount?.toString() || '0'"
           :limit="page.limit"
           :callback="pagePowerEvents"
         />

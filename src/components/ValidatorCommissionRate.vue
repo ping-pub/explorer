@@ -7,15 +7,23 @@ import type { Commission } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
 const props = defineProps({
   commission: { type: Object as PropType<Commission> },
 });
+const format = useFormatter();
 
 let rate = computed(
-  () => Number(props.commission?.commissionRates.rate || 0) * 100
+  () =>
+    (format.toDecimal(props.commission?.commissionRates.rate)?.value() || 0) *
+    100
 );
 let change = computed(
-  () => Number(props.commission?.commissionRates.maxChangeRate || 0) * 100
+  () =>
+    (format
+      .toDecimal(props.commission?.commissionRates.maxChangeRate)
+      ?.value() || 0) * 100
 );
 let max = computed(
-  () => Number(props.commission?.commissionRates.maxRate || 1) * 100
+  () =>
+    (format.toDecimal(props.commission?.commissionRates.maxRate)?.value() ||
+      1) * 100
 );
 
 const left = rate;
@@ -36,8 +44,6 @@ const s5 = computed(() =>
 );
 
 const series = computed(() => [s1.value, s2.value, s3, s4.value, s5.value]);
-
-const format = useFormatter();
 
 const chartConfig = computed(() => {
   const secondaryText = `hsl(var(--bc))`;
