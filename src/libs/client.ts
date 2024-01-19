@@ -76,6 +76,8 @@ import type { SlashingExtension } from '@cosmjs/stargate/build/modules';
 import type { DecodedTxRaw } from '@cosmjs/proto-signing';
 import { decodeTxRaw } from '@cosmjs/proto-signing';
 import { longify } from '@cosmjs/stargate/build/queryclient';
+import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
+import { QueryClientImpl as StakingQueryClientImpl } from 'cosmjs-types/cosmos/staking/v1beta1/query';
 
 export type ExtraTxResponse = TxResponse & {
   txRaw: DecodedTxRaw;
@@ -111,6 +113,11 @@ export interface ExtraExtension {
       address: string,
       page?: PageRequest
     ) => Promise<QueryAllContractStateResponse>;
+
+    readonly validatorDelegations: (
+      validatorAddr: string,
+      page?: PageRequest
+    ) => Promise<QueryValidatorDelegationsResponse>;
   };
 }
 function setupExtraExtension(base: QueryClient) {
@@ -119,6 +126,7 @@ function setupExtraExtension(base: QueryClient) {
   const govQueryService = new GovQueryClientImpl(rpc);
   const bankQueryService = new BankQueryClientImpl(rpc);
   const wasmQueryService = new WasmQueryClientImpl(rpc);
+  const stakingQueryService = new StakingQueryClientImpl(rpc);
   return {
     extra: {
       accounts: async (page?: PageRequest) => {
@@ -167,6 +175,15 @@ function setupExtraExtension(base: QueryClient) {
       },
       bankParams: async () => {
         return await bankQueryService.Params();
+      },
+      validatorDelegations: async (
+        validatorAddr: string,
+        page?: PageRequest
+      ) => {
+        return await stakingQueryService.ValidatorDelegations({
+          validatorAddr,
+          pagination: page?.toPagination(),
+        });
       },
     },
   };
@@ -569,8 +586,9 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     //   },
     //   query
     // );
-    const res = await this.queryClient.staking.validatorDelegations(
-      validator_addr
+    const res = await this.queryClient.extra.validatorDelegations(
+      validator_addr,
+      page
     );
     console.log(res);
     return res;

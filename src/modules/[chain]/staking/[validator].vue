@@ -23,7 +23,7 @@ import {
   type PaginatedTxs,
 } from '@/types';
 import PaginationBar from '@/components/PaginationBar.vue';
-import { fromAscii, fromBase64, toAscii, toBase64 } from '@cosmjs/encoding';
+import { fromAscii, fromBase64, toHex, toBase64 } from '@cosmjs/encoding';
 import { stringToUint8Array, uint8ArrayToString } from '@/libs/utils';
 import type { TxSearchResponse } from '@cosmjs/tendermint-rpc';
 import { fromTimestamp } from 'cosmjs-types/helpers';
@@ -720,8 +720,8 @@ function mapDelegators(messages: any[]) {
                 }}</RouterLink>
               </td>
               <td class="truncate text-primary" style="max-width: 200px">
-                <RouterLink :to="`/${props.chain}/tx/${item.hash}`">
-                  {{ item.hash }}
+                <RouterLink :to="`/${props.chain}/tx/${toHex(item.hash)}`">
+                  {{ toBase64(item.hash) }}
                 </RouterLink>
               </td>
               <td>
