@@ -1,3 +1,4 @@
+import { fromAscii, toBase64 } from '@cosmjs/encoding';
 import type { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
 
 export function getLocalObject(name: string) {
@@ -14,6 +15,19 @@ export function getLocalChains() {
 
 export const percent = (num: number) => {
   return parseFloat((num * 100).toFixed(2));
+};
+
+export const decodeBuffer = (value: Uint8Array) => {
+  try {
+    const strValue = fromAscii(value);
+    try {
+      return JSON.parse(strValue);
+    } catch {
+      return strValue;
+    }
+  } catch {
+    return toBase64(value);
+  }
 };
 
 export function stringToUint8Array(str: string) {

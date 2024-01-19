@@ -24,6 +24,7 @@ import type { QueryAllContractStateResponse } from 'cosmjs-types/cosmwasm/wasm/v
 import type { ContractInfo } from 'cosmjs-types/cosmwasm/wasm/v1/types';
 import { fromAscii } from '@cosmjs/encoding';
 import type { ExtraTxSearchResponse } from '@/libs/client';
+import { decodeBuffer } from '@/libs/utils';
 
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
@@ -308,9 +309,9 @@ const result = ref({});
               <JsonViewer
                 :value="
                   state.models?.map((v) => ({
-                    key: fromAscii(v.key),
-                    value: JSON.parse(fromAscii(v.value)),
-                  })) || ''
+                    key: decodeBuffer(v.key),
+                    value: decodeBuffer(v.value),
+                  })) || []
                 "
                 :theme="baseStore.theme || 'dark'"
                 style="background: transparent"

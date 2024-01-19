@@ -11,6 +11,7 @@ import type {
   QueryCodesResponse,
 } from 'cosmjs-types/cosmwasm/wasm/v1/query';
 import { toBase64 } from '@cosmjs/encoding';
+import { accessTypeToJSON } from 'cosmjs-types/cosmwasm/wasm/v1/types';
 
 const props = defineProps(['chain']);
 
@@ -72,7 +73,7 @@ function myContracts() {
             </td>
             <td>{{ v.creator }}</td>
             <td>
-              {{ v.instantiatePermission?.permission }}
+              {{ accessTypeToJSON(v.instantiatePermission?.permission) }}
               <span
                 >{{ v.instantiatePermission?.address }}
                 {{ v.instantiatePermission?.addresses.join(', ') }}</span
