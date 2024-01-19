@@ -193,7 +193,7 @@ export class BaseRestClient<R extends AbstractRegistry> {
   endpoint: string;
   registry: R;
   protected readonly tmClient: CometClient;
-  protected queryClient:
+  public queryClient:
     | QueryClient &
         AuthExtension &
         BankExtension &

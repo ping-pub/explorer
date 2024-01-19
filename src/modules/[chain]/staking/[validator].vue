@@ -32,8 +32,10 @@ import type {
   Validator,
 } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
 import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
-import type { ExtraTxSearchResponse } from '@/libs/client';
+import type { ExtraTxResponse, ExtraTxSearchResponse } from '@/libs/client';
 import type { Event } from '@cosmjs/tendermint-rpc';
+import type { Any } from 'cosmjs-types/google/protobuf/any';
+import { decodeProto } from '@/components/dynamic';
 
 const props = defineProps(['validator', 'chain']);
 
@@ -239,6 +241,9 @@ function loadPowerEvents(p: number, type: EventType) {
       page
     )
     .then((res) => {
+      res.txs.forEach((tx) => {
+        tx.txRaw.body.messages = tx.txRaw.body.messages.map(decodeProto);
+      });
       events.value = res;
     });
 }
@@ -248,6 +253,28 @@ function pagePowerEvents(page: number) {
 }
 
 pagePowerEvents(1);
+
+function mapAmounts(tx: ExtraTxResponse) {
+  const amounts = tx.txRaw.body?.messages
+    .map((x: any) => {
+      // amount from blockchain
+      if (x.grantee) {
+        return x.msgs
+          .filter(
+            (msg: any) => msg.amount && msg.validatorAddress === validator
+          )
+          .reduce((a: number, msg: any) => a + Number(msg.amount.amount), 0);
+      }
+      if (x.contract) {
+        return x.funds[0].amount;
+      }
+      // default
+      return x?.amount?.amount;
+    })
+    .filter(Boolean);
+  if (amounts.length) return amounts;
+  return mapEvents(tx.result.events);
+}
 
 function mapEvents(events: readonly Event[]) {
   const attributes = events
@@ -283,7 +310,7 @@ function mapEvents(events: readonly Event[]) {
 function mapDelegators(messages: any[]) {
   if (!messages) return [];
   return Array.from(
-    new Set(messages.map((x) => x.delegator_address || x.grantee))
+    new Set(messages.map((x) => x.delegatorAddress || x.grantee || x.contract))
   );
 }
 </script>
@@ -789,14 +816,10 @@ function mapDelegators(messages: any[]) {
                     'text-no': selectedEventType === EventType.Unbond,
                   }"
                 >
-                  <RouterLink :to="`/${props.chain}/tx/${item.hash}`">
+                  <RouterLink :to="`/${props.chain}/tx/${toHex(item.hash)}`">
                     <span class="mr-2">
                       {{ selectedEventType === EventType.Delegate ? '+' : '-' }}
-                      {{
-                        mapEvents(item.result.events)
-                          .map((x: any) => x.amount)
-                          .join(', ')
-                      }}</span
+                      {{ mapAmounts(item).join(', ') }}</span
                     >
                   </RouterLink>
                   <Icon
