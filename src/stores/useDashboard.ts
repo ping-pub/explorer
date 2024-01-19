@@ -306,7 +306,7 @@ export const useDashboard = defineStore('dashboard', {
 
       const currencies = ['usd, cny']; // usd,cny,eur,jpy,krw,sgd,hkd
       get(
-        `https://price.market.orai.io/simple/price?include_24hr_change=true&vs_currencies=${currencies.join(
+        `https://api.coingecko.com/api/v3/simple/price?include_24hr_change=true&vs_currencies=${currencies.join(
           ','
         )}&ids=${coinIds.join(',')}`
       ).then((x) => {

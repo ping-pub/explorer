@@ -33,7 +33,7 @@ export const useCoingecko = defineStore('coingecko', {
     },
 
     fetchCoinPrice(ids: string[]) {
-      const url = `https://price.market.orai.io/simple/price?include_24hr_change=true&vs_currencies=${[
+      const url = `https://api.coingecko.com/api/v3/simple/price?include_24hr_change=true&vs_currencies=${[
         'usd',
         this.currency,
       ].join(',')}&ids=${ids.join(',')}`;
