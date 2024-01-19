@@ -7,7 +7,7 @@
       "address": "https://lcd.orai.io"
     }
   ],
-  "rpc": [{ "provider": "Oraichain", "address": "wss://rpc.orai.io" }],
+  "rpc": [{ "provider": "Oraichain", "address": "https://rpc.orai.io" }],
   "cosmwasm_enabled": true,
   "sdk_version": "0.45.16",
   "coin_type": "118",

@@ -8,11 +8,11 @@
     "https://lcd-osmosis.blockapsis.com"
   ],
   "rpc": [
-    "wss://rpc.osmosis.zone",
-    "wss://rpc-osmosis-ia.cosmosia.notional.ventures:443",
-    "wss://osmosis-rpc.polkachu.com:443",
-    "wss://osmosis.validator.network:443",
-    "wss://rpc-osmosis.blockapsis.com:443"
+    "https://rpc.osmosis.zone",
+    "https://rpc-osmosis-ia.cosmosia.notional.ventures:443",
+    "https://osmosis-rpc.polkachu.com:443",
+    "https://osmosis.validator.network:443",
+    "https://rpc-osmosis.blockapsis.com:443"
   ],
   "snapshot_provider": "",
   "sdk_version": "0.46.1",
