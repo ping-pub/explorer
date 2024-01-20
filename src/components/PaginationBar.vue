@@ -66,7 +66,7 @@ function goPreviousPage() {
         {{ page }}
       </button>
     </div>
-    <div v-if="nextKey" class="btn-group">
+    <div v-if="nextKey && Number(total ?? '0') === 0" class="btn-group">
       <button
         v-if="nextKeys.length > 0"
         class="btn bg-gray-100 text-gray-500 hover:text-white hover:btn-primary border-none dark:bg-gray-800 dark:text-white"
