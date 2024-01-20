@@ -2,10 +2,12 @@
 import { computed, ref } from 'vue';
 
 const props = defineProps({
+  nextKey: { type: Uint8Array, required: false },
   total: { type: String },
   limit: { type: Number },
   callback: { type: Function, required: true },
 });
+const nextKeys = ref([] as (Uint8Array | undefined)[]);
 const current = ref(1);
 const showSize = 3;
 const pages = computed(() => {
@@ -38,6 +40,16 @@ function gotoPage(pageNum: number) {
   current.value = pageNum;
   props.callback(pageNum);
 }
+
+function goNextPage() {
+  nextKeys.value.push(props.nextKey);
+  props.callback(undefined, props.nextKey);
+}
+
+function goPreviousPage() {
+  nextKeys.value.pop();
+  props.callback(undefined, nextKeys.value[nextKeys.value.length - 1]);
+}
 </script>
 <template>
   <div class="my-5 text-center">
@@ -52,6 +64,21 @@ function gotoPage(pageNum: number) {
         @click="gotoPage(page)"
       >
         {{ page }}
+      </button>
+    </div>
+    <div v-if="nextKey" class="btn-group">
+      <button
+        v-if="nextKeys.length > 0"
+        class="btn bg-gray-100 text-gray-500 hover:text-white hover:btn-primary border-none dark:bg-gray-800 dark:text-white"
+        @click="goPreviousPage()"
+      >
+        Prev
+      </button>
+      <button
+        class="btn bg-gray-100 text-gray-500 hover:text-white hover:btn-primary border-none dark:bg-gray-800 dark:text-white"
+        @click="goNextPage()"
+      >
+        Next
       </button>
     </div>
   </div>

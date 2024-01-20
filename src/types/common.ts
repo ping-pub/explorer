@@ -1,4 +1,4 @@
-import { fromBase64 } from '@cosmjs/encoding';
+import { fromBase64, toBase64 } from '@cosmjs/encoding';
 import { longify } from '@cosmjs/stargate/build/queryclient';
 import { PageRequest as CosmosPageRequest } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
 
@@ -52,6 +52,10 @@ export class PageRequest {
       reverse: this.reverse ?? true,
     });
     return pagination;
+  }
+
+  setNextKey(key?: Uint8Array) {
+    this.key = key ? toBase64(key) : undefined;
   }
 
   setPage(page: number) {

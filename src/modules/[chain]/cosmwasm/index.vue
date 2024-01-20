@@ -1,17 +1,13 @@
 <script lang="ts" setup>
-import { useBlockchain, useFormatter, useTxDialog } from '@/stores';
-import { useWasmStore } from './WasmStore';
-import { ref } from 'vue';
-import type { PaginabledCodeInfos } from './types';
-import { PageRequest } from '@/types';
 import PaginationBar from '@/components/PaginationBar.vue';
 import router from '@/router';
-import type {
-  QueryCodeResponse,
-  QueryCodesResponse,
-} from 'cosmjs-types/cosmwasm/wasm/v1/query';
+import { useTxDialog } from '@/stores';
+import { PageRequest } from '@/types';
 import { toBase64 } from '@cosmjs/encoding';
+import type { QueryCodesResponse } from 'cosmjs-types/cosmwasm/wasm/v1/query';
 import { accessTypeToJSON } from 'cosmjs-types/cosmwasm/wasm/v1/types';
+import { ref } from 'vue';
+import { useWasmStore } from './WasmStore';
 
 const props = defineProps(['chain']);
 
@@ -22,8 +18,10 @@ const wasmStore = useWasmStore();
 const dialog = useTxDialog();
 const creator = ref('');
 
-function pageload(pageNum: number) {
+function pageload(pageNum: number, nextKey?: Uint8Array) {
+  pageRequest.value.setNextKey(nextKey);
   pageRequest.value.setPage(pageNum);
+
   wasmStore.wasmClient.getWasmCodeList(pageRequest.value).then((x) => {
     codes.value = x;
   });
@@ -88,6 +86,7 @@ function myContracts() {
           :total="
             codes.pagination?.total ? codes.pagination.total.toString() : '0'
           "
+          :nextKey="codes.pagination?.nextKey"
           :callback="pageload"
         />
         <label
