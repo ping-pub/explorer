@@ -136,10 +136,11 @@ function metaItem(metadata: string | undefined): {
                     item?.voterStatus !== VoteOption.VOTE_OPTION_NO_WITH_VETO
                   "
                   >{{
-                    voteOptionToJSON(item?.voterStatus).replace(
-                      'VOTE_OPTION_',
-                      ''
-                    )
+                    voteOptionToJSON(item?.voterStatus)
+                      .toLowerCase()
+                      .replace(/^vote_option/, '')
+                      .replaceAll(/_(.)/g, (m, g) => ' ' + g.toUpperCase())
+                      .trim()
                   }}</span
                 >
 
@@ -237,10 +238,11 @@ function metaItem(metadata: string | undefined): {
               <span
                 v-if="item?.voterStatus !== VoteOption.VOTE_OPTION_NO_WITH_VETO"
                 >{{
-                  voteOptionToJSON(item?.voterStatus).replace(
-                    'VOTE_OPTION_',
-                    ''
-                  )
+                  voteOptionToJSON(item?.voterStatus)
+                    .toLowerCase()
+                    .replace(/^vote_option/, '')
+                    .replaceAll(/_(.)/g, (m, g) => ' ' + g.toUpperCase())
+                    .trim()
                 }}</span
               >
 

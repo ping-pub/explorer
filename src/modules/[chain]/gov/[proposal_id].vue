@@ -103,10 +103,11 @@ const color = computed(() => {
 });
 const status = computed(() => {
   if (proposal.value.status) {
-    return proposalStatusToJSON(proposal.value.status).replace(
-      'PROPOSAL_STATUS_',
-      ''
-    );
+    return proposalStatusToJSON(proposal.value.status)
+      .toLowerCase()
+      .replace(/^proposal_status/, '')
+      .replaceAll(/_(.)/g, (m, g) => ' ' + g.toUpperCase())
+      .trim();
   }
   return '';
 });
@@ -440,10 +441,11 @@ function metaItem(metadata: string | undefined): {
                   item.options
                     .map(
                       (x) =>
-                        `${voteOptionToJSON(x.option).replace(
-                          'VOTE_OPTION_',
-                          ''
-                        )}:${format.percent(x.weight)}`
+                        `${voteOptionToJSON(x.option)
+                          .toLowerCase()
+                          .replace(/^vote_option/, '')
+                          .replaceAll(/_(.)/g, (m, g) => ' ' + g.toUpperCase())
+                          .trim()}:${format.percent(x.weight)}`
                     )
                     .join(', ')
                 }}

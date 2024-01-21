@@ -71,7 +71,13 @@ function myContracts() {
             </td>
             <td>{{ v.creator }}</td>
             <td>
-              {{ accessTypeToJSON(v.instantiatePermission?.permission) }}
+              {{
+                accessTypeToJSON(v.instantiatePermission?.permission)
+                  .toLowerCase()
+                  .replace(/^access_type/, '')
+                  .replaceAll(/_(.)/g, (m, g) => ' ' + g.toUpperCase())
+                  .trim()
+              }}
               <span
                 >{{ v.instantiatePermission?.address }}
                 {{ v.instantiatePermission?.addresses.join(', ') }}</span
