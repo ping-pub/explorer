@@ -354,9 +354,13 @@ export const useFormatter = defineStore('formatter', {
     numberAndSign(input: number, fmt = '+0,0') {
       return numeral(input).format(fmt);
     },
-    toLocaleDate(time?: string | number | Date) {
+    toLocaleDate(time?: string | number | Date | Timestamp) {
       if (!time) return '';
-      return new Date(time).toLocaleString(navigator.language);
+      const timeValue =
+        typeof time === 'object' && 'seconds' in time
+          ? fromTimestamp(time)
+          : time;
+      return new Date(timeValue).toLocaleString(navigator.language);
     },
     toDay(time?: string | number | Date | Timestamp, format = 'long') {
       if (!time) return '';

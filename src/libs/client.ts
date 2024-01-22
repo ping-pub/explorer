@@ -4,7 +4,7 @@ import {
   setupWasmExtension,
   type WasmExtension,
 } from '@cosmjs/cosmwasm-stargate';
-import { fromBase64 } from '@cosmjs/encoding';
+import { fromBase64, fromHex, toBase64, toHex } from '@cosmjs/encoding';
 import type { DecodedTxRaw } from '@cosmjs/proto-signing';
 import { decodeTxRaw } from '@cosmjs/proto-signing';
 import {
@@ -89,8 +89,11 @@ import {
   type RequestRegistry,
 } from './registry';
 import semver from 'semver';
-import type { ChainConfig } from '@/stores';
+import { useBlockchain, type ChainConfig } from '@/stores';
 import type { PageResponse } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
+import type { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service';
+import { Tx } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
+import type { Event, EventAttribute } from 'cosmjs-types/tendermint/abci/types';
 
 export const DEFAULT_SDK_VERSION = '0.45.16';
 
@@ -649,7 +652,6 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     } catch (ex) {
       console.log(ex);
     }
-    // return this.request(this.registry.staking_validators, { status, limit });
   }
   async getStakingValidator(validator_addr: string) {
     // return this.request(this.registry.staking_validators_address, {
@@ -836,12 +838,47 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     ]);
   }
 
-  async getTx(hash: string) {
-    // return this.request(this.registry.tx_hash, { hash });
+  async getTx(hash: string): Promise<GetTxResponse | undefined> {
     try {
-      const res = await this.queryClient.tx.getTx(hash);
-      console.log(res);
-      return res;
+      const blockchain = useBlockchain();
+      // TODO:// hardcode for nomic sdk
+      if (blockchain.chainName === 'OraiBtcMainnet') {
+        const tmRes = await this.tmClient.tx({ hash: fromHex(hash) });
+        const tx = Tx.decode(tmRes.tx);
+        const block = await this.tmClient.block(tmRes.height);
+        return {
+          tx,
+          txResponse: {
+            height: BigInt(tmRes.height),
+            gasUsed: tmRes.result.gasUsed,
+            gasWanted: tmRes.result.gasWanted,
+            txhash: toHex(tmRes.hash),
+            code: tmRes.result.code,
+            codespace: tmRes.result.codespace ?? '',
+            data: tmRes.result.data ? toHex(tmRes.result.data) : '',
+            rawLog: tmRes.result.log ?? '',
+            logs: [],
+            info: '',
+            timestamp: block.block.header.time.toString(),
+            events: tmRes.result.events.map((e) => {
+              const event: Event = {
+                type: e.type,
+                attributes: e.attributes.map((a) => {
+                  const attribute: EventAttribute = {
+                    key: toBase64(a.key),
+                    value: toBase64(a.value),
+                    index: false,
+                  };
+                  return attribute;
+                }),
+              };
+              return event;
+            }),
+          },
+        };
+      } else {
+        return await this.queryClient.tx.getTx(hash);
+      }
     } catch (ex) {
       console.log(ex);
     }

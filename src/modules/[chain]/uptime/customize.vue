@@ -1,20 +1,14 @@
 <script lang="ts" setup>
-import { ref, onMounted, computed, watchEffect } from 'vue';
-import { fromHex, toBase64 } from '@cosmjs/encoding';
-import { Icon } from '@iconify/vue';
+import { consensusPubkeyToHexAddress, valconsToBase64 } from '@/libs';
+import { CosmosRestClient } from '@/libs/client';
 import {
-  useFormatter,
-  useStakingStore,
-  useBaseStore,
   useBlockchain,
   useDashboard,
+  useFormatter,
+  useStakingStore,
 } from '@/stores';
-import UptimeBar from '@/components/UptimeBar.vue';
-import type { Block, Commit } from '@/types';
-import { consensusPubkeyToHexAddress, valconsToBase64 } from '@/libs';
-import type { SigningInfo } from '@/types/slashing';
-import { CosmosRestClient } from '@/libs/client';
 import type { ValidatorSigningInfo } from 'cosmjs-types/cosmos/slashing/v1beta1/slashing';
+import { computed, ref } from 'vue';
 
 const props = defineProps(['chain']);
 
@@ -23,10 +17,13 @@ const format = useFormatter();
 const chainStore = useBlockchain();
 const dashboard = useDashboard();
 // storage local favorite validator ids
+
+type ValidatorValue = { name: string; address: string };
+
 const local = ref(
   JSON.parse(localStorage.getItem('uptime-validators') || '{}') as Record<
     string,
-    { name: string; address: string }[]
+    ValidatorValue[]
   >
 );
 const signingInfo = ref({} as Record<string, ValidatorSigningInfo[]>);
@@ -66,7 +63,11 @@ const filterValidators = computed(() => {
 });
 
 const list = computed(() => {
-  const list = [] as any[];
+  const list = [] as {
+    chainName: string;
+    v: ValidatorValue;
+    sigingInfo?: ValidatorSigningInfo;
+  }[];
   if (local.value)
     Object.keys(local.value).map((chainName) => {
       const vals = local.value[chainName];
@@ -194,22 +195,23 @@ function color(v: string) {
             <td>{{ v.v.name }}</td>
             <td>
               <span v-if="v.sigingInfo">{{
-                Number(v.sigingInfo.index_offset) -
-                Number(v.sigingInfo.start_height)
+                Number(v.sigingInfo.indexOffset) -
+                Number(v.sigingInfo.startHeight)
               }}</span>
             </td>
             <td>
               <div
                 v-if="
-                  v.sigingInfo && !v.sigingInfo?.jailed_until.startsWith('1970')
+                  v.sigingInfo &&
+                  !v.sigingInfo?.jailedUntil.toString().startsWith('1970')
                 "
                 class="text-xs flex flex-wrap"
               >
                 <div class="mt-1">
-                  {{ format.toLocaleDate(v.sigingInfo?.jailed_until) }}
+                  {{ format.toLocaleDate(v.sigingInfo?.jailedUntil) }}
                 </div>
                 <div class="badge">
-                  {{ format.toDay(v.sigingInfo.jailed_until, 'from') }}
+                  {{ format.toDay(v.sigingInfo.jailedUntil, 'from') }}
                 </div>
               </div>
             </td>
@@ -218,8 +220,8 @@ function color(v: string) {
               <span
                 v-if="v.sigingInfo"
                 class="badge"
-                :class="color(v.sigingInfo?.missed_blocks_counter)"
-                >{{ v.sigingInfo?.missed_blocks_counter }}</span
+                :class="color(v.sigingInfo?.missedBlocksCounter.toString())"
+                >{{ v.sigingInfo?.missedBlocksCounter }}</span
               >
             </td>
             <td class="">
