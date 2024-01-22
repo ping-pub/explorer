@@ -134,7 +134,7 @@ function updateTotalSigningInfo() {
 }
 
 const commits2 = computed(() => {
-  const la = baseStore.recents.map((b) => b.block.lastCommit);
+  const la = baseStore.recents.map((b) => b.block.lastCommit!);
   // trigger update total signing info
   if (la.length > 1 && Number(la.at(la.length - 1)?.height || 0) % 10 === 7) {
     updateTotalSigningInfo();

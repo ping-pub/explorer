@@ -1,6 +1,9 @@
 import { fromBinary, type JsonObject } from '@cosmjs/cosmwasm-stargate';
 import { fromAscii, toBase64 } from '@cosmjs/encoding';
 import type { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
+import type { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service';
+
+export const TXS_CACHE: Record<string, GetTxResponse> = {};
 
 export function getLocalObject(name: string) {
   const text = localStorage.getItem(name);

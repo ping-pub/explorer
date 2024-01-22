@@ -5,6 +5,7 @@ import { computed } from '@vue/reactivity';
 import type { PropType } from 'vue';
 import { hashTx } from '@/libs';
 import { useBlockchain, useFormatter } from '@/stores';
+import { TXS_CACHE } from '@/libs/utils';
 
 const props = defineProps({
   value: { type: Object as PropType<Block> },
@@ -17,15 +18,14 @@ const txs = computed(() => {
         hash: hashTx(x),
         tx: decodeTxRaw(x),
       };
-
       TXS_CACHE[tx.hash] = {
-        // @ts-ignore
         txResponse: {
           height: BigInt(props.value?.header.height!),
+          // @ts-ignore
           timestamp: props.value?.header.time,
           code: 0,
           txhash: tx.hash,
-          gasWanted: tx.tx.authInfo.fee?.gasLimit,
+          gasWanted: tx.tx.authInfo.fee?.gasLimit!,
         },
         // @ts-ignore
         tx: tx.tx,

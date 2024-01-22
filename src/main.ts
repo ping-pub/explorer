@@ -29,5 +29,3 @@ setInterval(() => {
     blockStore.fetchLatest().finally(() => (requestCounter.value -= 1));
   }
 }, 6000);
-
-globalThis.TXS_CACHE = {};

@@ -16,10 +16,7 @@
       "@/*": [
         "./src/*"
       ]
-    },
-    "typeRoots": [
-      "./types"
-    ]
+    }
   },
   "references": [
     {
