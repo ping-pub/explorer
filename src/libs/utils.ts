@@ -19,15 +19,11 @@ export const percent = (num: number) => {
 };
 
 export const decodeBuffer = (value: Uint8Array) => {
+  const base64Str = toBase64(value);
   try {
-    const strValue = fromAscii(value);
-    try {
-      return JSON.parse(strValue);
-    } catch {
-      return strValue;
-    }
+    return fromBinary(base64Str);
   } catch {
-    return toBase64(value);
+    return base64Str;
   }
 };
 

@@ -5,6 +5,7 @@ import { fromAscii, toBase64, toHex } from '@cosmjs/encoding';
 import { computed } from '@vue/reactivity';
 import { ref } from 'vue';
 import { parseJSONRecursive } from '@/libs/utils';
+import { fromBinary } from '@cosmjs/cosmwasm-stargate';
 
 const baseStore = useBaseStore();
 
@@ -18,14 +19,10 @@ const text = computed(() => {
       return toBase64(props.value);
     default:
       try {
-        const strValue = fromAscii(props.value);
-        try {
-          const jsonValue = JSON.parse(strValue);
-          return parseJSONRecursive(jsonValue);
-        } catch {
-          return strValue;
-        }
-      } catch {
+        const jsonValue = fromBinary(toBase64(props.value));
+        console.log('computed', jsonValue);
+        return parseJSONRecursive(jsonValue);
+      } catch (ex) {
         return 'Invalid Utf8';
       }
   }
