@@ -15,7 +15,9 @@ const baseStore = useBaseStore();
 const format = useFormatter();
 const tx = ref({} as GetTxResponse);
 if (props.hash) {
-  blockchain.rpc.getTx(props.hash).then((x) => (tx.value = x));
+  blockchain.rpc.getTx(props.hash).then((x) => {
+    tx.value = x ?? TXS_CACHE[props.hash];
+  });
 }
 const messages = computed(() => {
   return tx.value.tx?.body?.messages || [];

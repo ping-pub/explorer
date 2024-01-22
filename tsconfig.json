@@ -1,18 +1,26 @@
 {
   "extends": "@vue/tsconfig/tsconfig.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue"
+  ],
   "compilerOptions": {
     // "ignoreDeprecations": "5.0",
-    "lib": [      
+    "lib": [
       "es2022",
       "dom"
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "typeRoots": [
+      "./types"
+    ]
   },
-
   "references": [
     {
       "path": "./tsconfig.config.json"

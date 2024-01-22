@@ -6,7 +6,6 @@ import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { computed } from '@vue/reactivity';
 import { onBeforeRouteUpdate } from 'vue-router';
 import { useBaseStore, useFormatter } from '@/stores';
-import type { Block } from '@/types';
 import Countdown from '@/components/Countdown.vue';
 import type { BlockResponse } from '@cosmjs/tendermint-rpc';
 
@@ -138,7 +137,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
 
       <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
         <h2 class="card-title flex flex-row justify-between">{{ $t('account.transactions') }}</h2>
-        <TxsElement :value="current.block?.txs" />
+        <TxsElement :value="current.block" />
       </div>
 
       <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">

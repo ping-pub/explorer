@@ -731,7 +731,6 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getBaseBlockAt(height: string | number | undefined) {
     // return this.request(this.registry.base_tendermint_block_height, { height });
     const res = await this.tmClient.block(height ? Number(height) : undefined);
-    console.log(res);
     return res;
   }
   async getBaseNodeInfo() {
@@ -839,9 +838,13 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
 
   async getTx(hash: string) {
     // return this.request(this.registry.tx_hash, { hash });
-    const res = await this.queryClient.tx.getTx(hash);
-    console.log(res);
-    return res;
+    try {
+      const res = await this.queryClient.tx.getTx(hash);
+      console.log(res);
+      return res;
+    } catch (ex) {
+      console.log(ex);
+    }
   }
 
   // mint

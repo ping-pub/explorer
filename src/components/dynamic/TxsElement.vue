@@ -1,18 +1,37 @@
 <script lang="ts" setup>
+import type { Block } from '@cosmjs/tendermint-rpc';
 import { decodeTxRaw } from '@cosmjs/proto-signing';
 import { computed } from '@vue/reactivity';
+import type { PropType } from 'vue';
 import { hashTx } from '@/libs';
 import { useBlockchain, useFormatter } from '@/stores';
+
 const props = defineProps({
-  value: { type: Array<Uint8Array> },
+  value: { type: Object as PropType<Block> },
 });
 
 const txs = computed(() => {
   return (
-    props.value?.map((x) => ({
-      hash: hashTx(x),
-      tx: decodeTxRaw(x),
-    })) || []
+    props.value?.txs?.map((x) => {
+      const tx = {
+        hash: hashTx(x),
+        tx: decodeTxRaw(x),
+      };
+
+      TXS_CACHE[tx.hash] = {
+        // @ts-ignore
+        txResponse: {
+          height: BigInt(props.value?.header.height!),
+          timestamp: props.value?.header.time,
+          code: 0,
+          txhash: tx.hash,
+          gasWanted: tx.tx.authInfo.fee?.gasLimit,
+        },
+        // @ts-ignore
+        tx: tx.tx,
+      };
+      return tx;
+    }) || []
   );
 });
 
