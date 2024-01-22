@@ -14,6 +14,7 @@ import type { Block, Commit } from '@/types';
 import { consensusPubkeyToHexAddress, valconsToBase64 } from '@/libs';
 import type { SigningInfo } from '@/types/slashing';
 import { CosmosRestClient } from '@/libs/client';
+import type { ValidatorSigningInfo } from 'cosmjs-types/cosmos/slashing/v1beta1/slashing';
 
 const props = defineProps(['chain']);
 
@@ -28,7 +29,7 @@ const local = ref(
     { name: string; address: string }[]
   >
 );
-const signingInfo = ref({} as Record<string, SigningInfo[]>);
+const signingInfo = ref({} as Record<string, ValidatorSigningInfo[]>);
 const selected = ref([] as string[]);
 const selectChain = ref(chainStore.chainName);
 const validators = ref(stakingStore.validators);
@@ -93,7 +94,7 @@ function add() {
   const newList = [] as { name: string; address: string }[];
   selected.value.forEach((x) => {
     const validator = validators.value.find(
-      (v) => consensusPubkeyToHexAddress(v.consensus_pubkey) === x
+      (v) => consensusPubkeyToHexAddress(v.consensusPubkey) === x
     );
     if (validator)
       newList.push({
@@ -115,6 +116,7 @@ async function changeChain() {
 
   const client = CosmosRestClient.newDefault(endpoint);
   const x = await client.getStakingValidators('BOND_STATUS_BONDED');
+  if (!x) return;
   validators.value = x.validators;
 
   const vals = local.value[selectChain.value];
@@ -283,7 +285,7 @@ function color(v: string) {
             <tbody>
               <tr v-for="(v, i) in filterValidators">
                 <td>
-                  <label :for="v.operator_address"
+                  <label :for="v.operatorAddress"
                     ><div class="w-full">
                       {{ i + 1 }}. {{ v.description.moniker }}
                     </div></label
@@ -291,11 +293,11 @@ function color(v: string) {
                 </td>
                 <td>
                   <input
-                    :id="v.operator_address"
+                    :id="v.operatorAddress"
                     v-model="selected"
                     class="checkbox"
                     type="checkbox"
-                    :value="consensusPubkeyToHexAddress(v.consensus_pubkey)"
+                    :value="consensusPubkeyToHexAddress(v.consensusPubkey)"
                   />
                 </td>
               </tr>

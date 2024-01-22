@@ -1,5 +1,5 @@
 import { DEFAULT, fetchData } from '@/libs';
-import { PageRequest } from '@/types';
+import type { PageRequest } from '@/types';
 import {
   setupWasmExtension,
   type WasmExtension,
@@ -380,9 +380,13 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return res;
   }
   async getBankSupplyByDenom(denom: string) {
-    const res = await this.queryClient.bank.supplyOf(denom);
-    console.log(res);
-    return res;
+    try {
+      const res = await this.queryClient.bank.supplyOf(denom);
+      console.log(res);
+      return res;
+    } catch (ex) {
+      console.log(ex);
+    }
   }
   // Distribution Module
   async getDistributionParams() {
@@ -489,31 +493,35 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     status: ProposalStatus,
     page?: PageRequest
   ): Promise<ExtraQueryProposalsResponse> {
-    if (!page) page = new PageRequest();
-    page.reverse = true;
+    try {
+      // v1 for sdk version > 0.45
+      if (semver.gt(this.version, DEFAULT_SDK_VERSION)) {
+        const resV1 = await this.queryClient.extra.proposalsV1(status, page);
+        return {
+          // @ts-ignore
+          proposals: resV1.proposals.map((v) => {
+            return {
+              ...v,
+              proposalId: v.id,
+            };
+          }),
+          pagination: resV1.pagination,
+        };
+      } else {
+        const res = await this.queryClient.extra.proposals(status, page);
+        res?.proposals.forEach((item) => {
+          if (item.content) {
+            Object.assign(item, TextProposal.decode(item.content.value));
+          }
+        });
 
-    // v1 for sdk version > 0.45
-    if (semver.gt(this.version, DEFAULT_SDK_VERSION)) {
-      const resV1 = await this.queryClient.extra.proposalsV1(status, page);
+        return res as ExtraQueryProposalsResponse;
+      }
+    } catch (ex) {
+      console.log(ex);
       return {
-        // @ts-ignore
-        proposals: resV1.proposals.map((v) => {
-          return {
-            ...v,
-            proposalId: v.id,
-          };
-        }),
-        pagination: resV1.pagination,
+        proposals: [],
       };
-    } else {
-      const res = await this.queryClient.extra.proposals(status, page);
-      res?.proposals.forEach((item) => {
-        if (item.content) {
-          Object.assign(item, TextProposal.decode(item.content.value));
-        }
-      });
-
-      return res as ExtraQueryProposalsResponse;
     }
   }
   async getGovProposal(proposal_id: string) {
@@ -613,9 +621,13 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return res;
   }
   async getStakingParams() {
-    const res = await this.queryClient.staking.params();
-    console.log(res);
-    return res;
+    try {
+      const res = await this.queryClient.staking.params();
+      console.log(res);
+      return res;
+    } catch (ex) {
+      console.log(ex);
+    }
     // return this.request(this.registry.staking_params, {});
   }
   async getStakingPool() {
@@ -630,9 +642,13 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     // return this.request(this.registry.staking_pool, {});
   }
   async getStakingValidators(status: BondStatusString, limit = 200) {
-    const res = await this.queryClient.staking.validators(status);
-    console.log(status, res);
-    return res;
+    try {
+      const res = await this.queryClient.staking.validators(status);
+      console.log(status, res);
+      return res;
+    } catch (ex) {
+      console.log(ex);
+    }
     // return this.request(this.registry.staking_validators, { status, limit });
   }
   async getStakingValidator(validator_addr: string) {

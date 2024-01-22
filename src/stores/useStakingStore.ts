@@ -169,6 +169,7 @@ export const useStakingStore = defineStore('stakingStore', {
           );
           // provider validators
           const validatorsRes = await client.getStakingValidators(status);
+          if (!validatorsRes) return [];
           const proVals = validatorsRes.validators.sort(
             (a, b) => Number(b.delegatorShares) - Number(a.delegatorShares)
           );
@@ -182,6 +183,7 @@ export const useStakingStore = defineStore('stakingStore', {
       const validatorsRes = await this.blockchain.rpc?.getStakingValidators(
         status
       );
+      if (!validatorsRes) return [];
       const vals = validatorsRes.validators.sort(
         (a, b) => Number(b.delegatorShares) - Number(a.delegatorShares)
       );

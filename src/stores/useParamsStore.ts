@@ -109,6 +109,7 @@ export const useParamStore = defineStore('paramstore', {
     },
     async handleStakingParams() {
       const res = await this.getStakingParams();
+      if (!res) return;
       const bond_denom = res?.params.bondDenom;
       this.staking.items = Object.entries(res.params)
         .map(([key, value]) => ({ subtitle: key, value: value }))
