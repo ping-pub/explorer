@@ -11,6 +11,7 @@ const chainNameMap = {
   terp: 'terpnetwork',
   bandchain: 'band',
   'terra-luna': 'terra',
+  terra: 'terra2',
   cosmos: 'cosmoshub',
   'dyson-protocol': 'dyson',
 };
@@ -39,5 +40,5 @@ const updateChain = async (chainFile) => {
     console.log('Updating', chainFile);
     await updateChain(chainFile);
   }
-  //   updateChain('bitsong.json');
+  // updateChain('terra.json');
 })();

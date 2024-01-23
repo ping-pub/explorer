@@ -33,7 +33,7 @@
   "coin_type": "330",
   "min_tx_fee": "5000",
   "addr_prefix": "terra",
-  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra/images/luna.png",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.png",
   "assets": [
     {
       "base": "uluna",
