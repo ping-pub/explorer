@@ -1,0 +1,24 @@
+{
+  "chain_name": "starname",
+  "api": "https://api.iov-mainnet-ibc.iov.one",
+  "rpc": [
+    "https://rpc-iov.keplr.app:443",
+    "https://rpc-iov.keplr.app:443"
+  ],
+  "snapshot_provider": "",
+  "sdk_version": "0.44.5",
+  "coin_type": "234",
+  "min_tx_fee": "8000",
+  "addr_prefix": "star",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/starname/images/iov.png",
+  "assets": [
+    {
+      "base": "uiov",
+      "symbol": "IOV",
+      "exponent": "6",
+      "coingecko_id": "starname",
+      "logo": "/logos/starname.jpg"
+    }
+  ],
+  "cosmwasm_enabled": false
+}

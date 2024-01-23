@@ -1,0 +1,38 @@
+{
+  "chain_name": "celestia",
+  "api": [
+    {
+      "address": "https://api.lunaroasis.net",
+      "provider": "Lunar Oasis"
+    },
+    {
+      "address": "https://api.celestia.nodestake.top",
+      "provider": "NodeStake"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.lunaroasis.net",
+      "provider": "Lunar Oasis"
+    },
+    {
+      "address": "https://rpc.celestia.nodestake.top",
+      "provider": "NodeStake"
+    }
+  ],
+  "sdk_version": "0.47.0",
+  "coin_type": "118",
+  "min_tx_fee": "800",
+  "addr_prefix": "celestia",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/celestia/images/celestia.png",
+  "assets": [
+    {
+      "base": "utia",
+      "symbol": "TIA",
+      "exponent": "6",
+      "coingecko_id": "celestia",
+      "logo": "/logos/celestia.png"
+    }
+  ],
+  "cosmwasm_enabled": false
+}

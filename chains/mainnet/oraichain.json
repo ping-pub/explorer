@@ -7,13 +7,18 @@
       "address": "https://lcd.orai.io"
     }
   ],
-  "rpc": [{ "provider": "Oraichain", "address": "https://rpc.orai.io" }],
-  "cosmwasm_enabled": true,
+  "rpc": [
+    {
+      "provider": "Oraichain",
+      "address": "https://rpc.orai.io"
+    }
+  ],
+  "cosmwasm_enabled": false,
   "sdk_version": "0.45.16",
   "coin_type": "118",
   "min_tx_fee": "800",
   "addr_prefix": "orai",
-  "logo": "https://s2.coinmarketcap.com/static/img/coins/64x64/7533.png",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/oraichain/images/orai.png",
   "assets": [
     {
       "base": "orai",

@@ -1,0 +1,28 @@
+{
+  "chain_name": "kyve",
+  "api": [
+    "https://api-explorer.kyve.network:443",
+    "https://api.kyve.nodestake.top"
+  ],
+  "rpc": [
+    "https://rpc-eu-1.kyve.network:443",
+    "https://rpc-us-1.kyve.network:443",
+    "https://rpc.kyve.nodestake.top"
+  ],
+  "snapshot_provider": "",
+  "sdk_version": "0.46.10",
+  "coin_type": "118",
+  "min_tx_fee": "4000",
+  "assets": [
+    {
+      "base": "ukyve",
+      "symbol": "KYVE",
+      "exponent": "6",
+      "coingecko_id": "",
+      "logo": "/logos/kyve.svg"
+    }
+  ],
+  "addr_prefix": "kyve",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kyve/images/kyve.png",
+  "cosmwasm_enabled": false
+}

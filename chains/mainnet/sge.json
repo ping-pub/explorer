@@ -1,0 +1,36 @@
+{
+  "chain_name": "sge",
+  "alias": "sge",
+  "api": [
+    "https://rest.cosmos.directory/sge",
+    "https://sge-api.lavenderfive.com",
+    "https://sge-api.ramuchi.tech",
+    "https://api-sge.nodeist.net",
+    "https://sge-api.polkachu.com",
+    "https://api.sge.nodestake.top"
+  ],
+  "rpc": [
+    "https://rpc.cosmos.directory/sge",
+    "https://sge-rpc.lavenderfive.com",
+    "https://sge-rpc.ramuchi.tech",
+    "https://rpc-sge.nodeist.net",
+    "https://sge-rpc.polkachu.com",
+    "https://rpc.sge.nodestake.top"
+  ],
+  "snapshot_provider": "",
+  "addr_prefix": "sge",
+  "coin_type": "494",
+  "min_tx_fee": "8000",
+  "assets": [
+    {
+      "base": "usge",
+      "symbol": "SGE",
+      "exponent": "6",
+      "coingecko_id": "sge",
+      "logo": "/logos/sge.png"
+    }
+  ],
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sge/images/sge.png",
+  "sdk_version": "0.45.8",
+  "cosmwasm_enabled": false
+}
