@@ -14,13 +14,14 @@
   "coin_type": "118",
   "min_tx_fee": "5000",
   "addr_prefix": "empower",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/5ef245f3a7b4fabac235a767980443dfc172c825/empowerchain/images/mpwr.svg",
   "assets": [
     {
       "base": "umpwr",
       "symbol": "MPWR",
       "exponent": "6",
       "coingecko_id": "",
-      "logo": "/logos/empower.png"
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/5ef245f3a7b4fabac235a767980443dfc172c825/empowerchain/images/mpwr.svg"
     }
   ],
   "cosmwasm_enabled": false

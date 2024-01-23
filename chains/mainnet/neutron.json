@@ -29,9 +29,7 @@
     }
   ],
   "provider_chain": {
-    "api": [
-      "https://api-cosmoshub-ia.cosmosia.notional.ventures"
-    ]
+    "api": ["https://api-cosmoshub-ia.cosmosia.notional.ventures"]
   },
   "features": [
     "dashboard",
@@ -54,11 +52,11 @@
       "symbol": "NTRN",
       "exponent": "6",
       "coingecko_id": "neutron",
-      "logo": "/logos/neutron.svg"
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/neutron.svg"
     }
   ],
   "addr_prefix": "neutron",
   "theme_color": "#161723",
-  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/neutron-black-logo.png",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/neutron.svg",
   "cosmwasm_enabled": true
 }

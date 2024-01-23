@@ -11,14 +11,14 @@
   "coin_type": "118",
   "min_tx_fee": "3000",
   "addr_prefix": "like",
-  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/likecoin/images/likecoin-chain-logo.png",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/likecoin/images/like.png",
   "assets": [
     {
       "base": "nanolike",
       "symbol": "LIKE",
       "exponent": "9",
       "coingecko_id": "likecoin",
-      "logo": "/logos/likecoin.png"
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/likecoin/images/like.png"
     }
   ],
   "cosmwasm_enabled": false

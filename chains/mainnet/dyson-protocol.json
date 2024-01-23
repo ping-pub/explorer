@@ -19,10 +19,10 @@
       "symbol": "DYS",
       "exponent": "0",
       "coingecko_id": "",
-      "logo": "https://dys.dysonprotocol.com/static/dys-inverted.svg"
+      "logo": "https://dys.dysonprotocol.com/static/dys-inverted.png"
     }
   ],
   "addr_prefix": "dys",
-  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dyson/images/dyson.png",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dyson/images/dys.png",
   "cosmwasm_enabled": false
 }

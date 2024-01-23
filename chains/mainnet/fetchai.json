@@ -32,7 +32,7 @@
       "symbol": "fet",
       "exponent": "18",
       "coingecko_id": "fetch-ai",
-      "logo": "/logos/fetchhub.png"
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/fetchhub/images/fet.png"
     }
   ],
   "cosmwasm_enabled": false

@@ -3,13 +3,16 @@ const fs = require('fs');
 
 const chainsPath = path.join(__dirname, 'chains', 'mainnet');
 const chainNameMap = {
+  lum: 'lumnetwork',
+  nym: 'nyx',
+  centauri: 'composable',
   crypto: 'cryptoorgchain',
   empower: 'empowerchain',
   fetchai: 'fetchhub',
   iris: 'irisnet',
   secret: 'secretnetwork',
   terp: 'terpnetwork',
-  bandchain: 'band',
+  band: 'bandchain',
   'terra-luna': 'terra',
   terra: 'terra2',
   cosmos: 'cosmoshub',
@@ -23,10 +26,10 @@ const updateChain = async (chainFile) => {
   try {
     const data = await fetch(url).then((res) => res.json());
     const cosmwasmEnabled = data.codebase?.cosmwasm_enabled ?? false;
-    const logo = data.logo_URIs?.png;
+    const logo = data.logo_URIs?.svg ?? data.logo_URIs?.png;
     const filePath = path.join(chainsPath, chainFile);
     const chainData = JSON.parse(fs.readFileSync(filePath).toString());
-    chainData.logo = logo;
+    if (logo) chainData.logo = logo;
     chainData.cosmwasm_enabled = cosmwasmEnabled;
     fs.writeFileSync(filePath, JSON.stringify(chainData, null, 2));
   } catch (ex) {
@@ -35,10 +38,13 @@ const updateChain = async (chainFile) => {
 };
 
 (async () => {
-  const chainFiles = fs.readdirSync(chainsPath);
-  for (const chainFile of chainFiles) {
-    console.log('Updating', chainFile);
-    await updateChain(chainFile);
+  if (process.argv[2]) {
+    updateChain(process.argv[2]);
+  } else {
+    const chainFiles = fs.readdirSync(chainsPath);
+    for (const chainFile of chainFiles) {
+      console.log('Updating', chainFile);
+      await updateChain(chainFile);
+    }
   }
-  // updateChain('terra.json');
 })();

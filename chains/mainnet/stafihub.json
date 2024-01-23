@@ -14,7 +14,7 @@
   "coin_type": "118",
   "min_tx_fee": "20000",
   "addr_prefix": "stafi",
-  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stafihub/images/stafihub-chain-logo.png",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stafihub/images/stafihub.png",
   "assets": [
     {
       "base": "ufis",

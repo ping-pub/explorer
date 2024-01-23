@@ -1,5 +1,5 @@
 import { fromBinary, type JsonObject } from '@cosmjs/cosmwasm-stargate';
-import { toBase64 } from '@cosmjs/encoding';
+import { fromAscii, toBase64 } from '@cosmjs/encoding';
 import type { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
 import type { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service';
 
@@ -20,11 +20,20 @@ export const percent = (num: number) => {
 };
 
 export const decodeBuffer = (value: Uint8Array) => {
-  const base64Str = toBase64(value);
   try {
-    return fromBinary(base64Str);
+    const str = fromAscii(value);
+    try {
+      return JSON.parse(str);
+    } catch {
+      return str;
+    }
   } catch {
-    return base64Str;
+    const base64Str = toBase64(value);
+    try {
+      return fromBinary(base64Str);
+    } catch {
+      return base64Str;
+    }
   }
 };
 

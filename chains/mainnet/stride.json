@@ -45,9 +45,7 @@
     }
   ],
   "provider_chain": {
-    "api": [
-      "https://api-cosmoshub-ia.cosmosia.notional.ventures"
-    ]
+    "api": ["https://api-cosmoshub-ia.cosmosia.notional.ventures"]
   },
   "features": [
     "dashboard",
@@ -66,7 +64,7 @@
   "coin_type": "118",
   "min_tx_fee": "800",
   "addr_prefix": "stride",
-  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/stride-chain-logo.png",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/strd.svg",
   "theme_color": "#e91179",
   "assets": [
     {
@@ -74,7 +72,7 @@
       "symbol": "STRD",
       "exponent": "6",
       "coingecko_id": "stride",
-      "logo": "/logos/stride.png"
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/strd.svg"
     }
   ],
   "cosmwasm_enabled": false

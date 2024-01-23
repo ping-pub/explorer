@@ -1,11 +1,7 @@
 {
   "chain_name": "fxcore",
-  "api": [
-    "https://fx-rest.functionx.io"
-  ],
-  "rpc": [
-    "https://fx-json.functionx.io:26657"
-  ],
+  "api": ["https://fx-rest.functionx.io"],
+  "rpc": ["https://fx-json.functionx.io"],
   "snapshot_provider": "",
   "sdk_version": "v0.46.13",
   "coin_type": "60",
@@ -16,7 +12,7 @@
       "symbol": "FX",
       "exponent": "18",
       "coingecko_id": "fx-coin",
-      "logo": "/logos/fxcore.svg"
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/fxcore/images/fx.png"
     }
   ],
   "addr_prefix": "fx",
@@ -31,5 +27,6 @@
     "eth-address-gen",
     "eth-key-sign"
   ],
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/fxcore/images/fx.png",
   "cosmwasm_enabled": false
 }

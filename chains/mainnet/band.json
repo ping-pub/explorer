@@ -1,19 +1,25 @@
 {
-    "chain_name": "band",
-    "alias": "band-protocol",
-    "api": "https://laozi1.bandchain.org/api",
-    "rpc": ["http://rpc.laozi1.bandchain.org:80", "http://rpc.laozi1.bandchain.org:80"],
-    "snapshot_provider": "",
-    "addr_prefix": "band",
-    "coin_type": "494",
-    "min_tx_fee": "8000",
-    "assets": [{
-        "base": "uband",
-        "symbol": "BAND",
-        "exponent": "6",
-        "coingecko_id": "band-protocol", 
-        "logo": "/logos/band-protocol.svg"
-    }],
-    "logo": "/logos/band-protocol.svg",
-    "sdk_version": "0.45.8"
+  "chain_name": "band",
+  "alias": "band-protocol",
+  "api": "https://laozi1.bandchain.org/api",
+  "rpc": [
+    "http://rpc.laozi1.bandchain.org:80",
+    "http://rpc.laozi1.bandchain.org:80"
+  ],
+  "snapshot_provider": "",
+  "addr_prefix": "band",
+  "coin_type": "494",
+  "min_tx_fee": "8000",
+  "assets": [
+    {
+      "base": "uband",
+      "symbol": "BAND",
+      "exponent": "6",
+      "coingecko_id": "band-protocol",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bandchain/images/band.png"
+    }
+  ],
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bandchain/images/band.png",
+  "sdk_version": "0.45.8",
+  "cosmwasm_enabled": false
 }

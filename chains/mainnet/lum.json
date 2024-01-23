@@ -1,19 +1,28 @@
 {
-    "chain_name": "lum-network",
-    "coingecko": "lum-network",
-    "api": ["https://node0.mainnet.lum.network/rest", "https://lumnetwork-api.lavenderfive.com"],
-    "rpc": ["https://node0.mainnet.lum.network:443/rpc", "https://lumnetwork-rpc.lavenderfive.com:443"],
-    "snapshot_provider": "",
-    "sdk_version": "0.44.5",
-    "coin_type": "880",
-    "min_tx_fee": "5000",
-    "addr_prefix": "lum",
-    "logo": "/logos/lum-network.png",
-    "assets": [{
-        "base": "ulum",
-        "symbol": "LUM",
-        "exponent": "6",
-        "coingecko_id": "lum-network", 
-        "logo": "/logos/lum-network.png"
-    }]
+  "chain_name": "lum-network",
+  "coingecko": "lum-network",
+  "api": [
+    "https://node0.mainnet.lum.network/rest",
+    "https://lumnetwork-api.lavenderfive.com"
+  ],
+  "rpc": [
+    "https://node0.mainnet.lum.network:443/rpc",
+    "https://lumnetwork-rpc.lavenderfive.com:443"
+  ],
+  "snapshot_provider": "",
+  "sdk_version": "0.44.5",
+  "coin_type": "880",
+  "min_tx_fee": "5000",
+  "addr_prefix": "lum",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/lumnetwork/images/lum.svg",
+  "assets": [
+    {
+      "base": "ulum",
+      "symbol": "LUM",
+      "exponent": "6",
+      "coingecko_id": "lum-network",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/lumnetwork/images/lum.svg"
+    }
+  ],
+  "cosmwasm_enabled": false
 }
