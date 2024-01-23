@@ -1,13 +1,6 @@
 <script setup lang="ts">
-import {
-  useBlockchain,
-  useFormatter,
-  useMintStore,
-  useStakingStore,
-  useTxDialog,
-} from '@/stores';
-import { onMounted, computed, ref } from 'vue';
-import { Icon } from '@iconify/vue';
+import { decodeProto } from '@/components/dynamic';
+import PaginationBar from '@/components/PaginationBar.vue';
 import CommissionRate from '@/components/ValidatorCommissionRate.vue';
 import {
   consensusPubkeyToHexAddress,
@@ -15,27 +8,26 @@ import {
   pubKeyToValcons,
   valoperToPrefix,
 } from '@/libs';
+import type { ExtraTxResponse, ExtraTxSearchResponse } from '@/libs/client';
+import { stringToUint8Array } from '@/libs/utils';
 import {
-  PageRequest,
-  type Coin,
-  type Delegation,
-  type PaginatedDelegations,
-  type PaginatedTxs,
-} from '@/types';
-import PaginationBar from '@/components/PaginationBar.vue';
-import { fromAscii, fromBase64, toHex, toBase64 } from '@cosmjs/encoding';
-import { stringToUint8Array, uint8ArrayToString } from '@/libs/utils';
-import type { TxSearchResponse } from '@cosmjs/tendermint-rpc';
-import { fromTimestamp } from 'cosmjs-types/helpers';
+  useBlockchain,
+  useFormatter,
+  useMintStore,
+  useStakingStore,
+  useTxDialog,
+} from '@/stores';
+import { PageRequest, type Coin } from '@/types';
+import { fromAscii, toBase64, toHex } from '@cosmjs/encoding';
+import type { Event } from '@cosmjs/tendermint-rpc';
+import { Icon } from '@iconify/vue';
+import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
 import type {
   DelegationResponse,
   Validator,
 } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
-import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
-import type { ExtraTxResponse, ExtraTxSearchResponse } from '@/libs/client';
-import type { Event } from '@cosmjs/tendermint-rpc';
-import type { Any } from 'cosmjs-types/google/protobuf/any';
-import { decodeProto } from '@/components/dynamic';
+import { fromTimestamp } from 'cosmjs-types/helpers';
+import { computed, onMounted, ref } from 'vue';
 
 const props = defineProps(['validator', 'chain']);
 

@@ -19,10 +19,11 @@ import {
 import { useBaseStore } from './useBaseStore';
 import type { BondStatusString } from '@cosmjs/stargate/build/modules/staking/queries';
 import type { Duration } from 'cosmjs-types/google/protobuf/duration';
-import type {
-  Pool,
-  Validator,
-  Params,
+import {
+  type Pool,
+  type Validator,
+  type Params,
+  bondStatusToJSON,
 } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
 import type { Any } from 'cosmjs-types/google/protobuf/any';
 import type { JsonObject } from '@cosmjs/cosmwasm-stargate';
@@ -159,34 +160,26 @@ export const useStakingStore = defineStore('stakingStore', {
       }
     },
     async fetchValidators(status: BondStatusString) {
+      let client;
       if (this.blockchain.isConsumerChain) {
         if (
           this.blockchain.current?.providerChain.api &&
           this.blockchain.current.providerChain.api.length > 0
         ) {
-          const client = CosmosRestClient.newDefault(
+          client = CosmosRestClient.newDefault(
             this.blockchain.current.providerChain.api[0].address
           );
-          // provider validators
-          const validatorsRes = await client.getStakingValidators(status);
-          if (!validatorsRes) return [];
-          const proVals = validatorsRes.validators.sort(
-            (a, b) => Number(b.delegatorShares) - Number(a.delegatorShares)
-          );
-          if (status === 'BOND_STATUS_BONDED') {
-            this.validators = proVals;
-          }
-
-          return proVals;
         }
+      } else {
+        client = this.blockchain.rpc;
       }
-      const validatorsRes = await this.blockchain.rpc?.getStakingValidators(
-        status
-      );
+
+      // provider validators
+      const validatorsRes = await client?.getStakingValidators(status);
       if (!validatorsRes) return [];
-      const vals = validatorsRes.validators.sort(
-        (a, b) => Number(b.delegatorShares) - Number(a.delegatorShares)
-      );
+      const vals = validatorsRes.validators
+        .filter((v) => bondStatusToJSON(v.status) === status)
+        .sort((a, b) => Number(b.delegatorShares) - Number(a.delegatorShares));
       if (status === 'BOND_STATUS_BONDED') {
         this.validators = vals;
       }

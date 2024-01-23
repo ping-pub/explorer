@@ -52,3 +52,7 @@ html[data-theme='dark'] {
   opacity: 0;
   transform: translateY(-calc(15%));
 }
+
+.table :where(th, td) {
+  word-break: break-word;
+}
