@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { useBlockchain } from './useBlockchain';
 import { percent, formatNumber, formatTokenAmount } from '@/libs/utils';
+import { DEFAULT_SDK_VERSION } from '@/libs/client';
 export interface stakingItem {
   unbonding_time: string;
   max_validators: number;
@@ -66,11 +67,11 @@ export const useParamStore = defineStore('paramstore', {
     },
     appVersion: {
       title: 'Application Version',
-      items: {},
+      items: [] as Array<any>,
     },
     nodeVersion: {
       title: 'Node Information',
-      items: {},
+      items: [] as Array<any>,
     },
   }),
   getters: {
@@ -196,19 +197,20 @@ export const useParamStore = defineStore('paramstore', {
     async handleAbciInfo() {
       const res = await this.fetchAbciInfo();
 
+      if (!res) return;
+
       localStorage.setItem(
         `sdk_version_${this.blockchain.chainName}`,
-        res.version
+        res.applicationVersion?.cosmosSdkVersion ?? DEFAULT_SDK_VERSION
       );
 
-      this.appVersion.items = [res.protocolVersion];
-      // Object.entries(res.application_version).map(
-      //   ([key, value]) => ({ subtitle: key, value: value })
-      // );
-      this.nodeVersion.items = [res.version];
-      // this.nodeVersion.items = Object.entries(res.default_node_info).map(
-      //   ([key, value]) => ({ subtitle: key, value: value })
-      // );
+      this.appVersion.items = Object.entries(res.applicationVersion ?? {}).map(
+        ([key, value]) => ({ subtitle: key, value: value })
+      );
+
+      this.nodeVersion.items = Object.entries(res.defaultNodeInfo ?? {}).map(
+        ([key, value]) => ({ subtitle: key, value: value })
+      );
     },
     async getBaseTendermintBlockLatest() {
       return await this.blockchain.rpc?.getBaseBlockLatest();

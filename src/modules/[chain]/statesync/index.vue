@@ -2,13 +2,14 @@
 import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
 import { fromBase64, toHex } from '@cosmjs/encoding';
 import type { NodeInfo } from '@cosmjs/tendermint-rpc';
+import type { GetNodeInfoResponse } from 'cosmjs-types/cosmos/base/tendermint/v1beta1/query';
 import { onMounted, ref } from 'vue';
 import { computed } from 'vue';
 
 const props = defineProps(['hash', 'chain']);
 const blockchain = useBlockchain();
 const base = useBaseStore();
-const nodeInfo = ref({} as NodeInfo);
+const nodeInfo = ref({} as GetNodeInfoResponse | undefined);
 
 const height = ref(0);
 const hash = ref('');
@@ -29,7 +30,7 @@ const rpcs = computed(() => {
 });
 
 const appName = computed(() => {
-  return nodeInfo.value.version || 'gaiad';
+  return nodeInfo.value?.applicationVersion?.appName || 'gaiad';
 });
 
 onMounted(() => {
@@ -59,7 +60,8 @@ onMounted(() => {
       </h2>
       <div class="text-sm">
         1. {{ $t('statesync.text_1') }} ({{ appName }}
-        {{ $t('statesync.version') }}: {{ nodeInfo.version || '' }})
+        {{ $t('statesync.version') }}:
+        {{ nodeInfo?.applicationVersion?.version || '' }})
         <br />
         {{ $t('statesync.text_1_1') }}.
         <br />

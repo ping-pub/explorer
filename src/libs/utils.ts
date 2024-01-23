@@ -1,7 +1,14 @@
 import { fromBinary, type JsonObject } from '@cosmjs/cosmwasm-stargate';
 import { fromAscii, toBase64 } from '@cosmjs/encoding';
 import type { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
-import type { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service';
+
+export const formatTitle = (title: string) => {
+  const upperCaseTitle = title
+    .replace(/_(\w)/g, (m, g1) => ' ' + g1.toUpperCase())
+    .replace(/([A-Z])/g, ' $1')
+    .trim();
+  return upperCaseTitle[0].toUpperCase() + upperCaseTitle.slice(1);
+};
 
 export function getLocalObject(name: string) {
   const text = localStorage.getItem(name);

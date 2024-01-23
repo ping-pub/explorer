@@ -3,7 +3,7 @@ import { computed } from '@vue/reactivity';
 import DynamicComponent from './DynamicComponent.vue';
 
 const props = defineProps({
-  value: { type: null as any },
+  value: { type: Array<any> },
   thead: {
     type: Boolean,
     default: true,
@@ -18,7 +18,7 @@ const header = computed(() => {
 });
 </script>
 <template>
-  <div class="overflow-auto max-h-96 ">
+  <div class="overflow-auto max-h-96">
     <table class="table table-xs table-compact table-pin-rows w-full">
       <thead v-if="thead">
         <tr>

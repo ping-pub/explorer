@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { useFormatter } from '@/stores';
-import { formatSeconds } from '@/libs/utils';
+import { formatSeconds, formatTitle } from '@/libs/utils';
 import { fromAscii, toBase64 } from '@cosmjs/encoding';
 const props = defineProps({
   cardItem: {
@@ -42,11 +42,6 @@ function calculateValue(value: any) {
   }
 
   return newValue;
-}
-
-function formatTitle(v: string) {
-  if (!v) return '';
-  return v.replace(/_/g, ' ');
 }
 </script>
 <template>

@@ -4,6 +4,7 @@ import { useBlockchain, useDashboard, useFormatter } from '@/stores';
 import type { Coin, CoinWithPrice, Delegation } from '@/types';
 import { fromBech32, toBase64, toBech32, toHex } from '@cosmjs/encoding';
 import { Icon } from '@iconify/vue';
+import type { DelegationResponse } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
 import { computed } from 'vue';
 import { ref } from 'vue';
 import {
@@ -28,7 +29,7 @@ const conf = ref(
   >
 );
 const balances = ref({} as Record<string, CoinWithPrice[]>);
-const delegations = ref({} as Record<string, Delegation[]>);
+const delegations = ref({} as Record<string, DelegationResponse[]>);
 
 // initial loading queue
 // load balances

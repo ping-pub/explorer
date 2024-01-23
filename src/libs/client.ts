@@ -70,7 +70,10 @@ import {
   VoteOption,
   type ProposalStatus,
 } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
-
+import {
+  GetNodeInfoResponse,
+  ServiceClientImpl as TmQueryClientImpl,
+} from 'cosmjs-types/cosmos/base/tendermint/v1beta1/query';
 import { Proposal as ProposalV1 } from 'cosmjs-types/cosmos/gov/v1/gov';
 
 import {
@@ -169,6 +172,8 @@ export interface ExtraExtension {
       validatorAddr: string,
       page?: PageRequest
     ) => Promise<QueryValidatorDelegationsResponse>;
+
+    readonly getNodeInfo: () => Promise<GetNodeInfoResponse>;
   };
 }
 function setupExtraExtension(base: QueryClient) {
@@ -179,6 +184,7 @@ function setupExtraExtension(base: QueryClient) {
   const bankQueryService = new BankQueryClientImpl(rpc);
   const wasmQueryService = new WasmQueryClientImpl(rpc);
   const stakingQueryService = new StakingQueryClientImpl(rpc);
+  const tmQueryClientImpl = new TmQueryClientImpl(rpc);
   return {
     extra: {
       accounts: async (page?: PageRequest) => {
@@ -247,6 +253,10 @@ function setupExtraExtension(base: QueryClient) {
           validatorAddr,
           pagination: page?.toPagination(),
         });
+      },
+
+      getNodeInfo: async () => {
+        return await tmQueryClientImpl.GetNodeInfo();
       },
     },
   };
@@ -360,7 +370,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
 
   // Auth Module
   async getAuthAccounts(page?: PageRequest) {
-    // if (!page) page = new PageRequest();
+    if (!page) page = new PageRequest();
     // const query = `?${page.toQueryString()}`;
     // return this.request(this.registry.auth_accounts, {}, query);
     const res = await this.queryClient.extra.accounts(page);
@@ -780,11 +790,23 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     const res = await this.tmClient.block(height ? Number(height) : undefined);
     return res;
   }
-  async getBaseNodeInfo() {
+  async getBaseNodeInfo(): Promise<GetNodeInfoResponse | undefined> {
     // return this.request(this.registry.base_tendermint_node_info, {});
-    const res = await this.tmClient.status();
-    console.log(res);
-    return res.nodeInfo;
+    try {
+      const blockchain = useBlockchain();
+      // TODO:// hardcode for nomic sdk
+      if (blockchain.chainName === 'OraiBtcMainnet') {
+        const res = await this.tmClient.status();
+        return GetNodeInfoResponse.fromPartial({
+          // @ts-ignore
+          defaultNodeInfo: res.nodeInfo,
+        });
+      } else {
+        return await this.queryClient.extra.getNodeInfo();
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
   }
   async getBaseValidatorsetAt(height: string | number, offset: number) {
     // const query = `?pagination.limit=100&pagination.offset=${offset}`;
