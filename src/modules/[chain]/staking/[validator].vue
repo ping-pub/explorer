@@ -29,7 +29,15 @@ import type {
 import { fromTimestamp } from 'cosmjs-types/helpers';
 import { computed, onMounted, ref } from 'vue';
 
-const props = defineProps(['validator', 'chain']);
+const props = defineProps({
+  validator: {
+    type: String,
+    required: true,
+  },
+  chain: {
+    type: String,
+  },
+});
 
 const staking = useStakingStore();
 const blockchain = useBlockchain();
@@ -132,6 +140,7 @@ const loadAvatar = (identity: string) => {
 onMounted(() => {
   if (validator) {
     staking.fetchValidator(validator).then((res) => {
+      if (!res) return;
       v.value = res.validator;
       identity.value = res.validator?.description?.identity || '';
       if (identity.value && !avatars.value[identity.value])
@@ -149,6 +158,7 @@ onMounted(() => {
     blockchain.rpc
       .getDistributionValidatorOutstandingRewards(validator)
       .then((res) => {
+        if (!res) return;
         rewards.value = res.rewards?.rewards?.sort(
           (a, b) => Number(b.amount) - Number(a.amount)
         );
@@ -159,6 +169,7 @@ onMounted(() => {
         });
       });
     blockchain.rpc.getDistributionValidatorCommission(validator).then((res) => {
+      if (!res) return;
       commission.value = res.commission?.commission?.sort(
         (a, b) => Number(b.amount) - Number(a.amount)
       );

@@ -1,10 +1,23 @@
-import { DEFAULT, fetchData } from '@/libs';
+import {
+  consensusPubkeyToHexAddress,
+  DEFAULT,
+  fetchData,
+  operatorAddressToAccount,
+  pubKeyToValcons,
+} from '@/libs';
 import type { PageRequest } from '@/types';
 import {
   setupWasmExtension,
   type WasmExtension,
 } from '@cosmjs/cosmwasm-stargate';
-import { fromBase64, fromHex, toBase64, toHex } from '@cosmjs/encoding';
+import {
+  fromBase64,
+  fromBech32,
+  fromHex,
+  toBase64,
+  toBech32,
+  toHex,
+} from '@cosmjs/encoding';
 import type { DecodedTxRaw } from '@cosmjs/proto-signing';
 import { decodeTxRaw } from '@cosmjs/proto-signing';
 import {
@@ -69,7 +82,10 @@ import {
   QueryClientImpl as GovQueryClientImplV1,
   QueryProposalsResponse as QueryProposalsResponseV1,
 } from 'cosmjs-types/cosmos/gov/v1/query';
-import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
+import type {
+  QueryValidatorDelegationsResponse,
+  QueryValidatorResponse,
+} from 'cosmjs-types/cosmos/staking/v1beta1/query';
 import { QueryClientImpl as StakingQueryClientImpl } from 'cosmjs-types/cosmos/staking/v1beta1/query';
 import {
   QueryAllContractStateResponse,
@@ -94,6 +110,7 @@ import type { PageResponse } from 'cosmjs-types/cosmos/base/query/v1beta1/pagina
 import type { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service';
 import { Tx } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import type { Event, EventAttribute } from 'cosmjs-types/tendermint/abci/types';
+import { PubKey as Ed25519PubKey } from 'cosmjs-types/cosmos/crypto/ed25519/keys';
 
 export const DEFAULT_SDK_VERSION = '0.45.16';
 
@@ -418,22 +435,31 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     // return this.request(this.registry.distribution_validator_commission, {
     //   validator_address,
     // });
-    const res = await this.queryClient.distribution.validatorCommission(
-      validator_address
-    );
-    console.log(res);
-    return res;
+    try {
+      const res = await this.queryClient.distribution.validatorCommission(
+        validator_address
+      );
+      console.log(res);
+      return res;
+    } catch (ex) {
+      console.log(ex);
+    }
   }
   async getDistributionValidatorOutstandingRewards(validator_address: string) {
     // return this.request(
     //   this.registry.distribution_validator_outstanding_rewards,
     //   { validator_address }
     // );
-    const res = await this.queryClient.distribution.validatorOutstandingRewards(
-      validator_address
-    );
-    console.log(res);
-    return res;
+    try {
+      const res =
+        await this.queryClient.distribution.validatorOutstandingRewards(
+          validator_address
+        );
+      console.log(res);
+      return res;
+    } catch (ex) {
+      console.log(ex);
+    }
   }
   async getDistributionValidatorSlashes(
     validator_address: string,
@@ -657,9 +683,28 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     // return this.request(this.registry.staking_validators_address, {
     //   validator_addr,
     // });
-    const res = await this.queryClient.staking.validator(validator_addr);
-    console.log(res);
-    return res;
+    try {
+      const blockchain = useBlockchain();
+      // TODO:// hardcode for nomic sdk
+      if (blockchain.chainName === 'OraiBtcMainnet') {
+        const validators = await this.getStakingValidators(
+          'BOND_STATUS_BONDED'
+        );
+        const validator = validators?.validators.find((v) => {
+          return operatorAddressToAccount(v.operatorAddress) === validator_addr;
+        });
+        return {
+          validator,
+        };
+      } else {
+        const res = await this.queryClient.staking.validator(validator_addr);
+        console.log(res);
+
+        return res;
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
   }
   async getStakingValidatorsDelegations(
     validator_addr: string,

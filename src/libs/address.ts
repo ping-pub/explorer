@@ -15,9 +15,10 @@ export function decodeAddress(address: string) {
 
 export function valoperToPrefix(valoper?: string) {
   if (!valoper) return '';
-  const prefixIndex = valoper.indexOf('valoper');
-  if (prefixIndex === -1) return null;
-  return valoper.slice(0, prefixIndex);
+  // const prefixIndex = valoper.indexOf('valoper');
+  // if (prefixIndex === -1) return null;
+  // return valoper.slice(0, prefixIndex);
+  return fromBech32(valoper).prefix;
 }
 
 export function operatorAddressToAccount(operAddress?: string) {
