@@ -13,7 +13,7 @@
       "address": "https://rpc.orai.io"
     }
   ],
-  "cosmwasm_enabled": false,
+  "cosmwasm_enabled": true,
   "sdk_version": "0.45.16",
   "coin_type": "118",
   "min_tx_fee": "800",

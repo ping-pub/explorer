@@ -30,7 +30,7 @@ const updateChain = async (chainFile) => {
     const filePath = path.join(chainsPath, chainFile);
     const chainData = JSON.parse(fs.readFileSync(filePath).toString());
     if (logo) chainData.logo = logo;
-    chainData.cosmwasm_enabled = cosmwasmEnabled;
+    if (cosmwasmEnabled) chainData.cosmwasm_enabled = cosmwasmEnabled;
     fs.writeFileSync(filePath, JSON.stringify(chainData, null, 2));
   } catch (ex) {
     console.log('Problem with', url, ex.toString());
