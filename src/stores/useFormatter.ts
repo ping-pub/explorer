@@ -325,7 +325,8 @@ export const useFormatter = defineStore('formatter', {
       return numeral(percent > 0.0001 ? percent : 0).format('0.[00]%');
     },
     formatDecimalToPercent(decimal: string) {
-      return numeral(decimal).format('0.[00]%');
+      if (!decimal) return '-';
+      return this.percent(decimal);
     },
     formatCommissionRate(rate?: string) {
       if (!rate) return '-';
@@ -337,9 +338,11 @@ export const useFormatter = defineStore('formatter', {
       let decimalFormat = numeral(decimal);
 
       const decimalValue = decimalFormat.value();
+
       if (decimalValue && decimalValue > 1e6) {
         decimalFormat = decimalFormat.divide('1000000000000000000');
       }
+
       return decimalFormat;
     },
     percent(decimal?: string | number) {

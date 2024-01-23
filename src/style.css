@@ -6,6 +6,7 @@
 
 html,body {
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -54,5 +55,9 @@ html[data-theme='dark'] {
 }
 
 .table :where(th, td) {
+  word-break: break-word;
+}
+
+.text-break {
   word-break: break-word;
 }

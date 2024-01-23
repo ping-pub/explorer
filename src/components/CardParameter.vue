@@ -12,7 +12,11 @@ const props = defineProps({
 const formatter = useFormatter();
 function calculateValue(value: any) {
   if (!value) return;
-  if (value instanceof Uint8Array) return fromAscii(value);
+
+  if (value instanceof Uint8Array) {
+    return formatter.formatDecimalToPercent(fromAscii(value));
+  }
+
   if (Array.isArray(value)) {
     return (value[0] && value[0].amount) || '-';
   }
@@ -28,9 +32,15 @@ function calculateValue(value: any) {
     return value;
   }
 
-  if (newValue < 1 && newValue > 0) {
-    return formatter.formatDecimalToPercent(value);
+  // check is correct percent format
+  const decimalFormat = formatter.toDecimal(value);
+  if (decimalFormat) {
+    const decimalValue = decimalFormat.value();
+    if (decimalValue && decimalValue < 1 && decimalValue > 0) {
+      return decimalFormat.format('0.[00]%');
+    }
   }
+
   return newValue;
 }
 
@@ -53,10 +63,10 @@ function formatTitle(v: string) {
         :key="index"
         class="rounded-sm bg-active px-4 py-2"
       >
-        <div class="text-xs mb-2 text-secondary capitalize">
+        <div class="text-xs mb-2 text-secondary capitalize text-break">
           {{ formatTitle(item?.subtitle) }}
         </div>
-        <div class="text-base text-main">
+        <div class="text-base text-main text-break">
           {{ calculateValue(item?.value) }}
         </div>
       </div>

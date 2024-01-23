@@ -189,7 +189,7 @@ function color(v: string) {
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4 overflow-hidden">
         {{ $t('ibc.title_2')
-        }}<span class="ml-2 text-sm">{{
+        }}<span class="ml-2 text-sm text-break">{{
           clientState?.clientState?.typeUrl
         }}</span>
       </h2>
@@ -266,7 +266,7 @@ function color(v: string) {
             </tr>
             <tr>
               <td class="w-52">{{ $t('ibc.upgrade_path') }}:</td>
-              <td class="text-right">
+              <td class="text-right text-break">
                 {{ clientState?.upgradePath?.join(', ') }}
               </td>
             </tr>

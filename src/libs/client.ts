@@ -5,7 +5,7 @@ import {
   operatorAddressToAccount,
   pubKeyToValcons,
 } from '@/libs';
-import type { PageRequest } from '@/types';
+import { PageRequest } from '@/types';
 import {
   setupWasmExtension,
   type WasmExtension,
@@ -819,7 +819,12 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
   // tx
   async getTxsBySender(sender: string, page?: PageRequest) {
-    // if (!page) page = new PageRequest();
+    // const blockchain = useBlockchain();
+    // if (blockchain.chainName === 'osmosis') {
+    //   if (!page) page = new PageRequest(undefined, true);
+    //   page.setCountTotal(false);
+    // }
+
     // const query = `?order_by=2&events=message.sender='${sender}'&pagination.limit=${
     //   page.limit
     // }&pagination.offset=${page.offset || 0}`;
