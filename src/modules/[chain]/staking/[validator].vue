@@ -140,7 +140,7 @@ const loadAvatar = (identity: string) => {
 onMounted(() => {
   if (validator) {
     staking.fetchValidator(validator).then((res) => {
-      if (!res) return;
+      if (!res?.validator) return;
       v.value = res.validator;
       identity.value = res.validator?.description?.identity || '';
       if (identity.value && !avatars.value[identity.value])

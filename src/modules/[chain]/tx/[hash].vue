@@ -7,27 +7,26 @@ import type { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service';
 import { JsonViewer } from 'vue3-json-viewer';
 // if you used v1.0.5 or latster ,you should add import "vue3-json-viewer/dist/index.css"
 import 'vue3-json-viewer/dist/index.css';
-import { TXS_CACHE } from '@/libs/utils';
 
 const props = defineProps(['hash', 'chain']);
 
 const blockchain = useBlockchain();
 const baseStore = useBaseStore();
 const format = useFormatter();
-const tx = ref({} as GetTxResponse);
+const tx = ref({} as GetTxResponse | undefined);
 if (props.hash) {
   blockchain.rpc.getTx(props.hash).then((x) => {
-    tx.value = x ?? TXS_CACHE[props.hash];
+    tx.value = x;
   });
 }
 const messages = computed(() => {
-  return tx.value.tx?.body?.messages || [];
+  return tx.value?.tx?.body?.messages || [];
 });
 </script>
 <template>
   <div>
     <div
-      v-if="tx.txResponse"
+      v-if="tx?.txResponse"
       class="bg-base-100 px-4 pt-3 pb-4 rounded shadow mb-4"
     >
       <h2 class="card-title truncate mb-2">{{ $t('tx.title') }}</h2>
@@ -36,7 +35,7 @@ const messages = computed(() => {
           <tbody>
             <tr>
               <td>{{ $t('tx.tx_hash') }}</td>
-              <td>{{ tx.txResponse.txhash }}</td>
+              <td>{{ tx?.txResponse.txhash }}</td>
             </tr>
             <tr>
               <td>{{ $t('account.height') }}</td>
@@ -106,7 +105,7 @@ const messages = computed(() => {
     </div>
 
     <div
-      v-if="tx.txResponse"
+      v-if="tx?.txResponse"
       class="bg-base-100 px-4 pt-3 pb-4 rounded shadow mb-4"
     >
       <h2 class="card-title truncate mb-2">
@@ -120,7 +119,10 @@ const messages = computed(() => {
       <div v-if="messages.length === 0">{{ $t('tx.no_messages') }}</div>
     </div>
 
-    <div v-if="tx.txResponse" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+    <div
+      v-if="tx?.txResponse"
+      class="bg-base-100 px-4 pt-3 pb-4 rounded shadow"
+    >
       <h2 class="card-title truncate mb-2">JSON</h2>
       <JsonViewer
         :value="tx"
