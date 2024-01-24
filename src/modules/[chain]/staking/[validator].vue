@@ -870,10 +870,3 @@ function mapDelegators(messages: any[]) {
     </div>
   </div>
 </template>
-
-<style>
-.validatore-table.table :where(th, td) {
-  padding: 0.6rem 1rem;
-  font-size: 14px;
-}
-</style>

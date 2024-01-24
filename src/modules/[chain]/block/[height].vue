@@ -20,12 +20,20 @@ const height = computed(() => {
   return Number(current.value.block?.header?.height || props.height || 0);
 });
 
+const commit = computed(()=>{
+  const lastCommit = current.value.block?.lastCommit;
+  if(lastCommit){
+    Object.assign(lastCommit,{signatures : lastCommit.signatures.filter(c=>c.signature)})
+  }
+  return lastCommit;
+})
+
 const isFutureBlock = computed({
   get: () => {
     const latest = store.latest?.block?.header.height
     const isFuture = latest ? target.value > Number(latest) : true
     if (!isFuture && !current.value.blockId) store.fetchBlock(target.value).then(x => {
-      current.value = x;      
+      current.value = x;                
     })
     return isFuture
   },
@@ -58,7 +66,7 @@ function updateTarget() {
 onBeforeRouteUpdate(async (to, from, next) => {
   if (from.path !== to.path) {
     store.fetchBlock(String(to.params.height)).then(x => {
-      current.value = x;      
+      current.value = x;            
     });
     next();
   }
@@ -140,7 +148,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
 
       <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
         <h2 class="card-title flex flex-row justify-between">{{ $t('block.last_commit') }}</h2>
-        <DynamicComponent :value="current.block?.lastCommit" />
+        <DynamicComponent :value="commit" />
       </div>
   </div>
 </div></template>
