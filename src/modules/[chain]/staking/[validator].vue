@@ -62,7 +62,7 @@ const addresses = ref(
     valCons: string;
   }
 );
-const selfBonded = ref({} as DelegationResponse);
+const selfBonded = ref({} as DelegationResponse | undefined);
 
 addresses.value.account = operatorAddressToAccount(validator);
 // load self bond
@@ -90,6 +90,8 @@ const apr = computed(() => {
 });
 
 const selfRate = computed(() => {
+  if (!selfBonded.value) return '-';
+
   if (selfBonded.value.balance?.amount) {
     return format.calculatePercent(
       selfBonded.value.balance.amount,
@@ -479,7 +481,10 @@ function mapDelegators(messages: any[]) {
               >
                 <Icon icon="mdi-percent" class="text-3xl" />
               </div>
-              <div class="ml-3 flex flex-col justify-center">
+              <div
+                class="ml-3 flex flex-col justify-center"
+                v-if="selfBonded?.balance"
+              >
                 <h4>
                   {{ format.formatToken(selfBonded.balance) }} ({{ selfRate }})
                 </h4>

@@ -86,6 +86,7 @@ import {
   QueryProposalsResponse as QueryProposalsResponseV1,
 } from 'cosmjs-types/cosmos/gov/v1/query';
 import type {
+  QueryDelegationResponse,
   QueryValidatorDelegationsResponse,
   QueryValidatorResponse,
 } from 'cosmjs-types/cosmos/staking/v1beta1/query';
@@ -316,12 +317,17 @@ export class BaseRestClient<R extends AbstractRegistry> {
     query = '',
     adapter?: (source: any) => T
   ) {
-    let url = `${request.url.startsWith('http') ? '' : this.endpoint}${
-      request.url
-    }${query}`;
+    let url = request.url;
+    if (!url.startsWith('http')) {
+      const blockchain = useBlockchain();
+      url = (blockchain.current?.endpoints.rest?.[0].address ?? '') + url;
+    }
+
+    url += query;
     Object.keys(args).forEach((k) => {
       url = url.replace(`{${k}}`, args[k] || '');
     });
+
     return fetchData<T>(url, adapter || request.adapter);
   }
 }
@@ -744,17 +750,44 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getStakingValidatorsDelegationsDelegator(
     validator_addr: string,
     delegator_addr: string
-  ) {
-    // return this.request(
-    //   this.registry.staking_validators_delegations_delegator,
-    //   { validator_addr, delegator_addr }
-    // );
-    const res = await this.queryClient.staking.delegation(
-      delegator_addr,
-      validator_addr
-    );
-    console.log(res);
-    return res;
+  ): Promise<QueryDelegationResponse | undefined> {
+    try {
+      const blockchain = useBlockchain();
+      // TODO:// hardcode for nomic sdk
+      if (blockchain.chainName === 'OraiBtcMainnet') {
+        const { delegation_responses } = await this.request(
+          this.registry.staking_deletations,
+          {
+            delegator_addr,
+          }
+        );
+        const res = delegation_responses.find(
+          (d) => d.delegation.validator_address === validator_addr
+        );
+        if (res) {
+          const response: QueryDelegationResponse = {
+            delegationResponse: {
+              delegation: {
+                delegatorAddress: res.delegation.delegator_address,
+                validatorAddress: res.delegation.validator_address,
+                shares: res.delegation.shares,
+              },
+              balance: res.balance,
+            },
+          };
+          return response;
+        }
+      } else {
+        const res = await this.queryClient.staking.delegation(
+          delegator_addr,
+          validator_addr
+        );
+
+        return res;
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
   }
   async getStakingValidatorsDelegationsUnbonding(
     validator_addr: string,

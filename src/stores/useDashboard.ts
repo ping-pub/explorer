@@ -65,6 +65,7 @@ export interface ChainConfig {
   features?: string[];
   endpoints: {
     rpc?: Endpoint[];
+    rest?: Endpoint[];
     grpc?: Endpoint[];
   };
   logo: string;
@@ -91,6 +92,7 @@ export interface LocalConfig {
   addr_prefix: string;
   alias: string;
   api: string[] | Endpoint[];
+  rpc: string[] | Endpoint[];
   provider_chain: {
     api: string[] | Endpoint[];
   };
@@ -107,7 +109,6 @@ export interface LocalConfig {
   theme_color?: string;
   min_tx_fee: string;
   cosmwasm_enabled: boolean;
-  rpc: string[] | Endpoint[];
   sdk_version: string;
   registry_name?: string;
   features?: string[];
@@ -160,7 +161,9 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
   conf.prettyName = lc.registry_name || lc.chain_name;
   conf.endpoints = {
     rpc: apiConverter(lc.rpc),
+    rest: apiConverter(lc.api),
   };
+
   if (lc.provider_chain) {
     conf.providerChain = {
       api: apiConverter(lc.provider_chain.api),
