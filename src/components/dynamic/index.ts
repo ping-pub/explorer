@@ -1,10 +1,6 @@
 import * as injProto from '@injectivelabs/core-proto-ts';
 import osmoProto from '@/libs/protos/osmosis';
-
 import { MsgType } from '@injectivelabs/ts-types';
-
-import { Registry } from '@cosmjs/proto-signing';
-import { defaultRegistryTypes as defaultStargateTypes } from '@cosmjs/stargate';
 import ObjectElement from './ObjectElement.vue';
 import TextElement from './TextElement.vue';
 import ArrayElement from './ArrayElement.vue';
@@ -70,8 +66,6 @@ const findType = (obj: any, type: string): any => {
   }
 };
 
-export const customRegistry = new Registry(defaultStargateTypes);
-
 export const lookupType = (obj: any, typeUrl: string) => {
   const paths = typeUrl.slice(1).split('.');
   let type = obj;
@@ -89,13 +83,11 @@ export const decodeProto = (msg: { typeUrl: string; value: Uint8Array }) => {
   if (msg.typeUrl.startsWith('/osmosis.')) {
     // fallback with osmosis
     type = lookupType(osmoProto, msg.typeUrl);
-  } else if (msg.typeUrl.startsWith('/injective.')) {
+  } else {
     type = findType(
       injProto,
       typeMap[msg.typeUrl] ?? msg.typeUrl.split('.').pop()
     );
-  } else {
-    type = customRegistry.lookupType(msg.typeUrl);
   }
 
   if (type) {
