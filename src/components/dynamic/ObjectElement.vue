@@ -13,11 +13,7 @@ const props = defineProps(['value']);
           </td>
           <td class="w-4/5">
             <div class="overflow-hidden w-auto whitespace-normal">
-              <Component
-                v-if="v"
-                :is="select(v, 'horizontal')"
-                :value="v"
-              ></Component>
+              <Component :is="select(v, 'horizontal')" :value="v"></Component>
             </div>
           </td>
         </tr>

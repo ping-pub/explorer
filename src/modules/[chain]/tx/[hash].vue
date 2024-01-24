@@ -23,10 +23,10 @@ const messages = computed(() => {
   return tx.value?.tx?.body?.messages || [];
 });
 
-const rawLog = computed(() => {
-  return tx.value?.txResponse?.rawLog
-    ? logs.parseRawLog(tx.value?.txResponse?.rawLog)
-    : logs.parseLogs(tx.value?.txResponse?.logs || []);
+const txLogs = computed(() => {
+  return (
+    tx.value?.txResponse?.logs || logs.parseRawLog(tx.value?.txResponse?.rawLog)
+  );
 });
 </script>
 <template>
@@ -125,16 +125,16 @@ const rawLog = computed(() => {
       <div v-if="messages.length === 0">{{ $t('tx.no_messages') }}</div>
     </div>
 
-    <div v-if="rawLog" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow mb-4">
+    <div v-if="txLogs" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow mb-4">
       <h2 class="card-title truncate mb-2">
-        {{ $t('account.logs') }}: ({{ rawLog.length }})
+        {{ $t('account.logs') }}: ({{ txLogs.length }})
       </h2>
-      <div v-for="(msg, i) in rawLog">
+      <div v-for="(msg, i) in txLogs">
         <div class="border border-slate-400 rounded-md mt-4">
           <DynamicComponent :value="msg" />
         </div>
       </div>
-      <div v-if="rawLog.length === 0">{{ $t('tx.no_logs') }}</div>
+      <div v-if="txLogs.length === 0">{{ $t('tx.no_logs') }}</div>
     </div>
 
     <div
