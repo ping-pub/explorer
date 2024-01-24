@@ -3,7 +3,7 @@ import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { computed, ref } from '@vue/reactivity';
 import type { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service';
-
+import { logs } from '@cosmjs/stargate';
 import { JsonViewer } from 'vue3-json-viewer';
 // if you used v1.0.5 or latster ,you should add import "vue3-json-viewer/dist/index.css"
 import 'vue3-json-viewer/dist/index.css';
@@ -25,8 +25,8 @@ const messages = computed(() => {
 
 const rawLog = computed(() => {
   return tx.value?.txResponse?.rawLog
-    ? JSON.parse(tx.value?.txResponse?.rawLog)
-    : tx.value?.txResponse?.logs || [];
+    ? logs.parseRawLog(tx.value?.txResponse?.rawLog)
+    : logs.parseLogs(tx.value?.txResponse?.logs || []);
 });
 </script>
 <template>
