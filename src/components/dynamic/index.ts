@@ -11,6 +11,7 @@ import ArrayElement from './ArrayElement.vue';
 import UInt8Array from './UInt8Array.vue';
 import NumberElement from './NumberElement.vue';
 import TokenElement from './TokenElement.vue';
+import TimestampElement from './TimestampElement.vue';
 import ObjectHorizontalElement from './ObjectHorizontalElement.vue';
 import Long from 'long';
 
@@ -43,6 +44,10 @@ function selectObject(v: Object, direct?: string) {
       Object.keys(v).includes('amount') &&
       Object.keys(v).includes('denom'): {
       return TokenElement;
+    }
+    case v && Object.keys(v).includes('seconds'):
+    case v instanceof Date: {
+      return TimestampElement;
     }
     case direct === 'horizontal':
       return ObjectHorizontalElement;

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, resolveComponent, h } from 'vue'
+import { defineComponent, resolveComponent, h } from 'vue';
 
 export default defineComponent({
   setup() {
@@ -10,9 +10,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style>
-.layout-wrapper.layout-blank {
-  flex-direction: column;
-}
-</style>

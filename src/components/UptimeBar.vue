@@ -38,5 +38,3 @@ const bars = computed(() => {
     </div>
   </div>
 </template>
-
-<style></style>

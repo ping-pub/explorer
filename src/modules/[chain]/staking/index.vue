@@ -578,10 +578,3 @@ loadAvatars();
     }
   }
 </route>
-
-<style>
-.staking-table.table :where(th, td) {
-  padding: 8px 5px;
-  background: transparent;
-}
-</style>

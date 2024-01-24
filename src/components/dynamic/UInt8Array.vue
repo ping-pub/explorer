@@ -51,11 +51,11 @@ function getClass(value: string) {
         {{ text }}
       </span>
     </div>
-    <div class="btn-group mt-4" role="group">
+    <div class="btn-group mt-4 inline-block" role="group">
       <button
         type="button"
         v-bind:class="getClass('utf8')"
-        class="btn btn-sm"
+        class="btn btn-xs"
         @click="change('utf8')"
       >
         Utf8
@@ -63,7 +63,7 @@ function getClass(value: string) {
       <button
         type="button"
         v-bind:class="getClass('base64')"
-        class="btn btn-sm"
+        class="btn btn-xs"
         @click="change('base64')"
       >
         Base64
@@ -71,7 +71,7 @@ function getClass(value: string) {
       <button
         type="button"
         v-bind:class="getClass('hex')"
-        class="btn btn-sm"
+        class="btn btn-xs"
         @click="change('hex')"
       >
         Hex

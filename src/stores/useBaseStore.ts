@@ -42,10 +42,6 @@ export const useBaseStore = defineStore('baseStore', {
           const diff = dayjs(this.latest.block?.header?.time.toString()).diff(
             this.earlest.block?.header?.time.toString()
           );
-          console.log(
-            JSON.stringify(this.earlest),
-            JSON.stringify(this.latest)
-          );
           const blocks =
             Number(this.latest.block.header.height) -
             Number(this.earlest.block.header.height);

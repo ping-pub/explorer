@@ -34,6 +34,10 @@ html[data-theme='dark'] {
   --bg-active: #242b40;
 }
 
+table td {
+  min-width: 100px!important;
+}
+
 .table th:first-child {
   position: relative;
   z-index: 2;
@@ -57,6 +61,38 @@ html[data-theme='dark'] {
 .table :where(th, td) {
   word-break: break-word;
 }
+
+.ping-connect-btn,
+.ping-connect-dropdown {
+  display: none !important;
+}
+
+.layout-wrapper.layout-blank {
+  flex-direction: column;
+}
+
+.countdown-container {
+  display: inline-flexbox;
+  position: relative;
+}
+
+.countdown {
+  position: absolute;
+  width: 45%;
+  text-align: right;
+  float: right;
+}
+
+.validatore-table.table :where(th, td) {
+  padding: 0.6rem 1rem;
+  font-size: 14px;
+}
+
+.staking-table.table :where(th, td) {
+  padding: 8px 5px;
+  background: transparent;
+}
+
 
 .text-break {
   word-break: break-word;
