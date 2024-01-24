@@ -66,6 +66,7 @@
     "height": "Height",
     "hash": "Hash",
     "messages": "Messages",
+    "logs": "Logs",
     "time": "Time",
     "error": "Account does not exists on chain"
   },
@@ -249,7 +250,8 @@
     "gas": "Gas",
     "fee": "Fee",
     "memo": "Memo",
-    "no_messages": "No messages"
+    "no_messages": "No messages",
+    "no_logs": "No logs"
   },
   "uptime": {
     "overall": "Overall",

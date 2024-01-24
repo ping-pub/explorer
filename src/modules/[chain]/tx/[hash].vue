@@ -22,6 +22,12 @@ if (props.hash) {
 const messages = computed(() => {
   return tx.value?.tx?.body?.messages || [];
 });
+
+const rawLog = computed(() => {
+  return tx.value?.txResponse?.rawLog
+    ? JSON.parse(tx.value?.txResponse?.rawLog)
+    : tx.value?.txResponse?.logs || [];
+});
 </script>
 <template>
   <div>
@@ -117,6 +123,18 @@ const messages = computed(() => {
         </div>
       </div>
       <div v-if="messages.length === 0">{{ $t('tx.no_messages') }}</div>
+    </div>
+
+    <div v-if="rawLog" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow mb-4">
+      <h2 class="card-title truncate mb-2">
+        {{ $t('account.logs') }}: ({{ rawLog.length }})
+      </h2>
+      <div v-for="(msg, i) in rawLog">
+        <div class="border border-slate-400 rounded-md mt-4">
+          <DynamicComponent :value="msg" />
+        </div>
+      </div>
+      <div v-if="rawLog.length === 0">{{ $t('tx.no_logs') }}</div>
     </div>
 
     <div
