@@ -97,3 +97,7 @@ table td {
 .text-break {
   word-break: break-word;
 }
+
+.jv-container .jv-code.boxed {
+  overflow-y: auto;
+}
