@@ -22,9 +22,10 @@ import { fromAscii, toBase64, toHex } from '@cosmjs/encoding';
 import type { Event } from '@cosmjs/tendermint-rpc';
 import { Icon } from '@iconify/vue';
 import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
-import type {
-  DelegationResponse,
-  Validator,
+import {
+  bondStatusToJSON,
+  type DelegationResponse,
+  type Validator,
 } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
 import { fromTimestamp } from 'cosmjs-types/helpers';
 import { computed, onMounted, ref } from 'vue';
@@ -403,13 +404,19 @@ function mapDelegators(messages: any[]) {
                 <Icon icon="mdi-shield-account-outline" class="text-xl mr-1" />
                 <span class="font-bold mr-2">{{ $t('staking.status') }}: </span
                 ><span>
-                  {{ String(v.status).replace('BOND_STATUS_', '') }}
+                  {{
+                    bondStatusToJSON(v.status)
+                      .toLowerCase()
+                      .replace(/^bond_status/, '')
+                      .replaceAll(/_(.)/g, (m, g) => ' ' + g.toUpperCase())
+                      .trim()
+                  }}
                 </span>
               </div>
               <div class="flex items-center">
                 <Icon icon="mdi-shield-alert-outline" class="text-xl mr-1" />
                 <span class="font-bold mr-2">{{ $t('staking.jailed') }}: </span>
-                <span> {{ v.jailed || '-' }} </span>
+                <span> {{ v.jailed ?? '-' }} </span>
               </div>
             </div>
             <p class="text-sm mt-4 mb-3 font-medium">

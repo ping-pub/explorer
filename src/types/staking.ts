@@ -23,15 +23,12 @@ export interface Validator {
 }
 
 export interface CommissionRate {
-  commissionRates: {
+  commission_rates: {
     rate: string;
-    maxRate: string;
-    maxChangeRate: string;
+    max_rate: string;
+    max_change_rate: string;
   };
-  updateTime: {
-    seconds: BigInt;
-    nanos: number;
-  };
+  update_time: string;
 }
 
 export interface UnbondingResponses {

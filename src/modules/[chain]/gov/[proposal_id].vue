@@ -434,7 +434,13 @@ function metaItem(metadata: string | undefined): {
                     item.option === VoteOption.VOTE_OPTION_ABSTAIN,
                 }"
               >
-                {{ String(item.option).replace('VOTE_OPTION_', '') }}
+                {{
+                  voteOptionToJSON(item.option)
+                    .toLowerCase()
+                    .replace(/^vote_option/, '')
+                    .replaceAll(/_(.)/g, (m, g) => ' ' + g.toUpperCase())
+                    .trim()
+                }}
               </td>
               <td v-if="item.options" class="py-2 text-sm">
                 {{
