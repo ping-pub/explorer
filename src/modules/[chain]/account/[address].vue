@@ -81,20 +81,23 @@ const totalAmount = computed(() => {
 const totalValue = computed(() => {
   let value = 0;
   delegations.value?.forEach((x) => {
-    value += format.tokenValueNumber(x.balance);
+    value += format.tokenValueNumber(x.balance, 1e18);
   });
   rewards.value?.total?.forEach((x) => {
-    value += format.tokenValueNumber(x);
+    value += format.tokenValueNumber(x, 1e18);
   });
   balances.value?.forEach((x) => {
-    value += format.tokenValueNumber(x);
+    value += format.tokenValueNumber(x, 1e18);
   });
   unbonding.value?.forEach((x) => {
     x.entries?.forEach((y) => {
-      value += format.tokenValueNumber({
-        amount: y.balance,
-        denom: stakingStore.params.bondDenom,
-      });
+      value += format.tokenValueNumber(
+        {
+          amount: y.balance,
+          denom: stakingStore.params.bondDenom,
+        },
+        1e18
+      );
     });
   });
   return format.formatNumber(value, '0,0.00');
@@ -264,7 +267,7 @@ function mapAmount(events: readonly Event[]) {
               </div>
               <div class="flex-1">
                 <div class="text-sm font-semibold">
-                  {{ format.formatToken(delegationItem?.balance) }}
+                  {{ format.formatToken2(delegationItem?.balance) }}
                 </div>
                 <div class="text-xs">
                   {{
@@ -304,7 +307,7 @@ function mapAmount(events: readonly Event[]) {
               </div>
               <div class="flex-1">
                 <div class="text-sm font-semibold">
-                  {{ format.formatToken(rewardItem) }}
+                  {{ format.formatToken2(rewardItem, 1e18) }}
                 </div>
                 <div class="text-xs">
                   {{ format.calculatePercent(rewardItem.amount, totalAmount) }}
@@ -316,7 +319,7 @@ function mapAmount(events: readonly Event[]) {
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"
                 ></span
-                >${{ format.tokenValue(rewardItem) }}
+                >${{ format.tokenValue(rewardItem, 1e18) }}
               </div>
             </div>
             <!-- mdi-account-arrow-right -->
@@ -336,10 +339,13 @@ function mapAmount(events: readonly Event[]) {
               <div class="flex-1">
                 <div class="text-sm font-semibold">
                   {{
-                    format.formatToken({
-                      amount: String(unbondingTotal),
-                      denom: stakingStore.params.bondDenom,
-                    })
+                    format.formatToken2(
+                      {
+                        amount: String(unbondingTotal),
+                        denom: stakingStore.params.bondDenom,
+                      },
+                      1e18
+                    )
                   }}
                 </div>
                 <div class="text-xs">
@@ -353,10 +359,13 @@ function mapAmount(events: readonly Event[]) {
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert"
                 ></span>
                 ${{
-                  format.tokenValue({
-                    amount: String(unbondingTotal),
-                    denom: stakingStore.params.bondDenom,
-                  })
+                  format.tokenValue(
+                    {
+                      amount: String(unbondingTotal),
+                      denom: stakingStore.params.bondDenom,
+                    },
+                    1e18
+                  )
                 }}
               </div>
             </div>
@@ -426,7 +435,11 @@ function mapAmount(events: readonly Event[]) {
                     rewards?.rewards?.find(
                       (x) =>
                         x.validatorAddress === v.delegation.validatorAddress
-                    )?.reward
+                    )?.reward,
+                    undefined,
+                    undefined,
+                    undefined,
+                    1e18
                   )
                 }}
               </td>
@@ -531,7 +544,9 @@ function mapAmount(events: readonly Event[]) {
                       denom: stakingStore.params.bondDenom,
                     },
                     true,
-                    '0,0.[00]'
+                    '0,0.[00]',
+                    undefined,
+                    1e18
                   )
                 }}
               </td>
@@ -599,8 +614,7 @@ function mapAmount(events: readonly Event[]) {
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </td>
               <td class="py-3">
-                {{ format.toLocaleDate(v.timestamp) }}
-                <span class="text-xs"
+                <span v-if="v.timestamp" class="text-xs"
                   >({{ format.toDay(v.timestamp, 'from') }})</span
                 >
               </td>
@@ -659,8 +673,7 @@ function mapAmount(events: readonly Event[]) {
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </td>
               <td class="py-3">
-                {{ format.toLocaleDate(v.timestamp) }}
-                <span class="text-xs"
+                <span v-if="v.timestamp" class="text-xs"
                   >({{ format.toDay(v.timestamp, 'from') }})</span
                 >
               </td>

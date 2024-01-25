@@ -115,9 +115,11 @@ export const useFormatter = defineStore('formatter', {
     showChanges(v?: number) {
       return v !== 0 ? numeral(v).format('+0,0.[00]') : '';
     },
-    tokenValue(token?: Coin) {
+    tokenValue(token?: Coin, decimal?: number) {
       if (token) {
-        return numeral(this.tokenValueNumber(token)).format('0,0.[00]');
+        return numeral(this.tokenValueNumber(token, decimal)).format(
+          '0,0.[00]'
+        );
       }
       return '';
     },
@@ -132,7 +134,7 @@ export const useFormatter = defineStore('formatter', {
       }
       return 0;
     },
-    tokenValueNumber(token?: Coin) {
+    tokenValueNumber(token?: Coin, decimal?: number) {
       if (!token || !token.denom) return 0;
       // find the symbol,
       const symbol =
@@ -144,6 +146,7 @@ export const useFormatter = defineStore('formatter', {
       // cacualte amount of symbol
       const amount = Number(token.amount) / 10 ** exponent;
       const value = amount * this.price(token.denom);
+      if (decimal) return value / decimal;
       return value;
     },
     formatTokenAmount(
