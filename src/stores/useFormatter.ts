@@ -149,8 +149,8 @@ export const useFormatter = defineStore('formatter', {
     formatTokenAmount(token: { denom: string; amount: string }) {
       return this.formatToken(token, false);
     },
-    formatToken2(token: { denom: string; amount: string }, withDenom = true) {
-      return this.formatToken(token, true, '0,0.[00]');
+    formatToken2(token: { denom: string; amount: string }, decimal?: number) {
+      return this.formatToken(token, true, '0,0.[00]', undefined, decimal);
     },
 
     findGlobalAssetConfig(denom: string) {
@@ -237,10 +237,17 @@ export const useFormatter = defineStore('formatter', {
       token?: { denom: string; amount: string },
       withDenom = true,
       fmt = '0,0.[0]',
-      mode = 'local'
+      mode = 'local',
+      decimal?: number
     ): string {
       if (token && token.amount && token?.denom) {
         let amount = Number(token.amount);
+
+        if (decimal) {
+          // could be DecCoin
+          amount /= decimal;
+        }
+
         let denom = token.denom;
 
         let conf =

@@ -15,10 +15,8 @@ import { formatSeconds } from '@/libs/utils';
 import type { Validator } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
 import type { Params } from 'cosmjs-types/cosmos/slashing/v1beta1/slashing';
 import { fromAscii, toBase64 } from '@cosmjs/encoding';
-import { decodeProto } from '@/components/dynamic';
 import type { Any } from 'cosmjs-types/google/protobuf/any';
-import { PubKey as Ed25519PubKey } from 'cosmjs-types/cosmos/crypto/ed25519/keys';
-import { PubKey as Secp256k1PubKey } from 'cosmjs-types/cosmos/crypto/secp256k1/keys';
+import { decodeKey } from '@/libs';
 
 const staking = useStakingStore();
 const base = useBaseStore();
@@ -96,27 +94,6 @@ const change24 = (key: Key) => {
   // // console.log( txt, n, o)
   // return n > 0 && o > 0 ? n - o : 0;
   return changes.value[txt];
-};
-
-const decodeKey = (value: Any): Key => {
-  const key: Key = {
-    '@type': value.typeUrl,
-    key: '',
-  };
-  try {
-    switch (value.typeUrl) {
-      case '/cosmos.crypto.ed25519.PubKey':
-        key.key = toBase64(Ed25519PubKey.decode(value.value).key);
-        break;
-      default:
-        key.key = toBase64(Secp256k1PubKey.decode(value.value).key);
-        break;
-    }
-  } catch {
-    // already decoded
-    key.key = toBase64(value.value);
-  }
-  return key;
 };
 
 const change24Text = (value?: Any) => {

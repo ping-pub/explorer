@@ -7,6 +7,7 @@ import {
   operatorAddressToAccount,
   pubKeyToValcons,
   valoperToPrefix,
+  decodeKey,
 } from '@/libs';
 import type { ExtraTxResponse, ExtraTxSearchResponse } from '@/libs/client';
 import { stringToUint8Array } from '@/libs/utils';
@@ -18,7 +19,7 @@ import {
   useTxDialog,
 } from '@/stores';
 import { PageRequest, type Coin } from '@/types';
-import { fromAscii, toBase64, toHex } from '@cosmjs/encoding';
+import { fromAscii, fromBech32, toBase64, toHex } from '@cosmjs/encoding';
 import type { Event } from '@cosmjs/tendermint-rpc';
 import { Icon } from '@iconify/vue';
 import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
@@ -81,8 +82,14 @@ blockchain.rpc.getTxsBySender(addresses.value.account).then((x) => {
   txs.value = x;
 });
 
+const consensusPubkey = computed(() => {
+  return v.value.consensusPubkey
+    ? decodeKey(v.value.consensusPubkey)
+    : undefined;
+});
+
 const apr = computed(() => {
-  const rate = v.value?.commission?.commissionRates || 0;
+  const rate = Number(v.value?.commission?.commissionRates.rate || 0) / 1e18;
   const inflation = useMintStore().inflation;
   if (Number(inflation)) {
     return format.percent((1 - Number(rate)) * Number(inflation));
@@ -235,7 +242,6 @@ const selectedEventType = ref(EventType.Delegate);
 function loadPowerEvents(p: number, type: EventType) {
   selectedEventType.value = type;
   page.setPage(p);
-  page.setPageSize(5);
   blockchain.rpc
     .getTxs(
       [
@@ -408,7 +414,7 @@ function mapDelegators(messages: any[]) {
                     bondStatusToJSON(v.status)
                       .toLowerCase()
                       .replace(/^bond_status/, '')
-                      .replaceAll(/_(.)/g, (m, g) => ' ' + g.toUpperCase())
+                      .replaceAll(/_(.)/g, ' $1')
                       .trim()
                   }}
                 </span>
@@ -595,7 +601,7 @@ function mapDelegators(messages: any[]) {
               variant="outlined"
               class="mr-1 mb-1 badge text-xs"
             >
-              {{ format.formatToken2(i) }}
+              {{ format.formatToken2(i, 1e18) }}
             </div>
             <div class="text-sm mb-2 mt-2">
               {{ $t('staking.outstanding') }} {{ $t('account.rewards') }}
@@ -605,7 +611,7 @@ function mapDelegators(messages: any[]) {
               :key="`reward-${k}`"
               class="mr-1 mb-1 badge text-xs"
             >
-              {{ format.formatToken2(i) }}
+              {{ format.formatToken2(i, 1e18) }}
             </div>
           </div>
           <div class="">
@@ -689,10 +695,10 @@ function mapDelegators(messages: any[]) {
                 icon="mdi:content-copy"
                 class="ml-2 cursor-pointer"
                 v-show="v.consensusPubkey"
-                @click="copyWebsite(JSON.stringify(v.consensusPubkey) || '')"
+                @click="copyWebsite(JSON.stringify(consensusPubkey) || '')"
               />
             </div>
-            <div class="text-xs">{{ v.consensusPubkey }}</div>
+            <div class="text-xs">{{ consensusPubkey }}</div>
           </div>
         </div>
       </div>

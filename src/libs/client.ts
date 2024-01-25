@@ -103,6 +103,7 @@ import {
   type AbstractRegistry,
   type RequestRegistry,
 } from './registry';
+import { decodeProto } from '@/components/dynamic';
 
 export const DEFAULT_SDK_VERSION = '0.45.16';
 export const LCD_FALLBACK_CHAINS = ['OraiBtcMainnet'];
@@ -963,11 +964,14 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
 
     if (decodeRaw) {
       res.txs.forEach((tx, i) => {
+        const txRaw = decodeTxRaw(tx.tx);
+
+        // txRaw.body.messages = txRaw.body.messages.map(decodeProto);
         // @ts-ignore
-        tx.txRaw = decodeTxRaw(tx.tx);
+        tx.txRaw = txRaw;
       });
     }
-    console.log('getTxs', res);
+    // console.log('getTxs', res);
     // @ts-ignore
     return res;
   }
@@ -1008,8 +1012,9 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
                 type: e.type,
                 attributes: e.attributes.map((a) => {
                   const attribute: EventAttribute = {
-                    key: toBase64(a.key),
-                    value: toBase64(a.value),
+                    key: typeof a.key === 'string' ? a.key : toBase64(a.key),
+                    value:
+                      typeof a.value === 'string' ? a.value : toBase64(a.value),
                     index: false,
                   };
                   return attribute;
@@ -1036,9 +1041,13 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
   async getMintInflation() {
     // return this.request(this.registry.mint_inflation, {});
-    const res = await this.queryClient.mint.inflation();
-    console.log(res);
-    return res;
+    try {
+      const res = await this.queryClient.mint.inflation();
+      console.log('getMintInflation', res);
+      return res;
+    } catch (ex) {
+      console.log('getMintInflation', ex);
+    }
   }
   async getMintAnnualProvisions() {
     // return this.request(this.registry.mint_annual_provisions, {});
