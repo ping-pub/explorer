@@ -1,0 +1,31 @@
+{
+  "chain_name": "onomy",
+  "api": [
+    {
+      "address": "https://rest-mainnet.onomy.io",
+      "provider": "onomy"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc-mainnet.onomy.io",
+      "provider": "onomy"
+    }
+  ],
+  "cosmwasm_enabled": false,
+  "sdk_version": "0.44",
+  "coin_type": "60",
+  "min_tx_fee": "800",
+  "assets": [
+    {
+      "base": "nom",
+      "symbol": "NOM",
+      "exponent": "18",
+      "coingecko_id": "xpla",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/onomy/images/nom.svg"
+    }
+  ],
+  "addr_prefix": "onomy",
+  "theme_color": "#ce4747",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/onomy/images/nom.svg"
+}

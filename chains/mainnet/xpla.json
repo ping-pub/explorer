@@ -1,0 +1,47 @@
+{
+  "chain_name": "xpla",
+  "api": [
+    {
+      "address": "https://dimension-lcd.xpla.io",
+      "provider": "ZenaAD"
+    },
+    {
+      "address": "https://dimension-lcd.xpla.dev",
+      "provider": "Holdings"
+    },
+    {
+      "address": "https://xpla-api.lavenderfive.com:443",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "http://xpla.api.staking-explorer.com",
+      "provider": "staking-explorer.com"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://dimension-rpc.xpla.dev",
+      "provider": "Holdings"
+    },
+    {
+      "address": "https://xpla-rpc.lavenderfive.com:443",
+      "provider": "Lavender.Five Nodes 🐝"
+    }
+  ],
+  "cosmwasm_enabled": true,
+  "sdk_version": "0.42.6",
+  "coin_type": "60",
+  "min_tx_fee": "800",
+  "assets": [
+    {
+      "base": "axpla",
+      "symbol": "XPLA",
+      "exponent": "18",
+      "coingecko_id": "xpla",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xpla/images/xpla.svg"
+    }
+  ],
+  "addr_prefix": "xpla",
+  "theme_color": "#ce4747",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xpla/images/xpla.svg"
+}

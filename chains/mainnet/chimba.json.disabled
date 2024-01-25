@@ -1,0 +1,31 @@
+{
+  "chain_name": "chimba",
+  "registry_name": "chimba",
+  "api": [
+    {
+      "address": "https://mainnet.chimba.ooo",
+      "provider": "chimba"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.mainnet.chimba.ooo",
+      "provider": "chimba"
+    }
+  ],
+  "cosmwasm_enabled": false,
+  "sdk_version": "0.45.1",
+  "coin_type": "990",
+  "min_tx_fee": "800",
+  "addr_prefix": "chimba",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/chimba/images/chimba-blue.svg",
+  "assets": [
+    {
+      "base": "ucmba",
+      "symbol": "Chimba",
+      "exponent": "6",
+      "coingecko_id": "chimba",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/chimba/images/chimba-blue.svg"
+    }
+  ]
+}
