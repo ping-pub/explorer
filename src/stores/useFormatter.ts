@@ -146,10 +146,13 @@ export const useFormatter = defineStore('formatter', {
       const value = amount * this.price(token.denom);
       return value;
     },
-    formatTokenAmount(token: { denom: string; amount: string }) {
-      return this.formatToken(token, false);
+    formatTokenAmount(
+      token?: { denom: string; amount: string },
+      decimal?: number
+    ) {
+      return this.formatToken(token, false, undefined, undefined, decimal);
     },
-    formatToken2(token: { denom: string; amount: string }, decimal?: number) {
+    formatToken2(token?: { denom: string; amount: string }, decimal?: number) {
       return this.formatToken(token, true, '0,0.[00]', undefined, decimal);
     },
 
@@ -293,10 +296,14 @@ export const useFormatter = defineStore('formatter', {
     formatTokens(
       tokens?: { denom: string; amount: string }[],
       withDenom = true,
-      fmt = '0.0a'
+      fmt = '0,0.[0]',
+      mode?: string,
+      decimal?: number
     ): string {
       if (!tokens) return '';
-      return tokens.map((x) => this.formatToken(x, withDenom, fmt)).join(', ');
+      return tokens
+        .map((x) => this.formatToken(x, withDenom, fmt, mode, decimal))
+        .join(', ');
     },
     calculateBondedRatio(
       pool: { bonded_tokens: string; not_bonded_tokens: string } | undefined
@@ -331,30 +338,20 @@ export const useFormatter = defineStore('formatter', {
       const percent = Number(input) / Number(total);
       return numeral(percent > 0.0001 ? percent : 0).format('0.[00]%');
     },
-    formatDecimalToPercent(decimal: string) {
+    formatDecimalToPercent(decimal: string, divideDecimal?: number) {
       if (!decimal) return '-';
-      return this.percent(decimal);
+      return this.percent(decimal, divideDecimal);
     },
-    formatCommissionRate(rate?: string) {
+    formatCommissionRate(rate?: string, divideDecimal?: number) {
       if (!rate) return '-';
-      return this.percent(rate);
+      return this.percent(rate, divideDecimal);
     },
-    toDecimal(decimal?: string | number) {
-      if (!decimal) return;
-
+    percent(decimal?: string | number, divideDecimal?: number) {
       let decimalFormat = numeral(decimal);
-
-      const decimalValue = decimalFormat.value();
-
-      if (decimalValue && decimalValue > 1e6) {
-        decimalFormat = decimalFormat.divide('1000000000000000000');
-      }
-
-      return decimalFormat;
-    },
-    percent(decimal?: string | number) {
-      const decimalFormat = this.toDecimal(decimal);
       if (!decimalFormat) return '-';
+      if (divideDecimal) {
+        decimalFormat = decimalFormat.divide(divideDecimal);
+      }
       return decimalFormat.format('0.[00]%');
     },
     formatNumber(input?: number, fmt = '0.[00]') {

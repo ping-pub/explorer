@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { CosmosRestClient } from '@/libs/client';
-import type { Coin, Delegation } from '@/types';
 import { ref, watchEffect } from 'vue';
 import type { AccountEntry } from './utils';
 import { computed } from 'vue';
@@ -10,6 +9,7 @@ import ApexCharts from 'vue3-apexcharts';
 import { get } from '@/libs';
 import { getMarketPriceChartConfig } from '@/components/charts/apexChartConfig';
 import type { DelegationResponse } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
+import type { Coin } from 'cosmjs-types/cosmos/base/v1beta1/coin';
 
 const format = useFormatter();
 const conf = ref(

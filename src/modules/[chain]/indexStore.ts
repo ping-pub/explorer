@@ -1,16 +1,16 @@
 import {
+  useBankStore,
+  useBaseStore,
   useBlockchain,
   useCoingecko,
-  useBaseStore,
-  useBankStore,
   useFormatter,
   useGovStore,
 } from '@/stores';
 import { useDistributionStore } from '@/stores/useDistributionStore';
 import { useMintStore } from '@/stores/useMintStore';
 import { useStakingStore } from '@/stores/useStakingStore';
-import type { Coin, Tally } from '@/types';
-import type { Pool } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
+import type { Tally } from '@/types';
+import type { Coin } from '@cosmjs/stargate';
 import numeral from 'numeral';
 import { defineStore } from 'pinia';
 
@@ -170,14 +170,14 @@ export const useIndexModule = defineStore('module-index', {
           title: 'Supply',
           color: 'success',
           icon: 'mdi-currency-usd',
-          stats: formatter.formatTokenAmount(bank.supply!),
+          stats: formatter.formatToken(bank.supply!),
           change: 0,
         },
         {
           title: 'Bonded Tokens',
           color: 'warning',
           icon: 'mdi-lock',
-          stats: formatter.formatTokenAmount({
+          stats: formatter.formatToken({
             // @ts-ignore
             amount: this.pool.bondedTokens,
             denom: staking.params.bondDenom,
@@ -195,11 +195,15 @@ export const useIndexModule = defineStore('module-index', {
           title: 'Community Pool',
           color: 'primary',
           icon: 'mdi-bank',
-          stats: formatter.formatTokens(
+          stats: formatter.formatToken(
             // @ts-ignore
-            this.communityPool?.filter(
+            this?.communityPool?.find(
               (x: Coin) => x.denom === staking.params.bondDenom
-            )
+            ),
+            undefined,
+            undefined,
+            undefined,
+            1e18
           ),
           change: 0,
         },

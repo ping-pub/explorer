@@ -2,7 +2,6 @@ import type {
   AuthAccount,
   Block,
   ClientStateWithProof,
-  Coin,
   ConnectionWithProof,
   DenomTrace,
   NodeInfo,
@@ -43,6 +42,7 @@ import type {
 } from '@/types/staking';
 import type { PaginatedTxs, Tx, TxResponse } from '@/types';
 import semver from 'semver';
+import type { Coin } from 'cosmjs-types/cosmos/base/v1beta1/coin';
 export interface Request<T> {
   url: string;
   adapter: (source: any) => T;

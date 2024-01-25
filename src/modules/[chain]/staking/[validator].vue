@@ -18,8 +18,9 @@ import {
   useStakingStore,
   useTxDialog,
 } from '@/stores';
-import { PageRequest, type Coin } from '@/types';
+import { PageRequest } from '@/types';
 import { fromAscii, fromBech32, toBase64, toHex } from '@cosmjs/encoding';
+import type { Coin } from '@cosmjs/stargate';
 import type { Event } from '@cosmjs/tendermint-rpc';
 import { Icon } from '@iconify/vue';
 import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
@@ -441,7 +442,10 @@ function mapDelegators(messages: any[]) {
                         amount: v.delegatorShares,
                         denom: staking.params.bondDenom,
                       },
-                      false
+                      true,
+                      undefined,
+                      undefined,
+                      1e18
                     )
                   }}
                 </span>
@@ -458,7 +462,10 @@ function mapDelegators(messages: any[]) {
                         amount: v.delegatorShares,
                         denom: staking.params.bondDenom,
                       },
-                      false
+                      true,
+                      undefined,
+                      undefined,
+                      1e18
                     )
                   }}
                 </span>
@@ -544,7 +551,7 @@ function mapDelegators(messages: any[]) {
                 />
               </div>
               <div class="ml-3 flex flex-col justify-center">
-                <h4>{{ v.unbondingHeight }}</h4>
+                <h4>{{ Number(v.unbondingHeight) || '-' }}</h4>
                 <span class="text-sm">{{
                   $t('staking.unbonding_height')
                 }}</span>
@@ -562,9 +569,7 @@ function mapDelegators(messages: any[]) {
                 <h4
                   v-if="
                     v.unbondingTime &&
-                    !fromTimestamp(v.unbondingTime)
-                      .toString()
-                      .startsWith('1970')
+                    fromTimestamp(v.unbondingTime).getFullYear() > 1970
                   "
                 >
                   {{ format.toDay(v.unbondingTime, 'from') }}

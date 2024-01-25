@@ -3,6 +3,7 @@ import ApexCharts from 'vue3-apexcharts';
 import { computed, type PropType } from 'vue';
 import { useFormatter } from '@/stores';
 import type { Commission } from 'cosmjs-types/cosmos/staking/v1beta1/staking';
+import numeral from 'numeral';
 
 const props = defineProps({
   commission: { type: Object as PropType<Commission> },
@@ -11,18 +12,18 @@ const format = useFormatter();
 
 let rate = computed(
   () =>
-    (format.toDecimal(props.commission?.commissionRates.rate)?.value() || 0) *
-    100
+    (numeral(props.commission?.commissionRates.rate).divide(1e18)?.value() ||
+      0) * 100
 );
 let change = computed(
   () =>
-    (format
-      .toDecimal(props.commission?.commissionRates.maxChangeRate)
+    (numeral(props.commission?.commissionRates.maxChangeRate)
+      .divide(1e18)
       ?.value() || 0) * 100
 );
 let max = computed(
   () =>
-    (format.toDecimal(props.commission?.commissionRates.maxRate)?.value() ||
+    (numeral(props.commission?.commissionRates.maxRate).divide(1e18)?.value() ||
       1) * 100
 );
 

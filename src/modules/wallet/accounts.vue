@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { CosmosRestClient } from '@/libs/client';
 import { useBlockchain, useDashboard, useFormatter } from '@/stores';
-import type { Coin, CoinWithPrice, Delegation } from '@/types';
+import type { CoinWithPrice, Delegation } from '@/types';
 import { fromBech32, toBase64, toBech32, toHex } from '@cosmjs/encoding';
 import { Icon } from '@iconify/vue';
 import type { DelegationResponse } from 'cosmjs-types/cosmos/staking/v1beta1/staking';

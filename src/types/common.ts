@@ -1,6 +1,7 @@
 import { fromBase64, toBase64 } from '@cosmjs/encoding';
 import { longify } from '@cosmjs/stargate/build/queryclient';
 import { PageRequest as CosmosPageRequest } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
+import type { Coin } from 'cosmjs-types/cosmos/base/v1beta1/coin';
 
 export interface Key {
   '@type': string;
@@ -77,11 +78,6 @@ export interface PaginatedResponse {
 
 export class Response<T> {
   [key: string]: T;
-}
-
-export interface Coin {
-  amount: string;
-  denom: string;
 }
 
 export interface CoinWithPrice extends Coin {

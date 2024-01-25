@@ -491,7 +491,8 @@ loadAvatars();
                 <td class="text-right text-xs">
                   {{
                     format.formatCommissionRate(
-                      v.commission?.commissionRates?.rate
+                      v.commission?.commissionRates?.rate,
+                      1e18
                     )
                   }}
                 </td>

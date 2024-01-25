@@ -1,4 +1,5 @@
-import type { Key, PaginatedResponse, Coin } from './common';
+import type { Coin } from 'cosmjs-types/cosmos/base/v1beta1/coin';
+import type { Key, PaginatedResponse } from './common';
 
 export interface Validator {
   operator_address: string;

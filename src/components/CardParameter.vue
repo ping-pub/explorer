@@ -3,6 +3,7 @@ import type { PropType } from 'vue';
 import { useFormatter } from '@/stores';
 import { formatSeconds, formatTitle } from '@/libs/utils';
 import { fromAscii, toBase64 } from '@cosmjs/encoding';
+import numeral from 'numeral';
 const props = defineProps({
   cardItem: {
     type: Object as PropType<{ title: string; items: Array<any> }>,
@@ -14,7 +15,7 @@ function calculateValue(value: any) {
   if (!value) return;
 
   if (value instanceof Uint8Array) {
-    return formatter.formatDecimalToPercent(fromAscii(value));
+    return formatter.formatDecimalToPercent(fromAscii(value), 1e18);
   }
 
   if (Array.isArray(value)) {
@@ -33,7 +34,7 @@ function calculateValue(value: any) {
   }
 
   // check is correct percent format
-  const decimalFormat = formatter.toDecimal(value);
+  const decimalFormat = numeral(value);
   if (decimalFormat) {
     const decimalValue = decimalFormat.value();
     if (decimalValue && decimalValue < 1 && decimalValue > 0) {
