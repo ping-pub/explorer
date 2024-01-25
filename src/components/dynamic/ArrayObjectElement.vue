@@ -34,7 +34,7 @@ const header = computed(() => {
       <tbody>
         <tr v-for="(item, index) in value" :key="index">
           <td v-for="(el, key) in header" :key="key">
-            <DynamicComponent :value="item[el]" />
+            <DynamicComponent v-if="item" :value="item[el]" />
           </td>
         </tr>
       </tbody>

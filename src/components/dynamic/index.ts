@@ -1,4 +1,5 @@
 import * as injProto from '@injectivelabs/core-proto-ts';
+import evmosProto from '@/libs/protos/evmos';
 import osmoProto from '@/libs/protos/osmosis';
 import { MsgType } from '@injectivelabs/ts-types';
 import ObjectElement from './ObjectElement.vue';
@@ -10,6 +11,7 @@ import TokenElement from './TokenElement.vue';
 import TimestampElement from './TimestampElement.vue';
 import ObjectHorizontalElement from './ObjectHorizontalElement.vue';
 import Long from 'long';
+import { toBase64 } from '@cosmjs/encoding';
 
 export function select(v: any, direct?: string) {
   // if(k === 'txs' && v) {
@@ -78,23 +80,36 @@ export const lookupType = (obj: any, typeUrl: string) => {
   return type;
 };
 
-export const decodeProto = (msg: { typeUrl: string; value: Uint8Array }) => {
+export const decodeProto = (msg: {
+  typeUrl?: string;
+  type_url?: string;
+  value: Uint8Array;
+}) => {
+  const typeUrl = msg.typeUrl ?? msg.type_url;
+  if (!typeUrl) return msg;
   let type;
-  if (msg.typeUrl.startsWith('/osmosis.')) {
+  if (typeUrl.startsWith('/osmosis.')) {
     // fallback with osmosis
-    type = lookupType(osmoProto, msg.typeUrl);
+    type = lookupType(osmoProto, typeUrl);
+  } else if (
+    typeUrl.startsWith('/evmos.') ||
+    typeUrl.startsWith('/ethermint.')
+  ) {
+    // fallback with evmos
+    type = lookupType(evmosProto, typeUrl);
   } else {
-    type = findType(
-      injProto,
-      typeMap[msg.typeUrl] ?? msg.typeUrl.split('.').pop()
-    );
+    type = findType(injProto, typeMap[typeUrl] ?? typeUrl.split('.').pop());
   }
 
   if (type) {
-    const instance = type.decode(msg.value);
+    const instance = (type.decode || type.deserialize)(msg.value);
     if (instance.msgs) {
       instance.msgs = instance.msgs.map(decodeProto);
     }
+    if (instance.data) {
+      instance.data = decodeProto(instance.data);
+    }
+
     return instance;
   }
 };
