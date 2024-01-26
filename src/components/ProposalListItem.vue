@@ -52,7 +52,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
           <td class="px-4 w-20">
             <label
               for="proposal-detail-modal"
-              class="text-main text-base hover:text-indigo-400 cursor-pointer"
+              class="text-main text-base hover:text-gray-400 cursor-pointer"
               @click="proposalInfo = item"
             >
               #{{ item?.proposal_id }}</label
@@ -62,13 +62,13 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
             <div>
               <RouterLink
                 :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
-                class="text-main text-base mb-1 block hover:text-indigo-400 truncate"
+                class="text-main text-base mb-1 block hover:text-gray-400 truncate"
               >
                 {{ item?.content?.title || item?.title || metaItem(item?.metadata)?.title }}
               </RouterLink>
               <div
                 v-if="item.content"
-                class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
+                class="bg-[#f6f2ff] text-[#4a4a4a] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
               >
                 {{ showType(item.content['@type']) }} 
               </div>
@@ -144,7 +144,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
         class="px-4 py-4"
       >
         <div
-          class="text-main text-base mb-1 flex justify-between hover:text-indigo-400"
+          class="text-main text-base mb-1 flex justify-between hover:text-gray-400"
         >
           <RouterLink
             :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
@@ -153,7 +153,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
           >
           <label
             for="proposal-detail-modal"
-            class="text-main text-base hover:text-indigo-400 cursor-pointer"
+            class="text-main text-base hover:text-gray-400 cursor-pointer"
             @click="proposalInfo = item"
           >
             #{{ item?.proposal_id }}</label
@@ -164,7 +164,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
           <div class="col-span-2">
             <div
               v-if="item.content"
-              class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
+              class="bg-[#f6f2ff] text-[#4a4a4a] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
             >
               {{ showType(item.content['@type']) }}
             </div>

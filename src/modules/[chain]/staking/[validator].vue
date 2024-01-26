@@ -252,7 +252,7 @@ function mapDelegators(messages: any[]) {
 </script>
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow border-indigo-500">
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow border-gray-500">
       <div class="flex flex-col lg:!flex-row pt-2 pb-1">
         <div class="flex-1">
           <div class="flex">

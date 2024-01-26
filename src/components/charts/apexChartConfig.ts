@@ -88,14 +88,14 @@ const themeColors = (theme: string) => {
   return {
     dark: true,
     colors: {
-      background: '#282A42',
+      background: '#242424',
       surface: '#30334E',
       'surface-variant': '#BDBDBD',
       'on-surface-variant': '#424242',
-      primary: chainStore.current?.themeColor || '#666CFF',
-      'primary-darken-1': '#3700B3',
-      secondary: '#6D788D',
-      'secondary-darken-1': '#03DAC5',
+      primary: '#8a8a8a',
+      'primary-darken-1': '#2e2e2e',
+      secondary: '#8f8f8f',
+      'secondary-darken-1': '#8f8f8f',
       error: '#FF4D49',
       info: '#26C6F9',
       success: '#72E128',
@@ -105,13 +105,13 @@ const themeColors = (theme: string) => {
       'on-success': '#fff',
       'on-info': '#fff',
       'on-warning': '#fff',
-      'on-background': '#eaeaff',
-      'on-surface': '#eaeaff',
-      'perfect-scrollbar-thumb': '#4A5072',
+      'on-background': '#2e2e2e',
+      'on-surface': '#2e2e2e',
+      'perfect-scrollbar-thumb': '#666875',
       'snackbar-background': '#F5F5F5',
-      'on-snackbar-background': '#30334E',
-      'tooltip-background': '#464A65',
-      'alert-background': '#282A42',
+      'on-snackbar-background': '#474747',
+      'tooltip-background': '#5f5f61',
+      'alert-background': '#242424',
       'grey-50': '#2A2E42',
       'grey-100': '#41435c',
       'grey-200': '#3A3E5B',
@@ -140,7 +140,7 @@ const themeColors = (theme: string) => {
       'on-grey-900': '#000',
     },
     variables: {
-      'border-color': '#eaeaff',
+      'border-color': '#c9c9d1',
       'border-opacity': 0.12,
       'high-emphasis-opacity': 0.87,
       'medium-emphasis-opacity': 0.6,
@@ -156,7 +156,7 @@ const themeColors = (theme: string) => {
       'theme-on-kbd': '#FFFFFF',
       'theme-code': '#343434',
       'theme-on-code': '#CCCCCC',
-      'code-color': '#d400ff',
+      'code-color': '#b7b6b8',
       'overlay-scrim-background': '#101121',
       'overlay-scrim-opacity': 0.6,
       'shadow-key-umbra-opacity': 'rgba(20, 21, 33, 0.08)',
@@ -169,17 +169,17 @@ const themeColors = (theme: string) => {
 export const colorVariables = (theme: string) => {
   if (theme === 'light') {
     return {
-      themeSecondaryTextColor: 'rgba(76,78,100,0.6)',
-      themeDisabledTextColor: 'rgba(76,78,100,0.38)',
-      themeBorderColor: 'rgba(76,78,100,0.12)',
-      themePrimaryTextColor: 'rgba(76,78,100,0.87)',
+      themeSecondaryTextColor: 'rgba(224, 224, 224,0.6)',
+      themeDisabledTextColor: 'rgba(224, 224, 224,0.38)',
+      themeBorderColor: 'rgba(224, 224, 224,0.12)',
+      themePrimaryTextColor: 'rgba(224, 224, 224,0.87)',
     };
   }
   return {
-    themeSecondaryTextColor: 'rgba(234,234,255,0.6)',
-    themeDisabledTextColor: 'rgba(234,234,255,0.38)',
-    themeBorderColor: 'rgba(234,234,255,0.12)',
-    themePrimaryTextColor: 'rgba(234,234,255,0.87)',
+    themeSecondaryTextColor: 'rgba(224, 224, 224,0.6)',
+    themeDisabledTextColor: 'rgba(224, 224, 224,0.38)',
+    themeBorderColor: 'rgba(224, 224, 2245,0.12)',
+    themePrimaryTextColor: 'rgba(224, 224, 224,0.87)',
   };
 };
 /// Price Chart config
@@ -211,7 +211,7 @@ export const getMarketPriceChartConfig = (
       position: 'top',
       horizontalAlign: 'left',
 
-      labels: { colors: themeSecondaryTextColor },
+      labels: { colors: 'gray' },
       markers: {
         offsetY: 1,
         offsetX: -3,
@@ -222,10 +222,10 @@ export const getMarketPriceChartConfig = (
       },
     },
 
-    colors: [themeColors(theme).colors.primary],
+    colors: ['gray'],
     fill: {
       opacity: 0.5,
-      type: 'gradient',
+      type: '',
     },
     grid: {
       show: true,
@@ -236,7 +236,7 @@ export const getMarketPriceChartConfig = (
     },
     yaxis: {
       labels: {
-        style: { colors: themeDisabledTextColor },
+        style: { colors: "gray" },
         formatter: function (value: string) {
           const pattern = Number(value) > 0.01 ? '0.0[0]a' : '0.00[000]';
           return numeral(value).format(pattern);
@@ -252,7 +252,7 @@ export const getMarketPriceChartConfig = (
         stroke: { color: themeBorderColor },
       },
       labels: {
-        style: { colors: themeDisabledTextColor },
+        style: { colors: 'gray' },
       },
       categories,
     },
@@ -274,7 +274,7 @@ export const getDonutChartConfig = (
   return {
     stroke: { width: 0 },
     labels,
-    colors: donutColors,
+    colors: "#FFF",
     // colors: [
     //   donutColors.series1,
     //   donutColors.series5,
@@ -288,7 +288,7 @@ export const getDonutChartConfig = (
     legend: {
       position: 'bottom',
       markers: { offsetX: -3 },
-      labels: { colors: themeSecondaryTextColor },
+      labels: { colors: "FFF" },
       itemMargin: {
         vertical: 3,
         horizontal: 10,
@@ -304,7 +304,7 @@ export const getDonutChartConfig = (
             },
             value: {
               fontSize: '1.5rem',
-              color: themeSecondaryTextColor,
+              color: "gray",
               formatter: (val: string) => `${parseInt(val, 10)}`,
             },
             total: {
@@ -312,7 +312,7 @@ export const getDonutChartConfig = (
               fontSize: '1.5rem',
               // label: 'Operational',
               // formatter: () => '31%',
-              color: themePrimaryTextColor,
+              color: "gray",
             },
           },
         },
