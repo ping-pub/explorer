@@ -366,10 +366,12 @@ export const useFormatter = defineStore('formatter', {
     },
     toLocaleDate(time?: string | number | Date | Timestamp) {
       if (!time) return '';
+
       const timeValue =
         typeof time === 'object' && 'seconds' in time
           ? fromTimestamp(time)
           : time;
+
       return new Date(timeValue).toLocaleString(navigator.language);
     },
     toDay(time?: string | number | Date | Timestamp, format = 'long') {

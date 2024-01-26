@@ -53,6 +53,7 @@ onMounted(() => {
   if (connId.value) {
     chainStore.rpc.getIBCConnectionsById(connId.value).then((x) => {
       conn.value = x.connection;
+      console.log('getIBCConnectionsClientState', conn.value);
     });
     chainStore.rpc.getIBCConnectionsClientState(connId.value).then((x) => {
       // @ts-ignore
@@ -65,7 +66,6 @@ onMounted(() => {
           )
         );
       }
-      console.log('getIBCConnectionsClientState', clientState.value);
     });
     chainStore.rpc.getIBCConnectionsChannels(connId.value).then((x) => {
       channels.value = x.channels;
@@ -426,13 +426,15 @@ function color(v: string) {
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </div>
             </td>
-            <td>{{ format.toLocaleDate(resp.timestamp) }}</td>
+            <td>
+              {{ resp.timestamp ? format.toLocaleDate(resp.timestamp) : '-' }}
+            </td>
           </tr>
         </tbody>
       </table>
       <PaginationBar
         :limit="page.limit"
-        :total="txs.totalCount.toString()"
+        :total="txs?.totalCount?.toString()"
         :callback="pageload"
       />
     </div>
