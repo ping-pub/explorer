@@ -25,6 +25,6 @@
         "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/ntrn.svg"
     }],
     "addr_prefix": "neutron",
-    "theme_color": "#161723",
+    "theme_color": "#2e2e2e",
     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/ntrn.svg"
 }
