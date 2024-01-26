@@ -8,25 +8,25 @@
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "osmo",
-    "logo": "/logos/osmosis.jpg",
+    "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.svg",
     "theme_color": "#812cd6",
     "assets": [{
         "base": "uosmo",
         "symbol": "OSMO",
         "exponent": "6",
         "coingecko_id": "osmosis", 
-        "logo": "/logos/osmosis.jpg"
+        "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.svg"
     },{
         "base": "uion",
         "symbol": "ION",
         "exponent": "6",
         "coingecko_id": "ion", 
-        "logo": "/logos/osmosis.jpg"
+        "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/ion.svg"
     },{
         "base": "usomm",
         "symbol": "SOMM",
         "exponent": "6",
         "coingecko_id": "somm", 
-        "logo": ""
+        "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sommelier/images/somm.svg"
     }]
 }
