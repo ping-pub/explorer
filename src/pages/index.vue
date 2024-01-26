@@ -38,7 +38,7 @@ const chainStore = useBlockchain()
   <div class="">
     <div class="flex md:!flex-row flex-col items-center justify-center mb-6 mt-14 gap-2">
       <div class="w-16 rounded-full">
-       <img src="src/assets/images/telescope1024.png" alt="telescope logo">
+       <img src="/src/assets/images/telescope1024.png" alt="telescope logo">
       </div>
       <h1 class="text-3xl md:!text-6xl font-bold">
         {{ $t('pages.title') }}
