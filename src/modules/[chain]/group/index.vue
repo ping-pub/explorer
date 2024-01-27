@@ -3,10 +3,10 @@
     group
   </div>
 </template>
-<route>
+<!-- <route>
   {
     meta: {
       i18n: 'group',
     }
   }
-</route>
+</route> -->
