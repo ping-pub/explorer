@@ -205,7 +205,7 @@ enum EventType {
   Unbond = 'unbond',
 }
 
-const selectedEventType = ref(EventType.Unbond)
+const selectedEventType = ref(EventType.Delegate)
 
 function loadPowerEvents(p: number, type: EventType) {
   selectedEventType.value = type
@@ -220,13 +220,21 @@ function pagePowerEvents(page: number) {
     loadPowerEvents(page, selectedEventType.value)
 }
 
+pagePowerEvents(1)
 
 function mapEvents(events: {type: string, attributes: {key: string, value: string}[]}[]) {
-  const attributes = events.filter(x => x.type=== selectedEventType.value).filter(x => x.attributes.findIndex(attr => attr.value === toBase64(stringToUint8Array(validator))) > -1).map(x => {
+  const attributes = events
+    .filter(x => x.type=== selectedEventType.value)
+      .filter(x => x.attributes.findIndex(attr => attr.value === validator || attr.value === toBase64(stringToUint8Array(validator))) > -1)
+      .map(x => {
     // check if attributes need to decode
-    if(x.attributes.findIndex(a => a.value === `amount`) > -1) return x.attributes
     const output = {} as {[key: string]: string }
-    x.attributes.forEach(attr => {
+
+    if(x.attributes.findIndex(a => a.key === `amount`) > -1) {
+      x.attributes.forEach(attr => {
+        output[attr.key] = attr.value
+      })
+    } else x.attributes.forEach(attr => {
       output[uint8ArrayToString(fromBase64(attr.key))] = uint8ArrayToString(fromBase64(attr.value))
     })
     return output
@@ -635,7 +643,7 @@ function mapDelegators(messages: any[]) {
       <div class="text-lg mb-4 font-semibold">
         <div class="tabs tabs-boxed bg-transparent">
                 
-                <span class="mr-10">Power Events: </span>
+                <span class="mr-10">Voting Power Events: </span>
                 <a
                     class="tab text-gray-400"
                     :class="{ 'tab-active': selectedEventType === EventType.Delegate }"
@@ -659,7 +667,7 @@ function mapDelegators(messages: any[]) {
           </thead>
           <tbody>
             <tr v-for="(item, i) in events.tx_responses">
-              <td class="pr-2 text-primary" style="max-width: 250px">
+              <td class="pr-2 truncate text-primary" style="max-width: 250px">
                 <RouterLink v-for="d in mapDelegators(item.tx?.body?.messages)" :to="`/${props.chain}/account/${d}`">
                   {{ d }}
                 </RouterLink> 

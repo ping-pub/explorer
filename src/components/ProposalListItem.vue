@@ -9,7 +9,7 @@ import { select } from '@/components/dynamic/index';
 import type { PaginatedProposals } from '@/types';
 import ProposalProcess from './ProposalProcess.vue';
 import type { PropType } from 'vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 const dialog = useTxDialog();
 defineProps({
   proposals: { type: Object as PropType<PaginatedProposals> },
@@ -38,6 +38,11 @@ const voterStatusMap: Record<string, string> = {
 };
 
 const proposalInfo = ref();
+
+function metaItem(metadata: string|undefined): { title: string; summary: string } {
+  return metadata ? JSON.parse(metadata) : {}
+}
+
 </script>
 <template>
   <div class="bg-white dark:bg-[#28334e] rounded text-sm">
@@ -59,13 +64,13 @@ const proposalInfo = ref();
                 :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
                 class="text-main text-base mb-1 block hover:text-indigo-400 truncate"
               >
-                {{ item?.content?.title || item?.title }}
+                {{ item?.content?.title || item?.title || metaItem(item?.metadata)?.title }}
               </RouterLink>
               <div
                 v-if="item.content"
                 class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
               >
-                {{ showType(item.content['@type']) }}
+                {{ showType(item.content['@type']) }} 
               </div>
             </div>
           </td>
@@ -144,7 +149,7 @@ const proposalInfo = ref();
           <RouterLink
             :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
             class="flex-1 w-0 truncate mr-4"
-            >{{ item?.content?.title || item?.title }}</RouterLink
+            >{{ item?.content?.title || item?.title || metaItem(item?.metadata)?.title }}</RouterLink
           >
           <label
             for="proposal-detail-modal"
@@ -237,9 +242,9 @@ const proposalInfo = ref();
         <h3 class="font-bold text-lg">Description</h3>
         <p class="py-4">
           <Component
-            v-if="proposalInfo?.content?.description || proposalInfo?.summary"
-            :is="select(proposalInfo?.content?.description || proposalInfo?.summary, 'horizontal')"
-            :value="proposalInfo?.content?.description || proposalInfo?.summary"
+            v-if="proposalInfo?.content?.description || proposalInfo?.summary || metaItem(proposalInfo?.metadata)?.summary"
+            :is="select(proposalInfo?.content?.description || proposalInfo?.summary || metaItem(proposalInfo?.metadata)?.summary, 'horizontal')"
+            :value="proposalInfo?.content?.description || proposalInfo?.summary || metaItem(proposalInfo?.metadata)?.summary"
           >
           </Component>
         </p>

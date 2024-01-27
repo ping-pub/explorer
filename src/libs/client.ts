@@ -20,12 +20,12 @@ export class BaseRestClient<R extends AbstractRegistry> {
     this.endpoint = endpoint;
     this.registry = registry;
   }
-  async request<T>(request: Request<T>, args: Record<string, any>, query = '') {
+  async request<T>(request: Request<T>, args: Record<string, any>, query = '', adapter?: (source: any) => T ) {
     let url = `${request.url.startsWith("http")?'':this.endpoint}${request.url}${query}`;
     Object.keys(args).forEach((k) => {
       url = url.replace(`{${k}}`, args[k] || '');
     });
-    return fetchData<T>(url, request.adapter);
+    return fetchData<T>(url, adapter||request.adapter);
   }
 }
 
@@ -56,7 +56,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
       req = findApiProfileByChain(chain.chainName)
       // if not found. try sdk version
       if(!req && chain.versions?.cosmosSdk) {
-        req = findApiProfileBySDKVersion(chain.versions?.cosmosSdk)
+        req = findApiProfileBySDKVersion(localStorage.getItem(`sdk_version_${chain.chainName}`) || chain.versions?.cosmosSdk)
       }
     }
     return new CosmosRestClient(endpoint, req || DEFAULT)
@@ -161,7 +161,14 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     return this.request(this.registry.gov_proposals_deposits, { proposal_id });
   }
   async getGovProposalTally(proposal_id: string) {
-    return this.request(this.registry.gov_proposals_tally, { proposal_id });
+    return this.request(this.registry.gov_proposals_tally, { proposal_id }, undefined, (source: any) => {
+      return {tally: {
+        yes: source.tally.yes || source.tally.yes_count,
+        abstain: source.tally.abstain || source.tally.abstain_count,
+        no: source.tally.no || source.tally.no_count,
+        no_with_veto: source.tally.no_with_veto || source.tally.no_with_veto_count,
+      }};
+    });
   }
   async getGovProposalVotes(proposal_id: string, page?: PageRequest) {
     if(!page) page = new PageRequest()

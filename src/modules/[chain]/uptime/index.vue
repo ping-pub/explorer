@@ -107,19 +107,27 @@ onMounted(() => {
     }
   });
 
-  chainStore.rpc.getSlashingSigningInfos().then((x) => {
-    x.info?.forEach((i) => {
-      signingInfo.value[valconsToBase64(i.address)] = i;
-    });
-  });
+  updateTotalSigningInfo();
 
   chainStore.rpc.getSlashingParams().then((x) => {
     slashingParam.value = x.params;
   });
 });
 
+function updateTotalSigningInfo() {
+  chainStore.rpc.getSlashingSigningInfos().then((x) => {
+    x.info?.forEach((i) => {
+      signingInfo.value[valconsToBase64(i.address)] = i;
+    });
+  });
+}
+
 const commits2 = computed(() => {
   const la = baseStore.recents.map((b) => b.block.last_commit);
+  // trigger update total signing info
+  if(la.length > 1 && Number(la.at(la.length-1)?.height|| 0) % 10 === 7) {
+    updateTotalSigningInfo();
+  };
   const all = [...commits.value, ...la];
   return all.length > 50 ? all.slice(all.length - 50) : all;
 });

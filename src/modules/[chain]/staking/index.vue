@@ -71,6 +71,7 @@ async function fetchChange() {
     }
 }
 
+
 const changes = computed(() => {
     const changes = {} as Record<string, number>;
     Object.keys(latest.value).forEach((k) => {
@@ -197,7 +198,14 @@ const logo = (identity?: string) => {
         : `https://s3.amazonaws.com/keybase_processed_uploads/${url}`;
 };
 
-fetchChange();
+let height_in_24h = ref(0)
+base.$subscribe((_, s) => {
+    if (Number(s.earlest.block.header.height) !== height_in_24h.value) {
+        height_in_24h.value = Number(s.earlest.block.header.height);
+        fetchChange();
+    }
+});
+
 loadAvatars();
 </script>
 <template>

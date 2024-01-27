@@ -258,42 +258,36 @@ async function update() {
           <div class="text-xs mb-1">{{ $t('consensus.round') }}: {{ item.round }}</div>
           <div class="text-xs break-words">{{ item.prevotes_bit_array }}</div>
 
-          <div class="flex flex-wrap py-6">
+          <div class="flex flex-rows flex-wrap py-6">
             <div
-              class="inline-flex items-center justify-center w-fit rounded-3xl h-5 text-sm px-2 text-slate-200 leading-5"
+              class=" w-48 rounded-3xl h-5 text-sm px-2 text-slate-200 leading-5"
               v-for="(pre, i) in item.prevotes"
               :key="i"
               size="sm"
               style="margin: 2px"
-              :class="[`bg-${color(i, pre)}`]"
             >
-              <span>{{ showName(i, pre) }}</span>
+              <span class="flex flex-rows justify-between">
+                <span class="truncate">{{ showName(i, 'nil-Vote') }} </span>
+                <span>
+                  <span class="tooltip " :data-tip="pre" 
+                  :class="{
+                    'bg-green-400': String(pre).toLowerCase() !== 'nil-vote',
+                    'bg-red-400': String(pre).toLowerCase() === 'nil-vote'
+                  }"
+                  >&nbsp;</span> 
+                  <span class="tooltip ml-1" :data-tip="item.precommits[i]" 
+                  :class="{
+                    'bg-green-400': String(item.precommits[i]).toLowerCase() !== 'nil-vote',
+                    'bg-red-400': String(item.precommits[i]).toLowerCase() === 'nil-vote'
+                  }">&nbsp;</span>
+                </span>
+              </span>
             </div>
           </div>
         </div>
       </div>
       <div class="divider"></div>
-      <!--  -->
-      <div class="flex flex-col md:!flex-row">
-        <div class="flex mr-1 mb-1">
-          <div class="px-4 w-[34px] h-6 rounded-lg bg-primary"></div>
-          <span class="mx-1">{{ $t('consensus.proposer_sign') }}</span>
-        </div>
-        <div class="flex mr-1 mb-1">
-          <div class="px-4 w-[34px] h-6 rounded-lg bg-warning"></div>
-          <span class="mx-1">{{ $t('consensus.proposer_not_sign') }}</span>
-        </div>
 
-        <div class="flex mr-1 mb-1">
-          <div class="px-4 w-[34px] h-6 rounded-lg bg-success"></div>
-          <span class="mx-1">{{ $t('consensus.sign') }}</span>
-        </div>
-
-        <div class="flex mr-1 mb-1">
-          <div class="px-4 w-[34px] h-6 rounded-lg bg-gray-700"></div>
-          <span class="mx-1">{{ $t('consensus.not_sign') }}</span>
-        </div>
-      </div>
     </div>
 
     <!-- alert-info -->
