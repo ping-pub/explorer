@@ -101,3 +101,8 @@ table td {
 .jv-container .jv-code.boxed {
   overflow-y: auto;
 }
+
+.dropdown-content {
+  max-height: 80vh;
+  overflow-y: auto;
+}

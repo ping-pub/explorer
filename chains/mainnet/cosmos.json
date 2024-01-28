@@ -37,16 +37,140 @@
   ],
   "rpc": [
     {
-      "provider": "icycro",
-      "address": "https://cosmos-rpc.icycro.org"
+      "address": "https://rpc-cosmoshub.blockapsis.com",
+      "provider": "chainapsis"
     },
     {
-      "provider": "dragonstake",
-      "address": "https://rpc.cosmos.dragonstake.io"
+      "address": "https://cosmos-rpc.quickapi.com:443",
+      "provider": "Chainlayer"
     },
     {
-      "provider": "Golden Ratio Staking",
-      "address": "https://rpc-cosmoshub.goldenratiostaking.net"
+      "address": "https://cosmos-rpc.onivalidator.com",
+      "provider": "Oni Validator ⛩️"
+    },
+    {
+      "address": "https://rpc-cosmoshub.whispernode.com:443",
+      "provider": "WhisperNode 🤐"
+    },
+    {
+      "address": "https://cosmoshub-rpc.lavenderfive.com:443",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://rpc.cosmoshub.strange.love",
+      "provider": "strangelove-ventures"
+    },
+    {
+      "address": "https://rpc-cosmoshub.ecostake.com",
+      "provider": "ecostake"
+    },
+    {
+      "address": "https://rpc-cosmoshub.pupmos.network",
+      "provider": "PUPMØS"
+    },
+    {
+      "address": "https://rpc-cosmoshub.cosmos-spaces.cloud",
+      "provider": "Cosmos Spaces"
+    },
+    {
+      "address": "https://cosmos-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://cosmos-rpc.staketab.org:443",
+      "provider": "Staketab"
+    },
+    {
+      "address": "https://rpc-cosmoshub-ia.cosmosia.notional.ventures/",
+      "provider": "Notional"
+    },
+    {
+      "address": "https://rpc-cosmoshub.architectnodes.com",
+      "provider": "Architect Nodes"
+    },
+    {
+      "address": "https://rpc.cosmos.dragonstake.io",
+      "provider": "DragonStake"
+    },
+    {
+      "address": "https://cosmoshub.rpc.stakin-nodes.com",
+      "provider": "Stakin"
+    },
+    {
+      "address": "https://cosmos-rpc.icycro.org",
+      "provider": "IcyCRO 🧊"
+    },
+    {
+      "address": "https://rpc.cosmos.bh.rocks",
+      "provider": "BlockHunters 🎯"
+    },
+    {
+      "address": "https://cosmos-rpc.rockrpc.net",
+      "provider": "RockawayX Infra"
+    },
+    {
+      "address": "http://rpc-cosmoshub.freshstaking.com:26657",
+      "provider": "FreshSTAKING"
+    },
+    {
+      "address": "https://cosmos-rpc.easy2stake.com/",
+      "provider": "Easy 2 Stake"
+    },
+    {
+      "address": "https://rpc.cosmos.nodestake.top",
+      "provider": "NodeStake"
+    },
+    {
+      "address": "https://cosmos.rpc.silknodes.io",
+      "provider": "Silk Nodes"
+    },
+    {
+      "address": "https://cosmos-rpc.publicnode.com:443",
+      "provider": "Allnodes ⚡️ Nodes & Staking"
+    },
+    {
+      "address": "https://cosmoshub.rpc.kjnodes.com",
+      "provider": "kjnodes"
+    },
+    {
+      "address": "https://rpc-cosmoshub.goldenratiostaking.net",
+      "provider": "Golden Ratio Staking"
+    },
+    {
+      "address": "https://rpc-cosmos-hub-01.stakeflow.io",
+      "provider": "Stakeflow"
+    },
+    {
+      "address": "https://cosmos-rpc.w3coins.io",
+      "provider": "w3coins"
+    },
+    {
+      "address": "https://cosmos-rpc.enigma-validator.com",
+      "provider": "Enigma"
+    },
+    {
+      "address": "https://rpc-cosmoshub.mms.team",
+      "provider": "MMS"
+    },
+    {
+      "address": "https://cosmos-rpc.tienthuattoan.ventures",
+      "provider": "TienThuatToan"
+    },
+    {
+      "address": "https://community.nuxian-node.ch:6797/gaia/trpc",
+      "provider": "PRO Delegators"
+    },
+    {
+      "address": "https://cosmos-rpc.highstakes.ch:26657/",
+      "provider": "High Stakes 🇨🇭"
+    },
+    {
+      "address": "https://cosmoshub-rpc.cosmosrescue.dev",
+      "provider": "cosmosrescue"
+    },
+    {
+      "address": "https://cosmos-rpc.stakeandrelax.net",
+      "provider": "Stake&Relax 🦥"
     }
   ],
   "cosmwasm_enabled": false,

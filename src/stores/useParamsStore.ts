@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { useBlockchain } from './useBlockchain';
 import { percent, formatNumber, formatTokenAmount } from '@/libs/utils';
 import { DEFAULT_SDK_VERSION } from '@/libs/client';
+import { toAscii } from '@cosmjs/encoding';
 export interface stakingItem {
   unbonding_time: string;
   max_validators: number;
@@ -169,8 +170,12 @@ export const useParamStore = defineStore('paramstore', {
     },
     async handleDistributionParams() {
       const res = await this.getDistributionParams();
+      // try to convert to ascii
       this.distribution.items = Object.entries(res.params).map(
-        ([key, value]) => ({ subtitle: key, value: value })
+        ([key, value]) => ({
+          subtitle: key,
+          value: typeof value === 'string' ? toAscii(value) : value,
+        })
       );
     },
     async handleGovernanceParams() {
