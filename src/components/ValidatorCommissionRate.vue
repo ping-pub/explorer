@@ -91,7 +91,7 @@ const chartConfig = computed(() => {
                             offsetY: -15,
                             fontWeight: 500,
                             fontSize: '2.125rem',
-                            formatter: (value: unknown) => `${rate.value}%`,
+                            formatter: (value: unknown) => `${rate.value.toFixed(1)}%`,
                             color: primaryText,
                         },
                         total: {
@@ -99,7 +99,7 @@ const chartConfig = computed(() => {
                             label: 'Commission Rate',
                             fontSize: '1rem',
                             color: secondaryText,
-                            formatter: () => `${rate.value}%`,
+                            formatter: () => `${rate.value.toFixed(1)}%`,
                         },
                     },
                 },
