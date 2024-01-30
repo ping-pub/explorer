@@ -3,21 +3,21 @@
     "api": [
         {
             "address": "https://t-api.prysmchain.com", 
-            "provider": "PRYSM-core"
+            "provider": "Light Labs"
         }
     ], 
     "rpc": [
         {
             "address": "https://t-rpc.prysmchain.com", 
-            "provider": "PRYSM-core"
+            "provider": "Light Labs"
         }
     ],
     "sdk_version": "v0.45.2",
     "coin_type": "60",
     "min_tx_fee": "800",
     "assets": [{
-        "base": "upym",
-        "symbol": "PYM",
+        "base": "uprysm",
+        "symbol": "PSM",
         "exponent": "6",
         "coingecko_id": "prysm",
         "logo": "/prysm.svg"
