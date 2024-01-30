@@ -774,7 +774,7 @@ function mapDelegators(messages: any[]) {
               </td>
               <td class="truncate text-primary" style="max-width: 200px">
                 <RouterLink :to="`/${props.chain}/tx/${toHex(item.hash)}`">
-                  {{ toBase64(item.hash) }}
+                  {{ toHex(item.hash) }}
                 </RouterLink>
               </td>
               <td>

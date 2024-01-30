@@ -3,7 +3,7 @@ import PaginationBar from '@/components/PaginationBar.vue';
 import router from '@/router';
 import { useTxDialog } from '@/stores';
 import { PageRequest } from '@/types';
-import { toBase64 } from '@cosmjs/encoding';
+import { toBase64, toHex } from '@cosmjs/encoding';
 import type { QueryCodesResponse } from 'cosmjs-types/cosmwasm/wasm/v1/query';
 import { accessTypeToJSON } from 'cosmjs-types/cosmwasm/wasm/v1/types';
 import { ref } from 'vue';
@@ -11,7 +11,7 @@ import { useWasmStore } from './WasmStore';
 
 const props = defineProps(['chain']);
 
-const codes = ref({} as QueryCodesResponse);
+const codes = ref({} as QueryCodesResponse | undefined);
 
 const pageRequest = ref(new PageRequest());
 const wasmStore = useWasmStore();
@@ -58,15 +58,15 @@ function myContracts() {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(v, index) in codes.codeInfos" :key="index">
+          <tr v-for="(v, index) in codes?.codeInfos" :key="index">
             <td>{{ v.codeId }}</td>
             <td>
               <RouterLink
                 :to="`/${props.chain}/cosmwasm/${v.codeId}/contracts`"
                 class="truncate max-w-[200px] block text-primary dark:invert"
-                :title="toBase64(v.dataHash)"
+                :title="toHex(v.dataHash)"
               >
-                {{ toBase64(v.dataHash) }}
+                {{ toHex(v.dataHash) }}
               </RouterLink>
             </td>
             <td>{{ v.creator }}</td>
@@ -90,9 +90,9 @@ function myContracts() {
         <PaginationBar
           :limit="pageRequest.limit"
           :total="
-            codes.pagination?.total ? codes.pagination.total.toString() : '0'
+            codes?.pagination?.total ? codes.pagination.total.toString() : '0'
           "
-          :nextKey="codes.pagination?.nextKey"
+          :nextKey="codes?.pagination?.nextKey"
           :callback="pageload"
         />
         <label

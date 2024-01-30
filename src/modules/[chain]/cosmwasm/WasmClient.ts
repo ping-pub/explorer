@@ -1,3 +1,4 @@
+import { ChainGrpcWasmApi, type PaginationOption } from '@injectivelabs/sdk-ts';
 import { BaseRestClient } from '@/libs/client';
 import { adapter, type AbstractRegistry, type Request } from '@/libs/registry';
 
@@ -10,9 +11,15 @@ import type {
   PaginabledContractStates,
   WasmParam,
 } from './types';
-import { toAscii, toBase64 } from '@cosmjs/encoding';
+import { fromAscii, fromBase64, toAscii, toBase64 } from '@cosmjs/encoding';
 import type { PageRequest } from '@/types';
 import { useBlockchain } from '@/stores';
+import type {
+  CodeInfoResponse,
+  QueryAllContractStateResponse,
+  QueryCodesResponse,
+} from 'cosmjs-types/cosmwasm/wasm/v1/query';
+import { AccessType } from 'cosmjs-types/cosmwasm/wasm/v1/types';
 
 export interface WasmRequestRegistry extends AbstractRegistry {
   cosmwasm_code: Request<PaginabledCodeInfos>;
@@ -65,11 +72,54 @@ export const DEFAULT_VERSION: WasmRequestRegistry = {
 };
 
 export class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
-  async getWasmCodeList(page?: PageRequest) {
+  async getWasmCodeList(
+    page?: PageRequest
+  ): Promise<QueryCodesResponse | undefined> {
     // if(!pr) pr = new PageRequest()
     // const query = `?${pr.toQueryString()}`
     // return this.request(this.registry.cosmwasm_code, {}, /*query*/);
     const blockchain = useBlockchain();
+
+    if (blockchain.chainName === 'injective') {
+      let endpoint = blockchain.current?.endpoints.grpc?.[0].address;
+      if (!endpoint) return;
+      const wasmApi = new ChainGrpcWasmApi(endpoint);
+      const paginationOption = {
+        reverse: page?.reverse ?? true,
+        key: page?.key,
+        countTotal: false,
+        limit: page?.limit,
+      };
+
+      const { codeInfosList, pagination } = await wasmApi.fetchContractCodes(
+        paginationOption
+      );
+
+      return {
+        codeInfos: codeInfosList.map((info) => {
+          return {
+            codeId: BigInt(info.codeId),
+            creator: info.creator,
+            dataHash:
+              typeof info.dataHash === 'string'
+                ? fromBase64(info.dataHash)
+                : info.dataHash,
+            instantiatePermission: {
+              permission: AccessType.ACCESS_TYPE_EVERYBODY,
+              addresses: [] as string[],
+              address: '',
+            },
+          };
+        }),
+        pagination: {
+          nextKey: pagination.next
+            ? fromBase64(pagination.next)
+            : new Uint8Array(),
+          total: BigInt(pagination.total),
+        },
+      };
+    }
+
     if (blockchain.chainName === 'osmosis') {
       page?.setCountTotal(false);
     }
@@ -143,13 +193,23 @@ export class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
     );
     return res;
   }
-  async getWasmContractStates(address: string, page: PageRequest) {
-    const blockchain = useBlockchain();
-    if (blockchain.chainName === 'osmosis') {
+  async getWasmContractStates(
+    address: string,
+    page: PageRequest
+  ): Promise<QueryAllContractStateResponse | undefined> {
+    // const blockchain = useBlockchain();
+    try {
+      // if (
+      //   blockchain.chainName === 'osmosis' ||
+      //   blockchain.chainName === 'injective'
+      // ) {
       page.setCountTotal(false);
+      // }
+      const res = await this.queryClient.extra.contractStates(address, page);
+      return res;
+    } catch (ex) {
+      console.log(ex);
     }
-    const res = await this.queryClient.extra.contractStates(address, page);
-    return res;
     // if(!pr) pr = new PageRequest()
     // const query = `?${pr.toQueryString()}`
     // return this.request(this.registry.cosmwasm_contract_address_state, {

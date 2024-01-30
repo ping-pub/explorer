@@ -36,6 +36,12 @@
       "address": "https://injective-rpc.publicnode.com:443"
     }
   ],
+  "grpc": [
+    {
+      "address": "https://grpc.injective.network",
+      "provider": "Injective"
+    }
+  ],
   "snapshot_provider": "",
   "sdk_version": "v0.45.5",
   "coin_type": "60",
@@ -63,5 +69,5 @@
       "logo": "/logos/injective.jpg"
     }
   ],
-  "cosmwasm_enabled": false
+  "cosmwasm_enabled": true
 }

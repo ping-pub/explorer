@@ -37,7 +37,6 @@ async function initParamsForKeplr() {
       chainId: chainid,
       chainName: chain.chainName,
       rpc: chain.endpoints?.rpc?.at(0)?.address,
-      // @ts-ignore
       rest: chain.endpoints?.rest?.at(0)?.address,
       bip44: {
         coinType: Number(chain.coinType),

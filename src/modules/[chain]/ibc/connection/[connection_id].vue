@@ -53,7 +53,6 @@ onMounted(() => {
   if (connId.value) {
     chainStore.rpc.getIBCConnectionsById(connId.value).then((x) => {
       conn.value = x.connection;
-      console.log('getIBCConnectionsClientState', conn.value);
     });
     chainStore.rpc.getIBCConnectionsClientState(connId.value).then((x) => {
       // @ts-ignore
@@ -411,7 +410,7 @@ function color(v: string) {
               <div class="text-xs truncate text-primary dark:invert">
                 <RouterLink
                   :to="`/${chainStore.chainName}/tx/${toHex(resp.hash)}`"
-                  >{{ toBase64(resp.hash) }}</RouterLink
+                  >{{ toHex(resp.hash) }}</RouterLink
                 >
               </div>
             </td>

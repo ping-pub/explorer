@@ -37,7 +37,7 @@ const txs = ref<ExtraTxSearchResponse>({ txs: [], totalCount: 0 });
 const dialog = useTxDialog();
 const infoDialog = ref(false);
 const info = ref({} as ContractInfo | undefined);
-const state = ref({} as QueryAllContractStateResponse);
+const state = ref({} as QueryAllContractStateResponse | undefined);
 const selected = ref('');
 const balances = ref({} as Coin[]);
 
@@ -239,7 +239,7 @@ const result = ref({});
               <div class="text-xs truncate text-primary dark:invert">
                 <RouterLink
                   :to="`/${chainStore.chainName}/tx/${toHex(resp.hash)}`"
-                  >{{ toBase64(resp.hash) }}
+                  >{{ toHex(resp.hash) }}
                 </RouterLink>
               </div>
             </td>
@@ -305,7 +305,7 @@ const result = ref({});
             <div class="overflow-auto">
               <JsonViewer
                 :value="
-                  state.models?.map((v) => ({
+                  state?.models?.map((v) => ({
                     key: decodeBuffer(v.key),
                     value: decodeBuffer(v.value),
                   })) || []
@@ -320,7 +320,7 @@ const result = ref({});
               <PaginationBar
                 :limit="pageRequest.limit"
                 :total="
-                  state.pagination?.total
+                  state?.pagination?.total
                     ? state.pagination.total.toString()
                     : '0'
                 "

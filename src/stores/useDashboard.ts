@@ -23,6 +23,7 @@ export interface DirectoryChain {
   best_apis: {
     rest: Endpoint[];
     rpc: Endpoint[];
+    grpc: Endpoint[];
   };
   chain_id: string;
   chain_name: string;
@@ -93,6 +94,7 @@ export interface LocalConfig {
   alias: string;
   api: string[] | Endpoint[];
   rpc: string[] | Endpoint[];
+  grpc: string[] | Endpoint[];
   provider_chain: {
     api: string[] | Endpoint[];
   };
@@ -162,6 +164,7 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
   conf.endpoints = {
     rpc: apiConverter(lc.rpc),
     rest: apiConverter(lc.api),
+    grpc: apiConverter(lc.grpc),
   };
 
   if (lc.provider_chain) {

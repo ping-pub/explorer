@@ -599,7 +599,7 @@ function mapAmount(events: readonly Event[]) {
                   :to="`/${chain}/tx/${toHex(v.hash)}`"
                   class="text-primary dark:invert"
                 >
-                  {{ toBase64(v.hash) }}
+                  {{ toHex(v.hash) }}
                 </RouterLink>
               </td>
               <td class="flex items-center py-3">
@@ -658,7 +658,7 @@ function mapAmount(events: readonly Event[]) {
                   :to="`/${chain}/tx/${toHex(v.hash)}`"
                   class="text-primary dark:invert"
                 >
-                  {{ toBase64(v.hash) }}
+                  {{ toHex(v.hash) }}
                 </RouterLink>
               </td>
               <td class="flex items-center py-3">
