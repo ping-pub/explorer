@@ -14,6 +14,7 @@
     <link rel="stylesheet" type="text/css" href="/loader.css" />
     <script type="module">
       import { Buffer } from 'buffer';
+      window.global ||= window;
       window.Buffer = Buffer;
     </script>
   </head>
