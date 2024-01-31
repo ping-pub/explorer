@@ -45,7 +45,7 @@ import type { PaginatedTxs, Tx, TxResponse } from '@/types';
 import semver from 'semver'
 export interface Request<T> {
   url: string;
-  adapter: (source: any) => T;
+  adapter: (source: any) => Promise<T>;
 }
 
 export interface AbstractRegistry {
@@ -154,7 +154,7 @@ export interface RequestRegistry extends AbstractRegistry {
   interchain_security_ccv_provider_validator_consumer_addr: Request<{consumer_address: string}>
 }
 
-export function adapter<T>(source: any): T {
+export function adapter<T>(source: any): Promise<T> {
   return source;
 }
 
