@@ -61,6 +61,6 @@ export async function post(url: string, data: any) {
     },
     body: JSON.stringify(data), // body data type must match "Content-Type" header
   });
-  // const response = axios.post((config ? config.rpc : this.config.rpc) + url, data)
+
   return response.json(); // parses JSON response into native JavaScript objects
 }

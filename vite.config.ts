@@ -1,6 +1,6 @@
 import { fileURLToPath, URL } from 'node:url';
 
-import { defineConfig } from 'vite';
+import { defineConfig, splitVendorChunkPlugin } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import Layouts from 'vite-plugin-vue-layouts';
@@ -15,7 +15,9 @@ export default defineConfig({
   define: {
     'process.env': {},
   },
+  build: { chunkSizeWarningLimit: 1600 },
   plugins: [
+    splitVendorChunkPlugin(),
     vue({
       template: {
         compilerOptions: {

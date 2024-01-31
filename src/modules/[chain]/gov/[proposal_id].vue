@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { computed } from '@vue/reactivity';
-import { fromTimestamp } from 'cosmjs-types/helpers';
-import MdEditor from 'md-editor-v3';
+import Countdown from '@/components/Countdown.vue';
+import { decodeProto } from '@/components/dynamic';
 import ObjectElement from '@/components/dynamic/ObjectElement.vue';
+import PaginationBar from '@/components/PaginationBar.vue';
 import {
   useBaseStore,
   useBlockchain,
@@ -11,34 +11,25 @@ import {
   useStakingStore,
   useTxDialog,
 } from '@/stores';
-import {
-  PageRequest,
-  type GovProposal,
-  type GovVote,
-  type PaginatedProposalDeposit,
-  type Pagination,
-} from '@/types';
-import { ref, reactive } from 'vue';
-import Countdown from '@/components/Countdown.vue';
-import PaginationBar from '@/components/PaginationBar.vue';
+import { PageRequest } from '@/types';
 import { fromBech32, toHex } from '@cosmjs/encoding';
+import { computed } from '@vue/reactivity';
+import type { PageResponse } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
+import type { Params } from 'cosmjs-types/cosmos/distribution/v1beta1/distribution';
+import type { Proposal, Vote } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
 import {
   ProposalStatus,
   proposalStatusToJSON,
   VoteOption,
   voteOptionToJSON,
 } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
-import type { MsgSoftwareUpgrade } from 'cosmjs-types/cosmos/upgrade/v1beta1/tx';
-import type { Proposal, Vote } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
-import type { PageResponse } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
+import type { QueryDepositsResponse } from 'cosmjs-types/cosmos/gov/v1beta1/query';
 import type { ParameterChangeProposal } from 'cosmjs-types/cosmos/params/v1beta1/params';
-import type {
-  QueryDepositResponse,
-  QueryDepositsResponse,
-} from 'cosmjs-types/cosmos/gov/v1beta1/query';
-import { decodeProto } from '@/components/dynamic';
+import type { MsgSoftwareUpgrade } from 'cosmjs-types/cosmos/upgrade/v1beta1/tx';
 import type { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
-import type { Params } from 'cosmjs-types/cosmos/distribution/v1beta1/distribution';
+import { fromTimestamp } from 'cosmjs-types/helpers';
+import MdEditor from 'md-editor-v3';
+import { reactive, ref } from 'vue';
 
 export type ExtraProposal = Proposal & {
   content: ParameterChangeProposal &
@@ -385,7 +376,13 @@ function metaItem(metadata: string | undefined): {
             </div>
             <div class="pl-5 text-sm">
               {{ $t('gov.current_status') }}:
-              {{ $t(`gov.proposal_statuses.${proposal.status}`) }}
+              {{
+                $t(
+                  `gov.proposal_statuses.${proposalStatusToJSON(
+                    proposal.status
+                  )}`
+                )
+              }}
             </div>
           </div>
 
