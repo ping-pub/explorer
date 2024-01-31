@@ -23,7 +23,13 @@ if (props.hash) {
     blockchain.rpc.getTx(props.hash).then((x) => (tx.value = x));
 }
 const messages = computed(() => {
-    return tx.value.tx?.body?.messages || [];
+    return tx.value.tx?.body?.messages.map(x=> {
+        if(x.packet?.data) {
+            // @ts-ignore
+            x.message = format.base64ToString(x.packet.data)
+        }
+        return x
+    }) || [];
 });
 </script>
 <template>
