@@ -19,7 +19,7 @@ import {
   type UnbondingResponses,
   PageRequest,
 } from '@/types';
-import type { Event } from '@cosmjs/tendermint-rpc';
+
 import type { Coin } from '@cosmjs/amino';
 import Countdown from '@/components/Countdown.vue';
 import { fromAscii, fromBase64, toBase64, toHex } from '@cosmjs/encoding';
@@ -31,6 +31,7 @@ import { BaseAccount } from 'cosmjs-types/cosmos/auth/v1beta1/auth';
 import type { ExtraTxResponse } from '@/libs/client';
 import type { QueryDelegationTotalRewardsResponse } from 'cosmjs-types/cosmos/distribution/v1beta1/query';
 import { fromTimestamp } from 'cosmjs-types/helpers';
+import type { Event } from 'cosmjs-types/tendermint/abci/types';
 
 const props = defineProps(['address', 'chain']);
 
@@ -151,9 +152,7 @@ function mapAmount(events: readonly Event[]) {
   if (!events) return [];
   return events
     .find((x) => x.type === 'coin_received')
-    ?.attributes.filter(
-      (x) => (typeof x.key === 'string' ? x.key : fromAscii(x.key)) === 'amount'
-    )
+    ?.attributes.filter((x) => x.key === 'amount')
     .map((x) => x.value);
 }
 </script>

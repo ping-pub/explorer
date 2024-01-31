@@ -39,6 +39,7 @@ import {
   type AbciQueryParams,
   type CometClient,
   type QueryTag,
+  type TxData,
   type TxResponse,
 } from '@cosmjs/tendermint-rpc';
 import { buildQuery } from '@cosmjs/tendermint-rpc/build/tendermint37/requests';
@@ -104,13 +105,17 @@ import {
   type RequestRegistry,
 } from './registry';
 import { decodeProto } from '@/components/dynamic';
+import { convertStr } from './utils';
 
 export const DEFAULT_SDK_VERSION = '0.45.16';
 export const LCD_FALLBACK_CHAINS = ['OraiBtcMainnet'];
 
-export type ExtraTxResponse = TxResponse & {
+export type ExtraTxResponse = Omit<TxResponse, 'result'> & {
   txRaw: DecodedTxRaw;
   timestamp?: string;
+  result: Omit<TxData, 'events'> & {
+    readonly events: readonly Event[];
+  };
 };
 export interface ExtraTxSearchResponse {
   readonly txs: ExtraTxResponse[];
@@ -965,6 +970,13 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     if (decodeRaw) {
       res.txs.forEach((tx, i) => {
         const txRaw = decodeTxRaw(tx.tx);
+        tx.result.events.forEach((event) => {
+          event.attributes.forEach((attr) => {
+            const key = convertStr(attr.key);
+            const value = convertStr(attr.value);
+            Object.assign(attr, { key, value });
+          });
+        });
 
         // txRaw.body.messages = txRaw.body.messages.map(decodeProto);
         // @ts-ignore
@@ -1062,7 +1074,6 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     //   hash,
     // });
     const res = await this.queryClient.ibc.transfer.denomTrace(hash);
-    console.log(res);
     return res;
   }
   async getIBCConnections(page?: PageRequest) {

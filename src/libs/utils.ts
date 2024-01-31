@@ -1,5 +1,5 @@
 import { fromBinary, type JsonObject } from '@cosmjs/cosmwasm-stargate';
-import { fromAscii, toBase64 } from '@cosmjs/encoding';
+import { fromAscii, fromBase64, toBase64 } from '@cosmjs/encoding';
 import type { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
 
 export const formatTitle = (title: string) => {
@@ -24,6 +24,26 @@ export function getLocalChains() {
 
 export const percent = (num: number) => {
   return parseFloat((num * 100).toFixed(2));
+};
+
+export const convertStr = (value: Uint8Array | string) => {
+  let valueArr;
+  if (typeof value === 'string') {
+    try {
+      valueArr = fromBase64(value);
+    } catch {
+      // pure string
+      return value;
+    }
+  } else {
+    valueArr = value;
+  }
+
+  try {
+    return fromAscii(valueArr);
+  } catch {
+    return typeof value === 'string' ? value : toBase64(valueArr);
+  }
 };
 
 export const decodeBuffer = (value: Uint8Array) => {
@@ -55,14 +75,6 @@ export const parseJSONRecursive = (value: JsonObject) => {
   }
   return value;
 };
-
-export function stringToUint8Array(str: string) {
-  const arr = [];
-  for (let i = 0, j = str.length; i < j; ++i) {
-    arr.push(str.charCodeAt(i));
-  }
-  return new Uint8Array(arr);
-}
 
 export function uint8ArrayToString(arr: Uint8Array) {
   let str = '';

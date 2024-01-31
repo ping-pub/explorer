@@ -10,7 +10,6 @@ import {
   decodeKey,
 } from '@/libs';
 import type { ExtraTxResponse, ExtraTxSearchResponse } from '@/libs/client';
-import { stringToUint8Array } from '@/libs/utils';
 import {
   useBlockchain,
   useFormatter,
@@ -21,7 +20,7 @@ import {
 import { PageRequest } from '@/types';
 import { fromAscii, fromBech32, toBase64, toHex } from '@cosmjs/encoding';
 import type { Coin } from '@cosmjs/stargate';
-import type { Event } from '@cosmjs/tendermint-rpc';
+import type { Event, EventAttribute } from 'cosmjs-types/tendermint/abci/types';
 import { Icon } from '@iconify/vue';
 import type { QueryValidatorDelegationsResponse } from 'cosmjs-types/cosmos/staking/v1beta1/query';
 import {
@@ -286,45 +285,39 @@ function mapAmounts(tx: ExtraTxResponse) {
     })
     .filter(Boolean);
   if (amounts.length) return amounts;
-  return mapEvents(tx.result.events);
+  // fallback from event
+  return filterEvents(tx.result.events).map((x) =>
+    x.attributes.find((a) => a.key === 'amount')?.value.replace(/[^\d]+/g, '')
+  );
 }
 
-function mapEvents(events: readonly Event[]) {
+function filterEvents(events: readonly Event[]) {
   const attributes = events
     .filter((x) => x.type === selectedEventType.value)
-    .filter(
-      (x) =>
-        x.attributes.findIndex((attr) => {
-          const base64Validator = toBase64(stringToUint8Array(validator));
-          return (
-            toBase64(attr.value) === base64Validator ||
-            toBase64(attr.value) === base64Validator
-          );
-        }) > -1
-    )
-    .map((x) => {
-      // check if attributes need to decode
-      const output = {} as { [key: string]: string };
-
-      if (x.attributes.findIndex((a) => fromAscii(a.key) === `amount`) > -1) {
-        x.attributes.forEach((attr) => {
-          output[fromAscii(attr.key)] = fromAscii(attr.value);
-        });
-      } else
-        x.attributes.forEach((attr) => {
-          output[fromAscii(attr.key)] = fromAscii(attr.value);
-        });
-      return output;
-    });
+    .filter((x) =>
+      x.attributes.some((attr) => {
+        return attr.value === validator;
+      })
+    );
 
   return attributes;
 }
 
-function mapDelegators(messages: any[]) {
+function mapDelegators(tx: ExtraTxResponse) {
+  const { messages } = tx.txRaw.body;
   if (!messages) return [];
-  return Array.from(
-    new Set(messages.map((x) => x.delegatorAddress || x.grantee || x.contract))
-  );
+
+  const delegators = Array.from(
+    new Set(
+      messages.map((x: any) => x.delegatorAddress || x.grantee || x.contract)
+    )
+  ).filter(Boolean);
+
+  if (delegators.length) return delegators;
+  // fallback from event
+  return filterEvents(tx.result.events)
+    .map((x) => x.attributes.find((a) => a.key === 'validator')?.value)
+    .filter(Boolean);
 }
 </script>
 <template>
@@ -410,7 +403,7 @@ function mapDelegators(messages: any[]) {
               <div class="flex items-center mb-2">
                 <Icon icon="mdi-shield-account-outline" class="text-xl mr-1" />
                 <span class="font-bold mr-2">{{ $t('staking.status') }}: </span
-                ><span>
+                ><span class="capitalize">
                   {{
                     bondStatusToJSON(v.status)
                       .toLowerCase()
@@ -828,7 +821,7 @@ function mapDelegators(messages: any[]) {
             <tr v-for="(item, i) in events.txs">
               <td class="pr-2 truncate text-primary" style="max-width: 250px">
                 <RouterLink
-                  v-for="d in mapDelegators(item.txRaw.body?.messages)"
+                  v-for="d in mapDelegators(item)"
                   :to="`/${props.chain}/account/${d}`"
                 >
                   {{ d }}
