@@ -151,10 +151,10 @@ function mapAmount(events: readonly Event[]) {
   if (!events) return [];
   return events
     .find((x) => x.type === 'coin_received')
-    ?.attributes.filter((x) => toBase64(x.key) === 'YW1vdW50')
-    .map((x) =>
-      toBase64(x.key) === 'YW1vdW50' ? fromAscii(x.value) : toBase64(x.value)
-    );
+    ?.attributes.filter(
+      (x) => (typeof x.key === 'string' ? x.key : fromAscii(x.key)) === 'amount'
+    )
+    .map((x) => x.value);
 }
 </script>
 <template>
