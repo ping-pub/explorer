@@ -162,13 +162,15 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
   async getGovProposalTally(proposal_id: string) {
     return this.request(this.registry.gov_proposals_tally, { proposal_id }, undefined, (source: any) => {
-      return {tally: {
+      return Promise.resolve({ tally: {
         yes: source.tally.yes || source.tally.yes_count,
         abstain: source.tally.abstain || source.tally.abstain_count,
         no: source.tally.no || source.tally.no_count,
         no_with_veto: source.tally.no_with_veto || source.tally.no_with_veto_count,
-      }};
-    });
+        },
+        });
+      }
+    );
   }
   async getGovProposalVotes(proposal_id: string, page?: PageRequest) {
     if(!page) page = new PageRequest()
