@@ -29,14 +29,6 @@
       "address": "https://akash-rpc.polkachu.com"
     },
     {
-      "provider": "Forbole",
-      "address": "http://rpc.akash.forbole.com:80"
-    },
-    {
-      "provider": "Skynet Validators",
-      "address": "http://akashsentry01.skynetvalidators.com:26657"
-    },
-    {
       "provider": "Allnodes",
       "address": "https://akash-rpc.publicnode.com"
     }

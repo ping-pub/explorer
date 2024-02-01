@@ -5,17 +5,42 @@
     "https://rest.cosmos.directory/realio",
     "https://realio-api.genznodes.dev",
     "https://api-realio-network.nodeist.net",
-    "http://realio.api.m.stavr.tech:21097",
     "https://api.realio.indonode.net",
     "https://api.realio.nodestake.top"
   ],
   "rpc": [
-    "https://rpc.cosmos.directory/realio",
-    "https://realio-rpc.genznodes.dev",
-    "https://rpc-realio-network.nodeist.net",
-    "http://realio.rpc.m.stavr.tech:21097",
-    "https://rpc.realio.indonode.net",
-    "https://rpc.realio.nodestake.top"
+    {
+      "address": "https://realio-rpc.genznodes.dev",
+      "provider": "genznodes"
+    },
+    {
+      "address": "https://realio.rpc.bccnodes.com/",
+      "provider": "BccNodes"
+    },
+    {
+      "address": "https://rpc-realio-network.nodeist.net",
+      "provider": "Nodeist"
+    },
+    {
+      "address": "https://rpc.realio.indonode.net",
+      "provider": "Indonode"
+    },
+    {
+      "address": "https://rpc.realio.nodestake.top",
+      "provider": "NodeStake"
+    },
+    {
+      "address": "https://rpc-realio.vinjan.xyz",
+      "provider": "vinjan"
+    },
+    {
+      "address": "https://api-realio.sr20de.xyz",
+      "provider": "Sr20de"
+    },
+    {
+      "address": "https://rpc.realio.safeblock.space",
+      "provider": "Safe Block"
+    }
   ],
   "snapshot_provider": "",
   "addr_prefix": "realio",

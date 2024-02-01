@@ -1,11 +1,7 @@
 {
   "chain_name": "hermit",
   "api": ["https://rpc.hermit.network:1317"],
-  "rpc": [
-    "https://rpc1.hermit.network",
-    "http://rpc.hermit.network:26657",
-    "https://rpc2.hermit.network"
-  ],
+  "rpc": ["https://rpc1.hermit.network", "https://rpc2.hermit.network"],
   "sdk_version": "0.45.4",
   "coin_type": "928",
   "min_tx_fee": "800",

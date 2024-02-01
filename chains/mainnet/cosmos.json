@@ -109,10 +109,6 @@
       "provider": "RockawayX Infra"
     },
     {
-      "address": "http://rpc-cosmoshub.freshstaking.com:26657",
-      "provider": "FreshSTAKING"
-    },
-    {
       "address": "https://cosmos-rpc.easy2stake.com/",
       "provider": "Easy 2 Stake"
     },

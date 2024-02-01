@@ -14,16 +14,32 @@
   ],
   "rpc": [
     {
-      "provider": "Anonymous",
-      "address": "http://34.82.96.8:26657"
+      "address": "https://rpc-irisnet-ia.cosmosia.notional.ventures/",
+      "provider": "Notional"
     },
     {
-      "provider": "Anonymous",
-      "address": "http://34.77.68.145:26657"
+      "address": "https://rpc-irisnet-01.stakeflow.io",
+      "provider": "Stakeflow"
     },
     {
-      "provider": "Allnodes",
-      "address": "https://iris-rpc.publicnode.com:443"
+      "address": "https://irisnet-rpc.w3coins.io",
+      "provider": "w3coins"
+    },
+    {
+      "address": "https://iris-rpc.publicnode.com:443",
+      "provider": "Allnodes ⚡️ Nodes & Staking"
+    },
+    {
+      "address": "https://iris-rpc.highstakes.ch:26657/",
+      "provider": "High Stakes 🇨🇭"
+    },
+    {
+      "address": "https://iris-mainnet.rpc.l0vd.com:443",
+      "provider": "L0vd.com ❤️"
+    },
+    {
+      "address": "https://mainnet-iris-rpc.konsortech.xyz",
+      "provider": "KonsorTech"
     }
   ],
   "sdk_version": "0.46.1",

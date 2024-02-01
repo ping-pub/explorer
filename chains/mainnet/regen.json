@@ -25,10 +25,6 @@
   ],
   "rpc": [
     {
-      "provider": "VitWit",
-      "address": "http://public-rpc.regen.vitwit.com:26657"
-    },
-    {
       "provider": "StakeSystems",
       "address": "https://regen.stakesystems.io:2053"
     },

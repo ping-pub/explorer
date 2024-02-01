@@ -3,8 +3,42 @@
   "alias": "band-protocol",
   "api": "https://laozi1.bandchain.org/api",
   "rpc": [
-    "http://rpc.laozi1.bandchain.org:80",
-    "http://rpc.laozi1.bandchain.org:80"
+    {
+      "address": "https://rpc-bandchain-ia.cosmosia.notional.ventures/",
+      "provider": "Notional"
+    },
+    {
+      "address": "https://band-rpc.ibs.team/",
+      "provider": "Inter Blockchain Services"
+    },
+    {
+      "address": "https://bandchain-mainnet-rpc.autostake.com",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    },
+    {
+      "address": "https://band.rpc.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://rpc-band-01.stakeflow.io",
+      "provider": "Stakeflow"
+    },
+    {
+      "address": "https://rpc-band.cosmos-spaces.cloud",
+      "provider": "Cosmos Spaces"
+    },
+    {
+      "address": "https://band-rpc.w3coins.io",
+      "provider": "w3coins"
+    },
+    {
+      "address": "https://bandprotocol-rpc.highstakes.ch:26657/",
+      "provider": "High Stakes 🇨🇭"
+    },
+    {
+      "address": "https://band-rpc.stake-town.com",
+      "provider": "StakeTown"
+    }
   ],
   "snapshot_provider": "",
   "addr_prefix": "band",
