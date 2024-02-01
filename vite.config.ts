@@ -15,7 +15,7 @@ export default defineConfig({
   define: {
     'process.env': {},
   },
-  build: { chunkSizeWarningLimit: 1600 },
+  build: { chunkSizeWarningLimit: 20000 },
   plugins: [
     splitVendorChunkPlugin(),
     vue({
