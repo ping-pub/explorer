@@ -120,9 +120,7 @@ export class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
       };
     }
 
-    if (blockchain.chainName === 'osmosis') {
-      page?.setCountTotal(false);
-    }
+    page?.setCountTotal(false);
 
     const res = await this.queryClient.extra.listCode(page);
     return res;

@@ -107,10 +107,10 @@ export const useBaseStore = defineStore('baseStore', {
       }
       //check if the block exists in recents
       if (
-        this.recents.findIndex(
-          (x) =>
-            toBase64(x?.blockId?.hash) === toBase64(this.latest?.blockId?.hash)
-        ) === -1
+        this.latest?.blockId?.hash &&
+        this.recents.some(
+          (x) => toBase64(x.blockId.hash) === toBase64(this.latest.blockId.hash)
+        )
       ) {
         if (this.recents.length >= 50) {
           this.recents.shift();
