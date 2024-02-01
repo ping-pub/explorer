@@ -122,7 +122,11 @@ export class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
 
     page?.setCountTotal(false);
 
-    const res = await this.queryClient.extra.listCode(page);
+    const res = await this.queryClient.extra.listCode(
+      page,
+      blockchain.chainName === 'secret'
+    );
+
     return res;
   }
   async getWasmCodeById(code_id: string) {
@@ -144,10 +148,14 @@ export class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
     const res = await this.queryClient.extra.wasmParams();
     return res;
   }
-  async getWasmContracts(address: string) {
+  async getWasmContractInfo(address: string) {
     // return this.request(this.registry.cosmwasm_contract_address, { address });
-    const res = await this.queryClient.wasm.getContractInfo(address);
-    return res;
+    try {
+      const res = await this.queryClient.wasm.getContractInfo(address);
+      return res.contractInfo;
+    } catch (ex) {
+      console.log(ex);
+    }
   }
   async getWasmContractsByCreator(creator_address: string, page?: PageRequest) {
     // if(!page) page = new PageRequest()

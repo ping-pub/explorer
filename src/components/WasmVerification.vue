@@ -27,10 +27,8 @@ onMounted(() => {
   const chainId = base.latest?.block?.header?.chainId || 'Oraichain';
   // console.log("mounted", `${baseurl}/deploy-histories/neutron?contract=${props.contract}`, chainId.value)
   const url = `${baseurl}/deploy-histories/${chainId}?contract=${props.contract}`;
-  console.log('url:', url);
   get(url)
     .then((x) => {
-      console.log('verification:', x);
       verification.value = x;
     })
     .catch((e) => {

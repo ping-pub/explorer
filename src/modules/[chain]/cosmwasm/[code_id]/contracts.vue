@@ -13,7 +13,7 @@ const props = defineProps(['code_id', 'chain']);
 const pageRequest = ref(new PageRequest());
 const response = ref({} as QueryContractsByCodeResponse);
 
-const info = ref({} as ContractInfo);
+const info = ref({} as ContractInfo | undefined);
 const dialog = useTxDialog();
 const infoDialog = ref(false);
 const wasmStore = useWasmStore();
@@ -40,8 +40,8 @@ function loadContract(pageNum: number) {
 loadContract(1);
 
 function showInfo(address: string) {
-  wasmStore.wasmClient.getWasmContracts(address).then((x) => {
-    info.value = x.contractInfo;
+  wasmStore.wasmClient.getWasmContractInfo(address).then((x) => {
+    info.value = x;
   });
 }
 </script>

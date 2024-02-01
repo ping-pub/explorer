@@ -67,7 +67,6 @@ export const useTxDialog = defineStore('txDialogStore', {
         });
     },
     confirmed(tx: any) {
-      console.log('confirmed:', tx);
       if (CALLBACK) {
         CALLBACK();
       }

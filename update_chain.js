@@ -43,7 +43,6 @@ const updateChain = async (chainFile) => {
   } else {
     const chainFiles = fs.readdirSync(chainsPath);
     for (const chainFile of chainFiles) {
-      console.log('Updating', chainFile);
       await updateChain(chainFile);
     }
   }

@@ -11,7 +11,8 @@ import TokenElement from './TokenElement.vue';
 import TimestampElement from './TimestampElement.vue';
 import ObjectHorizontalElement from './ObjectHorizontalElement.vue';
 import Long from 'long';
-import { toBase64 } from '@cosmjs/encoding';
+import { MsgRegistry } from 'secretjs';
+import { toBech32 } from '@cosmjs/encoding';
 
 export function select(v: any, direct?: string) {
   // if(k === 'txs' && v) {
@@ -97,6 +98,8 @@ export const decodeProto = (msg: {
   ) {
     // fallback with evmos
     type = lookupType(evmosProto, typeUrl);
+  } else if (typeUrl.startsWith('/secret.')) {
+    type = MsgRegistry.get(typeUrl);
   } else {
     type = findType(injProto, typeMap[typeUrl] ?? typeUrl.split('.').pop());
   }
@@ -108,6 +111,14 @@ export const decodeProto = (msg: {
     }
     if (instance.data) {
       instance.data = decodeProto(instance.data);
+    }
+
+    // fix for secret
+    if (typeUrl.startsWith('/secret.')) {
+      if (instance.sender)
+        instance.sender = toBech32('secret', instance.sender);
+      if (instance.contract)
+        instance.contract = toBech32('secret', instance.contract);
     }
 
     return instance;

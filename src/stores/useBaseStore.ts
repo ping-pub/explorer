@@ -96,6 +96,7 @@ export const useBaseStore = defineStore('baseStore', {
       } catch (e) {
         this.connected = false;
       }
+
       if (
         !this.earlest ||
         this.earlest?.block?.header?.chainId !=
@@ -105,10 +106,11 @@ export const useBaseStore = defineStore('baseStore', {
         this.earlest = this.latest;
         this.recents = [];
       }
+
       //check if the block exists in recents
       if (
         this.latest?.blockId?.hash &&
-        this.recents.some(
+        !this.recents.some(
           (x) => toBase64(x.blockId.hash) === toBase64(this.latest.blockId.hash)
         )
       ) {

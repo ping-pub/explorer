@@ -42,7 +42,6 @@ export const useIBCModule = defineStore('module-ibc', {
         : 'chain_1';
     },
     registryChannels(): any {
-      console.log('registryChannels', this.registryConf);
       return this.registryConf.channels;
     },
   },

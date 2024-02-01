@@ -180,8 +180,6 @@ export const useFormatter = defineStore('formatter', {
           if (!asset) {
             // update ibc metadata if not exits in local cache
             this.fetchDenomMetadata(ibcDenom);
-          } else {
-            console.log('ibc metadata', asset);
           }
         } else {
           asset = this.findGlobalAssetConfig(denom);

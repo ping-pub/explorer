@@ -91,6 +91,8 @@ import {
   QueryContractsByCreatorResponse,
   QueryParamsResponse as QueryWasmParamsResponse,
 } from 'cosmjs-types/cosmwasm/wasm/v1/query';
+import { QueryClientImpl as SecretWasmQueryClientImpl } from 'secretjs/src/protobuf/secret/compute/v1beta1/query';
+
 import { toTimestamp } from 'cosmjs-types/helpers';
 import type { Event, EventAttribute } from 'cosmjs-types/tendermint/abci/types';
 import semver from 'semver';
@@ -106,6 +108,7 @@ import {
 } from './registry';
 import { decodeProto } from '@/components/dynamic';
 import { convertStr } from './utils';
+import { AccessType } from 'cosmjs-types/cosmwasm/wasm/v1/types';
 
 export const DEFAULT_SDK_VERSION = '0.45.16';
 export const LCD_FALLBACK_CHAINS = ['OraiBtcMainnet'];
@@ -152,7 +155,10 @@ export interface ExtraExtension {
     readonly totalSupply: (
       page?: PageRequest
     ) => Promise<QueryTotalSupplyResponse>;
-    readonly listCode: (page?: PageRequest) => Promise<QueryCodesResponse>;
+    readonly listCode: (
+      page?: PageRequest,
+      secret?: boolean
+    ) => Promise<QueryCodesResponse>;
     readonly wasmParams: () => Promise<QueryWasmParamsResponse>;
     readonly bankParams: () => Promise<QueryBankParamsResponse>;
     readonly contractsByCreator: (
@@ -179,6 +185,7 @@ function setupExtraExtension(base: QueryClient) {
   const govQueryServiceV1 = new GovQueryClientImplV1(rpc);
   const bankQueryService = new BankQueryClientImpl(rpc);
   const wasmQueryService = new WasmQueryClientImpl(rpc);
+  const secretWasmQueryClientImpl = new SecretWasmQueryClientImpl(rpc);
   const stakingQueryService = new StakingQueryClientImpl(rpc);
   const tmQueryClientImpl = new TmQueryClientImpl(rpc);
   return {
@@ -218,7 +225,30 @@ function setupExtraExtension(base: QueryClient) {
           pagination: page?.toPagination(),
         });
       },
-      listCode: async (page?: PageRequest) => {
+      listCode: async (
+        page?: PageRequest,
+        secret = false
+      ): Promise<QueryCodesResponse> => {
+        if (secret) {
+          const res = await secretWasmQueryClientImpl.Codes({
+            pagination: page?.toPagination(),
+          });
+
+          return {
+            codeInfos: res.code_infos.map((codeInfo) => {
+              return {
+                codeId: BigInt(codeInfo.code_id),
+                creator: codeInfo.creator,
+                dataHash: fromHex(codeInfo.code_hash),
+                instantiatePermission: {
+                  permission: AccessType.ACCESS_TYPE_EVERYBODY,
+                  address: '',
+                  addresses: [],
+                },
+              };
+            }),
+          };
+        }
         return await wasmQueryService.Codes({
           pagination: page?.toPagination(),
         });
@@ -620,7 +650,6 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
 
     // const paginationKey = page?.key ? fromBase64(page.key) : undefined;
     const res = await this.queryClient.extra.votes(proposal_id, page);
-    console.log('vote', proposal_id, res);
     return res;
   }
   async getGovProposalVotesVoter(proposal_id: string, voter: string) {
@@ -983,7 +1012,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
         tx.txRaw = txRaw;
       });
     }
-    // console.log('getTxs', res);
+
     // @ts-ignore
     return res;
   }
@@ -1055,10 +1084,10 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     // return this.request(this.registry.mint_inflation, {});
     try {
       const res = await this.queryClient.mint.inflation();
-      console.log('getMintInflation', res);
+
       return res;
     } catch (ex) {
-      console.log('getMintInflation', ex);
+      console.log(ex);
     }
   }
   async getMintAnnualProvisions() {

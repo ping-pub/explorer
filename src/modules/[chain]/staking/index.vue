@@ -42,7 +42,6 @@ onMounted(() => {
   });
   chainStore.rpc.getSlashingParams().then((res) => {
     slashing.value = res.params;
-    console.log('slashing', slashing.value);
   });
 });
 

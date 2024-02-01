@@ -63,7 +63,6 @@ store.fetchProposal(props.proposal_id).then((res) => {
   }
   // @ts-ignore
   proposal.value = proposalDetail;
-  console.log('fetchProposal', proposal.value);
 
   // load origin params if the proposal is param change
   if (changeProposal?.changes) {
@@ -220,7 +219,6 @@ function pageload(p: number) {
   pageRequest.value.setPage(p);
   store.fetchProposalVotes(props.proposal_id, pageRequest.value).then((x) => {
     votes.value = x.votes;
-    console.log('vote', votes.value);
     pageResponse.value = x.pagination;
   });
 }

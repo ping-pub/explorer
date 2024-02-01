@@ -45,8 +45,8 @@ const contractAddress = String(route.query.contract);
 
 onMounted(() => {
   const address = contractAddress;
-  wasmStore.wasmClient.getWasmContracts(address).then((x) => {
-    info.value = x.contractInfo;
+  wasmStore.wasmClient.getWasmContractInfo(address).then((x) => {
+    info.value = x;
   });
   chainStore.rpc
     .getTxs(

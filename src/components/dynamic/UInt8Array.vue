@@ -20,7 +20,6 @@ const text = computed(() => {
     default:
       try {
         const jsonValue = fromBinary(toBase64(props.value));
-        console.log('computed', jsonValue);
         return parseJSONRecursive(jsonValue);
       } catch (ex) {
         return 'Invalid Utf8';
