@@ -3,10 +3,6 @@
   "alias": "akash-network",
   "api": [
     {
-      "provider": "Notional",
-      "address": "https://api-akash-ia.cosmosia.notional.ventures"
-    },
-    {
       "provider": "Polkachu",
       "address": "https://akash-api.polkachu.com"
     },
@@ -20,10 +16,6 @@
     }
   ],
   "rpc": [
-    {
-      "provider": "Notional",
-      "address": "ttps://rpc-akash-ia.cosmosia.notional.ventures"
-    },
     {
       "provider": "Polkachu",
       "address": "https://akash-rpc.polkachu.com"

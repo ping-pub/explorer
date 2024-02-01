@@ -3,10 +3,6 @@
   "registry_name": "cosmoshub",
   "api": [
     {
-      "provider": "notional",
-      "address": "https://api-cosmoshub-ia.cosmosia.notional.ventures"
-    },
-    {
       "provider": "blockapsis",
       "address": "https://lcd-cosmoshub.blockapsis.com:443"
     },
@@ -79,10 +75,6 @@
     {
       "address": "https://cosmos-rpc.staketab.org:443",
       "provider": "Staketab"
-    },
-    {
-      "address": "https://rpc-cosmoshub-ia.cosmosia.notional.ventures/",
-      "provider": "Notional"
     },
     {
       "address": "https://rpc-cosmoshub.architectnodes.com",

@@ -29,10 +29,6 @@
       "address": "https://bitcanna-rpc.polkachu.com:443"
     },
     {
-      "provider": "Notional",
-      "address": "https://rpc-bitcanna-ia.cosmosia.notional.ventures:443"
-    },
-    {
       "provider": "Allnodes",
       "address": "https://bitcanna-rpc.publicnode.com:443"
     }

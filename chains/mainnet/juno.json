@@ -3,10 +3,6 @@
   "coingecko": "juno-network",
   "api": [
     {
-      "provider": "Notional",
-      "address": "https://api-juno-ia.cosmosia.notional.ventures"
-    },
-    {
       "provider": "Polkachu",
       "address": "https://juno-api.polkachu.com"
     },
@@ -28,10 +24,6 @@
     }
   ],
   "rpc": [
-    {
-      "provider": "Notional",
-      "address": "https://rpc-juno-ia.cosmosia.notional.ventures:443"
-    },
     {
       "provider": "Polkachu",
       "address": "https://juno-rpc.polkachu.com:443"

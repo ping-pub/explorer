@@ -6,10 +6,6 @@
       "provider": "umee Foundation"
     },
     {
-      "address": "https://api-umee-ia.cosmosia.notional.ventures/",
-      "provider": "Notional"
-    },
-    {
       "address": "https://umee.api.m.stavr.tech",
       "provider": "🔥STAVR🔥"
     },
@@ -54,9 +50,7 @@
       "provider": "w3coins"
     }
   ],
-  "rpc": [
-    "https://umee-rpc.polkachu.com:443"
-  ],
+  "rpc": ["https://umee-rpc.polkachu.com:443"],
   "snapshot_provider": "",
   "sdk_version": "0.46.11",
   "coin_type": "118",

@@ -4,10 +4,6 @@
   "api": "https://laozi1.bandchain.org/api",
   "rpc": [
     {
-      "address": "https://rpc-bandchain-ia.cosmosia.notional.ventures/",
-      "provider": "Notional"
-    },
-    {
       "address": "https://band-rpc.ibs.team/",
       "provider": "Inter Blockchain Services"
     },

@@ -2,10 +2,6 @@
   "chain_name": "comdex",
   "api": [
     {
-      "provider": "Notional",
-      "address": "https://api-comdex-ia.cosmosia.notional.ventures"
-    },
-    {
       "provider": "Polkachu",
       "address": "https://comdex-api.polkachu.com"
     },
@@ -23,10 +19,6 @@
     }
   ],
   "rpc": [
-    {
-      "provider": "Notional",
-      "address": "https://rpc-comdex-ia.cosmosia.notional.ventures:443"
-    },
     {
       "provider": "AuditOne",
       "address": "https://api.comdex.audit.one:443/rpc"

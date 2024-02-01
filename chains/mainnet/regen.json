@@ -7,10 +7,6 @@
       "address": "https://regen.stakesystems.io"
     },
     {
-      "provider": "Notional",
-      "address": "https://api-regen-ia.cosmosia.notional.ventures"
-    },
-    {
       "provider": "EcoStake",
       "address": "https://rest-regen.ecostake.com"
     },

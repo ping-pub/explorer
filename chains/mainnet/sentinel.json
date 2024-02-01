@@ -2,10 +2,6 @@
   "chain_name": "sentinel",
   "api": [
     {
-      "provider": "Notional",
-      "address": "https://api-sentinel-ia.cosmosia.notional.ventures"
-    },
-    {
       "provider": "Sentinel",
       "address": "https://lcd.sentinel.co"
     },
@@ -15,10 +11,6 @@
     }
   ],
   "rpc": [
-    {
-      "provider": "Notional",
-      "address": "https://api-sentinel-ia.cosmosia.notional.ventures:443"
-    },
     {
       "provider": "Keplr",
       "address": "https://rpc-sentinel.keplr.app:443"

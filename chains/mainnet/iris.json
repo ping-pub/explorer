@@ -14,10 +14,6 @@
   ],
   "rpc": [
     {
-      "address": "https://rpc-irisnet-ia.cosmosia.notional.ventures/",
-      "provider": "Notional"
-    },
-    {
       "address": "https://rpc-irisnet-01.stakeflow.io",
       "provider": "Stakeflow"
     },
