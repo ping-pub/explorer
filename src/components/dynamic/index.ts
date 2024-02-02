@@ -125,4 +125,7 @@ export const decodeProto = (msg: {
 
     return instance;
   }
+
+  // return default
+  return msg.value;
 };
