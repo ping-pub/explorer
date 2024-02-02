@@ -12,6 +12,7 @@ import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import type { Key, SlashingParam, Validator } from '@/types';
 import { formatSeconds}  from '@/libs/utils'
+import { diff } from 'semver';
 
 const staking = useStakingStore();
 const base = useBaseStore();
@@ -40,12 +41,12 @@ onMounted(() => {
     })
 });
 
-async function fetchChange() {
+async function fetchChange(blockWindow: number = 14400) {
     let page = 0;
 
     let height = Number(base.latest?.block?.header?.height || 0);
-    if (height > 14400) {
-        height -= 14400;
+    if (height > blockWindow) {
+        height -= blockWindow;
     } else {
         height = 1;
     }
@@ -70,7 +71,6 @@ async function fetchChange() {
         page += 100;
     }
 }
-
 
 const changes = computed(() => {
     const changes = {} as Record<string, number>;
@@ -198,11 +198,13 @@ const logo = (identity?: string) => {
         : `https://s3.amazonaws.com/keybase_processed_uploads/${url}`;
 };
 
-let height_in_24h = ref(0)
 base.$subscribe((_, s) => {
-    if (Number(s.earlest.block.header.height) !== height_in_24h.value) {
-        height_in_24h.value = Number(s.earlest.block.header.height);
-        fetchChange();
+    console.log(s.recents.length)
+    if (s.recents.length === 2) {
+        const diff_time = Date.parse(s.recents[1].block.header.time) - Date.parse(s.recents[0].block.header.time)
+        const diff_height = Number(s.recents[1].block.header.height) - Number(s.recents[0].block.header.height)
+        const block_window = Number(Number(86400 * 1000 * diff_height / diff_time).toFixed(0))
+        fetchChange(block_window);
     }
 });
 
