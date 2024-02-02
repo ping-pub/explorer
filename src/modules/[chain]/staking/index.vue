@@ -198,8 +198,10 @@ const logo = (identity?: string) => {
         : `https://s3.amazonaws.com/keybase_processed_uploads/${url}`;
 };
 
+const loaded = ref(false);
 base.$subscribe((_, s) => {
-    if (s.recents.length === 2) {
+    if (s.recents.length >= 2 && loaded.value === false) {
+        loaded.value = true;
         const diff_time = Date.parse(s.recents[1].block.header.time) - Date.parse(s.recents[0].block.header.time)
         const diff_height = Number(s.recents[1].block.header.height) - Number(s.recents[0].block.header.height)
         const block_window = Number(Number(86400 * 1000 * diff_height / diff_time).toFixed(0))
