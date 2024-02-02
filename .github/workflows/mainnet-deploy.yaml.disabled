@@ -1,28 +1,47 @@
 
-name: Deploy to ping.pub
+name: Build and Deploy
 
 on:
   push:
-    branches: [ master2 ]
-  # pull_request:
-  #   branches: [ master ]
+    branches:
+      - master
+    tags:
+      - '*'  # Trigger on any tag push
 
 jobs:
-  deploy:
-    name: Ping deploy
-    runs-on: mainnet 
+  build:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
     steps:
-    - name: Environment
-      run:  export NODE_OPTIONS="--max_old_space_size=4096"
-      
-    - name: Git Checkout Latest
-      uses: actions/checkout@v3
-      
-    - name: Install
-      run: yarn install --ignore-engines
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    - name: Build
-      run: yarn build
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build website
+        run: yarn build
 
-    - name: Deploy
-      run: cp -rf ./dist/* /var/www/html/
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./build
+
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
