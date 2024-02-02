@@ -314,7 +314,7 @@ function selected(route: any, nav: NavLink) {
         </a>
       </div>
     </div>
-    <div class="xl:!ml-64 px-3 pt-4">
+    <div class="xl:!ml-72 px-3 pt-4">
       <!-- header -->
       <div
         class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10"
