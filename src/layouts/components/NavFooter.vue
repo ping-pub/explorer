@@ -6,15 +6,15 @@
     <div class="flex flex-1">
       &copy;&nbsp;
       {{ new Date().getFullYear() }}&nbsp;
-      Made With&nbsp;
+      Forked With &nbsp;
       <img src="../../assets/images/heart.svg" />&nbsp;
-      By&nbsp;
+      By &nbsp;
       <a
         class="link link-primary no-underline"
-        href="https://ping.pub"
+        href="https://whispernode.com"
         target="_blank"
         rel="noopener noreferrer"
-        >Ping.pub</a
+        >WhisperNode</a
       >
     </div>
     <div
