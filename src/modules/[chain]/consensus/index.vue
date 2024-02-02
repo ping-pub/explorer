@@ -68,11 +68,11 @@ function showName(i: number, text: string) {
     }
     return i;
   }
-  const txt = text.substring(text.indexOf(':') + 1, text.indexOf(' '));
-  const sig = text.split(' ');
-  // @ts-ignore
-  const val = validators.value.find((x) => x?.hex?.startsWith(txt));
-  return `${val?.description?.moniker || txt} - ${sig[2]}`;
+  // const txt = text.substring(text.indexOf(':') + 1, text.indexOf(' '));
+  // const sig = text.split(' ');
+  // // @ts-ignore
+  // const val = validators.value.find((x) => x?.hex?.startsWith(txt));
+  // return `${val?.description?.moniker || txt} - ${sig[2]}`;
 }
 function color(i: number, txt: string) {
   if (i === roundState.value?.proposer?.index) {
