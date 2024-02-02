@@ -159,7 +159,7 @@ export const useParamStore = defineStore('paramstore', {
       //     const chainIndex = this.chain.items.findIndex(x => x.subtitle === 'inflation')
       //     this.chain.items[chainIndex].value = `${percent(res)}%`
       // })
-      const res = await this.getMintParam();
+      // const res = await this.getMintParam();
     },
     async handleSlashingParams() {
       const res = await this.getSlashingParams();

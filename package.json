@@ -82,6 +82,7 @@
     "vue-tsc": "^1.8.27"
   },
   "resolutions": {
-    "cosmjs-types": "^0.9.0"
+    "cosmjs-types": "^0.9.0",
+    "@cosmjs/math": "^0.32.2"
   }
 }

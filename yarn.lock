@@ -1507,42 +1507,7 @@
     ledger-cosmos-js "^2.1.8"
     semver "^7.5.2"
 
-"@cosmjs/math@0.27.1":
-  version "0.27.1"
-  resolved "https://registry.yarnpkg.com/@cosmjs/math/-/math-0.27.1.tgz#be78857b008ffc6b1ed6fecaa1c4cd5bc38c07d7"
-  integrity sha512-cHWVjmfIjtRc7f80n7x+J5k8pe+vTVTQ0lA82tIxUgqUvgS6rogPP/TmGtTiZ4+NxWxd11DUISY6gVpr18/VNQ==
-  dependencies:
-    bn.js "^5.2.0"
-
-"@cosmjs/math@^0.29.3", "@cosmjs/math@^0.29.5":
-  version "0.29.5"
-  resolved "https://registry.yarnpkg.com/@cosmjs/math/-/math-0.29.5.tgz#722c96e080d6c2b62215ce9f4c70da7625b241b6"
-  integrity sha512-2GjKcv+A9f86MAWYLUkjhw1/WpRl2R1BTb3m9qPG7lzMA7ioYff9jY5SPCfafKdxM4TIQGxXQlYGewQL16O68Q==
-  dependencies:
-    bn.js "^5.2.0"
-
-"@cosmjs/math@^0.30.0", "@cosmjs/math@^0.30.1":
-  version "0.30.1"
-  resolved "https://registry.yarnpkg.com/@cosmjs/math/-/math-0.30.1.tgz#8b816ef4de5d3afa66cb9fdfb5df2357a7845b8a"
-  integrity sha512-yaoeI23pin9ZiPHIisa6qqLngfnBR/25tSaWpkTm8Cy10MX70UF5oN4+/t1heLaM6SSmRrhk3psRkV4+7mH51Q==
-  dependencies:
-    bn.js "^5.2.0"
-
-"@cosmjs/math@^0.31.1":
-  version "0.31.1"
-  resolved "https://registry.yarnpkg.com/@cosmjs/math/-/math-0.31.1.tgz#74c02cf237c2996b77661b636b014168b18d95e6"
-  integrity sha512-kiuHV6m6DSB8/4UV1qpFhlc4ul8SgLXTGRlYkYiIIP4l0YNeJ+OpPYaOlEgx4Unk2mW3/O2FWYj7Jc93+BWXng==
-  dependencies:
-    bn.js "^5.2.0"
-
-"@cosmjs/math@^0.31.3":
-  version "0.31.3"
-  resolved "https://registry.yarnpkg.com/@cosmjs/math/-/math-0.31.3.tgz#767f7263d12ba1b9ed2f01f68d857597839fd957"
-  integrity sha512-kZ2C6glA5HDb9hLz1WrftAjqdTBb3fWQsRR+Us2HsjAYdeE6M3VdXMsYCP5M3yiihal1WDwAY2U7HmfJw7Uh4A==
-  dependencies:
-    bn.js "^5.2.0"
-
-"@cosmjs/math@^0.32.2":
+"@cosmjs/math@0.27.1", "@cosmjs/math@^0.29.3", "@cosmjs/math@^0.29.5", "@cosmjs/math@^0.30.0", "@cosmjs/math@^0.30.1", "@cosmjs/math@^0.31.1", "@cosmjs/math@^0.31.3", "@cosmjs/math@^0.32.2":
   version "0.32.2"
   resolved "https://registry.yarnpkg.com/@cosmjs/math/-/math-0.32.2.tgz#4522312769197e132679e4960862bcec0eed4cb8"
   integrity sha512-b8+ruAAY8aKtVKWSft2IvtCVCUH1LigIlf9ALIiY8n9jtM4kMASiaRbQ/27etnSAInV88IaezKK9rQZrtxTjcw==

@@ -1,10 +1,12 @@
 import { DEFAULT, fetchData } from '@/libs';
 import { PageRequest } from '@/types';
 import {
-  setupWasmExtension,
-  type WasmExtension,
-} from '@cosmjs/cosmwasm-stargate';
-import { fromBase64, fromHex, toBase64, toHex } from '@cosmjs/encoding';
+  fromBase64,
+  fromHex,
+  toBase64,
+  toBech32,
+  toHex,
+} from '@cosmjs/encoding';
 import type { DecodedTxRaw } from '@cosmjs/proto-signing';
 import { decodeTxRaw } from '@cosmjs/proto-signing';
 import {
@@ -15,7 +17,6 @@ import {
   setupDistributionExtension,
   setupGovExtension,
   setupIbcExtension,
-  setupMintExtension,
   setupSlashingExtension,
   setupStakingExtension,
   setupTxExtension,
@@ -25,13 +26,18 @@ import {
   type GovExtension,
   type GovProposalId,
   type IbcExtension,
-  type MintExtension,
   type StakingExtension,
   type TxExtension,
 } from '@cosmjs/stargate';
-import type { SlashingExtension } from '@cosmjs/stargate/build/modules';
+import type {
+  MintParams,
+  SlashingExtension,
+} from '@cosmjs/stargate/build/modules';
 import type { BondStatusString } from '@cosmjs/stargate/build/modules/staking/queries';
-import { longify } from '@cosmjs/stargate/build/queryclient';
+import {
+  decodeCosmosSdkDecFromProto,
+  longify,
+} from '@cosmjs/stargate/build/queryclient';
 import {
   HttpClient,
   Tendermint37Client,
@@ -47,6 +53,13 @@ import {
   QueryAccountsResponse,
   QueryClientImpl as AuthQueryClientImpl,
 } from 'cosmjs-types/cosmos/auth/v1beta1/query';
+import {
+  QueryAnnualProvisionsResponse,
+  QueryClientImpl as MintQueryClientImpl,
+  QueryInflationResponse,
+  QueryParamsResponse,
+} from 'cosmjs-types/cosmos/mint/v1beta1/query';
+import { QueryClientImpl as OsmoMintQueryClientImpl } from 'osmojs/dist/codegen/osmosis/mint/v1beta1/query.rpc.Query';
 import {
   QueryClientImpl as BankQueryClientImpl,
   QueryParamsResponse as QueryBankParamsResponse,
@@ -87,12 +100,17 @@ import { Tx } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import {
   QueryAllContractStateResponse,
   QueryClientImpl as WasmQueryClientImpl,
+  QueryCodeResponse,
   QueryCodesResponse,
+  QueryContractHistoryResponse,
+  QueryContractInfoResponse,
+  QueryContractsByCodeResponse,
   QueryContractsByCreatorResponse,
   QueryParamsResponse as QueryWasmParamsResponse,
+  QueryRawContractStateResponse,
 } from 'cosmjs-types/cosmwasm/wasm/v1/query';
 import { QueryClientImpl as SecretWasmQueryClientImpl } from 'secretjs/src/protobuf/secret/compute/v1beta1/query';
-
+import { ChainGrpcWasmApi, type PaginationOption } from '@injectivelabs/sdk-ts';
 import { toTimestamp } from 'cosmjs-types/helpers';
 import type { Event, EventAttribute } from 'cosmjs-types/tendermint/abci/types';
 import semver from 'semver';
@@ -106,9 +124,11 @@ import {
   type AbstractRegistry,
   type RequestRegistry,
 } from './registry';
-import { decodeProto } from '@/components/dynamic';
 import { convertStr } from './utils';
 import { AccessType } from 'cosmjs-types/cosmwasm/wasm/v1/types';
+import type { JsonObject } from '@cosmjs/cosmwasm-stargate';
+import { Decimal } from '@cosmjs/math';
+import { assert } from '@cosmjs/utils';
 
 export const DEFAULT_SDK_VERSION = '0.45.16';
 export const LCD_FALLBACK_CHAINS = ['OraiBtcMainnet'];
@@ -138,6 +158,44 @@ export interface ExtraQueryProposalsResponse {
 }
 
 export interface ExtraExtension {
+  readonly mint: {
+    readonly params: () => Promise<JsonObject>;
+    readonly inflation: () => Promise<Decimal>;
+    readonly annualProvisions: () => Promise<Decimal>;
+  };
+  readonly wasm: {
+    readonly contractsByCreator: (
+      address: string,
+      page?: PageRequest
+    ) => Promise<QueryContractsByCreatorResponse>;
+    readonly contractStates: (
+      address: string,
+      page?: PageRequest
+    ) => Promise<QueryAllContractStateResponse>;
+    readonly wasmParams: () => Promise<QueryWasmParamsResponse>;
+    readonly listCode: (page?: PageRequest) => Promise<QueryCodesResponse>;
+    readonly listContractsByCodeId: (
+      codeId: string,
+      page?: PageRequest,
+      secret?: boolean
+    ) => Promise<QueryContractsByCodeResponse>;
+    readonly getCode: (id: string) => Promise<QueryCodeResponse>;
+    readonly getContractInfo: (
+      address: string
+    ) => Promise<QueryContractInfoResponse>;
+    readonly getContractCodeHistory: (
+      address: string,
+      page?: PageRequest
+    ) => Promise<QueryContractHistoryResponse>;
+    readonly queryContractRaw: (
+      address: string,
+      key: Uint8Array
+    ) => Promise<QueryRawContractStateResponse>;
+    readonly queryContractSmart: (
+      address: string,
+      query: JsonObject
+    ) => Promise<JsonObject>;
+  };
   readonly extra: {
     readonly accounts: (page?: PageRequest) => Promise<QueryAccountsResponse>;
     readonly votes: (
@@ -155,20 +213,8 @@ export interface ExtraExtension {
     readonly totalSupply: (
       page?: PageRequest
     ) => Promise<QueryTotalSupplyResponse>;
-    readonly listCode: (
-      page?: PageRequest,
-      secret?: boolean
-    ) => Promise<QueryCodesResponse>;
-    readonly wasmParams: () => Promise<QueryWasmParamsResponse>;
+
     readonly bankParams: () => Promise<QueryBankParamsResponse>;
-    readonly contractsByCreator: (
-      address: string,
-      page?: PageRequest
-    ) => Promise<QueryContractsByCreatorResponse>;
-    readonly contractStates: (
-      address: string,
-      page?: PageRequest
-    ) => Promise<QueryAllContractStateResponse>;
 
     readonly validatorDelegations: (
       validatorAddr: string,
@@ -178,6 +224,7 @@ export interface ExtraExtension {
     readonly getNodeInfo: () => Promise<GetNodeInfoResponse>;
   };
 }
+
 function setupExtraExtension(base: QueryClient) {
   const rpc = createProtobufRpcClient(base);
   const authQueryService = new AuthQueryClientImpl(rpc);
@@ -185,10 +232,297 @@ function setupExtraExtension(base: QueryClient) {
   const govQueryServiceV1 = new GovQueryClientImplV1(rpc);
   const bankQueryService = new BankQueryClientImpl(rpc);
   const wasmQueryService = new WasmQueryClientImpl(rpc);
-  const secretWasmQueryClientImpl = new SecretWasmQueryClientImpl(rpc);
+  const secretWasmQueryService = new SecretWasmQueryClientImpl(rpc);
   const stakingQueryService = new StakingQueryClientImpl(rpc);
-  const tmQueryClientImpl = new TmQueryClientImpl(rpc);
+  const mintQueryService = new MintQueryClientImpl(rpc);
+  const osmoMintQueryService = new OsmoMintQueryClientImpl(rpc);
+  const tmQueryService = new TmQueryClientImpl(rpc);
+  const blockchain = useBlockchain();
   return {
+    mint: {
+      params: async (): Promise<JsonObject> => {
+        switch (blockchain.chainName) {
+          case 'osmosis':
+            const osmoRes = await osmoMintQueryService.params();
+            return osmoRes.params;
+          default:
+            const res = await mintQueryService.Params();
+            return res.params;
+        }
+      },
+      inflation: async (): Promise<Decimal> => {
+        switch (blockchain.chainName) {
+          case 'osmosis':
+            const res = await osmoMintQueryService.params();
+            return Decimal.fromAtomics(
+              (
+                (1 -
+                  Number(res.params.distributionProportions.developerRewards)) *
+                1e6
+              ).toString(),
+              6
+            );
+          default:
+            const { inflation } = await mintQueryService.Inflation();
+            return decodeCosmosSdkDecFromProto(inflation);
+        }
+      },
+      annualProvisions: async (): Promise<Decimal> => {
+        const { annualProvisions } = await mintQueryService.AnnualProvisions();
+        return decodeCosmosSdkDecFromProto(annualProvisions);
+      },
+    },
+    wasm: {
+      listCode: async (page?: PageRequest): Promise<QueryCodesResponse> => {
+        switch (blockchain.chainName) {
+          case 'injective': {
+            let endpoint = blockchain.current?.endpoints.grpc?.[0].address!;
+            const wasmApi = new ChainGrpcWasmApi(endpoint);
+            const paginationOption = {
+              reverse: page?.reverse ?? true,
+              key: page?.key,
+              countTotal: false,
+              limit: page?.limit,
+            };
+
+            const { codeInfosList, pagination } =
+              await wasmApi.fetchContractCodes(paginationOption);
+
+            return {
+              codeInfos: codeInfosList.map((info) => {
+                return {
+                  codeId: BigInt(info.codeId),
+                  creator: info.creator,
+                  dataHash:
+                    typeof info.dataHash === 'string'
+                      ? fromBase64(info.dataHash)
+                      : info.dataHash,
+                  instantiatePermission: {
+                    permission: AccessType.ACCESS_TYPE_EVERYBODY,
+                    addresses: [] as string[],
+                    address: '',
+                  },
+                };
+              }),
+              pagination: {
+                nextKey: pagination.next
+                  ? fromBase64(pagination.next)
+                  : new Uint8Array(),
+                total: BigInt(pagination.total),
+              },
+            };
+          }
+
+          case 'secret': {
+            const res = await secretWasmQueryService.Codes({
+              pagination: page?.toPagination(),
+            });
+
+            return {
+              codeInfos: res.code_infos.map((codeInfo) => {
+                return {
+                  codeId: BigInt(codeInfo.code_id),
+                  creator: codeInfo.creator,
+                  dataHash: fromHex(codeInfo.code_hash),
+                  instantiatePermission: {
+                    permission: AccessType.ACCESS_TYPE_EVERYBODY,
+                    address: '',
+                    addresses: [],
+                  },
+                };
+              }),
+            };
+          }
+          default:
+            return await wasmQueryService.Codes({
+              pagination: page?.toPagination(),
+            });
+        }
+      },
+      listContractsByCodeId: async (
+        codeId: string,
+        page?: PageRequest
+      ): Promise<QueryContractsByCodeResponse> => {
+        switch (blockchain.chainName) {
+          case 'secret': {
+            const res = await secretWasmQueryService.ContractsByCodeId({
+              code_id: codeId,
+            });
+            return {
+              contracts: res.contract_infos.map((c) => c.contract_address),
+            };
+          }
+          default:
+            return await wasmQueryService.ContractsByCode({
+              codeId: BigInt(codeId),
+              pagination: page?.toPagination(),
+            });
+        }
+      },
+      wasmParams: async () => {
+        return await wasmQueryService.Params();
+      },
+      contractsByCreator: async (
+        address: string,
+        page?: PageRequest
+      ): Promise<QueryContractsByCreatorResponse> => {
+        switch (blockchain.chainName) {
+          case 'secret': {
+            return {
+              contractAddresses: [],
+            };
+          }
+          default:
+            return await wasmQueryService.ContractsByCreator({
+              pagination: page?.toPagination(),
+              creatorAddress: address,
+            });
+        }
+      },
+      contractStates: async (
+        address: string,
+        page?: PageRequest
+      ): Promise<QueryAllContractStateResponse> => {
+        switch (blockchain.chainName) {
+          case 'secret': {
+            return {
+              models: [],
+            };
+          }
+          default:
+            return await wasmQueryService.AllContractState({
+              pagination: page?.toPagination(),
+              address,
+            });
+        }
+      },
+      getCode: async (codeId: string): Promise<QueryCodeResponse> => {
+        switch (blockchain.chainName) {
+          case 'secret': {
+            const res = await secretWasmQueryService.Code({
+              code_id: codeId,
+            });
+            const codeInfo = res.code_info!;
+            return {
+              codeInfo: {
+                codeId: BigInt(codeInfo.code_id),
+                creator: codeInfo.creator,
+                dataHash: fromHex(codeInfo.code_hash),
+                instantiatePermission: {
+                  permission: AccessType.ACCESS_TYPE_EVERYBODY,
+                  address: '',
+                  addresses: [],
+                },
+              },
+              data: res.wasm,
+            };
+          }
+          default:
+            return await wasmQueryService.Code({
+              codeId: BigInt(codeId),
+            });
+        }
+      },
+      getContractInfo: async (
+        address: string
+      ): Promise<QueryContractInfoResponse> => {
+        switch (blockchain.chainName) {
+          case 'secret': {
+            const res = await secretWasmQueryService.ContractInfo({
+              contract_address: address,
+            });
+            const contractInfo = res.contract_info!;
+            return {
+              address: res.contract_address,
+              contractInfo: {
+                codeId: BigInt(contractInfo.code_id),
+                creator: toBech32('secret', contractInfo.creator),
+                admin: contractInfo.admin,
+                label: contractInfo.label,
+                created: contractInfo.created
+                  ? {
+                      blockHeight: BigInt(contractInfo.created.block_height),
+                      txIndex: BigInt(contractInfo.created.tx_index),
+                    }
+                  : undefined,
+                ibcPortId: contractInfo.ibc_port_id,
+              },
+            };
+          }
+          default:
+            return await wasmQueryService.ContractInfo({
+              address,
+            });
+        }
+      },
+
+      getContractCodeHistory: async (
+        address: string,
+        page?: PageRequest
+      ): Promise<QueryContractHistoryResponse> => {
+        switch (blockchain.chainName) {
+          case 'secret':
+            const res = await secretWasmQueryService.ContractHistory({
+              contract_address: address,
+            });
+            return {
+              entries: res.entries.map((entry) => {
+                return {
+                  operation: entry.operation,
+                  codeId: BigInt(entry.code_id),
+                  updated: entry.updated
+                    ? {
+                        blockHeight: BigInt(entry.updated.block_height),
+                        txIndex: BigInt(entry.updated.tx_index),
+                      }
+                    : undefined,
+                  msg: entry.msg,
+                };
+              }),
+            };
+          default:
+            return await wasmQueryService.ContractHistory({
+              address,
+              pagination: page?.toPagination(),
+            });
+        }
+      },
+      queryContractRaw: async (
+        address: string,
+        key: Uint8Array
+      ): Promise<QueryRawContractStateResponse> => {
+        switch (blockchain.chainName) {
+          case 'secret':
+            const res = await secretWasmQueryService.QuerySecretContract({
+              contract_address: address,
+              query: key,
+            });
+            return {
+              data: res.data,
+            };
+          default:
+            return await wasmQueryService.RawContractState({
+              address,
+              queryData: key,
+            });
+        }
+      },
+
+      queryContractSmart: async (
+        address: string,
+        query: JsonObject
+      ): Promise<JsonObject> => {
+        switch (blockchain.chainName) {
+          case 'secret':
+            return {};
+          default:
+            return await wasmQueryService.SmartContractState({
+              address,
+              queryData: query,
+            });
+        }
+      },
+    },
     extra: {
       accounts: async (page?: PageRequest) => {
         return authQueryService.Accounts({
@@ -225,49 +559,7 @@ function setupExtraExtension(base: QueryClient) {
           pagination: page?.toPagination(),
         });
       },
-      listCode: async (
-        page?: PageRequest,
-        secret = false
-      ): Promise<QueryCodesResponse> => {
-        if (secret) {
-          const res = await secretWasmQueryClientImpl.Codes({
-            pagination: page?.toPagination(),
-          });
 
-          return {
-            codeInfos: res.code_infos.map((codeInfo) => {
-              return {
-                codeId: BigInt(codeInfo.code_id),
-                creator: codeInfo.creator,
-                dataHash: fromHex(codeInfo.code_hash),
-                instantiatePermission: {
-                  permission: AccessType.ACCESS_TYPE_EVERYBODY,
-                  address: '',
-                  addresses: [],
-                },
-              };
-            }),
-          };
-        }
-        return await wasmQueryService.Codes({
-          pagination: page?.toPagination(),
-        });
-      },
-      wasmParams: async () => {
-        return await wasmQueryService.Params();
-      },
-      contractsByCreator: async (address: string, page?: PageRequest) => {
-        return await wasmQueryService.ContractsByCreator({
-          pagination: page?.toPagination(),
-          creatorAddress: address,
-        });
-      },
-      contractStates: async (address: string, page?: PageRequest) => {
-        return await wasmQueryService.AllContractState({
-          pagination: page?.toPagination(),
-          address,
-        });
-      },
       bankParams: async () => {
         return await bankQueryService.Params();
       },
@@ -282,7 +574,7 @@ function setupExtraExtension(base: QueryClient) {
       },
 
       getNodeInfo: async () => {
-        return await tmQueryClientImpl.GetNodeInfo();
+        return await tmQueryService.GetNodeInfo();
       },
     },
   };
@@ -298,13 +590,11 @@ export class BaseRestClient<R extends AbstractRegistry> {
         AuthExtension &
         BankExtension &
         StakingExtension &
-        MintExtension &
         GovExtension &
         IbcExtension &
         SlashingExtension &
         DistributionExtension &
         TxExtension &
-        WasmExtension &
         ExtraExtension;
 
   constructor(endpoint: string, registry: R, version?: string) {
@@ -326,13 +616,11 @@ export class BaseRestClient<R extends AbstractRegistry> {
       setupAuthExtension,
       setupBankExtension,
       setupStakingExtension,
-      setupMintExtension,
       setupGovExtension,
       setupIbcExtension,
       setupSlashingExtension,
       setupDistributionExtension,
       setupTxExtension,
-      setupWasmExtension,
       setupExtraExtension
     );
   }
@@ -1084,7 +1372,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     // return this.request(this.registry.mint_inflation, {});
     try {
       const res = await this.queryClient.mint.inflation();
-
+      // const res = await this.queryClient.mint.inflation();
       return res;
     } catch (ex) {
       console.log(ex);

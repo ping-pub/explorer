@@ -1,4 +1,3 @@
-import { ChainGrpcWasmApi, type PaginationOption } from '@injectivelabs/sdk-ts';
 import { BaseRestClient } from '@/libs/client';
 import { adapter, type AbstractRegistry, type Request } from '@/libs/registry';
 
@@ -78,74 +77,32 @@ export class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
     // if(!pr) pr = new PageRequest()
     // const query = `?${pr.toQueryString()}`
     // return this.request(this.registry.cosmwasm_code, {}, /*query*/);
-    const blockchain = useBlockchain();
-
-    if (blockchain.chainName === 'injective') {
-      let endpoint = blockchain.current?.endpoints.grpc?.[0].address;
-      if (!endpoint) return;
-      const wasmApi = new ChainGrpcWasmApi(endpoint);
-      const paginationOption = {
-        reverse: page?.reverse ?? true,
-        key: page?.key,
-        countTotal: false,
-        limit: page?.limit,
-      };
-
-      const { codeInfosList, pagination } = await wasmApi.fetchContractCodes(
-        paginationOption
-      );
-
-      return {
-        codeInfos: codeInfosList.map((info) => {
-          return {
-            codeId: BigInt(info.codeId),
-            creator: info.creator,
-            dataHash:
-              typeof info.dataHash === 'string'
-                ? fromBase64(info.dataHash)
-                : info.dataHash,
-            instantiatePermission: {
-              permission: AccessType.ACCESS_TYPE_EVERYBODY,
-              addresses: [] as string[],
-              address: '',
-            },
-          };
-        }),
-        pagination: {
-          nextKey: pagination.next
-            ? fromBase64(pagination.next)
-            : new Uint8Array(),
-          total: BigInt(pagination.total),
-        },
-      };
-    }
 
     page?.setCountTotal(false);
 
-    const res = await this.queryClient.extra.listCode(
-      page,
-      blockchain.chainName === 'secret'
-    );
+    const res = await this.queryClient.wasm.listCode(page);
 
     return res;
   }
-  async getWasmCodeById(code_id: string) {
+  async getWasmCodeById(codeId: string) {
     // return this.request(this.registry.cosmwasm_code, { code_id }); // `code_id` is a param in above url
-    const res = await this.queryClient.wasm.getCode(Number(code_id));
+    const res = await this.queryClient.wasm.getCode(codeId);
     return res;
   }
   async getWasmCodeContracts(code_id: string, page?: PageRequest) {
     // if(!page) page = new PageRequest()
     // const query = `?${page.toQueryString()}`
     // return this.request(this.registry.cosmwasm_code_id_contracts, { code_id });
+    page?.setCountTotal(false);
     const res = await this.queryClient.wasm.listContractsByCodeId(
-      Number(code_id)
+      code_id,
+      page
     );
     return res;
   }
   async getWasmParams() {
     // return this.request(this.registry.cosmwasm_param, {});
-    const res = await this.queryClient.extra.wasmParams();
+    const res = await this.queryClient.wasm.wasmParams();
     return res;
   }
   async getWasmContractInfo(address: string) {
@@ -161,7 +118,7 @@ export class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
     // if(!page) page = new PageRequest()
     // const query = `?${page.toQueryString()}`
     // return this.request(this.registry.cosmwasm_wasm_contracts_creator, { creator_address });
-    const res = await this.queryClient.extra.contractsByCreator(
+    const res = await this.queryClient.wasm.contractsByCreator(
       creator_address,
       page
     );
@@ -203,15 +160,10 @@ export class WasmRestClient extends BaseRestClient<WasmRequestRegistry> {
     address: string,
     page: PageRequest
   ): Promise<QueryAllContractStateResponse | undefined> {
-    // const blockchain = useBlockchain();
     try {
-      // if (
-      //   blockchain.chainName === 'osmosis' ||
-      //   blockchain.chainName === 'injective'
-      // ) {
       page.setCountTotal(false);
-      // }
-      const res = await this.queryClient.extra.contractStates(address, page);
+
+      const res = await this.queryClient.wasm.contractStates(address, page);
       return res;
     } catch (ex) {
       console.log(ex);
