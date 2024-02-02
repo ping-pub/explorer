@@ -12,7 +12,7 @@ import TimestampElement from './TimestampElement.vue';
 import ObjectHorizontalElement from './ObjectHorizontalElement.vue';
 import Long from 'long';
 import { MsgRegistry } from 'secretjs';
-import { toBech32 } from '@cosmjs/encoding';
+import { fromBase64, toBech32 } from '@cosmjs/encoding';
 
 export function select(v: any, direct?: string) {
   // if(k === 'txs' && v) {
@@ -105,7 +105,9 @@ export const decodeProto = (msg: {
   }
 
   if (type) {
-    const instance = (type.decode || type.deserialize)(msg.value);
+    const instance = (type.decode || type.deserialize)(
+      typeof msg.value === 'string' ? fromBase64(msg.value) : msg.value
+    );
     if (instance.msgs) {
       instance.msgs = instance.msgs.map(decodeProto);
     }

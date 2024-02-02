@@ -260,3 +260,16 @@ export function rgbToHsl(color: string) {
     l,
   };
 }
+
+export const wrapBinary = (value: any): any => {
+  if (value instanceof Uint8Array) {
+    return toBase64(value);
+  }
+
+  if (typeof value === 'object') {
+    for (const key in value) {
+      value[key] = wrapBinary(value[key]);
+    }
+  }
+  return value;
+};

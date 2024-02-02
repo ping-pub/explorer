@@ -7,6 +7,7 @@ import { logs } from '@cosmjs/stargate';
 import { JsonViewer } from 'vue3-json-viewer';
 // if you used v1.0.5 or latster ,you should add import "vue3-json-viewer/dist/index.css"
 import 'vue3-json-viewer/dist/index.css';
+import { wrapBinary } from '@/libs/utils';
 
 const props = defineProps(['hash', 'chain']);
 
@@ -143,7 +144,7 @@ const txLogs = computed(() => {
     >
       <h2 class="card-title truncate mb-2">JSON</h2>
       <JsonViewer
-        :value="tx"
+        :value="wrapBinary(tx)"
         :theme="baseStore.theme"
         style="background: transparent"
         copyable
