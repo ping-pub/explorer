@@ -199,7 +199,6 @@ const logo = (identity?: string) => {
 };
 
 base.$subscribe((_, s) => {
-    console.log(s.recents.length)
     if (s.recents.length === 2) {
         const diff_time = Date.parse(s.recents[1].block.header.time) - Date.parse(s.recents[0].block.header.time)
         const diff_height = Number(s.recents[1].block.header.height) - Number(s.recents[0].block.header.height)
