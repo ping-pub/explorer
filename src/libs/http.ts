@@ -2,7 +2,7 @@ import fetch from 'cross-fetch';
 
 export async function fetchData<T>(
   url: string,
-  adapter: (source: any) => T
+  adapter: (source: any) => Promise<T>
 ): Promise<T> {
   const response = await fetch(url);
   if (!response.ok) {

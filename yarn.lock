@@ -2184,10 +2184,17 @@
     estree-walker "^2.0.2"
     picomatch "^2.3.1"
 
+<<<<<<< HEAD
 "@shikijs/core@1.0.0-beta.0":
   version "1.0.0-beta.0"
   resolved "https://registry.yarnpkg.com/@shikijs/core/-/core-1.0.0-beta.0.tgz#e38a10ce3398342553e37fe9b10db61fc00cc186"
   integrity sha512-uicyrkx379Q5sxQuGV3kduHPWIAkjxmeA5A4J6syscx8wiEyIV06i/Q6s9GeKLCb857Hi90H8e/FoFSbcjnZsw==
+=======
+"@shikijs/core@1.0.0-beta.1":
+  version "1.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@shikijs/core/-/core-1.0.0-beta.1.tgz#40d21605cfc30c9d83bdc3c03414d478930ec30c"
+  integrity sha512-z3gdznaRj/DJSLQdR2Gdx6AB3e5+Il/kSGdLTGHI7HnalgPL15RbGgBSdLHW8rKAz4+dezAcTdnxm8z6YTu7nA==
+>>>>>>> 15c86909d0549edeef237111754f32c046a84ddf
 
 "@sinclair/typebox@^0.24.1":
   version "0.24.51"
@@ -6026,11 +6033,19 @@ shelljs@0.8.5:
     rechoir "^0.6.2"
 
 shiki@^1.0.0-beta.0:
+<<<<<<< HEAD
   version "1.0.0-beta.0"
   resolved "https://registry.yarnpkg.com/shiki/-/shiki-1.0.0-beta.0.tgz#34d5d672fbc0f5ac65892cd681404fefaa565c8f"
   integrity sha512-CcP0IhEDQ3LWfJC44cfxfId9pjJi9Nephl8DxgrL4tKWprI/oz6deZyL0vB+XWxhTx/1uonzWQKaSQPwKx5dTA==
   dependencies:
     "@shikijs/core" "1.0.0-beta.0"
+=======
+  version "1.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/shiki/-/shiki-1.0.0-beta.1.tgz#fbff19e1ba180e3093f274b00fd6578237d157bd"
+  integrity sha512-iq32WxjemJVlAHg5HjYoL1qCxGmvyh3Z8kr2E/gMTQdcxyXxTpMhahIC7myxFBapAk9o8QN8mxCpr4JT5rqpRQ==
+  dependencies:
+    "@shikijs/core" "1.0.0-beta.1"
+>>>>>>> 15c86909d0549edeef237111754f32c046a84ddf
 
 side-channel@^1.0.4:
   version "1.0.4"

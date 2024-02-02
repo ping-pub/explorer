@@ -26,7 +26,7 @@ function proposalAdapter(p: any): GovProposal {
 export const requests: Partial<RequestRegistry> = {
     mint_inflation: { 
         url: `https://public-osmosis-api.numia.xyz/apr?start_date=${new Date(new Date().getTime() - 186400*1000).toISOString().split('T')[0]}&end_date=${new Date().toISOString().split('T')[0]}`, 
-        adapter: (data: any) => {
+        adapter: async (data: any) => {
             const [first] = data
             return {inflation: String(Number(first?.apr|| "0")/100.0)}
         } 
@@ -34,7 +34,7 @@ export const requests: Partial<RequestRegistry> = {
     gov_params_voting: { url: '/cosmos/gov/v1/params/voting', adapter },
     gov_params_tally: { url: '/cosmos/gov/v1/params/tallying', adapter },
     gov_params_deposit: { url: '/cosmos/gov/v1/params/deposit', adapter },
-    gov_proposals: { url: '/cosmos/gov/v1/proposals', adapter: (source: any): PaginatedProposals => {
+    gov_proposals: { url: '/cosmos/gov/v1/proposals', adapter: async (source: any): Promise<PaginatedProposals> => {
       const proposals = source.proposals.map((p:any) => proposalAdapter(p))
       return {
           proposals,
@@ -43,7 +43,7 @@ export const requests: Partial<RequestRegistry> = {
     }},
     gov_proposals_proposal_id: {
       url: '/cosmos/gov/v1/proposals/{proposal_id}',
-      adapter: (source: any): {proposal: GovProposal} => {
+      adapter: async (source: any): Promise<{proposal: GovProposal}> => {
           return {
               proposal: proposalAdapter(source.proposal)
           }

@@ -20,7 +20,7 @@ export class BaseRestClient<R extends AbstractRegistry> {
     this.endpoint = endpoint;
     this.registry = registry;
   }
-  async request<T>(request: Request<T>, args: Record<string, any>, query = '', adapter?: (source: any) => T ) {
+  async request<T>(request: Request<T>, args: Record<string, any>, query = '', adapter?: (source: any) => Promise<T> ) {
     let url = `${request.url.startsWith("http")?'':this.endpoint}${request.url}${query}`;
     Object.keys(args).forEach((k) => {
       url = url.replace(`{${k}}`, args[k] || '');
@@ -162,13 +162,15 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
   async getGovProposalTally(proposal_id: string) {
     return this.request(this.registry.gov_proposals_tally, { proposal_id }, undefined, (source: any) => {
-      return {tally: {
+      return Promise.resolve({ tally: {
         yes: source.tally.yes || source.tally.yes_count,
         abstain: source.tally.abstain || source.tally.abstain_count,
         no: source.tally.no || source.tally.no_count,
         no_with_veto: source.tally.no_with_veto || source.tally.no_with_veto_count,
-      }};
-    });
+        },
+        });
+      }
+    );
   }
   async getGovProposalVotes(proposal_id: string, page?: PageRequest) {
     if(!page) page = new PageRequest()
