@@ -91,7 +91,7 @@ const change24 = (entry: { consensus_pubkey: Key; tokens: string }) => {
 
     const latestValue = latest.value[txt];
     if (!latestValue) {
-        return;
+        return 0;
     }
 
     const displayTokens = format.tokenAmountNumber({
