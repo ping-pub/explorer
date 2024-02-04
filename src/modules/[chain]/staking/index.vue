@@ -27,7 +27,7 @@ const latest = ref({} as Record<string, number>);
 const yesterday = ref({} as Record<string, number>);
 const tab = ref('active');
 const unbondList = ref([] as Validator[]);
-const slashing =ref({} as SlashingParam)
+const slashing = ref({} as SlashingParam)
 
 onMounted(() => {
     staking.fetchUnbondingValdiators().then((res) => {
@@ -82,24 +82,35 @@ const changes = computed(() => {
     return changes;
 });
 
-const change24 = (key: Key) => {
-    const txt = key.key;
+const change24 = (entry: { consensus_pubkey: Key; tokens: string }) => {
+    const txt = entry.consensus_pubkey.key;
     // const n: number = latest.value[txt];
     // const o: number = yesterday.value[txt];
     // // console.log( txt, n, o)
     // return n > 0 && o > 0 ? n - o : 0;
-    return changes.value[txt];
+
+    const latestValue = latest.value[txt];
+    if (!latestValue) {
+        return;
+    }
+
+    const displayTokens = format.tokenAmountNumber({
+        amount: parseInt(entry.tokens, 10).toString(),
+        denom: staking.params.bond_denom,
+    });
+    const coefficient = displayTokens / latestValue;
+    return changes.value[txt] * coefficient;
 };
 
-const change24Text = (key?: Key) => {
-    if (!key) return '';
-    const v = change24(key);
+const change24Text = (entry: { consensus_pubkey: Key; tokens: string }) => {
+    if (!entry) return '';
+    const v = change24(entry);
     return v && v !== 0 ? format.showChanges(v) : '';
 };
 
-const change24Color = (key?: Key) => {
-    if (!key) return '';
-    const v = change24(key);
+const change24Color = (entry: { consensus_pubkey: Key; tokens: string }) => {
+    if (!entry) return '';
+    const v = change24(entry);
     if (v > 0) return 'text-success';
     if (v < 0) return 'text-error';
 };
@@ -416,9 +427,9 @@ loadAvatars();
                             <!-- 👉 24h Changes -->
                             <td
                                 class="text-right text-xs"
-                                :class="change24Color(v.consensus_pubkey)"
+                                :class="change24Color(v)"
                             >
-                                {{ change24Text(v.consensus_pubkey) }}
+                                {{ change24Text(v) }}
                             </td>
                             <!-- 👉 commission -->
                             <td class="text-right text-xs">
