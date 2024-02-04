@@ -131,7 +131,7 @@ onMounted(() => {
       );
       addresses.value.valCons = pubKeyToValcons(
         v.value.consensus_pubkey,
-        blockchain.current.bech32ConsensusPrefix,
+        blockchain.current.bech32ConsensusPrefix || "",
       );
     });
     blockchain.rpc
