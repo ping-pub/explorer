@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { fromBase64 } from '@cosmjs/encoding';
+import { fromBinary } from '@cosmjs/cosmwasm-stargate';
 import { computed } from 'vue';
 import { select, decodeProto } from './index';
 
@@ -8,8 +8,9 @@ const props = defineProps(['value', 'direct']);
 const selectValue = computed(() => {
   if (typeof props.value === 'string') {
     try {
-      return fromBase64(props.value);
+      return fromBinary(props.value);
     } catch {}
+    return props.value;
   } else if (props.value?.typeUrl) {
     return { typeUrl: props.value.typeUrl, value: decodeProto(props.value) };
   }

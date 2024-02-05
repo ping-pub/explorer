@@ -13,7 +13,7 @@ const props = defineProps({
     }>,
   },
 });
-console.log(props);
+
 const total = computed(() => props.pool?.bondedTokens);
 const format = useFormatter();
 const yes = computed(() =>
