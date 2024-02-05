@@ -7,7 +7,7 @@
 **<h2>Prysm Testnet Dashboard functions as a cosmwasm interface, wallet, IBC registry and block-chain explorer for the Prysm testnet<h2></h2>**
 
 
-**Prysm Chain Testnet Dashboard URL - https://explorer.prysmchain.com/PRYSM**
+**Prysm Chain Testnet Dashboard URL - https://explorer.prysm.network/PRYSM**
 
 **PRYSM Testnet endpoints and nodes**
 
