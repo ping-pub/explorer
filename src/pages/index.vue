@@ -26,7 +26,7 @@ const chains = computed(() => {
 });
 
 const featured = computed(() => {
-  const names = ["cosmos", "osmosis", "akash", "celestia", "evmos", "injective", "dydx", "noble"];
+  const names = ["cosmos", "osmosis", "akash", "secret", "evmos", "injective", "dydx", "noble"];
   return chains.value
     .filter(x => names.includes(x.chainName))
     .sort((a, b)=> (names.indexOf(a.chainName) - names.indexOf(b.chainName)))
@@ -38,25 +38,25 @@ const chainStore = useBlockchain()
   <div class="">
     <div class="flex md:!flex-row flex-col items-center justify-center mb-6 mt-14 gap-2">
       <div class="w-16 rounded-full">
-        <svg version="1.0" xmlns="http://www.w3.org/2000/svg" 
-          viewBox="0 0 150.000000 132.000000"
-          preserveAspectRatio="xMidYMid meet">
-          <g transform="translate(0.000000,132.000000) scale(0.100000,-0.100000)"
-          :fill="chainStore.current?.themeColor||'#666CFF'" class=" dark:invert" stroke="none">
-            <path d="M500 1310 l-125 -5 -182 -315 c-100 -173 -182 -321 -182 -329 -1 -7
-            81 -159 181 -337 l183 -324 372 0 371 0 186 325 c102 179 186 330 186 337 0 7
-            -82 157 -182 335 l-183 323 -250 -2 c-137 -1 -306 -5 -375 -8z m588 -454 c61
-            -106 112 -197 112 -201 0 -4 -50 -95 -111 -201 l-112 -194 -231 0 -231 0 -105
-            181 c-58 100 -109 190 -114 200 -6 14 17 63 104 213 l112 196 232 0 231 0 113
-            -194z"/>
-            <path d="M591 1001 l-54 -6 -87 -150 -88 -150 176 -3 c97 -1 181 -1 187 2 9 3
-            165 267 183 308 4 9 -233 7 -317 -1z"/>
-            <path d="M872 824 l-90 -159 36 -66 c113 -201 147 -258 153 -251 8 8 179 302
-            179 307 0 2 -37 68 -83 147 -46 78 -88 151 -94 162 -9 16 -24 -5 -101 -140z"/>
-            <path d="M360 625 c0 -7 148 -263 172 -297 l19 -28 186 0 c101 0 183 3 181 8
-            -1 4 -43 78 -93 165 l-90 157 -187 0 c-104 0 -188 -2 -188 -5z"/>
-          </g>
-        </svg>
+       <svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 165.79 167.16">
+  <g id="Layer_1-2">
+    <ellipse cx="82.9" cy="83.58" rx="78.65" ry="79.34" style="fill: #ffea6e;"/>
+    <path d="m82.9,167.16C37.19,167.16,0,129.67,0,83.58S37.19,0,82.9,0s82.89,37.49,82.89,83.58-37.18,83.58-82.89,83.58Zm0-158.68C41.9,8.48,8.49,42.17,8.49,83.58s33.38,75.09,74.41,75.09,74.4-33.68,74.4-75.09S123.93,8.48,82.9,8.48Z" style="fill: #101111;"/>
+    <rect x="31.69" y="97.23" width="10.27" height="10.27" style="fill: #101414;"/>
+    <rect x="42.02" y="107.5" width="10.27" height="10.27" style="fill: #101414;"/>
+    <rect x="52.36" y="97.23" width="10.27" height="10.27" style="fill: #101414;"/>
+    <rect x="62.7" y="107.5" width="10.27" height="10.27" style="fill: #101414;"/>
+    <rect x="72.97" y="97.23" width="10.27" height="10.27" style="fill: #101414;"/>
+    <rect x="83.31" y="107.5" width="10.27" height="10.27" style="fill: #101414;"/>
+    <rect x="93.65" y="97.23" width="10.27" height="10.27" style="fill: #101414;"/>
+    <rect x="114.26" y="97.23" width="10.27" height="10.27" style="fill: #101414;"/>
+    <rect x="103.99" y="107.5" width="10.27" height="10.27" style="fill: #101414;"/>
+    <path d="m131.81,107.5h-6.88l-2.55,21.73c-.24,3,2.54,5.55,6.06,5.55s6.29-2.55,6.05-5.55l-2.68-21.73Zm-3.37,24.64c-1.91,0-3.45-1.53-3.46-3.44s1.53-3.45,3.44-3.46c1.91,0,3.45,1.53,3.46,3.44h0c0,1.91-1.53,3.45-3.43,3.46,0,0,0,0-.01,0Z" style="fill: #101414;"/>
+    <path d="m106.39,63.26l10.71-6.07c-2-6.77-6.08-12-10.42-12.16-6.52-.31-11.58,10.71-11.5,19.41.08,9.11,5.82,20,12.05,19.31,4.57-.5,8.92-7.19,10-16.17l-10.84-4.32Z" style="fill: #101111;"/>
+    <path d="m59.75,63.26l10.71-6.07c-2-6.77-6.08-12-10.42-12.16-6.52-.31-11.58,10.71-11.5,19.41.08,9.11,5.82,20,12,19.31,4.57-.5,8.92-7.19,10-16.17l-10.79-4.32Z" style="fill: #101111;"/>
+  </g>
+</svg>
+
       </div>
       <h1 class="text-primary dark:invert text-3xl md:!text-6xl font-bold">
         {{ $t('pages.title') }}
