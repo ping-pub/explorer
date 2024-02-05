@@ -59,7 +59,7 @@ function selected(route: any, nav: NavLink) {
 </script>
 
 <template>
-  <div class="bg-gray-100 dark:bg-[#171d30]">
+  <div class="bg-[#efefef] dark:bg-[#070707]">
     <!-- sidebar -->
     <div
       class="w-72 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-gray-700"

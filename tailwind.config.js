@@ -11,6 +11,8 @@ module.exports = {
         main: 'var(--text-main)',
         secondary: 'var(--text-secondary)',
         active: 'var(--bg-active)',
+        invert: 'var(--text-invert)',
+        whisper: '#ffea6e',
       }
     },
   },
@@ -27,8 +29,9 @@ module.exports = {
         dark: {
           ...require('daisyui/src/theming/themes')['[data-theme=dark]'],
           primary: '#666cff',
+          inverted: '#ffffff',
           'base-100': '#2a334c',
-          'base-200': '#252d37'
+          'base-200': '#252d37',
         },
       },
     ],

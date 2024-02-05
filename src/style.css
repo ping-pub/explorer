@@ -31,6 +31,7 @@ html[data-theme='dark'] {
   --text-main: #f7f7f7;
   --text-secondary: #6f6e84;
   --bg-active: #242b40;
+  --text-invert: #ffffff;
 }
 
 .table th:first-child {
