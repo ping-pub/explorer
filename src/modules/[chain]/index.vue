@@ -136,14 +136,14 @@ const amount = computed({
           </div>
           <div class="text-xs mt-2">
             {{ $t('index.rank') }}:
-            <div class="badge text-xs badge-error bg-[#fcebea] dark:bg-[#41384d] text-red-400">
+            <div class="badge text-xs badge-error bg-[#fcebea] dark:bg-[ #41384d] text-red-400">
               #{{ coinInfo.market_cap_rank }}
             </div>
           </div>
 
           <div class="my-4 flex flex-wrap items-center">
             <a v-for="(item, index) of comLinks" :key="index" :href="item.href"
-              class="link link-primary px-2 py-1 rounded-sm no-underline hover:text-primary hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center">
+              class="link link-primary px-2 py-1 rounded-sm no-underline hover:text-primary hover:bg-base-200 dark:hover:bg-slate-800 flex items-center">
               <Icon :icon="item?.icon" />
               <span class="ml-1 text-sm uppercase">{{ item?.name }}</span>
             </a>

@@ -22,16 +22,16 @@ module.exports = {
       {
         light: {
           ...require('daisyui/src/theming/themes')['[data-theme=light]'],
-          primary: '#666cff',
+          primary: '#ffea6e',
         },
       },
       {
         dark: {
           ...require('daisyui/src/theming/themes')['[data-theme=dark]'],
-          primary: '#666cff',
+          primary: '#ffea6e',
           inverted: '#ffffff',
-          'base-100': '#2a334c',
-          'base-200': '#252d37',
+          'base-100': '#222222',
+          'base-200': '#303030',
         },
       },
     ],

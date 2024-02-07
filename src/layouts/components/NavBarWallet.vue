@@ -50,7 +50,7 @@ const tipMsg = computed(() => {
       </div>
       <div>
         <a v-if="walletStore.currentAddress"
-          class="block py-2 px-2 hover:bg-gray-100 dark:hover:bg-[#353f5a] rounded cursor-pointer"
+          class="block py-2 px-2 hover:bg-base-200 dark:hover:bg-[#353f5a] rounded cursor-pointer"
           style="overflow-wrap: anywhere" @click="copyAdress(walletStore.currentAddress)">
           {{ walletStore.currentAddress }}
         </a>
@@ -63,7 +63,7 @@ const tipMsg = computed(() => {
         </RouterLink>
         <div v-if="walletStore.currentAddress" class="divider mt-1 mb-1"></div>
         <a v-if="walletStore.currentAddress"
-          class="block py-2 px-2 hover:bg-gray-100 dark:hover:bg-[#353f5a] rounded cursor-pointer"
+          class="block py-2 px-2 hover:bg-base-200 dark:hover:bg-[#353f5a] rounded cursor-pointer"
           @click="walletStore.disconnect()">Disconnect</a>
       </div>
     </div>
