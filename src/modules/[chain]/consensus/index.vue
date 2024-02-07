@@ -156,7 +156,7 @@ async function update() {
 <template>
   <div>
     <!--  -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+    <div class="bg-[#222222] px-4 pt-3 pb-4 rounded shadow">
       <div class="form-control">
         <label class="input-group input-group-md w-full flex">
           <!-- <input
@@ -181,7 +181,7 @@ async function update() {
     <div class="mt-4" v-if="roundState['height/round/step']">
       <div class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 pb-4">
         <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-[#222222] px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ rate }}</h4>
@@ -197,7 +197,7 @@ async function update() {
         </div>
         <!-- Height -->
         <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-[#222222] px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ height }}</h4>
@@ -213,7 +213,7 @@ async function update() {
         </div>
         <!-- Round -->
         <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-[#222222] px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ round }}</h4>
@@ -229,7 +229,7 @@ async function update() {
         </div>
         <!-- Step -->
         <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-[#222222] px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ step }}</h4>
@@ -247,7 +247,7 @@ async function update() {
     </div>
     <!-- update -->
     <div
-      class="bg-base-100 p-4 rounded shadow"
+      class="bg-[#222222] p-4 rounded shadow"
       v-if="roundState['height/round/step']"
     >
       <div class="flex flex-1 flex-col truncate">

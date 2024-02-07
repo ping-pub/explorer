@@ -37,7 +37,7 @@ function pageload(p: number) {
 </script>
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+    <div class="bg-[#222222] px-4 pt-3 pb-4 rounded shadow">
       <div class="flex flex-wrap gap-4  items-center">
         <h2 class="card-title py-4">{{ $t('ibc.title') }}</h2>
         <div class="tabs tabs-boxed">

@@ -58,7 +58,7 @@ function changeEndpoint(item: Endpoint) {
       </div>
       <div
         v-for="(item, index) in chainStore.current?.endpoints?.rest"
-        class="px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-base-100 cursor-pointer"
+        class="px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-[#222222] cursor-pointer"
         :key="index"
         @click="changeEndpoint(item)"
       >

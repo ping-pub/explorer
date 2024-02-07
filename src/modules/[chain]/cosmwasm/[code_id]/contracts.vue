@@ -50,7 +50,7 @@ function showInfo(address: string) {
 </script>
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-[#222222] px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title truncate w-full">
         {{ $t('cosmwasm.contract_list_code') }}: {{ props.code_id }}
       </h2>

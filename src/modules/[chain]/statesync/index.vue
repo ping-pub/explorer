@@ -42,7 +42,7 @@ onMounted(() => {
 </script>
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-[#222222] px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title truncate mb-2">{{ $t('statesync.title') }}</h2>
       <div class="text-sm">
         {{ $t('statesync.description') }}
@@ -53,7 +53,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-[#222222] px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title truncate mb-2">
         {{ $t('statesync.title_2') }}
       </h2>
@@ -90,7 +90,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+    <div class="bg-[#222222] px-4 pt-3 pb-4 rounded shadow">
       <h2 class="card-title truncate mb-2">{{ $t('statesync.title_3') }}</h2>
       <div class="text-sm">
         {{ $t('statesync.text_title_3') }}

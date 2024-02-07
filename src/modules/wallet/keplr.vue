@@ -84,7 +84,7 @@ function suggest() {
 </script>
 
 <template>
-    <div class="bg-base-100 p-4 rounded text-center">
+    <div class="bg-[#222222] p-4 rounded text-center">
         <div class="flex">
             <select v-model="selected" class="select select-bordered mx-5" @change="initParamsForKeplr">
                 <option v-for="c in dashboard.chains" :value="c">

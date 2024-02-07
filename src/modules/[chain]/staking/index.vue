@@ -224,7 +224,7 @@ loadAvatars();
 </script>
 <template>
 <div>
-    <div class="bg-base-100 rounded-lg grid sm:grid-cols-1 md:grid-cols-4 p-4" >    
+    <div class="bg-[#222222] rounded-lg grid sm:grid-cols-1 md:grid-cols-4 p-4" >    
         <div class="flex">
             <span>
                 <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
@@ -303,7 +303,7 @@ loadAvatars();
             </div>
         </div>
 
-        <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+        <div class="bg-[#222222] px-4 pt-3 pb-4 rounded shadow">
             <div class="overflow-x-auto">
                 <table class="table staking-table w-full">
                     <thead>

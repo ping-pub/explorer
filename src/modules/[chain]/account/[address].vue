@@ -133,7 +133,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
 <template>
   <div v-if="account">
     <!-- address -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-[#222222] px-4 pt-3 pb-4 rounded mb-4 shadow">
       <div class="flex items-center">
         <!-- img -->
         <div class="inline-flex relative w-11 h-11 rounded-md">
@@ -159,7 +159,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
     </div>
 
     <!-- Assets -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-[#222222] px-4 pt-3 pb-4 rounded mb-4 shadow">
       <div class="flex justify-between">
         <h2 class="card-title mb-4">{{ $t('account.assets') }}</h2>
         <!-- button -->
@@ -340,7 +340,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
     </div>
 
     <!-- Delegations -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-[#222222] px-4 pt-3 pb-4 rounded mb-4 shadow">
       <div class="flex justify-between">
         <h2 class="card-title mb-4">{{ $t('account.delegations') }}</h2>
         <div class="flex justify-end mb-4">
@@ -446,7 +446,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
 
     <!-- Unbonding Delegations -->
     <div
-      class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow"
+      class="bg-[#222222] px-4 pt-3 pb-4 rounded mb-4 shadow"
       v-if="unbonding && unbonding.length > 0"
     >
       <h2 class="card-title mb-4">{{ $t('account.unbonding_delegations') }}</h2>
@@ -507,7 +507,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
     </div>
 
     <!-- Transactions -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-[#222222] px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">{{ $t('account.transactions') }}</h2>
       <div class="overflow-x-auto">
         <table class="table w-full text-sm">
@@ -551,7 +551,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
     </div>
 
     <!-- Received -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-[#222222] px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">{{ $t('account.received') }}</h2>
       <div class="overflow-x-auto">
         <table class="table w-full text-sm">
@@ -595,7 +595,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
     </div>
 
     <!-- Account -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-[#222222] px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">{{ $t('account.acc') }}</h2>
       <DynamicComponent :value="account" />
     </div>

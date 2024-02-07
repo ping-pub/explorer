@@ -30,7 +30,7 @@ const list = computed(() => {
         <div v-show="tab === 'blocks'" class="grid xl:!grid-cols-6 md:!grid-cols-4 grid-cols-1 gap-3">
 
             <RouterLink v-for="item in list"
-                class="flex flex-col justify-between rounded p-4 shadow bg-base-100"
+                class="flex flex-col justify-between rounded p-4 shadow bg-[#222222]"
                 :to="`/${chain}/block/${item.block.header.height}`">
                 <div class="flex justify-between">
                     <h3 class="text-md font-bold sm:!text-lg">
@@ -49,7 +49,7 @@ const list = computed(() => {
             </RouterLink>
         </div>
 
-        <div v-show="tab === 'transactions'" class="bg-base-100 rounded overflow-x-auto">
+        <div v-show="tab === 'transactions'" class="bg-[#222222] rounded overflow-x-auto">
             <table class="table w-full table-compact">
                 <thead class="bg-base-200">
                     <tr>
