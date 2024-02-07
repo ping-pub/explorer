@@ -258,7 +258,7 @@ const currencySign = computed(() => {
 
       <div class="overflow-x-auto mt-4">
         <table class="table w-full">
-          <thead class="bg-base-200">
+          <thead class="bg-[#303030]">
             <tr>
               <th>Token</th>
               <th class="text-right">Value</th>
@@ -289,7 +289,7 @@ const currencySign = computed(() => {
         No Data
       </div>
     </div>
-    <div class="text-center my-5 bg-base-200">
+    <div class="text-center my-5 bg-[#303030]">
       <RouterLink to="./accounts" class="btn btn-link">Add More Asset</RouterLink>
     </div>
   </div>

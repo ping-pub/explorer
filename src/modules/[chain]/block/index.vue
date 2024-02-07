@@ -51,7 +51,7 @@ const list = computed(() => {
 
         <div v-show="tab === 'transactions'" class="bg-[#222222] rounded overflow-x-auto">
             <table class="table w-full table-compact">
-                <thead class="bg-base-200">
+                <thead class="bg-[#303030]">
                     <tr>
                         <th style="position: relative; z-index: 2;">{{ $t('account.height') }}</th>
                         <th style="position: relative; z-index: 2;">{{ $t('account.hash') }}</th>

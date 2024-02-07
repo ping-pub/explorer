@@ -100,7 +100,7 @@ function selected(route: any, nav: NavLink) {
             @click="changeOpen(index)"
           />
           <div
-            class="collapse-title !py-0 px-4 flex items-center cursor-pointer hover:bg-base-200  "
+            class="collapse-title !py-0 px-4 flex items-center cursor-pointer hover:bg-[#303030]  "
           >
             <Icon
               v-if="item?.icon?.icon"
@@ -134,7 +134,7 @@ function selected(route: any, nav: NavLink) {
               <RouterLink
                 v-if="isNavLink(el)"
                 @click="sidebarShow = false"
-                class="hover:bg-base-200   rounded cursor-pointer px-3 py-2 flex items-center"
+                class="hover:bg-[#303030]   rounded cursor-pointer px-3 py-2 flex items-center"
                 :class="{
                   '!bg-primary': selected($route, el),
                 }"
@@ -174,7 +174,7 @@ function selected(route: any, nav: NavLink) {
           v-if="isNavLink(item)"
           :to="item?.to"
           @click="sidebarShow = false"
-          class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-base-200  "
+          class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-[#303030]  "
         >
           <Icon
             v-if="item?.icon?.icon"
@@ -217,7 +217,7 @@ function selected(route: any, nav: NavLink) {
         <a
           href="https://scrt.network"
           target="_blank"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-base-200  "
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-[#303030]  "
         >
           <img
             src="https://ping.pub/logos/secret.png"
@@ -232,7 +232,7 @@ function selected(route: any, nav: NavLink) {
         <a
           href="https://osmosis.zone"
           target="_blank"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-base-200  "
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-[#303030]  "
         >
           <img
             src="https://ping.pub/logos/osmosis.jpg"
@@ -249,7 +249,7 @@ function selected(route: any, nav: NavLink) {
             Tools
           </div>
           <RouterLink to="/wallet/suggest"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-base-200  "
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-[#303030]  "
           >
             <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
             <div
@@ -263,7 +263,7 @@ function selected(route: any, nav: NavLink) {
         <a
           href="https://twitter.com/WhisperNode"
           target="_blank"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-base-200  "
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-[#303030]  "
         >
           <Icon icon="mdi:twitter" class="text-xl mr-2" />
           <div
@@ -275,7 +275,7 @@ function selected(route: any, nav: NavLink) {
         <a
           href="https://discord.com/invite/KHCzGSb2"
           target="_blank"
-          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-base-200  "
+          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-[#303030]  "
         >
           <Icon icon="mdi:discord" class="text-xl mr-2" />
           <div
@@ -287,7 +287,7 @@ function selected(route: any, nav: NavLink) {
         <a
           href="https://github.com/ping-pub/explorer/discussions"
           target="_blank"
-          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-base-200  "
+          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-[#303030]  "
         >
           <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
           <div

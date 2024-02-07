@@ -95,7 +95,7 @@ function color(v: string) {
 </script>
 <template>
   <div class="">
-    <div class="px-4 pt-3 pb-4 bg-base-200 rounded mb-4 shadow ">
+    <div class="px-4 pt-3 pb-4 bg-[#303030] rounded mb-4 shadow ">
       <div class="mx-auto max-w-7xl px-6 lg:!px-8">
         <dl class="grid grid-cols-1 gap-x-6 text-center lg:!grid-cols-3">
           <div class="mx-auto flex items-center">
@@ -133,7 +133,7 @@ function color(v: string) {
         clientState.client_state?.['@type'] }}</span></h2>
       <div class="overflow-x-auto grid grid-cols-1 md:grid-cols-2 gap-4">
         <table class="table table-sm capitalize">
-          <thead class="bg-base-200">
+          <thead class="bg-[#303030]">
             <tr>
               <td colspan="3">{{ $t('ibc.trust_parameters') }}</td>
             </tr>
@@ -170,7 +170,7 @@ function color(v: string) {
           </tbody>
         </table>
         <table class="table table-sm text-sm w-full capitalize">
-          <thead class="bg-base-200">
+          <thead class="bg-[#303030]">
             <tr>
               <td colspan="2">{{ $t('ibc.upgrade_parameters') }}</td>
             </tr>
