@@ -1,6 +1,6 @@
 {
     "chain_name": "dymension",
-    "api": ["https://dymension-api.kalia.network"],
+    "api": ["https://api-dymension.whispernode.com","https://dymension-api.kalia.network"],
     "rpc": ["https://dymension-rpc.kalia.network:443"],
     "snapshot_provider": "",
     "sdk_version": "0.46.15",
