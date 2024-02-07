@@ -1,8 +1,6 @@
 import {
   fromBase64,
   fromBech32,
-  fromHex,
-  toBase64,
   toBech32,
   toHex,
 } from '@cosmjs/encoding';
@@ -10,13 +8,6 @@ import { Ripemd160, sha256 } from '@cosmjs/crypto';
 
 export function decodeAddress(address: string) {
   return fromBech32(address);
-}
-
-export function valoperToPrefix(valoper?: string) {
-  if (!valoper) return '';
-  const prefixIndex = valoper.indexOf('valoper');
-  if (prefixIndex === -1) return null;
-  return valoper.slice(0, prefixIndex);
 }
 
 export function operatorAddressToAccount(operAddress?: string) {
@@ -59,7 +50,7 @@ export function pubKeyToValcons(
     const pubkey = fromBase64(consensusPubkey.key);
     if (pubkey) {
       const addressData = sha256(pubkey).slice(0, 20);
-      return toBech32(`${prefix}valcons`, addressData);
+      return toBech32(prefix, addressData);
     }
   }
   return '';

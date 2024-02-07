@@ -57,6 +57,7 @@ export interface ChainConfig {
   chainName: string;
   prettyName: string;
   bech32Prefix: string;
+  bech32ConsensusPrefix: string;
   chainId: string;
   coinType: string;
   assets: Asset[];
@@ -89,6 +90,7 @@ export interface ChainConfig {
 
 export interface LocalConfig {
   addr_prefix: string;
+  consensus_prefix?: string;
   alias: string;
   api: string[] | Endpoint[];
   provider_chain: {
@@ -153,6 +155,7 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
     cosmosSdk: lc.sdk_version
   }
   conf.bech32Prefix = lc.addr_prefix;
+  conf.bech32ConsensusPrefix = lc.consensus_prefix ?? lc.addr_prefix + 'valcons';
   conf.chainName = lc.chain_name;
   conf.coinType = lc.coin_type;
   conf.prettyName = lc.registry_name || lc.chain_name;
@@ -177,6 +180,7 @@ export function fromDirectory(source: DirectoryChain): ChainConfig {
   const conf = {} as ChainConfig;
   (conf.assets = source.assets),
     (conf.bech32Prefix = source.bech32_prefix),
+    (conf.bech32ConsensusPrefix = source.bech32_prefix + 'valcons'),
     (conf.chainId = source.chain_id),
     (conf.chainName = source.chain_name),
     (conf.prettyName = source.pretty_name),

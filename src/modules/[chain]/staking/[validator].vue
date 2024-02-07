@@ -13,7 +13,6 @@ import {
   consensusPubkeyToHexAddress,
   operatorAddressToAccount,
   pubKeyToValcons,
-  valoperToPrefix,
 } from '@/libs';
 import { PageRequest, type Coin, type Delegation, type PaginatedDelegations, type PaginatedTxs, type Validator } from '@/types';
 import PaginationBar from '@/components/PaginationBar.vue';
@@ -127,13 +126,12 @@ onMounted(() => {
       identity.value = res.validator?.description?.identity || '';
       if (identity.value && !avatars.value[identity.value]) loadAvatar(identity.value);
 
-      const prefix = valoperToPrefix(v.value.operator_address) || '<Invalid>';
       addresses.value.hex = consensusPubkeyToHexAddress(
         v.value.consensus_pubkey
       );
       addresses.value.valCons = pubKeyToValcons(
         v.value.consensus_pubkey,
-        prefix
+        blockchain.current?.bech32ConsensusPrefix || "",
       );
     });
     blockchain.rpc

@@ -123,15 +123,22 @@ export const useFormatter = defineStore('formatter', {
       }
       return 0
     },
-    tokenValueNumber(token?: Coin) {
+    tokenAmountNumber(token?: Coin) {
       if(!token || !token.denom) return 0
-      // find the symbol, 
+
+      // find the symbol
       const symbol = this.dashboard.coingecko[token.denom]?.symbol || token.denom 
-      // convert denomation to to symbol
+      // convert denomination to to symbol
       const exponent =
         this.dashboard.coingecko[symbol?.toLowerCase()]?.exponent || this.specialDenom(token.denom);
-      // cacualte amount of symbol
+      // caculate amount of symbol
       const amount = Number(token.amount) / (10 ** exponent)
+      return amount
+    },
+    tokenValueNumber(token?: Coin) {
+      if(!token || !token.denom) return 0
+
+      const amount = this.tokenAmountNumber(token)
       const value = amount * this.price(token.denom)
       return value
     },
