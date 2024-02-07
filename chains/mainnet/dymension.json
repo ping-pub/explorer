@@ -1,0 +1,18 @@
+{
+    "chain_name": "dymension",
+    "api": ["https://dymension-api.kalia.network"],
+    "rpc": ["https://dymension-rpc.kalia.network:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.15",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "dym",
+    "logo": "/logos/dymension.png",
+    "assets": [{
+        "base": "adym",
+        "symbol": "DYM",
+        "exponent": "18",
+        "coingecko_id": "dymension", 
+        "logo": "/logos/dymension.png"
+    }]
+}
