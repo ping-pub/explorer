@@ -241,7 +241,7 @@ loadAvatars();
             <span>
                 <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
                     <Icon class="text-primary" icon="mdi:lock-open-outline" size="32" />
-                    <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-[#ffea6e]"></div>
+                    <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 !bg-[#ffea6e]"></div>
                 </div>
             </span>
             <span>
@@ -450,7 +450,7 @@ loadAvatars();
                                 <label
                                     v-else
                                     for="delegate"
-                                    class="btn btn-xs bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] rounded-sm capitalize"
+                                    class="btn btn-xs !bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] rounded-sm capitalize"
                                     @click="
                                         dialog.open('delegate', {
                                             validator_address:
