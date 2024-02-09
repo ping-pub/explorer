@@ -170,7 +170,7 @@ async function update() {
               {{ item?.address }}/consensus_state
             </option>
           </select>
-          <button class="btn btn-primary" @click="onChange">{{ $t('consensus.monitor') }}</button>
+          <button class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]" @click="onChange">{{ $t('consensus.monitor') }}</button>
         </label>
       </div>
       <div v-if="httpstatus !== 200" class="text-error mt-1">

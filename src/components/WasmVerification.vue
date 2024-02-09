@@ -236,7 +236,7 @@ function callFunction(title: string, method: string, arg: Argument) {
             <div v-if="Object.keys(verification).length == 0" >
                Haven't found verification
             </div>
-            <button class="btn btn-primary mt-5" @click="verify" :disabled="executions.length > 0">verify</button>
+            <button class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] mt-5" @click="verify" :disabled="executions.length > 0">verify</button>
         </div>
 
         <!-- alert-info -->

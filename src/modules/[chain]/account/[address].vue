@@ -138,7 +138,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
         <!-- img -->
         <div class="inline-flex relative w-11 h-11 rounded-md">
           <div
-            class="w-11 h-11 absolute rounded-md opacity-10 bg-primary"
+            class="w-11 h-11 absolute rounded-md opacity-10 bg-[#ffea6e]"
           ></div>
           <div
             class="w-full inline-flex items-center align-middle flex-none justify-center"
@@ -166,13 +166,13 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
         <div class="flex justify-end mb-4 pr-5">
             <label
               for="send"
-              class="btn btn-primary btn-sm mr-2"
+              class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-sm mr-2"
               @click="dialog.open('send', {}, updateEvent)"
               >{{ $t('account.btn_send') }}</label
             >
             <label
               for="transfer"
-              class="btn btn-primary btn-sm"
+              class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-sm"
               @click="
                 dialog.open(
                   'transfer',
@@ -219,7 +219,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
               >
                 <span
-                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-[#ffea6e] dark:invert text-sm"
                 ></span>
                 ${{ format.tokenValue(balanceItem) }}                
               </div>
@@ -255,7 +255,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
               >
                 <span
-                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-[#ffea6e] dark:invert text-sm"
                 ></span>
                 ${{ format.tokenValue(delegationItem?.balance) }}                
               </div>
@@ -288,7 +288,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
               >
                 <span
-                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary  dark:invert text-sm"
+                  class="inset-x-0 inset-y-0 opacity-10 absolute bg-[#ffea6e]  dark:invert text-sm"
                 ></span>${{ format.tokenValue(rewardItem) }}
                 
               </div>
@@ -323,7 +323,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
               <div
                 class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
               >
-                <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert"></span>
+                <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-[#ffea6e] dark:invert"></span>
                 ${{format.tokenValue({
                       amount: String(unbondingTotal),
                       denom: stakingStore.params.bond_denom,
@@ -346,13 +346,13 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
         <div class="flex justify-end mb-4">
           <label
             for="delegate"
-            class="btn btn-primary btn-sm mr-2"
+            class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-sm mr-2"
             @click="dialog.open('delegate', {}, updateEvent)"
             >{{ $t('account.btn_delegate') }}</label
           >
           <label
             for="withdraw"
-            class="btn btn-primary btn-sm"
+            class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-sm"
             @click="dialog.open('withdraw', {}, updateEvent)"
             >{{ $t('account.btn_withdraw') }}</label
           >
@@ -396,7 +396,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 <div v-if="v.balance" class="flex justify-end">
                   <label
                     for="delegate"
-                    class="btn btn-primary btn-xs mr-2"
+                    class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-xs mr-2"
                     @click="
                       dialog.open(
                         'delegate',
@@ -410,7 +410,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                   >
                   <label
                     for="redelegate"
-                    class="btn btn-primary btn-xs mr-2"
+                    class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-xs mr-2"
                     @click="
                       dialog.open(
                         'redelegate',
@@ -424,7 +424,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                   >
                   <label
                     for="unbond"
-                    class="btn btn-primary btn-xs"
+                    class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-xs"
                     @click="
                       dialog.open(
                         'unbond',

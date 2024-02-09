@@ -162,7 +162,7 @@ function suggest() {
         </div>
         <div class="mt-4 mb-4">
 
-            <button class="btn !bg-primary !border-primary text-white mr-2" @click="suggest">Suggest {{ selected.chainName }} TO {{ wallet }}</button>
+            <button class="btn !bg-[#ffea6e] !border-primary text-white mr-2" @click="suggest">Suggest {{ selected.chainName }} TO {{ wallet }}</button>
 
             <div class="mt-4">
                 If the chain is not offically support on Keplr/Metamask Snap, you can submit these parameters to enable Keplr/Metamask Snap.

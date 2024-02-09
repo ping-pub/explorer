@@ -252,13 +252,13 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
         <div class="mt-6 grid grid-cols-2">
           <label
             for="vote"
-            class="btn btn-primary float-right btn-sm mx-1"
+            class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] float-right btn-sm mx-1"
             @click="dialog.open('vote', { proposal_id })"
             >{{ $t('gov.btn_vote') }}</label
           >
           <label
             for="deposit"
-            class="btn btn-primary float-right btn-sm mx-1"
+            class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] float-right btn-sm mx-1"
             @click="dialog.open('deposit', { proposal_id })"
             >{{ $t('gov.btn_deposit') }}</label
           >
@@ -277,7 +277,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
             <div class="text-sm">{{ shortTime(proposal.submit_time) }}</div>
           </div>
           <div class="flex items-center mb-4">
-            <div class="w-2 h-2 rounded-full bg-primary mr-3"></div>
+            <div class="w-2 h-2 rounded-full bg-[#ffea6e] mr-3"></div>
             <div class="text-base flex-1 text-main">
               {{ $t('gov.deposited_at') }}:
               {{

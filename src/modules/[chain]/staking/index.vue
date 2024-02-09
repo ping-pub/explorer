@@ -224,7 +224,7 @@ loadAvatars();
 </script>
 <template>
 <div>
-    <div class="bg-[#222222] rounded-lg grid sm:grid-cols-1 md:grid-cols-4 p-4" >    
+    <div class="bg-[#ffffff] dark:bg-[#222222] rounded-lg grid sm:grid-cols-1 md:grid-cols-4 p-4" >    
         <div class="flex">
             <span>
                 <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
@@ -241,7 +241,7 @@ loadAvatars();
             <span>
                 <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
                     <Icon class="text-primary" icon="mdi:lock-open-outline" size="32" />
-                    <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-primary"></div>
+                    <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-[#ffea6e]"></div>
                 </div>
             </span>
             <span>
@@ -279,19 +279,19 @@ loadAvatars();
         <div class="flex items-center justify-between py-1">
             <div class="tabs tabs-boxed bg-transparent">
                 <a
-                    class="tab text-gray-400"
+                    class="tab text-gray-800 dark:text-gray-400"
                     :class="{ 'tab-active': tab === 'featured' }"
                     @click="tab = 'featured'"
                     >{{ $t('staking.popular') }}</a
                 >
                 <a
-                    class="tab text-gray-400"
+                    class="tab text-gray-800 dark:text-gray-400"
                     :class="{ 'tab-active': tab === 'active' }"
                     @click="tab = 'active'"
                     >{{ $t('staking.active') }}</a
                 >
                 <a
-                    class="tab text-gray-400"
+                    class="tab text-gray-800 dark:text-gray-400"
                     :class="{ 'tab-active': tab === 'inactive' }"
                     @click="tab = 'inactive'"
                     >{{ $t('staking.inactive') }}</a
@@ -303,7 +303,7 @@ loadAvatars();
             </div>
         </div>
 
-        <div class="bg-[#222222] px-4 pt-3 pb-4 rounded shadow">
+        <div class="bg-[#ffffff] dark:bg-[#222222] px-4 pt-3 pb-4 rounded shadow">
             <div class="overflow-x-auto">
                 <table class="table staking-table w-full">
                     <thead>
@@ -326,7 +326,7 @@ loadAvatars();
                         <tr
                             v-for="({v, rank, logo}, i) in list"
                             :key="v.operator_address"
-                            class="hover:bg-[#303030] dark:hover:bg-[#384059]"
+                            class="hover:bg-[#ffffff] dark:hover:bg-[#303030] "
                         >
                             <!-- 👉 rank -->
                             <td>
@@ -375,7 +375,7 @@ loadAvatars();
                                     </div>
 
                                     <div class="flex flex-col">
-                                        <span class="text-sm text-primary dark:invert whitespace-nowrap overflow-hidden">
+                                        <span class="text-base font-bold text-[#ffea6e] whitespace-nowrap overflow-hidden">
                                             <RouterLink
                                                 :to="{
                                                     name: 'chain-staking-validator',
@@ -450,7 +450,7 @@ loadAvatars();
                                 <label
                                     v-else
                                     for="delegate"
-                                    class="btn btn-xs btn-primary rounded-sm capitalize"
+                                    class="btn btn-xs bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] rounded-sm capitalize"
                                     @click="
                                         dialog.open('delegate', {
                                             validator_address:

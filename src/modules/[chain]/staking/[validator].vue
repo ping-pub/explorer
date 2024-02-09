@@ -281,7 +281,7 @@ function mapDelegators(messages: any[]) {
               </div>
               <label
                 for="delegate"
-                class="btn btn-primary btn-sm w-full"
+                class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-sm w-full"
                 @click="
                   dialog.open('delegate', {
                     validator_address: v.operator_address,
@@ -484,7 +484,7 @@ function mapDelegators(messages: any[]) {
           <div class="">
             <label
               for="withdraw_commission"
-              class="btn btn-primary w-full"
+              class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] w-full"
               @click="
                 dialog.open('withdraw_commission', {
                   validator_address: v.operator_address,

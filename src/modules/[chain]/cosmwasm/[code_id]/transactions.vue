@@ -138,30 +138,30 @@ const result = ref({});
 
         <div class="text-center mb-4">
             <RouterLink to="contracts"><span class="btn btn-xs text-xs mr-2"> Back </span> </RouterLink>
-            <label @click="showFunds()" for="modal-contract-funds" class="btn btn-primary btn-xs text-xs mr-2">{{
+            <label @click="showFunds()" for="modal-contract-funds" class="btn  btn-xs text-xs mr-2">{{
                 $t('cosmwasm.btn_funds') }}</label>
-            <label class="btn btn-primary btn-xs text-xs mr-2" for="modal-contract-states" @click="showState()">
+            <label class="btn  btn-xs text-xs mr-2" for="modal-contract-states" @click="showState()">
                 {{ $t('cosmwasm.btn_states') }}
             </label>
-            <label for="modal-contract-query" class="btn btn-primary btn-xs text-xs mr-2" @click="showQuery()">
+            <label for="modal-contract-query" class="btn  btn-xs text-xs mr-2" @click="showQuery()">
                 {{ $t('cosmwasm.btn_query') }}
             </label>
-            <label for="wasm_execute_contract" class="btn btn-primary btn-xs text-xs mr-2"
+            <label for="wasm_execute_contract" class="btn  btn-xs text-xs mr-2"
                 @click="dialog.open('wasm_execute_contract', { contract: contractAddress })">
                 {{ $t('cosmwasm.btn_execute') }}
             </label>
 
-            <label for="wasm_migrate_contract" class="btn btn-primary btn-xs text-xs mr-2"
+            <label for="wasm_migrate_contract" class="btn  btn-xs text-xs mr-2"
                 @click="dialog.open('wasm_migrate_contract', { contract: contractAddress })">
                 {{ $t('cosmwasm.btn_migrate') }}
             </label>
 
-            <label for="wasm_update_admin" class="btn btn-primary btn-xs text-xs mr-2"
+            <label for="wasm_update_admin" class="btn  btn-xs text-xs mr-2"
                 @click="dialog.open('wasm_update_admin', { contract: contractAddress })">
                 {{ $t('cosmwasm.btn_update_admin') }}
             </label>
 
-            <label for="wasm_clear_admin" class="btn btn-primary btn-xs text-xs mr-2"
+            <label for="wasm_clear_admin" class="btn  btn-xs text-xs mr-2"
                 @click="dialog.open('wasm_clear_admin', { contract: contractAddress })">
                 {{ $t('cosmwasm.btn_clear_admin') }}
             </label>
@@ -275,7 +275,7 @@ const result = ref({});
 
                             </div>
                             <div class="mt-4 mb-4 text-center">
-                                <button class="btn btn-primary px-4 text-white" @click="queryContract()">
+                                <button class="btn  px-4 text-white" @click="queryContract()">
                                     {{ $t('cosmwasm.query_contract') }}
                                 </button>
                             </div>

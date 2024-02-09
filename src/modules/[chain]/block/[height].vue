@@ -81,7 +81,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
                   <p class="py-4">
                   <div class="join">
                     <input class="input input-bordered join-item" v-model="newHeight" type="number" />
-                    <button class="btn btn-primary join-item" @click="updateTarget()">{{ $t('block.btn_update') }}</button>
+                    <button class="btn  join-item" @click="updateTarget()">{{ $t('block.btn_update') }}</button>
                   </div>
                   </p>
                 </td>
@@ -110,11 +110,11 @@ onBeforeRouteUpdate(async (to, from, next) => {
           <p class="">#{{ current.block?.header?.height }}</p>
           <div class="flex" v-if="props.height">
             <RouterLink :to="`/${store.blockchain.chainName}/block/${height - 1}`"
-              class="btn btn-primary btn-sm p-1 text-2xl mr-2">
+              class="btn  btn-sm p-1 text-2xl mr-2">
               <Icon icon="mdi-arrow-left" class="w-full h-full" />
             </RouterLink>
             <RouterLink :to="`/${store.blockchain.chainName}/block/${height + 1}`"
-              class="btn btn-primary btn-sm p-1 text-2xl">
+              class="btn  btn-sm p-1 text-2xl">
               <Icon icon="mdi-arrow-right" class="w-full h-full" />
             </RouterLink>
           </div>
