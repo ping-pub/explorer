@@ -42,7 +42,7 @@ const tipMsg = computed(() => {
         {{ walletStore.shortAddress || 'Wallet' }}</span>
     </label>
     <div tabindex="0" class="dropdown-content menu shadow p-2 bg-[#ffffff] dark:bg-[#222222] rounded w-52 md:!w-64 overflow-auto">
-      <label v-if="!walletStore?.currentAddress" for="PingConnectWallet" class="btn btn-sm bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]">
+      <label v-if="!walletStore?.currentAddress" for="PingConnectWallet" class="btn-sm bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]">
         <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Wallet</span>
       </label>
       <div class="px-2 mb-1 text-gray-500 dark:text-gray-400 font-semibold">
