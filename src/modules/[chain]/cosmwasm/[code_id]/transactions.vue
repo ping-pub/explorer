@@ -138,37 +138,37 @@ const result = ref({});
 
         <div class="text-center mb-4">
             <RouterLink to="contracts"><span class="btn btn-xs text-xs mr-2"> Back </span> </RouterLink>
-            <label @click="showFunds()" for="modal-contract-funds" class="btn  btn-xs text-xs mr-2">{{
+            <label @click="showFunds()" for="modal-contract-funds" class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-xs text-xs mr-2">{{
                 $t('cosmwasm.btn_funds') }}</label>
-            <label class="btn  btn-xs text-xs mr-2" for="modal-contract-states" @click="showState()">
+            <label class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-xs text-xs mr-2" for="modal-contract-states" @click="showState()">
                 {{ $t('cosmwasm.btn_states') }}
             </label>
-            <label for="modal-contract-query" class="btn  btn-xs text-xs mr-2" @click="showQuery()">
+            <label for="modal-contract-query" class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-xs text-xs mr-2" @click="showQuery()">
                 {{ $t('cosmwasm.btn_query') }}
             </label>
-            <label for="wasm_execute_contract" class="btn  btn-xs text-xs mr-2"
+            <label for="wasm_execute_contract" class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-xs text-xs mr-2"
                 @click="dialog.open('wasm_execute_contract', { contract: contractAddress })">
                 {{ $t('cosmwasm.btn_execute') }}
             </label>
 
-            <label for="wasm_migrate_contract" class="btn  btn-xs text-xs mr-2"
+            <label for="wasm_migrate_contract" class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-xs text-xs mr-2"
                 @click="dialog.open('wasm_migrate_contract', { contract: contractAddress })">
                 {{ $t('cosmwasm.btn_migrate') }}
             </label>
 
-            <label for="wasm_update_admin" class="btn  btn-xs text-xs mr-2"
+            <label for="wasm_update_admin" class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-xs text-xs mr-2"
                 @click="dialog.open('wasm_update_admin', { contract: contractAddress })">
                 {{ $t('cosmwasm.btn_update_admin') }}
             </label>
 
-            <label for="wasm_clear_admin" class="btn  btn-xs text-xs mr-2"
+            <label for="wasm_clear_admin" class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] btn-xs text-xs mr-2"
                 @click="dialog.open('wasm_clear_admin', { contract: contractAddress })">
                 {{ $t('cosmwasm.btn_clear_admin') }}
             </label>
 
         </div>
 
-        <div class="bg-[#222222] px-4 pt-3 pb-4 rounded mb-4 shadow">
+        <div class="bg-[#ffffff] dark:bg-[#222222] px-4 pt-3 pb-4 rounded mb-4 shadow">
             <h2 class="card-title truncate w-full mt-4">Transactions</h2>
             <table class="table">
                 <thead>
@@ -275,7 +275,7 @@ const result = ref({});
 
                             </div>
                             <div class="mt-4 mb-4 text-center">
-                                <button class="btn  px-4 text-white" @click="queryContract()">
+                                <button class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] px-4 text-white" @click="queryContract()">
                                     {{ $t('cosmwasm.query_contract') }}
                                 </button>
                             </div>
