@@ -36,13 +36,13 @@ const tipMsg = computed(() => {
 
 <template>
   <div class="dropdown dropdown-hover dropdown-end">
-    <label tabindex="0" class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded btn-sm bg-[#ffea6e] m-1 lowercase truncate !inline-flex text-xs md:!text-sm text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]">
+    <label tabindex="0" class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg btn-sm bg-[#ffea6e] m-1 lowercase truncate !inline-flex text-xs md:!text-sm text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]">
       <Icon icon="mdi:wallet" />
       <span class="ml-1 hidden md:block">
         {{ walletStore.shortAddress || 'Wallet' }}</span>
     </label>
     <div tabindex="0" class="dropdown-content menu shadow p-2 bg-[#ffffff] dark:bg-[#222222] rounded w-52 md:!w-64 overflow-auto">
-      <label v-if="!walletStore?.currentAddress" for="PingConnectWallet" class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded btn-sm bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]">
+      <label v-if="!walletStore?.currentAddress" for="PingConnectWallet" class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg btn-sm bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] mt-1">
         <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Wallet</span>
       </label>
       <div class="px-2 mb-1 text-gray-500 dark:text-gray-400 font-semibold">
