@@ -1,7 +1,7 @@
 <template>
   <!-- footer -->
   <footer
-    class="flex items-center h-12 mt-5 text-sm bg-[#222222] py-2 z-10 w-full"
+    class="flex items-center h-12 mt-5 text-sm bg-[#ffffff] dark:bg-[#222222] py-2 z-10 w-full"
   >
     <div class="flex flex-1">
       &copy;&nbsp;
@@ -10,27 +10,11 @@
       <img src="../../assets/images/heart.svg" />&nbsp;
       By &nbsp;
       <a
-        class="link link-primary no-underline"
+        class="link text-primary text-base no-underline"
         href="https://ping.pub"
         target="_blank"
         rel="noopener noreferrer"
         >ping.pub</a
-      >
-    </div>
-    <div
-      class="hidden md:!block"
-    >
-      <a
-        class="link link-primary no-underline mr-4"
-        href="https://github.com/ping-pub/explorer/blob/master/LICENSE"
-        target="noopener noreferrer"
-        >License</a
-      >
-      <a
-        class="link link-primary no-underline"
-        href="https://github.com/ping-pub/explorer"
-        target="noopener noreferrer"
-        >Github</a
       >
     </div>
   </footer>
