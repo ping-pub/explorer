@@ -36,7 +36,7 @@ const tipMsg = computed(() => {
 
 <template>
   <div class="dropdown dropdown-hover dropdown-end">
-    <label tabindex="0" class="btn btn-sm bg-[#ffea6e] m-1 lowercase truncate !inline-flex text-xs md:!text-sm text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]">
+    <label tabindex="0" class="btn btn-whisper btn-sm bg-[#ffea6e] m-1 lowercase truncate !inline-flex text-xs md:!text-sm text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]">
       <Icon icon="mdi:wallet" />
       <span class="ml-1 hidden md:block">
         {{ walletStore.shortAddress || 'Wallet' }}</span>
@@ -93,9 +93,5 @@ const tipMsg = computed(() => {
 .ping-connect-btn,
 .ping-connect-dropdown {
   display: none !important;
-}
-
-.btn {
-  background-color: #ffea6e;
 }
 </style>
