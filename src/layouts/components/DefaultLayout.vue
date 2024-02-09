@@ -62,7 +62,7 @@ function selected(route: any, nav: NavLink) {
   <div class="bg-[#efefef] dark:bg-[#070707]">
     <!-- sidebar -->
     <div
-      class="w-72 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-[#222222] border-r border-gray-100 dark:border-gray-700"
+      class="w-72 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-[#ffffff]  dark:bg-[#222222] border-r border-gray-100 dark:border-gray-700"
       :class="{ block: sidebarShow, 'hidden xl:!block': !sidebarShow }"
     >
       <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
@@ -123,20 +123,20 @@ function selected(route: any, nav: NavLink) {
             </div>
             <div
               v-if="item?.badgeContent"
-              class="mr-6 badge badge-sm text-white border-none"
+              class="mr-6 badge badge-sm text-black border-none"
               :class="item?.badgeClass"
             >
               {{ item?.badgeContent }}
             </div>
           </div>
           <div class="collapse-content">
-            <div v-for="(el, key) of item?.children" class="menu bg-[#222222] w-full !p-0">
+            <div v-for="(el, key) of item?.children" class="menu bg-[#ffffff] dark:bg-[#222222] w-full !p-0">
               <RouterLink
                 v-if="isNavLink(el)"
                 @click="sidebarShow = false"
-                class="hover:bg-[#303030]   rounded cursor-pointer px-3 py-2 flex items-center"
+                class="hover:bg-[#f3f4f6] dark:hover:bg-[#303030]   rounded cursor-pointer px-3 py-2 flex items-center"
                 :class="{
-                  '!bg-primary': selected($route, el),
+                  '!bg-[#ffea6e]': selected($route, el),
                 }"
                 :to="el.to"
               >
@@ -145,7 +145,7 @@ function selected(route: any, nav: NavLink) {
                   icon="mdi:chevron-right"
                   class="mr-2 ml-3"
                   :class="{
-                    'text-white':
+                    'text-black':
                       $route.path === el?.to?.path &&
                       item?.title !== 'Favorite',
                   }"
@@ -160,7 +160,7 @@ function selected(route: any, nav: NavLink) {
                 <div
                   class="text-base capitalize text-gray-500 dark:text-gray-300"
                   :class="{
-                    '!text-white': selected($route, el),
+                    '!text-black': selected($route, el),
                   }"
                 >
                   {{ item?.title === 'Favorite' ? el?.title : $t(el?.title) }}
@@ -174,7 +174,7 @@ function selected(route: any, nav: NavLink) {
           v-if="isNavLink(item)"
           :to="item?.to"
           @click="sidebarShow = false"
-          class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-[#303030]  "
+          class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-[#f3f4f6] dark:hover:bg-[#303030]  "
         >
           <Icon
             v-if="item?.icon?.icon"
@@ -197,7 +197,7 @@ function selected(route: any, nav: NavLink) {
           </div>
           <div
             v-if="item?.badgeContent"
-            class="badge badge-sm text-white border-none" 
+            class="badge badge-sm text-black border-none" 
             :class="item?.badgeClass"
           >
             {{ item?.badgeContent }}
@@ -217,7 +217,7 @@ function selected(route: any, nav: NavLink) {
         <a
           href="https://scrt.network"
           target="_blank"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-[#303030]  "
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-[#f3f4f6] dark:hover:bg-[#303030]  "
         >
           <img
             src="https://ping.pub/logos/secret.png"
@@ -232,7 +232,7 @@ function selected(route: any, nav: NavLink) {
         <a
           href="https://osmosis.zone"
           target="_blank"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-[#303030]  "
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-[#f3f4f6] dark:hover:bg-[#303030]  "
         >
           <img
             src="https://ping.pub/logos/osmosis.jpg"
@@ -249,7 +249,7 @@ function selected(route: any, nav: NavLink) {
             Tools
           </div>
           <RouterLink to="/wallet/suggest"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-[#303030]  "
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-[#f3f4f6] dark:hover:bg-[#303030]  "
           >
             <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
             <div
@@ -263,7 +263,7 @@ function selected(route: any, nav: NavLink) {
         <a
           href="https://twitter.com/WhisperNode"
           target="_blank"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-[#303030]  "
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-[#f3f4f6] dark:hover:bg-[#303030]  "
         >
           <Icon icon="mdi:twitter" class="text-xl mr-2" />
           <div
@@ -275,7 +275,7 @@ function selected(route: any, nav: NavLink) {
         <a
           href="https://discord.com/invite/KHCzGSb2"
           target="_blank"
-          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-[#303030]  "
+          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-[#f3f4f6] dark:hover:bg-[#303030]  "
         >
           <Icon icon="mdi:discord" class="text-xl mr-2" />
           <div
@@ -287,7 +287,7 @@ function selected(route: any, nav: NavLink) {
         <a
           href="https://github.com/ping-pub/explorer/discussions"
           target="_blank"
-          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-[#303030]  "
+          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-[#f3f4f6] dark:hover:bg-[#303030]  "
         >
           <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
           <div
@@ -301,7 +301,7 @@ function selected(route: any, nav: NavLink) {
     <div class="xl:!ml-72 px-3 pt-4">
       <!-- header -->
       <div
-        class="flex items-center py-3 bg-[#222222] mb-4 rounded px-4 sticky top-0 z-10"
+        class="flex items-center py-3 bg-[#f3f4f6] dark:bg-[#222222] mb-4 rounded px-4 sticky top-0 z-10"
       >
         <div
           class="text-2xl pr-3 cursor-pointer xl:!hidden"
