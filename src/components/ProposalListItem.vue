@@ -118,7 +118,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
             <div class="">
               <label
                 for="vote"
-                class="btn btn-xs bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] rounded-sm"
+                class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg btn-xs bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] rounded-sm"
                 @click="
                   dialog.open('vote', {
                     proposal_id: item?.proposal_id,
@@ -212,7 +212,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
             </div>
             <label
               for="vote"
-              class="btn btn-xs bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] rounded-sm"
+              class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-xl font-semibold btn-xs bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] rounded-sm"
               @click="
                 dialog.open('vote', {
                   proposal_id: item?.proposal_id,
@@ -236,7 +236,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
       <label class="modal-box !w-11/12 !max-w-5xl" for="">
         <label
           for="proposal-detail-modal"
-          class="btn btn-sm btn-circle absolute right-2 top-2"
+          class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-xl dark:hover:border-white font-semibold btn-sm btn-circle absolute right-2 top-2"
           >✕</label
         >
         <h3 class="font-bold text-lg">Description</h3>
