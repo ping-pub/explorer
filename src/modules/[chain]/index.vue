@@ -232,7 +232,7 @@ const amount = computed({
                 </div>
                 <label class="modal-backdrop" for="calculator">{{ $t('index.close') }}</label>
               </div>
-              <a class="my-5 dark:text-white text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] !dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(0,0,0,1)] dark:hover:shadow-[0_0_10px_3px_rgba(255,255,255,1)]  btn grow" :class="{'!btn-success': store.trustColor === 'green', '!btn-warning': store.trustColor === 'yellow'}" :href="ticker.trade_url"
+              <a class="my-5 text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(0,0,0,1)] dark:hover:shadow-[0_0_10px_3px_rgba(255,255,255,1)]  pt-2 pb-2 font-semibold inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg uppercase grow" :class="{'btn-success': store.trustColor === 'green', 'btn-warning': store.trustColor === 'yellow'}" :href="ticker.trade_url"
                 target="_blank">
                 {{ $t('index.buy') }} {{ coinInfo.symbol || '' }}
               </a>
@@ -370,11 +370,11 @@ const amount = computed({
       </div>
 
       <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
-        <label for="PingTokenConvert" class="btn bg-[#ffea6e] text-black !hover:bg-[#ffffff] !dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]">{{ $t('index.btn_swap') }}</label>
-        <label for="send" class="btn bg-yes !border-yes text-white hover:bg-[#ffffff] dark:hover:bg-[#202020] hover:text-black dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(63,182,139,1)]" @click="dialog.open('send', {}, updateState)">{{ $t('account.btn_send') }}</label>
-        <label for="delegate" class="btn bg-info !border-info text-white hover:bg-[#ffffff] dark:hover:bg-[#202020] hover:text-black dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(0,178,255,1)] "
+        <label for="PingTokenConvert" class="pt-2 pb-2 font-semibold inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg uppercase bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]">{{ $t('index.btn_swap') }}</label>
+        <label for="send" class="pt-2 pb-2 font-semibold inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg uppercase bg-yes !border-yes text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] hover:text-black dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(63,182,139,1)]" @click="dialog.open('send', {}, updateState)">{{ $t('account.btn_send') }}</label>
+        <label for="delegate" class="pt-2 pb-2 font-semibold inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg uppercase bg-info !border-info text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] hover:text-black dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(0,178,255,1)] "
           @click="dialog.open('delegate', {}, updateState)">{{ $t('account.btn_delegate') }}</label>
-        <RouterLink to="/wallet/receive" class="btn !bg-info !border-info text-white hidden">{{ $t('index.receive') }}</RouterLink>
+        <RouterLink to="/wallet/receive" class="pt-2 pb-2 font-semibold inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg uppercase bg-info !border-info text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] hover:text-black dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(0,178,255,1)] hidden ">{{ $t('index.receive') }}</RouterLink>
       </div>
       <Teleport to="body">
         <ping-token-convert :chain-name="blockchain?.current?.prettyName" :endpoint="blockchain?.endpoint?.address"
