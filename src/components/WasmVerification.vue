@@ -213,8 +213,8 @@ function callFunction(title: string, method: string, arg: Argument) {
                       <input :name="`${method}-${name}`" type="text" :placeholder="p.format" class="input input-sm border border-gray-300 dark:border-gray-600 w-full" />
                     </div>
                     <div>
-                      <label v-if="title==='ExecuteMsg'" for="wasm_execute_contract" class="btn btn-sm" @click="callFunction(title, method, props)">{{ method }}</label>
-                      <label v-else class="btn btn-sm" @click="callFunction(title, method, props)">{{ method }}</label>
+                      <label v-if="title==='ExecuteMsg'" for="wasm_execute_contract" class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg btn-sm" @click="callFunction(title, method, props)">{{ method }}</label>
+                      <label v-else class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg btn-sm" @click="callFunction(title, method, props)">{{ method }}</label>
                     </div>
                     <div v-if="result[`${title}-${method}`]" class="mt-2">
                       <JsonViewer :value="result[`${title}-${method}`]" :theme="baseStore.theme||'dark'" style="background: transparent;" copyable boxed sort :expand-depth="5"/>
@@ -236,7 +236,7 @@ function callFunction(title: string, method: string, arg: Argument) {
             <div v-if="Object.keys(verification).length == 0" >
                Haven't found verification
             </div>
-            <button class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] mt-5" @click="verify" :disabled="executions.length > 0">verify</button>
+            <button class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] mt-5" @click="verify" :disabled="executions.length > 0">verify</button>
         </div>
 
         <!-- alert-info -->
