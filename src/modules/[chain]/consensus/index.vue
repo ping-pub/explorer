@@ -156,7 +156,7 @@ async function update() {
 <template>
   <div>
     <!--  -->
-    <div class="bg-[#222222] px-4 pt-3 pb-4 rounded shadow">
+    <div class="bg-[#ffffff] dark:bg-[#222222] px-4 pt-3 pb-4 rounded shadow">
       <div class="form-control">
         <label class="input-group input-group-md w-full flex">
           <!-- <input
@@ -170,7 +170,7 @@ async function update() {
               {{ item?.address }}/consensus_state
             </option>
           </select>
-          <button class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]" @click="onChange">{{ $t('consensus.monitor') }}</button>
+          <button class="join-item inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] uppercase font-bold px-4" @click="onChange">{{ $t('consensus.monitor') }}</button>
         </label>
       </div>
       <div v-if="httpstatus !== 200" class="text-error mt-1">
@@ -181,7 +181,7 @@ async function update() {
     <div class="mt-4" v-if="roundState['height/round/step']">
       <div class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 pb-4">
         <div
-          class="bg-[#222222] px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-[#ffffff] dark:bg-[#222222] px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ rate }}</h4>
@@ -197,7 +197,7 @@ async function update() {
         </div>
         <!-- Height -->
         <div
-          class="bg-[#222222] px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-[#ffffff] dark:bg-[#222222] px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ height }}</h4>
@@ -213,7 +213,7 @@ async function update() {
         </div>
         <!-- Round -->
         <div
-          class="bg-[#222222] px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-[#ffffff] dark:bg-[#222222] px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ round }}</h4>
@@ -229,7 +229,7 @@ async function update() {
         </div>
         <!-- Step -->
         <div
-          class="bg-[#222222] px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-[#ffffff] dark:bg-[#222222] px-4 py-3 rounded shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ step }}</h4>
@@ -247,7 +247,7 @@ async function update() {
     </div>
     <!-- update -->
     <div
-      class="bg-[#222222] p-4 rounded shadow"
+      class="bg-[#ffffff] dark:bg-[#222222] p-4 rounded shadow"
       v-if="roundState['height/round/step']"
     >
       <div class="flex flex-1 flex-col truncate">
@@ -260,7 +260,7 @@ async function update() {
 
           <div class="flex flex-rows flex-wrap py-6">
             <div
-              class=" w-48 rounded-3xl h-5 text-sm px-2 text-slate-200 leading-5"
+              class=" w-48 rounded-3xl h-5 text-sm px-2 text-black dark:text-slate-200 leading-5"
               v-for="(pre, i) in item.prevotes"
               :key="i"
               size="sm"
