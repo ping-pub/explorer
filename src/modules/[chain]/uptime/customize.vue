@@ -196,7 +196,7 @@ function color(v: string) {
                 {{ v.chainName }}
               </option>
             </select>
-              <input v-model="keyword" type="text" class="input w-full" placeholder="keywords to filter validator">
+              <input v-model="keyword" type="text" class="input dark:bg-[#303030] w-full" placeholder="keywords to filter validator">
             </div>
           </div>
         <div class="py-4 max-h-60 overflow-y-auto">
