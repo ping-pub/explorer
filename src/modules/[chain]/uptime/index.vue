@@ -172,7 +172,7 @@ function fetchAllKeyRotation() {
           type="text"
           v-model="keyword"
           placeholder="Keywords to filter validators"
-          class="input input-sm w-full flex-1 border border-gray-200 dark:border-gray-600"
+          class="input input-sm w-full flex-1 border border-gray-200 dark:border-gray-600 dark:bg-[#303030]"
         />
         <button v-if="chainStore.isConsumerChain" class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg btn-sm bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] mt-1" @click="fetchAllKeyRotation">Load Rotated Keys</button>
       </div>
