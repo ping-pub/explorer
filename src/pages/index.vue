@@ -57,14 +57,9 @@ const chainStore = useBlockchain()
               </g>
           </svg>
       </div>
-      <h1 class="text-primary dark:text-white text-3xl md:!text-6xl font-bold">
+      <h1 class="text-black dark:text-white text-3xl md:!text-6xl font-bold">
         {{ $t('pages.title') }}
       </h1>
-    </div>
-    <div class="text-center text-base">
-      <p class="mb-1">
-        {{ $t('pages.slogan') }}
-      </p>
     </div>
     <div
       v-if="dashboard.status !== LoadingStatus.Loaded"
@@ -73,7 +68,7 @@ const chainStore = useBlockchain()
       <progress class="progress progress-info w-80 h-1"></progress>
     </div>
 
-    <div v-if="featured.length>0" class="text-center text-base mt-6 text-primary dark:text-whisper">
+    <div v-if="featured.length>0" class="text-center text-base mt-6 text-[#222222] dark:text-whisper">
       <h2 class="mb-6"> Featured Blockchains 🔥 </h2>
     </div>
 
@@ -87,7 +82,7 @@ const chainStore = useBlockchain()
       />
     </div>
 
-    <div class="text-center text-base mt-6 text-primary dark:text-whisper">
+    <div class="text-center text-base mt-6 text-[#222222] dark:text-whisper">
       <h2 class="mb-6">{{ $t('pages.description') }}</h2>
     </div>
 
