@@ -47,7 +47,7 @@ function changeEndpoint(item: Endpoint) {
     </label>
     <div
       tabindex="0"
-      class="dropdown-content -left-6 w-80 menu shadow bg-[#303030] rounded-box overflow-auto"
+      class="dropdown-content -left-6 w-80 menu shadow bg-[#ffffff] dark:bg-[#303030] rounded-box overflow-auto"
     >
       <!-- rest -->
       <div
@@ -58,7 +58,7 @@ function changeEndpoint(item: Endpoint) {
       </div>
       <div
         v-for="(item, index) in chainStore.current?.endpoints?.rest"
-        class="px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-[#222222] cursor-pointer"
+        class="px-4 py-2 w-full hover:bg-[#f3f4f6] dark:hover:bg-[#222222] cursor-pointer"
         :key="index"
         @click="changeEndpoint(item)"
       >
