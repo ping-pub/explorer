@@ -279,20 +279,20 @@ loadAvatars();
         <div class="flex items-center justify-between py-1">
             <div class="tabs tabs-boxed bg-transparent">
                 <a
-                    class="tab text-gray-800 dark:text-gray-400"
-                    :class="{ 'tab-active': tab === 'featured' }"
+                    class="tab text-gray-600"
+                    :class="{ 'bg-[#ffea6e]': tab === 'featured' }"
                     @click="tab = 'featured'"
                     >{{ $t('staking.popular') }}</a
                 >
                 <a
-                    class="tab text-gray-800 dark:text-gray-400"
-                    :class="{ 'tab-active': tab === 'active' }"
+                    class="tab text-gray-600"
+                    :class="{ 'bg-[#ffea6e]': tab === 'active' }"
                     @click="tab = 'active'"
                     >{{ $t('staking.active') }}</a
                 >
                 <a
-                    class="tab text-gray-800 dark:text-gray-400"
-                    :class="{ 'tab-active': tab === 'inactive' }"
+                    class="tab text-gray-600"
+                    :class="{ 'bg-[#ffea6e]': tab === 'inactive' }"
                     @click="tab = 'inactive'"
                     >{{ $t('staking.inactive') }}</a
                 >
@@ -326,7 +326,7 @@ loadAvatars();
                         <tr
                             v-for="({v, rank, logo}, i) in list"
                             :key="v.operator_address"
-                            class="hover:bg-[#ffffff] dark:hover:bg-[#303030] "
+                            class="hover:bg-[#f3f4f6] dark:hover:bg-[#303030] "
                         >
                             <!-- 👉 rank -->
                             <td>
@@ -450,7 +450,7 @@ loadAvatars();
                                 <label
                                     v-else
                                     for="delegate"
-                                    class="btn btn-xs bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] rounded-sm capitalize"
+                                    class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 btn-xs font-semibold bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] rounded-lg capitalize"
                                     @click="
                                         dialog.open('delegate', {
                                             validator_address:
