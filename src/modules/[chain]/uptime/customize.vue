@@ -185,13 +185,13 @@ function color(v: string) {
 
     <!-- Put this part before </body> tag -->
     <input type="checkbox" id="add-validator" class="modal-toggle" @change="initial" />
-    <div class="modal">
-      <div class="modal-box relative">
+    <div class="modal bg-white">
+      <div class="modal-box relative  bg-[#f3f4f6] dark:bg-[#303030]">
         <label for="add-validator" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
         <h3 class="text-lg font-bold">{{ $t('uptime.add_validators') }}</h3>
           <div class="form-control my-5 border-2">
             <div class="input-group input-group-md">
-            <select v-model="selectChain" class="select select-bordered capitalize" @change="changeChain">
+            <select v-model="selectChain" class="select dark:bg-[#303030] select-bordered capitalize" @change="changeChain">
               <option v-for="v in dashboard.chains" :value="v.chainName">
                 {{ v.chainName }}
               </option>
