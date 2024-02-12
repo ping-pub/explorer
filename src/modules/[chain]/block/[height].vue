@@ -64,7 +64,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
   <div>
     <div v-if="isFutureBlock" class="text-center">
       <div v-if="remainingBlocks > 0">
-        <div class="text-primary font-bold text-lg my-10">#{{ target }}</div>
+        <div class="text-black dark:text-[#ffea6e] font-bold text-lg my-10">#{{ target }}</div>
         <Countdown :time="estimateTime" css="md:!text-5xl font-sans md:mx-5" />
         <div class="my-5">{{ $t('block.estimated_time') }}: <span class="text-xl font-bold">{{ format.toLocaleDate(estimateDate) }}</span>
         </div>
@@ -81,7 +81,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
                   <p class="py-4">
                   <div class="join">
                     <input class="input input-bordered join-item" v-model="newHeight" type="number" />
-                    <button class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] join-item" @click="updateTarget()">{{ $t('block.btn_update') }}</button>
+                    <button class="px-2 font-bold bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] uppercase join-item" @click="updateTarget()">{{ $t('block.btn_update') }}</button>
                   </div>
                   </p>
                 </td>
