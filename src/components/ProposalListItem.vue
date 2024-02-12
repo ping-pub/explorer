@@ -52,7 +52,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
           <td class="px-4 w-20">
             <label
               for="proposal-detail-modal"
-              class="text-main text-base hover:text-indigo-400 cursor-pointer"
+              class="text-main text-base hover:text-[#ffea6e] cursor-pointer"
               @click="proposalInfo = item"
             >
               #{{ item?.proposal_id }}</label
@@ -62,7 +62,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
             <div>
               <RouterLink
                 :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
-                class="text-main text-base mb-1 block hover:text-indigo-400 truncate"
+                class="text-main text-base mb-1 block hover:text-[#ffea6e]  truncate"
               >
                 {{ item?.content?.title || item?.title || metaItem(item?.metadata)?.title }}
               </RouterLink>
@@ -118,7 +118,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
             <div class="">
               <label
                 for="vote"
-                class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg btn-xs bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] rounded-sm"
+                class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg btn-xs bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] uppercase rounded-sm"
                 @click="
                   dialog.open('vote', {
                     proposal_id: item?.proposal_id,
@@ -129,7 +129,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
                   item?.voterStatus?.replace('VOTE_OPTION_', '')
                 }}</span>
 
-                <span v-else>Vote</span>
+                <span v-else>VOTE</span>
               </label>
             </div>
           </td>
@@ -144,7 +144,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
         class="px-4 py-4"
       >
         <div
-          class="text-main text-base mb-1 flex justify-between hover:text-indigo-400"
+          class="text-main text-base mb-1 flex justify-between hover:text-gray-500 dark:hover:text-[#ffea6e]"
         >
           <RouterLink
             :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
@@ -153,7 +153,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
           >
           <label
             for="proposal-detail-modal"
-            class="text-main text-base hover:text-indigo-400 cursor-pointer"
+            class="text-main text-base hover:text-[#ffea6e] cursor-pointer"
             @click="proposalInfo = item"
           >
             #{{ item?.proposal_id }}</label
@@ -164,7 +164,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
           <div class="col-span-2">
             <div
               v-if="item.content"
-              class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
+              class="bg-[#dfe2eb] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
             >
               {{ showType(item.content['@type']) }}
             </div>
@@ -212,7 +212,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
             </div>
             <label
               for="vote"
-              class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-xl font-semibold btn-xs bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] rounded-sm"
+              class="uppercase inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-xl font-semibold btn-xs bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] rounded-sm"
               @click="
                 dialog.open('vote', {
                   proposal_id: item?.proposal_id,
