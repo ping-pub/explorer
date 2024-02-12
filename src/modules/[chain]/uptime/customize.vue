@@ -125,7 +125,7 @@ function color(v: string) {
 <template>
   <div>
     <div class="overflow-x-auto w-full">
-      <div class="lg:!flex lg:!items-center lg:!justify-between bg-[#222222] p-5">
+      <div class="lg:!flex lg:!items-center lg:!justify-between bg-[#ffffff] dark:bg-[#222222] p-5">
         <div class="min-w-0 flex-1">
           <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">{{ $t('uptime.my_validators') }}</h2>
           <div class="mt-1 flex flex-col sm:!mt-0 sm:!flex-row sm:!flex-wrap sm:!space-x-6">
@@ -173,14 +173,14 @@ function color(v: string) {
             </td>
             <td class=" capitalize">{{ v.sigingInfo?.tombstoned }}</td>
             <td><span v-if="v.sigingInfo" class="badge " :class="color( v.sigingInfo?.missed_blocks_counter)">{{ v.sigingInfo?.missed_blocks_counter }}</span></td>
-            <td class=""><RouterLink :to="`/${v.chainName}/uptime/#blocks`" class="btn btn-xs bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]">{{ $t('module.blocks') }}</RouterLink></td>
+            <td class=""><RouterLink :to="`/${v.chainName}/uptime/#blocks`" class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] font-semibold rounded-lg px-2 py-1">{{ $t('module.blocks') }}</RouterLink></td>
           </tr>
         </tbody>
       </table>
     </div>
     
     <div class="text-center">
-      <label for="add-validator" class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] mt-5">{{ $t('uptime.add_validators') }}</label>
+      <label for="add-validator" class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] font-bold rounded-xl p-4 mt-5">{{ $t('uptime.add_validators') }}</label>
     </div>
 
     <!-- Put this part before </body> tag -->
@@ -214,7 +214,7 @@ function color(v: string) {
           </table>
         </div>
         <div class="modal-action">
-          <label class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]" @click="add">{{ $t('uptime.add') }}</label>
+          <label class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] font-bold rounded-xl p-4" @click="add">{{ $t('uptime.add') }}</label>
         </div>
       </div>
     </div>
