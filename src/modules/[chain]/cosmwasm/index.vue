@@ -33,8 +33,8 @@ function myContracts() {
         <h2 class="card-title truncate w-full">{{ $t('cosmwasm.title') }}</h2>
 
         <div class="join border border-[#ffea6e]">
-            <input v-model="creator" type=text class="input input-bordered w-40 join-item" placeholder="creator address" />
-            <button class="join-item btn  bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)]" @click="myContracts()">{{ $t('cosmwasm.btn_query') }}</button>
+            <input v-model="creator" type=text class="input input-bordered dark:bg-[#303030] w-40 join-item" placeholder="creator address" />
+            <button class="join-item join-item inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] uppercase font-bold px-4" @click="myContracts()">{{ $t('cosmwasm.btn_query') }}</button>
         </div>
         <div class="overflow-x-auto">
             <table class="table table-compact w-full mt-4 text-sm">
@@ -66,7 +66,7 @@ function myContracts() {
             </table>
             <div class="flex justify-between">
                 <PaginationBar :limit="pageRequest.limit" :total="codes.pagination?.total" :callback="pageload" />
-                <label for="wasm_store_code" class="btn bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] my-6 mr-7" @click="dialog.open('wasm_store_code', {})">{{ $t('cosmwasm.btn_up_sc') }}</label>
+                <label for="wasm_store_code" class="inline-flex items-center justify-center flex-wrap cursor-pointer select-none text-center transition duration-200 rounded-lg btn-sm bg-[#ffea6e] text-black hover:bg-[#ffffff] dark:hover:bg-[#202020] dark:hover:text-white hover:shadow-[0_0_10px_3px_rgba(255,234,110,1)] font-bold uppercase px-4  my-6 mr-7" @click="dialog.open('wasm_store_code', {})">{{ $t('cosmwasm.btn_up_sc') }}</label>
             </div>
         </div>
     </div>
