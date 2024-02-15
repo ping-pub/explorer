@@ -6,11 +6,11 @@
     "coin_type": 118,
     "min_tx_fee": 200,
     "addr_prefix": "althea",
-    "logo": "https://github.com/Winnode/explorer/blob/master/chains/mainnet/logos/althea.jpg",
+    "logo": "https://bafkreidzc4ttr7l64qkllwwomig2zgmj7n4dgvxhedwkl6inbqtq2gpwna.ipfs.nftstorage.link/",
     "assets": [{
         "base": "aalthea",
         "symbol": "ALTHEA",
         "exponent": 18,
-        "logo": "https://github.com/Winnode/explorer/blob/master/chains/mainnet/logos/althea.jpg"
+        "logo": "https://bafkreidzc4ttr7l64qkllwwomig2zgmj7n4dgvxhedwkl6inbqtq2gpwna.ipfs.nftstorage.link/"
     }]
 }
