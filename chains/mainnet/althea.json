@@ -6,11 +6,11 @@
     "coin_type": 118,
     "min_tx_fee": 200,
     "addr_prefix": "althea",
-    "logo": "/logos/althea.jpg",
+    "logo": "https://github.com/Winnode/explorer/blob/master/chains/mainnet/logos/althea.jpg",
     "assets": [{
         "base": "aalthea",
         "symbol": "ALTHEA",
         "exponent": 18,
-        "logo": "/logos/althea.jpg"
+        "logo": "https://github.com/Winnode/explorer/blob/master/chains/mainnet/logos/althea.jpg"
     }]
 }
