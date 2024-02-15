@@ -6,13 +6,13 @@
   "min_tx_fee": 200,
   "sdk_version": "0.46.8",
   "addr_prefix": "zeta",
-  "logo": "/logos/zetachain.jpg",
+  "logo": "https://bafybeifha77ubmfsha5wwnkqd5qvkbjop26y6njeo4xpku56j5icetcsle.ipfs.nftstorage.link/zetachain.jpg",
   "assets": [
     {
       "base": "azeta",
       "symbol": "ZETA",
       "exponent": 18,
-      "logo": "/logos/zetachain.jpg"
+      "logo": "https://bafybeifha77ubmfsha5wwnkqd5qvkbjop26y6njeo4xpku56j5icetcsle.ipfs.nftstorage.link/zetachain.jpg"
     }
   ]
 }
