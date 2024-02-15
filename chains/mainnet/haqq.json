@@ -1,0 +1,31 @@
+{
+  "chain_name": "haqq",
+  "coingecko": "",
+    "api": [
+        {"provider": "Haqq Network", "address": "https://haqq-mainnet-api.itrocket.net"}
+    ],
+    "rpc": [
+        {"provider": "Haqq Network", "address": "https://haqq-mainnet-rpc.itrocket.net"}
+    ],
+  "snapshot_provider": "",
+  "sdk_version": "0.46.10",
+  "coin_type": "60",
+  "min_tx_fee": "3000000000000000",
+  "addr_prefix": "haqq",
+  "logo": "/logos/haqq.png",
+  "keplr_features": [
+    "ibc-transfer",
+    "ibc-go",
+    "eth-address-gen",
+    "eth-key-sign"
+  ],
+  "assets": [
+    {
+      "base": "aISLM",
+      "symbol": "ISLM",
+      "exponent": "18",
+      "coingecko_id": "",
+      "logo": "/logos/haqq.png"
+    }
+  ]
+}

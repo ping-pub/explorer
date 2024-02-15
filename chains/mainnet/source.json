@@ -1,0 +1,16 @@
+{
+    "chain_name": "source",
+    "api": ["https://source-mainnet-api.itrocket.net"],
+    "rpc": ["https://source-mainnet-rpc.itrocket.net"],
+	"sdk_version": "v0.45.15",
+    "coin_type": 118,
+    "min_tx_fee": 200,
+    "addr_prefix": "source",
+    "logo": "/logos/source.jpg",
+    "assets": [{
+        "base": "usource",
+        "symbol": "SOURCE",
+        "exponent": 6,
+        "logo": "/logos/source.jpg"
+    }]
+}
