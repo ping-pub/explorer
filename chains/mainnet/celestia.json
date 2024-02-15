@@ -1,10 +1,10 @@
 {
     "chain_name": "celestia",
     "coingecko": "",
-    "api": ["https://celestia-mainnet-api.itrocket.net"],
-    "rpc": ["https://celestia-mainnet-rpc.itrocket.net"],
+    "api": ["https://celestia-testnet-api.itrocket.net"],
+    "rpc": ["https://celestia-testnet-rpc.itrocket.net"],
     "snapshot_provider": "",
-    "sdk_version": "0.46.14",
+    "sdk_version": "0.46.0",
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "celestia",

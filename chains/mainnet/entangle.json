@@ -1,0 +1,19 @@
+{
+    "chain_name": "entangle",
+    "coingecko": "",
+    "api": ["https://entangle-testnet-api.itrocket.net"], 
+    "rpc": ["https://entangle-testnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.12",
+    "coin_type": "60",
+    "min_tx_fee": "40000",
+    "addr_prefix": "ethm",
+    "logo": "/logos/entangle.jpg",
+    "assets": [{
+        "base": "aNGL",
+        "symbol": "NGL",
+        "exponent": "18", 
+        "coingecko_id": "",
+        "logo": "/logos/entangle.jpg"
+    }]
+}

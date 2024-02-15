@@ -1,0 +1,17 @@
+{
+  "chain_name": "entrypoint",
+  "api": ["https://entrypoint-testnet-api.itrocket.net"],
+  "rpc": ["https://entrypoint-testnet-rpc.itrocket.net"],
+  "sdk_version": "0.47.4",
+  "addr_prefix": "entrypoint",
+  "min_tx_fee": "5000",
+  "logo": "/logos/entrypoint.png",
+  "assets": [
+    {
+      "symbol": "ENTRY",
+      "base": "uentry",
+      "exponent": 6,
+      "logo": "/logos/entrypoint.png"
+    }
+  ]
+}

@@ -1,12 +1,12 @@
 {
     "chain_name": "empower",
     "coingecko": "",
-    "api": ["https://empower-mainnet-api.itrocket.net"],
-    "rpc": ["https://empower-mainnet-rpc.itrocket.net"],
+    "api": ["https://empower-testnet-api.itrocket.net"],
+    "rpc": ["https://empower-testnet-rpc.itrocket.net"],
     "snapshot_provider": "",
-    "sdk_version": "0.47.5",
+    "sdk_version": "0.47.2",
     "coin_type": "118",
-    "min_tx_fee": "5000",
+    "min_tx_fee": "800",
     "addr_prefix": "empower",
     "logo": "/logos/empower.png",
     "assets": [{

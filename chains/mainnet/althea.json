@@ -1,0 +1,16 @@
+{
+    "chain_name": "althea",
+    "api": ["https://althea-testnet-api.itrocket.net"],
+    "rpc": ["https://althea-testnet-rpc.itrocket.net"],
+	"sdk_version": "v0.45.16",
+    "coin_type": 118,
+    "min_tx_fee": 200,
+    "addr_prefix": "althea",
+    "logo": "/logos/althea.jpg",
+    "assets": [{
+        "base": "aalthea",
+        "symbol": "ALTHEA",
+        "exponent": 18,
+        "logo": "/logos/althea.jpg"
+    }]
+}

@@ -1,21 +1,15 @@
 {
-  "chain_name": "terp",
-  "coingecko": "",
-  "api": ["https://terp-mainnet-api.itrocket.net"],
-  "rpc": ["https://terp-mainnet-rpc.itrocket.net"],
-  "snapshot_provider": "",
-  "sdk_version": "0.47.1",
-  "coin_type": "118",
-  "min_tx_fee": "500",
-  "addr_prefix": "terp",
-  "logo": "/logos/terp.jpg",
-  "assets": [
-    {
-      "base": "uterp",
-      "symbol": "TERP",
-      "exponent": "6",
-      "coingecko_id": "",
-      "logo": "/logos/terp.jpg"
-    }
-  ]
+    "chain_name": "terp",
+    "api": ["https://terp-testnet-api.itrocket.net"],
+    "rpc": ["https://terp-testnet-rpc.itrocket.net"],
+    "coin_type": 118,
+    "min_tx_fee": 200,
+    "addr_prefix": "terp",
+    "logo": "/logos/terp.jpg",
+    "assets": [{
+        "base": "uterpx",
+        "symbol": "TERPX",
+        "exponent": 6,
+        "logo": "/logos/terp.jpg"
+    }]
 }

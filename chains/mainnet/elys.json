@@ -1,0 +1,17 @@
+{
+  "chain_name": "elys",
+  "api": ["https://elys-testnet-api.itrocket.net"],
+  "rpc": ["https://elys-testnet-rpc.itrocket.net"],
+  "sdk_version": "0.46.7",
+  "addr_prefix": "elys",
+  "min_tx_fee": "5000",
+  "logo": "/logos/elys.jpg",
+  "assets": [
+    {
+      "symbol": "ELYS",
+      "base": "uelys",
+      "exponent": 6,
+      "logo": "/logos/elys.jpg"
+    }
+  ]
+}

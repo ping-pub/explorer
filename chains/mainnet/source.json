@@ -1,8 +1,8 @@
 {
     "chain_name": "source",
-    "api": ["https://source-mainnet-api.itrocket.net"],
-    "rpc": ["https://source-mainnet-rpc.itrocket.net"],
-	"sdk_version": "v0.45.15",
+    "api": ["https://source-testnet-api.itrocket.net"],
+    "rpc": ["https://source-testnet-rpc.itrocket.net"],
+	"sdk_version": "v0.34.16",
     "coin_type": 118,
     "min_tx_fee": 200,
     "addr_prefix": "source",

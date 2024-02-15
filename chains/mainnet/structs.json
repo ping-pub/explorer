@@ -1,0 +1,18 @@
+{
+  "chain_name": "structs",
+  "api": ["https://structs-testnet-api.itrocket.net"],
+  "rpc": ["https://structs-testnet-rpc.itrocket.net"],
+  "coin_type": 118,
+  "min_tx_fee": 200,
+  "sdk_version": "0.47.3",
+  "addr_prefix": "structs",
+  "logo": "/logos/structs.jpg",
+  "assets": [
+    {
+      "base": "ualpha",
+      "symbol": "ALPHA",
+      "exponent": 6,
+      "logo": "/logos/structs.jpg"
+    }
+  ]
+}
