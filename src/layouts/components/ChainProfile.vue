@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useBlockchain, useBaseStore, type Endpoint } from '@/stores';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
@@ -9,6 +10,7 @@ function changeEndpoint(item: Endpoint) {
   chainStore.setRestEndpoint(item);
   if (chainStore.current) router.push(`/${chainStore.current.chainName}`);
 }
+let rpcModel = ref('');
 </script>
 
 <template>
@@ -102,6 +104,14 @@ function changeEndpoint(item: Endpoint) {
           </div>
         </div>
       </div>
+      <input
+        v-model="rpcModel"
+        class="input w-full mx-4 mt-2 !input-bordered input-sm"
+        @keydown.enter.prevent="
+          changeEndpoint({ address: rpcModel, provider: 'custom' })
+        "
+        :placeholder="'custom: https://rpc.' + chainStore.chainName + '.io'"
+      />
 
       <!-- bottom-->
       <div class="px-4 py-2">&nbsp;</div>
