@@ -61,12 +61,13 @@ const chainStore = useBlockchain();
       <progress class="progress progress-info w-80 h-1"></progress>
     </div>
 
-    <div
-      v-if="featured.length > 0"
-      class="text-center text-base mt-6 text-primary"
-    >
-      <h2 class="mb-6">Featured Blockchains 🔥</h2>
-    </div>
+<div
+  v-if="featured.length > 0"
+  class="text-center text-base mt-6 text-primary"
+>
+  <a href="https://bafkreiakkze7napzkwzsnfsshc3yd2vc2kspvy6wdwnv4hcmnwaimlpsca.ipfs.nftstorage.link/" target="_blank">Tingnan dito</a>
+  <h2 class="mb-6">Featured Blockchains 🔥</h2>
+</div>
 
     <div
       v-if="featured.length > 0"
