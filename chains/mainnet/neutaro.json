@@ -1,0 +1,31 @@
+{
+  "chain_name": "Neutaro",
+  "api": [
+    {
+      "address": "https://api1.neutaro.tech",
+      "provider": "Neutaro"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc1.neutaro.tech",
+      "provider": "Neutaro"
+    }
+  ],
+  "cosmwasm_enabled": true,
+  "sdk_version": "0.45.6",
+  "coin_type": "60",
+  "min_tx_fee": "800",
+  "assets": [
+    {
+      "base": "neutaro",
+      "symbol": "$ntmpi",
+      "exponent": "6",
+      "coingecko_id": "ntmpi",
+      "logo": "https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/Neutaro/chain.png"
+    }
+  ],
+  "addr_prefix": "neutaro",
+  "theme_color": "#ce4747",
+  "logo": "https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/Neutaro/chain.png"
+}
