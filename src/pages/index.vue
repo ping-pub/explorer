@@ -65,8 +65,7 @@ const chainStore = useBlockchain();
   v-if="featured.length > 0"
   class="text-center text-base mt-6 text-primary"
 >
-  <a href="https://bafkreiakkze7napzkwzsnfsshc3yd2vc2kspvy6wdwnv4hcmnwaimlpsca.ipfs.nftstorage.link/" target="_blank">Tingnan dito</a>
-  <h2 class="mb-6">Featured Blockchains 🔥</h2>
+  <img src="https://bafkreiakkze7napzkwzsnfsshc3yd2vc2kspvy6wdwnv4hcmnwaimlpsca.ipfs.nftstorage.link/" alt="Featured Blockchains Image">
 </div>
 
     <div
