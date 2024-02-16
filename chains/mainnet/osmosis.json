@@ -8,7 +8,7 @@
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "osmo",
-    "logo": "/logos/osmosis.jpg",
+    "logo": "/logos/Osmosis.png",
     "theme_color": "#812cd6",
     "assets": [{
         "base": "uosmo",
