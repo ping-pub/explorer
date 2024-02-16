@@ -67,7 +67,7 @@ function selected(route: any, nav: NavLink) {
     >
       <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
         <RouterLink to="/" class="flex items-center">
-          <img class="w-60 h-20" src="https://bafkreic2epj67ikzlldmisan4ei4u65sik5d5xyo7kgxmk4busnlpqipom.ipfs.nftstorage.link/" />
+          <img class="w-50 h-18" src="https://bafkreiakkze7napzkwzsnfsshc3yd2vc2kspvy6wdwnv4hcmnwaimlpsca.ipfs.nftstorage.link/" />
         </RouterLink>
         <div
           class="pr-4 cursor-pointer xl:!hidden"
