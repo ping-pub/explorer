@@ -64,8 +64,11 @@ const chainStore = useBlockchain();
 <div
   v-if="featured.length > 0"
   class="text-center text-base mt-6 text-primary"
+  style="display: flex; flex-direction: column; align-items: center;"
 >
-  <img src="https://bafkreiakkze7napzkwzsnfsshc3yd2vc2kspvy6wdwnv4hcmnwaimlpsca.ipfs.nftstorage.link/" alt="Featured Blockchains Image">
+  <div style="text-align: center;">
+    <img src="https://bafkreiakkze7napzkwzsnfsshc3yd2vc2kspvy6wdwnv4hcmnwaimlpsca.ipfs.nftstorage.link/" alt="Featured Blockchains Image">
+  </div>
 </div>
 
     <div
