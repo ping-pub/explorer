@@ -15,13 +15,13 @@
         "symbol": "OSMO",
         "exponent": "6",
         "coingecko_id": "osmosis", 
-        "logo": "/logos/osmosis.jpg"
+        "logo": "/logos/Osmosis.png"
     },{
         "base": "uion",
         "symbol": "ION",
         "exponent": "6",
         "coingecko_id": "ion", 
-        "logo": "/logos/osmosis.jpg"
+        "logo": "/logos/Osmosis.png"
     },{
         "base": "usomm",
         "symbol": "SOMM",
