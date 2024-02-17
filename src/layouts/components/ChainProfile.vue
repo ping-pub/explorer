@@ -106,7 +106,7 @@ let rpcModel = ref('');
       </div>
       <input
         v-model="rpcModel"
-        class="input w-full mx-4 mt-2 !input-bordered input-sm"
+        class="input w-full !input-bordered input-sm"
         @keydown.enter.prevent="
           changeEndpoint({ address: rpcModel, provider: 'custom' })
         "

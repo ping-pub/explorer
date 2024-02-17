@@ -8,6 +8,10 @@
   ],
   "rpc": [
     {
+      "address": "https://neutaro.rpc.orai.io",
+      "provider": "Oraichain"
+    },
+    {
       "address": "https://rpc1.neutaro.tech",
       "provider": "Neutaro"
     }
