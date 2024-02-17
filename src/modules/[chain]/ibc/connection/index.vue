@@ -1,8 +1,11 @@
 <script lang="ts" setup>
-// router.push(`/${props.chain}/ibc/connection/connection-0`)
+import { useRouter } from 'vue-router';
+const props = defineProps(['chain']);
+const router = useRouter();
+router.push(`/${props.chain}/ibc/connection/connection-0`);
 </script>
 <template>
-    <div></div>
+  <div></div>
 </template>
 <route>
     {

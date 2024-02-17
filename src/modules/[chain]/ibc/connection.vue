@@ -1,16 +1,12 @@
 <script lang="ts" setup>
-import PaginationBar from '@/components/PaginationBar.vue';
-import { useBlockchain, useFormatter } from '@/stores';
-import { PageRequest, type Connection, type Pagination } from '@/types';
-import { computed, onMounted } from 'vue';
-import { ref } from 'vue';
+import { useBlockchain } from '@/stores';
+import { PageRequest } from '@/types';
+import { onMounted, ref } from 'vue';
 
-import ChainRegistryClient from '@ping-pub/chain-registry-client';
-import type { IBCPath } from '@ping-pub/chain-registry-client/dist/types';
-import router from '@/router';
-import { useIBCModule } from './connStore';
 import type { PageResponse } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
 import type { IdentifiedConnection } from 'cosmjs-types/ibc/core/connection/v1/connection';
+import { useRoute } from 'vue-router';
+import { useIBCModule } from './connStore';
 
 const props = defineProps(['chain']);
 const chainStore = useBlockchain();
@@ -19,6 +15,7 @@ const list = ref([] as IdentifiedConnection[]);
 const pageRequest = ref(new PageRequest());
 const pageResponse = ref({} as PageResponse | undefined);
 const tab = ref('registry');
+const route = useRoute();
 
 onMounted(() => {
   pageload(1);
@@ -31,7 +28,8 @@ function pageload(p: number) {
     list.value = x.connections;
     pageResponse.value = x.pagination;
     if (x.pagination?.total && Number(x.pagination.total) > 0) {
-      ibcStore.showConnection(0);
+      const connId = route.params.connection_id as string;
+      ibcStore.showConnection(connId || 0);
     }
   });
 }

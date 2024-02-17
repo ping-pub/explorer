@@ -1,30 +1,18 @@
 <script lang="ts" setup>
+import PaginationBar from '@/components/PaginationBar.vue';
+import type { ExtraTxSearchResponse } from '@/libs/client';
 import { formatSeconds } from '@/libs/utils';
 import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
-import {
-  type Connection,
-  type ClientState,
-  type Channel,
-  PageRequest,
-  type TxResponse,
-  type PaginatedTxs,
-} from '@/types';
-import { computed, onMounted } from 'vue';
-import { ref } from 'vue';
-import { useIBCModule } from '../connStore';
-import PaginationBar from '@/components/PaginationBar.vue';
+import { PageRequest } from '@/types';
+import { toHex } from '@cosmjs/encoding';
 import { Icon } from '@iconify/vue';
-import type { ConnectionEnd } from 'cosmjs-types/ibc/core/connection/v1/connection';
-import type { IdentifiedClientState } from 'cosmjs-types/ibc/core/client/v1/client';
 import type { IdentifiedChannel } from 'cosmjs-types/ibc/core/channel/v1/channel';
-import {
-  ClientState as TendermintClientState,
-  ConsensusState as TendermintConsensusState,
-} from 'cosmjs-types/ibc/lightclients/tendermint/v1/tendermint';
 import { State } from 'cosmjs-types/ibc/core/channel/v1/channel';
-import type { TxSearchResponse } from '@cosmjs/tendermint-rpc';
-import { toBase64, toHex } from '@cosmjs/encoding';
-import type { ExtraTxSearchResponse } from '@/libs/client';
+import type { IdentifiedClientState } from 'cosmjs-types/ibc/core/client/v1/client';
+import type { ConnectionEnd } from 'cosmjs-types/ibc/core/connection/v1/connection';
+import { ClientState as TendermintClientState } from 'cosmjs-types/ibc/lightclients/tendermint/v1/tendermint';
+import { computed, onMounted, ref } from 'vue';
+import { useIBCModule } from '../connStore';
 
 const props = defineProps(['chain', 'connection_id']);
 const chainStore = useBlockchain();
