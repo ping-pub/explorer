@@ -291,14 +291,14 @@ export const useDashboard = defineStore('dashboard', {
         if(this.chains[k]) this.chains[k].assets.forEach(a => {
           if(a.coingecko_id !== undefined && a.coingecko_id.length > 0) {
             coinIds.push(a.coingecko_id)
-            a.denom_units.forEach(u => {
-              this.coingecko[u.denom] = {
-                coinId: a.coingecko_id || '',
-                exponent: u.exponent,
-                symbol: a.symbol
-              }
-            })
-          } 
+          }
+          a.denom_units.forEach(u => {
+            this.coingecko[u.denom] = {
+              coinId: a.coingecko_id || '',
+              exponent: u.exponent,
+              symbol: a.symbol
+            }
+          })
         })
       })
 
