@@ -1,0 +1,36 @@
+{
+  "chain_name": "humans",
+  "api": [
+    { "provider": "POSTHUMAN∞DVS", "address": "https://rest.humans.posthuman.digital" }
+  ],
+  "rpc": [
+    { "provider": "POSTHUMAN∞DVS", "address": "https://rpc.humans.posthuman.digital" }
+  ],
+  "features": [
+    "dashboard",
+    "blocks",
+    "ibc",
+    "cosmwasm",
+    "uptime",
+    "parameters",
+    "state-sync",
+    "consensus",
+    "supply",
+    "widget"
+  ],
+  "sdk_version": "0.46.11",
+  "coin_type": "60",
+  "min_tx_fee": "8000",
+  "assets": [
+    {
+      "base": "aheat",
+      "symbol": "HEAT",
+      "exponent": "18",
+      "coingecko_id": "humans-ai",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/humans/images/humans_small_light.svg"
+    }
+  ],
+  "addr_prefix": "human",
+  "theme_color": "#2e2e2e",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/humans/images/humans_small_light.svg"
+}

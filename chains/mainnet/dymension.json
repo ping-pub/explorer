@@ -1,0 +1,42 @@
+{
+  "chain_name": "dymension",
+  "api": [
+    {
+      "provider": "POSTHUMAN∞DVS",
+      "address": "https://rest.dymension.posthuman.digital"
+    }
+  ],
+  "rpc": [
+    {
+      "provider": "POSTHUMAN∞DVS",
+      "address": "https://rpc.dymension.posthuman.digital"
+    }
+  ],
+  "features": [
+    "dashboard",
+    "blocks",
+    "ibc",
+    "cosmwasm",
+    "uptime",
+    "parameters",
+    "state-sync",
+    "consensus",
+    "supply",
+    "widget"
+  ],
+  "sdk_version": "0.46.15",
+  "coin_type": "60",
+  "min_tx_fee": "8000",
+  "assets": [
+    {
+      "base": "adym",
+      "symbol": "DYM",
+      "exponent": "18",
+      "coingecko_id": "dymension",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dymension/images/dymension-logo.svg"
+    }
+  ],
+  "addr_prefix": "dym",
+  "theme_color": "#2e2e2e",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dymension/images/dymension-logo.svg"
+}
