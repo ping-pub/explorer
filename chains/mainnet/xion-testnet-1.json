@@ -2,12 +2,12 @@
   "chain_name": "xion-testnet-1",
   "coingecko": "XION",
   "api": [
-    {"provider": "burnt", "address": "https://api.xion-testnet-1.burnt.com"}
+    {"provider": "Lavender.Five Nodes \uD83D\uDC1D", "address": "https://testnet-burnt-api.lavenderfive.com"}
   ],
   "rpc": [
-    {"provider": "burnt", "address": "https://rpc.xion-testnet-1.burnt.com:443"}
+    {"provider": "Lavender.Five Nodes \uD83D\uDC1D", "address": "https://testnet-burnt-rpc.lavenderfive.com/"}
   ],
-  "snapshot_provider": "5a6101778428024311120c9d24721b5765db8351@rpc.xion-testnet-1.burnt.com:26656",
+  "snapshot_provider": "",
   "sdk_version": "0.47.3",
   "coin_type": "118",
   "min_tx_fee": "800",
