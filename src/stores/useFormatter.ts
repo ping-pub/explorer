@@ -121,16 +121,15 @@ export const useFormatter = defineStore('formatter', {
         case denom.startsWith("a"): return 18
         case denom==='inj': return 18
       }
-      return 0
+      return this.exponentForDenom(denom)
     },
     tokenAmountNumber(token?: Coin) {
       if(!token || !token.denom) return 0
 
       // find the symbol
       const symbol = this.dashboard.coingecko[token.denom]?.symbol || token.denom 
-      // convert denomination to to symbol
-      const exponent =
-        this.dashboard.coingecko[symbol?.toLowerCase()]?.exponent || this.specialDenom(token.denom);
+      // convert denomination to symbol
+      const exponent = this.dashboard.coingecko[symbol?.toLowerCase()]?.exponent || this.specialDenom(token.denom);
       // caculate amount of symbol
       const amount = Number(token.amount) / (10 ** exponent)
       return amount
@@ -160,7 +159,20 @@ export const useFormatter = defineStore('formatter', {
       }
       return undefined
     },
+    exponentForDenom(denom: string) {
+      const asset: Asset | undefined = this.findGlobalAssetConfig(denom)
+      let exponent = 0;
+      if (asset) {
+        // find the max exponent for display
+        asset.denom_units.forEach((x) => {
+          if (x.exponent >= exponent) {
+            exponent = x.exponent;
+          }
+        });
+      }
 
+      return exponent;
+    },
     tokenDisplayDenom(denom?: string) {
       if (denom) {
         let asset: Asset | undefined;
