@@ -3,11 +3,11 @@ FROM node:alpine as builder
 
   COPY package.json .
   RUN set -eux \
-    && yarn --ignore-engines install
+    && yarn
 
   COPY . .
   RUN set -eux \
-    && yarn --ignore-engines build
+    && yarn build
 
 FROM nginx:alpine as app
   COPY --from=builder /app/dist/ /usr/share/nginx/html/
