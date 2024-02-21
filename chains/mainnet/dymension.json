@@ -12,18 +12,6 @@
       "address": "https://rpc.dymension.posthuman.digital"
     }
   ],
-  "features": [
-    "dashboard",
-    "blocks",
-    "ibc",
-    "cosmwasm",
-    "uptime",
-    "parameters",
-    "state-sync",
-    "consensus",
-    "supply",
-    "widget"
-  ],
   "sdk_version": "0.46.15",
   "coin_type": "60",
   "min_tx_fee": "8000",

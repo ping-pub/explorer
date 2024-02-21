@@ -25,13 +25,6 @@ const chains = computed(() => {
   }
 });
 
-const featured = computed(() => {
-  const names = ["cosmos", "osmosis", "akash", "celestia", "evmos", "injective", "dydx", "noble"];
-  return chains.value
-    .filter(x => names.includes(x.chainName))
-    .sort((a, b)=> (names.indexOf(a.chainName) - names.indexOf(b.chainName)))
-})
-
 const chainStore = useBlockchain()
 </script>
 <template>
@@ -54,20 +47,6 @@ const chainStore = useBlockchain()
       class="flex justify-center"
     >
       <progress class="progress progress-info w-80 h-1"></progress>
-    </div>
-
-    <div v-if="featured.length>0" class="text-center text-base mt-6">
-      <h2 class="mb-6"> Featured Blockchains </h2>
-    </div>
-
-    <div v-if="featured.length>0"
-      class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"
-    >
-    <ChainSummary
-        v-for="(chain, index) in featured"
-        :key="index"
-        :name="chain.chainName"
-      />
     </div>
 
     <div class="text-center text-base mt-6">

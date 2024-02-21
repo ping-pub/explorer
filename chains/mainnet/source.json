@@ -12,18 +12,6 @@
       "address": "https://rpc.source.posthuman.digital"
     }
   ],
-  "features": [
-    "dashboard",
-    "blocks",
-    "ibc",
-    "cosmwasm",
-    "uptime",
-    "parameters",
-    "state-sync",
-    "consensus",
-    "supply",
-    "widget"
-  ],
   "sdk_version": "0.45",
   "coin_type": "118",
   "min_tx_fee": "8000",

@@ -21,7 +21,7 @@ onMounted(() => {
         <div
           v-for="(item, index) of chain.items"
           :key="index"
-          class="rounded-sm bg-active px-4 py-2"
+          class="rounded-sm bg px-4 py-2"
         >
           <div class="text-xs mb-2 text-secondary">{{ item.subtitle }}</div>
           <div class="text-base text-main">{{ item.value }}</div>
