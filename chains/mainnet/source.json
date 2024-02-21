@@ -1,0 +1,42 @@
+{
+  "chain_name": "source",
+  "api": [
+    {
+      "provider": "POSTHUMAN∞DVS",
+      "address": "https://rest.source.posthuman.digital"
+    }
+  ],
+  "rpc": [
+    {
+      "provider": "POSTHUMAN∞DVS",
+      "address": "https://rpc.source.posthuman.digital"
+    }
+  ],
+  "features": [
+    "dashboard",
+    "blocks",
+    "ibc",
+    "cosmwasm",
+    "uptime",
+    "parameters",
+    "state-sync",
+    "consensus",
+    "supply",
+    "widget"
+  ],
+  "sdk_version": "0.45",
+  "coin_type": "118",
+  "min_tx_fee": "8000",
+  "assets": [
+    {
+      "base": "usource",
+      "symbol": "SOURCE",
+      "exponent": "6",
+      "coingecko_id": "source",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/source/images/source.svg"
+    }
+  ],
+  "addr_prefix": "source",
+  "theme_color": "#2e2e2e",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/source/images/source.svg"
+}
