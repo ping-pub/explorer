@@ -31,6 +31,7 @@ export interface GovProposal {
     description?: string;
     current?: any[];
     changes?: any[];
+    params?: any[];
     plan?: {
       height?: string | number;
       time?: string | number;
