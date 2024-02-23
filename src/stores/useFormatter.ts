@@ -107,7 +107,7 @@ export const useFormatter = defineStore('formatter', {
       return info ? info[`${currency}_24h_change`] || 0 : 0;
     },
     showChanges(v?: number) {
-      return v!==0 ? numeral(v).format("+0,0.[00]"): ""
+      return v!==0 ? numeral(v).format("+0,0"): ""
     },
     tokenValue(token?: Coin) {
       if(token) {
