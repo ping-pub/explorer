@@ -1,6 +1,6 @@
 {
     "chain_name": "allora testnet",
-    "registry_name": "testnet",
+    "registry_name": "Allora",
     "api": [
         {"provider": "upshot", "address": "https://allora-api.prod-us-east-1.behindthecurtain.xyz:8443"}
     ],
