@@ -63,7 +63,7 @@ export const useStakingStore = defineStore('stakingStore', {
       }
     },
     async fetchAcitveValdiators() {
-      return this.fetchValidators('BOND_STATUS_BONDED');
+      return this.fetchValidators('BOND_STATUS_BONDED', 500);
     },
     async fetchInacitveValdiators() {
       return this.fetchValidators('BOND_STATUS_UNBONDED');
@@ -132,12 +132,12 @@ export const useStakingStore = defineStore('stakingStore', {
         await this.fetchKeyRotation(chain_id, pubKeyToValcons(val.consensus_pubkey, prefix.replace('valoper','')))
       }
     },
-    async fetchValidators(status: string) {
+    async fetchValidators(status: string, limit = 300) {
       if(this.blockchain.isConsumerChain) {
         if(this.blockchain.current?.providerChain.api && this.blockchain.current.providerChain.api.length > 0) {
           const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address)
           // provider validators
-          const res = await client.getStakingValidators(status)
+          const res = await client.getStakingValidators(status, limit)
           const proVals = res.validators.sort(
             (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
           )
@@ -148,7 +148,7 @@ export const useStakingStore = defineStore('stakingStore', {
           return proVals
         }
       }
-      return this.blockchain.rpc?.getStakingValidators(status).then((res) => {
+      return this.blockchain.rpc?.getStakingValidators(status, limit).then((res) => {
         const vals = res.validators.sort(
           (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
         );
