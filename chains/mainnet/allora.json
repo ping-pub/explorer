@@ -2,15 +2,21 @@
     "chain_name": "allora testnet",
     "registry_name": "Allora",
     "api": [
-        {"provider": "upshot", "address": "https://allora-api1.prod-us-east-1.behindthecurtain.xyz:8443"}
+        {
+            "provider": "upshot",
+            "address": "https://allora-api1.prod-us-east-1.behindthecurtain.xyz:8443"
+        }
     ],
     "sdk_version": "0.45.1",
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "allora",
-    "assets": [{
-        "base": "uallo",
-        "symbol": "ALLO",
-        "exponent": "6"
-    }]
+    "assets": [
+        {
+            "base": "uallo",
+            "symbol": "ALLO",
+            "exponent": "6"
+        }
+    ],
+    "logo": "/chain-logos/allora.png"
 }
