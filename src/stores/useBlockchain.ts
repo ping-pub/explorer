@@ -22,8 +22,6 @@ import {
   useWalletStore,
 } from '.';
 import { useBlockModule } from '@/modules/[chain]/block/block';
-import { DEFAULT } from '@/libs';
-import { hexToRgb, rgbToHsl } from '@/libs/utils';
 
 export const useBlockchain = defineStore('blockchain', {
   state: () => {
@@ -41,10 +39,10 @@ export const useBlockchain = defineStore('blockchain', {
   },
   getters: {
     current(): ChainConfig | undefined {
-      const chain = this.dashboard.chains[this.chainName]
+      const chain = this.dashboard.chains[this.chainName];
       // update chain config with dynamic updated sdk version
-      const sdkversion = localStorage.getItem(`sdk_version_${this.chainName}`)
-      if(sdkversion && chain?.versions) {
+      const sdkversion = localStorage.getItem(`sdk_version_${this.chainName}`);
+      if (sdkversion && chain?.versions) {
         chain.versions.cosmosSdk = sdkversion;
       }
       return chain;
@@ -68,15 +66,15 @@ export const useBlockchain = defineStore('blockchain', {
       const router = useRouter();
       const routes = router?.getRoutes() || [];
       if (this.current && routes) {
-        if (this.current?.themeColor) {
-          const { color } = hexToRgb(this.current?.themeColor);
-          const { h, s, l } = rgbToHsl(color);
-          const themeColor = h + ' ' + s + '% ' + l +'%';
-          document.body.style.setProperty('--p', `${themeColor}`);
-          // document.body.style.setProperty('--p', `${this.current?.themeColor}`);
-        } else {
-          document.body.style.setProperty('--p', '237.65 100% 70%');
-        }
+        // if (this.current?.themeColor) {
+        //   const { color } = hexToRgb(this.current?.themeColor);
+        //   const { h, s, l } = rgbToHsl(color);
+        //   const themeColor = h + ' ' + s + '% ' + l +'%';
+        //   document.body.style.setProperty('--p', `${themeColor}`);
+        //   // document.body.style.setProperty('--p', `${this.current?.themeColor}`);
+        // } else {
+        //   document.body.style.setProperty('--p', '237.65 100% 70%');
+        // }
         currNavItem = [
           {
             title: this.current?.prettyName || this.chainName || '',
@@ -118,23 +116,23 @@ export const useBlockchain = defineStore('blockchain', {
       // combine all together
       return [
         ...currNavItem,
-        { heading: 'Ecosystem' } as NavSectionTitle,
-        {
-          title: 'Favorite',
-          children: favNavItems,
-          badgeContent: favNavItems.length,
-          badgeClass: 'bg-primary',
-          i18n: true,
-          icon: { icon: 'mdi-star', size: '22' },
-        } as NavGroup,
-        {
-          title: 'All Blockchains',
-          to: { path: '/' },
-          badgeContent: this.dashboard.length,
-          badgeClass: 'bg-primary',
-          i18n: true,
-          icon: { icon: 'mdi-grid', size: '22' },
-        } as NavLink,
+        // { heading: 'Ecosystem' } as NavSectionTitle,
+        // {
+        //   title: 'Favorite',
+        //   children: favNavItems,
+        //   badgeContent: favNavItems.length,
+        //   badgeClass: 'bg-primary',
+        //   i18n: true,
+        //   icon: { icon: 'mdi-star', size: '22' },
+        // } as NavGroup,
+        // {
+        //   title: 'All Blockchains',
+        //   to: { path: '/' },
+        //   badgeContent: this.dashboard.length,
+        //   badgeClass: 'bg-primary',
+        //   i18n: true,
+        //   icon: { icon: 'mdi-grid', size: '22' },
+        // } as NavLink,
       ];
     },
   },
@@ -153,7 +151,7 @@ export const useBlockchain = defineStore('blockchain', {
       useBlockModule().initial();
     },
 
-    randomEndpoint(chainName: string) : Endpoint | undefined {
+    randomEndpoint(chainName: string): Endpoint | undefined {
       const end = localStorage.getItem(`endpoint-${chainName}`);
       if (end) {
         return JSON.parse(end);
@@ -162,14 +160,14 @@ export const useBlockchain = defineStore('blockchain', {
         if (all) {
           const rn = Math.random();
           const endpoint = all[Math.floor(rn * all.length)];
-          return endpoint
+          return endpoint;
         }
       }
     },
 
     async randomSetupEndpoint() {
-      const endpoint = this.randomEndpoint(this.chainName)
-      if(endpoint) await this.setRestEndpoint(endpoint);
+      const endpoint = this.randomEndpoint(this.chainName);
+      if (endpoint) await this.setRestEndpoint(endpoint);
     },
 
     async setRestEndpoint(endpoint: Endpoint) {
@@ -183,14 +181,15 @@ export const useBlockchain = defineStore('blockchain', {
     },
     async setCurrent(name: string) {
       // Ensure chains are loaded due to asynchronous calls.
-      if(this.dashboard.length === 0) {
+      if (this.dashboard.length === 0) {
         await this.dashboard.initial();
       }
 
       // Find the case-sensitive name for the chainName, else simply use the parameter-value.
-      const caseSensitiveName = 
-        Object.keys(this.dashboard.chains).find((x) => x.toLowerCase() === name.toLowerCase()) 
-        || name;
+      const caseSensitiveName =
+        Object.keys(this.dashboard.chains).find(
+          (x) => x.toLowerCase() === name.toLowerCase()
+        ) || name;
 
       // Update chainName if needed
       if (caseSensitiveName !== this.chainName) {
