@@ -1,10 +1,10 @@
 {
-    "chain_name": "allora testnet",
+    "chain_name": "allora edgenet",
     "registry_name": "Allora",
     "api": [
         {
             "provider": "upshot",
-            "address": "https://allora-api1.prod-us-east-1.behindthecurtain.xyz:8443"
+            "address": "https://allora-api.edgenet.allora.network:8443"
         }
     ],
     "sdk_version": "0.45.1",
