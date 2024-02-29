@@ -257,7 +257,7 @@ function metaItem(metadata: string | undefined): {
               : 'text-info'
           "
         >
-          {{ status }}
+          {{ proposal.status }}
         </div>
       </h2>
 
