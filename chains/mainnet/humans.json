@@ -11,8 +11,8 @@
   "min_tx_fee": "8000",
   "assets": [
     {
-      "base": "aheat",
-      "symbol": "HEAT",
+      "base": "aheart",
+      "symbol": "HEART",
       "exponent": "18",
       "coingecko_id": "humans-ai",
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/humans/images/humans_small_light.svg"
