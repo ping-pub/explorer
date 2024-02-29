@@ -2,5 +2,5 @@
 const props = defineProps(['value']);
 </script>
 <template>
-  <span>{{ props.value }}</span>
+  <span>{{ props.value.toString() }}</span>
 </template>

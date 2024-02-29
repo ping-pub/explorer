@@ -80,6 +80,12 @@ store.fetchProposal(props.proposal_id).then((res) => {
   }
 });
 
+const proposalRest = computed(() => {
+  if (!proposal.value.content) return;
+  const { title, description, plan, typeUrl, ...rest } = proposal.value.content;
+  return rest;
+});
+
 const color = computed(() => {
   if (proposal.value.status === ProposalStatus.PROPOSAL_STATUS_PASSED) {
     // 'PROPOSAL_STATUS_PASSED') {
@@ -254,15 +260,16 @@ function metaItem(metadata: string | undefined): {
           {{ status }}
         </div>
       </h2>
-      <div class="">
-        <ObjectElement :value="proposal.content" />
-      </div>
+
       <div v-if="proposal.content?.description">
         <MdEditor
           :model-value="format.multiLine(proposal.content?.description)"
           previewOnly
           class="md-editor-recover"
         ></MdEditor>
+      </div>
+      <div v-if="proposalRest">
+        <ObjectElement :value="proposalRest" />
       </div>
     </div>
     <!-- grid lg:!!grid-cols-3 auto-rows-max-->
@@ -446,7 +453,7 @@ function metaItem(metadata: string | undefined): {
                           .toLowerCase()
                           .replace(/^vote_option/, '')
                           .replaceAll(/_(.)/g, (m, g) => ' ' + g.toUpperCase())
-                          .trim()}:${format.percent(x.weight)}`
+                          .trim()}:${format.percent(x.weight, 1e18)}`
                     )
                     .join(', ')
                 }}

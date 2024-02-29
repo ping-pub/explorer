@@ -16,6 +16,8 @@ function selectByElement() {
       case first instanceof Uint8Array:
         return ArrayBytesElement;
       case typeof first === 'string':
+      case typeof first === 'number':
+      case typeof first === 'bigint':
         return ArrayStringElement;
       case Object.keys(first).includes('denom'):
         return ArrayCoinElement;
