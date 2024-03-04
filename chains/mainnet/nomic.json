@@ -1,7 +1,7 @@
 {
     "chain_name": "nomic",
     "api": ["https://app.nomic.io:8443"],
-    "rpc": [""],
+    "rpc": ["https://rpc-nomic.whispernode.com:443"],
     "snapshot_provider": "",
     "sdk_version": "0.47.5",
     "coin_type": "118",
