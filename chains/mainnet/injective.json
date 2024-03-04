@@ -1,0 +1,18 @@
+{
+    "chain_name": "injective",
+    "api": ["https://lcd-injective.whispernode.com:443"],
+    "rpc": ["https://rpc-injective.whispernode.com:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.47.5",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "addr_prefix": "inj",
+    "logo": "/logos/injective.jpg",
+    "assets": [{
+        "base": "inj",
+        "symbol": "INJ",
+        "exponent": "18",
+        "coingecko_id": "injective", 
+        "logo": "/logos/injective.jpg"
+    }]
+}
