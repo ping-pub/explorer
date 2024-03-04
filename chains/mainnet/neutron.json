@@ -1,0 +1,18 @@
+{
+    "chain_name": "neutron",
+    "api": ["https://lcd-neutron.whispernode.com:443"],
+    "rpc": ["https://rpc-neutron.whispernode.com:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.47.6",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "addr_prefix": "neutron",
+    "logo": "/logos/neutron.svg",
+    "assets": [{
+        "base": "untrn",
+        "symbol": "NTRN",
+        "exponent": "6",
+        "coingecko_id": "neutron", 
+        "logo": "/logos/neutron.svg"
+    }]
+}
