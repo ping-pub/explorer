@@ -1,0 +1,18 @@
+{
+    "chain_name": "jackal",
+    "api": ["https://lcd-jackal.whispernode.com:443"],
+    "rpc": ["https://rpc-jackal.whispernode.com:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.47.5",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "addr_prefix": "jackal",
+    "logo": "/logos/jackal.png",
+    "assets": [{
+        "base": "ujkl",
+        "symbol": "JKL",
+        "exponent": "6",
+        "coingecko_id": "jackal-protocol", 
+        "logo": "/logos/jackal.png"
+    }]
+}
