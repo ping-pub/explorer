@@ -1,0 +1,18 @@
+{
+    "chain_name": "archway",
+    "api": "https://lcd-archway.whispernode.com:443",
+    "rpc": ["https://lcd-archway.whispernode.com:443", "https://rpc-sentinel.keplr.app:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.6",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "addr_prefix": "archway",
+    "logo": "/logos/archway.png",
+    "assets": [{
+        "base": "aarch",
+        "symbol": "ARCH",
+        "exponent": "18",
+        "coingecko_id": "archway", 
+        "logo": "/logos/archway.png"
+    }]
+}
