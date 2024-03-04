@@ -12,7 +12,7 @@
         "base": "inj",
         "symbol": "INJ",
         "exponent": "18",
-        "coingecko_id": "injective", 
+        "coingecko_id": "injective-protocol", 
         "logo": "/logos/injective.jpg"
     }]
 }
