@@ -1,5 +1,7 @@
 <script lang="ts" setup>
+import { toHex } from '@cosmjs/encoding';
 import type { Commit } from '@cosmjs/tendermint-rpc';
+import { toBase64 } from '@injectivelabs/sdk-ts';
 import { computed, type PropType } from 'vue';
 
 const props = defineProps({
@@ -12,9 +14,11 @@ const bars = computed(() => {
   if (!props.blocks) return uptime;
   props.blocks.filter(Boolean).forEach((element) => {
     const has = element.signatures?.findIndex(
-      (sig) => sig.validatorAddress === props.validator
+      (sig) =>
+        sig.validatorAddress &&
+        toHex(sig.validatorAddress).toUpperCase() === props.validator
     );
-    // console.log(has, props.validato, element)
+
     uptime.push({
       height: element.height,
       color: has > -1 ? 'bg-green-500' : 'bg-red-500',

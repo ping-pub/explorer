@@ -56,7 +56,7 @@ const list = computed(() => {
       return {
         v,
         signing,
-        hex: toBase64(fromHex(hexAddress)),
+        hex: hexAddress,
         uptime:
           signing && window > 0
             ? (window - Number(signing.missedBlocksCounter)) / window
@@ -72,7 +72,7 @@ const list = computed(() => {
       return {
         v,
         signing,
-        hex: toBase64(fromHex(consensusPubkeyToHexAddress(v.consensusPubkey))),
+        hex: consensusPubkeyToHexAddress(v.consensusPubkey),
         uptime:
           signing && window > 0
             ? (window - Number(signing.missedBlocksCounter)) / window
@@ -313,7 +313,10 @@ function fetchAllKeyRotation() {
                   :data-tip="`Window size: ${slashingParam.signedBlocksWindow}`"
                   ><span class="ml-2 btn btn-error btn-xs">{{
                     slashingParam.minSignedPerWindow &&
-                    format.percent(fromAscii(slashingParam.minSignedPerWindow))
+                    format.percent(
+                      fromAscii(slashingParam.minSignedPerWindow),
+                      1e18
+                    )
                   }}</span>
                 </span>
               </td>
