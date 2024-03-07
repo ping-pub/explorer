@@ -2,7 +2,7 @@ import fetch from 'cross-fetch';
 
 export async function fetchData<T>(
   url: string,
-  adapter: (source: any) => T
+  adapter: (source: any) => Promise<T>
 ): Promise<T> {
   const response = await fetch(url);
   if (!response.ok) {
@@ -28,9 +28,12 @@ try {
   console.error(error.message);
 }
 // */
-
 export async function get(url: string) {
-  return (await fetch(url)).json();
+  return (await fetch(url, {referrerPolicy: 'origin-when-cross-origin'})).json();
+}
+
+export async function getB(url: string) {
+  return (await fetch(url, {referrerPolicy: 'origin-when-cross-origin'})).arrayBuffer();
 }
 
 export async function post(url: string, data: any) {
@@ -38,11 +41,11 @@ export async function post(url: string, data: any) {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     // mode: 'cors', // no-cors, *cors, same-origin
     // credentials: 'same-origin', // redirect: 'follow', // manual, *follow, error
-    // referrerPolicy: 'origin', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    referrerPolicy: 'origin-when-cross-origin', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
     headers: {
-      'Content-Type': 'text/plain',
+      'Content-Type': 'application/json',
       Accept: '*/*',
-      'Accept-Encoding': 'gzip, deflate, br',
+      // 'Accept-Encoding': 'gzip, deflate, br',
     },
     body: JSON.stringify(data), // body data type must match "Content-Type" header
   });

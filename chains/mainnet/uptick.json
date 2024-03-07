@@ -1,5 +1,5 @@
 {
-  "chain_name": "Uptick",
+  "chain_name": "uptick",
   "coingecko": "",
   "api": ["https://uptick-rest.brocha.in"],
   "rpc": ["https://uptick-rpc.brocha.in"],

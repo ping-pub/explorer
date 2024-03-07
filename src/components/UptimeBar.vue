@@ -11,13 +11,32 @@ const bars = computed(() => {
   const uptime = Array(50).fill({ height: 0, color: 'bg-secondary' });
   if(!props.blocks) return uptime
   props.blocks.forEach((element) => {
-    const has = element.signatures?.findIndex(
+    // @deprecated
+    // const has = element.signatures?.findIndex(
+    //   (sig) => sig.validator_address === props.validator
+    // );
+    // // console.log(has, props.validato, element)
+    // uptime.push({
+    //   height: element.height,
+    //   color: has > -1 ? 'bg-green-500' : 'bg-red-500',
+    // });
+
+    // show flag nil
+    const signature = element.signatures?.find(
       (sig) => sig.validator_address === props.validator
     );
-    // console.log(has, props.validato, element)
+    // console.log("sign", signature)
+    let color = `bg-red-500`
+    if(signature) {
+      if(signature.block_id_flag === 'BLOCK_ID_FLAG_COMMIT') {
+        color = `bg-green-500`
+      } else {
+        color = `bg-yellow-500`
+      }
+    }
     uptime.push({
       height: element.height,
-      color: has > -1 ? 'bg-green-500' : 'bg-red-500',
+      color,
     });
     uptime.shift();
   });
@@ -25,14 +44,14 @@ const bars = computed(() => {
 });
 </script>
 <template>
-  <div class="flex items-center justify-evenly">
+  <div class="flex items-center justify-evenly gap-0.5">
     <div class="cursor-default" v-for="(item, index) in bars" :key="index">
-      <div class="tooltip" :data-tip="item.height">
-        <span
+      <div class="tooltip" 
+          :data-tip="item.height" 
           :class="item.color"
-          style="width: 1.2%"
-        >&nbsp;
-        </span>
+          style="width: 4px;"
+      >
+        &nbsp;
       </div>
     </div>
   </div>

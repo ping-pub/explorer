@@ -12,7 +12,7 @@ const format = useFormatter();
 function isMD() {
   if (
     props.value &&
-    (props.value.indexOf('\n') > -1 || props.value.indexOf('\\n') > -1)
+    (String(props.value).indexOf('\n') > -1 || String(props.value).indexOf('\\n') > -1)
   ) {
     return true;
   }

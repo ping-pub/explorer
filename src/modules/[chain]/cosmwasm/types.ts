@@ -65,5 +65,8 @@ export interface PaginabledCodeInfos extends PaginatedResponse {
   code_infos: CodeInfo[];
 }
 export interface PaginabledContracts extends PaginatedResponse {
-  contracts: string[];
+  // return type of cosmwasm_code_id_contracts
+  contracts?: string[];
+  // return type of cosmwasm_wasm_contracts_creator
+  contract_addresses?: string[];
 }

@@ -41,7 +41,13 @@ export const useBlockchain = defineStore('blockchain', {
   },
   getters: {
     current(): ChainConfig | undefined {
-      return this.dashboard.chains[this.chainName];
+      const chain = this.dashboard.chains[this.chainName]
+      // update chain config with dynamic updated sdk version
+      const sdkversion = localStorage.getItem(`sdk_version_${this.chainName}`)
+      if(sdkversion && chain?.versions) {
+        chain.versions.cosmosSdk = sdkversion;
+      }
+      return chain;
     },
     logo(): string {
       return this.current?.logo || '';
@@ -139,7 +145,6 @@ export const useBlockchain = defineStore('blockchain', {
       //     global.current
       // }
       useWalletStore().$reset();
-      await this.randomSetupEndpoint();
       await useStakingStore().init();
       useBankStore().initial();
       useBaseStore().initial();
@@ -148,18 +153,23 @@ export const useBlockchain = defineStore('blockchain', {
       useBlockModule().initial();
     },
 
-    async randomSetupEndpoint() {
-      const end = localStorage.getItem(`endpoint-${this.chainName}`);
+    randomEndpoint(chainName: string) : Endpoint | undefined {
+      const end = localStorage.getItem(`endpoint-${chainName}`);
       if (end) {
-        this.setRestEndpoint(JSON.parse(end));
+        return JSON.parse(end);
       } else {
         const all = this.current?.endpoints?.rest;
         if (all) {
           const rn = Math.random();
           const endpoint = all[Math.floor(rn * all.length)];
-          await this.setRestEndpoint(endpoint);
+          return endpoint
         }
       }
+    },
+
+    async randomSetupEndpoint() {
+      const endpoint = this.randomEndpoint(this.chainName)
+      if(endpoint) await this.setRestEndpoint(endpoint);
     },
 
     async setRestEndpoint(endpoint: Endpoint) {
@@ -171,9 +181,20 @@ export const useBlockchain = defineStore('blockchain', {
         JSON.stringify(endpoint)
       );
     },
-    setCurrent(name: string) {
-      if (name !== this.chainName) {
-        this.chainName = name;
+    async setCurrent(name: string) {
+      // Ensure chains are loaded due to asynchronous calls.
+      if(this.dashboard.length === 0) {
+        await this.dashboard.initial();
+      }
+
+      // Find the case-sensitive name for the chainName, else simply use the parameter-value.
+      const caseSensitiveName = 
+        Object.keys(this.dashboard.chains).find((x) => x.toLowerCase() === name.toLowerCase()) 
+        || name;
+
+      // Update chainName if needed
+      if (caseSensitiveName !== this.chainName) {
+        this.chainName = caseSensitiveName;
       }
     },
     supportModule(mod: string) {

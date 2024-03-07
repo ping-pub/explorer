@@ -1,5 +1,5 @@
 {
-  "chain_name": "Rebus",
+  "chain_name": "rebus",
   "coingecko": "rebus",
   "api": [
     "https://rebus-rest.brocha.in/",

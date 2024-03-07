@@ -4,7 +4,7 @@ import type { Coin, Delegation } from '@/types';
 import { ref, watchEffect } from 'vue';
 import type { AccountEntry } from './utils';
 import { computed } from 'vue';
-import { useBaseStore, useFormatter } from '@/stores';
+import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
 import DonutChart from '@/components/charts/DonutChart.vue';
 import ApexCharts from 'vue3-apexcharts';
 import { get } from '@/libs';
@@ -17,6 +17,7 @@ const conf = ref(
     AccountEntry[]
   >
 );
+const chainStore = useBlockchain();
 const balances = ref({} as Record<string, Coin[]>);
 const delegations = ref({} as Record<string, Delegation[]>);
 const tokenMeta = ref({} as Record<string, AccountEntry>);
@@ -64,7 +65,8 @@ Object.values(conf.value).forEach((imported) => {
     imported.forEach((x) => {
       if (x.endpoint && x.address) {
         loading.value += 1
-        const client = CosmosRestClient.newDefault(x.endpoint);
+        const endpoint = chainStore.randomEndpoint(x.chainName)
+        const client = CosmosRestClient.newDefault(endpoint?.address || x.endpoint);
         client.getBankBalances(x.address).then((res) => {
           const bal = res.balances.filter((x) => x.denom.length < 10);
           if (bal) balances.value[x.address || ""] = bal;

@@ -1,14 +1,17 @@
 <script lang="ts" setup>
-import { useBlockchain, useFormatter } from '@/stores';
+import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { computed, ref } from '@vue/reactivity';
 import type { Tx, TxResponse } from '@/types';
-import JsonPretty from 'vue-json-pretty';
-import 'vue-json-pretty/lib/styles.css';
+
+import { JsonViewer } from "vue3-json-viewer"
+// if you used v1.0.5 or latster ,you should add import "vue3-json-viewer/dist/index.css"
+import "vue3-json-viewer/dist/index.css";
 
 const props = defineProps(['hash', 'chain']);
 
 const blockchain = useBlockchain();
+const baseStore = useBaseStore();
 const format = useFormatter();
 const tx = ref(
     {} as {
@@ -20,7 +23,13 @@ if (props.hash) {
     blockchain.rpc.getTx(props.hash).then((x) => (tx.value = x));
 }
 const messages = computed(() => {
-    return tx.value.tx?.body?.messages || [];
+    return tx.value.tx?.body?.messages.map(x=> {
+        if(x.packet?.data) {
+            // @ts-ignore
+            x.message = format.base64ToString(x.packet.data)
+        }
+        return x
+    }) || [];
 });
 </script>
 <template>
@@ -45,12 +54,15 @@ const messages = computed(() => {
                         <tr>
                             <td>{{ $t('staking.status') }}</td>
                             <td>
-                                <div class="text-xs truncate relative py-2 px-4 w-fit mr-2 rounded" :class="`text-${tx.tx_response.code === 0 ? 'success' : 'error'
+                                <span class="text-xs truncate relative py-2 px-4 w-fit mr-2 rounded" :class="`text-${tx.tx_response.code === 0 ? 'success' : 'error'
                                     }`">
                                     <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${tx.tx_response.code === 0 ? 'success' : 'error'
                                         }`"></span>
-                                    {{ tx.tx_response.code === 0 ? 'Success' : 'Failded' }}
-                                </div>
+                                    {{ tx.tx_response.code === 0 ? 'Success' : 'Failed' }}
+                                </span>
+                                <span>
+                                    {{ tx.tx_response.code === 0 ? '' : tx?.tx_response?.raw_log }}
+                                </span>
                             </td>
                         </tr>
                         <tr>
@@ -102,7 +114,7 @@ const messages = computed(() => {
 
         <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
             <h2 class="card-title truncate mb-2">JSON</h2>
-            <JsonPretty :data="tx" :deep="3" />
+            <JsonViewer :value="tx" :theme="baseStore.theme" style="background: transparent;" copyable boxed sort expand-depth="5"/>
         </div>
     </div>
 </template>

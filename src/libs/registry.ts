@@ -45,7 +45,7 @@ import type { PaginatedTxs, Tx, TxResponse } from '@/types';
 import semver from 'semver'
 export interface Request<T> {
   url: string;
-  adapter: (source: any) => T;
+  adapter: (source: any) => Promise<T>;
 }
 
 export interface AbstractRegistry {
@@ -124,6 +124,8 @@ export interface RequestRegistry extends AbstractRegistry {
   base_tendermint_validatorsets_latest: Request<PaginatedTendermintValidator>;
   base_tendermint_validatorsets_height: Request<PaginatedTendermintValidator>;
 
+  params: Request<{param: any}>;
+
   tx_txs: Request<PaginatedTxs>;
   tx_txs_block: Request<Tx>;
   tx_hash: Request<{ tx: Tx; tx_response: TxResponse }>;
@@ -149,9 +151,10 @@ export interface RequestRegistry extends AbstractRegistry {
   ibc_core_connection_connections: Request<PaginatedIBCConnections>;
   ibc_core_connection_connections_connection_id: Request<ConnectionWithProof>;
   ibc_core_connection_connections_connection_id_client_state: Request<ClientStateWithProof>;
+  interchain_security_ccv_provider_validator_consumer_addr: Request<{consumer_address: string}>
 }
 
-export function adapter<T>(source: any): T {
+export function adapter<T>(source: any): Promise<T> {
   return source;
 }
 

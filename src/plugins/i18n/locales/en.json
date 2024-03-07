@@ -10,6 +10,7 @@
     "cosmwasm": "Cosmwasm",
     "widget": "Widgets",
     "ibc": "IBC",
+    "nft": "NFT",
     "consensus": "Consensus",
     "supply": "Supply",
     "account": "Accounts",
@@ -32,6 +33,8 @@
     "btn_index": "Back to Home"
   },
   "account": {
+    "amount": "Amount",
+    "received": "Recent Received",
     "type": "Type",
     "address": "Address",
     "acc": "Account",
@@ -50,6 +53,7 @@
     "btn_unbond": "Unbond",
     "validator": "Validator",
     "delegation": "Delegation",
+    "delegator": "Delegator",
     "rewards": "Rewards",
     "action": "Action",
     "unbonding_delegations": "Unbonding Delegations",
@@ -107,18 +111,24 @@
     "btn_up_sc": "Upload Smart Contract",
     "contract_list_code": "Contract List of Code",
     "contract_list": "Contract List",
-    "btn_contract": "Contract",
+    "btn_contract": "Contract Info",
     "btn_funds": "Funds",
     "btn_states": "States",
     "btn_fees": "Fees",
     "btn_query": "Query",
     "btn_execute": "Execute",
+    "btn_transactions": "Txs",
+    "btn_details": "Details",
+    "btn_migrate": "Migrate",
+    "btn_update_admin": "Update Admin",
+    "btn_clear_admin": "Clear Admin",
     "instantiate_contract": "Instantiate Contract",
     "contract_detail": "Contract Detail",
     "contract_balances": "Contract Balances",
     "no_escrowed_assets": "No Escrowed Assets",
     "contract_states": "Contract States",
-    "query_contract": "Query Contract"
+    "query_contract": "Query Contract",
+    "tips_description_1": "This feature is available when deploying contracts via WELLDONE Code. For more information, please check the document at the link below."
   },
   "gov": {
     "voting": "Voting",
@@ -133,6 +143,13 @@
     "vote_start_from": "Voting start from",
     "vote_end": "Voting end",
     "current_status": "Current Status",
+    "proposal_statuses": {
+      "PROPOSAL_STATUS_DEPOSIT_PERIOD": "Deposit period",
+      "PROPOSAL_STATUS_VOTING_PERIOD": "Voting period",
+      "PROPOSAL_STATUS_PASSED": "Passed",
+      "PROPOSAL_STATUS_REJECTED": "Rejected",
+      "PROPOSAL_STATUS_FAILED": "Failed"
+    },
     "upgrade_plan": "Upgrade Plan",
     "votes": "Votes"
   },
@@ -170,7 +187,7 @@
     "btn_in": "In"
   },
   "staking": {
-    "infalation": "Infalation",
+    "inflation": "Inflation",
     "unbonding_time": "Unbonding Time",
     "double_sign_slashing": "Double Sign Slashing",
     "downtime_slashing": "Downtime Slashing",
@@ -204,7 +221,10 @@
     "operator_addr": "Operator Address",
     "hex_addr": "Hex Address",
     "signer_addr": "Signer Address",
-    "consensus_pub_key": "Consensus Public Key"
+    "consensus_pub_key": "Consensus Public Key",
+    "liquid_staking": "Liquid Staking",
+    "liquid_staking_shares":"Liquid Shares",
+    "validator_bond_share":"Validator Bonded"
   },
   "statesync": {
     "title": "What's State Sync?",

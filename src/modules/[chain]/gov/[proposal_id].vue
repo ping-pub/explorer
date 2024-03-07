@@ -4,6 +4,7 @@ import MdEditor from 'md-editor-v3';
 import ObjectElement from '@/components/dynamic/ObjectElement.vue';
 import {
   useBaseStore,
+  useBlockchain,
   useFormatter,
   useGovStore,
   useStakingStore,
@@ -28,6 +29,7 @@ const format = useFormatter();
 const store = useGovStore();
 const dialog = useTxDialog();
 const stakingStore = useStakingStore();
+const chainStore = useBlockchain();
 
 store.fetchProposal(props.proposal_id).then((res) => {
   const proposalDetail = reactive(res.proposal);
@@ -38,8 +40,49 @@ store.fetchProposal(props.proposal_id).then((res) => {
     });
   }
   proposal.value = proposalDetail;
+  // load origin params if the proposal is param change
+  if(proposalDetail.content?.changes) {
+    proposalDetail.content?.changes.forEach((item) => {  
+        chainStore.rpc.getParams(item.subspace, item.key).then((res) => {
+          if(proposal.value.content && res.param) {
+            if(proposal.value.content.current){
+              proposal.value.content.current.push(res.param);
+            } else {
+              proposal.value.content.current = [res.param];
+            };
+          }
+        })
+    })
+  }
+
+  const msgType = proposalDetail.content['@type'] || '';
+  if(msgType.endsWith('MsgUpdateParams')) {
+    if(msgType.indexOf('staking') > -1) {
+      chainStore.rpc.getStakingParams().then((res) => {
+        addCurrentParams(res);
+      });
+    } else if(msgType.indexOf('gov') > -1) {
+      chainStore.rpc.getGovParamsVoting().then((res) => {
+        addCurrentParams(res);
+      });
+    } else if(msgType.indexOf('distribution') > -1) {
+      chainStore.rpc.getDistributionParams().then((res) => {
+        addCurrentParams(res);
+      });
+    } else if(msgType.indexOf('slashing') > -1) {
+      chainStore.rpc.getSlashingParams().then((res) => {
+        addCurrentParams(res);
+      });
+    }
+  }
 });
 
+function addCurrentParams(res: any) {
+  if(proposal.value.content && res.params) {
+    proposal.value.content.params = [proposal.value.content?.params];
+    proposal.value.content.current = [res.params];
+  }
+}
 const color = computed(() => {
   if (proposal.value.status === 'PROPOSAL_STATUS_PASSED') {
     return 'success';
@@ -169,14 +212,18 @@ function pageload(p: number) {
     pageResponse.value = x.pagination;
   });
 }
+
+function metaItem(metadata: string|undefined): { title: string; summary: string } {
+  return metadata ? JSON.parse(metadata) : {}
+}
 </script>
 
 <template>
   <div>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title flex flex-col md:!justify-between md:!flex-row">
+      <h2 class="card-title flex flex-col md:!justify-between md:!flex-row mb-2">
         <p class="truncate w-full">
-          {{ proposal_id }}. {{ proposal.title || proposal.content?.title }}
+          {{ proposal_id }}. {{ proposal.title || proposal.content?.title || metaItem(proposal?.metadata)?.title  }}
         </p>
         <div
           class="badge badge-ghost"
@@ -194,9 +241,9 @@ function pageload(p: number) {
       <div class="">
         <ObjectElement :value="proposal.content" />
       </div>
-      <div v-if="proposal.summary && !proposal.content?.description">
+      <div v-if="proposal.summary && !proposal.content?.description || metaItem(proposal?.metadata)?.summary ">
         <MdEditor
-          :model-value="format.multiLine(proposal.summary)"
+          :model-value="format.multiLine(proposal.summary || metaItem(proposal?.metadata)?.summary)"
           previewOnly
           class="md-editor-recover"
         ></MdEditor>
@@ -303,7 +350,7 @@ function pageload(p: number) {
               </div>
             </div>
             <div class="pl-5 text-sm">
-              {{ $t('gov.current_status') }}: {{ proposal.status }}
+              {{ $t('gov.current_status') }}: {{ $t(`gov.proposal_statuses.${proposal.status}`) }}
             </div>
           </div>
 
@@ -344,6 +391,7 @@ function pageload(p: number) {
             <tr v-for="(item, index) of votes" :key="index">
               <td class="py-2 text-sm">{{ showValidatorName(item.voter) }}</td>
               <td
+                v-if="item.option"
                 class="py-2 text-sm"
                 :class="{
                   'text-yes': item.option === 'VOTE_OPTION_YES',
@@ -351,6 +399,12 @@ function pageload(p: number) {
                 }"
               >
                 {{ String(item.option).replace('VOTE_OPTION_', '') }}
+              </td>
+              <td
+                v-if="item.options"
+                class="py-2 text-sm"
+              >
+                {{ item.options.map(x => `${x.option.replace('VOTE_OPTION_', '')}:${format.percent(x.weight)}`).join(', ') }}
               </td>
             </tr>
           </tbody>

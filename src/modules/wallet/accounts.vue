@@ -17,6 +17,7 @@ const dashboard = useDashboard();
 const chainStore = useBlockchain()
 const format = useFormatter();
 const sourceAddress = ref(''); //
+const sourceHdPath = ref("m/44/118/0'/0/0"); //
 const selectedSource = ref({} as LocalKey); //
 const importStep = ref('step1')
 
@@ -40,6 +41,7 @@ Object.values(conf.value).forEach((imported) => {
           // continue only if the page is living
           if (imported[i].endpoint) {
             loadBalances(
+              imported[i].chainName,
               imported[i].endpoint || '',
               imported[i].address
             ).finally(() => resolve());
@@ -123,49 +125,9 @@ const totalChange = computed(() => {
 })
 
 // Adding Model Boxes
-const sourceOptions = computed(() => {
-  // scan all connected wallet
-  const keys = scanLocalKeys();
-  // parser options from all existed keys
-  Object.values(conf.value).forEach((x) => {
-    const [first] = x;
-    if (first) {
-      const { data } = fromBech32(first.address);
-      const hex = toHex(data);
-      if (
-        keys.findIndex(
-          (k) => toHex(fromBech32(k.cosmosAddress).data) === hex
-        ) === -1
-      ) {
-        keys.push({
-          cosmosAddress: first.address,
-          hdPath: `m/44/${first.coinType}/0'/0/0`,
-        });
-      }
-    }
-  });
-  // parse options from an given address
-  if (sourceAddress.value) {
-    const { prefix, data } = fromBech32(sourceAddress.value);
-    const chain = Object.values(dashboard.chains).find(
-      (x) => x.bech32Prefix === prefix
-    );
-    if (chain) {
-      keys.push({
-        cosmosAddress: sourceAddress.value,
-        hdPath: `m/44/${chain.coinType}/0'/0/0`,
-      });
-    }
-  }
-  if (!selectedSource.value.cosmosAddress && keys.length > 0) {
-    selectedSource.value = keys[0];
-  }
-  return keys;
-});
-
 const availableAccount = computed(() => {
-  if (selectedSource.value.cosmosAddress) {
-    return scanCompatibleAccounts([selectedSource.value]).filter(
+  if (sourceAddress.value) {
+    return scanCompatibleAccounts([{cosmosAddress: sourceAddress.value, hdPath: sourceHdPath.value }]).filter(
       (x) => !addresses.value.includes(x.address)
     );
   }
@@ -209,15 +171,17 @@ async function addAddress(acc: AccountEntry) {
   }
 
   if (acc.endpoint) {
-    loadBalances(acc.endpoint, acc.address);
+    loadBalances(acc.chainName, acc.endpoint, acc.address);
   }
 
   localStorage.setItem('imported-addresses', JSON.stringify(conf.value));
 }
 
 // load balances for an address
-async function loadBalances(endpoint: string, address: string) {
-  const client = CosmosRestClient.newDefault(endpoint);
+async function loadBalances(chainName: string, endpoint: string, address: string) {
+  
+  const endpointObj = chainStore.randomEndpoint(chainName)
+  const client = CosmosRestClient.newDefault(endpointObj?.address || endpoint);
   await client.getBankBalances(address).then((res) => {
     balances.value[address] = res.balances.filter((x) => x.denom.length < 10);
   });
@@ -351,9 +315,6 @@ async function loadBalances(endpoint: string, address: string) {
           </svg>
           Import Address
         </a>
-        <RouterLink to="/wallet/keplr">
-          <span class="btn btn-link">Add chain to Keplr</span>
-        </RouterLink>
       </div>
     </div>
     <!-- Put this part before </body> tag -->
@@ -361,22 +322,10 @@ async function loadBalances(endpoint: string, address: string) {
       <div class="modal-box">
         <a href="#" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</a>
         <h3 class="font-bold text-lg mb-2">Derive Account From Address</h3>
-        <div v-show="importStep === 'step1'">
-          <label class="hidden input-group input-group-sm w-full">
-            <span>Connected</span>
-            <select v-model="selectedSource" class="select select-bordered select-sm w-3/4">
-              <option v-for="source in sourceOptions" :value="source">
-                <span class="overflow-hidden">{{ source.cosmosAddress }}</span>
-              </option>
-            </select>
-          </label>
-          <ul class="menu">
-            <li v-for="source in sourceOptions" @click="selectedSource = source; importStep = 'step2'">
-              <a><label class="overflow-hidden flex flex-col"><div class=" font-bold">{{ source.cosmosAddress }} </div><div class="text-xs">{{ source.hdPath }}</div></label></a>
-            </li>
-          </ul>
-          <label class="my-2 p-2">
+        <div>
+          <label class="my-2">
             <input v-model="sourceAddress" class="input input-bordered w-full input-sm" placeholder="Input an address" @change="importStep = 'step2'" />
+            <input v-model="sourceHdPath" class="input input-bordered w-full input-sm" placeholder="m/44/118/0'/0/0" />
           </label>
         </div>
         <div v-show="importStep === 'step2'" class="py-4 max-h-72 overflow-y-auto">

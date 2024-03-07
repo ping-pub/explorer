@@ -118,7 +118,8 @@
       "contract_balances": "Saldo Kontrak",
       "no_escrowed_assets": "Tidak Ada Aset yang Dititipkan",
       "contract_states": "Bagian Kontrak",
-      "query_contract": "Query Kontrak"
+      "query_contract": "Query Kontrak",
+      "tips_description_1": "This feature is available when deploying contracts via WELLDONE Code. For more information, please check the document at the link below."
     },
     "gov": {
       "voting": "Voting",
@@ -133,6 +134,13 @@
       "vote_start_from": "Voting dimulai dari",
       "vote_end": "Voting berakhir",
       "current_status": "Status Saat Ini",
+      "proposal_statuses": {
+        "PROPOSAL_STATUS_DEPOSIT_PERIOD": "Periode Deposit",
+        "PROPOSAL_STATUS_VOTING_PERIOD": "Periode Pemungutan Suara",
+        "PROPOSAL_STATUS_PASSED": "Disetujui",
+        "PROPOSAL_STATUS_REJECTED": "Ditolak",
+        "PROPOSAL_STATUS_FAILED": "Gagal"
+      },
       "upgrade_plan": "Peningkatan Rencana",
       "votes": "Suara"
     },
@@ -170,7 +178,7 @@
       "btn_in": "Masuk"
     },
     "staking": {
-      "infalation": "Inflasi",
+      "inflation": "Inflasi",
       "unbonding_time": "Waktu Pembatalan Tautan",
       "double_sign_slashing": "Pemotongan Ganda Tanda Tangan",
       "downtime_slashing": "Pemotongan Downtime",

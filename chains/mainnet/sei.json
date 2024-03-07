@@ -1,0 +1,21 @@
+{
+  "chain_name": "sei",
+  "coingecko": "",
+  "api": ["https://sei-api.polkachu.com/", "https://sei-public-rest.brocha.in"],
+  "rpc": ["https://sei-rpc.polkachu.com/", "https://sei-public-rpc.brocha.in"],
+  "snapshot_provider": "",
+  "sdk_version": "0.45.4",
+  "coin_type": 505,
+  "min_tx_fee": "800",
+  "addr_prefix": "sei",
+  "logo": "/logos/sei.png",
+  "assets": [
+    {
+      "base": "usei",
+      "symbol": "SEI",
+      "exponent": 6,
+      "coingecko_id": "",
+      "logo": "/logos/sei.png"
+    }
+  ]
+}
