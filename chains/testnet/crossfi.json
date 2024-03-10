@@ -1,0 +1,22 @@
+{
+    "chain_name": "crossfi"
+    "api": [
+        {"provider": "Stake-Take", "address": "https://api.crossfi.stake-take.com"}
+    ],
+    "rpc": [
+        {"provider": "Stake-Take", "address": "https://rpc.crossfi.stake-take.com"}
+    ],
+    "snapshot_provider": "",
+    "sdk_version": "v0.47.6",
+    "coin_type": "60",
+    "min_tx_fee": "0",
+    "addr_prefix": "mx",
+    "logo": "/logos/crossfi.svg",
+    "assets": [{
+        "base": "mpx",
+        "symbol": "PX",
+        "exponent": "18",
+        "coingecko_id": "crossfi",
+        "logo": "/logos/crossfi.svg"
+    }]
+}
