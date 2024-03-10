@@ -11,12 +11,12 @@
     "coin_type": "60",
     "min_tx_fee": "0",
     "addr_prefix": "mx",
-    "logo": "/logos/crossfi.svg",
+    "logo": "https://pbs.twimg.com/profile_images/1719733805483790336/9rtdiMS-_400x400.jpg",
     "assets": [{
         "base": "mpx",
         "symbol": "PX",
         "exponent": "18",
         "coingecko_id": "crossfi",
-        "logo": "/logos/crossfi.svg"
+        "logo": "https://pbs.twimg.com/profile_images/1719733805483790336/9rtdiMS-_400x400.jpg"
     }]
 }
