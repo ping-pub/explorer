@@ -21,6 +21,7 @@
     "@leapwallet/name-matcha": "^1.1.0",
     "@osmonauts/lcd": "^0.8.0",
     "@ping-pub/chain-registry-client": "^0.0.25",
+    "@vercel/speed-insights": "^1.0.10",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
     "@vueuse/core": "^9.12.0",
     "@vueuse/integrations": "^10.1.2",
