@@ -8,7 +8,13 @@ import updateLocale from 'dayjs/plugin/updateLocale';
 import utc from 'dayjs/plugin/utc';
 import localeData from 'dayjs/plugin/localeData';
 import { useStakingStore } from './useStakingStore';
-import { fromBase64, fromBech32, fromHex, toHex } from '@cosmjs/encoding';
+import {
+  fromAscii,
+  fromBase64,
+  fromBech32,
+  fromHex,
+  toHex,
+} from '@cosmjs/encoding';
 import { consensusPubkeyToHexAddress, get } from '@/libs';
 import { useBankStore } from './useBankStore';
 // import type { Coin, DenomTrace } from '@/types';
@@ -347,9 +353,19 @@ export const useFormatter = defineStore('formatter', {
       if (!rate) return '-';
       return this.percent(rate, divideDecimal);
     },
-    percent(decimal?: string | number, divideDecimal?: number) {
-      let decimalFormat = numeral(decimal);
-      if (!decimalFormat) return '-';
+    percent(decimal?: string | number | Uint8Array, divideDecimal?: number) {
+      if (!decimal) return '-';
+      let decimalFormat;
+      if (decimal instanceof Uint8Array) {
+        try {
+          decimalFormat = numeral(fromAscii(decimal));
+        } catch {
+          return '-';
+        }
+      } else {
+        decimalFormat = numeral(decimal);
+      }
+      if (!decimalFormat || !decimalFormat.value()) return '-';
       if (divideDecimal) {
         decimalFormat = decimalFormat.divide(divideDecimal);
       }

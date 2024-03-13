@@ -292,12 +292,7 @@ loadAvatars();
         </span>
         <span>
           <div class="font-bold">
-            {{
-              format.percent(
-                slashing.slashFractionDoubleSign &&
-                  fromAscii(slashing.slashFractionDoubleSign)
-              )
-            }}
+            {{ format.percent(slashing.slashFractionDoubleSign) }}
           </div>
           <div class="text-xs">{{ $t('staking.double_sign_slashing') }}</div>
         </span>
@@ -315,12 +310,7 @@ loadAvatars();
         </span>
         <span>
           <div class="font-bold">
-            {{
-              format.percent(
-                slashing.slashFractionDowntime &&
-                  fromAscii(slashing.slashFractionDowntime)
-              )
-            }}
+            {{ format.percent(slashing.slashFractionDowntime) }}
           </div>
           <div class="text-xs">{{ $t('staking.downtime_slashing') }}</div>
         </span>

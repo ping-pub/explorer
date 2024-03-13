@@ -313,10 +313,7 @@ function fetchAllKeyRotation() {
                   :data-tip="`Window size: ${slashingParam.signedBlocksWindow}`"
                   ><span class="ml-2 btn btn-error btn-xs">{{
                     slashingParam.minSignedPerWindow &&
-                    format.percent(
-                      fromAscii(slashingParam.minSignedPerWindow),
-                      1e18
-                    )
+                    format.percent(slashingParam.minSignedPerWindow, 1e18)
                   }}</span>
                 </span>
               </td>

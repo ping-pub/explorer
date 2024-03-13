@@ -61,7 +61,12 @@ export const decodeKey = (value: Any): Key => {
 export function consensusPubkeyToKey(consensusPubkey?: Any) {
   if (!consensusPubkey) return;
   if (consensusPubkey.typeUrl === '/cosmos.crypto.ed25519.PubKey') {
-    return Ed25519PubKey.decode(consensusPubkey.value).key;
+    const value =
+      // fix trim 0a20 at beginning of buffer
+      consensusPubkey.value.length === 32
+        ? new Uint8Array([10, 32, ...consensusPubkey.value])
+        : consensusPubkey.value;
+    return Ed25519PubKey.decode(value).key;
   }
   if (consensusPubkey.typeUrl === '/cosmos.crypto.secp256k1.PubKey') {
     return Secp256k1PubKey.decode(consensusPubkey.value).key;
@@ -69,6 +74,7 @@ export function consensusPubkeyToKey(consensusPubkey?: Any) {
 }
 
 export function consensusPubkeyToHexAddress(consensusPubkey?: Any) {
+  console.log('consensusPubkey', consensusPubkey);
   const pubkey = consensusPubkeyToKey(consensusPubkey);
   if (!pubkey) return '';
   if (consensusPubkey?.typeUrl === '/cosmos.crypto.ed25519.PubKey') {

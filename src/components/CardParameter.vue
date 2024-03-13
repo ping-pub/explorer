@@ -15,7 +15,11 @@ function calculateValue(value: any) {
   if (!value) return;
 
   if (value instanceof Uint8Array) {
-    return formatter.formatDecimalToPercent(fromAscii(value), 1e18);
+    try {
+      return formatter.formatDecimalToPercent(fromAscii(value), 1e18);
+    } catch {
+      return '-';
+    }
   }
 
   if (Array.isArray(value)) {
