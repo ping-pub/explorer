@@ -1,38 +1,16 @@
 <script lang="ts" setup>
-import { useBlockchain } from '@/stores';
-import { PageRequest } from '@/types';
 import { onMounted, ref } from 'vue';
 
 import type { PageResponse } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
-import type { IdentifiedConnection } from 'cosmjs-types/ibc/core/connection/v1/connection';
-import { useRoute } from 'vue-router';
 import { useIBCModule } from './connStore';
 
-const props = defineProps(['chain']);
-const chainStore = useBlockchain();
 const ibcStore = useIBCModule();
-const list = ref([] as IdentifiedConnection[]);
-const pageRequest = ref(new PageRequest());
 const pageResponse = ref({} as PageResponse | undefined);
 const tab = ref('registry');
-const route = useRoute();
 
 onMounted(() => {
-  pageload(1);
   ibcStore.load();
 });
-
-function pageload(p: number) {
-  pageRequest.value.setPage(p);
-  chainStore.rpc.getIBCConnections(pageRequest.value).then((x) => {
-    list.value = x.connections;
-    pageResponse.value = x.pagination;
-    if (x.pagination?.total && Number(x.pagination.total) > 0) {
-      const connId = route.params.connection_id as string;
-      ibcStore.showConnection(connId || 0);
-    }
-  });
-}
 </script>
 <template>
   <div>
@@ -91,3 +69,11 @@ function pageload(p: number) {
     </div>
   </div>
 </template>
+<route>
+  {
+    meta: {
+      i18n: 'ibc',
+      order: 9
+    }
+  }
+</route>
