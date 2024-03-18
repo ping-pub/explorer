@@ -22,7 +22,7 @@
       "symbol": "EBL",
       "exponent": "6",
       "coingecko_id": "",
-      "logo": "/logos/8ball.png"
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/8ball/images/8ball.png"
     }
   ],
   "cosmwasm_enabled": true

@@ -1,0 +1,79 @@
+{
+  "chain_name": "Sei",
+  "coingecko": "sei-network",
+  "api": [
+    {
+      "address": "https://sei-api.lavenderfive.com:443",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://sei-api.polkachu.com/",
+      "provider": "polkachu.com"
+    },
+    {
+      "address": "https://sei-rest.brocha.in/",
+      "provider": "Brochain"
+    },
+    {
+      "address": "https://api-sei.stingray.plus/",
+      "provider": "StingRay"
+    },
+    {
+      "address": "https://lcd-sei.whispernode.com:443",
+      "provider": "WhisperNode 🤐"
+    },
+    {
+      "address": "https://sei.api.kjnodes.com",
+      "provider": "kjnodes"
+    },
+    {
+      "address": "https://sei-rest.publicnode.com",
+      "provider": "Allnodes ⚡️ Nodes & Staking"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://sei-rpc.lavenderfive.com:443",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://sei-rpc.polkachu.com/",
+      "provider": "polkachu.com"
+    },
+    {
+      "address": "https://sei-rpc.brocha.in/",
+      "provider": "Brochain"
+    },
+    {
+      "address": "https://rpc-sei.stingray.plus/",
+      "provider": "StingRay"
+    },
+    {
+      "address": "https://rpc-sei.whispernode.com:443",
+      "provider": "WhisperNode 🤐"
+    },
+    {
+      "address": "https://sei.rpc.kjnodes.com",
+      "provider": "kjnodes"
+    },
+    {
+      "address": "https://sei-rpc.publicnode.com:443",
+      "provider": "Allnodes ⚡️ Nodes & Staking"
+    }
+  ],
+  "snapshot_provider": "",
+  "coin_type": "118",
+  "sdk_version": "0.45.10",
+  "addr_prefix": "sei",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sei/images/sei.png",
+  "assets": [
+    {
+      "base": "usei",
+      "symbol": "SEI",
+      "exponent": "6",
+      "coingecko_id": "",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sei/images/sei.png"
+    }
+  ],
+  "cosmwasm_enabled": true
+}
