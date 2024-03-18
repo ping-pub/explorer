@@ -6,9 +6,8 @@
   "scripts": {
     "dev": "vite",
     "serve": "vite",
-    "build": "run-p type-check build-only",
+    "build": "build-only",
     "preview": "vite preview",
-    "build-only": "vite build",
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
