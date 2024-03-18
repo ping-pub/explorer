@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "serve": "vite",
-    "build": "build-only",
+    "build": "vite build",
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit"
   },
