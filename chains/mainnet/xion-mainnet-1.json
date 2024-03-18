@@ -1,0 +1,30 @@
+{
+  "chain_name": "xion-mainnet-1",
+  "coingecko": "XION",
+  "api": [
+    {"provider": "burnt-labs", "address": "https://api.xion-mainnet-1.burnt.com"}
+  ],
+  "rpc": [
+    {"provider": "burnt-labs", "address": "https://rpc.xion-mainnet-1.burnt.com"}
+  ],
+  "snapshot_provider": "",
+  "sdk_version": "0.47.10",
+  "coin_type": "118",
+  "min_tx_fee": "800",
+  "addr_prefix": "xion",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png",
+  "assets": [
+    {
+      "base": "uxion",
+      "symbol": "XION",
+      "exponent": "6",
+      "coingecko_id": "xion",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png"
+    }
+  ],
+  "keplr_features": [
+    "ibc-go",
+    "ibc-transfer",
+    "no-legacy-stdTx"
+  ]
+}

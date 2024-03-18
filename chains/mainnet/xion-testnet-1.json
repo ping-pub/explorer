@@ -8,7 +8,7 @@
     {"provider": "Lavender.Five Nodes \uD83D\uDC1D", "address": "https://testnet-burnt-rpc.lavenderfive.com/"}
   ],
   "snapshot_provider": "",
-  "sdk_version": "0.47.3",
+  "sdk_version": "0.47.10",
   "coin_type": "118",
   "min_tx_fee": "800",
   "addr_prefix": "xion",
