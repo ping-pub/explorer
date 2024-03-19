@@ -2184,17 +2184,10 @@
     estree-walker "^2.0.2"
     picomatch "^2.3.1"
 
-<<<<<<< HEAD
-"@shikijs/core@1.0.0-beta.0":
-  version "1.0.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@shikijs/core/-/core-1.0.0-beta.0.tgz#e38a10ce3398342553e37fe9b10db61fc00cc186"
-  integrity sha512-uicyrkx379Q5sxQuGV3kduHPWIAkjxmeA5A4J6syscx8wiEyIV06i/Q6s9GeKLCb857Hi90H8e/FoFSbcjnZsw==
-=======
 "@shikijs/core@1.0.0-beta.1":
   version "1.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/@shikijs/core/-/core-1.0.0-beta.1.tgz#40d21605cfc30c9d83bdc3c03414d478930ec30c"
   integrity sha512-z3gdznaRj/DJSLQdR2Gdx6AB3e5+Il/kSGdLTGHI7HnalgPL15RbGgBSdLHW8rKAz4+dezAcTdnxm8z6YTu7nA==
->>>>>>> 15c86909d0549edeef237111754f32c046a84ddf
 
 "@sinclair/typebox@^0.24.1":
   version "0.24.51"
@@ -2205,13 +2198,6 @@
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
-
-"@types/adm-zip@^0.5.5":
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/@types/adm-zip/-/adm-zip-0.5.5.tgz#4588042726aa5f351d7ea88232e4a952f60e7c1a"
-  integrity sha512-YCGstVMjc4LTY5uK9/obvxBya93axZOVOyf2GSUulADzmLhYE45u2nAssCs/fWBs1Ifq5Vat75JTPwd5XZoPJw==
-  dependencies:
-    "@types/node" "*"
 
 "@types/debug@^4.1.7":
   version "4.1.8"
@@ -2613,11 +2599,6 @@ acorn@^8.10.0, acorn@^8.8.2, acorn@^8.9.0:
   version "8.10.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.10.0.tgz#8be5b3907a67221a81ab23c7889c4c5526b62ec5"
   integrity sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==
-
-adm-zip@^0.5.10:
-  version "0.5.10"
-  resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.5.10.tgz#4a51d5ab544b1f5ce51e1b9043139b639afff45b"
-  integrity sha512-x0HvcHqVJNTPk/Bw8JbLWlWoo6Wwnsug0fnYYro1HBrjxZ3G7/AZk7Ahv8JwDe1uIcz8eBqvu86FuF1POiG7vQ==
 
 agent-base@6:
   version "6.0.2"
@@ -6033,19 +6014,11 @@ shelljs@0.8.5:
     rechoir "^0.6.2"
 
 shiki@^1.0.0-beta.0:
-<<<<<<< HEAD
-  version "1.0.0-beta.0"
-  resolved "https://registry.yarnpkg.com/shiki/-/shiki-1.0.0-beta.0.tgz#34d5d672fbc0f5ac65892cd681404fefaa565c8f"
-  integrity sha512-CcP0IhEDQ3LWfJC44cfxfId9pjJi9Nephl8DxgrL4tKWprI/oz6deZyL0vB+XWxhTx/1uonzWQKaSQPwKx5dTA==
-  dependencies:
-    "@shikijs/core" "1.0.0-beta.0"
-=======
   version "1.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/shiki/-/shiki-1.0.0-beta.1.tgz#fbff19e1ba180e3093f274b00fd6578237d157bd"
   integrity sha512-iq32WxjemJVlAHg5HjYoL1qCxGmvyh3Z8kr2E/gMTQdcxyXxTpMhahIC7myxFBapAk9o8QN8mxCpr4JT5rqpRQ==
   dependencies:
     "@shikijs/core" "1.0.0-beta.1"
->>>>>>> 15c86909d0549edeef237111754f32c046a84ddf
 
 side-channel@^1.0.4:
   version "1.0.4"

@@ -10,25 +10,19 @@
       <img src="../../assets/images/heart.svg" />&nbsp;
       By&nbsp;
       <a
-        class="link link-primary no-underline"
-        href="https://ping.pub"
+        class="link text-primary no-underline"
+        href="https://validator247.com"
         target="_blank"
         rel="noopener noreferrer"
-        >Ping.pub</a
+        >Validator247</a
       >
     </div>
     <div
       class="hidden md:!block"
     >
       <a
-        class="link link-primary no-underline mr-4"
-        href="https://github.com/ping-pub/explorer/blob/master/LICENSE"
-        target="noopener noreferrer"
-        >License</a
-      >
-      <a
-        class="link link-primary no-underline"
-        href="https://github.com/ping-pub/explorer"
+        class="link text-primary no-underline"
+        href="https://github.com/Validator247"
         target="noopener noreferrer"
         >Github</a
       >
