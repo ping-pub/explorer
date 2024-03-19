@@ -2,10 +2,10 @@
   "chain_name": "xion-mainnet-1",
   "coingecko": "XION",
   "api": [
-    {"provider": "burnt-labs", "address": "https://api.xion-mainnet-1.burnt.com"}
+    {"provider": "burnt-labs", "address": "http://api.xion-mainnet-1.svc.cluster.local:1317"}
   ],
   "rpc": [
-    {"provider": "burnt-labs", "address": "https://rpc.xion-mainnet-1.burnt.com"}
+    {"provider": "burnt-labs", "address": "http://rpc.xion-mainnet-1.svc.cluster.local:26657"}
   ],
   "snapshot_provider": "",
   "sdk_version": "0.47.10",
