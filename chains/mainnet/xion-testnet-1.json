@@ -1,0 +1,58 @@
+{
+  "chain_name": "xion-testnet-1",
+  "coingecko": "XION",
+  "api": [
+    {"provider": "burnt-labs", "address": "https://api.xion-testnet-1.burnt.com"}
+  ],
+  "rpc": [
+    {"provider": "burnt-labs", "address": "https://rpc.xion-testnet-1.burnt.com"}
+  ],
+  "snapshot_provider": "",
+  "sdk_version": "0.47.10",
+  "coin_type": "118",
+  "min_tx_fee": "800",
+  "addr_prefix": "xion",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png",
+  "assets": [
+    {
+      "base": "uxion",
+      "symbol": "XION",
+      "exponent": "6",
+      "coingecko_id": "xion",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png"
+    },
+    {
+      "base": "ibc/D934516FBE457F3A98AFABD87E0EFF7F95A15325C191EA8CDD7763C702FDDEC2",
+      "symbol": "AXL",
+      "exponent": "6",
+      "coingecko_id": "axelar",
+      "logo": "https://images.ctfassets.net/mjqoq33y05of/6eCdgxArb4F62MPUb4hqnr/9f701bb72329dfffa0f0f43f2d8915b3/Axelar_Logo_Symbol_Black-min.png"
+    },
+    {
+      "base": "ibc/92E0120F15D037353CFB73C14651FC8930ADC05B93100FD7754D3A689E53B333",
+      "symbol": "OSMO",
+      "exponent": "6",
+      "coingecko_id": "osmosis",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png"
+    },
+    {
+      "base": "ibc/92E0120F15D037353CFB73C14651FC8930ADC05B93100FD7754D3A689E53B333",
+      "symbol": "INJ",
+      "exponent": "1",
+      "coingecko_id": "injective-protocol",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/inj.png"
+    },
+    {
+      "base": "ibc/295548A78785A1007F232DE286149A6FF512F180AF5657780FC89C009E2C348F",
+      "symbol": "USDC",
+      "exponent": "6",
+      "coingecko_id": "usd-coin",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.png"
+    }
+  ],
+  "keplr_features": [
+    "ibc-go",
+    "ibc-transfer",
+    "no-legacy-stdTx"
+  ]
+}
