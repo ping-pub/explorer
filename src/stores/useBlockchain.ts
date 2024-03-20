@@ -36,6 +36,7 @@ export const useBlockchain = defineStore('blockchain', {
         address: string;
         provider: string;
       },
+      tx_count: 0 as number,
       connErr: '',
     };
   },
@@ -48,6 +49,9 @@ export const useBlockchain = defineStore('blockchain', {
         chain.versions.cosmosSdk = sdkversion;
       }
       return chain;
+    },
+    txCount(): number {
+      return this.tx_count
     },
     logo(): string {
       return this.current?.logo || '';
@@ -167,6 +171,29 @@ export const useBlockchain = defineStore('blockchain', {
       }
     },
 
+    async fetchTxCount() {
+      try {
+        let response;
+        console.log('fetching tx count', this.chainName);
+        if (this.chainName === 'xion-testnet-1') {
+          response = await fetch('https://chain-data.xion-testnet-1.burnt.com/api/txs/count');
+        } else {
+          response = await fetch('https://chain-data.xion-mainnet-1.burnt.com/api/txs/count');
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        this.tx_count = data.count;
+
+      } catch (error) {
+        console.error('Fetching transaction count failed', error);
+        this.tx_count = 0;
+      }
+    },
+
     async randomSetupEndpoint() {
       const endpoint = this.randomEndpoint(this.chainName)
       if(endpoint) await this.setRestEndpoint(endpoint);
@@ -188,8 +215,8 @@ export const useBlockchain = defineStore('blockchain', {
       }
 
       // Find the case-sensitive name for the chainName, else simply use the parameter-value.
-      const caseSensitiveName = 
-        Object.keys(this.dashboard.chains).find((x) => x.toLowerCase() === name.toLowerCase()) 
+      const caseSensitiveName =
+        Object.keys(this.dashboard.chains).find((x) => x.toLowerCase() === name.toLowerCase())
         || name;
 
       // Update chainName if needed

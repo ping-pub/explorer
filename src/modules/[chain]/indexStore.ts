@@ -27,7 +27,6 @@ export function colorMap(color: string) {
 export const useIndexModule = defineStore('module-index', {
   state: () => {
     return {
-      transactionCount: 0 as number,
       days: 14,
       tickerIndex: 0,
       coinInfo: {
@@ -78,7 +77,8 @@ export const useIndexModule = defineStore('module-index', {
   },
   getters: {
     txCount(): number {
-        return this.transactionCount;
+      const chain = useBlockchain();
+      return chain.txCount;
     },
     blockchain() {
       const chain = useBlockchain();
@@ -214,6 +214,7 @@ export const useIndexModule = defineStore('module-index', {
       this.$reset();
       this.initCoingecko();
       useMintStore().fetchInflation();
+      useBlockchain().fetchTxCount();
       useDistributionStore()
         .fetchCommunityPool()
         .then((x) => {
@@ -224,22 +225,6 @@ export const useIndexModule = defineStore('module-index', {
               denom: t.denom,
             }));
         });
-      // const gov = useGovStore();
-      // gov.fetchProposals('2').then((x) => {
-      //   this.proposals = x;
-      // });
-      // Fetch the transaction count
-      try {
-        const response = await fetch('https://chain-data.xion-testnet-1.burnt.com/api/txs/count');
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        this.transactionCount = data.count;
-      } catch (error) {
-        console.error('Fetching transaction count failed', error);
-        this.transactionCount = 0;
-      }
     },
     tickerColor(color: string) {
       return colorMap(color);
