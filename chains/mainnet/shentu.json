@@ -1,0 +1,23 @@
+{
+    "chain_name": "Shentu",
+    "coingecko": "certik",
+    "api": [
+        {"provider": "Validator247", "address": "https://shentu-api.validator247.com"}
+    ],
+    "rpc": [
+        {"provider": "Validator247", "address": "https://shentu-rpc.validator247.com"}
+    ],
+    "snapshot_provider": "",
+    "sdk_version": "v0.47.6",
+    "coin_type": "118",
+    "min_tx_fee": "0",
+    "addr_prefix": "shentu",
+    "logo": "/logos/shentu_ctk.svg",
+    "assets": [{
+        "base": "uctk",
+        "symbol": "CTK",
+        "exponent": "6",
+        "coingecko_id": "certik",
+        "logo": "/logos/shentu_ctk.svg"
+    }]
+}
