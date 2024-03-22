@@ -2,14 +2,14 @@
     "chain_name": "Warden-Testnet",
     "api": [
         {
-            "address": "https://warden-api.cherryvalidator.us", 
-            "provider": "CherryValidator"
+            "address": "https://warden-api.validator247.com", 
+            "provider": "Validator247"
         }
     ], 
     "rpc": [
         {
-            "address": "https://warden-rpc.cherryvalidator.us", 
-            "provider": "CherryValidator"
+            "address": "https://warden-rpc.validator247.com", 
+            "provider": "Validator247"
         }
     ],
     "sdk_version": "0.47.3",
