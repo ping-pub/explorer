@@ -1,0 +1,28 @@
+{
+    "chain_name": "Warden-Testnet",
+    "api": [
+        {
+            "address": "https://warden-api.cherryvalidator.us", 
+            "provider": "CherryValidator"
+        }
+    ], 
+    "rpc": [
+        {
+            "address": "https://warden-rpc.cherryvalidator.us", 
+            "provider": "CherryValidator"
+        }
+    ],
+    "sdk_version": "0.47.3",
+    "snapshot_provider": "",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "warden",
+    "logo": "/logos/warden.svg",
+    "theme_color": "#812cd6",
+    "assets": [{
+        "base": "uward",
+        "symbol": "WARD",
+        "exponent": "6",
+        "logo": "/logos/warden.svg"
+    }]
+}
