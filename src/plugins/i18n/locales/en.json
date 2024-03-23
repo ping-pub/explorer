@@ -9,6 +9,7 @@
     "state-sync": "State Sync",
     "cosmwasm": "Cosmwasm",
     "widget": "Widgets",
+    "tx": "Transactions",
     "ibc": "IBC",
     "nft": "NFT",
     "consensus": "Consensus",
