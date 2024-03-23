@@ -44,12 +44,12 @@ const bars = computed(() => {
 });
 </script>
 <template>
-  <div class="flex items-center justify-evenly gap-0.5">
+  <div class="flex gap-0.5">
     <div class="cursor-default" v-for="(item, index) in bars" :key="index">
       <div class="tooltip" 
           :data-tip="item.height" 
           :class="item.color"
-          style="width: 4px;"
+          style="width: 3px;"
       >
         &nbsp;
       </div>

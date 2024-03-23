@@ -255,7 +255,11 @@
     "signed_blocks": "已签名数量",
     "missing_blocks": "未签名数量",
     "add_validators": "添加验证人",
-    "add": "添加"
+    "add": "添加",
+    "legend": "图例",
+    "committed": "已提交",
+    "precommitted": "预提交",
+    "missed": "丢失"
   },
   "widget": {
     "title": "初始设置",

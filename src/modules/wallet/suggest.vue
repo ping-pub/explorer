@@ -170,6 +170,6 @@ function suggest() {
             </div>
         </div>
 
-        <AdBanner id="home-banner-ad" unit="banner" width="970px" height="90px" />
+        <AdBanner id="suggest-banner-ad" unit="banner" width="970px" height="90px" />
     </div>
 </template>

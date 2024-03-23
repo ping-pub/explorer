@@ -18,6 +18,7 @@ import { computed } from '@vue/reactivity';
 import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
 import ProposalListItem from '@/components/ProposalListItem.vue';
 import ArrayObjectElement from '@/components/dynamic/ArrayObjectElement.vue'
+import AdBanner from '@/components/ad/AdBanner.vue';
 
 const props = defineProps(['chain']);
 
@@ -381,6 +382,8 @@ const amount = computed({
           :hd-path="walletStore?.connectedWallet?.hdPath"></ping-token-convert>
       </Teleport>
     </div>
+
+    <AdBanner id="chain-home-banner-ad" unit="banner" width="970px" height="90px" />
 
     <div class="bg-base-100 rounded mt-4">
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">

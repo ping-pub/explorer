@@ -258,7 +258,7 @@ const currencySign = computed(() => {
         </div>
       </div>
       <div class="overflow-x-auto mt-4">
-      <AdBanner class="bg-base-200" id="home-banner-ad" unit="banner" width="970px" height="90px" />
+      <AdBanner class="bg-base-200" id="portfolio-banner-ad" unit="banner" width="970px" height="90px" />
         <table class="table w-full">
           <thead class="bg-base-200">
             <tr>

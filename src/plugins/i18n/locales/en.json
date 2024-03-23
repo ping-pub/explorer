@@ -266,7 +266,11 @@
     "signed_blocks": "Signed Blocks",
     "missing_blocks": "Missing Blocks",
     "add_validators": "Add Validators",
-    "add": "Add"
+    "add": "Add",
+    "legend": "Legend",
+    "committed": "Committed",
+    "precommitted": "Precommitted",
+    "missed": "Missed"
   },
   "widget": {
     "title": "Initial Setting",

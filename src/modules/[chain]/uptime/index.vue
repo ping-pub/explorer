@@ -183,31 +183,36 @@ function fetchAllKeyRotation() {
         Note: Please load rotated keys to see the correct uptime
       </div>
       <!-- grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-4 mt-4 -->
-      <div
-        class="flex flex-row flex-wrap gap-x-4 mt-4 justify-center"
-        :class="tab === '2' ? '' : 'hidden'"
-      >
-        <div v-for="({ v, signing, hex }, i) in list" :key="i">
-          <div class="flex items-center justify-between py-0 w-[298px]">
-            <label class="truncate text-sm">
-              <span class="ml-1 text-black dark:text-white"
-                >{{ i + 1 }}.{{ v.description.moniker }}</span
+      <div :class="tab === '2' ? '' : 'hidden'">
+        <div class="flex flex-row flex-wrap gap-x-4 mt-4 justify-center">
+          <div v-for="({ v, signing, hex }, i) in list" :key="i">
+            <div class="flex justify-between py-0 w-[248px]">
+              <label class="truncate text-sm">
+                <span class="ml-1 text-black dark:text-white"
+                  >{{ i + 1 }}.{{ v.description.moniker }}</span
+                >
+              </label>
+              <div
+                v-if="Number(signing?.missed_blocks_counter || 0) > 10"
+                class="badge badge-sm bg-transparent border-0 text-red-500 font-bold"
               >
-            </label>
-            <div
-              v-if="Number(signing?.missed_blocks_counter || 0) > 10"
-              class="badge badge-sm bg-transparent border-0 text-red-500 font-bold"
-            >
-              {{ signing?.missed_blocks_counter }}
+                {{ signing?.missed_blocks_counter }}
+              </div>
+              <div
+                v-else
+                class="badge badge-sm bg-transparent text-green-600 border-0 font-bold"
+              >
+                {{ signing?.missed_blocks_counter }}
+              </div>
             </div>
-            <div
-              v-else
-              class="badge badge-sm bg-transparent text-green-600 border-0 font-bold"
-            >
-              {{ signing?.missed_blocks_counter }}
-            </div>
+            <UptimeBar :blocks="commits2" :validator="hex" />
           </div>
-          <UptimeBar :blocks="commits2" :validator="hex" />
+        </div>
+        <div class="mt-5 ml-5 text-xs flex justify-center gap-2">
+          <span class=" font-bold">{{ $t('uptime.legend') }}: </span>
+          <span class="bg-green-500">&nbsp;</span> {{ $t('uptime.committed')}} 
+          <span class="bg-yellow-500">&nbsp;</span> {{ $t('uptime.precommitted')}} 
+          <span class="bg-red-500">&nbsp;</span> {{ $t('uptime.missed')}} 
         </div>
       </div>
 

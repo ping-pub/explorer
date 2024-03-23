@@ -254,7 +254,11 @@
       "signed_blocks": "Blok Tersign",
       "missing_blocks": "Blok yang Hilang",
       "add_validators": "Tambahkan Validator",
-      "add": "Tambahkan"
+      "add": "Tambahkan",
+      "legend": "Legend",
+      "committed": "Committed",
+      "precommitted": "Precommitted",
+      "missed": "Missed"
     },
     "widget": {
       "title": "Pengaturan Awal",
