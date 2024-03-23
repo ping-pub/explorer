@@ -4,6 +4,7 @@ import { suggestChain } from '@leapwallet/cosmos-snap-provider';
 import { useDashboard, type ChainConfig, useBlockchain, NetworkType } from '@/stores';
 import { CosmosRestClient } from '@/libs/client';
 import { onMounted } from 'vue';
+import AdBanner from '@/components/ad/AdBanner.vue';
 
 const error = ref("")
 const conf = ref("")
@@ -168,5 +169,7 @@ function suggest() {
                 If the chain is not offically support on Keplr/Metamask Snap, you can submit these parameters to enable Keplr/Metamask Snap.
             </div>
         </div>
+
+        <AdBanner id="home-banner-ad" unit="banner" width="970px" height="90px" />
     </div>
 </template>

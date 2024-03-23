@@ -6,7 +6,9 @@ import {
   type ChainConfig,
 } from '@/stores/useDashboard';
 import ChainSummary from '@/components/ChainSummary.vue';
-import { computed, ref } from 'vue';
+import AdBanner from '@/components/ad/AdBanner.vue';
+
+import { computed, onMounted, ref } from 'vue';
 import { useBlockchain } from '@/stores';
 
 const dashboard = useDashboard();
@@ -33,6 +35,7 @@ const featured = computed(() => {
 })
 
 const chainStore = useBlockchain()
+
 </script>
 <template>
   <div class="">
@@ -88,6 +91,8 @@ const chainStore = useBlockchain()
       />
     </div>
 
+    <AdBanner id="home-banner-ad" unit="banner" width="970px" height="90px" />
+
     <div class="text-center text-base mt-6 text-primary">
       <h2 class="mb-6">{{ $t('pages.description') }}</h2>
     </div>
@@ -114,4 +119,4 @@ const chainStore = useBlockchain()
  .logo path{
   fill: #171d30;
 }
-</style>
+</style>@/components/ad/ad
