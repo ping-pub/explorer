@@ -46,7 +46,7 @@ const messages = computed(() => {
 
         <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow mb-4">
             <h2 class="card-title truncate mb-2">{{ $t('tx.title') }}</h2>
-            <div class="overflow-auto-x">
+            <div class="overflow-hidden">
                 <table class="table text-sm">
                     <tbody>
                         <tr>
