@@ -127,7 +127,7 @@ const amount = computed({
 
 <template>
   <div>
-    <div v-if="coinInfo && coinInfo.name" class="bg-base-100 rounded shadow mb-4">
+    <div v-if="coinInfo && coinInfo.name" class="bg-base-100 rounded shadow">
       <div class="grid grid-cols-2 md:grid-cols-3 p-4">
         <div class="col-span-2 md:col-span-1">
           <div class="text-xl font-semibold text-main">
@@ -256,14 +256,14 @@ const amount = computed({
         </div>
       </div>
     </div>
-    
-    <AdBanner id="chain-home-banner-ad" unit="banner" width="970px" height="90px" />
 
-    <div class="grid grid-cols-1 gap-4 md:!grid-cols-3 lg:!grid-cols-6">
+    <div class="grid grid-cols-1 gap-4 md:!grid-cols-3 lg:!grid-cols-6 mt-4">
       <div v-for="(item, key) in store.stats" :key="key">
         <CardStatisticsVertical v-bind="item" />
       </div>
     </div>
+
+    <AdBanner id="chain-home-banner-ad" unit="banner" width="970px" height="90px" />
 
     <div v-if="blockchain.supportModule('governance')" class="bg-base-100 rounded mt-4 shadow">
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
