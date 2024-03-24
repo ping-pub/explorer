@@ -28,7 +28,14 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
+      // Set default consent to 'denied' as a placeholder
+      // Determine actual values based on your own requirements
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      });
       gtag('config', 'G-SSBKVF3GMX');
     </script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/ping-widget@latest/dist/ping-widget.min.js"></script>
