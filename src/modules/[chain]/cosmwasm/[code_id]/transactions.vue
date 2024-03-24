@@ -36,6 +36,20 @@ const balances = ref({} as PaginatedBalances)
 
 const contractAddress = String(route.query.contract)
 
+const history = JSON.parse(localStorage.getItem("contract_history") || "{}")
+
+if(history[chainStore.chainName]) {
+    if(!history[chainStore.chainName].includes(contractAddress)) {
+        history[chainStore.chainName].push(contractAddress)
+        if(history[chainStore.chainName].length > 10) {
+            history[chainStore.chainName].shift()
+        }
+    }
+} else {
+    history[chainStore.chainName] = [contractAddress]
+}
+localStorage.setItem("contract_history", JSON.stringify(history))
+
 onMounted(() => {
     const address = contractAddress
     wasmStore.wasmClient.getWasmContracts(address).then((x) => {
@@ -137,7 +151,7 @@ const result = ref({});
         </div>
 
         <div class="text-center mb-4">
-            <RouterLink to="contracts"><span class="btn btn-xs text-xs mr-2"> Back </span> </RouterLink>
+            <RouterLink :to="`../${info.code_id}/contracts`"><span class="btn btn-xs text-xs mr-2"> Back </span> </RouterLink>
             <label @click="showFunds()" for="modal-contract-funds" class="btn btn-primary btn-xs text-xs mr-2">{{
                 $t('cosmwasm.btn_funds') }}</label>
             <label class="btn btn-primary btn-xs text-xs mr-2" for="modal-contract-states" @click="showState()">
@@ -169,9 +183,9 @@ const result = ref({});
         </div>
 
         <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-            <h2 class="card-title truncate w-full mt-4">Transactions</h2>
+            <h2 class="card-title truncate w-full mt-4 mb-2">Transactions</h2>
             <table class="table">
-                <thead>
+                <thead class=" bg-base-200">
                     <tr>
                         <td> {{ $t('ibc.height') }}</td>
                         <td>{{ $t('ibc.txhash') }}</td>

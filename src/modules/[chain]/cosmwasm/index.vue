@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useBlockchain, useFormatter, useTxDialog } from '@/stores';
 import { useWasmStore } from './WasmStore';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import type { PaginabledCodeInfos } from './types';
 import { PageRequest } from '@/types';
 import PaginationBar from '@/components/PaginationBar.vue';
@@ -15,6 +15,8 @@ const pageRequest = ref(new PageRequest())
 const wasmStore = useWasmStore();
 const dialog = useTxDialog()
 const creator = ref("")
+const field = ref("contract")
+const history = ref([])
 
 function pageload(pageNum: number) {
     pageRequest.value.setPage(pageNum)
@@ -24,21 +26,42 @@ function pageload(pageNum: number) {
 }
 pageload(1)
 
+onMounted(() => {
+    const historyStore = JSON.parse(localStorage.getItem("contract_history") || "{}")
+    history.value = historyStore[props.chain] || []
+})
+
 function myContracts() {
-    router.push(`/${props.chain}/cosmwasm/${creator.value}/contracts`)
+    if(field.value === "contract")
+        router.push(`/${props.chain}/cosmwasm/0/transactions?contract=${creator.value}`)
+    else if(field.value === "creator")
+        router.push(`/${props.chain}/cosmwasm/${creator.value}/contracts`)
+}
+const togo = ref("")
+function gotoHistory() {
+    router.push(`/${props.chain}/cosmwasm/0/transactions?contract=${togo.value}`)
 }
 </script>
 <template>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-        <h2 class="card-title truncate w-full">{{ $t('cosmwasm.title') }}</h2>
-
-        <div class="join border border-primary">
-            <input v-model="creator" type=text class="input input-bordered w-40 join-item" placeholder="creator address" />
-            <button class="join-item btn  btn-primary" @click="myContracts()">{{ $t('cosmwasm.btn_query') }}</button>
+        <h2 class="card-title truncate w-full mb-4">{{ $t('cosmwasm.title') }}</h2>
+        <div class="grid grid-flow-col auto-cols-max gap-4 overflow-hidden">
+            <div class="join w-full border border-primary">
+                <select v-model="field" class="select select-primary"><option value="contract">Contract</option><option value="creator">Creator</option></select>
+                <input v-model="creator" type=text class="input input-bordered w-full join-item" placeholder="address" />
+                <button class="join-item btn  btn-primary" @click="myContracts()">{{ $t('cosmwasm.btn_query') }}</button>
+            </div>
+            <div>
+                <select v-model="togo" class="select select-primary" @change="gotoHistory()">
+                    <option value="">History</option>
+                    <option v-for="(v, index) in history" :key="index" :value="v" >...{{ String(v).substring(45) }}</option>
+                </select>
+            </div>
         </div>
+
         <div class="overflow-x-auto">
             <table class="table table-compact w-full mt-4 text-sm">
-                <thead>
+                <thead class=" bg-base-200">
                     <tr>
                         <th>{{ $t('cosmwasm.code_id') }}</th>
                         <th>{{ $t('cosmwasm.code_hash') }}</th>

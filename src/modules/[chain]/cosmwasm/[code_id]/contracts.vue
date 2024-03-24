@@ -56,7 +56,7 @@ function showInfo(address: string) {
       </h2>
       <div class="overflow-x-auto">
         <table class="table table-compact w-full mt-4">
-          <thead>
+          <thead class="bg-base-200">
             <tr>
               <th style="position: relative; z-index: 2">{{ $t('cosmwasm.contract_list') }}</th>
               <th>{{ $t('account.action') }}</th>
