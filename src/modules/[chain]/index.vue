@@ -256,6 +256,8 @@ const amount = computed({
         </div>
       </div>
     </div>
+    
+    <AdBanner id="chain-home-banner-ad" unit="banner" width="970px" height="90px" />
 
     <div class="grid grid-cols-1 gap-4 md:!grid-cols-3 lg:!grid-cols-6">
       <div v-for="(item, key) in store.stats" :key="key">
@@ -382,8 +384,6 @@ const amount = computed({
           :hd-path="walletStore?.connectedWallet?.hdPath"></ping-token-convert>
       </Teleport>
     </div>
-
-    <AdBanner id="chain-home-banner-ad" unit="banner" width="970px" height="90px" />
 
     <div class="bg-base-100 rounded mt-4">
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
