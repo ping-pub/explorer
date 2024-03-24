@@ -208,7 +208,7 @@ function fetchAllKeyRotation() {
             <UptimeBar :blocks="commits2" :validator="hex" />
           </div>
         </div>
-        <div class="mt-5 ml-5 text-xs flex justify-center gap-2">
+        <div class="mt-5 text-xs flex justify-center gap-2">
           <span class=" font-bold">{{ $t('uptime.legend') }}: </span>
           <span class="bg-green-500">&nbsp;</span> {{ $t('uptime.committed')}} 
           <span class="bg-yellow-500">&nbsp;</span> {{ $t('uptime.precommitted')}} 
