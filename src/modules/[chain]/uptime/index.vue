@@ -56,7 +56,7 @@ const validatorSet = computed(() => {
 const blocks = ref({} as Record<string, BlockColor[]>);
 
 const grid  = computed(() => {
-  
+
   const validators = keyword.value.length === 0 ? validatorSet.value : 
   validatorSet.value.filter((v) => v.moniker.toLowerCase().includes(keyword.value.toLowerCase()));
 
@@ -79,21 +79,36 @@ const grid  = computed(() => {
 });
 
 baseStore.$subscribe((_, state) => {
-  
-  if(Number(state.latest.block.header.height) % 7 === 0 ) updateTotalSigningInfo();
-
-  state.latest.block.last_commit?.signatures?.forEach((s) => {
-    const block = blocks.value[s.validator_address] || [];
-    block.push({
-      height: state.latest.block.header.height,
-      color: s.block_id_flag === 'BLOCK_ID_FLAG_COMMIT' ? 'bg-green-500' : 
-      s.block_id_flag === 'BLOCK_ID_FLAG_NIL' ? 'bg-yellow-500' : 'bg-red-500',
+  const newHeight = Number(state.latest?.block?.header?.height || 0)
+  if (newHeight > latest.value) {
+    latest.value = newHeight;
+    if(Number(state.latest.block.header.height) % 7 === 0 ) updateTotalSigningInfo();
+    state.latest.block.last_commit?.signatures?.forEach((s) => {
+      const block = blocks.value[s.validator_address] || [];
+      block.push({
+        height: state.latest.block.header.height,
+        color: s.block_id_flag === 'BLOCK_ID_FLAG_COMMIT' ? 'bg-green-500' : 'bg-yellow-500'
+      });
+      if (block.length > 50) {
+        block.shift();
+      }
+      blocks.value[s.validator_address] = block;
     });
-    if (block.length > 50) {
-      block.shift();
-    }
-    blocks.value[s.validator_address] = block;
-  });
+
+    validatorSet.value.forEach((v) => {
+      const block = blocks.value[v.base64] || [];
+      if(block.length === 0 || block[block.length - 1].height !== state.latest.block.header.height) {
+        block.push({
+          height: state.latest.block.header.height,
+          color: 'bg-red-500'
+        });
+        if (block.length > 50) {
+          block.shift();
+        }
+        blocks.value[v.base64] = block;
+      }
+    });
+  }
 });
 
 onMounted(() => {
@@ -123,10 +138,20 @@ onMounted(() => {
                     const block = blocks.value[s.validator_address] || [];
                     block.unshift({
                       height: x.block.header.height,
-                      color: s.block_id_flag === 'BLOCK_ID_FLAG_COMMIT' ? 'bg-green-500' : 
-                      s.block_id_flag === 'BLOCK_ID_FLAG_NIL' ? 'bg-yellow-500' : 'bg-red-500',
+                      color: s.block_id_flag === 'BLOCK_ID_FLAG_COMMIT' ? 'bg-green-500' : 'bg-yellow-500' ,
                     });
                     blocks.value[s.validator_address] = block;
+                  });
+
+                  validatorSet.value.forEach((v) => {
+                    const block = blocks.value[v.base64] || [];
+                    if(block.length === 0 || block.findIndex((b) => b.height === x.block.header.height) === -1) {
+                      block.unshift({
+                        height: x.block.header.height,
+                        color: 'bg-red-500'
+                      });
+                      blocks.value[v.base64] = block;
+                    }
                   });
                   resolve();
                 });
@@ -280,7 +305,7 @@ function fetchAllKeyRotation() {
             </td>
             <td class="text-xs text-right">
               <span
-                v-if="v.signing.jailed_until.startsWith('1970')"
+                v-if="v.signing && v.signing.jailed_until.startsWith('1970')"
                 class="text-right"
                 >{{
                   format.percent(
