@@ -2,14 +2,14 @@
 import { ref, onMounted, computed, onUnmounted } from 'vue';
 import { fromHex, toBase64 } from '@cosmjs/encoding';
 import {
-  useFormatter,
   useStakingStore,
   useBaseStore,
   useBlockchain,
+useFormatter,
 } from '@/stores';
 import UptimeBar from '@/components/UptimeBar.vue';
-import type { Commit, SlashingParam, SigningInfo } from '@/types';
-import { consensusPubkeyToHexAddress, pubKeyToValcons, valconsToBase64 } from '@/libs';
+import type { SlashingParam, SigningInfo } from '@/types';
+import { consensusPubkeyToHexAddress, valconsToBase64 } from '@/libs';
 
 const props = defineProps(['chain']);
 
@@ -18,64 +18,87 @@ const format = useFormatter();
 const baseStore = useBaseStore();
 const chainStore = useBlockchain();
 const latest = ref(0);
-const commits = ref([] as Commit[]);
 const keyword = ref('');
 const live = ref(true);
 const slashingParam = ref({} as SlashingParam);
-
 const signingInfo = ref({} as Record<string, SigningInfo>);
 
-// filter validators by keywords
-const validators = computed(() => {
-  if (keyword)
-    return stakingStore.validators.filter(
-      (x) => x.description.moniker.indexOf(keyword.value) > -1
-    );
-  return stakingStore.validators;
+interface BlockColor {
+  height: string;
+  color: string;
+}
+interface ValidatorUnit {
+  moniker: string;
+  blocks: BlockColor[];
+  hex: string;
+  base64: string;
+  missed_blocks_counter: number | string;
+  uptime: number;
+  signing: SigningInfo;
+}
+
+function padding(blocks: BlockColor[] = []) {
+  const raw = Array(50).fill({ height: "0", color: 'bg-secondary' } as BlockColor).concat(blocks)
+  return raw.slice(raw.length - 50);
+}
+
+const validatorSet = computed(() => {
+  return stakingStore.validators.map((v) => {
+    const hex = consensusPubkeyToHexAddress(v.consensus_pubkey)
+    return {
+      moniker: v.description.moniker,
+      hex,
+      base64: toBase64(fromHex(hex))
+    };
+  });
 });
 
-const list = computed(() => {
-  if(chainStore.isConsumerChain) {
-    stakingStore.loadKeyRotationFromLocalstorage(baseStore.latest?.block?.header?.chain_id)
+const blocks = ref({} as Record<string, BlockColor[]>);
 
-    const window = Number(slashingParam.value.signed_blocks_window || 0);
-    const vset = validators.value.map((v) => {
-      
-      const hexAddress = stakingStore.findRotatedHexAddress(v.consensus_pubkey)
-      const signing =
-        signingInfo.value[hexAddress];
-      return {
-        v,
-        signing,
-        hex: toBase64(fromHex(hexAddress)),
-        uptime:
-          signing && window > 0
+const grid  = computed(() => {
+  
+  const validators = keyword.value.length === 0 ? validatorSet.value : 
+  validatorSet.value.filter((v) => v.moniker.toLowerCase().includes(keyword.value.toLowerCase()));
+
+  const window = Number(slashingParam.value.signed_blocks_window || 0);
+  return validators.map((v) => {
+    const signing = signingInfo.value[v.hex];
+    const uptime = signing && window > 0
             ? (window - Number(signing.missed_blocks_counter)) / window
-            : undefined,
-      };
+            : undefined
+    return {
+      moniker: v.moniker,
+      hex: v.hex,
+      base64: v.base64,
+      blocks: padding(blocks.value[v.base64] || []) ,
+      uptime,
+      missed_blocks_counter: signing?.missed_blocks_counter || 0,
+      signing
+    } as ValidatorUnit;
+  })
+});
+
+baseStore.$subscribe((_, state) => {
+  
+  if(Number(state.latest.block.header.height) % 7 === 0 ) updateTotalSigningInfo();
+
+  state.latest.block.last_commit?.signatures?.forEach((s) => {
+    const block = blocks.value[s.validator_address] || [];
+    block.push({
+      height: state.latest.block.header.height,
+      color: s.block_id_flag === 'BLOCK_ID_FLAG_COMMIT' ? 'bg-green-500' : 
+      s.block_id_flag === 'BLOCK_ID_FLAG_NIL' ? 'bg-yellow-500' : 'bg-red-500',
     });
-    return vset;
-  } else {
-    const window = Number(slashingParam.value.signed_blocks_window || 0);
-    const vset = validators.value.map((v) => {
-      const signing =
-        signingInfo.value[consensusPubkeyToHexAddress(v.consensus_pubkey)];
-      return {
-        v,
-        signing,
-        hex: toBase64(fromHex(consensusPubkeyToHexAddress(v.consensus_pubkey))),
-        uptime:
-          signing && window > 0
-            ? (window - Number(signing.missed_blocks_counter)) / window
-            : undefined,
-      };
-    });
-    return vset;
-  }
+    if (block.length > 50) {
+      block.shift();
+    }
+    blocks.value[s.validator_address] = block;
+  });
 });
 
 onMounted(() => {
   live.value = true;
+
   baseStore.fetchLatest().then((l) => {
     let b = l;
     if (
@@ -85,7 +108,6 @@ onMounted(() => {
       b = baseStore.recents?.at(0) || l;
     }
     latest.value = Number(b.block.header.height);
-    commits.value.unshift(b.block.last_commit);
     const height = Number(b.block.header?.height || 0);
     if (height > 50) {
       // constructs sequence for loading blocks
@@ -94,10 +116,18 @@ onMounted(() => {
         promise = promise.then(
           () =>
             new Promise((resolve, reject) => {
-              if (live.value && commits2.value.length < 50) {
+              if (live.value) {
                 // continue only if the page is living
                 baseStore.fetchBlock(i).then((x) => {
-                  commits.value.unshift(x.block.last_commit);
+                  x.block.last_commit?.signatures?.forEach((s) => {
+                    const block = blocks.value[s.validator_address] || [];
+                    block.unshift({
+                      height: x.block.header.height,
+                      color: s.block_id_flag === 'BLOCK_ID_FLAG_COMMIT' ? 'bg-green-500' : 
+                      s.block_id_flag === 'BLOCK_ID_FLAG_NIL' ? 'bg-yellow-500' : 'bg-red-500',
+                    });
+                    blocks.value[s.validator_address] = block;
+                  });
                   resolve();
                 });
               }
@@ -121,16 +151,6 @@ function updateTotalSigningInfo() {
     });
   });
 }
-
-const commits2 = computed(() => {
-  const la = baseStore.recents.map((b) => b.block.last_commit);
-  // trigger update total signing info
-  if(la.length > 1 && Number(la.at(la.length-1)?.height|| 0) % 10 === 7) {
-    updateTotalSigningInfo();
-  };
-  const all = [...commits.value, ...la];
-  return all.length > 50 ? all.slice(all.length - 50) : all;
-});
 
 onUnmounted(() => {
   live.value = false;
@@ -185,27 +205,27 @@ function fetchAllKeyRotation() {
       <!-- grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-4 mt-4 -->
       <div :class="tab === '2' ? '' : 'hidden'">
         <div class="flex flex-row flex-wrap gap-x-4 mt-4 justify-center">
-          <div v-for="({ v, signing, hex }, i) in list" :key="i">
+          <div v-for="(unit, i) in grid" :key="i">
             <div class="flex justify-between py-0 w-[248px]">
               <label class="truncate text-sm">
                 <span class="ml-1 text-black dark:text-white"
-                  >{{ i + 1 }}.{{ v.description.moniker }}</span
+                  >{{ i + 1 }}.{{ unit.moniker }}</span
                 >
               </label>
               <div
-                v-if="Number(signing?.missed_blocks_counter || 0) > 10"
+                v-if="Number(unit?.missed_blocks_counter || 0) > 10"
                 class="badge badge-sm bg-transparent border-0 text-red-500 font-bold"
               >
-                {{ signing?.missed_blocks_counter }}
+                {{ unit?.missed_blocks_counter }}
               </div>
               <div
                 v-else
                 class="badge badge-sm bg-transparent text-green-600 border-0 font-bold"
               >
-                {{ signing?.missed_blocks_counter }}
+                {{ unit?.missed_blocks_counter }}
               </div>
             </div>
-            <UptimeBar :blocks="commits2" :validator="hex" />
+            <UptimeBar :blocks="unit.blocks" />
           </div>
         </div>
         <div class="mt-5 text-xs flex justify-center gap-2">
@@ -228,53 +248,51 @@ function fetchAllKeyRotation() {
               <td>{{ $t('uptime.tombstoned') }}</td>
             </tr>
           </thead>
-          <tr v-for="({ v, signing, uptime }, i) in list" class="hover">
+          <tr v-for="(v, i) in grid" class="hover">
             <td>
               <div class="truncate max-w-sm">
-                {{ i + 1 }}. {{ v.description.moniker }}
+                {{ i + 1 }}. {{ v.moniker }}
               </div>
             </td>
             <td class="text-right">
               <span
-                v-if="signing"
-                class=""
                 :class="
-                  uptime && uptime > 0.95 ? 'text-green-500' : 'text-red-500'
+                  v.uptime && v.uptime > 0.95 ? 'text-green-500' : 'text-red-500'
                 "
               >
                 <div
                   class="tooltip"
-                  :data-tip="`${signing.missed_blocks_counter} missing blocks`"
+                  :data-tip="`${v.missed_blocks_counter} missing blocks`"
                 >
-                  {{ format.percent(uptime) }}
+                  {{ format.percent(v.uptime) }}
                 </div>
               </span>
             </td>
             <td>
-              <span v-if="signing && !signing.jailed_until.startsWith('1970')">
+              <span v-if="v.signing && !v.signing.jailed_until.startsWith('1970')">
                 <div
                   class="tooltip"
-                  :data-tip="format.toDay(signing?.jailed_until, 'long')"
+                  :data-tip="format.toDay(v.signing.jailed_until, 'long')"
                 >
-                  <span>{{ format.toDay(signing?.jailed_until, 'from') }}</span>
+                  <span>{{ format.toDay(v.signing.jailed_until, 'from') }}</span>
                 </div>
               </span>
             </td>
             <td class="text-xs text-right">
               <span
-                v-if="signing && signing.jailed_until.startsWith('1970')"
+                v-if="v.signing.jailed_until.startsWith('1970')"
                 class="text-right"
                 >{{
                   format.percent(
-                    Number(signing.index_offset) /
-                      (latest - Number(signing.start_height))
+                    Number(v.signing.index_offset) /
+                      (latest - Number(v.signing.start_height))
                   )
                 }}</span
               >
-              {{ signing?.index_offset }}
+              {{ v.signing?.index_offset }}
             </td>
-            <td class="text-right">{{ signing?.start_height }}</td>
-            <td class="capitalize">{{ signing?.tombstoned }}</td>
+            <td class="text-right">{{ v.signing?.start_height }}</td>
+            <td class="capitalize">{{ v.signing?.tombstoned }}</td>
           </tr>
           <tfoot>
             <tr>
