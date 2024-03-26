@@ -2,14 +2,14 @@
     "chain_name": "Aligned-Layer-Testnet",
     "api": [
         {
-            "address": "https://alignedlayer-api.cherryvalidator.us", 
-            "provider": "CherryValidator"
+            "address": "https://alignedlayer-api.validator247.com", 
+            "provider": "Validator247"
         }
     ], 
     "rpc": [
         {
-            "address": "https://alignedlayer-rpc.cherryvalidator.us", 
-            "provider": "CherryValidator"
+            "address": "https://alignedlayer-rpc.validator247.com", 
+            "provider": "Validator247"
         }
     ],
     "sdk_version": "0.47.3",
