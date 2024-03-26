@@ -1,7 +1,7 @@
 {
     "chain_name": "Quasar",
     "coingecko": "",
-    "api": ["https://quasar-api.polkachu.com"],
+    "api": ["https://quasar-api.polkachu.com", "https://lcd-quasar.whispernode.com:443"],
     "rpc": ["https://quasar-rpc.polkachu.com"],
     "sdk_version": "0.45.14",
     "coin_type": 118,

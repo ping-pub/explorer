@@ -1,6 +1,6 @@
 {
     "chain_name": "comdex",
-    "api":"https://rest.comdex.one/",
+    "api": ["https://rest.comdex.one/", "https://lcd-comdex.whispernode.com:443"],
     "rpc": ["https://api.comdex.audit.one:443/rpc", "https://rpc.comdex.one:443"],
     "snapshot_provider": "",
     "sdk_version": "0.44.3",

@@ -1,7 +1,7 @@
 {
     "chain_name": "kujira",
     "coingecko": "",
-    "api": ["https://lcd.kaiyo.kujira.setten.io", "https://kujira-api.polkachu.com"],
+    "api": ["https://lcd.kaiyo.kujira.setten.io", "https://kujira-api.polkachu.com", "https://lcd-kujira.whispernode.com:443"],
     "rpc": ["https://rpc.kaiyo.kujira.setten.io", "https://kujira-api.polkachu.com:443"],
     "snapshot_provider": "",
     "sdk_version": "0.45.4",
