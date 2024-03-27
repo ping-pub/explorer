@@ -92,11 +92,12 @@ baseStore.$subscribe((_, state) => {
           color: sig.block_id_flag === 'BLOCK_ID_FLAG_COMMIT' ? 'bg-green-500' : 'bg-yellow-500'
         });
       } else {
-        block.unshift({
+        block.push({
           height: state.latest.block.header.height,
           color: 'bg-red-500'
         });
       }
+      if (block.length > 50) block.shift();
       blocks.value[v.base64] = block;
     });
   }
@@ -129,7 +130,7 @@ onMounted(() => {
                     const sig = x.block.last_commit?.signatures.find((s) => s.validator_address === v.base64)
                     const block = blocks.value[v.base64] || [];
                     if (sig){
-                      block.push({
+                      block.unshift({
                         height: x.block.header.height,
                         color: sig.block_id_flag === 'BLOCK_ID_FLAG_COMMIT' ? 'bg-green-500' : 'bg-yellow-500'
                       });
