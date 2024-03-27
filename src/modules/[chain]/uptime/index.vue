@@ -83,30 +83,21 @@ baseStore.$subscribe((_, state) => {
   if (newHeight > latest.value) {
     latest.value = newHeight;
     if(Number(state.latest.block.header.height) % 7 === 0 ) updateTotalSigningInfo();
-    state.latest.block.last_commit?.signatures?.forEach((s) => {
-      const block = blocks.value[s.validator_address] || [];
-      block.push({
-        height: state.latest.block.header.height,
-        color: s.block_id_flag === 'BLOCK_ID_FLAG_COMMIT' ? 'bg-green-500' : 'bg-yellow-500'
-      });
-      if (block.length > 50) {
-        block.shift();
-      }
-      blocks.value[s.validator_address] = block;
-    });
-
     validatorSet.value.forEach((v) => {
+      const sig = state.latest.block.last_commit?.signatures.find((s) => s.validator_address === v.base64)
       const block = blocks.value[v.base64] || [];
-      if(block.length === 0 || block[block.length - 1].height !== state.latest.block.header.height) {
+      if (sig){
         block.push({
+          height: state.latest.block.header.height,
+          color: sig.block_id_flag === 'BLOCK_ID_FLAG_COMMIT' ? 'bg-green-500' : 'bg-yellow-500'
+        });
+      } else {
+        block.unshift({
           height: state.latest.block.header.height,
           color: 'bg-red-500'
         });
-        if (block.length > 50) {
-          block.shift();
-        }
-        blocks.value[v.base64] = block;
       }
+      blocks.value[v.base64] = block;
     });
   }
 });
@@ -130,28 +121,25 @@ onMounted(() => {
       for (let i = height - 1; i > height - 50; i -= 1) {
         promise = promise.then(
           () =>
-            new Promise((resolve, reject) => {
+            new Promise((resolve) => {
               if (live.value) {
                 // continue only if the page is living
                 baseStore.fetchBlock(i).then((x) => {
-                  x.block.last_commit?.signatures?.forEach((s) => {
-                    const block = blocks.value[s.validator_address] || [];
-                    block.unshift({
-                      height: x.block.header.height,
-                      color: s.block_id_flag === 'BLOCK_ID_FLAG_COMMIT' ? 'bg-green-500' : 'bg-yellow-500' ,
-                    });
-                    blocks.value[s.validator_address] = block;
-                  });
-
                   validatorSet.value.forEach((v) => {
+                    const sig = x.block.last_commit?.signatures.find((s) => s.validator_address === v.base64)
                     const block = blocks.value[v.base64] || [];
-                    if(block.length === 0 || block.findIndex((b) => b.height === x.block.header.height) === -1) {
+                    if (sig){
+                      block.push({
+                        height: x.block.header.height,
+                        color: sig.block_id_flag === 'BLOCK_ID_FLAG_COMMIT' ? 'bg-green-500' : 'bg-yellow-500'
+                      });
+                    } else {
                       block.unshift({
                         height: x.block.header.height,
                         color: 'bg-red-500'
                       });
-                      blocks.value[v.base64] = block;
                     }
+                    blocks.value[v.base64] = block;
                   });
                   resolve();
                 });
