@@ -72,7 +72,7 @@ const grid = computed(() => {
       base64: v.base64,
       blocks: padding(blockColors.value[v.base64] || []),
       uptime,
-      missed_blocks_counter: signing?.missed_blocks_counter || 0,
+      missed_blocks_counter: signing?.missed_blocks_counter,
       signing
     } as ValidatorUnit;
   })
