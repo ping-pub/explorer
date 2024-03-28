@@ -1,6 +1,6 @@
 {
     "chain_name": "cheqd",
-    "api": "https://api.cheqd.net",
+    "api": ["https://api.cheqd.net", "https://lcd-cheqd.whispernode.com:443"],
     "rpc": ["https://rpc.cheqd.net:443", "https://rpc.cheqd.net:443"],
     "snapshot_provider": "",
     "sdk_version": "0.44.3",

@@ -1,6 +1,6 @@
 {
     "chain_name": "sentinel",
-    "api": "https://lcd.sentinel.co",
+    "api": ["https://lcd.sentinel.co", "https://lcd-sentinel.whispernode.com:443"],
     "rpc": ["https://rpc-sentinel.keplr.app:443", "https://rpc-sentinel.keplr.app:443"],
     "snapshot_provider": "",
     "sdk_version": "0.45.6",
