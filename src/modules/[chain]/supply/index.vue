@@ -34,7 +34,7 @@ function pageload(p: number) {
 <template>
     <div class="overflow-auto">
         <table class="table table-compact">
-            <thead>
+            <thead class=" bg-base-200">
                 <tr>
                     <td>Token</td>
                     <td>Amount</td>
