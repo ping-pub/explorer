@@ -16,12 +16,12 @@
   "sdk_version": "0.45.11",
   "coin_type": "118",
   "min_tx_fee": "800",
-  "addr_prefix": "orai",
+  "addr_prefix": "oraib",
   "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/oraichain/images/orai.png",
   "assets": [
     {
-      "base": "orai",
-      "symbol": "ORAI",
+      "base": "oraib",
+      "symbol": "ORAIB",
       "exponent": "6",
       "coingecko_id": "oraichain-token",
       "logo": "https://s2.coinmarketcap.com/static/img/coins/64x64/7533.png"
