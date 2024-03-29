@@ -21,7 +21,7 @@
     "theme_color": "#812cd6",
     "assets": [{
         "base": "stake",
-        "symbol": "STAKE",
+        "symbol": "AL",
         "exponent": "6",
         "logo": "/logos/aligned.jpg"
     }]
