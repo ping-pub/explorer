@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { computed, ref } from '@vue/reactivity';
 import { useBaseStore, useFormatter } from '@/stores';
+import TxsInBlocksChart from '@/components/charts/TxsInBlocksChart.vue';
+
 const props = defineProps(['chain']);
 
 const tab = ref('blocks');
@@ -25,8 +27,11 @@ const list = computed(() => {
                 >{{ $t('block.future') }}</RouterLink>
         </div>
 
-        <div v-show="tab === 'blocks'" class="grid xl:!grid-cols-6 md:!grid-cols-4 grid-cols-1 gap-3">
+        <div v-show="tab === 'blocks'">
 
+            <TxsInBlocksChart />
+
+            <div class="grid xl:!grid-cols-6 md:!grid-cols-4 grid-cols-1 gap-3">
             <RouterLink v-for="item in list"
                 class="flex flex-col justify-between rounded p-4 shadow bg-base-100"
                 :to="`/${chain}/block/${item.block.header.height}`">
@@ -45,6 +50,7 @@ const list = computed(() => {
                     <span class="text-right mt-1 whitespace-nowrap"> {{ item.block?.data?.txs.length }} txs </span>
                 </div>
             </RouterLink>
+            </div>
         </div>
     </div>
 </template>
