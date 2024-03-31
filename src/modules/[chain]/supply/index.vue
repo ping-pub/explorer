@@ -32,7 +32,7 @@ function pageload(p: number) {
 
 </script>
 <template>
-    <div class="overflow-auto">
+    <div class="overflow-auto bg-base-100">
         <table class="table table-compact">
             <thead class=" bg-base-200">
                 <tr>
@@ -40,7 +40,7 @@ function pageload(p: number) {
                     <td>Amount</td>
                 </tr>
             </thead>
-            <tr v-for="item in list">
+            <tr v-for="item in list" class="hover">
                 <td>{{ item.denom  }}</td>
                 <td>{{ item.amount  }}</td>
             </tr>
