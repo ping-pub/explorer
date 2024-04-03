@@ -2,14 +2,14 @@
     "chain_name": "galactica-testnet",
     "api": [
         {
-            "address": "https://galactica-testnet-api.cherryvalidator.us", 
-            "provider": "CherryValidator"
+            "address": "https://galactica-testnet-api.validator247.com", 
+            "provider": "Validator247"
         }
     ], 
     "rpc": [
         {
-            "address": "https://galactica-testnet-rpc.cherryvalidator.us", 
-            "provider": "CherryValidator"
+            "address": "https://galactica-testnet-rpc.validator247.com", 
+            "provider": "Validator247"
         }
     ],
     "sdk_version": "0.47.3",
