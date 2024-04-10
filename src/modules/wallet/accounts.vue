@@ -228,7 +228,7 @@ async function loadBalances(chainName: string, endpoint: string, address: string
       <div v-for="{ key, subaccounts } in accounts" class="bg-base-100 rounded-md my-5 py-5">
         <div class="flex justify-self-center">
           <div class="mx-2 p-2">
-            <svg :fill="chainStore.current?.themeColor || '#666CFF'" height="28px" width="28px" version="1.1" id="Capa_1"
+            <svg :fill="chainStore.current?.themeColor || '#f28056'" height="28px" width="28px" version="1.1" id="Capa_1"
               xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 487.5 487.5"
               xml:space="preserve">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>

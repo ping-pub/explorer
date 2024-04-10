@@ -95,10 +95,10 @@ function gotoHistory() {
     </div>
 </template>
 
-<route>
-    {
-      meta: {
-        i18n: 'cosmwasm'
-      }
-    }
-</route>
+<!--<route>-->
+<!--    {-->
+<!--      meta: {-->
+<!--        i18n: 'cosmwasm'-->
+<!--      }-->
+<!--    }-->
+<!--</route>-->
