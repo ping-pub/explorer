@@ -128,7 +128,7 @@ const upgradeCountdown = computed((): number => {
   if (height > 0) {
     const base = useBaseStore();
     const current = Number(base.latest?.block?.header?.height || 0);
-    return (height - current) * 6 * 1000;
+    return (height - current) * Number((base.blocktime / 1000).toFixed()) * 1000;
   }
   const now = new Date();
   const end = new Date(proposal.value.content?.plan?.time || '');
