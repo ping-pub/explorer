@@ -11,7 +11,7 @@
     { "provider": "posthuman", "address": "https://rpc.crossfi-testnet.posthuman.digital" }
   ],
   "sdk_version": "0.45.1",
-  "coin_type": "118",
+  "coin_type": "60",
   "min_tx_fee": "800",
   "addr_prefix": "mx",
   "logo": "https://avatars.githubusercontent.com/u/141825300?s=200&v=4",
@@ -20,7 +20,6 @@
       "base": "mpx",
       "symbol": "MPX",
       "exponent": "18",
-      "coingecko_id": "crossfi-2",
       "logo": "https://avatars.githubusercontent.com/u/141825300?s=200&v=4"
     }
   ]
