@@ -5,10 +5,10 @@
     {
       "provider": "posthuman",
       "address": "https://rest.crossfi-testnet.posthuman.digital"
-    },
+    }
   ],
   "rpc": [
-    { "provider": "posthuman", "address": "https://rpc.crossfi-testnet.posthuman.digital" },
+    { "provider": "posthuman", "address": "https://rpc.crossfi-testnet.posthuman.digital" }
   ],
   "sdk_version": "0.45.1",
   "coin_type": "118",
