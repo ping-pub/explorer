@@ -2,13 +2,13 @@
     "chain_name": "Warden-Testnet",
     "api": [
         {
-            "address": "https://warden-api.validator247.com", 
+            "address": "https://warden-testnet-api.validator247.com", 
             "provider": "Validator247"
         }
     ], 
     "rpc": [
         {
-            "address": "https://warden-rpc.validator247.com", 
+            "address": "https://warden-testnet-rpc.validator247.com", 
             "provider": "Validator247"
         }
     ],
