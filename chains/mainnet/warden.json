@@ -1,5 +1,5 @@
 {
-    "chain_name": "Warden-Testnet",
+    "chain_name": "warden-testnet",
     "api": [
         {
             "address": "https://warden-testnet-api.validator247.com", 
