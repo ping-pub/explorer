@@ -1,0 +1,19 @@
+{
+    "chain_name": "seda",
+    "api": ["https://api-seda.whispernode.com:443"],
+    "rpc": ["https://rpc-seda.whispernode.com:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.15",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "seda",
+    "logo": "/logos/seda.png",
+    "assets": [{
+        "base": "aseda",
+        "symbol": "SEDA",
+        "exponent": "18",
+        "coingecko_id": "seda", 
+        "logo": "/logos/seda.png"
+    }]
+}
+
