@@ -290,7 +290,7 @@ export const useDashboard = defineStore('dashboard', {
       const keys = Object.keys(this.chains) // load all blockchain
       // Object.keys(this.favoriteMap) //only load favorite once it has too many chains
       keys.forEach(k => {
-        if(this.chains[k]) this.chains[k].assets.forEach(a => {
+        if(Array.isArray(this.chains[k]?.assets)) this.chains[k].assets.forEach(a => {
           if(a.coingecko_id !== undefined && a.coingecko_id.length > 0) {
             coinIds.push(a.coingecko_id)
             a.denom_units.forEach(u => {
