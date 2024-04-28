@@ -138,19 +138,21 @@ function apiConverter(api: any[]) {
 
 export function fromLocal(lc: LocalConfig): ChainConfig {
   const conf = {} as ChainConfig;
-  conf.assets = lc.assets.map((x) => ({
-    name: x.base,
-    base: x.base,
-    display: x.symbol,
-    symbol: x.symbol,
-    logo_URIs: { svg: x.logo },
-    coingecko_id: x.coingecko_id,
-    exponent: x.exponent,
-    denom_units: [
-      { denom: x.base, exponent: 0 },
-      { denom: x.symbol.toLowerCase(), exponent: Number(x.exponent) },
-    ],
-  }));
+  if(lc.assets && Array.isArray(lc.assets)) {
+    conf.assets = lc.assets.map((x) => ({
+      name: x.base,
+      base: x.base,
+      display: x.symbol,
+      symbol: x.symbol,
+      logo_URIs: { svg: x.logo },
+      coingecko_id: x.coingecko_id,
+      exponent: x.exponent,
+      denom_units: [
+        { denom: x.base, exponent: 0 },
+        { denom: x.symbol.toLowerCase(), exponent: Number(x.exponent) },
+      ],
+    }));
+  }
   conf.versions = {
     cosmosSdk: lc.sdk_version
   }
