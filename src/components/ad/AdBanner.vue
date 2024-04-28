@@ -10,22 +10,21 @@ const props = defineProps({
 });
 
 const show = ref(false)
-// onMounted(() => {
-//   const adClient = getClient();
-//   const adUnitId = getUnit(props.unit);
-//   show.value = adClient !== undefined && adUnitId !== undefined;
+onMounted(() => {
+  const adClient = getClient();
+  const adUnitId = getUnit(props.unit);
+  show.value = adClient !== undefined && adUnitId !== undefined;
 
-//   if(show.value) {
-//     adClient.showBannerAd({
-//         adUnitId,
-//         containerId: props.id,
-//     });
-//   }
-// });
+  if(show.value) {
+    adClient.showBannerAd({
+        adUnitId,
+        containerId: props.id,
+    });
+  }
+});
 
 </script>
 <template>
-  <div v-show="show" class="grid justify-items-center overflow-auto">
-    
+  <div v-show="show" :id="id" :unit="unit" class="grid justify-items-center overflow-auto pt-4">
   </div>
 </template>
