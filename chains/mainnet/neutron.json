@@ -1,0 +1,30 @@
+{
+    "chain_name": "neutron",
+    "api": [
+        {"provider": "Polkachu", "address": "https://neutron-api.polkachu.com"},
+        {"provider": "NodeStake", "address": "https://api.neutron.nodestake.top"},
+        {"provider": "Allnodes", "address": "https://neutron-rest.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "Polkachu", "address": "https://neutron-rpc.polkachu.com"}, 
+        {"provider": "NodeStake", "address": "https://rpc.neutron.nodestake.top"},
+        {"provider": "Allnodes", "address": "https://neutron-rpc.publicnode.com:443"}
+    ],
+    "provider_chain": {
+        "api": ["https://api-cosmoshub-ia.cosmosia.notional.ventures"]
+    },
+    "features": ["dashboard", "blocks", "ibc", "cosmwasm", "uptime", "parameters", "state-sync", "consensus", "supply", "widget"],
+    "sdk_version": "0.45.1",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "assets": [{
+        "base": "untrn",
+        "symbol": "NTRN",
+        "exponent": "6",
+        "coingecko_id": "neutron",
+        "logo": "/logos/neutron.svg"
+    }],
+    "addr_prefix": "neutron",
+    "theme_color": "#161723",
+    "logo": "/logos/neutron.svg"
+}

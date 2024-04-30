@@ -11,10 +11,10 @@
       By&nbsp;
       <a
         class="link link-primary no-underline"
-        href="https://aviaone.com"
+        href="https://ping.pub"
         target="_blank"
         rel="noopener noreferrer"
-        >AviaOne</a
+        >Ping.pub</a
       >
     </div>
     <div
@@ -28,7 +28,7 @@
       >
       <a
         class="link link-primary no-underline"
-        href="https://github.com/aviaone"
+        href="https://github.com/ping-pub/explorer"
         target="noopener noreferrer"
         >Github</a
       >
