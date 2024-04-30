@@ -37,7 +37,39 @@ To set up the project locally, follow these steps:
 5. **View in browser**:
    Open your web browser and go to [http://localhost:5173/](http://localhost:5173/) to see the application running.
 
-## Managing Chains
+## Installing Node.js and npm on the Server
+
+To run the project on a server, Node.js and npm must be installed. Here is how to install Node.js version 18 and npm on a Linux server:
+
+### Installing Node.js v18
+
+1. **Curl and Software Properties**:
+   Ensure that `curl` and the software properties are installed, which will help in fetching and setting up the Node.js repository.
+   ```bash
+   sudo apt update
+   sudo apt install curl software-properties-common
+   ```
+
+2. **NodeSource Node.js 18.x repo**:
+   Add the Node.js 18.x repository from NodeSource. This repository contains the latest version of Node.js.
+   ```bash
+   curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+   ```
+
+3. **Install Node.js**:
+   Once the repository is added, install Node.js and npm.
+   ```bash
+   sudo apt install nodejs
+   ```
+
+4. **Verify Installation**:
+   Check the installed versions of Node.js and npm to ensure they are installed correctly.
+   ```bash
+   node -v
+   npm -v
+   ```
+
+### Managing Chains
 
 To add or remove blockchain chains for the mainnet environment, follow the steps below.
 

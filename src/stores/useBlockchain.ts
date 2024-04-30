@@ -65,6 +65,7 @@ export const useBlockchain = defineStore('blockchain', {
       return this.current && this.current.providerChain;
     },
     computedChainMenu() {
+      console.log(123)
       let currNavItem: VerticalNavItems = [];
       const router = useRouter();
       const routes = router?.getRoutes() || [];
