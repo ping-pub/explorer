@@ -1,0 +1,81 @@
+{
+  "chain_name": "coreum",
+  "api": [
+    {
+      "address": "https://full-node.mainnet-1.coreum.dev:1317",
+      "provider": "Coreum Foundation"
+    },
+    {
+      "address": "https://coreum-api.genznodes.dev",
+      "provider": "genznodes"
+    },
+    {
+      "address": "https://coreum-rest.publicnode.com",
+      "provider": "Allnodes ⚡️ Nodes & Staking"
+    },
+    {
+      "address": "https://rest-coreum.ecostake.com",
+      "provider": "ecostake"
+    },
+    {
+      "address": "https://coreum.api.silknodes.io",
+      "provider": "Silk Nodes"
+    },
+    {
+      "address": "https://api.mainnet.solonation.cf",
+      "provider": "solonation"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://full-node.mainnet-1.coreum.dev:26657",
+      "provider": "Coreum Foundation"
+    },
+    {
+      "address": "https://full-node-uranium.mainnet-1.coreum.dev:26657",
+      "provider": "Coreum Foundation"
+    },
+    {
+      "address": "https://full-node-curium.mainnet-1.coreum.dev:26657",
+      "provider": "Coreum Foundation"
+    },
+    {
+      "address": "https://full-node-californium.mainnet-1.coreum.dev:26657",
+      "provider": "Coreum Foundation"
+    },
+    {
+      "address": "https://coreum-rpc.genznodes.dev",
+      "provider": "genznodes"
+    },
+    {
+      "address": "https://coreum-rpc.publicnode.com:443",
+      "provider": "Allnodes ⚡️ Nodes & Staking"
+    },
+    {
+      "address": "https://rpc-coreum.ecostake.com",
+      "provider": "ecostake"
+    },
+    {
+      "address": "https://coreum.rpc.silknodes.io",
+      "provider": "Silk Nodes"
+    },
+    {
+      "address": "https://rpc.mainnet.solonation.cf",
+      "provider": "solonation"
+    }
+  ],
+  "sdk_version": "0.47.5",
+  "coin_type": "990",
+  "min_tx_fee": "5000",
+  "addr_prefix": "core",
+  "logo": "/logos/coreum.png",
+  "assets": [
+    {
+      "base": "ucore",
+      "symbol": "CORE",
+      "exponent": "6",
+      "coingecko_id": "coreum",
+      "logo": "/logos/coreum.png"
+    }
+  ]
+}

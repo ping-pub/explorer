@@ -1,0 +1,69 @@
+{
+    "chain_name": "andromeda",
+    "api": [
+        {
+            "address": "https://api.andromeda-1.andromeda.aviaone.com/",
+            "provider": "AVIAONE"
+        },
+        {
+            "address": "https://andromeda-api.stake-town.com:443",
+            "provider": "StakeTown"
+        },
+        {
+            "address": "https://andro.api.m.stavr.tech",
+            "provider": "🔥STAVR🔥"
+        },
+        {
+            "address": "https://andromeda.api.kjnodes.com",
+            "provider": "kjnodes"
+        },
+        {
+            "address": "https://andromeda-api.lavenderfive.com:443",
+            "provider": "Lavender.Five Nodes 🐝"
+        },
+        {
+            "address": "https://andromeda-api.genznodes.dev",
+            "provider": "genznodes"
+        }
+    ],
+    "rpc": [
+        {
+            "address": "https://rpc.andromeda-1.andromeda.aviaone.com",
+            "provider": "AVIAONE"
+        },
+        {
+            "address": "https://andromeda.rpc.kjnodes.com",
+            "provider": "kjnodes"
+        },
+        {
+            "address": "https://andromeda-rpc.lavenderfive.com:443",
+            "provider": "Lavender.Five Nodes 🐝"
+        },
+        {
+            "address": "https://andromeda-rpc.stake-town.com:443",
+            "provider": "StakeTown"
+        },
+        {
+            "address": "https://andro.rpc.m.stavr.tech",
+            "provider": "🔥STAVR🔥"
+        },
+        {
+            "address": "https://andromeda-rpc.genznodes.dev",
+            "provider": "genznodes"
+        }
+    ],
+    "sdk_version": "0.47.5",
+    "coin_type": "118",
+    "min_tx_fee": "2000",
+    "addr_prefix": "andr",
+    "logo": "/logos/andromeda.png",
+    "assets": [
+        {
+            "base": "uandr",
+            "symbol": "ANDR",
+            "exponent": "6",
+            "coingecko_id": "andromeda-2",
+            "logo": "/logos/andromeda.png"
+        }
+    ]
+}

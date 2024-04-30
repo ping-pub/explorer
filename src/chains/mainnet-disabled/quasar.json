@@ -1,0 +1,28 @@
+{
+    "chain_name": "Quasar",
+    "coingecko": "",
+    "api": [
+        {"provider": "Polkachu", "address": "https://quasar-api.polkachu.com"},
+        {"provider": "NodeStake", "address": "https://api.quasar.nodestake.top"},
+        {"provider": "Allnodes", "address": "https://quasar-rest.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "Polkachu", "address": "https://quasar-rpc.polkachu.com"}, 
+        {"provider": "NodeStake", "address": "https://rpc.quasar.nodestake.top"},
+        {"provider": "Allnodes", "address": "https://quasar-rpc.publicnode.com:443"}
+    ],
+    "sdk_version": "0.45.14",
+    "coin_type": 118,
+    "min_tx_fee": "8000",
+    "addr_prefix": "quasar",
+    "logo": "/logos/quasar.png",
+    "assets": [
+      {
+        "base": "uqsr",
+        "symbol": "QSR",
+        "exponent": 6,
+        "coingecko_id": "quasar-2",
+        "logo": "/logos/quasar.png"
+      }
+    ]
+}

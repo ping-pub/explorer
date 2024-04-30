@@ -1,0 +1,30 @@
+{
+    "chain_name": "tenet",
+    "coingecko": "tenet",
+    "api": [
+        {"provider": "Tenet", "address": "https://app.rpc.tenet.org"},
+        {"provider": "LavenderFive", "address": "https://tenet-api.lavenderfive.com"},
+        {"provider": "NodeStake", "address": "https://api.tenet.nodestake.top"},
+        {"provider": "Allnodes", "address": "https://tenet-rest.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "Tenet", "address": "https://tendermint-1.rpc.tenet.org:443"},
+        {"provider": "Tenet", "address": "https://tendermint-2.rpc.tenet.org:443"},
+        {"provider": "LavenderFive", "address": "https://tenet-rpc.lavenderfive.com"},
+        {"provider": "NodeStake", "address": "https://rpc.tenet.nodestake.top"},
+        {"provider": "Allnodes", "address": "https://tenet-rpc.publicnode.com:443"}
+    ],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.9-ledger",
+    "coin_type": "60",
+    "min_tx_fee": "20000000000",
+    "addr_prefix": "tenet",
+    "logo": "/logos/tenet.webp",
+    "assets": [{
+        "base": "atenet",
+        "symbol": "TENET",
+        "exponent": "18",
+        "coingecko_id": "tenet-1b000f7b-59cb-4e06-89ce-d62b32d362b9",
+        "logo": "/logos/tenet.webp"
+    }]
+}

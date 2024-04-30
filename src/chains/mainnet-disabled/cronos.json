@@ -1,0 +1,23 @@
+
+{
+    "chain_name": "cronos",
+    "api": [
+        {"provider": "Cronos", "address": "https://rest.cronos.org"},
+        {"provider": "Allnodes", "address": "https://cronos-rest.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "Cronos", "address": "https://rpc.cronos.org:443"}, 
+        {"provider": "Allnodes", "address": "https://cronos-rpc.publicnode.com:443"}
+    ],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.11",
+    "coin_type": "60",
+    "min_tx_fee": "5000000000000000",
+    "addr_prefix": "crc",
+    "logo": "/logos/cronos.png",
+    "assets": [{
+        "base": "basecro",
+        "symbol": "CRO",
+        "exponent": "18"
+    }]
+}

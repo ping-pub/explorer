@@ -1,0 +1,30 @@
+{
+    "chain_name": "chihuahua",
+    "coingecko": "chihuahua-token",
+    "api": [
+        {"provider": "Polkachu", "address": "https://chihuahua-api.polkachu.com"},
+        {"provider": "Chihuahua", "address": "https://api.chihuahua.wtf"},
+        {"provider": "Mercury Nodes", "address": "https://chihuahua-api.mercury-nodes.net"},
+        {"provider": "Golden Ratio Staking", "address": "https://rest-chihuahua.goldenratiostaking.net"},
+        {"provider": "Allnodes", "address": "https://chihuahua-rest.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "Polkachu", "address": "https://chihuahua-rpc.polkachu.com:443"}, 
+        {"provider": "Chihuahua", "address": "https://rpc.chihuahua.wtf:443"}, 
+        {"provider": "Golden Ratio Staking", "address": "https://rpc-chihuahua.goldenratiostaking.net"},
+        {"provider": "Allnodes", "address": "https://chihuahua-rpc.publicnode.com:443"}
+    ],
+    "snapshot_provider": "12611137be6f64f9a7fb8977614a5a6f257c1394@65.21.200.224:29656",
+    "sdk_version": "0.47.8",
+    "coin_type": "118",
+    "min_tx_fee": "250000",
+    "addr_prefix": "chihuahua",
+    "logo": "/logos/chihuahua.png",
+    "assets": [{
+        "base": "uhuahua",
+        "symbol": "HUAHUA",
+        "exponent": "6",
+        "coingecko_id": "chihuahua-token", 
+        "logo": "/logos/chihuahua.png"
+    }]
+}

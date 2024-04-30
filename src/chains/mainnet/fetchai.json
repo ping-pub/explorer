@@ -1,0 +1,24 @@
+{
+    "chain_name": "fetchhub",
+    "api": [
+        {"provider": "Fetch.ai", "address": "https://rest-fetchhub.fetch.ai"},
+        {"provider": "Allnodes", "address": "https://fetch-rest.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "Fetch.ai", "address": "https://rpc-fetchhub.fetch.ai:443"}, 
+        {"provider": "Allnodes", "address": "https://fetch-rpc.publicnode.com:443"}
+    ],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.6",
+    "coin_type": "118",
+    "min_tx_fee": "3000000000000000",
+    "addr_prefix": "fetch",
+    "logo": "/logos/fetchhub.png",
+    "assets": [{
+        "base": "afet",
+        "symbol": "fet",
+        "exponent": "18",
+        "coingecko_id": "fetch-ai", 
+        "logo": "/logos/fetchhub.png"
+    }]
+}

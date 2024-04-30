@@ -1,0 +1,67 @@
+{
+  "chain_name": "dydx",
+  "api": [
+      {
+        "address": "https://rest-dydx.ecostake.com:443",
+        "provider": "ecostake"
+      },
+      {
+        "address": "https://dydx-rest.publicnode.com",
+        "provider": "Allnodes ⚡️ Nodes & Staking"
+      },
+      {
+        "address": "https://dydx-ops-rest.kingnodes.com",
+        "provider": "Kingnodes"
+      },
+      {
+        "address": "https://dydx-api.lavenderfive.com",
+        "provider": "Lavenderfive"
+      },
+      {
+        "address": "https://dydx-mainnet-lcd.autostake.com",
+        "provider": "Autostake"
+      },
+      {
+        "address": "https://api-dydx.cosmos-spaces.cloud",
+        "provider": "Cosmos spaces"
+      },
+      {
+        "address": "https://rest-dydx.cros-nest.com",
+        "provider": "Cross-nest"
+      },
+      {
+        "address": "https://dydx-dao-api.polkachu.com",
+        "provider": "Polkachu"
+      }
+    ],
+  "rpc": [
+      {
+        "address": "https://dydx-mainnet-full-rpc.public.blastapi.io",
+        "provider": "Blastapi"
+      },
+      {
+        "address": "https://dydx-ops-rpc.kingnodes.com",
+        "provider": "Kingnodes"
+      },
+      {
+        "address": "https://rpc.dydx.nodestake.top:443",
+        "provider": "NodeStake"
+      },
+      {
+        "address": "https://dydx-rpc.publicnode.com:443",
+        "provider": "Allnodes ⚡️ Nodes & Staking"
+      }
+    ],
+  "sdk_version": "0.46.1",
+  "coin_type": "118",
+  "min_tx_fee": "5000",
+  "addr_prefix": "dydx",
+  "logo": "https://ping.pub/logos/dydx.svg",
+  "assets": [{
+      "base": "adydx",
+      "symbol": "DYDX",
+      "exponent": "18",
+      "coingecko_id": "dydx", 
+      "logo": "https://ping.pub/logos/dydx.svg"
+  }]
+}

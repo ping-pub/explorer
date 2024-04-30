@@ -1,0 +1,33 @@
+{
+    "chain_name": "kujira",
+    "coingecko": "",
+    "api": [
+        {"provider": "Polkachu", "address": "https://kujira-api.polkachu.com"},
+        {"provider": "Setten", "address": "https://lcd.kaiyo.kujira.setten.io"},
+        {"provider": "Nodeist", "address": "https://api-kujira.nodeist.net"},
+        {"provider": "Kjnodes", "address": "https://kujira.api.kjnodes.com"},
+        {"provider": "Golden Ratio Staking", "address": "https://rest-kujira.goldenratiostaking.net"},
+        {"provider": "Allnodes", "address": "https://kujira-rest.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "Polkachu", "address": "https://kujira-api.polkachu.com"}, 
+        {"provider": "Setten", "address": "https://rpc.kaiyo.kujira.setten.io"}, 
+        {"provider": "Nodeist", "address": "https://rpc-stride.nodeist.net"}, 
+        {"provider": "Kjnodes", "address": "https://kujira.rpc.kjnodes.com:443"}, 
+        {"provider": "Golden Ratio Staking", "address": "https://rpc-kujira.goldenratiostaking.net"},
+        {"provider": "Allnodes", "address": "https://kujira-rpc.publicnode.com:443"}
+    ],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.4",
+    "coin_type": "118",
+    "min_tx_fee": "1250",
+    "addr_prefix": "kujira",
+    "logo": "/logos/kujira.png",
+    "assets": [{
+        "base": "ukuji",
+        "symbol": "KUJI",
+        "exponent": "6",
+        "coingecko_id": "kujira",
+        "logo": "/logos/kujira.png"
+    }]
+}

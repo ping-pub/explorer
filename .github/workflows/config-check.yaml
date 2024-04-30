@@ -7,8 +7,8 @@ on:
   pull_request:
    # branches: [ master ]
    paths:
-      - 'chains/mainnet/**'
-      - 'chains/testnet/**'
+      - 'src/chains/mainnet/**'
+      - 'src/chains/testnet/**'
 
 jobs:
   deploy:
