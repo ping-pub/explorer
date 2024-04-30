@@ -8,12 +8,12 @@
     "coin_type": "118",
     "min_tx_fee": "5000",
     "addr_prefix": "lumen",
-    "logo": "/logos/lumen.png",
+    "logo": "/src/assets/logos/lumen.png",
     "assets": [{
         "base": "ulumen",
         "symbol": "LUMEN",
         "exponent": "6",
         "coingecko_id": "",
-        "logo": "/logos/lumen.png"
+        "logo": "/src/assets/logos/lumen.png"
     }]
 }

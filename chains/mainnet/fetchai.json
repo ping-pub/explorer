@@ -13,12 +13,12 @@
     "coin_type": "118",
     "min_tx_fee": "3000000000000000",
     "addr_prefix": "fetch",
-    "logo": "/logos/fetchhub.png",
+    "logo": "/src/assets/logos/fetchhub.png",
     "assets": [{
         "base": "afet",
         "symbol": "fet",
         "exponent": "18",
         "coingecko_id": "fetch-ai", 
-        "logo": "/logos/fetchhub.png"
+        "logo": "/src/assets/logos/fetchhub.png"
     }]
 }

@@ -8,12 +8,12 @@
     "coin_type": "370",
     "min_tx_fee": "8000",
     "addr_prefix": "bze",
-    "logo": "/logos/beezee.png",
+    "logo": "/src/assets/logos/beezee.png",
     "assets": [{
         "base": "ubze",
         "symbol": "BZE",
         "exponent": "6",
         "coingecko_id": "bzedge",
-        "logo": "/logos/beezee.png"
+        "logo": "/src/assets/logos/beezee.png"
     }]
   }

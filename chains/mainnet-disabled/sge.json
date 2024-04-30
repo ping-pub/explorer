@@ -29,9 +29,9 @@
       "symbol": "SGE",
       "exponent": "6",
       "coingecko_id": "sge",
-      "logo": "/logos/sge.png"
+      "logo": "/src/assets/logos/sge.png"
     }
   ],
-  "logo": "/logos/sge.png",
+  "logo": "/src/assets/logos/sge.png",
   "sdk_version": "0.45.8"
 }

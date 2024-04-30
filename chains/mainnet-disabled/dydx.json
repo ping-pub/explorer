@@ -56,12 +56,12 @@
   "coin_type": "118",
   "min_tx_fee": "5000",
   "addr_prefix": "dydx",
-  "logo": "https://ping.pub/logos/dydx.svg",
+  "logo": "https://ping.pub/src/assets/logos/dydx.svg",
   "assets": [{
       "base": "adydx",
       "symbol": "DYDX",
       "exponent": "18",
       "coingecko_id": "dydx", 
-      "logo": "https://ping.pub/logos/dydx.svg"
+      "logo": "https://ping.pub/src/assets/logos/dydx.svg"
   }]
 }

@@ -8,12 +8,12 @@
     "min_tx_fee": "5000",
     "addr_prefix": "gravity",
     "excludes": "",
-    "logo": "/logos/gravity-bridge.png",
+    "logo": "/src/assets/logos/gravity-bridge.png",
     "assets": [{
         "base": "ugraviton",
         "symbol": "GRAVITON",
         "exponent": "6",
         "coingecko_id": "graviton", 
-        "logo": "/logos/gravity-bridge.png"
+        "logo": "/src/assets/logos/gravity-bridge.png"
     }]
 }

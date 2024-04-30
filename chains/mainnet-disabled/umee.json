@@ -60,12 +60,12 @@
     "coin_type": "118",
     "min_tx_fee": "8000",
     "addr_prefix": "umee",
-    "logo": "/logos/umee.png",
+    "logo": "/src/assets/logos/umee.png",
     "assets": [{
         "base": "uumee",
         "symbol": "UMEE",
         "exponent": "6",
         "coingecko_id": "umee",
-        "logo": "/logos/umee.png"
+        "logo": "/src/assets/logos/umee.png"
     }]
   }

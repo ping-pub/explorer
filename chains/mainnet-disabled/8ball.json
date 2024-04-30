@@ -15,14 +15,14 @@
     "coin_type": "118",
     "sdk_version": "0.46.8",
     "addr_prefix": "8ball",
-    "logo": "/logos/8ball.png",
+    "logo": "/src/assets/logos/8ball.png",
     "assets": [
         {
             "base": "uebl",
             "symbol": "EBL",
             "exponent": "6",
             "coingecko_id": "",
-            "logo": "/logos/8ball.png"
+            "logo": "/src/assets/logos/8ball.png"
         }
     ]
 }

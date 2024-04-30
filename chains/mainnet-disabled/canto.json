@@ -7,7 +7,7 @@
   "coin_type": "60",
   "min_tx_fee": "800",
   "addr_prefix": "canto",
-  "logo": "/logos/canto.png",
+  "logo": "/src/assets/logos/canto.png",
   "assets": [
     {
       "base": "acanto",

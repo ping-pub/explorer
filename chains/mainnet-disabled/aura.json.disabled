@@ -8,12 +8,12 @@
     "coin_type": "118",
     "min_tx_fee": "8000",
     "addr_prefix": "eaura",
-    "logo": "/logos/aura.png",
+    "logo": "/src/assets/logos/aura.png",
     "assets": [{
         "base": "ueaura",
         "symbol": "AURA",
         "exponent": "6",
         "coingecko_id": "aura-network", 
-        "logo": "/logos/aura.png"
+        "logo": "/src/assets/logos/aura.png"
     }]
   }

@@ -11,14 +11,14 @@
         "symbol": "NYM",
         "exponent": "6",
         "coingecko_id": "nym",
-        "logo": "/logos/nym.jpeg"
+        "logo": "/src/assets/logos/nym.jpeg"
     },{
         "base": "unyx",
         "symbol": "NYX",
         "exponent": "6",
         "coingecko_id": "",
-        "logo": "/logos/nym.jpeg"
+        "logo": "/src/assets/logos/nym.jpeg"
     }],
     "addr_prefix": "n",
-    "logo": "/logos/nym.jpeg"
+    "logo": "/src/assets/logos/nym.jpeg"
 }

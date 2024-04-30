@@ -21,16 +21,16 @@
       "symbol": "PUNDIX",
       "exponent": "18",
       "coingecko_id": "pundi-x-2",
-      "logo": "/logos/pundi-x-token-logo.svg"
+      "logo": "/src/assets/logos/pundi-x-token-logo.svg"
     },
     {
       "base": "bsc0x29a63F4B209C29B4DC47f06FFA896F32667DAD2C",
       "symbol": "PURSE",
       "exponent": "18",
       "coingecko_id": "pundi-x-purse",
-      "logo": "/logos/purse-token-logo.svg"
+      "logo": "/src/assets/logos/purse-token-logo.svg"
     }
   ],
   "addr_prefix": "px",
-  "logo": "/logos/pundi-x-logo.svg"
+  "logo": "/src/assets/logos/pundi-x-logo.svg"
 }

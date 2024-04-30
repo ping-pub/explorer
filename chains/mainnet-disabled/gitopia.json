@@ -8,12 +8,12 @@
     "coin_type": "118",
     "min_tx_fee": "3000",
     "addr_prefix": "gitopia",
-    "logo": "/logos/gitopia.png",
+    "logo": "/src/assets/logos/gitopia.png",
     "assets": [{
         "base": "ulore",
         "symbol": "LORE",
         "exponent": "6",
         "coingecko_id": "",
-        "logo": "/logos/gitopia.png"
+        "logo": "/src/assets/logos/gitopia.png"
     }]
 }

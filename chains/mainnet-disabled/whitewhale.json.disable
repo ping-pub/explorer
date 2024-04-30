@@ -7,14 +7,14 @@
   "coin_type": "118",
   "min_tx_fee": "8000",
   "addr_prefix": "migaloo",
-  "logo": "/logos/whitewhale.png",
+  "logo": "/src/assets/logos/whitewhale.png",
   "assets": [
     {
       "base": "uwhale",
       "symbol": "WHALE",
       "exponent": "6",
       "coingecko_id": "white-whale",
-      "logo": "/logos/whale.png"
+      "logo": "/src/assets/logos/whale.png"
     }
   ]
 }

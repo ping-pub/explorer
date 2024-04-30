@@ -27,16 +27,16 @@
       "symbol": "RIO",
       "exponent": "18",
       "coingecko_id": "realio-network",
-      "logo": "/logos/realio.png"
+      "logo": "/src/assets/logos/realio.png"
     },
     {
       "base": "arst",
       "symbol": "RST",
       "exponent": "18",
       "coingecko_id": "",
-      "logo": "/logos/realio.jpg"
+      "logo": "/src/assets/logos/realio.jpg"
     }
   ],
-  "logo": "/logos/realio.png",
+  "logo": "/src/assets/logos/realio.png",
   "sdk_version": "v0.46.11"
 }

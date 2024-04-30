@@ -24,12 +24,12 @@
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "celestia",
-    "logo": "/logos/celestia.png",
+    "logo": "/src/assets/logos/celestia.png",
     "assets": [{
         "base": "utia",
         "symbol": "TIA",
         "exponent": "6",
         "coingecko_id": "celestia",
-        "logo": "/logos/celestia.png"
+        "logo": "/src/assets/logos/celestia.png"
     }]
 }

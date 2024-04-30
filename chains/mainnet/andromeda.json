@@ -56,14 +56,14 @@
     "coin_type": "118",
     "min_tx_fee": "2000",
     "addr_prefix": "andr",
-    "logo": "/logos/andromeda.png",
+    "logo": "/src/assets/logos/andromeda.png",
     "assets": [
         {
             "base": "uandr",
             "symbol": "ANDR",
             "exponent": "6",
             "coingecko_id": "andromeda-2",
-            "logo": "/logos/andromeda.png"
+            "logo": "/src/assets/logos/andromeda.png"
         }
     ]
 }

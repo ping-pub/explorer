@@ -16,12 +16,12 @@
     "coin_type": "118",
     "min_tx_fee": "0",
     "addr_prefix": "nolus",
-    "logo": "/logos/nolus.svg",
+    "logo": "/src/assets/logos/nolus.svg",
     "assets": [{
         "base": "unls",
         "symbol": "NLS",
         "exponent": "6",
         "coingecko_id": "nolus",
-        "logo": "/logos/nolus.svg"
+        "logo": "/src/assets/logos/nolus.svg"
     }]
 }

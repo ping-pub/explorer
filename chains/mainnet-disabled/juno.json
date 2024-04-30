@@ -22,12 +22,12 @@
     "coin_type": "118",
     "min_tx_fee": "3000",
     "addr_prefix": "juno",
-    "logo": "/logos/juno.png",
+    "logo": "/src/assets/logos/juno.png",
     "assets": [{
         "base": "ujuno",
         "symbol": "JUNO",
         "exponent": "6",
         "coingecko_id": "juno-network", 
-        "logo": "/logos/juno.png"
+        "logo": "/src/assets/logos/juno.png"
     }]
 }

@@ -16,18 +16,18 @@
     "coin_type": "118",
     "min_tx_fee": "0",
     "addr_prefix": "noble",
-    "logo": "/logos/noble.jpeg",
+    "logo": "/src/assets/logos/noble.jpeg",
     "assets": [{
         "base": "uusdc",
         "symbol": "USDC",
         "exponent": "6",
         "coingecko_id": "",
-        "logo": "/logos/usdc.svg"
+        "logo": "/src/assets/logos/usdc.svg"
     },{
         "base": "ustake",
         "symbol": "STAKE",
         "exponent": "6",
         "coingecko_id": "",
-        "logo": "/logos/usdc.svg"
+        "logo": "/src/assets/logos/usdc.svg"
     }]
 }

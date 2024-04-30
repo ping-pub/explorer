@@ -15,12 +15,12 @@
     "coin_type": "330",
     "min_tx_fee": "5000",
     "addr_prefix": "terra",
-    "logo": "/logos/terra.png",
+    "logo": "/src/assets/logos/terra.png",
     "assets": [{
         "base": "uluna",
         "symbol": "LUNA",
         "exponent": "6",
         "coingecko_id": "terra-luna-2", 
-        "logo": "/logos/luna.jpg"
+        "logo": "/src/assets/logos/luna.jpg"
     }]
 }

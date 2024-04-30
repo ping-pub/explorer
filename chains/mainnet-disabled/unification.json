@@ -9,13 +9,13 @@
   "coin_type": "5555",
   "min_tx_fee": "25000000000000000",
   "addr_prefix": "und",
-  "logo": "/logos/unification.png",
+  "logo": "/src/assets/logos/unification.png",
   "assets": [{
     "base": "nund",
     "symbol": "FUND",
     "exponent": "9",
     "coingecko_id": "unification",
-    "logo": "/logos/unification.png"
+    "logo": "/src/assets/logos/unification.png"
   }],
   "gasPriceStep": {
     "low": 100,

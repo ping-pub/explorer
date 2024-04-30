@@ -7,18 +7,18 @@
     "coin_type": "118",
     "min_tx_fee": "5000",
     "addr_prefix": "cre",
-    "logo": "/logos/cre.png",
+    "logo": "/src/assets/logos/cre.png",
     "assets": [{
         "base": "ucre",
         "symbol": "CRE",
         "exponent": "6",
         "coingecko_id": "crescent-network", 
-        "logo": "/logos/cre.png"
+        "logo": "/src/assets/logos/cre.png"
     },{
         "base": "ubcre",
         "symbol": "bCRE",
         "exponent": "6",
         "coingecko_id": "", 
-        "logo": "/logos/cre.png"
+        "logo": "/src/assets/logos/cre.png"
     }]
 }

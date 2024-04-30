@@ -12,7 +12,7 @@
   "coin_type": "118",
   "min_tx_fee": "1250000",
   "addr_prefix": "6x",
-  "logo": "/logos/six.png",
+  "logo": "/src/assets/logos/six.png",
   "keplr_features": [
   ],
   "assets": [
@@ -21,7 +21,7 @@
       "symbol": "SIX",
       "exponent": "6",
       "coingecko_id": "six-network",
-      "logo": "/logos/usix.png"
+      "logo": "/src/assets/logos/usix.png"
     }
   ],
   "theme_color": "#55afdd"

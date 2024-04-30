@@ -15,14 +15,14 @@
   "coin_type": "118",
   "min_tx_fee": "5000",
   "addr_prefix": "rebus",
-  "logo": "/logos/rebus.png",
+  "logo": "/src/assets/logos/rebus.png",
   "assets": [
     {
       "base": "arebus",
       "symbol": "REBUS",
       "exponent": "18",
       "coingecko_id": "rebus",
-      "logo": "/logos/rebus.png"
+      "logo": "/src/assets/logos/rebus.png"
     }
   ]
 }

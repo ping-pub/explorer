@@ -11,8 +11,8 @@
         "symbol": "GHM",
         "exponent": "6",
         "coingecko_id": "Hermit", 
-        "logo": "/logos/hermit_network.png"
+        "logo": "/src/assets/logos/hermit_network.png"
     }],
     "addr_prefix": "ghm",
-    "logo": "/logos/hermit_network.png"
+    "logo": "/src/assets/logos/hermit_network.png"
 }

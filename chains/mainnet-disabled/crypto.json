@@ -15,12 +15,12 @@
     "coin_type": "394",
     "min_tx_fee": "5000",
     "addr_prefix": "cro",
-    "logo": "/logos/crypto-com-chain.png",
+    "logo": "/src/assets/logos/crypto-com-chain.png",
     "assets": [{
         "base": "basecro",
         "symbol": "CRO",
         "exponent": "8",
         "coingecko_id": "crypto-com-chain", 
-        "logo": "/logos/crypto-com-chain.png"
+        "logo": "/src/assets/logos/crypto-com-chain.png"
     }]
 }

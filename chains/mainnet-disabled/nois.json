@@ -5,13 +5,13 @@
   "sdk_version": "0.45.14",
   "addr_prefix": "nois",
   "min_tx_fee": "5000",
-  "logo": "/logos/nois.png",
+  "logo": "/src/assets/logos/nois.png",
   "assets": [
     {
       "symbol": "NOIS",
       "base": "unois",
       "exponent": 6,
-      "logo": "/logos/nois.png"
+      "logo": "/src/assets/logos/nois.png"
     }
   ]
 }

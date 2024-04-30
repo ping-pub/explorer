@@ -24,12 +24,12 @@
     "coin_type": "118",
     "min_tx_fee": "50000",
     "addr_prefix": "source",
-    "logo": "/logos/source.png",
+    "logo": "/src/assets/logos/source.png",
     "assets": [{
         "base": "usource",
         "symbol": "SOURCE",
         "exponent": "6",
         "coingecko_id": "source",
-        "logo": "/logos/source.png"
+        "logo": "/src/assets/logos/source.png"
     }]
 }

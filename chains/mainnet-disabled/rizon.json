@@ -17,8 +17,8 @@
         "symbol": "ATOLO",
         "exponent": "6",
         "coingecko_id": "rizon", 
-        "logo": "/logos/rizon.svg"
+        "logo": "/src/assets/logos/rizon.svg"
     }],
     "addr_prefix": "rizon",
-    "logo": "/logos/rizon.svg"
+    "logo": "/src/assets/logos/rizon.svg"
 }

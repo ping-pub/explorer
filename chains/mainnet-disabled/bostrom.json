@@ -8,12 +8,12 @@
     "coin_type": "118",
     "min_tx_fee": "5000",
     "addr_prefix": "bostrom",
-    "logo": "/logos/bostrom.png",
+    "logo": "/src/assets/logos/bostrom.png",
     "assets": [{
         "base": "boot",
         "symbol": "BOOT",
         "exponent": "0",
         "coingecko_id": "", 
-        "logo": "/logos/bostrom.png"
+        "logo": "/src/assets/logos/bostrom.png"
     }]
 }

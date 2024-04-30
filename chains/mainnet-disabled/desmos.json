@@ -7,13 +7,13 @@
     "coin_type": "118",
     "min_tx_fee": "3000",
     "addr_prefix": "desmos",
-    "logo": "/logos/desmos.png",
+    "logo": "/src/assets/logos/desmos.png",
     "theme_color": "#ed6c53",
     "assets": [{
         "base": "udsm",
         "symbol": "DSM",
         "exponent": "6",
         "coingecko_id": "desmos", 
-        "logo": "/logos/desmos.png"
+        "logo": "/src/assets/logos/desmos.png"
     }]
 }

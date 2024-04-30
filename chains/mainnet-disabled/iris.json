@@ -16,12 +16,12 @@
     "min_tx_fee": "40000",
     "addr_prefix": "iaa",
     "excludes": "mint",
-    "logo": "/logos/iris-network.svg",
+    "logo": "/src/assets/logos/iris-network.svg",
     "assets": [{
         "base": "uiris",
         "symbol": "IRIS",
         "exponent": "6",
         "coingecko_id": "iris-network", 
-        "logo": "/logos/iris-network.svg"
+        "logo": "/src/assets/logos/iris-network.svg"
     }]
 }

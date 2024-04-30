@@ -8,7 +8,7 @@
     "coin_type": "118",
     "min_tx_fee": "100000000",
     "addr_prefix": "swth",
-    "logo": "/logos/carbon.svg",
+    "logo": "/src/assets/logos/carbon.svg",
     "sign_opts": {
         "keplr": {
             "preferNoSetFee": true
@@ -19,6 +19,6 @@
         "symbol": "SWTH",
         "exponent": "8",
         "coingecko_id": "switcheo", 
-        "logo": "/logos/carbon.svg"
+        "logo": "/src/assets/logos/carbon.svg"
     }]
 }

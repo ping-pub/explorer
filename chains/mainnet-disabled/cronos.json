@@ -14,7 +14,7 @@
     "coin_type": "60",
     "min_tx_fee": "5000000000000000",
     "addr_prefix": "crc",
-    "logo": "/logos/cronos.png",
+    "logo": "/src/assets/logos/cronos.png",
     "assets": [{
         "base": "basecro",
         "symbol": "CRO",

@@ -14,12 +14,12 @@
     "coin_type": "750",
     "min_tx_fee": "3000",
     "addr_prefix": "persistence",
-    "logo": "/logos/persistence.png",
+    "logo": "/src/assets/logos/persistence.png",
     "assets": [{
         "base": "uxprt",
         "symbol": "XPRT",
         "exponent": "6",
         "coingecko_id": "persistence", 
-        "logo": "/logos/persistence.png"
+        "logo": "/src/assets/logos/persistence.png"
     }]
 }

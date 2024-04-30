@@ -7,13 +7,13 @@
   "coin_type": "10111",
   "min_tx_fee": "3000",
   "addr_prefix": "dh",
-  "logo": "/logos/dhealth.png",
+  "logo": "/src/assets/logos/dhealth.png",
   "theme_color": "#150867",
   "assets": [{
       "base": "udhp",
       "symbol": "DHP",
       "exponent": "6",
       "coingecko_id": "dhealth",
-      "logo": "/logos/dhealth.png"
+      "logo": "/src/assets/logos/dhealth.png"
   }]
 }

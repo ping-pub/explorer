@@ -23,8 +23,8 @@
         "symbol": "BCNA",
         "exponent": "6",
         "coingecko_id": "bitcanna", 
-        "logo": "/logos/bitcanna.svg"
+        "logo": "/src/assets/logos/bitcanna.svg"
     }],
     "addr_prefix": "bcna",
-    "logo": "/logos/bitcanna.svg"
+    "logo": "/src/assets/logos/bitcanna.svg"
 }

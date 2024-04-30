@@ -8,14 +8,14 @@
   "coin_type": "118",
   "min_tx_fee": "8000",
   "addr_prefix": "meme",
-  "logo": "/logos/meme.png",
+  "logo": "/src/assets/logos/meme.png",
   "assets": [
     {
       "base": "umeme",
       "symbol": "MEME",
       "exponent": "6",
       "coingecko_id": "meme-network",
-      "logo": "/logos/meme.png"
+      "logo": "/src/assets/logos/meme.png"
     }
   ]
 }

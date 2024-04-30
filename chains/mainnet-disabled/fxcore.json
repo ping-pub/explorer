@@ -16,11 +16,11 @@
       "symbol": "FX",
       "exponent": "18",
       "coingecko_id": "fx-coin",
-      "logo": "/logos/fxcore.svg"
+      "logo": "/src/assets/logos/fxcore.svg"
     }
   ],
   "addr_prefix": "fx",
-  "logo": "/logos/fxcore.svg",
+  "logo": "/src/assets/logos/fxcore.svg",
   "keplr_price_step": {
     "low": 4000000000000,
     "average": 4000000000000,

@@ -15,12 +15,12 @@
     "coin_type": "118",
     "min_tx_fee": "8000",
     "addr_prefix": "sent",
-    "logo": "/logos/sentinel.png",
+    "logo": "/src/assets/logos/sentinel.png",
     "assets": [{
         "base": "udvpn",
         "symbol": "DVPN",
         "exponent": "6",
         "coingecko_id": "sentinel", 
-        "logo": "/logos/sentinel.png"
+        "logo": "/src/assets/logos/sentinel.png"
     }]
 }

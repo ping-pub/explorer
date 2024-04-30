@@ -24,8 +24,8 @@
         "symbol": "AKT",
         "exponent": "6",
         "coingecko_id": "akash-network", 
-        "logo": "/logos/akash-network.png"
+        "logo": "/src/assets/logos/akash-network.png"
     }],
     "addr_prefix": "akash",
-    "logo": "/logos/akash-network.png"
+    "logo": "/src/assets/logos/akash-network.png"
 }

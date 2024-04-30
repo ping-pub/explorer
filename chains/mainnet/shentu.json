@@ -15,12 +15,12 @@
     "coin_type": "118",
     "min_tx_fee": "8000",
     "addr_prefix": "shentu",
-    "logo": "/logos/shentu.jpg",
+    "logo": "/src/assets/logos/shentu.jpg",
     "assets": [{
         "base": "uctk",
         "symbol": "CTK",
         "exponent": "6",
         "coingecko_id": "certik", 
-        "logo": "/logos/shentu.jpg"
+        "logo": "/src/assets/logos/shentu.jpg"
     }]
 }

@@ -7,7 +7,7 @@
     "addr_prefix": "emoney",
     "coin_type": "118",
     "min_tx_fee": "5000",
-    "logo": "/logos/e-money.jpg",
+    "logo": "/src/assets/logos/e-money.jpg",
     "sdk_version": "0.42.10",
     "excludes": "mint governance",
     "assets": [{
@@ -15,12 +15,12 @@
         "symbol": "NGM",
         "exponent": "6",
         "coingecko_id": "emoney", 
-        "logo": "/logos/e-money.jpg"
+        "logo": "/src/assets/logos/e-money.jpg"
     },{
         "base": "eeur",
         "symbol": "EEUR",
         "exponent": "6",
         "coingecko_id": "e-money-eur", 
-        "logo": "/logos/e-money.jpg"
+        "logo": "/src/assets/logos/e-money.jpg"
     }]
 }

@@ -7,13 +7,13 @@
     "coin_type": "60",
     "min_tx_fee": "5000000000000000",
     "addr_prefix": "plq",
-    "logo": "/logos/planq.png",
+    "logo": "/src/assets/logos/planq.png",
     "keplr_features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
     "assets": [{
         "base": "aplanq",
         "symbol": "plq",
         "exponent": "18",
         "coingecko_id": "planq",
-        "logo": "/logos/planq.png"
+        "logo": "/src/assets/logos/planq.png"
     }]
 }

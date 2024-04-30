@@ -21,12 +21,12 @@
     "coin_type": "118",
     "min_tx_fee": "5000",
     "addr_prefix": "comdex",
-    "logo": "/logos/comdex.png",
+    "logo": "/src/assets/logos/comdex.png",
     "assets": [{
         "base": "ucmdx",
         "symbol": "CMDX",
         "exponent": "6",
         "coingecko_id": "comdex", 
-        "logo": "/logos/comdex.png"
+        "logo": "/src/assets/logos/comdex.png"
     }]
 }

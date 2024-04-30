@@ -8,18 +8,18 @@
     "coin_type": "118",
     "min_tx_fee": "10000",
     "addr_prefix": "did:com:",
-    "logo": "/logos/commercionetwork.png",
+    "logo": "/src/assets/logos/commercionetwork.png",
     "assets": [{
         "base": "ucommercio",
         "symbol": "COM",
         "exponent": "6",
         "coingecko_id": "", 
-        "logo": "/logos/com.png"
+        "logo": "/src/assets/logos/com.png"
     },{
         "base": "uccc",
         "symbol": "CCC",
         "exponent": "6",
         "coingecko_id": "", 
-        "logo": "/logos/ccc.png"
+        "logo": "/src/assets/logos/ccc.png"
     }]
 }

@@ -68,14 +68,14 @@
   "coin_type": "990",
   "min_tx_fee": "5000",
   "addr_prefix": "core",
-  "logo": "/logos/coreum.png",
+  "logo": "/src/assets/logos/coreum.png",
   "assets": [
     {
       "base": "ucore",
       "symbol": "CORE",
       "exponent": "6",
       "coingecko_id": "coreum",
-      "logo": "/logos/coreum.png"
+      "logo": "/src/assets/logos/coreum.png"
     }
   ]
 }

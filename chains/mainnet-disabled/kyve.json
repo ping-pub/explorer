@@ -11,8 +11,8 @@
         "symbol": "KYVE",
         "exponent": "6",
         "coingecko_id": "kyve-network",
-        "logo": "/logos/kyve.svg"
+        "logo": "/src/assets/logos/kyve.svg"
     }],
     "addr_prefix": "kyve",
-    "logo": "/logos/kyve.svg"
+    "logo": "/src/assets/logos/kyve.svg"
 }

@@ -14,13 +14,13 @@
     "coin_type": "118",
     "min_tx_fee": "5000",
     "addr_prefix": "kava",
-    "logo": "/logos/kava.png",
+    "logo": "/src/assets/logos/kava.png",
     "theme_color": "#ff433e",
     "assets": [{
         "base": "ukava",
         "symbol": "KAVA",
         "exponent": "6",
         "coingecko_id": "kava", 
-        "logo": "/logos/kava.png"
+        "logo": "/src/assets/logos/kava.png"
     }]
 }

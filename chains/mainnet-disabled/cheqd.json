@@ -7,12 +7,12 @@
     "coin_type": "118",
     "min_tx_fee": "5000",
     "addr_prefix": "cheqd",
-    "logo": "/logos/cheqd.png",
+    "logo": "/src/assets/logos/cheqd.png",
     "assets": [{
         "base": "ncheq",
         "symbol": "CHEQ",
         "exponent": "9",
         "coingecko_id": "cheqd-network", 
-        "logo": "/logos/cheqd.png"
+        "logo": "/src/assets/logos/cheqd.png"
     }]
 }

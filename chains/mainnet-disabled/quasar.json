@@ -15,14 +15,14 @@
     "coin_type": 118,
     "min_tx_fee": "8000",
     "addr_prefix": "quasar",
-    "logo": "/logos/quasar.png",
+    "logo": "/src/assets/logos/quasar.png",
     "assets": [
       {
         "base": "uqsr",
         "symbol": "QSR",
         "exponent": 6,
         "coingecko_id": "quasar-2",
-        "logo": "/logos/quasar.png"
+        "logo": "/src/assets/logos/quasar.png"
       }
     ]
 }

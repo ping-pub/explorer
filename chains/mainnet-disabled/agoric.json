@@ -19,7 +19,7 @@
       "symbol": "BLD",
       "exponent": "6",
       "coingecko_id": "agoric",
-      "logo": "/logos/agoric-bld.svg"
+      "logo": "/src/assets/logos/agoric-bld.svg"
     },
     {
       "base": "uist",
@@ -30,5 +30,5 @@
     }
   ],
   "addr_prefix": "agoric",
-  "logo": "/logos/agoric.png"
+  "logo": "/src/assets/logos/agoric.png"
 }

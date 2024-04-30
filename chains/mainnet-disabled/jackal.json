@@ -15,14 +15,14 @@
     "coin_type": "118",
     "sdk_version": "0.45.11",
     "addr_prefix": "jkl",
-    "logo": "/logos/jackal.png",
+    "logo": "/src/assets/logos/jackal.png",
     "assets": [
         {
             "base": "ujkl",
             "symbol": "JKL",
             "exponent": "6",
             "coingecko_id": "jackal-protocol",
-            "logo": "/logos/jackal.png"
+            "logo": "/src/assets/logos/jackal.png"
         }
     ]
 }

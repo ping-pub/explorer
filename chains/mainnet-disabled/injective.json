@@ -18,7 +18,7 @@
     "min_tx_fee": "5000",
     "addr_prefix": "inj",
     "excludes": "",
-    "logo": "/logos/injective.jpg",
+    "logo": "/src/assets/logos/injective.jpg",
     "keplr_features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
     "keplr_price_step": {
       "low": 100000000000,
@@ -30,6 +30,6 @@
         "symbol": "INJ",
         "exponent": "18",
         "coingecko_id": "injective-protocol", 
-        "logo": "/logos/injective.jpg"
+        "logo": "/src/assets/logos/injective.jpg"
     }]
 }

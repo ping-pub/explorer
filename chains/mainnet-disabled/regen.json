@@ -18,12 +18,12 @@
     "coin_type": "118",
     "min_tx_fee": "3000",
     "addr_prefix": "regen",
-    "logo": "/logos/regen.svg",
+    "logo": "/src/assets/logos/regen.svg",
     "assets": [{
         "base": "uregen",
         "symbol": "REGEN",
         "exponent": "6",
         "coingecko_id": "regen", 
-        "logo": "/logos/regen.svg"
+        "logo": "/src/assets/logos/regen.svg"
     }]
 }

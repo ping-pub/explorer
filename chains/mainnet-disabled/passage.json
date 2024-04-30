@@ -7,7 +7,7 @@
   "coin_type": "118",
   "min_tx_fee": "800",
   "addr_prefix": "pasg",
-  "logo": "/logos/passage.png",
+  "logo": "/src/assets/logos/passage.png",
   "assets": [
     {
       "base": "upasg",

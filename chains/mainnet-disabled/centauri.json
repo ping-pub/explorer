@@ -8,12 +8,12 @@
     "coin_type": "118",
     "min_tx_fee": "500",
     "addr_prefix": "centauri",
-    "logo": "/logos/composable.jpg",
+    "logo": "/src/assets/logos/composable.jpg",
     "assets": [{
         "base": "ppica",
         "symbol": "PICA",
         "exponent": "12",
         "coingecko_id": "picasso",
-        "logo": "/logos/composable.jpg"
+        "logo": "/src/assets/logos/composable.jpg"
     }]
   }
