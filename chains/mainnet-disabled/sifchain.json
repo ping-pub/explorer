@@ -1,0 +1,26 @@
+{
+    "chain_name": "sifchain",
+    "api": [
+        {"provider": "Polkachu", "address": "https://sifchain-api.polkachu.com"},
+        {"provider": "Allnodes", "address": "https://sifchain-rest.publicnode.com"},
+        {"provider": "AutoStake", "address": "https://sifchain-mainnet-lcd.autostake.com:443"}
+    ],
+    "rpc": [
+        {"provider": "Polkachu", "address": "https://sifchain-rpc.polkachu.com:443"},
+        {"provider": "Allnodes", "address": "https://sifchain-rpc.publicnode.com:443"},
+        {"provider": "AutoStake", "address": "https://sifchain-mainnet-rpc.autostake.com:443"}
+    ],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.0",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "addr_prefix": "sif",
+    "logo": "/logos/sifchain.jpeg",
+    "assets": [{
+        "base": "rowan",
+        "symbol": "ROWAN",
+        "exponent": "18",
+        "coingecko_id": "sifchain", 
+        "logo": "/logos/sifchain.jpeg"
+    }]
+}

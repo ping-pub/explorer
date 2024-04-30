@@ -1,0 +1,28 @@
+{
+    "chain_name": "BlockX",
+    "api": [
+        {
+            "address": "https://api.blockxnet.com",
+            "provider": "BlockX"
+        }
+    ],
+    "rpc": [
+        {
+            "address": "https://rpc.blockxnet.com",
+            "provider": "BlockX"
+        }
+    ],
+    "sdk_version": "0.45.1",
+    "coin_type": "60",
+    "min_tx_fee": "25000000000",
+    "addr_prefix": "blockx",
+    "logo": "https://i.imgur.com/7PRBOzQ.png",
+    "theme_color": "#0d5ad6",
+    "keplr_features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
+    "assets": [{
+        "base": "abcx",
+        "symbol": "BCX",
+        "exponent": "18",
+        "logo": "https://i.imgur.com/7PRBOzQ.png"
+    }]
+}

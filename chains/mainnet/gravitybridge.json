@@ -1,0 +1,19 @@
+{
+    "chain_name": "gravity-bridge",
+    "api": ["https://gravitychain.io:1317","https://api.gravity-bridge.nodestake.top"],
+    "rpc": ["https://gravitychain.io:26657", "http://gravity-bridge-1-08.nodes.amhost.net:26657","https://rpc.gravity-bridge.nodestake.top"],
+    "snapshot_provider": "",
+    "sdk_version": "0.44.5",
+    "coin_type": "60",
+    "min_tx_fee": "5000",
+    "addr_prefix": "gravity",
+    "excludes": "",
+    "logo": "/logos/gravity-bridge.png",
+    "assets": [{
+        "base": "ugraviton",
+        "symbol": "GRAVITON",
+        "exponent": "6",
+        "coingecko_id": "graviton", 
+        "logo": "/logos/gravity-bridge.png"
+    }]
+}

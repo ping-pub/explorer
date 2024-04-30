@@ -1,0 +1,19 @@
+{
+  "chain_name": "dhealth",
+  "coingecko": "dhealth",
+  "api": ["https://lcd.dhealth.com", "https://api.dhealth.nodestake.org"],
+  "rpc": ["https://rpc.dhealth.com:443", "https://rpc.dhealth.nodestake.org:443"],
+  "sdk_version": "0.47.4",
+  "coin_type": "10111",
+  "min_tx_fee": "3000",
+  "addr_prefix": "dh",
+  "logo": "/logos/dhealth.png",
+  "theme_color": "#150867",
+  "assets": [{
+      "base": "udhp",
+      "symbol": "DHP",
+      "exponent": "6",
+      "coingecko_id": "dhealth",
+      "logo": "/logos/dhealth.png"
+  }]
+}

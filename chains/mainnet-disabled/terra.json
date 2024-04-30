@@ -1,0 +1,26 @@
+{
+    "chain_name": "terra",
+    "api": [
+        {"provider": "TFL", "address": "https://phoenix-lcd.terra.dev"},
+        {"provider": "Polkachu", "address": "https://terra-api.polkachu.com"},
+        {"provider": "Allnodes", "address": "https://terra-lcd.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "TFL", "address": "https://phoenix-rpc.terra.dev:443"},
+        {"provider": "Polkachu", "address": "https://terra-rpc.polkachu.com:443"},
+        {"provider": "Allnodes", "address": "https://terra-rpc.publicnode.com:443"}
+    ],
+    "snapshot_provider": "https://polkachu.com/tendermint_snapshots/terra",
+    "sdk_version": "0.47.5",
+    "coin_type": "330",
+    "min_tx_fee": "5000",
+    "addr_prefix": "terra",
+    "logo": "/logos/terra.png",
+    "assets": [{
+        "base": "uluna",
+        "symbol": "LUNA",
+        "exponent": "6",
+        "coingecko_id": "terra-luna-2", 
+        "logo": "/logos/luna.jpg"
+    }]
+}

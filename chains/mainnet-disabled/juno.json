@@ -1,0 +1,33 @@
+{
+    "chain_name": "juno",
+    "coingecko": "juno-network",
+    "api": [
+        {"provider": "Notional", "address": "https://api-juno-ia.cosmosia.notional.ventures"},
+        {"provider": "Polkachu", "address": "https://juno-api.polkachu.com"},
+        {"provider": "Itastakers", "address": "https://lcd-juno.itastakers.com"},
+        {"provider": "Golden Ratio Staking", "address": "https://rest-juno.goldenratiostaking.net"},
+        {"provider": "Reece", "address": "https://juno-api.reece.sh"},
+        {"provider": "Allnodes", "address": "https://juno-rest.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "Notional", "address": "https://rpc-juno-ia.cosmosia.notional.ventures:443"}, 
+        {"provider": "Polkachu", "address": "https://juno-rpc.polkachu.com:443"}, 
+        {"provider": "Itastakers", "address": "https://rpc-juno.itastakers.com:443"}, 
+        {"provider": "Golden Ratio Staking", "address": "https://rpc-juno.goldenratiostaking.net"}, 
+        {"provider": "Reece", "address": "https://juno-rpc.reece.sh"}, 
+        {"provider": "Allnodes", "address": "https://juno-rpc.publicnode.com:443"}
+    ],
+    "snapshot_provider": "",
+    "sdk_version": "0.47.3",
+    "coin_type": "118",
+    "min_tx_fee": "3000",
+    "addr_prefix": "juno",
+    "logo": "/logos/juno.png",
+    "assets": [{
+        "base": "ujuno",
+        "symbol": "JUNO",
+        "exponent": "6",
+        "coingecko_id": "juno-network", 
+        "logo": "/logos/juno.png"
+    }]
+}

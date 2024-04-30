@@ -1,0 +1,30 @@
+{
+    "chain_name": "bitcanna",
+    "coingecko": "bitcanna",
+    "api": [
+        {"provider": "Bitcanna", "address": "https://lcd.bitcanna.io"},
+        {"provider": "Polkachu", "address": "https://bitcanna-api.polkachu.com"},
+        {"provider": "Allnodes", "address": "https://bitcanna-rest.publicnode.com"},
+        {"provider": "Notional", "address": "https://api-bitcanna-ia.cosmosia.notional.ventures"}
+    ],
+    "rpc": [
+        {"provider": "Bitcanna", "address": "https://rpc.bitcanna.io:443"}, 
+        {"provider": "Polkachu", "address": "https://bitcanna-rpc.polkachu.com:443"}, 
+        {"provider": "Notional", "address": "https://rpc-bitcanna-ia.cosmosia.notional.ventures:443"},
+        {"provider": "Allnodes", "address": "https://bitcanna-rpc.publicnode.com:443"}
+    ],
+    "snapshot_provider": "29edc55748bc341224f711a05cb0a9f6d73b4da3@bitcanna.rpc.ping.pub:26656",
+    "sdk_version": "0.46.14",
+    "coin_type": "118",
+    "min_tx_fee": "420",
+    "theme_color": "#00b786",
+    "assets": [{
+        "base": "ubcna",
+        "symbol": "BCNA",
+        "exponent": "6",
+        "coingecko_id": "bitcanna", 
+        "logo": "/logos/bitcanna.svg"
+    }],
+    "addr_prefix": "bcna",
+    "logo": "/logos/bitcanna.svg"
+}

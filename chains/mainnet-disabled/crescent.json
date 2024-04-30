@@ -1,0 +1,24 @@
+{
+    "chain_name": "crescent",
+    "api": ["https://crescent-api.polkachu.com", "https://mainnet.crescent.network:1317", "https://api.crescent.pupmos.network"],
+    "rpc": ["https://mainnet.crescent.network:26657", "https://crescent-rpc.polkachu.com"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.3",
+    "coin_type": "118",
+    "min_tx_fee": "5000",
+    "addr_prefix": "cre",
+    "logo": "/logos/cre.png",
+    "assets": [{
+        "base": "ucre",
+        "symbol": "CRE",
+        "exponent": "6",
+        "coingecko_id": "crescent-network", 
+        "logo": "/logos/cre.png"
+    },{
+        "base": "ubcre",
+        "symbol": "bCRE",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "/logos/cre.png"
+    }]
+}

@@ -1,0 +1,36 @@
+{
+  "chain_name": "pundix",
+  "api": [
+    {
+      "address": "https://px-rest.pundix.com",
+      "provider": "Pundi X"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://px-json.pundix.com",
+      "provider": "Pundi X"
+    }
+  ],
+  "sdk_version": "0.45.11",
+  "coin_type": "118",
+  "min_tx_fee": "2000000000000",
+  "assets": [
+    {
+      "base": "ibc/55367B7B6572631B78A93C66EF9FDFCE87CDE372CC4ED7848DA78C1EB1DCDD78",
+      "symbol": "PUNDIX",
+      "exponent": "18",
+      "coingecko_id": "pundi-x-2",
+      "logo": "/logos/pundi-x-token-logo.svg"
+    },
+    {
+      "base": "bsc0x29a63F4B209C29B4DC47f06FFA896F32667DAD2C",
+      "symbol": "PURSE",
+      "exponent": "18",
+      "coingecko_id": "pundi-x-purse",
+      "logo": "/logos/purse-token-logo.svg"
+    }
+  ],
+  "addr_prefix": "px",
+  "logo": "/logos/pundi-x-logo.svg"
+}

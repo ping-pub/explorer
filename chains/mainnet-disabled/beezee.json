@@ -1,0 +1,19 @@
+{
+    "chain_name": "beezee",
+    "coingecko": "bzedge",
+    "api": ["https://rest.getbze.com"],
+    "rpc": ["https://rpc-1.getbze.com:443","https://rpc-2.getbze.com:443"],
+    "snapshot_provider": ["a9fac0534bd6853f5810fdc692564967bd01b1fe@rpc-1.getbze.com:26656"],
+    "sdk_version": "0.45.9",
+    "coin_type": "370",
+    "min_tx_fee": "8000",
+    "addr_prefix": "bze",
+    "logo": "/logos/beezee.png",
+    "assets": [{
+        "base": "ubze",
+        "symbol": "BZE",
+        "exponent": "6",
+        "coingecko_id": "bzedge",
+        "logo": "/logos/beezee.png"
+    }]
+  }
