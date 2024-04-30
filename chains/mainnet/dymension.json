@@ -1,0 +1,51 @@
+{
+  "chain_name": "dymension",
+  "api": [
+      {
+        "address": "https://dymension.api.kjnodes.com:443",
+        "provider": "kjnodes.com 🦄"
+      },
+      {
+        "address": "https://api.dymension.nodestake.org",
+        "provider": "NodeStake"
+      },
+      {
+        "address": "https://dymension-api.lavenderfive.com:443",
+        "provider": "Lavender.Five Nodes 🐝"
+      },
+	  {
+        "address": "https://dymension-rest.publicnode.com",
+        "provider": "Allnodes ⚡️ Nodes & Staking"
+      }
+    ],
+  "rpc": [
+      {
+        "address": "https://dymension.rpc.kjnodes.com",
+        "provider": "kjnodes.com 🦄"
+      },
+      {
+        "address": "https://api.dymension.nodestake.org",
+        "provider": "NodeStake"
+      },
+      {
+        "address": "https://dymension-rpc.lavenderfive.com:443",
+        "provider": "Lavender.Five Nodes 🐝"
+      },
+      {
+        "address": "https://dymension-rpc.publicnode.com:443",
+        "provider": "Allnodes ⚡️ Nodes & Staking"
+      }
+    ],
+  "sdk_version": "0.46.15",
+  "coin_type": "60",
+  "min_tx_fee": "20000000000",
+  "addr_prefix": "dym",
+  "logo": "https://ping.pub/logos/dymension.png",
+  "assets": [{
+      "base": "adym",
+      "symbol": "DYM",
+      "exponent": "18",
+      "coingecko_id": "dymension", 
+      "logo": "https://ping.pub/logos/dymension.png"
+  }]
+}

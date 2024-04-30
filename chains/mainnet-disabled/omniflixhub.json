@@ -1,0 +1,19 @@
+{
+    "chain_name": "omniflixhub",
+    "coingecko": "omniflix-network",
+    "api": ["https://api.omniflix.silentvalidator.com", "https://omniflix-api.dakshavalidator.in", "https://api.omniflix.nodestake.top","https://omniflixhub-api.skynetvalidators.com"],
+    "rpc": ["https://rpc.omniflix.network", "https://rpc.omniflix.nodestake.top"],
+    "snapshot_provider": "https://polkachu.com/tendermint_snapshots/omniflix",
+    "sdk_version": "0.47.5",
+    "coin_type": "118",
+    "min_tx_fee": "3000",
+    "addr_prefix": "omniflix",
+    "logo": "/logos/omniflix.png",
+    "assets": [{
+        "base": "uflix",
+        "symbol": "FLIX",
+        "exponent": "6",
+        "coingecko_id": "omniflix-network",
+        "logo": "/logos/omniflix.png"
+    }]
+}

@@ -1,0 +1,21 @@
+{
+  "chain_name": "meme",
+  "coingecko": "meme-network",
+  "api": [ "https://api-meme-1.meme.sx", "https://meme-api.polkachu.com:443", "https://api.meme.pupmos.network:443", "https://meme-api.kleomedes.network:443", "https://meme.api.m.anode.team:443" ],
+  "rpc": [ "https://rpc-meme-1.meme.sx:443", "https://meme-rpc.polkachu.com:443", "https://rpc-meme.pupmos.network:443", "https://meme-rpc.kleomedes.network:443", "http://meme.statesync.nodersteam.com:26657", "https://meme.rpc.m.anode.team:443" ],
+  "snapshot_provider": "",
+  "sdk_version": "0.45.9",
+  "coin_type": "118",
+  "min_tx_fee": "8000",
+  "addr_prefix": "meme",
+  "logo": "/logos/meme.png",
+  "assets": [
+    {
+      "base": "umeme",
+      "symbol": "MEME",
+      "exponent": "6",
+      "coingecko_id": "meme-network",
+      "logo": "/logos/meme.png"
+    }
+  ]
+}

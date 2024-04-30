@@ -1,0 +1,42 @@
+{
+  "chain_name": "realio",
+  "alias": "realio",
+  "api": [
+    "https://rest.cosmos.directory/realio",
+    "https://realio-api.genznodes.dev",
+    "https://api-realio-network.nodeist.net",
+    "http://realio.api.m.stavr.tech:21097",
+    "https://api.realio.indonode.net",
+    "https://api.realio.nodestake.top"
+  ],
+  "rpc": [
+    "https://rpc.cosmos.directory/realio",
+    "https://realio-rpc.genznodes.dev",
+    "https://rpc-realio-network.nodeist.net",
+    "http://realio.rpc.m.stavr.tech:21097",
+    "https://rpc.realio.indonode.net",
+    "https://rpc.realio.nodestake.top"
+  ],
+  "snapshot_provider": "",
+  "addr_prefix": "realio",
+  "coin_type": "60",
+  "min_tx_fee": "5000",
+  "assets": [
+    {
+      "base": "ario",
+      "symbol": "RIO",
+      "exponent": "18",
+      "coingecko_id": "realio-network",
+      "logo": "/logos/realio.png"
+    },
+    {
+      "base": "arst",
+      "symbol": "RST",
+      "exponent": "18",
+      "coingecko_id": "",
+      "logo": "/logos/realio.jpg"
+    }
+  ],
+  "logo": "/logos/realio.png",
+  "sdk_version": "v0.46.11"
+}

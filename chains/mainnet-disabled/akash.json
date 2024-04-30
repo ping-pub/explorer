@@ -1,0 +1,31 @@
+{
+    "chain_name": "akash",
+    "alias": "akash-network",
+    "api": [
+        {"provider": "Notional", "address": "https://api-akash-ia.cosmosia.notional.ventures"},
+        {"provider": "Polkachu", "address": "https://akash-api.polkachu.com"},
+        {"provider": "c29r3", "address": "https://akash.c29r3.xyz:443/api"},
+        {"provider": "Allnodes", "address": "https://akash-rest.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "Notional", "address": "ttps://rpc-akash-ia.cosmosia.notional.ventures"}, 
+        {"provider": "Polkachu", "address": "https://akash-rpc.polkachu.com"}, 
+        {"provider": "Forbole", "address": "http://rpc.akash.forbole.com:80"}, 
+        {"provider": "Skynet Validators", "address": "http://akashsentry01.skynetvalidators.com:26657"}, 
+        {"provider": "Allnodes", "address": "https://akash-rpc.publicnode.com"}
+    ],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.4",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "theme_color": "#ce4747",
+    "assets": [{
+        "base": "uakt",
+        "symbol": "AKT",
+        "exponent": "6",
+        "coingecko_id": "akash-network", 
+        "logo": "/logos/akash-network.png"
+    }],
+    "addr_prefix": "akash",
+    "logo": "/logos/akash-network.png"
+}

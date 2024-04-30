@@ -1,0 +1,28 @@
+{
+  "chain_name": "six",
+  "registry_name": "sixnet",
+  "api": [
+    "https://sixnet-api.sixprotocol.net:443"
+  ],
+  "rpc": [
+    "https://sixnet-rpc.sixprotocol.net:443"
+  ],
+  "snapshot_provider": "",
+  "sdk_version": "0.45",
+  "coin_type": "118",
+  "min_tx_fee": "1250000",
+  "addr_prefix": "6x",
+  "logo": "/logos/six.png",
+  "keplr_features": [
+  ],
+  "assets": [
+    {
+      "base": "usix",
+      "symbol": "SIX",
+      "exponent": "6",
+      "coingecko_id": "six-network",
+      "logo": "/logos/usix.png"
+    }
+  ],
+  "theme_color": "#55afdd"
+}

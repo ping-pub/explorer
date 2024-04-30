@@ -1,0 +1,32 @@
+{
+    "chain_name": "comdex",
+    "api": [
+        {"provider": "Notional", "address": "https://api-comdex-ia.cosmosia.notional.ventures"},
+        {"provider": "Polkachu", "address": "https://comdex-api.polkachu.com"},
+        {"provider": "Comdex", "address": "https://rest.comdex.one"},
+        {"provider": "Golden Ratio Staking", "address": "https://rest-comdex.goldenratiostaking.net"},
+        {"provider": "Allnodes", "address": "https://comdex-rest.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "Notional", "address": "https://rpc-comdex-ia.cosmosia.notional.ventures:443"},
+        {"provider": "AuditOne", "address": "https://api.comdex.audit.one:443/rpc"},
+        {"provider": "Polkachu", "address": "https://comdex-rpc.polkachu.com:443"},
+        {"provider": "Comdex", "address": "https://rpc.comdex.one:443"},
+        {"provider": "AuditOne", "address": "https://api.comdex.audit.one:443/rpc"},
+        {"provider": "Golden Ratio Staking", "address": "https://rpc-comdex.goldenratiostaking.net"},
+        {"provider": "Allnodes", "address": "https://comdex-rpc.publicnode.com:443"}
+    ],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.8",
+    "coin_type": "118",
+    "min_tx_fee": "5000",
+    "addr_prefix": "comdex",
+    "logo": "/logos/comdex.png",
+    "assets": [{
+        "base": "ucmdx",
+        "symbol": "CMDX",
+        "exponent": "6",
+        "coingecko_id": "comdex", 
+        "logo": "/logos/comdex.png"
+    }]
+}

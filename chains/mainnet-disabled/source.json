@@ -1,0 +1,35 @@
+{
+    "chain_name": "source",
+    "coingecko": "source",
+    "api": [
+        {"provider": "NodeStake", "address": "https://api.source.nodestake.top"},
+        {"provider": "KJNodes", "address": "https://source.api.kjnodes.com"},
+        {"provider": "TCNetwork", "address": "https://rest.source.tcnetwork.io"},
+        {"provider": "MoonBridge", "address": "https://source.api.moonbridge.team"},
+        {"provider": "Nodeist", "address": "https://api-source.nodeist.net"},
+        {"provider": "ITRocket", "address": "https://source-mainnet-api.itrocket.net:443"},
+        {"provider": "StakeTown", "address": "https://source-api.stake-town.com:443"}
+    ],
+    "rpc": [
+        {"provider": "NodeStake", "address": "https://rpc.source.nodestake.top"},
+        {"provider": "KJNodes", "address": "https://source.rpc.kjnodes.com"},
+        {"provider": "TCNetwork", "address": "https://rpc.source.tcnetwork.io"}, 
+        {"provider": "MoonBridge", "address": "https://source.rpc.moonbridge.team"}, 
+        {"provider": "Nodeist", "address": "https://rpc-source.nodeist.net"}, 
+        {"provider": "ITRocket", "address": "https://source-mainnet-rpc.itrocket.net:443"}, 
+        {"provider": "StakeTown", "address": "https://source-rpc.stake-town.com:443"}
+    ],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.15",
+    "coin_type": "118",
+    "min_tx_fee": "50000",
+    "addr_prefix": "source",
+    "logo": "/logos/source.png",
+    "assets": [{
+        "base": "usource",
+        "symbol": "SOURCE",
+        "exponent": "6",
+        "coingecko_id": "source",
+        "logo": "/logos/source.png"
+    }]
+}

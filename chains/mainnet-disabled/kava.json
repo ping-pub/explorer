@@ -1,0 +1,26 @@
+{
+    "chain_name": "kava",
+    "coingecko": "kava",
+    "api": [
+        {"provider": "Kava", "address": "https://api.data.kava.io"},
+        {"provider": "Allnodes", "address": "https://kava-rest.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "Kava", "address": "https://rpc.kava.io:443"},
+        {"provider": "Allnodes", "address": "https://kava-rpc.publicnode.com:443"}
+    ],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.11",
+    "coin_type": "118",
+    "min_tx_fee": "5000",
+    "addr_prefix": "kava",
+    "logo": "/logos/kava.png",
+    "theme_color": "#ff433e",
+    "assets": [{
+        "base": "ukava",
+        "symbol": "KAVA",
+        "exponent": "6",
+        "coingecko_id": "kava", 
+        "logo": "/logos/kava.png"
+    }]
+}

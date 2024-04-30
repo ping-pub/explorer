@@ -1,0 +1,20 @@
+{
+    "chain_name": "cudos",
+    "coingecko": "cudos",
+    "api": ["https://rest.cudos.org"],
+    "rpc": ["https://rpc.cudos.org"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.3",
+    "coin_type": "118",
+    "min_tx_fee": "5000000000000",
+    "addr_prefix": "cudos",
+    "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cudos/images/cudos.png",
+    "assets": [{
+        "base": "acudos",
+        "symbol": "CUDOS",
+        "exponent": "18",
+        "coingecko_id": "cudos", 
+        "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cudos/images/cudos.png"
+    }
+    ]
+}

@@ -1,0 +1,34 @@
+{
+    "chain_name": "stride",
+    "api": [
+        {"provider": "Polkachu", "address": "https://stride-api.polkachu.com"},
+        {"provider": "NodeStake", "address": "https://api.stride.nodestake.top"},
+        {"provider": "Nodeist", "address": "https://api-stride.nodeist.net"},
+        {"provider": "Kjnodes", "address": "https://stride.api.kjnodes.com"},
+        {"provider": "Allnodes", "address": "https://stride-rest.publicnode.com"}
+    ],
+    "rpc": [
+        {"provider": "Polkachu", "address": "https://stride-rpc.polkachu.com:443"},
+        {"provider": "NodeStake", "address": "https://rpc.stride.nodestake.top"},
+        {"provider": "Nodeist", "address": "https://rpc-stride.nodeist.net"},
+        {"provider": "Kjnodes", "address": "https://stride.rpc.kjnodes.com:443"},
+        {"provider": "Allnodes", "address": "https://stride-rpc.publicnode.com:443"}
+    ],
+    "provider_chain": {
+        "api": ["https://api-cosmoshub-ia.cosmosia.notional.ventures"]
+    },    
+    "features": ["dashboard","governance", "blocks", "ibc", "cosmwasm", "uptime", "parameters", "state-sync", "consensus", "supply", "widget"],
+    "sdk_version": "0.45.5",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "stride",
+    "logo": "/logos/stride.png",
+    "theme_color": "#e91179",
+    "assets": [{
+        "base": "ustrd",
+        "symbol": "STRD",
+        "exponent": "6",
+        "coingecko_id": "stride",
+        "logo": "/logos/stride.png"
+    }]
+}
