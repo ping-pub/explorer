@@ -11,7 +11,7 @@ import type {
   NavSectionTitle,
   VerticalNavItems,
 } from '@/layouts/types';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { CosmosRestClient } from '@/libs/client';
 import {
   useBankStore,
@@ -24,6 +24,7 @@ import {
 import { useBlockModule } from '@/modules/[chain]/block/block';
 import { DEFAULT } from '@/libs';
 import { hexToRgb, rgbToHsl } from '@/libs/utils';
+import { computed } from 'vue';
 
 export const useBlockchain = defineStore('blockchain', {
   state: () => {
@@ -101,6 +102,12 @@ export const useBlockchain = defineStore('blockchain', {
               .sort((a, b) => a.order - b.order),
           },
         ];
+
+        const route = useRoute()
+        const currentRouteName = computed(() => route.name)
+        if (currentRouteName.value === 'index') {
+          currNavItem = []
+        }
       }
       // compute favorite menu
       const favNavItems: VerticalNavItems = [];
