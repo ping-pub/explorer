@@ -1,0 +1,26 @@
+{
+    "chain_name": "elys",
+    "api": [
+        "https://api.testnet.elys.network"
+    ],
+    "rpc": [
+        "https://rpc.testnet.elys.network",
+        "http://198.27.74.140:26657",
+        "http://91.183.62.162:26657",
+        "http://5.101.138.254:26657"
+    ],
+    "coin_type": "118",
+    "sdk_version": "0.46.11",
+    "addr_prefix": "elys",
+    "min_tx_fee": "0",
+    "logo": "/logos/elys.png",
+    "assets": [
+        {
+            "symbol": "ELYS",
+            "base": "uelys",
+            "exponent": 6,
+            "coingecko_id": "elys",
+            "logo": "https://avatars.githubusercontent.com/u/121874884"
+        }
+    ]
+}

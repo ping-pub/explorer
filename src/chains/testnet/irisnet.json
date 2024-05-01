@@ -1,0 +1,19 @@
+{
+    "chain_name": "iris-network",
+    "api": ["https://lcd.nyancat.irisnet.org"],
+    "rpc": ["https://rpc.nyancat.irisnet.org:443","https://rpc.nyancat.irisnet.org:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.42.4",
+    "coin_type": "118",
+    "min_tx_fee": "40000",
+    "addr_prefix": "iaa",
+    "excludes": "mint",
+    "logo": "/logos/iris-network.svg",
+    "assets": [{
+        "base": "uiris",
+        "symbol": "IRIS",
+        "exponent": "6",
+        "coingecko_id": "iris-network", 
+        "logo": "/logos/iris-network.svg"
+    }]
+}

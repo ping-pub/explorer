@@ -1,0 +1,20 @@
+{
+    "chain_name": "mantrachain",
+    "coingecko": "mantra",
+    "api": ["https://testnet.mantra.api.srv.stakr.space"],
+    "rpc": ["https://testnet.mantra.rpc.srv.stakr.space"],
+    "snapshot_provider": "",
+    "sdk_version": "0.47.4",
+    "coin_type": "118",
+    "min_tx_fee": "40",
+    "addr_prefix": "mantra",
+    "logo": "https://testnet.explorer.stakr.space/logos/mantra.svg",
+    "theme_color": "#812cd6",
+    "assets": [{
+        "base": "uom",
+        "symbol": "OM",
+        "exponent": "6",
+        "coingecko_id": "mantra-dao",
+        "logo": "https://testnet.explorer.stakr.space/logos/mantra.svg"
+    }]
+}

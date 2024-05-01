@@ -1,0 +1,27 @@
+{
+  "chain_name": "qwoyn",
+  "api": [
+    {
+      "address": "https://testnet-api.qwoyn.studio",
+      "provider": "Qwoyn Studios"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://testnet-rpc.qwoyn.studio",
+      "provider": "Qwoyn Studios"
+    }
+  ],
+  "sdk_version": "0.47.3",
+  "coin_type": "118",
+  "min_tx_fee": "1000",
+  "assets": [{
+    "base": "uqwoyn",
+    "symbol": "QWOYN",
+    "exponent": "6",
+    "logo": "/logos/qwoyn.png"
+  }],
+  "addr_prefix": "qwoyn",
+  "theme_color": "#DC2458",
+  "logo": "/logos/qwoyn.png"
+}

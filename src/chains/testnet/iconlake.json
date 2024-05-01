@@ -1,0 +1,29 @@
+{
+    "chain_name": "iconLake",
+    "registry_name": "iconLake",
+    "api": [
+        {"provider": "iconLake", "address": "https://lcd.testnet.iconlake.com"}
+    ],
+    "rpc": [
+        {"provider": "iconLake", "address": "https://rpc.testnet.iconlake.com"}
+    ],
+    "sdk_version": "0.47.3",
+    "coin_type": "1009",
+    "min_tx_fee": "800",
+    "assets": [
+        {
+            "base": "ulake",
+            "symbol": "LAKE",
+            "exponent": "6",
+            "logo": "/logos/iconlake-lake.svg"
+        },{
+            "base": "udrop",
+            "symbol": "DROP",
+            "exponent": "4",
+            "logo": "/logos/iconlake-drop.svg"
+        }
+    ],
+    "addr_prefix": "iconlake",
+    "theme_color": "#476de8",
+    "logo": "/logos/iconlake.svg"
+}

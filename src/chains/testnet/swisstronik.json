@@ -1,0 +1,27 @@
+{
+    "chain_name": "swisstronik",
+    "alias": "swisstronik",
+    "api": [
+      "https://api.testnet.swisstronik.com",
+      "https://testnet-swisstronik-api.genznodes.dev"
+    ],
+    "rpc": [
+      "https://rpc.testnet.swisstronik.com",
+      "https://testnet-swisstronik-rpc.genznodes.dev"
+    ],
+    "snapshot_provider": "",
+    "addr_prefix": "swtr",
+    "coin_type": "60",
+    "min_tx_fee": "5000",
+    "assets": [
+      {
+        "base": "uswtr",
+        "symbol": "SWTR",
+        "exponent": "18",
+        "coingecko_id": "",
+        "logo": "/logos/swisstronik.png"
+      }
+    ],
+    "logo": "/logos/swisstronik.png",
+    "sdk_version": "v0.47.5"
+}

@@ -1,0 +1,22 @@
+{
+    "chain_name": "0g-evmos",
+    "registry_name": "0g-evmos",
+    "api": [
+        {"provider": "CryptoNodeID", "address": "https://0gevmos-testnet-api.cryptonode.id"}
+    ],
+    "rpc": [
+        {"provider": "CryptoNodeID", "address": "https://0gevmos-testnet-rpc.cryptonode.id"}
+    ],
+    "sdk_version": "0.47.6",
+    "coin_type": "118",
+    "min_tx_fee": "500000",
+    "addr_prefix": "evmos",
+    "logo": "/logos/0g-evmos.png",
+    "assets": [{
+        "base": "aevmos",
+        "symbol": "OG",
+        "exponent": "18",
+        "coingecko_id": "", 
+        "logo": "/logos/0g-evmos.png"
+    }]
+}

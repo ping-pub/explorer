@@ -1,0 +1,56 @@
+{
+  "chain_name": "Titan Testnet",
+  "api": [
+    {
+      "address": "https://titan-testnet-lcd-1.tokenize-dev.com:443",
+      "provider": "Titanlab.io"
+    },
+    {
+      "address": "https://titan-testnet-lcd-2.tokenize-dev.com:443",
+      "provider": "Titanlab.io"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://titan-testnet-rpc-1.tokenize-dev.com:443",
+      "provider": "Titanlab.io"
+    },
+    {
+      "address": "https://titan-testnet-rpc-2.tokenize-dev.com:443",
+      "provider": "Titanlab.io"
+    },
+    {
+      "address": "https://titan-testnet-rpc-3.tokenize-dev.com:443",
+      "provider": "Titanlab.io"
+    },
+    {
+      "address": "https://titan-testnet-rpc-4.tokenize-dev.com:443",
+      "provider": "Titanlab.io"
+    }
+  ],
+  "sdk_version": "v0.47.6-titan.3",
+  "coin_type": "60",
+  "min_tx_fee": "100000000000",
+  "addr_prefix": "titan",
+  "logo": "/logos/titan.svg",
+  "assets": [
+    {
+      "base": "atkx",
+      "symbol": "TKX",
+      "exponent": "18",
+      "coingecko_id": "",
+      "logo": "/logos/tkx.png"
+    }
+  ],
+  "keplr_price_step": {
+    "low": 100000000000,
+    "average": 110000000000,
+    "high": 200000000000
+  },
+  "theme_color": "#FF671E",
+  "keplr_features": [
+    "cosmwasm",
+    "eth-address-gen",
+    "eth-key-sign"
+  ]
+}

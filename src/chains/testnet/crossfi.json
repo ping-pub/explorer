@@ -1,11 +1,27 @@
 {
-    "chain_name": "crossfi-testnet-1",
-    "api": ["https://crossfi-testnet-api.forpeaky.xyz"],
-    "rpc": ["https://crossfi-testnet-rpc.forpeaky.xyz"],
-    "coingecko": "",
+    "chain_name": "crossfi",
+    "api": [
+        {"provider": "Stake-Take", "address": "https://api.crossfi.stake-take.com"},
+        {"provider": "STAKR.space", "address": "https://crossfi.api.srv.stakr.space"},
+        {"provider": "BonyNode", "address": "https://crossfi-testnet-api.bonynode.online"}
+    ],
+    "rpc": [
+        {"provider": "Stake-Take", "address": "https://rpc.crossfi.stake-take.com"},
+        {"provider": "STAKR.space", "address": "https://crossfi-rpc.srv.stakr.space"},
+        {"provider": "BonyNode", "address": "https://crossfi-testnet-rpc.bonynode.online"}
+    ],
     "snapshot_provider": "",
-    "sdk_version": "0.47.1",
-    "coin_type": "118",
-    "min_tx_fee": "500",
-    "addr_prefix": "crossfi"
-    }
+    "sdk_version": "v0.46.13",
+    "keplr_features": ["eth-address-gen", "eth-key-sign"],
+    "coin_type": "60",
+    "min_tx_fee": "5000000000000000",
+    "addr_prefix": "mx",
+    "logo": "https://pbs.twimg.com/profile_images/1719733805483790336/9rtdiMS-_400x400.jpg",
+    "assets": [{
+        "base": "mpx",
+        "symbol": "PX",
+        "exponent": "18",
+        "coingecko_id": "crossfi",
+        "logo": "https://pbs.twimg.com/profile_images/1719733805483790336/9rtdiMS-_400x400.jpg"
+    }]
+}

@@ -1,0 +1,20 @@
+{
+  "chain_name": "centauritestnet",
+  "api": ["https://api-banksy4.notional.ventures"],
+  "rpc": ["https://rpc-banksy4.notional.ventures"],
+  "coingecko": "",
+  "snapshot_provider": "",
+  "sdk_version": "0.47.3",
+  "coin_type": "118",
+  "min_tx_fee": "500",
+  "addr_prefix": "centauri",
+  "logo": "/logos/composable.jpg",
+  "assets": [{
+    "base": "ppica",
+    "symbol": "PICA",
+    "exponent": "12",
+    "coingecko_id": "",
+    "logo": "/logos/composable.jpg"
+  }
+  ]
+}
