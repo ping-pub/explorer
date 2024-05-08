@@ -14,15 +14,15 @@
     ],
     "sdk_version": "0.47.3",
     "snapshot_provider": "",
-    "coin_type": "60",
-    "min_tx_fee": "800",
-    "addr_prefix": "evmos",
+    "coin_type": "118",
+    "min_tx_fee": "6000",
+    "addr_prefix": "0g",
     "logo": "/logos/zg.svg",
     "theme_color": "#812cd6",
     "assets": [{
-        "base": "aevmos",
-        "symbol": "EVMOS",
-        "exponent": "18",
+        "base": "ua0gi",
+        "symbol": "A0GI",
+        "exponent": "6",
         "logo": "/logos/zg.svg"
     }]
 }
