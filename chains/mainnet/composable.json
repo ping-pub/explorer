@@ -1,18 +1,18 @@
 {
-    "chain_name": "composable",
-    "api": ["https://lcd-composable.whispernode.com:443"],
-    "rpc": ["https://rpc-composable.whispernode.com:443"],
+    "chain_name": "picasso",
+    "api": ["https://api-picasso.whispernode.com:443"],
+    "rpc": ["https://rpc-picasso.whispernode.com:443"],
     "snapshot_provider": "",
     "sdk_version": "0.47.3",
     "coin_type": "118",
     "min_tx_fee": "8000",
-    "addr_prefix": "centauri",
+    "addr_prefix": "pica",
     "logo": "/logos/composable.jpg",
     "assets": [{
         "base": "ppica",
         "symbol": "PICA",
         "exponent": "12",
-        "coingecko_id": "composable", 
+        "coingecko_id": "picasso", 
         "logo": "/logos/composable.jpg"
     }]
 }
