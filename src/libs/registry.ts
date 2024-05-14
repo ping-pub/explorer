@@ -55,7 +55,7 @@ export interface AbstractRegistry {
 // use snake style, since the all return object use snake style.
 export interface RequestRegistry extends AbstractRegistry {
   auth_params: Request<any>;
-  applications: Request<any>;
+  application: Request<any>;
   gateway: Request<any>;
   supplier: Request<any>;
   auth_accounts: Request<PaginabledAccounts>;
@@ -113,7 +113,7 @@ export interface RequestRegistry extends AbstractRegistry {
   staking_params: Request<StakingParam>;
   staking_pool: Request<StakingPool>;
   staking_validators: Request<PaginatedValdiators>;
-  staking_validators_address: Request<{ validator: Validator }>;
+  staking_validators_address: Request<{ validator: Validator, supplier:any }>;
   staking_validators_delegations: Request<PaginatedDelegations>;
   staking_validators_delegations_delegator: Request<{
     delegation_response: Delegation;

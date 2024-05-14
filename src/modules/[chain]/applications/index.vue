@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from '@vue/reactivity';
 import { useApplicationStore, useBlockchain, useFormatter } from '@/stores';
-import { PageRequest, type AuthAccount, type Pagination, type Coin } from '@/types';
+import { PageRequest, type AuthAccount, type Pagination, type Application } from '@/types';
 import { onMounted } from 'vue';
 import PaginationBar from '@/components/PaginationBar.vue';
 const props = defineProps(['chain']);
@@ -9,7 +9,7 @@ const props = defineProps(['chain']);
 const format = useFormatter();
 const chainStore = useBlockchain()
 
-const list = ref([] as Coin[])
+const list = ref([] as Application[])
 
 function showType(v: string) {
   return v.replace("/cosmos.auth.v1beta1.", "")
@@ -60,7 +60,7 @@ function pageload(p: number) {
         </td>
         <td>{{ item.stake?.amount }} {{ item.stake?.denom }}</td>
         <td>{{ item.service_configs?.length }}</td>
-        <td>{{ item.service_configs?.map(sc => sc.service.name?.length > 0 ? sc.service.name : sc.service.id).join(", ")
+        <td>{{ item.service_configs?.map((sc:any) => sc.service.name?.length > 0 ? sc.service.name : sc.service.id).join(", ")
         }}</td>
       </tr>
     </table>

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from '@vue/reactivity';
 import { useApplicationStore, useBlockchain, useFormatter } from '@/stores';
-import { PageRequest, type AuthAccount, type Pagination, type Coin } from '@/types';
+import { PageRequest, type AuthAccount, type Pagination, type Supplier } from '@/types';
 import { onMounted } from 'vue';
 import PaginationBar from '@/components/PaginationBar.vue';
 const props = defineProps(['chain']);
@@ -9,7 +9,7 @@ const props = defineProps(['chain']);
 const format = useFormatter();
 const chainStore = useBlockchain()
 
-const list = ref([] as Coin[])
+const list = ref([] as Supplier[])
 
 function showType(v: string) {
   return v.replace("/cosmos.auth.v1beta1.", "")
@@ -43,7 +43,7 @@ function pageload(p: number) {
           <td>Services</td>
         </tr>
       </thead>
-      <tr v-for="item, index in list.sort((a, b) => {
+      <tr v-for="item, index in list.sort((a:any, b:any) => {
           return parseInt(b.stake.amount) - parseInt(a.stake.amount);
         })" class="hover">
         <td>{{ index }}</td>
@@ -60,7 +60,7 @@ function pageload(p: number) {
         </td>
         <td>{{ item.stake?.amount }} {{ item.stake?.denom }}</td>
         <td>{{ item.services?.length }}</td>
-        <td>{{ item.services?.map(sc => sc.service.name?.length > 0 ? sc.service.name : sc.service.id).join(", ")
+        <td>{{ item.services?.map((sc:any) => sc.service.name?.length > 0 ? sc.service.name : sc.service.id).join(", ")
         }}</td>
       </tr>
     </table>

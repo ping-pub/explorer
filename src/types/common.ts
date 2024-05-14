@@ -55,6 +55,25 @@ export interface Coin {
     denom: string;
 }
 
+export interface Supplier {
+    address: any;
+    stake: any;
+    services: any;
+}
+
+export interface Gateway {
+    address: any;
+    stake: any;
+    services: any;
+}
+
+export interface Application {
+    address: any;
+    stake: any;
+    service_configs: any;
+}
+
+
 export interface CoinWithPrice extends Coin {
     value?: number;
     price?: number;
