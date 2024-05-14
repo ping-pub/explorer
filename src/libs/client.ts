@@ -103,6 +103,15 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getDistributionCommunityPool() {
     return this.request(this.registry.distribution_community_pool, {});
   }
+  async getApplications(){
+    return this.request(this.registry.application, {});
+  }
+  async getSuppliers(){
+    return this.request(this.registry.supplier, {});
+  }
+  async getGateways(){
+    return this.request(this.registry.gateway, {});
+  }
   async getDistributionDelegatorRewards(delegator_addr: string) {
     return this.request(this.registry.distribution_delegator_rewards, {
       delegator_addr,

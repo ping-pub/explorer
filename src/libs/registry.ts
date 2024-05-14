@@ -55,6 +55,9 @@ export interface AbstractRegistry {
 // use snake style, since the all return object use snake style.
 export interface RequestRegistry extends AbstractRegistry {
   auth_params: Request<any>;
+  applications: Request<any>;
+  gateway: Request<any>;
+  supplier: Request<any>;
   auth_accounts: Request<PaginabledAccounts>;
   auth_account_address: Request<{ account: AuthAccount }>;
 

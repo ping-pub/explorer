@@ -4,6 +4,10 @@ import {
 } from './registry';
 
 export const DEFAULT: RequestRegistry = {
+  application: {url: '/pokt-network/poktroll/application/application', adapter},
+  gateway: {url: '/pokt-network/poktroll/gateway/gateway', adapter},
+  supplier: {url: '/pokt-network/poktroll/supplier/supplier', adapter},
+  // application: {url: '/pokt-network/poktroll/application/application', adapter},
   auth_params: { url: '/cosmos/auth/v1beta1/params', adapter },
   auth_accounts: { url: '/cosmos/auth/v1beta1/accounts', adapter },
   auth_account_address: {

@@ -72,17 +72,17 @@ dayjs()
 </script>
 
 <template>
-  <div class="bg-gray-100 dark:bg-[#171d30]">
+  <div class="bg-gray-100 dark:bg-[#231f20;]">
     <!-- sidebar -->
     <div
-      class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-gray-700"
+      class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto border-r border-gray-100 dark:border-gray-700"
       :class="{ block: sidebarShow, 'hidden xl:!block': !sidebarShow }"
     >
       <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
         <RouterLink to="/" class="flex items-center">
-          <img class="w-10 h-10" src="../../assets/logo.svg" />
+          <img class="w-10 h-10" src="https://poktroll-devnet.cryptonode.tools/logos/pokt_white.svg" />
           <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">
-            Ping.pub
+            Ping.Pokt
           </h1>
         </RouterLink>
         <div
@@ -144,7 +144,7 @@ dayjs()
             </div>
           </div>
           <div class="collapse-content">
-            <div v-for="(el, key) of item?.children" class="menu bg-base-100 w-full !p-0">
+            <div v-for="(el, key) of item?.children" class="menu w-full !p-0">
               <RouterLink
                 v-if="isNavLink(el)"
                 @click="sidebarShow = false"
@@ -224,7 +224,7 @@ dayjs()
           {{ item?.heading }}
         </div>
       </div>
-      <div class="px-2">
+      <!-- <div class="px-2">
           <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
             Tools
           </div>
@@ -324,12 +324,13 @@ dayjs()
             FAQ
           </div>
         </a>
-      </div>
+      </div> -->
     </div>
     <div class="xl:!ml-64 px-3 pt-4">
       <!-- header -->
       <div
-        class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10"
+        class="flex items-center py-3 mb-4 rounded px-4 sticky top-0 z-10"
+        
       >
         <div
           class="text-2xl pr-3 cursor-pointer xl:!hidden"

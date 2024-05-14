@@ -2,7 +2,9 @@
   "module": {
     "dashboard": "Dashboard",
     "blocks": "Blocks",
-    "staking": "Staking",
+    "applications": "Applications",
+    "gateways": "Gateways",
+    "suppliers": "Suppliers",
     "governance": "Governance",
     "parameters": "Parameters",
     "uptime": "Uptime",
@@ -14,13 +16,7 @@
     "nft": "NFT",
     "consensus": "Consensus",
     "supply": "Supply",
-    "account": "Accounts",
-    "ecosystem": "Ecosystem",
-    "favorite": "Favorite",
-    "add_to_favorite": "Add to favorite",
-    "all_blockchains": "All Blockchain",
-    "sponsors": "Sponsors",
-    "links": "Links"
+    "account": "Accounts"
   },
   "pages": {
     "title": "Ping Dashboard",
