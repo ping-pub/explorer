@@ -1,0 +1,7 @@
+services:
+  pocket-poktroll-faucet:
+    image: stakenodes/poktroll-explorer:latest
+    container_name: poktroll-explorer
+    restart: unless-stopped
+    ports:
+      - 5173:5173
