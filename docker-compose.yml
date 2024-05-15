@@ -1,7 +1,10 @@
+version: '3.8'
+
 services:
-  pocket-poktroll-faucet:
-    image: stakenodes/poktroll-explorer:latest
-    container_name: poktroll-explorer
+  pocket-poktroll-explorer:
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: unless-stopped
     ports:
       - 5173:5173
