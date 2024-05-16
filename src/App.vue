@@ -8,7 +8,7 @@ onMounted(() => {
   themeChange(false);
   //overrriding default route here
   if(window.location.pathname.length == 1)
-    router.push('/poktroll/blocks')
+    router.push('/poktroll/block')
 });
 </script>
 
