@@ -88,7 +88,7 @@ function search() {
     {
       meta: {
         i18n: 'tx',
-        order: 5
+        order: 3
       }
     }
   </route>

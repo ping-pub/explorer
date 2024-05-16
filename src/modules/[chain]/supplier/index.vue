@@ -72,7 +72,7 @@ function pageload(p: number) {
     {
       meta: {
         i18n: 'suppliers',
-        order: 3
+        order: 6
       }
     }
   </route>

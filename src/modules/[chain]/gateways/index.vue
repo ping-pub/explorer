@@ -67,7 +67,7 @@ function pageload(p: number) {
     {
       meta: {
         i18n: 'gateways',
-        order: 3
+        order: 5
       }
     }
   </route>

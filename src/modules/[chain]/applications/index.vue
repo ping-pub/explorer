@@ -72,7 +72,7 @@ function pageload(p: number) {
     {
       meta: {
         i18n: 'applications',
-        order: 3
+        order: 4
       }
     }
   </route>
