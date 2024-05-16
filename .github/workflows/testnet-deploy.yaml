@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    name: Ping deploy
+    name: Pocket deploy
     runs-on: testnet 
     steps:
     - name: print

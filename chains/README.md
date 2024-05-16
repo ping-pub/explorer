@@ -14,13 +14,13 @@
     "api": [
         {
             "address": "https://cosmos.api.ping.pub", 
-            "provider": "Ping"
+            "provider": "Pocket"
         }
     ], 
     "rpc": [
         {
             "address": "https://cosmos.api.ping.pub", 
-            "provider": "Ping"
+            "provider": "Pocket"
         }
     ],
     "sdk_version": "0.42.6",

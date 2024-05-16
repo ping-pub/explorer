@@ -31,7 +31,7 @@ const list = computed(() => {
 
             <TxsInBlocksChart />
 
-            <div class="grid xl:!grid-cols-6 md:!grid-cols-4 grid-cols-1 gap-3">
+            <div class="grid xl:!grid-cols-1 md:!grid-cols-1 grid-cols-1 gap-3 w-2/12">
             <RouterLink v-for="item in list"
                 class="flex flex-col justify-between rounded p-4 shadow bg-base-100"
                 :to="`/${chain}/block/${item.block.header.height}`">

@@ -40,7 +40,7 @@ cp -r ./dist/* <ROOT_OF_WEB_SERVER>
 docker run -d -p 8088:80 ping.pub/dashboard
 ```
 
-# Enable LCD for Ping.pub (do this on the config for your chain)
+# Enable LCD for Pocket.pub (do this on the config for your chain)
 
 1. Set `enable = true` in `./config/app.toml`
 ```
