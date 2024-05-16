@@ -7,7 +7,7 @@ const router = useRouter();
 onMounted(() => {
   themeChange(false);
   if(window.location.pathname.length == 1)
-    router.push('/poktroll')
+    router.push('/poktroll/blocks')
 });
 </script>
 
