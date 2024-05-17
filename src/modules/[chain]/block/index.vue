@@ -2,7 +2,7 @@
 import { computed, ref } from '@vue/reactivity';
 import { useBaseStore, useFormatter } from '@/stores';
 import TxsInBlocksChart from '@/components/charts/TxsInBlocksChart.vue';
-
+import { useBlockModule } from "@/modules/[chain]/block/block";
 const props = defineProps(['chain']);
 
 const tab = ref('blocks');
@@ -16,6 +16,7 @@ const list = computed(() => {
     // return recents.sort((a, b) => (Number(b.block.header.height) - Number(a.block.header.height)))
     return base.recents
 })
+
 </script>
 <template>
     <div>
@@ -31,8 +32,8 @@ const list = computed(() => {
 
             <TxsInBlocksChart />
 
-            <div class="grid xl:!grid-cols-1 md:!grid-cols-1 grid-cols-1 gap-3 w-2/12">
-            <RouterLink v-for="item in list"
+            <div class="grid xl:!grid-cols-1 md:!grid-cols-1 grid-cols-1 gap-3 xl:!w-3/12 md:!w-4/12">
+            <RouterLink v-for="item in [...list].reverse()"
                 class="flex flex-col justify-between rounded p-4 shadow bg-base-100"
                 :to="`/${chain}/block/${item.block.header.height}`">
                 <div class="flex justify-between">

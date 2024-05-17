@@ -89,6 +89,15 @@ export const useBaseStore = defineStore('baseStore', {
                 this.earlest = this.latest;
                 this.recents = [];
             }
+            if(this.recents.length == 0){
+                let promises = [];
+                for (let i =9;i>=1;i--){
+                  promises.push(this.blockchain.rpc?.getBaseBlockAt(`${parseInt(this.latest.block.header.height) - i}`))
+                }
+                let res = await Promise.all(promises)
+                this.recents = [...res]
+              }
+              
             //check if the block exists in recents
             if (
                 this.recents.findIndex(
