@@ -3,6 +3,7 @@ import { computed, ref } from '@vue/reactivity';
 import { useBaseStore, useFormatter } from '@/stores';
 import TxsInBlocksChart from '@/components/charts/TxsInBlocksChart.vue';
 import { useBlockModule } from "@/modules/[chain]/block/block";
+import { reactive } from 'vue';
 const props = defineProps(['chain']);
 
 const tab = ref('blocks');
@@ -11,7 +12,7 @@ const base = useBaseStore()
 
 const format = useFormatter();
 
-const list = computed(() => {
+const list = reactive(() => {
     // const recents = base.recents
     // return recents.sort((a, b) => (Number(b.block.header.height) - Number(a.block.header.height)))
     return base.recents
@@ -31,9 +32,20 @@ const list = computed(() => {
         <div v-show="tab === 'blocks'">
 
             <TxsInBlocksChart />
-
-            <div class="grid xl:!grid-cols-1 md:!grid-cols-1 grid-cols-1 gap-3 xl:!w-3/12 md:!w-4/12">
-            <RouterLink v-for="item in [...list].reverse()"
+            <div class="float-right px-2">
+                <span class="">
+                    <span>Recent: </span>
+                    <select v-model="base.pageSize" @change="(e:any)=>base.updatePageSize(e.target.value)" class="px-4 py-2 rounded">
+                        <option :value=10>10</option>
+                        <option :value=25>25</option>
+                        <option :value=50>50</option>
+                        <option :value=100>100</option>
+                    </select>
+                </span>
+            </div>
+            <div class="grid xl:!grid-cols-2 md:!grid-cols-2 grid-cols-1 gap-3 xl:!w-3/12 md:!w-4/12 px-4">
+            
+            <RouterLink v-for="item in [...list()].reverse()"
                 class="flex flex-col justify-between rounded p-4 shadow bg-base-100"
                 :to="`/${chain}/block/${item.block.header.height}`">
                 <div class="flex justify-between">

@@ -27,7 +27,7 @@ const options = computed(() => {
                 rotate: -45
             },
             show: false,
-            categories: baseStore.recents.map((x) => x.block.header.height).concat(Array(50-baseStore.recents.length).fill('')),
+            categories: baseStore.recents.map((x) => x.block.header.height).concat(Array(50-baseStore.recents?.length).fill('')),
         }
     };
 });

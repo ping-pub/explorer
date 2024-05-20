@@ -17,6 +17,7 @@ export const useBaseStore = defineStore('baseStore', {
                 | 'light'
                 | 'dark',
             connected: true,
+            pageSize: 10
         };
     },
     getters: {
@@ -63,7 +64,7 @@ export const useBaseStore = defineStore('baseStore', {
                     }
                 })
             );
-            return txs.sort((a, b) => {return Number(b.height) - Number(a.height)});
+            return txs.sort((a, b) => { return Number(b.height) - Number(a.height) });
         },
     },
     actions: {
@@ -73,38 +74,49 @@ export const useBaseStore = defineStore('baseStore', {
         async clearRecentBlocks() {
             this.recents = [];
         },
+        async updatePageSize(pgsz: number) {
+            this.pageSize = pgsz;
+            let promises = [];
+            for (let i = this.pageSize; i >= 2; i--) {
+                promises.push(this.blockchain.rpc?.getBaseBlockAt(`${parseInt(this.latest.block.header.height) - i}`))
+            }
+            let res = await Promise.all(promises)
+            this.recents = [...res]
+            this.recents.push(this.latest)
+            // this.fetchLatest();
+        },
         async fetchLatest() {
-            try{
+            try {
                 this.latest = await this.blockchain.rpc?.getBaseBlockLatest();
                 this.connected = true
-            }catch(e) {
+            } catch (e) {
                 this.connected = false
             }
             if (
                 !this.earlest ||
                 this.earlest?.block?.header?.chain_id !=
-                    this.latest?.block?.header?.chain_id
+                this.latest?.block?.header?.chain_id
             ) {
                 //reset earlest and recents
                 this.earlest = this.latest;
                 this.recents = [];
             }
-            if(this.recents.length == 0){
+            if (this.recents.length == 0) {
                 let promises = [];
-                for (let i =9;i>=1;i--){
-                  promises.push(this.blockchain.rpc?.getBaseBlockAt(`${parseInt(this.latest.block.header.height) - i}`))
+                for (let i = this.pageSize; i > 1; i--) {
+                    promises.push(this.blockchain.rpc?.getBaseBlockAt(`${parseInt(this.latest.block.header.height) - i}`))
                 }
                 let res = await Promise.all(promises)
                 this.recents = [...res]
-              }
-              
+            }
+
             //check if the block exists in recents
             if (
                 this.recents.findIndex(
                     (x) => x?.block_id?.hash === this.latest?.block_id?.hash
                 ) === -1
             ) {
-                if (this.recents.length >= 50) {
+                if (this.recents.length >= this.pageSize) {
                     this.recents.shift();
                 }
                 this.recents.push(this.latest);
