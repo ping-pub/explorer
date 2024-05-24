@@ -5,6 +5,10 @@ import { useI18n } from 'vue-i18n';
 
 const i18nLangs: Array<{ label: string; i18nLang: string }> = [
     {
+        label: '日本語',
+        i18nLang: 'ja',
+    },
+    {
         label: 'English',
         i18nLang: 'en',
     },
@@ -15,7 +19,7 @@ const i18nLangs: Array<{ label: string; i18nLang: string }> = [
     {
         label: 'Indonesian',
         i18nLang: 'id',
-    },
+    }
 ];
 
 let locale = ref(useI18n({ useScope: 'global' }).locale);
@@ -23,7 +27,7 @@ watch(locale, (val) => {
     document.documentElement.setAttribute('lang', val as string);
 });
 
-let currentLang = ref(localStorage.getItem('lang') || 'en');
+let currentLang = ref(localStorage.getItem('lang') || 'ja');
 
 watch(currentLang, (val: string) => {
     document.documentElement.setAttribute('lang', val as string);
