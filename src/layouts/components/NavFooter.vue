@@ -5,7 +5,7 @@
   >
     <div class="flex">
       Made With&nbsp;
-      <img src="https://poktroll-devnet.cryptonode.tools/logos/pokt_white.svg" />&nbsp;
+      <img src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" width="20" />&nbsp;
       &copy;&nbsp;
       {{ new Date().getFullYear() }}&nbsp;
     </div>

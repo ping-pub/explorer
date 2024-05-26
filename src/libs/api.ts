@@ -7,6 +7,9 @@ export const DEFAULT: RequestRegistry = {
   application: {url: '/pokt-network/poktroll/application/application', adapter},
   gateway: {url: '/pokt-network/poktroll/gateway/gateway', adapter},
   supplier: {url: '/pokt-network/poktroll/supplier/supplier', adapter},
+  application_info: {url: '/pokt-network/poktroll/application/application/{address}', adapter},
+  gateway_info: {url: '/pokt-network/poktroll/gateway/gateway/{address}', adapter},
+  supplier_info: {url: '/pokt-network/poktroll/supplier/supplier/{address}', adapter},
   // application: {url: '/pokt-network/poktroll/application/application', adapter},
   auth_params: { url: '/cosmos/auth/v1beta1/params', adapter },
   auth_accounts: { url: '/cosmos/auth/v1beta1/accounts', adapter },
@@ -76,7 +79,7 @@ export const DEFAULT: RequestRegistry = {
     url: '/cosmos/gov/v1beta1/proposals/{proposal_id}/votes/{voter}',
     adapter,
   },
-  staking_deletations: {
+  staking_delegations: {
     url: '/cosmos/staking/v1beta1/delegations/{delegator_addr}',
     adapter,
   },

@@ -43,7 +43,7 @@ const list = reactive(() => {
                     </select>
                 </span>
             </div>
-            <div class="grid xl:!grid-cols-2 md:!grid-cols-2 grid-cols-1 gap-3 xl:!w-3/12 md:!w-4/12 px-4">
+            <div class="grid xl:!grid-cols-2 md:!grid-cols-2 grid-cols-1 gap-3 xl:!w-8/12 md:!w-8/12 px-4">
             
             <RouterLink v-for="item in [...list()].reverse()"
                 class="flex flex-col justify-between rounded p-4 shadow bg-base-100"

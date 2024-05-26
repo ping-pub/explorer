@@ -58,6 +58,9 @@ export interface RequestRegistry extends AbstractRegistry {
   application: Request<any>;
   gateway: Request<any>;
   supplier: Request<any>;
+  application_info: Request<any>;
+  gateway_info: Request<any>;
+  supplier_info: Request<any>;
   auth_accounts: Request<PaginabledAccounts>;
   auth_account_address: Request<{ account: AuthAccount }>;
 
@@ -106,7 +109,7 @@ export interface RequestRegistry extends AbstractRegistry {
   gov_proposals_votes: Request<PaginatedProposalVotes>;
   gov_proposals_votes_voter: Request<{ vote: GovVote }>;
 
-  staking_deletations: Request<PaginatedDelegations>;
+  staking_delegations: Request<PaginatedDelegations>;
   staking_delegator_redelegations: Request<PaginatedRedelegations>;
   staking_delegator_unbonding_delegations: Request<PaginatedUnbonding>;
   staking_delegator_validators: Request<PaginatedValdiators>;

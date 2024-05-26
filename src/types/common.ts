@@ -57,19 +57,19 @@ export interface Coin {
 
 export interface Supplier {
     address: any;
-    stake: any;
+    stake: Coin;
     services: any;
 }
 
 export interface Gateway {
     address: any;
-    stake: any;
+    stake: Coin;
     services: any;
 }
 
 export interface Application {
     address: any;
-    stake: any;
+    stake: Coin;
     service_configs: any;
 }
 

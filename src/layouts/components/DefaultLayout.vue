@@ -77,10 +77,11 @@ dayjs()
     <div
       class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto border-r border-gray-100 dark:border-gray-700"
       :class="{ block: sidebarShow, 'hidden xl:!block': !sidebarShow }"
+      style="background-color: #231f20;"
     >
       <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
         <RouterLink to="/" class="flex items-center">
-          <img class="w-10 h-10" src="https://poktroll-devnet.cryptonode.tools/logos/pokt_white.svg" />
+          <img class="w-10 h-10" src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
           <h1 class="flex-1 ml-3 text-xl font-semibold dark:text-white">
             Shannon Explorer
           </h1>
@@ -330,7 +331,7 @@ dayjs()
       <!-- header -->
       <div
         class="flex items-center py-3 mb-4 rounded px-4 sticky top-0 z-10"
-        
+        style="background-color: #231f20;"
       >
         <div
           class="text-2xl pr-3 cursor-pointer xl:!hidden"

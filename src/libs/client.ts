@@ -103,14 +103,29 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getDistributionCommunityPool() {
     return this.request(this.registry.distribution_community_pool, {});
   }
-  async getApplications(){
-    return this.request(this.registry.application, {});
+  async getApplications(page?: PageRequest){
+    if(!page) page = new PageRequest();
+    const query =`?${page.toQueryString()}`;
+    return this.request(this.registry.application, {}, query);
   }
-  async getSuppliers(){
-    return this.request(this.registry.supplier, {});
+  async getSuppliers(page?: PageRequest){
+    if(!page) page = new PageRequest();
+    const query =`?${page.toQueryString()}`;
+    return this.request(this.registry.supplier, {}, query);
   }
-  async getGateways(){
-    return this.request(this.registry.gateway, {});
+  async getGateways(page?: PageRequest){
+    if(!page) page = new PageRequest();
+    const query =`?${page.toQueryString()}`;
+    return this.request(this.registry.gateway, {}, query);
+  }
+  async getApplicationsInfo(address: string){
+    return this.request(this.registry.application_info, {address});
+  }
+  async getSuppliersInfo(address: string){
+    return this.request(this.registry.supplier_info, {address});
+  }
+  async getGatewaysInfo(address: string){
+    return this.request(this.registry.gateway_info, {address});
   }
   async getDistributionDelegatorRewards(delegator_addr: string) {
     return this.request(this.registry.distribution_delegator_rewards, {
@@ -195,7 +210,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
   // staking
   async getStakingDelegations(delegator_addr: string) {
-    return this.request(this.registry.staking_deletations, { delegator_addr });
+    return this.request(this.registry.staking_delegations, { delegator_addr });
   }
   async getStakingDelegatorRedelegations(delegator_addr: string) {
     return this.request(this.registry.staking_delegator_redelegations, {

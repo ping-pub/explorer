@@ -7,17 +7,17 @@
     "rpc": [
         {"provider": "Poktroll-Testnet", "address": "https://testnet-validated-validator-rpc.poktroll.com"}
     ],
-    "features": ["dashboard", "blocks", "tx", "applications", "gateways", "suppliers", "validators", "uptime", "supply", "parameters", "consensus"],
+    "features": ["account", "dashboard", "blocks", "tx", "applications", "gateways", "suppliers", "validators", "uptime", "supply", "parameters", "consensus"],
     "sdk_version": "0.45.1",
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "pokt",
-    "logo": "https://poktroll-devnet.cryptonode.tools/logos/pokt_white.svg",
+    "logo": "https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png",
     "assets": [{
         "base": "upokt",
-        "symbol": "ATOM",
+        "symbol": "pokt",
         "exponent": "6",
-        "coingecko_id": "cosmos", 
-        "logo": "https://poktroll-devnet.cryptonode.tools/logos/pokt_white.svg"
+        "coingecko_id": "pocket-network", 
+        "logo": "https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png"
     }]
 }

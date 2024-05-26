@@ -24,7 +24,7 @@ onMounted(() => {
 
 function pageload(p: number) {
   pageRequest.value.setPage(p)
-  chainStore.rpc.getSuppliers().then(x => {
+  chainStore.rpc.getSuppliers(pageRequest.value).then(x => {
     list.value = x.supplier
     pageResponse.value = x.pagination
   });
@@ -52,7 +52,7 @@ function pageload(p: number) {
             <span class="text-sm text-primary dark:invert whitespace-nowrap overflow-hidden">
 
               <RouterLink
-                :to="`/${chainStore.chainName}/supplier/${item?.address}`"
+                :to="`/${chainStore.chainName}/account/${item?.address}`"
               class="font-weight-medium">{{ item.address }}</RouterLink>
             </span>
             <span class="text-xs">{{ item.address }}</span>
