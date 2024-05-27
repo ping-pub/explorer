@@ -5,7 +5,7 @@ import TxsInBlocksChart from '@/components/charts/TxsInBlocksChart.vue';
 import { useBlockModule } from "@/modules/[chain]/block/block";
 import { PageRequest, type AuthAccount, type Pagination } from '@/types';
 import { reactive, onMounted } from 'vue';
-
+import PaginationBar from '@/components/PaginationBar.vue';
 const props = defineProps(['chain']);
 
 const tab = ref('blocks');
@@ -22,17 +22,25 @@ const pageRequest = ref(new PageRequest())
 const pageResponse = ref({} as Pagination)
 
 onMounted(() => {
-  pageload(1)
-  pageRequest.value.setPageSize(10)
-  pageResponse.value = {
-    total: base.latest?.block?.header.height
-  }
+    pageload(1)
+    pageRequest.value.setPageSize(10)
+    pageResponse.value = {
+        total: base.latest?.block?.header.height
+    }
 });
 
 function pageload(p: number) {
-  pageRequest.value.setPage(p)
+    pageRequest.value.setPage(p)
 }
 
+function handleScroll() {
+    const container = document.querySelector('.blocksContainer') as HTMLDivElement;
+    // Check if the scroll is at the bottom
+    let isAtBottom = container.scrollTop + container.clientHeight >= container.scrollHeight;
+    if (isAtBottom) {
+        base.updatePageSize(base.pageSize + 50)
+    }
+}
 </script>
 <template>
     <div>
@@ -45,27 +53,37 @@ function pageload(p: number) {
         </div>
 
         <div v-show="tab === 'blocks'">
-            <table class="table table-compact">
-                <thead>
-                    <tr>
-                        <td>{{ $t('block.block_header') }}</td>
-                        <td>{{ $t('account.hash') }}</td>
-                        <td>{{ $t('block.proposer') }}</td>
-                        <td>{{ $t('account.no_of_transactions') }}</td>
-                        <td>{{ $t('account.time') }}</td>
-                    </tr>
-                </thead>
-                <tr v-for="item in [...list()].reverse()">
-                    <td>{{ item.block.header.height }}</td>
-                    <td>
-                        <RouterLink :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}</RouterLink>
-                    </td>
-                    <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
-                    <td>{{ item.block?.data?.txs.length }}</td>
-                    <td>{{ format.toDay(item.block?.header?.time) }}</td>
-                </tr>
-            </table>
-            <PaginationBar :limit="10" :total="500" :callback="base"/>
+            <div class="blocksContainer" @scroll="handleScroll" style="height: 78vh;overflow: scroll;">
+                <table class="table table-compact">
+                    <thead>
+                        <tr>
+                            <td>{{ $t('block.block_header') }}</td>
+                            <td>{{ $t('account.hash') }}</td>
+                            <td>{{ $t('block.proposer') }}</td>
+                            <td>{{ $t('account.no_of_transactions') }}</td>
+                            <td>{{ $t('account.time') }}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in [...list()].reverse()">
+                            <td>{{ item.block.header.height }}</td>
+                            <td>
+                                <RouterLink :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}
+                                </RouterLink>
+                            </td>
+                            <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
+                            <td>{{ item.block?.data?.txs.length }}</td>
+                            <td>{{ format.toDay(item.block?.header?.time) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pre-loading" v-if="base.fetchingBlocks">
+                    <div class="effect-1 effects"></div>
+                    <div class="effect-2 effects"></div>
+                    <div class="effect-3 effects"></div>
+                </div>
+            </div>
         </div>
     </div>
 </template>

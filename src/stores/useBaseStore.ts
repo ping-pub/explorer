@@ -17,7 +17,8 @@ export const useBaseStore = defineStore('baseStore', {
                 | 'light'
                 | 'dark',
             connected: true,
-            pageSize: 50
+            pageSize: 50,
+            fetchingBlocks: false
         };
     },
     getters: {
@@ -75,14 +76,19 @@ export const useBaseStore = defineStore('baseStore', {
             this.recents = [];
         },
         async updatePageSize(pgsz: number) {
+            this.fetchingBlocks = true
             this.pageSize = pgsz;
             let promises = [];
             for (let i = this.pageSize; i >= 2; i--) {
                 promises.push(this.blockchain.rpc?.getBaseBlockAt(`${parseInt(this.latest.block.header.height) - i}`))
             }
-            let res = await Promise.all(promises)
+            let res = await Promise.all(promises).catch(e=> {
+                console.error(e)
+                return []
+            })
             this.recents = [...res]
             this.recents.push(this.latest)
+            this.fetchingBlocks = false
             // this.fetchLatest();
         },
         async fetchLatest() {
@@ -106,7 +112,10 @@ export const useBaseStore = defineStore('baseStore', {
                 for (let i = this.pageSize; i > 1; i--) {
                     promises.push(this.blockchain.rpc?.getBaseBlockAt(`${parseInt(this.latest.block.header.height) - i}`))
                 }
-                let res = await Promise.all(promises)
+                let res = await Promise.all(promises).catch(e => {
+                    console.error(e)
+                    return []
+                })
                 this.recents = [...res]
             }
 
