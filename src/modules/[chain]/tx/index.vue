@@ -17,7 +17,6 @@ const hash = ref('');
 const current = chainStore?.current?.chainName || '';
 onMounted(() => {
     tab.value = String(vueRouters.currentRoute.value.query.tab || 'recent');
-    console.log(tab.value);
 });
 function search() {
     if (hashReg.test(hash.value)) {

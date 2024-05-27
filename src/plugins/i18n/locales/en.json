@@ -60,6 +60,7 @@
     "balance": "Balance",
     "completion_time": "Completion Time",
     "transactions": "Transactions",
+    "no_of_transactions": "No. of Transactions",
     "no_transactions": "No Transactions",
     "height": "Height",
     "hash": "Hash",
@@ -68,6 +69,7 @@
     "error": "Account does not exists on chain"
   },
   "block": {
+    "proposer": "Proposer",
     "estimated_time": "Estimated Time",
     "countdown_for_block": "Countdown For Block",
     "countdown_for_block_input": "Input A New Target Block Number",

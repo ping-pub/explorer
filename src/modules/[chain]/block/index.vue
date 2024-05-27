@@ -3,7 +3,9 @@ import { computed, ref } from '@vue/reactivity';
 import { useBaseStore, useFormatter } from '@/stores';
 import TxsInBlocksChart from '@/components/charts/TxsInBlocksChart.vue';
 import { useBlockModule } from "@/modules/[chain]/block/block";
-import { reactive } from 'vue';
+import { PageRequest, type AuthAccount, type Pagination } from '@/types';
+import { reactive, onMounted } from 'vue';
+
 const props = defineProps(['chain']);
 
 const tab = ref('blocks');
@@ -13,57 +15,57 @@ const base = useBaseStore()
 const format = useFormatter();
 
 const list = reactive(() => {
-    // const recents = base.recents
-    // return recents.sort((a, b) => (Number(b.block.header.height) - Number(a.block.header.height)))
     return base.recents
 })
+
+const pageRequest = ref(new PageRequest())
+const pageResponse = ref({} as Pagination)
+
+onMounted(() => {
+  pageload(1)
+  pageRequest.value.setPageSize(10)
+  pageResponse.value = {
+    total: base.latest?.block?.header.height
+  }
+});
+
+function pageload(p: number) {
+  pageRequest.value.setPage(p)
+}
 
 </script>
 <template>
     <div>
         <div class="tabs tabs-boxed bg-transparent mb-4">
-            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'blocks' }"
-                @click="tab = 'blocks'">{{ $t('block.recent') }}</a>
-            <RouterLink class="tab text-gray-400 uppercase" 
-                :to="`/${chain}/block/${Number(base.latest?.block?.header.height||0) + 10000}`"
-                >{{ $t('block.future') }}</RouterLink>
+            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'blocks' }" @click="tab = 'blocks'">{{
+                $t('block.recent') }}</a>
+            <RouterLink class="tab text-gray-400 uppercase"
+                :to="`/${chain}/block/${Number(base.latest?.block?.header.height || 0) + 10000}`">{{ $t('block.future') }}
+            </RouterLink>
         </div>
 
         <div v-show="tab === 'blocks'">
-
-            <TxsInBlocksChart />
-            <div class="float-right px-2">
-                <span class="">
-                    <span>Recent: </span>
-                    <select v-model="base.pageSize" @change="(e:any)=>base.updatePageSize(e.target.value)" class="px-4 py-2 rounded">
-                        <option :value=10>10</option>
-                        <option :value=25>25</option>
-                        <option :value=50>50</option>
-                        <option :value=100>100</option>
-                    </select>
-                </span>
-            </div>
-            <div class="grid xl:!grid-cols-2 md:!grid-cols-2 grid-cols-1 gap-3 xl:!w-8/12 md:!w-8/12 px-4">
-            
-            <RouterLink v-for="item in [...list()].reverse()"
-                class="flex flex-col justify-between rounded p-4 shadow bg-base-100"
-                :to="`/${chain}/block/${item.block.header.height}`">
-                <div class="flex justify-between">
-                    <h3 class="text-md font-bold sm:!text-lg">
-                        {{ item.block.header.height }}
-                    </h3>
-                    <span class="rounded text-xs whitespace-nowrap font-medium text-green-600">
-                        {{ format.toDay(item.block?.header?.time, 'from') }}
-                    </span>
-                </div>
-                <div class="flex justify-between tooltip" data-tip="Block Proposor">
-                    <div class="mt-2 hidden text-sm sm:!block truncate">
-                        <span>{{ format.validator(item.block?.header?.proposer_address) }}</span>
-                    </div>
-                    <span class="text-right mt-1 whitespace-nowrap"> {{ item.block?.data?.txs.length }} txs </span>
-                </div>
-            </RouterLink>
-            </div>
+            <table class="table table-compact">
+                <thead>
+                    <tr>
+                        <td>{{ $t('block.block_header') }}</td>
+                        <td>{{ $t('account.hash') }}</td>
+                        <td>{{ $t('block.proposer') }}</td>
+                        <td>{{ $t('account.no_of_transactions') }}</td>
+                        <td>{{ $t('account.time') }}</td>
+                    </tr>
+                </thead>
+                <tr v-for="item in [...list()].reverse()">
+                    <td>{{ item.block.header.height }}</td>
+                    <td>
+                        <RouterLink :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}</RouterLink>
+                    </td>
+                    <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
+                    <td>{{ item.block?.data?.txs.length }}</td>
+                    <td>{{ format.toDay(item.block?.header?.time) }}</td>
+                </tr>
+            </table>
+            <PaginationBar :limit="10" :total="500" :callback="base"/>
         </div>
     </div>
 </template>

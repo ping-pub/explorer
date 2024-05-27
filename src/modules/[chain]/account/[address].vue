@@ -198,7 +198,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
       </div>
       <div class="grid md:!grid-cols-3">
         <div class="md:!col-span-1">
-          <DonutChart :series="totalAmountByCategory" :labels="labels" />
+          <DonutChart :series="totalAmountByCategory.map(x => {return parseFloat(format.formatToken({amount: `${x}`, denom: 'upokt'}, true));})" :labels="labels" />
         </div>
         <div class="mt-4 md:!col-span-2 md:!mt-0 md:!ml-4">
           <!-- list-->
@@ -252,35 +252,6 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               </div>
             </div>
             <!-- mdi-account-arrow-right -->
-            <div class="flex items-center px-4">
-              <div class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4">
-                <Icon icon="mdi-account-arrow-right" class="text-error" size="20" />
-                <div class="absolute top-0 bottom-0 left-0 right-0 bg-error opacity-20"></div>
-              </div>
-              <div class="flex-1">
-                <div class="text-sm font-semibold">
-                  {{
-                    format.formatToken({
-                      amount: String(unbondingTotal),
-                      denom: stakingStore.params.bond_denom,
-                    })
-                  }}
-                </div>
-                <div class="text-xs">
-                  {{ format.calculatePercent(unbondingTotal, totalAmount) }}
-                </div>
-              </div>
-              <!-- <div
-                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
-              >
-                <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert"></span>
-                ${{format.tokenValue({
-                      amount: String(unbondingTotal),
-                      denom: stakingStore.params.bond_denom,
-                    })
-                  }}                
-              </div> -->
-            </div>
           </div>
           <!-- <div class="mt-4 text-lg font-semibold mr-5 pl-5 border-t pt-4 text-right">
             {{ $t('account.total_value') }}: ${{ totalValue }}

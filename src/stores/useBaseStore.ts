@@ -17,7 +17,7 @@ export const useBaseStore = defineStore('baseStore', {
                 | 'light'
                 | 'dark',
             connected: true,
-            pageSize: 10
+            pageSize: 50
         };
     },
     getters: {
@@ -123,7 +123,6 @@ export const useBaseStore = defineStore('baseStore', {
             }
             return this.latest;
         },
-
         async fetchValidatorByHeight(height?: number, offset = 0) {
             return this.blockchain.rpc.getBaseValidatorsetAt(
                 String(height),

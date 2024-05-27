@@ -58,7 +58,7 @@ function pageload(p: number) {
             <span class="text-xs">{{ item.address }}</span>
           </div>
         </td>
-        <td>{{ item.stake?.amount }} {{ item.stake?.denom }}</td>
+        <td class="font-bold">{{ format.formatToken(item.stake) }}</td>
         <td>{{ item.service_configs?.length }}</td>
         <td>{{ item.service_configs?.map((sc:any) => sc.service.name?.length > 0 ? sc.service.name : sc.service.id).join(", ")
         }}</td>

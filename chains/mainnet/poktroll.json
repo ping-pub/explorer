@@ -7,7 +7,7 @@
     "rpc": [
         {"provider": "Poktroll-Testnet", "address": "https://testnet-validated-validator-rpc.poktroll.com"}
     ],
-    "features": ["account", "dashboard", "blocks", "tx", "applications", "gateways", "suppliers", "validators", "uptime", "supply", "parameters", "consensus"],
+    "features": ["dashboard", "blocks", "tx", "applications", "gateways", "suppliers", "validators", "uptime", "supply", "parameters", "consensus"],
     "sdk_version": "0.45.1",
     "coin_type": "118",
     "min_tx_fee": "800",

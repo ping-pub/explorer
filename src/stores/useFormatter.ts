@@ -242,7 +242,7 @@ export const useFormatter = defineStore('formatter', {
     formatToken(
       token?: { denom: string; amount: string },
       withDenom = true,
-      fmt = '0,0.[0]',
+      fmt = '0,0.[000000]',
       mode = 'local'
     ): string {
       if (token && token.amount && token?.denom) {
