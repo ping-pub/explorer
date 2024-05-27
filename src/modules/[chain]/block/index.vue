@@ -38,7 +38,7 @@ function handleScroll() {
     // Check if the scroll is at the bottom
     let isAtBottom = container.scrollTop + container.clientHeight >= container.scrollHeight;
     if (isAtBottom) {
-        base.updatePageSize(base.pageSize + 50)
+        base.updatePageSize(base.pageSize + 5)
     }
 }
 </script>
