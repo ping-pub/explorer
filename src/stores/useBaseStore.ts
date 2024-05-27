@@ -79,7 +79,7 @@ export const useBaseStore = defineStore('baseStore', {
             this.fetchingBlocks = true
             this.pageSize = pgsz;
             let promises = [];
-            for (let i = this.pageSize; i >= 2; i--) {
+            for (let i = this.pageSize; i >= 0; i--) {
                 promises.push(this.blockchain.rpc?.getBaseBlockAt(`${parseInt(this.latest.block.header.height) - i}`))
             }
             let res = await Promise.all(promises).catch(e=> {
@@ -109,7 +109,7 @@ export const useBaseStore = defineStore('baseStore', {
             }
             if (this.recents.length == 0) {
                 let promises = [];
-                for (let i = this.pageSize; i > 1; i--) {
+                for (let i = this.pageSize; i > 0; i--) {
                     promises.push(this.blockchain.rpc?.getBaseBlockAt(`${parseInt(this.latest.block.header.height) - i}`))
                 }
                 let res = await Promise.all(promises).catch(e => {
@@ -125,9 +125,6 @@ export const useBaseStore = defineStore('baseStore', {
                     (x) => x?.block_id?.hash === this.latest?.block_id?.hash
                 ) === -1
             ) {
-                if (this.recents.length >= this.pageSize) {
-                    this.recents.shift();
-                }
                 this.recents.push(this.latest);
             }
             return this.latest;
