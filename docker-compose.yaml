@@ -7,8 +7,4 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "80:80"
-    volumes:
-      - ./www:/usr/share/nginx/html
-    networks:
-      - mynet
+      - "8080:80"
