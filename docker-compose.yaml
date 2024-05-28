@@ -1,0 +1,14 @@
+---
+services:
+
+  www:
+    image: burnt/pingpub
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./www:/usr/share/nginx/html
+    networks:
+      - mynet
