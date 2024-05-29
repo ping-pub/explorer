@@ -1,8 +1,8 @@
 {
     "chain_name": "dymension",
     "coingecko": "dymension",
-    "api": ["http://95.179.253.169:14617"],
-    "rpc": ["http://95.179.253.169:26657"],
+    "api":["https://us-central1-ping-pub-explorer.cloudfunctions.net/proxyToSentryApi"],
+    "rpc": ["https://us-central1-ping-pub-explorer.cloudfunctions.net/proxyToSentryRpc"],
     "snapshot_provider": "",
     "coin_type": 60,
     "sdk_version": "0.46.10",
