@@ -40,7 +40,7 @@ function registeCustomRequest() {
     }
   });
 }
-    
+
 registeCustomRequest()
 
 export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
@@ -49,7 +49,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
 
   static newStrategy(endpoint: string, chain: any) {
-    
+
     let req
     if(chain) {
       // find by name first
@@ -81,19 +81,14 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getBankDenomMetadata() {
     return this.request(this.registry.bank_denoms_metadata, {});
   }
-  async getBankSupply(page?: PageRequest) {    
+  async getBankSupply(page?: PageRequest) {
     if(!page) page = new PageRequest()
     const query =`?${page.toQueryString()}`;
     return this.request(this.registry.bank_supply, {}, query);
   }
   async getBankSupplyByDenom(denom: string) {
-    let supply;
-    try{
-       supply = await this.request(this.registry.bank_supply_by_denom, { denom });
-    } catch(err) {
-      // will move this to sdk version profile later
-      supply = await this.request({url: "/cosmos/bank/v1beta1/supply/by_denom?denom={denom}", adapter } as Request<{ amount: Coin }>, { denom });
-    }
+    let supply = await this.request(this.registry.bank_supply_by_denom, { denom });
+    console.log(supply)
     return supply
   }
   // Distribution Module
@@ -223,7 +218,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
       // page.reverse = true
       page.count_total = true
       page.offset = 0
-    } 
+    }
     const query =`?${page.toQueryString()}`;
     return this.request(this.registry.staking_validators_delegations, {
       validator_addr,
@@ -282,7 +277,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   // query ibc receiving msgs
   // ?&pagination.reverse=true&events=recv_packet.packet_dst_channel='${channel}'&events=recv_packet.packet_dst_port='${port}'
   async getTxs(query: string, params: any, page?: PageRequest) {
-    if(!page) page = new PageRequest()    
+    if(!page) page = new PageRequest()
     return this.request(this.registry.tx_txs, params, `${query}&${page.toQueryString()}`);
   }
   async getTxsAt(height: string | number) {
