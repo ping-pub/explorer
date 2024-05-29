@@ -1,0 +1,18 @@
+{
+    "chain_name": "canon-4",
+    "api": ["https://canon-4.api.network.umee.cc"],
+    "rpc": ["https://canon-4.rpc.network.umee.cc:443"],
+    "snapshot_provider": "d97750eddfe88fcd0be61694c396d4491217549b@94.250.203.6:26696,c12ac110e0249f0cef55599b335892444e4a21ac@142.132.198.227:26656",
+    "sdk_version": "0.47.11",
+    "coin_type": "118",
+    "min_tx_fee": "8000",
+    "addr_prefix": "umee",
+    "logo": "/logos/umee.png",
+    "assets": [{
+        "base": "uumee",
+        "symbol": "UMEE",
+        "exponent": "6",
+        "coingecko_id": "umee", 
+        "logo": "/logos/umee.png"
+    }]
+  }
