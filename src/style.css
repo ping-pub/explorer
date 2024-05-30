@@ -52,3 +52,20 @@ html[data-theme='dark'] {
   opacity: 0;
   transform: translateY(-calc(15%));
 }
+/* nav logo style */
+.nav_logo {
+  width: calc(100% - 4rem);
+  margin-left: -1rem;
+}
+html.dark .nav_logo-light {
+  display: none;
+}
+html.light .nav_logo-light {
+  display: inline-block;
+}
+html.dark .nav_logo-dark {
+  display: inline-block;
+}
+html.light .nav_logo-dark {
+  display: none;
+}
