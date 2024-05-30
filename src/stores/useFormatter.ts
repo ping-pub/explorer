@@ -72,9 +72,9 @@ export const useFormatter = defineStore('formatter', {
       return trace;
     },
     async fetchDenomMetadata(denom: string) {
-      if(this.loading.includes(denom)) return 
+      if(this.loading.includes(denom)) return
       this.loading.push(denom)
-      const asset = await get(`https://metadata.ping.pub/metadata/${denom}`) as Asset
+      const asset = await get(`https://ibc-metadata.testnet.burnt.com/metadata/${denom}`) as Asset
       this.ibcMetadata[denom] = asset
     },
     priceInfo(denom: string) {
@@ -127,7 +127,7 @@ export const useFormatter = defineStore('formatter', {
       if(!token || !token.denom) return 0
 
       // find the symbol
-      const symbol = this.dashboard.coingecko[token.denom]?.symbol || token.denom 
+      const symbol = this.dashboard.coingecko[token.denom]?.symbol || token.denom
       // convert denomination to symbol
       const exponent = this.dashboard.coingecko[symbol?.toLowerCase()]?.exponent || this.specialDenom(token.denom);
       // caculate amount of symbol
@@ -147,7 +147,7 @@ export const useFormatter = defineStore('formatter', {
     formatToken2(token: { denom: string; amount: string }, withDenom = true) {
       return this.formatToken(token, true, '0,0.[00]');
     },
-    
+
     findGlobalAssetConfig(denom: string) {
       const chains = Object.values(this.dashboard.chains)
       for ( let i =0; i < chains.length; i++ ) {
@@ -197,7 +197,7 @@ export const useFormatter = defineStore('formatter', {
             if (x.exponent >= unit.exponent) {
               unit = x;
             }
-          });          
+          });
           return unit.denom;
         }
         return denom;
