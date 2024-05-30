@@ -4,6 +4,3 @@ yarn-error.log
 dist
 .idea
 .env
-.DS_Store
-_env
-.gitignore
