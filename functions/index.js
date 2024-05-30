@@ -37,7 +37,7 @@ function authenticateToken(req, res, next) {
 apiApp.use(authenticateToken);
 
 apiApp.use((req, res) => {
-  const sentryUrl = "http://95.179.253.169:60606" + req.path;
+  const sentryUrl = "http://95.179.253.169:14617" + req.path;
   const query = qs.stringify(req.query, {arrayFormat: "repeat"});
   axios({
     method: req.method,
@@ -55,7 +55,7 @@ apiApp.use((req, res) => {
 });
 
 rpcApp.use((req, res) => {
-  const sentryUrl = "http://95.179.253.169:50505" + req.path;
+  const sentryUrl = "http://95.179.253.169:26657" + req.path;
   const query = qs.stringify(req.query, {arrayFormat: "repeat"});
   axios({
     method: req.method,
