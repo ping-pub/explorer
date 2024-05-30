@@ -82,7 +82,8 @@ dayjs()
         <RouterLink to="/" class="flex items-center">
           <!-- <img class="w-10 h-10" src="../../assets/logo.svg" /> -->
           <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">
-            Omakase
+            <img class="nav_logo nav_logo-dark" src="/src/assets/images/svg/logo_omakase-dark.svg" alt="omakase">
+            <img class="nav_logo nav_logo-light" src="/src/assets/images/svg/logo_omakase-light.svg" alt="omakase">
           </h1>
         </RouterLink>
         <div
