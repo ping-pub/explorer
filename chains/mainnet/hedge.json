@@ -1,0 +1,28 @@
+{
+    "chain_name": "Hedge-Testnet",
+    "api": [
+        {
+            "address": "https://hedge-api.validator247.com", 
+            "provider": "XSS-Labs"
+        }
+    ], 
+    "rpc": [
+        {
+            "address": "https://hedge-rpc.validator247.com", 
+            "provider": "XSS-Labs"
+        }
+    ],
+    "sdk_version": "0.47.3",
+    "snapshot_provider": "",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "hedge",
+    "logo": "/logos/hedge.png",
+    "theme_color": "#812cd6",
+    "assets": [{
+        "base": "uhedge",
+        "symbol": "Hedge",
+        "exponent": "6",
+        "logo": "/logos/hedge_token.svg"
+    }]
+}

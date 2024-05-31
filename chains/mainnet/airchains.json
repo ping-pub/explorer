@@ -1,0 +1,28 @@
+{
+    "chain_name": "airchains-testnet",
+    "api": [
+        {
+            "address": "https://airchains-testnet-api.validator247.com", 
+            "provider": "XSS-Labs"
+        }
+    ], 
+    "rpc": [
+        {
+            "address": "https://airchains-testnet-rpc.validator247.com", 
+            "provider": "XSS-Labs"
+        }
+    ],
+    "sdk_version": "0.47.3",
+    "snapshot_provider": "",
+    "coin_type": "118",
+    "min_tx_fee": "2000",
+    "addr_prefix": "air",
+    "logo": "/logos/airchain.jpeg",
+    "theme_color": "#812cd6",
+    "assets": [{
+        "base": "amf",
+        "symbol": "AMF",
+        "exponent": "6",
+        "logo": "/logos/airchain.jpeg"
+    }]
+}

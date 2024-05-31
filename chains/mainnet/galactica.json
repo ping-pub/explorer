@@ -1,0 +1,28 @@
+{
+    "chain_name": "galactica-testnet",
+    "api": [
+        {
+            "address": "https://galactica-testnet-api.validator247.com", 
+            "provider": "XSS-Labs"
+        }
+    ], 
+    "rpc": [
+        {
+            "address": "https://galactica-testnet-rpc.validator247.com", 
+            "provider": "XSS-Labs"
+        }
+    ],
+    "sdk_version": "0.47.3",
+    "snapshot_provider": "",
+    "coin_type": "60",
+    "min_tx_fee": "1000",
+    "addr_prefix": "gala",
+    "logo": "/logos/galactica.jpeg",
+    "theme_color": "#812cd6",
+    "assets": [{
+        "base": "agnet",
+        "symbol": "GNET",
+        "exponent": "18",
+        "logo": "/logos/galactica.jpeg"
+    }]
+}

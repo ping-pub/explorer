@@ -1,0 +1,28 @@
+{
+    "chain_name": "Aligned-Layer-Testnet",
+    "api": [
+        {
+            "address": "https://alignedlayer-api.validator247.com", 
+            "provider": "XSS-Labs"
+        }
+    ], 
+    "rpc": [
+        {
+            "address": "https://alignedlayer-rpc.validator247.com", 
+            "provider": "XSS-Labs"
+        }
+    ],
+    "sdk_version": "0.47.3",
+    "snapshot_provider": "",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "aligned",
+    "logo": "/logos/aligned.jpg",
+    "theme_color": "#812cd6",
+    "assets": [{
+        "base": "stake",
+        "symbol": "AL",
+        "exponent": "6",
+        "logo": "/logos/aligned.jpg"
+    }]
+}

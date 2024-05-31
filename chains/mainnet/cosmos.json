@@ -2,13 +2,10 @@
     "chain_name": "cosmos",
     "registry_name": "cosmoshub",
     "api": [
-        {"provider": "notional", "address": "https://api-cosmoshub-ia.cosmosia.notional.ventures"},
-        {"provider": "blockapsis", "address": "https://lcd-cosmoshub.blockapsis.com:443"},
-        {"provider": "WhisperNode🤐", "address": "https://lcd-cosmoshub.whispernode.com:443"},
+        {"provider": "nodestake", "address": "https://api.cosmos.nodestake.top"},
         {"provider": "pupmos", "address": "https://api-cosmoshub.pupmos.network"},
         {"provider": "publicnode", "address": "https://cosmos-rest.publicnode.com"},
         {"provider": "staketab", "address": "https://cosmos-rest.staketab.org"},
-        {"provider": "nodestake", "address": "https://api.cosmos.nodestake.top"},
         {"provider": "Golden Ratio Staking", "address": "https://rest-cosmoshub.goldenratiostaking.net"}
     ],
     "rpc": [
