@@ -34,7 +34,8 @@ export const UNITS: Record<string, Record<string, string>> = {
     "testnet.ping.pub": {
         "banner": "1644951b-5022-4544-8a85-11aef8a8f645",
         "banner_mobile": "81e0527f-475a-42a4-bb9a-ed9967c5d06f",
-        "popup": "bd77a47c-30fc-4592-9d37-616d4f66964d"
+        "popup": "bd77a47c-30fc-4592-9d37-616d4f66964d",
+        "popup_mobile": "bd77a47c-30fc-4592-9d37-616d4f66964d"
     },
     
 }
