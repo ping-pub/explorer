@@ -68,7 +68,7 @@ function selected(route: any, nav: NavLink) {
       <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
         <RouterLink to="/" class="flex items-center">
           <h1 class="flex-1 text-2xl font-semibold text-primary">
-            Validato247
+            Node39.TOP
           </h1>
         </RouterLink>
         <div
@@ -275,7 +275,7 @@ function selected(route: any, nav: NavLink) {
 
         <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">{{ $t('module.links') }}</div>
         <a
-          href="https://twitter.com/validator247"
+          href="https://twitter.com/node39_"
           target="_blank"
           class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
@@ -287,7 +287,7 @@ function selected(route: any, nav: NavLink) {
           </div>
         </a>
         <a
-          href="https://discord.gg/hDNee6Sr"
+          href="https://discord.gg/sgmPvFgz"
           target="_blank"
           class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
@@ -299,7 +299,7 @@ function selected(route: any, nav: NavLink) {
           </div>
         </a>
         <a
-          href="https://t.me/Validator247"
+          href="https://t.me/node39"
           target="_blank"
           class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >

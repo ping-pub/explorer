@@ -2,14 +2,14 @@
     "chain_name": "Hedge-Testnet",
     "api": [
         {
-            "address": "https://hedge-api.validator247.com", 
-            "provider": "validator247"
+            "address": "https://hedge-testnet-api.node39.top", 
+            "provider": "Node39.TOP"
         }
     ], 
     "rpc": [
         {
-            "address": "https://hedge-rpc.validator247.com", 
-            "provider": "validator247"
+            "address": "https://hedge-testnet-rpc.node39.top", 
+            "provider": "Node39.TOP"
         }
     ],
     "sdk_version": "0.47.3",

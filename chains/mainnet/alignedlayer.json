@@ -2,14 +2,14 @@
     "chain_name": "Aligned-Layer-Testnet",
     "api": [
         {
-            "address": "https://alignedlayer-api.validator247.com", 
-            "provider": "Validator247"
+            "address": "https://alignedlayer-testnet-api.itrocket.net", 
+            "provider": "Node39.TOP"
         }
     ], 
     "rpc": [
         {
-            "address": "https://alignedlayer-rpc.validator247.com", 
-            "provider": "Validator247"
+            "address": "https://alignedlayer-testnet-rpc.itrocket.net", 
+            "provider": "Node39.TOP"
         }
     ],
     "sdk_version": "0.47.3",

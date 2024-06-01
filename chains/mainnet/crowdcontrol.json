@@ -1,0 +1,29 @@
+{
+    "chainId": "cardtestnet-10",
+    "chain_name": "crowncontrol-testnet",
+    "api": [
+        {
+            "address": "https://crowdcontrol-testnet-api.node39.top", 
+            "provider": "Node39"
+        }
+    ], 
+    "rpc": [
+        {
+            "address": "https://crowdcontrol-testnet-rpc.node39.top", 
+            "provider": "Node39"
+        }
+    ],
+    "sdk_version": "0.34.29",
+    "snapshot_provider": "",
+    "coin_type": "118",
+    "min_tx_fee": "200",
+    "addr_prefix": "cc",
+    "logo": "/logos/crowdcontrol.png",
+    "theme_color": "#812cd6",
+    "assets": [{
+        "base": "ubpf",
+        "symbol": "BBF",
+        "exponent": "6",
+        "logo": "/logos/crowdcontrol.png"
+    }]
+}

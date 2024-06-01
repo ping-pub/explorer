@@ -1,0 +1,28 @@
+{
+    "chain_name": "swisstronik-testnet",
+    "api": [
+        {
+            "address": "https://swisstronik-testnet-api.node39.top", 
+            "provider": "Node39"
+        }
+    ], 
+    "rpc": [
+        {
+            "address": "https://swisstronik-testnet-rpc.node39.top", 
+            "provider": "Node39"
+        }
+    ],
+    "sdk_version": "0.47.3",
+    "snapshot_provider": "",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "mantra",
+    "logo": "/logos/swisstronik.png",
+    "theme_color": "#812cd6",
+    "assets": [{
+        "base": "uswtr",
+        "symbol": "SWTR",
+        "exponent": "6",
+        "logo": "/logos/swisstronik.png"
+    }]
+}

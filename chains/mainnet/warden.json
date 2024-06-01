@@ -2,14 +2,14 @@
     "chain_name": "warden-testnet",
     "api": [
         {
-            "address": "https://warden-testnet-api.validator247.com", 
-            "provider": "Validator247"
+            "address": "https://warden-testnet-api.node39.top", 
+            "provider": "Node39"
         }
     ], 
     "rpc": [
         {
-            "address": "https://warden-testnet-rpc.validator247.com", 
-            "provider": "Validator247"
+            "address": "https://warden-testnet-api.node39.top", 
+            "provider": "Node39"
         }
     ],
     "sdk_version": "0.47.3",

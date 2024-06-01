@@ -2,14 +2,14 @@
     "chain_name": "airchains-testnet",
     "api": [
         {
-            "address": "https://airchains-testnet-api.validator247.com", 
-            "provider": "Validator247"
+            "address": "https://airchains-testnet-api.node39.top", 
+            "provider": "Node39.TOP"
         }
     ], 
     "rpc": [
         {
-            "address": "https://airchains-testnet-rpc.validator247.com", 
-            "provider": "Validator247"
+            "address": "https://airchains-testnet-rpc.node39.top", 
+            "provider": "Node39.TOP"
         }
     ],
     "sdk_version": "0.47.3",

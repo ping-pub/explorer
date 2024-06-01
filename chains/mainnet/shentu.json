@@ -2,10 +2,10 @@
     "chain_name": "shentu",
     "coingecko": "certik",
     "api": [
-        {"provider": "Validator247", "address": "https://shentu-api.validator247.com"}
+        {"provider": "Node39.TOP", "address": "https://shentu-api.node39.top"}
     ],
     "rpc": [
-        {"provider": "Validator247", "address": "https://shentu-rpc.validator247.com"}
+        {"provider": "Node39.TOP", "address": "https://shentu-rpc.node39.top"}
     ],
     "snapshot_provider": "",
     "sdk_version": "0.45.9",
