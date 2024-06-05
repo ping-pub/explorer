@@ -1,0 +1,29 @@
+{
+  "chain_name": "initia-testnet",
+  "theme_color": "#2e2e2e",
+  "api": [
+    {
+      "provider": "posthuman",
+      "address": "https://rest.initia.posthuman.digital"
+    }
+  ],
+  "rpc": [
+    {
+      "provider": "posthuman",
+      "address": "https://rpc-public.initia.posthuman.digital"
+    }
+  ],
+  "sdk_version": "0.45.1",
+  "coin_type": "118",
+  "min_tx_fee": "800",
+  "addr_prefix": "init",
+  "logo": "https://raw.githubusercontent.com/initia-labs/initia-registry/main/testnets/initia/images/INIT.svg",
+  "assets": [
+    {
+      "base": "uinit",
+      "symbol": "INIT",
+      "exponent": "6",
+      "logo": "https://raw.githubusercontent.com/initia-labs/initia-registry/main/testnets/initia/images/INIT.svg"
+    }
+  ]
+}
