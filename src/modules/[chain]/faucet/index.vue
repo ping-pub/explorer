@@ -8,7 +8,7 @@ const chainStore = useBlockchain();
 const format = useFormatter();
 
 const notReady = computed(() => {
-    return chainStore.current === undefined || chainStore.current.endpoints.grpc === undefined || chainStore.current.faucet === undefined; 
+    return chainStore.current === undefined || chainStore.current.faucet === undefined; 
 });
 
 const validAddress = computed(() => {
