@@ -6,9 +6,35 @@ import { ref, onMounted, computed } from 'vue';
 
 const chainStore = useBlockchain();
 const format = useFormatter();
+interface FaucetResponse {
+    status: string;
+    result: any;
+    message: string;
+}
+
+const address = ref('');
+const faucet = ref('');
+const balances = ref([]);
+const faucetModal = ref(false);
+const ret = ref({} as FaucetResponse); 
+const configChecker = ref('');
+
+const checklist = computed(() => {
+    const endpoint = chainStore.current?.endpoints?.rest
+    const bs = balances.value.length > 0 && balances.value.findIndex((v:any) => v.amount <= 10) === -1;
+    return [
+        { title: 'Rest Endpoint', status: endpoint && endpoint[0].address !== '' },
+        { title: 'Has Faucet Configured', status: chainStore.current?.faucet !== undefined },
+        { title: 'Faucet Account', status: faucet.value !== ''},
+        { title: 'Faucet Balance', status: bs},
+    ];
+});
 
 const notReady = computed(() => {
-    return chainStore.current === undefined || chainStore.current.faucet === undefined; 
+    for (const it of checklist.value) {
+        if (!it.status) return true;
+    }
+    return false;
 });
 
 const validAddress = computed(() => {
@@ -21,18 +47,6 @@ const faucetUrl = computed(() => {
     // return `http://localhost:3000/${chainStore.current?.chainName}`;
 });
 
-
-interface FaucetResponse {
-    status: string;
-    result: any;
-    message: string;
-}
-
-const address = ref('');
-const faucet = ref('');
-const balances = ref([]);
-const faucetModal = ref(false);
-const ret = ref({} as FaucetResponse); 
 
 function claim() {
     
@@ -49,14 +63,19 @@ function claim() {
 
 function balance() {
     get(`${faucetUrl.value}/balance`).then(res => {
+        if(res.status === 'error') {
+            configChecker.value = res.message;
+            return;
+        }
         balances.value = res.result?.balance;
         faucet.value = res.result?.address;
     });
 }
 
 onMounted(() => {
-    if (notReady.value) return;
-    balance();
+    if (chainStore.current && chainStore.current.faucet) {
+        balance();
+    }
 });
 
 
@@ -105,9 +124,14 @@ onMounted(() => {
             <div class="mt-4">
                 <span class="text-base"> 1. Submit chain configuation</span>
                 <div class="mockup-code bg-base-200 my-2 gap-4">
-                    <pre>https://github.com/ping-pub/faucet </pre>
+                    <div v-for="it in checklist">
+                        <pre>{{ it.title }}: {{ it.status ? '✅' : '❌' }} </pre>
+                    </div>
+
+                    <pre class=" text-xs text-red-500">{{ configChecker }}</pre>
+                    <pre></pre>
                     <a class=" btn-ghost text-white rounded-md p-2 ml-4"
-                        href="https://github.com/ping-pub/faucet">Go</a>
+                        href="https://github.com/ping-pub/ping.pub/blob/main/faucet.md">Update</a>
                 </div>
 
                 <span class="text-base"> 2. Fund the faucet account</span>
