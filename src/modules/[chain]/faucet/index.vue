@@ -125,7 +125,7 @@ onMounted(() => {
                 <span class="text-base"> 1. Submit chain configuation</span>
                 <div class="mockup-code bg-base-200 my-2 gap-4">
                     <div v-for="it in checklist">
-                        <pre>{{ it.title }}: {{ it.status ? '✅' : '❌' }} </pre>
+                        <pre><code class="text-gray-800 dark:invert">{{ it.title }}: </code>{{ it.status ? '✅' : '❌' }} </pre>
                     </div>
 
                     <pre class=" text-xs text-red-500">{{ configChecker }}</pre>
@@ -136,7 +136,7 @@ onMounted(() => {
 
                 <span class="text-base"> 2. Fund the faucet account</span>
                 <div class="mockup-code bg-base-200 my-2">
-                    <pre data-prefix=">"><code class=" text-gray-800 dark:invert"> Address: {{ faucet }} </code></pre>
+                    <pre data-prefix=">"><code class=" text-gray-800 dark:invert"> Faucet Address: {{ faucet }} </code></pre>
                     <pre
                         data-prefix=">"><code class="text-gray-800 dark:invert"> Balances: {{ format.formatTokens(balances) }} </code></pre>
                 </div>
