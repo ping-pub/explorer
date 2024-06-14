@@ -68,7 +68,7 @@ function fetchSendingTxs(channel: string, port: string, pageNum = 0) {
   channel_id.value = channel
   port_id.value = port
   txs.value = {} as PaginatedTxs
-  chainStore.rpc.getTxs("?order_by=2&events=send_packet.packet_src_channel='{channel}'&events=send_packet.packet_src_port='{port}'", { channel, port }, page.value).then(res => {
+  chainStore.rpc.getTxs("?order_by=2&query=send_packet.packet_src_channel='{channel}'&query=send_packet.packet_src_port='{port}'", { channel, port }, page.value).then(res => {
     txs.value = res
   })
     .finally(() => loading.value = false)
@@ -80,7 +80,7 @@ function fetchRecevingTxs(channel: string, port: string, pageNum = 0) {
   channel_id.value = channel
   port_id.value = port
   txs.value = {} as PaginatedTxs
-  chainStore.rpc.getTxs("?order_by=2&events=recv_packet.packet_dst_channel='{channel}'&events=recv_packet.packet_dst_port='{port}'", { channel, port }, page.value).then(res => {
+  chainStore.rpc.getTxs("?order_by=2&query=recv_packet.packet_dst_channel='{channel}'&query=recv_packet.packet_dst_port='{port}'", { channel, port }, page.value).then(res => {
     txs.value = res
   })
     .finally(() => loading.value = false)

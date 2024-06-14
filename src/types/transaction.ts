@@ -31,6 +31,40 @@ export interface Tx {
     "signatures": string[]
 }
 
+export interface TxLocal {
+    "@type"?: string,
+    "body": {
+        "messages": {"@type": string, "amount"?: Coin[], packet?: { data: string }}[],
+        "memo": string,
+        "timeout_height": string,
+        "extension_options": any[],
+        "non_critical_extension_options": any[]
+    },
+    "auth_info": {
+        "signer_infos": [
+            {
+                "public_key": Key,
+                "mode_info": {
+                    "single"?: {
+                        "mode": string // "SIGN_MODE_DIRECT"
+                    }
+                },
+                "sequence": string
+            }
+        ],
+        "fee": {
+            "amount": Coin[],
+            "gas_limit": string,
+            "payer": string,
+            "granter": string
+        }
+    },
+    "signatures": string[],
+    "_id": string,
+    "height": string,
+    "code": number,
+    "raw_log": string
+}
 export interface Attributes {
     index?: boolean,
     key: string,

@@ -210,7 +210,7 @@ function loadPowerEvents(p: number, type: EventType) {
   selectedEventType.value = type
   page.setPage(p);
   page.setPageSize(5);
-  blockchain.rpc.getTxs("?order_by=2&events={type}.supplier='{supplier}'", { type: selectedEventType.value, supplier }, page).then(res => {
+  blockchain.rpc.getTxs("?order_by=2&query={type}.supplier='{supplier}'", { type: selectedEventType.value, supplier }, page).then(res => {
     events.value = res
   })
 }

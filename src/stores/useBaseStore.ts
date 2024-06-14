@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { useBlockchain } from '@/stores';
 import { decodeTxRaw, type DecodedTxRaw } from '@cosmjs/proto-signing';
 import dayjs from 'dayjs';
-import type { Block } from '@/types';
+import type { Block, TxLocal } from '@/types';
 import { hashTx } from '@/libs';
 import { fromBase64 } from '@cosmjs/encoding';
 import { useRouter } from 'vue-router';
@@ -18,7 +18,8 @@ export const useBaseStore = defineStore('baseStore', {
                 | 'dark',
             connected: true,
             pageSize: 50,
-            fetchingBlocks: false
+            fetchingBlocks: false,
+            allTxs: [] as TxLocal[]
         };
     },
     getters: {
@@ -66,7 +67,7 @@ export const useBaseStore = defineStore('baseStore', {
                 })
             );
             return txs.sort((a, b) => { return Number(b.height) - Number(a.height) });
-        },
+        }
     },
     actions: {
         async initial() {
@@ -75,6 +76,12 @@ export const useBaseStore = defineStore('baseStore', {
         async clearRecentBlocks() {
             this.recents = [];
         },
+        async getAllTxs(startingBlock = '', numOfBlocks = 0) {
+            let res = await fetch("/api/v1/transactions?page=1&limit=10");
+            const resJson = await res.json();
+            this.allTxs = resJson.data
+            return res
+        },
         async updatePageSize(pgsz: number) {
             this.fetchingBlocks = true
             this.pageSize = pgsz;
@@ -82,7 +89,7 @@ export const useBaseStore = defineStore('baseStore', {
             for (let i = this.pageSize; i >= 0; i--) {
                 promises.push(this.blockchain.rpc?.getBaseBlockAt(`${parseInt(this.latest.block.header.height) - i}`))
             }
-            let res = await Promise.all(promises).catch(e=> {
+            let res = await Promise.all(promises).catch(e => {
                 console.error(e)
                 return []
             })

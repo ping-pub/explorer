@@ -234,6 +234,7 @@
     "tx": {
       "title": "Rangkuman",
       "tx_hash": "Tx Hash",
+      "tx_id": "Tx ID (Local)",
       "gas": "Bahan bakar",
       "fee": "Biaya",
       "memo": "Memo",

@@ -55,7 +55,7 @@ onMounted(() => {
     wasmStore.wasmClient.getWasmContracts(address).then((x) => {
         info.value = x.contract_info;
     });
-    chainStore.rpc.getTxs("?order_by=2&events=execute._contract_address='{address}'", { address }, page.value).then(res => {
+    chainStore.rpc.getTxs("?order_by=2&query=execute._contract_address='{address}'", { address }, page.value).then(res => {
         txs.value = res
     })
 
@@ -64,7 +64,7 @@ onMounted(() => {
 function pageload(pageNum: number) {
     page.value.setPage(pageNum)
     const address = String(route.query.contract)
-    chainStore.rpc.getTxs("?order_by=2&events=execute._contract_address='{address}'", { address }, page.value).then(res => {
+    chainStore.rpc.getTxs("?order_by=2&query=execute._contract_address='{address}'", { address }, page.value).then(res => {
         txs.value = res
     })
 }

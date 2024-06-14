@@ -17,6 +17,7 @@ const hash = ref('');
 const current = chainStore?.current?.chainName || '';
 onMounted(() => {
     tab.value = String(vueRouters.currentRoute.value.query.tab || 'recent');
+    base.getAllTxs()
 });
 function search() {
     if (hashReg.test(hash.value)) {
@@ -38,27 +39,27 @@ function search() {
                 <thead class="bg-base-200">
                     <tr>
                         <th style="position: relative; z-index: 2;">{{ $t('account.height') }}</th>
-                        <th style="position: relative; z-index: 2;">{{ $t('account.hash') }}</th>
+                        <th style="position: relative; z-index: 2;">{{ $t('tx.tx_id') }}</th>
                         <th>{{ $t('account.messages') }}</th>
                         <th>{{ $t('block.fees') }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, index) in base.txsInRecents" :index="index" class="hover">
+                    <tr v-for="(item, index) in base.allTxs" :index="index" class="hover">
                         <td class="text-sm text-primary">
                             <RouterLink :to="`/${props.chain}/block/${item.height}`">{{ item.height }}</RouterLink>
                         </td>
                         <td class="truncate text-primary" width="50%">
-                            <RouterLink :to="`/${props.chain}/tx/${item.hash}`">{{
-                item.hash
+                            <RouterLink :to="`/${props.chain}/stx/${item._id}`">{{
+                item._id
             }}</RouterLink>
                         </td>
-                        <td>{{ format.messages(item.tx.body.messages) }}</td>
-                        <td>{{ format.formatTokens(item.tx.authInfo.fee?.amount) }}</td>
+                        <td>{{ format.messages(item.body.messages) }}</td>
+                        <td>{{ format.formatTokens(item.body.messages[0]?.amount) }}</td>
                     </tr>
                 </tbody>
             </table>
-            <div class="p-4">
+            <!-- <div class="p-4">
                 <div class="alert relative bg-transparent">
                     <div class="alert  absolute inset-x-0 inset-y-0 w-full h-full bg-info opacity-10"></div>
                     <div class="text-info flex gap-2">
@@ -70,7 +71,7 @@ function search() {
                         <span>{{ $t('block.only_tx') }}</span>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <div v-show="tab === 'search'" class="bg-base-100 rounded overflow-x-auto">

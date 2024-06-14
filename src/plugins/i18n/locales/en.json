@@ -246,6 +246,7 @@
   "tx": {
     "title": "Summary",
     "tx_hash": "Tx Hash",
+    "tx_id": "Tx ID (Local)",
     "gas": "Gas",
     "fee": "Fee",
     "memo": "Memo",

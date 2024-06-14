@@ -66,4 +66,12 @@ export default defineConfig({
   optimizeDeps: {
     entries: ['./src/**/*.vue'],
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://pocket-poktroll-explorer-backend:3005',
+        changeOrigin: true,
+      },
+    },
+  },
 });
