@@ -43,7 +43,7 @@ const tipMsg = computed(() => {
 
 let chainId = baseStore?.value?.currentChainId;
 let params = '';
-if (route.path === '/SIDE-Testnet') {
+if (route.path === '/SIDE-Testnet' || route.path === '/wallet/unisat') {
   chainId = 'S2-testnet-2';
   params = JSON.stringify({
     wallet: ['okex', 'unisat']
