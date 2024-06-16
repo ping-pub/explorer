@@ -128,8 +128,11 @@ export const useWalletStore = defineStore('walletStore', {
       if(value) this.wallet = value 
     },
     suggestChain() {
-      // const router = useRouter()
-      router.push({path: '/wallet/keplr'})
+      if (window.location.pathname === '/SIDE-Testnet') {
+        router.push({path: '/wallet/unisat'})
+      } else {
+        router.push({path: '/wallet/keplr'})
+      }
     }
   },
 });

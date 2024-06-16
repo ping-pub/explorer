@@ -12,9 +12,7 @@ const selected = ref({} as ChainConfig)
 
 onMounted(() => {
     const chainStore = useBlockchain()
-    selected.value = chainStore.current || Object.values(dashboard.chains)[0]
-  debugger;
-    initParamsForKeplr()
+    selected.value = chainStore.current || Object.values(dashboard.chains)[0];
 })
 async function initParamsForKeplr() {
     const chain = selected.value
@@ -76,9 +74,9 @@ async function initParamsForKeplr() {
 
 function suggest() {
     // @ts-ignore
-    if (window.keplr) {
+    if (window.unisat) {
         // @ts-ignore
-        window.keplr.experimentalSuggestChain(JSON.parse(conf.value)).catch(e => {
+        window.unisat.experimentalSuggestChain(JSON.parse(conf.value)).catch(e => {
             error.value = e
         })
     }
@@ -94,7 +92,7 @@ function suggest() {
                     {{ c.chainName }}
                 </option>
             </select>
-            <button class="btn !bg-yes !border-yes text-white px-10" @click="suggest">Add {{ selected.chainName }} TO Keplr Wallet</button>
+            <button class="btn !bg-yes !border-yes text-white px-10" @click="suggest">Add {{ selected.chainName }} TO Unisat Wallet</button>
         </div>
         <div class="text-main mt-5">
             <textarea v-model="conf" class="textarea textarea-bordered w-full" rows="15"></textarea>

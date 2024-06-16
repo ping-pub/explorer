@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
 import { useBaseStore, useBlockchain, useWalletStore } from '@/stores';
 import { Icon } from '@iconify/vue';
 import { ref, computed } from 'vue';
 
+const route = useRoute();
 const walletStore = useWalletStore();
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
@@ -32,6 +34,22 @@ const tipMsg = computed(() => {
     ? { class: 'error', msg: 'Copy Error!' }
     : { class: 'success', msg: 'Copy Success!' };
 });
+// console.log(`route: `, route);
+// console.log(`baseStore: `, baseStore);
+// console.log(`baseStore: currentChainId`, baseStore.currentChainId);
+// console.log(`baseStore: defaultHDPath`, chainStore?.value?.defaultHDPath);
+// console.log(`baseStore: `, walletStateChange);
+// console.log(`baseStore: `, walletStore.suggestChain());
+
+let chainId = baseStore?.value?.currentChainId;
+let params = '';
+if (route.path === '/SIDE-Testnet' || route.path === '/wallet/unisat') {
+  chainId = 'S2-testnet-2';
+  params = JSON.stringify({
+    wallet: ['okex', 'unisat']
+  })
+}
+
 </script>
 
 <template>
@@ -83,7 +101,7 @@ const tipMsg = computed(() => {
     </div>
   </div>
   <Teleport to="body">
-    <ping-connect-wallet :chain-id="baseStore.currentChainId" :hd-path="chainStore.defaultHDPath"
+    <ping-connect-wallet :params="params" :chain-id="chainId" :hd-path="chainStore.defaultHDPath"
       :addr-prefix="chainStore.current?.bech32Prefix || 'cosmos'" @connect="walletStateChange"
       @keplr-config="walletStore.suggestChain()" />
   </Teleport>
