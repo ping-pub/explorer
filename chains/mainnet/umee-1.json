@@ -2,7 +2,7 @@
     "chain_name": "umee-1",
     "api": ["https://umee-api.polkachu.com"],
     "rpc": ["https://umee-rpc.polkachu.com:443"],
-    "snapshot_provider": "e3c5813067963f7bfb0a2a975871a7d303a26f40@143.110.188.229:26656,7f8b83fd029e33f5c69f2d3030b48e0785bd8af0@65.108.230.188:13656,15273>
+    "snapshot_provider": "e3c5813067963f7bfb0a2a975871a7d303a26f40@143.110.188.229:26656,7f8b83fd029e33f5c69f2d3030b48e0785bd8af0@65.108.230.188:13656",
     "sdk_version": "0.47.11",
     "coin_type": "118",
     "min_tx_fee": "8000",
