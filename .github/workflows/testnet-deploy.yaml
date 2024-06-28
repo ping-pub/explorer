@@ -14,6 +14,7 @@ jobs:
     steps:
     - name: print
       run: echo ${GITHUB_REF#refs/heads/}
+      
     - name: Git Checkout Latest
       uses: actions/checkout@v2
       

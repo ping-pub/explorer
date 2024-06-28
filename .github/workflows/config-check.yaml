@@ -2,8 +2,8 @@
 name: Config Checker
 
 on:
-  # push:
-  #   branches: [ master ]
+  push:
+     branches: [ master, sge ]
   pull_request:
    # branches: [ master ]
    paths:

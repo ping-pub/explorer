@@ -1,0 +1,52 @@
+name: Sync repo
+
+on:
+  schedule:
+    - cron: "0 1 * * 3"
+  workflow_dispatch:
+
+jobs:
+  get_state:
+    runs-on: ubuntu-latest
+    outputs:
+      EXPLORER: ${{ steps.status.outputs.EXPLORER }}
+      UPDATE: ${{ steps.status.outputs.UPDATE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get commits 
+        id: status
+        run: |
+          echo "EXPLORER=$(git ls-remote -h https://github.com/ping-pub/explorer.git master | cut -f1)" >> $GITHUB_OUTPUT
+          grep '^${EXPLORER}$' pingpub.commit && echo "UPDATE=0" >> $GITHUB_OUTPUT || export echo "UPDATE=1" >> $GITHUB_OUTPUT
+
+  repo_sync:
+    needs: get_state
+    runs-on: ubuntu-latest
+    if: needs.get_state.outputs.UPDATE == 0 #Should be changed later
+    steps:
+      - name: Clone SGE Repo
+        uses: actions/checkout@v4
+        with:
+          ref: 'sge'
+
+      - name: Clone Original Repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'ping-pub/explorer'
+          ref: 'master'
+          path: 'original'
+
+      - name: Update files
+        run: |
+          rm original/chains/mainnet/cosmos.json original/chains/mainnet/neutron.json original/chains/mainnet/nolus.json 
+          rm original/chains/mainnet/osmosis.json original/chains/testnet/crossfi.json
+          cp -r ./original/* ./
+          rm -rf original/
+          echo $UPDATE > pingpub.commit
+    
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: 'sge'

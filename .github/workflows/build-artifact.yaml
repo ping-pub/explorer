@@ -1,0 +1,236 @@
+
+name: Build Artifacts
+
+on:
+  push:
+    branches: [ sge ]
+  # pull_request:
+  #   branches: [ master ]
+  workflow_dispatch:
+  
+jobs:
+  build_packages:
+    strategy:
+      matrix:
+        include:
+          - env: mainnet
+            cfg: "chains/mainnet/sge.json"
+          - env: testnet
+            cfg: "chains/testnet/sge.json"
+          - env: staging 
+            cfg: "chains/testnet/sge_stage.json"
+    runs-on: ubuntu-latest 
+    steps:
+    - name: Environment
+      run:  export NODE_OPTIONS="--max_old_space_size=4096"
+      
+    - name: Git Checkout Latest
+      uses: actions/checkout@v4
+
+    - name: Update config
+      run: |
+        if [ ${{ matrix.env }} != "mainnet" ]; then cp ${{ matrix.cfg }} chains/mainnet/sge.json; fi
+
+    - name: Install
+      run: yarn install --ignore-engines
+
+    - name: Build
+      run: yarn build
+
+    - name: Pack 
+      run: | 
+        mv dist/ pingpub
+        tar -czf pingpub_${{ matrix.env }}.tar.gz ./pingpub/ 
+
+    - uses: actions/upload-artifact@v4
+      id: upload
+      with:
+        name: pingpub_${{ matrix.env }}.tar.gz
+        path: pingpub_${{ matrix.env }}.tar.gz
+        retention-days: 1
+
+  build_image_staging:
+    needs: build_packages
+    runs-on: ubuntu-latest
+    outputs: 
+      PINGPUB_AMI_STAGING: ${{ steps.extract.outputs.PINGPUB_AMI }}
+    permissions:
+      id-token: write 
+      contents: read  
+    steps:
+      - name: Checkout aws-infra
+        uses: actions/checkout@v4
+        with: 
+          repository: 'saage-tech/aws-infra'
+          token:  ${{ secrets.READ_ST }}
+
+      - name: Download 
+        uses: actions/download-artifact@v4
+
+      - name: Assume role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_STAGING }}
+          aws-region: ${{ secrets.AWS_REGION_STAGING }}
+          
+      - name: Packer Init
+        run: |
+          cp pingpub_staging.tar.gz/pingpub_staging.tar.gz ./packer/blockexplorer/files/pingpub.tar.gz
+          cd packer/blockexplorer
+          packer init .
+
+      - name: Packer Build 
+        working-directory: packer/blockexplorer
+        run: |
+          packer build -var-file=staging.pkvars.hcl blockexplorer.pkr.hcl
+
+      - name: Extract AMI_ID
+        id: extract
+        working-directory: packer/blockexplorer
+        run : |
+          AMI_ID=$(jq -r '.builds[-1].artifact_id' packer-manifest.json | cut -d ":" -f2)
+          echo "PINGPUB_AMI=$AMI_ID" >> $GITHUB_OUTPUT
+          echo $AMI_ID
+
+  build_image_testnet:
+    needs: build_packages
+    runs-on: ubuntu-latest
+    outputs: 
+      PINGPUB_AMI_TESTNET: ${{ steps.extract.outputs.PINGPUB_AMI }}
+    permissions:
+      id-token: write 
+      contents: read  
+    steps:
+      - name: Checkout aws-infra
+        uses: actions/checkout@v4
+        with: 
+          repository: 'saage-tech/aws-infra'
+          token:  ${{ secrets.READ_ST }}
+
+      - name: Download 
+        uses: actions/download-artifact@v4
+
+      - name: Assume role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_TESTNET }}
+          aws-region: ${{ secrets.AWS_REGION_TESTNET }}
+          
+      - name: Packer Init
+        run: |
+          cp pingpub_testnet.tar.gz/pingpub_testnet.tar.gz ./packer/blockexplorer/files/pingpub.tar.gz
+          cd packer/blockexplorer
+          packer init .
+
+      - name: Packer Build 
+        working-directory: packer/blockexplorer
+        run: |
+          packer build -var-file=testnet.pkvars.hcl blockexplorer.pkr.hcl
+
+      - name: Extract AMI_ID
+        id: extract
+        working-directory: packer/blockexplorer
+        run : |
+          AMI_ID=$(jq -r '.builds[-1].artifact_id' packer-manifest.json | cut -d ":" -f2)
+          echo "PINGPUB_AMI=$AMI_ID" >> $GITHUB_OUTPUT
+          echo $AMI_ID
+
+  build_image_mainnet:
+    needs: build_packages
+    runs-on: ubuntu-latest
+    outputs: 
+      PINGPUB_AMI_MAINNET: ${{ steps.extract.outputs.PINGPUB_AMI }}
+    permissions:
+      id-token: write 
+      contents: read  
+    steps:
+      - name: Checkout aws-infra
+        uses: actions/checkout@v4
+        with: 
+          repository: 'saage-tech/aws-infra'
+          token:  ${{ secrets.READ_ST }}
+
+      - name: Download 
+        uses: actions/download-artifact@v4
+
+      - name: Assume role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_MAINNET }}
+          aws-region: ${{ secrets.AWS_REGION_MAINNET }}
+          
+      - name: Packer Init
+        run: |
+          cp pingpub_mainnet.tar.gz/pingpub_mainnet.tar.gz ./packer/blockexplorer/files/pingpub.tar.gz
+          cd packer/blockexplorer
+          packer init .
+
+      - name: Packer Build 
+        working-directory: packer/blockexplorer
+        run: |
+          packer build -var-file=mainnet.pkvars.hcl blockexplorer.pkr.hcl
+
+      - name: Extract AMI_ID
+        id: extract
+        working-directory: packer/blockexplorer
+        run : |
+          ls -la
+          AMI_ID=$(jq -r '.builds[-1].artifact_id' packer-manifest.json | cut -d ":" -f2)
+          echo "PINGPUB_AMI=$AMI_ID" >> $GITHUB_OUTPUT
+          echo $AMI_ID
+
+  update_ami:
+    needs: [ build_image_staging, build_image_testnet, build_image_mainnet ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout terragrunt code
+        uses: actions/checkout@v4
+        with: 
+          repository: 'saage-tech/terragrunt-live-sgenetwork'
+          token:  ${{ secrets.UPDATE_ST }}
+  
+      - name: Replace AMI IDs
+        env:
+          MAINNET_AMI: ${{ needs.build_image_mainnet.outputs.PINGPUB_AMI_MAINNET }}
+          TESTNET_AMI: ${{ needs.build_image_testnet.outputs.PINGPUB_AMI_TESTNET }}
+          STAGING_AMI: ${{ needs.build_image_staging.outputs.PINGPUB_AMI_STAGING }}
+        run: |
+          ls -la $GITHUB_WORKSPACE
+          cd ${GITHUB_WORKSPACE}/staging/us-east-1/blockchain/pingpub/instance/pingpub-priv
+          sed -i "s/aws_instance_ami =.*/aws_instance_ami = ${STAGING_AMI}/g" terragrunt.hcl
+          cd ${GITHUB_WORKSPACE}/testnet/us-east-1/public-testnet-20221028/pingpub/instances/pingpub-priv
+          sed -i "s/aws_instance_ami =.*/aws_instance_ami = ${TESTNET_AMI}/g" terragrunt.hcl
+          cd ${GITHUB_WORKSPACE}/mainnet/ap-northeast-2/blockchain/pingpub/instance/pingpub-priv
+          sed -i "s/aws_instance_ami =.*/aws_instance_ami = ${MAINNET_AMI}/g" terragrunt.hcl
+
+      - name: Check terragrunt HCL mainnet
+        uses: gruntwork-io/terragrunt-action@v2
+        with:
+          tf_version: v1.3.3
+          tg_version: v0.42.3
+          tg_dir: mainnet/ap-northeast-2/blockchain/pingpub/instance/pingpub-priv
+          tg_command: 'hclfmt'
+
+      - name: Check terragrunt HCL testnet
+        uses: gruntwork-io/terragrunt-action@v2
+        with:
+          tf_version: v1.3.3
+          tg_version: v0.42.3
+          tg_dir: testnet/us-east-1/public-testnet-20221028/pingpub/instances/pingpub-priv
+          tg_command: 'hclfmt'
+
+      - name: Check terragrunt HCL staging
+        uses: gruntwork-io/terragrunt-action@v2
+        with:
+          tf_version: v1.3.3
+          tg_version: v0.42.3
+          tg_dir: staging/us-east-1/blockchain/pingpub/instance/pingpub-priv
+          tg_command: 'hclfmt'
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Automated Change - PingPub update
+          push_options: --force
