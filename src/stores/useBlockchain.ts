@@ -16,10 +16,11 @@ import { CosmosRestClient } from '@/libs/client';
 import {
   useBankStore,
   useBaseStore,
+  useDistributionStore,
   useGovStore,
   useMintStore,
   useStakingStore,
-  useWalletStore,
+  useWalletStore
 } from '.';
 import { useBlockModule } from '@/modules/[chain]/block/block';
 import { DEFAULT } from '@/libs';
@@ -151,6 +152,7 @@ export const useBlockchain = defineStore('blockchain', {
       useGovStore().initial();
       useMintStore().initial();
       useBlockModule().initial();
+      useDistributionStore().initial();
     },
 
     randomEndpoint(chainName: string) : Endpoint | undefined {

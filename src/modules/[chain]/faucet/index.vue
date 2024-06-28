@@ -24,7 +24,7 @@ const checklist = computed(() => {
     const bs = balances.value.length > 0 && balances.value.findIndex((v:any) => v.amount <= 10) === -1;
     return [
         { title: 'Rest Endpoint', status: endpoint && endpoint[0].address !== '' },
-        { title: 'Has Faucet Configured', status: chainStore.current?.faucet !== undefined },
+        { title: 'Faucet Configured', status: chainStore.current?.faucet !== undefined },
         { title: 'Faucet Account', status: faucet.value !== ''},
         { title: 'Faucet Balance', status: bs},
     ];
