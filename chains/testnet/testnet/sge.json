@@ -1,0 +1,29 @@
+{
+  "chain_name": "sge",
+  "alias": "sge",
+  "api": [
+    "https://api.testnet.sgenetwork.io",
+	"https://sge.api.t.stavr.tech",
+    "https://testnet-sge-rest.cosmos-apis.com/"	
+  ],
+  "rpc": [
+    "https://rpc.testnet.sgenetwork.io",
+    "https://sge.rpc.t.stavr.tech",
+    "https://testnet-sge-rpc.cosmos-apis.com/"	
+  ],
+  "snapshot_provider": "",
+  "addr_prefix": "sge",
+  "coin_type": "494",
+  "min_tx_fee": "8000",
+  "assets": [
+    {
+      "base": "usge",
+      "symbol": "SGE",
+      "exponent": "6",
+      "coingecko_id": "sge",
+      "logo": "/logos/sge.png"
+    }
+  ],
+  "logo": "/logos/sge.png",
+  "sdk_version": "0.45.8"
+}

@@ -1,0 +1,25 @@
+{
+  "chain_name": "sge",
+  "alias": "sge",
+  "api": [
+    "https://api.staging.sgenetwork.io"
+  ],
+  "rpc": [
+    "https://rpc.staging.sgenetwork.io"
+  ],
+  "snapshot_provider": "",
+  "addr_prefix": "sge",
+  "coin_type": "494",
+  "min_tx_fee": "8000",
+  "assets": [
+    {
+      "base": "usge",
+      "symbol": "SGE",
+      "exponent": "6",
+      "coingecko_id": "sge",
+      "logo": "/logos/sge.png"
+    }
+  ],
+  "logo": "/logos/sge.png",
+  "sdk_version": "0.45.8"
+}
