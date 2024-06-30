@@ -24,6 +24,15 @@ function search() {
       vueRouters.push({ path: `/${current}/tx/${hash.value}` });
     }
 }
+
+function handleScroll() {
+    const container = document.querySelector('.txsContainer') as HTMLDivElement;
+    // Check if the scroll is at the bottom
+    let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
+    if (isAtBottom) {
+        base.appendTxsByPage(base.allTxs.length/base.pageSize, base.pageSize)
+    }
+}
 </script>
 <template>
     <div>
@@ -34,7 +43,7 @@ function search() {
                 @click="tab = 'search'">Search</a>
         </div>
 
-        <div v-show="tab === 'recent'" class="bg-base-100 rounded overflow-x-auto">
+        <div v-show="tab === 'recent'" class="bg-base-100 rounded overflow-x-auto txsContainer" @scroll="handleScroll" style="height: 78vh;overflow: scroll;">
             <table class="table w-full table-compact">
                 <thead class="bg-base-200">
                     <tr>

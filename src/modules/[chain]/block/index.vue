@@ -14,7 +14,7 @@ const base = useBaseStore()
 
 const format = useFormatter();
 
-const list = reactive(() => {
+const list = computed(() => {
     return base.recents
 })
 
@@ -36,7 +36,7 @@ function pageload(p: number) {
 function handleScroll() {
     const container = document.querySelector('.blocksContainer') as HTMLDivElement;
     // Check if the scroll is at the bottom
-    let isAtBottom = container.scrollTop + container.clientHeight >= container.scrollHeight;
+    let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
     if (isAtBottom) {
         base.updatePageSize(base.pageSize + 5)
     }
@@ -53,9 +53,9 @@ function handleScroll() {
         </div>
 
         <div v-show="tab === 'blocks'">
-            <div class="blocksContainer" @scroll="handleScroll" style="height: 78vh;overflow: scroll;">
+            <div class="bg-base-100 rounded overflow-auto blocksContainer" @scroll="handleScroll" style="height: 78vh;overflow: scroll;">
                 <table class="table table-compact">
-                    <thead>
+                    <thead class="bg-base-200">
                         <tr>
                             <td>{{ $t('block.block_header') }}</td>
                             <td>{{ $t('account.hash') }}</td>
@@ -65,7 +65,7 @@ function handleScroll() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in [...list()].reverse()">
+                        <tr v-for="item in [...list].reverse()">
                             <td>{{ item.block.header.height }}</td>
                             <td>
                                 <RouterLink :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}

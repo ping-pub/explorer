@@ -77,9 +77,15 @@ export const useBaseStore = defineStore('baseStore', {
             this.recents = [];
         },
         async getAllTxs(startingBlock = '', numOfBlocks = 0) {
-            let res = await fetch("/api/v1/transactions?page=1&limit=10");
+            let res = await fetch("/api/v1/transactions?page=1&limit="+this.pageSize);
             const resJson = await res.json();
             this.allTxs = resJson.data
+            return res
+        },
+        async appendTxsByPage(page:number = 2, limit:number = 10){
+            let res = await fetch(`/api/v1/transactions?page=${page}&limit=${limit}`);
+            const resJson = await res.json();
+            this.allTxs = [...this.allTxs, ...resJson.data]
             return res
         },
         async updatePageSize(pgsz: number) {

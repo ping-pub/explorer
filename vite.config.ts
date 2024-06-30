@@ -69,7 +69,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://pocket-poktroll-explorer-backend:3005',
+        target: 'http://localhost:3005',
         changeOrigin: true,
       },
     },
