@@ -1,0 +1,28 @@
+{
+    "chain_name": "side-protocol-testnet",
+    "api": [
+        {
+            "address": "https://sided-testnet-api.validator247.com", 
+            "provider": "XSS-Labs"
+        }
+    ], 
+    "rpc": [
+        {
+            "address": "https://sided-testnet-rpc.validator247.com", 
+            "provider": "XSS-Labs"
+        }
+    ],
+    "sdk_version": "0.47.3",
+    "snapshot_provider": "",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "bc",
+    "logo": "/logos/sided.jpg",
+    "theme_color": "#812cd6",
+    "assets": [{
+        "base": "uside",
+        "symbol": "SIDE",
+        "exponent": "6",
+        "logo": "/logos/sided.jpg"
+    }]
+}

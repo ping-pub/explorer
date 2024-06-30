@@ -1,0 +1,28 @@
+{
+    "chain_name": "warden-testnet",
+    "api": [
+        {
+            "address": "https://warden-testnet-api.validator247.com", 
+            "provider": "XSS-Labs"
+        }
+    ], 
+    "rpc": [
+        {
+            "address": "https://warden-testnet-rpc.validator247.com", 
+            "provider": "XSS-Labs"
+        }
+    ],
+    "sdk_version": "0.47.3",
+    "snapshot_provider": "",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "warden",
+    "logo": "/logos/warden.svg",
+    "theme_color": "#812cd6",
+    "assets": [{
+        "base": "uward",
+        "symbol": "WARD",
+        "exponent": "6",
+        "logo": "/logos/warden.svg"
+    }]
+}
