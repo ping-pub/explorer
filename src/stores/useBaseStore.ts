@@ -85,7 +85,15 @@ export const useBaseStore = defineStore('baseStore', {
         async appendTxsByPage(page:number = 2, limit:number = 10){
             let res = await fetch(`/api/v1/transactions?page=${page}&limit=${limit}`);
             const resJson = await res.json();
-            this.allTxs = [...this.allTxs, ...resJson.data]
+            var temp:TxLocal[] = [];
+            const nameSet:any = {};
+            [...this.allTxs, ...resJson.data].forEach(item => {
+                if (!nameSet[item.hash]) {
+                    nameSet[item.hash] = true;
+                    temp.push(item);
+                }
+            });
+            this.allTxs = temp
             return res
         },
         async updatePageSize(pgsz: number) {

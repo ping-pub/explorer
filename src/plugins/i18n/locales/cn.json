@@ -236,6 +236,8 @@
   "tx": {
     "title": "概要",
     "tx_hash": "Tx 哈希",
+    "tx_from": "From Address",
+    "tx_to": "To Address",
     "gas": "Gas",
     "fee": "手续费",
     "memo": "备注",

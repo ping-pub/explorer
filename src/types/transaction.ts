@@ -3,7 +3,7 @@ import type { Coin, Key, PaginatedResponse } from "./common"
 export interface Tx {
     "@type"?: string,
     "body": {
-        "messages": {"@type": string, "amount"?: Coin[], packet?: { data: string }}[],
+        "messages": { "@type": string, "amount"?: Coin[], packet?: { data: string } }[],
         "memo": string,
         "timeout_height": string,
         "extension_options": any[],
@@ -32,38 +32,17 @@ export interface Tx {
 }
 
 export interface TxLocal {
-    "@type"?: string,
-    "body": {
-        "messages": {"@type": string, "amount"?: Coin[], packet?: { data: string }}[],
-        "memo": string,
-        "timeout_height": string,
-        "extension_options": any[],
-        "non_critical_extension_options": any[]
+    "messages": { "from_address"?: string, "to_address"?: string, "@type": string, "amount"?: Coin[], packet?: { data: string } }[],
+    "fee": {
+        "amount": Coin[],
+        "gas_limit": string,
+        "payer": string,
+        "granter": string
     },
-    "auth_info": {
-        "signer_infos": [
-            {
-                "public_key": Key,
-                "mode_info": {
-                    "single"?: {
-                        "mode": string // "SIGN_MODE_DIRECT"
-                    }
-                },
-                "sequence": string
-            }
-        ],
-        "fee": {
-            "amount": Coin[],
-            "gas_limit": string,
-            "payer": string,
-            "granter": string
-        }
-    },
-    "signatures": string[],
-    "_id": string,
     "height": string,
-    "code": number,
-    "raw_log": string
+    "hash": string,
+    "status": number,
+    "timestamp": string
 }
 export interface Attributes {
     index?: boolean,
@@ -91,9 +70,9 @@ export interface TxResponse {
     "tx": Tx,
     "timestamp": "2022-08-13T23:24:54Z",
     "events": {
-            "type": string,
-            "attributes": Attributes[]
-        }[]
+        "type": string,
+        "attributes": Attributes[]
+    }[]
 }
 
 export interface PaginatedTxs extends PaginatedResponse {

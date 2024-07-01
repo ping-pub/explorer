@@ -21,7 +21,7 @@ onMounted(() => {
 });
 function search() {
     if (hashReg.test(hash.value)) {
-      vueRouters.push({ path: `/${current}/tx/${hash.value}` });
+        vueRouters.push({ path: `/${current}/tx/${hash.value}` });
     }
 }
 
@@ -30,41 +30,59 @@ function handleScroll() {
     // Check if the scroll is at the bottom
     let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
     if (isAtBottom) {
-        base.appendTxsByPage(base.allTxs.length/base.pageSize, base.pageSize)
+        base.appendTxsByPage(base.allTxs.length / base.pageSize, base.pageSize)
     }
 }
 </script>
 <template>
     <div>
         <div class="tabs tabs-boxed bg-transparent mb-4">
-            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'recent' }"
-                @click="tab = 'recent'">{{ $t('block.recent') }}</a>
+            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'recent' }" @click="tab = 'recent'">{{
+                $t('block.recent') }}</a>
             <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'search' }"
                 @click="tab = 'search'">Search</a>
         </div>
 
-        <div v-show="tab === 'recent'" class="bg-base-100 rounded overflow-x-auto txsContainer" @scroll="handleScroll" style="height: 78vh;overflow: scroll;">
+        <div v-show="tab === 'recent'" class="bg-base-100 rounded overflow-x-auto txsContainer" @scroll="handleScroll"
+            style="height: 78vh;overflow: scroll;">
             <table class="table w-full table-compact">
                 <thead class="bg-base-200">
                     <tr>
-                        <th style="position: relative; z-index: 2;">{{ $t('account.height') }}</th>
-                        <th style="position: relative; z-index: 2;">{{ $t('tx.tx_id') }}</th>
+                        <th style="position: relative; z-index: 2;">{{ $t('tx.tx_hash') }}</th>
+                        <th style="position: relative; z-index: 2;">{{ $t('block.block_header') }}</th>
+                        <th style="position: relative; z-index: 2;"># of Messages</th>
                         <th>{{ $t('account.messages') }}</th>
                         <th>{{ $t('block.fees') }}</th>
+                        <th>{{ $t('staking.status') }}</th>
+                        <th>{{ $t('account.time') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item, index) in base.allTxs" :index="index" class="hover">
+                        <td class="truncate text-primary" width="30%">
+                            <RouterLink :to="`/${props.chain}/tx/${item.hash}`">{{
+                                item.hash
+                            }}</RouterLink>
+                        </td>
                         <td class="text-sm text-primary">
                             <RouterLink :to="`/${props.chain}/block/${item.height}`">{{ item.height }}</RouterLink>
                         </td>
-                        <td class="truncate text-primary" width="50%">
-                            <RouterLink :to="`/${props.chain}/stx/${item._id}`">{{
-                item._id
-            }}</RouterLink>
+                        <td>{{ item.messages.length }}</td>
+                        <td>{{ format.messages(item.messages) }}</td>
+                        <td>{{ format.formatTokens(item.fee.amount) }}</td>
+                        <td>
+                            <span class="text-xs truncate relative py-2 px-4 w-fit mr-2 rounded" :class="`text-${item.status === 0 ? 'success' : 'error'
+                                }`">
+                                <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${item.status === 0 ? 'success' : 'error'
+                                    }`"></span>
+                                {{ item.status === 0 ? 'Success' : 'Failed' }}
+                            </span>
                         </td>
-                        <td>{{ format.messages(item.body.messages) }}</td>
-                        <td>{{ format.formatTokens(item.body.messages[0]?.amount) }}</td>
+                        <td>
+                            {{ format.toLocaleDate(item.timestamp) }} ({{
+                                format.toDay(item.timestamp, 'from')
+                            }})
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -86,7 +104,8 @@ function handleScroll() {
         <div v-show="tab === 'search'" class="bg-base-100 rounded overflow-x-auto">
             <div class="p-4">
                 <div class="form-control">
-                    <input v-model="hash" type="text" class="input input-bordered" placeholder="Search by Tx Hash" @blur="search"/>
+                    <input v-model="hash" type="text" class="input input-bordered" placeholder="Search by Tx Hash"
+                        @blur="search" />
                 </div>
             </div>
         </div>

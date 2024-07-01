@@ -235,6 +235,8 @@
       "title": "Rangkuman",
       "tx_hash": "Tx Hash",
       "tx_id": "Tx ID (Local)",
+      "tx_from": "From Address",
+      "tx_to": "To Address",
       "gas": "Bahan bakar",
       "fee": "Biaya",
       "memo": "Memo",

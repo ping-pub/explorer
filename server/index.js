@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Datastore = require('@seald-io/nedb')
+const { fromBase64 } = require('@cosmjs/encoding');
 const fs = require('fs');
 const path = require('path');
 const app = express();
@@ -8,17 +9,12 @@ const PORT = 3005; // Use a different port than Vite
 const { sha256 } = require('@cosmjs/crypto');
 const { toHex, toBase64 } = require('@cosmjs/encoding');
 const { StargateClient } = require('@cosmjs/stargate');
+const { decodeTxRaw } = require('@cosmjs/proto-signing');
+var CronJob = require("cron").CronJob;
 
 app.use(bodyParser.json());
-
 function hashTx(raw) {
-  // Convert JSON object to string
-  const jsonString = JSON.stringify(raw);
-
-  // Convert string to Uint8Array
-  const encoder = new TextEncoder();
-  const uint8Array = encoder.encode(jsonString);
-  return toHex(sha256(jsonString)).toUpperCase();
+  return toHex(sha256(raw)).toUpperCase();
 }
 
 async function createFileIfNotExists(filePath, content) {
@@ -82,8 +78,8 @@ app.get('/api/v1/transactions', async (req, res) => {
 
 // GET transactions
 app.get('/api/v1/transactions/:transaction_id', async (req, res) => {
-  const {transaction_id} = req.params
-  const docs = await db.findAsync({_id: transaction_id})
+  const { transaction_id } = req.params
+  const docs = await db.findAsync({ _id: transaction_id })
   const totalCount = await db.countAsync({})
 
   res.json({
@@ -94,42 +90,123 @@ app.get('/api/v1/transactions/:transaction_id', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
+var latestBlockHeight = '1'
 async function fetchLatestBlock() {
   let lbRes = await fetch('https://testnet-validated-validator-api.poktroll.com/cosmos/base/tendermint/v1beta1/blocks/latest');
   let latestBlock = await lbRes.json()
   console.log(latestBlock.block.header.height)
+  latestBlockHeight = latestBlock.block.header.height
   return latestBlock
+}
+async function fetchTx(hash) {
+  let lbRes = await fetch('https://testnet-validated-validator-api.poktroll.com/cosmos/tx/v1beta1/txs/' + hash);
+  let tx = await lbRes.json()
+  return tx
 }
 
 async function fetchTxByBlock(height) {
-  let lbRes = await fetch(`https://testnet-validated-validator-api.poktroll.com/cosmos/tx/v1beta1/txs/block/${height}`);
+  let lbRes = await fetch(`https://testnet-validated-validator-api.poktroll.com/cosmos/base/tendermint/v1beta1/blocks/${height}`);
   let blockDetails = await lbRes.json()
   return blockDetails;
 }
 // Fetch all data for transactions and dump in db
 fetchLatestBlock().then(async data => {
-  let latestBlockInDB = await db.findAsync({}, { height: 1 }).limit(1).sort({ height: -1 })
+  let latestBlockInDB = await db.findAsync({}).limit(1).sort({ height: -1 })
   if ((parseInt(latestBlockInDB[0]?.height) || 0) < parseInt(data.block.header.height)) {
     for (let i = parseInt(data.block.header.height); i > (parseInt(latestBlockInDB[0]?.height) || 0); i--) {
       let res = await fetchTxByBlock(i).then(async data => {
-        let transactions = data.txs.map(tx => ({...tx,height:i}))
-        console.log(i, transactions)
+        let transactions = []
+        for(tx of data.block.data.txs){
+          console.log('.')
+          let txRes = await fetchTx(hashTx(fromBase64(tx)))
+          transactions.push ({
+            status: txRes.tx_response.code,
+            timestamp: txRes.tx_response.timestamp,
+            messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
+            fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
+            hash: hashTx(fromBase64(tx)),
+            height: i
+          })
+        }
+        transactions.filter((async tx => {
+          let txRes = await db.findAsync({}, { hash: tx.hash }).limit(1).sort({ height: -1 })
+          if (txRes.length > 0) {
+            return false
+          }
+          return true
+        }))
+        if (transactions.length > 0) {
+          console.log(`Inserting Transactions`, transactions)
+        }
         let txs = await db.insertAsync(transactions)
         return txs
       })
-      // console.log(res)
     }
   }
 })
 
-async function getHash(txObject){
-        // Create a client to interact with the Cosmos blockchain
-        const client = await StargateClient.connect('https://testnet-validated-validator-rpc.poktroll.com');
-        // Encode the transaction object
-        const encodedTx = Uint8Array.from(txObject);
-        // Compute the transaction hash (the ID)
-        // const txHash = StargateClient.computeTxHash(encodedTx);
-        // console.log(`Transaction Hash: ${txHash}`);
-        return encodedTx
-}
+var lastProcessedBlock = latestBlockHeight
+var job = new CronJob(
+  "*/30 * * * * *",
+  async function () {
+    fetchLatestBlock().then(async data => {
+      let transactions = []
+      for(tx of data.block.data.txs){
+        let txRes = await fetchTx(hashTx(fromBase64(tx)))  
+        transactions.push ({
+          status: txRes.tx_response.code,
+          timestamp: txRes.tx_response.timestamp,
+          messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
+          fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
+          hash: hashTx(fromBase64(tx)),
+          height: i
+        })
+      }
+      transactions.filter((async tx => {
+        let txRes = await db.findAsync({}, { hash: tx.hash }).limit(1).sort({ height: -1 })
+        if (txRes.length > 0) {
+          return false
+        }
+        return true
+      }))
+      if (lastProcessedBlock != data.block.header.height) {
+        let res = await fetchTxByBlock(lastProcessedBlock).then(async data => {
+          let transactions = []
+          for(tx of data.block.data.txs){
+            let txRes = await fetchTx(hashTx(fromBase64(tx)))  
+            transactions.push ({
+              status: txRes.tx_response.code,
+              timestamp: txRes.tx_response.timestamp,
+              messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
+              fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
+              hash: hashTx(fromBase64(tx)),
+              height: i
+            })
+          }
+          transactions.filter((async tx => {
+            let txRes = await db.findAsync({}, { hash: tx.hash }).limit(1).sort({ height: -1 })
+            if (txRes.length > 0) {
+              return false
+            }
+            return true
+          }))
+          if (transactions.length > 0) {
+            console.log(`Inserting Transactions`, transactions)
+          }
+          let txs = await db.insertAsync(transactions)
+          return txs
+        })
+        lastProcessedBlock = data.block.header.height
+      }
+      if (transactions.length > 0) {
+        console.log(`Inserting Transactions`, transactions)
+      }
+      let txs = await db.insertAsync(transactions)
+      return txs
+    })
+  },
+  null,
+  true,
+  "America/Los_Angeles"
+);
+job.start();
