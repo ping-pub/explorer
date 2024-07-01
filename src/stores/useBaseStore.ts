@@ -77,16 +77,16 @@ export const useBaseStore = defineStore('baseStore', {
             this.recents = [];
         },
         async getAllTxs(startingBlock = '', numOfBlocks = 0) {
-            let res = await fetch("/api/v1/transactions?page=1&limit="+this.pageSize);
+            let res = await fetch("/api/v1/transactions?page=1&limit=" + this.pageSize);
             const resJson = await res.json();
             this.allTxs = resJson.data
             return res
         },
-        async appendTxsByPage(page:number = 2, limit:number = 10){
+        async appendTxsByPage(page: number = 2, limit: number = 10) {
             let res = await fetch(`/api/v1/transactions?page=${page}&limit=${limit}`);
             const resJson = await res.json();
-            var temp:TxLocal[] = [];
-            const nameSet:any = {};
+            var temp: TxLocal[] = [];
+            const nameSet: any = {};
             [...this.allTxs, ...resJson.data].forEach(item => {
                 if (!nameSet[item.hash]) {
                     nameSet[item.hash] = true;
@@ -108,14 +108,20 @@ export const useBaseStore = defineStore('baseStore', {
                 return []
             })
             this.recents = [...res]
-            this.recents.push(this.latest)
+            if (
+                this.recents.findIndex(
+                    (x) => x?.block_id?.hash === this.latest?.block_id?.hash
+                ) === -1
+            ) {
+                this.recents.push(this.latest)
+            }
             this.fetchingBlocks = false
             // this.fetchLatest();
         },
-        async fetchTx(hash:string) {
+        async fetchTx(hash: string) {
             let tx = await this.blockchain.rpc.getTx(hash);
             return tx
-          },
+        },
         async fetchLatest() {
             try {
                 this.latest = await this.blockchain.rpc?.getBaseBlockLatest();
@@ -149,30 +155,30 @@ export const useBaseStore = defineStore('baseStore', {
                     (x) => x?.block_id?.hash === this.latest?.block_id?.hash
                 ) === -1
             ) {
-                
+
                 this.recents.push(this.latest);
-                let transactions = [] as  TxLocal[]
-          for (var tx of this.latest.block.data.txs) {
-            console.log('.')
-            let txRes = await this.fetchTx(hashTx(fromBase64(tx)))
-            transactions.push({
-              status: txRes.tx_response.code,
-              timestamp: txRes.tx_response.timestamp,
-            //   @ts-expect-error due to inline object manipulation
-              messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
-              //   @ts-expect-error due to inline object manipulation
-              fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
-              hash: hashTx(fromBase64(tx)),
-              height: this.latest.block.header.height
-            })
-          }
-          transactions.filter((async tx => {
-            let txRes = this.allTxs.filter(txl => txl.hash == tx.hash)
-            if (txRes.length > 0) {
-              return false
-            }
-            return true
-          }))
+                let transactions = [] as TxLocal[]
+                for (var tx of this.latest.block.data.txs) {
+                    console.log('.')
+                    let txRes = await this.fetchTx(hashTx(fromBase64(tx)))
+                    transactions.push({
+                        status: txRes.tx_response.code,
+                        timestamp: txRes.tx_response.timestamp,
+                        //   @ts-expect-error due to inline object manipulation
+                        messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
+                        //   @ts-expect-error due to inline object manipulation
+                        fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
+                        hash: hashTx(fromBase64(tx)),
+                        height: this.latest.block.header.height
+                    })
+                }
+                transactions.filter((async tx => {
+                    let txRes = this.allTxs.filter(txl => txl.hash == tx.hash)
+                    if (txRes.length > 0) {
+                        return false
+                    }
+                    return true
+                }))
                 this.allTxs = [...transactions, ...this.allTxs]
             }
             return this.latest;
