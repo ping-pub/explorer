@@ -59,8 +59,8 @@ function handleScroll() {
                 </thead>
                 <tbody>
                     <tr v-for="(item, index) in base.allTxs" :index="index" class="hover">
-                        <td class="truncate text-primary" width="30%">
-                            <RouterLink :to="`/${props.chain}/tx/${item.hash}`">{{
+                        <td class="truncate text-primary" style="max-width:25vw">
+                            <RouterLink  class="truncate" :to="`/${props.chain}/tx/${item.hash}`">{{
                                 item.hash
                             }}</RouterLink>
                         </td>
