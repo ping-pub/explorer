@@ -51,7 +51,7 @@ function handleScroll() {
                         <th style="position: relative; z-index: 2;">{{ $t('tx.tx_hash') }}</th>
                         <th style="position: relative; z-index: 2;">{{ $t('block.block') }}</th>
                         <th>{{ $t('staking.status') }}</th>
-                        <th style="position: relative; z-index: 2;"># of Messages</th>
+                        <th style="position: relative; z-index: 2;">Messages</th>
                         <th>{{ $t('account.type') }}</th>
                         <th>{{ $t('block.fees') }}</th>
                         <th>{{ $t('account.time') }}</th>
@@ -79,9 +79,9 @@ function handleScroll() {
                         <td>{{ format.messages(item.messages) }}</td>
                         <td>{{ format.formatTokens(item.fee.amount) }}</td>
                         <td>
-                            {{ format.toLocaleDate(item.timestamp) }} ({{
+                            {{
                                 format.toDay(item.timestamp, 'from')
-                            }})
+                            }}
                         </td>
                     </tr>
                 </tbody>
