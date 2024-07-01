@@ -113,37 +113,34 @@ async function fetchTxByBlock(height) {
 // Fetch all data for transactions and dump in db
 try {
   fetchLatestBlock().then(async data => {
-    let latestBlockInDB = await db.findAsync({}).limit(1).sort({ height: -1 })
-    if ((parseInt(latestBlockInDB[0]?.height) || 0) < parseInt(data.block.header.height)) {
-      for (let i = parseInt(data.block.header.height); i > (parseInt(latestBlockInDB[0]?.height) || 0); i--) {
-        let res = await fetchTxByBlock(i).then(async data => {
-          let transactions = []
-          for (tx of data.block.data.txs) {
-            console.log('.')
-            let txRes = await fetchTx(hashTx(fromBase64(tx)))
-            transactions.push({
-              status: txRes.tx_response.code,
-              timestamp: txRes.tx_response.timestamp,
-              messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
-              fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
-              hash: hashTx(fromBase64(tx)),
-              height: i
-            })
+    for (let i = parseInt(data.block.header.height); i > 0; i--) {
+      let res = await fetchTxByBlock(i).then(async data => {
+        let transactions = []
+        for (tx of data.block.data.txs) {
+          console.log('.')
+          let txRes = await fetchTx(hashTx(fromBase64(tx)))
+          transactions.push({
+            status: txRes.tx_response.code,
+            timestamp: txRes.tx_response.timestamp,
+            messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
+            fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
+            hash: hashTx(fromBase64(tx)),
+            height: i
+          })
+        }
+        transactions.filter((async tx => {
+          let txRes = await db.findAsync({}, { hash: tx.hash }).limit(1).sort({ height: -1 })
+          if (txRes.length > 0) {
+            return false
           }
-          transactions.filter((async tx => {
-            let txRes = await db.findAsync({}, { hash: tx.hash }).limit(1).sort({ height: -1 })
-            if (txRes.length > 0) {
-              return false
-            }
-            return true
-          }))
-          if (transactions.length > 0) {
-            console.log(`Inserting Transactions`, transactions)
-          }
-          let txs = await db.insertAsync(transactions)
-          return txs
-        })
-      }
+          return true
+        }))
+        if (transactions.length > 0) {
+          console.log(`Inserting Transactions`, transactions)
+        }
+        let txs = await db.insertAsync(transactions)
+        return txs
+      })
     }
   })
 } catch (e) {
