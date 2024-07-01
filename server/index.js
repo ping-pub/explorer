@@ -109,72 +109,19 @@ async function fetchTxByBlock(height) {
   let blockDetails = await lbRes.json()
   return blockDetails;
 }
-// Fetch all data for transactions and dump in db
-fetchLatestBlock().then(async data => {
-  let latestBlockInDB = await db.findAsync({}).limit(1).sort({ height: -1 })
-  if ((parseInt(latestBlockInDB[0]?.height) || 0) < parseInt(data.block.header.height)) {
-    for (let i = parseInt(data.block.header.height); i > (parseInt(latestBlockInDB[0]?.height) || 0); i--) {
-      let res = await fetchTxByBlock(i).then(async data => {
-        let transactions = []
-        for(tx of data.block.data.txs){
-          console.log('.')
-          let txRes = await fetchTx(hashTx(fromBase64(tx)))
-          transactions.push ({
-            status: txRes.tx_response.code,
-            timestamp: txRes.tx_response.timestamp,
-            messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
-            fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
-            hash: hashTx(fromBase64(tx)),
-            height: i
-          })
-        }
-        transactions.filter((async tx => {
-          let txRes = await db.findAsync({}, { hash: tx.hash }).limit(1).sort({ height: -1 })
-          if (txRes.length > 0) {
-            return false
-          }
-          return true
-        }))
-        if (transactions.length > 0) {
-          console.log(`Inserting Transactions`, transactions)
-        }
-        let txs = await db.insertAsync(transactions)
-        return txs
-      })
-    }
-  }
-})
 
-var lastProcessedBlock = latestBlockHeight
-var job = new CronJob(
-  "*/30 * * * * *",
-  async function () {
-    fetchLatestBlock().then(async data => {
-      let transactions = []
-      for(tx of data.block.data.txs){
-        let txRes = await fetchTx(hashTx(fromBase64(tx)))  
-        transactions.push ({
-          status: txRes.tx_response.code,
-          timestamp: txRes.tx_response.timestamp,
-          messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
-          fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
-          hash: hashTx(fromBase64(tx)),
-          height: i
-        })
-      }
-      transactions.filter((async tx => {
-        let txRes = await db.findAsync({}, { hash: tx.hash }).limit(1).sort({ height: -1 })
-        if (txRes.length > 0) {
-          return false
-        }
-        return true
-      }))
-      if (lastProcessedBlock != data.block.header.height) {
-        let res = await fetchTxByBlock(lastProcessedBlock).then(async data => {
+// Fetch all data for transactions and dump in db
+try {
+  fetchLatestBlock().then(async data => {
+    let latestBlockInDB = await db.findAsync({}).limit(1).sort({ height: -1 })
+    if ((parseInt(latestBlockInDB[0]?.height) || 0) < parseInt(data.block.header.height)) {
+      for (let i = parseInt(data.block.header.height); i > (parseInt(latestBlockInDB[0]?.height) || 0); i--) {
+        let res = await fetchTxByBlock(i).then(async data => {
           let transactions = []
-          for(tx of data.block.data.txs){
-            let txRes = await fetchTx(hashTx(fromBase64(tx)))  
-            transactions.push ({
+          for (tx of data.block.data.txs) {
+            console.log('.')
+            let txRes = await fetchTx(hashTx(fromBase64(tx)))
+            transactions.push({
               status: txRes.tx_response.code,
               timestamp: txRes.tx_response.timestamp,
               messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
@@ -196,14 +143,80 @@ var job = new CronJob(
           let txs = await db.insertAsync(transactions)
           return txs
         })
+      }
+    }
+  })
+} catch (e) {
+  console.error("Error Trace :", e)
+}
+
+var lastProcessedBlock = latestBlockHeight
+var job = new CronJob(
+  "*/30 * * * * *",
+  async function () {
+    try {
+      let data = await fetchLatestBlock()
+      if (lastProcessedBlock != data.block.header.height) {
+        let res = await fetchTxByBlock(lastProcessedBlock).then(async data => {
+          let transactions = []
+          for (tx of data.block.data.txs) {
+            let txRes = await fetchTx(hashTx(fromBase64(tx)))
+            transactions.push({
+              status: txRes.tx_response.code,
+              timestamp: txRes.tx_response.timestamp,
+              messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
+              fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
+              hash: hashTx(fromBase64(tx)),
+              height: data.block.header.height
+            })
+          }
+          transactions.filter((async tx => {
+            let txRes = await db.findAsync({}, { hash: tx.hash }).limit(1).sort({ height: -1 })
+            if (txRes.length > 0) {
+              return false
+            }
+            return true
+          }))
+          if (transactions.length > 0) {
+            console.log(`Inserting Transactions`, transactions)
+          }
+          let txs = await db.insertAsync(transactions)
+          return txs
+        })
         lastProcessedBlock = data.block.header.height
+      } else {
+        fetchLatestBlock().then(async data => {
+          let transactions = []
+          for (tx of data.block.data.txs) {
+            let txRes = await fetchTx(hashTx(fromBase64(tx)))
+            transactions.push({
+              status: txRes.tx_response.code,
+              timestamp: txRes.tx_response.timestamp,
+              messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
+              fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
+              hash: hashTx(fromBase64(tx)),
+              height: data.block.header.height
+            })
+          }
+          transactions.filter((async tx => {
+            let txRes = await db.findAsync({}, { hash: tx.hash }).limit(1).sort({ height: -1 })
+            if (txRes.length > 0) {
+              return false
+            }
+            return true
+          }))
+          if (transactions.length > 0) {
+            console.log(`Inserting Transactions`, transactions)
+          }
+          let txs = await db.insertAsync(transactions)
+          return txs
+
+
+        })
       }
-      if (transactions.length > 0) {
-        console.log(`Inserting Transactions`, transactions)
-      }
-      let txs = await db.insertAsync(transactions)
-      return txs
-    })
+    } catch (e) {
+      console.error("Error Trace :", e)
+    }
   },
   null,
   true,

@@ -78,6 +78,7 @@
     "remaining_blocks": "Remaining Blocks",
     "average_block_time": "Average Block Time",
     "block_header": "Block Header",
+    "block": "Block",
     "last_commit": "Last Commit",
     "recent": "Recent",
     "future": "Future",

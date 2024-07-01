@@ -11,6 +11,8 @@ module.exports = {
         main: 'var(--text-main)',
         secondary: 'var(--text-secondary)',
         active: 'var(--bg-active)',
+        balance: '#89aa08',
+        staking: '#FDB528'
       }
     },
   },

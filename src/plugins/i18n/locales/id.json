@@ -74,6 +74,7 @@
       "remaining_blocks": "Blok Yang Tersisa",
       "average_block_time": "Rata-rata Waktu Blok",
       "block_header": "Blok Teratas",
+      "block": "Blok",
       "last_commit": "Komit Terakhir",
       "recent": "Terkini",
       "future": "Masa Depan",

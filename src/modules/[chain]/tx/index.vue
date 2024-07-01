@@ -49,11 +49,11 @@ function handleScroll() {
                 <thead class="bg-base-200">
                     <tr>
                         <th style="position: relative; z-index: 2;">{{ $t('tx.tx_hash') }}</th>
-                        <th style="position: relative; z-index: 2;">{{ $t('block.block_header') }}</th>
-                        <th style="position: relative; z-index: 2;"># of Messages</th>
-                        <th>{{ $t('account.messages') }}</th>
-                        <th>{{ $t('block.fees') }}</th>
+                        <th style="position: relative; z-index: 2;">{{ $t('block.block') }}</th>
                         <th>{{ $t('staking.status') }}</th>
+                        <th style="position: relative; z-index: 2;"># of Messages</th>
+                        <th>{{ $t('account.type') }}</th>
+                        <th>{{ $t('block.fees') }}</th>
                         <th>{{ $t('account.time') }}</th>
                     </tr>
                 </thead>
@@ -67,9 +67,6 @@ function handleScroll() {
                         <td class="text-sm text-primary">
                             <RouterLink :to="`/${props.chain}/block/${item.height}`">{{ item.height }}</RouterLink>
                         </td>
-                        <td>{{ item.messages.length }}</td>
-                        <td>{{ format.messages(item.messages) }}</td>
-                        <td>{{ format.formatTokens(item.fee.amount) }}</td>
                         <td>
                             <span class="text-xs truncate relative py-2 px-4 w-fit mr-2 rounded" :class="`text-${item.status === 0 ? 'success' : 'error'
                                 }`">
@@ -78,6 +75,9 @@ function handleScroll() {
                                 {{ item.status === 0 ? 'Success' : 'Failed' }}
                             </span>
                         </td>
+                        <td>{{ item.messages.length }}</td>
+                        <td>{{ format.messages(item.messages) }}</td>
+                        <td>{{ format.formatTokens(item.fee.amount) }}</td>
                         <td>
                             {{ format.toLocaleDate(item.timestamp) }} ({{
                                 format.toDay(item.timestamp, 'from')

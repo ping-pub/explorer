@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { useBlockchain } from '@/stores';
 import { decodeTxRaw, type DecodedTxRaw } from '@cosmjs/proto-signing';
 import dayjs from 'dayjs';
-import type { Block, TxLocal } from '@/types';
+import type { Block, TxLocal, Tx, TxResponse } from '@/types';
 import { hashTx } from '@/libs';
 import { fromBase64 } from '@cosmjs/encoding';
 import { useRouter } from 'vue-router';
@@ -112,6 +112,10 @@ export const useBaseStore = defineStore('baseStore', {
             this.fetchingBlocks = false
             // this.fetchLatest();
         },
+        async fetchTx(hash:string) {
+            let tx = await this.blockchain.rpc.getTx(hash);
+            return tx
+          },
         async fetchLatest() {
             try {
                 this.latest = await this.blockchain.rpc?.getBaseBlockLatest();
@@ -139,14 +143,37 @@ export const useBaseStore = defineStore('baseStore', {
                 })
                 this.recents = [...res]
             }
-
             //check if the block exists in recents
             if (
                 this.recents.findIndex(
                     (x) => x?.block_id?.hash === this.latest?.block_id?.hash
                 ) === -1
             ) {
+                
                 this.recents.push(this.latest);
+                let transactions = [] as  TxLocal[]
+          for (var tx of this.latest.block.data.txs) {
+            console.log('.')
+            let txRes = await this.fetchTx(hashTx(fromBase64(tx)))
+            transactions.push({
+              status: txRes.tx_response.code,
+              timestamp: txRes.tx_response.timestamp,
+            //   @ts-expect-error due to inline object manipulation
+              messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
+              //   @ts-expect-error due to inline object manipulation
+              fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
+              hash: hashTx(fromBase64(tx)),
+              height: this.latest.block.header.height
+            })
+          }
+          transactions.filter((async tx => {
+            let txRes = this.allTxs.filter(txl => txl.hash == tx.hash)
+            if (txRes.length > 0) {
+              return false
+            }
+            return true
+          }))
+                this.allTxs = [...transactions, ...this.allTxs]
             }
             return this.latest;
         },

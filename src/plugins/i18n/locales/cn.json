@@ -76,6 +76,7 @@
     "remaining_blocks": "剩余区块",
     "average_block_time": "平均出块时间",
     "block_header": "区块高度",
+    "block": "Block",
     "last_commit": "最后提交",
     "recent": "最近区块",
     "future": "未来区块",
