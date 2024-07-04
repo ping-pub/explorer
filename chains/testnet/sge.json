@@ -3,7 +3,7 @@
   "alias": "sge",
   "api": [
     "https://api.testnet.sgenetwork.io",
-	"https://sge.api.t.stavr.tech",
+	  "https://sge.api.t.stavr.tech",
     "https://testnet-sge-rest.cosmos-apis.com/"	
   ],
   "rpc": [
