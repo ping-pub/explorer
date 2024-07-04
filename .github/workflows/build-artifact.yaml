@@ -199,11 +199,11 @@ jobs:
         run: |
           ls -la $GITHUB_WORKSPACE
           cd ${GITHUB_WORKSPACE}/staging/us-east-1/blockchain/pingpub/instance/pingpub-priv
-          sed -i "s/aws_instance_ami =.*/aws_instance_ami = ${STAGING_AMI}/g" terragrunt.hcl
+          sed -i "s/aws_instance_ami =.*/aws_instance_ami = \"${STAGING_AMI}\"/g" terragrunt.hcl
           cd ${GITHUB_WORKSPACE}/testnet/us-east-1/public-testnet-20221028/pingpub/instances/pingpub-priv
-          sed -i "s/aws_instance_ami =.*/aws_instance_ami = ${TESTNET_AMI}/g" terragrunt.hcl
+          sed -i "s/aws_instance_ami =.*/aws_instance_ami = \"${TESTNET_AMI}\"/g" terragrunt.hcl
           cd ${GITHUB_WORKSPACE}/mainnet/ap-northeast-2/blockchain/pingpub/instance/pingpub-priv
-          sed -i "s/aws_instance_ami =.*/aws_instance_ami = ${MAINNET_AMI}/g" terragrunt.hcl
+          sed -i "s/aws_instance_ami =.*/aws_instance_ami = \"${MAINNET_AMI}\"/g" terragrunt.hcl
 
       - name: Check terragrunt HCL mainnet
         uses: gruntwork-io/terragrunt-action@v2
