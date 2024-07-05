@@ -2,10 +2,10 @@
   "chain_name": "sge",
   "alias": "sge",
   "api": [
-    "https://api.staging.sgenetwork.io"
+    { "provider": "sge-network", "address": "https://lcd-1317.staging.sgenetwork.io"}
   ],
   "rpc": [
-    "https://rpc.staging.sgenetwork.io"
+    { "provider": "sge-network", "address": "https://lcd-26657.staging.sgenetwork.io"}
   ],
   "snapshot_provider": "",
   "addr_prefix": "sge",

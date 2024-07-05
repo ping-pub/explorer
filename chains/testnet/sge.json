@@ -2,14 +2,12 @@
   "chain_name": "sge",
   "alias": "sge",
   "api": [
-    "https://api.testnet.sgenetwork.io",
-	  "https://sge.api.t.stavr.tech",
-    "https://testnet-sge-rest.cosmos-apis.com/"	
+    { "provider": "sge-network", "address": "https://lcd-1317.testnet.sgenetwork.io"},
+    { "provider": "stavr.tech",  "address": "https://sge.api.t.stavr.tech" }
   ],
   "rpc": [
-    "https://rpc.testnet.sgenetwork.io",
-    "https://sge.rpc.t.stavr.tech",
-    "https://testnet-sge-rpc.cosmos-apis.com/"	
+    { "provider": "sge-network", "address": "https://lcd-26657.testnet.sgenetwork.io" },
+    { "provider": "stavr.tech",  "address": "https://sge.rpc.t.stavr.tech" }
   ],
   "snapshot_provider": "",
   "addr_prefix": "sge",

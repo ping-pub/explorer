@@ -30,8 +30,13 @@ jobs:
     - name: Update config
       run: |
         if [ ${{ matrix.env }} != "mainnet" ]; then cp ${{ matrix.cfg }} chains/mainnet/sge.json; fi
-        cat chains/mainnet/sge.json
+        rm chains/testnet/*
+        cp chains/mainnet/sge.json chains/testnet/sge.json
 
+    - name: Remove Google Analytics
+      run: |
+          sed -i '25,40d' index.html
+          
     - name: Install
       run: yarn install --ignore-engines
 
