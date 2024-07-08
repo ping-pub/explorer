@@ -66,6 +66,7 @@ function selected(route: any, nav: NavLink) {
     route.path === nav.to?.path ||
     (route.path.startsWith(nav.to?.path) &&
       nav.title.indexOf('dashboard') === -1);
+
   return b;
 }
 function confirm() {
@@ -113,12 +114,15 @@ function confirm() {
       class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-[#383B40]"
       :class="{ block: sidebarShow, 'hidden xl:!block': !sidebarShow }"
     >
-      <div class="flex justify-between mt-1 pl-4 py-4 mb-1 border-b border-[#383B40]">
-        <RouterLink to="/" class="flex flex-1 items-center w-full justify-center">
+      <div
+        class="flex justify-between mt-1 pl-4 py-4 mb-1 border-b border-[#383B40]"
+      >
+        <RouterLink
+          to="/"
+          class="flex flex-1 items-center w-full justify-center"
+        >
           <img class="w-10 h-10" src="../../assets/logo.svg" />
-          <h1 class="ml-3 text-2xl font-semibold dark:text-white">
-            OraiScan
-          </h1>
+          <h1 class="ml-3 text-2xl font-semibold dark:text-white">OraiScan</h1>
         </RouterLink>
         <div
           class="pr-4 cursor-pointer xl:!hidden flex items-center"
@@ -127,10 +131,7 @@ function confirm() {
           <Icon icon="mdi-close" class="text-2xl" />
         </div>
       </div>
-      <div
-        v-for="(item, index) of blockchain.computedChainMenu"
-        :key="index"
-        >
+      <div v-for="(item, index) of blockchain.computedChainMenu" :key="index">
         <!-- class="px-2" -->
         <div
           v-if="isNavGroup(item)"
@@ -138,7 +139,7 @@ function confirm() {
           class="collapse"
           :class="{
             'collapse-arrow': item?.children?.length > 0,
-            'collapse-open': sidebarOpen, // index === 0 && 
+            'collapse-open': sidebarOpen, // index === 0 &&
             'collapse-close': index === 0 && !sidebarOpen,
           }"
         >
@@ -162,12 +163,12 @@ function confirm() {
             <img
               v-if="item?.icon?.image"
               :src="item?.icon?.image"
-              class="w-6 h-6 rounded-full mr-3"
+              class="w-6 h-6 rounded-full mr-3 bg-white border border-gray-300"
             />
             <div
               class="text-base text-gray-700 dark:text-gray-200 whitespace-nowrap text-[16px] uppercase font-semibold"
               :class="{
-                'capitalize': item?.icon?.icon
+                capitalize: item?.icon?.icon,
               }"
             >
               {{ item?.title }}
@@ -175,7 +176,7 @@ function confirm() {
             <div
               v-if="item?.badgeContent"
               class="mr-6 badge badge-sm text-[#2E2E33] font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
-              >
+            >
               <!-- :class="item?.badgeClass" -->
               {{ item?.badgeContent }}
             </div>
@@ -207,9 +208,9 @@ function confirm() {
                 <img
                   v-if="el?.icon?.image"
                   :src="el?.icon?.image"
-                  class="w-6 h-6 rounded-full mr-3 ml-4"
+                  class="w-6 h-6 rounded-full mr-3 ml-4 bg-white border border-gray-300"
                   :class="{
-                    'border border-gray-300 bg-white': selected($route, el),
+                    '': selected($route, el),
                   }"
                 />
                 <div
@@ -229,7 +230,7 @@ function confirm() {
           v-if="isNavLink(item)"
           :to="item?.to"
           @click="sidebarShow = false"
-          class="cursor-pointer px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59] border-t border-b border-base-300 h-[60px]"
+          class="cursor-pointer px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#2E2E33] border-t border-b border-base-300 h-[60px]"
         >
           <!-- <Icon
             v-if="item?.icon?.icon"
@@ -243,7 +244,7 @@ function confirm() {
           <img
             v-if="item?.icon?.image"
             :src="item?.icon?.image"
-            class="w-6 h-6 rounded-full mr-3 border border-blue-100"
+            class="w-6 h-6 rounded-full mr-3 border border-blue-100 bg-white"
           />
           <div
             class="text-base capitalize text-gray-700 dark:text-gray-200 whitespace-nowrap"
@@ -251,9 +252,9 @@ function confirm() {
             {{ item?.title }}
           </div>
           <div
-            v-if="item?.badgeContent"              
+            v-if="item?.badgeContent"
             class="mr-6 badge badge-sm text-[#2E2E33] font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
-            >
+          >
             <!-- :class="item?.badgeClass" -->
             {{ item?.badgeContent }}
           </div>
@@ -262,15 +263,17 @@ function confirm() {
         <div
           v-if="isNavTitle(item)"
           class="px-4 text-sm text-gray-400 pb-2 uppercase border-b border-base-300"
-        >
-          <!-- {{ item?.heading }} -->
-        </div>
+        ></div>
       </div>
-      <div class="px-2">
-        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">Tools</div>
+      <div class="px-2 mt-6">
         <RouterLink
           to="/wallet/suggest"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#2E2E33] border border-[#242627] borderImage h-[48px]"
+          :class="{
+            '!bg-[#2E2E33] borderImageActive': selected($route, {
+              to: { path: '/wallet/suggest', title: 'Wallet Helper' },
+            }),
+          }"
         >
           <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
           <div
@@ -280,10 +283,37 @@ function confirm() {
           </div>
         </RouterLink>
 
-        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
+        <!-- <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
           {{ $t('module.links') }}
+        </div> -->
+
+        <div class="flex justify-around items-center my-6">
+          <a
+            href="https://t.me/oraichain"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="filter hover:brightness-150"
+          >
+            <img src="../../assets//images/svg/telegram.svg" alt="telegram" />
+          </a>
+          <a
+            href="https://twitter.com/oraichain"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="filter hover:brightness-150"
+          >
+            <img src="../../assets//images/svg/twiter.svg" alt="twiter" />
+          </a>
+          <a
+            href="https://discord.gg/oraichain"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="filter hover:brightness-150"
+          >
+            <img src="../../assets//images/svg/discord.svg" alt="discord" />
+          </a>
         </div>
-        <a
+        <!-- <a
           href="https://twitter.com/oraichain"
           target="_blank"
           class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
@@ -296,7 +326,6 @@ function confirm() {
           </div>
         </a>
         <a
-          v-if="showDiscord"
           href="https://discord.gg/oraichain"
           target="_blank"
           class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
@@ -319,7 +348,7 @@ function confirm() {
           >
             FAQ
           </div>
-        </a>
+        </a> -->
       </div>
     </div>
     <div class="xl:!ml-64">
@@ -340,13 +369,13 @@ function confirm() {
 
         <!-- <NavSearchBar />-->
         <div class="lg:block hidden w-full max-w-[334px]">
-            <input
-              class="input flex-1 w-full !input-bordered bg-[#2E2E33] text-[14px] font-normal h-[44px]"
-              v-model="searchQuery"
-              placeholder="Search by Height, Address and TxHash"
-              v-on:keyup.enter="confirm"
-            />
-            <!-- <div
+          <input
+            class="input flex-1 w-full !input-bordered bg-[#2E2E33] text-[14px] font-normal h-[44px]"
+            v-model="searchQuery"
+            placeholder="Search by Height, Address and TxHash"
+            v-on:keyup.enter="confirm"
+          />
+          <!-- <div
               class="mt-2 text-right text-sm text-error"
               v-show="errorMessage"
             >
