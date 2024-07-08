@@ -54,7 +54,7 @@ function calculateValue(value: any) {
 </script>
 <template>
   <div
-    class="bg-base-100 px-6 py-6 rounded-[16px] mt-5"
+    class="bg-base-100 px-6 py-6 rounded-2xl mt-5"
     v-if="props.cardItem?.items && props.cardItem?.items?.length > 0"
   >
     <div class="text-base font-semibold mb-3 text-white">
