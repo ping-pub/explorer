@@ -116,3 +116,7 @@ table td {
   border: 1px solid #242627;
   border-image: url(./assets/images/svg/border.svg) 22 / 35px;
 }
+
+.section {
+  @apply p-6 rounded-2xl mb-4 shadow border border-[#242627] dark:bg-[#141416];
+}

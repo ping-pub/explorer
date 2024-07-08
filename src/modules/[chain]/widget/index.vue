@@ -49,9 +49,7 @@ const hdPath = computed(() => {
         ><code class="text-gray-800 dark:invert">&lt;script type="module" src="https://unpkg.com/@oraichain/oraiscan-widget@latest/dist/ping-widget.js"&gt;</code></pre>
       </div>
     </div>
-    <div
-      class="p-6 rounded-2xl mb-4 shadow border border-[#242627] dark:bg-[#141416]"
-    >
+    <div class="section">
       <h2 class="card-title text-white">{{ $t('module.widget') }}</h2>
       <div class="mt-4">
         <span class="text-base text-white font-semibold">
