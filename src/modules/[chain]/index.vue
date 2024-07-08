@@ -367,7 +367,10 @@ const amount = computed({
             previewOnly
           ></MdEditor>
         </div>
-        <div v-if="!coinInfo.description?.en" class="text-center">
+        <div
+          v-if="!coinInfo.description?.en && !coinInfo.categories"
+          class="text-center"
+        >
           No informations
         </div>
       </div>
