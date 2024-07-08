@@ -117,3 +117,37 @@ table td {
   border: 1px solid #242627;
   border-image: url(./assets/images/svg/border.svg) 22 / 35px;
 }
+
+.boxWithBg {
+  display: flex;
+  height: 216px;
+  border-radius: 8px;
+  padding: 14px 0px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1 0 0;
+  align-self: stretch;
+  gap: 4px;
+
+  border: 1px solid var(--Colors-Neutral-Border-default, #383b40);
+  background: var(--Colors-Neutral-Surface-card, #18181a);
+
+  background-image: url(./assets/images/pages/bg_stake_gpu.png);
+  background-repeat: no-repeat;
+  background-size: 105% 105%;
+  background-position: center center;
+  transition: all ease-in-out 0.2s;
+}
+
+.boxRewardWithImg {
+  background-image: url(./assets/images/pages/bg_apy_gpu.png);
+}
+
+.boxWithBg:hover {
+  background-size: 112% 112%;
+}
+
+.btn-secondary {
+  @apply bg-[#2E2E33] rounded-lg border border-[#383B40] px-6 py-[14px] h-[48px] text-[14px] font-medium text-white hover:brightness-150 hover:bg-[#2E2E33] hover:border-[#383B40];
+}

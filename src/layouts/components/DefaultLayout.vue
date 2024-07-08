@@ -360,7 +360,7 @@ function confirm() {
         <div class="flex-1 w-0"></div>
 
         <!-- <NavSearchBar />-->
-        <div class="lg:block hidden w-full max-w-[334px]">
+        <div class="lg:block hidden w-full max-w-[334px] mx-2">
           <input
             class="input flex-1 w-full !input-bordered bg-[#2E2E33] text-[14px] font-normal h-[44px]"
             v-model="searchQuery"
@@ -374,7 +374,7 @@ function confirm() {
               {{ errorMessage }}
             </div> -->
         </div>
-        <NavBarI18n class="hidden md:!inline-block" />
+        <!-- <NavBarI18n class="hidden md:!inline-block" /> -->
         <NavbarThemeSwitcher class="!inline-block" />
         <NavbarSearch class="!inline-block" />
         <NavBarWallet />

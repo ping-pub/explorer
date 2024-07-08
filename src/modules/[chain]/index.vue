@@ -19,6 +19,9 @@ import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
 import ProposalListItem from '@/components/ProposalListItem.vue';
 import ArrayObjectElement from '@/components/dynamic/ArrayObjectElement.vue';
 
+import sendImg from '../../assets/images/svg/send.svg';
+import delegateImg from '../../assets/images/svg/delegate.svg';
+
 const props = defineProps(['chain']);
 
 const blockchain = useBlockchain();
@@ -87,12 +90,14 @@ const change = computed(() => {
 });
 const color = computed(() => {
   switch (true) {
-    case change.value > 0:
-      return 'text-green-600';
-    case change.value === 0:
-      return 'text-grey-500';
-    case change.value < 0:
-      return 'text-red-600';
+    // case change.value > 0:
+    //   return 'text-green-600';
+    // case change.value === 0:
+    //   return 'text-grey-500';
+    // case change.value < 0:
+    //   return 'text-red-600';
+    default:
+      return 'text-[#83838A]';
   }
 });
 
@@ -127,7 +132,7 @@ const amount = computed({
   <div>
     <div
       v-if="coinInfo && coinInfo.name"
-      class="rounded shadow mb-4 border-b border-base-300"
+      class="rounded shadow border-b border-base-300"
     >
       <div class="grid grid-cols-2 md:grid-cols-3 p-4">
         <div class="col-span-2 md:col-span-1">
@@ -205,7 +210,7 @@ const amount = computed({
                   </div>
                 </div>
               </label>
-              <div class="dropdown-content pt-1">
+              <div class="dropdown-content pt-1 z-20">
                 <div class="h-64 overflow-auto w-full shadow rounded">
                   <ul class="menu w-full bg-gray-100 rounded dark:bg-[#384059]">
                     <li
@@ -217,10 +222,8 @@ const amount = computed({
                         class="flex items-center justify-between hover:bg-base-100"
                       >
                         <div class="flex-1">
-                          <div
-                            class="text-main text-sm"
-                            :class="trustColor(item.trust_score)"
-                          >
+                          <div class="text-main text-sm text-[#B999F3]">
+                            <!-- :class="trustColor(item.trust_score)" -->
                             {{ item?.market?.name }}
                           </div>
                           <div class="text-sm text-gray-500 dark:text-gray-400">
@@ -353,7 +356,7 @@ const amount = computed({
         <div class="mx-4 flex flex-wrap items-center">
           <div
             v-for="tag in coinInfo.categories"
-            class="mr-2 mb-4 text-xs bg-gray-100 dark:bg-[#384059] px-3 rounded-full py-1"
+            class="mr-2 mb-2 text-xs bg-gray-100 dark:bg-[rgba(180,183,187,0.10)] px-3 rounded py-1"
           >
             {{ tag }}
           </div>
@@ -365,7 +368,7 @@ const amount = computed({
           ></MdEditor>
         </div>
         <div v-if="!coinInfo.description?.en" class="text-center">
-          No information
+          No informations
         </div>
       </div>
       <div class="border-none lg:border-solid lg:border-l border-base-300">
@@ -406,22 +409,30 @@ const amount = computed({
 
     <div class="rounded mt-4 border-t border-base-300">
       <div
-        class="flex justify-between px-4 pt-4 pb-2 text-lg font-semibold text-main"
+        class="flex flex-wrap justify-between items-center px-4 pt-4 pb-2 text-lg font-semibold text-main"
       >
-        <span class="truncate">{{
-          walletStore.currentAddress || 'Not Connected'
-        }}</span>
+        <div class="flex-1">
+          <p class="text-[18px] text-[#f7f7f7] font-semibold">My Wallet</p>
+
+          <p
+            class="truncate max-w-[calc(100%-10px)] sm:w-[unset] mt-1 text-[#B999F3] text-[14px] font-normal"
+          >
+            {{ walletStore.currentAddress || 'Not Connected' }}
+          </p>
+        </div>
         <RouterLink
           v-if="walletStore.currentAddress"
-          class="float-right text-sm cursor-pointert link link-primary no-underline font-medium"
+          class="float-right inline-flex text-sm cursor-pointer link link-primary no-underline font-medium text-[#B999F3]"
           :to="`/${chain}/account/${walletStore.currentAddress}`"
-          >{{ $t('index.more') }}</RouterLink
         >
+          {{ $t('index.more') }}
+          <Icon icon="mdi:arrow-right" width="20" height="20" />
+        </RouterLink>
       </div>
       <div
-        class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 px-4 pb-6"
+        class="grid grid-cols-1 md:!grid-cols-3 auto-cols-auto gap-4 px-4 pb-6"
       >
-        <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
+        <div class="boxWithBg rounded-lg px-4 py-3 border border-base-300">
           <div class="text-sm mb-1">{{ $t('account.balance') }}</div>
           <div class="text-lg font-semibold text-main">
             {{ format.formatToken(walletStore.balanceOfStakingToken) }}
@@ -429,17 +440,25 @@ const amount = computed({
           <div class="text-sm" :class="color">
             ${{ format.tokenValue(walletStore.balanceOfStakingToken) }}
           </div>
-        </div>
-        <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
-          <div class="text-sm mb-1">{{ $t('module.staking') }}</div>
-          <div class="text-lg font-semibold text-main">
-            {{ format.formatToken(walletStore.stakingAmount) }}
+
+          <div>
+            <label for="PingTokenConvert" class="btn btn-secondary mr-4">
+              <Icon icon="mdi:swap-vertical" width="20" height="20" />
+              {{ $t('index.btn_swap') }}
+            </label>
+            <label
+              for="send"
+              class="btn btn-secondary"
+              @click="dialog.open('send', {}, updateState)"
+            >
+              <img :src="sendImg" alt="sendIcon" width="20" height="20" />
+              {{ $t('account.btn_send') }}
+            </label>
           </div>
-          <div class="text-sm" :class="color">
-            ${{ format.tokenValue(walletStore.stakingAmount) }}
-          </div>
         </div>
-        <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
+        <div
+          class="boxWithBg boxRewardWithImg rounded-lg px-4 py-3 border border-base-300"
+        >
           <div class="text-sm mb-1">{{ $t('index.reward') }}</div>
           <div class="text-lg font-semibold text-main">
             {{ format.formatToken(walletStore.rewardAmount) }}
@@ -447,14 +466,38 @@ const amount = computed({
           <div class="text-sm" :class="color">
             ${{ format.tokenValue(walletStore.rewardAmount) }}
           </div>
+
+          <label
+            for="delegate"
+            class="btn btn-secondary"
+            @click="dialog.open('delegate', {}, updateState)"
+          >
+            <img :src="delegateImg" alt="delegate" width="20" height="20" />
+            {{ $t('account.btn_delegate') }}</label
+          >
         </div>
-        <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
-          <div class="text-sm mb-1">{{ $t('index.unbonding') }}</div>
-          <div class="text-lg font-semibold text-main">
-            {{ format.formatToken(walletStore.unbondingAmount) }}
+        <div>
+          <div
+            class="bg-gray-100 dark:bg-transparent rounded-lg px-4 py-3 border border-base-300 flex flex-col justify-center items-center"
+          >
+            <div class="text-sm mb-1">{{ $t('module.staking') }}</div>
+            <div class="text-lg font-semibold text-main">
+              {{ format.formatToken(walletStore.stakingAmount) }}
+            </div>
+            <div class="text-sm" :class="color">
+              ${{ format.tokenValue(walletStore.stakingAmount) }}
+            </div>
           </div>
-          <div class="text-sm" :class="color">
-            ${{ format.tokenValue(walletStore.unbondingAmount) }}
+          <div
+            class="bg-gray-100 dark:bg-transparent rounded-lg px-4 py-3 mt-4 border border-base-300 flex flex-col justify-center items-center"
+          >
+            <div class="text-sm mb-1">{{ $t('index.unbonding') }}</div>
+            <div class="text-lg font-semibold text-main">
+              {{ format.formatToken(walletStore.unbondingAmount) }}
+            </div>
+            <div class="text-sm" :class="color">
+              ${{ format.tokenValue(walletStore.unbondingAmount) }}
+            </div>
           </div>
         </div>
       </div>
@@ -476,7 +519,7 @@ const amount = computed({
             <tr v-for="(item, index) in walletStore.delegations" :key="index">
               <td>
                 <RouterLink
-                  class="link link-primary no-underline"
+                  class="link link-primary no-underline text-[#B999F3]"
                   :to="`/${chain}/staking/${item?.delegation?.validatorAddress}`"
                 >
                   {{
@@ -499,10 +542,10 @@ const amount = computed({
                 }}
               </td>
               <td>
-                <div>
+                <div class="flex">
                   <label
                     for="delegate"
-                    class="btn !btn-xs !btn-primary btn-ghost rounded-sm mr-2"
+                    class="btn !btn-xs !btn-primary btn-ghost rounded mr-2 filter hover:brightness-150 capitalize"
                     @click="
                       dialog.open(
                         'delegate',
@@ -515,7 +558,7 @@ const amount = computed({
                   </label>
                   <label
                     for="withdraw"
-                    class="btn !btn-xs !btn-primary btn-ghost rounded-sm"
+                    class="btn whitespace-nowrap !btn-xs !btn-primary btn-ghost mr-2 rounded filter hover:brightness-150 capitalize"
                     @click="
                       dialog.open(
                         'withdraw',
@@ -533,28 +576,34 @@ const amount = computed({
         </table>
       </div>
 
-      <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
-        <label for="PingTokenConvert" class="btn btn-primary text-white">{{
+      <!-- <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
+        <label for="PingTokenConvert" class="btn btn-primary text-white">
+          <Icon icon='mdi:swap-vertical'/>
+          {{
           $t('index.btn_swap')
         }}</label>
         <label
           for="send"
           class="btn !bg-yes !border-yes text-white"
           @click="dialog.open('send', {}, updateState)"
-          >{{ $t('account.btn_send') }}</label
+          >
+          <Icon icon='mdi:send-variant-outline'/>
+          {{ $t('account.btn_send') }}</label
         >
         <label
           for="delegate"
           class="btn !bg-info !border-info text-white"
           @click="dialog.open('delegate', {}, updateState)"
-          >{{ $t('account.btn_delegate') }}</label
+          >
+
+          {{ $t('account.btn_delegate') }}</label
         >
         <RouterLink
           to="/wallet/receive"
           class="btn !bg-info !border-info text-white hidden"
           >{{ $t('index.receive') }}</RouterLink
         >
-      </div>
+      </div> -->
       <Teleport to="body">
         <ping-token-convert
           :chain-name="blockchain?.current?.prettyName"
