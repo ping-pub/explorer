@@ -86,8 +86,12 @@ export const useWalletStore = defineStore('walletStore', {
     },
     shortAddress() {
       const address: string = this.currentAddress;
-      if (address.length > 4) {
-        return `${address.substring(address.length - 4)}`;
+      if (address.length > 6) {
+        return (
+          address.substring(0, 6) +
+          '...' +
+          address.substring(address.length - 6)
+        );
       }
       return '';
     },

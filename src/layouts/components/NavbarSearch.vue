@@ -62,12 +62,12 @@ function confirm() {
 <template>
   <div>
     <button
-      class="btn btn-ghost btn-circle btn-sm mx-1"
+      class="btn btn-sm mr-2 lg:hidden block rounded-lg border border-base-300 bg-[#2E2E33] h-[44px] w-[44px]"
       @click="openSearchModal"
     >
       <Icon
         icon="mdi:magnify"
-        class="text-2xl text-gray-500 dark:text-gray-400"
+        class="text-2xl text-gray-500 dark:text-gray-300"
       />
     </button>
 
@@ -108,7 +108,7 @@ function confirm() {
             <input
               class="input flex-1 w-full !input-bordered"
               v-model="searchQuery"
-              placeholder="Height/Transaction/Account Address"
+              placeholder="Search by Height, Address and TxHash"
             />
             <div
               class="mt-2 text-right text-sm text-error"

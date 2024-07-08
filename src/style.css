@@ -4,7 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
-html,body {
+html,
+body {
   height: 100%;
   overflow-x: hidden;
 }
@@ -12,9 +13,9 @@ html,body {
 body {
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: Sora, Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
   font-size: 15px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -35,7 +36,7 @@ html[data-theme='dark'] {
 }
 
 table td {
-  min-width: 100px!important;
+  min-width: 100px !important;
 }
 
 .table th:first-child {
@@ -93,7 +94,6 @@ table td {
   background: transparent;
 }
 
-
 .text-break {
   word-break: break-word;
 }
@@ -105,4 +105,14 @@ table td {
 .dropdown-content {
   max-height: 80vh;
   overflow-y: auto;
+}
+
+.borderImage:hover {
+  border: 1px solid #242627;
+  border-image: url(./assets/images/svg/border.svg) 22 / 35px;
+}
+
+.borderImageActive {
+  border: 1px solid #242627;
+  border-image: url(./assets/images/svg/border.svg) 22 / 35px;
 }

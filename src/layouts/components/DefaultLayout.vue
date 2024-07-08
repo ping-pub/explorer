@@ -10,6 +10,7 @@ import ChainProfile from '@/layouts/components/ChainProfile.vue';
 
 import { useDashboard } from '@/stores/useDashboard';
 import { useBlockchain } from '@/stores';
+import { useRouter } from 'vue-router';
 
 import NavBarI18n from './NavBarI18n.vue';
 import NavBarWallet from './NavBarWallet.vue';
@@ -37,9 +38,12 @@ blockchain.$subscribe((m, s) => {
     blockchain.randomSetupEndpoint();
   }
 });
+const vueRouters = useRouter();
 
 const sidebarShow = ref(false);
 const sidebarOpen = ref(true);
+let searchQuery = ref('');
+let errorMessage = ref('');
 
 const changeOpen = (index: Number) => {
   if (index === 0) {
@@ -64,24 +68,60 @@ function selected(route: any, nav: NavLink) {
       nav.title.indexOf('dashboard') === -1);
   return b;
 }
+function confirm() {
+  errorMessage.value = '';
+  const key = searchQuery.value;
+  if (!key) {
+    errorMessage.value = 'Please enter a value!';
+    return;
+  }
+  const height = /^\d+$/;
+  const txhash = /^[A-Z\d]{64}$/;
+  const addr = /^[a-z\d]+1[a-z\d]{38,58}$/;
+
+  const current = blockchain?.current?.chainName || '';
+  const routeParams = vueRouters?.currentRoute?.value;
+
+  if (!Object.values(routeParams?.params).includes(key)) {
+    if (height.test(key)) {
+      vueRouters.push({ path: `/${current}/block/${key}` });
+      setTimeout(() => {
+        closeSearchModal();
+      }, 1000);
+    } else if (txhash.test(key)) {
+      vueRouters.push({ path: `/${current}/tx/${key}` });
+      setTimeout(() => {
+        closeSearchModal();
+      }, 1000);
+      //     this.$router.push({ name: 'transaction', params: { chain: c.chain_name, hash: key } })
+    } else if (addr.test(key)) {
+      vueRouters.push({ path: `/${current}/account/${key}` });
+      setTimeout(() => {
+        closeSearchModal();
+      }, 1000);
+    } else {
+      errorMessage.value = 'The input not recognized';
+    }
+  }
+}
 </script>
 
 <template>
-  <div class="bg-gray-100 dark:bg-[#171d30]">
+  <div class="bg-gray-100 dark:bg-[#18181A]">
     <!-- sidebar -->
     <div
-      class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-gray-700"
+      class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-[#383B40]"
       :class="{ block: sidebarShow, 'hidden xl:!block': !sidebarShow }"
     >
-      <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
-        <RouterLink to="/" class="flex items-center">
+      <div class="flex justify-between mt-1 pl-4 py-4 mb-1 border-b border-[#383B40]">
+        <RouterLink to="/" class="flex flex-1 items-center w-full justify-center">
           <img class="w-10 h-10" src="../../assets/logo.svg" />
-          <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">
+          <h1 class="ml-3 text-2xl font-semibold dark:text-white">
             OraiScan
           </h1>
         </RouterLink>
         <div
-          class="pr-4 cursor-pointer xl:!hidden"
+          class="pr-4 cursor-pointer xl:!hidden flex items-center"
           @click="sidebarShow = false"
         >
           <Icon icon="mdi-close" class="text-2xl" />
@@ -90,15 +130,15 @@ function selected(route: any, nav: NavLink) {
       <div
         v-for="(item, index) of blockchain.computedChainMenu"
         :key="index"
-        class="px-2"
-      >
+        >
+        <!-- class="px-2" -->
         <div
           v-if="isNavGroup(item)"
           :tabindex="index"
           class="collapse"
           :class="{
             'collapse-arrow': item?.children?.length > 0,
-            'collapse-open': index === 0 && sidebarOpen,
+            'collapse-open': sidebarOpen, // index === 0 && 
             'collapse-close': index === 0 && !sidebarOpen,
           }"
         >
@@ -108,9 +148,9 @@ function selected(route: any, nav: NavLink) {
             @click="changeOpen(index)"
           />
           <div
-            class="collapse-title !py-0 px-4 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
+            class="collapse-title !py-0 px-3 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
           >
-            <Icon
+            <!-- <Icon
               v-if="item?.icon?.icon"
               :icon="item?.icon?.icon"
               class="text-xl mr-2"
@@ -118,22 +158,25 @@ function selected(route: any, nav: NavLink) {
                 'text-yellow-500': item?.title === 'Favorite',
                 'text-blue-500': item?.title !== 'Favorite',
               }"
-            />
+            /> -->
             <img
               v-if="item?.icon?.image"
               :src="item?.icon?.image"
               class="w-6 h-6 rounded-full mr-3"
             />
             <div
-              class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap"
+              class="text-base text-gray-700 dark:text-gray-200 whitespace-nowrap text-[16px] uppercase font-semibold"
+              :class="{
+                'capitalize': item?.icon?.icon
+              }"
             >
               {{ item?.title }}
             </div>
             <div
               v-if="item?.badgeContent"
-              class="mr-6 badge badge-sm text-white border-none"
-              :class="item?.badgeClass"
-            >
+              class="mr-6 badge badge-sm text-[#2E2E33] font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
+              >
+              <!-- :class="item?.badgeClass" -->
               {{ item?.badgeContent }}
             </div>
           </div>
@@ -145,9 +188,9 @@ function selected(route: any, nav: NavLink) {
               <RouterLink
                 v-if="isNavLink(el)"
                 @click="sidebarShow = false"
-                class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
+                class="hover:bg-gray-100 dark:hover:bg-[#2E2E33] h-[48px] rounded-lg cursor-pointer px-3 py-2 flex items-center border border-[#242627] borderImage"
                 :class="{
-                  '!bg-primary': selected($route, el),
+                  '!bg-[#2E2E33] borderImageActive': selected($route, el),
                 }"
                 :to="el.to"
               >
@@ -186,9 +229,9 @@ function selected(route: any, nav: NavLink) {
           v-if="isNavLink(item)"
           :to="item?.to"
           @click="sidebarShow = false"
-          class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="cursor-pointer px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59] border-t border-b border-base-300 h-[60px]"
         >
-          <Icon
+          <!-- <Icon
             v-if="item?.icon?.icon"
             :icon="item?.icon?.icon"
             class="text-xl mr-2"
@@ -196,30 +239,31 @@ function selected(route: any, nav: NavLink) {
               'text-yellow-500': item?.title === 'Favorite',
               'text-blue-500': item?.title !== 'Favorite',
             }"
-          />
+          /> -->
           <img
             v-if="item?.icon?.image"
             :src="item?.icon?.image"
             class="w-6 h-6 rounded-full mr-3 border border-blue-100"
           />
           <div
-            class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap"
+            class="text-base capitalize text-gray-700 dark:text-gray-200 whitespace-nowrap"
           >
             {{ item?.title }}
           </div>
           <div
-            v-if="item?.badgeContent"
-            class="badge badge-sm text-white border-none"
-            :class="item?.badgeClass"
-          >
+            v-if="item?.badgeContent"              
+            class="mr-6 badge badge-sm text-[#2E2E33] font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
+            >
+            <!-- :class="item?.badgeClass" -->
             {{ item?.badgeContent }}
           </div>
         </RouterLink>
+
         <div
           v-if="isNavTitle(item)"
-          class="px-4 text-sm text-gray-400 pb-2 uppercase"
+          class="px-4 text-sm text-gray-400 pb-2 uppercase border-b border-base-300"
         >
-          {{ item?.heading }}
+          <!-- {{ item?.heading }} -->
         </div>
       </div>
       <div class="px-2">
@@ -253,7 +297,7 @@ function selected(route: any, nav: NavLink) {
         </a>
         <a
           v-if="showDiscord"
-          href="https://discord.com/invite/CmjYVSr6GW"
+          href="https://discord.gg/oraichain"
           target="_blank"
           class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
@@ -278,10 +322,10 @@ function selected(route: any, nav: NavLink) {
         </a>
       </div>
     </div>
-    <div class="xl:!ml-64 px-3 pt-4">
+    <div class="xl:!ml-64">
       <!-- header -->
       <div
-        class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10"
+        class="flex items-center py-4 bg-base-100 mb-4 px-4 sticky top-0 z-10 border-b border-base-300"
       >
         <div
           class="text-2xl pr-3 cursor-pointer xl:!hidden"
@@ -295,6 +339,20 @@ function selected(route: any, nav: NavLink) {
         <div class="flex-1 w-0"></div>
 
         <!-- <NavSearchBar />-->
+        <div class="lg:block hidden w-full max-w-[334px]">
+            <input
+              class="input flex-1 w-full !input-bordered bg-[#2E2E33] text-[14px] font-normal h-[44px]"
+              v-model="searchQuery"
+              placeholder="Search by Height, Address and TxHash"
+              v-on:keyup.enter="confirm"
+            />
+            <!-- <div
+              class="mt-2 text-right text-sm text-error"
+              v-show="errorMessage"
+            >
+              {{ errorMessage }}
+            </div> -->
+        </div>
         <NavBarI18n class="hidden md:!inline-block" />
         <NavbarThemeSwitcher class="!inline-block" />
         <NavbarSearch class="!inline-block" />
@@ -302,7 +360,7 @@ function selected(route: any, nav: NavLink) {
       </div>
 
       <!-- 👉 Pages -->
-      <div style="min-height: calc(100vh - 180px)">
+      <div style="min-height: calc(100vh - 180px)" class="px-3">
         <RouterView v-slot="{ Component }">
           <Transition mode="out-in">
             <Component :is="Component" />
