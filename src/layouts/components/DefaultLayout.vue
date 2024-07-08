@@ -113,12 +113,15 @@ function confirm() {
       class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-[#383B40]"
       :class="{ block: sidebarShow, 'hidden xl:!block': !sidebarShow }"
     >
-      <div class="flex justify-between mt-1 pl-4 py-4 mb-1 border-b border-[#383B40]">
-        <RouterLink to="/" class="flex flex-1 items-center w-full justify-center">
+      <div
+        class="flex justify-between mt-1 pl-4 py-4 mb-1 border-b border-[#383B40]"
+      >
+        <RouterLink
+          to="/"
+          class="flex flex-1 items-center w-full justify-center"
+        >
           <img class="w-10 h-10" src="../../assets/logo.svg" />
-          <h1 class="ml-3 text-2xl font-semibold dark:text-white">
-            OraiScan
-          </h1>
+          <h1 class="ml-3 text-2xl font-semibold dark:text-white">OraiScan</h1>
         </RouterLink>
         <div
           class="pr-4 cursor-pointer xl:!hidden flex items-center"
@@ -127,10 +130,7 @@ function confirm() {
           <Icon icon="mdi-close" class="text-2xl" />
         </div>
       </div>
-      <div
-        v-for="(item, index) of blockchain.computedChainMenu"
-        :key="index"
-        >
+      <div v-for="(item, index) of blockchain.computedChainMenu" :key="index">
         <!-- class="px-2" -->
         <div
           v-if="isNavGroup(item)"
@@ -138,7 +138,7 @@ function confirm() {
           class="collapse"
           :class="{
             'collapse-arrow': item?.children?.length > 0,
-            'collapse-open': sidebarOpen, // index === 0 && 
+            'collapse-open': sidebarOpen, // index === 0 &&
             'collapse-close': index === 0 && !sidebarOpen,
           }"
         >
@@ -167,7 +167,7 @@ function confirm() {
             <div
               class="text-base text-gray-700 dark:text-gray-200 whitespace-nowrap text-[16px] uppercase font-semibold"
               :class="{
-                'capitalize': item?.icon?.icon
+                capitalize: item?.icon?.icon,
               }"
             >
               {{ item?.title }}
@@ -175,7 +175,7 @@ function confirm() {
             <div
               v-if="item?.badgeContent"
               class="mr-6 badge badge-sm text-[#2E2E33] font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
-              >
+            >
               <!-- :class="item?.badgeClass" -->
               {{ item?.badgeContent }}
             </div>
@@ -251,9 +251,9 @@ function confirm() {
             {{ item?.title }}
           </div>
           <div
-            v-if="item?.badgeContent"              
+            v-if="item?.badgeContent"
             class="mr-6 badge badge-sm text-[#2E2E33] font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
-            >
+          >
             <!-- :class="item?.badgeClass" -->
             {{ item?.badgeContent }}
           </div>
@@ -340,13 +340,13 @@ function confirm() {
 
         <!-- <NavSearchBar />-->
         <div class="lg:block hidden w-full max-w-[334px]">
-            <input
-              class="input flex-1 w-full !input-bordered bg-[#2E2E33] text-[14px] font-normal h-[44px]"
-              v-model="searchQuery"
-              placeholder="Search by Height, Address and TxHash"
-              v-on:keyup.enter="confirm"
-            />
-            <!-- <div
+          <input
+            class="input flex-1 w-full !input-bordered bg-[#2E2E33] text-[14px] font-normal h-[44px]"
+            v-model="searchQuery"
+            placeholder="Search by Height, Address and TxHash"
+            v-on:keyup.enter="confirm"
+          />
+          <!-- <div
               class="mt-2 text-right text-sm text-error"
               v-show="errorMessage"
             >
@@ -360,7 +360,7 @@ function confirm() {
       </div>
 
       <!-- 👉 Pages -->
-      <div style="min-height: calc(100vh - 180px)" class="px-3">
+      <div style="min-height: calc(100vh - 180px)" class="px-6">
         <RouterView v-slot="{ Component }">
           <Transition mode="out-in">
             <Component :is="Component" />

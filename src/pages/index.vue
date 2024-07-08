@@ -47,13 +47,6 @@ const chainStore = useBlockchain();
 <template>
   <div class="">
     <div
-      class="flex md:!flex-row flex-col items-center justify-center mb-6 mt-14 gap-2"
-    >
-      <h1 class="text-primary dark:invert text-3xl md:!text-6xl font-bold">
-        {{ $t('pages.title') }}
-      </h1>
-    </div>
-    <div
       v-if="dashboard.status !== LoadingStatus.Loaded"
       class="flex justify-center"
     >
@@ -62,14 +55,14 @@ const chainStore = useBlockchain();
 
     <div
       v-if="featured.length > 0"
-      class="text-center text-base mt-6 text-primary"
+      class="text-left text-base mt-6 text-white font-semibold"
     >
       <h2 class="mb-6">Featured Blockchains</h2>
     </div>
 
     <div
       v-if="featured.length > 0"
-      class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"
+      class="grid grid-cols-1 gap-8 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"
     >
       <ChainSummary
         v-for="(chain, index) in featured"
@@ -78,17 +71,17 @@ const chainStore = useBlockchain();
       />
     </div>
 
-    <div class="text-center text-base mt-6 text-primary">
+    <div class="text-left text-base mt-12 text-white font-semibold">
       <h2 class="mb-6">{{ $t('pages.description') }}</h2>
     </div>
 
     <div
-      class="flex items-center rounded-lg bg-base-100 border border-gray-200 dark:border-gray-700 mt-10"
+      class="flex items-center rounded-lg bg-[#2E2E33] border border-gray-200 dark:border-gray-700 mt-10"
     >
       <Icon icon="mdi:magnify" class="text-2xl text-gray-400 ml-3" />
       <input
         :placeholder="$t('pages.search_placeholder')"
-        class="px-4 h-10 bg-transparent flex-1 outline-none text-base"
+        class="px-4 h-10 bg-[#2E2E33] flex-1 outline-none text-base"
         v-model="keywords"
       />
       <div class="px-4 text-base hidden md:!block">
@@ -97,7 +90,7 @@ const chainStore = useBlockchain();
     </div>
 
     <div
-      class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"
+      class="grid grid-cols-1 gap-8 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"
     >
       <ChainSummary
         v-for="(chain, index) in chains"
