@@ -72,10 +72,11 @@ export const useBlockchain = defineStore('blockchain', {
           const { color } = hexToRgb(this.current?.themeColor);
           const { h, s, l } = rgbToHsl(color);
           const themeColor = h + ' ' + s + '% ' + l + '%';
-          document.body.style.setProperty('--p', `${themeColor}`);
+          // document.body.style.setProperty('--p', `${themeColor}`);
           // document.body.style.setProperty('--p', `${this.current?.themeColor}`);
+          document.body.style.setProperty('--p', '262 79% 55%'); // #7332E7
         } else {
-          document.body.style.setProperty('--p', '237.65 100% 70%');
+          document.body.style.setProperty('--p', '262 79% 55%'); // #7332E7
         }
         currNavItem = [
           {

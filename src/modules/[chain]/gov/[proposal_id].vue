@@ -239,7 +239,7 @@ function metaItem(metadata: string | undefined): {
 
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2
         class="card-title flex flex-col md:!justify-between md:!flex-row mb-2"
       >

@@ -86,20 +86,12 @@ function confirm() {
   if (!Object.values(routeParams?.params).includes(key)) {
     if (height.test(key)) {
       vueRouters.push({ path: `/${current}/block/${key}` });
-      setTimeout(() => {
-        closeSearchModal();
-      }, 1000);
     } else if (txhash.test(key)) {
       vueRouters.push({ path: `/${current}/tx/${key}` });
-      setTimeout(() => {
-        closeSearchModal();
-      }, 1000);
+
       //     this.$router.push({ name: 'transaction', params: { chain: c.chain_name, hash: key } })
     } else if (addr.test(key)) {
       vueRouters.push({ path: `/${current}/account/${key}` });
-      setTimeout(() => {
-        closeSearchModal();
-      }, 1000);
     } else {
       errorMessage.value = 'The input not recognized';
     }
@@ -272,7 +264,7 @@ function confirm() {
           :class="{
             '!bg-[#2E2E33] borderImageActive': selected($route, {
               to: { path: '/wallet/suggest', title: 'Wallet Helper' },
-            }),
+            } as NavLink),
           }"
         >
           <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
@@ -389,7 +381,7 @@ function confirm() {
       </div>
 
       <!-- 👉 Pages -->
-      <div style="min-height: calc(100vh - 180px)" class="px-3">
+      <div style="min-height: calc(100vh - 180px)" class="px-0">
         <RouterView v-slot="{ Component }">
           <Transition mode="out-in">
             <Component :is="Component" />

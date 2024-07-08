@@ -1,7 +1,7 @@
 import { useBlockchain } from '@/stores';
 import numeral from 'numeral';
 
-const chainStore = useBlockchain()
+const chainStore = useBlockchain();
 
 const themeColors = (theme: string) => {
   if (theme === 'light') {
@@ -12,7 +12,8 @@ const themeColors = (theme: string) => {
         surface: '#FFFFFF',
         'surface-variant': '#424242',
         'on-surface-variant': '#EEEEEE',
-        primary: chainStore.current?.themeColor || '#666CFF',
+        // primary: chainStore.current?.themeColor || '#666CFF',
+        primary: '#B999F3',
         'primary-darken-1': '#3700B3',
         secondary: '#6D788D',
         'secondary-darken-1': '#018786',
@@ -92,7 +93,8 @@ const themeColors = (theme: string) => {
       surface: '#30334E',
       'surface-variant': '#BDBDBD',
       'on-surface-variant': '#424242',
-      primary: chainStore.current?.themeColor || '#666CFF',
+      // primary: chainStore.current?.themeColor || '#666CFF',
+      primary: '#B999F3',
       'primary-darken-1': '#3700B3',
       secondary: '#6D788D',
       'secondary-darken-1': '#03DAC5',
@@ -260,14 +262,55 @@ export const getMarketPriceChartConfig = (
 };
 
 // const donutColors = Array.from({length: 19}, () => (`#${Math.floor(Math.random()*16777215+100000).toString(16)}`))
-const donutColors = ["#bbe81a", "#ff5f0b", "#43ebef", "#1999e5", "#230b2c", "#628be8", "#aa5343", "#c9fa89", "#e88ea8", "#72e4a2", "#38cd87", "#515e13", "#7bf8f5", "#83dd6e", "#e8b203", "#7d11d5", "#3e4927", "#f303e2", "#249493", "#50e5e6", "#11deb2", "#a2f9c7", "#2a7bdc", "#47383a", "#226da4", "#966319", "#1bdf99", "#f3ab0c", "#961f50", "#832efd", "#875287", "#4bebe7", "#1d3d2e", "#9caea4", "#2772f5", "#938bf1", "#6228a5", "#24fea5", "#c9bbc8", "#e27225", "#54bd9f", "#babb2d", "#bcf591", "#803b36", "#124f03"]
+const donutColors = [
+  '#bbe81a',
+  '#ff5f0b',
+  '#43ebef',
+  '#1999e5',
+  '#230b2c',
+  '#628be8',
+  '#aa5343',
+  '#c9fa89',
+  '#e88ea8',
+  '#72e4a2',
+  '#38cd87',
+  '#515e13',
+  '#7bf8f5',
+  '#83dd6e',
+  '#e8b203',
+  '#7d11d5',
+  '#3e4927',
+  '#f303e2',
+  '#249493',
+  '#50e5e6',
+  '#11deb2',
+  '#a2f9c7',
+  '#2a7bdc',
+  '#47383a',
+  '#226da4',
+  '#966319',
+  '#1bdf99',
+  '#f3ab0c',
+  '#961f50',
+  '#832efd',
+  '#875287',
+  '#4bebe7',
+  '#1d3d2e',
+  '#9caea4',
+  '#2772f5',
+  '#938bf1',
+  '#6228a5',
+  '#24fea5',
+  '#c9bbc8',
+  '#e27225',
+  '#54bd9f',
+  '#babb2d',
+  '#bcf591',
+  '#803b36',
+  '#124f03',
+];
 
-
-export const getDonutChartConfig = (
-  theme: string,
-  labels: string[]
-) => {
-
+export const getDonutChartConfig = (theme: string, labels: string[]) => {
   const { themeSecondaryTextColor, themePrimaryTextColor } =
     colorVariables(theme);
 
@@ -359,4 +402,3 @@ export const getDonutChartConfig = (
     ],
   };
 };
-

@@ -127,7 +127,7 @@ const amount = computed({
   <div>
     <div
       v-if="coinInfo && coinInfo.name"
-      class="bg-base-100 rounded shadow mb-4"
+      class="rounded shadow mb-4 border-b border-base-300"
     >
       <div class="grid grid-cols-2 md:grid-cols-3 p-4">
         <div class="col-span-2 md:col-span-1">
@@ -137,54 +137,70 @@ const amount = computed({
             }}</span
             >)
           </div>
-          <div class="text-xs mt-2">
-            {{ $t('index.rank') }}:
-            <div
-              class="badge text-xs badge-error bg-[#fcebea] dark:bg-[#41384d] text-red-400"
-            >
-              #{{ coinInfo.market_cap_rank }}
+          <div class="flex flex-wrap items-center">
+            <div class="text-xs my-2">
+              {{ $t('index.rank') }}:
+              <div
+                class="badge text-xs rounded bg-[#fcebea] dark:bg-[#CBAEFF] text-[#2E2E33] font-semibold h-[22px]"
+              >
+                #{{ coinInfo.market_cap_rank }}
+              </div>
             </div>
-          </div>
 
-          <div class="my-4 flex flex-wrap items-center">
-            <a
-              v-for="(item, index) of comLinks"
-              :key="index"
-              :href="item.href"
-              class="link link-primary px-2 py-1 rounded-sm no-underline hover:text-primary hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center"
-            >
-              <Icon :icon="item?.icon" />
-              <span class="ml-1 text-sm uppercase">{{ item?.name }}</span>
-            </a>
+            <div class="my-2 flex flex-wrap items-center">
+              <a
+                v-for="(item, index) of comLinks"
+                :key="index"
+                :href="item.href"
+                class="link link-primary px-2 py-1 rounded-sm no-underline hover:bg-gray-100 dark:hover:bg-base-300 flex items-center text-white hover:text-white"
+              >
+                <Icon :icon="item?.icon" />
+                <span class="ml-1 text-sm capitalize text-[14px] font-normal">{{
+                  item?.name
+                }}</span>
+              </a>
+            </div>
           </div>
 
           <div>
             <div class="dropdown dropdown-hover w-full">
               <label>
                 <div
-                  class="bg-gray-100 dark:bg-[#384059] flex items-center justify-between px-4 py-2 cursor-pointer rounded"
+                  class="bg-gray-100 dark:bg-[#2E2E33] flex flex-col items-center justify-between px-4 py-2 cursor-pointer rounded-lg border border-base-300"
                 >
-                  <div>
-                    <div
-                      class="font-semibold text-xl text-[#666] dark:text-white"
-                    >
-                      {{ ticker?.market?.name || '' }}
-                    </div>
-                    <div class="text-info text-sm">
-                      {{ shortName(ticker?.base, ticker?.coin_id) }}/{{
-                        shortName(ticker?.target, ticker?.target_coin_id)
-                      }}
-                    </div>
+                  <div
+                    class="flex justify-between gap-2 text-[#B4B7BB] font-normal text-[14px] w-full"
+                  >
+                    <span> Select Exchange </span>
+                    <span>
+                      {{ shortName(ticker?.base, ticker?.coin_id) }}{{ ' ' }}
+                      Price
+                    </span>
                   </div>
-
-                  <div class="text-right">
-                    <div
-                      class="text-xl font-semibold text-[#666] dark:text-white"
-                    >
-                      ${{ ticker?.converted_last?.usd }}
+                  <div class="w-full flex items-center justify-between mt-1">
+                    <div>
+                      <div
+                        class="font-semibold text-xl text-[#666] dark:text-white flex items-center gap-1"
+                      >
+                        {{ ticker?.market?.name || '' }}
+                        <Icon icon="mdi:chevron-down" width="20" height="20" />
+                      </div>
+                      <div class="text-[#B999F3] text-sm">
+                        {{ shortName(ticker?.base, ticker?.coin_id) }}/{{
+                          shortName(ticker?.target, ticker?.target_coin_id)
+                        }}
+                      </div>
                     </div>
-                    <div class="text-sm" :class="store.priceColor">
-                      {{ store.priceChange }}%
+
+                    <div class="text-right">
+                      <div
+                        class="text-xl font-semibold text-[#666] dark:text-white"
+                      >
+                        ${{ ticker?.converted_last?.usd }}
+                      </div>
+                      <div class="text-sm" :class="store.priceColor">
+                        {{ store.priceChange }}%
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -213,7 +229,7 @@ const amount = computed({
                             }}
                           </div>
                         </div>
-
+                        primary
                         <div class="text-base text-main">
                           ${{ item?.converted_last?.usd }}
                         </div>
@@ -225,7 +241,22 @@ const amount = computed({
             </div>
 
             <div class="flex">
-              <label class="btn btn-primary !px-1 my-5 mr-2" for="calculator">
+              <a
+                class="my-5 !text-white btn grow bg-primary border-0 filter hover:brightness-150 hover:bg-primary"
+                :class="{
+                  // 'bg-primary border-0 filter hover:brightness-150 ':
+                  //   store.trustColor === 'green',
+                  // '!btn-warning': store.trustColor === 'yellow',
+                }"
+                :href="ticker.trade_url"
+                target="_blank"
+              >
+                {{ $t('index.buy') }} {{ coinInfo.symbol || '' }}
+              </a>
+              <label
+                class="btn !px-1 my-5 ml-2 rounded-lg border border-base-300 bg-[#2E2E33] h-[44px] w-[44px]"
+                for="calculator"
+              >
                 <svg
                   class="w-8 h-8"
                   xmlns="http://www.w3.org/2000/svg"
@@ -303,17 +334,6 @@ const amount = computed({
                   $t('index.close')
                 }}</label>
               </div>
-              <a
-                class="my-5 !text-white btn grow"
-                :class="{
-                  '!btn-success': store.trustColor === 'green',
-                  '!btn-warning': store.trustColor === 'yellow',
-                }"
-                :href="ticker.trade_url"
-                target="_blank"
-              >
-                {{ $t('index.buy') }} {{ coinInfo.symbol || '' }}
-              </a>
             </div>
           </div>
         </div>
@@ -322,32 +342,53 @@ const amount = computed({
           <PriceMarketChart />
         </div>
       </div>
-      <div class="h-[1px] w-full bg-gray-100 dark:bg-[#384059]"></div>
-      <div class="max-h-[250px] overflow-auto p-4 text-sm">
-        <MdEditor
-          :model-value="coinInfo.description?.en"
-          previewOnly
-        ></MdEditor>
-      </div>
-      <div class="mx-4 flex flex-wrap items-center">
-        <div
-          v-for="tag in coinInfo.categories"
-          class="mr-2 mb-4 text-xs bg-gray-100 dark:bg-[#384059] px-3 rounded-full py-1"
-        >
-          {{ tag }}
-        </div>
-      </div>
+      <!-- <div class="h-[1px] w-full bg-gray-100 dark:bg-[#384059]"></div> -->
     </div>
 
-    <div class="grid grid-cols-1 gap-4 md:!grid-cols-3 lg:!grid-cols-6">
-      <div v-for="(item, key) in store.stats" :key="key">
-        <CardStatisticsVertical v-bind="item" />
+    <div class="grid grid-cols-1 gap-4 lg:!grid-cols-2">
+      <div>
+        <div class="px-6 py-4 text-lg font-semibold text-main">
+          About {{ coinInfo.name }}
+        </div>
+        <div class="mx-4 flex flex-wrap items-center">
+          <div
+            v-for="tag in coinInfo.categories"
+            class="mr-2 mb-4 text-xs bg-gray-100 dark:bg-[#384059] px-3 rounded-full py-1"
+          >
+            {{ tag }}
+          </div>
+        </div>
+        <div class="max-h-[250px] overflow-auto p-4 text-sm mb-4">
+          <MdEditor
+            :model-value="coinInfo.description?.en"
+            previewOnly
+          ></MdEditor>
+        </div>
+        <div v-if="!coinInfo.description?.en" class="text-center">
+          No information
+        </div>
+      </div>
+      <div class="border-none lg:border-solid lg:border-l border-base-300">
+        <div class="px-6 py-4 text-lg font-semibold text-main">
+          {{ $t('index.metric') }}
+        </div>
+        <div
+          class="grid grid-cols-1 gap-4 md:!grid-cols-3 p-6 pt-0 items-stretch"
+        >
+          <div
+            v-for="(item, key) in store.stats"
+            :key="key"
+            class="border border-[#383B40] rounded-lg p-4"
+          >
+            <CardStatisticsVertical v-bind="item" />
+          </div>
+        </div>
       </div>
     </div>
 
     <div
       v-if="blockchain.supportModule('governance')"
-      class="bg-base-100 rounded mt-4 shadow"
+      class="border-t border-base-300"
     >
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         {{ $t('index.active_proposals') }}
@@ -363,7 +404,7 @@ const amount = computed({
       </div>
     </div>
 
-    <div class="bg-base-100 rounded mt-4 shadow">
+    <div class="rounded mt-4 border-t border-base-300">
       <div
         class="flex justify-between px-4 pt-4 pb-2 text-lg font-semibold text-main"
       >
@@ -523,8 +564,8 @@ const amount = computed({
       </Teleport>
     </div>
 
-    <div class="bg-base-100 rounded mt-4">
-      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
+    <div class="rounded mt-4 p-4 border-t border-base-300">
+      <div class="pt-4 pb-2 text-lg font-semibold text-main">
         {{ $t('index.app_versions') }}
       </div>
       <!-- Application Version -->
