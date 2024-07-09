@@ -37,15 +37,15 @@ function pageload(p: number) {
 }
 </script>
 <template>
-  <div class="overflow-auto">
+  <div class="overflow-auto section mx-6">
     <table class="table table-compact">
       <thead>
-        <tr>
+        <tr class="text-white">
           <td>Token</td>
           <td>Amount</td>
         </tr>
       </thead>
-      <tr v-for="item in list">
+      <tr v-for="item in list" class="border-b border-b-[#242627] px-4">
         <td>{{ item.denom }}</td>
         <td>{{ item.amount }}</td>
       </tr>

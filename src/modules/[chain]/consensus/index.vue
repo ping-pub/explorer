@@ -153,23 +153,24 @@ async function update() {
 </script>
 
 <template>
-  <div>
-    <!--  -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+  <div class="px-6">
+    <div class="pt-3 pb-4">
       <div class="form-control">
-        <label class="input-group input-group-md w-full flex">
-          <!-- <input
-            type="text"
-            placeholder="Button on both side"
-            class="input input-bordered input-md w-full"
+        <label
+          class="input-group input-group-md w-[80vw] md:w-[40vw] flex flex-wrap md:ml-auto"
+        >
+          <select
             v-model="rpc"
-          /> -->
-          <select v-model="rpc" class="select select-bordered w-full flex-1">
+            class="select select-bordered flex-1 mb-2 md:mb-0"
+          >
             <option v-for="(item, index) in rpcList" :key="index">
               {{ item?.address }}/consensus_state
             </option>
           </select>
-          <button class="btn btn-primary" @click="onChange">
+          <button
+            class="btn btn-primary bg-[#2E2E33] border border-[#383B40]"
+            @click="onChange"
+          >
             {{ $t('consensus.monitor') }}
           </button>
         </label>
@@ -182,83 +183,44 @@ async function update() {
     <div class="mt-4" v-if="roundState['height/round/step']">
       <div class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 pb-4">
         <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-base-100 px-4 py-3 rounded-lg border border-[#383B40] shadow flex justify-center items-center"
         >
-          <div class="text-sm mb-1 flex flex-col truncate">
+          <div class="text-sm mb-1 flex flex-col truncate items-center">
             <h4 class="text-lg font-semibold text-main">{{ rate }}</h4>
             <span class="text-md">{{ $t('consensus.onboard_rate') }}</span>
-          </div>
-          <div class="avatar placeholder">
-            <div
-              class="bg-rose-100 text-neutral-content rounded-full w-12 h-12"
-            >
-              <span class="text-2xl text-error font-semibold">{{
-                $t('consensus.o')
-              }}</span>
-            </div>
           </div>
         </div>
         <!-- Height -->
         <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-base-100 px-4 py-3 rounded-lg border border-[#383B40] shadow flex justify-center items-center"
         >
-          <div class="text-sm mb-1 flex flex-col truncate">
+          <div class="text-sm mb-1 flex flex-col truncate items-center">
             <h4 class="text-lg font-semibold text-main">{{ height }}</h4>
             <span class="text-md">{{ $t('account.height') }}</span>
-          </div>
-          <div class="avatar placeholder">
-            <div
-              class="bg-green-100 text-neutral-content rounded-full w-12 h-12"
-            >
-              <span class="text-2xl text-success font-semibold">{{
-                $t('consensus.h')
-              }}</span>
-            </div>
           </div>
         </div>
         <!-- Round -->
         <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-base-100 px-4 py-3 rounded-lg border border-[#383B40] shadow flex justify-center items-center"
         >
-          <div class="text-sm mb-1 flex flex-col truncate">
+          <div class="text-sm mb-1 flex flex-col truncate items-center">
             <h4 class="text-lg font-semibold text-main">{{ round }}</h4>
             <span class="text-md">{{ $t('consensus.round') }}</span>
-          </div>
-          <div class="avatar placeholder">
-            <div
-              class="bg-violet-100 text-neutral-content rounded-full w-12 h-12"
-            >
-              <span class="text-2xl text-primary font-semibold">{{
-                $t('consensus.r')
-              }}</span>
-            </div>
           </div>
         </div>
         <!-- Step -->
         <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-base-100 px-4 py-3 rounded-lg border border-[#383B40] shadow flex justify-center items-center"
         >
-          <div class="text-sm mb-1 flex flex-col truncate">
+          <div class="text-sm mb-1 flex flex-col truncate items-center">
             <h4 class="text-lg font-semibold text-main">{{ step }}</h4>
             <span class="text-md">{{ $t('consensus.step') }}</span>
-          </div>
-          <div class="avatar placeholder">
-            <div
-              class="bg-blue-100 text-neutral-content rounded-full w-12 h-12"
-            >
-              <span class="text-2xl text-info font-semibold">{{
-                $t('consensus.s')
-              }}</span>
-            </div>
           </div>
         </div>
       </div>
     </div>
     <!-- update -->
-    <div
-      class="bg-base-100 p-4 rounded shadow"
-      v-if="roundState['height/round/step']"
-    >
+    <div class="section" v-if="roundState['height/round/step']">
       <div class="flex flex-1 flex-col truncate">
         <h2 class="text-sm card-title text-error mb-6">
           {{ $t('consensus.updated_at') }} {{ newTime || '' }}
@@ -311,13 +273,15 @@ async function update() {
 
     <!-- alert-info -->
     <div
-      class="text-[#00cfe8] bg-[rgba(0,207,232,0.12)] rounded shadow mt-4 alert-info"
+      class="text-[#00cfe8] bg-[rgba(0,207,232,0.12)] rounded shadow mt-4 alert-info section"
     >
       <div
         class="drop-shadow-md px-4 pt-2 pb-2"
         style="box-shadow: rgba(0, 207, 232, 0.4) 0px 6px 15px -7px"
       >
-        <h2 class="text-base font-semibold">{{ $t('consensus.tips') }}</h2>
+        <h2 class="text-base font-semibold text-white">
+          {{ $t('consensus.tips') }}
+        </h2>
       </div>
       <div class="px-4 py-4">
         <ul style="list-style-type: disc" class="pl-8">
