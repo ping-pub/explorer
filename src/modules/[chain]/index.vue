@@ -146,7 +146,7 @@ const amount = computed({
             <div class="text-xs my-2">
               {{ $t('index.rank') }}:
               <div
-                class="badge text-xs rounded bg-[#fcebea] dark:bg-[#CBAEFF] text-[#2E2E33] font-semibold h-[22px]"
+                class="badge text-xs rounded bg-[#fcebea] dark:bg-[#CBAEFF] text-base font-semibold h-[22px]"
               >
                 #{{ coinInfo.market_cap_rank }}
               </div>
@@ -171,7 +171,7 @@ const amount = computed({
             <div class="dropdown dropdown-hover w-full">
               <label>
                 <div
-                  class="bg-gray-100 dark:bg-[#2E2E33] flex flex-col items-center justify-between px-4 py-2 cursor-pointer rounded-lg border border-base-300"
+                  class="bg-gray-100 dark:bg-base flex flex-col items-center justify-between px-4 py-2 cursor-pointer rounded-lg border border-base-300"
                 >
                   <div
                     class="flex justify-between gap-2 text-[#B4B7BB] font-normal text-[14px] w-full"
@@ -190,7 +190,7 @@ const amount = computed({
                         {{ ticker?.market?.name || '' }}
                         <Icon icon="mdi:chevron-down" width="20" height="20" />
                       </div>
-                      <div class="text-[#B999F3] text-sm">
+                      <div class="text-link text-sm">
                         {{ shortName(ticker?.base, ticker?.coin_id) }}/{{
                           shortName(ticker?.target, ticker?.target_coin_id)
                         }}
@@ -222,7 +222,7 @@ const amount = computed({
                         class="flex items-center justify-between hover:bg-base-100"
                       >
                         <div class="flex-1">
-                          <div class="text-main text-sm text-[#B999F3]">
+                          <div class="text-main text-sm text-link">
                             <!-- :class="trustColor(item.trust_score)" -->
                             {{ item?.market?.name }}
                           </div>
@@ -257,7 +257,7 @@ const amount = computed({
                 {{ $t('index.buy') }} {{ coinInfo.symbol || '' }}
               </a>
               <label
-                class="btn !px-1 my-5 ml-2 rounded-lg border border-base-300 bg-[#2E2E33] h-[44px] w-[44px]"
+                class="btn !px-1 my-5 ml-2 rounded-lg border border-base-300 bg-base h-[44px] w-[44px]"
                 for="calculator"
               >
                 <svg
@@ -418,14 +418,14 @@ const amount = computed({
           <p class="text-[18px] text-[#f7f7f7] font-semibold">My Wallet</p>
 
           <p
-            class="truncate max-w-[calc(100%-10px)] sm:w-[unset] mt-1 text-[#B999F3] text-[14px] font-normal"
+            class="truncate max-w-[calc(100%-10px)] sm:w-[unset] mt-1 text-link text-[14px] font-normal"
           >
             {{ walletStore.currentAddress || 'Not Connected' }}
           </p>
         </div>
         <RouterLink
           v-if="walletStore.currentAddress"
-          class="float-right inline-flex text-sm cursor-pointer link link-primary no-underline font-medium text-[#B999F3]"
+          class="float-right inline-flex text-sm cursor-pointer link link-primary no-underline font-medium text-link"
           :to="`/${chain}/account/${walletStore.currentAddress}`"
         >
           {{ $t('index.more') }}
@@ -522,7 +522,7 @@ const amount = computed({
             <tr v-for="(item, index) in walletStore.delegations" :key="index">
               <td>
                 <RouterLink
-                  class="link link-primary no-underline text-[#B999F3]"
+                  class="link link-primary no-underline text-link"
                   :to="`/${chain}/staking/${item?.delegation?.validatorAddress}`"
                 >
                   {{

@@ -80,9 +80,10 @@ table td {
 
 .countdown {
   position: absolute;
-  width: 45%;
-  text-align: right;
-  float: right;
+  transform: translate(-50%, -50%);
+  /* width: 45%; */
+  /* text-align: right; */
+  /* float: right; */
 }
 
 .validatore-table.table :where(th, td) {
@@ -149,7 +150,7 @@ table td {
 }
 
 .btn-secondary {
-  @apply cursor-pointer bg-[#2E2E33] rounded-lg border border-[#383B40] px-6 py-[14px] h-[48px] text-[14px] font-medium text-white hover:brightness-150 hover:bg-[#2E2E33] hover:border-[#383B40];
+  @apply cursor-pointer bg-base rounded-lg border border-[#383B40] px-6 py-[14px] h-[48px] text-[14px] font-medium text-white hover:brightness-150 hover:bg-base hover:border-[#383B40];
 }
 
 .box-border {
@@ -160,4 +161,15 @@ table td {
   background-color: rgba(185, 153, 243, 0.2);
   color: white;
   border: 1px solid #b999f3;
+}
+
+.box-content {
+  @apply m-4 md:m-6 mb-4 p-4 md:p-6 rounded-[16px] shadow bg-[#141416] border border-[#242627];
+}
+
+.customTabV2.tabs-boxed .tab-active:not(.tab-disabled):not([disabled]) {
+  background-color: transparent;
+  color: #b999f3;
+  font-weight: 600;
+  border-bottom: 2px solid #b999f3;
 }

@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors');
+
 module.exports = {
   darkMode: ['class'],
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
@@ -8,9 +10,15 @@ module.exports = {
         yes: '#3fb68b',
         no: '#ff5353',
         info: '#00b2ff',
+        link: '#B999F3',
         main: 'var(--text-main)',
         secondary: 'var(--text-secondary)',
         active: 'var(--bg-active)',
+        base: {
+          DEFAULT: '#2E2E33',
+          400: '#242627',
+          500: '#141416',
+        },
       },
     },
   },

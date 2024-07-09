@@ -80,8 +80,8 @@
     "average_block_time": "Average Block Time",
     "block_header": "Block Header",
     "last_commit": "Last Commit",
-    "recent": "Recent",
-    "future": "Future",
+    "recent": "Recent Block",
+    "future": "Future Block",
     "fees": "Fees",
     "only_tx": "Only show txs in recent blocks"
   },

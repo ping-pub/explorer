@@ -39,7 +39,7 @@ onMounted(() => {
 <template>
   <!-- <div class="tooltip tooltip-bottom delay-1000">
     <button
-      class="btn btn-ghost btn-circle btn-sm mx-2 rounded-lg border border-base-300 bg-[#2E2E33] h-[44px] w-[44px]"
+      class="btn btn-ghost btn-circle btn-sm mx-2 rounded-lg border border-base-300 bg-base h-[44px] w-[44px]"
       @click="changeMode()"
     >
       <Icon

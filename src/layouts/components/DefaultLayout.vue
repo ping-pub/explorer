@@ -167,7 +167,7 @@ function confirm() {
             </div>
             <div
               v-if="item?.badgeContent"
-              class="mr-6 badge badge-sm text-[#2E2E33] font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
+              class="mr-6 badge badge-sm text-base font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
             >
               <!-- :class="item?.badgeClass" -->
               {{ item?.badgeContent }}
@@ -181,9 +181,9 @@ function confirm() {
               <RouterLink
                 v-if="isNavLink(el)"
                 @click="sidebarShow = false"
-                class="hover:bg-gray-100 dark:hover:bg-[#2E2E33] h-[48px] rounded-lg cursor-pointer px-3 py-2 flex items-center border border-[#242627] borderImage"
+                class="hover:bg-gray-100 dark:hover:bg-base h-[48px] rounded-lg cursor-pointer px-3 py-2 flex items-center border border-[#242627] borderImage"
                 :class="{
-                  '!bg-[#2E2E33] borderImageActive': selected($route, el),
+                  '!bg-base borderImageActive': selected($route, el),
                 }"
                 :to="el.to"
               >
@@ -222,7 +222,7 @@ function confirm() {
           v-if="isNavLink(item)"
           :to="item?.to"
           @click="sidebarShow = false"
-          class="cursor-pointer px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#2E2E33] border-t border-b border-base-300 h-[60px]"
+          class="cursor-pointer px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-base border-t border-b border-base-300 h-[60px]"
         >
           <!-- <Icon
             v-if="item?.icon?.icon"
@@ -245,7 +245,7 @@ function confirm() {
           </div>
           <div
             v-if="item?.badgeContent"
-            class="mr-6 badge badge-sm text-[#2E2E33] font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
+            class="mr-6 badge badge-sm text-base font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
           >
             <!-- :class="item?.badgeClass" -->
             {{ item?.badgeContent }}
@@ -260,9 +260,9 @@ function confirm() {
       <div class="px-2 mt-6">
         <RouterLink
           to="/wallet/suggest"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#2E2E33] border border-[#242627] borderImage h-[48px]"
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-base border border-[#242627] borderImage h-[48px]"
           :class="{
-            '!bg-[#2E2E33] borderImageActive': selected($route, {
+            '!bg-base borderImageActive': selected($route, {
               to: { path: '/wallet/suggest', title: 'Wallet Helper' },
             } as NavLink),
           }"
@@ -362,7 +362,7 @@ function confirm() {
         <!-- <NavSearchBar />-->
         <div class="lg:block hidden w-full max-w-[334px] mx-2">
           <input
-            class="input flex-1 w-full !input-bordered bg-[#2E2E33] text-[14px] font-normal h-[44px]"
+            class="input flex-1 w-full !input-bordered bg-base text-[14px] font-normal h-[44px]"
             v-model="searchQuery"
             placeholder="Search by Height, Address and TxHash"
             v-on:keyup.enter="confirm"

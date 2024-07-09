@@ -447,7 +447,7 @@ loadAvatars();
 
                     <div class="flex flex-col">
                       <span
-                        class="text-sm text-primary dark:text-[#B999F3] whitespace-nowrap overflow-hidden"
+                        class="text-sm text-primary dark:text-link whitespace-nowrap overflow-hidden"
                       >
                         <RouterLink
                           :to="{

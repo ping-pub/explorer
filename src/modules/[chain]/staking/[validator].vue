@@ -648,7 +648,7 @@ function mapDelegators(tx: ExtraTxResponse) {
               />
             </div>
             <RouterLink
-              class="text-xs text-[#B999F3]"
+              class="text-xs text-link"
               :to="`/${chain}/account/${addresses.account}`"
             >
               {{ addresses.account }}
@@ -731,10 +731,10 @@ function mapDelegators(tx: ExtraTxResponse) {
             <tr
               v-for="{ balance, delegation } in delegations.delegationResponses"
             >
-              <td class="text-sm text-[#B999F3]">
+              <td class="text-sm text-link">
                 {{ delegation.delegatorAddress }}
               </td>
-              <td class="truncate text-[#B999F3]">
+              <td class="truncate text-link">
                 {{ format.formatToken(balance) }}
               </td>
             </tr>
@@ -768,12 +768,12 @@ function mapDelegators(tx: ExtraTxResponse) {
           </thead>
           <tbody>
             <tr v-for="(item, i) in txs.txs">
-              <td class="text-sm text-[#B999F3]">
+              <td class="text-sm text-link">
                 <RouterLink :to="`/${props.chain}/block/${item.height}`">{{
                   item.height
                 }}</RouterLink>
               </td>
-              <td class="truncate text-[#B999F3]" style="max-width: 200px">
+              <td class="truncate text-link" style="max-width: 200px">
                 <RouterLink :to="`/${props.chain}/tx/${toHex(item.hash)}`">
                   {{ toHex(item.hash) }}
                 </RouterLink>
@@ -829,7 +829,7 @@ function mapDelegators(tx: ExtraTxResponse) {
           </thead>
           <tbody>
             <tr v-for="(item, i) in events.txs">
-              <td class="pr-2 truncate text-[#B999F3]" style="max-width: 250px">
+              <td class="pr-2 truncate text-link" style="max-width: 250px">
                 <RouterLink
                   v-for="d in mapDelegators(item)"
                   :to="`/${props.chain}/account/${d}`"
@@ -861,7 +861,7 @@ function mapDelegators(tx: ExtraTxResponse) {
               </td>
               <td width="150">
                 <RouterLink
-                  class="text-[#B999F3] mb-0"
+                  class="text-link mb-0"
                   :to="`/${props.chain}/block/${item.height}`"
                   >{{ item.height }}</RouterLink
                 ><br />

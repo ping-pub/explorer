@@ -62,7 +62,7 @@ function confirm() {
 <template>
   <div>
     <button
-      class="btn btn-sm mr-2 lg:hidden block rounded-lg border border-base-300 bg-[#2E2E33] h-[44px] w-[44px]"
+      class="btn btn-sm mr-2 lg:hidden block rounded-lg border border-base-300 bg-base h-[44px] w-[44px]"
       @click="openSearchModal"
     >
       <Icon
