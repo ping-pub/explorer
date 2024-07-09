@@ -17,7 +17,10 @@ let rpcModel = ref('');
   <div class="dropdown">
     <label tabindex="0" class="flex items-center">
       <div class="p-1 relative mr-3 cursor-pointer">
-        <img v-lazy="chainStore.logo" class="w-9 h-9 rounded-full" />
+        <img
+          v-lazy="chainStore.logo"
+          class="w-9 h-9 rounded-full bg-white border border-white"
+        />
         <div
           class="w-2 h-2 rounded-full absolute right-0 bottom-0 shadow"
           :class="{

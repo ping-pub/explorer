@@ -19,6 +19,9 @@ import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
 import ProposalListItem from '@/components/ProposalListItem.vue';
 import ArrayObjectElement from '@/components/dynamic/ArrayObjectElement.vue';
 
+import sendImg from '../../assets/images/svg/send.svg';
+import delegateImg from '../../assets/images/svg/delegate.svg';
+
 const props = defineProps(['chain']);
 
 const blockchain = useBlockchain();
@@ -87,12 +90,14 @@ const change = computed(() => {
 });
 const color = computed(() => {
   switch (true) {
-    case change.value > 0:
-      return 'text-green-600';
-    case change.value === 0:
-      return 'text-grey-500';
-    case change.value < 0:
-      return 'text-red-600';
+    // case change.value > 0:
+    //   return 'text-green-600';
+    // case change.value === 0:
+    //   return 'text-grey-500';
+    // case change.value < 0:
+    //   return 'text-red-600';
+    default:
+      return 'text-[#83838A]';
   }
 });
 
@@ -127,7 +132,7 @@ const amount = computed({
   <div>
     <div
       v-if="coinInfo && coinInfo.name"
-      class="bg-base-100 rounded shadow mb-4"
+      class="rounded shadow border-b border-base-300"
     >
       <div class="grid grid-cols-2 md:grid-cols-3 p-4">
         <div class="col-span-2 md:col-span-1">
@@ -137,59 +142,75 @@ const amount = computed({
             }}</span
             >)
           </div>
-          <div class="text-xs mt-2">
-            {{ $t('index.rank') }}:
-            <div
-              class="badge text-xs badge-error bg-[#fcebea] dark:bg-[#41384d] text-red-400"
-            >
-              #{{ coinInfo.market_cap_rank }}
+          <div class="flex flex-wrap items-center">
+            <div class="text-xs my-2">
+              {{ $t('index.rank') }}:
+              <div
+                class="badge text-xs rounded bg-[#fcebea] dark:bg-[#CBAEFF] text-base font-semibold h-[22px]"
+              >
+                #{{ coinInfo.market_cap_rank }}
+              </div>
             </div>
-          </div>
 
-          <div class="my-4 flex flex-wrap items-center">
-            <a
-              v-for="(item, index) of comLinks"
-              :key="index"
-              :href="item.href"
-              class="link link-primary px-2 py-1 rounded-sm no-underline hover:text-primary hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center"
-            >
-              <Icon :icon="item?.icon" />
-              <span class="ml-1 text-sm uppercase">{{ item?.name }}</span>
-            </a>
+            <div class="my-2 flex flex-wrap items-center">
+              <a
+                v-for="(item, index) of comLinks"
+                :key="index"
+                :href="item.href"
+                class="link link-primary px-2 py-1 rounded-sm no-underline hover:bg-gray-100 dark:hover:bg-base-300 flex items-center text-white hover:text-white"
+              >
+                <Icon :icon="item?.icon" />
+                <span class="ml-1 text-sm capitalize text-[14px] font-normal">{{
+                  item?.name
+                }}</span>
+              </a>
+            </div>
           </div>
 
           <div>
             <div class="dropdown dropdown-hover w-full">
               <label>
                 <div
-                  class="bg-gray-100 dark:bg-[#384059] flex items-center justify-between px-4 py-2 cursor-pointer rounded"
+                  class="bg-gray-100 dark:bg-base flex flex-col items-center justify-between px-4 py-2 cursor-pointer rounded-lg border border-base-300"
                 >
-                  <div>
-                    <div
-                      class="font-semibold text-xl text-[#666] dark:text-white"
-                    >
-                      {{ ticker?.market?.name || '' }}
-                    </div>
-                    <div class="text-info text-sm">
-                      {{ shortName(ticker?.base, ticker?.coin_id) }}/{{
-                        shortName(ticker?.target, ticker?.target_coin_id)
-                      }}
-                    </div>
+                  <div
+                    class="flex justify-between gap-2 text-[#B4B7BB] font-normal text-[14px] w-full"
+                  >
+                    <span> Select Exchange </span>
+                    <span>
+                      {{ shortName(ticker?.base, ticker?.coin_id) }}{{ ' ' }}
+                      Price
+                    </span>
                   </div>
-
-                  <div class="text-right">
-                    <div
-                      class="text-xl font-semibold text-[#666] dark:text-white"
-                    >
-                      ${{ ticker?.converted_last?.usd }}
+                  <div class="w-full flex items-center justify-between mt-1">
+                    <div>
+                      <div
+                        class="font-semibold text-xl text-[#666] dark:text-white flex items-center gap-1"
+                      >
+                        {{ ticker?.market?.name || '' }}
+                        <Icon icon="mdi:chevron-down" width="20" height="20" />
+                      </div>
+                      <div class="text-link text-sm">
+                        {{ shortName(ticker?.base, ticker?.coin_id) }}/{{
+                          shortName(ticker?.target, ticker?.target_coin_id)
+                        }}
+                      </div>
                     </div>
-                    <div class="text-sm" :class="store.priceColor">
-                      {{ store.priceChange }}%
+
+                    <div class="text-right">
+                      <div
+                        class="text-xl font-semibold text-[#666] dark:text-white"
+                      >
+                        ${{ ticker?.converted_last?.usd }}
+                      </div>
+                      <div class="text-sm" :class="store.priceColor">
+                        {{ store.priceChange }}%
+                      </div>
                     </div>
                   </div>
                 </div>
               </label>
-              <div class="dropdown-content pt-1">
+              <div class="dropdown-content pt-1 z-20">
                 <div class="h-64 overflow-auto w-full shadow rounded">
                   <ul class="menu w-full bg-gray-100 rounded dark:bg-[#384059]">
                     <li
@@ -201,10 +222,8 @@ const amount = computed({
                         class="flex items-center justify-between hover:bg-base-100"
                       >
                         <div class="flex-1">
-                          <div
-                            class="text-main text-sm"
-                            :class="trustColor(item.trust_score)"
-                          >
+                          <div class="text-main text-sm text-link">
+                            <!-- :class="trustColor(item.trust_score)" -->
                             {{ item?.market?.name }}
                           </div>
                           <div class="text-sm text-gray-500 dark:text-gray-400">
@@ -213,7 +232,7 @@ const amount = computed({
                             }}
                           </div>
                         </div>
-
+                        primary
                         <div class="text-base text-main">
                           ${{ item?.converted_last?.usd }}
                         </div>
@@ -225,7 +244,22 @@ const amount = computed({
             </div>
 
             <div class="flex">
-              <label class="btn btn-primary !px-1 my-5 mr-2" for="calculator">
+              <a
+                class="my-5 !text-white btn grow bg-primary border-0 filter hover:brightness-150 hover:bg-primary"
+                :class="{
+                  // 'bg-primary border-0 filter hover:brightness-150 ':
+                  //   store.trustColor === 'green',
+                  // '!btn-warning': store.trustColor === 'yellow',
+                }"
+                :href="ticker.trade_url"
+                target="_blank"
+              >
+                {{ $t('index.buy') }} {{ coinInfo.symbol || '' }}
+              </a>
+              <label
+                class="btn !px-1 my-5 ml-2 rounded-lg border border-base-300 bg-base h-[44px] w-[44px]"
+                for="calculator"
+              >
                 <svg
                   class="w-8 h-8"
                   xmlns="http://www.w3.org/2000/svg"
@@ -303,17 +337,6 @@ const amount = computed({
                   $t('index.close')
                 }}</label>
               </div>
-              <a
-                class="my-5 !text-white btn grow"
-                :class="{
-                  '!btn-success': store.trustColor === 'green',
-                  '!btn-warning': store.trustColor === 'yellow',
-                }"
-                :href="ticker.trade_url"
-                target="_blank"
-              >
-                {{ $t('index.buy') }} {{ coinInfo.symbol || '' }}
-              </a>
             </div>
           </div>
         </div>
@@ -322,32 +345,56 @@ const amount = computed({
           <PriceMarketChart />
         </div>
       </div>
-      <div class="h-[1px] w-full bg-gray-100 dark:bg-[#384059]"></div>
-      <div class="max-h-[250px] overflow-auto p-4 text-sm">
-        <MdEditor
-          :model-value="coinInfo.description?.en"
-          previewOnly
-        ></MdEditor>
-      </div>
-      <div class="mx-4 flex flex-wrap items-center">
-        <div
-          v-for="tag in coinInfo.categories"
-          class="mr-2 mb-4 text-xs bg-gray-100 dark:bg-[#384059] px-3 rounded-full py-1"
-        >
-          {{ tag }}
-        </div>
-      </div>
+      <!-- <div class="h-[1px] w-full bg-gray-100 dark:bg-[#384059]"></div> -->
     </div>
 
-    <div class="grid grid-cols-1 gap-4 md:!grid-cols-3 lg:!grid-cols-6">
-      <div v-for="(item, key) in store.stats" :key="key">
-        <CardStatisticsVertical v-bind="item" />
+    <div class="grid grid-cols-1 gap-4 lg:!grid-cols-2">
+      <div>
+        <div class="px-6 py-4 text-lg font-semibold text-main">
+          About {{ coinInfo.name }}
+        </div>
+        <div class="mx-4 flex flex-wrap items-center">
+          <div
+            v-for="tag in coinInfo.categories"
+            class="mr-2 mb-2 text-xs bg-gray-100 dark:bg-[rgba(180,183,187,0.10)] px-3 rounded py-1"
+          >
+            {{ tag }}
+          </div>
+        </div>
+        <div class="max-h-[250px] overflow-auto p-4 text-sm mb-4">
+          <MdEditor
+            :model-value="coinInfo.description?.en"
+            previewOnly
+          ></MdEditor>
+        </div>
+        <div
+          v-if="!coinInfo.description?.en && !coinInfo.categories"
+          class="text-center"
+        >
+          No informations
+        </div>
+      </div>
+      <div class="border-none lg:border-solid lg:border-l border-base-300">
+        <div class="px-6 py-4 text-lg font-semibold text-main">
+          {{ $t('index.metric') }}
+        </div>
+        <div
+          class="grid grid-cols-1 gap-4 md:!grid-cols-3 p-6 pt-0 items-stretch"
+        >
+          <div
+            v-for="(item, key) in store.stats"
+            :key="key"
+            class="border border-[#383B40] rounded-lg p-4"
+          >
+            <CardStatisticsVertical v-bind="item" />
+          </div>
+        </div>
       </div>
     </div>
 
     <div
       v-if="blockchain.supportModule('governance')"
-      class="bg-base-100 rounded mt-4 shadow"
+      class="border-t border-base-300"
     >
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         {{ $t('index.active_proposals') }}
@@ -363,24 +410,32 @@ const amount = computed({
       </div>
     </div>
 
-    <div class="bg-base-100 rounded mt-4 shadow">
+    <div class="rounded mt-4 border-t border-base-300">
       <div
-        class="flex justify-between px-4 pt-4 pb-2 text-lg font-semibold text-main"
+        class="flex flex-wrap justify-between items-center px-4 pt-4 pb-2 text-lg font-semibold text-main"
       >
-        <span class="truncate">{{
-          walletStore.currentAddress || 'Not Connected'
-        }}</span>
+        <div class="flex-1">
+          <p class="text-[18px] text-[#f7f7f7] font-semibold">My Wallet</p>
+
+          <p
+            class="truncate max-w-[calc(100%-10px)] sm:w-[unset] mt-1 text-link text-[14px] font-normal"
+          >
+            {{ walletStore.currentAddress || 'Not Connected' }}
+          </p>
+        </div>
         <RouterLink
           v-if="walletStore.currentAddress"
-          class="float-right text-sm cursor-pointert link link-primary no-underline font-medium"
+          class="float-right inline-flex text-sm cursor-pointer link link-primary no-underline font-medium text-link"
           :to="`/${chain}/account/${walletStore.currentAddress}`"
-          >{{ $t('index.more') }}</RouterLink
         >
+          {{ $t('index.more') }}
+          <Icon icon="mdi:arrow-right" width="20" height="20" />
+        </RouterLink>
       </div>
       <div
-        class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 px-4 pb-6"
+        class="grid grid-cols-1 md:!grid-cols-3 auto-cols-auto gap-4 px-4 pb-6"
       >
-        <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
+        <div class="boxWithBg rounded-lg px-4 py-3 border border-base-300">
           <div class="text-sm mb-1">{{ $t('account.balance') }}</div>
           <div class="text-lg font-semibold text-main">
             {{ format.formatToken(walletStore.balanceOfStakingToken) }}
@@ -388,17 +443,25 @@ const amount = computed({
           <div class="text-sm" :class="color">
             ${{ format.tokenValue(walletStore.balanceOfStakingToken) }}
           </div>
-        </div>
-        <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
-          <div class="text-sm mb-1">{{ $t('module.staking') }}</div>
-          <div class="text-lg font-semibold text-main">
-            {{ format.formatToken(walletStore.stakingAmount) }}
+
+          <div>
+            <label for="PingTokenConvert" class="btn btn-secondary mr-4">
+              <Icon icon="mdi:swap-vertical" width="20" height="20" />
+              {{ $t('index.btn_swap') }}
+            </label>
+            <label
+              for="send"
+              class="btn btn-secondary"
+              @click="dialog.open('send', {}, updateState)"
+            >
+              <img :src="sendImg" alt="sendIcon" width="20" height="20" />
+              {{ $t('account.btn_send') }}
+            </label>
           </div>
-          <div class="text-sm" :class="color">
-            ${{ format.tokenValue(walletStore.stakingAmount) }}
-          </div>
         </div>
-        <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
+        <div
+          class="boxWithBg boxRewardWithImg rounded-lg px-4 py-3 border border-base-300"
+        >
           <div class="text-sm mb-1">{{ $t('index.reward') }}</div>
           <div class="text-lg font-semibold text-main">
             {{ format.formatToken(walletStore.rewardAmount) }}
@@ -406,14 +469,38 @@ const amount = computed({
           <div class="text-sm" :class="color">
             ${{ format.tokenValue(walletStore.rewardAmount) }}
           </div>
+
+          <label
+            for="delegate"
+            class="btn btn-secondary"
+            @click="dialog.open('delegate', {}, updateState)"
+          >
+            <img :src="delegateImg" alt="delegate" width="20" height="20" />
+            {{ $t('account.btn_delegate') }}</label
+          >
         </div>
-        <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
-          <div class="text-sm mb-1">{{ $t('index.unbonding') }}</div>
-          <div class="text-lg font-semibold text-main">
-            {{ format.formatToken(walletStore.unbondingAmount) }}
+        <div>
+          <div
+            class="bg-gray-100 dark:bg-transparent rounded-lg px-4 py-3 border border-base-300 flex flex-col justify-center items-center"
+          >
+            <div class="text-sm mb-1">{{ $t('module.staking') }}</div>
+            <div class="text-lg font-semibold text-main">
+              {{ format.formatToken(walletStore.stakingAmount) }}
+            </div>
+            <div class="text-sm" :class="color">
+              ${{ format.tokenValue(walletStore.stakingAmount) }}
+            </div>
           </div>
-          <div class="text-sm" :class="color">
-            ${{ format.tokenValue(walletStore.unbondingAmount) }}
+          <div
+            class="bg-gray-100 dark:bg-transparent rounded-lg px-4 py-3 mt-4 border border-base-300 flex flex-col justify-center items-center"
+          >
+            <div class="text-sm mb-1">{{ $t('index.unbonding') }}</div>
+            <div class="text-lg font-semibold text-main">
+              {{ format.formatToken(walletStore.unbondingAmount) }}
+            </div>
+            <div class="text-sm" :class="color">
+              ${{ format.tokenValue(walletStore.unbondingAmount) }}
+            </div>
           </div>
         </div>
       </div>
@@ -435,7 +522,7 @@ const amount = computed({
             <tr v-for="(item, index) in walletStore.delegations" :key="index">
               <td>
                 <RouterLink
-                  class="link link-primary no-underline"
+                  class="link link-primary no-underline text-link"
                   :to="`/${chain}/staking/${item?.delegation?.validatorAddress}`"
                 >
                   {{
@@ -458,10 +545,10 @@ const amount = computed({
                 }}
               </td>
               <td>
-                <div>
+                <div class="flex">
                   <label
                     for="delegate"
-                    class="btn !btn-xs !btn-primary btn-ghost rounded-sm mr-2"
+                    class="btn !btn-xs !btn-primary btn-ghost rounded mr-2 filter hover:brightness-150 capitalize"
                     @click="
                       dialog.open(
                         'delegate',
@@ -474,7 +561,7 @@ const amount = computed({
                   </label>
                   <label
                     for="withdraw"
-                    class="btn !btn-xs !btn-primary btn-ghost rounded-sm"
+                    class="btn whitespace-nowrap !btn-xs !btn-primary btn-ghost mr-2 rounded filter hover:brightness-150 capitalize"
                     @click="
                       dialog.open(
                         'withdraw',
@@ -492,28 +579,34 @@ const amount = computed({
         </table>
       </div>
 
-      <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
-        <label for="PingTokenConvert" class="btn btn-primary text-white">{{
+      <!-- <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
+        <label for="PingTokenConvert" class="btn btn-primary text-white">
+          <Icon icon='mdi:swap-vertical'/>
+          {{
           $t('index.btn_swap')
         }}</label>
         <label
           for="send"
           class="btn !bg-yes !border-yes text-white"
           @click="dialog.open('send', {}, updateState)"
-          >{{ $t('account.btn_send') }}</label
+          >
+          <Icon icon='mdi:send-variant-outline'/>
+          {{ $t('account.btn_send') }}</label
         >
         <label
           for="delegate"
           class="btn !bg-info !border-info text-white"
           @click="dialog.open('delegate', {}, updateState)"
-          >{{ $t('account.btn_delegate') }}</label
+          >
+
+          {{ $t('account.btn_delegate') }}</label
         >
         <RouterLink
           to="/wallet/receive"
           class="btn !bg-info !border-info text-white hidden"
           >{{ $t('index.receive') }}</RouterLink
         >
-      </div>
+      </div> -->
       <Teleport to="body">
         <ping-token-convert
           :chain-name="blockchain?.current?.prettyName"
@@ -523,8 +616,8 @@ const amount = computed({
       </Teleport>
     </div>
 
-    <div class="bg-base-100 rounded mt-4">
-      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
+    <div class="rounded mt-4 p-4 border-t border-base-300">
+      <div class="pt-4 pb-2 text-lg font-semibold text-main">
         {{ $t('index.app_versions') }}
       </div>
       <!-- Application Version -->

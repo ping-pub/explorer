@@ -20,6 +20,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #18181a;
 }
 
 :root {
@@ -79,9 +80,10 @@ table td {
 
 .countdown {
   position: absolute;
-  width: 45%;
-  text-align: right;
-  float: right;
+  transform: translate(-50%, -50%);
+  /* width: 45%; */
+  /* text-align: right; */
+  /* float: right; */
 }
 
 .validatore-table.table :where(th, td) {
@@ -119,4 +121,59 @@ table td {
 
 .section {
   @apply p-6 rounded-2xl mb-4 shadow border border-[#242627] dark:bg-[#141416];
+}
+
+.boxWithBg {
+  display: flex;
+  height: 216px;
+  border-radius: 8px;
+  padding: 14px 0px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1 0 0;
+  align-self: stretch;
+  gap: 4px;
+
+  border: 1px solid var(--Colors-Neutral-Border-default, #383b40);
+  background: var(--Colors-Neutral-Surface-card, #18181a);
+
+  background-image: url(./assets/images/pages/bg_stake_gpu.png);
+  background-repeat: no-repeat;
+  background-size: 105% 105%;
+  background-position: center center;
+  transition: all ease-in-out 0.2s;
+}
+
+.boxRewardWithImg {
+  background-image: url(./assets/images/pages/bg_apy_gpu.png);
+}
+
+.boxWithBg:hover {
+  background-size: 112% 112%;
+}
+
+.btn-secondary {
+  @apply cursor-pointer bg-base rounded-lg border border-[#383B40] px-6 py-[14px] h-[48px] text-[14px] font-medium text-white hover:brightness-150 hover:bg-base hover:border-[#383B40];
+}
+
+.box-border {
+  @apply border  border-base-300 rounded-lg flex flex-col items-center justify-center bg-transparent;
+}
+
+.customTab.tabs-boxed .tab-active:not(.tab-disabled):not([disabled]) {
+  background-color: rgba(185, 153, 243, 0.2);
+  color: white;
+  border: 1px solid #b999f3;
+}
+
+.box-content {
+  @apply m-4 md:m-6 mb-4 p-4 md:p-6 rounded-[16px] shadow bg-[#141416] border border-[#242627];
+}
+
+.customTabV2.tabs-boxed .tab-active:not(.tab-disabled):not([disabled]) {
+  background-color: transparent;
+  color: #b999f3;
+  font-weight: 600;
+  border-bottom: 2px solid #b999f3;
 }

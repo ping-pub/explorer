@@ -66,6 +66,7 @@ function selected(route: any, nav: NavLink) {
     route.path === nav.to?.path ||
     (route.path.startsWith(nav.to?.path) &&
       nav.title.indexOf('dashboard') === -1);
+
   return b;
 }
 function confirm() {
@@ -85,20 +86,12 @@ function confirm() {
   if (!Object.values(routeParams?.params).includes(key)) {
     if (height.test(key)) {
       vueRouters.push({ path: `/${current}/block/${key}` });
-      setTimeout(() => {
-        closeSearchModal();
-      }, 1000);
     } else if (txhash.test(key)) {
       vueRouters.push({ path: `/${current}/tx/${key}` });
-      setTimeout(() => {
-        closeSearchModal();
-      }, 1000);
+
       //     this.$router.push({ name: 'transaction', params: { chain: c.chain_name, hash: key } })
     } else if (addr.test(key)) {
       vueRouters.push({ path: `/${current}/account/${key}` });
-      setTimeout(() => {
-        closeSearchModal();
-      }, 1000);
     } else {
       errorMessage.value = 'The input not recognized';
     }
@@ -162,7 +155,7 @@ function confirm() {
             <img
               v-if="item?.icon?.image"
               :src="item?.icon?.image"
-              class="w-6 h-6 rounded-full mr-3"
+              class="w-6 h-6 rounded-full mr-3 bg-white border border-gray-300"
             />
             <div
               class="text-base text-gray-700 dark:text-gray-200 whitespace-nowrap text-[16px] uppercase font-semibold"
@@ -174,7 +167,7 @@ function confirm() {
             </div>
             <div
               v-if="item?.badgeContent"
-              class="mr-6 badge badge-sm text-[#2E2E33] font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
+              class="mr-6 badge badge-sm text-base font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
             >
               <!-- :class="item?.badgeClass" -->
               {{ item?.badgeContent }}
@@ -188,9 +181,9 @@ function confirm() {
               <RouterLink
                 v-if="isNavLink(el)"
                 @click="sidebarShow = false"
-                class="hover:bg-gray-100 dark:hover:bg-[#2E2E33] h-[48px] rounded-lg cursor-pointer px-3 py-2 flex items-center border border-[#242627] borderImage"
+                class="hover:bg-gray-100 dark:hover:bg-base h-[48px] rounded-lg cursor-pointer px-3 py-2 flex items-center border border-[#242627] borderImage"
                 :class="{
-                  '!bg-[#2E2E33] borderImageActive': selected($route, el),
+                  '!bg-base borderImageActive': selected($route, el),
                 }"
                 :to="el.to"
               >
@@ -207,9 +200,9 @@ function confirm() {
                 <img
                   v-if="el?.icon?.image"
                   :src="el?.icon?.image"
-                  class="w-6 h-6 rounded-full mr-3 ml-4"
+                  class="w-6 h-6 rounded-full mr-3 ml-4 bg-white border border-gray-300"
                   :class="{
-                    'border border-gray-300 bg-white': selected($route, el),
+                    '': selected($route, el),
                   }"
                 />
                 <div
@@ -229,7 +222,7 @@ function confirm() {
           v-if="isNavLink(item)"
           :to="item?.to"
           @click="sidebarShow = false"
-          class="cursor-pointer px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59] border-t border-b border-base-300 h-[60px]"
+          class="cursor-pointer px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-base border-t border-b border-base-300 h-[60px]"
         >
           <!-- <Icon
             v-if="item?.icon?.icon"
@@ -243,7 +236,7 @@ function confirm() {
           <img
             v-if="item?.icon?.image"
             :src="item?.icon?.image"
-            class="w-6 h-6 rounded-full mr-3 border border-blue-100"
+            class="w-6 h-6 rounded-full mr-3 border border-blue-100 bg-white"
           />
           <div
             class="text-base capitalize text-gray-700 dark:text-gray-200 whitespace-nowrap"
@@ -252,7 +245,7 @@ function confirm() {
           </div>
           <div
             v-if="item?.badgeContent"
-            class="mr-6 badge badge-sm text-[#2E2E33] font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
+            class="mr-6 badge badge-sm text-base font-semibold text-[14px] border-none bg-[#CBAEFF] rounded mx-[6px] h-[22px]"
           >
             <!-- :class="item?.badgeClass" -->
             {{ item?.badgeContent }}
@@ -262,15 +255,17 @@ function confirm() {
         <div
           v-if="isNavTitle(item)"
           class="px-4 text-sm text-gray-400 pb-2 uppercase border-b border-base-300"
-        >
-          <!-- {{ item?.heading }} -->
-        </div>
+        ></div>
       </div>
-      <div class="px-2">
-        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">Tools</div>
+      <div class="px-2 mt-6">
         <RouterLink
           to="/wallet/suggest"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-base border border-[#242627] borderImage h-[48px]"
+          :class="{
+            '!bg-base borderImageActive': selected($route, {
+              to: { path: '/wallet/suggest', title: 'Wallet Helper' },
+            } as NavLink),
+          }"
         >
           <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
           <div
@@ -280,10 +275,37 @@ function confirm() {
           </div>
         </RouterLink>
 
-        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
+        <!-- <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
           {{ $t('module.links') }}
+        </div> -->
+
+        <div class="flex justify-around items-center my-6">
+          <a
+            href="https://t.me/oraichain"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="filter hover:brightness-150"
+          >
+            <img src="../../assets//images/svg/telegram.svg" alt="telegram" />
+          </a>
+          <a
+            href="https://twitter.com/oraichain"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="filter hover:brightness-150"
+          >
+            <img src="../../assets//images/svg/twiter.svg" alt="twiter" />
+          </a>
+          <a
+            href="https://discord.gg/oraichain"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="filter hover:brightness-150"
+          >
+            <img src="../../assets//images/svg/discord.svg" alt="discord" />
+          </a>
         </div>
-        <a
+        <!-- <a
           href="https://twitter.com/oraichain"
           target="_blank"
           class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
@@ -296,7 +318,6 @@ function confirm() {
           </div>
         </a>
         <a
-          v-if="showDiscord"
           href="https://discord.gg/oraichain"
           target="_blank"
           class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
@@ -319,7 +340,7 @@ function confirm() {
           >
             FAQ
           </div>
-        </a>
+        </a> -->
       </div>
     </div>
     <div class="xl:!ml-64">
@@ -339,9 +360,9 @@ function confirm() {
         <div class="flex-1 w-0"></div>
 
         <!-- <NavSearchBar />-->
-        <div class="lg:block hidden w-full max-w-[334px]">
+        <div class="lg:block hidden w-full max-w-[334px] mx-2">
           <input
-            class="input flex-1 w-full !input-bordered bg-[#2E2E33] text-[14px] font-normal h-[44px]"
+            class="input flex-1 w-full !input-bordered bg-base text-[14px] font-normal h-[44px]"
             v-model="searchQuery"
             placeholder="Search by Height, Address and TxHash"
             v-on:keyup.enter="confirm"
@@ -353,14 +374,14 @@ function confirm() {
               {{ errorMessage }}
             </div> -->
         </div>
-        <NavBarI18n class="hidden md:!inline-block" />
+        <!-- <NavBarI18n class="hidden md:!inline-block" /> -->
         <NavbarThemeSwitcher class="!inline-block" />
         <NavbarSearch class="!inline-block" />
         <NavBarWallet />
       </div>
 
       <!-- 👉 Pages -->
-      <div style="min-height: calc(100vh - 180px)" class="px-6">
+      <div style="min-height: calc(100vh - 180px)" class="px-0">
         <RouterView v-slot="{ Component }">
           <Transition mode="out-in">
             <Component :is="Component" />

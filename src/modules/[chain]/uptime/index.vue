@@ -160,7 +160,7 @@ function fetchAllKeyRotation() {
 
 <template>
   <div>
-    <div class="tabs tabs-boxed bg-transparent mb-4">
+    <div class="tabs tabs-boxed bg-transparent mb-4 customTab">
       <a
         class="tab text-gray-400 capitalize"
         :class="{ 'tab-active': tab === '3' }"
