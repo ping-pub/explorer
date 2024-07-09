@@ -63,7 +63,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
 console.log('item.block?.header', list);
 </script>
 <template>
-  <div class="m-4 md:m-6 border border-base-400 bg-base-500 rounded-2xl">
+  <div class="m-4 md:m-6 border border-base-400 bg-base-100 rounded-2xl">
     <div class="tabs tabs-boxed customTabV2 bg-transparent mb-4 p-6 pb-0">
       <a
         class="tab text-gray-400 capitalize !pb-3"
@@ -88,31 +88,6 @@ console.log('item.block?.header', list);
     </div>
 
     <div v-show="tab === 'blocks'" class="grid grid-cols-1 gap-3">
-      <!-- <RouterLink v-for="item in list" class="flex flex-col justify-between rounded p-4 shadow bg-base-100"
-        :to="`/${chain}/block/${item.block.header.height}`">
-        <div class="flex justify-between">
-          <h3 class="text-md font-bold sm:!text-lg">
-            {{ item.block.header.height }}
-          </h3>
-          <span class="rounded text-xs whitespace-nowrap font-medium text-green-600">
-            {{ format.toDay(item.block?.header?.time.toString(), 'from') }}
-          </span>
-        </div>
-        <div class="flex justify-between tooltip" data-tip="Block Proposor">
-          <div class="mt-2 hidden text-sm sm:!block truncate">
-            <span>{{
-              format.validator(
-                item.block?.header?.proposerAddress &&
-                toBase64(item.block?.header?.proposerAddress)
-              )
-            }}</span>
-          </div>
-          <span class="text-right mt-1 whitespace-nowrap">
-            {{ item.block?.txs.length }} txs
-          </span>
-        </div>
-      </RouterLink> -->
-
       <div class="bg-base-100 overflow-x-auto w-full rounded-2xl mb-4">
         <table class="table w-full table-compact">
           <thead class="border border-base-200">
