@@ -54,7 +54,11 @@ function metaItem(metadata: string | undefined): {
   <div class="bg-white dark:bg-transparent rounded-lg text-sm">
     <table class="table-compact w-full table-fixed hidden lg:!table">
       <tbody>
-        <tr v-for="(item, index) in proposals?.proposals" :key="index">
+        <tr
+          v-for="(item, index) in proposals?.proposals"
+          :key="index"
+          class="hover:bg-[#47474B] cursor-pointer border-b border-b-[#242627] px-4"
+        >
           <td class="px-4 w-20">
             <label
               for="proposal-detail-modal"
@@ -68,7 +72,7 @@ function metaItem(metadata: string | undefined): {
             <div>
               <RouterLink
                 :to="`/${chain.chainName}/gov/${item?.proposalId}`"
-                class="text-main text-base mb-1 block hover:text-indigo-400 truncate"
+                class="text-base mb-1 block text-indigo-400 truncate"
               >
                 {{ item?.title }}
               </RouterLink>

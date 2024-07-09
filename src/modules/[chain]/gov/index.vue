@@ -38,8 +38,8 @@ function page(p: number) {
 }
 </script>
 <template>
-  <div>
-    <div class="tabs tabs-boxed bg-transparent mb-4 text-center">
+  <div class="mx-6 section">
+    <div class="tabs tabs-boxed bg-transparent mb-4 text-center customTab">
       <a
         class="tab text-gray-400 uppercase"
         :class="{

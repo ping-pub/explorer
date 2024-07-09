@@ -21,7 +21,8 @@ const bars = computed(() => {
 
     uptime.push({
       height: element.height,
-      color: has > -1 ? 'bg-green-500' : 'bg-red-500',
+      color: has > -1 ? 'bg-[rgba(39,120,77,0.50)]' : 'bg-red-500',
+      border: has > -1 ? 'border-[#319660]' : 'border-[#FF5252]',
     });
     uptime.shift();
   });
@@ -29,12 +30,12 @@ const bars = computed(() => {
 });
 </script>
 <template>
-  <div class="flex items-center justify-evenly gap-0.5">
+  <div class="flex items-center justify-evenly gap-0.5 mb-3">
     <div class="cursor-default" v-for="(item, index) in bars" :key="index">
       <div
         class="tooltip"
         :data-tip="item.height"
-        :class="item.color"
+        :class="['border', item.color, item.border]"
         style="width: 4px"
       >
         &nbsp;

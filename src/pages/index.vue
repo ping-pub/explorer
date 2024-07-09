@@ -45,7 +45,7 @@ const featured = computed(() => {
 const chainStore = useBlockchain();
 </script>
 <template>
-  <div class="">
+  <div class="section dark:bg-base-200 ml-3">
     <div
       v-if="dashboard.status !== LoadingStatus.Loaded"
       class="flex justify-center"
@@ -81,7 +81,7 @@ const chainStore = useBlockchain();
       <Icon icon="mdi:magnify" class="text-2xl text-gray-400 ml-3" />
       <input
         :placeholder="$t('pages.search_placeholder')"
-        class="px-4 h-10 bg-[#2E2E33] flex-1 outline-none text-base"
+        class="px-4 h-10 bg-[#2E2E33] flex-1 outline-none text-base text-white"
         v-model="keywords"
       />
       <div class="px-4 text-base hidden md:!block">
