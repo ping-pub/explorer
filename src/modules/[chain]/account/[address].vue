@@ -164,7 +164,7 @@ function mapAmount(events: readonly Event[]) {
     >
       <div class="flex items-center">
         <!-- img -->
-        <div class="inline-flex relative w-11 h-11 rounded-md">
+        <!-- <div class="inline-flex relative w-11 h-11 rounded-md">
           <div
             class="w-11 h-11 absolute rounded-md opacity-10 bg-primary"
           ></div>
@@ -177,34 +177,25 @@ function mapAmount(events: readonly Event[]) {
               style="width: 27px; height: 27px"
             />
           </div>
-        </div>
+        </div> -->
         <!-- content -->
         <div class="flex flex-1 flex-col truncate pl-4">
-          <h2 class="text-sm card-title text-white">
-            {{ $t('account.address') }}:
+          <h2 class="text-sm card-title">
+            {{ $t('account.address') }}
           </h2>
-          <span class="text-xs truncate"> {{ address }}</span>
+          <span class="truncate text-lg text-white"> {{ address }}</span>
         </div>
-      </div>
-    </div>
-
-    <!-- Assets -->
-    <div
-      class="m-4 md:m-6 mb-4 p-4 md:p-6 rounded-[16px] shadow bg-[#141416] border border-[#242627]"
-    >
-      <div class="flex justify-between">
-        <h2 class="card-title mb-4">{{ $t('account.assets') }}</h2>
         <!-- button -->
         <div class="flex justify-end mb-4 pr-5">
           <label
             for="send"
-            class="btn btn-primary btn-sm mr-2"
+            class="btn btn-secondary-sm btn-sm mr-2"
             @click="dialog.open('send', {}, updateEvent)"
             >{{ $t('account.btn_send') }}</label
           >
           <label
             for="transfer"
-            class="btn btn-primary btn-sm"
+            class="btn btn-secondary-sm btn-sm"
             @click="
               dialog.open(
                 'transfer',
@@ -217,6 +208,15 @@ function mapAmount(events: readonly Event[]) {
             >{{ $t('account.btn_transfer') }}</label
           >
         </div>
+      </div>
+    </div>
+
+    <!-- Assets -->
+    <div
+      class="m-4 md:m-6 mb-4 p-4 md:p-6 rounded-[16px] shadow bg-[#141416] border border-[#242627]"
+    >
+      <div class="flex text-white justify-between">
+        <h2 class="card-title mb-4">{{ $t('account.assets') }}</h2>
       </div>
       <div class="grid md:!grid-cols-3">
         <div class="md:!col-span-1">
@@ -376,7 +376,7 @@ function mapAmount(events: readonly Event[]) {
             </div>
           </div>
           <div
-            class="mt-4 text-lg font-semibold mr-5 pl-5 border-t pt-4 text-right"
+            class="mt-4 text-lg font-semibold mr-5 pl-5 border-t border-base-300 pt-4 text-right"
           >
             {{ $t('account.total_value') }}: ${{
               totalValue && !isNaN(Number(totalValue)) ? totalValue : 0
@@ -397,13 +397,13 @@ function mapAmount(events: readonly Event[]) {
         <div class="flex justify-end mb-4">
           <label
             for="delegate"
-            class="btn btn-primary btn-sm mr-2"
+            class="btn btn-secondary-sm btn-sm mr-2"
             @click="dialog.open('delegate', {}, updateEvent)"
             >{{ $t('account.btn_delegate') }}</label
           >
           <label
             for="withdraw"
-            class="btn btn-primary btn-sm"
+            class="btn btn-secondary-sm btn-sm"
             @click="dialog.open('withdraw', {}, updateEvent)"
             >{{ $t('account.btn_withdraw') }}</label
           >
@@ -428,7 +428,7 @@ function mapAmount(events: readonly Event[]) {
               </td>
             </tr>
             <tr v-for="(v, index) in delegations" :key="index">
-              <td class="text-caption text-primary py-3">
+              <td class="text-caption text-link py-3">
                 <RouterLink
                   :to="`/${chain}/staking/${v.delegation.validatorAddress}`"
                   >{{
@@ -458,7 +458,7 @@ function mapAmount(events: readonly Event[]) {
                 <div v-if="v.balance" class="flex justify-end">
                   <label
                     for="delegate"
-                    class="btn btn-primary btn-xs mr-2"
+                    class="btn btn-secondary-sm btn-xs mr-2"
                     @click="
                       dialog.open(
                         'delegate',
@@ -472,7 +472,7 @@ function mapAmount(events: readonly Event[]) {
                   >
                   <label
                     for="redelegate"
-                    class="btn btn-primary btn-xs mr-2"
+                    class="btn btn-secondary-sm btn-xs mr-2"
                     @click="
                       dialog.open(
                         'redelegate',
@@ -486,7 +486,7 @@ function mapAmount(events: readonly Event[]) {
                   >
                   <label
                     for="unbond"
-                    class="btn btn-primary btn-xs"
+                    class="btn btn-secondary-sm btn-xs"
                     @click="
                       dialog.open(
                         'unbond',
