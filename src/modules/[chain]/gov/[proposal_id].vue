@@ -238,13 +238,13 @@ function metaItem(metadata: string | undefined): {
 </script>
 
 <template>
-  <div>
+  <div class="px-6">
     <div class="px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2
-        class="card-title flex flex-col md:!justify-between md:!flex-row mb-2"
+        class="card-title flex flex-col md:!justify-between md:!flex-row mb-2 text-white"
       >
         <p class="truncate w-full">
-          {{ proposal_id }}.
+          #{{ proposal_id }}
           {{ proposal.content?.title }}
         </p>
         <div
@@ -276,11 +276,13 @@ function metaItem(metadata: string | undefined): {
     <!-- flex-col lg:!!flex-row flex -->
     <div class="gap-4 mb-4 grid lg:!!grid-cols-3 auto-rows-max">
       <!-- flex-1 -->
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
-        <h2 class="card-title mb-1">{{ $t('gov.tally') }}</h2>
+      <div class="section">
+        <h2 class="card-title mb-1 text-white">
+          {{ $t('gov.tally') }}
+        </h2>
         <div class="mb-1" v-for="(item, index) of processList" :key="index">
           <label class="block text-sm mb-1">{{ item.name }}</label>
-          <div class="h-5 w-full relative">
+          <div class="h-5 w-full relative mb-3">
             <div
               class="absolute inset-x-0 inset-y-0 w-full opacity-10 rounded-sm"
               :class="`${item.class}`"
@@ -290,7 +292,7 @@ function metaItem(metadata: string | undefined): {
               :class="`${item.class}`"
               :style="`width: ${
                 item.value === '-' || item.value === 'NaN%' ? '0%' : item.value
-              }`"
+              }, max-width: 100%`"
             ></div>
             <p
               class="absolute inset-x-0 inset-y-0 text-center text-sm text-[#666] dark:text-[#eee] flex items-center justify-center"
@@ -308,15 +310,15 @@ function metaItem(metadata: string | undefined): {
           >
           <label
             for="deposit"
-            class="btn btn-primary float-right btn-sm mx-1"
+            class="btn btn-primary rounded-lg float-right btn-sm mx-1 bg-[#2E2E33] border border-[#383B40]"
             @click="dialog.open('deposit', { proposal_id })"
             >{{ $t('gov.btn_deposit') }}</label
           >
         </div>
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-5 rounded shadow lg:!!col-span-2">
-        <h2 class="card-title">{{ $t('gov.timeline') }}</h2>
+      <div class="section">
+        <h2 class="card-title text-white">{{ $t('gov.timeline') }}</h2>
 
         <div class="px-1">
           <div class="flex items-center mb-4 mt-2">
@@ -420,8 +422,8 @@ function metaItem(metadata: string | undefined): {
       </div>
     </div>
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title">{{ $t('gov.votes') }}</h2>
+    <div class="section">
+      <h2 class="card-title text-white">{{ $t('gov.votes') }}</h2>
       <div class="overflow-x-auto">
         <table class="table w-full table-zebra">
           <tbody>

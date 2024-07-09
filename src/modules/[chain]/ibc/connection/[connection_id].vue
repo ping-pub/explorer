@@ -135,7 +135,7 @@ function color(v: string) {
 }
 </script>
 <template>
-  <div class="">
+  <div class="mx-6">
     <div class="px-4 pt-3 pb-4 bg-base-200 rounded mb-4 shadow">
       <div class="mx-auto max-w-7xl px-6 lg:!px-8">
         <dl class="grid grid-cols-1 gap-x-6 text-center lg:!grid-cols-3">
@@ -173,8 +173,8 @@ function color(v: string) {
       </div>
     </div>
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4 overflow-hidden">
+    <div class="section">
+      <h2 class="card-title mb-4 overflow-hidden text-white">
         {{ $t('ibc.title_2')
         }}<span class="ml-2 text-sm text-break">{{
           clientState?.clientState?.typeUrl
@@ -261,8 +261,8 @@ function color(v: string) {
         </table>
       </div>
     </div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow overflow-hidden">
-      <h2 class="card-title">{{ $t('ibc.channels') }}</h2>
+    <div class="section">
+      <h2 class="card-title text-white">{{ $t('ibc.channels') }}</h2>
       <div class="overflow-auto">
         <table class="table w-full mt-4">
           <thead>

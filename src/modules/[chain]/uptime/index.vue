@@ -19,6 +19,7 @@ import type {
   Params,
   ValidatorSigningInfo,
 } from 'cosmjs-types/cosmos/slashing/v1beta1/slashing';
+import { Icon } from '@iconify/vue';
 
 const props = defineProps(['chain']);
 
@@ -178,12 +179,15 @@ function fetchAllKeyRotation() {
       </RouterLink>
     </div>
     <div class="bg-base-100 px-5 pt-5">
-      <div class="flex items-center gap-x-4">
+      <div
+        class="flex items-center gap-x-4 dark:bg-[#2E2E33] border border-gray-200 dark:border-gray-700 rounded-lg py-2"
+      >
+        <Icon icon="mdi:magnify" class="text-2xl text-gray-400 ml-3" />
         <input
           type="text"
           v-model="keyword"
-          placeholder="Keywords to filter validators"
-          class="input input-sm w-full flex-1 border border-gray-200 dark:border-gray-600"
+          placeholder="Search validators by name"
+          class="w-full flex-1 outline-none text-base text-white dark:bg-[#2E2E33]"
         />
         <button
           v-if="chainStore.isConsumerChain"
@@ -210,7 +214,7 @@ function fetchAllKeyRotation() {
       >
         <div v-for="({ v, signing, hex }, i) in list" :key="i">
           <div class="flex items-center justify-between py-0 w-[298px]">
-            <label class="truncate text-sm">
+            <label class="truncate text-sm mb-1">
               <span class="ml-1 text-black dark:text-white"
                 >{{ i + 1 }}.{{ v.description.moniker }}</span
               >
