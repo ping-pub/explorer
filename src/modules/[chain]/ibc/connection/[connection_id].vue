@@ -136,129 +136,151 @@ function color(v: string) {
 </script>
 <template>
   <div class="mx-6">
-    <div class="px-4 pt-3 pb-4 bg-base-200 rounded mb-4 shadow">
-      <div class="mx-auto max-w-7xl px-6 lg:!px-8">
-        <dl class="grid grid-cols-1 gap-x-6 text-center lg:!grid-cols-3">
-          <div class="mx-auto flex items-center">
-            <div>
-              <div
-                class="order-first text-3xl font-semibold tracking-tight text-main mb-1"
-              >
-                {{ baseStore.latest?.block?.header?.chainId }}
-              </div>
-              <div class="text-sm text-gray-500 dark:text-gray-400">
-                {{ conn?.clientId }} {{ props.connection_id }}
-              </div>
-            </div>
-          </div>
-          <div class="mx-auto flex items-center">
-            <div :class="{ 'text-success': conn?.state === State.STATE_OPEN }">
-              <span class="text-lg rounded-full">&#x21cc;</span>
-              <div class="text-c">
-                {{ conn?.state }}
-              </div>
-            </div>
-          </div>
-          <div class="mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+      <div
+        class="col-span-1 md:col-span-2 px-4 pt-3 pb-4 rounded-[16px] shadow bg-[#141416] border border-[#242627] flex flex-col justify-center items-center bg-img-ibc"
+      >
+        <div
+          class="box-border p-4 md:p-6 min-h-[112px] min-w-[256px] !rounded-[20px]"
+        >
+          <div>
             <div
-              class="order-first text-3xl font-semibold tracking-tight text-main mb-2"
+              class="order-first text-3xl font-semibold text-center tracking-tight text-white mb-1"
             >
-              {{ clientState?.chainId }}
+              {{ baseStore.latest?.block?.header?.chainId }}
             </div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">
-              {{ conn?.counterparty?.connectionId }} {{ clientState?.clientId }}
+            <div
+              class="text-sm text-gray-500 dark:text-gray-400 text-center mt-4"
+            >
+              {{ conn?.clientId }} {{ props.connection_id }}
             </div>
           </div>
-        </dl>
+        </div>
+        <div class="flex w-full gap-2 items-center justify-between my-4">
+          <div class="flex-1 border border-[#383B40]"></div>
+          <div
+            :class="{ 'text-[#39DD47]': conn?.state === State.STATE_OPEN }"
+            class="inline-flex gap-2 whitespace-nowrap"
+          >
+            <!-- <span class="text-lg rounded-full">&#x21cc;</span> -->
+            <Icon icon="mdi:swap-vertical" width="20" height="20" />
+            <div class="text-center">
+              {{ conn?.state !== State.STATE_OPEN ? 'Failed' : 'Open' }}
+              ({{ conn?.state }})
+            </div>
+          </div>
+          <div class="flex-1 border border-[#383B40]"></div>
+        </div>
+        <div
+          class="box-border p-4 md:p-6 min-h-[112px] min-w-[256px] !rounded-[20px]"
+        >
+          <div
+            class="order-first text-3xl font-semibold tracking-tight text-center text-white"
+          >
+            {{ clientState?.chainId }}
+          </div>
+          <div
+            class="text-sm text-gray-500 dark:text-gray-400 text-center mt-4"
+          >
+            {{ conn?.counterparty?.connectionId }}
+            {{ clientState?.clientId }}
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="section">
-      <h2 class="card-title mb-4 overflow-hidden text-white">
-        {{ $t('ibc.title_2')
-        }}<span class="ml-2 text-sm text-break">{{
+      <div class="section col-span-1 md:col-span-3 !mb-0">
+        <h2 class="card-title overflow-hidden text-white ml-2">
+          {{ $t('ibc.title_2') }}
+        </h2>
+        <span class="ml-2 text-sm text-break text-[#B4B7BB] mb-2">{{
           clientState?.clientState?.typeUrl
         }}</span>
-      </h2>
-      <div class="overflow-x-auto grid grid-cols-1 md:grid-cols-2 gap-4">
-        <table class="table table-sm capitalize">
-          <thead class="bg-base-200">
-            <tr>
-              <td colspan="3">{{ $t('ibc.trust_parameters') }}</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="w-52">{{ $t('ibc.trust_level') }}:</td>
-              <td>
-                {{ clientState?.trustLevel?.numerator }}/{{
-                  clientState?.trustLevel?.denominator
-                }}
-              </td>
-            </tr>
-            <tr>
-              <td class="w-52">{{ $t('ibc.trusting_period') }}:</td>
-              <td>
-                {{ formatSeconds(clientState?.trustingPeriod) }}
-              </td>
-            </tr>
-            <tr>
-              <td class="w-52">{{ $t('ibc.unbonding_period') }}:</td>
-              <td>
-                {{ formatSeconds(clientState?.unbondingPeriod) }}
-              </td>
-            </tr>
-            <tr>
-              <td class="w-52">{{ $t('ibc.max_clock_drift') }}:</td>
-              <td>
-                {{ formatSeconds(clientState?.maxClockDrift) }}
-              </td>
-            </tr>
-            <tr>
-              <td class="w-52">{{ $t('ibc.frozen_height') }}:</td>
-              <td>
-                {{ clientState?.frozenHeight?.revisionHeight.toString() }}
-              </td>
-            </tr>
-            <tr>
-              <td class="w-52">{{ $t('ibc.latest_height') }}:</td>
-              <td>
-                {{ clientState?.latestHeight?.revisionHeight.toString() }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <table class="table table-sm text-sm w-full capitalize">
-          <thead class="bg-base-200">
-            <tr>
-              <td colspan="2">{{ $t('ibc.upgrade_parameters') }}</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="2">
-                <div class="flex justify-between">
-                  <span>{{ $t('ibc.allow_update_after_expiry') }}:</span>
-                  <span>{{ clientState?.allowUpdateAfterExpiry }}</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <div class="flex justify-between">
-                  <span>{{ $t('ibc.allow_update_after_misbehaviour') }}: </span>
-                  <span>{{ clientState?.allowUpdateAfterMisbehaviour }}</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td class="w-52">{{ $t('ibc.upgrade_path') }}:</td>
-              <td class="text-right text-break">
-                {{ clientState?.upgradePath?.join(', ') }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <br />
+        <br />
+        <div class="w-full border-b border-base-300 mb-2"></div>
+        <div class="overflow-x-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+          <table class="table table-sm capitalize">
+            <thead class="text-white font-semibold">
+              <tr>
+                <td colspan="3">{{ $t('ibc.trust_parameters') }}</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="w-52">{{ $t('ibc.trust_level') }}:</td>
+                <td>
+                  {{ clientState?.trustLevel?.numerator }}/{{
+                    clientState?.trustLevel?.denominator
+                  }}
+                </td>
+              </tr>
+              <tr>
+                <td class="w-52">{{ $t('ibc.trusting_period') }}:</td>
+                <td>
+                  {{ formatSeconds(clientState?.trustingPeriod) }}
+                </td>
+              </tr>
+              <tr>
+                <td class="w-52">{{ $t('ibc.unbonding_period') }}:</td>
+                <td>
+                  {{ formatSeconds(clientState?.unbondingPeriod) }}
+                </td>
+              </tr>
+              <tr>
+                <td class="w-52">{{ $t('ibc.max_clock_drift') }}:</td>
+                <td>
+                  {{ formatSeconds(clientState?.maxClockDrift) }}
+                </td>
+              </tr>
+              <tr>
+                <td class="w-52">{{ $t('ibc.frozen_height') }}:</td>
+                <td>
+                  {{ clientState?.frozenHeight?.revisionHeight.toString() }}
+                </td>
+              </tr>
+              <tr>
+                <td class="w-52">{{ $t('ibc.latest_height') }}:</td>
+                <td>
+                  {{ clientState?.latestHeight?.revisionHeight.toString() }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="md:hidden w-full border-b border-base-300 mb-2"></div>
+          <table class="table table-sm text-sm w-full capitalize">
+            <thead class="text-white font-semibold">
+              <tr>
+                <td colspan="2">{{ $t('ibc.upgrade_parameters') }}</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="2">
+                  <div class="flex justify-between">
+                    <span>{{ $t('ibc.allow_update_after_expiry') }}:</span>
+                    <span>{{ clientState?.allowUpdateAfterExpiry }}</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <div class="flex justify-between">
+                    <span
+                      >{{ $t('ibc.allow_update_after_misbehaviour') }}:
+                    </span>
+                    <span>{{ clientState?.allowUpdateAfterMisbehaviour }}</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-52">{{ $t('ibc.upgrade_path') }}:</td>
+                <td class="text-right text-break">
+                  {{ clientState?.upgradePath?.join(', ') }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <div class="section">
@@ -266,7 +288,7 @@ function color(v: string) {
       <div class="overflow-auto">
         <table class="table w-full mt-4">
           <thead>
-            <tr>
+            <tr class="text-white">
               <th>{{ $t('ibc.txs') }}</th>
               <th style="position: relative; z-index: 2">
                 {{ $t('ibc.channel_id') }}
@@ -284,23 +306,7 @@ function color(v: string) {
               <td>
                 <div class="flex gap-1">
                   <button
-                    class="btn btn-xs"
-                    @click="
-                      fetchSendingTxs(
-                        v[ibcStore.sourceField].channel_id,
-                        v[ibcStore.sourceField].port_id
-                      )
-                    "
-                    :disabled="loading"
-                  >
-                    <span
-                      v-if="loading"
-                      class="loading loading-spinner loading-sm"
-                    ></span>
-                    {{ $t('ibc.btn_out') }}
-                  </button>
-                  <button
-                    class="btn btn-xs"
+                    class="btn btn-xs !bg-[rgba(39,120,77,0.20)] border border-[rgba(39,120,77,0.20)] rounded-lg !text-[#39DD47]"
                     @click="
                       fetchRecevingTxs(
                         v[ibcStore.sourceField].channel_id,
@@ -311,13 +317,29 @@ function color(v: string) {
                   >
                     <span
                       v-if="loading"
-                      class="loading loading-spinner loading-sm"
+                      class="loading loading-spinner loading-sm !text-[#39DD47]"
                     ></span>
                     {{ $t('ibc.btn_in') }}
                   </button>
+                  <button
+                    class="btn btn-xs !bg-[rgba(255,82,82,0.20)] border border-[rgba(255,82,82,0.20)] rounded-lg !text-[#FF5252]"
+                    @click="
+                      fetchSendingTxs(
+                        v[ibcStore.sourceField].channel_id,
+                        v[ibcStore.sourceField].port_id
+                      )
+                    "
+                    :disabled="loading"
+                  >
+                    <span
+                      v-if="loading"
+                      class="loading loading-spinner loading-sm !text-[#FF5252]"
+                    ></span>
+                    {{ $t('ibc.btn_out') }}
+                  </button>
                 </div>
               </td>
-              <td>
+              <td class="text-white">
                 <a href="#">{{ v[ibcStore.sourceField].channel_id }}</a>
               </td>
               <td>{{ v[ibcStore.sourceField].port_id }}</td>
@@ -326,53 +348,53 @@ function color(v: string) {
               <td>
                 <div class="flex gap-1">
                   <button
-                    class="btn btn-xs"
-                    @click="fetchSendingTxs(v.channelId, v.portId)"
-                    :disabled="loading"
-                  >
-                    <span
-                      v-if="loading"
-                      class="loading loading-spinner loading-sm"
-                    ></span>
-                    {{ $t('ibc.btn_out') }}
-                  </button>
-                  <button
-                    class="btn btn-xs"
+                    class="btn btn-xs !bg-[rgba(39,120,77,0.20)] border border-[rgba(39,120,77,0.20)] rounded-lg !text-[#39DD47]"
                     @click="fetchRecevingTxs(v.channelId, v.portId)"
                     :disabled="loading"
                   >
                     <span
                       v-if="loading"
-                      class="loading loading-spinner loading-sm"
+                      class="loading loading-spinner loading-sm !text-[#39DD47]"
                     ></span>
                     {{ $t('ibc.btn_in') }}
                   </button>
+                  <button
+                    class="btn btn-xs !bg-[rgba(255,82,82,0.20)] border border-[rgba(255,82,82,0.20)] rounded-lg !text-[#FF5252]"
+                    @click="fetchSendingTxs(v.channelId, v.portId)"
+                    :disabled="loading"
+                  >
+                    <span
+                      v-if="loading"
+                      class="loading loading-spinner loading-sm !text-[#FF5252]"
+                    ></span>
+                    {{ $t('ibc.btn_out') }}
+                  </button>
                 </div>
               </td>
-              <td>
+              <td class="text-white">
                 <a href="#" @click="loadChannel(v.channelId, v.portId)">{{
                   v.channelId
                 }}</a>
               </td>
-              <td>{{ v.portId }}</td>
+              <td class="text-white">{{ v.portId }}</td>
               <td>
                 <div
-                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit"
+                  class="text-xs truncate relative py-2 px-4 rounded-full w-fit text-white"
                   :class="`text-${color(v.state.toString())}`"
                 >
-                  <span
+                  <!-- <span
                     class="inset-x-0 inset-y-0 opacity-10 absolute"
                     :class="`bg-${color(v.state.toString())}`"
-                  ></span>
+                  ></span> -->
                   {{ v.state }}
                 </div>
               </td>
               <td>
                 {{ v.counterparty?.portId }}/{{ v.counterparty?.channelId }}
               </td>
-              <td>{{ v.connectionHops.join(', ') }}</td>
+              <td class="text-white">{{ v.connectionHops.join(', ') }}</td>
               <td>{{ v.version }}</td>
-              <td>{{ v.ordering }}</td>
+              <td class="text-right text-white">{{ v.ordering }}</td>
             </tr>
           </tbody>
         </table>
@@ -385,17 +407,17 @@ function color(v: string) {
       <table class="table">
         <thead>
           <tr>
-            <td>{{ $t('ibc.height') }}</td>
-            <td>{{ $t('ibc.txhash') }}</td>
-            <td>{{ $t('ibc.messages') }}</td>
-            <td>{{ $t('ibc.time') }}</td>
+            <td class="text-white">{{ $t('ibc.height') }}</td>
+            <td class="text-white">{{ $t('ibc.txhash') }}</td>
+            <td class="text-white">{{ $t('ibc.messages') }}</td>
+            <td class="text-white">{{ $t('ibc.time') }}</td>
           </tr>
         </thead>
         <tbody>
           <tr v-for="resp in txs?.txs">
             <td>{{ resp.height }}</td>
             <td>
-              <div class="text-xs truncate text-primary dark:invert">
+              <div class="text-xs truncate text-primary dark:text-link">
                 <RouterLink
                   :to="`/${chainStore.chainName}/tx/${toHex(resp.hash)}`"
                   >{{ toHex(resp.hash) }}</RouterLink
