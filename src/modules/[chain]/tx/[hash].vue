@@ -8,6 +8,7 @@ import { JsonViewer } from 'vue3-json-viewer';
 // if you used v1.0.5 or latster ,you should add import "vue3-json-viewer/dist/index.css"
 import 'vue3-json-viewer/dist/index.css';
 import { wrapBinary } from '@/libs/utils';
+import { Icon } from '@iconify/vue';
 
 const props = defineProps(['hash', 'chain']);
 
@@ -57,17 +58,12 @@ const txLogs = computed(() => {
               <td>{{ $t('staking.status') }}</td>
               <td>
                 <span
-                  class="text-xs truncate relative py-2 px-4 w-fit mr-2 rounded"
-                  :class="`text-${
-                    tx.txResponse.code === 0 ? 'success' : 'error'
+                  class="text-xs truncate relative py-2 w-fit mr-2 rounded inline-flex items-center"
+                  :class="`${
+                    tx.txResponse.code === 0 ? 'text-[#39DD47]' : 'text-error'
                   }`"
                 >
-                  <span
-                    class="inset-x-0 inset-y-0 opacity-10 absolute"
-                    :class="`bg-${
-                      tx.txResponse.code === 0 ? 'success' : 'error'
-                    }`"
-                  ></span>
+                  <Icon icon="mdi:check" width="20" height="20" />&nbsp;&nbsp;
                   {{ tx.txResponse.code === 0 ? 'Success' : 'Failed' }}
                 </span>
                 <span>
@@ -103,7 +99,7 @@ const txLogs = computed(() => {
             </tr>
             <tr>
               <td>{{ $t('tx.memo') }}</td>
-              <td>{{ tx.tx?.body?.memo }}</td>
+              <td>{{ tx.tx?.body?.memo || '--' }}</td>
             </tr>
           </tbody>
         </table>

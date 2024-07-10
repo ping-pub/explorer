@@ -93,25 +93,28 @@ function suggest() {
 </script>
 
 <template>
-  <div class="bg-base-100 p-4 rounded text-center">
+  <div class="box-content">
     <div class="flex">
       <select
         v-model="selected"
-        class="select select-bordered mx-5"
+        class="select select-bordered mr-5"
         @change="initParamsForKeplr"
       >
         <option v-for="c in dashboard.chains" :value="c">
           {{ c.chainName }}
         </option>
       </select>
-      <button class="btn !bg-yes !border-yes text-white px-10" @click="suggest">
+      <button
+        class="btn !bg-primary text-white px-10 hover:brightness-150"
+        @click="suggest"
+      >
         Add {{ selected.chainName }} TO Keplr Wallet
       </button>
     </div>
     <div class="text-main mt-5">
       <textarea
         v-model="conf"
-        class="textarea textarea-bordered w-full"
+        class="textarea textarea-bordered w-full shadow-sm bg-base-200"
         rows="15"
       ></textarea>
     </div>
