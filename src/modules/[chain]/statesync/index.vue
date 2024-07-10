@@ -40,7 +40,7 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div>
+  <div class="px-6">
     <div
       class="p-6 rounded-2xl mb-4 shadow border border-[#242627] dark:bg-[#141416]"
     >

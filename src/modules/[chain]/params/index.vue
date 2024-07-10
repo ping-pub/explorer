@@ -13,7 +13,7 @@ onMounted(() => {
 </script>
 <template>
   <!-- Chain ID -->
-  <div class="px-4 pt-3 pb-4">
+  <div class="px-6 pt-3 pb-4">
     <div class="text-base font-semibold mb-3 text-white">
       {{ chain.title }}
     </div>

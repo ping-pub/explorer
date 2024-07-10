@@ -88,7 +88,7 @@ console.log('item.block?.header', list);
     </div>
 
     <div v-show="tab === 'blocks'" class="grid grid-cols-1 gap-3">
-      <div class="bg-base-100 overflow-x-auto w-full rounded-2xl mb-4">
+      <div class="bg-base-100 overflow-x-auto w-full rounded-2xl mb-4 px-5">
         <table class="table w-full table-compact">
           <thead class="border border-base-200">
             <tr>
@@ -233,7 +233,7 @@ console.log('item.block?.header', list);
 
     <div
       v-show="tab === 'transactions'"
-      class="bg-base-100 overflow-x-auto rounded-2xl"
+      class="bg-base-100 overflow-x-auto rounded-2xl px-5"
     >
       <table class="table w-full table-compact">
         <thead class="border border-base-200">

@@ -33,7 +33,7 @@ function myContracts() {
 }
 </script>
 <template>
-  <div class="section">
+  <div class="section mx-6">
     <div class="flex justify-between items-center w-full flex-wrap">
       <h2 class="card-title truncate text-white">
         {{ $t('cosmwasm.title') }}

@@ -160,8 +160,8 @@ function fetchAllKeyRotation() {
 </script>
 
 <template>
-  <div>
-    <div class="tabs tabs-boxed bg-transparent mb-4 customTab px-5">
+  <div class="px-6">
+    <div class="tabs tabs-boxed bg-transparent mb-4 customTab">
       <a
         class="tab text-gray-400 capitalize"
         :class="{ 'tab-active': tab === '3' }"
@@ -178,7 +178,7 @@ function fetchAllKeyRotation() {
         <a class="tab text-gray-400 capitalize">{{ $t('uptime.customize') }}</a>
       </RouterLink>
     </div>
-    <div class="bg-base-100 px-5 pt-5">
+    <div class="bg-base-100 px-5 pt-5 section">
       <div
         class="flex items-center gap-x-4 dark:bg-[#2E2E33] border border-gray-200 dark:border-gray-700 rounded-lg py-2"
       >
