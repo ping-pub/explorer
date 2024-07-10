@@ -298,7 +298,7 @@ function color(v: string) {
               <th>{{ $t('ibc.counterparty') }}</th>
               <th>{{ $t('ibc.hops') }}</th>
               <th>{{ $t('ibc.version') }}</th>
-              <th>{{ $t('ibc.ordering') }}</th>
+              <th class="text-right">{{ $t('ibc.ordering') }}</th>
             </tr>
           </thead>
           <tbody>
