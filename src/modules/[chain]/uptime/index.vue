@@ -149,7 +149,7 @@ onUnmounted(() => {
 });
 
 //const tab = ref(window.location.hash.search("block")>-1?"2":"3")
-const tab = ref('2');
+const tab = ref('3');
 function changeTab(v: string) {
   tab.value = v;
 }
@@ -161,7 +161,7 @@ function fetchAllKeyRotation() {
 
 <template>
   <div>
-    <div class="tabs tabs-boxed bg-transparent mb-4 customTab">
+    <div class="tabs tabs-boxed bg-transparent mb-4 customTab px-5">
       <a
         class="tab text-gray-400 capitalize"
         :class="{ 'tab-active': tab === '3' }"
@@ -239,22 +239,25 @@ function fetchAllKeyRotation() {
       <div :class="tab === '3' ? '' : 'hidden'" class="overflow-x-auto">
         <table class="table table-compact w-full mt-5">
           <thead class="capitalize">
-            <tr>
+            <tr class="text-white">
               <td>{{ $t('account.validator') }}</td>
-              <td class="text-right">{{ $t('module.uptime') }}</td>
+              <td class="">{{ $t('module.uptime') }}</td>
               <td>{{ $t('uptime.last_jailed_time') }}</td>
               <td class="text-right">{{ $t('uptime.signed_precommits') }}</td>
               <td class="text-right">{{ $t('uptime.start_height') }}</td>
-              <td>{{ $t('uptime.tombstoned') }}</td>
+              <td class="text-right">{{ $t('uptime.tombstoned') }}</td>
             </tr>
           </thead>
-          <tr v-for="({ v, signing, uptime }, i) in list" class="hover">
+          <tr
+            v-for="({ v, signing, uptime }, i) in list"
+            class="hover border-b border-b-[#242627] px-4 text-white"
+          >
             <td>
               <div class="truncate max-w-sm">
                 {{ i + 1 }}. {{ v.description.moniker }}
               </div>
             </td>
-            <td class="text-right">
+            <td class="text-[#39DD47]">
               <span
                 v-if="signing"
                 class=""
@@ -287,7 +290,7 @@ function fetchAllKeyRotation() {
                 </div>
               </span>
             </td>
-            <td class="text-xs text-right">
+            <td class="text-right">
               <span
                 v-if="
                   signing?.jailedUntil &&
@@ -306,7 +309,7 @@ function fetchAllKeyRotation() {
               {{ signing?.indexOffset }}
             </td>
             <td class="text-right">{{ signing?.startHeight }}</td>
-            <td class="capitalize">{{ signing?.tombstoned }}</td>
+            <td class="capitalize text-right">{{ signing?.tombstoned }}</td>
           </tr>
           <tfoot>
             <tr>

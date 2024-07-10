@@ -31,7 +31,7 @@ function changeChart(type: string) {
 </script>
 
 <template>
-  <div class="tabs tabs-boxed bg-transparent justify-end">
+  <div class="tabs tabs-boxed bg-transparent justify-end customTab">
     <a
       class="tab text-xs mr-2 text-gray-400 uppercase"
       :class="{ 'tab-active': kind === 'price' }"
