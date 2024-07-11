@@ -362,7 +362,7 @@ function confirm() {
         <!-- <NavSearchBar />-->
         <div class="lg:block hidden w-full max-w-[334px] mx-2">
           <input
-            class="input flex-1 w-full !input-bordered bg-base text-[14px] font-normal h-[44px]"
+            class="input flex-1 w-full !input-bordered bg-base text-[14px] font-normal h-[44px] focus:outline-none"
             v-model="searchQuery"
             placeholder="Search by Height, Address and TxHash"
             v-on:keyup.enter="confirm"

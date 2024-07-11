@@ -49,6 +49,9 @@ function myContracts() {
           />
           <button
             class="btn btn-primary bg-[#2E2E33] border border-[#383B40]"
+            :class="
+              !creator.length ? 'cursor-not-allowed pointer-events-none' : ''
+            "
             @click="myContracts()"
           >
             {{ $t('cosmwasm.btn_query') }}

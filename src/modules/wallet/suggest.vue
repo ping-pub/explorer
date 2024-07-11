@@ -166,60 +166,62 @@ function suggest() {
 </script>
 
 <template>
-  <div class="bg-base-100 p-4 rounded text-center">
-    <div class="flex text-center">
-      <select v-model="network" class="select select-bordered">
-        <option :value="NetworkType.Mainnet">Mainnet</option>
-        <option :value="NetworkType.Testnet">Testnet</option>
-      </select>
-      <select
-        v-model="selected"
-        class="select select-bordered mx-5"
-        @change="onchange"
-      >
-        <option v-for="c in chains" :value="c">
-          {{ c.chainName }}
-        </option>
-      </select>
-      <label class="flex align-items-center"
-        ><input
-          type="radio"
-          v-model="wallet"
-          value="keplr"
-          class="radio radio-bordered mr-1"
+  <div class="section mx-6">
+    <div class="bg-base-100 p-4 rounded text-center">
+      <div class="flex text-center items-center">
+        <select v-model="network" class="select select-bordered">
+          <option :value="NetworkType.Mainnet">Mainnet</option>
+          <option :value="NetworkType.Testnet">Testnet</option>
+        </select>
+        <select
+          v-model="selected"
+          class="select select-bordered mx-5"
           @change="onchange"
-        />
-        Keplr</label
-      >
-      <label class="flex align-items-center"
-        ><input
-          type="radio"
-          v-model="wallet"
-          value="metamask"
-          class="radio radio-bordered ml-4 mr-1"
-          @change="onchange"
-        />
-        Metamask</label
-      >
-    </div>
-    <div class="text-main mt-5">
-      <textarea
-        v-model="conf"
-        class="textarea textarea-bordered w-full"
-        rows="15"
-      ></textarea>
-    </div>
-    <div class="mt-4 mb-4">
-      <button
-        class="btn !bg-primary !border-primary text-white mr-2"
-        @click="suggest"
-      >
-        Suggest {{ selected.chainName }} TO {{ wallet }}
-      </button>
+        >
+          <option v-for="c in chains" :value="c">
+            {{ c.chainName }}
+          </option>
+        </select>
+        <label class="flex align-items-center"
+          ><input
+            type="radio"
+            v-model="wallet"
+            value="keplr"
+            class="radio radio-bordered mr-1"
+            @change="onchange"
+          />
+          Keplr</label
+        >
+        <label class="flex align-items-center"
+          ><input
+            type="radio"
+            v-model="wallet"
+            value="metamask"
+            class="radio radio-bordered ml-4 mr-1"
+            @change="onchange"
+          />
+          Metamask</label
+        >
+      </div>
+      <div class="text-main mt-5">
+        <textarea
+          v-model="conf"
+          class="textarea textarea-bordered w-full"
+          rows="15"
+        ></textarea>
+      </div>
+      <div class="mt-4 mb-4">
+        <button
+          class="btn !bg-primary !border-primary text-white mr-2"
+          @click="suggest"
+        >
+          Suggest {{ selected.chainName }} TO {{ wallet }}
+        </button>
 
-      <div class="mt-4">
-        If the chain is not offically support on Keplr/Metamask Snap, you can
-        submit these parameters to enable Keplr/Metamask Snap.
+        <div class="mt-4">
+          If the chain is not offically support on Keplr/Metamask Snap, you can
+          submit these parameters to enable Keplr/Metamask Snap.
+        </div>
       </div>
     </div>
   </div>
