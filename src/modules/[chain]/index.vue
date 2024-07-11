@@ -211,16 +211,18 @@ const amount = computed({
                   </div>
                 </div>
               </label>
-              <div class="dropdown-content pt-1 z-20">
+              <div class="dropdown-content pt-1 z-20 max-w-320px">
                 <div class="h-64 overflow-auto w-full shadow rounded">
-                  <ul class="menu w-full bg-gray-100 rounded dark:bg-[#384059]">
+                  <ul
+                    class="menu w-full bg-gray-100 rounded dark:bg-base-200 max-w-320px"
+                  >
                     <li
                       v-for="(item, index) in store.coinInfo.tickers"
                       :key="index"
                       @click="store.selectTicker(index)"
                     >
                       <div
-                        class="flex items-center justify-between hover:bg-base-100"
+                        class="flex items-center justify-between hover:bg-base-300 max-w-320px"
                       >
                         <div class="flex-1">
                           <div class="text-main text-sm text-link">
