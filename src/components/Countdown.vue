@@ -14,7 +14,7 @@ const s = ref(0);
     v-if="time"
     :time="time > 0 ? time : 0"
     v-slot="{ days, hours, minutes, seconds }"
-    class="countdown-container flex justify-items-center items-start justify-center"
+    class="countdown-container flex justify-items-center items-start justify-center gap-2 md:gap3"
   >
     <div class="flex flex-col">
       <span
@@ -23,7 +23,9 @@ const s = ref(0);
       >
         {{ days }}
       </span>
-      <p class="text-[#B4B7BB] text-xs font-normal capitalize mt-3">days</p>
+      <p class="text-[#B4B7BB] text-xs font-normal capitalize mt-3 text-center">
+        days
+      </p>
     </div>
     <span class="mt-4">:</span>
     <div class="flex flex-col">
@@ -33,7 +35,9 @@ const s = ref(0);
       >
         {{ hours }}
       </span>
-      <p class="text-[#B4B7BB] text-xs font-normal capitalize mt-3">hours</p>
+      <p class="text-[#B4B7BB] text-xs font-normal capitalize mt-3 text-center">
+        hours
+      </p>
     </div>
     <span class="mt-4">:</span>
     <div class="flex flex-col">
@@ -43,7 +47,9 @@ const s = ref(0);
       >
         {{ minutes }}
       </span>
-      <p class="text-[#B4B7BB] text-xs font-normal capitalize mt-3">minutes</p>
+      <p class="text-[#B4B7BB] text-xs font-normal capitalize mt-3 text-center">
+        minutes
+      </p>
     </div>
     <span class="mt-4">:</span>
     <div class="flex flex-col">
@@ -62,7 +68,9 @@ const s = ref(0);
           </Transition>
         </div>
       </span>
-      <p class="text-[#B4B7BB] text-xs font-normal capitalize mt-3">secs</p>
+      <p class="text-[#B4B7BB] text-xs font-normal capitalize mt-3 text-center">
+        secs
+      </p>
     </div>
   </Countdown>
 </template>
