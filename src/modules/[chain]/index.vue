@@ -552,7 +552,7 @@ const amount = computed({
                 <div class="flex">
                   <label
                     for="delegate"
-                    class="btn !btn-xs !btn-primary btn-ghost rounded mr-2 filter hover:brightness-150 capitalize"
+                    class="text-link rounded mr-3 font-semibold filter hover:brightness-150 capitalize cursor-pointer"
                     @click="
                       dialog.open(
                         'delegate',
@@ -565,7 +565,7 @@ const amount = computed({
                   </label>
                   <label
                     for="withdraw"
-                    class="btn whitespace-nowrap !btn-xs !btn-primary btn-ghost mr-2 rounded filter hover:brightness-150 capitalize"
+                    class="text-link rounded mr-2 font-semibold filter hover:brightness-150 capitalize cursor-pointer"
                     @click="
                       dialog.open(
                         'withdraw',

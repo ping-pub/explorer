@@ -19,6 +19,9 @@ module.exports = {
           400: '#242627',
         },
       },
+      fontFamily: {
+        ibm: ['var(--font-family)', 'Inter', 'sans-serif'],
+      },
     },
   },
   plugins: [require('daisyui')],
