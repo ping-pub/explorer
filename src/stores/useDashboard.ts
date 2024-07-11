@@ -265,7 +265,8 @@ export enum ConfigSource {
 export const useDashboard = defineStore('dashboard', {
   state: () => {
     const favMap = JSON.parse(
-      localStorage.getItem('favoriteMap') || '{"cosmos":true, "osmosis":true}'
+      localStorage.getItem('favoriteMap') ||
+        '{"Oraichain":true,"OraiBtcMainnet":true, "OraiBridge":true,  "cosmos":true, "osmosis":true, "injective":true }'
     );
     return {
       status: LoadingStatus.Empty,
