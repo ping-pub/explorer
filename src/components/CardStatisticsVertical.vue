@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { controlledComputed } from '@vueuse/core'
+import { controlledComputed } from '@vueuse/core';
 
 interface Props {
   title: string;
@@ -22,17 +22,18 @@ const isPositive = controlledComputed(
 </script>
 
 <template>
-  <div class="bg-base-100 shadow rounded p-4">
+  <div class="">
     <div class="flex items-center justify-center">
       <div
         v-if="props.icon"
         class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center"
       >
-        <Icon :class="[`text-${props?.color}`]" :icon="props.icon" size="32" />
+        <!-- <Icon :class="[`text-${props?.color}`]" :icon="props.icon" size="32" /> -->
+        <Icon class="text-[#B4B7BB]" :icon="props.icon" size="32" />
         <div
-          class="absolute top-0 left-0 bottom-0 right-0 opacity-20"
-          :class="[`bg-${props?.color}`]"
+          class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-[rgba(180,183,187,0.10)]"
         ></div>
+        <!-- :class="[`bg-${props?.color}`]" -->
       </div>
 
       <div
@@ -46,14 +47,18 @@ const isPositive = controlledComputed(
     </div>
 
     <div class="">
-      <h6 class="text-lg text-center font-semibold mt-2 mb-1">
-        {{ props.stats || '-'}}
+      <h6 class="text-[16px] text-white font-bold text-center mt-2 mb-1">
+        {{ props.stats || '-' }}
       </h6>
       <p class="text-sm text-center">
         {{ props.title }}
       </p>
 
-      <div v-if="props.subtitle" size="x-small" class="font-semibold">
+      <div
+        v-if="props.subtitle"
+        size="x-small"
+        class="font-normal text-[14px] text-[#B4B7BB]"
+      >
         <span class="truncate">{{ props.subtitle }}</span>
       </div>
     </div>

@@ -40,10 +40,14 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title truncate mb-2">{{ $t('statesync.title') }}</h2>
-      <div class="text-sm">
+  <div class="px-6">
+    <div
+      class="p-6 rounded-2xl mb-4 shadow border border-[#242627] dark:bg-[#141416]"
+    >
+      <h2 class="card-title truncate mb-2 text-white">
+        {{ $t('statesync.title') }}
+      </h2>
+      <div class="text-sm text-[#B4B7BB] w-8/12">
         {{ $t('statesync.description') }}
         <a
           class="text-primary lowercase"
@@ -54,11 +58,13 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title truncate mb-2">
+    <div
+      class="p-6 rounded-2xl mb-4 shadow border border-[#242627] dark:bg-[#141416]"
+    >
+      <h2 class="card-title truncate mb-2 text-white">
         {{ $t('statesync.title_2') }}
       </h2>
-      <div class="text-sm">
+      <div class="text-sm text-[#B4B7BB]">
         1. {{ $t('statesync.text_1') }} ({{ appName }}
         {{ $t('statesync.version') }}:
         {{ nodeInfo?.applicationVersion?.version || '' }})
@@ -113,9 +119,13 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
-      <h2 class="card-title truncate mb-2">{{ $t('statesync.title_3') }}</h2>
-      <div class="text-sm">
+    <div
+      class="p-6 rounded-2xl mb-4 shadow border border-[#242627] dark:bg-[#141416]"
+    >
+      <h2 class="card-title truncate mb-2 text-white">
+        {{ $t('statesync.title_3') }}
+      </h2>
+      <div class="text-sm text-[#B4B7BB]">
         {{ $t('statesync.text_title_3') }}
         <br /><br />
         <div class="mockup-code bg-base-200 my-2">

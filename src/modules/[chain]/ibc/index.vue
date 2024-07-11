@@ -14,10 +14,10 @@ onMounted(() => {
 </script>
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+    <div class="box-content">
       <div class="flex flex-wrap gap-4 items-center">
-        <h2 class="card-title py-4">{{ $t('ibc.title') }}</h2>
-        <div class="tabs tabs-boxed">
+        <h2 class="card-title py-4 text-white">{{ $t('ibc.title') }}</h2>
+        <div class="tabs tabs-boxed customTab">
           <a
             class="tab"
             :class="{ 'tab-active': tab === 'registry' }"
@@ -33,10 +33,10 @@ onMounted(() => {
         </div>
       </div>
       <div>
-        <div v-show="tab === 'registry'" class="flex flex-wrap gap-1 p-4">
+        <div v-show="tab === 'registry'" class="flex flex-wrap gap-4 p-4">
           <span
             v-for="s in ibcStore.commonIBCs"
-            class="btn btn-xs btn-link mr-1"
+            class="btn btn-secondary-sm"
             @click="ibcStore.fetchConnection(s.path)"
             >{{ s.from }} &#x21cc; {{ s.to }}</span
           >

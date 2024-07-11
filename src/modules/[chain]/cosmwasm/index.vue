@@ -33,44 +33,67 @@ function myContracts() {
 }
 </script>
 <template>
-  <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-    <h2 class="card-title truncate w-full">{{ $t('cosmwasm.title') }}</h2>
+  <div class="section mx-6">
+    <div class="flex justify-between items-center w-full flex-wrap">
+      <h2 class="card-title truncate text-white">
+        {{ $t('cosmwasm.title') }}
+      </h2>
 
-    <div class="join border border-primary">
-      <input
-        v-model="creator"
-        type="text"
-        class="input input-bordered w-40 join-item"
-        placeholder="creator address"
-      />
-      <button class="join-item btn btn-primary" @click="myContracts()">
-        {{ $t('cosmwasm.btn_query') }}
-      </button>
+      <div class="flex items-center gap-3 flex-wrap">
+        <div class="join flex items-center gap-3 mt-4 md:mt-0">
+          <input
+            v-model="creator"
+            type="text"
+            class="input input-bordered w-[50vw] md:w-[27vw] bg-[#2E2E33] border border-[#383B40]"
+            placeholder="Creator address"
+          />
+          <button
+            class="btn btn-primary bg-[#2E2E33] border border-[#383B40]"
+            :class="
+              !creator.length ? 'cursor-not-allowed pointer-events-none' : ''
+            "
+            @click="myContracts()"
+          >
+            {{ $t('cosmwasm.btn_query') }}
+          </button>
+        </div>
+        <div class="w-[1px] h-[35px] bg-[#383B40] mx-2 hidden md:block"></div>
+        <label
+          for="wasm_store_code"
+          class="btn btn-primary my-5 capitalize rounded-lg"
+          @click="dialog.open('wasm_store_code', {})"
+          >{{ $t('cosmwasm.btn_up_sc') }}</label
+        >
+      </div>
     </div>
     <div class="overflow-x-auto">
-      <table class="table table-compact w-full mt-4 text-sm">
+      <table class="table table-compact w-full mt-4 text-sm text-white">
         <thead>
-          <tr>
+          <tr class="text-white">
             <th>{{ $t('cosmwasm.code_id') }}</th>
             <th>{{ $t('cosmwasm.code_hash') }}</th>
             <th>{{ $t('cosmwasm.creator') }}</th>
-            <th>{{ $t('cosmwasm.permissions') }}</th>
+            <th class="text-right">{{ $t('cosmwasm.permissions') }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(v, index) in codes?.codeInfos" :key="index">
+          <tr
+            v-for="(v, index) in codes?.codeInfos"
+            :key="index"
+            class="border-b border-b-[#242627] px-4"
+          >
             <td>{{ v.codeId }}</td>
             <td>
               <RouterLink
                 :to="`/${props.chain}/cosmwasm/${v.codeId}/contracts`"
-                class="truncate max-w-[200px] block text-primary dark:invert"
+                class="truncate max-w-[200px] block dark:text-[#B999F3]"
                 :title="toHex(v.dataHash)"
               >
                 {{ toHex(v.dataHash) }}
               </RouterLink>
             </td>
             <td>{{ v.creator }}</td>
-            <td>
+            <td class="text-right">
               {{
                 accessTypeToJSON(v.instantiatePermission?.permission)
                   .toLowerCase()
@@ -86,7 +109,7 @@ function myContracts() {
           </tr>
         </tbody>
       </table>
-      <div class="flex justify-between">
+      <div class="flex justify-end">
         <PaginationBar
           :limit="pageRequest.limit"
           :total="
@@ -95,12 +118,6 @@ function myContracts() {
           :nextKey="codes?.pagination?.nextKey"
           :callback="pageload"
         />
-        <label
-          for="wasm_store_code"
-          class="btn btn-primary my-5"
-          @click="dialog.open('wasm_store_code', {})"
-          >{{ $t('cosmwasm.btn_up_sc') }}</label
-        >
       </div>
     </div>
   </div>

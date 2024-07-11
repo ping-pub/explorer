@@ -57,9 +57,11 @@ function goPreviousPage() {
       <button
         v-for="{ page, color } in pages"
         :key="page"
-        class="btn bg-gray-100 text-gray-500 hover:text-white border-none dark:bg-gray-800 dark:text-white"
+        class="btn bg-gray-100 text-gray-500 hover:text-white border-none dark:bg-base dark:text-white"
         :class="{
-          '!btn-primary': color === 'btn-primary',
+          '!bg-[rgba(185,153,243,0.2)] !text-white !border !border-solid !border-link':
+            color === 'btn-primary',
+          // '!btn-primary': color === 'btn-primary',
         }"
         @click="gotoPage(page)"
       >
@@ -69,13 +71,13 @@ function goPreviousPage() {
     <div v-if="nextKey && Number(total ?? '0') === 0" class="btn-group">
       <button
         v-if="nextKeys.length > 0"
-        class="btn bg-gray-100 text-gray-500 hover:text-white hover:btn-primary border-none dark:bg-gray-800 dark:text-white"
+        class="btn bg-gray-100 text-gray-500 hover:text-white hover:btn-primary border-none dark:bg-base dark:text-white"
         @click="goPreviousPage()"
       >
         Prev
       </button>
       <button
-        class="btn bg-gray-100 text-gray-500 hover:text-white hover:btn-primary border-none dark:bg-gray-800 dark:text-white"
+        class="btn bg-gray-100 text-gray-500 hover:text-white hover:btn-primary border-none dark:bg-base dark:text-white"
         @click="goNextPage()"
       >
         Next

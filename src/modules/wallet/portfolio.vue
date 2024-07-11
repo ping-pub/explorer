@@ -257,10 +257,10 @@ const currencySign = computed(() => {
 </script>
 <template>
   <div class="overflow-x-auto w-full rounded-md">
-    <div class="flex flex-wrap justify-between bg-base-100 p-5">
+    <div class="flex flex-wrap justify-between bg-base-100 p-5 box-content">
       <div class="min-w-0">
         <h2
-          class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight"
+          class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight text-white"
         >
           Portfolio
         </h2>
@@ -301,7 +301,7 @@ const currencySign = computed(() => {
         </div>
       </div>
     </div>
-    <div class="bg-base-100">
+    <div class="box-content">
       <div v-if="tokenList" class="grid grid-cols-1 md:grid-cols-3">
         <div>
           <DonutChart
@@ -360,7 +360,7 @@ const currencySign = computed(() => {
       <div class="p-4 text-center" v-if="tokenList.length === 0">No Data</div>
     </div>
     <div class="text-center my-5 bg-base-200">
-      <RouterLink to="./accounts" class="btn btn-link"
+      <RouterLink to="./accounts" class="btn btn-link !text-link"
         >Add More Asset</RouterLink
       >
     </div>

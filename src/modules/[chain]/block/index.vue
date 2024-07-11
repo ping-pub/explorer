@@ -1,14 +1,19 @@
 <script lang="ts" setup>
-import { computed, ref } from '@vue/reactivity';
+import Countdown from '@/components/Countdown.vue';
 import { useBaseStore, useFormatter } from '@/stores';
-import { fromAscii, toBase64 } from '@cosmjs/encoding';
+import { toBase64 } from '@cosmjs/encoding';
+import type { BlockResponse } from '@cosmjs/tendermint-rpc';
+import { computed, ref } from '@vue/reactivity';
+import { watchEffect } from 'vue';
+import { onBeforeRouteUpdate } from 'vue-router';
 const props = defineProps(['chain']);
 
-const tab = ref('blocks');
-
 const base = useBaseStore();
-
 const format = useFormatter();
+const tab = ref('blocks');
+const lastHeight = ref(Number(base.latest?.block?.header.height || 0) + 10000);
+const target = ref(Number(lastHeight.value || 0));
+const current = ref({} as BlockResponse);
 
 const list = computed(() => {
   const recents = base.recents;
@@ -16,105 +21,265 @@ const list = computed(() => {
     (a, b) => Number(b.block.header.height) - Number(a.block.header.height)
   );
 });
+
+watchEffect(() => {
+  if (base.latest?.block?.header.height && lastHeight.value === 10000) {
+    lastHeight.value = Number(base.latest?.block?.header.height || 0) + 10000;
+    target.value = Number(lastHeight.value || 0);
+  }
+});
+
+const remainingBlocks = computed(() => {
+  const latest = base.latest?.block?.header.height;
+  return latest ? Number(target.value) - Number(latest) : 0;
+});
+
+const estimateTime = computed(() => {
+  const seconds =
+    remainingBlocks.value * Number((base.blocktime / 1000).toFixed()) * 1000;
+  return seconds;
+});
+
+const estimateDate = computed(() => {
+  return new Date(new Date().getTime() + estimateTime.value);
+});
+
+const edit = ref(false);
+const newHeight = ref(lastHeight.value);
+function updateTarget() {
+  target.value = Number(newHeight.value);
+  console.log(target.value);
+}
+
+onBeforeRouteUpdate(async (to, from, next) => {
+  if (from.path !== to.path) {
+    base.fetchBlock(String(to.params.height)).then((x) => {
+      current.value = x;
+    });
+    next();
+  }
+});
 </script>
 <template>
-  <div>
-    <div class="tabs tabs-boxed bg-transparent mb-4">
+  <div class="m-4 md:m-6 border border-base-400 bg-base-100 rounded-2xl">
+    <div class="tabs tabs-boxed customTabV2 bg-transparent mb-4 p-6 pb-0">
       <a
-        class="tab text-gray-400 uppercase"
+        class="tab text-gray-400 capitalize !pb-3"
         :class="{ 'tab-active': tab === 'blocks' }"
         @click="tab = 'blocks'"
         >{{ $t('block.recent') }}</a
       >
-      <RouterLink
-        class="tab text-gray-400 uppercase"
-        :to="`/${chain}/block/${
-          Number(base.latest?.block?.header.height || 0) + 10000
-        }`"
-        >{{ $t('block.future') }}</RouterLink
+      <!-- <RouterLink class="tab text-gray-400 capitalize" :to="`/${chain}/block/${Number(base.latest?.block?.header.height || 0) + 10000
+        }`">{{ $t('block.future') }}</RouterLink> -->
+      <a
+        class="tab text-gray-400 capitalize !pb-2"
+        :class="{ 'tab-active': tab === 'future' }"
+        @click="tab = 'future'"
+        >{{ $t('block.future') }}</a
       >
       <a
-        class="tab text-gray-400 uppercase"
+        class="tab text-gray-400 capitalize !pb-2"
         :class="{ 'tab-active': tab === 'transactions' }"
         @click="tab = 'transactions'"
         >{{ $t('account.transactions') }}</a
       >
     </div>
 
+    <div v-show="tab === 'blocks'" class="grid grid-cols-1 gap-3">
+      <div class="bg-base-100 overflow-x-auto w-full rounded-2xl mb-4 px-5">
+        <table class="table w-full table-compact">
+          <thead class="border border-base-200">
+            <tr>
+              <th class="text-white text-xs font-bold">#ID</th>
+              <th
+                class="text-white text-xs font-bold"
+                style="position: relative; z-index: 2"
+              >
+                Block Proposer
+              </th>
+              <th class="text-white text-xs font-bold">TXS Count</th>
+              <th class="text-white text-xs font-bold text-right">
+                Created Time
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="item in list"
+              :index="item.block.header.height"
+              class="hover:bg-base-300"
+            >
+              <td>
+                <RouterLink
+                  :to="`/${chain}/block/${item.block.header.height}`"
+                  class="text-link cursor-pointer hover:text-primary"
+                >
+                  {{ item.block.header.height }}
+                </RouterLink>
+              </td>
+              <td class="text-sm text-link">
+                <!-- <RouterLink
+                  :to="`/${chain}/staking/${toBase64(
+                    item.block?.header?.proposerAddress
+                  )}`"
+                  class="text-link cursor-pointer hover:text-primary"
+                > -->
+                <div
+                  class="mt-2 hidden text-sm sm:!block truncate text-white font-semibold"
+                >
+                  <span>{{
+                    format.validator(
+                      item.block?.header?.proposerAddress &&
+                        toBase64(item.block?.header?.proposerAddress)
+                    )
+                  }}</span>
+                </div>
+                <!-- </RouterLink> -->
+              </td>
+              <td>
+                <span class="text-right mt-1 whitespace-nowrap text-white">
+                  {{ item.block?.txs.length }}
+                </span>
+              </td>
+              <td class="truncate text-right">
+                <span
+                  class="rounded text-xs whitespace-nowrap font-normal text-[#83838A] text-right"
+                >
+                  {{
+                    format.toDay(item.block?.header?.time.toString(), 'from')
+                  }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <div
-      v-show="tab === 'blocks'"
-      class="grid xl:!grid-cols-6 md:!grid-cols-4 grid-cols-1 gap-3"
+      v-show="tab === 'future'"
+      class="bg-base-100 rounded-2xl overflow-x-auto"
     >
-      <RouterLink
-        v-for="item in list"
-        class="flex flex-col justify-between rounded p-4 shadow bg-base-100"
-        :to="`/${chain}/block/${item.block.header.height}`"
-      >
-        <div class="flex justify-between">
-          <h3 class="text-md font-bold sm:!text-lg">
-            {{ item.block.header.height }}
-          </h3>
-          <span
-            class="rounded text-xs whitespace-nowrap font-medium text-green-600"
-          >
-            {{ format.toDay(item.block?.header?.time.toString(), 'from') }}
-          </span>
-        </div>
-        <div class="flex justify-between tooltip" data-tip="Block Proposor">
-          <div class="mt-2 hidden text-sm sm:!block truncate">
-            <span>{{
-              format.validator(
-                item.block?.header?.proposerAddress &&
-                  toBase64(item.block?.header?.proposerAddress)
-              )
+      <div class="text-center">
+        <div v-if="remainingBlocks > 0">
+          <div class="text-white font-bold text-lg my-10">#{{ target }}</div>
+          <Countdown :time="estimateTime" css="md:mx-3 mx-2" />
+          <div class="my-5 text-[#B4B7BB] font-normal text-[14px]">
+            {{ $t('block.estimated_time') }}:
+            <span class="text-xl font-normal">{{
+              format.toLocaleDate(estimateDate)
             }}</span>
           </div>
-          <span class="text-right mt-1 whitespace-nowrap">
-            {{ item.block?.txs.length }} txs
-          </span>
+          <div class="pt-10 flex justify-center">
+            <div class="box-content !p-6 rounded-2xl !bg-base">
+              <table class="table w-max rounded-2xl">
+                <tbody>
+                  <tr
+                    class="hover hover:brightness-150 rounded cursor-pointer !border-base-300"
+                    @click="edit = !edit"
+                  >
+                    <td>{{ $t('block.countdown_for_block') }}:</td>
+                    <td class="text-right">
+                      <span class="md:!ml-40">{{ target }}</span>
+                    </td>
+                  </tr>
+                  <tr v-if="edit" class="!border-base-300">
+                    <td colspan="2" class="text-center">
+                      <h3 class="text-lg font-bold">
+                        {{ $t('block.countdown_for_block_input') }}
+                      </h3>
+                      <div class="py-4">
+                        <div class="join">
+                          <input
+                            class="input input-bordered join-item !bg-base-300"
+                            v-model="newHeight"
+                            type="number"
+                          />
+                          <button
+                            class="btn btn-primary join-item"
+                            @click="updateTarget()"
+                          >
+                            {{ $t('block.btn_update') }}
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="!border-base-300">
+                    <td>{{ $t('block.current_height') }}:</td>
+                    <td class="text-right">
+                      #{{ base.latest?.block?.header.height }}
+                    </td>
+                  </tr>
+                  <tr class="!border-base-300">
+                    <td>{{ $t('block.remaining_blocks') }}:</td>
+                    <td class="text-right">{{ remainingBlocks }}</td>
+                  </tr>
+                  <tr class="!border-base-300">
+                    <td>{{ $t('block.average_block_time') }}:</td>
+                    <td class="text-right">
+                      {{ (base.blocktime / 1000).toFixed(1) }}s
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-      </RouterLink>
+      </div>
     </div>
 
     <div
       v-show="tab === 'transactions'"
-      class="bg-base-100 rounded overflow-x-auto"
+      class="bg-base-100 overflow-x-auto rounded-2xl px-5"
     >
       <table class="table w-full table-compact">
-        <thead class="bg-base-200">
+        <thead class="border border-base-200">
           <tr>
-            <th style="position: relative; z-index: 2">
-              {{ $t('account.height') }}
+            <th class="text-white text-xs font-bold">
+              {{ $t('account.messages') }}
             </th>
-            <th style="position: relative; z-index: 2">
+            <th
+              class="text-white text-xs font-bold"
+              style="position: relative; z-index: 2"
+            >
               {{ $t('account.hash') }}
             </th>
-            <th>{{ $t('account.messages') }}</th>
-            <th>{{ $t('block.fees') }}</th>
+            <th class="text-white text-xs font-bold">{{ $t('block.fees') }}</th>
+            <th
+              class="text-white text-xs font-bold"
+              style="position: relative; z-index: 2"
+            >
+              {{ $t('account.height') }}
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr
             v-for="(item, index) in base.txsInRecents"
             :index="index"
-            class="hover"
+            class="hover:bg-base-300"
           >
-            <td class="text-sm text-primary">
-              <RouterLink :to="`/${props.chain}/block/${item.height}`">{{
-                item.height
-              }}</RouterLink>
+            <td>
+              <span class="bg-[rgba(180,183,187,0.10)] rounded px-2 py-[1px]">
+                {{ format.messages(item.tx.body.messages) }}
+              </span>
             </td>
-            <td class="truncate text-primary" width="50%">
+            <td class="truncate text-link" width="50%">
               <RouterLink :to="`/${props.chain}/tx/${item.hash}`">{{
                 item.hash
               }}</RouterLink>
             </td>
-            <td>{{ format.messages(item.tx.body.messages) }}</td>
             <td>{{ format.formatTokens(item.tx.authInfo.fee?.amount) }}</td>
+            <td class="text-sm text-link">
+              <RouterLink :to="`/${props.chain}/block/${item.height}`">{{
+                item.height
+              }}</RouterLink>
+            </td>
           </tr>
         </tbody>
       </table>
-      <div class="p-4">
+      <div class="p-4 rounded-2xl">
         <div class="alert relative bg-transparent">
           <div
             class="alert absolute inset-x-0 inset-y-0 w-full h-full bg-info opacity-10"

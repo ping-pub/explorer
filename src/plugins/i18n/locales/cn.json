@@ -23,7 +23,7 @@
   "pages": {
     "title": "OraiScan Dashboard",
     "slogan": "OraiScan Dashboard 是一个区块链浏览器，也是一个网页钱包，还有更多 ... 🛠",
-    "description": "Cosmos Ecosystem Blockchains 🚀",
+    "description": "Cosmos Ecosystem Blockchains",
     "search_placeholder": "搜索区块链",
     "add_to_favorite": "加入收藏夹",
     "title_all": "404",
@@ -271,6 +271,7 @@
     "close": "关闭",
     "buy": "买入",
     "active_proposals": "进行中的提案",
+    "metric": "Metrics",
     "no_active_proposals": "没有进行中的提案",
     "more": "更多",
     "reward": "奖励",

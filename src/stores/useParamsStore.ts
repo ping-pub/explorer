@@ -106,7 +106,7 @@ export const useParamStore = defineStore('paramstore', {
         // this.latestTime = toDay(res.block.header.time, 'long')
         this.latestTime = res.block.header.time.toDateString();
       } catch (error) {
-        console.warn(error);
+        console.error(error);
       }
     },
     async handleStakingParams() {

@@ -14,18 +14,63 @@ const s = ref(0);
     v-if="time"
     :time="time > 0 ? time : 0"
     v-slot="{ days, hours, minutes, seconds }"
-    class="countdown-container justify-items-center"
+    class="countdown-container flex justify-items-center items-start justify-center gap-2 md:gap3"
   >
-    <span class="text-primary font-bold" :class="css">{{ days }}</span> days
-    <span class="text-primary font-bold" :class="css">{{ hours }}</span> hours
-    <span class="text-primary font-bold" :class="css">{{ minutes }}</span>
-    minutes
-    <span class="text-primary font-bold w-40" :class="css">
-      <Transition name="slide-up">
-        <span v-if="seconds % 2 === 0" class="countdown">{{ seconds }}</span>
-        <span v-else="seconds % 2 === 1" class="countdown">{{ seconds }}</span>
-      </Transition>
-    </span>
-    <span class="ml-10">seconds</span>
+    <div class="flex flex-col">
+      <span
+        class="!w-14 !h-14 flex items-center justify-center text-link !text-[18px] md:!text-[18px] leading-none !font-semibold border rounded border-link p-4"
+        :class="css"
+      >
+        {{ days }}
+      </span>
+      <p class="text-[#B4B7BB] text-xs font-normal capitalize mt-3 text-center">
+        days
+      </p>
+    </div>
+    <span class="mt-4">:</span>
+    <div class="flex flex-col">
+      <span
+        class="!w-14 !h-14 flex items-center justify-center text-link !text-[18px] md:!text-[18px] leading-none !font-semibold border rounded border-link p-4"
+        :class="css"
+      >
+        {{ hours }}
+      </span>
+      <p class="text-[#B4B7BB] text-xs font-normal capitalize mt-3 text-center">
+        hours
+      </p>
+    </div>
+    <span class="mt-4">:</span>
+    <div class="flex flex-col">
+      <span
+        class="!w-14 !h-14 flex items-center justify-center text-link !text-[18px] md:!text-[18px] leading-none !font-semibold border rounded border-link p-4"
+        :class="css"
+      >
+        {{ minutes }}
+      </span>
+      <p class="text-[#B4B7BB] text-xs font-normal capitalize mt-3 text-center">
+        minutes
+      </p>
+    </div>
+    <span class="mt-4">:</span>
+    <div class="flex flex-col">
+      <span
+        class="!w-14 !h-14 flex items-center justify-center text-link !text-[18px] md:!text-[18px] leading-none !font-semibold border rounded border-link p-4"
+        :class="css"
+      >
+        <div class="relative">
+          <Transition name="slide-up">
+            <span v-if="seconds % 2 === 0" class="countdown">{{
+              seconds
+            }}</span>
+            <span v-else="seconds % 2 === 1" class="countdown">{{
+              seconds
+            }}</span>
+          </Transition>
+        </div>
+      </span>
+      <p class="text-[#B4B7BB] text-xs font-normal capitalize mt-3 text-center">
+        secs
+      </p>
+    </div>
   </Countdown>
 </template>

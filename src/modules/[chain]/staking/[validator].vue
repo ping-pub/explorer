@@ -322,8 +322,10 @@ function mapDelegators(tx: ExtraTxResponse) {
 </script>
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow border-indigo-500">
-      <div class="flex flex-col lg:!flex-row pt-2 pb-1">
+    <div
+      class="m-4 md:m-6 mb-4 p-4 md:p-6 rounded-[16px] shadow bg-[#141416] border border-[#242627]"
+    >
+      <div class="flex flex-col lg:!flex-row pb-1">
         <div class="flex-1">
           <div class="flex">
             <div class="avatar mr-4 relative w-24 rounded-lg overflow-hidden">
@@ -363,7 +365,7 @@ function mapDelegators(tx: ExtraTxResponse) {
               >
             </div>
           </div>
-          <div class="m-4 text-sm">
+          <div class="m-4 ml-0 text-sm">
             <p class="text-sm mb-3 font-medium">{{ $t('staking.about_us') }}</p>
             <div class="card-list">
               <div class="flex items-center mb-2">
@@ -574,14 +576,16 @@ function mapDelegators(tx: ExtraTxResponse) {
           </div>
         </div>
       </div>
-      <div class="text-sm px-4 pt-3 border-t">{{ v.description?.details }}</div>
+      <div class="text-sm pt-3 border-t border-base-300">
+        {{ v.description?.details }}
+      </div>
     </div>
 
-    <div class="mt-3 grid grid-cols-1 md:!grid-cols-3 gap-4">
-      <div>
-        <CommissionRate :commission="v.commission"></CommissionRate>
-      </div>
-      <div class="bg-base-100 rounded shadow relative overflow-auto">
+    <div class="mt-3 grid grid-cols-1 md:!grid-cols-3 gap-4 mx-4 md:mx-6">
+      <CommissionRate :commission="v.commission"></CommissionRate>
+      <div
+        class="bg-[#141416] border border-[#242627] rounded-[16px] shadow relative overflow-auto"
+      >
         <div class="text-lg font-semibold text-main px-4 pt-4">
           {{ $t('staking.commissions_&_rewards') }}
         </div>
@@ -615,7 +619,7 @@ function mapDelegators(tx: ExtraTxResponse) {
           <div class="">
             <label
               for="withdraw_commission"
-              class="btn btn-primary w-full"
+              class="btn btn-primary w-full capitalize"
               @click="
                 dialog.open('withdraw_commission', {
                   validator_address: v.operatorAddress,
@@ -626,7 +630,9 @@ function mapDelegators(tx: ExtraTxResponse) {
           </div>
         </div>
       </div>
-      <div class="bg-base-100 rounded shadow overflow-x-auto">
+      <div
+        class="bg-[#141416] border border-[#242627] rounded-[16px] shadow overflow-x-auto"
+      >
         <div class="px-4 pt-4 mb-2 text-main font-lg font-semibold">
           {{ $t('staking.addresses') }}
         </div>
@@ -642,7 +648,7 @@ function mapDelegators(tx: ExtraTxResponse) {
               />
             </div>
             <RouterLink
-              class="text-xs text-primary"
+              class="text-xs text-link"
               :to="`/${chain}/account/${addresses.account}`"
             >
               {{ addresses.account }}
@@ -704,9 +710,9 @@ function mapDelegators(tx: ExtraTxResponse) {
 
     <div
       v-if="delegations.delegationResponses"
-      class="mt-5 bg-base-100 shadow rounded p-4"
+      class="m-4 md:m-6 mb-4 p-4 md:p-6 rounded-[16px] shadow bg-[#141416] border border-[#242627]"
     >
-      <div class="text-lg mb-4 font-semibold">
+      <div class="text-lg mb-4 font-semibold text-white">
         {{ $t('account.delegations') }}
         <span class="float-right">
           {{ delegations.delegationResponses?.length || 0 }} /
@@ -725,10 +731,10 @@ function mapDelegators(tx: ExtraTxResponse) {
             <tr
               v-for="{ balance, delegation } in delegations.delegationResponses"
             >
-              <td class="text-sm text-primary">
+              <td class="text-sm text-link">
                 {{ delegation.delegatorAddress }}
               </td>
-              <td class="truncate text-primary">
+              <td class="truncate text-link">
                 {{ format.formatToken(balance) }}
               </td>
             </tr>
@@ -742,8 +748,10 @@ function mapDelegators(tx: ExtraTxResponse) {
       </div>
     </div>
 
-    <div class="mt-5 bg-base-100 shadow rounded p-4">
-      <div class="text-lg mb-4 font-semibold">
+    <div
+      class="m-4 md:m-6 mb-4 p-4 md:p-6 rounded-[16px] shadow bg-[#141416] border border-[#242627]"
+    >
+      <div class="text-lg mb-4 font-semibold text-white">
         {{ $t('account.transactions') }}
       </div>
       <div class="rounded overflow-auto">
@@ -760,12 +768,12 @@ function mapDelegators(tx: ExtraTxResponse) {
           </thead>
           <tbody>
             <tr v-for="(item, i) in txs.txs">
-              <td class="text-sm text-primary">
+              <td class="text-sm text-link">
                 <RouterLink :to="`/${props.chain}/block/${item.height}`">{{
                   item.height
                 }}</RouterLink>
               </td>
-              <td class="truncate text-primary" style="max-width: 200px">
+              <td class="truncate text-link" style="max-width: 200px">
                 <RouterLink :to="`/${props.chain}/tx/${toHex(item.hash)}`">
                   {{ toHex(item.hash) }}
                 </RouterLink>
@@ -790,8 +798,10 @@ function mapDelegators(tx: ExtraTxResponse) {
       </div>
     </div>
 
-    <div class="mt-5 bg-base-100 shadow rounded p-4">
-      <div class="text-lg mb-4 font-semibold">
+    <div
+      class="m-4 md:m-6 mb-4 p-4 md:p-6 rounded-[16px] shadow bg-[#141416] border border-[#242627]"
+    >
+      <div class="text-lg mb-4 font-semibold text-white">
         <div class="tabs tabs-boxed bg-transparent">
           <span class="mr-10">Voting Power Events: </span>
           <a
@@ -819,7 +829,7 @@ function mapDelegators(tx: ExtraTxResponse) {
           </thead>
           <tbody>
             <tr v-for="(item, i) in events.txs">
-              <td class="pr-2 truncate text-primary" style="max-width: 250px">
+              <td class="pr-2 truncate text-link" style="max-width: 250px">
                 <RouterLink
                   v-for="d in mapDelegators(item)"
                   :to="`/${props.chain}/account/${d}`"
@@ -851,7 +861,7 @@ function mapDelegators(tx: ExtraTxResponse) {
               </td>
               <td width="150">
                 <RouterLink
-                  class="text-primary mb-0"
+                  class="text-link mb-0"
                   :to="`/${props.chain}/block/${item.height}`"
                   >{{ item.height }}</RouterLink
                 ><br />

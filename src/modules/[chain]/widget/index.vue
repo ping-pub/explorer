@@ -17,9 +17,11 @@ const hdPath = computed(() => {
 });
 </script>
 <template>
-  <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
-      <h2 class="card-title">{{ $t('widget.title') }}</h2>
+  <div class="px-6">
+    <div
+      class="p-6 rounded-2xl mb-4 shadow border border-[#242627] dark:bg-[#141416]"
+    >
+      <h2 class="card-title text-white">{{ $t('widget.title') }}</h2>
       <div class="my-4 grid grid-flow-col auto-cols-max overflow-auto">
         <div class="form-control">
           <div class="input-group">
@@ -38,18 +40,22 @@ const hdPath = computed(() => {
           </div>
         </div>
       </div>
-      <span class="text-base">{{ $t('widget.text_1') }}</span>
-      <div class="mockup-code bg-base-200 my-2">
+      <span class="text-base text-white font-semibold">{{
+        $t('widget.text_1')
+      }}</span>
+      <div class="mockup-code bg-[#1A1E25] my-2">
         <pre
           data-prefix="1"
         ><code class="text-gray-800 dark:invert">&lt;script type="module" src="https://unpkg.com/@oraichain/oraiscan-widget@latest/dist/ping-widget.js"&gt;</code></pre>
       </div>
     </div>
-    <div class="bg-base-100 my-5 px-4 pt-3 pb-4 rounded shadow">
-      <h2 class="card-title">{{ $t('module.widget') }}</h2>
+    <div class="section">
+      <h2 class="card-title text-white">{{ $t('module.widget') }}</h2>
       <div class="mt-4">
-        <span class="text-base"> 1. {{ $t('widget.text_2') }}</span>
-        <div class="mockup-code bg-base-200 my-2">
+        <span class="text-base text-white font-semibold">
+          1. {{ $t('widget.text_2') }}</span
+        >
+        <div class="mockup-code bg-[#1A1E25] my-4">
           <pre
             data-prefix=">"
           ><code class="text-green-400">&lt;!-- This widget is optional. --&gt; </code></pre>
@@ -58,8 +64,10 @@ const hdPath = computed(() => {
           ><code  class="text-gray-800 dark:invert">&lt;ping-connect-wallet chain-id="{{ chainId }}" hd-path="{{ hdPath }}"/&gt;</code></pre>
         </div>
 
-        <span class="text-base"> 2. {{ $t('widget.text_3') }}</span>
-        <div class="mockup-code bg-base-200 my-2">
+        <span class="text-base text-white font-semibold">
+          2. {{ $t('widget.text_3') }}</span
+        >
+        <div class="mockup-code bg-[#1A1E25] my-2">
           <pre
             data-prefix=">"
           ><code class=" text-gray-800 dark:invert">&lt;ping-token-convert chain-name="{{ chainName }}" endpoint="{{endpoint}}" hd-path="{{hdPath}}"/&gt;</code></pre>

@@ -19,6 +19,7 @@ import type {
   Params,
   ValidatorSigningInfo,
 } from 'cosmjs-types/cosmos/slashing/v1beta1/slashing';
+import { Icon } from '@iconify/vue';
 
 const props = defineProps(['chain']);
 
@@ -148,7 +149,7 @@ onUnmounted(() => {
 });
 
 //const tab = ref(window.location.hash.search("block")>-1?"2":"3")
-const tab = ref('2');
+const tab = ref('3');
 function changeTab(v: string) {
   tab.value = v;
 }
@@ -159,8 +160,8 @@ function fetchAllKeyRotation() {
 </script>
 
 <template>
-  <div>
-    <div class="tabs tabs-boxed bg-transparent mb-4">
+  <div class="px-6">
+    <div class="tabs tabs-boxed bg-transparent mb-4 customTab">
       <a
         class="tab text-gray-400 capitalize"
         :class="{ 'tab-active': tab === '3' }"
@@ -177,13 +178,16 @@ function fetchAllKeyRotation() {
         <a class="tab text-gray-400 capitalize">{{ $t('uptime.customize') }}</a>
       </RouterLink>
     </div>
-    <div class="bg-base-100 px-5 pt-5">
-      <div class="flex items-center gap-x-4">
+    <div class="bg-base-100 px-5 pt-5 section">
+      <div
+        class="flex items-center gap-x-4 dark:bg-[#2E2E33] border border-gray-200 dark:border-gray-700 rounded-lg py-2"
+      >
+        <Icon icon="mdi:magnify" class="text-2xl text-gray-400 ml-3" />
         <input
           type="text"
           v-model="keyword"
-          placeholder="Keywords to filter validators"
-          class="input input-sm w-full flex-1 border border-gray-200 dark:border-gray-600"
+          placeholder="Search validators by name"
+          class="w-full flex-1 outline-none text-base text-white dark:bg-[#2E2E33]"
         />
         <button
           v-if="chainStore.isConsumerChain"
@@ -210,7 +214,7 @@ function fetchAllKeyRotation() {
       >
         <div v-for="({ v, signing, hex }, i) in list" :key="i">
           <div class="flex items-center justify-between py-0 w-[298px]">
-            <label class="truncate text-sm">
+            <label class="truncate text-sm mb-1">
               <span class="ml-1 text-black dark:text-white"
                 >{{ i + 1 }}.{{ v.description.moniker }}</span
               >
@@ -235,22 +239,25 @@ function fetchAllKeyRotation() {
       <div :class="tab === '3' ? '' : 'hidden'" class="overflow-x-auto">
         <table class="table table-compact w-full mt-5">
           <thead class="capitalize">
-            <tr>
+            <tr class="text-white">
               <td>{{ $t('account.validator') }}</td>
-              <td class="text-right">{{ $t('module.uptime') }}</td>
+              <td class="">{{ $t('module.uptime') }}</td>
               <td>{{ $t('uptime.last_jailed_time') }}</td>
               <td class="text-right">{{ $t('uptime.signed_precommits') }}</td>
               <td class="text-right">{{ $t('uptime.start_height') }}</td>
-              <td>{{ $t('uptime.tombstoned') }}</td>
+              <td class="text-right">{{ $t('uptime.tombstoned') }}</td>
             </tr>
           </thead>
-          <tr v-for="({ v, signing, uptime }, i) in list" class="hover">
+          <tr
+            v-for="({ v, signing, uptime }, i) in list"
+            class="hover border-b border-b-[#242627] px-4 text-white"
+          >
             <td>
               <div class="truncate max-w-sm">
                 {{ i + 1 }}. {{ v.description.moniker }}
               </div>
             </td>
-            <td class="text-right">
+            <td class="text-[#39DD47]">
               <span
                 v-if="signing"
                 class=""
@@ -283,7 +290,7 @@ function fetchAllKeyRotation() {
                 </div>
               </span>
             </td>
-            <td class="text-xs text-right">
+            <td class="text-right">
               <span
                 v-if="
                   signing?.jailedUntil &&
@@ -302,7 +309,7 @@ function fetchAllKeyRotation() {
               {{ signing?.indexOffset }}
             </td>
             <td class="text-right">{{ signing?.startHeight }}</td>
-            <td class="capitalize">{{ signing?.tombstoned }}</td>
+            <td class="capitalize text-right">{{ signing?.tombstoned }}</td>
           </tr>
           <tfoot>
             <tr>

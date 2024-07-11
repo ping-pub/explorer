@@ -47,14 +47,14 @@ function showInfo(address: string) {
 </script>
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title truncate w-full">
+    <div class="section">
+      <h2 class="card-title truncate w-full text-white">
         {{ $t('cosmwasm.contract_list_code') }}: {{ props.code_id }}
       </h2>
       <div class="overflow-x-auto">
         <table class="table table-compact w-full mt-4">
           <thead>
-            <tr>
+            <tr class="text-white">
               <th style="position: relative; z-index: 2">
                 {{ $t('cosmwasm.contract_list') }}
               </th>
@@ -65,7 +65,7 @@ function showInfo(address: string) {
             <tr
               v-for="(v, index) in response.contracts"
               :key="index"
-              class="hover"
+              class="hover py-4"
             >
               <td>{{ v }}</td>
               <td>
