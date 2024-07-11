@@ -59,8 +59,6 @@ onBeforeRouteUpdate(async (to, from, next) => {
     next();
   }
 });
-
-console.log('item.block?.header', list);
 </script>
 <template>
   <div class="m-4 md:m-6 border border-base-400 bg-base-100 rounded-2xl">

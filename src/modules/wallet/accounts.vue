@@ -206,8 +206,8 @@ async function loadBalances(
 </script>
 <template>
   <div>
-    <div class="overflow-x-auto w-full rounded-md">
-      <div class="flex flex-wrap justify-between bg-base-100 p-5">
+    <div class="overflow-x-auto rounded-md box-content !mb-0">
+      <div class="flex flex-wrap justify-between">
         <div class="min-w-0">
           <h2
             class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight"
@@ -241,7 +241,7 @@ async function loadBalances(
         </div>
         <div class="flex flex-col text-right">
           <span>Total Value</span>
-          <span class="text-xl text-success font-bold"
+          <span class="text-xl text-link font-bold"
             >${{ format.formatNumber(totalValue, '0,0.[00]') }}</span
           >
           <span class="text-sm" :class="format.color(totalChange)">{{
@@ -252,14 +252,12 @@ async function loadBalances(
     </div>
 
     <div class="overflow-x-auto">
-      <div
-        v-for="{ key, subaccounts } in accounts"
-        class="bg-base-100 rounded-md my-5 py-5"
-      >
+      <div v-for="{ key, subaccounts } in accounts" class="box-content">
         <div class="flex justify-self-center">
           <div class="mx-2 p-2">
+            <!-- :fill="chainStore.current?.themeColor || '#666CFF'" -->
             <svg
-              :fill="chainStore.current?.themeColor || '#666CFF'"
+              fill="#B999F3"
               height="28px"
               width="28px"
               version="1.1"
@@ -302,15 +300,21 @@ async function loadBalances(
               >
               <ul
                 tabindex="0"
-                class="-left-14 dropdown-content menu p-2 shadow bg-base-200 rounded-box z-50"
+                class="!overflow-y-auto !max-h-80 -left-14 dropdown-content p-2 shadow bg-base-300 rounded-lg z-50 w-max max-w-[320px]"
               >
-                <li v-for="x in subaccounts">
-                  <a>
-                    <img :src="x.account.logo" class="w-8 h-8 mr-2" />
-                    <span class="font-bold capitalize"
+                <li
+                  v-for="x in subaccounts"
+                  class="flex p-2 hover:bg-base-200 cursor-pointer rounded"
+                >
+                  <a class="flex items-center gap-2">
+                    <img
+                      :src="x.account.logo"
+                      class="w-8 h-8 mr-2 bg-white border border-white rounded-full"
+                    />
+                    <span class="font-bold capitalize text-white"
                       >{{ x.account.chainName }} <br />
                       <span
-                        class="text-xs font-normal sm:w-16 sm:overflow-hidden"
+                        class="text-xs font-normal sm:w-16 sm:overflow-hidden break-all"
                         >{{ x.account.address }}</span
                       >
                     </span>
@@ -325,7 +329,7 @@ async function loadBalances(
             </div>
           </div>
         </div>
-        <div class="p-4 bg-base-200 mt-2">Delegations</div>
+        <div class="p-4 bg-base-300 rounded-lg mt-2">Delegations</div>
         <div>
           <ul class="!menu w-full">
             <div v-for="x in subaccounts">
@@ -333,7 +337,10 @@ async function loadBalances(
                 <RouterLink
                   :to="`/${x.account.chainName}/account/${x.account.address}`"
                 >
-                  <img :src="x.account.logo" class="w-6 h-6 mr-2" />
+                  <img
+                    :src="x.account.logo"
+                    class="w-6 h-6 mr-2 bg-white border border-white rounded-full"
+                  />
                   <span class="font-bold"
                     >{{
                       format.formatToken(x.delegation, true, '0,0.[00]', 'all')
@@ -366,7 +373,7 @@ async function loadBalances(
             </div>
           </ul>
         </div>
-        <div class="p-4 bg-base-200">Balances</div>
+        <div class="p-4 bg-base-300 rounded-lg">Balances</div>
         <div>
           <ul class="!menu w-full">
             <div v-for="s in subaccounts">
@@ -374,7 +381,10 @@ async function loadBalances(
                 <RouterLink
                   :to="`/${s.account.chainName}/account/${s.account.address}`"
                 >
-                  <img :src="s.account.logo" class="w-6 h-6 mr-2" />
+                  <img
+                    :src="s.account.logo"
+                    class="w-6 h-6 mr-2 bg-white border border-white rounded-full"
+                  />
                   <span class="font-bold"
                     >{{ format.formatToken(x, true, '0,0.[00]', 'all') }}
                     <br /><span
@@ -402,7 +412,7 @@ async function loadBalances(
         </div>
       </div>
 
-      <div class="text-center bg-base-100 rounded-md my-4 p-4">
+      <div class="text-center bg-base-100 rounded-md my-4 p-4 sticky bottom-[]">
         <a
           href="#address-modal"
           class="inline-flex items-center ml-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"

@@ -458,7 +458,7 @@ function mapAmount(events: readonly Event[]) {
                 <div v-if="v.balance" class="flex justify-end">
                   <label
                     for="delegate"
-                    class="btn btn-secondary-sm btn-xs mr-2"
+                    class="text-link cursor-pointer hover:brightness-150 font-semibold mr-2"
                     @click="
                       dialog.open(
                         'delegate',
@@ -472,7 +472,7 @@ function mapAmount(events: readonly Event[]) {
                   >
                   <label
                     for="redelegate"
-                    class="btn btn-secondary-sm btn-xs mr-2"
+                    class="text-link cursor-pointer hover:brightness-150 font-semibold mr-2"
                     @click="
                       dialog.open(
                         'redelegate',
@@ -486,7 +486,7 @@ function mapAmount(events: readonly Event[]) {
                   >
                   <label
                     for="unbond"
-                    class="btn btn-secondary-sm btn-xs"
+                    class="text-link cursor-pointer hover:brightness-150 font-semibold"
                     @click="
                       dialog.open(
                         'unbond',
