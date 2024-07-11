@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap'); */
 
 @tailwind base;
 @tailwind components;
@@ -13,8 +13,8 @@ body {
 body {
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
-  font-family: Sora, Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans',
+  font-family: var(--font-family), Inter, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans',
     'Helvetica Neue', sans-serif;
   font-size: 15px;
   text-rendering: optimizeLegibility;
@@ -27,6 +27,7 @@ body {
   --text-main: #333;
   --text-secondary: #4b525d;
   --bg-active: #fbfbfc;
+  --font-family: 'IBM Plex Sans';
 }
 
 html.dark,
@@ -34,6 +35,54 @@ html[data-theme='dark'] {
   --text-main: #f7f7f7;
   --text-secondary: #6f6e84;
   --bg-active: #242b40;
+}
+
+@font-face {
+  font-family: var(--font-family);
+  src: url('./assets/fonts/IBMPlexSans/IBMPlexSans-Thin.ttf');
+  font-weight: 100;
+  font-display: swap;
+}
+@font-face {
+  font-family: var(--font-family);
+  src: url('./assets/fonts/IBMPlexSans/IBMPlexSans-ExtraLight.ttf');
+  font-weight: 200;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family);
+  src: url('./assets/fonts/IBMPlexSans/IBMPlexSans-Light.ttf');
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family);
+  src: url('./assets/fonts/IBMPlexSans/IBMPlexSans-Regular.ttf');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family);
+  src: url('./assets/fonts/IBMPlexSans/IBMPlexSans-Medium.ttf');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family);
+  src: url('./assets/fonts/IBMPlexSans/IBMPlexSans-SemiBold.ttf');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family);
+  src: url('./assets/fonts/IBMPlexSans/IBMPlexSans-Bold.ttf');
+  font-weight: 700;
+  font-display: swap;
 }
 
 table td {
