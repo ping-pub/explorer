@@ -16,6 +16,7 @@ import { useIndexModule, colorMap } from './indexStore';
 import { computed } from '@vue/reactivity';
 
 import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
+import CopyAddress from '@/layouts/components/CopyAddress.vue';
 import ProposalListItem from '@/components/ProposalListItem.vue';
 import ArrayObjectElement from '@/components/dynamic/ArrayObjectElement.vue';
 
@@ -417,11 +418,14 @@ const amount = computed({
         <div class="flex-1">
           <p class="text-[18px] text-[#f7f7f7] font-semibold">My Wallet</p>
 
-          <p
-            class="truncate max-w-[calc(100%-10px)] sm:w-[unset] mt-1 text-link text-[14px] font-normal"
-          >
-            {{ walletStore.currentAddress || 'Not Connected' }}
-          </p>
+          <div class="flex gap-2 items-center">
+            <p
+              class="truncate max-w-[calc(100%-10px)] sm:w-[unset] text-link text-[14px] font-normal"
+            >
+              {{ walletStore.currentAddress || 'Not Connected' }}
+            </p>
+            <CopyAddress :fillSvg="'#B999F3'" />
+          </div>
         </div>
         <RouterLink
           v-if="walletStore.currentAddress"
