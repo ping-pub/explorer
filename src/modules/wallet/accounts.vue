@@ -210,7 +210,7 @@ async function loadBalances(
       <div class="flex flex-wrap justify-between">
         <div class="min-w-0">
           <h2
-            class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight"
+            class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight text-white"
           >
             Accounts
           </h2>
