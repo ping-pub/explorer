@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+  
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v3
         with:
