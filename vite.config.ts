@@ -7,8 +7,13 @@ import Layouts from 'vite-plugin-vue-layouts';
 import DefineOptions from 'unplugin-vue-define-options/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import Pages from 'vite-plugin-pages';
+import fs from 'fs';
+import path from 'path';
 
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
+
+import { createHtmlPlugin } from 'vite-plugin-html';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -58,6 +63,26 @@ export default defineConfig({
       ],
     }),
     DefineOptions(),
+
+    // createHtmlPlugin({
+    //   inject: {
+    //     // Inject data into ejs template
+    //     ejsOptions: {
+    //       customCss: () => {
+    //         const filepath = path.resolve(__dirname, './src/style.output.css');
+    //         if (fs.existsSync(filepath)) {
+    //           const css = fs.readFileSync(filepath, 'utf-8');
+    //           console.log('css', css);
+    //           return `<style>${css}</style>`;
+    //         }
+    //         return '';
+    //       },
+    //     },
+    //   },
+    // }),
+    cssInjectedByJsPlugin({
+      styleId: 'app-styles',
+    }),
   ],
   resolve: {
     alias: {

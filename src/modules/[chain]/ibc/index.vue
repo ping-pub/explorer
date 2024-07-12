@@ -36,7 +36,7 @@ onMounted(() => {
         <div v-show="tab === 'registry'" class="flex flex-wrap gap-4 p-4">
           <span
             v-for="s in ibcStore.commonIBCs"
-            class="btn btn-secondary-sm"
+            class="btn btn-third-sm"
             @click="ibcStore.fetchConnection(s.path)"
             >{{ s.from }} &#x21cc; {{ s.to }}</span
           >

@@ -248,7 +248,7 @@ const amount = computed({
 
             <div class="flex">
               <a
-                class="my-5 !text-white btn grow bg-primary border-0 filter hover:brightness-150 hover:bg-primary"
+                class="my-5 !text-white btn grow bg-primary border-0 hover:brightness-150 hover:bg-primary"
                 :class="{
                   // 'bg-primary border-0 filter hover:brightness-150 ':
                   //   store.trustColor === 'green',
@@ -426,7 +426,10 @@ const amount = computed({
             >
               {{ walletStore.currentAddress || 'Not Connected' }}
             </p>
-            <CopyAddress :fillSvg="'#B999F3'" />
+            <CopyAddress
+              v-if="walletStore.currentAddress"
+              :fillSvg="'#B999F3'"
+            />
           </div>
         </div>
         <RouterLink
@@ -451,13 +454,13 @@ const amount = computed({
           </div>
 
           <div>
-            <label for="PingTokenConvert" class="btn btn-secondary mr-4">
+            <label for="PingTokenConvert" class="btn btn-third mr-4">
               <Icon icon="mdi:swap-vertical" width="20" height="20" />
               {{ $t('index.btn_swap') }}
             </label>
             <label
               for="send"
-              class="btn btn-secondary"
+              class="btn btn-third"
               @click="dialog.open('send', {}, updateState)"
             >
               <img :src="sendImg" alt="sendIcon" width="20" height="20" />
@@ -478,7 +481,7 @@ const amount = computed({
 
           <label
             for="delegate"
-            class="btn btn-secondary"
+            class="btn btn-third"
             @click="dialog.open('delegate', {}, updateState)"
           >
             <img :src="delegateImg" alt="delegate" width="20" height="20" />
@@ -528,7 +531,7 @@ const amount = computed({
             <tr v-for="(item, index) in walletStore.delegations" :key="index">
               <td>
                 <RouterLink
-                  class="link link-primary no-underline text-link"
+                  class="link link-primary no-underline text-link hover:brightness-150 hover:text-link"
                   :to="`/${chain}/staking/${item?.delegation?.validatorAddress}`"
                 >
                   {{

@@ -57,14 +57,10 @@ function metaItem(metadata: string | undefined): {
         <tr
           v-for="(item, index) in proposals?.proposals"
           :key="index"
-          class="hover:bg-[#47474B] cursor-pointer border-b border-b-[#242627] px-4"
+          class="hover:bg-[#47474B] cursor-pointer border-b border-b-[#242627] px-4 rounded"
         >
           <td class="px-4 w-20">
-            <label
-              for="proposal-detail-modal"
-              class="text-main text-base hover:text-indigo-400 cursor-pointer"
-              @click="proposalInfo = item"
-            >
+            <label for="proposal-detail-modal" class="text-main text-base">
               #{{ item?.proposalId }}</label
             >
           </td>
@@ -171,11 +167,9 @@ function metaItem(metadata: string | undefined): {
             class="flex-1 w-0 truncate mr-4"
             >{{ item?.title }}</RouterLink
           >
-          <label
-            for="proposal-detail-modal"
-            class="text-main text-base hover:text-indigo-400 cursor-pointer"
-            @click="proposalInfo = item"
-          >
+          <label for="proposal-detail-modal" class="text-main text-base">
+            <!-- @click="proposalInfo = item" -->
+            <!-- hover:text-indigo-400 cursor-pointer -->
             #{{ item?.proposalId }}</label
           >
         </div>
@@ -257,8 +251,8 @@ function metaItem(metadata: string | undefined): {
       </div>
     </div>
 
-    <input type="checkbox" id="proposal-detail-modal" class="modal-toggle" />
-    <label for="proposal-detail-modal" class="modal">
+    <!-- <input type="checkbox" id="proposal-detail-modal" class="modal-toggle" /> -->
+    <!-- <label for="proposal-detail-modal" class="modal">
       <label class="modal-box !w-11/12 !max-w-5xl" for="">
         <label
           for="proposal-detail-modal"
@@ -290,6 +284,6 @@ function metaItem(metadata: string | undefined): {
           </Component>
         </p>
       </label>
-    </label>
+    </label> -->
   </div>
 </template>
