@@ -1,5 +1,7 @@
 {
-  "projects": {},
+  "projects": {
+    "default": "oraichain-dapp"
+  },
   "targets": {
     "oraichain-dapp": {
       "hosting": {
