@@ -48,7 +48,7 @@ function confirm() {
         closeSearchModal();
       }, 1000);
       //     this.$router.push({ name: 'transaction', params: { chain: c.chain_name, hash: key } })
-    } else if (addr.test(key)) {
+    } else if (key.startsWith('lava@')) {
       vueRouters.push({ path: `/${current}/account/${key}` });
       setTimeout(() => {
         closeSearchModal();
