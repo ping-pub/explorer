@@ -18,4 +18,4 @@ jobs:
           token: ${{ secrets.PAT }}
           repository: oraichain/infra
           event-type: firebase
-          client-payload: '{"node_version": 18", "target": "oraichainscan"}'
+          client-payload: '{"node_version": "18", "target": "oraichainscan"}'
