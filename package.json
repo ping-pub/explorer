@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "serve": "vite",
+    "prebuild": "tailwindcss -i ./src/style.css -o ./src/style.output.css",
     "build": "vite build",
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit"
@@ -24,7 +25,7 @@
     "@intlify/unplugin-vue-i18n": "^0.8.2",
     "@leapwallet/cosmos-snap-provider": "^0.1.20",
     "@leapwallet/name-matcha": "^1.1.0",
-    "@oraichain/oraiscan-widget": "^0.2.11",
+    "@oraichain/oraiscan-widget": "0.2.12-1",
     "@osmonauts/lcd": "^0.8.0",
     "@ping-pub/chain-registry-client": "^0.0.25",
     "@tharsis/proto": "^0.1.20",
@@ -77,6 +78,8 @@
     "unplugin-vue-components": "^0.23.0",
     "unplugin-vue-define-options": "1.1.4",
     "vite": "^5.0.12",
+    "vite-plugin-css-injected-by-js": "^3.5.1",
+    "vite-plugin-html": "^3.2.2",
     "vite-plugin-pages": "^0.32.0",
     "vue-json-viewer": "3",
     "vue-tsc": "^1.8.27"

@@ -2,6 +2,8 @@
 const colors = require('tailwindcss/colors');
 
 module.exports = {
+  // prefix: 'tw-scan-',
+  // important: true,
   darkMode: ['class'],
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
