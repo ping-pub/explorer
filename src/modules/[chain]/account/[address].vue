@@ -24,8 +24,12 @@ import type {
 import type { Coin } from '@cosmjs/amino';
 import Countdown from '@/components/Countdown.vue';
 import { fromBase64 } from '@cosmjs/encoding';
+import { useClipboard } from '@vueuse/core'
 
 const props = defineProps(['address', 'chain']);
+
+const source = ref(props.address)
+const { copy, copied } = useClipboard({ source })
 
 const blockchain = useBlockchain();
 const stakingStore = useStakingStore();
@@ -109,21 +113,21 @@ function loadAccount(address: string) {
     // No way to decide if an address is an application, gateway or supplier, so using all endpoints to fetch correct information
     blockchain.rpc.getApplicationsInfo(address).then((x) => {
       // @ts-expect-error because delegation is being reused as stake information container, yet keeping the support for delegations
-      delegations.value.push({balance: x.application.stake})
+      delegations.value.push({ balance: x.application.stake })
     }).catch(e => {
       console.error(e)
     })
 
     blockchain.rpc.getGatewaysInfo(address).then((x) => {
       // @ts-expect-error because delegation is being reused as stake information container, yet keeping the support for delegations
-      delegations.value.push({balance: x.gateway.stake})
+      delegations.value.push({ balance: x.gateway.stake })
     }).catch(e => {
       console.error(e)
     })
 
     blockchain.rpc.getSuppliersInfo(address).then((x) => {
       // @ts-expect-error because delegation is being reused as stake information container, yet keeping the support for delegations
-      delegations.value.push({balance: x.supplier.stake})
+      delegations.value.push({ balance: x.supplier.stake })
     }).catch(e => {
       console.error(e)
     })
@@ -172,7 +176,10 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
         <!-- content -->
         <div class="flex flex-1 flex-col truncate pl-4">
           <h2 class="text-sm card-title">{{ $t('account.address') }}:</h2>
-          <span class="text-xs truncate"> {{ address }}</span>
+          <span class="text-xs truncate" style="width:max-content"> {{ address }} {{ "&nbsp;&nbsp;&nbsp;" }}
+          <span class="float-right" style="width:max-content" v-if="copied">&nbsp;&nbsp;Copied!</span>
+            <Icon class="float-right" icon="ic:round-content-copy" @click="copy(address)"/>
+          </span>
         </div>
       </div>
     </div>
@@ -198,7 +205,9 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
       </div>
       <div class="grid md:!grid-cols-3">
         <div class="md:!col-span-1">
-          <DonutChart :series="totalAmountByCategory.map(x => {return parseFloat(format.formatToken({amount: `${x}`, denom: 'upokt'}, true));})" :labels="labels" />
+          <DonutChart
+            :series="totalAmountByCategory.map(x => { return parseFloat(format.formatToken({ amount: `${x}`, denom: 'upokt' }, true)); })"
+            :labels="labels" />
         </div>
         <div class="mt-4 md:!col-span-2 md:!mt-0 md:!ml-4">
           <!-- list-->
