@@ -111,10 +111,10 @@ function confirm() {
       >
         <RouterLink
           to="/"
-          class="flex flex-1 items-center w-full justify-center"
+          class="flex flex-1 items-center w-full justify-center h-10"
         >
-          <img class="w-10 h-10" src="../../assets/logo.svg" />
-          <h1 class="ml-3 text-2xl font-semibold dark:text-white">OraiScan</h1>
+          <img src="../../assets/scanium-logo.svg" />
+          <!-- <h1 class="ml-3 text-2xl font-semibold dark:text-white">Scanium</h1> -->
         </RouterLink>
         <div
           class="pr-4 cursor-pointer xl:!hidden flex items-center"

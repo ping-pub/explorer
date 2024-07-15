@@ -5,8 +5,6 @@ import TxDialog from './components/TxDialog.vue';
 
 onMounted(() => {
   themeChange(false);
-  // import '@oraichain/oraiscan-widget';
-  // defineAsyncComponent(() => import('@/style.css'));
 
   // Find the <style> element with id "app-style"
   const appStyle = document.getElementById('app-styles');
