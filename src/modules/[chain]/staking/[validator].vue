@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { parseCoins } from '@cosmjs/stargate';
 import {
+  useBankStore,
   useBlockchain,
+  useDistributionStore,
   useFormatter,
   useMintStore,
   useStakingStore,
@@ -64,12 +66,12 @@ blockchain.rpc.getTxsBySender(addresses.value.account).then((x) => {
 });
 
 const apr = computed(() => {
-  const rate = v.value.commission?.commission_rates.rate || 0;
+  const rate = Number(v.value.commission?.commission_rates.rate || 0);
   const inflation = useMintStore().inflation;
-  if (Number(inflation)) {
-    return format.percent((1 - Number(rate)) * Number(inflation));
-  }
-  return '-';
+  const communityTax = Number(useDistributionStore().params.community_tax);
+  const bondedRatio = Number(staking.pool.bonded_tokens) / Number(useBankStore().supply.amount);
+
+  return format.percent((1 - communityTax) * (1 - rate) * Number(inflation) / bondedRatio);
 });
 
 const selfRate = computed(() => {

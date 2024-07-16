@@ -1,10 +1,14 @@
 # Directory Layout
 
-** if you want to list your blockhain on ping.pub, please submit your configure on https://github.com/ping-pub/ping.pub.git **
+Note: the host name used in the user's browser (displayed in the address bar) to load the explorer app determines which of the chain configuration directories is used.
+If the host name contains the substring "testnet" (for example: "https://mytestnetwork.example.com") then chain configuration files in the `testnet` directory (only) are loaded. Conversely if the host name does not contain that substring then chain configuration files in the `mainnet` directory (only) are loaded.
+Remember to bear this behavior in mind when selecting a DNS host name for self hosting the explorer.
+
+** if you want to list your blockchain on ping.pub, please submit your configuration on https://github.com/ping-pub/ping.pub.git **
 
 - Submit configs for mainnet, go to https://github.com/ping-pub/explorer/tree/master/chains/mainnet
 
-- Submit configs for testnet, go to https://github.com/ping-pub/explorer/tree/master/chains/testnet, thess configs will be enabled when you visit the domain starts withs `testnet.*`, for example `https://testnet.ping.pub`
+- Submit configs for testnet, go to https://github.com/ping-pub/explorer/tree/master/chains/testnet, these configs will be enabled when you visit the domain that starts with `testnet.*`, for example `https://testnet.ping.pub`
 
 # Sample of Config
 
