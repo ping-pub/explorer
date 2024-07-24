@@ -16,7 +16,9 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "preserveValueImports": false,
+    "isolatedModules": true,
   },
   "references": [
     {

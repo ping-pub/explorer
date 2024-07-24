@@ -13,12 +13,19 @@ import ObjectHorizontalElement from './ObjectHorizontalElement.vue';
 import Long from 'long';
 import { MsgRegistry } from 'secretjs';
 import { fromBase64, toBech32 } from '@cosmjs/encoding';
+import {
+  SetGasLessContractsProposal,
+  UnsetGasLessContractsProposal,
+} from '@/codegen/cosmwasm/wasm/v1/proposal';
+
+const ExtendedRegistry = Object.fromEntries(
+  [SetGasLessContractsProposal, UnsetGasLessContractsProposal].map((msg) => [
+    msg.typeUrl,
+    msg,
+  ])
+);
 
 export function select(v: any, direct?: string) {
-  // if(k === 'txs' && v) {
-  //     return TxsElement
-  // } else {
-
   const type = typeof v;
   switch (type) {
     case 'object':
@@ -100,6 +107,8 @@ export const decodeProto = (msg: {
     type = lookupType(evmosProto, typeUrl);
   } else if (typeUrl.startsWith('/secret.')) {
     type = MsgRegistry.get(typeUrl);
+  } else if (ExtendedRegistry[typeUrl]) {
+    type = ExtendedRegistry[typeUrl];
   } else {
     type = findType(injProto, typeMap[typeUrl] ?? typeUrl.split('.').pop());
   }
