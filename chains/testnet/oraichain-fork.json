@@ -1,0 +1,32 @@
+{
+    "chain_name": "Oraichain-Fork",
+    "registry_name": "oraichain-fork",
+    "api": [
+      {
+        "provider": "Oraichain" ,
+        "address": "https://testnet-v2.lcd.orai.io/"
+      }
+    ],
+    "rpc": [
+      {
+        "provider": "Oraichain",
+        "address": "https://testnet-v2.rpc.orai.io/"
+      }
+    ],
+    "cosmwasm_enabled": true,
+    "sdk_version": "0.45.16",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "orai",
+    "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/oraichain/images/orai.png",
+    "assets": [
+      {
+        "base": "orai",
+        "symbol": "ORAI",
+        "exponent": "6",
+        "coingecko_id": "oraichain-token",
+        "logo": "https://s2.coinmarketcap.com/static/img/coins/64x64/7533.png"
+      }
+    ]
+  }
+  
