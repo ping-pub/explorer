@@ -1,8 +1,47 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Supermolot";
+  font-display: swap;
+  src: url("/fonts/TT-Supermolot-Neue-Variable.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Inter var";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/InterVariable-Italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/JetBrainsMono[wght].woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/JetBrainsMono-Italic[wght].woff2") format("woff2");
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-supermolot;
+
+  }
+
+  body, p, a, div, span, ul, ol, li, blockquote, input, textarea, button, label, pre, code, table, th, td, caption {
+    @apply font-mono;
+  }
+}
 
 html,body {
   height: 100%;

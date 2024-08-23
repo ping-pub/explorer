@@ -11,7 +11,11 @@ module.exports = {
         main: 'var(--text-main)',
         secondary: 'var(--text-secondary)',
         active: 'var(--bg-active)',
-      }
+      },
+      fontFamily: {
+        supermolot: ['Supermolot', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      },
     },
   },
   plugins: [require('daisyui')],
