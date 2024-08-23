@@ -10,7 +10,7 @@
   "addr_prefix": "union",
   "min_tx_fee": "0",
   "coin_type": "1337",
-  "logo": "",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/uniontestnet/images/union.png",
   "assets": [
     {
       "symbol": "UNO",
