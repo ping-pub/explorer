@@ -77,25 +77,25 @@ const chainStore = useBlockchain()
       <progress class="progress progress-info w-80 h-1"></progress>
     </div>
 
-    <div v-if="featured.length>0" class="text-center text-base mt-6 text-primary">
-      <h2 class="mb-6"> Featured Blockchains 🔥 </h2>
-    </div>
+<!--    <div v-if="featured.length>0" class="text-center text-base mt-6 text-primary">-->
+<!--      <h2 class="mb-6"> Featured Blockchains 🔥 </h2>-->
+<!--    </div>-->
 
-    <div v-if="featured.length>0"
-      class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"
-    >
-    <ChainSummary
-        v-for="(chain, index) in featured"
-        :key="index"
-        :name="chain.chainName"
-      />
-    </div>
+<!--    <div v-if="featured.length>0"-->
+<!--      class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"-->
+<!--    >-->
+<!--    <ChainSummary-->
+<!--        v-for="(chain, index) in featured"-->
+<!--        :key="index"-->
+<!--        :name="chain.chainName"-->
+<!--      />-->
+<!--    </div>-->
 
-    <AdBanner id="home-banner-ad" unit="banner" width="970px" height="90px" />
+<!--    <AdBanner id="home-banner-ad" unit="banner" width="970px" height="90px" />-->
 
-    <div class="text-center text-base mt-6 text-primary">
-      <h2 class="mb-6">{{ $t('pages.description') }}</h2>
-    </div>
+<!--    <div class="text-center text-base mt-6 text-primary">-->
+<!--      <h2 class="mb-6">{{ $t('pages.description') }}</h2>-->
+<!--    </div>-->
 
     <div class="flex items-center rounded-lg bg-base-100  border border-gray-200 dark:border-gray-700 mt-10">
       <Icon icon="mdi:magnify" class="text-2xl text-gray-400 ml-3"/>

@@ -117,7 +117,7 @@ onMounted(() => {
                 Tokens</button>
         </div>
 
-        <AdBanner id="home-banner-ad" unit="banner" />
+<!--        <AdBanner id="home-banner-ad" unit="banner" />-->
 
         <div class="bg-base-100 my-5 px-4 pt-3 pb-4 rounded shadow">
             <h2 class="card-title">Enable Faucet</h2>
@@ -158,10 +158,10 @@ onMounted(() => {
                 <div class="modal-action">
                     <label for="my_modal_6"  class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                 </div>
-                <p class="py-2">
-                <div>
-                    <AdBanner id="popup-ad" unit="popup" />
-                </div>
+<!--                <p class="py-2">-->
+<!--                <div>-->
+<!--                    <AdBanner id="popup-ad" unit="popup" />-->
+<!--                </div>-->
                 </p>
             </div>
         </div>
