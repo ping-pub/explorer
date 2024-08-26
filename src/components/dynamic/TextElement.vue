@@ -97,8 +97,8 @@ const isConvertable = computed(() => {
     list-style-type: disc;
     margin-block-start: 1em;
     margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
     padding-inline-start: 40px;
   }
   dl, ol, ul {

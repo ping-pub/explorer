@@ -257,7 +257,7 @@ async function loadBalances(chainName: string, endpoint: string, address: string
               <ul tabindex="0" class=" -left-14 dropdown-content menu p-2 shadow bg-base-200 z-50">
                 <li v-for="x in subaccounts">
                 <a>
-                  <img :src="x.account.logo" class="w-8 h-8 mr-2" />
+                  <img alt="account logo" :src="x.account.logo" class="w-8 h-8 mr-2" />
                   <span class="font-bold capitalize">{{ x.account.chainName }} <br>
                     <span class="text-xs font-normal sm:w-16 sm:overflow-hidden">{{ x.account.address }}</span>
                   </span>
@@ -274,7 +274,7 @@ async function loadBalances(chainName: string, endpoint: string, address: string
             <div v-for="x in subaccounts">
               <li v-if="x.delegation.amount">
                 <RouterLink :to="`/${x.account.chainName}/account/${x.account.address}`">
-                  <img :src="x.account.logo" class="w-6 h-6 mr-2" />
+                  <img alt="account.logo" :src="x.account.logo" class="w-6 h-6 mr-2" />
                   <span class="font-bold">{{ format.formatToken(x.delegation, true, '0,0.[00]', 'all') }} <br><span
                       class="text-xs" :class="format.color(x.delegation.change24h)">{{
                         format.formatNumber(x.delegation.change24h, '+0.[00]') }}%</span></span>
@@ -293,7 +293,7 @@ async function loadBalances(chainName: string, endpoint: string, address: string
             <div v-for="s in subaccounts">
               <li v-for="x in s.balances">
                 <RouterLink :to="`/${s.account.chainName}/account/${s.account.address}`">
-                  <img :src="s.account.logo" class="w-6 h-6 mr-2" />
+                  <img alt="account logo" :src="s.account.logo" class="w-6 h-6 mr-2" />
                   <span class="font-bold">{{ format.formatToken(x, true, '0,0.[00]', 'all') }} <br><span
                       class="text-xs" :class="format.color(x.change24h)">{{ format.formatNumber(x.change24h, '+0.[00]')
                       }}%</span></span>

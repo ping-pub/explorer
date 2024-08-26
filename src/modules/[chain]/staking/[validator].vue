@@ -266,6 +266,7 @@ function mapDelegators(messages: any[]) {
               <div class="w-24 absolute opacity-10"></div>
               <div class="w-24">
                 <img
+                  alt="identity"
                   v-if="identity && avatars[identity] !== 'undefined'"
                   v-lazy="logo(identity)"
                   class="object-contain"

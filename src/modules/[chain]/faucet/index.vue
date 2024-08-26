@@ -162,7 +162,7 @@ onMounted(() => {
 <!--                <div>-->
 <!--                    <AdBanner id="popup-ad" unit="popup" />-->
 <!--                </div>-->
-                </p>
+<!--                </p>-->
             </div>
         </div>
     </div>
