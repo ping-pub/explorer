@@ -186,7 +186,7 @@ function color(v: string) {
     <!-- Put this part before </body> tag -->
     <input type="checkbox" id="add-validator" class="modal-toggle" @change="initial" />
     <div class="modal">
-      <div class="modal-box relative">
+      <div class="modal-box relative bg-base-100">
         <label for="add-validator" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
         <h3 class="text-lg font-bold">{{ $t('uptime.add_validators') }}</h3>
           <div class="form-control my-5 border-2">

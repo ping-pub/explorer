@@ -144,7 +144,7 @@ onMounted(() => {
         </div>
         <input type="checkbox" v-model="faucetModal" id="my_modal_6" class="modal-toggle" />
         <div class="modal" role="dialog">
-            <div class="modal-box">
+            <div class="modal-box bg-base-100">
                 <div v-if="ret.status === 'error'">
                     <h3 class="font-bold text-red-500"> Error </h3>
                     <div>{{ ret.message }}</div>

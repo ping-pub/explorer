@@ -209,7 +209,7 @@ const amount = computed({
               <!-- Put this part before </body> tag -->
               <input type="checkbox" id="calculator" class="modal-toggle" />
               <div class="modal">
-                <div class="modal-box">
+                <div class="modal-box bg-base-100">
                   <h3 class="text-lg font-bold">{{ $t('index.price_calculator') }}</h3>
                   <div class="flex flex-col w-full mt-5">
                     <div class="grid h-20 flex-grow card place-items-center">

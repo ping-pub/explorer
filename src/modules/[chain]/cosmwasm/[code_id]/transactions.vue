@@ -221,7 +221,7 @@ const result = ref({});
         <div>
             <input type="checkbox" id="modal-contract-funds" class="modal-toggle" />
             <label for="modal-contract-funds" class="modal cursor-pointer">
-                <label class="modal-box relative p-2" for="">
+                <label class="modal-box relative p-2 bg-base-100" for="">
                     <div>
                         <div class="flex items-center justify-between px-3 pt-2">
                             <div class="text-lg">{{ $t('cosmwasm.contract_balances') }}</div>
@@ -240,7 +240,7 @@ const result = ref({});
 
             <input type="checkbox" id="modal-contract-states" class="modal-toggle" />
             <label for="modal-contract-states" class="modal cursor-pointer">
-                <label class="modal-box !w-11/12 !max-w-5xl bg-base-100" for="">
+                <label class="modal-box !w-11/12 !max-w-5xl" for="">
                     <div>
                         <div class="flex items-center justify-between px-3 pt-2 mb-4">
                             <div class="text-lg">{{ $t('cosmwasm.contract_states') }}</div>
@@ -257,7 +257,7 @@ const result = ref({});
 
             <input type="checkbox" id="modal-contract-query" class="modal-toggle" />
             <label for="modal-contract-query" class="modal cursor-pointer">
-                <label class="modal-box !w-11/12 !max-w-5xl bg-base-100" for="">
+                <label class="modal-box !w-11/12 !max-w-5xl" for="">
                     <div>
                         <div class="flex items-center justify-between px-3 pt-2 mb-4">
                             <div class="text-lg font-semibold">{{ $t('cosmwasm.query_contract') }}</div>
@@ -270,7 +270,7 @@ const result = ref({});
                                         :key="index" :class="{ 'pt-2': index === 0 }">
                                         <label class="label cursor-pointer justify-start"
                                             @click="selectedRadio = item?.value">
-                                            <input type="radio" name="radio-10" class="radio radio-sm radio-primary mr-4"
+                                            <input type="radio" name="radio-10" class="radio mr-4"
                                                 :checked="item?.value === selectedRadio"
                                                 style="border: 1px solid #d2d6dc" />
                                             <div>

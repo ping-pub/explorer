@@ -155,3 +155,12 @@ html[data-theme='dark'] {
     color: black!important;
   }
 }
+
+.modal-box {
+  @apply bg-base-100;
+}
+
+.textarea {
+  background-color: transparent!important;
+  border: 1px lightgray solid!important;
+}
