@@ -170,13 +170,13 @@ dayjs();
             </div>
           </div>
           <div class="collapse-content">
-            <div v-for="(el, key) of item?.children" class="menu bg-base-100 w-full !p-0">
+            <div v-for="(el, key) of item?.children" class="menu w-full !p-0">
               <RouterLink
                 v-if="isNavLink(el)"
                 @click="sidebarShow = false"
-                class="hover:bg-gray-100 dark:hover:bg-[#373f59] cursor-pointer px-3 py-2 flex items-center"
+                class="hover:opacity-60 cursor-pointer px-3 py-2 flex items-center"
                 :class="{
-                  'bg-primary': selected($route, el),
+                  'bg-primary !text-black': selected($route, el),
                 }"
                 :to="el.to"
               >
@@ -185,7 +185,7 @@ dayjs();
                   icon="mdi:chevron-right"
                   class="mr-2 ml-3"
                   :class="{
-                    'text-white':
+                    'text-black':
                       $route.path === el?.to?.path &&
                       item?.title !== 'Favorite',
                   }"
@@ -200,7 +200,7 @@ dayjs();
                 <div
                   class="text-base capitalize text-gray-500 dark:text-gray-300"
                   :class="{
-                    '!text-white': selected($route, el),
+                    '!text-black': selected($route, el),
                   }"
                 >
                   {{ item?.title === 'Favorite' ? el?.title : $t(el?.title) }}

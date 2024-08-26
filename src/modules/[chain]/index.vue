@@ -374,7 +374,7 @@ const amount = computed({
 
       <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
         <label for="PingTokenConvert" class="btn btn-primary text-white">{{ $t('index.btn_swap') }}</label>
-        <label for="send" class="btn btn-primary text-white" @click="dialog.open('send', {}, updateState)">{{ $t('account.btn_send') }}</label>
+        <label for="send" class="btn btn-primary btn-outline text-white" @click="dialog.open('send', {}, updateState)">{{ $t('account.btn_send') }}</label>
         <label for="delegate" class="btn btn-primary text-white"
           @click="dialog.open('delegate', {}, updateState)">{{ $t('account.btn_delegate') }}</label>
         <RouterLink to="/wallet/receive" class="btn !bg-info !border-info text-white hidden">{{ $t('index.receive') }}</RouterLink>
