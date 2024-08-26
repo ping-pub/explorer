@@ -107,7 +107,7 @@ html[data-theme='dark'] {
     background-color: #a0ecfd!important;
     border: none;
   }
-
+/* 
   .bg-base-100 {
     background-color: #252528!important;
   }
@@ -117,7 +117,7 @@ html[data-theme='dark'] {
 
   .bg-base-300 {
     background-color: #19191A!important;
-  }
+  } */
 
   .tab-active {
     color: black!important;
