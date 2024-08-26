@@ -326,17 +326,13 @@ loadAvatars();
                         <tr
                             v-for="({v, rank, logo}, i) in list"
                             :key="v.operator_address"
-                            class="hover:bg-gray-100 dark:hover:bg-[#384059]"
+                            class="hover:bg-neutral-200 dark:hover:bg-neutral-600"
                         >
                             <!-- 👉 rank -->
                             <td>
-                                <div
-                                    class="text-xs truncate relative px-2 py-1 w-fit"
-                                    :class="`text-${rank}`"
-                                >
+                                <div class="text-xs truncate relative px-2 py-1 w-fit">
                                     <span
                                         class="inset-x-0 inset-y-0 opacity-10 absolute"
-                                        :class="`bg-${rank}`"
                                     ></span>
                                     {{ i + 1 }}
                                 </div>
@@ -470,9 +466,7 @@ loadAvatars();
                 <div
                     class="text-xs truncate relative py-2 px-4 w-fit text-error mr-2"
                 >
-                    <span
-                        class="inset-x-0 inset-y-0 opacity-10 absolute bg-error"
-                    ></span>
+                    <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-error"></span>
                     {{ $t('staking.top') }} 33%
                 </div>
                 <div

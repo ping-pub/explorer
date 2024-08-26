@@ -108,7 +108,7 @@ function showInfo(address: string) {
 
     <input type="checkbox" id="modal-contract-detail" class="modal-toggle" />
     <label for="modal-contract-detail" class="modal cursor-pointer">
-      <label class="modal-box !w-11/12 !max-w-5xl relative p-2" for="">
+      <label class="modal-box !w-11/12 !max-w-5xl relative p-2 bg-base-100" for="">
         <div>
           <div class="flex items-center justify-between px-3 pt-2">
             <div class="text-lg">{{ $t('cosmwasm.contract_detail') }}</div>

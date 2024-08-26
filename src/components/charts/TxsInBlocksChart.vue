@@ -20,7 +20,7 @@ const options = computed(() => {
         dataLabels: {
           enabled: false
         },
-        colors: ['#5A67D8'],
+        colors: ['#a0ecfd'],
         xaxis: {
             labels: {
                 show: false,

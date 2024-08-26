@@ -52,7 +52,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
           <td class="px-4 w-20">
             <label
               for="proposal-detail-modal"
-              class="text-main text-base hover:text-indigo-400 cursor-pointer"
+              class="text-main text-base cursor-pointer hover:opacity-50"
               @click="proposalInfo = item"
             >
               #{{ item?.proposal_id }}</label
@@ -233,7 +233,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
 
     <input type="checkbox" id="proposal-detail-modal" class="modal-toggle" />
     <label for="proposal-detail-modal" class="modal">
-      <label class="modal-box !w-11/12 !max-w-5xl" for="">
+      <label class="modal-box !w-11/12 !max-w-5xl bg-base-100" for="">
         <label
           for="proposal-detail-modal"
           class="btn btn-sm btn-circle absolute right-2 top-2"

@@ -240,7 +240,7 @@ const result = ref({});
 
             <input type="checkbox" id="modal-contract-states" class="modal-toggle" />
             <label for="modal-contract-states" class="modal cursor-pointer">
-                <label class="modal-box !w-11/12 !max-w-5xl" for="">
+                <label class="modal-box !w-11/12 !max-w-5xl bg-base-100" for="">
                     <div>
                         <div class="flex items-center justify-between px-3 pt-2 mb-4">
                             <div class="text-lg">{{ $t('cosmwasm.contract_states') }}</div>
@@ -257,7 +257,7 @@ const result = ref({});
 
             <input type="checkbox" id="modal-contract-query" class="modal-toggle" />
             <label for="modal-contract-query" class="modal cursor-pointer">
-                <label class="modal-box !w-11/12 !max-w-5xl" for="">
+                <label class="modal-box !w-11/12 !max-w-5xl bg-base-100" for="">
                     <div>
                         <div class="flex items-center justify-between px-3 pt-2 mb-4">
                             <div class="text-lg font-semibold">{{ $t('cosmwasm.query_contract') }}</div>
