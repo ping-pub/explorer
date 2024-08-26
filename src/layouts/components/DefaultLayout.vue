@@ -77,7 +77,7 @@ dayjs();
 </script>
 
 <template>
-  <div class="bg-gray-200 dark:bg-[#171d30]">
+  <div class="bg-base-300">
     <!-- sidebar -->
     <div
       class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-gray-700"
@@ -176,7 +176,7 @@ dayjs();
                 @click="sidebarShow = false"
                 class="hover:bg-gray-100 dark:hover:bg-[#373f59] cursor-pointer px-3 py-2 flex items-center"
                 :class="{
-                  '!bg-primary': selected($route, el),
+                  'bg-primary': selected($route, el),
                 }"
                 :to="el.to"
               >

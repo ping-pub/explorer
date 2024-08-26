@@ -233,7 +233,7 @@ loadAvatars();
                 </div>
             </span>
             <span>
-                <div class="font-bold">{{ format.percent(mintStore.inflation) }}</div>
+                <div class="font-bold text-black dark:text-white">{{ format.percent(mintStore.inflation) }}</div>
                 <div class="text-xs">{{ $t('staking.inflation') }}</div>
             </span>
         </div>
@@ -245,7 +245,7 @@ loadAvatars();
                 </div>
             </span>
             <span>
-                <div class="font-bold">{{ formatSeconds(staking.params?.unbonding_time) }}</div>
+                <div class="font-bold text-black dark:text-white">{{ formatSeconds(staking.params?.unbonding_time) }}</div>
                 <div class="text-xs">{{ $t('staking.unbonding_time') }}</div>
             </span>
         </div> 
@@ -257,7 +257,7 @@ loadAvatars();
                 </div>
             </span>
             <span>
-            <div class="font-bold">{{ format.percent(slashing.slash_fraction_double_sign) }}</div>
+            <div class="font-bold text-black dark:text-white">{{ format.percent(slashing.slash_fraction_double_sign) }}</div>
             <div class="text-xs">{{ $t('staking.double_sign_slashing') }}</div>
             </span>
         </div> 
@@ -269,7 +269,7 @@ loadAvatars();
                 </div>
             </span>
             <span>
-            <div class="font-bold">{{ format.percent(slashing.slash_fraction_downtime) }}</div>
+            <div class="font-bold text-black dark:text-white">{{ format.percent(slashing.slash_fraction_downtime) }}</div>
             <div class="text-xs">{{ $t('staking.downtime_slashing') }}</div>
             </span>
         </div>  
@@ -375,7 +375,7 @@ loadAvatars();
                                     </div>
 
                                     <div class="flex flex-col">
-                                        <span class="text-sm text-primary dark:invert whitespace-nowrap overflow-hidden">
+                                        <span class="text-sm text-black dark:text-white whitespace-nowrap overflow-hidden">
                                             <RouterLink
                                                 :to="{
                                                     name: 'chain-staking-validator',

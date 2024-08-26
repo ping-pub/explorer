@@ -45,7 +45,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
 
 </script>
 <template>
-  <div class="bg-white dark:bg-[#28334e] text-sm">
+  <div class="bg-base-100 text-sm">
     <table class="table-compact w-full table-fixed hidden lg:!table">
       <tbody>
         <tr v-for="(item, index) in proposals?.proposals" :key="index">
@@ -68,9 +68,9 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
               </RouterLink>
               <div
                 v-if="item.content"
-                class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block px-2 py-[1px] text-xs mb-1"
+                class="inline-block px-2 py-[1px] text-xs mb-1"
               >
-                {{ showType(item.content['@type']) }} 
+                {{ showType(item.content['@type']) }}
               </div>
             </div>
           </td>
@@ -81,7 +81,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
             ></ProposalProcess>
           </td>
           <td class="w-36">
-            <div class="pl-4">
+            <div class="pl-4 font-bold">
               <div
                 class="flex items-center"
                 :class="
@@ -164,7 +164,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
           <div class="col-span-2">
             <div
               v-if="item.content"
-              class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block px-2 py-[1px] text-xs mb-1"
+              class="inline-block px-2 py-[1px] text-xs mb-1"
             >
               {{ showType(item.content['@type']) }}
             </div>

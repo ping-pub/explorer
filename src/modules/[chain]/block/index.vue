@@ -39,7 +39,7 @@ const list = computed(() => {
                     <h3 class="text-md font-bold sm:!text-lg">
                         {{ item.block.header.height }}
                     </h3>
-                    <span class="text-xs whitespace-nowrap font-medium text-green-600">
+                    <span class="text-xs whitespace-nowrap font-medium text-black dark:text-white">
                         {{ format.toDay(item.block?.header?.time, 'from') }}
                     </span>
                 </div>

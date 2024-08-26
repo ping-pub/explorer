@@ -197,7 +197,7 @@ const result = ref({});
                     <tr v-for="resp in txs?.tx_responses">
                         <td>{{ resp.height }}</td>
                         <td>
-                            <div class="text-xs truncate text-primary dark:invert">
+                            <div class="text-xs truncate text-black dark:text-white">
                                 <RouterLink :to="`/${chainStore.chainName}/tx/${resp.txhash}`">{{ resp.txhash }}
                                 </RouterLink>
                             </div>

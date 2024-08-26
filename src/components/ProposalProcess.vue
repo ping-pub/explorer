@@ -32,28 +32,28 @@ const veto = computed(() =>
 <template>
   <div class="progress h-6 text-xs flex items-center">
     <div
-      class="h-6 bg-yes flex items-center pl-2 text-white overflow-hidden"
+      class="h-6 bg-yes flex items-center pl-2 text-black overflow-hidden"
       :style="`width: ${yes}`"
       :title="yes"
     >
       {{ yes }}
     </div>
     <div
-      class="h-6 bg-no flex items-center text-white overflow-hidden"
+      class="h-6 bg-no flex items-center text-black overflow-hidden"
       :style="`width: ${no}`"
       :title="no"
     >
       {{ no }}
     </div>
     <div
-      class="h-6 bg-[#B71C1C] flex items-center text-white overflow-hidden"
+      class="h-6 bg-[#B71C1C] flex items-center text-black overflow-hidden"
       :style="`width: ${veto};`"
       :title="veto"
     >
       {{ veto }}
     </div>
     <div
-      class="h-6 bg-secondary flex items-center text-white overflow-hidden"
+      class="h-6 bg-secondary flex items-center text-black overflow-hidden"
       :style="`width: ${abstain}`"
       :title="abstain"
     >
