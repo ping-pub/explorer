@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { fromBase64, toBase64 } from '@cosmjs/encoding';
 import { decodeTxRaw } from '@cosmjs/proto-signing';
-import { computed } from '@vue/reactivity';
+import { computed } from 'vue';
 import { hashTx } from '@/libs';
 import { useBlockchain, useFormatter } from '@/stores';
 const props = defineProps({

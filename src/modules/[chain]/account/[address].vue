@@ -7,7 +7,7 @@ import {
 } from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import DonutChart from '@/components/charts/DonutChart.vue';
-import { computed, ref } from '@vue/reactivity';
+import { computed, ref } from 'vue';
 import { onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
 

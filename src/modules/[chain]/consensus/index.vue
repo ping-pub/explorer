@@ -126,11 +126,11 @@ async function update() {
       .then((res) => {
         roundState.value = res.result.round_state;
         const raw = roundState?.value?.['height/round/step']?.split('/');
-        // eslint-disable-next-line prefer-destructuring
+         
         height.value = raw[0];
-        // eslint-disable-next-line prefer-destructuring
+         
         round.value = raw[1];
-        // eslint-disable-next-line prefer-destructuring
+         
         step.value = raw[2];
 
         // find the highest onboard rate

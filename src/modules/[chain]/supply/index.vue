@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from '@vue/reactivity';
+import { computed, ref } from 'vue';
 import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
 import { PageRequest, type AuthAccount, type Pagination, type Coin } from '@/types';
 import { onMounted } from 'vue';

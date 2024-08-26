@@ -2,7 +2,7 @@
 import ApexCharts from 'vue3-apexcharts';
 import { getMarketPriceChartConfig } from './apexChartConfig';
 import { useIndexModule } from '@/modules/[chain]/indexStore';
-import { computed, ref } from '@vue/reactivity';
+import { computed, ref } from 'vue';
 import { useBaseStore } from '@/stores';
 
 const store = useIndexModule();

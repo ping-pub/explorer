@@ -209,7 +209,7 @@ export const useFormatter = defineStore('formatter', {
     ) {
       if (token && token.amount && token?.denom) {
         let amount = Number(token.amount);
-        let denom = token.denom;
+        const denom = token.denom;
 
         let conf = mode === 'local'? this.blockchain.current?.assets?.find(
           // @ts-ignore

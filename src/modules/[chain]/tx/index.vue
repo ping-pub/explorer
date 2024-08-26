@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from '@vue/reactivity';
+import { computed, ref } from 'vue';
 import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
 import type { PaginatedTxs } from '@/types';
 import { useRouter } from 'vue-router';

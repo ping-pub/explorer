@@ -3,7 +3,7 @@ import { onMounted, ref, watchEffect } from 'vue';
 import { Icon } from '@iconify/vue';
 import TxsElement from '@/components/dynamic/TxsElement.vue';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
-import { computed } from '@vue/reactivity';
+import { computed } from 'vue';
 import { onBeforeRouteUpdate } from 'vue-router';
 import { useBaseStore, useFormatter } from '@/stores';
 import type { Block } from '@/types';

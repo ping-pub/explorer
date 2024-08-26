@@ -39,7 +39,7 @@ blockchain.$subscribe((m, s) => {
 const sidebarShow = ref(false);
 const sidebarOpen = ref(true);
 
-const changeOpen = (index: Number) => {
+const changeOpen = (index: number) => {
   if (index === 0) {
     sidebarOpen.value = !sidebarOpen.value;
   }

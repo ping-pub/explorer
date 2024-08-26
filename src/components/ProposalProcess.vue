@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useFormatter } from '@/stores';
 import type { Tally } from '@/types';
-import { computed } from '@vue/reactivity';
+import { computed } from 'vue';
 import type { PropType } from 'vue';
 
 const props = defineProps({

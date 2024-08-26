@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from '@vue/reactivity';
+import { computed } from 'vue';
 import DynamicComponent from './DynamicComponent.vue';
 
 const props = defineProps({

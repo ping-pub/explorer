@@ -1,7 +1,7 @@
 declare module 'vue3-json-viewer' {
     import { AllowedComponentProps, App, Component, ComponentCustomProps, VNodeProps } from 'vue'
     interface JsonViewerProps {
-        value: Object | Array<any> | string | number | boolean; //对象
+        value: object | Array<any> | string | number | boolean; //对象
         expanded: boolean; //是否自动展开
         expandDepth: number; //展开层级
         copyable: boolean | object; //是否可复制

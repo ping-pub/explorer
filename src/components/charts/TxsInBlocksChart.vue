@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import ApexCharts from 'vue3-apexcharts';
-import { computed, ref } from '@vue/reactivity';
+import { computed, ref } from 'vue';
 import { useBaseStore } from '@/stores';
 
 const baseStore = useBaseStore();

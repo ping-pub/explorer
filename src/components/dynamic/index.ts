@@ -23,7 +23,7 @@ export function select(v: any, direct?: string) {
   // }
 }
 
-function selectObject(v: Object, direct?: string) {
+function selectObject(v: object, direct?: string) {
   switch (true) {
     case v instanceof Long:
       return NumberElement;

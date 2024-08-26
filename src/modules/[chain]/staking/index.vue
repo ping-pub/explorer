@@ -7,7 +7,7 @@ import {
     useStakingStore,
     useTxDialog,
 } from '@/stores';
-import { computed } from '@vue/reactivity';
+import { computed } from 'vue';
 import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import type { Key, SlashingParam, Validator } from '@/types';

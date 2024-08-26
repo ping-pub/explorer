@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
-import { computed, ref } from '@vue/reactivity';
+import { computed, ref } from 'vue';
 import type { Tx, TxResponse } from '@/types';
 
 import { JsonViewer } from "vue3-json-viewer"

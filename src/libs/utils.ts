@@ -73,7 +73,7 @@ export function formatTokenAmount(
     : tokenDenom?.denom_trace?.base_denom;
   let amount = 0;
   const asset = assets.find((a: any) => a.base === denom);
-  let exp = asset
+  const exp = asset
     ? asset.exponent
     : String(denom).startsWith('gravity')
     ? 18
@@ -177,7 +177,7 @@ export function rgbToHsl(color: string) {
     h = 0;
     s = 0;
   } else {
-    var d = max - min;
+    const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
     switch (max) {
       case r:
