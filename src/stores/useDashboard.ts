@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
 import { get } from '../libs/http';
-import type { Chain, Asset } from '@ping-pub/chain-registry-client/dist/types';
+import type { Asset } from '@ping-pub/chain-registry-client/dist/types';
 import { useBlockchain } from './useBlockchain';
+// import unionChainConfig from '../assets/chains/mainnet/union.json'
 
 export enum EndpointType {
   rpc,
@@ -236,28 +237,28 @@ export function getLogo(
   return undefined;
 }
 
-function createChainFromDirectory(source: DirectoryChain): Chain {
-  const conf: Chain = {} as Chain;
-  conf.apis = source.best_apis;
-  conf.bech32_prefix = source.bech32_prefix;
-  conf.chain_id = source.chain_id;
-  conf.chain_name = source.chain_name;
-  conf.explorers = source.explorers;
-  conf.pretty_name = source.pretty_name;
-  if (source.versions) {
-    conf.codebase = {
-      recommended_version: source.versions.application_version,
-      cosmos_sdk_version: source.versions.cosmos_sdk_version,
-      tendermint_version: source.versions.tendermint_version,
-    };
-  }
-  if (source.image) {
-    conf.logo_URIs = {
-      svg: source.image,
-    };
-  }
-  return conf;
-}
+// function createChainFromDirectory(source: DirectoryChain): Chain {
+//   const conf: Chain = {} as Chain;
+//   conf.apis = source.best_apis;
+//   conf.bech32_prefix = source.bech32_prefix;
+//   conf.chain_id = source.chain_id;
+//   conf.chain_name = source.chain_name;
+//   conf.explorers = source.explorers;
+//   conf.pretty_name = source.pretty_name;
+//   if (source.versions) {
+//     conf.codebase = {
+//       recommended_version: source.versions.application_version,
+//       cosmos_sdk_version: source.versions.cosmos_sdk_version,
+//       tendermint_version: source.versions.tendermint_version,
+//     };
+//   }
+//   if (source.image) {
+//     conf.logo_URIs = {
+//       svg: source.image,
+//     };
+//   }
+//   return conf;
+// }
 
 export enum LoadingStatus {
   Empty,
@@ -341,8 +342,8 @@ export const useDashboard = defineStore('dashboard', {
       }
       const source: Record<string, LocalConfig> =
         this.networkType === NetworkType.Mainnet
-          ? import.meta.glob('../../chains/mainnet/*.json', { eager: true })
-          : import.meta.glob('../../chains/testnet/*.json', { eager: true });
+          ? import.meta.glob('../assets/chains/mainnet/*.json', { eager: true })
+          : import.meta.glob('../assets/chains/testnet/*.json', { eager: true });
       Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
         this.chains[x.chain_name] = fromLocal(x);
       });
@@ -353,8 +354,8 @@ export const useDashboard = defineStore('dashboard', {
       const config: Record<string, ChainConfig> = {} 
       const source: Record<string, LocalConfig> =
         network === NetworkType.Mainnet
-          ? import.meta.glob('../../chains/mainnet/*.json', { eager: true })
-          : import.meta.glob('../../chains/testnet/*.json', { eager: true });
+          ? import.meta.glob('../assets/chains/mainnet/*.json', { eager: true })
+          : import.meta.glob('../assets/chains/testnet/*.json', { eager: true });
       Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
         config[x.chain_name] = fromLocal(x);
       });

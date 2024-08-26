@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "vite",
     "serve": "vite",
-    "build": "run-p type-check build-only",
+    "serve-dist":"npm_config_yes=true npx serve@latest ./dist/",
     "preview": "vite preview",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit",
+    "prebuild": "yarn typecheck",
+    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit",
     "lint": "eslint --fix . --ext .js,.cjs,.mjs,.ts,.vue,.html --cache",
     "format": "prettier --config .prettierrc.json . --ignore-path .eslintignore --write --ignore-unknown"
   },
