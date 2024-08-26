@@ -32,23 +32,23 @@ const hdPath = computed(() => {
         </div>
       </div>
       <span class="text-base">{{ $t('widget.text_1') }}</span>
-        <div class="mockup-code bg-base-200 my-2">
-            <pre data-prefix="1"><code class="text-gray-800 dark:invert">&lt;script type="module" src="https://unpkg.com/ping-widget@latest/dist/ping-widget.js"&gt;</code></pre>
+        <div class="mockup-code dark:bg-base-300 my-2">
+            <pre data-prefix="1"><code>&lt;script type="module" src="https://unpkg.com/ping-widget@latest/dist/ping-widget.js"&gt;</code></pre>
         </div>
     </div>
     <div class="bg-base-100 my-5 px-4 pt-3 pb-4 shadow">
       <h2 class="card-title">{{ $t('module.widget') }}</h2>
       <div class="mt-4">
         <span class="text-base"> 1. {{ $t('widget.text_2') }}</span>
-        <div class="mockup-code bg-base-200 my-2">
+        <div class="mockup-code dark:bg-base-300 my-2">
             <pre data-prefix=">"><code class="text-green-400">&lt;!-- This widget is optional. --&gt; </code></pre>
-            <pre data-prefix=">"><code  class="text-gray-800 dark:invert">&lt;ping-connect-wallet chain-id="{{ chainId }}" hd-path="{{ hdPath }}"/&gt;</code></pre>
+            <pre data-prefix=">"><code >&lt;ping-connect-wallet chain-id="{{ chainId }}" hd-path="{{ hdPath }}"/&gt;</code></pre>
         </div>
 
         <span class="text-base"> 2. {{ $t('widget.text_3') }}</span>
-        <div class="mockup-code bg-base-200 my-2">
-            <pre data-prefix=">"><code class=" text-gray-800 dark:invert">&lt;ping-token-convert chain-name="{{ chainName }}" endpoint="{{endpoint}}" hd-path="{{hdPath}}"/&gt;</code></pre>
-            <pre data-prefix=">"><code class="text-gray-800 dark:invert">&lt;label for="PingTokenConvert" class="btn btn-sm"&gt;Buy {{chainName.toUpperCase()}}&lt;/label&gt;</code></pre>
+        <div class="mockup-code dark:bg-base-300 my-2">
+            <pre data-prefix=">"><code>&lt;ping-token-convert chain-name="{{ chainName }}" endpoint="{{endpoint}}" hd-path="{{hdPath}}"/&gt;</code></pre>
+            <pre data-prefix=">"><code>&lt;label for="PingTokenConvert" class="btn btn-sm"&gt;Buy {{chainName.toUpperCase()}}&lt;/label&gt;</code></pre>
         </div>
       </div>
     </div>

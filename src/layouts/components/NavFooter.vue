@@ -10,7 +10,7 @@
       <img src="../../assets/images/heart.svg" />&nbsp;
       By&nbsp;
       <a
-        class="link link-primary no-underline"
+        class="link no-underline"
         href="https://ping.pub"
         target="_blank"
         rel="noopener noreferrer"
@@ -21,13 +21,13 @@
       class="hidden md:!block"
     >
       <a
-        class="link link-primary no-underline mr-4"
+        class="link no-underline mr-4"
         href="https://github.com/ping-pub/explorer/blob/master/LICENSE"
         target="noopener noreferrer"
         >License</a
       >
       <a
-        class="link link-primary no-underline"
+        class="link no-underline"
         href="https://github.com/ping-pub/explorer"
         target="noopener noreferrer"
         >Github</a

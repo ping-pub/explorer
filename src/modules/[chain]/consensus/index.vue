@@ -267,7 +267,7 @@ async function update() {
               style="margin: 2px"
             >
               <span class="flex flex-rows justify-between">
-                <span class="truncate">{{ showName(i, 'nil-Vote') }} </span>
+                <span class="truncate text-black dark:text-white">{{ showName(i, 'nil-Vote') }} </span>
                 <span>
                   <span class="tooltip " :data-tip="pre" 
                   :class="{
@@ -292,11 +292,10 @@ async function update() {
 
     <!-- alert-info -->
     <div
-      class="text-[#00cfe8] bg-[rgba(0,207,232,0.12)] shadow mt-4 alert-info"
+      class="bg-base-100 mt-4"
     >
       <div
-        class="drop-shadow-md px-4 pt-2 pb-2"
-        style="box-shadow: rgba(0, 207, 232, 0.4) 0px 6px 15px -7px"
+        class="px-4 pt-2 pb-2 border-b"
       >
         <h2 class="text-base font-semibold">{{ $t('consensus.tips') }}</h2>
       </div>

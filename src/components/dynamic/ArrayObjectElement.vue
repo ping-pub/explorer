@@ -25,7 +25,7 @@ const header = computed(() => {
           <th
             v-for="(item, index) in header"
             :key="index"
-            class="text-left capitalize"
+            class="text-left capitalize bg-base-300"
           >
             {{ item.replace(/_/g, ' ') }}
           </th>
