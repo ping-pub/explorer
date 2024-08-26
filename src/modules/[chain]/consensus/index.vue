@@ -165,7 +165,7 @@ async function update() {
             class="input input-bordered input-md w-full"
             v-model="rpc"
           /> -->
-          <select v-model="rpc" class="select select-bordered w-full flex-1">
+          <select v-model="rpc" class="select select-bordered bg-transparent w-full flex-1">
             <option v-for="(item, index) in rpcList" :key="index">
               {{ item?.address }}/consensus_state
             </option>

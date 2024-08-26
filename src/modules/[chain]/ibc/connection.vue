@@ -51,7 +51,7 @@ function pageload(p: number) {
             &#x21cc; {{ s.to }}</span>
         </div>
         <div v-show="tab === 'favorite'" class="flex flex-wrap gap-1 p-4 ">
-          <div class="join border border-primary">
+          <div class="join border">
             <button class="join-item px-2">{{ $t('ibc.connection_id') }}:</button>
             <input v-model="ibcStore.connectionId" type=number class="input input-bordered w-40 join-item" min="0"
               :max="pageResponse.total || 0" :placeholder="`0~${pageResponse.total}`" />

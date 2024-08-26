@@ -24,7 +24,7 @@ const hdPath = computed(() => {
         <div class="form-control">
             <div class="input-group">
                 <span>{{ $t('widget.endpoint') }}</span>
-                <select v-model="endpoint" class="select select-bordered w-fit">
+                <select v-model="endpoint" class="select select-bordered bg-transparent w-fit">
                 <option disabled selected>{{ $t('widget.select_endpoint') }}</option>
                 <option v-for="v in chainStore.current?.endpoints.rest" :value="v.address">{{ v.address }}</option>
                 </select>

@@ -46,13 +46,13 @@ function gotoHistory() {
     <div class="bg-base-100 px-4 pt-3 pb-4 mb-4 shadow">
         <h2 class="card-title truncate w-full mb-4">{{ $t('cosmwasm.title') }}</h2>
         <div class="grid grid-flow-col auto-cols-max gap-4 overflow-hidden">
-            <div class="join w-full border border-primary">
-                <select v-model="field" class="select select-primary"><option value="contract">Contract</option><option value="creator">Creator</option></select>
+            <div class="join w-full border">
+                <select v-model="field" class="select select-primary bg-transparent"><option value="contract">Contract</option><option value="creator">Creator</option></select>
                 <input v-model="creator" type=text class="input input-bordered w-full join-item" placeholder="address" />
                 <button class="join-item btn  btn-primary" @click="myContracts()">{{ $t('cosmwasm.btn_query') }}</button>
             </div>
             <div>
-                <select v-model="togo" class="select select-primary" @change="gotoHistory()">
+                <select v-model="togo" class="select select-primary bg-transparent" @change="gotoHistory()">
                     <option value="">History</option>
                     <option v-for="(v, index) in history" :key="index" :value="v" >...{{ String(v).substring(45) }}</option>
                 </select>
@@ -74,7 +74,7 @@ function gotoHistory() {
                         <td>{{ v.code_id }}</td>
                         <td>
                             <RouterLink :to="`/${props.chain}/cosmwasm/${v.code_id}/contracts`"
-                                class="truncate max-w-[200px] block text-primary dark:invert" :title="v.data_hash">
+                                class="truncate max-w-[200px] block text-black dark:text-white" :title="v.data_hash">
                                 {{ v.data_hash }}
                             </RouterLink>
                         </td>

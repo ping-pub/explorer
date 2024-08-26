@@ -46,7 +46,7 @@ onMounted(() => {
       <h2 class="card-title truncate mb-2">{{ $t('statesync.title') }}</h2>
       <div class="text-sm">
         {{ $t('statesync.description') }}
-        <a class="text-primary lowercase" href="https://blog.cosmos.network/cosmos-sdk-state-sync-guide-99e4cf43be2f">{{
+        <a class="text-black dark:text-white font-bold lowercase" href="https://blog.cosmos.network/cosmos-sdk-state-sync-guide-99e4cf43be2f">{{
           $t('statesync.here') }}&nbsp;</a>
         <a class="lowercase">
           {{ $t('statesync.for_more_info') }}.</a>
