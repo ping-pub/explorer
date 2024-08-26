@@ -95,7 +95,7 @@ function color(v: string) {
 </script>
 <template>
   <div class="">
-    <div class="px-4 pt-3 pb-4 bg-base-200 rounded mb-4 shadow ">
+    <div class="px-4 pt-3 pb-4 bg-base-200 mb-4 shadow ">
       <div class="mx-auto max-w-7xl px-6 lg:!px-8">
         <dl class="grid grid-cols-1 gap-x-6 text-center lg:!grid-cols-3">
           <div class="mx-auto flex items-center">
@@ -110,7 +110,7 @@ function color(v: string) {
           </div>
           <div class="mx-auto flex items-center">
             <div :class="{ 'text-success': conn.state?.indexOf('_OPEN') > -1 }">
-              <span class="text-lg rounded-full">&#x21cc;</span>
+              <span class="text-lg">&#x21cc;</span>
               <div class=" text-c">
                 {{ conn.state }}
               </div>
@@ -128,7 +128,7 @@ function color(v: string) {
       </div>
     </div>
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 px-4 pt-3 pb-4 mb-4 shadow">
       <h2 class="card-title mb-4 overflow-hidden">{{ $t('ibc.title_2') }}<span class="ml-2 text-sm">{{
         clientState.client_state?.['@type'] }}</span></h2>
       <div class="overflow-x-auto grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -197,7 +197,7 @@ function color(v: string) {
 
       </div>
     </div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow overflow-hidden">
+    <div class="bg-base-100 px-4 pt-3 pb-4 mb-4 shadow overflow-hidden">
       <h2 class="card-title">{{ $t('ibc.channels') }}</h2>
       <div class="overflow-auto">
         <table class="table w-full mt-4">
@@ -258,7 +258,7 @@ function color(v: string) {
               </td>
               <td>{{ v.port_id }}</td>
               <td>
-                <div class="text-xs truncate relative py-2 px-4 rounded-full w-fit" :class="`text-${color(v.state)}`">
+                <div class="text-xs truncate relative py-2 px-4 w-fit" :class="`text-${color(v.state)}`">
                   <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${color(v.state)}`"></span>
                   {{ v.state }}
                 </div>

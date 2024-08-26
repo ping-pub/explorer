@@ -33,13 +33,13 @@ const list = computed(() => {
 
             <div class="grid xl:!grid-cols-6 md:!grid-cols-4 grid-cols-1 gap-3">
             <RouterLink v-for="item in list"
-                class="flex flex-col justify-between rounded p-4 shadow bg-base-100"
+                class="flex flex-col justify-between p-4 shadow bg-base-100"
                 :to="`/${chain}/block/${item.block.header.height}`">
                 <div class="flex justify-between">
                     <h3 class="text-md font-bold sm:!text-lg">
                         {{ item.block.header.height }}
                     </h3>
-                    <span class="rounded text-xs whitespace-nowrap font-medium text-green-600">
+                    <span class="text-xs whitespace-nowrap font-medium text-green-600">
                         {{ format.toDay(item.block?.header?.time, 'from') }}
                     </span>
                 </div>

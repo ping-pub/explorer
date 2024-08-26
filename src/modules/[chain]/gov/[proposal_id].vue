@@ -220,7 +220,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
 
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 px-4 pt-3 pb-4 mb-4 shadow">
       <h2 class="card-title flex flex-col md:!justify-between md:!flex-row mb-2">
         <p class="truncate w-full">
           {{ proposal_id }}. {{ proposal.title || proposal.content?.title || metaItem(proposal?.metadata)?.title  }}
@@ -253,17 +253,17 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
     <!-- flex-col lg:!!flex-row flex -->
     <div class="gap-4 mb-4 grid lg:!!grid-cols-3 auto-rows-max">
       <!-- flex-1 -->
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+      <div class="bg-base-100 px-4 pt-3 pb-4 shadow">
         <h2 class="card-title mb-1">{{ $t('gov.tally') }}</h2>
         <div class="mb-1" v-for="(item, index) of processList" :key="index">
           <label class="block text-sm mb-1">{{ item.name }}</label>
           <div class="h-5 w-full relative">
             <div
-              class="absolute inset-x-0 inset-y-0 w-full opacity-10 rounded-sm"
+              class="absolute inset-x-0 inset-y-0 w-full opacity-10"
               :class="`${item.class}`"
             ></div>
             <div
-              class="absolute inset-x-0 inset-y-0 rounded-sm"
+              class="absolute inset-x-0 inset-y-0"
               :class="`${item.class}`"
               :style="`width: ${
                 item.value === '-' || item.value === 'NaN%' ? '0%' : item.value
@@ -292,19 +292,19 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
         </div>
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-5 rounded shadow lg:!!col-span-2">
+      <div class="bg-base-100 px-4 pt-3 pb-5 shadow lg:!!col-span-2">
         <h2 class="card-title">{{ $t('gov.timeline') }}</h2>
 
         <div class="px-1">
           <div class="flex items-center mb-4 mt-2">
-            <div class="w-2 h-2 rounded-full bg-error mr-3"></div>
+            <div class="w-2 h-2 bg-error mr-3"></div>
             <div class="text-base flex-1 text-main">
               {{ $t('gov.submit_at') }}: {{ format.toDay(proposal.submit_time) }}
             </div>
             <div class="text-sm">{{ shortTime(proposal.submit_time) }}</div>
           </div>
           <div class="flex items-center mb-4">
-            <div class="w-2 h-2 rounded-full bg-primary mr-3"></div>
+            <div class="w-2 h-2 bg-primary mr-3"></div>
             <div class="text-base flex-1 text-main">
               {{ $t('gov.deposited_at') }}:
               {{
@@ -327,7 +327,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
           </div>
           <div class="mb-4">
             <div class="flex items-center">
-              <div class="w-2 h-2 rounded-full bg-yes mr-3"></div>
+              <div class="w-2 h-2 bg-yes mr-3"></div>
               <div class="text-base flex-1 text-main">
                 {{ $t('gov.vote_start_from') }} {{ format.toDay(proposal.voting_start_time) }}
               </div>
@@ -341,7 +341,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
           </div>
           <div>
             <div class="flex items-center mb-1">
-              <div class="w-2 h-2 rounded-full bg-success mr-3"></div>
+              <div class="w-2 h-2 bg-success mr-3"></div>
               <div class="text-base flex-1 text-main">
                 {{ $t('gov.vote_end') }} {{ format.toDay(proposal.voting_end_time) }}
               </div>
@@ -361,7 +361,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
             "
           >
             <div class="flex items-center">
-              <div class="w-2 h-2 rounded-full bg-warning mr-3"></div>
+              <div class="w-2 h-2 bg-warning mr-3"></div>
               <div class="text-base flex-1 text-main">
                 {{ $t('gov.upgrade_plan') }}:
                 <span v-if="Number(proposal.content?.plan?.height || '0') > 0">
@@ -383,7 +383,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
       </div>
     </div>
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 px-4 pt-3 pb-4 mb-4 shadow">
       <h2 class="card-title">{{ $t('gov.votes') }}</h2>
       <div class="overflow-x-auto">
         <table class="table w-full table-zebra">

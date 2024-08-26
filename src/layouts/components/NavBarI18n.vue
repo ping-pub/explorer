@@ -53,7 +53,7 @@ const handleLangChange = (lang: string) => {
         </label>
         <ul
             tabindex="0"
-            class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-40"
+            class="dropdown-content menu p-2 shadow bg-base-100 w-40"
         >
             <li v-for="lang in i18nLangs" :key="lang.i18nLang">
                 <a

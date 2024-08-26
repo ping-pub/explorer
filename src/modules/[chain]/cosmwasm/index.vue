@@ -43,7 +43,7 @@ function gotoHistory() {
 }
 </script>
 <template>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 px-4 pt-3 pb-4 mb-4 shadow">
         <h2 class="card-title truncate w-full mb-4">{{ $t('cosmwasm.title') }}</h2>
         <div class="grid grid-flow-col auto-cols-max gap-4 overflow-hidden">
             <div class="join w-full border border-primary">

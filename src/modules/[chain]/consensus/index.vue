@@ -156,7 +156,7 @@ async function update() {
 <template>
   <div>
     <!--  -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+    <div class="bg-base-100 px-4 pt-3 pb-4 shadow">
       <div class="form-control">
         <label class="input-group input-group-md w-full flex">
           <!-- <input
@@ -181,7 +181,7 @@ async function update() {
     <div class="mt-4" v-if="roundState['height/round/step']">
       <div class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 pb-4">
         <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-base-100 px-4 py-3 shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ rate }}</h4>
@@ -189,7 +189,7 @@ async function update() {
           </div>
           <div class="avatar placeholder">
             <div
-              class="bg-rose-100 text-neutral-content rounded-full w-12 h-12"
+              class="bg-rose-100 text-neutral-content w-12 h-12"
             >
               <span class="text-2xl text-error font-semibold">{{ $t('consensus.o') }}</span>
             </div>
@@ -197,7 +197,7 @@ async function update() {
         </div>
         <!-- Height -->
         <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-base-100 px-4 py-3 shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ height }}</h4>
@@ -205,7 +205,7 @@ async function update() {
           </div>
           <div class="avatar placeholder">
             <div
-              class="bg-green-100 text-neutral-content rounded-full w-12 h-12"
+              class="bg-green-100 text-neutral-content w-12 h-12"
             >
               <span class="text-2xl text-success font-semibold">{{ $t('consensus.h') }}</span>
             </div>
@@ -213,7 +213,7 @@ async function update() {
         </div>
         <!-- Round -->
         <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-base-100 px-4 py-3 shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ round }}</h4>
@@ -221,7 +221,7 @@ async function update() {
           </div>
           <div class="avatar placeholder">
             <div
-              class="bg-violet-100 text-neutral-content rounded-full w-12 h-12"
+              class="bg-violet-100 text-neutral-content w-12 h-12"
             >
               <span class="text-2xl text-primary font-semibold">{{ $t('consensus.r') }}</span>
             </div>
@@ -229,7 +229,7 @@ async function update() {
         </div>
         <!-- Step -->
         <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
+          class="bg-base-100 px-4 py-3 shadow flex justify-between items-center"
         >
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ step }}</h4>
@@ -237,7 +237,7 @@ async function update() {
           </div>
           <div class="avatar placeholder">
             <div
-              class="bg-blue-100 text-neutral-content rounded-full w-12 h-12"
+              class="bg-blue-100 text-neutral-content w-12 h-12"
             >
               <span class="text-2xl text-info font-semibold">{{ $t('consensus.s') }}</span>
             </div>
@@ -247,7 +247,7 @@ async function update() {
     </div>
     <!-- update -->
     <div
-      class="bg-base-100 p-4 rounded shadow"
+      class="bg-base-100 p-4 shadow"
       v-if="roundState['height/round/step']"
     >
       <div class="flex flex-1 flex-col truncate">
@@ -260,7 +260,7 @@ async function update() {
 
           <div class="flex flex-rows flex-wrap py-6">
             <div
-              class=" w-48 rounded-3xl h-5 text-sm px-2 text-slate-200 leading-5"
+              class=" w-48 h-5 text-sm px-2 text-slate-200 leading-5"
               v-for="(pre, i) in item.prevotes"
               :key="i"
               size="sm"
@@ -292,7 +292,7 @@ async function update() {
 
     <!-- alert-info -->
     <div
-      class="text-[#00cfe8] bg-[rgba(0,207,232,0.12)] rounded shadow mt-4 alert-info"
+      class="text-[#00cfe8] bg-[rgba(0,207,232,0.12)] shadow mt-4 alert-info"
     >
       <div
         class="drop-shadow-md px-4 pt-2 pb-2"

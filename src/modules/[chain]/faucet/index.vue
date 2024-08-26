@@ -83,8 +83,8 @@ onMounted(() => {
 <template>
     <div>
         <div class="flex flex-col items-center justify-center mb-6 mt-14 gap-4">
-            <img v-if="chainStore.current?.logo" :src="`${chainStore.current?.logo}`" class="w-16 rounded-md" />
-            <div v-else class="w-16 rounded-full">
+            <img v-if="chainStore.current?.logo" :src="`${chainStore.current?.logo}`" class="w-16" />
+            <div v-else class="w-16">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150.000000 132.000000"
                     preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,132.000000) scale(0.100000,-0.100000)" fill="#666CFF" class=""
@@ -108,9 +108,9 @@ onMounted(() => {
                 {{ chainStore.chainName }} Faucet
             </h1>
         </div>
-        <div class="bg-base-100 my-5 px-4 pt-3 pb-4 rounded shadow">
+        <div class="bg-base-100 my-5 px-4 pt-3 pb-4 shadow">
             <h2 class="card-title">Get Tokens</h2>
-            <input type="text" v-model="address" class="mt-4 mb-4 w-full border border-gray-300 rounded-md p-2"
+            <input type="text" v-model="address" class="mt-4 mb-4 w-full border border-gray-300 p-2"
                 :class="{'input-error' : !validAddress}"
                 :disabled="notReady" placeholder="Enter your address" />
             <button class="btn btn-primary w-full bg-primary text-white" :disabled="notReady" @click="claim()">Get
@@ -119,7 +119,7 @@ onMounted(() => {
 
 <!--        <AdBanner id="home-banner-ad" unit="banner" />-->
 
-        <div class="bg-base-100 my-5 px-4 pt-3 pb-4 rounded shadow">
+        <div class="bg-base-100 my-5 px-4 pt-3 pb-4 shadow">
             <h2 class="card-title">Enable Faucet</h2>
             <div class="mt-4">
                 <span class="text-base"> 1. Submit chain configuration</span>
@@ -130,7 +130,7 @@ onMounted(() => {
 
                     <pre class=" text-xs text-red-500">{{ configChecker }}</pre>
                     <pre></pre>
-                    <a class=" btn-ghost text-white rounded-md p-2 ml-4"
+                    <a class=" btn-ghost text-white p-2 ml-4"
                         href="https://github.com/ping-pub/ping.pub/blob/main/faucet.md">Update</a>
                 </div>
 

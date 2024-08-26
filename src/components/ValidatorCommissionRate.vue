@@ -118,7 +118,7 @@ const chartConfig = computed(() => {
 </script>
 
 <template>
-    <div class="bg-base-100 rounded shadow p-4">
+    <div class="bg-base-100 shadow p-4">
         <div class="text-lg text-main font-semibold mb-1">Commission Rate</div>
         <div class="text-sm text-gray-500 dark:text-gray-400">
             {{ `Updated at ${format.toDay(props.commission?.update_time, 'short')}` }}
@@ -129,15 +129,15 @@ const chartConfig = computed(() => {
         <div>
             <div class="flex items-center justify-center flex-wrap gap-x-3">
                 <div class="flex items-center gap-x-2">
-                    <div class="bg-success w-[6px] h-[6px] rounded-full"></div>
+                    <div class="bg-success w-[6px] h-[6px]"></div>
                     <span class="text-caption">Rate:{{ rate.toFixed(0) }}%</span>
                 </div>
                 <div class="flex items-center gap-x-2">
-                    <div class="bg-success w-[6px] h-[6px] rounded-full opacity-60"></div>
+                    <div class="bg-success w-[6px] h-[6px] opacity-60"></div>
                     <span class="text-caption">24h: ±{{ change }}%</span>
                 </div>
                 <div class="flex items-center gap-x-2">
-                    <div class="bg-secondary w-[6px] h-[6px] rounded-full"></div>
+                    <div class="bg-secondary w-[6px] h-[6px]"></div>
                     <span class="text-caption">Max:{{ max }}%</span>
                 </div>
             </div>

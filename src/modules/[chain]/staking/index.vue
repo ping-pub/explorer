@@ -224,10 +224,10 @@ loadAvatars();
 </script>
 <template>
 <div>
-    <div class="bg-base-100 rounded-lg grid sm:grid-cols-1 md:grid-cols-4 p-4" >    
+    <div class="bg-base-100 grid sm:grid-cols-1 md:grid-cols-4 p-4" >
         <div class="flex">
             <span>
-                <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                <div class="relative w-9 h-9 overflow-hidden flex items-center justify-center mr-2">
                     <Icon class="text-success" icon="mdi:trending-up" size="32" />
                     <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-success"></div>
                 </div>
@@ -239,7 +239,7 @@ loadAvatars();
         </div>
         <div class="flex">
             <span>
-                <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                <div class="relative w-9 h-9 overflow-hidden flex items-center justify-center mr-2">
                     <Icon class="text-primary" icon="mdi:lock-open-outline" size="32" />
                     <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-primary"></div>
                 </div>
@@ -251,9 +251,9 @@ loadAvatars();
         </div> 
         <div class="flex">
             <span>
-                <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                <div class="relative w-9 h-9 overflow-hidden flex items-center justify-center mr-2">
                     <Icon class="text-error" icon="mdi:alert-octagon-outline" size="32" />
-                    <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-error"></div>
+                    <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20"></div>
                 </div>
             </span>
             <span>
@@ -263,7 +263,7 @@ loadAvatars();
         </div> 
         <div class="flex">
             <span>
-                <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                <div class="relative w-9 h-9 overflow-hidden flex items-center justify-center mr-2">
                     <Icon class="text-error" icon="mdi:pause" size="32" />
                     <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-error"></div>
                 </div>
@@ -303,7 +303,7 @@ loadAvatars();
             </div>
         </div>
 
-        <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+        <div class="bg-base-100 px-4 pt-3 pb-4 shadow">
             <div class="overflow-x-auto">
                 <table class="table staking-table w-full">
                     <thead class=" bg-base-200">
@@ -331,7 +331,7 @@ loadAvatars();
                             <!-- 👉 rank -->
                             <td>
                                 <div
-                                    class="text-xs truncate relative px-2 py-1 rounded-full w-fit"
+                                    class="text-xs truncate relative px-2 py-1 w-fit"
                                     :class="`text-${rank}`"
                                 >
                                     <span
@@ -348,12 +348,12 @@ loadAvatars();
                                     style="max-width: 300px"
                                 >
                                     <div
-                                        class="avatar mr-4 relative w-8 h-8 rounded-full"
+                                        class="avatar mr-4 relative w-8 h-8"
                                     >
                                         <div
-                                            class="w-8 h-8 rounded-full bg-gray-400 absolute opacity-10"
+                                            class="w-8 h-8 bg-gray-400 absolute opacity-10"
                                         ></div>
-                                        <div class="w-8 h-8 rounded-full">
+                                        <div class="w-8 h-8">
                                             <img
                                                 v-if="logo"
                                                 :src="logo"
@@ -450,7 +450,7 @@ loadAvatars();
                                 <label
                                     v-else
                                     for="delegate"
-                                    class="btn btn-xs btn-primary rounded-sm capitalize"
+                                    class="btn btn-xs btn-primary capitalize"
                                     @click="
                                         dialog.open('delegate', {
                                             validator_address:
@@ -468,7 +468,7 @@ loadAvatars();
             <div class="divider"></div>
             <div class="flex flex-row items-center">
                 <div
-                    class="text-xs truncate relative py-2 px-4 rounded-md w-fit text-error mr-2"
+                    class="text-xs truncate relative py-2 px-4 w-fit text-error mr-2"
                 >
                     <span
                         class="inset-x-0 inset-y-0 opacity-10 absolute bg-error"
@@ -476,7 +476,7 @@ loadAvatars();
                     {{ $t('staking.top') }} 33%
                 </div>
                 <div
-                    class="text-xs truncate relative py-2 px-4 rounded-md w-fit text-warning"
+                    class="text-xs truncate relative py-2 px-4 w-fit text-warning"
                 >
                     <span
                         class="inset-x-0 inset-y-0 opacity-10 absolute bg-warning"

@@ -30,7 +30,7 @@ const veto = computed(() =>
 </script>
 
 <template>
-  <div class="progress rounded-[3px] h-6 text-xs flex items-center">
+  <div class="progress h-6 text-xs flex items-center">
     <div
       class="h-6 bg-yes flex items-center pl-2 text-white overflow-hidden"
       :style="`width: ${yes}`"

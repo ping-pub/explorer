@@ -22,11 +22,11 @@ const isPositive = controlledComputed(
 </script>
 
 <template>
-  <div class="bg-base-100 shadow rounded p-4">
+  <div class="bg-base-100 shadow p-4">
     <div class="flex items-center justify-center">
       <div
         v-if="props.icon"
-        class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center"
+        class="relative w-9 h-9 overflow-hidden flex items-center justify-center"
       >
         <Icon :class="[`text-${props?.color}`]" :icon="props.icon" size="32" />
         <div

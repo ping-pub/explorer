@@ -193,7 +193,7 @@ async function loadBalances(chainName: string, endpoint: string, address: string
 </script>
 <template>
   <div>
-    <div class="overflow-x-auto w-full rounded-md">
+    <div class="overflow-x-auto w-full">
       <div class="flex flex-wrap justify-between bg-base-100 p-5">
         <div class="min-w-0">
           <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">
@@ -225,7 +225,7 @@ async function loadBalances(chainName: string, endpoint: string, address: string
 <!--    <AdBanner id="account-banner-ad" unit="banner" width="970px" height="90px" />-->
 
     <div class="overflow-x-auto">
-      <div v-for="{ key, subaccounts } in accounts" class="bg-base-100 rounded-md my-5 py-5">
+      <div v-for="{ key, subaccounts } in accounts" class="bg-base-100 my-5 py-5">
         <div class="flex justify-self-center">
           <div class="mx-2 p-2">
             <svg :fill="chainStore.current?.themeColor || '#666CFF'" height="28px" width="28px" version="1.1" id="Capa_1"
@@ -254,7 +254,7 @@ async function loadBalances(chainName: string, endpoint: string, address: string
             <div class=" max-w-md overflow-hidden"><div class="font-bold">{{ key }}</div></div>
             <div class="dropdown">
               <label tabindex="0" class=" cursor-pointer">{{ subaccounts.length }} addresses</label>
-              <ul tabindex="0" class=" -left-14 dropdown-content menu p-2 shadow bg-base-200 rounded-box z-50">
+              <ul tabindex="0" class=" -left-14 dropdown-content menu p-2 shadow bg-base-200 z-50">
                 <li v-for="x in subaccounts">
                 <a>
                   <img :src="x.account.logo" class="w-8 h-8 mr-2" />
@@ -307,9 +307,9 @@ async function loadBalances(chainName: string, endpoint: string, address: string
         </div>
       </div>
 
-      <div class=" text-center bg-base-100 rounded-md my-4 p-4">
+      <div class=" text-center bg-base-100 my-4 p-4">
         <a href="#address-modal"
-          class="inline-flex items-center ml-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+          class="inline-flex items-center ml-3 bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
           <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path
               d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z" />

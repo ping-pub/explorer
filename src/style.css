@@ -91,3 +91,7 @@ html[data-theme='dark'] {
   opacity: 0;
   transform: translateY(-calc(15%));
 }
+
+.btn, input, div, select, span {
+  border-radius: 0!important;
+}

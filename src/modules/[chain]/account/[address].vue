@@ -133,12 +133,12 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
 <template>
   <div v-if="account">
     <!-- address -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 px-4 pt-3 pb-4 mb-4 shadow">
       <div class="flex items-center">
         <!-- img -->
-        <div class="inline-flex relative w-11 h-11 rounded-md">
+        <div class="inline-flex relative w-11 h-11">
           <div
-            class="w-11 h-11 absolute rounded-md opacity-10 bg-primary"
+            class="w-11 h-11 absolute opacity-10 bg-primary"
           ></div>
           <div
             class="w-full inline-flex items-center align-middle flex-none justify-center"
@@ -159,7 +159,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
     </div>
 
     <!-- Assets -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 px-4 pt-3 pb-4 mb-4 shadow">
       <div class="flex justify-between">
         <h2 class="card-title mb-4">{{ $t('account.assets') }}</h2>
         <!-- button -->
@@ -200,7 +200,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
               :key="index"
             >
               <div
-                class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
+                class="w-9 h-9 overflow-hidden flex items-center justify-center relative mr-4"
               >
                 <Icon icon="mdi-account-cash" class="text-info" size="20" />
                 <div
@@ -216,7 +216,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 </div>
               </div>
               <div
-                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
+                class="text-xs truncate relative py-1 px-3 w-fit text-primary dark:invert mr-2"
               >
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"
@@ -231,7 +231,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
               :key="index"
             >
               <div
-                class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
+                class="w-9 h-9 overflow-hidden flex items-center justify-center relative mr-4"
               >
                 <Icon icon="mdi-user-clock" class="text-warning" size="20" />
                 <div
@@ -252,7 +252,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 </div>
               </div>
               <div
-                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
+                class="text-xs truncate relative py-1 px-3 w-fit text-primary dark:invert mr-2"
               >
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"
@@ -267,7 +267,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
               :key="index"
             >
               <div
-                class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
+                class="w-9 h-9 overflow-hidden flex items-center justify-center relative mr-4"
               >
                 <Icon
                   icon="mdi-account-arrow-up"
@@ -285,7 +285,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 <div class="text-xs">{{ format.calculatePercent(rewardItem.amount, totalAmount) }}</div>
               </div>
               <div
-                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
+                class="text-xs truncate relative py-1 px-3 w-fit text-primary dark:invert mr-2"
               >
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary  dark:invert text-sm"
@@ -296,7 +296,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
             <!-- mdi-account-arrow-right -->
             <div class="flex items-center px-4">
               <div
-                class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4"
+                class="w-9 h-9 overflow-hidden flex items-center justify-center relative mr-4"
               >
                 <Icon
                   icon="mdi-account-arrow-right"
@@ -321,7 +321,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 </div>
               </div>
               <div
-                class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2"
+                class="text-xs truncate relative py-1 px-3 w-fit text-primary dark:invert mr-2"
               >
                 <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert"></span>
                 ${{format.tokenValue({
@@ -340,7 +340,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
     </div>
 
     <!-- Delegations -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 px-4 pt-3 pb-4 mb-4 shadow">
       <div class="flex justify-between">
         <h2 class="card-title mb-4">{{ $t('account.delegations') }}</h2>
         <div class="flex justify-end mb-4">
@@ -446,7 +446,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
 
     <!-- Unbonding Delegations -->
     <div
-      class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow"
+      class="bg-base-100 px-4 pt-3 pb-4 mb-4 shadow"
       v-if="unbonding && unbonding.length > 0"
     >
       <h2 class="card-title mb-4">{{ $t('account.unbonding_delegations') }}</h2>
@@ -507,7 +507,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
     </div>
 
     <!-- Transactions -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 px-4 pt-3 pb-4 mb-4 shadow">
       <h2 class="card-title mb-4">{{ $t('account.transactions') }}</h2>
       <div class="overflow-x-auto">
         <table class="table w-full text-sm">

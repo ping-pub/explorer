@@ -258,13 +258,13 @@ function mapDelegators(messages: any[]) {
 </script>
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow border-indigo-500">
+    <div class="bg-base-100 px-4 pt-3 pb-4 shadow border-indigo-500">
       <div class="flex flex-col lg:!flex-row pt-2 pb-1">
         <div class="flex-1">
           <div class="flex">
-            <div class="avatar mr-4 relative w-24 rounded-lg overflow-hidden">
-              <div class="w-24 rounded-lg absolute opacity-10"></div>
-              <div class="w-24 rounded-lg">
+            <div class="avatar mr-4 relative w-24 overflow-hidden">
+              <div class="w-24 absolute opacity-10"></div>
+              <div class="w-24">
                 <img
                   v-if="identity && avatars[identity] !== 'undefined'"
                   v-lazy="logo(identity)"
@@ -364,7 +364,7 @@ function mapDelegators(messages: any[]) {
           <div class="flex flex-col mt-10">
             <div class="flex mb-2">
               <div
-                class="flex items-center justify-center rounded w-10 h-10"
+                class="flex items-center justify-center w-10 h-10"
                 style="border: 1px solid #666"
               >
                 <Icon icon="mdi-coin" class="text-3xl" />
@@ -383,7 +383,7 @@ function mapDelegators(messages: any[]) {
             </div>
             <div class="flex mb-2">
               <div
-                class="flex items-center justify-center rounded w-10 h-10"
+                class="flex items-center justify-center w-10 h-10"
                 style="border: 1px solid #666"
               >
                 <Icon icon="mdi-percent" class="text-3xl" />
@@ -398,7 +398,7 @@ function mapDelegators(messages: any[]) {
 
             <div class="flex mb-2">
               <div
-                class="flex items-center justify-center rounded w-10 h-10"
+                class="flex items-center justify-center w-10 h-10"
                 style="border: 1px solid #666"
               >
                 <Icon icon="mdi-account-tie" class="text-3xl" />
@@ -413,7 +413,7 @@ function mapDelegators(messages: any[]) {
             </div>
             <div class="flex mb-2">
               <div
-                class="flex items-center justify-center rounded w-10 h-10"
+                class="flex items-center justify-center w-10 h-10"
                 style="border: 1px solid #666"
               >
                 <Icon icon="mdi-finance" class="text-3xl" />
@@ -426,7 +426,7 @@ function mapDelegators(messages: any[]) {
 
             <div class="flex mb-2">
               <div
-                class="flex items-center justify-center rounded w-10 h-10"
+                class="flex items-center justify-center w-10 h-10"
                 style="border: 1px solid #666"
               >
                 <Icon icon="mdi:arrow-down-bold-circle-outline" class="text-3xl" />
@@ -439,7 +439,7 @@ function mapDelegators(messages: any[]) {
 
             <div class="flex mb-2">
               <div
-                class="flex items-center justify-center rounded w-10 h-10"
+                class="flex items-center justify-center w-10 h-10"
                 style="border: 1px solid #666"
               >
                 <Icon icon="mdi-clock" class="text-3xl" />
@@ -460,7 +460,7 @@ function mapDelegators(messages: any[]) {
       <div>
         <CommissionRate :commission="v.commission"></CommissionRate>
       </div>
-      <div class="bg-base-100 rounded shadow relative overflow-auto">
+      <div class="bg-base-100 shadow relative overflow-auto">
         <div class="text-lg font-semibold text-main px-4 pt-4">
           {{ $t('staking.commissions_&_rewards') }}
         </div>

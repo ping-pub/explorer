@@ -77,7 +77,7 @@ dayjs();
 </script>
 
 <template>
-  <div class="bg-gray-100 dark:bg-[#171d30]">
+  <div class="bg-gray-200 dark:bg-[#171d30]">
     <!-- sidebar -->
     <div
       class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-gray-700"
@@ -85,30 +85,30 @@ dayjs();
     >
       <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
         <RouterLink to="/" class="flex items-center">
-          <svg class="h-10" viewBox="0 0 656 182" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="h-10 dark:text-white text-black" viewBox="0 0 656 182" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M484.174 141.239C476.957 141.239 471.094 139.882 466.57 136.014C462.154 132.051 460.283 126.659 460.283 120.338V60.2464C460.283 53.8308 462.154 48.4386 466.57 44.5704C471.094 40.7022 476.957 39.3451 484.174 39.3451H523.154C530.478 39.3451 536.341 40.7022 540.757 44.5704C545.173 48.4386 547.044 53.8308 547.044 60.2464V120.338C547.044 126.659 545.173 132.051 540.757 136.014C536.341 139.882 530.478 141.239 523.154 141.239H484.174ZM514.352 121.644C516.937 121.644 519.239 121.564 520.639 120.338C522.147 119.111 523.154 117.377 523.154 115.112V65.4717C523.154 63.2074 522.147 61.4729 520.639 60.2464C519.239 59.0199 516.937 58.94 514.352 58.94H492.976C490.283 58.94 488.089 59.0199 486.689 60.2464C485.289 61.4729 484.174 63.2074 484.174 65.4717V115.112C484.174 117.377 485.289 119.111 486.689 120.338C488.089 121.564 490.283 121.644 492.976 121.644H514.352Z"
-              fill="white" />
-            <path d="M438.089 140.23H413.876V40.354H438.089V140.23Z" fill="white" />
+              fill="currentColor" />
+            <path d="M438.089 140.23H413.876V40.354H438.089V140.23Z" fill="currentColor" />
             <path
               d="M328.811 140.23H304.921V40.354H330.069L367.791 101.389L367.791 83.7212V40.354H391.682V140.23H366.534L328.811 79.1947L328.811 96.8628V140.23Z"
-              fill="white" />
+              fill="currentColor" />
             <path
               d="M592.891 139.876H569V40H594.148L631.87 101.035L631.87 83.3672V40H655.761V139.876H630.613L592.891 78.8407L592.891 96.5088V139.876Z"
-              fill="white" />
+              fill="currentColor" />
             <path
               d="M220.934 141.239C213.707 141.239 207.809 139.882 203.279 135.998C198.857 132.02 196.974 126.623 196.974 120.276V40.354H220.934V115.035C220.934 117.308 222.054 119.044 223.456 120.276C224.858 121.507 227.065 121.586 229.761 121.586H249.938C252.635 121.586 254.842 121.507 256.244 120.276C257.646 119.044 258.766 117.308 258.766 115.035V40.354H282.726V120.276C282.726 126.623 280.843 132.02 276.421 135.998C271.998 139.882 266.101 141.239 258.766 141.239H220.934Z"
-              fill="white" />
+              fill="currentColor" />
             <path fill-rule="evenodd" clip-rule="evenodd"
                   d="M121.062 121.062C121.062 154.492 93.961 181.593 60.5309 181.593C27.1006 181.593 0 154.492 0 121.062H29.6478C29.6478 137.777 43.8158 151.327 60.5309 151.327C77.246 151.327 91.4141 137.777 91.4141 121.062H121.062Z"
-                  fill="white" />
-            <path d="M136.939 105.185H166.708V75.4155H136.939V105.185Z" fill="white" />
-            <path d="M121.062 75.4154H91.2924V105.185H121.062V75.4154Z" fill="white" />
-            <path d="M45.6461 105.185H75.4154V75.4155H45.6461V105.185Z" fill="white" />
-            <path d="M29.7693 75.4154H0V105.185H29.7693V75.4154Z" fill="white" />
+                  fill="currentColor" />
+            <path d="M136.939 105.185H166.708V75.4155H136.939V105.185Z" fill="currentColor" />
+            <path d="M121.062 75.4154H91.2924V105.185H121.062V75.4154Z" fill="currentColor" />
+            <path d="M45.6461 105.185H75.4154V75.4155H45.6461V105.185Z" fill="currentColor" />
+            <path d="M29.7693 75.4154H0V105.185H29.7693V75.4154Z" fill="currentColor" />
             <path fill-rule="evenodd" clip-rule="evenodd"
                   d="M45.6465 60.5309C45.6465 27.1006 72.7473 0 106.177 0C139.608 0 166.708 27.1006 166.708 60.5309H137.061C137.061 43.8158 122.892 30.2655 106.177 30.2655C89.4624 30.2655 75.2943 43.8158 75.2943 60.5309H45.6465Z"
-                  fill="white" />
+                  fill="currentColor" />
           </svg>
         </RouterLink>
         <div
@@ -154,7 +154,7 @@ dayjs();
             <img
               v-if="item?.icon?.image"
               :src="item?.icon?.image"
-              class="w-6 h-6 rounded-full mr-3"
+              class="w-6 h-6 mr-3"
             />
             <div
               class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap"
@@ -174,7 +174,7 @@ dayjs();
               <RouterLink
                 v-if="isNavLink(el)"
                 @click="sidebarShow = false"
-                class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
+                class="hover:bg-gray-100 dark:hover:bg-[#373f59] cursor-pointer px-3 py-2 flex items-center"
                 :class="{
                   '!bg-primary': selected($route, el),
                 }"
@@ -193,7 +193,7 @@ dayjs();
                 <img
                   v-if="el?.icon?.image"
                   :src="el?.icon?.image"
-                  class="w-6 h-6 rounded-full mr-3 ml-4 " :class="{
+                  class="w-6 h-6 mr-3 ml-4 " :class="{
                   'border border-gray-300 bg-white': selected($route, el),
                 }"
                 />
@@ -210,7 +210,7 @@ dayjs();
             <div v-if="index === 0 && dashboard.networkType === NetworkType.Testnet"
                  class="menu bg-base-100 w-full !p-0">
               <RouterLink
-                class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
+                class="hover:bg-gray-100 dark:hover:bg-[#373f59] cursor-pointer px-3 py-2 flex items-center"
                 :to="`/${blockchain.chainName}/faucet`">
                 <Icon
                   icon="mdi:chevron-right"
@@ -235,7 +235,7 @@ dayjs();
           v-if="isNavLink(item)"
           :to="item?.to"
           @click="sidebarShow = false"
-          class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="cursor-pointer px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <Icon
             v-if="item?.icon?.icon"
@@ -249,7 +249,7 @@ dayjs();
           <img
             v-if="item?.icon?.image"
             :src="item?.icon?.image"
-            class="w-6 h-6 rounded-full mr-3 border border-blue-100"
+            class="w-6 h-6 mr-3 border border-blue-100"
           />
           <div
             class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap"
@@ -276,7 +276,7 @@ dayjs();
           Tools
         </div>
         <RouterLink to="/wallet/suggest"
-                    class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+                    class="py-2 px-4 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
           <div
@@ -293,7 +293,7 @@ dayjs();
         <a
           href="https://twitter.com/ping_pub"
           target="_blank"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <Icon icon="mdi:twitter" class="text-xl mr-2" />
           <div
@@ -306,7 +306,7 @@ dayjs();
           v-if="showDiscord"
           href="https://discord.com/invite/CmjYVSr6GW"
           target="_blank"
-          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <Icon icon="mdi:discord" class="text-xl mr-2" />
           <div
@@ -318,7 +318,7 @@ dayjs();
         <a
           href="https://github.com/ping-pub/explorer/discussions"
           target="_blank"
-          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
           <div
@@ -332,7 +332,7 @@ dayjs();
     <div class="xl:!ml-64 px-3 pt-4">
       <!-- header -->
       <div
-        class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10"
+        class="flex items-center py-3 bg-base-100 mb-4 px-4 sticky top-0 z-10"
       >
         <div
           class="text-2xl pr-3 cursor-pointer xl:!hidden"

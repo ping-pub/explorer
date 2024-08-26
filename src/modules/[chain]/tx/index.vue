@@ -34,7 +34,7 @@ function search() {
                 @click="tab = 'search'">Search</a>
         </div>
 
-        <div v-show="tab === 'recent'" class="bg-base-100 rounded overflow-x-auto">
+        <div v-show="tab === 'recent'" class="bg-base-100 overflow-x-auto">
             <table class="table w-full table-compact">
                 <thead class="bg-base-200">
                     <tr>
@@ -74,7 +74,7 @@ function search() {
             </div>
         </div>
 
-        <div v-show="tab === 'search'" class="bg-base-100 rounded overflow-x-auto">
+        <div v-show="tab === 'search'" class="bg-base-100 overflow-x-auto">
             <div class="p-4">
                 <div class="form-control">
                     <input v-model="hash" type="text" class="input input-bordered" placeholder="Search by Tx Hash" @blur="search"/>

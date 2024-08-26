@@ -45,7 +45,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
 
 </script>
 <template>
-  <div class="bg-white dark:bg-[#28334e] rounded text-sm">
+  <div class="bg-white dark:bg-[#28334e] text-sm">
     <table class="table-compact w-full table-fixed hidden lg:!table">
       <tbody>
         <tr v-for="(item, index) in proposals?.proposals" :key="index">
@@ -68,7 +68,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
               </RouterLink>
               <div
                 v-if="item.content"
-                class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
+                class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block px-2 py-[1px] text-xs mb-1"
               >
                 {{ showType(item.content['@type']) }} 
               </div>
@@ -93,7 +93,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
                 "
               >
                 <div
-                  class="w-1 h-1 rounded-full mr-2"
+                  class="w-1 h-1  mr-2"
                   :class="
                     statusMap?.[item?.status] === 'PASSED'
                       ? 'bg-yes'
@@ -118,7 +118,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
             <div class="">
               <label
                 for="vote"
-                class="btn btn-xs btn-primary rounded-sm"
+                class="btn btn-xs btn-primary"
                 @click="
                   dialog.open('vote', {
                     proposal_id: item?.proposal_id,
@@ -164,7 +164,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
           <div class="col-span-2">
             <div
               v-if="item.content"
-              class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
+              class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block px-2 py-[1px] text-xs mb-1"
             >
               {{ showType(item.content['@type']) }}
             </div>
@@ -197,7 +197,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
               "
             >
               <div
-                class="w-1 h-1 rounded-full mr-2"
+                class="w-1 h-1 mr-2"
                 :class="
                   statusMap?.[item?.status] === 'PASSED'
                     ? 'bg-yes'
@@ -212,7 +212,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
             </div>
             <label
               for="vote"
-              class="btn btn-xs btn-primary rounded-sm"
+              class="btn btn-xs btn-primary"
               @click="
                 dialog.open('vote', {
                   proposal_id: item?.proposal_id,

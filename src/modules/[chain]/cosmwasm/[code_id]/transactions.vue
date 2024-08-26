@@ -143,7 +143,7 @@ const result = ref({});
 </script>
 <template>
     <div>
-        <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+        <div class="bg-base-100 px-4 pt-3 pb-4 mb-4 shadow">
             <h2 class="card-title truncate w-full">
                 {{ $t('cosmwasm.contract_detail') }}
             </h2>
@@ -182,7 +182,7 @@ const result = ref({});
 
         </div>
 
-        <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+        <div class="bg-base-100 px-4 pt-3 pb-4 mb-4 shadow">
             <h2 class="card-title truncate w-full mt-4 mb-2">Transactions</h2>
             <table class="table">
                 <thead class=" bg-base-200">
@@ -266,7 +266,7 @@ const result = ref({});
                         <div class="px-3">
                             <div>
                                 <div class="grid grid-cols-2 gap-4 mb-4">
-                                    <div class="form-control border rounded px-4" v-for="(item, index) of radioContent"
+                                    <div class="form-control border px-4" v-for="(item, index) of radioContent"
                                         :key="index" :class="{ 'pt-2': index === 0 }">
                                         <label class="label cursor-pointer justify-start"
                                             @click="selectedRadio = item?.value">
