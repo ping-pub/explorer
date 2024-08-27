@@ -46,9 +46,11 @@ const isPositive = controlledComputed(
     </div>
 
     <div>
-      <h6 class="text-lg text-center font-semibold mt-2 mb-1 text-black dark:text-white">
-        {{ props.stats || '-'}}
-      </h6>
+      <div class="tooltip w-full z-20" :data-tip="props.stats || '-'">
+        <h6 class="text-lg text-center font-semibold mt-2 mb-1 text-black dark:text-white truncate w-full">
+          {{ props.stats || '-' }}
+        </h6>
+      </div>
       <p class="text-sm text-center">
         {{ props.title }}
       </p>
