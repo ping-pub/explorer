@@ -32,7 +32,9 @@ export default <Config>{
         light: {
           ...daisyuiTheme.light,
           primary: '#666cff',
-          '--base-100': '#252528',
+          '--base-100': '#fff',
+          '--base-200': '#e5e5e5',
+          '--base-300': '#eaeaea'
         },
       },
       {
@@ -40,6 +42,8 @@ export default <Config>{
           ...daisyuiTheme.dark,
           primary: '#f71866',
           '--base-100': '#252528',
+          '--base-200': '#252528',
+          '--base-300': '#19191A'
         },
       },
     ],

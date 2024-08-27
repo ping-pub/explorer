@@ -198,7 +198,7 @@ dayjs();
                 }"
                 />
                 <div
-                  class="text-base capitalize text-gray-500 dark:text-gray-300"
+                  class="text-base capitalize"
                   :class="{
                     '!text-black': selected($route, el),
                   }"
