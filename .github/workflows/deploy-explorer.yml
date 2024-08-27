@@ -1,9 +1,9 @@
-name: Deploy App
+name: Deploy Explorer
 
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 concurrency:
@@ -30,7 +30,7 @@ jobs:
             access-tokens = ${{ secrets.GITHUB_TOKEN }}
       - uses: nixbuild/nixbuild-action@812f1ab2b51842b0d44b9b79574611502d6940a0
         with:
-          nixbuild_token: ${{secrets.nixbuild_token}}
+          nixbuild_token: ${{secrets.NIXBUILD_TOKEN}}
       - name: Build explorer
         run: |
           touch build.json
@@ -48,7 +48,7 @@ jobs:
     env:
       npm_config_yes: true
     environment: 'explorer-production'
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -56,7 +56,7 @@ jobs:
       - uses: nixbuild/nix-quick-install-action@v26
       - uses: nixbuild/nixbuild-action@812f1ab2b51842b0d44b9b79574611502d6940a0
         with:
-          nixbuild_token: ${{ secrets.nixbuild_token }}
+          nixbuild_token: ${{ secrets.NIXBUILD_TOKEN }}
       - run: mkdir dump
       - run: nix copy --to file://`pwd`/dump --from ssh-ng://eu.nixbuild.net `nix eval --raw .#packages.x86_64-linux.explorer` --extra-experimental-features nix-command
       - run: cat dump/nar/*.nar.xz | xz -dc | nix-store --restore result
