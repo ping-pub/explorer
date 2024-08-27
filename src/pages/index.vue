@@ -4,12 +4,11 @@ import {
   useDashboard,
   LoadingStatus,
   type ChainConfig,
-} from '@/stores/useDashboard';
+} from '@/stores/useDashboard.ts';
 import ChainSummary from '@/components/ChainSummary.vue';
-import AdBanner from '@/components/ad/AdBanner.vue';
 
 import { computed, onMounted, ref } from 'vue';
-import { useBlockchain } from '@/stores';
+import { useBlockchain } from '@/stores/useBlockchain.ts';
 
 const dashboard = useDashboard();
 

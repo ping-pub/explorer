@@ -1,6 +1,14 @@
 {
   "compilerOptions": {
-    "types": ["vite/client"],
+    "types": [
+      "node",
+      "vite/client"
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
     "target": "ES2020",
     "useDefineForClassFields": true,
     "verbatimModuleSyntax": true,
@@ -26,7 +34,6 @@
     "noFallthroughCasesInSwitch": true,
     "allowJs": true,
     "checkJs": true,
-
     /* temp */
     "noImplicitAny": false,
   },
@@ -40,8 +47,9 @@
       "path": "./tsconfig.node.json"
     }
   ],
-
   "files": [
-    "postcss.config.cjs"
+    "eslint.config.mjs",
+    "postcss.config.cjs",
+    "prettier.config.mjs"
   ]
 }
