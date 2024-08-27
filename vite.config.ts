@@ -59,11 +59,6 @@ export default defineConfig({
     }),
     DefineOptions(),
   ],
-  // resolve: {
-  //   alias: {
-  //     '@': fileURLToPath(new URL('./src', import.meta.url)),
-  //   },
-  // },
   optimizeDeps: {
     entries: ['./src/**/*.vue'],
   },
