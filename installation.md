@@ -79,4 +79,4 @@ server {
     }
 }
 ```
-3. config your blockchain in [./src/chains]()
+3. config your blockchain in [./chains/mainnet]()
