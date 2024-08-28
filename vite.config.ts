@@ -2,20 +2,21 @@ import { fileURLToPath, URL } from 'node:url';
 
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import Pages from 'vite-plugin-pages';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import Layouts from 'vite-plugin-vue-layouts';
-import DefineOptions from 'unplugin-vue-define-options/vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
 import AutoImport from 'unplugin-auto-import/vite';
-import Pages from 'vite-plugin-pages';
-
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
+import DefineOptions from 'unplugin-vue-define-options/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   define: {
-    'process.env': {}
+    'process.env': {},
   },
   plugins: [
+    tsconfigPaths(),
     vue({
       template: {
         compilerOptions: {
@@ -52,17 +53,12 @@ export default defineConfig({
       compositionOnly: true,
       include: [
         fileURLToPath(
-          new URL('./src/plugins/i18n/locales/**', import.meta.url)
+          new URL('./src/plugins/i18n/locales/**', import.meta.url),
         ),
       ],
     }),
     DefineOptions(),
   ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
-  },
   optimizeDeps: {
     entries: ['./src/**/*.vue'],
   },

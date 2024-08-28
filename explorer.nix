@@ -14,11 +14,10 @@
         src = ./.;
 
         nativeBuildInputs = with pkgs; [
-          fixup-yarn-lock
-          nodejs
           tree
-          nodePackages.npm
-          nodePackages.yarn
+          fixup-yarn-lock
+          nodePackages_latest.yarn
+          nodePackages_latest.nodejs
         ];
 
         configurePhase = ''

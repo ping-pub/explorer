@@ -6,3 +6,6 @@ dist
 ._*
 _
 result
+.direnv
+.eslintcache
+.prettiercache

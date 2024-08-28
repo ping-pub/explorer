@@ -8,18 +8,26 @@
 
   outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
   flake-parts.lib.mkFlake { inherit inputs; } {
-    systems = [ "x86_64-linux" ];
+    systems = [ "x86_64-linux" "aarch64-linux" ];
     imports = [
       ./explorer.nix
     ];
     perSystem = { config, self', inputs', system, pkgs, lib, ... }: {
-
       _module.args = {
         inherit nixpkgs;
 
         pkgs = import nixpkgs {
           inherit system;
         };
+      };
+
+      devShells.default = pkgs.mkShell {
+        buildInputs = with pkgs; [
+          tree
+          direnv
+          nodePackages_latest.yarn
+          nodePackages_latest.nodejs
+        ];
       };
     };
   };
