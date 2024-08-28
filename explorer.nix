@@ -11,7 +11,10 @@
       pkgs.stdenv.mkDerivation {
         pname = "pingpub-explorer";
         version = "0.1.0";
-        src = ./.;
+        src = builtins.filterSource 
+          (path: type: 
+            type != "directory" || baseNameOf path != ".github") 
+          (pkgs.lib.cleanSource ./.);
 
         nativeBuildInputs = with pkgs; [
           tree
