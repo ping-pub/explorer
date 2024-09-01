@@ -12,7 +12,7 @@ import type {
 
 // which registry is store
 export const store = 'version' // name or version
-// Blockchain Name
+// Cosmos SDK version
 export const name = 'v0.50.0'
 
 function proposalAdapter(p: any): GovProposal {
