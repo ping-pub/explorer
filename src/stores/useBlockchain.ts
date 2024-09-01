@@ -146,7 +146,9 @@ export const useBlockchain = defineStore('blockchain', {
       //     global.current
       // }
       useWalletStore().$reset();
-      await useStakingStore().init();
+      if (!this.isConsumerChain) {
+        await useStakingStore().init();
+      }
       useBankStore().initial();
       useBaseStore().initial();
       useGovStore().initial();

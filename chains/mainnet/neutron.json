@@ -11,7 +11,7 @@
         {"provider": "Allnodes", "address": "https://neutron-rpc.publicnode.com:443"}
     ],
     "provider_chain": {
-        "api": ["https://api-cosmoshub-ia.cosmosia.notional.ventures"]
+        "api": ["https://rest.cosmos.directory/cosmoshub"]
     },
     "features": ["dashboard", "blocks", "ibc", "cosmwasm", "uptime", "parameters", "state-sync", "consensus", "supply", "widget"],
     "sdk_version": "0.45.1",

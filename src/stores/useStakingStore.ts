@@ -130,11 +130,21 @@ export const useStakingStore = defineStore('stakingStore', {
       return consensusPubkeyToHexAddress(key)
 
     },
+    async getConsumerValidators(chain_id: string) {
+      if(this.blockchain.current?.providerChain?.api && this.blockchain.current.providerChain.api.length > 0) {
+        const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address)
+        await client.getStakingValidators('BOND_STATUS_BONDED', 500).then((res) => { this.validators = res.validators });
+        return client.getInterchainSecurityConsumerValidators(chain_id)
+      } else {
+        return { validators: [] }
+      }
+    },
     async fetchAllKeyRotation(chain_id: string) {
+      let vs = []
       for(const val of this.validators) {
         const { prefix } = fromBech32(val.operator_address)
-        console.log(val, prefix)
-        await this.fetchKeyRotation(chain_id, pubKeyToValcons(val.consensus_pubkey, prefix.replace('valoper','valcons')))
+        const cons = pubKeyToValcons(val.consensus_pubkey, prefix.replace('valoper','valcons'))
+        vs.push(cons)
       }
     },
     async fetchValidators(status: string, limit = 300) {
@@ -142,15 +152,24 @@ export const useStakingStore = defineStore('stakingStore', {
         if(this.blockchain.current?.providerChain.api && this.blockchain.current.providerChain.api.length > 0) {
           const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address)
           // provider validators
-          const res = await client.getStakingValidators(status, limit)
-          const proVals = res.validators.sort(
-            (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
-          )
-          if (status === 'BOND_STATUS_BONDED') {
-            this.validators = proVals;
-          }
-
-          return proVals
+          // const baseStore = useBaseStore();
+          // let chain_id = baseStore.latest?.block?.header?.chain_id
+          // // fetch chain id if not available
+          // if (chain_id === undefined) {
+          //   await baseStore.fetchLatest();
+          //   chain_id = baseStore.latest?.block?.header?.chain_id || "unknown";
+          // }
+          // const res = await client.getInterchainSecurityConsumerValidators(chain_id)
+          // const consumerValidators = res.validators.sort(
+          //   (a, b) => Number(b.power) - Number(a.power)
+          // )
+          const providerValidators = await client.getStakingValidators(status, limit);
+          // return consumerValidators.map((val) => {
+          //   providerValidators.validators.find((v) => v.consensus_pubkey === val.provider_address)
+          // })
+          return providerValidators;
+        } else {
+          console.error("Please provide provider chain api in your chain configuration")
         }
       }
       return this.blockchain.rpc?.getStakingValidators(status, limit).then((res) => {

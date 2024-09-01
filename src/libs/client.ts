@@ -365,4 +365,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getInterchainSecurityProviderOptedInValidators(chain_id: string) {
     return this.request(this.registry.interchain_security_provider_opted_in_validators, {chain_id});
   }
+  async getInterchainSecurityConsumerValidators(chain_id: string) {
+    return this.request(this.registry.interchain_security_consumer_validators, {chain_id});
+  }
 }

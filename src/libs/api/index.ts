@@ -199,4 +199,8 @@ export const DEFAULT: RequestRegistry = {
     url: '/interchain_security/ccv/provider/opted_in_validators/{chain_id}',
     adapter,
   },
+  interchain_security_consumer_validators: {
+    url: '/interchain_security/ccv/provider/consumer_validators/{chain_id}',
+    adapter,
+  },
 };

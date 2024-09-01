@@ -153,6 +153,7 @@ export interface RequestRegistry extends AbstractRegistry {
   ibc_core_connection_connections_connection_id_client_state: Request<ClientStateWithProof>;
   interchain_security_ccv_provider_validator_consumer_addr: Request<{consumer_address: string}>
   interchain_security_provider_opted_in_validators: Request<{validators_provider_addresses: string[]}>
+  interchain_security_consumer_validators: Request<{validators: {provider_address: string, consumer_key: {ed25519: string}, power: string}[]}>
 }
 
 export function adapter<T>(source: any): Promise<T> {
