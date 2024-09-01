@@ -148,30 +148,6 @@ export const useStakingStore = defineStore('stakingStore', {
       }
     },
     async fetchValidators(status: string, limit = 300) {
-      if(this.blockchain.isConsumerChain) {
-        if(this.blockchain.current?.providerChain.api && this.blockchain.current.providerChain.api.length > 0) {
-          const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address)
-          // provider validators
-          // const baseStore = useBaseStore();
-          // let chain_id = baseStore.latest?.block?.header?.chain_id
-          // // fetch chain id if not available
-          // if (chain_id === undefined) {
-          //   await baseStore.fetchLatest();
-          //   chain_id = baseStore.latest?.block?.header?.chain_id || "unknown";
-          // }
-          // const res = await client.getInterchainSecurityConsumerValidators(chain_id)
-          // const consumerValidators = res.validators.sort(
-          //   (a, b) => Number(b.power) - Number(a.power)
-          // )
-          const providerValidators = await client.getStakingValidators(status, limit);
-          // return consumerValidators.map((val) => {
-          //   providerValidators.validators.find((v) => v.consensus_pubkey === val.provider_address)
-          // })
-          return providerValidators;
-        } else {
-          console.error("Please provide provider chain api in your chain configuration")
-        }
-      }
       return this.blockchain.rpc?.getStakingValidators(status, limit).then((res) => {
         const vals = res.validators.sort(
           (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
