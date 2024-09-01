@@ -103,7 +103,7 @@ baseStore.$subscribe((_, state) => {
       const chain_id = state.latest.block.header.chain_id;
       Promise.resolve().then(async () =>{
         await stakingStore.getConsumerValidators(chain_id).then((x) => {
-        x.validators.forEach(v => {
+        x.validators.sort((a,b) => Number(b.power)-Number(a.power)).forEach(v => {
           const base64 = toBase64(fromHex(consensusPubkeyToHexAddress({"@type": "/cosmos.crypto.ed25519.PubKey", key: v.consumer_key.ed25519 })));
           const moniker = v.provider_address;
           consumerValidators.value.push({ moniker, base64});
