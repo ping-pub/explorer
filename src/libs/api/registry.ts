@@ -195,11 +195,10 @@ export function findApiProfileBySDKVersion(
   version: string,
 ): RequestRegistry | undefined {
   let closestVersion: string | null = null;
-
+  const chain_version = version.match(/(\d+\.\d+\.?\d*)/g) || [""];
   for (const k in VERSION_REGISTRY) {
     const key = k.replace('v', "")
-    // console.log(semver.gt(key, version), semver.gte(version, key), key, version)
-    if (semver.lte(key, version)) {
+    if (semver.lte(key, chain_version[0])) {
       if (!closestVersion || semver.gt(key, closestVersion)) {
         closestVersion = k;
       }

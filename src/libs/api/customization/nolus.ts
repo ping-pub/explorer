@@ -1,8 +1,8 @@
-import type { RequestRegistry } from '@/libs/registry'
+import type { RequestRegistry } from '@/libs/api/registry'
 import type { GovProposal, PaginatedProposals } from '@/types'
 import { CosmosRestClient } from '@/libs/client';
 import { useBlockchain } from '@/stores';
-import { adapter } from '@/libs/registry'
+import { adapter } from '@/libs/api/registry'
 
 // Blockchain Name
 export const name = 'nolus';

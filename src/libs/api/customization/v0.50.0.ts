@@ -1,5 +1,5 @@
-import type { RequestRegistry } from '@/libs/registry'
-import { adapter } from '@/libs/registry'
+import type { RequestRegistry } from '@/libs/api/registry'
+import { adapter } from '@/libs/api/registry'
 import type {
     GovParams,
     GovProposal,
@@ -13,7 +13,7 @@ import type {
 // which registry is store
 export const store = 'version' // name or version
 // Blockchain Name
-export const name = 'v0.46.7'
+export const name = 'v0.50.0'
 
 function proposalAdapter(p: any): GovProposal {
     if(p) {
@@ -30,6 +30,8 @@ function proposalAdapter(p: any): GovProposal {
 }
 
 export const requests: Partial<RequestRegistry> = {
+  
+  bank_supply_by_denom: { url: '/cosmos/bank/v1beta1/supply/by_denom?denom={denom}', adapter },
   gov_params_voting: { url: '/cosmos/gov/v1/params/voting', adapter },
   gov_params_tally: { url: '/cosmos/gov/v1/params/tallying', adapter },
   gov_params_deposit: { url: '/cosmos/gov/v1/params/deposit', adapter },
