@@ -1,0 +1,71 @@
+name: Publish UI to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Version bump type: major, minor, patch'
+        required: true
+        default: 'minor'
+
+permissions:
+  contents: write
+  packages: write
+  id-token: write
+  actions: read
+  deployments: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish to Cloudflare Pages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Run your build step here if needed, e.g., for a React app
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ./
+
+      - name: Build project
+        run: yarn build
+        working-directory: ./
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: c1b181c9711b19ce0ed8b289c6995f7c
+          projectName: mantra-explorer
+          directory: ./dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      # Increment the version
+      - name: Bump version and push tag
+        id: bump_version
+        uses: anothrNick/github-tag-action@1.67.0
+        env:
+          VERBOSE: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_API_TAGGING: false # uses git cli
+          WITH_V: true
+          DEFAULT_BUMP: ${{ github.event.inputs.bump }}
+
+      # Create a GitHub release
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.bump_version.outputs.new_tag }}
+          release_name: UI Release ${{ steps.bump_version.outputs.new_tag }}
+          body: |
+            Changes in this release:
+            - See GitHub
+          draft: false
+          prerelease: false
