@@ -39,8 +39,8 @@ jobs:
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: c1b181c9711b19ce0ed8b289c6995f7c
-          projectName: mantra-explorer
+          accountId: ${{ secrets.CLOUDFLARE_PAGES_ACCOUNT_ID }}
+          projectName: explorer
           directory: ./dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
