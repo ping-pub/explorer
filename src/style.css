@@ -24,13 +24,15 @@ body {
   --text-main: #333;
   --text-secondary: #4b525d;
   --bg-active: #fbfbfc;
+  --bg-base: #000000;
 }
 
 html.dark,
 html[data-theme='dark'] {
   --text-main: #f7f7f7;
-  --text-secondary: #6f6e84;
-  --bg-active: #242b40;
+  --text-secondary: #FF97D6;
+  --bg-active: #242424;
+  background-color: #000000;
 }
 
 .table th:first-child {
@@ -51,4 +53,27 @@ html[data-theme='dark'] {
 .slide-up-leave-to {
   opacity: 0;
   transform: translateY(-calc(15%));
+}
+
+.section-grad__divider {
+  opacity: .5;
+  background-image: linear-gradient(90deg, #f8b99400, #f8b994 17%, #ff97d5 75%, #ff97d500);
+  width: 18.75em;
+  height: 1px;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  inset: 0% 0% auto;
+  display: block;
+  line-height: 20px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.grad-span {
+  background-image: linear-gradient(90deg, #ff97d5,#f8b994);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
 }

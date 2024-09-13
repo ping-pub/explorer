@@ -23,12 +23,12 @@
     "links": "Links"
   },
   "pages": {
-    "title": "Ping Dashboard",
+    "title": "MANTRA Dashboard",
     "title_all": "404",
     "tag": "Beta",
     "tag_all": "Page Not Found",
-    "slogan": "Ping Dashboard is not just an explorer but also a wallet and more ... 🛠",
-    "description": "Cosmos Ecosystem Blockchains 🚀",
+    "slogan": "A Security First L1 Blockchain for Real World Assets",
+    "description": "MANTRA Blockchains 🚀",
     "search_placeholder": "Search Chain",
     "description_all": "We couldn't find the page you are looking for.",
     "out_of_sync": "The latest block was produced at ",

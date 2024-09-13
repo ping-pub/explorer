@@ -23,8 +23,8 @@ if (props.hash) {
     blockchain.rpc.getTx(props.hash).then((x) => (tx.value = x));
 }
 const messages = computed(() => {
-    return tx.value.tx?.body?.messages.map(x=> {
-        if(x.packet?.data) {
+    return tx.value.tx?.body?.messages.map(x => {
+        if (x.packet?.data) {
             // @ts-ignore
             x.message = format.base64ToString(x.packet.data)
         }
@@ -35,12 +35,9 @@ const messages = computed(() => {
 <template>
     <div>
         <div class="tabs tabs-boxed bg-transparent mb-4">
-            <RouterLink class="tab text-gray-400 uppercase" 
-                :to="`/${chain}/tx/?tab=recent`"
-                >{{ $t('block.recent') }}</RouterLink>
-            <RouterLink class="tab text-gray-400 uppercase" 
-                :to="`/${chain}/tx/?tab=search`"
-                >Search</RouterLink>
+            <RouterLink class="tab text-gray-400 uppercase" :to="`/${chain}/tx/?tab=recent`">{{ $t('block.recent') }}
+            </RouterLink>
+            <RouterLink class="tab text-gray-400 uppercase" :to="`/${chain}/tx/?tab=search`">Search</RouterLink>
             <a class="tab text-gray-400 uppercase tab-active">Transaction</a>
         </div>
 
@@ -56,8 +53,9 @@ const messages = computed(() => {
                         <tr>
                             <td>{{ $t('account.height') }}</td>
                             <td>
-                                <RouterLink :to="`/${props.chain}/block/${tx.tx_response.height}`" class="text-primary dark:invert">{{ tx.tx_response.height
-                                }}
+                                <RouterLink :to="`/${props.chain}/block/${tx.tx_response.height}`"
+                                    class="text-primary dark:inver-x">{{ tx.tx_response.height
+                                    }}
                                 </RouterLink>
                             </td>
                         </tr>
@@ -124,7 +122,8 @@ const messages = computed(() => {
 
         <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
             <h2 class="card-title truncate mb-2">JSON</h2>
-            <JsonViewer :value="tx" :theme="baseStore.theme" style="background: transparent;" copyable boxed sort expand-depth="5"/>
+            <JsonViewer :value="tx" :theme="baseStore.theme" style="background: transparent;" copyable boxed sort
+                expand-depth="5" />
         </div>
     </div>
 </template>

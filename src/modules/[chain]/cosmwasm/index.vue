@@ -32,9 +32,9 @@ onMounted(() => {
 })
 
 function myContracts() {
-    if(field.value === "contract")
+    if (field.value === "contract")
         router.push(`/${props.chain}/cosmwasm/0/transactions?contract=${creator.value}`)
-    else if(field.value === "creator")
+    else if (field.value === "creator")
         router.push(`/${props.chain}/cosmwasm/${creator.value}/contracts`)
 }
 const togo = ref("")
@@ -47,14 +47,20 @@ function gotoHistory() {
         <h2 class="card-title truncate w-full mb-4">{{ $t('cosmwasm.title') }}</h2>
         <div class="grid grid-flow-col auto-cols-max gap-4 overflow-hidden">
             <div class="join w-full border border-primary">
-                <select v-model="field" class="select select-primary"><option value="contract">Contract</option><option value="creator">Creator</option></select>
-                <input v-model="creator" type=text class="input input-bordered w-full join-item" placeholder="address" />
-                <button class="join-item btn  btn-primary" @click="myContracts()">{{ $t('cosmwasm.btn_query') }}</button>
+                <select v-model="field" class="select select-primary">
+                    <option value="contract">Contract</option>
+                    <option value="creator">Creator</option>
+                </select>
+                <input v-model="creator" type=text class="input input-bordered w-full join-item"
+                    placeholder="address" />
+                <button class="join-item btn  btn-primary" @click="myContracts()">{{ $t('cosmwasm.btn_query')
+                    }}</button>
             </div>
             <div>
                 <select v-model="togo" class="select select-primary" @change="gotoHistory()">
                     <option value="">History</option>
-                    <option v-for="(v, index) in history" :key="index" :value="v" >...{{ String(v).substring(45) }}</option>
+                    <option v-for="(v, index) in history" :key="index" :value="v">...{{ String(v).substring(45) }}
+                    </option>
                 </select>
             </div>
         </div>
@@ -74,7 +80,7 @@ function gotoHistory() {
                         <td>{{ v.code_id }}</td>
                         <td>
                             <RouterLink :to="`/${props.chain}/cosmwasm/${v.code_id}/contracts`"
-                                class="truncate max-w-[200px] block text-primary dark:invert" :title="v.data_hash">
+                                class="truncate max-w-[200px] block text-primary-x" :title="v.data_hash">
                                 {{ v.data_hash }}
                             </RouterLink>
                         </td>
@@ -89,7 +95,8 @@ function gotoHistory() {
             </table>
             <div class="flex justify-between">
                 <PaginationBar :limit="pageRequest.limit" :total="codes.pagination?.total" :callback="pageload" />
-                <label for="wasm_store_code" class="btn btn-primary my-5" @click="dialog.open('wasm_store_code', {})">{{ $t('cosmwasm.btn_up_sc') }}</label>
+                <label for="wasm_store_code" class="btn btn-primary my-5" @click="dialog.open('wasm_store_code', {})">{{
+                    $t('cosmwasm.btn_up_sc') }}</label>
             </div>
         </div>
     </div>

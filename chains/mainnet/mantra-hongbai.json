@@ -1,0 +1,27 @@
+{
+    "chain_name": "MANTRA-Hongbai",
+    "pretty_name": "MANTRA Hongbai",
+    "coingecko": "om",
+    "api": [
+        {"provider": "MANTRA", "address": "https://rest.canary.mantrachain.dev"}
+        ],
+    "rpc": [
+        {"provider": "MANTRA", "address": "https://rpc.canary.mantrachain.dev"}
+        ],
+    "snapshot_provider": "",
+    "sdk_version": "0.50.0",
+    "coin_type": "118",
+    "min_tx_fee": "1000",
+    "addr_prefix": "mantra",
+    "logo": "https://assets.mantra.finance/images/networks/hongbai.svg",
+    "theme_color": "#FF97D6",
+    "assets": [{
+        "base": "uom",
+        "symbol": "OM",
+        "exponent": "6",
+        "coingecko_id": "mantra-dao", 
+        "logo": "../assets/images/coins/om.jpg"
+    }]
+}
+
+

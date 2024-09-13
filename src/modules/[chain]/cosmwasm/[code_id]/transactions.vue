@@ -38,10 +38,10 @@ const contractAddress = String(route.query.contract)
 
 const history = JSON.parse(localStorage.getItem("contract_history") || "{}")
 
-if(history[chainStore.chainName]) {
-    if(!history[chainStore.chainName].includes(contractAddress)) {
+if (history[chainStore.chainName]) {
+    if (!history[chainStore.chainName].includes(contractAddress)) {
         history[chainStore.chainName].push(contractAddress)
-        if(history[chainStore.chainName].length > 10) {
+        if (history[chainStore.chainName].length > 10) {
             history[chainStore.chainName].shift()
         }
     }
@@ -151,7 +151,8 @@ const result = ref({});
         </div>
 
         <div class="text-center mb-4">
-            <RouterLink :to="`../${info.code_id}/contracts`"><span class="btn btn-xs text-xs mr-2"> Back </span> </RouterLink>
+            <RouterLink :to="`../${info.code_id}/contracts`"><span class="btn btn-xs text-xs mr-2"> Back </span>
+            </RouterLink>
             <label @click="showFunds()" for="modal-contract-funds" class="btn btn-primary btn-xs text-xs mr-2">{{
                 $t('cosmwasm.btn_funds') }}</label>
             <label class="btn btn-primary btn-xs text-xs mr-2" for="modal-contract-states" @click="showState()">
@@ -197,7 +198,7 @@ const result = ref({});
                     <tr v-for="resp in txs?.tx_responses">
                         <td>{{ resp.height }}</td>
                         <td>
-                            <div class="text-xs truncate text-primary dark:invert">
+                            <div class="text-xs truncate text-primary dark:invert-x">
                                 <RouterLink :to="`/${chainStore.chainName}/tx/${resp.txhash}`">{{ resp.txhash }}
                                 </RouterLink>
                             </div>
@@ -216,7 +217,7 @@ const result = ref({});
             <PaginationBar :limit="page.limit" :total="txs.pagination?.total" :callback="pageload" />
         </div>
 
-        <WasmVerification :contract="contractAddress"/>
+        <WasmVerification :contract="contractAddress" />
 
         <div>
             <input type="checkbox" id="modal-contract-funds" class="modal-toggle" />
@@ -229,7 +230,8 @@ const result = ref({});
                         </div>
                         <ul class="menu mt-5">
                             <li v-for="b in balances.balances">
-                                <a class="flex justify-between"><span>{{ format.formatToken(b) }}</span> {{ b.amount }} </a>
+                                <a class="flex justify-between"><span>{{ format.formatToken(b) }}</span> {{ b.amount }}
+                                </a>
                             </li>
                             <li v-if="balances.pagination?.total === '0'" class="my-10 text-center">{{
                                 $t('cosmwasm.no_escrowed_assets') }}</li>
@@ -247,7 +249,10 @@ const result = ref({});
                             <label for="modal-contract-states" class="btn btn-sm btn-circle">✕</label>
                         </div>
                         <div class="overflow-auto">
-                            <JsonViewer :value="state.models?.map(v => ({key: format.hexToString(v.key), value: JSON.parse(format.base64ToString(v.value))}))||''" :theme="baseStore.theme||'dark'" style="background: transparent;" copyable boxed sort :expand-depth="5"/>
+                            <JsonViewer
+                                :value="state.models?.map(v => ({ key: format.hexToString(v.key), value: JSON.parse(format.base64ToString(v.value)) })) || ''"
+                                :theme="baseStore.theme || 'dark'" style="background: transparent;" copyable boxed sort
+                                :expand-depth="5" />
                             <PaginationBar :limit="pageRequest.limit" :total="state.pagination?.total"
                                 :callback="pageloadState" />
                         </div>
@@ -270,7 +275,8 @@ const result = ref({});
                                         :key="index" :class="{ 'pt-2': index === 0 }">
                                         <label class="label cursor-pointer justify-start"
                                             @click="selectedRadio = item?.value">
-                                            <input type="radio" name="radio-10" class="radio radio-sm radio-primary mr-4"
+                                            <input type="radio" name="radio-10"
+                                                class="radio radio-sm radio-primary mr-4"
                                                 :checked="item?.value === selectedRadio"
                                                 style="border: 1px solid #d2d6dc" />
                                             <div>
@@ -284,8 +290,9 @@ const result = ref({});
                                 </div>
                                 <textarea v-model="query" placeholder="Query String, {}" label="Query String"
                                     class="my-2 textarea textarea-bordered w-full" />
-                                
-                                <JsonViewer :value="result" :theme="baseStore.theme" style="background: transparent;" copyable boxed sort :expand-depth="5"/>
+
+                                <JsonViewer :value="result" :theme="baseStore.theme" style="background: transparent;"
+                                    copyable boxed sort :expand-depth="5" />
 
                             </div>
                             <div class="mt-4 mb-4 text-center">

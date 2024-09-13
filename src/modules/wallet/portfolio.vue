@@ -121,7 +121,7 @@ const tokenValues = computed(() => {
   Object.keys(tokenQty.value).forEach(k => {
     const x = tokenQty.value[k]
     const marketData = prices.value.find((p: any) => p.id === x.coinId)
-    values[k] = marketData? x.qty * marketData.current_price : 0
+    values[k] = marketData ? x.qty * marketData.current_price : 0
   })
   return values;
 });
@@ -201,7 +201,7 @@ const chartConfig = computed(() => {
 });
 
 const currencySign = computed(() => {
-  switch(currency.value) {
+  switch (currency.value) {
     case 'usd': return '$'
     case 'cny': return '¥'
     case 'eur': return '€'
@@ -258,7 +258,7 @@ const currencySign = computed(() => {
         </div>
       </div>
       <div class="overflow-x-auto mt-4">
-      <AdBanner class="bg-base-200" id="portfolio-banner-ad" unit="banner" width="970px" height="90px" />
+
         <table class="table w-full">
           <thead class="bg-base-200">
             <tr>

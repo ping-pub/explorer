@@ -11,6 +11,17 @@ module.exports = {
         main: 'var(--text-main)',
         secondary: 'var(--text-secondary)',
         active: 'var(--bg-active)',
+        "primary": "#FF97D6",
+        "secondary": "#F8B994",
+        "accent": "#FF97D6",
+        "neutral": "#2b3440",
+        "base-100": "#ffffff",
+        "info": "#3abff8",
+        "success": "#31B47A",
+        "warning": "#fbbd23",
+        "error": "#FB5050",
+        //'base-100': "#323029"
+
       }
     },
   },
@@ -20,13 +31,29 @@ module.exports = {
       {
         light: {
           ...require('daisyui/src/theming/themes')['[data-theme=light]'],
-          primary: '#666cff',
+          "primary": "#FF97D6",
+          "secondary": "#F8B994",
+          "accent": "#FF97D6",
+          "neutral": "#2b3440",
+          "base-100": "#ffffff",
+          "info": "#3abff8",
+          "success": "#31B47A",
+          "warning": "#fbbd23",
+          "error": "#FB5050",
         },
       },
       {
         dark: {
           ...require('daisyui/src/theming/themes')['[data-theme=dark]'],
-          primary: '#666cff',
+          "primary": "#FF97D6",
+          "secondary": "#F8B994",
+          "accent": "#FF97D6",
+          "neutral": "#2b3440",
+          //"base-100": "#000000",
+          "info": "#3abff8",
+          "success": "#31B47A",
+          "warning": "#fbbd23",
+          "error": "#FB5050",
           'base-100': '#2a334c',
           'base-200': '#252d37'
         },
