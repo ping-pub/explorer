@@ -2,7 +2,7 @@
     "chain_name": "MANTRA-Dukong",
     "coingecko": "om",
     "api": [
-        {"provider": "MANTRA", "address": "https://rest.dukong.mantrachain.dev"}
+        {"provider": "MANTRA", "address": "https://api.dukong.mantrachain.dev"}
         ],
     "rpc": [
         {"provider": "MANTRA", "address": "https://rpc.dukong.mantrachain.dev"}
