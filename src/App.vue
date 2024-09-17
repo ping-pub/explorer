@@ -4,6 +4,9 @@ import { onMounted } from 'vue';
 import TxDialog from './components/TxDialog.vue';
 
 onMounted(() => {
+  // Clear Local Storage temporarily until dukong is ready
+  localStorage.clear();
+
   themeChange(false);
 });
 </script>

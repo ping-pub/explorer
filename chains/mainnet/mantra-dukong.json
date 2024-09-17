@@ -2,15 +2,15 @@
     "chain_name": "MANTRA-Dukong",
     "coingecko": "om",
     "api": [
-        {"provider": "MANTRA", "address": "https://rest-dukong.canary.mantrachain.dev"}
+        {"provider": "MANTRA", "address": "https://rest.dukong.mantrachain.dev"}
         ],
     "rpc": [
-        {"provider": "MANTRA", "address": "https://rpc-dukong.canary.mantrachain.dev"}
+        {"provider": "MANTRA", "address": "https://rpc.dukong.mantrachain.dev"}
         ],
     "snapshot_provider": "",
     "sdk_version": "0.50.0",
     "coin_type": "118",
-    "min_tx_fee": "1000",
+    "min_tx_fee": "100000",
     "addr_prefix": "mantra",
     "logo": "https://assets.mantra.finance/images/networks/dukong.svg",
     "theme_color": "#FF97D6",
