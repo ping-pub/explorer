@@ -15,12 +15,12 @@
     "coin_type": "118",
     "min_tx_fee": "1000",
     "addr_prefix": "sge",
-    "logo": "/logos/sge.jpg",
+    "logo": "/logos/sge.png",
     "assets": [{
         "base": "usge",
         "symbol": "SGE",
         "exponent": "6",
         "coingecko_id": "six-sigma", 
-        "logo": "/logos/sge.jpg"
+        "logo": "/logos/sge.png"
     }]
 }
