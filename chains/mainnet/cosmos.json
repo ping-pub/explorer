@@ -1,17 +1,17 @@
 {
-    "chain_name": "cosmos",
-    "registry_name": "cosmoshub",
+    "chain_name": "cosmoshub-testnet",
+    "registry_name": "cosmoshubhub-testnet",
     "api": [
-        {"provider": "cosmos.directory", "address": "https://rest.cosmos.directory/cosmoshub"},
-        {"provider": "publicnode", "address": "https://cosmos-rest.publicnode.com"},
-        {"provider": "silknode", "address": "https://cosmos.api.silknodes.io"}
+        {"provider": "Vinjan.Inc", "address": "https://rest.seed-01.theta-testnet.polypore.xyz"}
+
+        
     ],
     "rpc": [
-        {"provider": "icycro", "address": "https://cosmos-rpc.icycro.org"}, 
-        {"provider": "dragonstake", "address": "https://rpc.cosmos.dragonstake.io"}, 
-        {"provider": "Golden Ratio Staking", "address": "https://rpc-cosmoshub.goldenratiostaking.net"}
+        {"provider": "Vinjan.Inc", "address": "https://cosmos-testnet-rpc.polkachu.com/"}
+
+        
     ],
-    "sdk_version": "0.45.1",
+    "sdk_version": "0.50.9-lsm",
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "cosmos",
