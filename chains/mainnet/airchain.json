@@ -15,12 +15,12 @@
     "coin_type": "118",
     "min_tx_fee": "1000",
     "addr_prefix": "air",
-    "logo": "/logos/airchain.jpg",
+    "logo": "/logos/airchain.png",
     "assets": [{
         "base": "amf",
         "symbol": "AMF",
         "exponent": "6",
         "coingecko_id": "", 
-        "logo": "/logos/airchain.jpg"
+        "logo": "/logos/airchain.png"
     }]
 }
