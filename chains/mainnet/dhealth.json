@@ -1,0 +1,26 @@
+{
+    "chain_name": "dhealth",
+    "registry_name": "dhealth",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://lcd.dhealth.com"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc-dhealth.vinjan.xyz"} 
+
+        
+    ],
+    "sdk_version": "0.47.4",
+    "coin_type": "10111",
+    "min_tx_fee": "1000",
+    "addr_prefix": "dh",
+    "logo": "/logos/dhealth.png",
+    "assets": [{
+        "base": "udhp",
+        "symbol": "DHP",
+        "exponent": "6",
+        "coingecko_id": "dhealth", 
+        "logo": "/logos/dhealth.png"
+    }]
+}
