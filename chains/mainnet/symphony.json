@@ -3,12 +3,12 @@
     "registry_name": "symphony-testnet",
     "api": [
         {"provider": "Vinjan.Inc", "address": "https://api-symphony.vinjan.xyz"},
-        {"provider": "Kleomedes", "address": "https://symphony-api.kleomedes.network"}
+        {"provider": "Indonode", "address": "https://api.symphony-t.indonode.net"}
         
     ],
     "rpc": [
         {"provider": "Vinjan.Inc", "address": "https://rpc-symphony.vinjan.xyz"},
-        {"provider": "Kleomedes", "address": "https://symphony-rpc.kleomedes.network"}
+        {"provider": "Indonode", "address": "https://rpc.symphony-t.indonode.net"}
 
         
     ],
