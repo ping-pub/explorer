@@ -1,0 +1,26 @@
+{
+    "chain_name": "decentr",
+    "registry_name": "decentr",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://api-decentr.vinjan.xyz"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc-decentr.vinjan.xyz"} 
+
+        
+    ],
+    "sdk_version": "0.45.9",
+    "coin_type": "118",
+    "min_tx_fee": "1000",
+    "addr_prefix": "decentr",
+    "logo": "/logos/decentr.png",
+    "assets": [{
+        "base": "udec",
+        "symbol": "DEC",
+        "exponent": "6",
+        "coingecko_id": "decentr", 
+        "logo": "/logos/decentr.png"
+    }]
+}
