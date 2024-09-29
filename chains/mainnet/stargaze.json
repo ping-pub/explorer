@@ -7,7 +7,7 @@
         
     ],
     "rpc": [
-        {"provider": "Vinjan.Inc", "address": "https://api-star.vinjan.xyz"} 
+        {"provider": "Vinjan.Inc", "address": "https://rpc-star.vinjan.xyz"} 
 
         
     ],
