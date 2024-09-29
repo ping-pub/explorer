@@ -1,0 +1,19 @@
+{
+    "chain_name": "penumbra",
+    "api": ["https://api-penumbra.whispernode.com:443"],
+    "rpc": ["https://rpc-penumbra.whispernode.com:443"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.15",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "penumbra",
+    "logo": "/logos/penumbra.png",
+    "assets": [{
+        "base": "penumbra",
+        "symbol": "UM",
+        "exponent": "18",
+        "coingecko_id": "", 
+        "logo": "/logos/penumbra.png"
+    }]
+}
+
