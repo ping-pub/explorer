@@ -1,0 +1,26 @@
+{
+    "chain_name": "structs-testnet",
+    "registry_name": "structs-testnet",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://structs-test.api.moonbridge.team"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://structs-test.rpc.moonbridge.team"} 
+
+        
+    ],
+    "sdk_version": "0.50.3",
+    "coin_type": "118",
+    "min_tx_fee": "1000",
+    "addr_prefix": "structs",
+    "logo": "/logos/structs.png",
+    "assets": [{
+        "base": "ualpha",
+        "symbol": "ALPHA",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "/logos/structs.png"
+    }]
+}
