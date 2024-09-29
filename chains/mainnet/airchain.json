@@ -1,0 +1,26 @@
+{
+    "chain_name": "airchain-testnet",
+    "registry_name": "airchain-testnet",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://api-airchain.vinjan.xyz"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc-airchain.vinjan.xyz"} 
+
+        
+    ],
+    "sdk_version": "0.50.3",
+    "coin_type": "118",
+    "min_tx_fee": "1000",
+    "addr_prefix": "air",
+    "logo": "/logos/airchain.jpg",
+    "assets": [{
+        "base": "amf",
+        "symbol": "AMF",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "/logos/airchain.jpg"
+    }]
+}
