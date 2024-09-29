@@ -17,7 +17,7 @@
     "addr_prefix": "realio",
     "logo": "/logos/realio.png",
     "assets": [{
-        "base": "ario",
+        "base": "stake",
         "symbol": "RIO",
         "exponent": "6",
         "coingecko_id": "realio-network", 
