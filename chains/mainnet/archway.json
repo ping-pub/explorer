@@ -1,0 +1,26 @@
+{
+    "chain_name": "archway-testnet",
+    "registry_name": "archway-testnet",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://api-archway.vinjan.xyz"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc-archway.vinjan.xyz"} 
+
+        
+    ],
+    "sdk_version": "0.50.7",
+    "coin_type": "118",
+    "min_tx_fee": "1000",
+    "addr_prefix": "archway",
+    "logo": "/logos/archway.png",
+    "assets": [{
+        "base": "aconst",
+        "symbol": "CONST",
+        "exponent": "18",
+        "coingecko_id": "", 
+        "logo": "/logos/stargaze.png"
+    }]
+}
