@@ -14,7 +14,7 @@
     "sdk_version": "0.46.11",
     "coin_type": "118",
     "min_tx_fee": "1000",
-    "addr_prefix": "elysw",
+    "addr_prefix": "elys",
     "logo": "/logos/elys.png",
     "assets": [{
         "base": "uelys",
