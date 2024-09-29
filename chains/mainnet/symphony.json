@@ -7,7 +7,7 @@
         
     ],
     "rpc": [
-        {"provider": "Vinjan.Inc", "address": "https://api-symphony.vinjan.xyz"} 
+        {"provider": "Vinjan.Inc", "address": "https://rpc-symphony.vinjan.xyz"} 
 
         
     ],
