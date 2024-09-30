@@ -1,0 +1,26 @@
+{
+    "chain_name": "seda",
+    "registry_name": "seda",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://seda.api.kjnodes.com"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc-seda.vinjan.xyz"} 
+
+        
+    ],
+    "sdk_version": "0.50.5",
+    "coin_type": "118",
+    "min_tx_fee": "1000",
+    "addr_prefix": "seda",
+    "logo": "/logos/seda.png",
+    "assets": [{
+        "base": "aseda",
+        "symbol": "SEDA",
+        "exponent": "18",
+        "coingecko_id": "flux-token", 
+        "logo": "/logos/seda.png"
+    }]
+}
