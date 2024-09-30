@@ -1,0 +1,26 @@
+{
+    "chain_name": "realio",
+    "registry_name": "realio",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://api-realio.vinjan.xyz"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc-realio.vinjan.xyz"} 
+
+        
+    ],
+    "sdk_version": "0.46.12",
+    "coin_type": "118",
+    "min_tx_fee": "5000000000000000",
+    "addr_prefix": "realio",
+    "logo": "/logos/realio.png",
+    "assets": [{
+        "base": "stake",
+        "symbol": "RIO",
+        "exponent": "6",
+        "coingecko_id": "realio-network", 
+        "logo": "/logos/realio.png"
+    }]
+}

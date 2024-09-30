@@ -1,0 +1,26 @@
+{
+    "chain_name": "stargaze-testnet",
+    "registry_name": "stargaze-testnet",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://api-star.vinjan.xyz"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc-star.vinjan.xyz"} 
+
+        
+    ],
+    "sdk_version": "0.47.10",
+    "coin_type": "118",
+    "min_tx_fee": "1000",
+    "addr_prefix": "stars",
+    "logo": "/logos/stargaze.png",
+    "assets": [{
+        "base": "ustars",
+        "symbol": "STARS",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "/logos/stargaze.png"
+    }]
+}

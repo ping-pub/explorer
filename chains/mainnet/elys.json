@@ -1,0 +1,26 @@
+{
+    "chain_name": "elys-testnet",
+    "registry_name": "elys-testnet",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://api-elys.vinjan.xyz"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc-elys.vinjan.xyz"} 
+
+        
+    ],
+    "sdk_version": "0.46.11",
+    "coin_type": "118",
+    "min_tx_fee": "1000",
+    "addr_prefix": "elys",
+    "logo": "/logos/elys.png",
+    "assets": [{
+        "base": "uelys",
+        "symbol": "ELYS",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "/logos/elys.png"
+    }]
+}

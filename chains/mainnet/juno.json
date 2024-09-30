@@ -1,0 +1,26 @@
+{
+    "chain_name": "juno-testnet",
+    "registry_name": "juno-testnet",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://juno.api.t.stavr.tech"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://juno-testnet-rpc.polkachu.com"} 
+
+        
+    ],
+    "sdk_version": "0.47.12",
+    "coin_type": "118",
+    "min_tx_fee": "1000",
+    "addr_prefix": "juno",
+    "logo": "/logos/juno.png",
+    "assets": [{
+        "base": "ujunox",
+        "symbol": "JUNOX",
+        "exponent": "18",
+        "coingecko_id": "", 
+        "logo": "/logos/juno.png"
+    }]
+}

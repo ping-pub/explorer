@@ -1,0 +1,26 @@
+{
+    "chain_name": "sge-mainnet",
+    "registry_name": "sge-mainnet",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://api-sge.vinjan.xyz"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc-sge.vinjan.xyz"} 
+
+        
+    ],
+    "sdk_version": "0.46.16",
+    "coin_type": "118",
+    "min_tx_fee": "1000",
+    "addr_prefix": "sge",
+    "logo": "/logos/sge.png",
+    "assets": [{
+        "base": "usge",
+        "symbol": "SGE",
+        "exponent": "6",
+        "coingecko_id": "six-sigma", 
+        "logo": "/logos/sge.png"
+    }]
+}

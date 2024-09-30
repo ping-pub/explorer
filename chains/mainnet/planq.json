@@ -1,0 +1,26 @@
+{
+    "chain_name": "planq",
+    "registry_name": "planq",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://api-planq.vinjan.xyz"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc-planq.vinjan.xyz"} 
+
+        
+    ],
+    "sdk_version": "0.46.3",
+    "coin_type": "60",
+    "min_tx_fee": "1000000000000000",
+    "addr_prefix": "plq",
+    "logo": "/logos/Planq.png",
+    "assets": [{
+        "base": "aplanq",
+        "symbol": "PLANQ",
+        "exponent": "18",
+        "coingecko_id": "planq", 
+        "logo": "/logos/Planq.png"
+    }]
+}

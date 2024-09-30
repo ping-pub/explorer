@@ -1,0 +1,26 @@
+{
+    "chain_name": "soarchain-testnet",
+    "registry_name": "soarchain-testnet",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc1.testnet.soarchain.com/api"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc-soarchain.vinjan.xyz"} 
+
+        
+    ],
+    "sdk_version": "0.45.5",
+    "coin_type": "118",
+    "min_tx_fee": "1000",
+    "addr_prefix": "soar",
+    "logo": "/logos/soarchain.png",
+    "assets": [{
+        "base": "utsoar",
+        "symbol": "TSOAR",
+        "exponent": "6",
+        "coingecko_id": "", 
+        "logo": "/logos/soarchain.png"
+    }]
+}

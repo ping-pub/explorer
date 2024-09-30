@@ -1,0 +1,26 @@
+{
+    "chain_name": "entangle",
+    "registry_name": "entangle",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://api.entangle.indonode.net"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc-entangle.vinjan.xyz"} 
+
+        
+    ],
+    "sdk_version": "0.47.10",
+    "coin_type": "60",
+    "min_tx_fee": "1000",
+    "addr_prefix": "ent",
+    "logo": "/logos/entangle.png",
+    "assets": [{
+        "base": "aNGL",
+        "symbol": "NGL",
+        "exponent": "18",
+        "coingecko_id": "entangle", 
+        "logo": "/logos/entangle.png"
+    }]
+}
