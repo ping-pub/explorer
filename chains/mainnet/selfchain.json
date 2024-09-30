@@ -1,0 +1,26 @@
+{
+    "chain_name": "selfchain",
+    "registry_name": "selfchain",
+    "api": [
+        {"provider": "Vinjan.Inc", "address": "https://api-selfchain.vinjan.xyz"}
+
+        
+    ],
+    "rpc": [
+        {"provider": "Vinjan.Inc", "address": "https://rpc-selfchain.vinjan.xyz"} 
+
+        
+    ],
+    "sdk_version": "0.47.10",
+    "coin_type": "118",
+    "min_tx_fee": "1000",
+    "addr_prefix": "self",
+    "logo": "/logos/selfchain.png",
+    "assets": [{
+        "base": "uself",
+        "symbol": "SLF",
+        "exponent": "6",
+        "coingecko_id": "slf", 
+        "logo": "/logos/selfchain.png"
+    }]
+}
