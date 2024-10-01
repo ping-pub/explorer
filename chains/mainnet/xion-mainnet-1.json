@@ -2,10 +2,13 @@
   "chain_name": "xion-mainnet-1",
   "coingecko": "XION",
   "api": [
-    {"provider": "burnt-labs", "address": "https://api.xion-mainnet-1.burnt.com"}
+    {
+      "provider": "burnt-labs",
+      "address": "https://xion-api.polkachu.com"
+    }
   ],
   "rpc": [
-    {"provider": "burnt-labs", "address": "https://rpc.xion-mainnet-1.burnt.com"}
+    { "provider": "burnt-labs", "address": "https://xion-rpc.polkachu.com" }
   ],
   "snapshot_provider": "",
   "sdk_version": "0.47.10",
@@ -50,9 +53,5 @@
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.png"
     }
   ],
-  "keplr_features": [
-    "ibc-go",
-    "ibc-transfer",
-    "no-legacy-stdTx"
-  ]
+  "keplr_features": ["ibc-go", "ibc-transfer", "no-legacy-stdTx"]
 }
