@@ -25,6 +25,7 @@ export const UNITS: Record<string, Record<string, string>> = {
     "localhost": {
         "banner": "3a094192-4c7b-4761-a50c-bd9b6a67e987",
         "banner_mobile": "e6b82a11-6a94-46c0-a9d2-cf730159a5e6",
+        "popup": "e6b82a11-6a94-46c0-a9d2-cf730159a5e6"
     },
     "ping.pub": {
         "banner": "6883877a-ccae-4a08-b457-7e30b3465a8c",
@@ -33,6 +34,8 @@ export const UNITS: Record<string, Record<string, string>> = {
     "testnet.ping.pub": {
         "banner": "1644951b-5022-4544-8a85-11aef8a8f645",
         "banner_mobile": "81e0527f-475a-42a4-bb9a-ed9967c5d06f",
+        "popup": "bd77a47c-30fc-4592-9d37-616d4f66964d",
+        "popup_mobile": "bd77a47c-30fc-4592-9d37-616d4f66964d"
     },
     
 }

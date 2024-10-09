@@ -1,6 +1,6 @@
 
 import { BaseRestClient } from '@/libs/client';
-import { adapter, type AbstractRegistry, type Request } from '@/libs/registry';
+import { adapter, type AbstractRegistry, type Request } from '@/libs/api/registry';
 import { PageRequest, type PaginatedResponse } from '@/types';
 
 export interface Classes {

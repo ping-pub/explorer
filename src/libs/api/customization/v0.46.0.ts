@@ -1,5 +1,5 @@
-import type { RequestRegistry } from '@/libs/registry'
-import { adapter } from '@/libs/registry'
+import type { RequestRegistry } from '@/libs/api/registry'
+import { adapter } from '@/libs/api/registry'
 import type {
     GovParams,
     GovProposal,
@@ -12,7 +12,7 @@ import type {
 
 // which registry is store
 export const store = 'version' // name or version
-// Blockchain Name
+// Cosmos SDK version
 export const name = 'v0.46.7'
 
 function proposalAdapter(p: any): GovProposal {

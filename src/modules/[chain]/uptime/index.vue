@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, onMounted, computed, onUnmounted } from 'vue';
-import { fromHex, toBase64 } from '@cosmjs/encoding';
+import { fromHex, toBase64, fromBase64, toHex } from '@cosmjs/encoding';
 import {
   useStakingStore,
   useBaseStore,
@@ -22,6 +22,7 @@ const keyword = ref('');
 const live = ref(true);
 const slashingParam = ref({} as SlashingParam);
 const signingInfo = ref({} as Record<string, SigningInfo>);
+const consumerValidators = ref([] as {moniker: string, base64: string}[]);
 
 interface BlockColor {
   height: string;
@@ -43,11 +44,20 @@ function padding(blocks: BlockColor[] = []) {
 }
 
 const validatorSet = computed(() => {
+  if (chainStore.isConsumerChain) {
+    return consumerValidators.value.map((v) => {
+      const b64 = valconsToBase64(v.moniker)
+      const moniker = stakingStore.validators.find((x) => toBase64(fromHex(consensusPubkeyToHexAddress(x.consensus_pubkey))) === b64)?.description.moniker;
+      return {
+        moniker: moniker || v.moniker,
+        base64: v.base64
+      };
+    });
+  }; 
   return stakingStore.validators.map((v) => {
     const hex = consensusPubkeyToHexAddress(v.consensus_pubkey)
     return {
       moniker: v.description.moniker,
-      hex,
       base64: toBase64(fromHex(hex))
     };
   });
@@ -62,13 +72,12 @@ const grid = computed(() => {
 
   const window = Number(slashingParam.value.signed_blocks_window || 0);
   return validators.map((v) => {
-    const signing = signingInfo.value[v.hex];
+    const signing = signingInfo.value[v.base64];
     const uptime = signing && window > 0
       ? (window - Number(signing.missed_blocks_counter)) / window
       : undefined
     return {
       moniker: v.moniker,
-      hex: v.hex,
       base64: v.base64,
       blocks: padding(blockColors.value[v.base64] || []),
       uptime,
@@ -88,6 +97,21 @@ baseStore.$subscribe((_, state) => {
       preFill();
       preload.value = true;
     }
+
+    // reset the consumer validators
+    if (newHeight > 0 && consumerValidators.value.length === 0) {
+      const chain_id = state.latest.block.header.chain_id;
+      Promise.resolve().then(async () =>{
+        await stakingStore.getConsumerValidators(chain_id).then((x) => {
+        x.validators.sort((a,b) => Number(b.power)-Number(a.power)).forEach(v => {
+          const base64 = toBase64(fromHex(consensusPubkeyToHexAddress({"@type": "/cosmos.crypto.ed25519.PubKey", key: v.consumer_key.ed25519 })));
+          const moniker = v.provider_address;
+          consumerValidators.value.push({ moniker, base64});
+        });
+
+      });
+      }) 
+    }
     
     if (Number(state.latest.block.header.height) % 7 === 0) updateTotalSigningInfo();
     fillblock(state.latest);
@@ -96,7 +120,6 @@ baseStore.$subscribe((_, state) => {
 
 onMounted(() => {
   live.value = true;
-
 
   // fill the recent blocks
   baseStore.recents?.forEach((b) => {
@@ -172,9 +195,6 @@ function changeTab(v: string) {
   tab.value = v;
 }
 
-function fetchAllKeyRotation() {
-  stakingStore.fetchAllKeyRotation(baseStore.latest?.block?.header?.chain_id)
-}
 </script>
 
 <template>
@@ -192,14 +212,8 @@ function fetchAllKeyRotation() {
       <div class="flex items-center gap-x-4">
         <input type="text" v-model="keyword" placeholder="Keywords to filter validators"
           class="input input-sm w-full flex-1 border border-gray-200 dark:border-gray-600" />
-        <button v-if="chainStore.isConsumerChain" class="btn btn-sm btn-primary" @click="fetchAllKeyRotation">Load
-          Rotated Keys</button>
       </div>
 
-      <div v-if="chainStore.isConsumerChain && Object.keys(stakingStore.keyRotation).length === 0"
-        class="alert alert-warning my-4">
-        Note: Please load rotated keys to see the correct uptime
-      </div>
       <!-- grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-4 mt-4 -->
       <div :class="tab === '2' ? '' : 'hidden'">
         <div class="flex flex-row flex-wrap gap-x-4 mt-4 justify-center">

@@ -85,7 +85,13 @@ export interface ChainConfig {
     low: number,
     average: number,
     high: number,
-  },
+  },  
+  faucet?: {
+    amount: string,
+    ip_limit: number,
+    address_limit: number,
+    fees: string
+  };
 }
 
 export interface LocalConfig {
@@ -93,6 +99,7 @@ export interface LocalConfig {
   consensus_prefix?: string;
   alias: string;
   api: string[] | Endpoint[];
+  grpc: Endpoint[];
   provider_chain: {
     api: string[] | Endpoint[]
   }
@@ -118,6 +125,12 @@ export interface LocalConfig {
     high: number,
   },
   keplr_features: string[],
+  faucet?: {
+    amount: string,
+    ip_limit: number,
+    address_limit: number,
+    fees: string
+  };
 }
 
 function apiConverter(api: any[]) {
@@ -164,6 +177,7 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
   conf.endpoints = {
     rest: apiConverter(lc.api),
     rpc: apiConverter(lc.rpc),
+    grpc: apiConverter(lc.grpc),
   };
   if(lc.provider_chain) {
     conf.providerChain = {
@@ -171,10 +185,11 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
     }
   }
   conf.features = lc.features
-  conf.logo = lc.logo;
+  conf.logo = lc.logo.startsWith('http') ? lc.logo : `https://ping.pub${lc.logo}`;
   conf.keplrFeatures = lc.keplr_features;
   conf.keplrPriceStep = lc.keplr_price_step;
   conf.themeColor = lc.theme_color;
+  conf.faucet = lc.faucet;
   return conf;
 }
 

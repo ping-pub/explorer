@@ -1,12 +1,10 @@
-import type{ RequestRegistry } from '@/libs/registry'
-// import dayjs from 'dayjs'
-import { adapter } from '@/libs/registry'
+import type{ RequestRegistry } from '../registry'
+import { adapter } from '../registry'
 import type { GovProposal, PaginatedProposals } from '@/types'
-
 // which registry is store
 export const store = 'name' // name or version
 // Blockchain Name
-export const name = 'osmosis'
+export const name = 'evmos'
 
 function proposalAdapter(p: any): GovProposal {
     if(p) {
@@ -22,15 +20,8 @@ function proposalAdapter(p: any): GovProposal {
     return p
 }
 
-// osmosis custom request
 export const requests: Partial<RequestRegistry> = {
-    mint_inflation: { 
-        url: `https://public-osmosis-api.numia.xyz/apr?start_date=${new Date(new Date().getTime() - 186400*1000).toISOString().split('T')[0]}&end_date=${new Date().toISOString().split('T')[0]}`, 
-        adapter: async (data: any) => {
-            const [first] = data
-            return {inflation: String(Number(first?.apr|| "0")/100.0)}
-        } 
-    },
+    mint_inflation: { url: '/evmos/inflation/v1/inflation_rate', adapter: async (data: any) => ({inflation: (Number(data.inflation_rate || 0)/ 100 ).toFixed(2)}) },
     gov_params_voting: { url: '/cosmos/gov/v1/params/voting', adapter },
     gov_params_tally: { url: '/cosmos/gov/v1/params/tallying', adapter },
     gov_params_deposit: { url: '/cosmos/gov/v1/params/deposit', adapter },

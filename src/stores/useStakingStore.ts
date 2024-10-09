@@ -94,6 +94,10 @@ export const useStakingStore = defineStore('stakingStore', {
             if(exists < 0) {
 
               const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address)
+
+              client.getInterchainSecurityProviderOptedInValidators(chain_id).then((res) => {
+                console.log(res)
+              })
               const res = await client.getInterchainSecurityValidatorRotatedKey(chain_id, validatorAddr);
               if(res.consumer_address) {
                 this.keyRotation[validatorAddr] = res.consumer_address
@@ -126,29 +130,24 @@ export const useStakingStore = defineStore('stakingStore', {
       return consensusPubkeyToHexAddress(key)
 
     },
+    async getConsumerValidators(chain_id: string) {
+      if(this.blockchain.current?.providerChain?.api && this.blockchain.current.providerChain.api.length > 0) {
+        const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address)
+        await client.getStakingValidators('BOND_STATUS_BONDED', 500).then((res) => { this.validators = res.validators });
+        return client.getInterchainSecurityConsumerValidators(chain_id)
+      } else {
+        return { validators: [] }
+      }
+    },
     async fetchAllKeyRotation(chain_id: string) {
+      let vs = []
       for(const val of this.validators) {
         const { prefix } = fromBech32(val.operator_address)
-        console.log(val, prefix)
-        await this.fetchKeyRotation(chain_id, pubKeyToValcons(val.consensus_pubkey, prefix.replace('valoper','valcons')))
+        const cons = pubKeyToValcons(val.consensus_pubkey, prefix.replace('valoper','valcons'))
+        vs.push(cons)
       }
     },
     async fetchValidators(status: string, limit = 300) {
-      if(this.blockchain.isConsumerChain) {
-        if(this.blockchain.current?.providerChain.api && this.blockchain.current.providerChain.api.length > 0) {
-          const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address)
-          // provider validators
-          const res = await client.getStakingValidators(status, limit)
-          const proVals = res.validators.sort(
-            (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
-          )
-          if (status === 'BOND_STATUS_BONDED') {
-            this.validators = proVals;
-          }
-
-          return proVals
-        }
-      }
       return this.blockchain.rpc?.getStakingValidators(status, limit).then((res) => {
         const vals = res.validators.sort(
           (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
