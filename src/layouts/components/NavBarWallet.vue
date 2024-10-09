@@ -95,8 +95,8 @@ const params = computed(() => {
     </div>
   </div>
   <Teleport to="body">
-    <ping-connect-wallet :chain-id="baseStore.currentChainId || 'cosmoshub-4'" :hd-path="chainStore.defaultHDPath"
-      :addr-prefix="chainStore.current?.bech32Prefix || 'cosmos'" @connect="walletStateChange"
+    <ping-connect-wallet :chain-id="baseStore.currentChainId" :hd-path="chainStore.defaultHDPath"
+      :addr-prefix="chainStore.current?.bech32Prefix" @connect="walletStateChange"
       @keplr-config="walletStore.suggestChain()"  :params="params" />
   </Teleport>
 </template>

@@ -63,6 +63,7 @@ export interface ChainConfig {
   assets: Asset[];
   themeColor?: string;
   features?: string[]
+  network_type: string;
   endpoints: {
     rest?: Endpoint[];
     rpc?: Endpoint[];
@@ -278,12 +279,12 @@ export const useDashboard = defineStore('dashboard', {
   state: () => {
     const favMap = JSON.parse(
       localStorage.getItem('favoriteMap') ||
-        '{"cosmos":true, "osmosis":true}'
+        '{}'
     );
     return {
       status: LoadingStatus.Empty,
       source: ConfigSource.MainnetCosmosDirectory,
-      networkType: NetworkType.Mainnet,
+      networkType: NetworkType.Testnet, // default to testnet until mainnet public
       favoriteMap: favMap as Record<string, boolean>,
       chains: {} as Record<string, ChainConfig>,
       prices: {} as Record<string, any>,
@@ -297,7 +298,8 @@ export const useDashboard = defineStore('dashboard', {
   },
   actions: {
     async initial() {
-      await this.loadingFromLocal();
+      await this.loadingFromRemote();
+      // await this.loadingFromLocal();
       // await this.loadingFromRegistry()
     },
     loadingPrices() {
@@ -334,6 +336,36 @@ export const useDashboard = defineStore('dashboard', {
           this.status = LoadingStatus.Loaded;
         });
       }
+    },
+    async loadingFromRemote() {
+        if (window.location.hostname.search("mainnet") > -1) {
+          this.networkType = NetworkType.Mainnet;
+        }
+
+        const urls = this.networkType === NetworkType.Mainnet
+          ? [
+            'https://raw.githubusercontent.com/burnt-labs/pingpub/refs/heads/chains/xion/chains/mainnet/xion-mainnet-1.json',
+            'https://raw.githubusercontent.com/burnt-labs/pingpub/refs/heads/chains/xion/chains/testnet/xion-testnet-1.json' 
+          ] : [ 
+            'https://raw.githubusercontent.com/burnt-labs/pingpub/refs/heads/chains/xion/chains/testnet/xion-testnet-1.json' 
+          ];
+
+        // Fetch the JSON file from the URL
+        for (const url of urls) {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`Failed to load configuration: ${response.statusText}`);
+          }
+
+          // Parse the JSON response
+          const config = await response.json();
+
+          // Use the loaded configuration
+          this.chains[config.chain_name] = fromLocal(config);
+        }
+
+        this.setupDefault();
+        this.status = LoadingStatus.Loaded;
     },
     async loadingFromLocal() {
       if(window.location.hostname.search("testnet") > -1) {

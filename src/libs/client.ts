@@ -287,16 +287,12 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   // ?&pagination.reverse=true&events=recv_packet.packet_dst_channel='${channel}'&events=recv_packet.packet_dst_port='${port}'
   async getTxs(query: string, params: any, page?: PageRequest) {
     if(!page) page = new PageRequest()
-<<<<<<< HEAD
-    return this.request(this.registry.tx_txs, params, `${query}&${page.toQueryString()}`);
-=======
     if (semver.gte(this.version.replaceAll('v', ''), '0.50.0')) {
       let query_edit = query.replaceAll('events=', 'query=')    
       return this.request(this.registry.tx_txs, params, `${query_edit}&${page.toQueryString()}`);
     } else { 
       return this.request(this.registry.tx_txs, params, `${query}&${page.toQueryString()}`);
     }
->>>>>>> upstream/master
   }
   async getTxsAt(height: string | number) {
     return this.request(this.registry.tx_txs_block, { height });

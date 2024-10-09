@@ -9,7 +9,7 @@
     "build": "run-p type-check build-only",
     "preview": "vite preview",
     "build-only": "vite build",
-    "deploy": "npm run build && wrangler pages deploy",
+    "deploy": "npm run build && wrangler pages deploy dist",
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {

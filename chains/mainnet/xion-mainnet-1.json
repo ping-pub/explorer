@@ -1,14 +1,18 @@
 {
   "chain_name": "xion-mainnet-1",
   "coingecko": "XION",
+  "network_type": "mainnet",
   "api": [
     {
       "provider": "burnt-labs",
-      "address": "https://xion-api.polkachu.com"
+      "address": "https://api.xion-mainnet-1.burnt.com"
     }
   ],
   "rpc": [
-    { "provider": "burnt-labs", "address": "https://xion-rpc.polkachu.com" }
+    {
+      "provider": "burnt-labs",
+      "address": "https://rpc.xion-mainnet-1.burnt.com"
+    }
   ],
   "snapshot_provider": "",
   "sdk_version": "0.47.10",

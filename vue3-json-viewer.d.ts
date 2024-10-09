@@ -1,15 +1,15 @@
 declare module 'vue3-json-viewer' {
     import { AllowedComponentProps, App, Component, ComponentCustomProps, VNodeProps } from 'vue'
     interface JsonViewerProps {
-        value: Object | Array<any> | string | number | boolean; //对象
-        expanded: boolean; //是否自动展开
-        expandDepth: number; //展开层级
-        copyable: boolean | object; //是否可复制
-        sort: boolean;//是否排序
-        boxed: boolean;//是否boxed
-        theme: string;//主题 jv-dark | jv-light
-        previewMode: boolean;//是否可复制
-        timeformat: (value: any) => string
+        value: Object | Array<any> | string | number | boolean; // Object
+        expanded: boolean; // Whether to automatically expand
+        expandDepth: number; // Expand depth
+        copyable: boolean | object; // Whether it is copyable
+        sort: boolean; // Whether to sort
+        boxed: boolean; // Whether boxed
+        theme: string; // Theme jv-dark | jv-light
+        previewMode: boolean; // Whether it is copyable
+        timeformat: (value: any) => string // Time format function
     }
     type JsonViewerType = JsonViewerProps & VNodeProps & AllowedComponentProps & ComponentCustomProps
     const JsonViewer: Component<JsonViewerType>
