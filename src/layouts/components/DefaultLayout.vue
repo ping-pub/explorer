@@ -182,7 +182,7 @@ dayjs()
                 </div>
               </RouterLink>
             </div>
-            <div v-if="index === 0 && dashboard.networkType === NetworkType.Testnet" class="menu bg-base-100 w-full !p-0">
+            <!-- <div v-if="index === 0 && dashboard.networkType === NetworkType.Testnet" class="menu bg-base-100 w-full !p-0">
               <RouterLink 
               class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
               :to="`/${blockchain.chainName}/faucet`">
@@ -201,7 +201,7 @@ dayjs()
                   New
                 </div>
               </RouterLink>
-            </div>
+            </div> -->
           </div>
         </div>
 
