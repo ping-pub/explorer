@@ -4,12 +4,13 @@ import { suggestChain } from '@leapwallet/cosmos-snap-provider';
 import { useDashboard, type ChainConfig, useBlockchain, NetworkType } from '@/stores';
 import { CosmosRestClient } from '@/libs/client';
 import { onMounted } from 'vue';
+import AdBanner from '@/components/ad/AdBanner.vue';
 
 const error = ref("")
 const conf = ref("")
 const dashboard = useDashboard()
 const selected = ref({} as ChainConfig)
-const wallet = ref("leap")
+const wallet = ref("keplr")
 const network = ref(NetworkType.Mainnet)
 const mainnet = ref([] as ChainConfig[])
 const testnet = ref([] as ChainConfig[])
@@ -31,7 +32,7 @@ onMounted(() => {
 })
 
 function onchange() {
-    wallet.value === "metamask" ? initSnap() : initParamsForKeplr()
+    wallet.value === "keplr" ? initParamsForKeplr() : initSnap()
 }
 
 async function initParamsForKeplr() {
@@ -127,15 +128,7 @@ async function initSnap() {
 }
 
 function suggest() {
-  if (wallet.value === "leap") {
-    // @ts-ignore
-    if (window.leap) {
-      // @ts-ignore
-      window.leap.experimentalSuggestChain(JSON.parse(conf.value)).catch(e => {
-        error.value = e
-      })
-    }
-  } else if (wallet.value === "keplr") {
+    if (wallet.value === "keplr") {
         // @ts-ignore
         if (window.keplr) {
             // @ts-ignore
@@ -147,6 +140,7 @@ function suggest() {
         suggestChain(JSON.parse(conf.value));
     }
 }
+
 </script>
 
 <template>
@@ -161,29 +155,21 @@ function suggest() {
                     {{ c.chainName }}
                 </option>
             </select>
-          <label>
-            <input type="radio" v-model="wallet" value="leap" class="radio radio-bordered ml-4" @change="onchange" />
-            Leap
-          </label>
-            <label>
-              <input type="radio" v-model="wallet" value="keplr" class="radio radio-bordered ml-4" @change="onchange" />
-              Keplr
-            </label>
-            <label>
-              <input type="radio" v-model="wallet" value="metamask" class="radio radio-bordered ml-4" @change="onchange"/>
-              Metamask
-            </label>
+            <label><input type="radio" v-model="wallet" value="keplr" class="radio radio-bordered" @change="onchange" />
+                Keplr</label>
+            <label><input type="radio" v-model="wallet" value="metamask" class="radio radio-bordered ml-4"
+                    @change="onchange" /> Metamask</label>
         </div>
         <div class="text-main mt-5">
             <textarea v-model="conf" class="textarea textarea-bordered w-full" rows="15"></textarea>
         </div>
         <div class="mt-4 mb-4">
 
-            <button class="btn !bg-primary !border-primary text-white mr-2" @click="suggest">
-              Suggest {{selected.chainName }} TO {{ wallet }}</button>
+            <button class="btn !bg-primary !border-primary text-white mr-2" @click="suggest">Suggest {{
+                selected.chainName }} TO {{ wallet }}</button>
 
             <div class="mt-4">
-                If the chain is not officially support on Keplr/Metamask Snap, you can submit these parameters to enable
+                If the chain is not offically support on Keplr/Metamask Snap, you can submit these parameters to enable
                 Keplr/Metamask Snap.
             </div>
         </div>
