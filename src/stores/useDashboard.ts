@@ -344,10 +344,10 @@ export const useDashboard = defineStore('dashboard', {
 
         const urls = this.networkType === NetworkType.Mainnet
           ? [
-            'https://raw.githubusercontent.com/burnt-labs/pingpub/refs/heads/chains/xion/chains/mainnet/xion-mainnet-1.json',
-            'https://raw.githubusercontent.com/burnt-labs/pingpub/refs/heads/chains/xion/chains/testnet/xion-testnet-1.json' 
+            'https://raw.githubusercontent.com/burnt-labs/pingpub/refs/heads/xion/main/chains/mainnet/xion-mainnet-1.json',
+            'https://raw.githubusercontent.com/burnt-labs/pingpub/refs/heads/xion/main/chains/testnet/xion-testnet-1.json' 
           ] : [ 
-            'https://raw.githubusercontent.com/burnt-labs/pingpub/refs/heads/chains/xion/chains/testnet/xion-testnet-1.json' 
+            'https://raw.githubusercontent.com/burnt-labs/pingpub/refs/heads/xion/main/chains/testnet/xion-testnet-1.json' 
           ];
 
         // Fetch the JSON file from the URL

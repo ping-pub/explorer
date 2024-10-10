@@ -5,13 +5,13 @@
   "api": [
     {
       "provider": "burnt-labs",
-      "address": "https://api.xion-mainnet-1.burnt.com"
+      "address": "https://api.xion-api.com"
     }
   ],
   "rpc": [
     {
       "provider": "burnt-labs",
-      "address": "https://rpc.xion-mainnet-1.burnt.com"
+      "address": "https://rpc.xion-api.com"
     }
   ],
   "snapshot_provider": "",
