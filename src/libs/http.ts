@@ -4,12 +4,15 @@ export async function fetchData<T>(
   url: string,
   adapter: (source: any) => Promise<T>
 ): Promise<T> {
-  const options = {};
+  let options = {};
 
   if (url.includes("https://rpc.mantrachain.io") || url.includes("https://api.mantrachain.io")) {
-    options.headers = {
-      "CF-Access-Client-Id": import.meta.env.VITE_CF_ACCESS_CLIENT_ID,
-      "CF-Access-Client-Secret": import.meta.env.VITE_CF_ACCESS_CLIENT_SECRET
+    options = {
+      headers:
+      {
+        "CF-Access-Client-Id": import.meta.env.VITE_CF_ACCESS_CLIENT_ID,
+        "CF-Access-Client-Secret": import.meta.env.VITE_CF_ACCESS_CLIENT_SECRET
+      }
     }
   }
 

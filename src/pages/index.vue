@@ -27,7 +27,7 @@ const chains = computed(() => {
 });
 
 const featured = computed(() => {
-  //const names = ['MANTRA-Hongbai', 'MANTRA-Dukong'];
+  const names = ['MANTRA-Hongbai', 'MANTRA-Dukong'];
   return chains.value
     .filter((x) => names.includes(x.chainName))
     .sort((a, b) => names.indexOf(a.chainName) - names.indexOf(b.chainName));

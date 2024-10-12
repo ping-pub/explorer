@@ -7,7 +7,7 @@
     "dev": "vite",
     "serve": "vite",
     "build": "run-p type-check build-only",
-    "build:public": "rm -rf chains/testnet && run-p type-check build-only",
+    "build:public": "rm -f chains/testnet/*.json && run-p type-check build-only",
     "build:internal": "run-p type-check build-only",
     "preview": "vite preview",
     "build-only": "vite build",
