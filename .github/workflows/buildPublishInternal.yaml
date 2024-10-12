@@ -1,4 +1,4 @@
-name: Publish UI to Cloudflare Pages
+name: Publish Internal UI to Cloudflare Pages
 
 on:
   workflow_dispatch:
