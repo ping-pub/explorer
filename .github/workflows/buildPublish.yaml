@@ -32,7 +32,7 @@ jobs:
         working-directory: ./
 
       - name: Build project
-        run: yarn build
+        run: yarn build:public
         working-directory: ./
 
       - name: Deploy to Cloudflare Pages

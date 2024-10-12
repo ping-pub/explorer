@@ -29,7 +29,7 @@ jobs:
         working-directory: ./
 
       - name: Build project
-        run: yarn build
+        run: yarn build:internal
         working-directory: ./
         env:
           VITE_CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
