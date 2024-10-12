@@ -4,7 +4,16 @@ export async function fetchData<T>(
   url: string,
   adapter: (source: any) => Promise<T>
 ): Promise<T> {
-  const response = await fetch(url);
+  const options = {};
+
+  if (url.includes("https://rpc.mantrachain.io") || url.includes("https://api.mantrachain.io")) {
+    options.headers = {
+      "CF-Access-Client-Id": import.meta.env.VITE_CF_ACCESS_CLIENT_ID,
+      "CF-Access-Client-Secret": import.meta.env.VITE_CF_ACCESS_CLIENT_SECRET
+    }
+  }
+
+  const response = await fetch(url, options);
   if (!response.ok) {
     throw new Error(`HTTP error: ${response.status}`);
   }
@@ -29,11 +38,11 @@ try {
 }
 // */
 export async function get(url: string) {
-  return (await fetch(url, {referrerPolicy: 'origin-when-cross-origin'})).json();
+  return (await fetch(url, { referrerPolicy: 'origin-when-cross-origin' })).json();
 }
 
 export async function getB(url: string) {
-  return (await fetch(url, {referrerPolicy: 'origin-when-cross-origin'})).arrayBuffer();
+  return (await fetch(url, { referrerPolicy: 'origin-when-cross-origin' })).arrayBuffer();
 }
 
 export async function post(url: string, data: any) {

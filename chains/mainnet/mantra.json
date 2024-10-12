@@ -1,17 +1,17 @@
 {
-    "chain_name": "MANTRA-Dukong",
+    "chain_name": "MANTRA-1",
     "coingecko": "om",
-    "type": "testnet",
+    "type": "mainnet",
     "api": [
         {
             "provider": "MANTRA",
-            "address": "https://api.dukong.mantrachain.io"
+            "address": "https://api.mantrachain.io"
         }
     ],
     "rpc": [
         {
             "provider": "MANTRA",
-            "address": "https://rpc.dukong.mantrachain.io"
+            "address": "https://rpc.mantrachain.io"
         }
     ],
     "snapshot_provider": "",

@@ -1,6 +1,7 @@
 {
     "chain_name": "MANTRA-Dukong-Internal",
     "coingecko": "om",
+    "type": "testnet",
     "api": [
         {
             "provider": "MANTRA",

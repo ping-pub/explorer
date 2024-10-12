@@ -63,6 +63,7 @@ export interface ChainConfig {
   assets: Asset[];
   themeColor?: string;
   features?: string[];
+  type?:string;
   endpoints: {
     rest?: Endpoint[];
     rpc?: Endpoint[];
@@ -103,6 +104,7 @@ export interface LocalConfig {
   provider_chain: {
     api: string[] | Endpoint[];
   };
+  type?: string;
   assets: {
     base: string;
     coingecko_id: string;
@@ -344,27 +346,32 @@ export const useDashboard = defineStore('dashboard', {
       }
     },
     async loadingFromLocal() {
-      if (window.location.hostname.search('testnet') > -1) {
-        this.networkType = NetworkType.Testnet;
+      let testnets: Record<string, LocalConfig> = {};
+      if (window.location.hostname.search('.int.') > -1 || window.location.hostname.search('localhost') > -1) {
+         testnets = import.meta.glob('../../chains/testnet/*.json', { eager: true });
       }
-      const source: Record<string, LocalConfig> =
-        this.networkType === NetworkType.Mainnet
-          ? import.meta.glob('../../chains/mainnet/*.json', { eager: true })
-          : import.meta.glob('../../chains/testnet/*.json', { eager: true });
+      const mainnets: Record<string, LocalConfig> = import.meta.glob('../../chains/mainnet/*.json', { eager: true });
+   
+      const source = {...mainnets, ...testnets};
+      
       Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
         this.chains[x.chain_name] = fromLocal(x);
       });
+
       this.setupDefault();
       this.status = LoadingStatus.Loaded;
     },
     async loadLocalConfig(network: NetworkType) {
-      const config: Record<string, ChainConfig> = {};
-      const source: Record<string, LocalConfig> =
-        network === NetworkType.Mainnet
-          ? import.meta.glob('../../chains/mainnet/*.json', { eager: true })
-          : import.meta.glob('../../chains/testnet/*.json', { eager: true });
+      let testnets: Record<string, LocalConfig> = {};
+      if (window.location.hostname.search('.int.') > -1 || window.location.hostname.search('localhost') > -1) {
+         testnets = import.meta.glob('../../chains/testnet/*.json', { eager: true });
+      }
+      const mainnets: Record<string, LocalConfig> = import.meta.glob('../../chains/mainnet/*.json', { eager: true });
+                
+      const source = {...mainnets, ...testnets};
+      
       Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
-        config[x.chain_name] = fromLocal(x);
+        this.chains[x.chain_name] = fromLocal(x);
       });
       return config;
     },
