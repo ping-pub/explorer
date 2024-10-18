@@ -2,13 +2,18 @@ FROM node:23-alpine AS build
 
 WORKDIR /app
 
+# Set environment variables for non-interactive npm installs
+ENV NPM_CONFIG_LOGLEVEL=warn
 ENV YARN_CACHE_FOLDER=/root/.yarn
 RUN mkdir -p $YARN_CACHE_FOLDER
 
-COPY . /app
+RUN corepack enable
+RUN yarn set version stable
 
-RUN yarn install
-RUN yarn build
+COPY --chown=node . /app
+
+RUN --mount=type=cache,mode=0777,target=/root/.yarn yarn install
+RUN --mount=type=cache,mode=0777,target=/root/.yarn yarn build
 
 ## Final image
 FROM node:23-alpine
