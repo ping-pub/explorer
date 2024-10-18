@@ -1,0 +1,19 @@
+{
+  "chain_name": "govgen",
+  "registry_name": "govgen",
+  "api": [{ "provider": "govgen.io", "address": "https://api.govgen.io" }],
+  "rpc": [{ "provider": "govgen.io", "address": "https://rpc.govgen.io" }],
+  "sdk_version": "0.45.1",
+  "coin_type": "118",
+  "min_tx_fee": "800",
+  "addr_prefix": "govgen",
+  "logo": "/logos/govgen.png",
+  "assets": [
+    {
+      "base": "ugovgen",
+      "symbol": "GOVGEN",
+      "exponent": "6",
+      "logo": "/logos/govgen.png"
+    }
+  ]
+}
