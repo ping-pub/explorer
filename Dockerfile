@@ -7,8 +7,8 @@ RUN mkdir -p $YARN_CACHE_FOLDER
 
 COPY . /app
 
-RUN --mount=type=cache,mode=0777,target=/root/.yarn yarn install
-RUN --mount=type=cache,mode=0777,target=/root/.yarn yarn build
+RUN yarn install
+RUN yarn build
 
 ## Final image
 FROM node:23-alpine
