@@ -1,0 +1,36 @@
+{
+  "chain_name": "dungeon",
+  "theme_color": "#2e2e2e",
+  "registry_name": "dungeon",
+  "api": [
+    {
+      "address": "https://api-dungeonchain.apeironnodes.com",
+      "provider": "ApeironNodes"
+    },
+    {
+      "address": "https://api-archive-dungeonchain.apeironnodes.com",
+      "provider": "ApeironNodes (Archive)"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc-dungeonchain.apeironnodes.com",
+      "provider": "ApeironNodes"
+    },
+    {
+      "address": "https://rpc-archive-dungeonchain.apeironnodes.com",
+      "provider": "ApeironNodes (Archive)"
+    }
+  ],
+  "sdk_version": "0.50.8",
+  "addr_prefix": "dungeon",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dungeon/images/DGN.png",
+  "assets": [
+    {
+      "base": "udgn",
+      "symbol": "DGN",
+      "exponent": "6",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dungeon/images/DGN.png"
+    }
+  ]
+}
