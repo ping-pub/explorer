@@ -270,15 +270,12 @@
     "price_calculator": "价格计算器",
     "close": "关闭",
     "buy": "买入",
-    "active_proposals": "进行中的提案",
-    "no_active_proposals": "没有进行中的提案",
     "more": "更多",
     "reward": "奖励",
     "unbonding": "赎回",
     "btn_withdraw_reward": "提取奖励",
     "btn_swap": "Swap",
     "receive": "Receive",
-    "app_versions": "应用版本",
     "node_info": "节点信息"
   }
 }

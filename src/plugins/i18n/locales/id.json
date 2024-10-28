@@ -269,15 +269,12 @@
       "price_calculator": "Kalkulator Harga",
       "close": "Tutup",
       "buy": "Beli",
-      "active_proposals": "Proposal Aktif",
-      "no_active_proposals": "Tidak ada proposal aktif",
       "more": "Selengkapnya",
       "reward": "Hadiah",
       "unbonding": "Pemisahan",
       "btn_withdraw_reward": "Tarik Hadiah",
       "btn_swap": "Tukar",
       "receive": "Terima",
-      "app_versions": "Versi Aplikasi",
       "node_info": "Informasi Node"
     }
 }
