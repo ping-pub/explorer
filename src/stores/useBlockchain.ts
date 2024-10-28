@@ -21,7 +21,6 @@ import {
   useStakingStore,
   useWalletStore,
 } from '.';
-import { useBlockModule } from '@/modules/[chain]/block/block';
 import { DEFAULT } from '@/libs';
 import { hexToRgb, rgbToHsl } from '@/libs/utils';
 
