@@ -253,18 +253,6 @@ const amount = computed({
       </div>
     </div>
 
-    <div v-if="blockchain.supportModule('governance')" class="bg-base-100 rounded mt-4 shadow">
-      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
-        {{ $t('index.active_proposals') }}
-      </div>
-      <div class="px-4 pb-4">
-        <ProposalListItem :proposals="store?.proposals" />
-      </div>
-      <div class="pb-8 text-center" v-if="store.proposals?.proposals?.length === 0">
-        {{ $t('index.no_active_proposals') }}
-      </div>
-    </div>
-
     <div class="bg-base-100 rounded mt-4 shadow">
       <div class="flex justify-between px-4 pt-4 pb-2 text-lg font-semibold text-main">
         <span class="truncate" >{{ walletStore.currentAddress || 'Not Connected' }}</span>
