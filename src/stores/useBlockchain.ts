@@ -150,7 +150,7 @@ export const useBlockchain = defineStore('blockchain', {
       useBaseStore().initial();
       useGovStore().initial();
       useMintStore().initial();
-      useBlockModule().initial();
+      // useBlockModule().initial();
     },
 
     randomEndpoint(chainName: string) : Endpoint | undefined {
