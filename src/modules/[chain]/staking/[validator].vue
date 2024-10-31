@@ -71,7 +71,7 @@ const apr = computed(() => {
   const communityTax = Number(useDistributionStore().params.community_tax);
   const bondedRatio = Number(staking.pool.bonded_tokens) / Number(useBankStore().supply.amount);
 
-  return format.percent((1 - communityTax) * (1 - rate) * Number(inflation) / bondedRatio);
+  return format.percent(0.6 * (1 - communityTax) * (1 - rate) * Number(inflation) / bondedRatio);
 });
 
 const selfRate = computed(() => {
