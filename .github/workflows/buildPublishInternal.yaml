@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest-x64-xlarge
+    runs-on: ubuntu-latest
     name: Publish to Cloudflare Pages
     environment: Internal
     steps:
