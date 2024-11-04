@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import { computed, ref } from '@vue/reactivity';
-import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
-import { PageRequest, type AuthAccount, type Pagination, type Coin } from '@/types';
-import { onMounted } from 'vue';
+import { useBlockchain, useFormatter } from '@/stores';
+import { PageRequest, type Pagination, type Coin } from '@/types';
+import { ref, onMounted } from 'vue';
 import PaginationBar from '@/components/PaginationBar.vue';
 const props = defineProps(['chain']);
 
-const format = useFormatter();
+const formatter = useFormatter();
 const chainStore = useBlockchain()
 
 const list = ref([] as Coin[])
@@ -27,6 +26,13 @@ function pageload(p: number) {
   chainStore.rpc.getBankSupply(pageRequest.value).then(x => {
     list.value = x.supply
     pageResponse.value = x.pagination
+
+    list.value.map(async coin => {
+      if (coin.denom.startsWith('ibc/')) {
+        const data = await formatter.fetchDenomTrace(coin.denom)
+        coin.denom = `${coin.denom} (${data.base_denom})`
+      }
+    })
   });
 }
 
@@ -41,8 +47,8 @@ function pageload(p: number) {
                 </tr>
             </thead>
             <tr v-for="item in list" class="hover">
-                <td>{{ item.denom  }}</td>
-                <td>{{ item.amount  }}</td>
+                <td>{{ item.denom }}</td>
+                <td>{{ item.amount }}</td>
             </tr>
         </table>
         <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload" />
