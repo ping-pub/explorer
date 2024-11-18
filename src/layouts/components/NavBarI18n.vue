@@ -10,11 +10,27 @@ const i18nLangs: Array<{ label: string; i18nLang: string }> = [
     },
     {
         label: '中文',
-        i18nLang: 'cn',
+        i18nLang: 'zh',
     },
     {
         label: 'Indonesian',
         i18nLang: 'id',
+    },
+    {
+        label: '日本語',
+        i18nLang: 'ja',
+    },
+    {
+        label: '한국인',
+        i18nLang: 'ko',
+    },
+    {
+        label: 'Deutsch',
+        i18nLang: 'de',
+    },
+    {
+        label: 'Español',
+        i18nLang: 'es',
     },
 ];
 
