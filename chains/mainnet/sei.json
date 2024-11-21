@@ -1,7 +1,7 @@
 {
     "chain_name": "sei",
-    "api": ["https://lcd-sei.whispernode.com:443"],
-    "rpc": ["https://rpc-sei.whispernode.com:443"],
+    "api": ["https://sei-testnet-api.polkachu.com:443"],
+    "rpc": ["https://sei-testnet-rpc.polkachu.com:443"],
     "snapshot_provider": "",
     "sdk_version": "0.47.5",
     "coin_type": "118",
