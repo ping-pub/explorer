@@ -2,10 +2,10 @@
     "chain_name": "poktroll",
     "registry_name": "Poktroll-Testnet",
     "api": [
-        {"provider": "Poktroll-Testnet", "address": "https://testnet-validated-validator-api.poktroll.com"}
+        {"provider": "Poktroll-Testnet", "address": "https://shannon-testnet-grove-api.alpha.poktroll.com"}
     ],
     "rpc": [
-        {"provider": "Poktroll-Testnet", "address": "https://testnet-validated-validator-rpc.poktroll.com"}
+        {"provider": "Poktroll-Testnet", "address": "https://shannon-testnet-grove-rpc.alpha.poktroll.com"}
     ],
     "features": ["dashboard", "blocks", "tx", "applications", "gateways", "suppliers", "validators", "uptime", "supply", "parameters", "consensus"],
     "sdk_version": "0.45.1",

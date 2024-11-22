@@ -71,7 +71,7 @@ function pageloadInit(p: number) {
         </td>
         <td class="font-bold">{{ format.formatToken(item.stake) }}</td>
         <td>{{ item.services?.length }}</td>
-        <td>{{ item.services?.map((sc: any) => sc.service.name?.length > 0 ? sc.service.name : sc.service.id).join(", ")
+        <td>{{ item.services?.map((sc: any) => sc.service_name?.length > 0 ? sc.service_name : sc.service_id).join(", ")
         }}</td>
       </tr>
     </table>
