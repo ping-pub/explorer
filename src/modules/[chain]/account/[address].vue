@@ -17,8 +17,8 @@ import type {
   TxResponse,
   DelegatorRewards,
   UnbondingResponses,
+  Coin
 } from '@/types';
-import type { Coin } from '@cosmjs/amino';
 import Countdown from '@/components/Countdown.vue';
 import { fromBase64 } from '@cosmjs/encoding';
 import { formatIbcToken } from '@/libs';
@@ -34,7 +34,7 @@ const txs = ref({} as TxResponse[]);
 const delegations = ref([] as Delegation[]);
 const rewards = ref({} as DelegatorRewards);
 const balances = ref([] as Coin[]);
-const formattedBalances = ref([] as string[]);
+const formattedBalances = ref([] as Coin[]);
 const recentReceived = ref([] as TxResponse[]);
 const unbonding = ref([] as UnbondingResponses[]);
 const unbondingTotal = ref(0);
@@ -113,10 +113,16 @@ async function loadAccount(address: string) {
     for (let balanceItem of x.balances) {
       if (balanceItem.denom.toLowerCase().startsWith('ibc/')) {
         const ibcToken = await formatIbcToken(balanceItem, false)
-        const formatted = `${ibcToken.amount} ${ibcToken.denom}`
+        const formatted = {
+          amount: ibcToken.amount,
+          denom: ibcToken.denom,
+        };
         tempFormattedBalances.push(formatted);
       } else {
-        tempFormattedBalances.push(format.formatToken(balanceItem));
+        tempFormattedBalances.push({
+          amount: balanceItem.amount,
+          denom: format.formatToken(balanceItem),
+        });
       }
     }
     formattedBalances.value = tempFormattedBalances;
@@ -226,7 +232,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
               </div>
               <div class="flex-1">
                 <div class="text-sm font-semibold">
-                  {{ balanceItem }}
+                  {{ `${balanceItem.amount} ${balanceItem.denom}` }}
                 </div>
                 <div class="text-xs">
                   {{ format.calculatePercent(balanceItem.amount, totalAmount) }}

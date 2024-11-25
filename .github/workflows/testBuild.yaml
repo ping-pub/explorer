@@ -1,0 +1,22 @@
+name: Build test in pull request
+
+on:
+  pull_request:
+    branches: ['main']
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    name: PR build test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Run your build step here if needed, e.g., for a React app
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ./
+
+      - name: Build project
+        run: yarn build:public
+        working-directory: ./
