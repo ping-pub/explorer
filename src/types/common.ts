@@ -26,20 +26,20 @@ export class PageRequest {
     }
     toQueryString() {
         const query = []
-        if(this.key) query.push(`pagination.key=${this.key}`)
-        if(this.limit) query.push(`pagination.limit=${this.limit}`)
-        if(this.offset !== undefined) query.push(`pagination.offset=${this.offset}`)
-        if(this.count_total) query.push(`pagination.count_total=${this.count_total}`)
-        if(this.reverse) query.push(`pagination.reverse=${this.reverse}`)
+        if (this.key) query.push(`pagination.key=${this.key}`)
+        if (this.limit) query.push(`pagination.limit=${this.limit}`)
+        if (this.offset !== undefined) query.push(`pagination.offset=${this.offset}`)
+        if (this.count_total) query.push(`pagination.count_total=${this.count_total}`)
+        if (this.reverse) query.push(`pagination.reverse=${this.reverse}`)
         return query.join('&')
     }
     setPage(page: number) {
-        if(page >= 1) this.offset = (page - 1) * this.limit
-    }    
+        if (page >= 1) this.offset = (page - 1) * this.limit
+    }
     setPageSize(size: number) {
         this.limit = size
     }
-    
+
 }
 
 export interface PaginatedResponse {
@@ -56,9 +56,10 @@ export interface Coin {
 }
 
 export interface Supplier {
-    address: any;
+    owner_address: any;
     stake: Coin;
     services: any;
+    operator_address: string;
 }
 
 export interface Gateway {
@@ -77,7 +78,7 @@ export interface Application {
 export interface CoinWithPrice extends Coin {
     value?: number;
     price?: number;
-    change24h?: number    
+    change24h?: number
 }
 
 export interface UptimeStatus {
