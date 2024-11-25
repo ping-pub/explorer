@@ -72,12 +72,11 @@ dayjs()
 </script>
 
 <template>
-  <div class="bg-gray-100 dark:bg-[#231f20;]">
+  <div class="bg-base-200 dark:bg-[#231f20;]">
     <!-- sidebar -->
     <div
-      class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto border-r border-gray-100 dark:border-gray-700"
+      class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto border-r border-gray-100 dark:border-gray-700 dark:bg-[#231f20;]"
       :class="{ block: sidebarShow, 'hidden xl:!block': !sidebarShow }"
-      style="background-color: #231f20;"
     >
       <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
         <RouterLink to="/poktroll/block" class="flex items-center">
@@ -327,11 +326,10 @@ dayjs()
         </a>
       </div> -->
     </div>
-    <div class="xl:!ml-64 px-3 pt-4">
+    <div class="xl:!ml-64 px-3">
       <!-- header -->
       <div
-        class="flex items-center py-3 mb-4 rounded px-4 sticky top-0 z-10"
-        style="background-color: #231f20;"
+        class="flex items-center py-3 mb-4 px-4 sticky top-0 z-10 bg-base-100 dark:bg-[#231f20;]"
       >
         <div
           class="text-2xl pr-3 cursor-pointer xl:!hidden"

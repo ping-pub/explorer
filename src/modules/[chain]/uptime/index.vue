@@ -179,7 +179,7 @@ function fetchAllKeyRotation() {
 
 <template>
   <div>
-    <div class="tabs tabs-boxed bg-transparent mb-4">
+    <div class="tabs tabs-boxed mb-4 bg-base-200">
       <a class="tab text-gray-400 capitalize" :class="{ 'tab-active': tab === '3' }" @click="changeTab('3')">{{
         $t('uptime.overall') }}</a>
       <a class="tab text-gray-400 capitalize" :class="{ 'tab-active': tab === '2' }" @click="changeTab('2')">{{

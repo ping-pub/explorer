@@ -23,6 +23,8 @@ module.exports = {
         light: {
           ...require('daisyui/src/theming/themes')['[data-theme=light]'],
           primary: '#666cff',
+          'base-100': '#231f20',
+          'base-200': '#252d37'
         },
       },
       {

@@ -46,7 +46,7 @@ function handleScroll() {
         <div v-show="tab === 'recent'" class="bg-base-100 rounded overflow-x-auto txsContainer" @scroll="handleScroll"
             style="height: 78vh;overflow: scroll;">
             <table class="table w-full table-compact">
-                <thead class="bg-base-200">
+                <thead class="bg-base-200 dark:bg-base-200">
                     <tr>
                         <th style="position: relative; z-index: 2;">{{ $t('tx.tx_hash') }}</th>
                         <th style="position: relative; z-index: 2;">{{ $t('block.block') }}</th>
