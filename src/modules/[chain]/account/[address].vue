@@ -119,9 +119,12 @@ async function loadAccount(address: string) {
         };
         tempFormattedBalances.push(formatted);
       } else {
+        const formatted = format.formatToken(balanceItem)
         tempFormattedBalances.push({
-          amount: balanceItem.amount,
-          denom: format.formatToken(balanceItem),
+          amount: formatted.split(' ')[0] === 'NaN'
+            ? balanceItem.amount
+            : formatted.split(' ')[0],
+          denom: formatted.split(' ')[1],
         });
       }
     }
@@ -232,7 +235,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
               </div>
               <div class="flex-1">
                 <div class="text-sm font-semibold">
-                  {{ `${balanceItem.amount} ${balanceItem.denom}` }}
+                  {{ `${balanceItem.amount.toString().replace(',', '')} ${balanceItem.denom}` }}
                 </div>
                 <div class="text-xs">
                   {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
