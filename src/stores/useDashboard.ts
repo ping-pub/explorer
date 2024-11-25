@@ -282,6 +282,7 @@ export const useDashboard = defineStore('dashboard', {
   },
   actions: {
     async initial() {
+      // TODO: MIGHT NEED TO SEE HOW THIS CAN BE UPDATED SOMEDAY
       await this.loadingFromLocal();
       // await this.loadingFromRegistry()
     },
