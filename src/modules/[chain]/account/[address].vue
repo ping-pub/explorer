@@ -21,6 +21,7 @@ import type {
 import type { Coin } from '@cosmjs/amino';
 import Countdown from '@/components/Countdown.vue';
 import { fromBase64 } from '@cosmjs/encoding';
+import { formatIbcToken } from '@/libs';
 
 const props = defineProps(['address', 'chain']);
 
@@ -33,13 +34,15 @@ const txs = ref({} as TxResponse[]);
 const delegations = ref([] as Delegation[]);
 const rewards = ref({} as DelegatorRewards);
 const balances = ref([] as Coin[]);
+const formattedBalances = ref([] as string[]);
 const recentReceived = ref([] as TxResponse[]);
 const unbonding = ref([] as UnbondingResponses[]);
 const unbondingTotal = ref(0);
-const chart = {};
+
 onMounted(() => {
   loadAccount(props.address);
 });
+
 const totalAmountByCategory = computed(() => {
   let sumDel = 0;
   delegations.value?.forEach((x) => {
@@ -81,14 +84,16 @@ const totalValue = computed(() => {
   });
   unbonding.value?.forEach((x) => {
     x.entries?.forEach((y) => {
-      value += format.tokenValueNumber({amount: y.balance, denom: stakingStore.params.bond_denom});
+      value += format.tokenValueNumber({
+        amount: y.balance,
+        denom: stakingStore.params.bond_denom,
+      });
     });
   });
   return format.formatNumber(value, '0,0.00');
 });
 
-
-function loadAccount(address: string) {
+async function loadAccount(address: string) {
   blockchain.rpc.getAuthAccount(address).then((x) => {
     account.value = x.account;
   });
@@ -101,8 +106,20 @@ function loadAccount(address: string) {
   blockchain.rpc.getStakingDelegations(address).then((x) => {
     delegations.value = x.delegation_responses;
   });
-  blockchain.rpc.getBankBalances(address).then((x) => {
+  blockchain.rpc.getBankBalances(address).then(async (x) => {
     balances.value = x.balances;
+
+    const tempFormattedBalances = [];
+    for (let balanceItem of x.balances) {
+      if (balanceItem.denom.toLowerCase().startsWith('ibc/')) {
+        const ibcToken = await formatIbcToken(balanceItem, false)
+        const formatted = `${ibcToken.amount} ${ibcToken.denom}`
+        tempFormattedBalances.push(formatted);
+      } else {
+        tempFormattedBalances.push(format.formatToken(balanceItem));
+      }
+    }
+    formattedBalances.value = tempFormattedBalances;
   });
   blockchain.rpc.getStakingDelegatorUnbonding(address).then((x) => {
     unbonding.value = x.unbonding_responses;
@@ -196,7 +213,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
             <!--balances  -->
             <div
               class="flex items-center px-4 mb-2"
-              v-for="(balanceItem, index) in balances"
+              v-for="(balanceItem, index) in formattedBalances"
               :key="index"
             >
               <div
@@ -209,7 +226,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
               </div>
               <div class="flex-1">
                 <div class="text-sm font-semibold">
-                  {{ format.formatToken(balanceItem) }}
+                  {{ balanceItem }}
                 </div>
                 <div class="text-xs">
                   {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
@@ -221,7 +238,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"
                 ></span>
-                ${{ format.tokenValue(balanceItem) }}                
+                ${{ format.tokenValue(balanceItem) }}
               </div>
             </div>
             <!--delegations  -->

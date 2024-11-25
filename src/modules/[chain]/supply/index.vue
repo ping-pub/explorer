@@ -3,7 +3,7 @@ import { useBlockchain, useFormatter } from '@/stores';
 import { PageRequest, type Pagination, type Coin } from '@/types';
 import { ref, onMounted } from 'vue';
 import PaginationBar from '@/components/PaginationBar.vue';
-const props = defineProps(['chain']);
+import { formatIbcToken } from '@/libs/assets';
 
 const formatter = useFormatter();
 const chainStore = useBlockchain()
@@ -21,17 +21,16 @@ onMounted(() => {
   pageload(1)
 });
 
-function pageload(p: number) {
+async function pageload(p: number) {
   pageRequest.value.setPage(p)
-  chainStore.rpc.getBankSupply(pageRequest.value).then(x => {
+  chainStore.rpc.getBankSupply(pageRequest.value).then(async x => {
     list.value = x.supply
     pageResponse.value = x.pagination
 
     list.value.map(async coin => {
-      if (coin.denom.startsWith('ibc/')) {
-        const data = await formatter.fetchDenomTrace(coin.denom)
-        coin.denom = `${coin.denom} (${data.base_denom})`
-      }
+      const { denom, amount } = await formatIbcToken(coin);
+      coin.denom = denom;
+      coin.amount = amount;
     })
   });
 }

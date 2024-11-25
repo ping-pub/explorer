@@ -261,6 +261,10 @@ export const useFormatter = defineStore('formatter', {
           }
         }
 
+        if (denom && denom.startsWith('factory/')) {
+          denom = denom.split('/')[2];
+        }
+
         if (conf) {
           let unit = { exponent: 0, denom: '' };
           // find the max exponent for display

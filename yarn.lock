@@ -1360,6 +1360,11 @@
   dependencies:
     "@babel/runtime" "^7.19.4"
 
+"@chain-registry/types@^0.50.17":
+  version "0.50.17"
+  resolved "https://registry.yarnpkg.com/@chain-registry/types/-/types-0.50.17.tgz#5e85a5ebe1452a8cf57f9bd506c2e62b3d84ab2e"
+  integrity sha512-2J6b2C/KbKHrx4nYuj9X2IqAuNdiJ9BRD96l7URfAwK2X4U+KZbYSMQ8mvNe5SLdVexDZuBFj735suQI9xVnkQ==
+
 "@chenfengyuan/vue-countdown@2":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@chenfengyuan/vue-countdown/-/vue-countdown-2.1.2.tgz#108d96b271e8db463604b6eedbefa83f2b668487"
@@ -3467,6 +3472,13 @@ case@1.6.3:
   version "1.6.3"
   resolved "https://registry.yarnpkg.com/case/-/case-1.6.3.tgz#0a4386e3e9825351ca2e6216c60467ff5f1ea1c9"
   integrity sha512-mzDSXIPaFwVDvZAHqZ9VlbyF4yyXRuX6IvB06WvPYkqJVO24kX1PPhv9bfpKNFZyxYFmmgo03HUiD8iklmJYRQ==
+
+chain-registry@^1.69.39:
+  version "1.69.39"
+  resolved "https://registry.yarnpkg.com/chain-registry/-/chain-registry-1.69.39.tgz#02b460f5b611ca90046f7022809b7f3a4f8b7b39"
+  integrity sha512-FHbnmsTJ+EMeENmEM/GJsCgqt40oLChvnhyrauwKCzelyIgvZhIdS/y/ADl1eekL79v3OBamQoTg0CUZKOEZ9w==
+  dependencies:
+    "@chain-registry/types" "^0.50.17"
 
 chalk@^1.0.0, chalk@^1.1.3:
   version "1.1.3"
