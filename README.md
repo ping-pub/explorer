@@ -56,7 +56,7 @@ Developers: @liangping @dingyiming
 
 ## Changes from Original Ping.Pub
 
-This version of Ping.Pub was forked off from commit https://github.com/ping-pub/explorer/commit/603d7ce2, where the following changes were applied:
+This version of Ping.Pub was forked from from commit https://github.com/ping-pub/explorer/commit/603d7ce2, with the following changes applied:
 
 - 
 
