@@ -54,3 +54,14 @@ You can hire us by submiting an issue and fund the issue on [IssueHunter](https:
 
 Developers: @liangping @dingyiming
 
+## Changes from Original Ping.Pub
+
+This version of Ping.Pub was forked from from commit https://github.com/ping-pub/explorer/commit/603d7ce2, with the following changes applied:
+
+- Added chains/mainnet/fuel.json
+- Added public/logos/fuel.png
+- Removed chains/mainnet/cosmos.json
+- Removed chains/mainnet/neutron.json
+- Removed chains/mainnet/nolus.json
+- Removed chains/mainnet/osmosis.json
+
