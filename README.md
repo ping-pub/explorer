@@ -54,9 +54,3 @@ You can hire us by submitting an issue and fund the issue on [IssueHunter](https
 
 Developers: @liangping @dingyiming
 
-## Changes from Original Ping.Pub
-
-This version of Ping.Pub was forked from from commit https://github.com/ping-pub/explorer/commit/603d7ce2, with the following changes applied:
-
-- Removed Sponsors from DefaultLayout.vue
-
