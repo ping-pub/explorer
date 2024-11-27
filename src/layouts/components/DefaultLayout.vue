@@ -238,8 +238,9 @@ dayjs()
               Wallet Helper
             </div>
           </RouterLink>
+          <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
         </div>
-        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">{{ $t('module.links') }}</div>
+        <div class="px-4 text-sm text-gray-400 pb-2 uppercase">{{ $t('module.links') }}</div>
         <a
           href="https://twitter.com/ping_pub"
           target="_blank"
