@@ -58,5 +58,5 @@ Developers: @liangping @dingyiming
 
 This version of Ping.Pub was forked from from commit https://github.com/ping-pub/explorer/commit/603d7ce2, with the following changes applied:
 
-- 
+- Removed Sponsors from DefaultLayout.vue
 
