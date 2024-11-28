@@ -1,0 +1,22 @@
+{
+    "chain_name": "fuel testnet",
+    "registry_name": "fuel testnet",
+    "api": [
+        {"provider": "SimplyStaking", "address": "https://rest-seq.simplystaking.xyz"}
+    ],
+    "rpc": [
+        {"provider": "SimplyStaking", "address": "https://rpc-seq.simplystaking.xyz"}
+    ],
+    "sdk_version": "0.50.5",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "fuelsequencer",
+    "logo": "/logos/fuel.png",
+    "assets": [{
+        "base": "test",
+        "symbol": "TEST",
+        "exponent": "18",
+        "coingecko_id": "",
+        "logo": "/logos/fuel.png"
+    }]
+}
