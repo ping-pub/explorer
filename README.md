@@ -60,6 +60,7 @@ This version of Ping.Pub was forked from from commit https://github.com/ping-pub
 
 - Removed Sponsors from DefaultLayout.vue
 - Added chains/mainnet/fuel.json
+- Added chains/mainnet/fuel-testnet.json
 - Added public/logos/fuel.png
 - Removed chains/mainnet/cosmos.json
 - Removed chains/mainnet/neutron.json

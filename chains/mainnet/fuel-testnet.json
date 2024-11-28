@@ -7,7 +7,7 @@
     "rpc": [
         {"provider": "SimplyStaking", "address": "https://rpc-seq.simplystaking.xyz"}
     ],
-    "sdk_version": "0.50.5",
+    "sdk_version": "0.50.10",
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "fuelsequencer",
