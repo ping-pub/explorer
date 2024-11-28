@@ -1,6 +1,6 @@
 {
-    "chain_name": "fuel",
-    "registry_name": "fuel",
+    "chain_name": "fuel mainnet",
+    "registry_name": "fuel mainnet",
     "api": [
         {"provider": "SimplyStaking", "address": "https://rest-fuel-seq.simplystaking.xyz"}
     ],
