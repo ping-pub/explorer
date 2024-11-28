@@ -1,0 +1,22 @@
+{
+    "chain_name": "fuel",
+    "registry_name": "fuel",
+    "api": [
+        {"provider": "SimplyStaking", "address": "https://rest-fuel-seq.simplystaking.xyz"}
+    ],
+    "rpc": [
+        {"provider": "SimplyStaking", "address": "https://rpc-fuel-seq.simplystaking.xyz"}
+    ],
+    "sdk_version": "0.50.10",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "fuelsequencer",
+    "logo": "/logos/fuel.png",
+    "assets": [{
+        "base": "fuel",
+        "symbol": "FUEL",
+        "exponent": "9",
+        "coingecko_id": "",
+        "logo": "/logos/fuel.png"
+    }]
+}
