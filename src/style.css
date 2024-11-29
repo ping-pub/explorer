@@ -6,6 +6,8 @@
 
 html,body {
   height: 100%;
+  background: #212121;
+
 }
 
 body {
@@ -23,7 +25,7 @@ body {
 :root {
   --text-main: #333;
   --text-secondary: #4b525d;
-  --bg-active: #fbfbfc;
+  --bg-active: #212121;
 }
 
 html.dark,

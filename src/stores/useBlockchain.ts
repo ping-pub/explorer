@@ -76,7 +76,7 @@ export const useBlockchain = defineStore('blockchain', {
           document.body.style.setProperty('--p', `${themeColor}`);
           // document.body.style.setProperty('--p', `${this.current?.themeColor}`);
         } else {
-          document.body.style.setProperty('--p', '237.65 100% 70%');
+          document.body.style.setProperty('--p', '150.55 38.46% 71.96%');
         }
         currNavItem = [
           {
@@ -103,48 +103,13 @@ export const useBlockchain = defineStore('blockchain', {
           },
         ];
       }
-      // compute favorite menu
-      const favNavItems: VerticalNavItems = [];
-      Object.keys(this.dashboard.favoriteMap).forEach((name) => {
-        const ch = this.dashboard.chains[name];
-        if (ch && this.dashboard.favoriteMap?.[name]) {
-          favNavItems.push({
-            title: ch.prettyName || ch.chainName || name,
-            to: { path: `/${ch.chainName || name}` },
-            icon: { image: ch.logo, size: '22' },
-          });
-        }
-      });
 
       // combine all together
-      return [
-        ...currNavItem,
-        { heading: 'Ecosystem' } as NavSectionTitle,
-        {
-          title: 'Favorite',
-          children: favNavItems,
-          badgeContent: favNavItems.length,
-          badgeClass: 'bg-primary',
-          i18n: true,
-          icon: { icon: 'mdi-star', size: '22' },
-        } as NavGroup,
-        {
-          title: 'All Blockchains',
-          to: { path: '/' },
-          badgeContent: this.dashboard.length,
-          badgeClass: 'bg-primary',
-          i18n: true,
-          icon: { icon: 'mdi-grid', size: '22' },
-        } as NavLink,
-      ];
+      return currNavItem;
     },
   },
   actions: {
     async initial() {
-      // this.current?.themeColor {
-      //     const { global } = useTheme();
-      //     global.current
-      // }
       useWalletStore().$reset();
       if (!this.isConsumerChain) {
         await useStakingStore().init();
@@ -155,6 +120,10 @@ export const useBlockchain = defineStore('blockchain', {
       useMintStore().initial();
       useBlockModule().initial();
       useDistributionStore().initial();
+
+      // Set default chain on start
+      const defaultChain = 'cosmos'; // Replace with your default chain name
+      await this.setCurrent(defaultChain);
     },
 
     randomEndpoint(chainName: string) : Endpoint | undefined {

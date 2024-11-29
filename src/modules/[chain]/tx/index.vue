@@ -21,7 +21,7 @@ onMounted(() => {
 });
 function search() {
     if (hashReg.test(hash.value)) {
-      vueRouters.push({ path: `/${current}/tx/${hash.value}` });
+        vueRouters.push({ path: `/${current}/tx/${hash.value}` });
     }
 }
 </script>
@@ -34,9 +34,9 @@ function search() {
                 @click="tab = 'search'">Search</a>
         </div>
 
-        <div v-show="tab === 'recent'" class="bg-base-100 rounded overflow-x-auto">
+        <div v-show="tab === 'recent'" class="bg-vector-bg rounded overflow-x-auto">
             <table class="table w-full table-compact">
-                <thead class="bg-base-200">
+                <thead class="bg-vector-bg">
                     <tr>
                         <th style="position: relative; z-index: 2;">{{ $t('account.height') }}</th>
                         <th style="position: relative; z-index: 2;">{{ $t('account.hash') }}</th>
@@ -51,8 +51,8 @@ function search() {
                         </td>
                         <td class="truncate text-primary" width="50%">
                             <RouterLink :to="`/${props.chain}/tx/${item.hash}`">{{
-                item.hash
-            }}</RouterLink>
+                                item.hash
+                            }}</RouterLink>
                         </td>
                         <td>{{ format.messages(item.tx.body.messages) }}</td>
                         <td>{{ format.formatTokens(item.tx.authInfo.fee?.amount) }}</td>
@@ -74,10 +74,11 @@ function search() {
             </div>
         </div>
 
-        <div v-show="tab === 'search'" class="bg-base-100 rounded overflow-x-auto">
+        <div v-show="tab === 'search'" class="bg-vector-bg rounded overflow-x-auto">
             <div class="p-4">
                 <div class="form-control">
-                    <input v-model="hash" type="text" class="input input-bordered" placeholder="Search by Tx Hash" @blur="search"/>
+                    <input v-model="hash" type="text" class="input input-bordered" placeholder="Search by Tx Hash"
+                        @blur="search" />
                 </div>
             </div>
         </div>

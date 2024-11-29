@@ -18,16 +18,16 @@ const options = computed(() => {
             }
         },
         dataLabels: {
-          enabled: false
+            enabled: false
         },
-        colors: ['#5A67D8'],
+        colors: ['#9cd3b8'],
         xaxis: {
             labels: {
                 show: false,
                 rotate: -45
             },
             show: false,
-            categories: baseStore.recents.map((x) => x.block.header.height).concat(Array(50-baseStore.recents.length).fill('')),
+            categories: baseStore.recents.map((x) => x.block.header.height).concat(Array(50 - baseStore.recents.length).fill('')),
         }
     };
 });

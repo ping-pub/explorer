@@ -207,7 +207,7 @@ export const useIndexModule = defineStore('module-index', {
       this.tickerIndex = 0;
       // @ts-ignore
       const [firstAsset] = this.blockchain?.assets || [];
-      return firstAsset.coingecko_id
+      return firstAsset?.coingecko_id;
     }
   },
   actions: {

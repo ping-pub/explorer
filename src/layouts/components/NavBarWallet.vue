@@ -39,7 +39,7 @@ const params = computed(() => {
   if (chainStore.chainName == 'side') {
     return JSON.stringify({
       wallet: ['okex', 'unisat'],
-   });
+    });
   }
   return "";
 });
@@ -53,7 +53,7 @@ const params = computed(() => {
       <span class="ml-1 hidden md:block">
         {{ walletStore.shortAddress || 'Wallet' }}</span>
     </label>
-    <div tabindex="0" class="dropdown-content menu shadow p-2 bg-base-100 rounded w-52 md:!w-64 overflow-auto">
+    <div tabindex="0" class="dropdown-content menu shadow p-2 bg-vector-bg rounded w-52 md:!w-64 overflow-auto">
       <label v-if="!walletStore?.currentAddress" for="PingConnectWallet" class="btn btn-sm btn-primary">
         <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Wallet</span>
       </label>
@@ -97,7 +97,7 @@ const params = computed(() => {
   <Teleport to="body">
     <ping-connect-wallet :chain-id="baseStore.currentChainId || 'cosmoshub-4'" :hd-path="chainStore.defaultHDPath"
       :addr-prefix="chainStore.current?.bech32Prefix || 'cosmos'" @connect="walletStateChange"
-      @keplr-config="walletStore.suggestChain()"  :params="params" />
+      @keplr-config="walletStore.suggestChain()" :params="params" />
   </Teleport>
 </template>
 
