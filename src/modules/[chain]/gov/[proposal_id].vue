@@ -231,10 +231,10 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
           {{ proposal_id }}. {{ proposal.title || proposal.content?.title || metaItem(proposal?.metadata)?.title }}
         </p>
         <div class="badge badge-ghost" :class="color === 'success'
-            ? 'text-yes'
-            : color === 'error'
-              ? 'text-no'
-              : 'text-info'
+          ? 'text-yes'
+          : color === 'error'
+            ? 'text-no'
+            : 'text-info'
           ">
           {{ status }}
         </div>
@@ -346,7 +346,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
                   (EST)</span>
                 <span v-else>{{
                   format.toDay(proposal.content?.plan?.time)
-                  }}</span>
+                }}</span>
               </div>
               <div class="text-sm">
                 {{ shortTime(proposal.voting_end_time) }}
@@ -374,8 +374,8 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
                 {{ String(item.option).replace('VOTE_OPTION_', '') }}
               </td>
               <td v-if="item.options" class="py-2 text-sm">
-                {{ item.options.map(x => `${x.option.replace('VOTE_OPTION_', '')}:${format.percent(x.weight)}`).join(',
-                ') }}
+                {{ item.options.map(x => `${x.option.replace('VOTE_OPTION_',
+                  '')}:${format.percent(x.weight)}`).join(',') }}
               </td>
             </tr>
           </tbody>
