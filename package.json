@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",
-    "postinstall": "husky install"
+    "postinstall": "husky"
   },
   "dependencies": {
     "@chenfengyuan/vue-countdown": "2",
@@ -82,5 +82,15 @@
     "vite-plugin-pages": "^0.28.0",
     "vue-json-viewer": "3",
     "vue-tsc": "^1.0.12"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "exec < /dev/tty && npx cz --hook || true"
+    }
   }
 }
