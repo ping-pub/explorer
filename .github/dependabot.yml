@@ -1,0 +1,9 @@
+# .github/dependabot.yml
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    target-branch: "test"
+    schedule:
+      interval: "monthly"
