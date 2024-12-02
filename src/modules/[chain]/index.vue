@@ -10,6 +10,7 @@ import {
   useWalletStore,
   useStakingStore,
   useParamStore,
+  useBaseStore
 } from '@/stores';
 import { onMounted, ref } from 'vue';
 import { useIndexModule, colorMap } from './indexStore';
@@ -29,6 +30,7 @@ const format = useFormatter();
 const dialog = useTxDialog();
 const stakingStore = useStakingStore();
 const paramStore = useParamStore()
+const base = useBaseStore()
 const coinInfo = computed(() => {
   return store.coinInfo;
 });
@@ -37,6 +39,7 @@ onMounted(() => {
   store.loadDashboard();
   walletStore.loadMyAsset();
   paramStore.handleAbciInfo()
+  base.getAllTxs()
   // if(!(coinInfo.value && coinInfo.value.name)) {
   // }
 });
@@ -143,7 +146,7 @@ const amount = computed({
       <div class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 px-4 pb-6">
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">Balance</div>
-          <div class="text-lg font-semibold text-main">
+          <div class="text-md font-semibold text-main">
             {{ format.formatToken(walletStore.balanceOfStakingToken) }}
           </div>
           <div class="text-sm" :class="color">
@@ -152,7 +155,7 @@ const amount = computed({
         </div>
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">Staking</div>
-          <div class="text-lg font-semibold text-main">
+          <div class="text-md font-semibold text-main">
             {{ format.formatToken(walletStore.stakingAmount) }}
           </div>
           <div class="text-sm" :class="color">
@@ -161,7 +164,7 @@ const amount = computed({
         </div>
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">Reward</div>
-          <div class="text-lg font-semibold text-main">
+          <div class="text-md font-semibold text-main">
             {{ format.formatToken(walletStore.rewardAmount) }}
           </div>
           <div class="text-sm" :class="color">
@@ -170,7 +173,7 @@ const amount = computed({
         </div>
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">Unbonding</div>
-          <div class="text-lg font-semibold text-main">
+          <div class="text-md font-semibold text-main">
             {{ format.formatToken(walletStore.unbondingAmount) }}
           </div>
           <div class="text-sm" :class="color">
@@ -240,9 +243,9 @@ const amount = computed({
       </Teleport>
     </div>
   </div>
-  <div>
-    <div v-if="blockchain.supportModule('governance')" class="bg-base-100 rounded shadow">
-      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
+  <div class="grid grid-cols-2">
+    <div v-if="blockchain.supportModule('governance')" class="bg-base-100 rounded shadow col-span-1">
+      <div class="px-4 pt-4 pb-2 text-md font-semibold text-main">
         Active Proposals
       </div>
       <div class="px-4 pb-4">
@@ -253,14 +256,91 @@ const amount = computed({
       </div>
     </div>
 
+    <div class="bg-base-100 dark:bg-base-200 col-span-1 mt-4 mr-5 px-1 py-1" style="height: 50vh;overflow: scroll;">
+      <h2 class="px-4 pt-4 pb-2 text-md font-semibold text-main">{{ $t('module.tx') }}</h2>
+      <table class="table w-full table-compact">
+        <thead class="bg-base-200 dark:bg-base-100">
+          <tr>
+            <th style="position: relative; z-index: 2;">{{ $t('tx.tx_hash') }}</th>
+            <th style="position: relative; z-index: 2;">{{ $t('block.block') }}</th>
+            <th>{{ $t('staking.status') }}</th>
+            <!-- <th style="position: relative; z-index: 2;">Messages</th> -->
+            <th>{{ $t('account.type') }}</th>
+            <th>{{ $t('block.fees') }}</th>
+            <th>{{ $t('account.time') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in base.allTxs" :index="index" class="hover">
+            <td class="truncate text-primary" style="max-width:15rem">
+              <RouterLink class="truncate" :to="`/${props.chain}/tx/${item.hash}`">{{
+                item.hash
+              }}</RouterLink>
+            </td>
+            <td class="text-sm text-primary">
+              <RouterLink :to="`/${props.chain}/block/${item.height}`">{{ item.height }}</RouterLink>
+            </td>
+            <td>
+              <span class="text-xs truncate relative py-2 px-4 w-fit mr-2 rounded" :class="`text-${item.status === 0 ? 'success' : 'error'
+                }`">
+                <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${item.status === 0 ? 'success' : 'error'
+                  }`"></span>
+                {{ item.status === 0 ? 'Success' : 'Failed' }}
+              </span>
+            </td>
+            <!-- <td>{{ item.messages.length }}</td> -->
+            <td>{{ format.messages(item.messages) }}</td>
+            <td>{{ format.formatTokens(item.fee.amount) }}</td>
+            <td>
+              {{
+                format.toDay(item.timestamp, 'from')
+              }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <div v-if="coinInfo && coinInfo.name" class="bg-base-100 rounded shadow mt-4">
+    <div class="bg-base-100 rounded overflow-auto blocksContainer mt-4 px-1 py-1" style="height: 50vh;overflow: scroll;">
+      <h2 class="px-4 pt-4 pb-2 text-md font-semibold text-main">Blocks</h2>
+                <table class="table table-compact">
+                    <thead class="bg-base-200">
+                        <tr>
+                            <td>{{ $t('block.block_header') }}</td>
+                            <td>{{ $t('account.hash') }}</td>
+                            <td>{{ $t('block.proposer') }}</td>
+                            <td>{{ $t('module.tx') }}</td>
+                            <td>{{ $t('account.time') }}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in [...base.recents].reverse()">
+                            <td>{{ item.block.header.height }}</td>
+                            <td class="truncate text-primary" style="max-width: 18rem;overflow:hidden;color:var(primary)">
+                                <RouterLink  class="truncate" :title="item.block_id.hash" :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}
+                                </RouterLink>
+                            </td>
+                            <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
+                            <td>{{ item.block?.data?.txs.length }}</td>
+                            <td>{{ format.toDay(item.block?.header?.time) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pre-loading" v-if="base.fetchingBlocks">
+                    <div class="effect-1 effects"></div>
+                    <div class="effect-2 effects"></div>
+                    <div class="effect-3 effects"></div>
+                </div>
+            </div>
+
+    <div v-if="coinInfo && coinInfo.name" class="bg-base-100 rounded shadow mt-4 col-span-1 mr-5">
       <div class="grid grid-cols-2 md:grid-cols-3 p-4">
         <div class="col-span-2 md:col-span-1">
           <div class="text-lg font-semibold text-main">
             {{ coinInfo.name }} (<span class="uppercase">{{
               coinInfo.symbol
-              }}</span>)
+            }}</span>)
           </div>
           <div class="text-xs mt-2">
             Rank:
@@ -294,7 +374,7 @@ const amount = computed({
                   </div>
 
                   <div class="text-right">
-                    <div class="text-lg font-semibold text-[#666] dark:text-white">
+                    <div class="text-md font-semibold text-[#666] dark:text-white">
                       ${{ ticker.converted_last.usd }}
                     </div>
                     <div class="text-sm" :class="store.priceColor">
@@ -303,19 +383,22 @@ const amount = computed({
                   </div>
                 </div>
               </label>
-              <div class="dropdown-content pt-1">
-                <div class="h-64 overflow-auto w-full shadow rounded">
+              <div class="dropdown-content pt-1" style="z-index:15">
+                <div class="h-64 overflow-x-hidden overflow-y-scroll w-11/12 shadow rounded">
                   <ul class="menu w-full bg-gray-100 rounded dark:bg-[#384059]">
-                    <li v-for="(item, index) in store.coinInfo.tickers" :key="index" @click="store.selectTicker(index)">
+                    <li v-for="(item, index) in store.coinInfo.tickers" :key="index" @click="store.selectTicker(index)"
+                      class="w-11/12">
                       <div class="flex items-center justify-between hover:bg-base-100">
                         <div class="flex-1">
                           <div class="text-main text-sm" :class="trustColor(item.trust_score)">
                             {{ item?.market?.name }}
                           </div>
                           <div class="text-sm text-gray-500 dark:text-gray-400">
-                            {{ shortName(item?.base, item.coin_id) }}/{{
-                              shortName(item?.target, item.target_coin_id)
-                            }}
+                            <p class="truncate">
+                              {{ shortName(item?.base, item.coin_id) }}/{{
+                                shortName(item?.target, item.target_coin_id)
+                              }}
+                            </p>
                           </div>
                         </div>
 
@@ -353,7 +436,7 @@ const amount = computed({
               <input type="checkbox" id="calculator" class="modal-toggle" />
               <div class="modal">
                 <div class="modal-box">
-                  <h3 class="text-lg font-bold">Price Calculator</h3>
+                  <h3 class="text-md font-bold">Price Calculator</h3>
                   <div class="flex flex-col w-full mt-5">
                     <div class="grid h-20 flex-grow card rounded-box place-items-center">
                       <div class="join w-full">
@@ -402,8 +485,15 @@ const amount = computed({
         </div>
       </div>
     </div>
+    
+    <div v-else class="bg-base-100 rounded shadow mt-4 col-span-1 mr-5  p-4">
+      <div class="text-md font-semibold text-main">
+        Unable to fetch coin data!
+      </div>
+    </div>
+    
     <div class="bg-base-100 rounded mt-4">
-      <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
+      <div class="px-4 pt-4 pb-2 text-md font-semibold text-main">
         Application Versions
       </div>
       <!-- Application Version -->
@@ -411,13 +501,14 @@ const amount = computed({
       <div class="h-4"></div>
     </div>
 
-    <div v-if="!store.coingeckoId" class="bg-base-100 rounded mt-4">
+    <div v-if="!store.coingeckoId" class="bg-base-100 rounded mt-4 col-span-1">
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         Node Information
       </div>
       <ArrayObjectElement :value="paramStore.nodeVersion?.items" :thead="false" />
       <div class="h-4"></div>
     </div>
+
   </div>
 </template>
 

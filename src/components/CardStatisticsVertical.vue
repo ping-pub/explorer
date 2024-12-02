@@ -46,7 +46,7 @@ const isPositive = controlledComputed(
     </div>
 
     <div class="">
-      <h6 class="text-lg text-center font-semibold mt-2 mb-1">
+      <h6 class="text-md text-center font-semibold mt-2 mb-1">
         {{ props.stats || '-'}}
       </h6>
       <p class="text-sm text-center">

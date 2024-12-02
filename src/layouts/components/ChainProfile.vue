@@ -30,7 +30,7 @@ function changeEndpoint(item: Endpoint) {
             chainStore.chainName ||
             ''
           "
-          class="capitalize whitespace-nowrap text-base font-semibold text-gray-600 dark:text-gray-200 hidden md:!block"
+          class="capitalize whitespace-nowrap text-base font-semibold  dark:text-gray-600 text-gray-200 hidden md:!block"
         >
           {{ 
             baseStore.latest?.block?.header?.height
@@ -39,7 +39,7 @@ function changeEndpoint(item: Endpoint) {
           }} <span class="text-error">{{ baseStore.connected ? '' : 'disconnected' }}</span>
         </div>
         <div
-          class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap hidden md:!block"
+          class="text-xs  dark:text-gray-500 text-gray-400 whitespace-nowrap hidden md:!block"
         >
           {{ chainStore.connErr || chainStore.endpoint.address }}
         </div>

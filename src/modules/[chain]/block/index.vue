@@ -37,8 +37,8 @@ function handleScroll() {
     const container = document.querySelector('.blocksContainer') as HTMLDivElement;
     // Check if the scroll is at the bottom
     let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
-    if (isAtBottom) {
-        base.updatePageSize(base.pageSize + 5)
+    if (isAtBottom && parseInt(base.recents[0].block.header.height) > 1) {
+        base.updatePageSize(base.pageSize + 10)
     }
 }
 </script>
@@ -53,7 +53,7 @@ function handleScroll() {
         </div>
 
         <div v-show="tab === 'blocks'">
-            <div class="bg-base-100 rounded overflow-auto blocksContainer" @scroll="handleScroll" style="height: 78vh;overflow: scroll;">
+            <div class="bg-base-100 rounded overflow-auto blocksContainer" @scroll="handleScroll" style="height: 70vh;overflow: scroll;">
                 <table class="table table-compact">
                     <thead class="bg-base-200">
                         <tr>

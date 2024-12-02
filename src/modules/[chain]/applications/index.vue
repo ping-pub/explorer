@@ -26,7 +26,7 @@ function pageload() {
   const container = document.querySelector('.applicationsContainer') as HTMLDivElement;
   // Check if the scroll is at the bottom
   let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
-  if (isAtBottom) {
+  if (isAtBottom && pageResponse.value.next_key != null) {
     pageRequest.value.setPage((pageRequest.value.offset || 0 / pageRequest.value.limit) + 1)
     chainStore.rpc.getApplications(pageRequest.value).then(x => {
       list.value = [...list.value, ...x.applications]

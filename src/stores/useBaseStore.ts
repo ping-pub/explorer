@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { useBlockchain } from '@/stores';
 import { decodeTxRaw, type DecodedTxRaw } from '@cosmjs/proto-signing';
 import dayjs from 'dayjs';
-import type { Block, TxLocal, Tx, TxResponse } from '@/types';
+import type { Block, TxLocal, Tx, TxResponse, Pagination } from '@/types';
 import { hashTx } from '@/libs';
 import { fromBase64 } from '@cosmjs/encoding';
 import { useRouter } from 'vue-router';
@@ -19,7 +19,8 @@ export const useBaseStore = defineStore('baseStore', {
             connected: true,
             pageSize: 50,
             fetchingBlocks: false,
-            allTxs: [] as TxLocal[]
+            allTxs: [] as TxLocal[],
+            pagination: {} as Pagination
         };
     },
     getters: {
@@ -77,10 +78,14 @@ export const useBaseStore = defineStore('baseStore', {
             this.recents = [];
         },
         async getAllTxs(startingBlock = '', numOfBlocks = 0) {
-            let res = await fetch("/api/v1/transactions?page=1&limit=" + this.pageSize);
-            const resJson = await res.json();
-            this.allTxs = resJson.data
-            return res
+            try {
+                let res = await fetch("/api/v1/transactions?page=1&limit=" + this.pageSize).catch(err => console.error("Error Fetching Transactions"));
+                const resJson = await res?.json();
+                this.allTxs = resJson?.data || []
+                return res
+            } catch (e) {
+                return []
+            }
         },
         async appendTxsByPage(page: number = 2, limit: number = 10) {
             let res = await fetch(`/api/v1/transactions?page=${page}&limit=${limit}`);
@@ -159,7 +164,6 @@ export const useBaseStore = defineStore('baseStore', {
                 this.recents.push(this.latest);
                 let transactions = [] as TxLocal[]
                 for (var tx of this.latest.block.data.txs) {
-                    console.log('.')
                     let txRes = await this.fetchTx(hashTx(fromBase64(tx)))
                     transactions.push({
                         status: txRes.tx_response.code,

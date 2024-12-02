@@ -1,7 +1,7 @@
 <template>
   <!-- footer -->
   <footer
-    class="flex items-center h-12 mt-5 text-sm bg-gray-100 dark:bg-[#231f20;] py-2 z-10 w-full justify-end"
+    class="flex items-center h-12 mt-0 text-sm bg-gray-100 dark:bg-[#231f20;] py-2 z-10 w-full justify-end"
   >
     <div class="flex">
       Made With&nbsp;
