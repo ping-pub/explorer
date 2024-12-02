@@ -28,9 +28,9 @@ function search() {
 <template>
     <div>
         <div class="tabs tabs-boxed bg-transparent mb-4">
-            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'recent' }"
+            <a class="tab text-gray-200 uppercase" :class="{ 'tab-active': tab === 'recent' }"
                 @click="tab = 'recent'">{{ $t('block.recent') }}</a>
-            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'search' }"
+            <a class="tab text-gray-200 uppercase" :class="{ 'tab-active': tab === 'search' }"
                 @click="tab = 'search'">Search</a>
         </div>
 
@@ -52,7 +52,7 @@ function search() {
                         <td class="truncate text-primary" width="50%">
                             <RouterLink :to="`/${props.chain}/tx/${item.hash}`">{{
                                 item.hash
-                            }}</RouterLink>
+                                }}</RouterLink>
                         </td>
                         <td>{{ format.messages(item.tx.body.messages) }}</td>
                         <td>{{ format.formatTokens(item.tx.authInfo.fee?.amount) }}</td>

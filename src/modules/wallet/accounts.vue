@@ -201,7 +201,7 @@ async function loadBalances(chainName: string, endpoint: string, address: string
           </h2>
           <div class="mt-1 flex flex-col sm:!mt-0 sm:!flex-row sm:!flex-wrap sm:!space-x-6">
             <div class="mt-2 items-center text-sm text-gray-500 hidden md:!flex">
-              <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
+              <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-200" viewBox="0 0 20 20" fill="currentColor"
                 aria-hidden="true">
                 <path fill-rule="evenodd"
                   d="M6 3.75A2.75 2.75 0 018.75 1h2.5A2.75 2.75 0 0114 3.75v.443c.572.055 1.14.122 1.706.2C17.053 4.582 18 5.75 18 7.07v3.469c0 1.126-.694 2.191-1.83 2.54-1.952.599-4.024.921-6.17.921s-4.219-.322-6.17-.921C2.694 12.73 2 11.665 2 10.539V7.07c0-1.321.947-2.489 2.294-2.676A41.047 41.047 0 016 4.193V3.75zm6.5 0v.325a41.622 41.622 0 00-5 0V3.75c0-.69.56-1.25 1.25-1.25h2.5c.69 0 1.25.56 1.25 1.25zM10 10a1 1 0 00-1 1v.01a1 1 0 001 1h.01a1 1 0 001-1V11a1 1 0 00-1-1H10z"
@@ -283,7 +283,7 @@ async function loadBalances(chainName: string, endpoint: string, address: string
                   <span class="float-right text-right">${{ format.formatNumber(x.delegation.value, '0,0.[00]')
                     }}<br><span class="text-xs" :class="format.color(x.delegation.change24h)">{{
                       format.formatNumber((x.delegation.change24h || 0) * (x.delegation.value || 0) / 100, '+0,0.[00]')
-                    }}</span></span>
+                      }}</span></span>
                 </RouterLink>
               </li>
             </div>
@@ -312,7 +312,7 @@ async function loadBalances(chainName: string, endpoint: string, address: string
       <div class=" text-center bg-vector-bg rounded-md my-4 p-4">
         <a href="#address-modal"
           class="inline-flex items-center ml-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-          <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path
               d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z" />
             <path

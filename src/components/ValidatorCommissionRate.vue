@@ -120,7 +120,7 @@ const chartConfig = computed(() => {
 <template>
     <div class="bg-vector-bg rounded shadow p-4">
         <div class="text-lg text-main font-semibold mb-1">Commission Rate</div>
-        <div class="text-sm text-gray-500 dark:text-gray-400">
+        <div class="text-sm text-gray-500 dark:text-gray-200">
             {{ `Updated at ${format.toDay(props.commission?.update_time, 'short')}` }}
         </div>
         <div class="w-80 m-auto">

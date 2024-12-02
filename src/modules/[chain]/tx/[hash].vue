@@ -35,10 +35,10 @@ const messages = computed(() => {
 <template>
     <div>
         <div class="tabs tabs-boxed bg-transparent mb-4">
-            <RouterLink class="tab text-gray-400 uppercase" :to="`/${chain}/tx/?tab=recent`">{{ $t('block.recent') }}
+            <RouterLink class="tab text-gray-200 uppercase" :to="`/${chain}/tx/?tab=recent`">{{ $t('block.recent') }}
             </RouterLink>
-            <RouterLink class="tab text-gray-400 uppercase" :to="`/${chain}/tx/?tab=search`">Search</RouterLink>
-            <a class="tab text-gray-400 uppercase tab-active">Transaction</a>
+            <RouterLink class="tab text-gray-200 uppercase" :to="`/${chain}/tx/?tab=search`">Search</RouterLink>
+            <a class="tab text-gray-200 uppercase tab-active">Transaction</a>
         </div>
 
         <div v-if="tx.tx_response" class="bg-vector-bg px-4 pt-3 pb-4 rounded shadow mb-4">

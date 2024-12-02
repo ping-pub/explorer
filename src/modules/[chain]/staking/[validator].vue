@@ -267,8 +267,8 @@ function mapDelegators(messages: any[]) {
               <div class="w-24 rounded-lg">
                 <img v-if="identity && avatars[identity] !== 'undefined'" v-lazy="logo(identity)" class="object-contain"
                   @error="(e) => {
-                      loadAvatar(identity);
-                    }
+                    loadAvatar(identity);
+                  }
                     " />
                 <Icon v-else class="text-8xl" :icon="`mdi-help-circle-outline`" />
               </div>
@@ -292,8 +292,8 @@ function mapDelegators(messages: any[]) {
                 <Icon icon="mdi-web" class="text-xl mr-1" />
                 <span class="font-bold mr-2">{{ $t('staking.website') }}: </span>
                 <a :href="v?.description?.website || '#'" :class="v?.description?.website
-                    ? 'cursor-pointer'
-                    : 'cursor-default'
+                  ? 'cursor-pointer'
+                  : 'cursor-default'
                   ">
                   {{ v.description?.website || '-' }}
                 </a>
@@ -541,7 +541,7 @@ function mapDelegators(messages: any[]) {
               <td class="text-sm text-primary">
                 <RouterLink :to="`/${props.chain}/block/${item.height}`">{{
                   item.height
-                  }}</RouterLink>
+                }}</RouterLink>
               </td>
               <td class="truncate text-primary" style="max-width: 200px">
                 <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
@@ -552,7 +552,7 @@ function mapDelegators(messages: any[]) {
                 <div class="flex items-center">
                   <span class="mr-2">{{
                     format.messages(item.tx.body.messages)
-                    }}</span>
+                  }}</span>
                   <Icon v-if="item.code === 0" icon="mdi-check" class="text-yes" />
                   <Icon v-else icon="mdi-multiply" class="text-no" />
                 </div>
@@ -569,9 +569,9 @@ function mapDelegators(messages: any[]) {
         <div class="tabs tabs-boxed bg-transparent">
 
           <span class="mr-10">Voting Power Events: </span>
-          <a class="tab text-gray-400" :class="{ 'tab-active': selectedEventType === EventType.Delegate }"
+          <a class="tab text-gray-200" :class="{ 'tab-active': selectedEventType === EventType.Delegate }"
             @click="loadPowerEvents(1, EventType.Delegate)">{{ $t('account.btn_delegate') }}</a>
-          <a class="tab text-gray-400" :class="{ 'tab-active': selectedEventType === EventType.Unbond }"
+          <a class="tab text-gray-200" :class="{ 'tab-active': selectedEventType === EventType.Unbond }"
             @click="loadPowerEvents(1, EventType.Unbond)">{{ $t('account.btn_unbond') }}</a>
         </div>
       </div>
@@ -607,7 +607,7 @@ function mapDelegators(messages: any[]) {
               <td width="150">
                 <RouterLink class="text-primary mb-0" :to="`/${props.chain}/block/${item.height}`">{{
                   item.height
-                  }}</RouterLink><br>
+                }}</RouterLink><br>
                 <span class="text-xs pt-0 mt-0">{{ format.toDay(item.timestamp, 'from') }}</span>
               </td>
             </tr>

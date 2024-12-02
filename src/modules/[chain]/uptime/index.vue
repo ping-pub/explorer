@@ -200,12 +200,12 @@ function changeTab(v: string) {
 <template>
   <div>
     <div class="tabs tabs-boxed bg-transparent mb-4">
-      <a class="tab text-gray-400 capitalize" :class="{ 'tab-active': tab === '3' }" @click="changeTab('3')">{{
+      <a class="tab text-gray-200 capitalize" :class="{ 'tab-active': tab === '3' }" @click="changeTab('3')">{{
         $t('uptime.overall') }}</a>
-      <a class="tab text-gray-400 capitalize" :class="{ 'tab-active': tab === '2' }" @click="changeTab('2')">{{
+      <a class="tab text-gray-200 capitalize" :class="{ 'tab-active': tab === '2' }" @click="changeTab('2')">{{
         $t('module.blocks') }}</a>
       <RouterLink :to="`/${chain}/uptime/customize`">
-        <a class="tab text-gray-400 capitalize">{{ $t('uptime.customize') }}</a>
+        <a class="tab text-gray-200 capitalize">{{ $t('uptime.customize') }}</a>
       </RouterLink>
     </div>
     <div class="bg-vector-bg px-5 pt-5">

@@ -179,7 +179,7 @@ const amount = computed({
                           <div class="text-main text-sm" :class="trustColor(item.trust_score)">
                             {{ item?.market?.name }}
                           </div>
-                          <div class="text-sm text-gray-500 dark:text-gray-400">
+                          <div class="text-sm text-gray-500 dark:text-gray-200">
                             {{ shortName(item?.base, item?.coin_id) }}/{{
                               shortName(item?.target, item?.target_coin_id)
                             }}
@@ -280,7 +280,6 @@ const amount = computed({
 
     <div v-if="blockchain.supportModule('governance')" class="bg-vector-bg rounded mt-4 shadow">
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
-        {{ $t('index.active_proposals') }}
       </div>
       <div class="px-4 pb-4">
         <ProposalListItem :proposals="store?.proposals" />

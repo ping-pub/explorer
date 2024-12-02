@@ -10,11 +10,16 @@ module.exports = {
         orange: '#fa7327',
       }
     },
+    boxShadow: {
+      'vector': '4px 0px 9px 0px rgba(0, 0, 0, 0.25)',  
+    },
     colors: {
       vector: {
         primary: '#9cd3b8',
-        bg: '#293330',
+        bg: 'rgb(0,0,0,0.39)',
+        green: 'rgb(41, 51, 48)',
         orange: '#fa7327',
+        gray: 'rgba(255, 255, 255, 0.45)',
       }
     }
   },

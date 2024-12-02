@@ -58,7 +58,7 @@ const handleLangChange = (lang: string) => {
         : 'dropdown-bottom dropdown-end'
         ">
         <label tabindex="0" class="btn btn-ghost btn-circle btn-sm mx-1">
-            <Icon icon="mdi-translate" class="text-2xl text-gray-500 dark:text-gray-400" />
+            <Icon icon="mdi-translate" class="text-2xl text-gray-500 dark:text-gray-200" />
         </label>
         <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-vector-bg rounded-box w-40">
             <li v-for="lang in i18nLangs" :key="lang.i18nLang">

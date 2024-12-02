@@ -48,21 +48,21 @@ const params = computed(() => {
 
 <template>
   <div class="dropdown dropdown-hover dropdown-end">
-    <label tabindex="0" class="btn btn-sm btn-primary m-1 lowercase truncate !inline-flex text-xs md:!text-sm">
-      <Icon icon="mdi:wallet" />
+    <label tabindex="0" class="btn-sm items-center lowercase truncate !inline-flex text-xs md:!text-sm">
+      <Icon icon="mdi:wallet" height="1.5em" />
       <span class="ml-1 hidden md:block">
         {{ walletStore.shortAddress || 'Wallet' }}</span>
     </label>
-    <div tabindex="0" class="dropdown-content menu shadow p-2 bg-vector-bg rounded w-52 md:!w-64 overflow-auto">
+    <div tabindex="0" class="dropdown-content menu shadow p-2 bg-[#0c0c0cab] rounded w-52 md:!w-64 overflow-auto">
       <label v-if="!walletStore?.currentAddress" for="PingConnectWallet" class="btn btn-sm btn-primary">
         <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Wallet</span>
       </label>
-      <div class="px-2 mb-1 text-gray-500 dark:text-gray-400 font-semibold">
+      <div class="px-2 mb-1 text-gray-500 dark:text-gray-200 font-semibold">
         {{ walletStore.connectedWallet?.wallet }}
       </div>
       <div>
         <a v-if="walletStore.currentAddress"
-          class="block py-2 px-2 hover:bg-gray-100 dark:hover:bg-[#353f5a] rounded cursor-pointer"
+          class="block py-2 px-2 hover:bg-gray-100 dark:hover:bg-[#121212a4] rounded cursor-pointer"
           style="overflow-wrap: anywhere" @click="copyAdress(walletStore.currentAddress)">
           {{ walletStore.currentAddress }}
         </a>
@@ -75,7 +75,7 @@ const params = computed(() => {
         </RouterLink>
         <div v-if="walletStore.currentAddress" class="divider mt-1 mb-1"></div>
         <a v-if="walletStore.currentAddress"
-          class="block py-2 px-2 hover:bg-gray-100 dark:hover:bg-[#353f5a] rounded cursor-pointer"
+          class="block py-2 px-2 hover:bg-gray-100 dark:hover:bg-vector-green rounded cursor-pointer"
           @click="walletStore.disconnect()">Disconnect</a>
       </div>
     </div>
@@ -95,9 +95,9 @@ const params = computed(() => {
     </div>
   </div>
   <Teleport to="body">
-    <ping-connect-wallet :chain-id="baseStore.currentChainId || 'cosmoshub-4'" :hd-path="chainStore.defaultHDPath"
-      :addr-prefix="chainStore.current?.bech32Prefix || 'cosmos'" @connect="walletStateChange"
-      @keplr-config="walletStore.suggestChain()" :params="params" />
+    <ping-connect-wallet class="walletconnector" :chain-id="baseStore.currentChainId || 'cosmoshub-4'"
+      :hd-path="chainStore.defaultHDPath" :addr-prefix="chainStore.current?.bech32Prefix || 'cosmos'"
+      @connect="walletStateChange" @keplr-config="walletStore.suggestChain()" :params="params" />
   </Teleport>
 </template>
 

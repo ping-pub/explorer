@@ -11,14 +11,8 @@ const changeTab = (val: string) => {
 <template>
   <div>
     <div class="tabs">
-      <a
-        class="tab tab-bordered text-gray-400 capitalize"
-        v-for="(item, index) of value"
-        :value="index"
-        :class="{ 'tab-active': tab === String(index) }"
-        @click="changeTab(String(index))"
-        >{{ index }}</a
-      >
+      <a class="tab tab-bordered text-gray-200 capitalize" v-for="(item, index) of value" :value="index"
+        :class="{ 'tab-active': tab === String(index) }" @click="changeTab(String(index))">{{ index }}</a>
     </div>
     <div class="min-h-[25px] mt-4">
       <div v-for="(v, k) of value" :value="k">

@@ -346,7 +346,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
                   (EST)</span>
                 <span v-else>{{
                   format.toDay(proposal.content?.plan?.time)
-                }}</span>
+                  }}</span>
               </div>
               <div class="text-sm">
                 {{ shortTime(proposal.voting_end_time) }}
@@ -369,7 +369,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
               <td class="py-2 text-sm">{{ showValidatorName(item.voter) }}</td>
               <td v-if="item.option" class="py-2 text-sm" :class="{
                 'text-yes': item.option === 'VOTE_OPTION_YES',
-                'text-gray-400': item.option === 'VOTE_OPTION_ABSTAIN',
+                'text-gray-200': item.option === 'VOTE_OPTION_ABSTAIN',
               }">
                 {{ String(item.option).replace('VOTE_OPTION_', '') }}
               </td>

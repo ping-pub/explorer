@@ -278,11 +278,11 @@ loadAvatars();
         <div>
             <div class="flex items-center justify-between py-1">
                 <div class="tabs tabs-boxed bg-transparent">
-                    <a class="tab text-gray-400" :class="{ 'tab-active': tab === 'featured' }"
+                    <a class="tab text-gray-200" :class="{ 'tab-active': tab === 'featured' }"
                         @click="tab = 'featured'">{{ $t('staking.popular') }}</a>
-                    <a class="tab text-gray-400" :class="{ 'tab-active': tab === 'active' }" @click="tab = 'active'">{{
+                    <a class="tab text-gray-200" :class="{ 'tab-active': tab === 'active' }" @click="tab = 'active'">{{
                         $t('staking.active') }}</a>
-                    <a class="tab text-gray-400" :class="{ 'tab-active': tab === 'inactive' }"
+                    <a class="tab text-gray-200" :class="{ 'tab-active': tab === 'inactive' }"
                         @click="tab = 'inactive'">{{ $t('staking.inactive') }}</a>
                 </div>
 
@@ -350,7 +350,7 @@ loadAvatars();
                                                 v.description?.website ||
                                                 v.description?.identity ||
                                                 '-'
-                                            }}</span>
+                                                }}</span>
                                         </div>
                                     </div>
                                 </td>

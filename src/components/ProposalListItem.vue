@@ -88,7 +88,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
                 </div>
               </div>
               <div
-                class="truncate col-span-2 md:!col-span-1 text-xs text-gray-500 dark:text-gray-400 text-right md:!flex md:!justify-start">
+                class="truncate col-span-2 md:!col-span-1 text-xs text-gray-500 dark:text-gray-200 text-right md:!flex md:!justify-start">
                 {{ format.toDay(item.voting_end_time, 'from') }}
               </div>
             </div>
@@ -103,7 +103,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
                 ">
                 <span v-if="item?.voterStatus !== 'VOTE_OPTION_NO_WITH_VETO'">{{
                   item?.voterStatus?.replace('VOTE_OPTION_', '')
-                }}</span>
+                  }}</span>
 
                 <span v-else>Vote</span>
               </label>
@@ -131,7 +131,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
             </div>
           </div>
 
-          <div class="truncate text-xs text-gray-500 dark:text-gray-400 flex items-center justify-end">
+          <div class="truncate text-xs text-gray-500 dark:text-gray-200 flex items-center justify-end">
             {{ format.toDay(item.voting_end_time, 'from') }}
           </div>
         </div>
@@ -165,7 +165,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
               ">
               <span v-if="item?.voterStatus !== 'VOTE_OPTION_NO_WITH_VETO'">{{
                 item?.voterStatus?.replace('VOTE_OPTION_', '')
-              }}</span>
+                }}</span>
 
               <span v-else>Vote</span></label>
 

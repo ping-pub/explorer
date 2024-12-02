@@ -54,3 +54,16 @@ html[data-theme='dark'] {
   opacity: 0;
   transform: translateY(-calc(15%));
 }
+
+/* wallet */
+.walletconnector label.modal-box, .hi label.modal-box  ul {
+  background-color: #293330 !important;
+}
+
+.walletconnector label.modal-box ul > :hover{
+  background-color: rgb(0,0,0,0.39) !important;
+}
+
+.walletconnector .btn :not(.btn-primary) {
+  background-color: #293330 !important;
+}
