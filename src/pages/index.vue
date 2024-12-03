@@ -12,7 +12,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useBlockchain } from '@/stores';
 
 const dashboard = useDashboard();
-
+router.push('/chain')
 const keywords = ref('');
 const chains = computed(() => {
   if (keywords.value) {
