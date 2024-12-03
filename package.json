@@ -25,6 +25,7 @@
     "@osmonauts/lcd": "^0.8.0",
     "@personaxyz/ad-sdk": "0.0.25",
     "@ping-pub/chain-registry-client": "^0.0.25",
+    "@vercel/analytics": "^1.4.1",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
     "@vueuse/core": "^9.12.0",
     "@vueuse/integrations": "^10.1.2",
