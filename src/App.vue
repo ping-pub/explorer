@@ -10,8 +10,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <Analytics />
   <div>
+    <Analytics />
     <RouterView />
     <TxDialog />
   </div>
