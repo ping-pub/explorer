@@ -56,7 +56,7 @@ html[data-theme='dark'] {
 }
 
 /* wallet */
-.walletconnector label.modal-box, .hi label.modal-box  ul {
+.walletconnector label.modal-box, .walletconnector label.modal-box  ul {
   background-color: #293330 !important;
 }
 

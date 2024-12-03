@@ -10,6 +10,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      redirect: '/cosmos'
     },
     ...setupLayouts(routes)
   ],
@@ -17,8 +18,13 @@ const router = createRouter({
 
 // Update current blockchain
 router.beforeEach((to) => {
+  const { chain } = to.params;
+  if (chain) {
     const blockchain = useBlockchain();
-    blockchain.setCurrent('cosmos');
+    if (chain !== blockchain.chainName) {
+      blockchain.setCurrent('chain');
+    }
+  }
 });
 
 // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
