@@ -67,6 +67,7 @@ const behind = computed(() => {
   return blocktime.value.isBefore(current)
 });
 
+const alpha_beta = window.location.host.includes('beta') ? 'beta' : 'alpha'
 dayjs()
 
 </script>
@@ -81,7 +82,7 @@ dayjs()
             <img class="w-10 h-10"
               src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
             <h1 class="flex-1 ml-3 text-xl font-semibold dark:text-white whitespace-nowrap mr-10">
-              Shannon Explorer
+              SHANNON {{ alpha_beta }}
             </h1>
           </RouterLink>
           <div v-for="(item, index) of blockchain.computedChainMenu" :key="index"
