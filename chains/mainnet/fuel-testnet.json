@@ -15,7 +15,7 @@
     "assets": [{
         "base": "test",
         "symbol": "TEST",
-        "exponent": "18",
+        "exponent": "9",
         "coingecko_id": "",
         "logo": "/logos/fuel.png"
     }]
