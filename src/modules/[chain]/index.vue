@@ -296,7 +296,7 @@ const amount = computed({
       </div>
 
     </div>
-    <div class="grid grid-cols-1">
+    <div class="grid grid-cols-2">
       <div v-if="blockchain.supportModule('governance')" class="bg-base-100 rounded-lg shadow col-span-1">
         <div class="px-4 pt-4 pb-2 text-md font-semibold text-main">
           Active Proposals
@@ -309,10 +309,10 @@ const amount = computed({
         </div>
       </div>
       <!-- Transactions -->
-      <div class="bg-base-100 col-span-1 mt-4 px-1 py-1 rounded-lg" style="height: 17rem;overflow: scroll;">
-        <h2 class="px-4 pt-4 pb-2 text-md font-semibold text-main ">{{ $t('module.tx') }}</h2>
+      <div class="bg-base-100 col-span-1 mt-4 px-1 py-1 rounded-lg mr-5" style="height: 34rem;overflow: scroll;">
+        <h2 class="px-4 pt-4 pb-2 text-md font-semibold text-main sticky top-0">{{ $t('module.tx') }}</h2>
         <table class="table w-full table-compact">
-          <thead class="bg-base-200">
+          <thead class="bg-base-200 sticky top-0">
             <tr>
               <th style="position: relative; z-index: 2;">{{ $t('tx.tx_hash') }}</th>
               <th style="position: relative; z-index: 2;">{{ $t('block.block') }}</th>
@@ -354,10 +354,10 @@ const amount = computed({
         </table>
       </div>
       <!-- Blocks -->
-      <div class="bg-base-100 rounded-lg overflow-auto blocksContainer mt-4 px-1 py-1" style="height: 17rem;overflow: scroll;">
-        <h2 class="px-4 pt-4 pb-2 text-md font-semibold text-main sticky">Blocks</h2>
+      <div class="bg-base-100 rounded-lg overflow-auto blocksContainer mt-4 px-1 py-1" style="height: 34rem;overflow: scroll;">
+        <h2 class="bg-base-100 px-4 pt-4 pb-2 text-md font-semibold text-main sticky top-0">Blocks</h2>
         <table class="table table-compact">
-          <thead class="bg-base-200">
+          <thead class="bg-base-200 sticky top-0">
             <tr>
               <td>{{ $t('block.block_header') }}</td>
               <td>{{ $t('account.hash') }}</td>
