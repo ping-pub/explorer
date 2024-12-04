@@ -74,10 +74,10 @@ dayjs()
 <template>
   <div>
     <header class="bg-base-200 shadow-md dark:bg-[#231f20;]">
-      <div class="container mx-auto px-1 py-2 flex justify-between items-center w-auto">
+      <div class="container mx-auto px-1 py-2 flex justify-center items-center">
 
         <nav class="flex">
-          <RouterLink to="/poktroll/" class="flex items-center minus-ml-10">
+          <RouterLink to="/poktroll/" class="flex items-center">
             <img class="w-10 h-10"
               src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
             <h1 class="flex-1 ml-3 text-xl font-semibold dark:text-white whitespace-nowrap mr-10">
@@ -100,16 +100,6 @@ dayjs()
                     :class="{
                       '!bg-primary': selected($route, el),
                     }" :to="el.to">
-                    <!-- <Icon
-                    v-if="!el?.icon?.image"
-                    icon="mdi:chevron-right"
-                    class="mr-2 ml-3"
-                    :class="{
-                      'text-white':
-                        $route.path === el?.to?.path &&
-                        item?.title !== 'Favorite',
-                    }"
-                  /> -->
                     <img v-if="el?.icon?.image" :src="el?.icon?.image" class="w-6 h-6 rounded-full mr-3 ml-4 " :class="{
                       'border border-gray-300 bg-white': selected($route, el),
                     }" />
@@ -122,7 +112,7 @@ dayjs()
                 </div>
               </div>
               <!-- Chain Name -->
-              <div class="collapse-title !py-0 px-2 h-auto flex items-center cursor-pointer ">
+              <!-- <div class="collapse-title !py-0 px-2 h-auto flex items-center cursor-pointer ">
                 <div
                   class="text-base capitalize flex-1 text-gray-200 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-200 whitespace-nowrap bg-[#231f20;] dark:bg-base-200 hover:bg-gray-100 dark:hover:bg-[#373f59] pill">
                   {{ item?.title }}
@@ -131,25 +121,11 @@ dayjs()
                   :class="item?.badgeClass">
                   {{ item?.badgeContent }}
                 </div>
-              </div>
+              </div> -->
             </div>
 
             <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="sidebarShow = false"
               class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
-              <!-- <Icon
-              v-if="item?.icon?.icon"
-              :icon="item?.icon?.icon"
-              class="text-xl mr-2"
-              :class="{
-                'text-yellow-500': item?.title === 'Favorite',
-                'text-blue-500': item?.title !== 'Favorite',
-              }"
-            />
-            <img
-              v-if="item?.icon?.image"
-              :src="item?.icon?.image"
-              class="w-6 h-6 rounded-full mr-3 border border-blue-100"
-            /> -->
               <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
                 {{ item?.title }}
               </div>
@@ -161,30 +137,33 @@ dayjs()
               {{ item?.heading }}
             </div>
           </div>
+          <div class="py-2 flex justify-between items-center">
+            <NavbarSearch class="!inline-block" />
+            <NavBarI18n class="hidden md:!inline-block pt-1" />
+            <NavbarThemeSwitcher class="!inline-block pt-1" />
+            <!-- <NavBarWallet /> -->
+          </div>
         </nav>
-        <NavBarI18n class="hidden md:!inline-block" />
-        <NavbarThemeSwitcher class="!inline-block" />
-        <NavBarWallet />
       </div>
     </header>
-    <div class="bg-base-200 dark:bg-[#231f20;] overflow-scroll  no-scrollbar" style="height:calc(100vh - 5rem)">
-      <div class="px-3 w-11/12 mx-auto">
+    <div class="bg-base-200 dark:bg-[#231f20;] overflow-scroll no-scrollbar" style="height:calc(100vh - 5rem)">
+      <div class="w-11/12 mx-auto">
         <!-- header -->
-        <div class="flex items-center py-3 mb-4 px-4 sticky top-0 z-10 bg-[#231f20;] dark:bg-base-200 rounded">
-          <div class="text-2xl pr-3 cursor-pointer xl:!hidden" @click="sidebarShow = true">
+        <!-- <div class="flex items-center py-3 mb-4 px-4 sticky top-0 z-10 bg-[#231f20;] dark:bg-base-200 rounded"> -->
+          <!-- <div class="text-2xl pr-3 cursor-pointer xl:!hidden" @click="sidebarShow = true">
             <Icon icon="mdi-menu" />
-          </div>
+          </div> -->
 
-          <ChainProfile />
+          <!-- <ChainProfile /> -->
 
-          <div class="flex-1 w-0"></div>
+          <!-- <div class="flex-1 w-0"></div> -->
 
           <!-- <NavSearchBar />-->
-          <NavbarSearch class="!inline-block" />
-        </div>
+          
+        <!-- </div> -->
 
         <!-- 👉 Pages -->
-        <div class="overflow-scroll no-scrollbar" style="height:calc(100vh - 13rem)">
+        <div class="overflow-scroll no-scrollbar" style="height:calc(100vh - 8rem)">
           <div v-if="behind" class="alert alert-error mb-4">
             <div class="flex gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -196,9 +175,9 @@ dayjs()
             </div>
           </div>
           <RouterView v-slot="{ Component }">
-
-            <Component :is="Component" />
-
+            <Transition mode="out-in">
+              <Component :is="Component" />
+            </Transition>
           </RouterView>
         </div>
 
