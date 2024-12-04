@@ -284,7 +284,7 @@ export const useDashboard = defineStore('dashboard', {
     return {
       status: LoadingStatus.Empty,
       source: ConfigSource.MainnetCosmosDirectory,
-      networkType: NetworkType.Testnet, // default to testnet until mainnet public
+      networkType: NetworkType.Mainnet, // default to testnet until mainnet public
       favoriteMap: favMap as Record<string, boolean>,
       chains: {} as Record<string, ChainConfig>,
       prices: {} as Record<string, any>,
@@ -346,26 +346,24 @@ export const useDashboard = defineStore('dashboard', {
       }
     },
     async loadingFromRemote() {
-      if (
-        window.location.hostname.search('(localhost|explorer-4hv|mainnet)') > -1
-      ) {
-        this.networkType = NetworkType.Mainnet;
+      if (window.location.hostname.search('testnet') > -1) {
+        this.networkType = NetworkType.Testnet;
       }
 
       const networkConfig = {
         [NetworkType.Mainnet]: [
           {
-            url: 'https://raw.githubusercontent.com/burnt-labs/pingpub/refs/heads/xion/main/chains/mainnet/xion-mainnet-1.json',
+            url: 'https://assets.xion.burnt.com/pingpub/xion-mainnet-1.json',
             chainName: 'xion-mainnet-1',
           },
           {
-            url: 'https://raw.githubusercontent.com/burnt-labs/pingpub/refs/heads/xion/main/chains/testnet/xion-testnet-1.json',
+            url: 'https://assets.xion.burnt.com/pingpub/xion-testnet-1.json',
             chainName: 'xion-testnet-1',
           },
         ],
         [NetworkType.Testnet]: [
           {
-            url: 'https://raw.githubusercontent.com/burnt-labs/pingpub/refs/heads/xion/main/chains/testnet/xion-testnet-1.json',
+            url: 'https://assets.xion.burnt.com/pingpub/xion-testnet-1.json',
             chainName: 'xion-testnet-1',
           },
         ],
