@@ -1,5 +1,5 @@
 {
-    "chain_name": "poktroll",
+    "chain_name": "poktroll-beta",
     "registry_name": "Poktroll-Testnet",
     "api": [
         {"provider": "Poktroll-Testnet", "address": "https://shannon-testnet-grove-api.beta.poktroll.com"}

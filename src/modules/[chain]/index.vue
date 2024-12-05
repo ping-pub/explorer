@@ -308,8 +308,42 @@ const amount = computed({
           No active proposals
         </div>
       </div>
+      <!-- Blocks -->
+      <div class="bg-base-100 rounded-lg overflow-auto col-span-1 mr-5 mt-4 px-1 py-1" style="height: 34rem;overflow: scroll;">
+        <h2 class="bg-base-100 px-4 pt-4 pb-2 text-md font-semibold text-main sticky top-0">Blocks</h2>
+        <table class="table table-compact">
+          <thead class="bg-base-200 sticky top-0">
+            <tr>
+              <th>{{ $t('block.block_header') }}</th>
+              <th>{{ $t('account.hash') }}</th>
+              <th>{{ $t('block.proposer') }}</th>
+              <th>{{ $t('module.tx') }}</th>
+              <th>{{ $t('account.time') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in [...base.recents].reverse()">
+              <td>{{ item.block.header.height }}</td>
+              <td class="truncate text-primary" style="max-width: 18rem;overflow:hidden;color:var(primary)">
+                <RouterLink class="truncate" :title="item.block_id.hash"
+                  :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}
+                </RouterLink>
+              </td>
+              <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
+              <td>{{ item.block?.data?.txs.length }}</td>
+              <td>{{ format.toDay(item.block?.header?.time) }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="pre-loading" v-if="base.fetchingBlocks">
+          <div class="effect-1 effects"></div>
+          <div class="effect-2 effects"></div>
+          <div class="effect-3 effects"></div>
+        </div>
+      </div>
       <!-- Transactions -->
-      <div class="bg-base-100 col-span-1 mt-4 px-1 py-1 rounded-lg mr-5" style="height: 34rem;overflow: scroll;">
+      <div class="bg-base-100 rounded-lg overflow-auto col-span-1 mt-4 px-1 py-1 " style="height: 34rem;overflow: scroll;">
         <h2 class="bg-base-100 px-4 pt-4 pb-2 text-md font-semibold text-main sticky top-0">{{ $t('module.tx') }}</h2>
         <table class="table w-full table-compact">
           <thead class="bg-base-200 sticky top-0">
@@ -352,40 +386,6 @@ const amount = computed({
             </tr>
           </tbody>
         </table>
-      </div>
-      <!-- Blocks -->
-      <div class="bg-base-100 rounded-lg overflow-auto blocksContainer mt-4 px-1 py-1" style="height: 34rem;overflow: scroll;">
-        <h2 class="bg-base-100 px-4 pt-4 pb-2 text-md font-semibold text-main sticky top-0">Blocks</h2>
-        <table class="table table-compact">
-          <thead class="bg-base-200 sticky top-0">
-            <tr>
-              <th>{{ $t('block.block_header') }}</th>
-              <th>{{ $t('account.hash') }}</th>
-              <th>{{ $t('block.proposer') }}</th>
-              <th>{{ $t('module.tx') }}</th>
-              <th>{{ $t('account.time') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in [...base.recents].reverse()">
-              <td>{{ item.block.header.height }}</td>
-              <td class="truncate text-primary" style="max-width: 18rem;overflow:hidden;color:var(primary)">
-                <RouterLink class="truncate" :title="item.block_id.hash"
-                  :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}
-                </RouterLink>
-              </td>
-              <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
-              <td>{{ item.block?.data?.txs.length }}</td>
-              <td>{{ format.toDay(item.block?.header?.time) }}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="pre-loading" v-if="base.fetchingBlocks">
-          <div class="effect-1 effects"></div>
-          <div class="effect-2 effects"></div>
-          <div class="effect-3 effects"></div>
-        </div>
       </div>
 
 
