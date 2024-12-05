@@ -29,4 +29,4 @@ EXPOSE 3005
 # RUN c
 
 # Command to run the server
-CMD ["node", "index.js"]
+CMD ["node", "--env-file=.env", "index.js"]
