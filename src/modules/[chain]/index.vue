@@ -359,7 +359,7 @@ const amount = computed({
           </thead>
           <tbody>
             <tr v-for="(item, index) in base.allTxs" :index="index" class="hover">
-              <td class="truncate text-primary" style="max-width:18rem">
+              <td class="truncate text-primary" style="max-width:14rem">
                 <RouterLink class="truncate" :to="`/${props.chain}/tx/${item.hash}`">{{
                   item.hash
                   }}</RouterLink>
