@@ -2,20 +2,52 @@
   "chain_name": "xion-mainnet-1",
   "coingecko": "XION",
   "network_type": "mainnet",
-  "api": [
-    {
-      "provider": "burnt-labs",
-      "address": "https://api.xion-mainnet-1.burnt.com"
-    }
-  ],
   "rpc": [
     {
-      "provider": "burnt-labs",
-      "address": "https://rpc.xion-mainnet-1.burnt.com"
+      "address": "https://rpc.xion-mainnet-1.burnt.com",
+      "provider": "🔥BurntLabs🔥"
+    },
+    {
+      "address": "https://xion-rpc.lavenderfive.com",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://rpc-burnt.imperator.co/",
+      "provider": "Imperator.co"
+    },
+    {
+      "address": "https://xion-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://xion-rpc.kingnodes.com",
+      "provider": "Kingnodes \ud83d\udc51"
+    }
+  ],
+  "api": [
+    {
+      "address": "https://api.xion-mainnet-1.burnt.com",
+      "provider": "🔥BurntLabs🔥"
+    },
+    {
+      "address": "https://xion-api.lavenderfive.com",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://lcd-burnt.imperator.co/",
+      "provider": "Imperator.co"
+    },
+    {
+      "address": "https://xion-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://xion-rest.kingnodes.com",
+      "provider": "Kingnodes \ud83d\udc51"
     }
   ],
   "snapshot_provider": "",
-  "sdk_version": "0.50.9",
+  "sdk_version": "0.50.10",
   "coin_type": "118",
   "min_tx_fee": "800",
   "addr_prefix": "xion",
@@ -25,9 +57,41 @@
       "base": "uxion",
       "symbol": "XION",
       "exponent": "6",
-      "coingecko_id": "xion",
+      "coingecko_id": "xion-2",
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png"
+    },
+    {
+      "base": "ibc/05007A23A23D8B3D286EC4A541189D86C0B76FD769008E4C85EBE977DDA437D3",
+      "symbol": "AXL",
+      "exponent": "6",
+      "coingecko_id": "axelar",
+      "logo": "https://images.ctfassets.net/mjqoq33y05of/6eCdgxArb4F62MPUb4hqnr/9f701bb72329dfffa0f0f43f2d8915b3/Axelar_Logo_Symbol_Black-min.png"
+    },
+    {
+      "base": "ibc/484532EB74866F3FB8A71F909F7B1B470FE2E66313DA0A1F9EE5B7C5C046D195",
+      "symbol": "OSMO",
+      "exponent": "6",
+      "coingecko_id": "osmosis",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png"
+    },
+    {
+      "base": "ibc/05314A48723E06A1B1B666066B6BEC89F3708E8854DF2E5E9193387AA9653036",
+      "symbol": "INJ",
+      "exponent": "1",
+      "coingecko_id": "injective-protocol",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/inj.png"
+    },
+    {
+      "base": "ibc/57097251ED81A232CE3C9D899E7C8096D6D87EF84BA203E12E424AA4C9B57A64",
+      "symbol": "USDC",
+      "exponent": "6",
+      "coingecko_id": "usd-coin",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.png"
     }
   ],
-  "keplr_features": ["ibc-go", "ibc-transfer", "no-legacy-stdTx"]
+  "keplr_features": [
+    "ibc-go",
+    "ibc-transfer",
+    "no-legacy-stdTx"
+  ]
 }

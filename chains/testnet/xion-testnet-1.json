@@ -1,20 +1,44 @@
 {
   "chain_name": "xion-testnet-1",
   "coingecko": "XION",
-  "api": [
-    {
-      "provider": "burnt-labs",
-      "address": "https://api.xion-testnet-1.burnt.com"
-    }
-  ],
   "rpc": [
     {
-      "provider": "burnt-labs",
-      "address": "https://rpc.xion-testnet-1.burnt.com"
+      "address": "https://rpc.xion-testnet-1.burnt.com",
+      "provider": "🔥BurntLabs🔥"
+    },
+    {
+      "address": "https://testnet-burnt-rpc.lavenderfive.com",
+      "provider": "Lavender.Five Nodes \ud83d\udc1d"
+    },
+    {
+      "address": "https://xion-testnet-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://burnt-testnet-rpc.itrocket.net",
+      "provider": "ITRocket"
+    }
+  ],
+  "rest": [
+    {
+      "address": "https://api.xion-testnet-1.burnt.com",
+      "provider": "🔥BurntLabs🔥"
+    },
+    {
+      "address": "https://testnet-burnt-api.lavenderfive.com",
+      "provider": "Lavender.Five Nodes \ud83d\udc1d"
+    },
+    {
+      "address": "https://xion-testnet-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://burnt-testnet-api.itrocket.net",
+      "provider": "ITRocket"
     }
   ],
   "snapshot_provider": "",
-  "sdk_version": "0.50.9",
+  "sdk_version": "0.50.10",
   "coin_type": "118",
   "min_tx_fee": "800",
   "addr_prefix": "xion",
@@ -24,7 +48,7 @@
       "base": "uxion",
       "symbol": "XION",
       "exponent": "6",
-      "coingecko_id": "xion",
+      "coingecko_id": "xion-2",
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png"
     },
     {
@@ -56,11 +80,9 @@
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.png"
     }
   ],
-  "keplr_features": ["ibc-go", "ibc-transfer", "no-legacy-stdTx"],
-  "faucet": {
-    "amount": "5xion",
-    "ip_limit": 5,
-    "address_limit": 5,
-    "fees": "0uxion"
-  }
+  "keplr_features": [
+    "ibc-go",
+    "ibc-transfer",
+    "no-legacy-stdTx"
+  ]
 }
