@@ -103,7 +103,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
                 ">
                 <span v-if="item?.voterStatus !== 'VOTE_OPTION_NO_WITH_VETO'">{{
                   item?.voterStatus?.replace('VOTE_OPTION_', '')
-                  }}</span>
+                }}</span>
 
                 <span v-else>Vote</span>
               </label>
@@ -165,7 +165,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
               ">
               <span v-if="item?.voterStatus !== 'VOTE_OPTION_NO_WITH_VETO'">{{
                 item?.voterStatus?.replace('VOTE_OPTION_', '')
-                }}</span>
+              }}</span>
 
               <span v-else>Vote</span></label>
 

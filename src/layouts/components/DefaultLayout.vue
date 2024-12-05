@@ -3,7 +3,6 @@ import { Icon } from '@iconify/vue';
 import { computed, ref } from 'vue';
 
 // Components
-import newFooter from '@/layouts/components/NavFooter.vue';
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
 import NavbarSearch from '@/layouts/components/NavbarSearch.vue';
 import ChainProfile from '@/layouts/components/ChainProfile.vue';
@@ -43,7 +42,6 @@ const changeOpen = (index: Number) => {
     sidebarOpen.value = !sidebarOpen.value;
   }
 };
-const showDiscord = window.location.host.search('ping.pub') > -1;
 
 function isNavGroup(nav: VerticalNavItems | any): nav is NavGroup {
   return (<NavGroup>nav).children !== undefined;
@@ -72,7 +70,7 @@ dayjs()
 </script>
 
 <template>
-  <div class="bg-gray-100 dark:bg-[#212121]">
+  <div class="bg-gray-10 h-full">
     <!-- sidebar -->
     <div class="w-64 fixed max-xl:shadow-vector z-50 left-0 top-0 bottom-0 overflow-auto bg-vector-green"
       :class="{ block: sidebarShow, 'hidden xl:!block': !sidebarShow }">
@@ -149,35 +147,13 @@ dayjs()
         <div class="px-4 text-sm pt-2 text-gray-200 pb-2 uppercase">
           Tools
         </div>
-        <RouterLink to="/wallet/suggest"
+        <RouterLink to="/wallet/apr"
           class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#212121]">
           <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
           <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">
-            Wallet Helper
+            APR Calculator
           </div>
         </RouterLink>
-        <div class="px-4 text-sm pt-2 text-gray-200 pb-2 uppercase">{{ $t('module.links') }}</div>
-        <a href="https://twitter.com/ping_pub" target="_blank"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#212121]">
-          <Icon icon="mdi:twitter" class="text-xl mr-2" />
-          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">
-            Twitter
-          </div>
-        </a>
-        <a v-if="showDiscord" href="https://discord.com/invite/CmjYVSr6GW" target="_blank"
-          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#212121]">
-          <Icon icon="mdi:discord" class="text-xl mr-2" />
-          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">
-            Discord
-          </div>
-        </a>
-        <a href="https://github.com/ping-pub/explorer/discussions" target="_blank"
-          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#212121]">
-          <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
-          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">
-            FAQ
-          </div>
-        </a>
       </div>
     </div>
     <div class="xl:!ml-64 h-full">
@@ -217,7 +193,6 @@ dayjs()
         </RouterView>
       </div>
 
-      <newFooter />
     </div>
   </div>
 </template>

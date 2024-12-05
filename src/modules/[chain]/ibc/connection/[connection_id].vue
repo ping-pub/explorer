@@ -95,7 +95,7 @@ function color(v: string) {
 </script>
 <template>
   <div class="">
-    <div class="px-4 pt-3 pb-4 bg-base-200 rounded mb-4 shadow ">
+    <div class="px-4 pt-3 pb-4 bg-base-200 rounded mb-4 shadow bg-vector-bg ">
       <div class="mx-auto max-w-7xl px-6 lg:!px-8">
         <dl class="grid grid-cols-1 gap-x-6 text-center lg:!grid-cols-3">
           <div class="mx-auto flex items-center">
@@ -236,7 +236,7 @@ function color(v: string) {
               <td>
                 <a href="#">{{
                   v[ibcStore.sourceField].channel_id
-                  }}</a>
+                }}</a>
               </td>
               <td>{{ v[ibcStore.sourceField].port_id }}</td>
             </tr>
@@ -256,7 +256,7 @@ function color(v: string) {
               <td>
                 <a href="#" @click="loadChannel(v.channel_id, v.port_id)">{{
                   v.channel_id
-                  }}</a>
+                }}</a>
               </td>
               <td>{{ v.port_id }}</td>
               <td>

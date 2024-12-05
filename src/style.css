@@ -4,10 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html,body {
-  height: 100%;
-  background: #212121;
-}
 
 body {
   transition: color 0.5s, background-color 0.5s;
@@ -29,6 +25,11 @@ body {
 
 html.dark,
 html[data-theme='dark'] {
+  background-image: url('./assets/vector.svg');
+  background-size: cover;
+  background-color: #212121;
+  background-repeat: no-repeat;
+
   --text-main: #f7f7f7;
   --text-secondary: #6f6e84;
   --bg-active: #242b40;
@@ -56,13 +57,23 @@ html[data-theme='dark'] {
 
 /* wallet */
 .walletconnector label.modal-box, .walletconnector label.modal-box  ul {
-  background-color: #0c0c0cd3 !important;
+  background-color: #141414 !important;
+}
+.walletconnector label.modal-box, .walletconnector label.modal-box > ul:first-child {
+  background-color: #212121 !important;
 }
 
 .walletconnector label.modal-box ul > :hover{
   background-color: rgb(0,0,0,0.39) !important;
 }
 
-.walletconnector .btn :not(.btn-primary) {
-  background-color: #293330 !important;
+.walletconnector .label.modal-box div label  {
+  background-color: rgb(0,0,0,0.39) !important;
 }
+
+.walletconnector label.btn.mr-1{
+  background-color: #161616 !important;
+  border-color: #161616;
+}
+
+

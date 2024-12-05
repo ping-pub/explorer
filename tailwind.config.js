@@ -4,6 +4,9 @@ module.exports = {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      backgroundImage: {
+        'vector': "url('/src/assets/vector.svg')",
+      },
       colors: {
         primary: '#9cd3b8',
         bg: '#293330',
@@ -32,7 +35,7 @@ module.exports = {
           primary: "blue",
           secondary: "teal",
           ".input":{
-            'background-color': '#293330',
+            'background-color': '#161616',
           },
           ".btn-primary":{
             'background-color': '#324239',
@@ -42,9 +45,32 @@ module.exports = {
             'background-color': '#324239',
             'border-color': '#324239',
           },
+          ".modal-box .btn-circle":{
+            'background-color': '#212121',
+            'border-color': '#212121',
+          },
+          ".modal-box w.btn-circle:hover":{
+            'background-color': '#212121',
+            'border-color': '#212121',
+          },
           ".bg-info": {
             'background-color': '#293330',
             'border-color': '#293330',
+          },
+          ".modal-box": {
+            'background-color': '#212121',
+          },
+          ".select": {
+            'background-color': '#161616',
+          },
+          ".table-zebra tbody tr:nth-child(even) ": {
+            'background-color': '#161616',
+          },
+          ".text-secondary" : {
+            'color': '#9cd3b8',
+          },
+          ".table tr.hover:hover" : {
+            'background-color': '#161616',
           }
         },
       },
