@@ -27,9 +27,6 @@ const isPositive = controlledComputed(
       {{ props.title }}
     </p>
 
-    <div v-if="props.subtitle" size="x-small" class="font-semibold">
-      <span class="truncate">{{ props.subtitle }}</span>
-    </div>
     <div class="flex items-center justify-center">
       <div v-if="props.icon" class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center">
         <Icon :class="[`text-${props?.color}`]" :icon="props.icon" size="32" />
@@ -47,7 +44,10 @@ const isPositive = controlledComputed(
       <h6 :class="'text-xl text-center font-semibold mt-2 mb-1 text-'+props.color">
         {{ props.stats || '-' }}
       </h6>
+    </div>
 
+    <div size="x-small" class="text-sm flex items-center justify-center">
+      <span class="truncate text-grey text-center">{{ props.subtitle || "-" }}</span>
     </div>
   </div>
 </template>

@@ -310,12 +310,12 @@ const amount = computed({
       </div>
       <!-- Transactions -->
       <div class="bg-base-100 col-span-1 mt-4 px-1 py-1 rounded-lg mr-5" style="height: 34rem;overflow: scroll;">
-        <h2 class="px-4 pt-4 pb-2 text-md font-semibold text-main sticky top-0">{{ $t('module.tx') }}</h2>
+        <h2 class="bg-base-100 px-4 pt-4 pb-2 text-md font-semibold text-main sticky top-0">{{ $t('module.tx') }}</h2>
         <table class="table w-full table-compact">
           <thead class="bg-base-200 sticky top-0">
             <tr>
-              <th style="position: relative; z-index: 2;">{{ $t('tx.tx_hash') }}</th>
-              <th style="position: relative; z-index: 2;">{{ $t('block.block') }}</th>
+              <th>{{ $t('tx.tx_hash') }}</th>
+              <th>{{ $t('block.block') }}</th>
               <th>{{ $t('staking.status') }}</th>
               <!-- <th style="position: relative; z-index: 2;">Messages</th> -->
               <th>{{ $t('account.type') }}</th>
@@ -325,7 +325,7 @@ const amount = computed({
           </thead>
           <tbody>
             <tr v-for="(item, index) in base.allTxs" :index="index" class="hover">
-              <td class="truncate text-primary" style="max-width:25rem">
+              <td class="truncate text-primary" style="max-width:18rem">
                 <RouterLink class="truncate" :to="`/${props.chain}/tx/${item.hash}`">{{
                   item.hash
                   }}</RouterLink>
@@ -359,11 +359,11 @@ const amount = computed({
         <table class="table table-compact">
           <thead class="bg-base-200 sticky top-0">
             <tr>
-              <td>{{ $t('block.block_header') }}</td>
-              <td>{{ $t('account.hash') }}</td>
-              <td>{{ $t('block.proposer') }}</td>
-              <td>{{ $t('module.tx') }}</td>
-              <td>{{ $t('account.time') }}</td>
+              <th>{{ $t('block.block_header') }}</th>
+              <th>{{ $t('account.hash') }}</th>
+              <th>{{ $t('block.proposer') }}</th>
+              <th>{{ $t('module.tx') }}</th>
+              <th>{{ $t('account.time') }}</th>
             </tr>
           </thead>
           <tbody>

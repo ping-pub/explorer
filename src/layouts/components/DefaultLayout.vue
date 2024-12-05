@@ -81,9 +81,10 @@ dayjs()
           <RouterLink to="/poktroll/" class="flex items-center">
             <img class="w-10 h-10"
               src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
-            <h1 class="flex-1 ml-3 text-xl font-semibold dark:text-white whitespace-nowrap mr-10">
-              SHANNON {{ alpha_beta }}
+            <h1 class="flex-1 ml-3 text-xl font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
+              SHANNON
             </h1>
+            <span class="pill">{{ alpha_beta }}</span>
           </RouterLink>
           <div v-for="(item, index) of blockchain.computedChainMenu" :key="index"
             class="px-2 flex justify-between items-center">
@@ -140,7 +141,7 @@ dayjs()
           </div>
           <div class="py-2 flex justify-between items-center">
             <NavbarSearch class="!inline-block" />
-            <NavBarI18n class="hidden md:!inline-block pt-1" />
+            <!-- <NavBarI18n class="hidden md:!inline-block pt-1" /> -->
             <NavbarThemeSwitcher class="!inline-block pt-1" />
             <!-- <NavBarWallet /> -->
           </div>
@@ -216,5 +217,17 @@ dayjs()
   /* IE and Edge */
   scrollbar-width: none;
   /* Firefox */
+}
+.pill {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #007bff;
+  /* Blue color */
+  border-radius: 20px;
+  text-transform: uppercase;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 </style>

@@ -24,6 +24,8 @@ export function colorMap(color: string) {
   }
 }
 
+const bank = useBankStore();
+
 export const useIndexModule = defineStore('module-index', {
   state: () => {
     return {
@@ -143,7 +145,6 @@ export const useIndexModule = defineStore('module-index', {
 
     stats() {
       const base = useBaseStore();
-      const bank = useBankStore();
       const staking = useStakingStore();
       const mintStore = useMintStore();
       const formatter = useFormatter();
@@ -155,6 +156,7 @@ export const useIndexModule = defineStore('module-index', {
           // icon: 'mdi-pound',
           stats: String(base?.latest?.block?.header?.height || 0),
           change: 0,
+          subtitle: `Avg Block Time: ${String(base.blocktime/1000)}s`
         },
         {
           title: 'Active Validators',
@@ -174,11 +176,11 @@ export const useIndexModule = defineStore('module-index', {
           title: 'Bonded Tokens',
           color: '',
           // icon: 'mdi-lock',
-          stats: formatter.formatTokenAmount({
+          stats: `${formatter.formatTokenAmount({
             // @ts-ignore
             amount: this.pool.bonded_tokens,
             denom: staking.params.bond_denom,
-          }),
+          }) || ""} ${staking.params.bond_denom || ""}`,
           change: 0,
         },
         {
@@ -192,12 +194,15 @@ export const useIndexModule = defineStore('module-index', {
           title: 'Community Pool',
           color: '',
           // icon: 'mdi-bank',
-          stats: formatter.formatTokens(
-            // @ts-ignore
-            this.communityPool?.filter(
-              (x: Coin) => x.denom === staking.params.bond_denom
-            )
-          ),
+          // @ts-expect-error
+          stats: `${this.communityPool[0]?.amount || ''} ${this.communityPool[0]?.denom || ''}`
+          // formatter.formatTokens(
+          //   // @ts-ignore
+          //   this.communityPool?.filter(
+          //     (x: Coin) => x.denom === staking.params.bond_denom
+          //   )
+          // )
+          ,
           change: 0,
         },
       ];
@@ -214,6 +219,8 @@ export const useIndexModule = defineStore('module-index', {
     async loadDashboard() {
       this.$reset();
       this.initCoingecko();
+      bank.initial();
+      useStakingStore().init();
       useMintStore().fetchInflation();
       useDistributionStore()
         .fetchCommunityPool()
@@ -221,7 +228,7 @@ export const useIndexModule = defineStore('module-index', {
           this.communityPool = x?.pool
             ?.filter((t) => t.denom.length < 10)
             ?.map((t) => ({
-              amount: String(parseInt(t.amount)),
+              amount: String(parseFloat(t.amount).toFixed(2)),
               denom: t.denom,
             }));
         });
