@@ -159,7 +159,7 @@ function fillblock(b: Block, direction: string = 'end') {
     const block = blockColors.value[v.base64] || [];
     let color = {
       height: b.block.header.height,
-      color: 'bg-red-500'
+      color: 'bg-vector-primary'
     }
     if (sig) {
       color = {

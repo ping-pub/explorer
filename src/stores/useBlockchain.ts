@@ -122,7 +122,7 @@ export const useBlockchain = defineStore('blockchain', {
       useDistributionStore().initial();
 
       // Set default chain on start
-      const defaultChain = 'cosmos'; // Replace with your default chain name
+      const defaultChain = 'chain'; // Replace with your default chain name
       await this.setCurrent(defaultChain);
     },
 
@@ -161,8 +161,8 @@ export const useBlockchain = defineStore('blockchain', {
       }
 
       // Find the case-sensitive name for the chainName, else simply use the parameter-value.
-      const caseSensitiveName = 
-        Object.keys(this.dashboard.chains).find((x) => x.toLowerCase() === name.toLowerCase()) 
+      const caseSensitiveName =
+        Object.keys(this.dashboard.chains).find((x) => x.toLowerCase() === name.toLowerCase())
         || name;
 
       // Update chainName if needed

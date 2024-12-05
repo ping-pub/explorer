@@ -7,7 +7,6 @@
 html,body {
   height: 100%;
   background: #212121;
-
 }
 
 body {
@@ -57,7 +56,7 @@ html[data-theme='dark'] {
 
 /* wallet */
 .walletconnector label.modal-box, .walletconnector label.modal-box  ul {
-  background-color: #293330 !important;
+  background-color: #0c0c0cd3 !important;
 }
 
 .walletconnector label.modal-box ul > :hover{

@@ -262,12 +262,6 @@ const amount = computed({
       <div class="max-h-[250px] overflow-auto p-4 text-sm">
         <MdEditor :model-value="coinInfo.description?.en" previewOnly></MdEditor>
       </div>
-      <div class="mx-4 flex flex-wrap items-center">
-        <div v-for="tag in coinInfo.categories"
-          class="mr-2 mb-4 text-xs bg-gray-100 dark:bg-[#212121] px-3 rounded-full py-1">
-          {{ tag }}
-        </div>
-      </div>
     </div>
 
     <div class="grid grid-cols-1 gap-4 md:!grid-cols-3 lg:!grid-cols-6 mt-4">
@@ -387,7 +381,7 @@ const amount = computed({
 
       <div class="grid grid-cols-3 gap-4 px-4 pb-6 mt-4">
         <label for="PingTokenConvert" class="btn btn-primary text-white">{{ $t('index.btn_swap') }}</label>
-        <label for="send" class="btn !bg-yes !border-yes text-white" @click="dialog.open('send', {}, updateState)">{{
+        <label for="send" class="btn !bg-[#212121] text-white" @click="dialog.open('send', {}, updateState)">{{
           $t('account.btn_send') }}</label>
         <label for="delegate" class="btn !bg-info !border-info text-white"
           @click="dialog.open('delegate', {}, updateState)">{{ $t('account.btn_delegate') }}</label>

@@ -1,10 +1,10 @@
 <template>
   <!-- footer -->
-  <footer class="flex items-center h-12 mt-5 text-sm bg-gray-100 dark:bg-[#212121] py-2 z-10 w-full">
+  <footer class="flex items-center h-12 mt-12 ml-4 text-sm bg-gray-100 dark:bg-[#212121] py-2 z-10 w-full">
     <div class="flex flex-1">
       &copy;&nbsp;
       {{ new Date().getFullYear() }}&nbsp;
-      Made With&nbsp;
+      Made Using&nbsp;
       <img src="../../assets/images/heart.svg" />&nbsp;
       By&nbsp;
       <a class="link link-primary no-underline" href="https://ping.pub" target="_blank"

@@ -74,12 +74,12 @@ dayjs()
 <template>
   <div class="bg-gray-100 dark:bg-[#212121]">
     <!-- sidebar -->
-    <div class="w-64 fixed shadow-vector  z-50 left-0 top-0 bottom-0 overflow-auto bg-vector-green"
+    <div class="w-64 fixed max-xl:shadow-vector z-50 left-0 top-0 bottom-0 overflow-auto bg-vector-green"
       :class="{ block: sidebarShow, 'hidden xl:!block': !sidebarShow }">
-      <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
-        <a href="https://playonvector.com" class="flex items-center justify-center">
+      <div class="flex justify-between mt-1 max-xl:pl-4 py-4 mb-1">
+        <RouterLink :to="`/`" class="flex items-center justify-center">
           <img class="w-4/5 h-10" src="../../assets/logo.svg" />
-        </a>
+        </RouterLink>
         <div class="pr-4 cursor-pointer xl:!hidden" @click="sidebarShow = false">
           <Icon icon="mdi-close" class="text-2xl" />
         </div>
@@ -180,9 +180,9 @@ dayjs()
         </a>
       </div>
     </div>
-    <div class="xl:!ml-64">
+    <div class="xl:!ml-64 h-full">
       <!-- header -->
-      <div class="flex items-center py-3 bg-vector-green mb-4 rounded px-4 sticky top-0 z-10">
+      <div class="flex items-center py-3 bg-vector-green mb-4 max-xl:rounded px-4 sticky top-0 z-10">
         <div class="text-2xl pr-3 cursor-pointer xl:!hidden" @click="sidebarShow = true">
           <Icon icon="mdi-menu" />
         </div>
@@ -199,9 +199,9 @@ dayjs()
       </div>
 
       <!-- 👉 Pages -->
-      <div style="min-height: calc(100vh - 180px);">
+      <div style="min-height: calc(100vh - 180px); padding: 0.5rem 1rem;">
         <div v-if="behind" class="alert alert-error mb-4">
-          <div class="flex gap-2">
+          <div class="flex gap-2 m-4">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
               class="stroke-current flex-shrink-0 w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

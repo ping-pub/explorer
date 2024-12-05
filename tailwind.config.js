@@ -11,7 +11,7 @@ module.exports = {
       }
     },
     boxShadow: {
-      'vector': '4px 0px 9px 0px rgba(0, 0, 0, 0.25)',  
+      'vector': '4px 0px 9px 0px rgba(0, 0, 0, 0.25)',
     },
     colors: {
       vector: {
@@ -33,6 +33,18 @@ module.exports = {
           secondary: "teal",
           ".input":{
             'background-color': '#293330',
+          },
+          ".btn-primary":{
+            'background-color': '#324239',
+            'border-color': '#324239',
+          },
+          ".btn-primary:hover":{
+            'background-color': '#324239',
+            'border-color': '#324239',
+          },
+          ".bg-info": {
+            'background-color': '#293330',
+            'border-color': '#293330',
           }
         },
       },

@@ -10,7 +10,6 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/cosmos'
     },
     ...setupLayouts(routes)
   ],
