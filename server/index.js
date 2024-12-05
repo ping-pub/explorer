@@ -92,20 +92,20 @@ app.listen(PORT, () => {
 });
 var latestBlockHeight = '1'
 async function fetchLatestBlock() {
-  let lbRes = await fetch(process.env.rpc_endpoint || 'https://shannon-testnet-grove-api.alpha.poktroll.com/cosmos/base/tendermint/v1beta1/blocks/latest');
+  let lbRes = await fetch(`${process.env.rpc_endpoint || 'https://shannon-testnet-grove-api.beta.poktroll.com'}/cosmos/base/tendermint/v1beta1/blocks/latest`);
   let latestBlock = await lbRes.json()
   console.log(latestBlock.block.header.height)
   latestBlockHeight = latestBlock.block.header.height
   return latestBlock
 }
 async function fetchTx(hash) {
-  let lbRes = await fetch(process.env.rpc_endpoint || 'https://shannon-testnet-grove-api.alpha.poktroll.com/cosmos/tx/v1beta1/txs/' + hash);
+  let lbRes = await fetch((process.env.rpc_endpoint || 'https://shannon-testnet-grove-api.beta.poktroll.com') + `/cosmos/tx/v1beta1/txs/${hash}`);
   let tx = await lbRes.json()
   return tx
 }
 
 async function fetchTxByBlock(height) {
-  let lbRes = await fetch(process.env.rpc_endpoint || `https://shannon-testnet-grove-api.alpha.poktroll.com/cosmos/base/tendermint/v1beta1/blocks/${height}`);
+  let lbRes = await fetch((process.env.rpc_endpoint || 'https://shannon-testnet-grove-api.beta.poktroll.com') + `/cosmos/base/tendermint/v1beta1/blocks/${height}`);
   let blockDetails = await lbRes.json()
   return blockDetails;
 }
