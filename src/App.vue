@@ -7,8 +7,8 @@ const router = useRouter();
 onMounted(() => {
   themeChange(false);
   //overrriding default route here
-  if(window.location.pathname.length == 1)
-    router.push('/poktroll/')
+  if (window.location.pathname.length == 1)
+    router.push('/poktroll' + (window.location.href.includes('local') ? '-beta' : ''))
 });
 </script>
 
