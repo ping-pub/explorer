@@ -39,7 +39,7 @@ interface ValidatorUnit {
 }
 
 function padding(blocks: BlockColor[] = []) {
-  const raw = Array(50).fill({ height: "0", color: 'bg-secondary' } as BlockColor).concat(blocks)
+  const raw = Array(50).fill({ height: "0", color: 'bg-vector-green' } as BlockColor).concat(blocks)
   return raw.slice(raw.length - 50);
 }
 

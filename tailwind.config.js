@@ -37,6 +37,10 @@ module.exports = {
           ".input":{
             'background-color': '#161616',
           },
+          // ".btn":{
+          //   'background-color': '#324239',
+          //   'border-color': '#324239',
+          // },
           ".btn-primary":{
             'background-color': '#324239',
             'border-color': '#324239',
@@ -66,11 +70,14 @@ module.exports = {
           ".table-zebra tbody tr:nth-child(even) ": {
             'background-color': '#161616',
           },
+          ".table tr.hover:nth-child(even):hover": {
+            'background-color': '#101010',
+          },
           ".text-secondary" : {
             'color': '#9cd3b8',
           },
           ".table tr.hover:hover" : {
-            'background-color': '#161616',
+            'background-color': '#101010',
           }
         },
       },
