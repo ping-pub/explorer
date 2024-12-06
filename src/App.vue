@@ -8,7 +8,7 @@ onMounted(() => {
   themeChange(false);
   //overrriding default route here
   if (window.location.pathname.length == 1)
-    router.push('/poktroll' + (window.location.href.includes('beta') ? '-beta' : ''))
+    router.push(window.location.href.includes('beta') ? 'pocket-beta' : 'poktroll')
 });
 </script>
 
