@@ -3,6 +3,8 @@ import { computed, ref } from '@vue/reactivity';
 import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
 import type { PaginatedTxs } from '@/types';
 import { useRouter } from 'vue-router';
+import { Icon } from '@iconify/vue';
+
 import { onMounted } from 'vue';
 const props = defineProps(['chain']);
 const vueRouters = useRouter();
@@ -77,8 +79,15 @@ function search() {
         <div v-show="tab === 'search'" class="bg-vector-bg rounded overflow-x-auto">
             <div class="p-4">
                 <div class="form-control">
-                    <input v-model="hash" type="text" class="input input-bordered" placeholder="Search by Tx Hash"
-                        @blur="search" />
+                    <div class="flex w-full">
+                        <input v-model="hash" type="text" class="input w-full input-bordered !border-r-0"
+                            placeholder="Search by Tx Hash" @blur="search" />
+                        <div class="">
+                            <button class=" btn !rounded-l-none btn-primary" @click="search">
+                                <Icon icon="mdi:magnify" class="text-2xl text-gray-500 dark:text-gray-200" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

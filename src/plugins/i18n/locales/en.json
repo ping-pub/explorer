@@ -225,8 +225,8 @@
     "signer_addr": "Signer Address",
     "consensus_pub_key": "Consensus Public Key",
     "liquid_staking": "Liquid Staking",
-    "liquid_staking_shares":"Liquid Shares",
-    "validator_bond_share":"Validator Bonded"
+    "liquid_staking_shares": "Liquid Shares",
+    "validator_bond_share": "Validator Bonded"
   },
   "statesync": {
     "title": "What's State Sync?",
@@ -268,7 +268,7 @@
     "signed_blocks": "Signed Blocks",
     "missing_blocks": "Missing Blocks",
     "add_validators": "Add Validators",
-    "add": "Add",
+    "add": "Confirm",
     "legend": "Legend",
     "committed": "Committed",
     "precommitted": "Precommitted",

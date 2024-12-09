@@ -59,25 +59,27 @@ function handleKeyPress(event: KeyboardEvent) {
       <h1 class="text-primary  text-3xl font-bold">
         {{ $t('pages.title') }}
       </h1>
-      <div class="flex w-full max-w-[600px] ">
-        <input class="input flex-1 w-full !input-bordered !rounded-r-none" @keypress="handleKeyPress"
-          v-model="searchQuery" placeholder="Search for Height/Transaction/Account Address" />
+      <div class="w-full max-w-[600px]">
+        <div class="flex w-full max-w-[600px]">
+          <input class="input flex-1 w-full !input-bordered !rounded-r-none" @keypress="handleKeyPress"
+            v-model="searchQuery" autofocus placeholder="Search for Height/Transaction/Account Address" />
+          <div class="">
+            <button class=" btn !rounded-l-none btn-primary" @click="confirm">
+              <Icon icon="mdi:magnify" class="text-2xl text-gray-500 dark:text-gray-200" />
+            </button>
+          </div>
+        </div>
         <div class="">
-          <button class=" btn !rounded-l-none btn-primary" @click="confirm">
-            <Icon icon="mdi:magnify" class="text-2xl text-gray-500 dark:text-gray-200" />
-          </button>
+          <div class="mt-4 text-center text-sm text-error" v-show="errorMessage">
+            {{ errorMessage }}
+          </div>
         </div>
       </div>
-
       <div class="text-center text-base">
         <p class="mb-1">
           {{ $t('pages.slogan') }}
         </p>
-        <div class="">
-          <div class="mt-2 text-right text-sm text-error" v-show="errorMessage">
-            {{ errorMessage }}
-          </div>
-        </div>
+
       </div>
       <!-- Socials -->
       <div class="flex gap-8">
