@@ -66,10 +66,11 @@ onBeforeRouteUpdate(async (to, from, next) => {
       <div v-if="remainingBlocks > 0">
         <div class="text-primary font-bold text-lg my-10">#{{ target }}</div>
         <Countdown :time="estimateTime" css="md:!text-5xl font-sans md:mx-5" />
-        <div class="my-5">{{ $t('block.estimated_time') }}: <span class="text-xl font-bold">{{ format.toLocaleDate(estimateDate) }}</span>
+        <div class="my-5">{{ $t('block.estimated_time') }}: <span class="text-xl font-bold">{{
+          format.toLocaleDate(estimateDate) }}</span>
         </div>
         <div class="pt-10 flex justify-center">
-          <table class="table w-max rounded-lg bg-base-100">
+          <table class="table w-max rounded-lg bg-vector-bg">
             <tbody>
               <tr class="hover cursor-pointer" @click="edit = !edit">
                 <td>{{ $t('block.countdown_for_block') }}:</td>
@@ -81,7 +82,8 @@ onBeforeRouteUpdate(async (to, from, next) => {
                   <p class="py-4">
                   <div class="join">
                     <input class="input input-bordered join-item" v-model="newHeight" type="number" />
-                    <button class="btn btn-primary join-item" @click="updateTarget()">{{ $t('block.btn_update') }}</button>
+                    <button class="btn btn-primary join-item" @click="updateTarget()">{{ $t('block.btn_update')
+                      }}</button>
                   </div>
                   </p>
                 </td>
@@ -105,7 +107,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
       </div>
     </div>
     <div v-else>
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <div class="bg-vector-bg px-4 pt-3 pb-4 rounded mb-4 shadow">
         <h2 class="card-title flex flex-row justify-between">
           <p class="">#{{ current.block?.header?.height }}</p>
           <div class="flex" v-if="props.height">
@@ -124,19 +126,20 @@ onBeforeRouteUpdate(async (to, from, next) => {
         </div>
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <div class="bg-vector-bg px-4 pt-3 pb-4 rounded mb-4 shadow">
         <h2 class="card-title flex flex-row justify-between">{{ $t('block.block_header') }}</h2>
         <DynamicComponent :value="current.block?.header" />
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <div class="bg-vector-bg px-4 pt-3 pb-4 rounded mb-4 shadow">
         <h2 class="card-title flex flex-row justify-between">{{ $t('account.transactions') }}</h2>
         <TxsElement :value="current.block?.data?.txs" />
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+      <div class="bg-vector-bg px-4 pt-3 pb-4 rounded shadow">
         <h2 class="card-title flex flex-row justify-between">{{ $t('block.last_commit') }}</h2>
         <DynamicComponent :value="current.block?.last_commit" />
       </div>
+    </div>
   </div>
-</div></template>
+</template>

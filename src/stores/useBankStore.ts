@@ -28,8 +28,10 @@ export const useBankStore = defineStore('bankstore', {
       const denom =
         this.staking.params.bond_denom ||
         this.blockchain.current?.assets[0].base;
+      console.log(denom, 'demon')
       if (denom) {
         this.blockchain.rpc.getBankSupplyByDenom(denom).then((res) => {
+          console.log('respawn', res)
           if (res.amount) this.supply = res.amount;
         });
       }

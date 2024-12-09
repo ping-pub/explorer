@@ -53,9 +53,9 @@ function loadChannel(channel: string, port: string) {
 
 function pageload(pageNum: number) {
   if (direction.value === 'In') {
-    fetchSendingTxs(channel_id.value, port_id.value, pageNum -1)
+    fetchSendingTxs(channel_id.value, port_id.value, pageNum - 1)
   } else {
-    fetchSendingTxs(channel_id.value, port_id.value, pageNum -1)
+    fetchSendingTxs(channel_id.value, port_id.value, pageNum - 1)
   }
 
 }
@@ -95,7 +95,7 @@ function color(v: string) {
 </script>
 <template>
   <div class="">
-    <div class="px-4 pt-3 pb-4 bg-base-200 rounded mb-4 shadow ">
+    <div class="px-4 pt-3 pb-4 bg-base-200 rounded mb-4 shadow bg-vector-bg ">
       <div class="mx-auto max-w-7xl px-6 lg:!px-8">
         <dl class="grid grid-cols-1 gap-x-6 text-center lg:!grid-cols-3">
           <div class="mx-auto flex items-center">
@@ -103,7 +103,7 @@ function color(v: string) {
               <div class="order-first text-3xl font-semibold tracking-tight text-main mb-1">
                 {{ baseStore.latest?.block?.header?.chain_id }}
               </div>
-              <div class="text-sm text-gray-500 dark:text-gray-400">
+              <div class="text-sm text-gray-500 dark:text-gray-200">
                 {{ conn.client_id }} {{ props.connection_id }}
               </div>
             </div>
@@ -120,7 +120,7 @@ function color(v: string) {
             <div class="order-first text-3xl font-semibold tracking-tight text-main mb-2">
               {{ clientState.client_state?.chain_id }}
             </div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">
+            <div class="text-sm text-gray-500 dark:text-gray-200">
               {{ conn.counterparty?.connection_id }} {{ clientState.client_id }}
             </div>
           </div>
@@ -128,12 +128,12 @@ function color(v: string) {
       </div>
     </div>
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-vector-bg px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4 overflow-hidden">{{ $t('ibc.title_2') }}<span class="ml-2 text-sm">{{
         clientState.client_state?.['@type'] }}</span></h2>
       <div class="overflow-x-auto grid grid-cols-1 md:grid-cols-2 gap-4">
         <table class="table table-sm capitalize">
-          <thead class="bg-base-200">
+          <thead class="bg-vector-bg">
             <tr>
               <td colspan="3">{{ $t('ibc.trust_parameters') }}</td>
             </tr>
@@ -170,7 +170,7 @@ function color(v: string) {
           </tbody>
         </table>
         <table class="table table-sm text-sm w-full capitalize">
-          <thead class="bg-base-200">
+          <thead class="bg-vector-bg">
             <tr>
               <td colspan="2">{{ $t('ibc.upgrade_parameters') }}</td>
             </tr>
@@ -184,8 +184,10 @@ function color(v: string) {
             </tr>
             <tr>
               <td colspan="2">
-                <div class="flex justify-between"><span>{{ $t('ibc.allow_update_after_misbehaviour') }}: </span> <span>{{
-                  clientState.client_state?.allow_update_after_misbehaviour }}</span></div>
+                <div class="flex justify-between"><span>{{ $t('ibc.allow_update_after_misbehaviour') }}: </span>
+                  <span>{{
+                    clientState.client_state?.allow_update_after_misbehaviour }}</span>
+                </div>
               </td>
             </tr>
             <tr>
@@ -197,7 +199,7 @@ function color(v: string) {
 
       </div>
     </div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow overflow-hidden">
+    <div class="bg-vector-bg px-4 pt-3 pb-4 rounded mb-4 shadow overflow-hidden">
       <h2 class="card-title">{{ $t('ibc.channels') }}</h2>
       <div class="overflow-auto">
         <table class="table w-full mt-4">
@@ -289,7 +291,7 @@ function color(v: string) {
           <tr v-for="resp in txs?.tx_responses">
             <td>{{ resp.height }}</td>
             <td>
-              <div class="text-xs truncate text-primary dark:invert">
+              <div class="text-xs truncate text-primary ">
                 <RouterLink :to="`/${chainStore.chainName}/tx/${resp.txhash}`">{{ resp.txhash }}</RouterLink>
               </div>
             </td>
