@@ -60,9 +60,15 @@ function handleKeyPress(event: KeyboardEvent) {
         {{ $t('pages.title') }}
       </h1>
       <div class="flex w-full max-w-[600px] ">
-        <input class="input flex-1 w-full !input-bordered"  @keypress="handleKeyPress" v-model="searchQuery"
-          placeholder="Search for Height/Transaction/Account Address" />
+        <input class="input flex-1 w-full !input-bordered !rounded-r-none" @keypress="handleKeyPress"
+          v-model="searchQuery" placeholder="Search for Height/Transaction/Account Address" />
+        <div class="">
+          <button class=" btn !rounded-l-none btn-primary" @click="confirm">
+            <Icon icon="mdi:magnify" class="text-2xl text-gray-500 dark:text-gray-200" />
+          </button>
+        </div>
       </div>
+
       <div class="text-center text-base">
         <p class="mb-1">
           {{ $t('pages.slogan') }}
