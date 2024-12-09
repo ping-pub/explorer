@@ -197,11 +197,6 @@ function color(v: string) {
         <h3 class="text-lg font-bold">{{ $t('uptime.add_validators') }}</h3>
         <div class="form-control my-5 border-2">
           <div class="input-group input-group-md">
-            <select v-model="selectChain" class="select select-bordered capitalize" @change="changeChain">
-              <option v-for="v in dashboard.chains" :value="v.chainName">
-                {{ v.chainName }}
-              </option>
-            </select>
             <input v-model="keyword" type="text" class="input w-full" placeholder="keywords to filter validator">
           </div>
         </div>

@@ -12,7 +12,7 @@ const themeColors = (theme: string) => {
         surface: '#FFFFFF',
         'surface-variant': '#424242',
         'on-surface-variant': '#EEEEEE',
-        primary: chainStore.current?.themeColor || '#9cd3b8',
+        primary: '#9cd3b8',
         'primary-darken-1': '#9cd3b8',
         secondary: '#6D788D',
         'secondary-darken-1': '#018786',
@@ -222,10 +222,11 @@ export const getMarketPriceChartConfig = (
       },
     },
 
-    colors: [themeColors(theme).colors.primary],
+    colors: [ '#fa7327'],
     fill: {
-      opacity: 0.5,
+      opacity: 0.8,
       type: 'gradient',
+      gradientToColors: ['#ff5722', '#fa7327'],
     },
     grid: {
       show: true,

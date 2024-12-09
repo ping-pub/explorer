@@ -110,7 +110,7 @@ const amount = computed({
           <div class="text-xl font-semibold text-main">
             {{ coinInfo.name }} (<span class="uppercase">{{
               coinInfo.symbol
-              }}</span>)
+            }}</span>)
           </div>
           <div>
             <div class="dropdown dropdown-hover w-full">
@@ -138,9 +138,9 @@ const amount = computed({
                   </div>
                 </div>
               </label>
-              <div class="dropdown-content pt-1">
+              <div class="dropdown-content pt-1 z-30">
                 <div class="h-64 overflow-auto w-full shadow rounded">
-                  <ul class="menu w-full bg-gray-100 rounded dark:bg-[#212121]">
+                  <ul class="menu w-full rounded !bg-[#212121]">
                     <li v-for="(item, index) in store.coinInfo.tickers" :key="index" @click="store.selectTicker(index)">
                       <div class="flex items-center justify-between hover:bg-vector-bg">
                         <div class="flex-1">
