@@ -1,0 +1,22 @@
+{
+    "chain_name": "fuel-sandbox",
+    "registry_name": "fuel sandbox",
+    "api": [
+        {"provider": "SimplyStaking", "address": "https://sandbox-rest-fuel-seq.simplystaking.xyz"}
+    ],
+    "rpc": [
+        {"provider": "SimplyStaking", "address": "https://sandbox-rpc-fuel-seq.simplystaking.xyz"}
+    ],
+    "sdk_version": "0.50.10",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "fuelsequencer",
+    "logo": "/logos/fuel.png",
+    "assets": [{
+        "base": "test",
+        "symbol": "TEST",
+        "exponent": "9",
+        "coingecko_id": "",
+        "logo": "/logos/fuel.png"
+    }]
+}
