@@ -2,10 +2,10 @@
     "chain_name": "fuel-testnet",
     "registry_name": "fuel testnet",
     "api": [
-        {"provider": "SimplyStaking", "address": "https://rest-seq.simplystaking.xyz"}
+        {"provider": "SimplyStaking", "address": "https://testnet-rest-fuel-seq.simplystaking.xyz"}
     ],
     "rpc": [
-        {"provider": "SimplyStaking", "address": "https://rpc-seq.simplystaking.xyz"}
+        {"provider": "SimplyStaking", "address": "https://testnet-rpc-fuel-seq.simplystaking.xyz"}
     ],
     "sdk_version": "0.50.10",
     "coin_type": "118",
