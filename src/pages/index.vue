@@ -61,7 +61,7 @@ function handleKeyPress(event: KeyboardEvent) {
       </h1>
       <div class="w-full max-w-[600px]">
         <div class="flex w-full max-w-[600px]">
-          <input class="input flex-1 w-full !input-bordered !rounded-r-none" @keypress="handleKeyPress"
+          <input class="input text-center flex-1 w-full !input-bordered !rounded-r-none" @keypress="handleKeyPress"
             v-model="searchQuery" autofocus placeholder="Search for Height/Transaction/Account Address" />
           <div class="">
             <button class=" btn !rounded-l-none btn-primary" @click="confirm">

@@ -15,7 +15,10 @@ function changeEndpoint(item: Endpoint) {
   <div class="dropdown">
     <label tabindex="0" class="flex items-center">
       <div class="p-1 relative mr-3 cursor-pointer">
-        <img v-lazy="chainStore.logo" class="w-9 h-9 rounded-full" />
+        <div class="relative">
+          <img src='../../assets/pentagon.svg' class="w-9 scale-[1.3] absolute h-9 rounded-full" />
+          <img v-lazy="chainStore.logo" class="w-9 h-9 rounded-full" />
+        </div>
         <div class="w-2 h-2 rounded-full absolute right-0 bottom-0 shadow" :class="{
           'bg-success': baseStore.connected,
           'bg-error': !baseStore.connected
@@ -38,13 +41,13 @@ function changeEndpoint(item: Endpoint) {
         </div>
       </div>
     </label>
-    <div tabindex="0" class="dropdown-content -left-6 w-80 menu shadow bg-vector-bg rounded-box overflow-auto">
+    <div tabindex="0" class="dropdown-content -left-6 w-80 menu shadow bg-[#212121]  rounded-box overflow-auto">
       <!-- rest -->
       <div class="px-4 py-2 text-sm text-gray-200" v-if="chainStore.current?.endpoints?.rest">
         Rest Endpoint
       </div>
       <div v-for="(item, index) in chainStore.current?.endpoints?.rest"
-        class="px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-[#212121] cursor-pointer" :key="index"
+        class="px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-[#121212a4] cursor-pointer" :key="index"
         @click="changeEndpoint(item)">
         <div class="flex flex-col">
           <div class="flex items-center justify-between w-full">
