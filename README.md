@@ -59,11 +59,7 @@ Developers: @liangping @dingyiming
 This version of Ping.Pub was forked from from commit https://github.com/ping-pub/explorer/commit/603d7ce2, with the following changes applied:
 
 - Removed Sponsors from DefaultLayout.vue
+- Removed existing chains from chains/mainnet/
 - Added chains/mainnet/fuel.json
 - Added chains/mainnet/fuel-testnet.json
 - Added public/logos/fuel.png
-- Removed chains/mainnet/cosmos.json
-- Removed chains/mainnet/neutron.json
-- Removed chains/mainnet/nolus.json
-- Removed chains/mainnet/osmosis.json
-
