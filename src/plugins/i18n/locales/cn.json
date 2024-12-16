@@ -1,18 +1,10 @@
 {
   "module": {
     "dashboard": "面板首页",
-    "blocks": "区块和交易",
     "staking": "质押生息",
     "governance": "社区治理",
-    "parameters": "参数",
     "uptime": "状态",
-    "consensus": "共识引擎",
-    "supply": "资产供应量",
     "account": "账户列表",
-    "state-sync": "状态同步",
-    "cosmwasm": "Cosmwasm",
-    "widget": "Widgets",
-    "ibc": "IBC",
     "ecosystem": "生态系统",
     "favorite": "收藏夹",
     "add_to_favorite": "加入收藏夹",
