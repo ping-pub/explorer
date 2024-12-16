@@ -1,12 +1,14 @@
 {
   "extends": "@vue/tsconfig/tsconfig.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue",
+    "src/modules/[chain]/.block"
+  ],
   "compilerOptions": {
     // "ignoreDeprecations": "5.0",
-    "lib": [      
-      "es2022",
-      "dom"
-    ],
+    "lib": ["es2022", "dom"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
