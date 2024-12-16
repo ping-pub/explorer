@@ -63,3 +63,4 @@ This version of Ping.Pub was forked from from commit https://github.com/ping-pub
 - Added chains/mainnet/fuel.json
 - Added chains/mainnet/fuel-testnet.json
 - Added public/logos/fuel.png
+- In src/stores/useDashboard.ts ensure `conf.logo = lc.logo;`
