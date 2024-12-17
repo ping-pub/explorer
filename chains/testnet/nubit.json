@@ -1,0 +1,19 @@
+{
+    "chain_name": "nubit",
+    "coingecko": "",
+    "api": ["https://nubit-testnet-api.itrocket.net"],
+    "rpc": ["https://nubit-testnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.46.16",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "nubit",
+    "logo": "/logos/nubit.jpg",
+    "assets": [{
+        "base": "unub",
+        "symbol": "NUB",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "/logos/nubit.jpg"
+    }]
+}

@@ -1,0 +1,19 @@
+{
+    "chain_name": "fiamma",
+    "coingecko": "",
+    "api": ["https://fiamma-testnet-api.itrocket.net"],
+    "rpc": ["https://fiamma-testnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "0.50.6",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "fiamma",
+    "logo": "/logos/fiamma.jpg",
+    "assets": [{
+        "base": "ufia",
+        "symbol": "FIA",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "/logos/fiamma.jpg"
+    }]
+}

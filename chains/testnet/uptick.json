@@ -1,0 +1,19 @@
+{
+    "chain_name": "uptick",
+    "coingecko": "",
+    "api": ["https://uptick-testnet-api.itrocket.net"], 
+    "rpc": ["https://uptick-testnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.9",
+    "coin_type": "60",
+    "min_tx_fee": "40000",
+    "addr_prefix": "uptick",
+    "logo": "https://www.itrocket.net/_next/static/media/uptick.c7f38cf8.jpg",
+    "assets": [{
+        "base": "auoc",
+        "symbol": "UOC",
+        "exponent": "18", 
+        "coingecko_id": "",
+        "logo": "https://www.itrocket.net/_next/static/media/uptick.c7f38cf8.jpg"
+    }]
+}

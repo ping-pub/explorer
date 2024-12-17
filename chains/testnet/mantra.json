@@ -1,0 +1,18 @@
+{
+  "chain_name": "mantra",
+  "api": ["https://mantra-testnet-api.itrocket.net"],
+  "rpc": ["https://mantra-testnet-rpc.itrocket.net"],
+  "coin_type": 118,
+  "min_tx_fee": 200,
+  "sdk_version": "0.47.4",
+  "addr_prefix": "mantra",
+  "logo": "/logos/mantra.jpg",
+  "assets": [
+    {
+      "base": "uom",
+      "symbol": "OM",
+      "exponent": 6,
+      "logo": "/logos/mantra.jpg"
+    }
+  ]
+}

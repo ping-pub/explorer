@@ -1,0 +1,19 @@
+{
+    "chain_name": "burnt",
+    "coingecko": "",
+    "api": ["https://burnt-testnet-api.itrocket.net"],
+    "rpc": ["https://burnt-testnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.50.10",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "burnt",
+    "logo": "/logos/burnt.jpg",
+    "assets": [{
+        "base": "uxion",
+        "symbol": "XION",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "/logos/burnt.jpg"
+    }]
+}

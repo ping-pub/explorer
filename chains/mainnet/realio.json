@@ -1,0 +1,22 @@
+{
+  "chain_name": "realio",
+  "api": [
+    "https://realio-mainnet-api.itrocket.net"
+  ],
+  "rpc": [
+    "https://realio-mainnet-rpc.itrocket.net"
+  ],
+  "sdk_version": "0.46.11",
+  "coin_type": "505",
+  "addr_prefix": "realio",
+  "min_tx_fee": "800",
+  "logo": "/logos/realio.png",
+  "assets": [
+    {
+      "symbol": "STAKE",
+      "base": "stake",
+      "exponent": 18,
+      "logo": "/logos/realio.png"
+    }
+ ]
+}

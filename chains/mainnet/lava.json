@@ -1,0 +1,18 @@
+{
+  "chain_name": "lava",
+  "api": ["https://lava-mainnet-api.itrocket.net"],
+  "rpc": ["https://lava-mainnet-rpc.itrocket.net"],
+  "coin_type": 118,
+  "min_tx_fee": 200,
+  "sdk_version": "0.47.10",
+  "addr_prefix": "lava@",
+  "logo": "/logos/lava.png",
+  "assets": [
+    {
+      "base": "ulava",
+      "symbol": "LAVA",
+      "exponent": 6,
+      "logo": "/logos/lava.png"
+    }
+  ]
+}

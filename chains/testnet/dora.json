@@ -1,0 +1,19 @@
+{
+    "chain_name": "dora",
+    "coingecko": "",
+    "api": ["https://dora-testnet-api.itrocket.net"], 
+    "rpc": ["https://dora-testnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "0.47.3",
+    "coin_type": "60",
+    "min_tx_fee": "40000",
+    "addr_prefix": "dora",
+    "logo": "/logos/dora.jpg",
+    "assets": [{
+        "base": "peaka",
+        "symbol": "DORA",
+        "exponent": "18", 
+        "coingecko_id": "",
+        "logo": "/logos/dora.jpg"
+    }]
+}

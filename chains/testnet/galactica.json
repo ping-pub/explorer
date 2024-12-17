@@ -1,0 +1,20 @@
+{
+    "chain_name": "galactica",
+    "coingecko": "",
+    "api": ["https://galactica-testnet-api.itrocket.net"], 
+    "rpc": ["https://galactica-testnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "0.47.3",
+    "coin_type": "60",
+    "min_tx_fee": "4000",
+    "addr_prefix": "gala",
+    "logo": "/logos/galactica.jpg",
+    "keplr_features": ["eth-address-gen", "eth-key-sign"],
+    "assets": [{
+        "base": "agnet",
+        "symbol": "GNET",
+        "exponent": "18", 
+        "coingecko_id": "",
+        "logo": "/logos/galactica.jpg"
+    }]
+}

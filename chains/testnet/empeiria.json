@@ -1,0 +1,16 @@
+{
+    "chain_name": "empeiria",
+    "api": ["https://empeiria-testnet-api.itrocket.net"],
+    "rpc": ["https://empeiria-testnet-rpc.itrocket.net"],
+	"sdk_version": "v0.47.9",
+    "coin_type": 118,
+    "min_tx_fee": 200,
+    "addr_prefix": "source",
+    "logo": "/logos/empeiria.jpg",
+    "assets": [{
+        "base": "uempe",
+        "symbol": "EMPE",
+        "exponent": 6,
+        "logo": "/logos/empeiria.jpg"
+    }]
+}

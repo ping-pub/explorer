@@ -1,0 +1,18 @@
+{
+  "chain_name": "zetachain",
+  "api": ["https://zetachain-testnet-api.itrocket.net"],
+  "rpc": ["https://zetachain-testnet-rpc.itrocket.net"],
+  "coin_type": 118,
+  "min_tx_fee": 200,
+  "sdk_version": "0.46.8",
+  "addr_prefix": "zeta",
+  "logo": "/logos/zetachain.jpg",
+  "assets": [
+    {
+      "base": "azeta",
+      "symbol": "ZETA",
+      "exponent": 18,
+      "logo": "/logos/zetachain.jpg"
+    }
+  ]
+}

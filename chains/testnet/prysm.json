@@ -1,0 +1,19 @@
+{
+    "chain_name": "prysm",
+    "coingecko": "",
+    "api": ["https://prysm-testnet-api.itrocket.net"],
+    "rpc": ["https://prysm-testnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.0",
+    "coin_type": "60",
+    "min_tx_fee": "800",
+    "addr_prefix": "prysm",
+    "logo": "/logos/prysm.jpg",
+    "assets": [{
+        "base": "uprysm",
+        "symbol": "PRYSM",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "/logos/prysm.jpg"
+    }]
+}

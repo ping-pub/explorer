@@ -1,0 +1,16 @@
+{
+    "chain_name": "ojo",
+    "api": ["https://ojo-testnet-api.itrocket.net"],
+    "rpc": ["https://ojo-testnet-rpc.itrocket.net"],
+    "coin_type": 118,
+    "min_tx_fee": 200,
+    "sdk_version": "0.46.7",
+    "addr_prefix": "ojo",
+    "logo": "/logos/ojo.png",
+    "assets": [{
+        "base": "uojo",
+        "symbol": "OJO",
+        "exponent": 6,
+        "logo": "/logos/ojo.png"
+    }]
+}

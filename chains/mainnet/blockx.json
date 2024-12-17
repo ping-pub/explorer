@@ -1,0 +1,20 @@
+{
+    "chain_name": "blockx",
+    "coingecko": "",
+    "api": ["https://blockx-mainnet-api.itrocket.net"], 
+    "rpc": ["https://blockx-mainnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "0.45.7",
+    "coin_type": "60",
+    "min_tx_fee": "4000",
+    "addr_prefix": "blockx",
+    "logo": "/logos/blockx.jpg",
+    "keplr_features": ["eth-address-gen", "eth-key-sign"],
+    "assets": [{
+        "base": "abcx",
+        "symbol": "BCX",
+        "exponent": "18", 
+        "coingecko_id": "",
+        "logo": "/logos/blockx.jpg"
+    }]
+}

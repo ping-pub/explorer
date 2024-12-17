@@ -1,0 +1,21 @@
+{
+  "chain_name": "doravota",
+  "coingecko": "",
+  "api": ["https://doravota-mainnet-api.itrocket.net"],
+  "rpc": ["https://doravota-mainnet-rpc.itrocket.net"],
+  "snapshot_provider": "",
+  "sdk_version": "0.47.5",
+  "coin_type": "118",
+  "min_tx_fee": "500",
+  "addr_prefix": "dora",
+  "logo": "/logos/dorafactory.jpg",
+  "assets": [
+    {
+      "base": "peaka",
+      "symbol": "DORA",
+      "exponent": "18",
+      "coingecko_id": "",
+      "logo": "/logos/dorafactory.jpg"
+    }
+  ]
+}

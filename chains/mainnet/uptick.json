@@ -1,0 +1,21 @@
+{
+  "chain_name": "uptick",
+  "coingecko": "",
+  "api": ["https://uptick-mainnet-api.itrocket.net"],
+  "rpc": ["https://uptick-mainnet-rpc.itrocket.net"],
+  "snapshot_provider": "",
+  "sdk_version": "0.46.0",
+  "coin_type": "118",
+  "min_tx_fee": "800",
+  "addr_prefix": "uptick",
+  "logo": "https://www.itrocket.net/_next/static/media/uptick.c7f38cf8.jpg",
+  "assets": [
+    {
+      "base": "auptick",
+      "symbol": "UPTICK",
+      "exponent": "18",
+      "coingecko_id": "",
+      "logo": "https://www.itrocket.net/_next/static/media/uptick.c7f38cf8.jpg"
+    }
+  ]
+}

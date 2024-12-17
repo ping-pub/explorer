@@ -1,10 +1,10 @@
 {
     "chain_name": "crossfi",
     "coingecko": "",
-    "api": ["https://crossfi-testnet-api.itrocket.net"], 
-    "rpc": ["https://crossfi-testnet-rpc.itrocket.net"],
+    "api": ["https://crossfi-mainnet-api.itrocket.net"], 
+    "rpc": ["https://crossfi-mainnet-rpc.itrocket.net"],
     "snapshot_provider": "",
-    "sdk_version": "0.47.6",
+    "sdk_version": "0.46.12",
     "coin_type": "60",
     "min_tx_fee": "4000",
     "addr_prefix": "mx",

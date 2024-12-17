@@ -1,0 +1,18 @@
+{
+  "chain_name": "warden",
+  "api": ["https://warden-testnet-api.itrocket.net"],
+  "rpc": ["https://warden-testnet-rpc.itrocket.net"],
+  "coin_type": 118,
+  "min_tx_fee": 200,
+  "sdk_version": "v0.50.9-evmos-warden",
+  "addr_prefix": "warden",
+  "logo": "/logos/warden.png",
+  "assets": [
+    {
+      "base": "award",
+      "symbol": "WARD",
+      "exponent": 18,
+      "logo": "/logos/warden.png"
+    }
+  ]
+}

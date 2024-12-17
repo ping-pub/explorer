@@ -1,0 +1,19 @@
+{
+    "chain_name": "cosmos",
+    "coingecko": "",
+    "api": ["https://cosmos-testnet-api.itrocket.net"],
+    "rpc": ["https://cosmos-testnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.50.9-lsm",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "cosmos",
+    "logo": "/logos/cosmoshub.jpg",
+    "assets": [{
+        "base": "uatom",
+        "symbol": "ATOM",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "/logos/cosmoshub.jpg"
+    }]
+}

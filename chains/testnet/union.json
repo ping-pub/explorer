@@ -1,0 +1,17 @@
+{
+  "chain_name": "union",
+  "api": ["https://union-testnet-api.itrocket.net"],
+  "rpc": ["https://union-testnet-rpc.itrocket.net"],
+  "sdk_version": "0.47.3",
+  "addr_prefix": "union",
+  "min_tx_fee": "5000",
+  "logo": "/logos/union.jpg",
+  "assets": [
+    {
+      "symbol": "UNO",
+      "base": "muno",
+      "exponent": 6,
+      "logo": "/logos/union.jpg"
+    }
+  ]
+}

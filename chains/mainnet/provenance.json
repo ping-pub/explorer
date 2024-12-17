@@ -1,0 +1,19 @@
+{
+    "chain_name": "provenance",
+    "coingecko": "",
+    "api": ["https://provenance-mainnet-api.itrocket.net"],
+    "rpc": ["https://provenance-mainnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.50.7-pio-1",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "provenance",
+    "logo": "/logos/provenance.jpg",
+    "assets": [{
+        "base": "nhash",
+        "symbol": "HASH",
+        "exponent": "9",
+        "coingecko_id": "",
+        "logo": "/logos/provenance.jpg"
+    }]
+}

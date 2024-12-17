@@ -1,0 +1,20 @@
+{
+    "chain_name": "og",
+    "coingecko": "",
+    "api": ["https://og-testnet-api.itrocket.net"], 
+    "rpc": ["https://og-testnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.11",
+    "coin_type": "60",
+    "min_tx_fee": "4000",
+    "addr_prefix": "0g",
+    "logo": "/logos/og.jpg",
+    "keplr_features": ["eth-address-gen", "eth-key-sign"],
+    "assets": [{
+        "base": "ua0gi",
+        "symbol": "A0GI",
+        "exponent": "6", 
+        "coingecko_id": "",
+        "logo": "/logos/og.jpg"
+    }]
+}
