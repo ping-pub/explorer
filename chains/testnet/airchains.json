@@ -5,13 +5,13 @@
   "sdk_version": "0.50.3",
   "addr_prefix": "air",
   "min_tx_fee": "200",
-  "logo": "/logos/airchains.jpg",
+  "logo": "https://github.com/itrocket-am/explorer-ping-pub/blob/master/public/logos/airchains.jpg",
   "assets": [
     {
       "symbol": "AMF",
       "base": "amf",
       "exponent": 6,
-      "logo": "/logos/airchains.jpg"
+      "logo": "https://github.com/itrocket-am/explorer-ping-pub/blob/master/public/logos/airchains.jpg"
     }
   ]
 }
