@@ -18,5 +18,6 @@
         "exponent": "9",
         "coingecko_id": "",
         "logo": "/logos/fuel.png"
-    }]
+    }],
+    "features": ["dashboard", "blocks", "uptime", "parameters", "state-sync", "consensus", "supply", "governance", "staking", "tx"]
 }
