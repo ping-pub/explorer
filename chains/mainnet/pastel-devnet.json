@@ -1,0 +1,26 @@
+{
+    "chain_name": "pastel-devnet-1",
+    "api": [
+        {
+            "address": "https://lcd.pastel.network",
+            "provider": "PastelNetwork"
+        }
+    ],
+    "rpc": [
+        {
+            "address": "https://rpc.pastel.network",
+            "provider": "PastelNetwork"
+        }
+    ],
+    "sdk_version": "0.50.10",
+    "coin_type": "118",
+    "min_tx_fee": "30",
+    "assets":[{
+        "base": "upsl",
+        "symbol": "PSL",
+        "exponent": "6",
+        "logo": "/logos/cosmos.svg"
+    }],
+    "addr_prefix": "pastel",
+    "logo": "/logos/cosmos.svg"
+}
