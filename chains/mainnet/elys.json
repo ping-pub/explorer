@@ -1,0 +1,60 @@
+{
+  "chain_name": "elys",
+  "theme_color": "#2e2e2e",
+  "registry_name": "elys",
+  "api": [
+    {
+      "address": "https://rest.cosmos.directory/elys",
+      "provider": "CosmosDirectory"
+    },
+    {
+      "address": "https://elys.api.liveraven.net",
+      "provider": "LiveRaveN"
+    },
+    {
+      "address": "https://community.nuxian-node.ch:6797/elys/crpc",
+      "provider": "PRO Delegators"
+    },
+    {
+      "address": "https://elys-mainnet-api.itrocket.net",
+      "provider": "itrocket"
+    },
+    {
+      "address": "https://api.elys.network",
+      "provider": "Elys Network"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.cosmos.directory/elys",
+      "provider": "CosmosDirectory"
+    },
+    {
+      "address": "https://elys.rpc.liveraven.net:443",
+      "provider": "LiveRaveN"
+    },
+    {
+      "address": "https://community.nuxian-node.ch:6797/elys/trpc",
+      "provider": "PRO Delegators"
+    },
+    {
+      "address": "https://elys-mainnet-rpc.itrocket.net:443",
+      "provider": "itrocket"
+    },
+    {
+      "address": "https://rpc.elys.network:443",
+      "provider": "Elys Network"
+    }
+  ],
+  "sdk_version": "0.50.9",
+  "addr_prefix": "elys",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/elys/images/elys.png",
+  "assets": [
+    {
+      "base": "uelys",
+      "symbol": "ELYS",
+      "exponent": "6",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/elys/images/elys.png"
+    }
+  ]
+}
