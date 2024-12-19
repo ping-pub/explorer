@@ -120,14 +120,14 @@ export const useBlockchain = defineStore('blockchain', {
       return [
         ...currNavItem,
         { heading: 'Ecosystem' } as NavSectionTitle,
-        {
-          title: 'Favorite',
-          children: favNavItems,
-          badgeContent: favNavItems.length,
-          badgeClass: 'bg-primary',
-          i18n: true,
-          icon: { icon: 'mdi-star', size: '22' },
-        } as NavGroup,
+        // {
+        //   title: 'Favorite',
+        //   children: favNavItems,
+        //   badgeContent: favNavItems.length,
+        //   badgeClass: 'bg-primary',
+        //   i18n: true,
+        //   icon: { icon: 'mdi-star', size: '22' },
+        // } as NavGroup,
         {
           title: 'All Blockchains',
           to: { path: '/' },

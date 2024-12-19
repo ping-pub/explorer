@@ -19,8 +19,8 @@
         "base": "upsl",
         "symbol": "PSL",
         "exponent": "6",
-        "logo": "/logos/cosmos.svg"
+        "logo": "/logos/pastel.png"
     }],
     "addr_prefix": "pastel",
-    "logo": "/logos/cosmos.svg"
+    "logo": "/logos/pastel.png"
 }
