@@ -25,7 +25,13 @@ export const useParamStore = defineStore('paramstore', {
           value: '-',
         },
         {
-          subtitle: 'bonded_and_supply',
+          subtitle: 'initial_supply',
+          icon: 'DollarSignIcon',
+          color: 'light-danger',
+          value: '-',
+        },
+        {
+          subtitle: 'bonded_from_sequencer_supply',
           icon: 'DollarSignIcon',
           color: 'light-danger',
           value: '-',
@@ -126,7 +132,7 @@ export const useParamStore = defineStore('paramstore', {
           const amount = resArr[1]?.amount?.amount;
           const assets = this.blockchain.current?.assets;
           const bondedAndSupply = this.chain.items.findIndex(
-            (x) => x.subtitle === 'bonded_and_supply'
+            (x) => x.subtitle === 'bonded_from_sequencer_supply'
           );
           this.chain.items[bondedAndSupply].value = `${formatNumber(
             formatTokenAmount(assets, pool.bonded_tokens, 2, bond_denom, false),
@@ -137,6 +143,10 @@ export const useParamStore = defineStore('paramstore', {
             true,
             0
           )}`;
+          const initialSupply = this.chain.items.findIndex(
+              (x) => x.subtitle === 'initial_supply'
+          );
+          this.chain.items[initialSupply].value = `10B`;
           const bondedRatio = this.chain.items.findIndex(
             (x) => x.subtitle === 'bonded_ratio'
           );

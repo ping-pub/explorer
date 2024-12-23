@@ -18,6 +18,10 @@ function showType(v: string) {
 const pageRequest = ref(new PageRequest())
 const pageResponse = ref({} as Pagination)
 
+const fuelItem = computed(() => {
+  return list.value.find(item => item.denom === "fuel")
+})
+
 onMounted(() => {
   pageload(1)
 });
@@ -37,12 +41,19 @@ function pageload(p: number) {
             <thead class=" bg-base-200">
                 <tr>
                     <td>Token</td>
-                    <td>Amount</td>
+                    <td>Units</td>
                 </tr>
             </thead>
-            <tr v-for="item in list" class="hover">
-                <td>{{ item.denom  }}</td>
-                <td>{{ item.amount  }}</td>
+            <tr class="hover">
+                <td>{{ "fuel (initial_supply)" }}</td>
+                <td>{{ "10000000000000000000" }}</td>
+            </tr>
+            <tr v-if="fuelItem" class="hover">
+                <td>{{ "fuel (supply_on_sequencer)" }}</td>
+                <td>{{ fuelItem.amount }}</td>
+            </tr>
+            <tr v-else class="hover">
+                <td colspan="2">No fuel token found</td>
             </tr>
         </table>
         <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload" />

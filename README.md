@@ -58,9 +58,22 @@ Developers: @liangping @dingyiming
 
 This version of Ping.Pub was forked from from commit https://github.com/ping-pub/explorer/commit/603d7ce2, with the following changes applied:
 
-- Removed Sponsors from DefaultLayout.vue
-- Removed existing chains from chains/mainnet/
-- Added chains/mainnet/fuel.json
-- Added chains/mainnet/fuel-testnet.json
-- Added public/logos/fuel.png
-- In src/stores/useDashboard.ts ensure `conf.logo = lc.logo;`
+- `chains/mainnet/`:
+  - Removed any existing chains.
+  - Added `fuel.json`.
+  - Added `fuel-testnet.json`.
+- `src/layouts/components/`:
+  - Removed Sponsors from `DefaultLayout.vue`.
+- `src/modules/[chain]`:
+  - In `indexStore.ts` add **Initial Supply** card.
+  - In `indexStore.ts` remove **Validators** card.
+  - In `indexStore.ts` rename **Supply** card to **Supply on Sequencer**.
+- `src/modules/[chain]/supply`:
+  - In `index.vue` add `fuel (initial_supply)`.
+  - In `index.vue` change fuel supply to `fuel (supply_on_sequencer)`.
+- `src/stores/`:
+  - In `useDashboard.ts` ensure `conf.logo = lc.logo;`.
+  - In `useParamsStore.ts` add `initial_supply`.
+  - In `useParamsStore.ts` change `bonded_and_supply` to `bonded_from_sequencer_supply`.
+- `public/logos/`:
+  - Added `fuel.png`.
