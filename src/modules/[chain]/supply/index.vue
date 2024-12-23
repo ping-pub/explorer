@@ -19,7 +19,7 @@ const pageRequest = ref(new PageRequest())
 const pageResponse = ref({} as Pagination)
 
 const fuelItem = computed(() => {
-  return list.value.find(item => item.denom === "fuel")
+  return list.value.find(item => item.denom === "fuel" || item.denom === "test")
 })
 
 onMounted(() => {

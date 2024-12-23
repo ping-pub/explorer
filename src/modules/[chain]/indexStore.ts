@@ -167,7 +167,9 @@ export const useIndexModule = defineStore('module-index', {
           title: 'Initial Supply',
           color: 'success',
           icon: 'mdi-currency-usd',
-          stats: formatter.formatTokenAmount({"denom": "fuel", "amount": 10000000000000000000}),
+          stats: formatter.formatTokenAmount(
+              {"denom": staking.params.bond_denom, "amount": 10000000000000000000}
+          ),
           change: 0,
         },
         {
