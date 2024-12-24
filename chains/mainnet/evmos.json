@@ -1,0 +1,61 @@
+{
+  "chain_name": "evmos",
+  "theme_color": "#2e2e2e",
+  "registry_name": "evmos",
+  "api": [
+    {
+      "address": "https://api-evmos-01.stakeflow.io",
+      "provider": "Stakeflow"
+    },
+    {
+      "address": "https://api.evmos.silentvalidator.com/",
+      "provider": "silent"
+    },
+    {
+      "address": "https://evmos-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://evmos-api.stake-town.com",
+      "provider": "StakeTown"
+    },
+    {
+      "address": "https://rest.lavenderfive.com:443/evmos",
+      "provider": "Lavender.Five Nodes 🐝"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc-evmos-01.stakeflow.io",
+      "provider": "Stakeflow"
+    },
+    {
+      "address": "https://rpc.lavenderfive.com:443/evmos",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://evmos-rpc.stake-town.com",
+      "provider": "StakeTown"
+    },
+    {
+      "address": "https://evmos-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://rpc.evmos.silentvalidator.com/",
+      "provider": "silent"
+    }
+  ],
+  "sdk_version": "0.47.12",
+  "addr_prefix": "evmos",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/evmos/images/evmos.svg",
+  "assets": [
+    {
+      "base": "aevmos",
+      "symbol": "EVMOS",
+      "exponent": "18",
+      "coingecko_id": "evmos",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/evmos/images/evmos.svg"
+    }
+  ]
+}
