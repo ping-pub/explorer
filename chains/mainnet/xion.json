@@ -1,0 +1,61 @@
+{
+  "chain_name": "xion",
+  "theme_color": "#2e2e2e",
+  "registry_name": "xion",
+  "api": [
+    {
+      "address": "https://api.xion-mainnet-1.burnt.com",
+      "provider": "🔥BurntLabs🔥"
+    },
+    {
+      "address": "https://xion-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://xion-api.lavenderfive.com",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://api.xion.nodestake.org",
+      "provider": "NodeStake"
+    },
+    {
+      "address": "https://lcd-burnt.imperator.co/",
+      "provider": "Imperator.co"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://xion-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://xion-rpc.lavenderfive.com",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://rpc.xion-mainnet-1.burnt.com",
+      "provider": "🔥BurntLabs🔥"
+    },
+    {
+      "address": "https://rpc-burnt.imperator.co/",
+      "provider": "Imperator.co"
+    },
+    {
+      "address": "https://rpc.xion.nodestake.org",
+      "provider": "NodeStake"
+    }
+  ],
+  "sdk_version": "0.50.10",
+  "addr_prefix": "xion",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png",
+  "assets": [
+    {
+      "base": "uxion",
+      "symbol": "XION",
+      "exponent": "6",
+      "coingecko_id": "xion-2",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png"
+    }
+  ]
+}
