@@ -1,0 +1,45 @@
+{
+  "chain_name": "odin",
+  "theme_color": "#2e2e2e",
+  "registry_name": "odin",
+  "api": [
+    {
+      "address": "https://rest.lavenderfive.com:443/odin",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://odin.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://api.odinprotocol.io",
+      "provider": "Heimdall Gateway"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.lavenderfive.com:443/odin",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://rpc.odinprotocol.io",
+      "provider": "Heimdall Gateway"
+    },
+    {
+      "address": "https://odin.rpc.m.stavr.tech:443",
+      "provider": "🔥STAVR🔥"
+    }
+  ],
+  "sdk_version": "0.45.6",
+  "addr_prefix": "odin",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/odin/images/odin.svg",
+  "assets": [
+    {
+      "base": "loki",
+      "symbol": "ODIN",
+      "exponent": "6",
+      "coingecko_id": "odin-protocol",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/odin/images/odin.svg"
+    }
+  ]
+}
