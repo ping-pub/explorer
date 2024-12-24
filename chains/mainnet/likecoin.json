@@ -22,7 +22,7 @@
       "provider": "Citizen Web3"
     },
     {
-      "address": "https://mainnet-node.like.co/rpc/",
+      "address": "https://mainnet-node.like.co/rpc",
       "provider": "like.co"
     },
     {

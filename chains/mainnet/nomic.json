@@ -4,7 +4,7 @@
   "registry_name": "nomic",
   "api": [
     {
-      "address": "https://nomic-rpc.polkachu.com/",
+      "address": "https://nomic-rpc.polkachu.com",
       "provider": "Polkachu"
     },
     {

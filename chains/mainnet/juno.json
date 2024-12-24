@@ -52,7 +52,7 @@
       "provider": "Decloud Nodes Lab"
     },
     {
-      "address": "https://api.juno.chaintools.tech/",
+      "address": "https://api.juno.chaintools.tech",
       "provider": "ChainTools"
     },
     {
@@ -110,7 +110,7 @@
       "provider": "Decloud Nodes Lab"
     },
     {
-      "address": "https://rpc.juno.chaintools.tech/",
+      "address": "https://rpc.juno.chaintools.tech",
       "provider": "ChainTools"
     },
     {

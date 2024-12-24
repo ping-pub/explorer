@@ -16,7 +16,7 @@
       "provider": "Nodes Hub 🛡️ 100% Slash Protected 🛡️ | Restake ✅"
     },
     {
-      "address": "https://api.firmachain.chaintools.tech/",
+      "address": "https://api.firmachain.chaintools.tech",
       "provider": "ChainTools"
     },
     {
@@ -38,7 +38,7 @@
       "provider": "Nodes Hub 🛡️ 100% Slash Protected 🛡️ | Restake ✅"
     },
     {
-      "address": "https://rpc.firmachain.chaintools.tech/",
+      "address": "https://rpc.firmachain.chaintools.tech",
       "provider": "ChainTools"
     },
     {

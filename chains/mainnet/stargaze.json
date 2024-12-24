@@ -12,7 +12,7 @@
       "provider": "ramuchi.tech"
     },
     {
-      "address": "https://rest.stargaze-apis.com/",
+      "address": "https://rest.stargaze-apis.com",
       "provider": "Stargaze Foundation"
     },
     {
@@ -28,7 +28,7 @@
       "provider": "D-stake"
     },
     {
-      "address": "https://api.stargaze.silentvalidator.com/",
+      "address": "https://api.stargaze.silentvalidator.com",
       "provider": "silent"
     },
     {
@@ -54,7 +54,7 @@
       "provider": "Bro_n_Bro"
     },
     {
-      "address": "https://rpc.stargaze-apis.com/",
+      "address": "https://rpc.stargaze-apis.com",
       "provider": "Stargaze Foundation"
     },
     {
@@ -78,7 +78,7 @@
       "provider": "D-stake"
     },
     {
-      "address": "https://rpc.stargaze.silentvalidator.com/",
+      "address": "https://rpc.stargaze.silentvalidator.com",
       "provider": "silent"
     },
     {

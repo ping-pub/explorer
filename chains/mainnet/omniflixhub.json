@@ -16,7 +16,7 @@
       "provider": "Daksha Validator"
     },
     {
-      "address": "https://api.omniflix.silentvalidator.com/",
+      "address": "https://api.omniflix.silentvalidator.com",
       "provider": "silent"
     },
     {
@@ -42,7 +42,7 @@
       "provider": "MZONDER"
     },
     {
-      "address": "https://rpc.omniflix.chaintools.tech/",
+      "address": "https://rpc.omniflix.chaintools.tech",
       "provider": "ChainTools"
     },
     {
@@ -58,7 +58,7 @@
       "provider": "Daksha Validator"
     },
     {
-      "address": "https://rpc.omniflix.silentvalidator.com/",
+      "address": "https://rpc.omniflix.silentvalidator.com",
       "provider": "silent"
     },
     {

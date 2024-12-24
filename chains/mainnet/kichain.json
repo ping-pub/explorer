@@ -20,11 +20,11 @@
       "provider": "🔥STAVR🔥"
     },
     {
-      "address": "https://api.kichain.chaintools.tech/",
+      "address": "https://api.kichain.chaintools.tech",
       "provider": "ChainTools"
     },
     {
-      "address": "https://ki-api.ibs.team/",
+      "address": "https://ki-api.ibs.team",
       "provider": "Inter Blockchain Services"
     }
   ],
@@ -42,11 +42,11 @@
       "provider": "Polkachu"
     },
     {
-      "address": "https://rpc.kichain.chaintools.tech/",
+      "address": "https://rpc.kichain.chaintools.tech",
       "provider": "ChainTools"
     },
     {
-      "address": "https://ki-rpc.ibs.team/",
+      "address": "https://ki-rpc.ibs.team",
       "provider": "Inter Blockchain Services"
     }
   ],

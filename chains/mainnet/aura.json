@@ -52,7 +52,7 @@
       "provider": "Staketab"
     },
     {
-      "address": "https://lcd.aura.network/",
+      "address": "https://lcd.aura.network",
       "provider": "Aura Network Foundation"
     }
   ],
@@ -102,7 +102,7 @@
       "provider": "🔥STAVR🔥"
     },
     {
-      "address": "https://rpc.aura.network/",
+      "address": "https://rpc.aura.network",
       "provider": "Aura Network Foundation"
     }
   ],

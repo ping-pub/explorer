@@ -25,7 +25,7 @@
     },
     {
       "provider": "QuantNode",
-      "address": "https://axelar-lcd.quantnode.tech/"
+      "address": "https://axelar-lcd.quantnode.tech"
     },
     {
       "provider": "Stakin",
@@ -47,7 +47,7 @@
   "rpc": [
     {
       "provider": "QuantNode",
-      "address": "https://axelar-rpc.quantnode.tech/"
+      "address": "https://axelar-rpc.quantnode.tech"
     },
     {
       "provider": "Imperator.co",
@@ -55,7 +55,7 @@
     },
     {
       "provider": "RockawayX Infra",
-      "address": "https://axelar-rpc.rockrpc.net/"
+      "address": "https://axelar-rpc.rockrpc.net"
     },
     {
       "provider": "Inter Blockchain Services",

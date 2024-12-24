@@ -20,7 +20,7 @@
       "provider": "NodeStake"
     },
     {
-      "address": "https://lcd-burnt.imperator.co/",
+      "address": "https://lcd-burnt.imperator.co",
       "provider": "Imperator.co"
     }
   ],
@@ -38,7 +38,7 @@
       "provider": "🔥BurntLabs🔥"
     },
     {
-      "address": "https://rpc-burnt.imperator.co/",
+      "address": "https://rpc-burnt.imperator.co",
       "provider": "Imperator.co"
     },
     {

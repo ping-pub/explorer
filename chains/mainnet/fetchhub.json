@@ -4,7 +4,7 @@
   "registry_name": "fetchhub",
   "api": [
     {
-      "address": "https://api.fetchhub-4.fetch.aviaone.com/",
+      "address": "https://api.fetchhub-4.fetch.aviaone.com",
       "provider": "AVIAONE 🟢"
     },
     {

@@ -8,7 +8,7 @@
       "provider": "Stakeflow"
     },
     {
-      "address": "https://api.evmos.silentvalidator.com/",
+      "address": "https://api.evmos.silentvalidator.com",
       "provider": "silent"
     },
     {
@@ -42,7 +42,7 @@
       "provider": "Polkachu"
     },
     {
-      "address": "https://rpc.evmos.silentvalidator.com/",
+      "address": "https://rpc.evmos.silentvalidator.com",
       "provider": "silent"
     }
   ],
