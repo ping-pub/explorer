@@ -1,0 +1,61 @@
+{
+  "chain_name": "lumnetwork",
+  "theme_color": "#2e2e2e",
+  "registry_name": "lumnetwork",
+  "api": [
+    {
+      "address": "https://rest.node0.mainnet.lum.network",
+      "provider": "Lum Foundation"
+    },
+    {
+      "address": "https://lum.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://lum-rest.stakerhouse.com",
+      "provider": "StakerHouse"
+    },
+    {
+      "address": "https://lum-api.ibs.team",
+      "provider": "Inter Blockchain Services"
+    },
+    {
+      "address": "https://lumnetwork_mainnet_api.chain.whenmoonwhenlambo.money",
+      "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.node0.mainnet.lum.network",
+      "provider": "Lum Foundation"
+    },
+    {
+      "address": "https://lum-rpc.stakerhouse.com",
+      "provider": "StakerHouse"
+    },
+    {
+      "address": "https://lum.rpc.m.stavr.tech:443",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://lum-rpc.ibs.team",
+      "provider": "Inter Blockchain Services"
+    },
+    {
+      "address": "https://lumnetwork_mainnet_rpc.chain.whenmoonwhenlambo.money",
+      "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
+    }
+  ],
+  "sdk_version": "0.47.11",
+  "addr_prefix": "lum",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/lumnetwork/images/lum.svg",
+  "assets": [
+    {
+      "base": "ulum",
+      "symbol": "LUM",
+      "exponent": "6",
+      "coingecko_id": "lum-network",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/lumnetwork/images/lum.svg"
+    }
+  ]
+}
