@@ -1,0 +1,64 @@
+{
+  "chain_name": "qwoyn",
+  "theme_color": "#2e2e2e",
+  "registry_name": "qwoyn",
+  "api": [
+    {
+      "address": "https://api-qwoyn.mzonder.com",
+      "provider": "MZONDER"
+    },
+    {
+      "address": "https://qwoyn.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://rest-qwoyn.theamsolutions.info:443",
+      "provider": "AM Solutions"
+    },
+    {
+      "address": "https://lcd.qwoyn.bronbro.io:443",
+      "provider": "Bro_n_Bro"
+    },
+    {
+      "address": "https://qwoyn-rest.staketab.org",
+      "provider": "Staketab"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc-qwoyn.mzonder.com:443",
+      "provider": "MZONDER"
+    },
+    {
+      "address": "https://rpc.qwoyn.bronbro.io:443",
+      "provider": "Bro_n_Bro"
+    },
+    {
+      "address": "https://rpc-qwoyn.theamsolutions.info:443",
+      "provider": "AM Solutions"
+    },
+    {
+      "address": "https://qwoyn.rpc.m.stavr.tech:443",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://qwoyn-rpc.staketab.org:443",
+      "provider": "Staketab"
+    },
+    {
+      "address": "https://rpc.qwoyn.studio:443",
+      "provider": "Qwoyn Studios"
+    }
+  ],
+  "sdk_version": "0.47.6",
+  "addr_prefix": "qwoyn",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/qwoyn/images/qwoyn.png",
+  "assets": [
+    {
+      "base": "uqwoyn",
+      "symbol": "QWOYN",
+      "exponent": "6",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/qwoyn/images/qwoyn.png"
+    }
+  ]
+}
