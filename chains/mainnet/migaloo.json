@@ -1,0 +1,45 @@
+{
+  "chain_name": "migaloo",
+  "theme_color": "#2e2e2e",
+  "registry_name": "migaloo",
+  "api": [
+    {
+      "address": "https://migaloo-api.polkachu.com:443",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://migaloo-api.kleomedes.network:443",
+      "provider": "Kleomedes"
+    },
+    {
+      "address": "https://migaloo-api.highstakes.ch",
+      "provider": "High Stakes 🇨🇭"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://migaloo-rpc.polkachu.com:443",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://migaloo-rpc.kleomedes.network:443",
+      "provider": "Kleomedes"
+    },
+    {
+      "address": "https://migaloo-rpc.highstakes.ch",
+      "provider": "High Stakes 🇨🇭"
+    }
+  ],
+  "sdk_version": "0.47.7",
+  "addr_prefix": "migaloo",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/white-whale.svg",
+  "assets": [
+    {
+      "base": "uwhale",
+      "symbol": "WHALE",
+      "exponent": "6",
+      "coingecko_id": "white-whale",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/white-whale.svg"
+    }
+  ]
+}
