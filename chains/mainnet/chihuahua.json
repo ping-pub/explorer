@@ -1,0 +1,93 @@
+{
+  "chain_name": "chihuahua",
+  "theme_color": "#2e2e2e",
+  "registry_name": "chihuahua",
+  "api": [
+    {
+      "address": "https://rest-chihuahua.ecostake.com",
+      "provider": "ecostake"
+    },
+    {
+      "address": "https://chihuahua-api.kleomedes.network",
+      "provider": "Kleomedes"
+    },
+    {
+      "address": "https://api.chihuahua.wtf",
+      "provider": "Chihuahua"
+    },
+    {
+      "address": "https://rest.lavenderfive.com:443/chihuahua",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://api.chihuahua.validatus.com",
+      "provider": "Validatus"
+    },
+    {
+      "address": "https://chihuahua-api.ibs.team",
+      "provider": "Inter Blockchain Services"
+    },
+    {
+      "address": "https://chihuahua-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://chihuahua-mainnet-lcd.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    },
+    {
+      "address": "https://chihua.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc-chihuahua.ecostake.com",
+      "provider": "ecostake"
+    },
+    {
+      "address": "https://rpc.chihuahua.validatus.com",
+      "provider": "Validatus"
+    },
+    {
+      "address": "https://rpc.lavenderfive.com:443/chihuahua",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://chihuahua-rpc.ibs.team",
+      "provider": "Inter Blockchain Services"
+    },
+    {
+      "address": "https://rpc.chihuahua.wtf",
+      "provider": "Chihuahua"
+    },
+    {
+      "address": "https://chihuahua-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://chihua.rpc.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://chihuahua-rpc.kleomedes.network",
+      "provider": "Kleomedes"
+    },
+    {
+      "address": "https://chihuahua-mainnet-rpc.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    }
+  ],
+  "sdk_version": "0.47.8",
+  "addr_prefix": "chihuahua",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/chihuahua/images/huahua.svg",
+  "assets": [
+    {
+      "base": "uhuahua",
+      "symbol": "HUAHUA",
+      "exponent": "6",
+      "coingecko_id": "chihuahua-token",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/chihuahua/images/huahua.svg"
+    }
+  ]
+}
