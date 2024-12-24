@@ -1,0 +1,109 @@
+{
+  "chain_name": "stargaze",
+  "theme_color": "#2e2e2e",
+  "registry_name": "stargaze",
+  "api": [
+    {
+      "address": "https://lcd.stargaze.bronbro.io:443",
+      "provider": "Bro_n_Bro"
+    },
+    {
+      "address": "https://stargaze-api.ramuchi.tech",
+      "provider": "ramuchi.tech"
+    },
+    {
+      "address": "https://rest.stargaze-apis.com/",
+      "provider": "Stargaze Foundation"
+    },
+    {
+      "address": "https://stargaze-api.chainroot.io",
+      "provider": "Chainroot"
+    },
+    {
+      "address": "https://stargaze-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://api-stargaze.d-stake.xyz",
+      "provider": "D-stake"
+    },
+    {
+      "address": "https://api.stargaze.silentvalidator.com/",
+      "provider": "silent"
+    },
+    {
+      "address": "https://stargaze-rest.stakerhouse.com",
+      "provider": "StakerHouse"
+    },
+    {
+      "address": "https://stargaze-rest.staketab.org",
+      "provider": "Staketab"
+    },
+    {
+      "address": "https://stargaze-api.kleomedes.network",
+      "provider": "Kleomedes"
+    },
+    {
+      "address": "https://stargaze-api.ibs.team",
+      "provider": "Inter Blockchain Services"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.stargaze.bronbro.io:443",
+      "provider": "Bro_n_Bro"
+    },
+    {
+      "address": "https://rpc.stargaze-apis.com/",
+      "provider": "Stargaze Foundation"
+    },
+    {
+      "address": "https://stargaze-rpc.chainroot.io",
+      "provider": "Chainroot"
+    },
+    {
+      "address": "https://stargaze-rpc.ramuchi.tech",
+      "provider": "ramuchi.tech"
+    },
+    {
+      "address": "https://stargaze-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://stargaze-rpc.ibs.team",
+      "provider": "Inter Blockchain Services"
+    },
+    {
+      "address": "https://rpc-stargaze.d-stake.xyz",
+      "provider": "D-stake"
+    },
+    {
+      "address": "https://rpc.stargaze.silentvalidator.com/",
+      "provider": "silent"
+    },
+    {
+      "address": "https://stargaze-rpc.staketab.org:443",
+      "provider": "Staketab"
+    },
+    {
+      "address": "https://stargaze-rpc.stakerhouse.com",
+      "provider": "StakerHouse"
+    },
+    {
+      "address": "https://stargaze-rpc.kleomedes.network",
+      "provider": "Kleomedes"
+    }
+  ],
+  "sdk_version": "0.47.12",
+  "addr_prefix": "stars",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stargaze/images/stars.svg",
+  "assets": [
+    {
+      "base": "ustars",
+      "symbol": "STARS",
+      "exponent": "6",
+      "coingecko_id": "stargaze",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stargaze/images/stars.svg"
+    }
+  ]
+}
