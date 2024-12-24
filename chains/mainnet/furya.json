@@ -1,0 +1,37 @@
+{
+  "chain_name": "furya",
+  "theme_color": "#2e2e2e",
+  "registry_name": "furya",
+  "api": [
+    {
+      "address": "https://furya.api.nodeshub.online:443",
+      "provider": "Nodes Hub 🛡️ 100% Slash Protected 🛡️ | Restake ✅"
+    },
+    {
+      "address": "https://furya.api.nodeshub.online",
+      "provider": "synergynodes"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://furya.rpc.nodeshub.online:443",
+      "provider": "nodeshub"
+    },
+    {
+      "address": "https://furya-rpc.synergynodes.com",
+      "provider": "synergynodes"
+    }
+  ],
+  "sdk_version": "0.47.8",
+  "addr_prefix": "furya",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/furya/images/chain.svg",
+  "assets": [
+    {
+      "base": "ufury",
+      "symbol": "FURY",
+      "exponent": "6",
+      "coingecko_id": "fanfury",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/furya/images/chain.svg"
+    }
+  ]
+}
