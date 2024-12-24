@@ -1,0 +1,53 @@
+{
+  "chain_name": "assetmantle",
+  "theme_color": "#2e2e2e",
+  "registry_name": "assetmantle",
+  "api": [
+    {
+      "address": "https://assetmantle-rest.stakerhouse.com",
+      "provider": "StakerHouse"
+    },
+    {
+      "address": "https://api.mantle.paranorm.pro:443",
+      "provider": "paranorm"
+    },
+    {
+      "address": "https://rest.assetmantle.one",
+      "provider": "AssetMantle"
+    },
+    {
+      "address": "https://assetmantle-api.polkachu.com",
+      "provider": "Polkachu"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.assetmantle.one",
+      "provider": "AssetMantle"
+    },
+    {
+      "address": "https://assetmantle-rpc.stakerhouse.com",
+      "provider": "StakerHouse"
+    },
+    {
+      "address": "https://rpc.mantle.paranorm.pro:443",
+      "provider": "paranorm"
+    },
+    {
+      "address": "https://assetmantle-rpc.polkachu.com",
+      "provider": "Polkachu"
+    }
+  ],
+  "sdk_version": "0.45.16",
+  "addr_prefix": "mantle",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/assetmantle/images/mntl.svg",
+  "assets": [
+    {
+      "base": "umntl",
+      "symbol": "MNTL",
+      "exponent": "6",
+      "coingecko_id": "assetmantle",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/assetmantle/images/mntl.svg"
+    }
+  ]
+}
