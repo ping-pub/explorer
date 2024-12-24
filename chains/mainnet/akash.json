@@ -1,0 +1,102 @@
+{
+  "chain_name": "akash",
+  "theme_color": "#2e2e2e",
+  "registry_name": "akash",
+  "api": [
+    {
+      "provider": "Lavender.Five Nodes",
+      "address": "https://rest.lavenderfive.com:443/akash"
+    },
+    {
+      "provider": "Stakewolle",
+      "address": "https://public.stakewolle.com/cosmos/akash/rest"
+    },
+    {
+      "provider": "w3coins",
+      "address": "https://akash-api.w3coins.io"
+    },
+    {
+      "provider": "ecostake",
+      "address": "https://rest-akash.ecostake.com"
+    },
+    {
+      "provider": "Polkachu",
+      "address": "https://akash-api.polkachu.com"
+    },
+    {
+      "provider": "c29r3",
+      "address": "https://akash.c29r3.xyz:443/api"
+    },
+    {
+      "provider": "forbole",
+      "address": "https://api.akash.forbole.com:443"
+    },
+    {
+      "provider": "Kleomedes",
+      "address": "https://akash-api.kleomedes.network"
+    },
+    {
+      "provider": "Decloud Nodes Lab",
+      "address": "https://akash.declab.pro:443"
+    },
+    {
+      "provider": "Cosmonaut Stakes",
+      "address": "https://akash-mainnet-rest.cosmonautstakes.com:443"
+    },
+    {
+      "provider": "Stakeflow",
+      "address": "https://api-akash-01.stakeflow.io"
+    }
+  ],
+  "rpc": [
+    {
+      "provider": "Lavender.Five Nodes",
+      "address": "https://rpc.lavenderfive.com:443/akash"
+    },
+    {
+      "provider": "c29r3",
+      "address": "http://akash.c29r3.xyz:80/rpc"
+    },
+    {
+      "provider": "w3coins",
+      "address": "https://akash-rpc.w3coins.io"
+    },
+    {
+      "provider": "Polkachu",
+      "address": "https://akash-rpc.polkachu.com"
+    },
+    {
+      "provider": "ecostake",
+      "address": "https://rpc-akash.ecostake.com:443"
+    },
+    {
+      "provider": "Decloud Nodes Lab",
+      "address": "https://akash.declab.pro:26601"
+    },
+    {
+      "provider": "forbole",
+      "address": "https://rpc.akash.forbole.com:443"
+    },
+    {
+      "provider": "Kleomedes",
+      "address": "https://akash-rpc.kleomedes.network"
+    },
+    {
+      "provider": "Cosmonaut Stakes",
+      "address": "https://akash-mainnet-rpc.cosmonautstakes.com:443"
+    }
+  ],
+  "sdk_version": "0.45.16",
+  "coin_type": "118",
+  "addr_prefix": "akash",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/akash/images/akt.svg",
+  "assets": [
+    {
+      "base": "uakt",
+      "symbol": "AKT",
+      "exponent": "6",
+      "coingecko_id": "akash-network",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/akash/images/akt.svg"
+    }
+  ]
+}
