@@ -1,0 +1,121 @@
+{
+  "chain_name": "aura",
+  "theme_color": "#2e2e2e",
+  "registry_name": "aura",
+  "api": [
+    {
+      "address": "https://m-aura.api.utsa.tech",
+      "provider": "𝐥𝐞𝐬𝐧𝐢𝐤 | 𝐔𝐓𝐒𝐀"
+    },
+    {
+      "address": "https://aura-api.stake-town.com",
+      "provider": "StakeTown"
+    },
+    {
+      "address": "https://rest.lavenderfive.com:443/aura",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://aura-api.ramuchi.tech",
+      "provider": "ramuchi.tech"
+    },
+    {
+      "address": "https://api.aura.safeblock.space",
+      "provider": "Safe Block"
+    },
+    {
+      "address": "https://aura.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://api.aura.silentvalidator.com",
+      "provider": "silent"
+    },
+    {
+      "address": "https://aura-api.noders.services",
+      "provider": "[NODERS]TEAM"
+    },
+    {
+      "address": "https://aura-api.highstakes.ch",
+      "provider": "High Stakes 🇨🇭"
+    },
+    {
+      "address": "https://mainnet-aura-api.konsortech.xyz",
+      "provider": "KonsorTech"
+    },
+    {
+      "address": "https://api-aura.mms.team",
+      "provider": "MMS"
+    },
+    {
+      "address": "https://aura-rest.staketab.org",
+      "provider": "Staketab"
+    },
+    {
+      "address": "https://lcd.aura.network/",
+      "provider": "Aura Network Foundation"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://m-aura.rpc.utsa.tech",
+      "provider": "𝐥𝐞𝐬𝐧𝐢𝐤 | 𝐔𝐓𝐒𝐀"
+    },
+    {
+      "address": "https://aura-rpc.stake-town.com",
+      "provider": "StakeTown"
+    },
+    {
+      "address": "https://rpc.lavenderfive.com:443/aura",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://aura-rpc.ramuchi.tech",
+      "provider": "ramuchi.tech"
+    },
+    {
+      "address": "https://aura-rpc.staketab.org:443",
+      "provider": "Staketab"
+    },
+    {
+      "address": "https://aura-rpc.noders.services",
+      "provider": "[NODERS]TEAM"
+    },
+    {
+      "address": "https://mainnet-aura-rpc.konsortech.xyz",
+      "provider": "KonsorTech"
+    },
+    {
+      "address": "https://rpc.aura.silentvalidator.com",
+      "provider": "silent"
+    },
+    {
+      "address": "https://aura-rpc.highstakes.chm",
+      "provider": "High Stakes 🇨🇭"
+    },
+    {
+      "address": "https://rpc-aura.mms.team",
+      "provider": "MMS"
+    },
+    {
+      "address": "http://aura.rpc.m.stavr.tech:11047",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://rpc.aura.network/",
+      "provider": "Aura Network Foundation"
+    }
+  ],
+  "sdk_version": "0.47.12",
+  "addr_prefix": "aura",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/aura/images/Aura-logo-2.2.svg",
+  "assets": [
+    {
+      "base": "uaura",
+      "symbol": "AURA",
+      "exponent": "6",
+      "coingecko_id": "aura-network",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/aura/images/Aura-logo-2.2.svg"
+    }
+  ]
+}
