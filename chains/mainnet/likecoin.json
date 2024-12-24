@@ -1,0 +1,45 @@
+{
+  "chain_name": "likecoin",
+  "theme_color": "#2e2e2e",
+  "registry_name": "likecoin",
+  "api": [
+    {
+      "address": "https://like.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://mainnet-node.like.co",
+      "provider": "like.co"
+    },
+    {
+      "address": "https://rest-likecoin-mainnet.pikaser.net",
+      "provider": "PikaSer"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.likecoin.citizenweb3.com:443",
+      "provider": "Citizen Web3"
+    },
+    {
+      "address": "https://mainnet-node.like.co/rpc/",
+      "provider": "like.co"
+    },
+    {
+      "address": "https://rpc-likecoin-mainnet.pikaser.net",
+      "provider": "PikaSer"
+    }
+  ],
+  "sdk_version": "0.46.16",
+  "addr_prefix": "like",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/likecoin/images/like.svg",
+  "assets": [
+    {
+      "base": "nanolike",
+      "symbol": "LIKE",
+      "exponent": "9",
+      "coingecko_id": "likecoin",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/likecoin/images/like.svg"
+    }
+  ]
+}
