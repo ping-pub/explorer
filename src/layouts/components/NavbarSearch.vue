@@ -78,7 +78,7 @@ function confirm() {
       @click="closeSearchModal"
     >
       <div
-        class="relative modal-box cursor-default"
+        class="relative modal-box cursor-default bg-[#171718]"
         @click="(event) => preventClick(event)"
       >
         <!-- header -->
@@ -86,8 +86,8 @@ function confirm() {
           <div
             class="text-lg font-bold flex flex-col md:!flex-row justify-between items-baseline"
           >
-            <span class="mr-2">Search</span>
-            <span class="capitalize text-sm md:!text-base"
+            <span class="mr-2 text-[#FFFFFF]">Search</span>
+            <span class="capitalize text-sm md:!text-base text-[#FFFFFF]"
               >Height/Transaction/Account Address</span
             >
           </div>
@@ -106,7 +106,7 @@ function confirm() {
         <div class="mt-4">
           <div class="">
             <input
-              class="input flex-1 w-full !input-bordered"
+              class="input flex-1 w-full !input-bordered text-[#FFFFFF]"
               v-model="searchQuery"
               placeholder="Height/Transaction/Account Address"
             />
@@ -120,7 +120,10 @@ function confirm() {
         </div>
         <!-- foot -->
         <div class="mt-6">
-          <button class="w-full btn btn-primary" @click="confirm">
+          <button
+            class="w-full btn bg-[#323232] hover:bg-[#2E2C50]"
+            @click="confirm"
+          >
             Confirm
           </button>
         </div>

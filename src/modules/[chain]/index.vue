@@ -317,7 +317,7 @@ const amount = computed({
           <PriceMarketChart />
         </div>
       </div>
-      <div class="h-[1px] w-full bg-gray-100 dark:bg-[#384059]"></div>
+      <div class="h-[1px] w-full bg-[#384059]"></div>
     </div>
 
     <div class="grid grid-cols-1 gap-4 md:!grid-cols-3 lg:!grid-cols-6">

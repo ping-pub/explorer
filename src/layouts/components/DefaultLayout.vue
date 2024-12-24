@@ -141,7 +141,7 @@ function selected(route: any, nav: NavLink) {
               <RouterLink
                 v-if="isNavLink(el)"
                 @click="sidebarShow = false"
-                class="hover:bg-[#19191C] dark:hover:bg-[#19191C] cursor-pointer px-3 py-2 flex items-center"
+                class="hover:bg-[#19191C] cursor-pointer px-3 py-2 flex items-center"
                 :class="{
                   'bg-[#2B2A37]': selected($route, el),
                 }"

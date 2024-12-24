@@ -198,7 +198,7 @@ function fetchAllKeyRotation() {
         <div v-for="({ v, signing, hex }, i) in list" :key="i">
           <div class="flex items-center justify-between py-0 w-[298px]">
             <label class="truncate text-sm">
-              <span class="ml-1 text-black dark:text-white"
+              <span class="ml-1 text-white"
                 >{{ i + 1 }}.{{ v.description.moniker }}</span
               >
             </label>

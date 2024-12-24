@@ -373,24 +373,24 @@ loadAvatars();
               <tr>
                 <th
                   scope="col"
-                  class="uppercase"
+                  class="uppercase text-[#686868]"
                   style="width: 3rem; position: relative"
                 >
                   {{ $t('staking.rank') }}
                 </th>
-                <th scope="col" class="uppercase">
+                <th scope="col" class="uppercase text-[#686868]">
                   {{ $t('staking.validator') }}
                 </th>
-                <th scope="col" class="text-right uppercase">
+                <th scope="col" class="text-right uppercase text-[#686868]">
                   {{ $t('staking.voting_power') }}
                 </th>
-                <th scope="col" class="text-right uppercase">
+                <th scope="col" class="text-right uppercase text-[#686868]">
                   {{ $t('staking.24h_changes') }}
                 </th>
-                <th scope="col" class="text-right uppercase">
+                <th scope="col" class="text-right uppercase text-[#686868]">
                   {{ $t('staking.commission') }}
                 </th>
-                <th scope="col" class="text-center uppercase">
+                <th scope="col" class="text-center uppercase text-[#686868]">
                   {{ $t('staking.actions') }}
                 </th>
               </tr>
@@ -399,7 +399,7 @@ loadAvatars();
               <tr
                 v-for="({ v, rank, logo }, i) in list"
                 :key="v.operator_address"
-                class="hover:bg-gray-100 dark:hover:bg-[#242424]"
+                class="hover:bg-[#242424]"
               >
                 <!-- 👉 rank -->
                 <td>
@@ -446,7 +446,7 @@ loadAvatars();
 
                     <div class="flex flex-col">
                       <span
-                        class="text-sm text-primary dark:invert whitespace-nowrap overflow-hidden"
+                        class="text-sm text-[#FFFFFF] dark:invert whitespace-nowrap overflow-hidden"
                       >
                         <RouterLink
                           :to="{
@@ -460,7 +460,7 @@ loadAvatars();
                           {{ v.description?.moniker }}
                         </RouterLink>
                       </span>
-                      <span class="text-xs">{{
+                      <span class="text-xs text-[#FFFFFF]">{{
                         v.description?.website || v.description?.identity || '-'
                       }}</span>
                     </div>
@@ -470,7 +470,9 @@ loadAvatars();
                 <!-- 👉 Voting Power -->
                 <td class="text-right">
                   <div class="flex flex-col">
-                    <h6 class="text-sm font-weight-medium whitespace-nowrap">
+                    <h6
+                      class="text-sm font-weight-medium whitespace-nowrap text-[#FFFFFF]"
+                    >
                       {{
                         format.formatToken(
                           {
@@ -482,7 +484,7 @@ loadAvatars();
                         )
                       }}
                     </h6>
-                    <span class="text-xs">{{
+                    <span class="text-xs text-[#FFFFFF]">{{
                       format.calculatePercent(
                         v.delegator_shares,
                         staking.totalPower
@@ -498,7 +500,7 @@ loadAvatars();
                   {{ change24Text(v.consensus_pubkey) }}
                 </td>
                 <!-- 👉 commission -->
-                <td class="text-right text-xs">
+                <td class="text-right text-xs text-[#FFFFFF]">
                   {{
                     format.formatCommissionRate(
                       v.commission?.commission_rates?.rate
@@ -516,7 +518,7 @@ loadAvatars();
                   <label
                     v-else
                     for="delegate"
-                    class="btn btn-xs btn-primary rounded-sm capitalize"
+                    class="btn btn-xs bg-[#323232] hover:bg-[#2B3936] rounded-sm capitalize"
                     @click="
                       dialog.open('delegate', {
                         validator_address: v.operator_address,
