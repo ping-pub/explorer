@@ -1,0 +1,65 @@
+{
+  "chain_name": "kichain",
+  "theme_color": "#2e2e2e",
+  "registry_name": "kichain",
+  "api": [
+    {
+      "address": "https://api.kichain-2.kichain.aviaone.com",
+      "provider": "AVIAONE 🟢"
+    },
+    {
+      "address": "https://api-mainnet.blockchain.ki",
+      "provider": "kifoundation"
+    },
+    {
+      "address": "https://kichain-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://kichain.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://api.kichain.chaintools.tech/",
+      "provider": "ChainTools"
+    },
+    {
+      "address": "https://ki-api.ibs.team/",
+      "provider": "Inter Blockchain Services"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.kichain-2.kichain.aviaone.com",
+      "provider": "AVIAONE 🟢"
+    },
+    {
+      "address": "https://rpc-mainnet.blockchain.ki",
+      "provider": "kifoundation"
+    },
+    {
+      "address": "https://kichain-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://rpc.kichain.chaintools.tech/",
+      "provider": "ChainTools"
+    },
+    {
+      "address": "https://ki-rpc.ibs.team/",
+      "provider": "Inter Blockchain Services"
+    }
+  ],
+  "sdk_version": "0.50.8",
+  "addr_prefix": "ki",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kichain/images/xki.svg",
+  "assets": [
+    {
+      "base": "uxki",
+      "symbol": "XKI",
+      "exponent": "6",
+      "coingecko_id": "ki",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kichain/images/xki.svg"
+    }
+  ]
+}
