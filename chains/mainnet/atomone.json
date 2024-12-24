@@ -1,0 +1,85 @@
+{
+  "chain_name": "atomone",
+  "theme_color": "#2e2e2e",
+  "registry_name": "atomone",
+  "api": [
+    {
+      "address": "https://community.nuxian-node.ch:6797/atomone/crpc",
+      "provider": "PRO Delegators"
+    },
+    {
+      "address": "https://atomone.api.nodeshub.online",
+      "provider": "Nodes Hub 🛡️ 100% Slash Protected 🛡️"
+    },
+    {
+      "address": "https://rest-atomone-1.cros-nest.com:443",
+      "provider": "crosnest"
+    },
+    {
+      "address": "https://atomone-api.allinbits.com",
+      "provider": "AllInBits"
+    },
+    {
+      "address": "https://atomone-api.ibs.team:443",
+      "provider": "Inter Blockchain Services"
+    },
+    {
+      "address": "https://api-atomone.nodeist.net",
+      "provider": "Nodeist"
+    },
+    {
+      "address": "https://atomone-api.cogwheel.zone",
+      "provider": "Cogwheel ⚙️"
+    },
+    {
+      "address": "https://atomone_mainnet_api.chain.whenmoonwhenlambo.money",
+      "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://community.nuxian-node.ch:6797/atomone/trpc",
+      "provider": "PRO Delegators"
+    },
+    {
+      "address": "https://atomone-rpc.ibs.team:443",
+      "provider": "Inter Blockchain Services"
+    },
+    {
+      "address": "https://atomone.rpc.nodeshub.online:443",
+      "provider": "Nodes Hub 🛡️ 100% Slash Protected 🛡️"
+    },
+    {
+      "address": "https://atomone-rpc.allinbits.com:443",
+      "provider": "AllInBits"
+    },
+    {
+      "address": "https://rpc-atomone.nodeist.net",
+      "provider": "Nodeist"
+    },
+    {
+      "address": "https://atomone-rpc.cogwheel.zone",
+      "provider": "Cogwheel ⚙️"
+    },
+    {
+      "address": "https://rpc-atomone-1.cros-nest.com:443",
+      "provider": "crosnest"
+    },
+    {
+      "address": "https://atomone_mainnet_rpc.chain.whenmoonwhenlambo.money",
+      "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
+    }
+  ],
+  "sdk_version": "0.47.13",
+  "addr_prefix": "atone",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/atomone/images/atomone.svg",
+  "assets": [
+    {
+      "base": "uatone",
+      "symbol": "ATONE",
+      "exponent": "6",
+      "coingecko_id": "atomone",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/atomone/images/atomone.svg"
+    }
+  ]
+}
