@@ -1,0 +1,41 @@
+{
+  "chain_name": "sifchain",
+  "theme_color": "#2e2e2e",
+  "registry_name": "sifchain",
+  "api": [
+    {
+      "address": "https://sifchain.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://sifchain-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://sifchain_mainnet_api.chain.whenmoonwhenlambo.money",
+      "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://sifchain-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://sifchain_mainnet_rpc.chain.whenmoonwhenlambo.money:443",
+      "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
+    }
+  ],
+  "sdk_version": "0.45.16",
+  "addr_prefix": "sif",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sifchain/images/rowan.svg",
+  "assets": [
+    {
+      "base": "rowan",
+      "symbol": "ROWAN",
+      "exponent": "18",
+      "coingecko_id": "sifchain",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sifchain/images/rowan.svg"
+    }
+  ]
+}

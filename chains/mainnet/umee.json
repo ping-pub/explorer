@@ -1,0 +1,113 @@
+{
+  "chain_name": "umee",
+  "theme_color": "#2e2e2e",
+  "registry_name": "umee",
+  "api": [
+    {
+      "address": "https://umee-lcd.quantnode.tech",
+      "provider": "QuantNode"
+    },
+    {
+      "address": "https://api-umee.mzonder.com",
+      "provider": "MZONDER"
+    },
+    {
+      "address": "https://umee-api.stake-town.com",
+      "provider": "StakeTown"
+    },
+    {
+      "address": "https://umee.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://umee-api.noders.services",
+      "provider": "[NODERS]TEAM"
+    },
+    {
+      "address": "https://umee-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://api-umee-01.stakeflow.io",
+      "provider": "Stakeflow"
+    },
+    {
+      "address": "https://umee-mainnet-lcd.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    },
+    {
+      "address": "https://umee-api.highstakes.ch",
+      "provider": "High Stakes 🇨🇭"
+    },
+    {
+      "address": "https://umee.api.stakevillage.net",
+      "provider": "Stake Village"
+    },
+    {
+      "address": "https://umee_mainnet_api.chain.whenmoonwhenlambo.money",
+      "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc-umee.mzonder.com",
+      "provider": "MZONDER"
+    },
+    {
+      "address": "https://umee-rpc.tienthuattoan.com",
+      "provider": "TTT 🇻🇳"
+    },
+    {
+      "address": "https://umee-rpc.quantnode.tech",
+      "provider": "QuantNode"
+    },
+    {
+      "address": "https://umee-rpc.stake-town.com",
+      "provider": "StakeTown"
+    },
+    {
+      "address": "https://umee-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://umee-rpc.noders.services",
+      "provider": "[NODERS]TEAM"
+    },
+    {
+      "address": "https://rpc-umee-01.stakeflow.io",
+      "provider": "Stakeflow"
+    },
+    {
+      "address": "http://umee.rpc.m.stavr.tech:10457",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://umee-mainnet-rpc.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    },
+    {
+      "address": "https://umee-rpc.highstakes.ch",
+      "provider": "High Stakes 🇨🇭"
+    },
+    {
+      "address": "https://umee_mainnet_rpc.chain.whenmoonwhenlambo.money",
+      "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
+    },
+    {
+      "address": "https://umee.rpc.stakevillage.net:443",
+      "provider": "Stake Village"
+    }
+  ],
+  "sdk_version": "0.47.14",
+  "addr_prefix": "umee",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/umee/images/umee.svg",
+  "assets": [
+    {
+      "base": "uumee",
+      "symbol": "UMEE",
+      "exponent": "6",
+      "coingecko_id": "umee",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/umee/images/umee.svg"
+    }
+  ]
+}
