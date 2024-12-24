@@ -1,0 +1,117 @@
+{
+  "chain_name": "quicksilver",
+  "theme_color": "#2e2e2e",
+  "registry_name": "quicksilver",
+  "api": [
+    {
+      "address": "https://quicksilver.tdrsys.com",
+      "provider": "TdrSys"
+    },
+    {
+      "address": "https://m-quicksilver.api.utsa.tech",
+      "provider": "𝐥𝐞𝐬𝐧𝐢𝐤 | 𝐔𝐓𝐒𝐀"
+    },
+    {
+      "address": "https://mainnet-quicksilver-api.konsortech.xyz",
+      "provider": "KonsorTech"
+    },
+    {
+      "address": "https://quicksilver-api.stake-town.com",
+      "provider": "StakeTown"
+    },
+    {
+      "address": "https://api.quicksilver.validatus.com",
+      "provider": "Validatus"
+    },
+    {
+      "address": "https://quicksilver-rest.staketab.org",
+      "provider": "Staketab"
+    },
+    {
+      "address": "https://quick.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://quicksilver-api.noders.services",
+      "provider": "[NODERS]TEAM"
+    },
+    {
+      "address": "https://rest.lavenderfive.com:443/quicksilver",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://quicksilver-mainnet-lcd.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    },
+    {
+      "address": "https://rest-quicksilver.architectnodes.com",
+      "provider": "Architect Nodes"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://m-quicksilver.rpc.utsa.tech",
+      "provider": "𝐥𝐞𝐬𝐧𝐢𝐤 | 𝐔𝐓𝐒𝐀"
+    },
+    {
+      "address": "https://quicksilver.tdrsys.com:2053",
+      "provider": "TdrSys"
+    },
+    {
+      "address": "https://rpc.quicksilver.zone:443",
+      "provider": "Quicksilver"
+    },
+    {
+      "address": "https://rpc.lavenderfive.com:443/quicksilver",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://quicksilver-rpc.stake-town.com",
+      "provider": "StakeTown"
+    },
+    {
+      "address": "http://quick.rpc.m.stavr.tech:21027",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://quicksilver-rpc.ibs.team:443",
+      "provider": "Inter Blockchain Services"
+    },
+    {
+      "address": "https://mainnet-quicksilver-rpc.konsortech.xyz",
+      "provider": "KonsorTech"
+    },
+    {
+      "address": "https://quicksilver-mainnet-rpc.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    },
+    {
+      "address": "https://rpc-quicksilver.architectnodes.com",
+      "provider": "Architect Nodes"
+    },
+    {
+      "address": "https://rpc.quicksilver.validatus.com",
+      "provider": "Validatus"
+    },
+    {
+      "address": "https://quicksilver-rpc.noders.services",
+      "provider": "[NODERS]TEAM"
+    },
+    {
+      "address": "https://quicksilver-rpc.staketab.org:443",
+      "provider": "Staketab"
+    }
+  ],
+  "sdk_version": "0.46.16",
+  "addr_prefix": "quick",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/quicksilver/images/qck.svg",
+  "assets": [
+    {
+      "base": "uqck",
+      "symbol": "QCK",
+      "exponent": "6",
+      "coingecko_id": "quicksilver",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/quicksilver/images/qck.svg"
+    }
+  ]
+}
