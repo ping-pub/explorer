@@ -1,0 +1,85 @@
+{
+  "chain_name": "omniflixhub",
+  "theme_color": "#2e2e2e",
+  "registry_name": "omniflixhub",
+  "api": [
+    {
+      "address": "https://omniflix.api.staking-explorer.com",
+      "provider": "Daily DROP | 3% Fee"
+    },
+    {
+      "address": "https://rest.lavenderfive.com:443/omniflixhub",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://omniflix-api.dakshavalidator.in",
+      "provider": "Daksha Validator"
+    },
+    {
+      "address": "https://api.omniflix.silentvalidator.com/",
+      "provider": "silent"
+    },
+    {
+      "address": "https://omniflixhub-mainnet-lcd.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    },
+    {
+      "address": "https://rest-omniflix.architectnodes.com",
+      "provider": "Architect Nodes"
+    },
+    {
+      "address": "https://api.omniflix.nodestake.org",
+      "provider": "NodeStake"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.lavenderfive.com:443/omniflixhub",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://rpc-omniflix.mzonder.com:443",
+      "provider": "MZONDER"
+    },
+    {
+      "address": "https://rpc.omniflix.chaintools.tech/",
+      "provider": "ChainTools"
+    },
+    {
+      "address": "https://rpc.omniflix.nodestake.org",
+      "provider": "NodeStake"
+    },
+    {
+      "address": "https://rpc.omniflix.bronbro.io:443",
+      "provider": "Bro_n_Bro"
+    },
+    {
+      "address": "https://omniflix-rpc.dakshavalidator.in",
+      "provider": "Daksha Validator"
+    },
+    {
+      "address": "https://rpc.omniflix.silentvalidator.com/",
+      "provider": "silent"
+    },
+    {
+      "address": "https://omniflixhub-mainnet-rpc.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    },
+    {
+      "address": "https://rpc-omniflix.architectnodes.com",
+      "provider": "Architect Nodes"
+    }
+  ],
+  "sdk_version": "0.47.10",
+  "addr_prefix": "omniflix",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/omniflixhub/images/flix.svg",
+  "assets": [
+    {
+      "base": "uflix",
+      "symbol": "FLIX",
+      "exponent": "6",
+      "coingecko_id": "omniflix-network",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/omniflixhub/images/flix.svg"
+    }
+  ]
+}
