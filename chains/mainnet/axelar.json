@@ -1,0 +1,110 @@
+{
+  "chain_name": "axelar",
+  "theme_color": "#2e2e2e",
+  "registry_name": "axelar",
+  "api": [
+    {
+      "provider": "chainlayer",
+      "address": "https://axelar-lcd.quickapi.com:443"
+    },
+    {
+      "provider": "nodes.guru",
+      "address": "https://api-1.axelar.nodes.guru:443"
+    },
+    {
+      "provider": "Stakeflow",
+      "address": "https://api-axelar-01.stakeflow.io"
+    },
+    {
+      "provider": "Imperator.co",
+      "address": "https://lcd-axelar.imperator.co:443"
+    },
+    {
+      "provider": "Qubelabs",
+      "address": "https://axelar-lcd.qubelabs.io:443"
+    },
+    {
+      "provider": "QuantNode",
+      "address": "https://axelar-lcd.quantnode.tech/"
+    },
+    {
+      "provider": "Stakin",
+      "address": "https://axelar.rest.stakin-nodes.com"
+    },
+    {
+      "provider": "Polkachu",
+      "address": "https://axelar-api.polkachu.com"
+    },
+    {
+      "provider": "Inter Blockchain Services",
+      "address": "https://axelar-api.ibs.team"
+    },
+    {
+      "provider": "BlockHunters 🎯",
+      "address": "https://api.axelar.bh.rocks"
+    }
+  ],
+  "rpc": [
+    {
+      "provider": "QuantNode",
+      "address": "https://axelar-rpc.quantnode.tech/"
+    },
+    {
+      "provider": "Imperator.co",
+      "address": "https://rpc-axelar.imperator.co:443"
+    },
+    {
+      "provider": "RockawayX Infra",
+      "address": "https://axelar-rpc.rockrpc.net/"
+    },
+    {
+      "provider": "Inter Blockchain Services",
+      "address": "https://axelar-rpc.ibs.team"
+    },
+    {
+      "provider": "Polkachu",
+      "address": "https://axelar-rpc.polkachu.com"
+    },
+    {
+      "provider": "chainlayer",
+      "address": "https://axelar-rpc.quickapi.com:443"
+    },
+    {
+      "provider": "BlockHunters 🎯",
+      "address": "https://rpc.axelar.bh.rocks"
+    },
+    {
+      "provider": "Qubelabs",
+      "address": "https://axelar-rpc.qubelabs.io:443"
+    },
+    {
+      "provider": "Stakeflow",
+      "address": "https://rpc-axelar-01.stakeflow.io"
+    },
+    {
+      "provider": "nodes.guru",
+      "address": "https://rpc-1.axelar.nodes.guru:443"
+    },
+    {
+      "provider": "p-ops",
+      "address": "https://axelar-rpc.pops.one:443"
+    },
+    {
+      "provider": "Stakin",
+      "address": "https://axelar.rpc.stakin-nodes.com"
+    }
+  ],
+  "sdk_version": "0.45.17",
+  "coin_type": "118",
+  "addr_prefix": "axelar",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/axl.svg",
+  "assets": [
+    {
+      "base": "uaxl",
+      "symbol": "AXL",
+      "exponent": "6",
+      "coingecko_id": "axelar",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/axl.svg"
+    }
+  ]
+}
