@@ -1,0 +1,77 @@
+{
+  "chain_name": "comdex",
+  "theme_color": "#2e2e2e",
+  "registry_name": "comdex",
+  "api": [
+    {
+      "address": "https://rest.lavenderfive.com:443/comdex",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://comdex-api.chainroot.io",
+      "provider": "Chainroot"
+    },
+    {
+      "address": "https://comdex-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://comdex-api.bluestake.net",
+      "provider": "BlueStake 🚀"
+    },
+    {
+      "address": "https://comdex.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://api-comdex-01.stakeflow.io",
+      "provider": "Stakeflow"
+    },
+    {
+      "address": "https://rest.comdex.one",
+      "provider": "comdex"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.lavenderfive.com:443/comdex",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://comdex-rpc.chainroot.io",
+      "provider": "Chainroot"
+    },
+    {
+      "address": "https://comdex-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://comdex-rpc.bluestake.net:443",
+      "provider": "BlueStake 🚀"
+    },
+    {
+      "address": "https://comdex.rpc.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://rpc-comdex-01.stakeflow.io",
+      "provider": "Stakeflow"
+    },
+    {
+      "address": "https://rpc.comdex.one",
+      "provider": "comdex"
+    }
+  ],
+  "sdk_version": "0.47.9",
+  "addr_prefix": "comdex",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/comdex/images/cmdx.svg",
+  "assets": [
+    {
+      "base": "ucmdx",
+      "symbol": "CMDX",
+      "exponent": "6",
+      "coingecko_id": "comdex",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/comdex/images/cmdx.svg"
+    }
+  ]
+}
