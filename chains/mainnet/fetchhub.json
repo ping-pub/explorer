@@ -104,14 +104,14 @@
   ],
   "sdk_version": "0.45.6",
   "addr_prefix": "fetch",
-  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/secretnetwork/images/scrt.svg",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/fetchhub/images/fet.svg",
   "assets": [
     {
       "base": "afet",
       "symbol": "FET",
       "exponent": "18",
       "coingecko_id": "fetch-ai",
-      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/secretnetwork/images/scrt.svg"
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/fetchhub/images/fet.svg"
     }
   ]
 }
