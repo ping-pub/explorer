@@ -1,0 +1,65 @@
+{
+  "chain_name": "zetachain",
+  "theme_color": "#2e2e2e",
+  "registry_name": "zetachain",
+  "api": [
+    {
+      "address": "https://zetachain.blockpi.network/lcd/v1/public",
+      "provider": "BlockPI"
+    },
+    {
+      "address": "https://zetachain.api.nodeshub.online:443",
+      "provider": "Nodes Hub 🛡️ 100% Slash Protected 🛡️ | Restake ✅"
+    },
+    {
+      "address": "https://zeta.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://rest.lavenderfive.com:443/zetachain",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://zetachain-api.noders.services",
+      "provider": "[NODERS]TEAM"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://zetachain.rpc.nodeshub.online:443",
+      "provider": "Nodes Hub 🛡️ 100% Slash Protected 🛡️ | Restake ✅"
+    },
+    {
+      "address": "https://rpc.lavenderfive.com:443/zetachain",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://zetachain.blockpi.network/rpc/v1/public",
+      "provider": "BlockPI"
+    },
+    {
+      "address": "https://zetachain-rpc.noders.services",
+      "provider": "[NODERS]TEAM"
+    },
+    {
+      "address": "https://rpc.zetachain.nodestake.org",
+      "provider": "NodeStake"
+    },
+    {
+      "address": "https://zeta.rpc.m.stavr.tech:443",
+      "provider": "🔥STAVR🔥"
+    }
+  ],
+  "sdk_version": "0.47.10",
+  "addr_prefix": "zeta",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/zetachain/images/zetachain.svg",
+  "assets": [
+    {
+      "base": "azeta",
+      "symbol": "ZETA",
+      "exponent": "18",
+      "coingecko_id": "zetachain",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/zetachain/images/zetachain.svg"
+    }
+  ]
+}
