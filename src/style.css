@@ -4,7 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
-html,body {
+html,
+body {
   height: 100%;
 }
 
@@ -51,4 +52,10 @@ html[data-theme='dark'] {
 .slide-up-leave-to {
   opacity: 0;
   transform: translateY(-calc(15%));
+}
+
+.rajdhani-regular {
+  font-family: 'Rajdhani', serif;
+  font-weight: 400;
+  font-style: normal;
 }

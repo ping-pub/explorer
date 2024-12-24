@@ -67,7 +67,7 @@ function confirm() {
     >
       <Icon
         icon="mdi:magnify"
-        class="text-2xl text-gray-500 dark:text-gray-400"
+        class="text-2xl text-[#D9D9D9] dark:text-[#D9D9D9]"
       />
     </button>
 

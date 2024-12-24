@@ -8,8 +8,8 @@ const props = defineProps({
 });
 
 const bars = computed(() => {
-  const uptime = Array(50).fill({ height: 0, color: 'bg-secondary' });
-  if(!props.blocks) return uptime
+  const uptime = Array(50).fill({ height: 0, color: 'bg-[#323232]' });
+  if (!props.blocks) return uptime;
   props.blocks.forEach((element) => {
     const has = element.signatures?.findIndex(
       (sig) => sig.validator_address === props.validator
@@ -17,7 +17,7 @@ const bars = computed(() => {
     // console.log(has, props.validato, element)
     uptime.push({
       height: element.height,
-      color: has > -1 ? 'bg-green-500' : 'bg-red-500',
+      color: has > -1 ? 'bg-[#33583B]' : 'bg-[#831C1D]',
     });
     uptime.shift();
   });
@@ -27,10 +27,11 @@ const bars = computed(() => {
 <template>
   <div class="flex items-center justify-evenly gap-0.5">
     <div class="cursor-default" v-for="(item, index) in bars" :key="index">
-      <div class="tooltip" 
-          :data-tip="item.height" 
-          :class="item.color"
-          style="width: 4px;"
+      <div
+        class="tooltip"
+        :data-tip="item.height"
+        :class="item.color"
+        style="width: 4px"
       >
         &nbsp;
       </div>
@@ -38,6 +39,4 @@ const bars = computed(() => {
   </div>
 </template>
 
-<style>
-  
-</style>
+<style></style>

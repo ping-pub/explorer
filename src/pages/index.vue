@@ -17,27 +17,28 @@ const chains = computed(() => {
     const lowercaseKeywords = keywords.value.toLowerCase();
 
     return Object.values(dashboard.chains).filter(
-      (x: ChainConfig) => x.chainName.toLowerCase().indexOf(lowercaseKeywords) > -1 
-      || x.prettyName.toLowerCase().indexOf(lowercaseKeywords) > -1
+      (x: ChainConfig) =>
+        x.chainName.toLowerCase().indexOf(lowercaseKeywords) > -1 ||
+        x.prettyName.toLowerCase().indexOf(lowercaseKeywords) > -1
     );
   } else {
     return Object.values(dashboard.chains);
   }
 });
 
-const chainStore = useBlockchain()
+const chainStore = useBlockchain();
 </script>
 <template>
   <div class="">
-    <div class="flex md:!flex-row flex-col items-center justify-center mb-6 mt-14 gap-2">
-      <div class="w-16 rounded-full">
-       <img src="/src/assets/images/telescope1024.png" alt="telescope logo">
-      </div>
-      <h1 class="text-3xl md:!text-6xl font-bold">
+    <div
+      class="flex md:!flex-row flex-col items-center justify-center mb-6 mt-14 gap-2"
+    >
+      <img class="w-453 h-153" src="../assets/logo-big.svg" />
+      <!-- <h1 class="text-3xl md:!text-6xl w-453 h-153 rajdhani-regular">
         {{ $t('pages.title') }}
-      </h1>
+      </h1> -->
     </div>
-    <div class="text-center">
+    <div class="text-center text-[#FFFFFF]">
       <p class="mb-1">
         {{ $t('pages.slogan') }}
       </p>
@@ -49,14 +50,19 @@ const chainStore = useBlockchain()
       <progress class="progress progress-info w-80 h-1"></progress>
     </div>
 
-    <div class="text-center text-base mt-6">
+    <!-- <div class="text-center text-base mt-6">
       <h2 class="mb-6">{{ $t('pages.description') }}</h2>
-    </div>
+    </div> -->
 
-    <div class="flex items-center rounded-lg bg-base-100  border border-gray-200 dark:border-gray-700 mt-10">
-      <Icon icon="mdi:magnify" class="text-2xl text-gray-400 ml-3"/>
-      <input :placeholder="$t('pages.search_placeholder')" class="px-4 h-10 bg-transparent flex-1 outline-none text-base" v-model="keywords" />
-      <div class="px-4 text-base hidden md:!block">{{ chains.length }}/{{ dashboard.length }}</div>
+    <div class="flex items-center rounded-full bg-[#171718] mt-10">
+      <input
+        :placeholder="$t('pages.search_placeholder')"
+        class="px-4 h-10 bg-transparent flex-1 outline-none text-base"
+        v-model="keywords"
+      />
+      <div class="px-4 text-base hidden md:!block">
+        <Icon icon="mdi:magnify" class="text-2xl text-[#686868] ml-3" />
+      </div>
     </div>
 
     <div
@@ -72,7 +78,7 @@ const chainStore = useBlockchain()
 </template>
 
 <style scoped>
- .logo path{
+.logo path {
   fill: #242424;
 }
 </style>

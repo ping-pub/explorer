@@ -9,7 +9,11 @@ import {
 } from '@/stores';
 import UptimeBar from '@/components/UptimeBar.vue';
 import type { Commit, SlashingParam, SigningInfo } from '@/types';
-import { consensusPubkeyToHexAddress, pubKeyToValcons, valconsToBase64 } from '@/libs';
+import {
+  consensusPubkeyToHexAddress,
+  pubKeyToValcons,
+  valconsToBase64,
+} from '@/libs';
 
 const props = defineProps(['chain']);
 
@@ -35,15 +39,15 @@ const validators = computed(() => {
 });
 
 const list = computed(() => {
-  if(chainStore.isConsumerChain) {
-    stakingStore.loadKeyRotationFromLocalstorage(baseStore.latest?.block?.header?.chain_id)
+  if (chainStore.isConsumerChain) {
+    stakingStore.loadKeyRotationFromLocalstorage(
+      baseStore.latest?.block?.header?.chain_id
+    );
 
     const window = Number(slashingParam.value.signed_blocks_window || 0);
     const vset = validators.value.map((v) => {
-      
-      const hexAddress = stakingStore.findRotatedHexAddress(v.consensus_pubkey)
-      const signing =
-        signingInfo.value[hexAddress];
+      const hexAddress = stakingStore.findRotatedHexAddress(v.consensus_pubkey);
+      const signing = signingInfo.value[hexAddress];
       return {
         v,
         signing,
@@ -125,9 +129,9 @@ function updateTotalSigningInfo() {
 const commits2 = computed(() => {
   const la = baseStore.recents.map((b) => b.block.last_commit);
   // trigger update total signing info
-  if(la.length > 1 && Number(la.at(la.length-1)?.height|| 0) % 10 === 7) {
+  if (la.length > 1 && Number(la.at(la.length - 1)?.height || 0) % 10 === 7) {
     updateTotalSigningInfo();
-  };
+  }
   const all = [...commits.value, ...la];
   return all.length > 50 ? all.slice(all.length - 50) : all;
 });
@@ -143,7 +147,7 @@ function changeTab(v: string) {
 }
 
 function fetchAllKeyRotation() {
-  stakingStore.fetchAllKeyRotation(baseStore.latest?.block?.header?.chain_id)
+  stakingStore.fetchAllKeyRotation(baseStore.latest?.block?.header?.chain_id);
 }
 </script>
 
@@ -160,18 +164,28 @@ function fetchAllKeyRotation() {
         <a class="tab text-gray-400 capitalize">{{ $t('uptime.customize') }}</a>
       </RouterLink>
     </div>
-    <div class="bg-base-100 px-5 pt-5">
+    <div class="bg-[#141415] px-5 pt-5">
       <div class="flex items-center gap-x-4">
         <input
           type="text"
           v-model="keyword"
           placeholder="Keywords to filter validators"
-          class="input input-sm w-full flex-1 border border-gray-200 dark:border-gray-600"
+          class="input input-sm w-full flex-1 border bg-[#171718]"
         />
-        <button v-if="chainStore.isConsumerChain" class="btn btn-sm btn-primary" @click="fetchAllKeyRotation">Load Rotated Keys</button>
+        <button
+          v-if="chainStore.isConsumerChain"
+          class="btn btn-sm btn-primary"
+          @click="fetchAllKeyRotation"
+        >
+          Load Rotated Keys
+        </button>
       </div>
 
-      <div v-if="chainStore.isConsumerChain && Object.keys(stakingStore.keyRotation).length === 0"
+      <div
+        v-if="
+          chainStore.isConsumerChain &&
+          Object.keys(stakingStore.keyRotation).length === 0
+        "
         class="alert alert-warning my-4"
       >
         Note: Please load rotated keys to see the correct uptime
