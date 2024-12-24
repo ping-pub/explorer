@@ -1,0 +1,133 @@
+{
+  "chain_name": "persistence",
+  "theme_color": "#2e2e2e",
+  "registry_name": "persistence",
+  "api": [
+    {
+      "address": "https://persistence-lcd.quantnode.tech",
+      "provider": "QuantNode"
+    },
+    {
+      "address": "https://persistence-api.kleomedes.network",
+      "provider": "Kleomedes"
+    },
+    {
+      "address": "https://persistence.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://rest.core.persistence.one",
+      "provider": "Persistence"
+    },
+    {
+      "address": "https://persistence-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://rest-persistence.architectnodes.com",
+      "provider": "Architect Nodes"
+    },
+    {
+      "address": "https://api-persistence-01.stakeflow.io",
+      "provider": "Stakeflow"
+    },
+    {
+      "address": "https://persistence-api.stake-town.com",
+      "provider": "StakeTown"
+    },
+    {
+      "address": "https://api.persistence.validatus.com",
+      "provider": "Validatus"
+    },
+    {
+      "address": "https://persistence-mainnet-lcd.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    },
+    {
+      "address": "https://persistence-api.highstakes.ch",
+      "provider": "High Stakes 🇨🇭"
+    },
+    {
+      "address": "https://persistence-mainnet-rest.cosmonautstakes.com",
+      "provider": "Cosmonaut Stakes"
+    },
+    {
+      "address": "https://public.stakewolle.com/cosmos/persistence/rest",
+      "provider": "Stakewolle"
+    },
+    {
+      "address": "https://persistence-api.stakeandrelax.net",
+      "provider": "Stake&Relax Validator 🦥"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://persistence-rpc.quantnode.tech",
+      "provider": "QuantNode"
+    },
+    {
+      "address": "https://rpc.core.persistence.one",
+      "provider": "Persistence"
+    },
+    {
+      "address": "https://public.stakewolle.com/cosmos/persistence/rpc",
+      "provider": "Stakewolle"
+    },
+    {
+      "address": "https://persistence-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://rpc-persistence.architectnodes.com",
+      "provider": "Architect Nodes"
+    },
+    {
+      "address": "https://rpc-persistence-01.stakeflow.io",
+      "provider": "Stakeflow"
+    },
+    {
+      "address": "https://persistence-rpc.stake-town.com",
+      "provider": "StakeTown"
+    },
+    {
+      "address": "https://rpc.persistence.validatus.com",
+      "provider": "Validatus"
+    },
+    {
+      "address": "https://persistence.rpc.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://persistence-mainnet-rpc.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    },
+    {
+      "address": "https://persistence-rpc.stakeandrelax.net",
+      "provider": "Stake&Relax Validator 🦥"
+    },
+    {
+      "address": "https://persistence-rpc.kleomedes.network",
+      "provider": "Kleomedes"
+    },
+    {
+      "address": "https://persistence-rpc.highstakes.ch",
+      "provider": "High Stakes 🇨🇭"
+    },
+    {
+      "address": "https://persistence-mainnet-rpc.cosmonautstakes.com",
+      "provider": "Cosmonaut Stakes"
+    }
+  ],
+  "sdk_version": "0.47.10",
+  "addr_prefix": "persistence",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/persistence/images/xprt.svg",
+  "assets": [
+    {
+      "base": "uxprt",
+      "symbol": "XPRT",
+      "exponent": "6",
+      "coingecko_id": "persistence",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/persistence/images/xprt.svg"
+    }
+  ]
+}
