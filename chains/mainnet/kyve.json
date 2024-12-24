@@ -4,66 +4,94 @@
   "registry_name": "kyve",
   "api": [
     {
-      "address": "https://lcd.g-bridge.bronbro.io:443",
-      "provider": "Bro_n_Bro"
+      "address": "https://kyve.api.liveraven.net",
+      "provider": "LiveRaveN"
     },
     {
-      "address": "https://api.gravity-bridge-3.gravity.aviaone.com",
-      "provider": "AviaOne 🟢"
+      "address": "https://lcd-kyve.imperator.co",
+      "provider": "Imperator.co"
     },
     {
-      "address": "https://rest.lavenderfive.com:443/gravitybridge",
+      "address": "https://api.kyve.network",
+      "provider": "kyve"
+    },
+    {
+      "address": "https://rest.lavenderfive.com:443/kyve",
       "provider": "Lavender.Five Nodes 🐝"
     },
     {
-      "address": "https://gravity-api.polkachu.com",
-      "provider": "Polkachu"
+      "address": "https://kyve.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
     },
     {
-      "address": "https://api-gravity-bridge-01.stakeflow.io",
-      "provider": "Stakeflow"
+      "address": "https://kyve-api.noders.services",
+      "provider": "[NODERS]TEAM"
     },
     {
-      "address": "https://gravity-api.ibs.team",
+      "address": "https://api-kyve.mms.team",
+      "provider": "MMS"
+    },
+    {
+      "address": "https://rest-kyve.ecostake.com",
+      "provider": "ecostake"
+    },
+    {
+      "address": "https://kyve-api.ibs.team",
       "provider": "Inter Blockchain Services"
     },
     {
-      "address": "https://gravitychain.io:1317",
-      "provider": "althea"
+      "address": "https://kyve.declab.pro:443",
+      "provider": "Decloud Nodes Lab"
+    },
+    {
+      "address": "https://kyve_mainnet_api.chain.whenmoonwhenlambo.money",
+      "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
     }
   ],
   "rpc": [
     {
-      "address": "https://rpc.g-bridge.bronbro.io:443",
-      "provider": "Bro_n_Bro"
+      "address": "https://kyve.rpc.liveraven.net",
+      "provider": "LiveRaveN"
     },
     {
-      "address": "https://rpc.gravity-bridge-3.gravity.aviaone.com:443",
-      "provider": "AviaOne 🟢"
+      "address": "https://rpc-kyve.imperator.co",
+      "provider": "Imperator.co"
     },
     {
-      "address": "https://rpc.lavenderfive.com:443/gravitybridge",
+      "address": "https://rpc.kyve.network",
+      "provider": "kyve"
+    },
+    {
+      "address": "https://rpc.lavenderfive.com:443/kyve",
       "provider": "Lavender.Five Nodes 🐝"
     },
     {
-      "address": "https://gravity-rpc.polkachu.com",
-      "provider": "Polkachu"
+      "address": "https://rpc-kyve.ecostake.com",
+      "provider": "ecostake"
     },
     {
-      "address": "https://rpc-gravity-bridge-01.stakeflow.io",
-      "provider": "Stakeflow"
+      "address": "https://kyve-rpc.noders.services",
+      "provider": "[NODERS]TEAM"
     },
     {
-      "address": "https://gravity-rpc.ibs.team",
+      "address": "http://kyve.rpc.m.stavr.tech:12357",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://rpc-kyve.mms.team",
+      "provider": "MMS"
+    },
+    {
+      "address": "https://kyve-rpc.ibs.team",
       "provider": "Inter Blockchain Services"
     },
     {
-      "address": "https://gravity-rpc.staketab.org:443",
-      "provider": "Staketab"
+      "address": "https://kyve.declab.pro:26616",
+      "provider": "Decloud Nodes Lab"
     },
     {
-      "address": "https://gravitychain.io:26657",
-      "provider": "althea"
+      "address": "https://kyve_mainnet_rpc.chain.whenmoonwhenlambo.money",
+      "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
     }
   ],
   "sdk_version": "0.50.7-kyve-rc0",
