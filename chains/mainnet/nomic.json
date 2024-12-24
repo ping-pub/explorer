@@ -1,0 +1,31 @@
+{
+  "chain_name": "nomic",
+  "theme_color": "#2e2e2e",
+  "registry_name": "nomic",
+  "api": [
+    {
+      "address": "https://nomic-rpc.polkachu.com/",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://rpc.nomic.basementnodes.ca:443",
+      "provider": "Basement Nodes ⚡️"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://app.nomic.io:8443",
+      "provider": "nomic-io"
+    }
+  ],
+  "addr_prefix": "nomic",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nomic/images/nom.svg",
+  "assets": [
+    {
+      "base": "unom",
+      "symbol": "NOM",
+      "exponent": "6",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nomic/images/nom.svg"
+    }
+  ]
+}
