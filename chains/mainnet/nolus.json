@@ -1,0 +1,69 @@
+{
+  "chain_name": "nolus",
+  "theme_color": "#2e2e2e",
+  "registry_name": "nolus",
+  "api": [
+    {
+      "address": "https://nolus.api.liveraven.net",
+      "provider": "LiveRaveN"
+    },
+    {
+      "address": "https://rest.lavenderfive.com:443/nolus",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://nolus-api.w3coins.io",
+      "provider": "w3coins"
+    },
+    {
+      "address": "https://nolus-mainnet-lcd.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    },
+    {
+      "address": "https://nolus-api.ibs.team",
+      "provider": "Inter Blockchain Services"
+    },
+    {
+      "address": "https://rest-nolus.architectnodes.com",
+      "provider": "Architect Nodes"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://nolus.rpc.liveraven.net",
+      "provider": "LiveRaveN"
+    },
+    {
+      "address": "https://rpc.lavenderfive.com:443/nolus",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://nolus-rpc.ibs.team",
+      "provider": "Inter Blockchain Services"
+    },
+    {
+      "address": "https://nolus-mainnet-rpc.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    },
+    {
+      "address": "https://nolus-rpc.w3coins.io",
+      "provider": "w3coins"
+    },
+    {
+      "address": "https://rpc-nolus.architectnodes.com",
+      "provider": "Architect Nodes"
+    }
+  ],
+  "sdk_version": "0.50.7",
+  "addr_prefix": "nolus",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nolus/images/nolus.svg",
+  "assets": [
+    {
+      "base": "unls",
+      "symbol": "NLS",
+      "exponent": "6",
+      "coingecko_id": "nolus",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nolus/images/nolus.svg"
+    }
+  ]
+}
