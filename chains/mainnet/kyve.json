@@ -1,0 +1,81 @@
+{
+  "chain_name": "kyve",
+  "theme_color": "#2e2e2e",
+  "registry_name": "kyve",
+  "api": [
+    {
+      "address": "https://lcd.g-bridge.bronbro.io:443",
+      "provider": "Bro_n_Bro"
+    },
+    {
+      "address": "https://api.gravity-bridge-3.gravity.aviaone.com",
+      "provider": "AviaOne 🟢"
+    },
+    {
+      "address": "https://rest.lavenderfive.com:443/gravitybridge",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://gravity-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://api-gravity-bridge-01.stakeflow.io",
+      "provider": "Stakeflow"
+    },
+    {
+      "address": "https://gravity-api.ibs.team",
+      "provider": "Inter Blockchain Services"
+    },
+    {
+      "address": "https://gravitychain.io:1317",
+      "provider": "althea"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.g-bridge.bronbro.io:443",
+      "provider": "Bro_n_Bro"
+    },
+    {
+      "address": "https://rpc.gravity-bridge-3.gravity.aviaone.com:443",
+      "provider": "AviaOne 🟢"
+    },
+    {
+      "address": "https://rpc.lavenderfive.com:443/gravitybridge",
+      "provider": "Lavender.Five Nodes 🐝"
+    },
+    {
+      "address": "https://gravity-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://rpc-gravity-bridge-01.stakeflow.io",
+      "provider": "Stakeflow"
+    },
+    {
+      "address": "https://gravity-rpc.ibs.team",
+      "provider": "Inter Blockchain Services"
+    },
+    {
+      "address": "https://gravity-rpc.staketab.org:443",
+      "provider": "Staketab"
+    },
+    {
+      "address": "https://gravitychain.io:26657",
+      "provider": "althea"
+    }
+  ],
+  "sdk_version": "0.50.7-kyve-rc0",
+  "addr_prefix": "kyve",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kyve/images/kyve-token.svg",
+  "assets": [
+    {
+      "base": "ukyve",
+      "symbol": "KYVE",
+      "exponent": "6",
+      "coingecko_id": "kyve-network",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kyve/images/kyve-token.svg"
+    }
+  ]
+}
