@@ -29,7 +29,7 @@ function pageload() {
   if (isAtBottom && pageResponse.value.next_key != null) {
     pageRequest.value.setPage((pageRequest.value.offset || 0 / pageRequest.value.limit) + 1)
     chainStore.rpc.getApplications(pageRequest.value).then(x => {
-      list.value = [...list.value, ...x.applications]
+      list.value = Array.from(new Set([...list.value, ...x.applications]));
       pageResponse.value = x.pagination
     });
   }

@@ -29,7 +29,7 @@ function pageload() {
   if (isAtBottom && parseInt(pageResponse.value.total || '0') != list.value.length) {
     pageRequest.value.setPage((pageRequest.value.offset || 0 / pageRequest.value.limit) + 1)
     chainStore.rpc.getSuppliers(pageRequest.value).then(x => {
-      list.value = [...list.value, ...x.supplier]
+      list.value = Array.from(new Set([...list.value, ...x.supplier]));
       pageResponse.value = x.pagination
     });
   }
