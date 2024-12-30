@@ -1,11 +1,21 @@
+body{
+  margin: 0;
+}
+
 #loading-bg {
-  background: var(--initial-loader-bg, #fff);
+  background: #212121;
+  display:flex;
+  position: relative;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .loading-logo {
-  position: absolute;
+  /* position: absolute;
   inset-block-start: 40%;
-  inset-inline-start: calc(50% - 75px);
+  inset-inline-start: calc(50% - 75px); */
 }
 
 .pre-loading {
@@ -14,8 +24,9 @@
   border: 3px solid transparent;
   block-size: 55px;
   border-radius: 50%;
+  top: 20px;
   inline-size: 55px;
-  inset-block-start: calc(40% + 35px);
+  inset-block-start: calc(40% + 140px);
   inset-inline-start: calc(50% - 27.5px);
 }
 

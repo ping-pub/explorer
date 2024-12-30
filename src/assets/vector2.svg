@@ -1,0 +1,70 @@
+<svg width="1280" height="868" viewBox="0 0 1280 868" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1_36)">
+<rect width="868" height="1280" transform="translate(6.10352e-05 868) rotate(-90)" fill="#212121"/>
+<g filter="url(#filter0_f_1_36)">
+<ellipse cx="491.366" cy="638.622" rx="491.366" ry="638.622" transform="matrix(-0.851505 0.524346 -0.274911 -0.96147 370.488 893.539)" fill="url(#paint0_angular_1_36)" fill-opacity="0.4"/>
+</g>
+<g style="mix-blend-mode:overlay" filter="url(#filter1_f_1_36)">
+<ellipse cx="1054.61" cy="856.008" rx="1054.61" ry="856.008" transform="matrix(-0.339311 0.940674 0.789709 0.613482 1677.2 -468.221)" fill="url(#paint1_angular_1_36)"/>
+</g>
+<g style="mix-blend-mode:multiply" filter="url(#filter2_f_1_36)">
+<path d="M-50.5129 434.733C112.56 -47.4581 511.117 -244.349 839.69 -5.03505C1168.26 234.279 1302.43 819.175 1139.36 1301.37C976.283 1783.56 577.726 1980.45 249.152 1741.13C-79.4207 1501.82 -213.585 916.925 -50.5129 434.733Z" fill="url(#paint2_angular_1_36)"/>
+</g>
+<g filter="url(#filter3_f_1_36)">
+<ellipse cx="538.096" cy="789.083" rx="538.096" ry="789.083" transform="matrix(-0.999048 0.043626 0.0202719 0.999794 2323.32 169.076)" fill="url(#paint3_angular_1_36)"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_1_36" x="-955.628" y="-407.176" width="1464.3" height="1888.69" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="139.146" result="effect1_foregroundBlur_1_36"/>
+</filter>
+<filter id="filter1_f_1_36" x="966.934" y="-337.122" width="2056.84" height="2772.19" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="131.7" result="effect1_foregroundBlur_1_36"/>
+</filter>
+<filter id="filter2_f_1_36" x="-349.745" y="-336.709" width="1788.33" height="2409.52" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="114.921" result="effect1_foregroundBlur_1_36"/>
+</filter>
+<filter id="filter3_f_1_36" x="934.046" y="-137.665" width="1735.37" height="2238.27" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="164.93" result="effect1_foregroundBlur_1_36"/>
+</filter>
+<radialGradient id="paint0_angular_1_36" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(491.366 638.622) rotate(90) scale(638.622 491.366)">
+<stop stop-color="#FA7327"/>
+<stop offset="0.195833" stop-color="#FFD361"/>
+<stop offset="0.451042" stop-color="#C0FFDE"/>
+<stop offset="0.648958" stop-color="#9CD3B8"/>
+<stop offset="0.8625" stop-color="#212121"/>
+</radialGradient>
+<radialGradient id="paint1_angular_1_36" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1054.61 856.008) rotate(90) scale(856.008 1054.61)">
+<stop stop-color="#FA7327"/>
+<stop offset="0.195833" stop-color="#FFD361"/>
+<stop offset="0.451042" stop-color="#C0FFDE"/>
+<stop offset="0.648958" stop-color="#9CD3B8"/>
+<stop offset="0.8625" stop-color="#212121"/>
+</radialGradient>
+<radialGradient id="paint2_angular_1_36" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(544.421 868.05) rotate(-71.315) scale(921.662 702.397)">
+<stop stop-color="#FA7327"/>
+<stop offset="0.195833" stop-color="#FFD361"/>
+<stop offset="0.451042" stop-color="#FFD361"/>
+<stop offset="0.648958" stop-color="#9CD3B8"/>
+<stop offset="0.8625" stop-color="#212121"/>
+</radialGradient>
+<radialGradient id="paint3_angular_1_36" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(538.096 789.083) rotate(90) scale(789.083 538.096)">
+<stop stop-color="#FA7327"/>
+<stop offset="0.195833" stop-color="#FFD361"/>
+<stop offset="0.451042" stop-color="#C0FFDE"/>
+<stop offset="0.648958" stop-color="#9CD3B8"/>
+<stop offset="0.8625" stop-color="#212121"/>
+</radialGradient>
+<clipPath id="clip0_1_36">
+<rect width="868" height="1280" fill="white" transform="translate(6.10352e-05 868) rotate(-90)"/>
+</clipPath>
+</defs>
+</svg>

@@ -21,8 +21,8 @@ const series = computed(() => {
                 kind.value === 'price'
                     ? store.marketData.prices.map((item: any) => item[1])
                     : store.marketData.total_volumes.map(
-                          (item: any) => item[1]
-                      ),
+                        (item: any) => item[1]
+                    ),
         },
     ];
 });
@@ -34,25 +34,14 @@ function changeChart(type: string) {
 
 <template>
     <div class="tabs tabs-boxed bg-transparent justify-end">
-        <a
-            class="tab text-xs mr-2 text-gray-400 uppercase"
-            :class="{ 'tab-active': kind === 'price' }"
-            @click="changeChart('price')"
-        >
+        <a class="tab text-xs mr-2 text-gray-200 uppercase" :class="{ 'tab-active': kind === 'price' }"
+            @click="changeChart('price')">
             Price
         </a>
-        <a
-            class="tab text-xs text-gray-400 uppercase"
-            :class="{ 'tab-active': kind === 'volume' }"
-            @click="changeChart('volume')"
-        >
+        <a class="tab text-xs text-gray-200 uppercase" :class="{ 'tab-active': kind === 'volume' }"
+            @click="changeChart('volume')">
             Volume
         </a>
     </div>
-    <ApexCharts
-        type="area"
-        height="230"
-        :options="chartConfig"
-        :series="series"
-    />
+    <ApexCharts type="area" height="230" :options="chartConfig" :series="series" />
 </template>

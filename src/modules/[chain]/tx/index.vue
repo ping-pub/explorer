@@ -3,6 +3,8 @@ import { computed, ref } from '@vue/reactivity';
 import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
 import type { PaginatedTxs } from '@/types';
 import { useRouter } from 'vue-router';
+import { Icon } from '@iconify/vue';
+
 import { onMounted } from 'vue';
 const props = defineProps(['chain']);
 const vueRouters = useRouter();
@@ -21,22 +23,22 @@ onMounted(() => {
 });
 function search() {
     if (hashReg.test(hash.value)) {
-      vueRouters.push({ path: `/${current}/tx/${hash.value}` });
+        vueRouters.push({ path: `/${current}/tx/${hash.value}` });
     }
 }
 </script>
 <template>
     <div>
         <div class="tabs tabs-boxed bg-transparent mb-4">
-            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'recent' }"
+            <a class="tab text-gray-200 uppercase" :class="{ 'tab-active': tab === 'recent' }"
                 @click="tab = 'recent'">{{ $t('block.recent') }}</a>
-            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'search' }"
+            <a class="tab text-gray-200 uppercase" :class="{ 'tab-active': tab === 'search' }"
                 @click="tab = 'search'">Search</a>
         </div>
 
-        <div v-show="tab === 'recent'" class="bg-base-100 rounded overflow-x-auto">
+        <div v-show="tab === 'recent'" class="bg-vector-bg rounded overflow-x-auto">
             <table class="table w-full table-compact">
-                <thead class="bg-base-200">
+                <thead class="bg-vector-bg">
                     <tr>
                         <th style="position: relative; z-index: 2;">{{ $t('account.height') }}</th>
                         <th style="position: relative; z-index: 2;">{{ $t('account.hash') }}</th>
@@ -51,8 +53,8 @@ function search() {
                         </td>
                         <td class="truncate text-primary" width="50%">
                             <RouterLink :to="`/${props.chain}/tx/${item.hash}`">{{
-                item.hash
-            }}</RouterLink>
+                                item.hash
+                                }}</RouterLink>
                         </td>
                         <td>{{ format.messages(item.tx.body.messages) }}</td>
                         <td>{{ format.formatTokens(item.tx.authInfo.fee?.amount) }}</td>
@@ -74,10 +76,18 @@ function search() {
             </div>
         </div>
 
-        <div v-show="tab === 'search'" class="bg-base-100 rounded overflow-x-auto">
+        <div v-show="tab === 'search'" class="bg-vector-bg rounded overflow-x-auto">
             <div class="p-4">
                 <div class="form-control">
-                    <input v-model="hash" type="text" class="input input-bordered" placeholder="Search by Tx Hash" @blur="search"/>
+                    <div class="flex w-full">
+                        <input v-model="hash" type="text" class="input w-full input-bordered !border-r-0"
+                            placeholder="Search by Tx Hash" @blur="search" />
+                        <div class="">
+                            <button class=" btn !rounded-l-none btn-primary" @click="search">
+                                <Icon icon="mdi:magnify" class="text-2xl text-gray-500 dark:text-gray-200" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

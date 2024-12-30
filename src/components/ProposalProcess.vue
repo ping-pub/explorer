@@ -31,33 +31,17 @@ const veto = computed(() =>
 
 <template>
   <div class="progress rounded-[3px] h-6 text-xs flex items-center">
-    <div
-      class="h-6 bg-yes flex items-center pl-2 text-white overflow-hidden"
-      :style="`width: ${yes}`"
-      :title="yes"
-    >
-      {{ yes }}
+    <div class="h-6 bg-[#69bba2] flex items-center pl-2 text-white overflow-hidden" :style="`width: ${yes}`"
+      :title="`Yes: ${yes}`">
     </div>
-    <div
-      class="h-6 bg-no flex items-center text-white overflow-hidden"
-      :style="`width: ${no}`"
-      :title="no"
-    >
-      {{ no }}
+    <div class="h-6 bg-[#db3b3b] flex items-center text-white overflow-hidden" :style="`width: ${no}`"
+      :title="`No: ${no}`">
     </div>
-    <div
-      class="h-6 bg-[#B71C1C] flex items-center text-white overflow-hidden"
-      :style="`width: ${veto};`"
-      :title="veto"
-    >
-      {{ veto }}
+    <div class="h-6 bg-[#B71C1C] flex items-center text-white overflow-hidden" :style="`width: ${veto}`"
+      :title="`Veto: ${veto}`">
     </div>
-    <div
-      class="h-6 bg-secondary flex items-center text-white overflow-hidden"
-      :style="`width: ${abstain}`"
-      :title="abstain"
-    >
-      {{ abstain }}
+    <div class="h-6 bg-[#1b1b1b] flex items-center text-white overflow-hidden" :style="`width: ${abstain}`"
+      :title="`Abstain: ${abstain}`">
     </div>
   </div>
 </template>

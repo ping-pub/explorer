@@ -16,9 +16,9 @@ onMounted(() => {
 })
 async function initParamsForKeplr() {
     const chain = selected.value
-    if(!chain.endpoints?.rest?.at(0)) throw new Error("Endpoint does not set");
+    if (!chain.endpoints?.rest?.at(0)) throw new Error("Endpoint does not set");
     const client = CosmosRestClient.newDefault(chain.endpoints.rest?.at(0)?.address || "")
-    const b = await client.getBaseBlockLatest()   
+    const b = await client.getBaseBlockLatest()
     const chainid = b.block.header.chain_id
 
     const gasPriceStep = chain.keplrPriceStep || {
@@ -84,7 +84,7 @@ function suggest() {
 </script>
 
 <template>
-    <div class="bg-base-100 p-4 rounded text-center">
+    <div class="bg-vector-bg p-4 rounded text-center">
         <AdBanner id="keplr-banner-ad" unit="banner" width="970px" height="90px" />
         <div class="flex">
             <select v-model="selected" class="select select-bordered mx-5" @change="initParamsForKeplr">
@@ -92,7 +92,8 @@ function suggest() {
                     {{ c.chainName }}
                 </option>
             </select>
-            <button class="btn !bg-yes !border-yes text-white px-10" @click="suggest">Add {{ selected.chainName }} TO Unisat Wallet</button>
+            <button class="btn !bg-yes !border-yes text-white px-10" @click="suggest">Add {{ selected.chainName }} TO
+                Unisat Wallet</button>
         </div>
         <div class="text-main mt-5">
             <textarea v-model="conf" class="textarea textarea-bordered w-full" rows="15"></textarea>

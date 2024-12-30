@@ -20,13 +20,9 @@ const header = computed(() => {
 <template>
   <div class="overflow-auto max-h-96 ">
     <table class="table table-xs table-compact table-pin-rows w-full">
-      <thead v-if="thead">
-        <tr>
-          <th
-            v-for="(item, index) in header"
-            :key="index"
-            class="text-left capitalize"
-          >
+      <thead v-if="thead" class="bg-vector-green">
+        <tr class="bg-vector-green">
+          <th v-for="(item, index) in header" :key="index" class="text-left capitalize">
             {{ item.replace(/_/g, ' ') }}
           </th>
         </tr>
