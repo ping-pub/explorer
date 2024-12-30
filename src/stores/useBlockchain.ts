@@ -46,7 +46,7 @@ export const useBlockchain = defineStore('blockchain', {
       const chain = this.dashboard.chains[this.chainName]
       // update chain config with dynamic updated sdk version
       const sdkversion = localStorage.getItem(`sdk_version_${this.chainName}`)
-      if(sdkversion && chain?.versions) {
+      if (sdkversion && chain?.versions) {
         chain.versions.cosmosSdk = sdkversion;
       }
       return chain;
@@ -76,7 +76,7 @@ export const useBlockchain = defineStore('blockchain', {
         if (this.current?.themeColor) {
           const { color } = hexToRgb(this.current?.themeColor);
           const { h, s, l } = rgbToHsl(color);
-          const themeColor = h + ' ' + s + '% ' + l +'%';
+          const themeColor = h + ' ' + s + '% ' + l + '%';
           document.body.style.setProperty('--p', `${themeColor}`);
           // document.body.style.setProperty('--p', `${this.current?.themeColor}`);
         } else {
@@ -161,7 +161,7 @@ export const useBlockchain = defineStore('blockchain', {
       useDistributionStore().initial();
     },
 
-    randomEndpoint(chainName: string) : Endpoint | undefined {
+    randomEndpoint(chainName: string): Endpoint | undefined {
       const end = localStorage.getItem(`endpoint-${chainName}`);
       if (end) {
         return JSON.parse(end);
@@ -179,12 +179,7 @@ export const useBlockchain = defineStore('blockchain', {
       try {
         let response;
         console.log('fetching tx count', this.chainName);
-        if (this.chainName === 'xion-testnet-1') {
-          response = await fetch('https://chain-data.xion-testnet-1.burnt.com/api/txs/count');
-        } else {
-          response = await fetch('https://chain-data.xion-mainnet-1.burnt.com/api/txs/count');
-        }
-
+        response = await fetch(`https://chain-data.${this.chainName}.burnt.com/api/txs/count`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -200,7 +195,7 @@ export const useBlockchain = defineStore('blockchain', {
 
     async randomSetupEndpoint() {
       const endpoint = this.randomEndpoint(this.chainName)
-      if(endpoint) await this.setRestEndpoint(endpoint);
+      if (endpoint) await this.setRestEndpoint(endpoint);
     },
 
     async setRestEndpoint(endpoint: Endpoint) {
@@ -214,7 +209,7 @@ export const useBlockchain = defineStore('blockchain', {
     },
     async setCurrent(name: string) {
       // Ensure chains are loaded due to asynchronous calls.
-      if(this.dashboard.length === 0) {
+      if (this.dashboard.length === 0) {
         await this.dashboard.initial();
       }
 

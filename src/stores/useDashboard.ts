@@ -33,14 +33,14 @@ export interface DirectoryChain {
   denom: string;
   display: string;
   explorers:
-    | {
-        name?: string | undefined;
-        kind?: string | undefined;
-        url?: string | undefined;
-        tx_page?: string | undefined;
-        account_page?: string | undefined;
-      }[]
-    | undefined;
+  | {
+    name?: string | undefined;
+    kind?: string | undefined;
+    url?: string | undefined;
+    tx_page?: string | undefined;
+    account_page?: string | undefined;
+  }[]
+  | undefined;
   height: number;
   image: string;
   name: string;
@@ -62,8 +62,7 @@ export interface ChainConfig {
   coinType: string;
   assets: Asset[];
   themeColor?: string;
-  features?: string[];
-  network_type: string;
+  features?: string[]
   endpoints: {
     rest?: Endpoint[];
     rpc?: Endpoint[];
@@ -78,20 +77,20 @@ export interface ChainConfig {
   exponent: string;
   excludes?: string;
   providerChain: {
-    api: Endpoint[];
+    api: Endpoint[]
   };
   // keplr config
-  keplrFeatures?: string[];
+  keplrFeatures?: string[],
   keplrPriceStep?: {
-    low: number;
-    average: number;
-    high: number;
-  };
+    low: number,
+    average: number,
+    high: number,
+  },
   faucet?: {
-    amount: string;
-    ip_limit: number;
-    address_limit: number;
-    fees: string;
+    amount: string,
+    ip_limit: number,
+    address_limit: number,
+    fees: string
   };
 }
 
@@ -102,8 +101,8 @@ export interface LocalConfig {
   api: string[] | Endpoint[];
   grpc: Endpoint[];
   provider_chain: {
-    api: string[] | Endpoint[];
-  };
+    api: string[] | Endpoint[]
+  }
   assets: {
     base: string;
     coingecko_id: string;
@@ -121,16 +120,16 @@ export interface LocalConfig {
   registry_name?: string;
   features?: string[];
   keplr_price_step?: {
-    low: number;
-    average: number;
-    high: number;
-  };
-  keplr_features: string[];
+    low: number,
+    average: number,
+    high: number,
+  },
+  keplr_features: string[],
   faucet?: {
-    amount: string;
-    ip_limit: number;
-    address_limit: number;
-    fees: string;
+    amount: string,
+    ip_limit: number,
+    address_limit: number,
+    fees: string
   };
 }
 
@@ -168,11 +167,10 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
     }));
   }
   conf.versions = {
-    cosmosSdk: lc.sdk_version,
-  };
+    cosmosSdk: lc.sdk_version
+  }
   conf.bech32Prefix = lc.addr_prefix;
-  conf.bech32ConsensusPrefix =
-    lc.consensus_prefix ?? lc.addr_prefix + 'valcons';
+  conf.bech32ConsensusPrefix = lc.consensus_prefix ?? lc.addr_prefix + 'valcons';
   conf.chainName = lc.chain_name;
   conf.coinType = lc.coin_type;
   conf.prettyName = lc.registry_name || lc.chain_name;
@@ -183,13 +181,11 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
   };
   if (lc.provider_chain) {
     conf.providerChain = {
-      api: apiConverter(lc.provider_chain.api),
-    };
+      api: apiConverter(lc.provider_chain.api)
+    }
   }
-  conf.features = lc.features;
-  conf.logo = lc.logo.startsWith('http')
-    ? lc.logo
-    : `https://ping.pub${lc.logo}`;
+  conf.features = lc.features
+  conf.logo = lc.logo.startsWith('http') ? lc.logo : `https://ping.pub${lc.logo}`;
   conf.keplrFeatures = lc.keplr_features;
   conf.keplrPriceStep = lc.keplr_price_step;
   conf.themeColor = lc.theme_color;
@@ -228,10 +224,10 @@ function pathConvert(path: string | undefined) {
 export function getLogo(
   conf:
     | {
-        svg?: string;
-        png?: string;
-        jpeg?: string;
-      }
+      svg?: string;
+      png?: string;
+      jpeg?: string;
+    }
     | undefined
 ) {
   if (conf) {
@@ -273,25 +269,25 @@ export enum NetworkType {
   Testnet,
 }
 export enum ConfigSource {
-  MainnetCosmosDirectory = 'https://chains.cosmos.directory',
-  TestnetCosmosDirectory = 'https://chains.testcosmos.directory',
+  MainnetCosmosDirectory = 'https://assets.xion.burnt.com/pingpub/xion-mainnet-1.json',
+  TestnetCosmosDirectory = 'https://assets.xion.burnt.com/pingpub/xion-testnet-1.json',
   Local = 'local',
 }
 
 export const useDashboard = defineStore('dashboard', {
   state: () => {
-    const favMap = JSON.parse(localStorage.getItem('favoriteMap') || '{}');
+    const favMap = JSON.parse(
+      localStorage.getItem('favoriteMap') ||
+      '{"xion":true}'
+    );
     return {
       status: LoadingStatus.Empty,
       source: ConfigSource.MainnetCosmosDirectory,
-      networkType: NetworkType.Mainnet, // default to testnet until mainnet public
+      networkType: NetworkType.Mainnet,
       favoriteMap: favMap as Record<string, boolean>,
       chains: {} as Record<string, ChainConfig>,
       prices: {} as Record<string, any>,
-      coingecko: {} as Record<
-        string,
-        { coinId: string; exponent: number; symbol: string }
-      >,
+      coingecko: {} as Record<string, { coinId: string, exponent: number, symbol: string }>,
     };
   },
   getters: {
@@ -301,38 +297,32 @@ export const useDashboard = defineStore('dashboard', {
   },
   actions: {
     async initial() {
-      await this.loadingFromRemote();
-      // await this.loadingFromLocal();
+      await this.loadingFromLocal();
       // await this.loadingFromRegistry()
     },
     loadingPrices() {
-      const coinIds = [] as string[];
-      const keys = Object.keys(this.chains); // load all blockchain
+      const coinIds = [] as string[]
+      const keys = Object.keys(this.chains) // load all blockchain
       // Object.keys(this.favoriteMap) //only load favorite once it has too many chains
-      keys.forEach((k) => {
-        if (Array.isArray(this.chains[k]?.assets))
-          this.chains[k].assets.forEach((a) => {
-            if (a.coingecko_id !== undefined && a.coingecko_id.length > 0) {
-              coinIds.push(a.coingecko_id);
-              a.denom_units.forEach((u) => {
-                this.coingecko[u.denom] = {
-                  coinId: a.coingecko_id || '',
-                  exponent: u.exponent,
-                  symbol: a.symbol,
-                };
-              });
-            }
-          });
-      });
+      keys.forEach(k => {
+        if (Array.isArray(this.chains[k]?.assets)) this.chains[k].assets.forEach(a => {
+          if (a.coingecko_id !== undefined && a.coingecko_id.length > 0) {
+            coinIds.push(a.coingecko_id)
+            a.denom_units.forEach(u => {
+              this.coingecko[u.denom] = {
+                coinId: a.coingecko_id || '',
+                exponent: u.exponent,
+                symbol: a.symbol
+              }
+            })
+          }
+        })
+      })
 
-      const currencies = ['usd, cny']; // usd,cny,eur,jpy,krw,sgd,hkd
-      get(
-        `https://api.coingecko.com/api/v3/simple/price?include_24hr_change=true&vs_currencies=${currencies.join(
-          ','
-        )}&ids=${coinIds.join(',')}`
-      ).then((x) => {
-        this.prices = x;
-      });
+      const currencies = ['usd, cny'] // usd,cny,eur,jpy,krw,sgd,hkd
+      get(`https://api.coingecko.com/api/v3/simple/price?include_24hr_change=true&vs_currencies=${currencies.join(',')}&ids=${coinIds.join(",")}`).then(x => {
+        this.prices = x
+      })
     },
     async loadingFromRegistry() {
       if (this.status === LoadingStatus.Empty) {
@@ -345,54 +335,9 @@ export const useDashboard = defineStore('dashboard', {
         });
       }
     },
-    async loadingFromRemote() {
-      if (window.location.hostname.search('testnet') > -1) {
-        this.networkType = NetworkType.Testnet;
-      }
-
-      const networkConfig = {
-        [NetworkType.Mainnet]: [
-          {
-            url: 'https://assets.xion.burnt.com/pingpub/xion-mainnet-1.json',
-            chainName: 'xion-mainnet-1',
-          },
-          {
-            url: 'https://assets.xion.burnt.com/pingpub/xion-testnet-1.json',
-            chainName: 'xion-testnet-1',
-          },
-        ],
-        [NetworkType.Testnet]: [
-          {
-            url: 'https://assets.xion.burnt.com/pingpub/xion-testnet-1.json',
-            chainName: 'xion-testnet-1',
-          },
-        ],
-      };
-      // Get the configurations for the current network type
-      const configs = networkConfig[this.networkType];
-
-      // Fetch configurations based on each URL and its unique chain name
-      const fetchConfigs = configs.map(async ({ url, chainName }) => {
-        try {
-          const response = await fetch(url);
-          if (!response.ok) {
-            throw new Error(`Failed to fetch ${chainName} config from ${url}`);
-          }
-          const config: LocalConfig = await response.json();
-          this.chains[config.chain_name] = fromLocal(config);
-        } catch (error) {
-          console.error(`Error loading config from ${url}:`, error);
-        }
-      });
-
-      await Promise.all(fetchConfigs); // Wait for all configs to load
-
-      this.setupDefault();
-      this.status = LoadingStatus.Loaded;
-    },
     async loadingFromLocal() {
-      if (window.location.hostname.search('testnet') > -1) {
-        this.networkType = NetworkType.Testnet;
+      if (window.location.hostname.search("testnet") > -1) {
+        this.networkType = NetworkType.Testnet
       }
       const source: Record<string, LocalConfig> =
         this.networkType === NetworkType.Mainnet
@@ -405,7 +350,7 @@ export const useDashboard = defineStore('dashboard', {
       this.status = LoadingStatus.Loaded;
     },
     async loadLocalConfig(network: NetworkType) {
-      const config: Record<string, ChainConfig> = {};
+      const config: Record<string, ChainConfig> = {}
       const source: Record<string, LocalConfig> =
         network === NetworkType.Mainnet
           ? import.meta.glob('../../chains/mainnet/*.json', { eager: true })
@@ -413,27 +358,23 @@ export const useDashboard = defineStore('dashboard', {
       Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
         config[x.chain_name] = fromLocal(x);
       });
-      return config;
+      return config
     },
     setupDefault() {
       if (this.length > 0) {
         const blockchain = useBlockchain();
-        const keys = Object.keys(this.favoriteMap);
+        const keys = Object.keys(this.favoriteMap)
         for (let i = 0; i < keys.length; i++) {
-          if (
-            !blockchain.chainName &&
-            this.chains[keys[i]] &&
-            this.favoriteMap[keys[i]]
-          ) {
+          if (!blockchain.chainName && this.chains[keys[i]] && this.favoriteMap[keys[i]]) {
             blockchain.setCurrent(keys[i]);
-            break;
+            break
           }
         }
         if (!blockchain.chainName) {
           const [first] = Object.keys(this.chains);
           blockchain.setCurrent(first);
         }
-        this.loadingPrices();
+        this.loadingPrices()
       }
     },
     setConfigSource(newSource: ConfigSource) {
