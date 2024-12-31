@@ -8,9 +8,7 @@ const route = useRoute();
 const walletStore = useWalletStore();
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
-// walletStore.$subscribe((m, s) => {
-//   console.log(m, s);
-// });
+
 function walletStateChange(res: any) {
   walletStore.setConnectedWallet(res.detail?.value);
 }
@@ -53,7 +51,8 @@ const params = computed(() => {
       <span class="ml-1 hidden md:block">
         {{ walletStore.shortAddress || 'Wallet' }}</span>
     </label>
-    <div tabindex="0" class="dropdown-content menu  p-2 bg-[#212121] drop-shadow-2xl rounded-lg w-52 md:!w-64 overflow-auto">
+    <div tabindex="0"
+      class="dropdown-content menu  p-2 bg-[#212121] drop-shadow-2xl rounded-lg w-52 md:!w-64 overflow-auto">
       <label v-if="!walletStore?.currentAddress" for="PingConnectWallet" class="btn btn-sm btn-primary">
         <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Wallet</span>
       </label>

@@ -43,8 +43,9 @@ const calculateValidatorROI = computed(() => {
   const commissionRate = Number(validatorSettings.validatorCommission || 0) / 100;
   const aprValue = parseFloat(apr.value as string) / 100;
   if (!aprValue) return 0;
+  const price = Number(tokenPrice.value || 0);
 
-  return Number((stake * aprValue * commissionRate).toFixed(2));
+  return Number(((stake * price) * aprValue * commissionRate).toFixed(2));
 });
 
 const calculateDelegatorAPR = computed(() => {
@@ -113,8 +114,11 @@ watch(selectedTab, (newTab) => {
           <input type="number" v-model="validatorSettings.validatorStake" min="0" :max="totalSupply"
             class="input-field max-w-[150px]" /> <span> VCTR </span>
         </div>
+        <label class="text-white pt-4">Token Price: ${{ tokenPrice }}</label>
+        <input type="range" v-model="tokenPrice" min="0.01" max="100" step="0.01" class="slider" />
         <label class="text-white pt-4">Validator Commission: {{ validatorSettings.validatorCommission }}%</label>
         <input type="range" v-model="validatorSettings.validatorCommission" min="1" max="100" step="1" class="slider" />
+
 
         <div class="text-main mt-4 w-full card card-body bg-vector-bg">
           <h4>Estimated Staking Revenue</h4>

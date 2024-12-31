@@ -15,9 +15,9 @@ function changeEndpoint(item: Endpoint) {
   <div class="dropdown">
     <label tabindex="0" class="flex items-center">
       <div class="p-1 relative mr-3 cursor-pointer">
-        <div class="relative">
-          <img src='../../assets/pentagon.svg' class="w-9 scale-[1.3] absolute h-9 rounded-full" />
-          <img v-lazy="chainStore.logo" class="w-9 h-9 rounded-full" />
+        <div class="relative w-full">
+          <img src='../../assets/profile.svg' class="w-10 scale-[1.3] absolute h-9 rounded-full" />
+          <img v-lazy="chainStore.logo" class="w-10 h-10  rounded-full  overflow-visible scale-[0.65]" />
         </div>
         <div class="w-2 h-2 rounded-full absolute right-0 bottom-0 shadow" :class="{
           'bg-success': baseStore.connected,
