@@ -30,7 +30,7 @@ const apr = computed((isVal: boolean) => {
   if (bondedRatio === 0) return 0;
 
   return format.percent(
-    (1 - communityTax) * (1 - commissionRate) * inflation / bondedRatio
+    (1 - communityTax) * inflation / bondedRatio
   );
 });
 
@@ -45,7 +45,7 @@ const calculateValidatorROI = computed(() => {
   if (!aprValue) return 0;
   const price = Number(tokenPrice.value || 0);
 
-  return Number(((stake * price) * aprValue * commissionRate).toFixed(2));
+  return Number((stake * price * aprValue * commissionRate).toFixed(2));
 });
 
 const calculateDelegatorAPR = computed(() => {
@@ -54,7 +54,7 @@ const calculateDelegatorAPR = computed(() => {
   const aprValue = parseFloat(apr.value as string) / 100;
   if (!aprValue) return 0;
 
-  return Number((tokens * price * aprValue).toFixed(2));
+  return Number((tokens * price * aprValue * (1 - commissionRate)).toFixed(2));
 });
 
 watch(selectedTab, (newTab) => {
