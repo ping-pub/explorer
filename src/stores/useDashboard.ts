@@ -280,10 +280,16 @@ export const useDashboard = defineStore('dashboard', {
       localStorage.getItem('favoriteMap') ||
       '{"xion":true}'
     );
+    let source: string = ConfigSource.MainnetCosmosDirectory;
+    let networkType = NetworkType.Mainnet;
+    if (window.location.hostname.search('testnet') > -1) {
+      source = ConfigSource.TestnetCosmosDirectory;
+      networkType = NetworkType.Testnet;
+    }
     return {
       status: LoadingStatus.Empty,
-      source: ConfigSource.MainnetCosmosDirectory,
-      networkType: NetworkType.Mainnet,
+      source: source,
+      networkType: networkType,
       favoriteMap: favMap as Record<string, boolean>,
       chains: {} as Record<string, ChainConfig>,
       prices: {} as Record<string, any>,
