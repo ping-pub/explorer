@@ -68,6 +68,7 @@ const behind = computed(() => {
 });
 
 const alpha_beta = window.location.host.includes('beta') ? 'beta' : 'alpha'
+const chain = window.location.host.includes('localhost') ? 'pocket-beta' : 'poktroll'
 dayjs()
 
 </script>
@@ -78,7 +79,7 @@ dayjs()
       <div class="container mx-auto px-1 py-2 flex justify-center items-center">
 
         <nav class="flex">
-          <RouterLink to="/poktroll/" class="flex items-center">
+          <RouterLink :to=chain class="flex items-center">
             <img class="w-10 h-10"
               src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
             <h1 class="flex-1 ml-3 text-xl font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
