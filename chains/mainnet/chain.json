@@ -3,11 +3,19 @@
     "registry_name": "vector",
     "api": [
         {
+            "provider": "PlayonVector",
+            "address": "https://archive-api-1.playonvector.com/"
+        },
+        {
             "provider": "Seraphim",
             "address": "https://archive-api-vector-1.seraphim.zone"
         }
     ],
     "rpc": [
+        {
+            "provider": "PlayonVector",
+            "address": "https://archive-rpc-1.playonvector.com/"
+        },
         {
             "provider": "Seraphim",
             "address": "https://archive-rpc-vector-1.seraphim.zone"
