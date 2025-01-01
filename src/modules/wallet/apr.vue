@@ -51,6 +51,8 @@ const calculateValidatorROI = computed(() => {
 const calculateDelegatorAPR = computed(() => {
   const tokens = Number(amountTokens.value || 0);
   const price = Number(tokenPrice.value || 0);
+  const commissionRate = Number(validatorSettings.validatorCommission || 0) / 100;
+
   const aprValue = parseFloat(apr.value as string) / 100;
   if (!aprValue) return 0;
 
