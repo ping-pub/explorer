@@ -82,7 +82,7 @@ function handleKeyPress(event: KeyboardEvent) {
 
       </div>
       <!-- Socials -->
-      <div class="flex gap-8">
+      <div class="flex flex-wrap justify-center gap-8 ">
         <a href="https://playonvector.com/" class="flex bg-vector-green rounded px-6 py-2 gap-2">
           <Icon icon="akar-icons:globe" class="text-2xl text-primary" />
           <p>Website</p>
