@@ -18,7 +18,7 @@ export const useBaseStore = defineStore('baseStore', {
                 | 'dark',
             connected: true,
             pageSize: 50,
-            fetchingBlocks: false,
+            fetchingBlocks: true,
             allTxs: [] as TxLocal[],
             pagination: {} as Pagination
         };
@@ -144,16 +144,19 @@ export const useBaseStore = defineStore('baseStore', {
                 this.recents = [];
             }
             if (this.recents.length == 0) {
-                let promises = [];
-                for (let i = this.pageSize; i > 0; i--) {
-                    promises.push(this.blockchain.rpc?.getBaseBlockAt(`${parseInt(this.latest.block.header.height) - i}`))
+                this.fetchingBlocks = true
+                for (let i = 1; i <= this.pageSize; i++) {
+                    const block = await this.blockchain.rpc?.getBaseBlockAt(`${parseInt(this.latest.block.header.height) - i}`).catch(e => {
+                        console.error(e);
+                        return null;
+                    });
+                    this.fetchingBlocks = false
+                    if (block) {
+                        this.recents.unshift(block);
+                    }
                 }
-                let res = await Promise.all(promises).catch(e => {
-                    console.error(e)
-                    return []
-                })
-                this.recents = [...res]
             }
+
             //check if the block exists in recents
             if (
                 this.recents.findIndex(

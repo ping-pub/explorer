@@ -138,7 +138,7 @@ const amount = computed({
             <div class="text-lg font-semibold text-main">
               {{ coinInfo.name }} (<span class="uppercase">{{
                 coinInfo.symbol
-                }}</span>)
+              }}</span>)
             </div>
             <div class="text-xs mt-2">
               Rank:
@@ -309,83 +309,86 @@ const amount = computed({
         </div>
       </div>
       <!-- Blocks -->
-      <div class="bg-base-100 rounded-lg overflow-auto col-span-1 mr-5 mt-4 px-1 py-1" style="height: 34rem;overflow: scroll;">
-        <h2 class="bg-base-100 px-4 pt-4 pb-2 text-md font-semibold text-main sticky top-0">Blocks</h2>
-        <table class="table table-compact">
-          <thead class="bg-base-200 sticky top-0">
-            <tr>
-              <th>{{ $t('block.block_header') }}</th>
-              <th>{{ $t('account.hash') }}</th>
-              <th>{{ $t('block.proposer') }}</th>
-              <th>{{ $t('module.tx') }}</th>
-              <th>{{ $t('account.time') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in [...base.recents].reverse()">
-              <td>{{ item.block.header.height }}</td>
-              <td class="truncate text-primary" style="max-width: 18rem;overflow:hidden;color:var(primary)">
-                <RouterLink class="truncate" :title="item.block_id.hash"
-                  :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}
-                </RouterLink>
-              </td>
-              <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
-              <td>{{ item.block?.data?.txs.length }}</td>
-              <td>{{ format.toDay(item.block?.header?.time) }}</td>
-            </tr>
-          </tbody>
-        </table>
-
+      <div class="bg-base-100 rounded-lg overflow-auto col-span-1 mr-5 mt-4 px-1 py-1 relative"
+        style="height: 34rem;">
+        <div class="bg-base-100 px-4 pt-4 pb-2 text-md font-semibold text-main">Blocks</div>
         <div class="pre-loading" v-if="base.fetchingBlocks">
           <div class="effect-1 effects"></div>
           <div class="effect-2 effects"></div>
           <div class="effect-3 effects"></div>
         </div>
+        <div class="max-h-[30rem] overflow-y-auto" v-else>
+          <table class="table table-compact">
+            <thead class="bg-base-200 sticky top-0">
+              <tr>
+                <th>{{ $t('block.block_header') }}</th>
+                <th>{{ $t('account.hash') }}</th>
+                <th>{{ $t('block.proposer') }}</th>
+                <th>{{ $t('module.tx') }}</th>
+                <th>{{ $t('account.time') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in [...base.recents].reverse()">
+                <td>{{ item.block.header.height }}</td>
+                <td class="truncate text-primary" style="max-width: 18rem; overflow:hidden; color:var(primary)">
+                  <RouterLink class="truncate" :title="item.block_id.hash"
+                    :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}
+                  </RouterLink>
+                </td>
+                <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
+                <td>{{ item.block?.data?.txs.length }}</td>
+                <td>{{ format.toDay(item.block?.header?.time) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <!-- Transactions -->
-      <div class="bg-base-100 rounded-lg overflow-auto col-span-1 mt-4 px-1 py-1 " style="height: 34rem;overflow: scroll;">
-        <h2 class="bg-base-100 px-4 pt-4 pb-2 text-md font-semibold text-main sticky top-0">{{ $t('module.tx') }}</h2>
-        <table class="table w-full table-compact">
-          <thead class="bg-base-200 sticky top-0">
-            <tr>
-              <th>{{ $t('tx.tx_hash') }}</th>
-              <th>{{ $t('block.block') }}</th>
-              <th>{{ $t('staking.status') }}</th>
-              <!-- <th style="position: relative; z-index: 2;">Messages</th> -->
-              <th>{{ $t('account.type') }}</th>
-              <th>{{ $t('block.fees') }}</th>
-              <th>{{ $t('account.time') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in base.allTxs" :index="index" class="hover">
-              <td class="truncate text-primary" style="max-width:14rem">
-                <RouterLink class="truncate" :to="`/${props.chain}/tx/${item.hash}`">{{
-                  item.hash
+      <div class="bg-base-100 rounded-lg overflow-auto col-span-1 mt-4 px-1 py-1"
+        style="height: 34rem; overflow: scroll;">
+        <div class="bg-base-100 px-4 pt-4 pb-2 text-md font-semibold text-main">{{ $t('module.tx') }}</div>
+        <div class="max-h-[30rem] overflow-y-auto">
+          <table class="table w-full table-compact">
+            <thead class="bg-base-200 sticky top-0">
+              <tr>
+                <th>{{ $t('tx.tx_hash') }}</th>
+                <th>{{ $t('block.block') }}</th>
+                <th>{{ $t('staking.status') }}</th>
+                <th>{{ $t('account.type') }}</th>
+                <th>{{ $t('block.fees') }}</th>
+                <th>{{ $t('account.time') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in base.allTxs" :index="index" class="hover">
+                <td class="truncate text-primary" style="max-width:14rem">
+                  <RouterLink class="truncate" :to="`/${props.chain}/tx/${item.hash}`">{{
+                    item.hash
                   }}</RouterLink>
-              </td>
-              <td class="text-sm text-primary">
-                <RouterLink :to="`/${props.chain}/block/${item.height}`">{{ item.height }}</RouterLink>
-              </td>
-              <td>
-                <span class="text-xs truncate relative py-2 px-4 w-fit mr-2 rounded-lg" :class="`text-${item.status === 0 ? 'success' : 'error'
-                  }`">
-                  <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${item.status === 0 ? 'success' : 'error'
-                    }`"></span>
-                  {{ item.status === 0 ? 'Success' : 'Failed' }}
-                </span>
-              </td>
-              <!-- <td>{{ item.messages.length }}</td> -->
-              <td>{{ format.messages(item.messages) }}</td>
-              <td>{{ format.formatTokens(item.fee.amount) }}</td>
-              <td>
-                {{
-                  format.toDay(item.timestamp, 'from')
-                }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+                <td class="text-sm text-primary">
+                  <RouterLink :to="`/${props.chain}/block/${item.height}`">{{ item.height }}</RouterLink>
+                </td>
+                <td>
+                  <span class="text-xs truncate relative py-2 px-4 w-fit mr-2 rounded-lg" :class="`text-${item.status === 0 ? 'success' : 'error'
+                    }`">
+                    <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${item.status === 0 ? 'success' : 'error'
+                      }`"></span>
+                    {{ item.status === 0 ? 'Success' : 'Failed' }}
+                  </span>
+                </td>
+                <td>{{ format.messages(item.messages) }}</td>
+                <td>{{ format.formatTokens(item.fee.amount) }}</td>
+                <td>
+                  {{
+                    format.toDay(item.timestamp, 'from')
+                  }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
 
@@ -393,8 +396,8 @@ const amount = computed({
         <div class="px-4 pt-4 pb-2 text-md font-semibold text-main">
           Application Versions
         </div> -->
-        <!-- Application Version -->
-        <!-- <ArrayObjectElement :value="paramStore.appVersion?.items" :thead="false" />
+      <!-- Application Version -->
+      <!-- <ArrayObjectElement :value="paramStore.appVersion?.items" :thead="false" />
         <div class="h-4"></div>
       </div> -->
 
