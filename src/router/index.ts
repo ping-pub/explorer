@@ -21,7 +21,7 @@ router.beforeEach((to) => {
   if (chain) {
     const blockchain = useBlockchain();
     if (chain !== blockchain.chainName) {
-      blockchain.setCurrent('chain');
+      blockchain.setCurrent('vector');
     }
   }
 });

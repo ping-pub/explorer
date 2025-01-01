@@ -122,7 +122,7 @@ export const useBlockchain = defineStore('blockchain', {
       useDistributionStore().initial();
 
       // Set default chain on start
-      const defaultChain = 'chain'; // Replace with your default chain name
+      const defaultChain = 'vector'; // Replace with your default chain name
       await this.setCurrent(defaultChain);
     },
 
