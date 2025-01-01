@@ -68,7 +68,7 @@ const behind = computed(() => {
 });
 
 const alpha_beta = window.location.host.includes('beta') ? 'beta' : 'alpha'
-const chain = window.location.host.includes('localhost') ? 'pocket-beta' : 'poktroll'
+const chain = window.location.host.includes('beta') ? '/pocket-beta' : '/poktroll'
 dayjs()
 
 </script>
