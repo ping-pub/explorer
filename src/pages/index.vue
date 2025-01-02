@@ -85,15 +85,15 @@ function handleKeyPress(event: KeyboardEvent) {
       <div class="flex flex-wrap justify-center gap-8">
         <a href="https://playonvector.com/" class="flex bg-vector-green rounded px-6 py-2 gap-2">
           <Icon icon="akar-icons:globe" class="text-2xl text-primary" />
-          <p>Website</p>
+          <p class="text-white">Website</p>
         </a>
         <a href="https://x.com/playonvector/" class="flex bg-vector-green rounded px-6 py-2 gap-2">
           <Icon icon="akar-icons:x-fill" class="text-2xl text-primary" />
-          <p>Twitter</p>
+          <p class="text-white">Twitter</p>
         </a>
         <a href="https://discord.gg/r5JacJAt" class="flex bg-vector-green rounded px-6 py-2 gap-2">
           <Icon icon="akar-icons:discord-fill" class="text-2xl text-primary" />
-          <p>Discord</p>
+          <p class="text-white">Discord</p>
         </a>
       </div>
     </div>
