@@ -1,0 +1,20 @@
+{
+    "chain_name": "kujira",
+    "coingecko": "kujira",
+    "api": ["https://kujira-api.bryanlabs.net"],
+    "rpc": ["https://kujira-rpc.bryanlabs.net"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.1",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "osmo",
+    "logo": "/logos/kujira.jpg",
+    "theme_color": "#812cd6",
+    "assets": [{
+        "base": "ukuji",
+        "symbol": "KUJI",
+        "exponent": "6",
+        "coingecko_id": "kujira", 
+        "logo": "/logos/kujira.jpg"
+    }]
+}

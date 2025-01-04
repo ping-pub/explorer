@@ -1,0 +1,20 @@
+{
+    "chain_name": "rujira",
+    "coingecko": "thorchain",
+    "api": ["https://thornode-devnet-api.bryanlabs.net"],
+    "rpc": ["https://thornode-devnet.bryanlabs.net"],
+    "snapshot_provider": "",
+    "sdk_version": "0.50.",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "sthor",
+    "logo": "/logos/rujira.jpg",
+    "theme_color": "#812cd6",
+    "assets": [{
+        "base": "uthor",
+        "symbol": "RUJI",
+        "exponent": "6",
+        "coingecko_id": "thorchain", 
+        "logo": "/logos/rujira.jpg"
+    }]
+}

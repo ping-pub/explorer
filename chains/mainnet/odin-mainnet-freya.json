@@ -1,0 +1,20 @@
+{
+    "chain_name": "odin",
+    "coingecko": "odin",
+    "api": ["https://odin-api.bryanlabs.net"],
+    "rpc": ["https://odin-rpc.bryanlabs.net"],
+    "snapshot_provider": "",
+    "sdk_version": "0.50.x",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "odin",
+    "logo": "/logos/odin.jpg",
+    "theme_color": "#812cd6",
+    "assets": [{
+        "base": "uloki",
+        "symbol": "ODIN",
+        "exponent": "6",
+        "coingecko_id": "odin", 
+        "logo": "/logos/odin.jpg"
+    }]
+}
