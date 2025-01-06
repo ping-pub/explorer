@@ -198,7 +198,12 @@ export const useIndexModule = defineStore('module-index', {
           title: 'APR',
           color: 'success',
           icon: 'mdi-chart-multiple',
-          stats: formatter.formatDecimalToPercent(mintStore.inflation),
+          stats: formatter.formatDecimalToPercent(
+            (
+              parseFloat(mintStore.inflation) *
+              (1 - parseFloat(mintStore.community_tax))
+            ).toString()
+          ),
           change: 0,
         },
       ];
