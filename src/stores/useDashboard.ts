@@ -278,7 +278,7 @@ export const useDashboard = defineStore('dashboard', {
   state: () => {
     const favMap = JSON.parse(
       localStorage.getItem('favoriteMap') ||
-      '{"xion":true}'
+      '{"xion-mainnet-1":true, "xion-testnet-1":true}'
     );
     let source: string = ConfigSource.MainnetCosmosDirectory;
     let networkType = NetworkType.Mainnet;
