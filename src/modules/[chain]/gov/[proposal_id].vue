@@ -396,7 +396,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
             <tr v-for="(item, index) of votes" :key="index">
               <td class="py-2 text-sm">{{ showValidatorName(item.voter) }}</td>
               <td
-                v-if="item.option"
+                v-if="item.option !== 'VOTE_OPTION_UNSPECIFIED'"
                 class="py-2 text-sm"
                 :class="{
                   'text-yes': item.option === 'VOTE_OPTION_YES',
