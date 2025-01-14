@@ -15,7 +15,7 @@ const hash = ref("")
 
 base.$subscribe((m, { latest }) => {
   let h = Number(latest.block?.header?.height)
-  h = Math.round((h - 2000) / 1000) * 1000
+  h = Math.round((h - 5000) / 5000) * 5000
   if (h > height.value) {
     height.value = h
     base.fetchBlock(h).then(res => {
