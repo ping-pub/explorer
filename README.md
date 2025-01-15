@@ -71,6 +71,8 @@ This version of Ping.Pub was forked from from commit https://github.com/ping-pub
 - `src/modules/[chain]/supply`:
   - In `index.vue` add `fuel (initial_supply)`.
   - In `index.vue` change fuel supply to `fuel (supply_on_sequencer)`.
+- `src/modules/[chain]/statesync`:
+  - In `index.vue` use a height interval of 5000 blocks, i.e. `h = Math.round((h - 5000) / 5000) * 5000`.
 - `src/stores/`:
   - In `useDashboard.ts` ensure `conf.logo = lc.logo;`.
   - In `useParamsStore.ts` add `initial_supply`.
