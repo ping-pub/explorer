@@ -1,0 +1,81 @@
+{
+  "chain_name": "agoric",
+  "theme_color": "#2e2e2e",
+  "registry_name": "agoric",
+  "api": [
+    {
+      "address": "https://api.agoric.stakewith.us",
+      "provider": "StakeWithUs"
+    },
+    {
+      "address": "https://agoric-api.w3coins.io",
+      "provider": "w3coins"
+    },
+    {
+      "address": "https://agoric.api.kjnodes.com",
+      "provider": "kjnodes"
+    },
+    {
+      "address": "https://agoric.api.m.stavr.tech",
+      "provider": "🔥STAVR🔥"
+    },
+    {
+      "address": "https://agoric-api.stakeandrelax.net",
+      "provider": "Stake&Relax 🦥"
+    },
+    {
+      "address": "https://agoric-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://agoric-mainnet-lcd.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.agoric.stakewith.us",
+      "provider": "StakeWithUs"
+    },
+    {
+      "address": "https://agoric-rpc.stakeangle.com",
+      "provider": "StakeAngle"
+    },
+    {
+      "address": "https://rpc.agoric.bronbro.io:443",
+      "provider": "Bro_n_Bro"
+    },
+    {
+      "address": "https://agoric-rpc.stakeandrelax.net",
+      "provider": "Stake&Relax 🦥"
+    },
+    {
+      "address": "https://agoric-rpc.w3coins.io",
+      "provider": "w3coins"
+    },
+    {
+      "address": "https://agoric-mainnet-rpc.autostake.com:443",
+      "provider": "AutoStake 🛡️ Slash Protected"
+    },
+    {
+      "address": "https://agoric-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://agoric.rpc.kjnodes.com",
+      "provider": "kjnodes"
+    }
+  ],
+  "sdk_version": "0.46.16",
+  "addr_prefix": "agoric",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/agoric/images/bld.svg",
+  "assets": [
+    {
+      "base": "ubld",
+      "symbol": "BLD",
+      "exponent": "6",
+      "coingecko_id": "agoric",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/agoric/images/bld.svg"
+    }
+  ]
+}
