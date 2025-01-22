@@ -4,6 +4,10 @@
   "registry_name": "beezee",
   "api": [
     {
+      "address": "https://rest.cosmos.directory/beezee",
+      "provider": "cosmos.directory"
+    },
+    {
       "address": "https://rest.getbze.com",
       "provider": "AlphaTeam"
     },
@@ -21,6 +25,10 @@
     }
   ],
   "rpc": [
+    {
+      "address": "https://rpc.cosmos.directory/beezee",
+      "provider": "cosmos.directory"
+    },
     {
       "address": "https://rpc.getbze.com",
       "provider": "AlphaTeam"
