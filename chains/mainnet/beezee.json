@@ -1,0 +1,53 @@
+{
+  "chain_name": "beezee",
+  "theme_color": "#2e2e2e",
+  "registry_name": "beezee",
+  "api": [
+    {
+      "address": "https://rest.getbze.com",
+      "provider": "AlphaTeam"
+    },
+    {
+      "address": "https://rest-1.getbze.com",
+      "provider": "AlphaTeam"
+    },
+    {
+      "address": "https://rest-2.getbze.com",
+      "provider": "AlphaTeam"
+    },
+    {
+      "address": "https://beezee_mainnet_api.chain.whenmoonwhenlambo.money",
+      "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.getbze.com",
+      "provider": "AlphaTeam"
+    },
+    {
+      "address": "https://rpc-1.getbze.com",
+      "provider": "AlphaTeam"
+    },
+    {
+      "address": "https://rpc-2.getbze.com",
+      "provider": "AlphaTeam"
+    },
+    {
+      "address": "https://beezee_mainnet_rpc.chain.whenmoonwhenlambo.money",
+      "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
+    }
+  ],
+  "sdk_version": "0.45.16",
+  "addr_prefix": "bze",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/beezee/images/bze.svg",
+  "assets": [
+    {
+      "base": "ubze",
+      "symbol": "BZE",
+      "exponent": "6",
+      "coingecko_id": "bzedge",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/beezee/images/bze.svg"
+    }
+  ]
+}
