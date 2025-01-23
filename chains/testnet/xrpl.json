@@ -1,0 +1,20 @@
+{
+    "chain_name": "xrpl",
+    "coingecko": "",
+    "api": ["https://xrpl-testnet-api.itrocket.net"], 
+    "rpc": ["https://xrpl-testnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.46.12",
+    "coin_type": "60",
+    "min_tx_fee": "4000",
+    "addr_prefix": "ethm",
+    "logo": "/logos/xrpl.webp",
+    "keplr_features": ["eth-address-gen", "eth-key-sign"],
+    "assets": [{
+        "base": "uxrp",
+        "symbol": "XRP",
+        "exponent": "18", 
+        "coingecko_id": "",
+        "logo": "/logos/xrpl.webp"
+    }]
+}
