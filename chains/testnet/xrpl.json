@@ -13,7 +13,7 @@
     "assets": [{
         "base": "apoa",
         "symbol": "POA",
-        "exponent": "18", 
+        "exponent": "6", 
         "coingecko_id": "",
         "logo": "/logos/xrpl.webp"
     }]
