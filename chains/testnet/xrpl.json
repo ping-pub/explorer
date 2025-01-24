@@ -5,7 +5,7 @@
     "rpc": ["https://xrpl-testnet-rpc.itrocket.net"],
     "snapshot_provider": "",
     "sdk_version": "v0.50.11-evmos",
-    "coin_type": "118",
+    "coin_type": "60",
     "min_tx_fee": "4000",
     "addr_prefix": "ethm",
     "logo": "/logos/xrpl.webp",
