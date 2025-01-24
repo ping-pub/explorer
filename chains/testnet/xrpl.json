@@ -11,8 +11,8 @@
     "logo": "/logos/xrpl.webp",
     "keplr_features": ["eth-address-gen", "eth-key-sign"],
     "assets": [{
-        "base": "axrp",
-        "symbol": "XRP",
+        "base": "apoa",
+        "symbol": "POA",
         "exponent": "18", 
         "coingecko_id": "",
         "logo": "/logos/xrpl.webp"
