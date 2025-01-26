@@ -4,6 +4,10 @@
   "registry_name": "furya",
   "api": [
     {
+      "address": "https://rpc.cosmos.directory:443/furya",
+      "provider": "cosmos.directory"
+    },
+    {
       "address": "https://furya.api.nodeshub.online:443",
       "provider": "Nodes Hub 🛡️ 100% Slash Protected 🛡️ | Restake ✅"
     },
@@ -13,6 +17,10 @@
     }
   ],
   "rpc": [
+    {
+      "address": "https://rest.cosmos.directory:443/furya",
+      "provider": "cosmos.directory"
+    },
     {
       "address": "https://furya.rpc.nodeshub.online:443",
       "provider": "nodeshub"
