@@ -18,7 +18,12 @@
     {
       "address": "https://dungeon_mainnet_api.chain.whenmoonwhenlambo.money",
       "provider": "WHEN MOON"
-    }
+    },
+    {
+      "provider": "Quasar",
+      "address": "https://dungeon-wallet.api.quasarstaking.ai"
+    },
+    { "provider": "Proxy", "address": "https://rest.cosmos.directory/dungeon" }
   ],
   "rpc": [
     {
@@ -36,7 +41,12 @@
     {
       "address": "https://dungeon_mainnet_rpc.chain.whenmoonwhenlambo.money",
       "provider": "WHEN MOON"
-    }
+    },
+    {
+      "provider": "Quasar",
+      "address": "https://dungeon-wallet.rpc.quasarstaking.ai"
+    },
+    { "provider": "Proxy", "address": "https://rpc.cosmos.directory/dungeon" }
   ],
   "sdk_version": "0.50.8",
   "addr_prefix": "dungeon",
