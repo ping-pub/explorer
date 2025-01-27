@@ -1,0 +1,28 @@
+{
+  "chain_name": "warden-testnet",
+  "theme_color": "#2e2e2e",
+  "api": [
+    {
+      "provider": "itrocket",
+      "address": "https://warden-testnet-api.itrocket.net"
+    }
+  ],
+  "rpc": [
+    {
+      "provider": "itrocket",
+      "address": "https://warden-testnet-rpc.itrocket.net"
+    }
+  ],
+  "sdk_version": "v0.50.9-evmos-warden",
+  "coin_type": "118",
+  "addr_prefix": "warden",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/wardenprotocol/images/ward.png",
+  "assets": [
+    {
+      "base": "award",
+      "symbol": "WARD",
+      "exponent": "18",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/wardenprotocol/images/ward.png"
+    }
+  ]
+}
