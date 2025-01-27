@@ -5,12 +5,20 @@
     {
       "provider": "itrocket",
       "address": "https://warden-testnet-api.itrocket.net"
+    },
+    {
+      "provider": "nodejumper",
+      "address": "https://rest.nodejumper.io/wardenprotocoltestnet"
     }
   ],
   "rpc": [
     {
       "provider": "itrocket",
       "address": "https://warden-testnet-rpc.itrocket.net"
+    },
+    {
+      "provider": "nodejumper",
+      "address": "https://rpc.nodejumper.io/wardenprotocoltestnet"
     }
   ],
   "sdk_version": "v0.50.9-evmos-warden",
