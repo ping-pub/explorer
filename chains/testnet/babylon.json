@@ -1,0 +1,19 @@
+{
+    "chain_name": "babylon",
+    "coingecko": "",
+    "api": ["https://babylon-testnet-api.itrocket.net"],
+    "rpc": ["https://babylon-testnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.50.9",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "bbn",
+    "logo": "/logos/babylon.jpg",
+    "assets": [{
+        "base": "ubbn",
+        "symbol": "BBN",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "/logos/babylon.jpg"
+    }]
+}
