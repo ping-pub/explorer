@@ -47,7 +47,7 @@ function metaItem(metadata: string | undefined): {
 }
 </script>
 <template>
-  <div class="bg-[#28334e] rounded text-sm">
+  <div class="bg-base-100 rounded text-sm">
     <table class="table-compact w-full table-fixed hidden lg:!table">
       <tbody>
         <tr v-for="(item, index) in proposals?.proposals" :key="index">
