@@ -1,0 +1,27 @@
+{
+  "chain_name": "babylon-testnet",
+  "api": [
+    {
+      "provider": "POSTHUMAN∞DVS",
+      "address": "https://rest-api.babylon.posthuman.digital"
+    }
+  ],
+  "rpc": [
+    {
+      "provider": "POSTHUMAN∞DVS",
+      "address": "https://rpc.babylon.posthuman.digital"
+    }
+  ],
+  "assets": [
+    {
+      "base": "ubbn",
+      "symbol": "BBN",
+      "exponent": "6",
+      "logo": "https://github.com/Validator-POSTHUMAN/posthuman-source-data/blob/main/babylon-testnet/babylon.svg"
+    }
+  ],
+  "sdk_version": "0.50.9",
+  "addr_prefix": "bbn",
+  "theme_color": "#2e2e2e",
+  "logo": "https://github.com/Validator-POSTHUMAN/posthuman-source-data/blob/main/babylon-testnet/babylon.svg"
+}
