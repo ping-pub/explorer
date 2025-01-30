@@ -25,11 +25,11 @@
       "base": "ubbn",
       "symbol": "BBN",
       "exponent": "6",
-      "logo": "https://github.com/Validator-POSTHUMAN/posthuman-source-data/blob/main/babylon-testnet/babylon.svg"
+      "logo": "babylon.jpg"
     }
   ],
   "sdk_version": "0.50.9",
   "addr_prefix": "bbn",
   "theme_color": "#2e2e2e",
-  "logo": "https://github.com/Validator-POSTHUMAN/posthuman-source-data/blob/main/babylon-testnet/babylon.svg"
+  "logo": "babylon.jpg"
 }
