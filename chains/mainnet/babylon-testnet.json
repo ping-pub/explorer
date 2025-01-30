@@ -2,11 +2,19 @@
   "chain_name": "babylon-testnet",
   "api": [
     {
+      "provider": "ITROCKET",
+      "address": "https://babylon-testnet-api.itrocket.net"
+    },
+    {
       "provider": "POSTHUMAN∞DVS",
       "address": "https://rest-api.babylon.posthuman.digital"
     }
   ],
   "rpc": [
+    {
+      "provider": "ITROCKET",
+      "address": "https://babylon-testnet-rpc.itrocket.net"
+    },
     {
       "provider": "POSTHUMAN∞DVS",
       "address": "https://rpc.babylon.posthuman.digital"
