@@ -7,10 +7,10 @@ module.exports = {
       colors: {
         yes: '#3fb68b',
         no: '#ff5353',
-        info: '#ffffff',
-        main: '#ffffff',
-        secondary: '#ffffff',
-        active: '#ffffff',
+        info: '#7a7c7d',
+        main: '#7a7c7d',
+        secondary: '#7a7c7d',
+        active: '#7a7c7d',
       },
     },
   },
@@ -21,6 +21,8 @@ module.exports = {
         light: {
           ...require('daisyui/src/theming/themes')['[data-theme=light]'],
           primary: '#666cff',
+          'base-100': '#141415',
+          'base-200': '#252d37',
         },
       },
       {

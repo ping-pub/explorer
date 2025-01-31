@@ -113,7 +113,7 @@ function loadAccount(address: string) {
     });
   });
 
-  const receivedQuery =  `?&pagination.reverse=true&events=coin_received.receiver='${address}'&pagination.limit=5`;
+  const receivedQuery =  `?&pagination.reverse=true&query=coin_received.receiver='${address}'`;
   blockchain.rpc.getTxs(receivedQuery, {}).then((x) => {
     recentReceived.value = x.tx_responses;
   });
@@ -523,12 +523,12 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
             <tr v-if="txs.length === 0"><td colspan="10"><div class="text-center">{{ $t('account.no_transactions') }}</div></td></tr>
             <tr v-for="(v, index) in txs" :key="index">
               <td class="text-sm py-3">
-                <RouterLink :to="`/${chain}/block/${v.height}`" class="text-primary dark:invert">{{
+                <RouterLink :to="`/${chain}/block/${v.height}`" class="dark:invert">{{
                   v.height
                 }}</RouterLink>
               </td>
               <td class="truncate py-3" style="max-width: 200px">
-                <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
+                <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="dark:invert">
                   {{ v.txhash }}
                 </RouterLink>
               </td>
@@ -567,12 +567,12 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
             <tr v-if="recentReceived.length === 0"><td colspan="10"><div class="text-center">{{ $t('account.no_transactions') }}</div></td></tr>
             <tr v-for="(v, index) in recentReceived" :key="index">
               <td class="text-sm py-3">
-                <RouterLink :to="`/${chain}/block/${v.height}`" class="text-primary dark:invert">{{
+                <RouterLink :to="`/${chain}/block/${v.height}`" class="dark:invert">{{
                   v.height
                 }}</RouterLink>
               </td>
               <td class="truncate py-3" style="max-width: 200px">
-                <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
+                <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="dark:invert">
                   {{ v.txhash }}
                 </RouterLink>
               </td>
