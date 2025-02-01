@@ -1,0 +1,19 @@
+{
+    "chain_name": "atomone",
+    "coingecko": "",
+    "api": ["https://atomone-testnet-api.itrocket.net"],
+    "rpc": ["https://atomone-testnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.47.13",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "atone",
+    "logo": "/logos/atomone.png",
+    "assets": [{
+        "base": "uatone",
+        "symbol": "ATONE",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "/logos/atomone.png"
+    }]
+}
