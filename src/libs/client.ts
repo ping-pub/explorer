@@ -272,13 +272,13 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   // tx
   async getTxsBySender(sender: string, page?: PageRequest) {
     if(!page) page = new PageRequest()
-    const query = `?order_by=2&events=message.sender='${sender}'&pagination.limit=${page.limit}&pagination.offset=${page.offset||0}`;
+    const query = `?order_by=2&query=message.sender='${sender}'&pagination.limit=${page.limit}&pagination.offset=${page.offset||0}`;
     return this.request(this.registry.tx_txs, {}, query);
   }
   // query ibc sending msgs
-  // ?&pagination.reverse=true&events=send_packet.packet_src_channel='${channel}'&events=send_packet.packet_src_port='${port}'
+  // ?&pagination.reverse=true&query=send_packet.packet_src_channel='${channel}'&query=send_packet.packet_src_port='${port}'
   // query ibc receiving msgs
-  // ?&pagination.reverse=true&events=recv_packet.packet_dst_channel='${channel}'&events=recv_packet.packet_dst_port='${port}'
+  // ?&pagination.reverse=true&query=recv_packet.packet_dst_channel='${channel}'&query=recv_packet.packet_dst_port='${port}'
   async getTxs(query: string, params: any, page?: PageRequest) {
     if(!page) page = new PageRequest()    
     return this.request(this.registry.tx_txs, params, `${query}&${page.toQueryString()}`);
