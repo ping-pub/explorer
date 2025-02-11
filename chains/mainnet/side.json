@@ -1,0 +1,68 @@
+{
+  "chain_name": "side",
+  "theme_color": "#2e2e2e",
+  "registry_name": "sidechain",
+  "api": [
+    {
+      "address": "https://api.side.bh.rocks:443",
+      "provider": "BlockHunters"
+    },
+    {
+      "address": "https://rest.side.one:443",
+      "provider": "Side Protocol"
+    },
+    {
+      "address": "https://side-api.synergynodes.com:443",
+      "provider": "Synergy Nodes"
+    },
+    {
+      "address": "https://side-mainnet-api.itrocket.net:443",
+      "provider": "ITRocket"
+    },
+    {
+      "address": "https://side.api.kjnodes.com:443",
+      "provider": "kjnodes"
+    },
+    {
+      "address": "https://api.side.nodestake.org:443",
+      "provider": "NodeStake"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://rpc.side.bh.rocks:443",
+      "provider": "BlockHunters"
+    },
+    {
+      "address": "https://rpc.side.one:443",
+      "provider": "Side Protocol"
+    },
+    {
+      "address": "https://side-rpc.synergynodes.com:443",
+      "provider": "Synergy Nodes"
+    },
+    {
+      "address": "https://side.rpc.kjnodes.com:443",
+      "provider": "kjnodes"
+    },
+    {
+      "address": "https://side-mainnet-rpc.itrocket.net:443",
+      "provider": "ITRocket"
+    },
+    {
+      "address": "https://rpc.side.nodestake.org:443",
+      "provider": "NodeStake"
+    }
+  ],
+  "sdk_version": "0.50.9",
+  "addr_prefix": "side",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sidechain/images/side.svg",
+  "assets": [
+    {
+      "base": "uside",
+      "symbol": "SIDE",
+      "exponent": "6",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sidechain/images/side.svg"
+    }
+  ]
+}
