@@ -1,0 +1,26 @@
+{
+  "chain_name": "pell-testnet",
+  "api": [
+    {
+      "provider": "ITROCKET",
+      "address": "https://pell-testnet-api.itrocket.net"
+    }
+  ],
+  "rpc": [
+    {
+      "provider": "ITROCKET",
+      "address": "https://pell-testnet-rpc.itrocket.net"
+    }
+  ],
+  "assets": [
+    {
+      "base": "apell",
+      "symbol": "PELL",
+      "exponent": "6",
+      "logo": "pell.svg"
+    }
+  ],
+  "addr_prefix": "pell",
+  "theme_color": "#2e2e2e",
+  "logo": "pell.svg"
+}
