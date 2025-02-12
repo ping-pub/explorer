@@ -4,14 +4,14 @@
   "rpc": ["https://tellor-testnet-rpc.itrocket.net"],
   "coin_type": 118,
   "min_tx_fee": 200,
-  "sdk_version": "0.50.7",
+  "sdk_version": "0.50.9",
   "addr_prefix": "tellor",
   "logo": "/logos/tellor.png",
   "assets": [
     {
-      "base": "uloya",
-      "symbol": "LOYA",
-      "exponent": 18,
+      "base": "loya",
+      "symbol": "Loya",
+      "exponent": 6,
       "logo": "/logos/tellor.png"
     }
   ]
