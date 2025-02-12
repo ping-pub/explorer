@@ -11,7 +11,7 @@
     {
       "base": "uloya",
       "symbol": "LOYA",
-      "exponent": 6,
+      "exponent": 18,
       "logo": "/logos/tellor.png"
     }
   ]
