@@ -1,20 +1,20 @@
 {
-    "chain_name": "xrpl",
+    "chain_name": "xrplevm",
     "coingecko": "",
-    "api": ["https://xrpl-testnet-api.itrocket.net"], 
-    "rpc": ["https://xrpl-testnet-rpc.itrocket.net"],
+    "api": ["https://xrplevm-testnet-api.itrocket.net"], 
+    "rpc": ["https://xrplevm-testnet-rpc.itrocket.net"],
     "snapshot_provider": "",
     "sdk_version": "v0.50.11-evmos",
     "coin_type": "60",
     "min_tx_fee": "4000",
     "addr_prefix": "ethm",
-    "logo": "/logos/xrpl.webp",
+    "logo": "/logos/xrplevm.webp",
     "keplr_features": ["eth-address-gen", "eth-key-sign"],
     "assets": [{
         "base": "apoa",
         "symbol": "POA",
         "exponent": "6", 
         "coingecko_id": "",
-        "logo": "/logos/xrpl.webp"
+        "logo": "/logos/xrplevm.webp"
     }]
 }
