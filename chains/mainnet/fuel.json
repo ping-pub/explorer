@@ -1,0 +1,20 @@
+
+{
+    "chain_name": "fuel",
+    "coingecko": "",
+    "api": ["https://fuel-mainnet-api.itrocket.net"],
+    "rpc": ["https://fuel-mainnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.50.10",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "fuelsequencer",
+    "logo": "/logos/fuel.jpg",
+    "assets": [{
+        "base": "fuel",
+        "symbol": "FUEL",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "/logos/fuel.jpg"
+    }]
+}
