@@ -13,7 +13,7 @@
     "assets": [{
         "base": "fuel",
         "symbol": "FUEL",
-        "exponent": "6",
+        "exponent": "9",
         "coingecko_id": "",
         "logo": "/logos/fuel.jpg"
     }]
