@@ -93,11 +93,47 @@ app.listen(PORT, () => {
 var latestBlockHeight = '1'
 async function fetchLatestBlock() {
   let lbRes = await fetch(`${process.env.rpc_endpoint || 'https://shannon-testnet-grove-api.beta.poktroll.com'}/cosmos/base/tendermint/v1beta1/blocks/latest`);
-  let latestBlock = await lbRes.json()
-  console.log(latestBlock.block.header.height)
-  latestBlockHeight = latestBlock.block.header.height
-  return latestBlock
+  let latestBlock = await lbRes.json();
+  console.log(latestBlock.block.header.height);
+  latestBlockHeight = latestBlock.block.header.height;
+  return latestBlock;
 }
+
+async function processTransactions(data, height) {
+  let transactions = [];
+  for (const tx of data.block.data.txs) {
+    console.log('.');
+    let txRes = await fetchTx(hashTx(fromBase64(tx)));
+    transactions.push({
+      status: txRes.tx_response.code,
+      timestamp: txRes.tx_response.timestamp,
+      messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
+      fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
+      hash: hashTx(fromBase64(tx)),
+      height: height
+    });
+  }
+  return transactions;
+}
+
+async function fetchAndStoreTransactions() {
+  try {
+    const data = await fetchLatestBlock();
+    for (let i = parseInt(data.block.header.height); i > 0; i--) {
+      let blockData = await fetchTxByBlock(i);
+      let transactions = await processTransactions(blockData, i);
+      if (transactions.length > 0) {
+        console.log(`Inserting Transactions`, transactions);
+        await db.insertAsync(transactions);
+      }
+    }
+  } catch (e) {
+    console.error("Error Trace :", e);
+  }
+}
+
+fetchAndStoreTransactions();
+
 async function fetchTx(hash) {
   let lbRes = await fetch((process.env.rpc_endpoint || 'https://shannon-testnet-grove-api.beta.poktroll.com') + `/cosmos/tx/v1beta1/txs/${hash}`);
   let tx = await lbRes.json()
@@ -108,43 +144,6 @@ async function fetchTxByBlock(height) {
   let lbRes = await fetch((process.env.rpc_endpoint || 'https://shannon-testnet-grove-api.beta.poktroll.com') + `/cosmos/base/tendermint/v1beta1/blocks/${height}`);
   let blockDetails = await lbRes.json()
   return blockDetails;
-}
-
-// Fetch all data for transactions and dump in db
-try {
-  fetchLatestBlock().then(async data => {
-    for (let i = parseInt(data.block.header.height); i > 0; i--) {
-      let res = await fetchTxByBlock(i).then(async data => {
-        let transactions = []
-        for (tx of data.block.data.txs) {
-          console.log('.')
-          let txRes = await fetchTx(hashTx(fromBase64(tx)))
-          transactions.push({
-            status: txRes.tx_response.code,
-            timestamp: txRes.tx_response.timestamp,
-            messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
-            fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
-            hash: hashTx(fromBase64(tx)),
-            height: i
-          })
-        }
-        transactions.filter((async tx => {
-          let txRes = await db.findAsync({}, { hash: tx.hash }).limit(1).sort({ height: -1 })
-          if (txRes.length > 0) {
-            return false
-          }
-          return true
-        }))
-        if (transactions.length > 0) {
-          console.log(`Inserting Transactions`, transactions)
-        }
-        let txs = await db.insertAsync(transactions)
-        return txs
-      })
-    }
-  })
-} catch (e) {
-  console.error("Error Trace :", e)
 }
 
 var lastProcessedBlock = latestBlockHeight
