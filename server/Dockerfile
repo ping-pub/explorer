@@ -26,7 +26,7 @@ USER node
 # Expose the port your app runs on
 EXPOSE 3005
 
-# RUN c
+RUN export NODE_OPTIONS="--max-old-space-size=8192"
 
 # Command to run the server
 CMD ["node", "--env-file=.env", "index.js"]
