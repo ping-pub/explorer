@@ -10,8 +10,11 @@ import {
 import { computed } from '@vue/reactivity';
 import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue';
-import type { Key, SlashingParam, Validator } from '@/types';
+import type { Key, SlashingParam, Validator, SigningInfo, Commit } from '@/types';
 import { formatSeconds } from '@/libs/utils';
+import UptimeBar from '@/components/UptimeBar.vue';
+import {consensusPubkeyToHexAddress, valconsToBase64} from "@/libs";
+import { fromHex, toBase64 } from '@cosmjs/encoding';
 
 const staking = useStakingStore();
 const base = useBaseStore();
@@ -22,11 +25,13 @@ const mintStore = useMintStore();
 
 const cache = JSON.parse(localStorage.getItem('avatars') || '{}');
 const avatars = ref(cache || {});
+const signingInfo = ref({} as Record<string, SigningInfo>);
 const latest = ref({} as Record<string, number>);
 const yesterday = ref({} as Record<string, number>);
 const tab = ref('active');
 const unbondList = ref([] as Validator[]);
 const slashing = ref({} as SlashingParam);
+const commits = ref([] as Commit[]);
 
 onMounted(() => {
   staking.fetchUnbondingValdiators().then((res) => {
@@ -103,6 +108,24 @@ const change24Color = (key?: Key) => {
   if (v < 0) return 'text-error';
 };
 
+function updateTotalSigningInfo() {
+  chainStore.rpc.getSlashingSigningInfos().then((x) => {
+    x.info?.forEach((i) => {
+      signingInfo.value[valconsToBase64(i.address)] = i;
+    });
+  });
+}
+
+const commits2 = computed(() => {
+  const la = base.recents.map((b) => b.block.last_commit);
+  // trigger update total signing info
+  if (la.length > 1 && Number(la.at(la.length - 1)?.height || 0) % 10 === 7) {
+    updateTotalSigningInfo();
+  }
+  const all = [...commits.value, ...la];
+  return all.length > 50 ? all.slice(all.length - 50) : all;
+});
+
 const calculateRank = function (position: number) {
   let sum = 0;
   for (let i = 0; i < position; i++) {
@@ -160,11 +183,20 @@ function isFeatured(
 }
 
 const list = computed(() => {
+  if(chainStore.isConsumerChain) {
+    staking.loadKeyRotationFromLocalstorage(
+      base.latest?.block?.header?.chain_id
+    );
+  }
+
   if (tab.value === 'active') {
     return staking.validators.map((x, i) => ({
       v: x,
       rank: calculateRank(i),
       logo: logo(x.description.identity),
+      hex: chainStore.isConsumerChain ? 
+      toBase64(fromHex(staking.findRotatedHexAddress(x.consensus_pubkey))) : 
+      toBase64(fromHex(consensusPubkeyToHexAddress(x.consensus_pubkey))) 
     }));
   } else if (tab.value === 'featured') {
     const endpoint = chainStore.current?.endpoints?.rest?.map(
@@ -178,6 +210,9 @@ const list = computed(() => {
           v: x,
           rank: 'primary',
           logo: logo(x.description.identity),
+          hex: chainStore.isConsumerChain ? 
+          toBase64(fromHex(staking.findRotatedHexAddress(x.consensus_pubkey))) : 
+          toBase64(fromHex(consensusPubkeyToHexAddress(x.consensus_pubkey))) 
         }));
     }
     return [];
@@ -186,6 +221,9 @@ const list = computed(() => {
     v: x,
     rank: 'primary',
     logo: logo(x.description.identity),
+    hex: chainStore.isConsumerChain ? 
+    toBase64(fromHex(staking.findRotatedHexAddress(x.consensus_pubkey))) : 
+    toBase64(fromHex(consensusPubkeyToHexAddress(x.consensus_pubkey))) 
   }));
 });
 
@@ -382,6 +420,9 @@ loadAvatars();
                   {{ $t('staking.validator') }}
                 </th>
                 <th scope="col" class="text-right uppercase text-[#686868]">
+                  {{ $t('staking.uptime_bar') }}
+                </th>
+                <th scope="col" class="text-right uppercase text-[#686868]">
                   {{ $t('staking.voting_power') }}
                 </th>
                 <th scope="col" class="text-right uppercase text-[#686868]">
@@ -397,7 +438,7 @@ loadAvatars();
             </thead>
             <tbody>
               <tr
-                v-for="({ v, rank, logo }, i) in list"
+                v-for="({ v, rank, logo, hex }, i) in list"
                 :key="v.operator_address"
                 class="hover:bg-[#242424]"
               >
@@ -466,7 +507,10 @@ loadAvatars();
                     </div>
                   </div>
                 </td>
-
+                <!--Uptime Bar-->
+                <td>
+                  <UptimeBar :blocks="commits2" :validator="hex"/>
+                </td>
                 <!-- 👉 Voting Power -->
                 <td class="text-right">
                   <div class="flex flex-col">
