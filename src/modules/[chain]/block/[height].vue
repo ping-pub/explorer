@@ -38,7 +38,7 @@ const remainingBlocks = computed(() => {
 })
 
 const estimateTime = computed(() => {
-  const seconds = remainingBlocks.value * store.blocktime
+  const seconds = Number((remainingBlocks.value * store.blocktime).toFixed(2))
   return seconds
 })
 
