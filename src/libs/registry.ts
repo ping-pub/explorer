@@ -58,9 +58,11 @@ export interface RequestRegistry extends AbstractRegistry {
   application: Request<any>;
   gateway: Request<any>;
   supplier: Request<any>;
+  services: Request<any>;
   application_info: Request<any>;
   gateway_info: Request<any>;
   supplier_info: Request<any>;
+  service_info: Request<any>;
   auth_accounts: Request<PaginabledAccounts>;
   auth_account_address: Request<{ account: AuthAccount }>;
 

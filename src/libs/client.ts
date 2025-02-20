@@ -118,6 +118,11 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     const query =`?${page.toQueryString()}`;
     return this.request(this.registry.gateway, {}, query);
   }
+  async getServices(page?: PageRequest){
+    if(!page) page = new PageRequest();
+    const query =`?${page.toQueryString()}`;
+    return this.request(this.registry.services, {}, query);
+  }
   async getApplicationsInfo(address: string){
     return this.request(this.registry.application_info, {address});
   }
@@ -126,6 +131,9 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
   async getGatewaysInfo(address: string){
     return this.request(this.registry.gateway_info, {address});
+  }
+  async getServicesInfo(address: string){
+    return this.request(this.registry.service_info, {address});
   }
   async getDistributionDelegatorRewards(delegator_addr: string) {
     return this.request(this.registry.distribution_delegator_rewards, {

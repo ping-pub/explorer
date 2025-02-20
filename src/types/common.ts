@@ -68,6 +68,13 @@ export interface Gateway {
     services: any;
 }
 
+export interface Service {
+    id: string;
+    name: string;
+    compute_units_per_relay: String;
+    owner_address: string;
+}
+
 export interface Application {
     address: any;
     stake: Coin;
