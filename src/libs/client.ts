@@ -279,9 +279,9 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getTxsBySender(sender: string, page?: PageRequest) {
     if(!page) page = new PageRequest()
 
-    let query = `?events=message.sender='${sender}'&pagination.limit=${page.limit}&pagination.offset=${page.offset||0}`;
+    let query = `?order_by=2&events=message.sender='${sender}'&pagination.limit=${page.limit}&pagination.offset=${page.offset||0}`;
     if (semver.gte(this.version.replaceAll('v', ''), '0.50.0')) {
-      query = `?query=message.sender='${sender}'&pagination.limit=${page.limit}&pagination.offset=${page.offset||0}`;
+      query = `?order_by=2&query=message.sender='${sender}'&pagination.limit=${page.limit}&pagination.offset=${page.offset||0}`;
     }
     return this.request(this.registry.tx_txs, {}, query);
   }

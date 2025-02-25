@@ -113,7 +113,7 @@ function loadAccount(address: string) {
     });
   });
 
-  const receivedQuery =  `?&pagination.reverse=true&events=coin_received.receiver='${address}'&pagination.limit=5`;
+  const receivedQuery =  `?order_by=2&events=coin_received.receiver='${address}'&pagination.limit=5`;
   blockchain.rpc.getTxs(receivedQuery, {}).then((x) => {
     recentReceived.value = x.tx_responses;
   });

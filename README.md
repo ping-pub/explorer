@@ -62,12 +62,16 @@ This version of Ping.Pub was forked from from commit https://github.com/ping-pub
   - Removed any existing chains.
   - Added `fuel.json`.
   - Added `fuel-testnet.json`.
+- `src/libs/`
+  - In `client.ts`, added `order_by=2` to `getTxsBySender` query, for DESC ordering.
 - `src/layouts/components/`:
   - Removed Sponsors from `DefaultLayout.vue`.
 - `src/modules/[chain]`:
   - In `indexStore.ts` add **Initial Supply** card.
   - In `indexStore.ts` remove **Validators** card.
   - In `indexStore.ts` rename **Supply** card to **Supply on Sequencer**.
+- `src/modules/[chain]/account`:
+  - In `[address].vue`, added `order_by=2` to `receivedQuery` query, for DESC ordering.
 - `src/modules/[chain]/supply`:
   - In `index.vue` add `fuel (initial_supply)`.
   - In `index.vue` change fuel supply to `fuel (supply_on_sequencer)`.
