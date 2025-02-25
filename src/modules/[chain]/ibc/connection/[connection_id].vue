@@ -121,7 +121,7 @@ function color(v: string) {
               {{ clientState.client_state?.chain_id }}
             </div>
             <div class="text-sm text-gray-500 dark:text-gray-400">
-              {{ conn.counterparty?.connection_id }} {{ clientState.client_id }}
+              {{ conn.counterparty?.connection_id }} {{ conn.counterparty?.client_id }}
             </div>
           </div>
         </dl>
