@@ -1,0 +1,22 @@
+{
+    "chain_name": "ssv",
+    "registry_name": "ssvchain",
+    "api": [
+        {"provider": "localhost", "address": "http://localhost:8080"}
+    ],
+    "rpc": [
+        {"provider": "localhost", "address": "http://localhost:26657"}
+    ],
+    "sdk_version": "0.50.11",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "ssv",
+    "logo": "https://ssv.network/wp-content/uploads/2024/09/Symbol.png",
+    "assets": [{
+        "base": "ssv",
+        "symbol": "SSV",
+        "exponent": "6",
+        "coingecko_id": "ssv-network", 
+        "logo": "https://ssv.network/wp-content/uploads/2024/09/Symbol.png"
+    }]
+}

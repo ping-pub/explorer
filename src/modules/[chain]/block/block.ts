@@ -23,7 +23,7 @@ export const useBlockModule = defineStore('blockModule', {
     txsInRecents() {
       const txs = [] as { hash: string; tx: DecodedTxRaw }[];
       this.recents.forEach((x) =>
-        x.block?.data?.txs.forEach((tx: Uint8Array) => {
+        x.sdk_block?.data?.txs.forEach((tx: Uint8Array) => {
           if (tx) {
             try {
               txs.push({

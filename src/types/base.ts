@@ -53,7 +53,7 @@ export interface Signature
 
 export interface Block {
     block_id: BlockId,
-    block: {
+    sdk_block: {
         header: {
             version: {
                 block: string,

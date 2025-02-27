@@ -17,12 +17,12 @@ const current = ref({} as Block)
 const target = ref(Number(props.height || 0))
 
 const height = computed(() => {
-  return Number(current.value.block?.header?.height || props.height || 0);
+  return Number(current.value.sdk_block?.header?.height || props.height || 0);
 });
 
 const isFutureBlock = computed({
   get: () => {
-    const latest = store.latest?.block?.header.height
+    const latest = store.latest?.sdk_block?.header.height
     const isFuture = latest ? target.value > Number(latest) : true
     if (!isFuture && !current.value.block_id) store.fetchBlock(target.value).then(x => current.value = x)
     return isFuture
@@ -33,7 +33,7 @@ const isFutureBlock = computed({
 })
 
 const remainingBlocks = computed(() => {
-  const latest = store.latest?.block?.header.height
+  const latest = store.latest?.sdk_block?.header.height
   return latest ? Number(target.value) - Number(latest) : 0
 })
 
@@ -107,7 +107,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
     <div v-else>
       <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
         <h2 class="card-title flex flex-row justify-between">
-          <p class="">#{{ current.block?.header?.height }}</p>
+          <p class="">#{{ current.sdk_block?.header?.height }}</p>
           <div class="flex" v-if="props.height">
             <RouterLink :to="`/${store.blockchain.chainName}/block/${height - 1}`"
               class="btn btn-primary btn-sm p-1 text-2xl mr-2">
@@ -126,17 +126,17 @@ onBeforeRouteUpdate(async (to, from, next) => {
 
       <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
         <h2 class="card-title flex flex-row justify-between">{{ $t('block.block_header') }}</h2>
-        <DynamicComponent :value="current.block?.header" />
+        <DynamicComponent :value="current.sdk_block?.header" />
       </div>
 
       <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
         <h2 class="card-title flex flex-row justify-between">{{ $t('account.transactions') }}</h2>
-        <TxsElement :value="current.block?.data?.txs" />
+        <TxsElement :value="current.sdk_block?.data?.txs" />
       </div>
 
       <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
         <h2 class="card-title flex flex-row justify-between">{{ $t('block.last_commit') }}</h2>
-        <DynamicComponent :value="current.block?.last_commit" />
+        <DynamicComponent :value="current.sdk_block?.last_commit" />
       </div>
   </div>
 </div></template>

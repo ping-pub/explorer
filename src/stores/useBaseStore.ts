@@ -23,13 +23,13 @@ export const useBaseStore = defineStore('baseStore', {
         blocktime(): number {
             if (this.earlest && this.latest) {
                 if (
-                    this.latest.block?.header?.height !==
-                    this.earlest.block?.header?.height
+                    this.latest.sdk_block?.header?.height !==
+                    this.earlest.sdk_block?.header?.height
                 ) {
-                    const diff = dayjs(this.latest.block?.header?.time).diff(
-                        this.earlest.block?.header?.time
+                    const diff = dayjs(this.latest.sdk_block?.header?.time).diff(
+                        this.earlest.sdk_block?.header?.time
                     );
-                    const blocks = Number(this.latest.block.header.height) - Number(this.earlest.block.header.height)
+                    const blocks = Number(this.latest.sdk_block.header.height) - Number(this.earlest.sdk_block.header.height)
                     return diff / (blocks);
                 }
             }
@@ -39,7 +39,7 @@ export const useBaseStore = defineStore('baseStore', {
             return useBlockchain();
         },
         currentChainId(): string {
-            return this.latest.block?.header.chain_id || '';
+            return this.latest.sdk_block?.header.chain_id || '';
         },
         txsInRecents() {
             const txs = [] as {
@@ -48,12 +48,12 @@ export const useBaseStore = defineStore('baseStore', {
                 tx: DecodedTxRaw;
             }[];
             this.recents.forEach((b) =>
-                b.block?.data?.txs.forEach((tx: string) => {
+                b.sdk_block?.data?.txs.forEach((tx: string) => {
                     if (tx) {
                         const raw = fromBase64(tx);
                         try {
                             txs.push({
-                                height: b.block.header.height,
+                                height: b.sdk_block.header.height,
                                 hash: hashTx(raw),
                                 tx: decodeTxRaw(raw),
                             });
@@ -82,8 +82,8 @@ export const useBaseStore = defineStore('baseStore', {
             }
             if (
                 !this.earlest ||
-                this.earlest?.block?.header?.chain_id !=
-                    this.latest?.block?.header?.chain_id
+                this.earlest?.sdk_block?.header?.chain_id !=
+                    this.latest?.sdk_block?.header?.chain_id
             ) {
                 //reset earlest and recents
                 this.earlest = this.latest;
