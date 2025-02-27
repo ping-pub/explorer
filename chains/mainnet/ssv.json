@@ -2,7 +2,7 @@
     "chain_name": "ssv",
     "registry_name": "ssvchain",
     "api": [
-        {"provider": "localhost", "address": "http://localhost:8080"}
+        {"provider": "localhost", "address": "http://localhost:1317"}
     ],
     "rpc": [
         {"provider": "localhost", "address": "http://localhost:26657"}
