@@ -18,4 +18,3 @@ EXPOSE 5173
 
 # Run the development server
 CMD ["yarn", "start"]
-
