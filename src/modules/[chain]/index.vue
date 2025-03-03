@@ -194,7 +194,7 @@ const chartOptions = ref({
         colors: 'rgba(255, 255, 255, 0.7)'
       },
       rotate: 0,
-      formatter: function(value) {
+      formatter: function(value: string) {
         return value;
       }
     },
@@ -224,7 +224,7 @@ const chartOptions = ref({
   tooltip: {
     theme: 'dark',
     x: {
-      formatter: function(value) {
+      formatter: function(value: string) {
         return value;
       }
     }
@@ -249,7 +249,7 @@ async function loadNetworkStats() {
     networkStats.value.services = parseInt(servicesData.pagination?.total || 0);
     
     const accountsData = await blockchain.rpc.getAuthAccounts(pageRequest);
-    networkStats.value.wallets = parseInt(accountsData.pagination?.total || 0);
+    networkStats.value.wallets = parseInt(accountsData.pagination?.total || '0');
     
     generateHistoricalData();
   } catch (error) {
@@ -271,7 +271,7 @@ function generateHistoricalData() {
   }
   
   // Set the categories directly in the chartOptions
-  chartOptions.value.xaxis.categories = labels;
+  chartOptions.value.xaxis.categories = labels as never[];
   
   // Generate more visible data with larger values
   const appData = [];
@@ -318,21 +318,20 @@ function generateHistoricalData() {
   }
   
   // Update the series data
-  historicalData.value.series[0].data = appData;
-  historicalData.value.series[1].data = supplierData;
-  historicalData.value.series[2].data = gatewayData;
-  historicalData.value.series[3].data = serviceData;
+  historicalData.value.series[0].data = appData as never[];
+  historicalData.value.series[1].data = supplierData as never[];
+  historicalData.value.series[2].data = gatewayData as never[];
+  historicalData.value.series[3].data = serviceData as never[];
   
   // Force chart to update by creating a new object
   chartOptions.value = {
     ...chartOptions.value,
     xaxis: {
       ...chartOptions.value.xaxis,
-      categories: labels,
-      type: 'category', // Explicitly set type to category
+      categories: labels as never[],
       labels: {
         ...chartOptions.value.xaxis.labels,
-        formatter: function(value) {
+        formatter: function(value: string) {
           return value;
         }
       }
