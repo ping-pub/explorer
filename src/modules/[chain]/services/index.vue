@@ -10,6 +10,7 @@ const format = useFormatter();
 const chainStore = useBlockchain()
 
 const list = ref([] as Service[])
+const sortDirection = ref('desc'); // Add sort direction state
 
 function showType(v: string) {
   return v.replace("/cosmos.auth.v1beta1.", "")
@@ -42,6 +43,23 @@ function pageloadInit(p: number) {
     pageResponse.value = x.pagination
   });
 }
+
+// Toggle sort direction
+function toggleSort() {
+  sortDirection.value = sortDirection.value === 'desc' ? 'asc' : 'desc';
+}
+
+// Sorted list of services
+const sortedList = computed(() => {
+  return [...list.value].sort((a, b) => {
+    const aValue = parseInt(a.compute_units_per_relay as string) || 0;
+    const bValue = parseInt(b.compute_units_per_relay as string) || 0;
+    
+    return sortDirection.value === 'desc' 
+      ? bValue - aValue 
+      : aValue - bValue;
+  });
+});
 </script>
 <template>
   <div class="bg-base-100 rounded overflow-auto servicesContainer" @scroll="pageload"
@@ -52,10 +70,14 @@ function pageloadInit(p: number) {
           <td>ID</td>
           <td>Name</td>
           <td>Owner</td>
-          <td>Compute Units</td>
+          <td class="cursor-pointer" @click="toggleSort">
+            Compute Units
+            <span v-if="sortDirection === 'desc'">↓</span>
+            <span v-else>↑</span>
+          </td>
         </tr>
       </thead>
-      <tr v-for="item, index in list" class="hover">
+      <tr v-for="item, index in sortedList" class="hover">
         <td>{{ item.id }}</td>
         <td class="font-bold">{{ item.name }}</td>
         <td>
