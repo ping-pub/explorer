@@ -567,17 +567,18 @@ watch(() => base.allTxs, (newTxs) => {
           <div>
             <div class="text-lg font-semibold text-main">Block Height</div>
           </div>
-          <div class="text-4xl font-bold mt-2">
+        </div>
+
+        <div class="text-4xl font-bold mt-2">
             {{ base.latest?.block?.header?.height || '0' }}
             <a :href="`/${blockchain.chainName}/block/${base.latest?.block?.header?.height}`" class="ml-2 text-sm">
               <Icon icon="mdi-arrow-right-circle-outline" class="text-xl" />
             </a>
           </div>
-          <br/>
+
           <div class="text-sm text-gray-500 mt-1">
             Welcome to {{ blockchain.chainName }}, where your Web3 journey begins.
           </div>
-        </div>
       </div>
 
       <!-- Network Performance Card -->
@@ -778,7 +779,7 @@ watch(() => base.allTxs, (newTxs) => {
                 <td class="truncate text-primary" style="max-width:14rem">
                   <RouterLink class="truncate" :to="`/${props.chain}/tx/${item.hash}`">{{
                     item.hash
-                  }}</RouterLink>
+                    }}</RouterLink>
                 </td>
                 <td class="text-sm text-primary">
                   <RouterLink :to="`/${props.chain}/block/${item.height}`">{{ item.height }}</RouterLink>
