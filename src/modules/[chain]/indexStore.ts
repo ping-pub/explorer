@@ -49,6 +49,16 @@ export const useIndexModule = defineStore('module-index', {
         },
         market_data: {
           price_change_percentage_24h: 0,
+          circulating_supply: 0,
+          total_volume: {
+            usd: 0,
+          },
+          market_cap: {
+            usd: 0,
+          },
+          current_price: {
+            usd: 0,
+          },
         },
         tickers: [] as {
           market: {

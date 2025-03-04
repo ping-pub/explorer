@@ -13,6 +13,7 @@
     "cosmwasm": "Cosmwasm",
     "widget": "Widgets",
     "tx": "Transactions",
+    "rtx": "Recent Transactions",
     "ibc": "IBC",
     "nft": "NFT",
     "consensus": "Consensus",

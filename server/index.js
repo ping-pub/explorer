@@ -75,6 +75,12 @@ app.get('/api/v1/transactions', async (req, res) => {
   });
 });
 
+app.get('/api/v1/transactions/count', async (req, res) => {
+  const totalCount = await db.countAsync({})
+  res.json({
+    data: totalCount
+  });
+});
 
 // GET transactions
 app.get('/api/v1/transactions/:transaction_id', async (req, res) => {
@@ -87,9 +93,6 @@ app.get('/api/v1/transactions/:transaction_id', async (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
 var latestBlockHeight = '1'
 async function fetchLatestBlock() {
   let lbRes = await fetch(`${process.env.rpc_endpoint || 'https://shannon-testnet-grove-api.beta.poktroll.com'}/cosmos/base/tendermint/v1beta1/blocks/latest`);
@@ -103,13 +106,22 @@ async function processTransactions(data, height) {
   let transactions = [];
   for (const tx of data.block.data.txs) {
     console.log('.');
-    let txRes = await fetchTx(hashTx(fromBase64(tx)));
+    const txHash = hashTx(fromBase64(tx));
+    
+    // Check if transaction already exists in the database
+    const existingTx = await db.findAsync({ hash: txHash });
+    if (existingTx && existingTx.length > 0) {
+      console.log(`Transaction ${txHash} already exists, skipping`);
+      continue;
+    }
+    
+    let txRes = await fetchTx(txHash);
     transactions.push({
       status: txRes.tx_response.code,
       timestamp: txRes.tx_response.timestamp,
       messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
       fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
-      hash: hashTx(fromBase64(tx)),
+      hash: txHash,
       height: height
     });
   }
@@ -123,7 +135,7 @@ async function fetchAndStoreTransactions() {
       let blockData = await fetchTxByBlock(i);
       let transactions = await processTransactions(blockData, i);
       if (transactions.length > 0) {
-        console.log(`Inserting Transactions`, transactions);
+        console.log(`Inserting ${transactions.length} new transactions from block ${i}`);
         await db.insertAsync(transactions);
       }
     }
@@ -131,8 +143,6 @@ async function fetchAndStoreTransactions() {
     console.error("Error Trace :", e);
   }
 }
-
-fetchAndStoreTransactions();
 
 async function fetchTx(hash) {
   let lbRes = await fetch((process.env.rpc_endpoint || 'https://shannon-testnet-grove-api.beta.poktroll.com') + `/cosmos/tx/v1beta1/txs/${hash}`);
@@ -155,59 +165,65 @@ var job = new CronJob(
       if (lastProcessedBlock != data.block.header.height) {
         let res = await fetchTxByBlock(lastProcessedBlock).then(async data => {
           let transactions = []
-          for (tx of data.block.data.txs) {
-            let txRes = await fetchTx(hashTx(fromBase64(tx)))
+          for (const tx of data.block.data.txs) {
+            const txHash = hashTx(fromBase64(tx))
+            
+            // Check if transaction already exists in the database
+            const existingTx = await db.findAsync({ hash: txHash })
+            if (existingTx && existingTx.length > 0) {
+              console.log(`Transaction ${txHash} already exists, skipping`)
+              continue
+            }
+            
+            let txRes = await fetchTx(txHash)
             transactions.push({
               status: txRes.tx_response.code,
               timestamp: txRes.tx_response.timestamp,
               messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
               fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
-              hash: hashTx(fromBase64(tx)),
+              hash: txHash,
               height: data.block.header.height
             })
           }
-          transactions.filter((async tx => {
-            let txRes = await db.findAsync({}, { hash: tx.hash }).limit(1).sort({ height: -1 })
-            if (txRes.length > 0) {
-              return false
-            }
-            return true
-          }))
+          
           if (transactions.length > 0) {
-            console.log(`Inserting Transactions`, transactions)
+            console.log(`Inserting ${transactions.length} new transactions from block ${data.block.header.height}`)
+            let txs = await db.insertAsync(transactions)
+            return txs
           }
-          let txs = await db.insertAsync(transactions)
-          return txs
+          return []
         })
         lastProcessedBlock = data.block.header.height
       } else {
         fetchLatestBlock().then(async data => {
           let transactions = []
-          for (tx of data.block.data.txs) {
-            let txRes = await fetchTx(hashTx(fromBase64(tx)))
+          for (const tx of data.block.data.txs) {
+            const txHash = hashTx(fromBase64(tx))
+            
+            // Check if transaction already exists in the database
+            const existingTx = await db.findAsync({ hash: txHash })
+            if (existingTx && existingTx.length > 0) {
+              console.log(`Transaction ${txHash} already exists, skipping`)
+              continue
+            }
+            
+            let txRes = await fetchTx(txHash)
             transactions.push({
               status: txRes.tx_response.code,
               timestamp: txRes.tx_response.timestamp,
               messages: { ...decodeTxRaw(fromBase64(tx)) }.body.messages,
               fee: { ...decodeTxRaw(fromBase64(tx)) }.authInfo.fee,
-              hash: hashTx(fromBase64(tx)),
+              hash: txHash,
               height: data.block.header.height
             })
           }
-          transactions.filter((async tx => {
-            let txRes = await db.findAsync({}, { hash: tx.hash }).limit(1).sort({ height: -1 })
-            if (txRes.length > 0) {
-              return false
-            }
-            return true
-          }))
+          
           if (transactions.length > 0) {
-            console.log(`Inserting Transactions`, transactions)
+            console.log(`Inserting ${transactions.length} new transactions from latest block ${data.block.header.height}`)
+            let txs = await db.insertAsync(transactions)
+            return txs
           }
-          let txs = await db.insertAsync(transactions)
-          return txs
-
-
+          return []
         })
       }
     } catch (e) {
@@ -220,3 +236,59 @@ var job = new CronJob(
 );
 job.start();
 console.log(process.env.rpc_endpoint);
+
+// Add this function to clean up duplicate transactions
+async function cleanupDuplicateTransactions() {
+  console.log("Starting duplicate transaction cleanup...");
+  
+  try {
+    // Get all transactions
+    const allTxs = await db.findAsync({});
+    console.log(`Found ${allTxs.length} total transactions in database`);
+    
+    // Create a map to track unique transactions by hash
+    const uniqueTxs = new Map();
+    const duplicates = [];
+    
+    // Identify duplicates (keep the first occurrence of each hash)
+    allTxs.forEach(tx => {
+      if (!uniqueTxs.has(tx.hash)) {
+        uniqueTxs.set(tx.hash, tx);
+      } else {
+        duplicates.push(tx._id);
+      }
+    });
+    
+    // Remove duplicates if any found
+    if (duplicates.length > 0) {
+      console.log(`Found ${duplicates.length} duplicate transactions to remove`);
+      
+      // Remove each duplicate
+      for (const id of duplicates) {
+        await db.removeAsync({ _id: id });
+      }
+      
+      console.log(`Successfully removed ${duplicates.length} duplicate transactions`);
+    } else {
+      console.log("No duplicate transactions found");
+    }
+    
+    // Compact the database to reclaim space
+    await db.compactDatafileAsync();
+    console.log("Database compacted after cleanup");
+    
+  } catch (error) {
+    console.error("Error during duplicate transaction cleanup:", error);
+  }
+}
+
+// Call the cleanup function before starting the server
+cleanupDuplicateTransactions().then(() => {
+  // Start the server after cleanup is complete
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+  
+  // Then start fetching transactions
+  fetchAndStoreTransactions();
+});

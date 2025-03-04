@@ -66,11 +66,11 @@ export const useParamStore = defineStore('paramstore', {
     },
     appVersion: {
       title: 'Application Version',
-      items: {},
+      items: [] as Array<any>,
     },
     nodeVersion: {
       title: 'Node Information',
-      items: {},
+      items: [] as Array<any>,
     },
   }),
   getters: {
