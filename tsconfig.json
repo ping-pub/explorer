@@ -2,8 +2,9 @@
   "extends": "@vue/tsconfig/tsconfig.json",
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
   "compilerOptions": {
+    "skipLibCheck": true,
     // "ignoreDeprecations": "5.0",
-    "lib": [      
+    "lib": [
       "es2022",
       "dom"
     ],
