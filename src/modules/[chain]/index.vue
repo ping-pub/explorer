@@ -138,7 +138,7 @@ onMounted(async () => {
 });
 
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
-
+const tickers = computed(() => store.coinInfo.tickers);
 const currName = ref("")
 blockchain.$subscribe((m, s) => {
   if (s.chainName !== currName.value) {
@@ -570,15 +570,14 @@ watch(() => base.allTxs, (newTxs) => {
             </div>
           </div>
 
-          <div class="text-4xl font-bold mt-2">
-            {{ base.latest?.block?.header?.height || '0' }}
-            <a :href="`/${blockchain.chainName}/block/${base.latest?.block?.header?.height}`" class="ml-2 text-sm">
-              <Icon icon="mdi-arrow-right-circle-outline" class="text-xl" />
-            </a>
-          </div>
-
-          <div class="text-sm text-gray-500 mt-1">
-            Welcome to {{ blockchain.chainName }}, where your Web3 journey begins.
+          <div class="text-4xl font-bold mt-2 row">
+            <p>
+              {{ base.latest?.block?.header?.height || '0' }}
+              <a :href="`/${blockchain.chainName}/block/${base.latest?.block?.header?.height}`"
+                class="ml-2 text-sm inline-block">
+                <Icon icon="mdi-arrow-right-circle-outline" class="text-xl" />
+              </a>
+            </p>
           </div>
         </div>
 
@@ -663,27 +662,46 @@ watch(() => base.allTxs, (newTxs) => {
         <div class="grid grid-cols-1 lg:grid-cols-1 gap-4">
           <!-- Coin Header with Buy Button -->
           <div class="bg-base-100 rounded-lg p-4 relative">
-            <div class="flex items-center gap-2 mb-4">
-              <div class="w-8 h-8 flex items-center justify-center rounded-md overflow-hidden">
-                <img v-if="blockchain.logo" :src="blockchain.logo" alt="Coin logo"
-                  class="w-full h-full object-cover" />
-                <div v-else class="w-full h-full bg-green-500 flex items-center justify-center">
-                  <Icon icon="mdi-currency-usd" class="text-xl text-white" />
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 flex items-center justify-center rounded-md overflow-hidden">
+                  <img v-if="blockchain.logo" :src="blockchain.logo" alt="Coin logo"
+                    class="w-full h-full object-cover" />
+                  <div v-else class="w-full h-full bg-green-500 flex items-center justify-center">
+                    <Icon icon="mdi-currency-usd" class="text-xl text-white" />
+                  </div>
                 </div>
+                <span class="text-xl font-bold">{{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}</span>
               </div>
-              <span class="text-xl font-bold">{{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}</span>
+              <div class="flex items-center gap-2">
+                <!-- Dropdown -->
+                <div class="dropdown dropdown-end">
+                  <label tabindex="0" class="btn btn-sm btn-outline">
+                    {{ ticker?.market?.name || 'Market' }}
+                    <Icon icon="mdi-chevron-down" class="ml-1" />
+                  </label>
+                  <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-1">
+                    <li v-for="(tic, index) in tickers" :key="tic.market.identifier">
+                      <a @click="() => { store.selectTicker(index); document.activeElement?.blur(); }"
+                        :class="{ 'active': index === store.tickerIndex }">
+                        {{ tic.market.name }}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <!-- Buy Button -->
+                <a class="!text-white btn btn-sm"
+                  :class="{ '!btn-success': store.trustColor === 'green', '!btn-warning': store.trustColor === 'yellow' }"
+                  :href="ticker?.trade_url" target="_blank">
+                  {{ $t('index.buy') }} {{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}
+                </a>
+              </div>
             </div>
-
-            <a class="my-5 !text-white btn grow w-full" :class="{'!btn-success': store.trustColor === 'green', '!btn-warning': store.trustColor === 'yellow'}" :href="ticker?.trade_url"
-            target="_blank">
-              {{ $t('index.buy') }} {{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}
-            </a>
-
             <!-- Price Card -->
             <div class="flex justify-between items-center py-3 border-b border-base-300">
               <div class="text-sm text-gray-500">Price</div>
               <div class="text-md font-bold">${{ store.coinInfo?.market_data?.current_price?.usd?.toFixed(6) || '0.00'
-              }}</div>
+                }}</div>
             </div>
 
             <!-- Volume Card -->
@@ -697,7 +715,7 @@ watch(() => base.allTxs, (newTxs) => {
             <div class="flex justify-between items-center py-3 border-b border-base-300">
               <div class="text-sm text-gray-500">Circulating Supply</div>
               <div class="text-md font-bold">
-                {{ format.formatNumber(store.coinInfo?.market_data?.circulating_supply || 0) }}
+                {{ format.formatNumber((store.coinInfo?.market_data?.circulating_supply || 0), '123,456,789.[00]') }}
                 {{ store.coinInfo?.symbol?.toUpperCase() || '' }}
               </div>
             </div>
@@ -705,8 +723,15 @@ watch(() => base.allTxs, (newTxs) => {
             <!-- Market Cap Card -->
             <div class="flex justify-between items-center py-3">
               <div class="text-sm text-gray-500">Market Cap</div>
-              <div class="text-md font-bold">${{ format.formatNumber(store.coinInfo?.market_data?.market_cap?.usd || 0)
-              }}</div>
+              <div class="text-md font-bold">
+                ${{ format.formatNumber(store.coinInfo?.market_data?.market_cap?.usd || 0, '123,456,789.[00]') }}
+              </div>
+            </div>
+            <div class="mx-4 flex flex-wrap items-center">
+              <div v-for="tag in store.coinInfo?.categories?.slice(0, 4)"
+                class="mr-2 mb-4 text-xs bg-gray-100 dark:bg-[#384059] px-3 rounded-full py-1">
+                {{ tag }}
+              </div>
             </div>
           </div>
         </div>
@@ -808,7 +833,7 @@ watch(() => base.allTxs, (newTxs) => {
                 <td class="truncate text-primary" style="max-width:14rem">
                   <RouterLink class="truncate" :to="`/${props.chain}/tx/${item.hash}`">{{
                     item.hash
-                    }}</RouterLink>
+                  }}</RouterLink>
                 </td>
                 <td class="text-sm text-primary">
                   <RouterLink :to="`/${props.chain}/block/${item.height}`">{{ item.height }}</RouterLink>
