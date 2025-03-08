@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url';
-
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
@@ -7,8 +6,56 @@ import Layouts from 'vite-plugin-vue-layouts';
 import DefineOptions from 'unplugin-vue-define-options/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import Pages from 'vite-plugin-pages';
-
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
+import type { Plugin } from 'vite';
+
+// Security patterns to block
+const SUSPICIOUS_PATTERNS = [
+  'eval-stdin.php',
+  'think\\app',
+  '.git/config',
+  '_profiler',
+  'wp-login',
+  'wp-admin',
+  'install.php',
+  'phpMyAdmin',
+  'invokefunction',
+  '../',
+  '..%2f',
+  '%2e%2e%2f'  // URL encoded ../
+];
+
+// Create a custom security plugin
+const securityPlugin = (): Plugin => ({
+  name: 'security-middleware',
+  configureServer(server) {
+    server.middlewares.use((req, res, next) => {
+      try {
+        // Get URL and decode safely
+        const url = req.url || '';
+        
+        // Check for suspicious patterns
+        if (SUSPICIOUS_PATTERNS.some(pattern => url.includes(pattern))) {
+          // Log blocked attempt
+          console.log(`Blocked suspicious request: ${url}`);
+          
+          // Return 403 Forbidden
+          res.statusCode = 403;
+          res.end('Forbidden');
+          return;
+        }
+        
+        // Process normal requests
+        next();
+      } catch (error) {
+        // Handle any errors during middleware processing
+        console.error("Middleware error:", error);
+        res.statusCode = 400;
+        res.end('Bad Request');
+      }
+    });
+  }
+});
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,6 +63,8 @@ export default defineConfig({
     'process.env': {}
   },
   plugins: [
+    // Add the security plugin FIRST to filter requests before other plugins
+    securityPlugin(),
     vue({
       template: {
         compilerOptions: {
@@ -69,6 +118,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://explorer-pocket-poktroll-explorer-backend-1:3005',
+        // target: 'http://localhost:3005',
         changeOrigin: true,
       },
     },

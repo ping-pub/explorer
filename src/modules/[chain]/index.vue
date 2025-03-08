@@ -556,20 +556,21 @@ watch(() => base.allTxs, (newTxs) => {
 
 <template>
   <div>
-    <!-- Block Height and Network Performance Cards -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-      <!-- Block Height Card -->
-      <div class="bg-base-100 rounded-lg p-4">
-        <div class="flex items-center">
-          <div class="w-12 h-12 bg-base-200 rounded-lg flex items-center justify-center mr-4">
-            <Icon icon="mdi-cube-outline" class="text-3xl" />
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4 mr-4">
+      <!-- Block Height and Network Performance Cards -->
+      <div class="grid grid-cols-1 lg:grid-cols-1 gap-4 mb-4">
+        <!-- Block Height Card -->
+        <div class="bg-base-100 rounded-lg p-4">
+          <div class="flex items-center">
+            <div class="w-12 h-12 bg-base-200 rounded-lg flex items-center justify-center mr-4">
+              <Icon icon="mdi-cube-outline" class="text-3xl" />
+            </div>
+            <div>
+              <div class="text-lg font-semibold text-main">Block Height</div>
+            </div>
           </div>
-          <div>
-            <div class="text-lg font-semibold text-main">Block Height</div>
-          </div>
-        </div>
 
-        <div class="text-4xl font-bold mt-2">
+          <div class="text-4xl font-bold mt-2">
             {{ base.latest?.block?.header?.height || '0' }}
             <a :href="`/${blockchain.chainName}/block/${base.latest?.block?.header?.height}`" class="ml-2 text-sm">
               <Icon icon="mdi-arrow-right-circle-outline" class="text-xl" />
@@ -579,111 +580,139 @@ watch(() => base.allTxs, (newTxs) => {
           <div class="text-sm text-gray-500 mt-1">
             Welcome to {{ blockchain.chainName }}, where your Web3 journey begins.
           </div>
-      </div>
-
-      <!-- Network Performance Card -->
-      <div class="bg-base-100 rounded-lg p-4">
-        <div class="flex items-center">
-          <div class="w-12 h-12 bg-base-200 rounded-lg flex items-center justify-center mr-4">
-            <Icon icon="mdi-chart-line" class="text-3xl" />
-          </div>
-          <div class="text-lg font-semibold text-main">Network Performance</div>
         </div>
 
-        <div class="grid grid-cols-3 gap-4 mt-4">
-          <!-- Consensus Nodes -->
-          <div>
-            <div class="text-sm text-gray-500">Consensus Nodes</div>
-            <div class="text-2xl font-bold">{{ paramStore.nodeVersion?.items?.length || '0' }}</div>
+        <!-- Network Performance Card -->
+        <div class="bg-base-100 rounded-lg p-4">
+          <div class="flex items-center">
+            <div class="w-12 h-12 bg-base-200 rounded-lg flex items-center justify-center mr-4">
+              <Icon icon="mdi-chart-line" class="text-3xl" />
+            </div>
+            <div class="text-lg font-semibold text-main">Network Performance</div>
           </div>
 
-          <!-- Avg Block Time -->
-          <div>
-            <div class="text-sm text-gray-500">Avg Block Time<span class="text-xs">(24h)</span></div>
-            <div class="text-2xl font-bold">{{ (base.blocktime / 1000).toFixed(1) }}s</div>
-          </div>
+          <div class="grid grid-cols-3 gap-4 mt-4">
+            <!-- Consensus Nodes -->
+            <div>
+              <div class="text-sm text-gray-500">Consensus Nodes</div>
+              <div class="text-2xl font-bold">{{ paramStore.nodeVersion?.items?.length || '0' }}</div>
+            </div>
 
-          <!-- Avg TX Per Block -->
-          <div>
-            <div class="text-sm text-gray-500">Avg TX Per Block<span class="text-xs">(24h)</span></div>
-            <div class="text-2xl font-bold">
-              {{
-                base.recents && base.recents.length > 0
-                  ? (base.recents.reduce((sum, block) => sum + (block.block?.data?.txs?.length || 0), 0) / Math.max(1,
-                    base.recents.length)).toFixed(1)
-                  : '0.0'
-              }}
+            <!-- Avg Block Time -->
+            <div>
+              <div class="text-sm text-gray-500">Avg Block Time<span class="text-xs">(24h)</span></div>
+              <div class="text-2xl font-bold">{{ (base.blocktime / 1000).toFixed(1) }}s</div>
+            </div>
+
+            <!-- Avg TX Per Block -->
+            <div>
+              <div class="text-sm text-gray-500">Avg TX Per Block<span class="text-xs">(24h)</span></div>
+              <div class="text-2xl font-bold">
+                {{
+                  base.recents && base.recents.length > 0
+                    ? (base.recents.reduce((sum, block) => sum + (block.block?.data?.txs?.length || 0), 0) / Math.max(1,
+                      base.recents.length)).toFixed(1)
+                    : '0.0'
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+        <!-- Network Statistics and Market Data Cards -->
+        <div class="bg-base-100 rounded-lg p-4">
+          <div class="text-lg font-semibold text-main w-100">
+            Network Statistics
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-4">
+            <!-- Network Statistics Cards -->
+            <div class="stat bg-base-200 rounded-lg p-4">
+              <div class="text-sm text-gray-500">Total Wallets</div>
+              <div class="text-2xl font-bold">{{ networkStats.wallets.toLocaleString() }}</div>
+            </div>
+
+            <div class="stat bg-base-200 rounded-lg p-4">
+              <div class="text-sm text-gray-500">Applications</div>
+              <div class="text-2xl font-bold">{{ networkStats.applications.toLocaleString() }}</div>
+            </div>
+
+            <div class="stat bg-base-200 rounded-lg p-4">
+              <div class="text-sm text-gray-500">Suppliers</div>
+              <div class="text-2xl font-bold">{{ networkStats.suppliers.toLocaleString() }}</div>
+            </div>
+
+            <div class="stat bg-base-200 rounded-lg p-4">
+              <div class="text-sm text-gray-500">Gateways</div>
+              <div class="text-2xl font-bold">{{ networkStats.gateways.toLocaleString() }}</div>
+            </div>
+
+            <div class="stat bg-base-200 rounded-lg p-4">
+              <div class="text-sm text-gray-500">Services</div>
+              <div class="text-2xl font-bold">{{ networkStats.services.toLocaleString() }}</div>
+            </div>
+
+            <div class="stat bg-base-200 rounded-lg p-4">
+              <div class="text-sm text-gray-500">Active Validators</div>
+              <div class="text-2xl font-bold">{{ String(base?.latest?.block?.last_commit?.signatures.length || 0) }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Third Column -->
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-4">
+          <!-- Coin Header with Buy Button -->
+          <div class="bg-base-100 rounded-lg p-4 relative">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-8 h-8 flex items-center justify-center rounded-md overflow-hidden">
+                <img v-if="blockchain.logo" :src="blockchain.logo" alt="Coin logo"
+                  class="w-full h-full object-cover" />
+                <div v-else class="w-full h-full bg-green-500 flex items-center justify-center">
+                  <Icon icon="mdi-currency-usd" class="text-xl text-white" />
+                </div>
+              </div>
+              <span class="text-xl font-bold">{{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}</span>
+            </div>
+
+            <a class="my-5 !text-white btn grow w-full" :class="{'!btn-success': store.trustColor === 'green', '!btn-warning': store.trustColor === 'yellow'}" :href="ticker?.trade_url"
+            target="_blank">
+              {{ $t('index.buy') }} {{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}
+            </a>
+
+            <!-- Price Card -->
+            <div class="flex justify-between items-center py-3 border-b border-base-300">
+              <div class="text-sm text-gray-500">Price</div>
+              <div class="text-md font-bold">${{ store.coinInfo?.market_data?.current_price?.usd?.toFixed(6) || '0.00'
+              }}</div>
+            </div>
+
+            <!-- Volume Card -->
+            <div class="flex justify-between items-center py-3 border-b border-base-300">
+              <div class="text-sm text-gray-500">Volume<span class="text-xs">(24h)</span></div>
+              <div class="text-md font-bold">${{ format.formatNumber(store.coinInfo?.market_data?.total_volume?.usd ||
+                0) }}</div>
+            </div>
+
+            <!-- Circulating Supply Card -->
+            <div class="flex justify-between items-center py-3 border-b border-base-300">
+              <div class="text-sm text-gray-500">Circulating Supply</div>
+              <div class="text-md font-bold">
+                {{ format.formatNumber(store.coinInfo?.market_data?.circulating_supply || 0) }}
+                {{ store.coinInfo?.symbol?.toUpperCase() || '' }}
+              </div>
+            </div>
+
+            <!-- Market Cap Card -->
+            <div class="flex justify-between items-center py-3">
+              <div class="text-sm text-gray-500">Market Cap</div>
+              <div class="text-md font-bold">${{ format.formatNumber(store.coinInfo?.market_data?.market_cap?.usd || 0)
+              }}</div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Network Statistics and Market Data Cards -->
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-4">
-      <!-- Network Statistics Cards -->
-      <div class="stat bg-base-100 rounded-lg p-4">
-        <div class="text-sm text-gray-500">Total Wallets</div>
-        <div class="text-2xl font-bold">{{ networkStats.wallets.toLocaleString() }}</div>
-      </div>
-
-      <div class="stat bg-base-100 rounded-lg p-4">
-        <div class="text-sm text-gray-500">Applications</div>
-        <div class="text-2xl font-bold">{{ networkStats.applications.toLocaleString() }}</div>
-      </div>
-
-      <div class="stat bg-base-100 rounded-lg p-4">
-        <div class="text-sm text-gray-500">Suppliers</div>
-        <div class="text-2xl font-bold">{{ networkStats.suppliers.toLocaleString() }}</div>
-      </div>
-
-      <div class="stat bg-base-100 rounded-lg p-4">
-        <div class="text-sm text-gray-500">Gateways</div>
-        <div class="text-2xl font-bold">{{ networkStats.gateways.toLocaleString() }}</div>
-      </div>
-
-      <div class="stat bg-base-100 rounded-lg p-4">
-        <div class="text-sm text-gray-500">Services</div>
-        <div class="text-2xl font-bold">{{ networkStats.services.toLocaleString() }}</div>
-      </div>
-
-      <div class="stat bg-base-100 rounded-lg p-4">
-        <div class="text-sm text-gray-500">Active Validators</div>
-        <div class="text-2xl font-bold">{{ String(base?.latest?.block?.last_commit?.signatures.length || 0) }}</div>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-4">
-      <!-- Price Card -->
-      <div class="bg-base-100 rounded-lg p-4">
-        <div class="text-sm text-gray-500">Price</div>
-        <div class="text-2xl font-bold">${{ store.coinInfo?.market_data?.current_price?.usd?.toFixed(6) || '0.00' }}
-        </div>
-      </div>
-
-      <!-- Volume Card -->
-      <div class="bg-base-100 rounded-lg p-4">
-        <div class="text-sm text-gray-500">Volume<span class="text-xs">(24h)</span></div>
-        <div class="text-2xl font-bold">${{ format.formatNumber(store.coinInfo?.market_data?.total_volume?.usd || 0) }}
-        </div>
-      </div>
-
-      <!-- Circulating Supply Card -->
-      <div class="bg-base-100 rounded-lg p-4">
-        <div class="text-sm text-gray-500">Circulating Supply</div>
-        <div class="text-2xl font-bold">
-          {{ format.formatNumber(store.coinInfo?.market_data?.circulating_supply || 0) }}
-          {{ store.coinInfo?.symbol?.toUpperCase() || '' }}
-        </div>
-      </div>
-
-      <!-- Market Cap Card -->
-      <div class="bg-base-100 rounded-lg p-4">
-        <div class="text-sm text-gray-500">Market Cap</div>
-        <div class="text-2xl font-bold">${{ format.formatNumber(store.coinInfo?.market_data?.market_cap?.usd || 0) }}
-        </div>
-      </div>
-    </div>
 
     <div class="grid grid-cols-2">
       <div v-if="blockchain.supportModule('governance')" class="bg-base-100 rounded-lg shadow col-span-1">
