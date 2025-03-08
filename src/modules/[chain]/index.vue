@@ -682,7 +682,7 @@ watch(() => base.allTxs, (newTxs) => {
                   </label>
                   <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-1">
                     <li v-for="(tic, index) in tickers" :key="tic.market.identifier">
-                      <a @click="() => { store.selectTicker(index); document.activeElement?.blur(); }"
+                      <a @click="() => { store.selectTicker(index); }"
                         :class="{ 'active': index === store.tickerIndex }">
                         {{ tic.market.name }}
                       </a>
@@ -727,12 +727,12 @@ watch(() => base.allTxs, (newTxs) => {
                 ${{ format.formatNumber(store.coinInfo?.market_data?.market_cap?.usd || 0, '123,456,789.[00]') }}
               </div>
             </div>
-            <div class="mx-4 flex flex-wrap items-center">
+            <!-- <div class="mx-4 flex flex-wrap items-center">
               <div v-for="tag in store.coinInfo?.categories?.slice(0, 4)"
                 class="mr-2 mb-4 text-xs bg-gray-100 dark:bg-[#384059] px-3 rounded-full py-1">
                 {{ tag }}
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
