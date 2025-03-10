@@ -556,9 +556,9 @@ watch(() => base.allTxs, (newTxs) => {
 
 <template>
   <div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4 mr-4">
+    <div class="grid grid-cols-1 lg:grid-cols-2">
       <!-- Block Height and Network Performance Cards -->
-      <div class="grid grid-cols-1 lg:grid-cols-1 gap-4 mb-4">
+      <div class="grid grid-cols-1 lg:grid-cols-1 gap-4 mr-5">
         <!-- Block Height Card -->
         <div class="bg-base-100 rounded-lg p-4">
           <div class="flex items-center">
@@ -618,13 +618,13 @@ watch(() => base.allTxs, (newTxs) => {
           </div>
         </div>
       </div>
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <!-- Network Statistics and Market Data Cards -->
         <div class="bg-base-100 rounded-lg p-4">
           <div class="text-lg font-semibold text-main w-100">
             Network Statistics
           </div>
-          <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-4">
+          <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 mt-4">
             <!-- Network Statistics Cards -->
             <div class="stat bg-base-200 rounded-lg p-4">
               <div class="text-sm text-gray-500">Total Wallets</div>
@@ -721,12 +721,34 @@ watch(() => base.allTxs, (newTxs) => {
             </div>
 
             <!-- Market Cap Card -->
-            <div class="flex justify-between items-center py-3">
+            <div class="flex justify-between items-center py-3 border-b border-base-300">
               <div class="text-sm text-gray-500">Market Cap</div>
               <div class="text-md font-bold">
                 ${{ format.formatNumber(store.coinInfo?.market_data?.market_cap?.usd || 0, '123,456,789.[00]') }}
               </div>
             </div>
+
+            <!-- 24h High/Low Card -->
+            <div class="flex justify-between items-center py-3 border-b border-base-300">
+              <div class="text-sm text-gray-500">24h High / Low</div>
+              <div class="text-md font-bold flex gap-2">
+                <span class="text-success">${{ store.coinInfo?.market_data?.high_24h?.usd?.toFixed(6) || '0.00' }}</span>
+                <span>/</span>
+                <span class="text-error">${{ store.coinInfo?.market_data?.low_24h?.usd?.toFixed(6) || '0.00' }}</span>
+              </div>
+            </div>
+
+            <!-- ATH Card -->
+            <div class="flex justify-between items-center py-3">
+              <div class="text-sm text-gray-500">All Time High</div>
+              <div class="text-md font-bold">
+                ${{ store.coinInfo?.market_data?.ath?.usd?.toFixed(6) || '0.00' }}
+                <span class="text-xs ml-1" :class="{'text-error': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) < 0}">
+                  ({{ store.coinInfo?.market_data?.ath_change_percentage?.usd?.toFixed(2) || '0.00' }}%)
+                </span>
+              </div>
+            </div>
+
             <!-- <div class="mx-4 flex flex-wrap items-center">
               <div v-for="tag in store.coinInfo?.categories?.slice(0, 4)"
                 class="mr-2 mb-4 text-xs bg-gray-100 dark:bg-[#384059] px-3 rounded-full py-1">
