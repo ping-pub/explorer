@@ -4,11 +4,9 @@
     class="flex items-center h-12 mt-0 text-sm bg-gray-100 dark:bg-[#231f20;] py-2 z-10 w-full justify-end"
   >
     <div class="flex items-center justify-center">
-      Powered by: <a class="text-md flex flex-row font-semibold items-center justify-center" href="https://stakenodes.org" target="_blank"><img alt="https://stakenodes.org" src="https://stakenodes.org/favicon.png" style="height:2rem"/>Stakenodes</a> &nbsp;&nbsp;||&nbsp;&nbsp; 
-      Made With&nbsp;
-      <img src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" width="20" />&nbsp;
       &copy;&nbsp;
-      {{ new Date().getFullYear() }}&nbsp;
+      {{ new Date().getFullYear() }} Pocket Network. All rights reserved.
+      Powered by: <a class="text-md flex flex-row font-semibold items-center justify-center" href="https://stakenodes.org" target="_blank"><img alt="https://stakenodes.org" src="https://stakenodes.org/favicon.png" style="height:2rem"/>Stakenodes</a>
     </div>
     <!-- <div
       class="hidden md:!block"
