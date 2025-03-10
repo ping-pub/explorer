@@ -707,8 +707,8 @@ watch(() => base.allTxs, (newTxs) => {
             <!-- Volume Card -->
             <div class="flex justify-between items-center py-3 border-b border-base-300">
               <div class="text-sm text-gray-500">Volume<span class="text-xs">(24h)</span></div>
-              <div class="text-md font-bold">${{ format.formatNumber(store.coinInfo?.market_data?.total_volume?.usd ||
-                0) }}</div>
+              <div class="text-md font-bold">${{ format.formatNumber((store.coinInfo?.market_data?.total_volume?.usd ||
+                0), '123,456,789.[00]') }}</div>
             </div>
 
             <!-- Circulating Supply Card -->

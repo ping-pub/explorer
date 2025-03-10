@@ -6,7 +6,7 @@
     <div class="flex items-center justify-center">
       &copy;&nbsp;
       {{ new Date().getFullYear() }} Pocket Network. All rights reserved.
-      Powered by: <a class="text-md flex flex-row font-semibold items-center justify-center" href="https://stakenodes.org" target="_blank"><img alt="https://stakenodes.org" src="https://stakenodes.org/favicon.png" style="height:2rem"/>Stakenodes</a>
+      Powered by <a class="text-md flex flex-row font-semibold items-center justify-center" href="https://stakenodes.org" target="_blank"><img alt="https://stakenodes.org" src="https://stakenodes.org/favicon.png" style="height:2rem"/>Stakenodes</a>
     </div>
     <!-- <div
       class="hidden md:!block"
