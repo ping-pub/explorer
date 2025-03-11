@@ -1,0 +1,18 @@
+{
+  "chain_name": "oraichain",
+  "api": ["https://oraichain-mainnet-api.itrocket.net"],
+  "rpc": ["https://oraichain-mainnet-rpc.itrocket.net"],
+  "coin_type": 118,
+  "min_tx_fee": 200,
+  "sdk_version": "0.50.7",
+  "addr_prefix": "orai",
+  "logo": "/logos/oraichain.jpg",
+  "assets": [
+    {
+      "base": "orai",
+      "symbol": "ORAI",
+      "exponent": 6,
+      "logo": "/logos/oraichain.jpg"
+    }
+  ]
+}
