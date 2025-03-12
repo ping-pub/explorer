@@ -342,7 +342,7 @@ async function loadBalances(chainName: string, endpoint: string, address: string
                     </div>
                   </div>
                   <div>
-                    <div class="tooltip" :class="acc.compatiable ? 'tooltip-success' : 'tooltip-error'
+                    <div class="tooltip" :class="acc.compatible ? 'tooltip-success' : 'tooltip-error'
                       " :data-tip="`Coin Type: ${acc.coinType}`">
                       <div class="font-bold capitalize" :class="acc.compatiable ? 'text-green-500' : 'text-red-500'
                         ">
