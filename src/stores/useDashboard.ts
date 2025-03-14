@@ -366,12 +366,23 @@ export const useDashboard = defineStore('dashboard', {
     async loadLocalConfig(network: NetworkType) {
       const config: Record<string, ChainConfig> = {};
       let testnets: Record<string, LocalConfig> = {};
-      if (window.location.hostname.search('.int.') > -1 || window.location.hostname.search('localhost') > -1) {
-        testnets = import.meta.glob('../../chains/testnet/*.json', { eager: true });
+      let internals: Record<string, LocalConfig> = {};
+      if (
+        window.location.hostname.search('.int.') > -1 ||
+        window.location.hostname.search('localhost') > -1 ||
+        // CloudFlare Pages
+        window.location.hostname.search('pages.dev') > -1
+      ) {
+        testnets = import.meta.glob('../../chains/testnet/*.json', {
+          eager: true,
+        });
+        internals = import.meta.glob('../../chains/internal/*.json', {
+          eager: true,
+        });
       }
       const mainnets: Record<string, LocalConfig> = import.meta.glob('../../chains/mainnet/*.json', { eager: true });
 
-      const source = { ...mainnets, ...testnets };
+      const source = { ...mainnets, ...testnets, ...internals };
 
       Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
         config[x.chain_name] = fromLocal(x);
