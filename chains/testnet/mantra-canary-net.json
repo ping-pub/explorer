@@ -1,17 +1,17 @@
 {
-  "chain_name": "MANTRA-Canary-Net",
+  "chain_name": "MANTRA-Canary",
   "coingecko": "om",
   "type": "testnet",
   "api": [
     {
       "provider": "MANTRA",
-      "address": "https://api.canary-net.mantrachain.dev"
+      "address": "https://api.archive.canary.mantrachain.dev"
     }
   ],
   "rpc": [
     {
       "provider": "MANTRA",
-      "address": "https://rpc.canary-net.mantrachain.dev"
+      "address": "https://rpc.archive.canary.mantrachain.dev"
     }
   ],
   "snapshot_provider": "",
