@@ -47,7 +47,7 @@
     }
   ],
   "snapshot_provider": "",
-  "sdk_version": "0.50.11",
+  "sdk_version": "0.50.13",
   "coin_type": "118",
   "min_tx_fee": "100",
   "addr_prefix": "xion",
