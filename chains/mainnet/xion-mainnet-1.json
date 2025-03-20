@@ -61,6 +61,13 @@
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png"
     },
     {
+      "base": "ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B",
+      "symbol": "OSMO",
+      "exponent": "6",
+      "coingecko_id": "osmosis",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png"
+    },
+    {
       "base": "ibc/CC7B293B3F08EA7DB96AFD4765BD0C7F95ABD7ECEAF21C74F3ACCBF7CEFB6591",
       "symbol": "OSMO",
       "exponent": "6",

@@ -44,6 +44,12 @@
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.png"
     }
   ],
+  "faucet": {
+    "amount": "2000000uxion",
+    "ip_limit": "1",
+    "address_limit": "1",
+    "fees": "150uxion"
+  },
   "keplr_features": [
     "ibc-go",
     "ibc-transfer",
