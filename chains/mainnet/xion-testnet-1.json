@@ -50,7 +50,6 @@
       "symbol": "XION",
       "exponent": "6",
       "coingecko_id": "xion-2",
-      "display": "uxion",
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png"
     },
     {
@@ -70,7 +69,7 @@
     {
       "base": "ibc/05314A48723E06A1B1B666066B6BEC89F3708E8854DF2E5E9193387AA9653036",
       "symbol": "INJ",
-      "exponent": "1",
+      "exponent": "18",
       "coingecko_id": "injective-protocol",
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/inj.png"
     },
