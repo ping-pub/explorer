@@ -50,6 +50,7 @@
       "symbol": "XION",
       "exponent": "6",
       "coingecko_id": "xion-2",
+      "display": "uxion",
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png"
     },
     {
