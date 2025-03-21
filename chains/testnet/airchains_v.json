@@ -1,0 +1,17 @@
+{
+  "chain_name": "airchains_v",
+  "api": ["https://airchains_v-testnet-api.itrocket.net"],
+  "rpc": ["https://airchains_v-testnet-rpc.itrocket.net"],
+  "sdk_version": "0.50.3",
+  "addr_prefix": "air",
+  "min_tx_fee": "200",
+  "logo": "/logos/airchains.jpg",
+  "assets": [
+    {
+      "symbol": "AMF",
+      "base": "amf",
+      "exponent": 6,
+      "logo": "/logos/airchains.jpg"
+    }
+  ]
+}
