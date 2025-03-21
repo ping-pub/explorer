@@ -122,7 +122,7 @@
       "exponent": "6",
       "coingecko_id": "usd-coin",
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelat/images/weth.png"
-    },
+    }
   ],
   "keplr_features": [
     "ibc-go",
