@@ -17,8 +17,8 @@ export const useBlockModule = defineStore('blockModule', {
       return useBlockchain();
     },
     blocktime() {
-      if (this.recents.length < 2) return 6000;
-      return 6000; // todo later
+      if (this.recents.length < 2) return 1500;
+      return 1500; // todo later
     },
     txsInRecents() {
       const txs = [] as { hash: string; tx: DecodedTxRaw }[];
@@ -30,7 +30,7 @@ export const useBlockModule = defineStore('blockModule', {
                 hash: hashTx(tx),
                 tx: decodeTxRaw(tx),
               });
-            } catch (e) {}
+            } catch (e) { }
           }
         })
       );
@@ -51,7 +51,7 @@ export const useBlockModule = defineStore('blockModule', {
         this.latest = x;
         // if(this.recents.length >= 50) this.recents.pop()
         // this.recents.push(x)
-        // setTimeout(timer, 6000)
+        // setTimeout(timer, 1500)
       });
     },
     async fetchLatest() {

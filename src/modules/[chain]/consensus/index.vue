@@ -33,7 +33,7 @@ onMounted(async () => {
   clearTime()
   timer = setInterval(() => {
     update();
-  }, 6000);
+  }, 1500);
 });
 onUnmounted(() => {
   clearTime();
@@ -80,7 +80,7 @@ function color(i: number, txt: string) {
   }
   return txt === 'nil-Vote' ? 'gray-700' : 'success';
 }
-async function onChange () {
+async function onChange() {
   httpstatus.value = 200;
   httpStatusText.value = '';
   roundState.value = {};
@@ -89,7 +89,7 @@ async function onChange () {
   update();
   timer = setInterval(() => {
     update();
-  }, 6000);
+  }, 1500);
 }
 
 async function fetchPosition() {
@@ -180,65 +180,49 @@ async function update() {
     <!-- cards -->
     <div class="mt-4" v-if="roundState['height/round/step']">
       <div class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 pb-4">
-        <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
-        >
+        <div class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center">
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ rate }}</h4>
             <span class="text-md">{{ $t('consensus.onboard_rate') }}</span>
           </div>
           <div class="avatar placeholder">
-            <div
-              class="bg-rose-100 text-neutral-content rounded-full w-12 h-12"
-            >
+            <div class="bg-rose-100 text-neutral-content rounded-full w-12 h-12">
               <span class="text-2xl text-error font-semibold">{{ $t('consensus.o') }}</span>
             </div>
           </div>
         </div>
         <!-- Height -->
-        <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
-        >
+        <div class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center">
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ height }}</h4>
             <span class="text-md">{{ $t('account.height') }}</span>
           </div>
           <div class="avatar placeholder">
-            <div
-              class="bg-green-100 text-neutral-content rounded-full w-12 h-12"
-            >
+            <div class="bg-green-100 text-neutral-content rounded-full w-12 h-12">
               <span class="text-2xl text-success font-semibold">{{ $t('consensus.h') }}</span>
             </div>
           </div>
         </div>
         <!-- Round -->
-        <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
-        >
+        <div class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center">
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ round }}</h4>
             <span class="text-md">{{ $t('consensus.round') }}</span>
           </div>
           <div class="avatar placeholder">
-            <div
-              class="bg-violet-100 text-neutral-content rounded-full w-12 h-12"
-            >
+            <div class="bg-violet-100 text-neutral-content rounded-full w-12 h-12">
               <span class="text-2xl text-primary font-semibold">{{ $t('consensus.r') }}</span>
             </div>
           </div>
         </div>
         <!-- Step -->
-        <div
-          class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center"
-        >
+        <div class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center">
           <div class="text-sm mb-1 flex flex-col truncate">
             <h4 class="text-lg font-semibold text-main">{{ step }}</h4>
             <span class="text-md">{{ $t('consensus.step') }}</span>
           </div>
           <div class="avatar placeholder">
-            <div
-              class="bg-blue-100 text-neutral-content rounded-full w-12 h-12"
-            >
+            <div class="bg-blue-100 text-neutral-content rounded-full w-12 h-12">
               <span class="text-2xl text-info font-semibold">{{ $t('consensus.s') }}</span>
             </div>
           </div>
@@ -246,10 +230,7 @@ async function update() {
       </div>
     </div>
     <!-- update -->
-    <div
-      class="bg-base-100 p-4 rounded shadow"
-      v-if="roundState['height/round/step']"
-    >
+    <div class="bg-base-100 p-4 rounded shadow" v-if="roundState['height/round/step']">
       <div class="flex flex-1 flex-col truncate">
         <h2 class="text-sm card-title text-error mb-6">
           {{ $t('consensus.updated_at') }} {{ newTime || '' }}
@@ -259,24 +240,16 @@ async function update() {
           <div class="text-xs break-words">{{ item.prevotes_bit_array }}</div>
 
           <div class="flex flex-rows flex-wrap py-6">
-            <div
-              class=" w-48 rounded-3xl h-5 text-sm px-2 text-slate-200 leading-5"
-              v-for="(pre, i) in item.prevotes"
-              :key="i"
-              size="sm"
-              style="margin: 2px"
-            >
+            <div class=" w-48 rounded-3xl h-5 text-sm px-2 text-slate-200 leading-5" v-for="(pre, i) in item.prevotes"
+              :key="i" size="sm" style="margin: 2px">
               <span class="flex flex-rows justify-between">
                 <span class="truncate">{{ showName(i, 'nil-Vote') }} </span>
                 <span>
-                  <span class="tooltip " :data-tip="pre" 
-                  :class="{
+                  <span class="tooltip " :data-tip="pre" :class="{
                     'bg-green-400': String(pre).toLowerCase() !== 'nil-vote',
                     'bg-red-400': String(pre).toLowerCase() === 'nil-vote'
-                  }"
-                  >&nbsp;</span> 
-                  <span class="tooltip ml-1" :data-tip="item.precommits[i]" 
-                  :class="{
+                  }">&nbsp;</span>
+                  <span class="tooltip ml-1" :data-tip="item.precommits[i]" :class="{
                     'bg-green-400': String(item.precommits[i]).toLowerCase() !== 'nil-vote',
                     'bg-red-400': String(item.precommits[i]).toLowerCase() === 'nil-vote'
                   }">&nbsp;</span>
@@ -291,13 +264,8 @@ async function update() {
     </div>
 
     <!-- alert-info -->
-    <div
-      class="text-[#00cfe8] bg-[rgba(0,207,232,0.12)] rounded shadow mt-4 alert-info"
-    >
-      <div
-        class="drop-shadow-md px-4 pt-2 pb-2"
-        style="box-shadow: rgba(0, 207, 232, 0.4) 0px 6px 15px -7px"
-      >
+    <div class="text-[#00cfe8] bg-[rgba(0,207,232,0.12)] rounded shadow mt-4 alert-info">
+      <div class="drop-shadow-md px-4 pt-2 pb-2" style="box-shadow: rgba(0, 207, 232, 0.4) 0px 6px 15px -7px">
         <h2 class="text-base font-semibold">{{ $t('consensus.tips') }}</h2>
       </div>
       <div class="px-4 py-4">

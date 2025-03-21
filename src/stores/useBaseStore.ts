@@ -33,7 +33,7 @@ export const useBaseStore = defineStore('baseStore', {
                     return diff / (blocks);
                 }
             }
-            return 6000;
+            return 1500;
         },
         blockchain() {
             return useBlockchain();
@@ -63,7 +63,7 @@ export const useBaseStore = defineStore('baseStore', {
                     }
                 })
             );
-            return txs.sort((a, b) => {return Number(b.height) - Number(a.height)});
+            return txs.sort((a, b) => { return Number(b.height) - Number(a.height) });
         },
     },
     actions: {
@@ -74,16 +74,16 @@ export const useBaseStore = defineStore('baseStore', {
             this.recents = [];
         },
         async fetchLatest() {
-            try{
+            try {
                 this.latest = await this.blockchain.rpc?.getBaseBlockLatest();
                 this.connected = true
-            }catch(e) {
+            } catch (e) {
                 this.connected = false
             }
             if (
                 !this.earlest ||
                 this.earlest?.block?.header?.chain_id !=
-                    this.latest?.block?.header?.chain_id
+                this.latest?.block?.header?.chain_id
             ) {
                 //reset earlest and recents
                 this.earlest = this.latest;
