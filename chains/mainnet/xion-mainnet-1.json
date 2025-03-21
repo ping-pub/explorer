@@ -119,7 +119,7 @@
     {
       "base": "ibc/AAD7136DD626569C3DDE7C5F764968BB2E939875EFC568AE5712B62081850814",
       "symbol": "axlWETH",
-      "exponent": "6",
+      "exponent": "18",
       "coingecko_id": "usd-coin",
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelat/images/weth.png"
     }
