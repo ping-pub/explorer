@@ -96,21 +96,21 @@
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelat/images/axlusdc.png"
     },
     {
-      "base": "",
+      "base": "ibc/0000000000000000000000000000000000000000000000000000000000000000",
       "symbol": "axlUSDT",
       "exponent": "6",
       "coingecko_id": "tether",
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelat/images/axlusdc.png"
     },
     {
-      "base": "",
+      "base": "ibc/0000000000000000000000000000000000000000000000000000000000000000",
       "symbol": "axlDAI",
       "exponent": "18",
       "coingecko_id": "dai",
       "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelat/images/axldai.png"
     },
     {
-      "base": "",
+      "base": "ibc/0000000000000000000000000000000000000000000000000000000000000000",
       "symbol": "axlFRAX",
       "exponent": "6",
       "coingecko_id": "frax",
