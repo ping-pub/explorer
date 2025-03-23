@@ -1,45 +1,89 @@
 <script lang="ts" setup>
-import { computed, ref } from '@vue/reactivity';
+import { computed, ref, reactive, onMounted, nextTick } from 'vue';
 import { useBaseStore, useFormatter } from '@/stores';
 import TxsInBlocksChart from '@/components/charts/TxsInBlocksChart.vue';
 import { useBlockModule } from "@/modules/[chain]/block/block";
-import { PageRequest, type AuthAccount, type Pagination } from '@/types';
-import { reactive, onMounted } from 'vue';
+import { PageRequest, type AuthAccount, type Pagination, type Block } from '@/types';
 import PaginationBar from '@/components/PaginationBar.vue';
 const props = defineProps(['chain']);
 
 const tab = ref('blocks');
-
-const base = useBaseStore()
-
+const base = useBaseStore();
 const format = useFormatter();
 
-const list = computed(() => {
-    return base.recents
-})
+// Add virtualization-related refs with proper typing
+const visibleBlocks = ref<{ item: Block; index: number; style: { transform: string } }[]>([]);
+const blockContainer = ref<HTMLDivElement | null>(null);
+const itemHeight = 46; // Height of a table row in pixels
+const bufferSize = 5; // Number of additional items to render above and below the visible area
 
-const pageRequest = ref(new PageRequest())
-const pageResponse = ref({} as Pagination)
+const list = computed(() => {
+    return base.recents;
+});
+
+const pageRequest = ref(new PageRequest());
+const pageResponse = ref({} as Pagination);
 
 onMounted(() => {
-    pageload(1)
-    pageRequest.value.setPageSize(10)
+    pageload(1);
+    pageRequest.value.setPageSize(10);
     pageResponse.value = {
         total: base.latest?.block?.header.height
-    }
+    };
+    
+    // Initialize virtual scrolling after mounting
+    initVirtualScroll();
 });
 
 function pageload(p: number) {
-    pageRequest.value.setPage(p)
+    pageRequest.value.setPage(p);
 }
 
 function handleScroll() {
-    const container = document.querySelector('.blocksContainer') as HTMLDivElement;
-    // Check if the scroll is at the bottom
-    let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
-    if (isAtBottom && parseInt(base.recents[0].block.header.height) > 1) {
-        base.updatePageSize(base.pageSize + 10)
+    updateVisibleBlocks();
+    
+    // Check if we're near the bottom to load more blocks
+    const container = blockContainer.value;
+    if (!container) return;
+    
+    const isAtBottom = container.scrollTop + container.clientHeight + (itemHeight * 10) >= container.scrollHeight;
+    if (isAtBottom && parseInt(base.recents[0]?.block?.header?.height || "0") > 1) {
+        if (!base.fetchingBlocks) {
+            base.updatePageSize(base.pageSize + 10);
+        }
     }
+}
+
+// Initialize virtual scrolling
+function initVirtualScroll() {
+    nextTick(() => {
+        if (blockContainer.value) {
+            updateVisibleBlocks();
+            blockContainer.value.addEventListener('scroll', handleScroll);
+        }
+    });
+}
+
+// Update which blocks are visible based on scroll position
+function updateVisibleBlocks() {
+    if (!blockContainer.value || list.value.length === 0) return;
+    
+    const container = blockContainer.value;
+    const scrollTop = container.scrollTop;
+    const viewportHeight = container.clientHeight;
+    
+    // Calculate which items should be visible
+    const startIndex = Math.floor(scrollTop / itemHeight) - bufferSize;
+    const endIndex = Math.ceil((scrollTop + viewportHeight) / itemHeight) + bufferSize;
+    
+    const start = Math.max(0, startIndex);
+    const end = Math.min(list.value.length, endIndex);
+    
+    visibleBlocks.value = list.value.slice(start, end).map((item, index) => ({
+        item,
+        index: start + index,
+        style: { transform: `translateY(${(start + index) * itemHeight}px)` }
+    }));
 }
 </script>
 <template>
@@ -52,23 +96,37 @@ function handleScroll() {
             </RouterLink>
         </div>
 
-        <div v-show="tab === 'blocks'">
-            <div class="bg-base-100 rounded overflow-auto blocksContainer" @scroll="handleScroll" style="height: 70vh;overflow: scroll;">
-                <table class="table table-compact">
-                    <thead class="bg-base-200">
+        <div v-show="tab === 'blocks'" 
+            class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-info overflow-x-auto blocksContainer" 
+            ref="blockContainer"
+            style="height: 78vh; overflow: auto;">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <Icon icon="mdi:cube-outline" class="text-2xl text-info mr-2" />
+                    <div class="text-lg font-semibold text-main">{{ $t('block.recent') }} {{ $t('block.block_header') }}</div>
+                </div>
+            </div>
+            
+            <div class="bg-base-200 rounded-md overflow-auto">
+                <table class="table table-compact w-full">
+                    <thead class="bg-base-300 sticky top-0">
                         <tr>
-                            <td>{{ $t('block.block_header') }}</td>
-                            <td>{{ $t('account.hash') }}</td>
-                            <td>{{ $t('block.proposer') }}</td>
-                            <td>{{ $t('account.no_of_transactions') }}</td>
-                            <td>{{ $t('account.time') }}</td>
+                            <th class="bg-base-300">{{ $t('block.block_header') }}</th>
+                            <th class="bg-base-300">{{ $t('account.hash') }}</th>
+                            <th class="bg-base-300">{{ $t('block.proposer') }}</th>
+                            <th class="bg-base-300">{{ $t('account.no_of_transactions') }}</th>
+                            <th class="bg-base-300">{{ $t('account.time') }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in [...list].reverse()">
-                            <td>{{ item.block.header.height }}</td>
-                            <td>
-                                <RouterLink :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}
+                        <!-- Using virtual list rendering for better performance -->
+                        <tr v-for="({ item, style }, i) in visibleBlocks" 
+                            :key="i"
+                            class="hover:bg-base-300 transition-colors duration-200">
+                            <td class="font-medium">{{ item.block.header.height }}</td>
+                            <td class="truncate text-info" style="max-width: 18rem; overflow:hidden;">
+                                <RouterLink class="truncate hover:underline" :title="item.block_id.hash"
+                                    :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}
                                 </RouterLink>
                             </td>
                             <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
@@ -78,10 +136,8 @@ function handleScroll() {
                     </tbody>
                 </table>
 
-                <div class="pre-loading" v-if="base.fetchingBlocks">
-                    <div class="effect-1 effects"></div>
-                    <div class="effect-2 effects"></div>
-                    <div class="effect-3 effects"></div>
+                <div class="flex justify-center items-center py-8" v-if="base.fetchingBlocks">
+                    <div class="loading loading-spinner loading-lg text-info"></div>
                 </div>
             </div>
         </div>

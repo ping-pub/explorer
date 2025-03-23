@@ -18,7 +18,8 @@
       "add_to_favorite": "Tambahkan ke favorit",
       "all_blockchains": "All Blockchain",
       "sponsors": "Sponsors",
-      "links": "Tautan"
+      "links": "Tautan",
+      "validators": "Validators"
     },
     "pages": {
       "title": "Pocket Dashboard",
@@ -51,6 +52,7 @@
       "validator": "Validator",
       "delegation": "Delegasi",
       "rewards": "Hadiah",
+      "signer": "Penandatangan",
       "action": "Tindakan",
       "unbonding_delegations": "Delegasi yang tidak terikat",
       "creation_height": "Tingkat Teratas",
@@ -184,6 +186,7 @@
       "double_sign_slashing": "Pemotongan Ganda Tanda Tangan",
       "downtime_slashing": "Pemotongan Downtime",
       "popular": "Populer",
+      "validators": "Validators",
       "active": "Aktif",
       "inactive": "Tidak Aktif",
       "rank": "Peringkat",

@@ -43,66 +43,61 @@ function handleScroll() {
                 @click="tab = 'search'">Search</a>
         </div>
 
-        <div v-show="tab === 'recent'" class="bg-base-100 rounded overflow-x-auto txsContainer" @scroll="handleScroll"
-            style="height: 78vh;overflow: scroll;">
-            <table class="table w-full table-compact">
-                <thead class="bg-base-200 dark:bg-base-200">
-                    <tr>
-                        <th style="position: relative; z-index: 2;">{{ $t('tx.tx_hash') }}</th>
-                        <th style="position: relative; z-index: 2;">{{ $t('block.block') }}</th>
-                        <th>{{ $t('staking.status') }}</th>
-                        <th style="position: relative; z-index: 2;">Messages</th>
-                        <th>{{ $t('account.type') }}</th>
-                        <th>{{ $t('block.fees') }}</th>
-                        <th>{{ $t('account.time') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in base.allTxs" :index="index" class="hover">
-                        <td class="truncate text-primary" style="max-width:25vw">
-                            <RouterLink  class="truncate" :to="`/${props.chain}/tx/${item.hash}`">{{
-                                item.hash
-                            }}</RouterLink>
-                        </td>
-                        <td class="text-sm text-primary">
-                            <RouterLink :to="`/${props.chain}/block/${item.height}`">{{ item.height }}</RouterLink>
-                        </td>
-                        <td>
-                            <span class="text-xs truncate relative py-2 px-4 w-fit mr-2 rounded" :class="`text-${item.status === 0 ? 'success' : 'error'
-                                }`">
-                                <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${item.status === 0 ? 'success' : 'error'
-                                    }`"></span>
-                                {{ item.status === 0 ? 'Success' : 'Failed' }}
-                            </span>
-                        </td>
-                        <td>{{ item.messages.length }}</td>
-                        <td>{{ format.messages(item.messages) }}</td>
-                        <td>{{ format.formatTokens(item.fee.amount) }}</td>
-                        <td>
-                            {{
-                                format.toDay(item.timestamp, 'from')
-                            }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- <div class="p-4">
-                <div class="alert relative bg-transparent">
-                    <div class="alert  absolute inset-x-0 inset-y-0 w-full h-full bg-info opacity-10"></div>
-                    <div class="text-info flex gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            class="stroke-current flex-shrink-0 w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span>{{ $t('block.only_tx') }}</span>
-                    </div>
+        <div v-show="tab === 'recent'" class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-warning overflow-x-auto txsContainer" @scroll="handleScroll"
+            style="height: 78vh; overflow: auto;">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <Icon icon="mdi:transfer" class="text-2xl text-warning mr-2" />
+                    <div class="text-lg font-semibold text-main">{{ $t('tx.tx_hash') }}</div>
                 </div>
-            </div> -->
+            </div>
+            
+            <div class="bg-base-200 rounded-md overflow-auto">
+                <table class="table w-full table-compact">
+                    <thead class="bg-base-300 sticky top-0">
+                        <tr>
+                            <th class="bg-base-300">{{ $t('tx.tx_hash') }}</th>
+                            <th class="bg-base-300">{{ $t('block.block') }}</th>
+                            <th class="bg-base-300">{{ $t('staking.status') }}</th>
+                            <th class="bg-base-300">Messages</th>
+                            <th class="bg-base-300">{{ $t('account.type') }}</th>
+                            <th class="bg-base-300">{{ $t('block.fees') }}</th>
+                            <th class="bg-base-300">{{ $t('account.time') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in base.allTxs" :index="index" class="hover:bg-base-300 transition-colors duration-200">
+                            <td class="truncate text-warning" style="max-width:25vw">
+                                <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.hash}`">{{
+                                    item.hash
+                                }}</RouterLink>
+                            </td>
+                            <td class="text-sm text-warning">
+                                <RouterLink :to="`/${props.chain}/block/${item.height}`" class="hover:underline">{{ item.height }}</RouterLink>
+                            </td>
+                            <td>
+                                <span class="text-xs truncate py-1 px-3 rounded-full" 
+                                      :class="item.status === 0 ? 'bg-success/10 text-success' : 'bg-error/10 text-error'">
+                                    {{ item.status === 0 ? 'Success' : 'Failed' }}
+                                </span>
+                            </td>
+                            <td>{{ item.messages.length }}</td>
+                            <td>{{ format.messages(item.messages) }}</td>
+                            <td>{{ format.formatTokens(item.fee.amount) }}</td>
+                            <td>{{ format.toDay(item.timestamp, 'from') }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div v-show="tab === 'search'" class="bg-base-100 rounded overflow-x-auto">
-            <div class="p-4">
+        <div v-show="tab === 'search'" class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-warning">
+            <div class="flex items-center mb-4">
+                <Icon icon="mdi:magnify" class="text-2xl text-warning mr-2" />
+                <div class="text-lg font-semibold text-main">Search Transactions</div>
+            </div>
+            
+            <div class="bg-base-200 p-4 rounded-md">
                 <div class="form-control">
                     <input v-model="hash" type="text" class="input input-bordered" placeholder="Search by Tx Hash"
                         @blur="search" />

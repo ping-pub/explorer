@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Icon } from '@iconify/vue';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 
 // Components
 import newFooter from '@/layouts/components/NavFooter.vue';
@@ -71,6 +71,36 @@ const alpha_beta = window.location.host.includes('beta') ? 'beta' : 'alpha'
 const chain = window.location.host.includes('beta') ? '/pocket-beta' : '/poktroll'
 dayjs()
 
+// Add this for responsive behavior
+const isMobile = ref(false);
+const visibleNavItems = ref(4); // Number of items to show before using "More" dropdown
+
+// Update this when window resizes
+const updateWindowSize = () => {
+  isMobile.value = window.innerWidth < 1024; // Adjust breakpoint as needed
+  visibleNavItems.value = window.innerWidth < 1280 ? 4 : 6; // Show fewer items on smaller screens
+};
+
+// Call once on component mount and add event listener
+onMounted(() => {
+  updateWindowSize();
+  window.addEventListener('resize', updateWindowSize);
+});
+
+// Clean up event listener when component unmounts
+onUnmounted(() => {
+  window.removeEventListener('resize', updateWindowSize);
+});
+
+// Compute which items should go in the More dropdown
+const mainNavItems = computed(() => {
+  return blockchain.computedChainMenu.slice(0, visibleNavItems.value);
+});
+
+const moreNavItems = computed(() => {
+  return blockchain.computedChainMenu.slice(visibleNavItems.value);
+});
+
 </script>
 
 <template>
@@ -79,7 +109,7 @@ dayjs()
       <div class="container mx-auto px-1 py-2 flex justify-center items-center">
 
         <nav class="flex">
-          <RouterLink :to=chain class="flex items-center">
+          <RouterLink :to=chain class="flex items-center mr-5">
             <img class="w-10 h-10"
               src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
             <h1 class="flex-1 ml-3 text-xl font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
@@ -87,7 +117,9 @@ dayjs()
             </h1>
             <span class="pill">{{ alpha_beta }}</span>
           </RouterLink>
-          <div v-for="(item, index) of blockchain.computedChainMenu" :key="index"
+          
+          <!-- Main nav items (limited based on screen size) -->
+          <div v-for="(item, index) of mainNavItems" :key="index"
             class="px-2 flex justify-between items-center">
             <div v-if="isNavGroup(item)" :tabindex="index" class="collapse flex" :class="{
               'collapse-arrow': index > 0 && item?.children?.length > 0,
@@ -114,17 +146,6 @@ dayjs()
                   </RouterLink>
                 </div>
               </div>
-              <!-- Chain Name -->
-              <!-- <div class="collapse-title !py-0 px-2 h-auto flex items-center cursor-pointer ">
-                <div
-                  class="text-base capitalize flex-1 text-gray-200 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-200 whitespace-nowrap bg-[#231f20;] dark:bg-base-200 hover:bg-gray-100 dark:hover:bg-[#373f59] pill">
-                  {{ item?.title }}
-                </div>
-                <div v-if="item?.badgeContent" class="mr-6 badge badge-sm text-white border-none"
-                  :class="item?.badgeClass">
-                  {{ item?.badgeContent }}
-                </div>
-              </div> -->
             </div>
 
             <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="sidebarShow = false"
@@ -136,10 +157,49 @@ dayjs()
                 {{ item?.badgeContent }}
               </div>
             </RouterLink>
+            
             <div v-if="isNavTitle(item)" class="px-4 text-sm text-gray-400 pb-2 uppercase">
               {{ item?.heading }}
             </div>
           </div>
+
+          <!-- "More" dropdown for additional nav items -->
+          <div v-if="moreNavItems.length > 0" class="dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-ghost btn-sm m-1 cursor-pointer">
+              <span class="mr-1">More</span>
+              <Icon icon="mdi-chevron-down" />
+            </label>
+            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50">
+              <li v-for="(item, index) in moreNavItems" :key="'more-'+index">
+                <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="sidebarShow = false"
+                  class="hover:bg-gray-100 dark:hover:bg-[#373f59]">
+                  <div class="text-base capitalize text-gray-700 dark:text-gray-200">
+                    {{ item?.title }}
+                  </div>
+                  <div v-if="item?.badgeContent" class="badge badge-sm text-white border-none" :class="item?.badgeClass">
+                    {{ item?.badgeContent }}
+                  </div>
+                </RouterLink>
+
+                <!-- Special handling for NavGroups in dropdown -->
+                <div v-if="isNavGroup(item)" class="dropdown dropdown-hover dropdown-right">
+                  <label tabindex="0" class="hover:bg-gray-100 dark:hover:bg-[#373f59] w-full text-start">
+                    {{ item?.title }}
+                  </label>
+                  <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50">
+                    <li v-for="(subItem, subIndex) in item.children" :key="'submenu-'+subIndex">
+                      <RouterLink v-if="isNavLink(subItem)" :to="subItem?.to" @click="sidebarShow = false"
+                        class="hover:bg-gray-100 dark:hover:bg-[#373f59]">
+                        {{ subItem?.title }}
+                      </RouterLink>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Icons section -->
           <div class="py-2 flex justify-between items-center">
             <NavbarSearch class="!inline-block" />
             <!-- <NavBarI18n class="hidden md:!inline-block pt-1" /> -->

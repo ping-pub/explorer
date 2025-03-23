@@ -53,6 +53,12 @@ export const useIndexModule = defineStore('module-index', {
           high_24h: {
             usd: 0,
           },
+          atl: {
+            usd: 0,
+          },
+          atl_change_percentage: {
+            usd: 0,
+          },
           low_24h: {
             usd: 0,
           },
@@ -195,7 +201,7 @@ export const useIndexModule = defineStore('module-index', {
           change: 0,
         },
         {
-          title: 'Bonded Tokens',
+          title: 'Staked Tokens',
           color: '',
           // icon: 'mdi-lock',
           stats: `${formatter.formatTokenAmount({

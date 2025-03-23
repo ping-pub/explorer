@@ -19,6 +19,7 @@ export const DEFAULT: RequestRegistry = {
   },
   services: {url: '/pokt-network/poktroll/service/service', adapter},
   service_info: {url: '/pokt-network/poktroll/service/service/{address}', adapter},
+  relay_mining_difficulty: {url: '/pokt-network/poktroll/service/relay_mining_difficulty', adapter},
   params: { url: '/cosmos/params/v1beta1/params?subspace={subspace}&key={key}', adapter },
   bank_params: { url: '/cosmos/bank/v1beta1/params', adapter },
   bank_balances_address: {

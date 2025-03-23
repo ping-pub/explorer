@@ -556,273 +556,354 @@ watch(() => base.allTxs, (newTxs) => {
 
 <template>
   <div>
-    <div class="grid grid-cols-1 lg:grid-cols-2">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
       <!-- Block Height and Network Performance Cards -->
-      <div class="grid grid-cols-1 lg:grid-cols-1 gap-4 mr-5">
-        <!-- Block Height Card -->
-        <div class="bg-base-100 rounded-lg p-4">
-          <div class="flex items-center">
-            <div class="w-12 h-12 bg-base-200 rounded-lg flex items-center justify-center mr-4">
-              <Icon icon="mdi-cube-outline" class="text-3xl" />
+      <div class="bg-base-100 px-4 pt-4 pb-4 rounded-md shadow-md border-t-4 border-info">
+        <div class="flex items-center mb-4">
+          <Icon icon="mdi:cube-outline" class="text-2xl text-info mr-2" />
+          <div class="text-lg font-semibold text-main">Network Status</div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
+          <!-- Block Height Card -->
+          <div class="bg-base-200 p-4 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
+            <div class="flex items-center mb-3">
+              <Icon icon="mdi:cube-scan" class="text-xl text-info mr-2" />
+              <div class="text-sm font-medium text-secondary">Current Block Height</div>
             </div>
-            <div>
-              <div class="text-lg font-semibold text-main">Block Height</div>
-            </div>
-          </div>
-
-          <div class="text-4xl font-bold mt-2 row">
-            <p>
+            <div class="text-3xl font-bold text-main flex items-center">
               {{ base.latest?.block?.header?.height || '0' }}
               <a :href="`/${blockchain.chainName}/block/${base.latest?.block?.header?.height}`"
-                class="ml-2 text-sm inline-block">
-                <Icon icon="mdi-arrow-right-circle-outline" class="text-xl" />
+                 class="ml-2 text-sm inline-block text-info hover:text-info/70 transition-colors duration-200">
+                <Icon icon="mdi:arrow-right-circle" class="text-xl" />
               </a>
-            </p>
-          </div>
-        </div>
-
-        <!-- Network Performance Card -->
-        <div class="bg-base-100 rounded-lg p-4">
-          <div class="flex items-center">
-            <div class="w-12 h-12 bg-base-200 rounded-lg flex items-center justify-center mr-4">
-              <Icon icon="mdi-chart-line" class="text-3xl" />
             </div>
-            <div class="text-lg font-semibold text-main">Network Performance</div>
+              <!-- let's add some more information here -->
+              <div class="text-md text-secondary mt-24">
+                <Icon icon="mdi:clock-outline" class="text-md text-info mr-2" />
+                <!-- format time to local time -->
+                Block Time: {{ new Date(base.latest?.block?.header?.time || '0').toLocaleString() }}
+              </div>
           </div>
 
-          <div class="grid grid-cols-3 gap-4 mt-4">
+          <!-- Network Performance Stats -->
+          <div class="grid grid-cols-1 gap-4 mt-1">
             <!-- Consensus Nodes -->
-            <div>
-              <div class="text-sm text-gray-500">Consensus Nodes</div>
-              <div class="text-2xl font-bold">{{ paramStore.nodeVersion?.items?.length || '0' }}</div>
+            <div class="bg-base-200 p-5 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
+              <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                  <Icon icon="mdi:server-network" class="text-info mr-2" />
+                  <span class="text-sm text-secondary">Consensus Nodes</span>
+                </div>
+                <div class="text-lg font-bold">{{ paramStore.nodeVersion?.items?.length || '0' }}</div>
+              </div>
             </div>
-
-            <!-- Avg Block Time -->
-            <div>
-              <div class="text-sm text-gray-500">Avg Block Time<span class="text-xs">(24h)</span></div>
-              <div class="text-2xl font-bold">{{ (base.blocktime / 1000).toFixed(1) }}s</div>
+            
+            <!-- Block Time -->
+            <div class="bg-base-200 p-5 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
+              <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                  <Icon icon="mdi:timer-outline" class="text-info mr-2" />
+                  <span class="text-sm text-secondary">Avg Block Time (24h)</span>
+                </div>
+                <div class="text-lg font-bold">{{ (base.blocktime / 1000).toFixed(1) }}s</div>
+              </div>
             </div>
-
-            <!-- Avg TX Per Block -->
-            <div>
-              <div class="text-sm text-gray-500">Avg TX Per Block<span class="text-xs">(24h)</span></div>
-              <div class="text-2xl font-bold">
-                {{
-                  base.recents && base.recents.length > 0
-                    ? (base.recents.reduce((sum, block) => sum + (block.block?.data?.txs?.length || 0), 0) / Math.max(1,
-                      base.recents.length)).toFixed(1)
-                    : '0.0'
-                }}
+            
+            <!-- Tx Per Block -->
+            <div class="bg-base-200 p-5 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
+              <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                  <Icon icon="mdi:chart-box-outline" class="text-info mr-2" />
+                  <span class="text-sm text-secondary">Avg TX Per Block (24h)</span>
+                </div>
+                <div class="text-lg font-bold">
+                  {{
+                    base.recents && base.recents.length > 0
+                      ? (base.recents.reduce((sum, block) => sum + (block.block?.data?.txs?.length || 0), 0) / Math.max(1,
+                        base.recents.length)).toFixed(1)
+                      : '0.0'
+                  }}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <!-- Network Statistics and Market Data Cards -->
-        <div class="bg-base-100 rounded-lg p-4">
-          <div class="text-lg font-semibold text-main w-100">
-            Network Statistics
+      
+      <!-- Market Data Section -->
+      <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-success">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center">
+            <Icon icon="mdi:chart-areaspline" class="text-2xl text-success mr-2" />
+            <div class="text-lg font-semibold text-main">Market Data</div>
           </div>
-          <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 mt-4">
-            <!-- Network Statistics Cards -->
-            <div class="stat bg-base-200 rounded-lg p-4">
-              <div class="text-sm text-gray-500">Total Wallets</div>
-              <div class="text-2xl font-bold">{{ networkStats.wallets.toLocaleString() }}</div>
+          <div class="flex items-center gap-2">
+            <div class="dropdown dropdown-end">
+              <label tabindex="0" class="btn btn-sm btn-outline">
+                {{ ticker?.market?.name || 'Market' }}
+                <Icon icon="mdi:chevron-down" class="ml-1" />
+              </label>
+              <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-1">
+                <li v-for="(tic, index) in tickers" :key="tic.market.identifier">
+                  <a @click="() => { store.selectTicker(index); }"
+                    :class="{ 'active': index === store.tickerIndex }">
+                    {{ tic.market.name }}
+                  </a>
+                </li>
+              </ul>
             </div>
-
-            <div class="stat bg-base-200 rounded-lg p-4">
-              <div class="text-sm text-gray-500">Applications</div>
-              <div class="text-2xl font-bold">{{ networkStats.applications.toLocaleString() }}</div>
+            <a class="!text-white btn btn-sm"
+              :class="{ '!btn-success': store.trustColor === 'green', '!btn-warning': store.trustColor === 'yellow' }"
+              :href="ticker?.trade_url" target="_blank">
+              {{ $t('index.buy') }} {{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}
+            </a>
+          </div>
+        </div>
+        
+        <!-- Coin Header -->
+        <div class="flex items-center mb-4 bg-base-200 p-3 rounded-md">
+          <div class="w-10 h-10 flex items-center justify-center rounded-md overflow-hidden mr-3">
+            <img v-if="blockchain.logo" :src="blockchain.logo" alt="Coin logo"
+              class="w-full h-full object-cover" />
+            <div v-else class="w-full h-full bg-success flex items-center justify-center">
+              <Icon icon="mdi:currency-usd" class="text-xl text-white" />
             </div>
-
-            <div class="stat bg-base-200 rounded-lg p-4">
-              <div class="text-sm text-gray-500">Suppliers</div>
-              <div class="text-2xl font-bold">{{ networkStats.suppliers.toLocaleString() }}</div>
-            </div>
-
-            <div class="stat bg-base-200 rounded-lg p-4">
-              <div class="text-sm text-gray-500">Gateways</div>
-              <div class="text-2xl font-bold">{{ networkStats.gateways.toLocaleString() }}</div>
-            </div>
-
-            <div class="stat bg-base-200 rounded-lg p-4">
-              <div class="text-sm text-gray-500">Services</div>
-              <div class="text-2xl font-bold">{{ networkStats.services.toLocaleString() }}</div>
-            </div>
-
-            <div class="stat bg-base-200 rounded-lg p-4">
-              <div class="text-sm text-gray-500">Active Validators</div>
-              <div class="text-2xl font-bold">{{ String(base?.latest?.block?.last_commit?.signatures.length || 0) }}
-              </div>
+          </div>
+          <div>
+            <div class="text-xl font-bold">{{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}</div>
+            <div class="text-sm text-secondary">{{ store.coinInfo?.name || 'Cryptocurrency' }}</div>
+          </div>
+          <div class="ml-auto flex flex-col items-end">
+            <div class="text-xl font-bold">${{ store.coinInfo?.market_data?.current_price?.usd?.toFixed(6) || '0.00' }}</div>
+            <div class="text-sm" :class="(store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0 ? 'text-success' : 'text-error'">
+              {{ (store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0 ? '+' : '' }}{{ store.coinInfo?.market_data?.price_change_percentage_24h?.toFixed(2) || '0.00' }}%
             </div>
           </div>
         </div>
-        <!-- Third Column -->
-        <div class="grid grid-cols-1 lg:grid-cols-1 gap-4">
-          <!-- Coin Header with Buy Button -->
-          <div class="bg-base-100 rounded-lg p-4 relative">
-            <div class="flex items-center justify-between gap-2 mb-4">
-              <div class="flex items-center gap-2">
-                <div class="w-8 h-8 flex items-center justify-center rounded-md overflow-hidden">
-                  <img v-if="blockchain.logo" :src="blockchain.logo" alt="Coin logo"
-                    class="w-full h-full object-cover" />
-                  <div v-else class="w-full h-full bg-green-500 flex items-center justify-center">
-                    <Icon icon="mdi-currency-usd" class="text-xl text-white" />
-                  </div>
-                </div>
-                <span class="text-xl font-bold">{{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <!-- Dropdown -->
-                <div class="dropdown dropdown-end">
-                  <label tabindex="0" class="btn btn-sm btn-outline">
-                    {{ ticker?.market?.name || 'Market' }}
-                    <Icon icon="mdi-chevron-down" class="ml-1" />
-                  </label>
-                  <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-1">
-                    <li v-for="(tic, index) in tickers" :key="tic.market.identifier">
-                      <a @click="() => { store.selectTicker(index); }"
-                        :class="{ 'active': index === store.tickerIndex }">
-                        {{ tic.market.name }}
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <!-- Buy Button -->
-                <a class="!text-white btn btn-sm"
-                  :class="{ '!btn-success': store.trustColor === 'green', '!btn-warning': store.trustColor === 'yellow' }"
-                  :href="ticker?.trade_url" target="_blank">
-                  {{ $t('index.buy') }} {{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}
-                </a>
-              </div>
+        
+        <!-- Market Data Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <!-- Volume Card -->
+          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50">
+            <div class="text-xs text-secondary flex items-center">
+              <Icon icon="mdi:swap-horizontal" class="mr-1 text-success" />
+              <span>24h Volume</span>
             </div>
-            <!-- Price Card -->
-            <div class="flex justify-between items-center py-3 border-b border-base-300">
-              <div class="text-sm text-gray-500">Price</div>
-              <div class="text-md font-bold">${{ store.coinInfo?.market_data?.current_price?.usd?.toFixed(6) || '0.00'
-                }}</div>
+            <div class="text-base font-medium mt-1">${{ format.formatNumber((store.coinInfo?.market_data?.total_volume?.usd || 0), '123,456,789.[00]') }}</div>
+          </div>
+          
+          <!-- Market Cap Card -->
+          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50">
+            <div class="text-xs text-secondary flex items-center">
+              <Icon icon="mdi:chart-pie" class="mr-1 text-success" />
+              <span>Market Cap</span>
             </div>
+            <div class="text-base font-medium mt-1">${{ format.formatNumber(store.coinInfo?.market_data?.market_cap?.usd || 0, '123,456,789.[00]') }}</div>
+          </div>
+          
+          <!-- Circulating Supply Card -->
+          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50">
+            <div class="text-xs text-secondary flex items-center">
+              <Icon icon="mdi:coins" class="mr-1 text-success" />
+              <span>Circulating Supply</span>
+            </div>
+            <div class="text-base font-medium mt-1">
+              {{ format.formatNumber((store.coinInfo?.market_data?.circulating_supply || 0), '123,456,789.[00]') }}
+              <span class="text-xs">{{ store.coinInfo?.symbol?.toUpperCase() || '' }}</span>
+            </div>
+          </div>
+          
+          <!-- 24h High/Low Card -->
+          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50">
+            <div class="text-xs text-secondary flex items-center">
+              <Icon icon="mdi:trending-up" class="mr-1 text-success" />
+              <span>24h High / Low</span>
+            </div>
+            <div class="text-base font-medium mt-1 flex items-center gap-2">
+              <span class="text-success">${{ store.coinInfo?.market_data?.high_24h?.usd?.toFixed(6) || '0.00' }}</span>
+              <span>/</span>
+              <span class="text-error">${{ store.coinInfo?.market_data?.low_24h?.usd?.toFixed(6) || '0.00' }}</span>
+            </div>
+          </div>
+          
+          <!-- ATH Card -->
+          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50">
+            <div class="text-xs text-secondary flex items-center">
+              <Icon icon="mdi:trophy" class="mr-1 text-success" />
+              <span>All Time High</span>
+            </div>
+            <div class="text-base font-medium mt-1">
+              ${{ store.coinInfo?.market_data?.ath?.usd?.toFixed(6) || '0.00' }}
+              <span class="text-xs ml-1" :class="{'text-error': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) < 0, 'text-success': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) > 0}">
+                ({{ store.coinInfo?.market_data?.ath_change_percentage?.usd?.toFixed(2) || '0.00' }}%)
+              </span>
+            </div>
+          </div>
 
-            <!-- Volume Card -->
-            <div class="flex justify-between items-center py-3 border-b border-base-300">
-              <div class="text-sm text-gray-500">Volume<span class="text-xs">(24h)</span></div>
-              <div class="text-md font-bold">${{ format.formatNumber((store.coinInfo?.market_data?.total_volume?.usd ||
-                0), '123,456,789.[00]') }}</div>
+          <!-- ATL Card -->
+          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50">
+            <div class="text-xs text-secondary flex items-center">
+              <Icon icon="mdi:trending-down" class="mr-1 text-error" />
+              <span>All Time Low</span>
             </div>
-
-            <!-- Circulating Supply Card -->
-            <div class="flex justify-between items-center py-3 border-b border-base-300">
-              <div class="text-sm text-gray-500">Circulating Supply</div>
-              <div class="text-md font-bold">
-                {{ format.formatNumber((store.coinInfo?.market_data?.circulating_supply || 0), '123,456,789.[00]') }}
-                {{ store.coinInfo?.symbol?.toUpperCase() || '' }}
-              </div>
+            <div class="text-base font-medium mt-1">
+              ${{ store.coinInfo?.market_data?.atl?.usd?.toFixed(6) || '0.00' }}
+              <span class="text-xs ml-1" :class="{'text-error': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) < 0, 'text-success': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) > 0}">
+                ({{ store.coinInfo?.market_data?.atl_change_percentage?.usd?.toFixed(2) || '0.00' }}%)
+              </span>
             </div>
-
-            <!-- Market Cap Card -->
-            <div class="flex justify-between items-center py-3 border-b border-base-300">
-              <div class="text-sm text-gray-500">Market Cap</div>
-              <div class="text-md font-bold">
-                ${{ format.formatNumber(store.coinInfo?.market_data?.market_cap?.usd || 0, '123,456,789.[00]') }}
-              </div>
-            </div>
-
-            <!-- 24h High/Low Card -->
-            <div class="flex justify-between items-center py-3 border-b border-base-300">
-              <div class="text-sm text-gray-500">24h High / Low</div>
-              <div class="text-md font-bold flex gap-2">
-                <span class="text-success">${{ store.coinInfo?.market_data?.high_24h?.usd?.toFixed(6) || '0.00' }}</span>
-                <span>/</span>
-                <span class="text-error">${{ store.coinInfo?.market_data?.low_24h?.usd?.toFixed(6) || '0.00' }}</span>
-              </div>
-            </div>
-
-            <!-- ATH Card -->
-            <div class="flex justify-between items-center py-3">
-              <div class="text-sm text-gray-500">All Time High</div>
-              <div class="text-md font-bold">
-                ${{ store.coinInfo?.market_data?.ath?.usd?.toFixed(6) || '0.00' }}
-                <span class="text-xs ml-1" :class="{'text-error': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) < 0}">
-                  ({{ store.coinInfo?.market_data?.ath_change_percentage?.usd?.toFixed(2) || '0.00' }}%)
-                </span>
-              </div>
-            </div>
-
-            <!-- <div class="mx-4 flex flex-wrap items-center">
-              <div v-for="tag in store.coinInfo?.categories?.slice(0, 4)"
-                class="mr-2 mb-4 text-xs bg-gray-100 dark:bg-[#384059] px-3 rounded-full py-1">
-                {{ tag }}
-              </div>
-            </div> -->
           </div>
         </div>
       </div>
     </div>
 
-
-    <div class="grid grid-cols-2">
-      <div v-if="blockchain.supportModule('governance')" class="bg-base-100 rounded-lg shadow col-span-1">
-        <div class="px-4 pt-4 pb-2 text-md font-semibold text-main">
-          Active Proposals
+    <!-- Network Statistics Section -->
+    
+      <!-- Network Statistics -->
+      <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-secondary mt-5">
+        <div class="flex items-center mb-4">
+          <Icon icon="mdi:network" class="text-2xl text-secondary mr-2" />
+          <div class="text-lg font-semibold text-main">Network Statistics</div>
         </div>
-        <div class="px-4 pb-4">
-          <ProposalListItem :proposals="store?.proposals" />
-        </div>
-        <div class="pb-8 text-center" v-if="store.proposals?.proposals?.length === 0">
-          No active proposals
-        </div>
-      </div>
-
-      <!-- Growth Chart -->
-      <div class="bg-base-100 rounded-lg p-4 mt-4 mr-5">
-        <div class="px-4 pt-2 pb-4 text-lg font-semibold text-main">
-          Network Growth (7 Days)
-        </div>
-        <div class="h-80">
-          <ApexCharts type="area" height="280" :options="chartOptions" :series="historicalData.series" />
-        </div>
-      </div>
-      <!-- Transaction History Section -->
-      <div class="bg-base-100 rounded-lg p-4 mt-4">
-        <div class="flex items-center px-4 pt-2 pb-4">
-          <!-- <div class="w-12 h-12 bg-base-200 rounded-lg flex items-center justify-center mr-4">
-          <Icon icon="mdi-file-document-outline" class="text-3xl" />
-        </div> -->
-          <div>
-            <div class="text-lg font-semibold text-main w-100">
-              Transaction History
+        
+        <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+          <!-- Total Wallets -->
+          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-secondary/50">
+            <div class="text-xs text-secondary flex items-center">
+              <Icon icon="mdi:wallet" class="mr-1 text-secondary" />
+              <span>Total Wallets</span>
             </div>
+            <div class="text-xl font-medium mt-1">{{ networkStats.wallets.toLocaleString() }}</div>
+          </div>
+          
+          <!-- Applications -->
+          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-secondary/50">
+            <div class="text-xs text-secondary flex items-center">
+              <Icon icon="mdi:apps" class="mr-1 text-secondary" />
+              <span>Applications</span>
+            </div>
+            <div class="text-xl font-medium mt-1">{{ networkStats.applications.toLocaleString() }}</div>
+          </div>
+          
+          <!-- Suppliers -->
+          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-secondary/50">
+            <div class="text-xs text-secondary flex items-center">
+              <Icon icon="mdi:package-variant" class="mr-1 text-secondary" />
+              <span>Suppliers</span>
+            </div>
+            <div class="text-xl font-medium mt-1">{{ networkStats.suppliers.toLocaleString() }}</div>
+          </div>
+          
+          <!-- Gateways -->
+          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-secondary/50">
+            <div class="text-xs text-secondary flex items-center">
+              <Icon icon="mdi:gate" class="mr-1 text-secondary" />
+              <span>Gateways</span>
+            </div>
+            <div class="text-xl font-medium mt-1">{{ networkStats.gateways.toLocaleString() }}</div>
+          </div>
+          
+          <!-- Services -->
+          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-secondary/50">
+            <div class="text-xs text-secondary flex items-center">
+              <Icon icon="mdi:handshake" class="mr-1 text-secondary" />
+              <span>Services</span>
+            </div>
+            <div class="text-xl font-medium mt-1">{{ networkStats.services.toLocaleString() }}</div>
+          </div>
+          
+          <!-- Active Validators -->
+          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-secondary/50">
+            <div class="text-xs text-secondary flex items-center">
+              <Icon icon="mdi:shield-check" class="mr-1 text-secondary" />
+              <span>Active Validators</span>
+            </div>
+            <div class="text-xl font-medium mt-1">{{ String(base?.latest?.block?.last_commit?.signatures.length || 0) }}</div>
           </div>
         </div>
-        <div class="h-80">
-          <ApexCharts type="area" height="280" :options="txChartOptions" :series="txChartSeries" />
+      </div>
+      
+      <!-- Governance Section - Active Proposals -->
+      <div v-if="blockchain.supportModule('governance')" class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-accent">
+        <div class="flex items-center mb-4">
+          <Icon icon="mdi:gavel" class="text-2xl text-accent mr-2" />
+          <div class="text-lg font-semibold text-main">Active Proposals</div>
+        </div>
+        
+        <div class="pb-4">
+          <ProposalListItem :proposals="store?.proposals" />
+        </div>
+        <div class="py-8 text-center" v-if="store.proposals?.proposals?.length === 0">
+          <Icon icon="mdi:vote-outline" class="text-4xl text-accent/40 mb-2" />
+          <div class="text-secondary">No active proposals at this time</div>
         </div>
       </div>
-      <!-- Blocks -->
-      <div class="bg-base-100 rounded-lg overflow-auto col-span-1 mr-5 mt-4 px-1 py-1 relative" style="height: 34rem;">
-        <div class="bg-base-100 px-4 pt-4 pb-2 text-md font-semibold text-main">Blocks</div>
-        <div class="pre-loading" v-if="base.fetchingBlocks">
-          <div class="effect-1 effects"></div>
-          <div class="effect-2 effects"></div>
-          <div class="effect-3 effects"></div>
+    
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
+      <!-- Network Growth Chart -->
+      <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-primary">
+        <div class="flex items-center mb-4">
+          <Icon icon="mdi:chart-line" class="text-2xl text-primary mr-2" />
+          <div class="text-lg font-semibold text-main">Network Growth (7 Days)</div>
         </div>
-        <div class="max-h-[30rem] overflow-y-auto" v-else>
-          <table class="table table-compact">
-            <thead class="bg-base-200 sticky top-0">
+        <div class="bg-base-200 p-4 rounded-md">
+          <div class="h-80">
+            <ApexCharts type="area" height="280" :options="chartOptions" :series="historicalData.series" />
+          </div>
+        </div>
+      </div>
+      
+      <!-- Transaction History Chart -->
+      <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-warning">
+        <div class="flex items-center mb-4">
+          <Icon icon="mdi:chart-timeline-variant" class="text-2xl text-warning mr-2" />
+          <div class="text-lg font-semibold text-main">Transaction History</div>
+        </div>
+        <div class="bg-base-200 p-4 rounded-md">
+          <div class="h-80">
+            <ApexCharts type="area" height="280" :options="txChartOptions" :series="txChartSeries" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tables Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
+      <!-- Blocks Table -->
+      <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-info">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center">
+            <Icon icon="mdi:cube-outline" class="text-2xl text-info mr-2" />
+            <div class="text-lg font-semibold text-main">Latest Blocks</div>
+          </div>
+          <RouterLink :to="`/${chain}/block`" class="text-info hover:text-info/70 text-sm flex items-center transition-colors duration-200">
+            View All
+            <Icon icon="mdi:arrow-right" class="ml-1" />
+          </RouterLink>
+        </div>
+        
+        <div class="bg-base-200 rounded-md overflow-auto" style="max-height: 30rem;">
+          <div class="flex justify-center items-center py-8" v-if="base.fetchingBlocks">
+            <div class="loading loading-spinner loading-lg text-info"></div>
+          </div>
+          <table class="table table-compact w-full" v-else>
+            <thead class="bg-base-300 sticky top-0">
               <tr>
-                <th>{{ $t('block.block_header') }}</th>
-                <th>{{ $t('account.hash') }}</th>
-                <th>{{ $t('block.proposer') }}</th>
-                <th>{{ $t('module.tx') }}</th>
-                <th>{{ $t('account.time') }}</th>
+                <th class="bg-base-300">{{ $t('block.block_header') }}</th>
+                <th class="bg-base-300">{{ $t('account.hash') }}</th>
+                <th class="bg-base-300">{{ $t('block.proposer') }}</th>
+                <th class="bg-base-300">{{ $t('module.tx') }}</th>
+                <th class="bg-base-300">{{ $t('account.time') }}</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in [...base.recents].reverse()">
-                <td>{{ item.block.header.height }}</td>
-                <td class="truncate text-primary" style="max-width: 18rem; overflow:hidden; color:var(primary)">
-                  <RouterLink class="truncate" :title="item.block_id.hash"
+              <tr v-for="item in [...base.recents].reverse()" class="hover:bg-base-300 transition-colors duration-200">
+                <td class="font-medium">{{ item.block.header.height }}</td>
+                <td class="truncate text-info" style="max-width: 18rem; overflow:hidden;">
+                  <RouterLink class="truncate hover:underline" :title="item.block_id.hash"
                     :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}
                   </RouterLink>
                 </td>
@@ -834,71 +915,67 @@ watch(() => base.allTxs, (newTxs) => {
           </table>
         </div>
       </div>
-      <!-- Transactions -->
-      <div class="bg-base-100 rounded-lg overflow-auto col-span-1 mt-4 px-1 py-1"
-        style="height: 34rem; overflow: scroll;">
-        <div class="bg-base-100 px-4 pt-4 pb-2 text-md font-semibold text-main">{{ $t('module.rtx') }}</div>
-        <div class="max-h-[30rem] overflow-y-auto">
-          <table class="table w-full table-compact">
-            <thead class="bg-base-200 sticky top-0">
+      
+      <!-- Transactions Table -->
+      <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-warning">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center">
+            <Icon icon="mdi:file-document-outline" class="text-2xl text-warning mr-2" />
+            <div class="text-lg font-semibold text-main">{{ $t('module.rtx') }}</div>
+          </div>
+          <RouterLink :to="`/${chain}/tx`" class="text-warning hover:text-warning/70 text-sm flex items-center transition-colors duration-200">
+            View All
+            <Icon icon="mdi:arrow-right" class="ml-1" />
+          </RouterLink>
+        </div>
+        
+        <div class="bg-base-200 rounded-md overflow-auto" style="max-height: 30rem;">
+          <table class="table table-compact w-full">
+            <thead class="bg-base-300 sticky top-0">
               <tr>
-                <th>{{ $t('tx.tx_hash') }}</th>
-                <th>{{ $t('block.block') }}</th>
-                <th>{{ $t('staking.status') }}</th>
-                <th>{{ $t('account.type') }}</th>
-                <th>{{ $t('block.fees') }}</th>
-                <th>{{ $t('account.time') }}</th>
+                <th class="bg-base-300">{{ $t('tx.tx_hash') }}</th>
+                <th class="bg-base-300">{{ $t('block.block') }}</th>
+                <th class="bg-base-300">{{ $t('staking.status') }}</th>
+                <th class="bg-base-300">{{ $t('account.type') }}</th>
+                <th class="bg-base-300">{{ $t('block.fees') }}</th>
+                <th class="bg-base-300">{{ $t('account.time') }}</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, index) in base.allTxs" :index="index" class="hover">
-                <td class="truncate text-primary" style="max-width:14rem">
-                  <RouterLink class="truncate" :to="`/${props.chain}/tx/${item.hash}`">{{
+              <tr v-for="(item, index) in base.allTxs" :index="index" class="hover:bg-base-300 transition-colors duration-200">
+                <td class="truncate text-warning" style="max-width:14rem">
+                  <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.hash}`">{{
                     item.hash
                   }}</RouterLink>
                 </td>
-                <td class="text-sm text-primary">
-                  <RouterLink :to="`/${props.chain}/block/${item.height}`">{{ item.height }}</RouterLink>
+                <td class="text-sm text-warning">
+                  <RouterLink :to="`/${props.chain}/block/${item.height}`" class="hover:underline">{{ item.height }}</RouterLink>
                 </td>
                 <td>
-                  <span class="text-xs truncate py-2 px-4 w-fit mr-2 rounded-lg" :class="`text-${item.status === 0 ? 'success' : 'error'
-                    }`">
-                    <span class="inset-x-0 inset-y-0 opacity-10" :class="`bg-${item.status === 0 ? 'success' : 'error'
-                      }`"></span>
+                  <span class="text-xs truncate py-1 px-3 rounded-full" 
+                        :class="item.status === 0 ? 'bg-success/10 text-success' : 'bg-error/10 text-error'">
                     {{ item.status === 0 ? 'Success' : 'Failed' }}
                   </span>
                 </td>
                 <td>{{ format.messages(item.messages) }}</td>
                 <td>{{ format.formatTokens(item.fee.amount) }}</td>
-                <td>
-                  {{
-                    format.toDay(item.timestamp, 'from')
-                  }}
-                </td>
+                <td>{{ format.toDay(item.timestamp, 'from') }}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+    </div>
 
-
-      <!-- <div class="bg-base-100 rounded-lg mt-4">
-        <div class="px-4 pt-4 pb-2 text-md font-semibold text-main">
-          Application Versions
-        </div> -->
-      <!-- Application Version -->
-      <!-- <ArrayObjectElement :value="paramStore.appVersion?.items" :thead="false" />
-        <div class="h-4"></div>
-      </div> -->
-
-      <div v-if="!store.coingeckoId" class="bg-base-100 rounded-lg mt-4 col-span-1">
-        <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
-          Node Information
-        </div>
-        <ArrayObjectElement :value="paramStore.nodeVersion?.items" :thead="false" />
-        <div class="h-4"></div>
+    <!-- Node Information Section - Only shown if coingeckoId is not available -->
+    <div v-if="!store.coingeckoId" class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-accent mt-5">
+      <div class="flex items-center mb-4">
+        <Icon icon="mdi:server" class="text-2xl text-accent mr-2" />
+        <div class="text-lg font-semibold text-main">Node Information</div>
       </div>
-
+      <div class="bg-base-200 rounded-md p-4">
+        <ArrayObjectElement :value="paramStore.nodeVersion?.items" :thead="false" />
+      </div>
     </div>
   </div>
 </template>

@@ -25,13 +25,13 @@ export const useParamStore = defineStore('paramstore', {
           value: '-',
         },
         {
-          subtitle: 'bonded_and_supply',
+          subtitle: 'staked_and_supply',
           icon: 'DollarSignIcon',
           color: 'light-danger',
           value: '-',
         },
         {
-          subtitle: 'bonded_ratio',
+          subtitle: 'staked_ratio',
           icon: 'PercentIcon',
           color: 'light-warning',
           value: '-',
@@ -125,10 +125,10 @@ export const useParamStore = defineStore('paramstore', {
           const pool = resArr[0]?.pool;
           const amount = resArr[1]?.amount?.amount;
           const assets = this.blockchain.current?.assets;
-          const bondedAndSupply = this.chain.items.findIndex(
-            (x) => x.subtitle === 'bonded_and_supply'
+          const stakedAndSupply = this.chain.items.findIndex(
+            (x) => x.subtitle === 'staked_and_supply'
           );
-          this.chain.items[bondedAndSupply].value = `${formatNumber(
+          this.chain.items[stakedAndSupply].value = `${formatNumber(
             formatTokenAmount(assets, pool.bonded_tokens, 2, bond_denom, false),
             true,
             0
@@ -137,10 +137,10 @@ export const useParamStore = defineStore('paramstore', {
             true,
             0
           )}`;
-          const bondedRatio = this.chain.items.findIndex(
-            (x) => x.subtitle === 'bonded_ratio'
+          const stakedRatio = this.chain.items.findIndex(
+            (x) => x.subtitle === 'staked_ratio'
           );
-          this.chain.items[bondedRatio].value = `${percent(
+          this.chain.items[stakedRatio].value = `${percent(
             Number(pool.bonded_tokens) / Number(amount)
           )}%`;
         }

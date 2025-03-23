@@ -75,6 +75,13 @@ export interface Service {
     owner_address: string;
 }
 
+export interface RelayMiningDifficulty {
+    service_id: string;
+    block_height: string;
+    num_relays_ema: string;
+    target_hash: string;
+}
+
 export interface Application {
     address: any;
     stake: Coin;

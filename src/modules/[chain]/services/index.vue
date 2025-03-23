@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from '@vue/reactivity';
 import { useApplicationStore, useBlockchain, useFormatter } from '@/stores';
-import { PageRequest, type AuthAccount, type Pagination, type Service } from '@/types';
+import { PageRequest, type AuthAccount, type Pagination, type Service, type RelayMiningDifficulty } from '@/types';
 import { onMounted } from 'vue';
 import PaginationBar from '@/components/PaginationBar.vue';
 const props = defineProps(['chain']);
@@ -10,7 +10,11 @@ const format = useFormatter();
 const chainStore = useBlockchain()
 
 const list = ref([] as Service[])
+const miningDifficulties = ref([] as RelayMiningDifficulty[])
 const sortDirection = ref('desc'); // Add sort direction state
+const sortField = ref('computeUnits'); // Default sort field: computeUnits or miningDifficulty
+const isLoadingMiningDifficulties = ref(false);
+const hasMiningDifficultyError = ref(false);
 
 function showType(v: string) {
   return v.replace("/cosmos.auth.v1beta1.", "")
@@ -21,6 +25,7 @@ const pageResponse = ref({} as Pagination)
 
 onMounted(() => {
   pageloadInit(1)
+  loadMiningDifficulties()
 });
 
 function pageload() {
@@ -44,20 +49,83 @@ function pageloadInit(p: number) {
   });
 }
 
+function loadMiningDifficulties() {
+  const difficultyRequest = new PageRequest()
+  difficultyRequest.count_total = true
+  difficultyRequest.limit = 100 // Set a higher limit to get more data at once
+  
+  isLoadingMiningDifficulties.value = true;
+  hasMiningDifficultyError.value = false;
+  
+  chainStore.rpc.getRelayMiningDifficulty(difficultyRequest).then(x => {
+    miningDifficulties.value = x.relayMiningDifficulty || []
+    isLoadingMiningDifficulties.value = false;
+  }).catch(error => {
+    console.error("Error loading mining difficulties:", error)
+    isLoadingMiningDifficulties.value = false;
+    hasMiningDifficultyError.value = true;
+  })
+}
+
 // Toggle sort direction
 function toggleSort() {
   sortDirection.value = sortDirection.value === 'desc' ? 'asc' : 'desc';
 }
 
+// Toggle sort field and reset direction to desc
+function toggleSortField(field: string) {
+  if (sortField.value === field) {
+    toggleSort();
+  } else {
+    sortField.value = field;
+    sortDirection.value = 'desc';
+  }
+}
+
+// Get mining difficulty for a service
+function getMiningDifficultyForService(serviceId: string) {
+  return miningDifficulties.value.find(md => md.service_id === serviceId)
+}
+
+// Get mining difficulty value for sorting
+function getMiningDifficultyValue(serviceId: string) {
+  const diff = getMiningDifficultyForService(serviceId);
+  return diff ? parseInt(diff.num_relays_ema) || 0 : 0;
+}
+
+// Determine difficulty level based on num_relays_ema
+function getDifficultyLevel(numRelaysEma: string) {
+  const relays = parseInt(numRelaysEma) || 0
+  if (relays > 1000) return { level: 'high', color: 'text-error', label: 'High' }
+  if (relays > 100) return { level: 'medium', color: 'text-warning', label: 'Medium' }
+  return { level: 'low', color: 'text-success', label: 'Low' }
+}
+
+// Check if target hash indicates maximum difficulty
+function isMaxDifficulty(targetHash: string) {
+  // Check if target hash is all forward slashes, which indicates maximum difficulty
+  return targetHash.includes("////////////////////////////////////////////")
+}
+
 // Sorted list of services
 const sortedList = computed(() => {
   return [...list.value].sort((a, b) => {
-    const aValue = parseInt(a.compute_units_per_relay as string) || 0;
-    const bValue = parseInt(b.compute_units_per_relay as string) || 0;
-    
-    return sortDirection.value === 'desc' 
-      ? bValue - aValue 
-      : aValue - bValue;
+    if (sortField.value === 'computeUnits') {
+      const aValue = parseInt(a.compute_units_per_relay as string) || 0;
+      const bValue = parseInt(b.compute_units_per_relay as string) || 0;
+      
+      return sortDirection.value === 'desc' 
+        ? bValue - aValue 
+        : aValue - bValue;
+    } else {
+      // Sort by mining difficulty
+      const aValue = getMiningDifficultyValue(a.id);
+      const bValue = getMiningDifficultyValue(b.id);
+      
+      return sortDirection.value === 'desc' 
+        ? bValue - aValue 
+        : aValue - bValue;
+    }
   });
 });
 </script>
@@ -70,10 +138,15 @@ const sortedList = computed(() => {
           <td>ID</td>
           <td>Name</td>
           <td>Owner</td>
-          <td class="cursor-pointer" @click="toggleSort">
+          <td class="cursor-pointer" @click="toggleSortField('miningDifficulty')">
+            Mining Difficulty
+            <span v-if="sortField === 'miningDifficulty' && sortDirection === 'desc'">↓</span>
+            <span v-if="sortField === 'miningDifficulty' && sortDirection === 'asc'">↑</span>
+          </td>
+          <td class="cursor-pointer" @click="toggleSortField('computeUnits')">
             Compute Units
-            <span v-if="sortDirection === 'desc'">↓</span>
-            <span v-else>↑</span>
+            <span v-if="sortField === 'computeUnits' && sortDirection === 'desc'">↓</span>
+            <span v-if="sortField === 'computeUnits' && sortDirection === 'asc'">↑</span>
           </td>
         </tr>
       </thead>
@@ -89,6 +162,32 @@ const sortedList = computed(() => {
             </span>
             <span class="text-xs">{{ item.owner_address }}</span>
           </div>
+        </td>
+        
+        <td>
+          <div v-if="isLoadingMiningDifficulties" class="flex items-center">
+            <span class="loading loading-spinner loading-xs mr-2"></span>
+            <span>Loading...</span>
+          </div>
+          <div v-else-if="hasMiningDifficultyError" class="text-error">
+            Error loading data
+            <button @click="loadMiningDifficulties" class="btn btn-xs btn-outline ml-2">
+              Retry
+            </button>
+          </div>
+          <div v-else-if="getMiningDifficultyForService(item.id)" class="flex flex-col">
+            <!-- <div class="flex items-center gap-2 text-xs">
+              
+            </div> -->
+            <span class="text-sm">Relays EMA: {{ getMiningDifficultyForService(item.id)?.num_relays_ema }}</span>
+            <span v-if="isMaxDifficulty(getMiningDifficultyForService(item.id)?.target_hash || '')" 
+                    class="badge badge-error text-xs">Max Difficulty</span>
+              <span v-else 
+                    :class="`badge ${getDifficultyLevel(getMiningDifficultyForService(item.id)?.num_relays_ema || '0').color} text-xs`">
+                {{ getDifficultyLevel(getMiningDifficultyForService(item.id)?.num_relays_ema || '0').label }} Difficulty
+              </span>
+          </div>
+          <span v-else>-</span>
         </td>
         <td>{{ item.compute_units_per_relay }}</td>
       </tr>

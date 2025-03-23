@@ -135,6 +135,13 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getServicesInfo(address: string){
     return this.request(this.registry.service_info, {address});
   }
+
+  async getRelayMiningDifficulty(page?: PageRequest){
+    if(!page) page = new PageRequest();
+    const query =`?${page.toQueryString()}`;
+    return this.request(this.registry.relay_mining_difficulty, {}, query);
+  }
+
   async getDistributionDelegatorRewards(delegator_addr: string) {
     return this.request(this.registry.distribution_delegator_rewards, {
       delegator_addr,
