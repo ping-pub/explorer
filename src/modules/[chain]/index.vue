@@ -565,29 +565,37 @@ watch(() => base.allTxs, (newTxs) => {
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
-          <!-- Block Height Card -->
-          <div class="bg-base-200 p-4 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
-            <div class="flex items-center mb-3">
-              <Icon icon="mdi:cube-scan" class="text-xl text-info mr-2" />
-              <div class="text-sm font-medium text-secondary">Current Block Height</div>
-            </div>
-            <div class="text-3xl font-bold text-main flex items-center">
-              {{ base.latest?.block?.header?.height || '0' }}
-              <a :href="`/${blockchain.chainName}/block/${base.latest?.block?.header?.height}`"
-                 class="ml-2 text-sm inline-block text-info hover:text-info/70 transition-colors duration-200">
-                <Icon icon="mdi:arrow-right-circle" class="text-xl" />
-              </a>
-            </div>
-              <!-- let's add some more information here -->
-              <div class="text-md text-secondary mt-24">
-                <Icon icon="mdi:clock-outline" class="text-md text-info mr-2" />
-                <!-- format time to local time -->
-                Block Time: {{ new Date(base.latest?.block?.header?.time || '0').toLocaleString() }}
+          <!-- Left Column: Block Height and Block Time Cards -->
+          <div class="grid grid-cols-1 gap-4">
+            <!-- Block Height Card -->
+            <div class="bg-base-200 p-4 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
+              <div class="flex items-center mb-3">
+                <Icon icon="mdi:cube-scan" class="text-xl text-info mr-2" />
+                <div class="text-sm font-medium text-secondary">Current Block Height</div>
               </div>
+              <div class="text-3xl font-bold text-main flex items-center">
+                {{ base.latest?.block?.header?.height || '0' }}
+                <a :href="`/${blockchain.chainName}/block/${base.latest?.block?.header?.height}`"
+                   class="ml-2 text-sm inline-block text-info hover:text-info/70 transition-colors duration-200">
+                  <Icon icon="mdi:arrow-right-circle" class="text-xl" />
+                </a>
+              </div>
+            </div>
+
+            <!-- Block Time Card -->
+            <div class="bg-base-200 p-4 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
+              <div class="flex items-center mb-3">
+                <Icon icon="mdi:clock-outline" class="text-xl text-info mr-2" />
+                <div class="text-sm font-medium text-secondary">Latest Block Time</div>
+              </div>
+              <div class="text-3xl font-bold text-main flex items-center">
+                {{ new Date(base.latest?.block?.header?.time || '0').toLocaleString() }}
+              </div>
+            </div>
           </div>
 
-          <!-- Network Performance Stats -->
-          <div class="grid grid-cols-1 gap-4 mt-1">
+          <!-- Right Column: Network Performance Stats -->
+          <div class="grid grid-cols-1 gap-4">
             <!-- Consensus Nodes -->
             <div class="bg-base-200 p-5 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
               <div class="flex justify-between items-center">
