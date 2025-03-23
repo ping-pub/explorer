@@ -7,7 +7,7 @@
     "rpc": [
         {"provider": "Poktroll-Testnet", "address": "https://shannon-testnet-grove-rpc.beta.poktroll.com"}
     ],
-    "features": ["dashboard", "blocks", "tx", "applications", "suppliers", "gateways", "services", "validators"],
+    "features": ["dashboard", "blocks", "tx", "applications", "suppliers", "gateways", "services", "validators", "parameters"],
     "sdk_version": "0.45.1",
     "coin_type": "118",
     "min_tx_fee": "800",
