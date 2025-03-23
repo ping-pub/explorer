@@ -73,12 +73,22 @@ dayjs()
 
 // Add this for responsive behavior
 const isMobile = ref(false);
-const visibleNavItems = ref(4); // Number of items to show before using "More" dropdown
+const visibleNavItems = ref(6); // Number of items to show before using "More" dropdown
 
 // Update this when window resizes
 const updateWindowSize = () => {
   isMobile.value = window.innerWidth < 1024; // Adjust breakpoint as needed
-  visibleNavItems.value = window.innerWidth < 1280 ? 4 : 6; // Show fewer items on smaller screens
+  if (window.innerWidth < 1024) {
+    visibleNavItems.value = 5;
+  } else if (window.innerWidth < 1280) {
+    visibleNavItems.value = 5;
+  } else if (window.innerWidth < 1400) {
+    visibleNavItems.value = 7;
+  } else if (window.innerWidth < 1600) {
+    visibleNavItems.value = 7;
+  } else {
+    visibleNavItems.value = 6;
+  }
 };
 
 // Call once on component mount and add event listener
@@ -94,11 +104,13 @@ onUnmounted(() => {
 
 // Compute which items should go in the More dropdown
 const mainNavItems = computed(() => {
-  return blockchain.computedChainMenu.slice(0, visibleNavItems.value);
+  // @ts-ignore
+  return blockchain.computedChainMenu[0]?.children.slice(0, visibleNavItems.value);
 });
 
 const moreNavItems = computed(() => {
-  return blockchain.computedChainMenu.slice(visibleNavItems.value);
+  // @ts-ignore
+  return blockchain.computedChainMenu[0]?.children.slice(visibleNavItems.value);
 });
 
 </script>
@@ -115,12 +127,12 @@ const moreNavItems = computed(() => {
             <h1 class="flex-1 ml-3 text-xl font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
               SHANNON
             </h1>
-            <span class="pill">{{ alpha_beta }}</span>
+            <span class="pill mr-10">{{ alpha_beta }}</span>
           </RouterLink>
           
           <!-- Main nav items (limited based on screen size) -->
           <div v-for="(item, index) of mainNavItems" :key="index"
-            class="px-2 flex justify-between items-center">
+            class="flex justify-between items-center">
             <div v-if="isNavGroup(item)" :tabindex="index" class="collapse flex" :class="{
               'collapse-arrow': index > 0 && item?.children?.length > 0,
               'collapse-open': index === 0 && sidebarOpen,
@@ -128,7 +140,7 @@ const moreNavItems = computed(() => {
             }">
               <input v-if="index > 0" type="checkbox" class="cursor-pointer !h-10 block" @click="changeOpen(index)" />
 
-              <div class="collapse-content flex flex-row py-3">
+              <!-- <div class="collapse-content flex flex-row py-3">
                 <div v-for="(el, key) of item?.children" class="menu w-full !p-0">
                   <RouterLink v-if="isNavLink(el)" @click="sidebarShow = false"
                     class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
@@ -145,13 +157,13 @@ const moreNavItems = computed(() => {
                     </div>
                   </RouterLink>
                 </div>
-              </div>
+              </div> -->
             </div>
 
             <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="sidebarShow = false"
               class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
               <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                {{ item?.title }}
+                {{ $t(item?.title) }}
               </div>
               <div v-if="item?.badgeContent" class="badge badge-sm text-white border-none" :class="item?.badgeClass">
                 {{ item?.badgeContent }}
@@ -164,17 +176,17 @@ const moreNavItems = computed(() => {
           </div>
 
           <!-- "More" dropdown for additional nav items -->
-          <div v-if="moreNavItems.length > 0" class="dropdown dropdown-end">
-            <label tabindex="0" class="btn btn-ghost btn-sm m-1 cursor-pointer">
-              <span class="mr-1">More</span>
-              <Icon icon="mdi-chevron-down" />
+          <div v-if="moreNavItems.length > 0" class="dropdown dropdown-end flex align-center justify-center mr-5">
+            <label tabindex="0" class="btn btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-4 mt-4 mr-5">
+              <span class="mr-1 flex flex-1">More </span>
+              <Icon icon="mdi-chevron-down" class="ml-1 flex flex-1" />
             </label>
             <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50">
               <li v-for="(item, index) in moreNavItems" :key="'more-'+index">
                 <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="sidebarShow = false"
                   class="hover:bg-gray-100 dark:hover:bg-[#373f59]">
                   <div class="text-base capitalize text-gray-700 dark:text-gray-200">
-                    {{ item?.title }}
+                    {{ $t(item?.title) }}
                   </div>
                   <div v-if="item?.badgeContent" class="badge badge-sm text-white border-none" :class="item?.badgeClass">
                     {{ item?.badgeContent }}
@@ -184,13 +196,13 @@ const moreNavItems = computed(() => {
                 <!-- Special handling for NavGroups in dropdown -->
                 <div v-if="isNavGroup(item)" class="dropdown dropdown-hover dropdown-right">
                   <label tabindex="0" class="hover:bg-gray-100 dark:hover:bg-[#373f59] w-full text-start">
-                    {{ item?.title }}
+                    {{ $t(item?.title) }}
                   </label>
                   <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50">
                     <li v-for="(subItem, subIndex) in item.children" :key="'submenu-'+subIndex">
                       <RouterLink v-if="isNavLink(subItem)" :to="subItem?.to" @click="sidebarShow = false"
                         class="hover:bg-gray-100 dark:hover:bg-[#373f59]">
-                        {{ subItem?.title }}
+                        {{ $t(subItem?.title) }}
                       </RouterLink>
                     </li>
                   </ul>
@@ -211,20 +223,6 @@ const moreNavItems = computed(() => {
     </header>
     <div class="bg-base-200 dark:bg-[#231f20;] overflow-scroll no-scrollbar" style="height:calc(100vh - 5rem)">
       <div class="w-11/12 mx-auto">
-        <!-- header -->
-        <!-- <div class="flex items-center py-3 mb-4 px-4 sticky top-0 z-10 bg-[#231f20;] dark:bg-base-200 rounded"> -->
-          <!-- <div class="text-2xl pr-3 cursor-pointer xl:!hidden" @click="sidebarShow = true">
-            <Icon icon="mdi-menu" />
-          </div> -->
-
-          <!-- <ChainProfile /> -->
-
-          <!-- <div class="flex-1 w-0"></div> -->
-
-          <!-- <NavSearchBar />-->
-          
-        <!-- </div> -->
-
         <!-- 👉 Pages -->
         <div class="overflow-scroll no-scrollbar" style="height:calc(100vh - 8rem)">
           <div v-if="behind" class="alert alert-error mb-4">

@@ -588,7 +588,7 @@ watch(() => base.allTxs, (newTxs) => {
                 <Icon icon="mdi:clock-outline" class="text-xl text-info mr-2" />
                 <div class="text-sm font-medium text-secondary">Latest Block Time</div>
               </div>
-              <div class="text-3xl font-bold text-main flex items-center">
+              <div class="text-xl font-bold text-main flex items-center">
                 {{ new Date(base.latest?.block?.header?.time || '0').toLocaleString() }}
               </div>
             </div>
