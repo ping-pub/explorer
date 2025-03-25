@@ -243,7 +243,7 @@ function formatTitle(v: string) {
             <Icon :icon="`mdi:${item.icon || 'information-outline'}`" class="mr-1 text-info" />
             {{ formatTitle(item.subtitle) }}
           </div>
-          <div class="text-base text-main font-medium">{{ item.value }}</div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis">{{ item.value }}</div>
         </div>
       </div>
     </div>
@@ -326,7 +326,7 @@ function formatTitle(v: string) {
             <Icon icon="mdi:currency-usd" class="mr-1 text-success" />
             <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
           </div>
-          <div class="text-base text-main font-medium">{{ item?.value }}</div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis">{{ item?.value }}</div>
         </div>
       </div>
     </div>
@@ -348,7 +348,7 @@ function formatTitle(v: string) {
             <Icon icon="mdi:gavel" class="mr-1 text-secondary" />
             <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
           </div>
-          <div class="text-base text-main font-medium">{{ item?.value }}</div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis">{{ item?.value }}</div>
         </div>
       </div>
     </div>
@@ -370,7 +370,7 @@ function formatTitle(v: string) {
             <Icon icon="mdi:vote" class="mr-1 text-accent" />
             <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
           </div>
-          <div class="text-base text-main font-medium">{{ item?.value }}</div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis">{{ item?.value }}</div>
         </div>
       </div>
     </div>
@@ -392,7 +392,7 @@ function formatTitle(v: string) {
             <Icon icon="mdi:percent" class="mr-1 text-warning" />
             <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
           </div>
-          <div class="text-base text-main font-medium">{{ item?.value }}</div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis">{{ item?.value }}</div>
         </div>
       </div>
     </div>
