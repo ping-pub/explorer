@@ -9,7 +9,7 @@
   "assets": [
     {
       "symbol": "AMF",
-      "base": "amf",
+      "base": "uamf",
       "exponent": 6,
       "logo": "/logos/airchains.jpg"
     }
