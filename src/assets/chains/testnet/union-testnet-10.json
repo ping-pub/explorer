@@ -1,12 +1,12 @@
 {
   "chain_name": "union",
   "api": [
-    "https://rest.testnet-9.union.build"
+    "https://rest.rpc-node.union-testnet-10.union.build"
   ],
   "rpc": [
-    "https://rpc.testnet-9.union.build"
+    "https://rpc.rpc-node.union-testnet-10.union.build"
   ],
-  "sdk_version": "0.47.0",
+  "sdk_version": "0.50.11",
   "addr_prefix": "union",
   "min_tx_fee": "0",
   "coin_type": "1337",
@@ -15,8 +15,8 @@
   "assets": [
     {
       "symbol": "UNO",
-      "base": "uuno",
-      "exponent": 9,
+      "base": "muno",
+      "exponent": 6,
       "coingecko_id": "uno",
       "logo": "https://raw.githubusercontent.com/Agoric/agoric-sdk/master/packages/wallet/ui/public/tokens/BLD.svg"
     }
