@@ -4,13 +4,13 @@ import { onMounted, computed } from 'vue';
 import { useBaseStore } from '@/stores';
 
 const themeMap: Record<string, string> = {
-    system: 'mdi-laptop',
+    system: 'mdi-weather-night',
     light: 'mdi-weather-sunny',
     dark: 'mdi-weather-night',
 };
 const baseStore = useBaseStore();
 const theme = computed(() => {
-    return baseStore.theme;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 });
 
 const changeMode = (val?: 'dark' | 'light') => {
@@ -37,12 +37,13 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="tooltip tooltip-bottom delay-1000">
+    <!-- <div class="tooltip tooltip-bottom delay-1000">
         <button
             class="btn btn-ghost btn-circle btn-sm mx-1"
             @click="changeMode()"
         >
             <Icon :icon="themeMap?.[theme]" class="text-2xl text-gray-500 dark:text-gray-400" />
         </button>
-    </div>
+    </div> -->
+    <span></span>
 </template>

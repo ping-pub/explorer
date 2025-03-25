@@ -583,7 +583,7 @@ watch(() => base.allTxs, (newTxs) => {
             </div>
 
             <!-- Block Time Card -->
-            <div class="bg-base-200 p-4 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
+            <div class="bg-base-200 p-4 py-8 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
               <div class="flex items-center mb-3">
                 <Icon icon="mdi:clock-outline" class="text-xl text-info mr-2" />
                 <div class="text-sm font-medium text-secondary">Latest Block Time</div>

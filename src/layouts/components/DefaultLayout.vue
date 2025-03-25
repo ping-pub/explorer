@@ -124,7 +124,7 @@ const moreNavItems = computed(() => {
           <RouterLink :to=chain class="flex items-center mr-5">
             <img class="w-10 h-10"
               src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
-            <h1 class="flex-1 ml-3 text-xl font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
+            <h1 class="flex-1 ml-3 text-lg font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
               SHANNON
             </h1>
             <span class="pill mr-10">{{ alpha_beta }}</span>
@@ -161,8 +161,8 @@ const moreNavItems = computed(() => {
             </div>
 
             <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="sidebarShow = false"
-              class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
-              <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
+              class="cursor-pointer rounded-lg px-2 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
+              <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap" style="font-size: 0.9rem;">
                 {{ $t(item?.title) }}
               </div>
               <div v-if="item?.badgeContent" class="badge badge-sm text-white border-none" :class="item?.badgeClass">
@@ -170,22 +170,22 @@ const moreNavItems = computed(() => {
               </div>
             </RouterLink>
             
-            <div v-if="isNavTitle(item)" class="px-4 text-sm text-gray-400 pb-2 uppercase">
+            <div v-if="isNavTitle(item)" class="px-1 text-sm text-gray-400 pb-2 uppercase">
               {{ item?.heading }}
             </div>
           </div>
 
           <!-- "More" dropdown for additional nav items -->
           <div v-if="moreNavItems.length > 0" class="dropdown dropdown-end flex align-center justify-center mr-5">
-            <label tabindex="0" class="btn btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-4 mt-4 mr-5">
-              <span class="mr-1 flex flex-1">More </span>
+            <label tabindex="0" class="btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-2 mt-4 mr-5">
+              <span class="mr-1 flex flex-1" style="font-size: 0.9rem;text-transform: unset !important;">Network</span>
               <Icon icon="mdi-chevron-down" class="ml-1 flex flex-1" />
             </label>
-            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50">
+            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50" style="font-size: 0.9rem;">
               <li v-for="(item, index) in moreNavItems" :key="'more-'+index">
                 <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="sidebarShow = false"
                   class="hover:bg-gray-100 dark:hover:bg-[#373f59]">
-                  <div class="text-base capitalize text-gray-700 dark:text-gray-200">
+                  <div class="text-base capitalize text-gray-700 dark:text-gray-200" style="font-size: 0.9rem;">
                     {{ $t(item?.title) }}
                   </div>
                   <div v-if="item?.badgeContent" class="badge badge-sm text-white border-none" :class="item?.badgeClass">
@@ -196,13 +196,13 @@ const moreNavItems = computed(() => {
                 <!-- Special handling for NavGroups in dropdown -->
                 <div v-if="isNavGroup(item)" class="dropdown dropdown-hover dropdown-right">
                   <label tabindex="0" class="hover:bg-gray-100 dark:hover:bg-[#373f59] w-full text-start">
-                    {{ $t(item?.title) }}
+                    <span style="font-size: 0.9rem;">{{ $t(item?.title) }}</span>
                   </label>
                   <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50">
                     <li v-for="(subItem, subIndex) in item.children" :key="'submenu-'+subIndex">
                       <RouterLink v-if="isNavLink(subItem)" :to="subItem?.to" @click="sidebarShow = false"
                         class="hover:bg-gray-100 dark:hover:bg-[#373f59]">
-                        {{ $t(subItem?.title) }}
+                        <span style="font-size: 0.9rem;">{{ $t(subItem?.title) }}</span>
                       </RouterLink>
                     </li>
                   </ul>
