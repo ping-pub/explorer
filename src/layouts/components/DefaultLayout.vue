@@ -113,24 +113,30 @@ const moreNavItems = computed(() => {
   return blockchain.computedChainMenu[0]?.children.slice(visibleNavItems.value);
 });
 
+// Mobile menu functionality
+const mobileMenuOpen = ref(false);
+const toggleMobileMenu = () => {
+  mobileMenuOpen.value = !mobileMenuOpen.value;
+};
+
 </script>
 
 <template>
   <div>
     <header class="bg-base-200 shadow-md dark:bg-[#231f20;]">
-      <div class="container mx-auto px-1 py-2 flex justify-center items-center">
-
-        <nav class="flex">
+      <!-- DESKTOP NAV - Only shown on desktop, hidden on mobile -->
+      <div class="desktop-nav">
+        <div class="container mx-auto px-1 py-2 flex justify-center items-center">
           <RouterLink :to=chain class="flex items-center mr-5">
             <img class="w-10 h-10"
               src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
-            <h1 class="flex-1 ml-3 text-lg font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
+            <h1 class="flex-1 ml-1 text-lg font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
               SHANNON
             </h1>
-            <span class="pill mr-10">{{ alpha_beta }}</span>
+            <span class="pill mr-5">{{ alpha_beta }}</span>
           </RouterLink>
           
-          <!-- Main nav items (limited based on screen size) -->
+          <!-- Main nav items -->
           <div v-for="(item, index) of mainNavItems" :key="index"
             class="flex justify-between items-center">
             <div v-if="isNavGroup(item)" :tabindex="index" class="collapse flex" :class="{
@@ -139,30 +145,11 @@ const moreNavItems = computed(() => {
               'collapse-close': index === 0 && !sidebarOpen,
             }">
               <input v-if="index > 0" type="checkbox" class="cursor-pointer !h-10 block" @click="changeOpen(index)" />
-
-              <!-- <div class="collapse-content flex flex-row py-3">
-                <div v-for="(el, key) of item?.children" class="menu w-full !p-0">
-                  <RouterLink v-if="isNavLink(el)" @click="sidebarShow = false"
-                    class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
-                    :class="{
-                      '!bg-primary': selected($route, el),
-                    }" :to="el.to">
-                    <img v-if="el?.icon?.image" :src="el?.icon?.image" class="w-6 h-6 rounded-full mr-3 ml-4 " :class="{
-                      'border border-gray-300 bg-white': selected($route, el),
-                    }" />
-                    <div class="text-base capitalize text-gray-500 dark:text-gray-300" :class="{
-                      '!text-white': selected($route, el),
-                    }">
-                      {{ item?.title === 'Favorite' ? el?.title : $t(el?.title) }}
-                    </div>
-                  </RouterLink>
-                </div>
-              </div> -->
             </div>
 
             <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="sidebarShow = false"
               class="cursor-pointer rounded-lg px-2 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
-              <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap" style="font-size: 0.9rem;">
+              <div class="capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap" style="font-size: 0.8rem;">
                 {{ $t(item?.title) }}
               </div>
               <div v-if="item?.badgeContent" class="badge badge-sm text-white border-none" :class="item?.badgeClass">
@@ -177,15 +164,15 @@ const moreNavItems = computed(() => {
 
           <!-- "More" dropdown for additional nav items -->
           <div v-if="moreNavItems.length > 0" class="dropdown dropdown-end flex align-center justify-center mr-5">
-            <label tabindex="0" class="btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-2 mt-4 mr-5">
-              <span class="mr-1 flex flex-1" style="font-size: 0.9rem;text-transform: unset !important;">Network</span>
+            <label tabindex="0" class="btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-2 mr-5">
+              <span class="mr-1 flex flex-1" style="font-size: 0.8rem;text-transform: unset !important;">Network</span>
               <Icon icon="mdi-chevron-down" class="ml-1 flex flex-1" />
             </label>
-            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50" style="font-size: 0.9rem;">
+            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50" style="font-size: 0.8rem;">
               <li v-for="(item, index) in moreNavItems" :key="'more-'+index">
                 <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="sidebarShow = false"
                   class="hover:bg-gray-100 dark:hover:bg-[#373f59]">
-                  <div class="text-base capitalize text-gray-700 dark:text-gray-200" style="font-size: 0.9rem;">
+                  <div class="capitalize text-gray-700 dark:text-gray-200" style="font-size: 0.8rem;">
                     {{ $t(item?.title) }}
                   </div>
                   <div v-if="item?.badgeContent" class="badge badge-sm text-white border-none" :class="item?.badgeClass">
@@ -214,11 +201,57 @@ const moreNavItems = computed(() => {
           <!-- Icons section -->
           <div class="py-2 flex justify-between items-center">
             <NavbarSearch class="!inline-block" />
-            <!-- <NavBarI18n class="hidden md:!inline-block pt-1" /> -->
             <NavbarThemeSwitcher class="!inline-block pt-1" />
-            <!-- <NavBarWallet /> -->
           </div>
-        </nav>
+        </div>
+      </div>
+
+      <!-- MOBILE NAV - Only shown on mobile, hidden on desktop -->
+      <div class="mobile-nav">
+        <div class="container mx-auto px-1 py-2 flex items-center justify-between">
+          <button class="flex items-center px-3 py-2" @click="toggleMobileMenu">
+            <Icon icon="mdi:menu" class="h-6 w-6 dark:text-white" />
+          </button>
+          
+          <RouterLink :to=chain class="flex items-center">
+            <img class="w-8 h-8"
+              src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
+            <h1 class="flex-1 ml-2 text-base font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
+              SHANNON
+            </h1>
+            <span class="pill text-xs">{{ alpha_beta }}</span>
+          </RouterLink>
+          
+          <NavbarThemeSwitcher class="!inline-block pt-1" />
+        </div>
+        
+        <div v-if="mobileMenuOpen" class="mobile-menu">
+          <div class="px-2 pt-2 pb-3 space-y-1">
+            <div v-for="(item, index) of mainNavItems.concat(moreNavItems)" :key="'mobile-'+index">
+              <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="mobileMenuOpen = false; sidebarShow = false"
+                class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-[#373f59] text-gray-700 dark:text-gray-200">
+                {{ $t(item?.title) }}
+              </RouterLink>
+
+              <template v-if="isNavGroup(item)">
+                <div class="space-y-1 pl-4">
+                  <div class="px-3 py-2 text-gray-500 dark:text-gray-400 font-medium">
+                    {{ $t(item?.title) }}
+                  </div>
+                  <div v-for="(subItem, subIndex) in (item as NavGroup).children" :key="'mobile-sub-'+subIndex">
+                    <RouterLink v-if="isNavLink(subItem)" :to="subItem?.to" @click="mobileMenuOpen = false; sidebarShow = false"
+                      class="block px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-[#373f59] text-gray-700 dark:text-gray-200">
+                      {{ $t(subItem?.title) }}
+                    </RouterLink>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+          <div class="px-4 py-3 border-t border-gray-200 dark:border-gray-700 flex justify-between">
+            <NavbarSearch class="!inline-block" />
+          </div>
+        </div>
       </div>
     </header>
     <div class="bg-base-200 dark:bg-[#231f20;] overflow-scroll no-scrollbar" style="height:calc(100vh - 5rem)">
@@ -247,15 +280,45 @@ const moreNavItems = computed(() => {
     </div>
   </div>
 </template>
+
 <style>
+/* Completely separate desktop and mobile components with CSS media queries */
+.desktop-nav {
+  display: none;
+}
+
+.mobile-nav {
+  display: block;
+}
+
+/* Media query for desktop */
+@media (min-width: 768px) {
+  .desktop-nav {
+    display: block;
+  }
+
+  .mobile-nav {
+    display: none;
+  }
+}
+
+.mobile-menu {
+  background-color: #f8f9fa;
+  width: 100%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dark .mobile-menu {
+  background-color: #231f20;
+}
+
 .pill {
   display: inline-block;
-  padding: 0.5em 1em;
-  font-size: 0.9rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.7rem;
   font-weight: bold;
   color: #ffffff;
-  /* background-color: secondary; */
-  /* Blue color */
+  background-color: #007bff;
   border-radius: 20px;
   text-transform: uppercase;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
@@ -276,17 +339,5 @@ const moreNavItems = computed(() => {
   /* IE and Edge */
   scrollbar-width: none;
   /* Firefox */
-}
-.pill {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.7rem;
-  font-weight: bold;
-  color: #ffffff;
-  background-color: #007bff;
-  /* Blue color */
-  border-radius: 20px;
-  text-transform: uppercase;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 </style>

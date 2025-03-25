@@ -63,7 +63,7 @@ function confirm() {
   <div>
     <div class="flex">
       <div class="flex items-center">
-        <input class="input w-[25rem] !input-bordered" v-model="searchQuery"
+        <input class="input w-[22rem] !input-bordered" v-model="searchQuery"
           placeholder="Height/Transaction/Account Address" />
         <button class="btn btn-ghost btn-circle btn-sm mx-1" @click="confirm">
           <Icon icon="mdi:magnify" class="text-2xl text-gray-500 dark:text-gray-400" />
