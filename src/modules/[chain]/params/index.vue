@@ -414,7 +414,7 @@ function formatTitle(v: string) {
             <Icon icon="mdi:sword" class="mr-1 text-error" />
             <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
           </div>
-          <div class="text-base text-main font-medium">{{ item?.value }}</div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis">{{ item?.value }}</div>
         </div>
       </div>
     </div>
