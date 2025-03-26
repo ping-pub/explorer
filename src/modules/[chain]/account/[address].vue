@@ -151,10 +151,16 @@ function updateEvent() {
 
 function mapAmount(events:{type: string, attributes: {key: string, value: string}[]}[]) {
   if(!events) return []
-  return events.find(x => x.type==='coin_received')?.attributes
-    .filter(x => x.key === 'YW1vdW50'|| x.key === `amount`)
-    .map(x => x.key==='amount'? x.value : String.fromCharCode(...fromBase64(x.value)))
+  return events.filter(x => x.type === 'coin_received')
+    ?.flatMap(x => x.attributes)
+    .filter(x => x.key === `amount`)
+    .map(
+      x => x.key === 'amount'
+        ? x.value
+        : String.fromCharCode(...fromBase64(x.value))
+    )
 }
+
 </script>
 <template>
   <div v-if="account">
@@ -216,7 +222,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
         <div class="md:!col-span-1">
           <DonutChart :series="totalAmountByCategory" :labels="labels" />
         </div>
-        <div class="mt-4 md:!col-span-2 md:!mt-0 md:!ml-4">          
+        <div class="mt-4 md:!col-span-2 md:!mt-0 md:!ml-4">
           <!-- list-->
           <div class="">
             <!--balances  -->
@@ -283,7 +289,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"
                 ></span>
-                ${{ format.tokenValue(delegationItem?.balance) }}                
+                ${{ format.tokenValue(delegationItem?.balance) }}
               </div>
             </div>
             <!-- rewards.total -->
@@ -316,7 +322,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                 <span
                   class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary  dark:invert text-sm"
                 ></span>${{ format.tokenValue(rewardItem) }}
-                
+
               </div>
             </div>
             <!-- mdi-account-arrow-right -->
@@ -354,7 +360,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                       amount: String(unbondingTotal),
                       denom: stakingStore.params.bond_denom,
                     })
-                  }}                
+                  }}
               </div>
             </div>
           </div>
@@ -527,7 +533,7 @@ function mapAmount(events:{type: string, attributes: {key: string, value: string
                   <Countdown :time="new Date(entry.completion_time).getTime() - new Date().getTime()" />
                 </td>
               </tr>
-          </tbody>          
+          </tbody>
         </table>
       </div>
     </div>
