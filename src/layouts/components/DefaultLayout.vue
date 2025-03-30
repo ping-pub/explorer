@@ -71,7 +71,7 @@ const behind = computed(() => {
 const alpha_beta = window.location.host.includes('beta') ? 'beta' : 'alpha'
 const chain = window.location.host.includes('beta') ? '/pocket-beta' : '/poktroll'
 const currentChain = computed(() => {
-  return window.location.pathname.includes('mainnet') ? 'poktroll-mainnet' : 'poktroll'
+  return window.location.pathname.includes('mainnet') ? 'poktroll-mainnet' : 'poktroll-beta'
 })
 
 // Add this for responsive behavior
@@ -155,8 +155,8 @@ const toggleMobileMenu = () => {
             <ul v-show="dropdownOpen" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50"
               style="font-size: 0.8rem;">
               <li>
-                <RouterLink to="/poktroll-beta" class="hover:bg-gray-100 dark:hover:bg-[#373f59]"
-                  :class="{ 'font-bold': currentChain === 'poktroll' }">
+                <RouterLink to="/pocket-beta" class="hover:bg-gray-100 dark:hover:bg-[#373f59]"
+                  :class="{ 'font-bold': currentChain === 'poktroll-beta' }">
                   <div class="capitalize text-gray-700 dark:text-gray-200" style="font-size: 0.8rem;">
                     Poktroll Beta
                   </div>
