@@ -12,7 +12,7 @@ import {
   useParamStore,
   useBaseStore
 } from '@/stores';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, nextTick, onBeforeUnmount } from 'vue';
 import { useIndexModule, colorMap } from './indexStore';
 import { computed } from '@vue/reactivity';
 
@@ -124,6 +124,106 @@ const txChartSeries = ref([
   }
 ]);
 
+// Add these refs for block list virtualization after the existing refs
+const visibleBlocks = ref<{ item: any; index: number }[]>([]);
+const visibleTxs = ref<{ item: any; index: number }[]>([]);
+const blockTableContainer = ref<HTMLDivElement | null>(null);
+const txTableContainer = ref<HTMLDivElement | null>(null);
+const itemHeight = 42; // Height of table rows
+const bufferSize = 5; // Number of additional items to render
+const ticking = ref(false); // For requestAnimationFrame throttling
+const blockScrollTimeout = ref<NodeJS.Timeout | null>(null);
+const txScrollTimeout = ref<NodeJS.Timeout | null>(null);
+
+// Add these methods for virtualization before the existing onMounted function
+function initVirtualLists() {
+    nextTick(() => {
+        // Initialize block table virtualization
+        if (blockTableContainer.value) {
+            updateVisibleBlocks();
+            blockTableContainer.value.addEventListener('scroll', handleBlockScroll, { passive: true });
+        }
+        
+        // Initialize transaction table virtualization
+        if (txTableContainer.value) {
+            updateVisibleTxs();
+            txTableContainer.value.addEventListener('scroll', handleTxScroll, { passive: true });
+        }
+    });
+}
+
+function handleBlockScroll() {
+    if (!ticking.value) {
+        ticking.value = true;
+        requestAnimationFrame(() => {
+            updateVisibleBlocks();
+            ticking.value = false;
+        });
+    }
+}
+
+function handleTxScroll() {
+    if (!ticking.value) {
+        ticking.value = true;
+        requestAnimationFrame(() => {
+            updateVisibleTxs();
+            ticking.value = false;
+        });
+    }
+}
+
+function updateVisibleBlocks() {
+    if (!blockTableContainer.value || !base.recents?.length) return;
+    
+    const container = blockTableContainer.value;
+    const scrollTop = container.scrollTop;
+    const viewportHeight = container.clientHeight;
+    
+    // Calculate which items should be visible
+    const startIndex = Math.floor(scrollTop / itemHeight) - bufferSize;
+    const endIndex = Math.ceil((scrollTop + viewportHeight) / itemHeight) + bufferSize;
+    
+    const start = Math.max(0, startIndex);
+    const end = Math.min(base.recents.length, endIndex);
+    
+    // Only update if the visible range has changed significantly
+    if (visibleBlocks.value.length === 0 || 
+        Math.abs(visibleBlocks.value[0]?.index - start) >= 2 || 
+        Math.abs(visibleBlocks.value[visibleBlocks.value.length - 1]?.index - (end - 1)) >= 2) {
+        
+        visibleBlocks.value = base.recents.slice(start, end).map((item, index) => ({
+            item,
+            index: start + index
+        }));
+    }
+}
+
+function updateVisibleTxs() {
+    if (!txTableContainer.value || !base.allTxs?.length) return;
+    
+    const container = txTableContainer.value;
+    const scrollTop = container.scrollTop;
+    const viewportHeight = container.clientHeight;
+    
+    // Calculate which items should be visible
+    const startIndex = Math.floor(scrollTop / itemHeight) - bufferSize;
+    const endIndex = Math.ceil((scrollTop + viewportHeight) / itemHeight) + bufferSize;
+    
+    const start = Math.max(0, startIndex);
+    const end = Math.min(base.allTxs.length, endIndex);
+    
+    // Only update if the visible range has changed significantly
+    if (visibleTxs.value.length === 0 || 
+        Math.abs(visibleTxs.value[0]?.index - start) >= 2 || 
+        Math.abs(visibleTxs.value[visibleTxs.value.length - 1]?.index - (end - 1)) >= 2) {
+        
+        visibleTxs.value = base.allTxs.slice(start, end).map((item, index) => ({
+            item,
+            index: start + index
+        }));
+    }
+}
+
 onMounted(async () => {
   store.loadDashboard();
   walletStore.loadMyAsset();
@@ -135,6 +235,9 @@ onMounted(async () => {
   // Then load stats that depend on transaction data
   loadNetworkStats();
   loadTransactionHistory();
+  
+  // Initialize virtual scrolling
+  initVirtualLists();
 });
 
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
@@ -325,29 +428,29 @@ const chartOptions = ref({
 });
 
 async function loadNetworkStats() {
-  const pageRequest = new PageRequest();
-  pageRequest.limit = 1;
+    const pageRequest = new PageRequest();
+    pageRequest.limit = 1;
 
-  try {
-    const applicationsData = await blockchain.rpc.getApplications(pageRequest);
-    networkStats.value.applications = parseInt(applicationsData.pagination?.total || 0);
+    try {
+        // Use Promise.all to fetch data in parallel instead of sequentially
+        const [applicationsData, suppliersData, gatewaysData, servicesData, accountsData] = await Promise.all([
+            blockchain.rpc.getApplications(pageRequest),
+            blockchain.rpc.getSuppliers(pageRequest),
+            blockchain.rpc.getGateways(pageRequest),
+            blockchain.rpc.getServices(pageRequest),
+            blockchain.rpc.getAuthAccounts(pageRequest)
+        ]);
 
-    const suppliersData = await blockchain.rpc.getSuppliers(pageRequest);
-    networkStats.value.suppliers = parseInt(suppliersData.pagination?.total || 0);
+        networkStats.value.applications = parseInt(applicationsData.pagination?.total || 0);
+        networkStats.value.suppliers = parseInt(suppliersData.pagination?.total || 0);
+        networkStats.value.gateways = parseInt(gatewaysData.pagination?.total || 0);
+        networkStats.value.services = parseInt(servicesData.pagination?.total || 0);
+        networkStats.value.wallets = parseInt(accountsData.pagination?.total || '0');
 
-    const gatewaysData = await blockchain.rpc.getGateways(pageRequest);
-    networkStats.value.gateways = parseInt(gatewaysData.pagination?.total || 0);
-
-    const servicesData = await blockchain.rpc.getServices(pageRequest);
-    networkStats.value.services = parseInt(servicesData.pagination?.total || 0);
-
-    const accountsData = await blockchain.rpc.getAuthAccounts(pageRequest);
-    networkStats.value.wallets = parseInt(accountsData.pagination?.total || '0');
-
-    generateHistoricalData();
-  } catch (error) {
-    console.error("Error loading network stats:", error);
-  }
+        generateHistoricalData();
+    } catch (error) {
+        console.error("Error loading network stats:", error);
+    }
 }
 
 function generateHistoricalData() {
@@ -434,32 +537,21 @@ function generateHistoricalData() {
 
 async function loadTransactionHistory() {
   try {
-    // Fetch total transaction count from API
-    const countResponse = await fetch("/api/v1/transactions/count").catch(err => {
+    // Use a throttled approach to fetching transaction count
+    const countPromise = fetch("/api/v1/transactions/count").catch(err => {
       console.error("Error fetching transaction count:", err);
       return null;
     });
 
-    if (countResponse && countResponse.ok) {
-      const countData = await countResponse.json();
-      transactionStats.value.total = countData.data || 0;
-      console.log("Total transactions from API:", transactionStats.value.total);
-    } else {
-      // Fallback to using the length of allTxs if API fails
-      transactionStats.value.total = base.allTxs?.length || 0;
-      console.log("Using fallback transaction count:", transactionStats.value.total);
-    }
-
     // Wait for base.allTxs to be populated if it's empty
     if (!base.allTxs || base.allTxs.length === 0) {
       console.log("Waiting for transaction data to load...");
-      // Try to load transactions if they haven't been loaded yet
       await base.getAllTxs();
     }
 
+    // Process transaction data while waiting for the count to complete
     const txs = base.allTxs || [];
-    console.log(`Processing ${txs.length} transactions for history chart`);
-
+    
     // Generate dates for the last 30 days
     const days = 30;
     const labels = [];
@@ -487,7 +579,7 @@ async function loadTransactionHistory() {
       }
     };
 
-    // Group transactions by day
+    // Group transactions by day - more efficiently
     const txsByDay = new Map();
 
     // Initialize all days with 0 counts
@@ -498,47 +590,79 @@ async function loadTransactionHistory() {
       txsByDay.set(dateKey, 0);
     }
 
-    // Count transactions by day
-    txs.forEach(tx => {
-      let txDate;
+    // Batch process transactions to avoid blocking the UI
+    const BATCH_SIZE = 100;
+    const processBatch = (startIndex: number) => {
+      const endIndex = Math.min(startIndex + BATCH_SIZE, txs.length);
+      
+      for (let i = startIndex; i < endIndex; i++) {
+        const tx = txs[i];
+        let txDate;
 
-      // Try different possible timestamp fields
-      if (tx.timestamp) {
-        txDate = new Date(tx.timestamp);
-      } else if (tx.height) {
-        // If we have a block height, try to find the block time from recents
-        const block = base.recents.find(b => b.block.header.height === tx.height);
-        if (block && block.block.header.time) {
-          txDate = new Date(block.block.header.time);
+        // Try different possible timestamp fields
+        if (tx.timestamp) {
+          txDate = new Date(tx.timestamp);
+        } else if (tx.height) {
+          // Look up from cache first
+          const cachedBlock = base._blockCache?.get(tx.height);
+          if (cachedBlock && cachedBlock.block.header.time) {
+            txDate = new Date(cachedBlock.block.header.time);
+          } else {
+            // Fall back to searching recents
+            const block = base.recents.find(b => b.block.header.height === tx.height);
+            if (block && block.block.header.time) {
+              txDate = new Date(block.block.header.time);
+            }
+          }
+        }
+        
+        if (txDate) {
+          const dateKey = txDate.toISOString().split('T')[0];
+          if (txsByDay.has(dateKey)) {
+            txsByDay.set(dateKey, txsByDay.get(dateKey) + 1);
+          }
         }
       }
-      if (txDate) {
-        const dateKey = txDate.toISOString().split('T')[0];
-
-        if (txsByDay.has(dateKey)) {
-          txsByDay.set(dateKey, txsByDay.get(dateKey) + 1);
-        }
+      
+      // Process next batch or finish
+      if (endIndex < txs.length) {
+        setTimeout(() => processBatch(endIndex), 0);
+      } else {
+        finalizeTxData();
       }
-    });
+    };
+    
+    const finalizeTxData = () => {
+      // Convert to array for chart
+      const txData = [];
+      for (let i = days - 1; i >= 0; i--) {
+        const date = new Date(now);
+        date.setDate(date.getDate() - i);
+        const dateKey = date.toISOString().split('T')[0];
+        txData.push(txsByDay.get(dateKey) || 0);
+      }
 
-    // Convert to array for chart
-    const txData = [];
-    for (let i = days - 1; i >= 0; i--) {
-      const date = new Date(now);
-      date.setDate(date.getDate() - i);
-      const dateKey = date.toISOString().split('T')[0];
-      txData.push(txsByDay.get(dateKey) || 0);
+      // Update the series data
+      txChartSeries.value = [{
+        name: 'Transactions',
+        data: txData as never[]
+      }];
+    };
+    
+    // Start batch processing
+    processBatch(0);
+    
+    // Get the count from API
+    if (countPromise) {
+      const countResponse = await countPromise;
+      if (countResponse && countResponse.ok) {
+        const countData = await countResponse.json();
+        transactionStats.value.total = countData.data || 0;
+      } else {
+        // Fallback to using the length of allTxs if API fails
+        transactionStats.value.total = txs.length || 0;
+      }
     }
-
-    console.log("Transaction data for chart:", txData);
-    console.log("Chart labels:", labels);
-
-    // Update the series data
-    txChartSeries.value = [{
-      name: 'Transactions',
-      data: txData as never[]
-    }];
-
   } catch (error) {
     console.error("Error loading transaction history:", error);
   }
@@ -551,6 +675,34 @@ watch(() => base.allTxs, (newTxs) => {
     loadTransactionHistory();
   }
 }, { deep: true });
+
+// Add this to clean up event listeners
+onBeforeUnmount(() => {
+    if (blockTableContainer.value) {
+        blockTableContainer.value.removeEventListener('scroll', handleBlockScroll);
+    }
+    
+    if (txTableContainer.value) {
+        txTableContainer.value.removeEventListener('scroll', handleTxScroll);
+    }
+    
+    if (blockScrollTimeout.value) {
+        clearTimeout(blockScrollTimeout.value);
+    }
+    
+    if (txScrollTimeout.value) {
+        clearTimeout(txScrollTimeout.value);
+    }
+});
+
+// Add watchers to update virtual lists when data changes
+watch(() => base.recents.length, () => {
+    updateVisibleBlocks();
+});
+
+watch(() => base.allTxs.length, () => {
+    updateVisibleTxs();
+});
 
 </script>
 
@@ -893,7 +1045,7 @@ watch(() => base.allTxs, (newTxs) => {
           </RouterLink>
         </div>
         
-        <div class="bg-base-200 rounded-md overflow-auto" style="max-height: 30rem;">
+        <div class="bg-base-200 rounded-md overflow-auto" style="max-height: 30rem;" ref="blockTableContainer">
           <div class="flex justify-center items-center py-8" v-if="base.fetchingBlocks">
             <div class="loading loading-spinner loading-lg text-info"></div>
           </div>
@@ -908,16 +1060,27 @@ watch(() => base.allTxs, (newTxs) => {
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in [...base.recents].reverse()" class="hover:bg-base-300 transition-colors duration-200">
-                <td class="font-medium">{{ item.block.header.height }}</td>
+              <!-- Add spacer at the top to push visible content -->
+              <tr v-if="visibleBlocks.length > 0" class="h-0 m-0 p-0 border-none">
+                <td :style="{ height: `${visibleBlocks[0].index * itemHeight}px`, padding: 0 }" colspan="5"></td>
+              </tr>
+              
+              <!-- Render only visible blocks -->
+              <tr v-for="item in visibleBlocks" :key="item.index" class="hover:bg-base-300 transition-colors duration-200">
+                <td class="font-medium">{{ item.item.block.header.height }}</td>
                 <td class="truncate text-info" style="max-width: 18rem; overflow:hidden;">
-                  <RouterLink class="truncate hover:underline" :title="item.block_id.hash"
-                    :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}
+                  <RouterLink class="truncate hover:underline" :title="item.item.block_id.hash"
+                    :to="`/${chain}/block/${item.item.block.header.height}`">{{ item.item.block_id.hash }}
                   </RouterLink>
                 </td>
-                <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
-                <td>{{ item.block?.data?.txs.length }}</td>
-                <td>{{ format.toDay(item.block?.header?.time) }}</td>
+                <td>{{ format.validator(item.item.block?.header?.proposer_address) }}</td>
+                <td>{{ item.item.block?.data?.txs.length }}</td>
+                <td>{{ format.toDay(item.item.block?.header?.time, 'from') }}</td>
+              </tr>
+              
+              <!-- Add spacer at the bottom to maintain scroll height -->
+              <tr v-if="visibleBlocks.length > 0 && base.recents.length > 0" class="h-0 m-0 p-0 border-none">
+                <td :style="{ height: `${Math.max(0, base.recents.length - (visibleBlocks[visibleBlocks.length-1].index + 1)) * itemHeight}px`, padding: 0 }" colspan="5"></td>
               </tr>
             </tbody>
           </table>
@@ -937,7 +1100,7 @@ watch(() => base.allTxs, (newTxs) => {
           </RouterLink>
         </div>
         
-        <div class="bg-base-200 rounded-md overflow-auto" style="max-height: 30rem;">
+        <div class="bg-base-200 rounded-md overflow-auto" style="max-height: 30rem;" ref="txTableContainer">
           <table class="table table-compact w-full">
             <thead class="bg-base-300 sticky top-0">
               <tr>
@@ -950,24 +1113,35 @@ watch(() => base.allTxs, (newTxs) => {
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, index) in base.allTxs" :index="index" class="hover:bg-base-300 transition-colors duration-200">
+              <!-- Add spacer at the top to push visible content -->
+              <tr v-if="visibleTxs.length > 0" class="h-0 m-0 p-0 border-none">
+                <td :style="{ height: `${visibleTxs[0].index * itemHeight}px`, padding: 0 }" colspan="6"></td>
+              </tr>
+              
+              <!-- Render only visible transactions -->
+              <tr v-for="item in visibleTxs" :key="item.index" class="hover:bg-base-300 transition-colors duration-200">
                 <td class="truncate text-warning" style="max-width:14rem">
-                  <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.hash}`">{{
-                    item.hash
+                  <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.item.hash}`">{{
+                    item.item.hash
                   }}</RouterLink>
                 </td>
                 <td class="text-sm text-warning">
-                  <RouterLink :to="`/${props.chain}/block/${item.height}`" class="hover:underline">{{ item.height }}</RouterLink>
+                  <RouterLink :to="`/${props.chain}/block/${item.item.height}`" class="hover:underline">{{ item.item.height }}</RouterLink>
                 </td>
                 <td>
                   <span class="text-xs truncate py-1 px-3 rounded-full" 
-                        :class="item.status === 0 ? 'bg-success/10 text-success' : 'bg-error/10 text-error'">
-                    {{ item.status === 0 ? 'Success' : 'Failed' }}
+                        :class="item.item.status === 0 ? 'bg-success/10 text-success' : 'bg-error/10 text-error'">
+                    {{ item.item.status === 0 ? 'Success' : 'Failed' }}
                   </span>
                 </td>
-                <td>{{ format.messages(item.messages) }}</td>
-                <td>{{ format.formatTokens(item.fee.amount) }}</td>
-                <td>{{ format.toDay(item.timestamp, 'from') }}</td>
+                <td>{{ format.messages(item.item.messages) }}</td>
+                <td>{{ format.formatTokens(item.item.fee.amount) }}</td>
+                <td>{{ format.toDay(item.item.timestamp, 'from') }}</td>
+              </tr>
+              
+              <!-- Add spacer at the bottom to maintain scroll height -->
+              <tr v-if="visibleTxs.length > 0 && base.allTxs.length > 0" class="h-0 m-0 p-0 border-none">
+                <td :style="{ height: `${Math.max(0, base.allTxs.length - (visibleTxs[visibleTxs.length-1].index + 1)) * itemHeight}px`, padding: 0 }" colspan="6"></td>
               </tr>
             </tbody>
           </table>
@@ -996,3 +1170,28 @@ watch(() => base.allTxs, (newTxs) => {
     }
   }
 </route>
+
+<style scoped>
+/* Styles for virtualized tables */
+.table tr.h-0 {
+  display: table-row;
+  line-height: 0;
+  height: 0;
+}
+
+.table tr.h-0 td {
+  padding: 0;
+  border: none;
+}
+
+/* Optimize table rendering */
+.table tbody tr {
+  contain: layout style;
+}
+
+/* Fix for better scrolling performance */
+.bg-base-200 {
+  will-change: transform;
+  transform: translateZ(0);
+}
+</style>

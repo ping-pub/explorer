@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT:-3005}:3005"
+    env_file:
+      - .env
+    environment:
+      - RPC_ENDPOINTS=${RPC_ENDPOINTS}
+      - REDIS_URL=redis://redis:6379
+      - PORT=${PORT:-3005}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_DB=${REDIS_DB:-0}
+      - WORKER_CONCURRENCY=${WORKER_CONCURRENCY:-2}
+      - HISTORICAL_BATCH_SIZE=${HISTORICAL_BATCH_SIZE:-50}
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+volumes:
+  redis-data: 
