@@ -10,12 +10,25 @@ services:
       - 5173:5173
     networks:
       - default
-  pocket-poktroll-explorer-backend:
-    build:
-      context: .
-      dockerfile: ./server/Dockerfile
-    restart: unless-stopped
-    ports:
-      - 3005:3005
+
+  # Extending from server's docker-compose.yml for backend services
+  redis:
+    extends:
+      file: ./server/docker-compose.yml
+      service: redis
     networks:
       - default
+
+  pocket-poktroll-explorer-backend:
+    extends:
+      file: ./server/docker-compose.yml
+      service: api
+    networks:
+      - default
+
+networks:
+  default:
+
+
+volumes:
+  redis-data: 
