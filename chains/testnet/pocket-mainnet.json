@@ -1,6 +1,6 @@
 {
     "chain_name": "pocket-mainnet",
-    "registry_name": "Pocket Mainnet",
+    "registry_name": "Mainnet",
     "api": [
         {"provider": "Pocket-Mainnet", "address": "https://shannon-grove-api.mainnet.poktroll.com"}
     ],

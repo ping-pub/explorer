@@ -1,6 +1,6 @@
 {
     "chain_name": "pocket-alpha",
-    "registry_name": "Poktroll Testnet - Alpha",
+    "registry_name": "Alpha",
     "api": [
         {"provider": "Poktroll-Testnet-Alpha", "address": "https://shannon-testnet-grove-api.alpha.poktroll.com"}
     ],
