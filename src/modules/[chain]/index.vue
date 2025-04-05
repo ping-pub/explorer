@@ -537,135 +537,131 @@ function generateHistoricalData() {
 
 async function loadTransactionHistory() {
   try {
-    // Use a throttled approach to fetching transaction count
-    const countPromise = fetch("/api/v1/transactions/count").catch(err => {
-      console.error("Error fetching transaction count:", err);
+    // Fetch historical transaction data using the transactions/count endpoint with chain parameter
+    const historyPromise = fetch(`/api/v1/transactions/count?chain=${blockchain.current?.transactionService}`).catch(err => {
+      console.error("Error fetching transaction history:", err);
       return null;
     });
 
-    // Wait for base.allTxs to be populated if it's empty
-    if (!base.allTxs || base.allTxs.length === 0) {
-      console.log("Waiting for transaction data to load...");
-      await base.getAllTxs(blockchain.current?.transactionService);
-    }
-
-    // Process transaction data while waiting for the count to complete
-    const txs = base.allTxs || [];
+    // Process history response
+    const historyResponse = await historyPromise;
     
-    // Generate dates for the last 30 days
-    const days = 30;
-    const labels = [];
-    const now = new Date();
-
-    for (let i = days - 1; i >= 0; i--) {
-      const date = new Date(now);
-      date.setDate(date.getDate() - i);
-      // Format date as "MMM D" (e.g., "Feb 3")
-      labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-    }
-
-    // Update the chart options with the date labels
-    txChartOptions.value = {
-      ...txChartOptions.value,
-      xaxis: {
-        ...txChartOptions.value.xaxis,
-        categories: labels as never[],
-        labels: {
-          ...txChartOptions.value.xaxis.labels,
-          formatter: function (value: string) {
-            return value;
-          }
-        }
-      }
-    };
-
-    // Group transactions by day - more efficiently
-    const txsByDay = new Map();
-
-    // Initialize all days with 0 counts
-    for (let i = 0; i < days; i++) {
-      const date = new Date(now);
-      date.setDate(date.getDate() - i);
-      const dateKey = date.toISOString().split('T')[0]; // YYYY-MM-DD format
-      txsByDay.set(dateKey, 0);
-    }
-
-    // Batch process transactions to avoid blocking the UI
-    const BATCH_SIZE = 100;
-    const processBatch = (startIndex: number) => {
-      const endIndex = Math.min(startIndex + BATCH_SIZE, txs.length);
+    if (historyResponse && historyResponse.ok) {
+      const historyData = await historyResponse.json();
       
-      for (let i = startIndex; i < endIndex; i++) {
-        const tx = txs[i];
-        let txDate;
-
-        // Try different possible timestamp fields
-        if (tx.timestamp) {
-          txDate = new Date(tx.timestamp);
-        } else if (tx.height) {
-          // Look up from cache first
-          const cachedBlock = base._blockCache?.get(tx.height);
-          if (cachedBlock && cachedBlock.block.header.time) {
-            txDate = new Date(cachedBlock.block.header.time);
-          } else {
-            // Fall back to searching recents
-            const block = base.recents.find(b => b.block.header.height === tx.height);
-            if (block && block.block.header.time) {
-              txDate = new Date(block.block.header.time);
+      if (historyData.data && historyData.data.labels && historyData.data.counts) {
+        // Store the total transaction count
+        transactionStats.value.total = historyData.data.total || 0;
+        
+        // Update chart options with the labels from the API
+        txChartOptions.value = {
+          ...txChartOptions.value,
+          xaxis: {
+            ...txChartOptions.value.xaxis,
+            categories: historyData.data.labels as never[],
+            labels: {
+              ...txChartOptions.value.xaxis.labels,
+              formatter: function (value: string) {
+                return value;
+              }
             }
           }
-        }
+        };
         
-        if (txDate) {
-          const dateKey = txDate.toISOString().split('T')[0];
-          if (txsByDay.has(dateKey)) {
-            txsByDay.set(dateKey, txsByDay.get(dateKey) + 1);
-          }
-        }
-      }
-      
-      // Process next batch or finish
-      if (endIndex < txs.length) {
-        setTimeout(() => processBatch(endIndex), 0);
+        // Update the series data with the counts from the API
+        txChartSeries.value = [{
+          name: 'Transactions',
+          data: historyData.data.counts as never[]
+        }];
       } else {
-        finalizeTxData();
+        console.error("Invalid history data format:", historyData);
+        fallbackToClientSideProcessing();
       }
-    };
-    
-    const finalizeTxData = () => {
-      // Convert to array for chart
-      const txData = [];
-      for (let i = days - 1; i >= 0; i--) {
-        const date = new Date(now);
-        date.setDate(date.getDate() - i);
-        const dateKey = date.toISOString().split('T')[0];
-        txData.push(txsByDay.get(dateKey) || 0);
-      }
-
-      // Update the series data
-      txChartSeries.value = [{
-        name: 'Transactions',
-        data: txData as never[]
-      }];
-    };
-    
-    // Start batch processing
-    processBatch(0);
-    
-    // Get the count from API
-    if (countPromise) {
-      const countResponse = await countPromise;
-      if (countResponse && countResponse.ok) {
-        const countData = await countResponse.json();
-        transactionStats.value.total = countData.data || 0;
-      } else {
-        // Fallback to using the length of allTxs if API fails
-        transactionStats.value.total = txs.length || 0;
-      }
+    } else {
+      console.warn("Could not fetch transaction history from API, falling back to client-side processing");
+      fallbackToClientSideProcessing();
     }
   } catch (error) {
     console.error("Error loading transaction history:", error);
+    fallbackToClientSideProcessing();
   }
+}
+
+// Fallback method if the API request fails
+function fallbackToClientSideProcessing() {
+  const txs = base.allTxs || [];
+  const days = 30;
+  const now = new Date();
+  const labels = [];
+  const txsByDay = new Map();
+  
+  // Generate labels and initialize counts
+  for (let i = days - 1; i >= 0; i--) {
+    const date = new Date(now);
+    date.setDate(date.getDate() - i);
+    // Format date as "MMM D" (e.g., "Feb 3")
+    labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+    
+    const dateKey = date.toISOString().split('T')[0]; // YYYY-MM-DD format
+    txsByDay.set(dateKey, 0);
+  }
+  
+  // Update chart options with generated labels
+  txChartOptions.value = {
+    ...txChartOptions.value,
+    xaxis: {
+      ...txChartOptions.value.xaxis,
+      categories: labels as never[],
+      labels: {
+        ...txChartOptions.value.xaxis.labels,
+        formatter: function (value: string) {
+          return value;
+        }
+      }
+    }
+  };
+  
+  // Count transactions by day
+  for (const tx of txs) {
+    let txDate;
+    
+    if (tx.timestamp) {
+      txDate = new Date(tx.timestamp);
+    } else if (tx.height) {
+      // Try to get timestamp from block
+      const cachedBlock = base._blockCache?.get(tx.height);
+      if (cachedBlock && cachedBlock.block.header.time) {
+        txDate = new Date(cachedBlock.block.header.time);
+      } else {
+        const block = base.recents.find(b => b.block.header.height === tx.height);
+        if (block && block.block.header.time) {
+          txDate = new Date(block.block.header.time);
+        }
+      }
+    }
+    
+    if (txDate) {
+      const dateKey = txDate.toISOString().split('T')[0];
+      if (txsByDay.has(dateKey)) {
+        txsByDay.set(dateKey, txsByDay.get(dateKey) + 1);
+      }
+    }
+  }
+  
+  // Convert to array for chart
+  const txData = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const date = new Date(now);
+    date.setDate(date.getDate() - i);
+    const dateKey = date.toISOString().split('T')[0];
+    txData.push(txsByDay.get(dateKey) || 0);
+  }
+  
+  // Update chart series
+  txChartSeries.value = [{
+    name: 'Transactions',
+    data: txData as never[]
+  }];
 }
 
 // Also add a watcher to reload transaction history when allTxs changes
@@ -727,7 +723,7 @@ watch(() => base.allTxs.length, () => {
               </div>
               <div class="text-3xl font-bold text-main flex items-center">
                 {{ base.latest?.block?.header?.height || '0' }}
-                <a :href="`/${blockchain.chainName}/blocks/${base.latest?.block?.header?.height}`"
+                <a :href="`/${chain}/blocks/${base.latest?.block?.header?.height}`"
                    class="ml-2 text-sm inline-block text-info hover:text-info/70 transition-colors duration-200">
                   <Icon icon="mdi:arrow-right-circle" class="text-xl" />
                 </a>

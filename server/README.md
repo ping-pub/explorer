@@ -82,7 +82,7 @@ npm start
 | Endpoint | Method | Description | Query Parameters |
 |----------|--------|-------------|-----------------|
 | `/api/v1/transactions` | GET | Get paginated transactions | `page`, `limit`, `chain` |
-| `/api/v1/transactions/count` | GET | Get transaction count | `chain` |
+| `/api/v1/transactions/count` | GET | Get transaction count or historical data | `chain` |
 | `/api/v1/transactions/:transaction_id` | GET | Get transaction by ID | `chain` |
 | `/api/v1/chains` | GET | Get available chains | None |
 | `/api/v1/chains/stats` | GET | Get chain statistics | None |
@@ -96,7 +96,7 @@ curl http://localhost:3005/api/v1/transactions?chain=shannon&page=1&limit=10
 # Get transaction count for all chains
 curl http://localhost:3005/api/v1/transactions/count
 
-# Get transaction count for a specific chain
+# Get transaction count for a specific chain (returns historical data)
 curl http://localhost:3005/api/v1/transactions/count?chain=shannon
 
 # Get a specific transaction

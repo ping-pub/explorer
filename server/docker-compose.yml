@@ -7,7 +7,7 @@ services:
       - "6379:6379"
     volumes:
       - redis-data:/data
-    command: redis-server --appendonly yes
+    command: redis-server --appendonly yes --save 60 1 --loglevel warning
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -31,8 +31,10 @@ services:
       - REDIS_DB=${REDIS_DB:-0}
       - WORKER_CONCURRENCY=${WORKER_CONCURRENCY:-2}
       - HISTORICAL_BATCH_SIZE=${HISTORICAL_BATCH_SIZE:-50}
+      - HISTORY_CACHE_TTL=${HISTORY_CACHE_TTL:-3600}  # Cache TTL for historical data (1 hour default)
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:
