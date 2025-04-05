@@ -228,9 +228,9 @@ onMounted(async () => {
   store.loadDashboard();
   walletStore.loadMyAsset();
   paramStore.handleAbciInfo();
-
+  console.log("current chain", blockchain.current)
   // Load transactions first
-  await base.getAllTxs();
+  await base.getAllTxs(blockchain.current?.transactionService);
 
   // Then load stats that depend on transaction data
   loadNetworkStats();
@@ -546,7 +546,7 @@ async function loadTransactionHistory() {
     // Wait for base.allTxs to be populated if it's empty
     if (!base.allTxs || base.allTxs.length === 0) {
       console.log("Waiting for transaction data to load...");
-      await base.getAllTxs();
+      await base.getAllTxs(blockchain.current?.transactionService);
     }
 
     // Process transaction data while waiting for the count to complete
@@ -727,7 +727,7 @@ watch(() => base.allTxs.length, () => {
               </div>
               <div class="text-3xl font-bold text-main flex items-center">
                 {{ base.latest?.block?.header?.height || '0' }}
-                <a :href="`/${blockchain.chainName}/block/${base.latest?.block?.header?.height}`"
+                <a :href="`/${blockchain.chainName}/blocks/${base.latest?.block?.header?.height}`"
                    class="ml-2 text-sm inline-block text-info hover:text-info/70 transition-colors duration-200">
                   <Icon icon="mdi:arrow-right-circle" class="text-xl" />
                 </a>
@@ -1070,7 +1070,7 @@ watch(() => base.allTxs.length, () => {
                 <td class="font-medium">{{ item.item.block.header.height }}</td>
                 <td class="truncate text-info" style="max-width: 18rem; overflow:hidden;">
                   <RouterLink class="truncate hover:underline" :title="item.item.block_id.hash"
-                    :to="`/${chain}/block/${item.item.block.header.height}`">{{ item.item.block_id.hash }}
+                    :to="`/${chain}/blocks/${item.item.block.header.height}`">{{ item.item.block_id.hash }}
                   </RouterLink>
                 </td>
                 <td>{{ format.validator(item.item.block?.header?.proposer_address) }}</td>
@@ -1126,7 +1126,7 @@ watch(() => base.allTxs.length, () => {
                   }}</RouterLink>
                 </td>
                 <td class="text-sm text-warning">
-                  <RouterLink :to="`/${props.chain}/block/${item.item.height}`" class="hover:underline">{{ item.item.height }}</RouterLink>
+                  <RouterLink :to="`/${props.chain}/blocks/${item.item.height}`" class="hover:underline">{{ item.item.height }}</RouterLink>
                 </td>
                 <td>
                   <span class="text-xs truncate py-1 px-3 rounded-full" 

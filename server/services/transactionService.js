@@ -68,26 +68,45 @@ class TransactionService {
         
         if (txData && Object.keys(txData).length > 0) {
           // Parse JSON fields
-          if (txData.messages) {
-            try {
-              txData.messages = JSON.parse(txData.messages);
-            } catch (e) {
-              console.error(`Error parsing messages for tx ${txHash}:`, e);
+          try {
+            // Transform fields
+            const transformedTxData = { ...txData };
+            
+            // Parse JSON fields
+            if (txData.messages) {
+              try {
+                transformedTxData.messages = JSON.parse(txData.messages);
+              } catch (e) {
+                console.error(`Error parsing messages for tx ${txHash}:`, e);
+                transformedTxData.messages = [];
+              }
             }
-          }
-          
-          if (txData.fee) {
-            try {
-              txData.fee = JSON.parse(txData.fee);
-            } catch (e) {
-              console.error(`Error parsing fee for tx ${txHash}:`, e);
+            
+            if (txData.fee) {
+              try {
+                transformedTxData.fee = JSON.parse(txData.fee);
+              } catch (e) {
+                console.error(`Error parsing fee for tx ${txHash}:`, e);
+                transformedTxData.fee = {};
+              }
             }
+            
+            // Convert numeric fields if needed
+            if (txData.height) {
+              transformedTxData.height = parseInt(txData.height, 10);
+            }
+            
+            if (txData.status) {
+              transformedTxData.status = parseInt(txData.status, 10);
+            }
+            
+            transactions.push({
+              ...transformedTxData,
+              chain: chainName
+            });
+          } catch (err) {
+            console.error(`Error processing transaction data for ${txHash}:`, err);
           }
-          
-          transactions.push({
-            ...txData,
-            chain: chainName
-          });
         }
       }
       
@@ -123,26 +142,40 @@ class TransactionService {
           return { data: null };
         }
         
+        // Transform the transaction data
+        const transformedTxData = { ...txData };
+        
         // Parse JSON fields
         if (txData.messages) {
           try {
-            txData.messages = JSON.parse(txData.messages);
+            transformedTxData.messages = JSON.parse(txData.messages);
           } catch (e) {
             console.error(`Error parsing messages for tx ${transactionId}:`, e);
+            transformedTxData.messages = [];
           }
         }
         
         if (txData.fee) {
           try {
-            txData.fee = JSON.parse(txData.fee);
+            transformedTxData.fee = JSON.parse(txData.fee);
           } catch (e) {
             console.error(`Error parsing fee for tx ${transactionId}:`, e);
+            transformedTxData.fee = {};
           }
+        }
+        
+        // Convert numeric fields if needed
+        if (txData.height) {
+          transformedTxData.height = parseInt(txData.height, 10);
+        }
+        
+        if (txData.status) {
+          transformedTxData.status = parseInt(txData.status, 10);
         }
         
         return {
           data: {
-            ...txData,
+            ...transformedTxData,
             chain
           }
         };
@@ -154,26 +187,40 @@ class TransactionService {
           const txData = await redis.hgetall(`tx:${chainName}:${transactionId}`);
           
           if (Object.keys(txData).length > 0) {
+            // Transform the transaction data
+            const transformedTxData = { ...txData };
+            
             // Parse JSON fields
             if (txData.messages) {
               try {
-                txData.messages = JSON.parse(txData.messages);
+                transformedTxData.messages = JSON.parse(txData.messages);
               } catch (e) {
                 console.error(`Error parsing messages for tx ${transactionId}:`, e);
+                transformedTxData.messages = [];
               }
             }
             
             if (txData.fee) {
               try {
-                txData.fee = JSON.parse(txData.fee);
+                transformedTxData.fee = JSON.parse(txData.fee);
               } catch (e) {
                 console.error(`Error parsing fee for tx ${transactionId}:`, e);
+                transformedTxData.fee = {};
               }
+            }
+            
+            // Convert numeric fields if needed
+            if (txData.height) {
+              transformedTxData.height = parseInt(txData.height, 10);
+            }
+            
+            if (txData.status) {
+              transformedTxData.status = parseInt(txData.status, 10);
             }
             
             return {
               data: {
-                ...txData,
+                ...transformedTxData,
                 chain: chainName
               }
             };

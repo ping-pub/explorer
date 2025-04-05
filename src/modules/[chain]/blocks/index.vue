@@ -2,7 +2,7 @@
 import { computed, ref, reactive, onMounted, nextTick, onBeforeUnmount } from 'vue';
 import { useBaseStore, useFormatter } from '@/stores';
 import TxsInBlocksChart from '@/components/charts/TxsInBlocksChart.vue';
-import { useBlockModule } from "@/modules/[chain]/block/block";
+import { useBlockModule } from "@/modules/[chain]/blocks/block";
 import { PageRequest, type AuthAccount, type Pagination, type Block } from '@/types';
 import PaginationBar from '@/components/PaginationBar.vue';
 import { watch } from 'vue';
@@ -136,7 +136,7 @@ watch(() => list.value.length, () => {
             <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'blocks' }" @click="tab = 'blocks'">{{
                 $t('block.recent') }}</a>
             <RouterLink class="tab text-gray-400 uppercase"
-                :to="`/${chain}/block/${Number(base.latest?.block?.header.height || 0) + 10000}`">{{ $t('block.future') }}
+                :to="`/${chain}/blocks/${Number(base.latest?.block?.header.height || 0) + 10000}`">{{ $t('block.future') }}
             </RouterLink>
         </div>
 
@@ -175,7 +175,7 @@ watch(() => list.value.length, () => {
                             <td class="font-medium">{{ item.block.header.height }}</td>
                             <td class="truncate text-info" style="max-width: 18rem; overflow:hidden;">
                                 <RouterLink class="truncate hover:underline" :title="item.block_id.hash"
-                                    :to="`/${chain}/block/${item.block.header.height}`">{{ item.block_id.hash }}
+                                    :to="`/${chain}/blocks/${item.block.header.height}`">{{ item.block_id.hash }}
                                 </RouterLink>
                             </td>
                             <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>

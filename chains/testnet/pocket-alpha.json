@@ -1,12 +1,13 @@
 {
-    "chain_name": "poktroll-mainnet",
-    "registry_name": "Poktroll-Mainnet",
+    "chain_name": "pocket-alpha",
+    "registry_name": "Poktroll Testnet - Alpha",
     "api": [
-        {"provider": "Poktroll-Mainnet", "address": "https://shannon-grove-api.mainnet.poktroll.com"}
+        {"provider": "Poktroll-Testnet-Alpha", "address": "https://shannon-testnet-grove-api.alpha.poktroll.com"}
     ],
     "rpc": [
-        {"provider": "Poktroll-Mainnet", "address": "https://shannon-grove-rpc.mainnet.poktroll.com"}
+        {"provider": "Poktroll-Testnet-Alpha", "address": "https://shannon-testnet-grove-rpc.alpha.poktroll.com"}
     ],
+    "transaction_service": "pocket-testnet-alpha",
     "features": ["dashboard", "blocks", "tx", "applications", "suppliers", "gateways", "services", "validators", "parameters"],
     "sdk_version": "0.45.1",
     "coin_type": "118",

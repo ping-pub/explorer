@@ -348,7 +348,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
             </tr>
             <tr v-for="(v, index) in txs" :key="index">
               <td class="text-sm py-3">
-                <RouterLink :to="`/${chain}/block/${v.height}`" class="text-primary dark:invert">{{
+                <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-primary dark:invert">{{
                   v.height
                 }}</RouterLink>
               </td>
@@ -393,7 +393,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
             </tr>
             <tr v-for="(v, index) in recentReceived" :key="index">
               <td class="text-sm py-3">
-                <RouterLink :to="`/${chain}/block/${v.height}`" class="text-primary dark:invert">{{
+                <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-primary dark:invert">{{
                   v.height
                 }}</RouterLink>
               </td>

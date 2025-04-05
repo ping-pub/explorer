@@ -17,7 +17,7 @@ const hash = ref('');
 const current = chainStore?.current?.chainName || '';
 onMounted(() => {
     tab.value = String(vueRouters.currentRoute.value.query.tab || 'recent');
-    base.getAllTxs()
+    base.getAllTxs(chainStore?.current?.transactionService)
 });
 function search() {
     if (hashReg.test(hash.value)) {
@@ -30,7 +30,7 @@ function handleScroll() {
     // Check if the scroll is at the bottom
     let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
     if (isAtBottom) {
-        base.appendTxsByPage((base.allTxs.length / base.pageSize) + 1, base.pageSize)
+        base.appendTxsByPage((base.allTxs.length / base.pageSize) + 1, base.pageSize, chainStore?.current?.transactionService)
     }
 }
 </script>
@@ -73,7 +73,7 @@ function handleScroll() {
                                 }}</RouterLink>
                             </td>
                             <td class="text-sm text-warning">
-                                <RouterLink :to="`/${props.chain}/block/${item.height}`" class="hover:underline">{{ item.height }}</RouterLink>
+                                <RouterLink :to="`/${props.chain}/blocks/${item.height}`" class="hover:underline">{{ item.height }}</RouterLink>
                             </td>
                             <td>
                                 <span class="text-xs truncate py-1 px-3 rounded-full" 

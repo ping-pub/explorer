@@ -109,11 +109,11 @@ onBeforeRouteUpdate(async (to, from, next) => {
         <h2 class="card-title flex flex-row justify-between">
           <p class="">#{{ current.block?.header?.height }}</p>
           <div class="flex" v-if="props.height">
-            <RouterLink :to="`/${store.blockchain.chainName}/block/${height - 1}`"
+            <RouterLink :to="`/${store.blockchain.chainName}/blocks/${height - 1}`"
               class="btn btn-primary btn-sm p-1 text-2xl mr-2">
               <Icon icon="mdi-arrow-left" class="w-full h-full" />
             </RouterLink>
-            <RouterLink :to="`/${store.blockchain.chainName}/block/${height + 1}`"
+            <RouterLink :to="`/${store.blockchain.chainName}/blocks/${height + 1}`"
               class="btn btn-primary btn-sm p-1 text-2xl">
               <Icon icon="mdi-arrow-right" class="w-full h-full" />
             </RouterLink>

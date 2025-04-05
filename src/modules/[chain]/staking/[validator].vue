@@ -654,7 +654,7 @@ function getTransactionFee(tx: any): string {
           <tbody>
             <tr v-for="(item, i) in txs.tx_responses">
               <td class="text-primary font-medium">
-                <RouterLink :to="`/${props.chain}/block/${item.height}`">{{
+                <RouterLink :to="`/${props.chain}/blocks/${item.height}`">{{
                   item.height
                   }}</RouterLink>
               </td>
@@ -724,7 +724,7 @@ function getTransactionFee(tx: any): string {
                 </div>
               </td>
               <td>
-                <RouterLink class="text-primary font-medium block" :to="`/${props.chain}/block/${item.height}`">
+                <RouterLink class="text-primary font-medium block" :to="`/${props.chain}/blocks/${item.height}`">
                   {{ item.height }}
                 </RouterLink>
                 <span class="text-xs text-gray-500">{{ format.toDay(item.timestamp, 'from') }}</span>

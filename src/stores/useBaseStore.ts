@@ -82,9 +82,10 @@ export const useBaseStore = defineStore('baseStore', {
         async clearRecentBlocks() {
             this.recents = [];
         },
-        async getAllTxs(startingBlock = '', numOfBlocks = 0) {
+        async getAllTxs(chain = 'pocket-mainnet') {
             try {
-                let res = await fetch("/api/v1/transactions?page=1&limit=" + this.pageSize + "&chain=" + (window.location.pathname.replace('/', ''))).catch(err => console.error("Error Fetching Transactions"));
+                //fetch from the transaction service
+                let res = await fetch("/api/v1/transactions?page=1&limit=" + this.pageSize + "&chain=" + (chain)).catch(err => console.error("Error Fetching Transactions"));
                 const resJson = await res?.json();
                 this.allTxs = resJson?.data || []
                 return res
@@ -92,8 +93,8 @@ export const useBaseStore = defineStore('baseStore', {
                 return []
             }
         },
-        async appendTxsByPage(page: number = 2, limit: number = 10) {
-            let res = await fetch(`/api/v1/transactions?page=${page}&limit=${limit}&chain=${window.location.pathname.replace('/', '')}`);
+        async appendTxsByPage(page: number = 2, limit: number = 10, chain = 'pocket-mainnet') {
+            let res = await fetch(`/api/v1/transactions?page=${page}&limit=${limit}&chain=${chain}`);
             const resJson = await res.json();
             var temp: TxLocal[] = [];
             const nameSet: any = {};

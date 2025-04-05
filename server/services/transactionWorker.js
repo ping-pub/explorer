@@ -25,12 +25,19 @@ function log(message) {
   parentPort.postMessage({ type: 'log', data: message });
 }
 
-function error(message) {
+function report_error(message) {
   parentPort.postMessage({ type: 'error', data: message });
 }
 
 function status(data) {
   parentPort.postMessage({ type: 'status', data });
+}
+
+// Helper function to handle BigInt serialization
+function safeJsonStringify(obj) {
+  return JSON.stringify(obj, (_, value) => 
+    typeof value === 'bigint' ? value.toString() : value
+  );
 }
 
 // Hash transaction function
@@ -108,10 +115,10 @@ async function processTransactions(blockData, height) {
       const txData = {
         status: txRes.tx_response.code,
         timestamp: txRes.tx_response.timestamp,
-        messages: JSON.stringify(decodedTx.body.messages),
-        fee: JSON.stringify(decodedTx.authInfo.fee),
+        messages: safeJsonStringify(decodedTx.body.messages),
+        fee: safeJsonStringify(decodedTx.authInfo.fee),
         hash: txHash,
-        height: height
+        height: height.toString() // Ensure height is stored as string
       };
       
       // Store transaction data in Redis
@@ -136,7 +143,7 @@ async function processTransactions(blockData, height) {
     await pipeline.exec();
     return newCount;
   } catch (error) {
-    error(`Error processing transactions for block ${height}: ${error.message}`);
+    report_error(`Error processing transactions for block ${height}: ${error.message}`);
     return 0;
   }
 }
@@ -144,6 +151,7 @@ async function processTransactions(blockData, height) {
 // Function to fetch historical blocks from newest to oldest
 async function fetchHistoricalBlocks() {
   try {
+    // Get the current latest block height from chain
     const latestBlock = await fetchLatestBlock();
     const latestHeight = parseInt(latestBlock.block.header.height, 10);
     
@@ -151,13 +159,24 @@ async function fetchHistoricalBlocks() {
     await redis.set(`chain:${rpcName}:max_height`, latestHeight);
     
     // Find the last processed block height, or start from the latest if none found
-    let lastProcessedHeight = parseInt(await redis.get(`chain:${rpcName}:latest_height`) || latestHeight, 10);
+    let lastProcessedHeight = parseInt(await redis.get(`chain:${rpcName}:latest_height`) || '0', 10);
+    
+    // If we already have processed blocks, start from there minus a small overlap
+    // to handle any reorgs
+    let startHeight = lastProcessedHeight > 0 ? Math.max(1, lastProcessedHeight - 5) : latestHeight;
     
     // Process blocks from newest to oldest with a batch approach
-    log(`Starting historical processing from height ${lastProcessedHeight} down to 1`);
+    log(`Starting historical processing from height ${startHeight} down to 1`);
     
-    // Start from the latest height if no processing has been done yet
-    let currentHeight = lastProcessedHeight;
+    // Start from the determined height
+    let currentHeight = startHeight;
+    
+    // Only process historical blocks if there's a significant number to process
+    // (Otherwise let the monitor process them)
+    if (currentHeight <= 10) {
+      log(`No significant historical blocks to process for chain ${rpcName}, skipping historical processing`);
+      return;
+    }
     
     while (currentHeight > 0) {
       const batchEnd = Math.max(1, currentHeight - batchSize + 1);
@@ -177,10 +196,17 @@ async function fetchHistoricalBlocks() {
           const txCount = await processTransactions(blockData, height);
           batchProcessed += txCount;
           
+          // Update latest_height if this is a newer block than what we've seen
+          // This helps keep the monitoring in sync
+          if (height > lastProcessedHeight) {
+            lastProcessedHeight = height;
+            await redis.set(`chain:${rpcName}:latest_height`, height);
+          }
+          
           // Small delay to avoid overwhelming the RPC
           await new Promise(resolve => setTimeout(resolve, 100));
         } catch (error) {
-          error(`Failed to process block ${height}: ${error.message}`);
+          report_error(`Failed to process block ${height}: ${error.message}`);
         }
       }
       
@@ -202,7 +228,7 @@ async function fetchHistoricalBlocks() {
     
     log(`Historical processing completed for chain ${rpcName}`);
   } catch (error) {
-    error(`Historical processing error: ${error.message}`);
+    report_error(`Historical processing error: ${error.message}`);
   }
 }
 
@@ -210,61 +236,123 @@ async function fetchHistoricalBlocks() {
 async function monitorNewBlocks() {
   log(`Starting new block monitor for chain ${rpcName}`);
   
-  let lastKnownHeight = parseInt(await redis.get(`chain:${rpcName}:max_height`) || '0', 10);
-  
-  // Monitor interval
-  setInterval(async () => {
-    try {
-      const latestBlock = await fetchLatestBlock();
-      const currentHeight = parseInt(latestBlock.block.header.height, 10);
-      
-      if (currentHeight > lastKnownHeight) {
-        log(`New block detected: ${currentHeight} (previous: ${lastKnownHeight})`);
+  try {
+    // Get the latest height from the chain
+    const latestBlock = await fetchLatestBlock();
+    const currentChainHeight = parseInt(latestBlock.block.header.height, 10);
+    
+    // Store the current chain height
+    await redis.set(`chain:${rpcName}:max_height`, currentChainHeight);
+    log(`Set max_height for ${rpcName} to ${currentChainHeight}`);
+    
+    // Get the last processed height from Redis
+    let lastProcessedHeight = parseInt(await redis.get(`chain:${rpcName}:latest_height`) || '0', 10);
+    log(`Block monitor initialized: Chain height=${currentChainHeight}, Last processed=${lastProcessedHeight}`);
+    
+    // Monitor interval
+    setInterval(async () => {
+      try {
+        // Always get fresh value from Redis to ensure we don't miss blocks
+        // between monitor intervals or if multiple workers are running
+        lastProcessedHeight = parseInt(await redis.get(`chain:${rpcName}:latest_height`) || '0', 10);
         
-        // Process all new blocks since the last one we knew about
-        for (let height = lastKnownHeight + 1; height <= currentHeight; height++) {
-          try {
-            const blockData = await fetchTxByBlock(height);
-            await processTransactions(blockData, height);
-          } catch (error) {
-            error(`Failed to process new block ${height}: ${error.message}`);
-          }
-        }
+        const latestBlock = await fetchLatestBlock();
+        const currentHeight = parseInt(latestBlock.block.header.height, 10);
         
-        // Update our last known height
-        lastKnownHeight = currentHeight;
+        // Update max_height to reflect the current chain tip
         await redis.set(`chain:${rpcName}:max_height`, currentHeight);
         
-        status({
-          chain: rpcName,
-          latestHeight: currentHeight,
-          monitoring: true
-        });
+        // Check if there are new blocks to process
+        if (currentHeight > lastProcessedHeight) {
+          const blockGap = currentHeight - lastProcessedHeight;
+          
+          // If there's a large gap, log it but still process in batches
+          if (blockGap > 100) {
+            log(`Large block gap detected: ${blockGap} blocks between ${lastProcessedHeight} and ${currentHeight}`);
+          } else {
+            log(`New block(s) detected: ${currentHeight} (previous: ${lastProcessedHeight}, gap: ${blockGap})`);
+          }
+          
+          // Define a reasonable batch size for processing
+          const MONITOR_BATCH_SIZE = 10; 
+          
+          // Process blocks in manageable batches to avoid timeouts
+          for (let batchStart = lastProcessedHeight + 1; batchStart <= currentHeight; batchStart += MONITOR_BATCH_SIZE) {
+            const batchEnd = Math.min(batchStart + MONITOR_BATCH_SIZE - 1, currentHeight);
+            log(`Processing blocks ${batchStart} to ${batchEnd}...`);
+            
+            // Process each block in the batch
+            for (let height = batchStart; height <= batchEnd; height++) {
+              try {
+                const blockData = await fetchTxByBlock(height);
+                await processTransactions(blockData, height);
+                
+                // Update after each successful block processing
+                lastProcessedHeight = height;
+                await redis.set(`chain:${rpcName}:latest_height`, height);
+              } catch (error) {
+                report_error(`Failed to process new block ${height}: ${error.message}`);
+              }
+            }
+            
+            // Report status after each batch
+            status({
+              chain: rpcName,
+              currentHeight: batchEnd,
+              latestHeight: currentHeight,
+              progress: ((batchEnd / currentHeight) * 100).toFixed(2) + '%',
+              monitoring: true
+            });
+          }
+        }
+      } catch (error) {
+        report_error(`Error monitoring for new blocks: ${error.message}`);
       }
-    } catch (error) {
-      error(`Error monitoring for new blocks: ${error.message}`);
-    }
-  }, 10000); // Check every 10 seconds
+    }, 10000); // Check every 10 seconds
+  } catch (error) {
+    report_error(`Failed to initialize block monitor: ${error.message}`);
+  }
 }
 
 // Main worker function
 async function runWorker() {
   log(`Starting worker for chain ${rpcName} with RPC endpoint ${rpcUrl}`);
   
-  // Start the monitoring for new blocks
-  monitorNewBlocks();
-  
-  // Start processing historical blocks
-  await fetchHistoricalBlocks();
+  try {
+    // First get the current chain tip
+    const latestBlock = await fetchLatestBlock();
+    const latestHeight = parseInt(latestBlock.block.header.height, 10);
+    
+    // Update max_height
+    await redis.set(`chain:${rpcName}:max_height`, latestHeight);
+    log(`Chain ${rpcName} current height: ${latestHeight}`);
+    
+    // Check if we have a latest_height in Redis, indicating some blocks were already processed
+    const processedHeight = await redis.get(`chain:${rpcName}:latest_height`);
+    
+    if (processedHeight) {
+      log(`Found existing processed data for chain ${rpcName}, last processed height: ${processedHeight}`);
+    } else {
+      log(`No existing data found for chain ${rpcName}, will start historical processing`);
+    }
+    
+    // Start the monitoring for new blocks first
+    monitorNewBlocks();
+    
+    // Then process historical blocks
+    await fetchHistoricalBlocks();
+  } catch (error) {
+    report_error(`Worker initialization error: ${error.message}`);
+  }
 }
 
 // Handle errors and cleanup
 process.on('unhandledRejection', (reason) => {
-  error(`Unhandled Promise Rejection: ${reason}`);
+  report_error(`Unhandled Promise Rejection: ${reason}`);
 });
 
 redis.on('error', (err) => {
-  error(`Redis error: ${err.message}`);
+  report_error(`Redis error: ${err.message}`);
 });
 
 // Clean up on exit
@@ -275,4 +363,4 @@ process.on('SIGINT', async () => {
 });
 
 // Start the worker
-runWorker().catch(err => error(`Worker failed to start: ${err.message}`)); 
+runWorker().catch(err => report_error(`Worker failed to start: ${err.message}`)); 

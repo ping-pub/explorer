@@ -614,7 +614,7 @@ function mapDelegators(messages: any[]) {
           <tbody>
             <tr v-for="(item, i) in txs.tx_responses">
               <td class="text-sm text-primary">
-                <RouterLink :to="`/${props.chain}/block/${item.height}`">{{
+                <RouterLink :to="`/${props.chain}/blocks/${item.height}`">{{
                   item.height
                 }}</RouterLink>
               </td>
@@ -696,7 +696,7 @@ function mapDelegators(messages: any[]) {
                 </div>
               </td>
               <td width="150">
-                <RouterLink class="text-primary mb-0" :to="`/${props.chain}/block/${item.height}`">{{
+                <RouterLink class="text-primary mb-0" :to="`/${props.chain}/blocks/${item.height}`">{{
                   item.height
                 }}</RouterLink><br>
                 <span class="text-xs pt-0 mt-0">{{ format.toDay(item.timestamp, 'from') }}</span>

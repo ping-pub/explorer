@@ -38,7 +38,7 @@ function confirm() {
 
   if (!Object.values(routeParams?.params).includes(key)) {
     if (height.test(key)) {
-      vueRouters.push({ path: `/${current}/block/${key}` });
+      vueRouters.push({ path: `/${current}/blocks/${key}` });
       setTimeout(() => {
         closeSearchModal();
       }, 1000);
