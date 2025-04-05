@@ -206,14 +206,21 @@ const toggleMobileMenu = () => {
                 {{ item?.heading }}
               </div>
             </div>
-
+            <a :href="currentChain?.chainName" @click="sidebarShow = false"
+              class="hover:bg-gray-100 dark:hover:bg-[#373f59] mr-5">
+              <div class="capitalize text-gray-700 dark:text-gray-200" style="font-size: 1rem;">
+                Home
+              </div>
+            </a>
             <!-- "More" dropdown for additional nav items -->
-            <div v-if="moreNavItems.length > 0" class="dropdown dropdown-end flex align-center justify-center mr-5 border-solid border-2 border-success shadow-md rounded-md">
-              <label tabindex="0" class="btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-2 mr-5"
+            <div v-if="moreNavItems.length > 0"
+              class="dropdown dropdown-end flex align-center justify-center mr-5 border-solid border-b-1 border-success shadow-md rounded-md">
+              <label tabindex="0"
+                class="btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-2 mr-5 text-primary"
                 @click="toggleModuleDropdown">
                 <span class="mr-1 flex flex-1" style="font-size: 1rem;text-transform: unset !important;">
                   <!-- {{ show title of the current route }} -->
-                  {{ $route.meta.i18n ? $t(`module.${$route.meta.i18n}`) : 'Details' }}
+                  Blockchain
                 </span>
                 <Icon icon="mdi-chevron-down" class="ml-1 flex flex-1" />
               </label>
@@ -285,7 +292,8 @@ const toggleMobileMenu = () => {
               </div>
               <div class="flex items-center justify-between rounded-lg border border-info p-2">
                 <div class="flex items-center">
-                  <span class="text-base font-medium text-gray-700 dark:text-gray-200">{{ currentChain?.prettyName }}</span>
+                  <span class="text-base font-medium text-gray-700 dark:text-gray-200">{{ currentChain?.prettyName
+                  }}</span>
                 </div>
                 <button @click="toggleMobileChainDropdown" class="p-1">
                   <Icon icon="mdi-chevron-down" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
@@ -307,7 +315,7 @@ const toggleMobileMenu = () => {
               </div>
             </div>
             <!-- End Chain Selection -->
-            
+
             <div v-for="(item, index) of mainNavItems.concat(moreNavItems)" :key="'mobile-' + index">
               <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="mobileMenuOpen = false; sidebarShow = false"
                 class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-[#373f59] text-gray-700 dark:text-gray-200">
