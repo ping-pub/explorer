@@ -265,14 +265,13 @@ const toggleMobileMenu = () => {
             <Icon icon="mdi:menu" class="h-6 w-6 dark:text-white" />
           </button>
 
-          <RouterLink :to=currentChain class="flex items-center">
+          <a :href="`/${currentChain?.chainName}`" class="flex items-center">
             <img class="w-8 h-8"
               src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
             <h1 class="flex-1 ml-2 text-base font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
               SHANNON
             </h1>
-
-          </RouterLink>
+          </a>
 
           <NavbarThemeSwitcher class="!inline-block pt-1" />
         </div>
