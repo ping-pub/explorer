@@ -155,7 +155,7 @@ const toggleMobileMenu = () => {
               <img class="w-10 h-10"
                 src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
               <h1 class="flex-1 ml-1 text-lg font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
-                SHANNON
+                POCKET
               </h1>
             </a>
             <div
@@ -269,7 +269,7 @@ const toggleMobileMenu = () => {
             <img class="w-8 h-8"
               src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
             <h1 class="flex-1 ml-2 text-base font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
-              SHANNON
+              POCKET
             </h1>
           </a>
 
