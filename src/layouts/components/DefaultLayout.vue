@@ -208,7 +208,7 @@ const toggleMobileMenu = () => {
                 {{ item?.heading }}
               </div>
             </div>
-            <a :href="currentChain?.chainName" @click="sidebarShow = false"
+            <a :href="`/${currentChain?.chainName}`" @click="sidebarShow = false"
               class="hover:bg-gray-100 dark:hover:bg-[#373f59] mr-5">
               <div class="capitalize text-gray-700 dark:text-gray-200" style="font-size: 1rem;">
                 Home
