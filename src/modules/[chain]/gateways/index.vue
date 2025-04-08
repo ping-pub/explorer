@@ -44,6 +44,7 @@ function pageloadInit(p: number) {
 }
 </script>
 <template>
+  <div>
   <p class="text-2xl font-bold">Gateways</p>
   <div class="bg-base-100 rounded overflow-auto gatewaysContainer" @scroll="pageload"
     style="height: 78vh;overflow: scroll;">
@@ -73,6 +74,7 @@ function pageloadInit(p: number) {
       </tr>
     </table>
   </div>
+</div>
 </template>
 
 <route>

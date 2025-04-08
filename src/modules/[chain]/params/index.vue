@@ -224,6 +224,7 @@ function formatTitle(v: string) {
 }
 </script>
 <template>
+  <div>
   <p class="text-2xl font-bold">Parameters</p>
   <div class="overflow-hidden">
     <!-- Chain ID -->
@@ -420,6 +421,7 @@ function formatTitle(v: string) {
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <route>
