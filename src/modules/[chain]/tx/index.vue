@@ -36,7 +36,7 @@ function handleScroll() {
 </script>
 <template>
     <div>
-        <p class="text-2xl font-bold">Transactions</p>
+        <p class="text-2xl font-bold mb-4">Transactions</p>
         <div class="tabs tabs-boxed bg-transparent mb-4">
             <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'recent' }" @click="tab = 'recent'">{{
                 $t('block.recent') }}</a>

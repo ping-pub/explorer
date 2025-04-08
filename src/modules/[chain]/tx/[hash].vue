@@ -31,6 +31,39 @@ const messages = computed(() => {
         return x
     }) || [];
 });
+
+// Format JSON data for viewer to prevent display issues
+const formattedTxData = computed(() => {
+    if (!tx.value || Object.keys(tx.value).length === 0) {
+        return {};
+    }
+    
+    try {
+        // Handle potential circular references by using a replacer function
+        const cache = new Set();
+        const cleanData = JSON.parse(JSON.stringify(tx.value, (key, value) => {
+            if (typeof value === 'object' && value !== null) {
+                if (cache.has(value)) {
+                    return '[Circular Reference]';
+                }
+                cache.add(value);
+            }
+            return value;
+        }));
+        return cleanData;
+    } catch (error) {
+        console.error('Error formatting tx data for JSON viewer:', error);
+        // If JSON conversion fails, provide a simpler object representation
+        return {
+            tx_hash: tx.value.tx_response?.txhash || '',
+            height: tx.value.tx_response?.height || '',
+            status: tx.value.tx_response?.code === 0 ? 'Success' : 'Failed',
+            gas: `${tx.value.tx_response?.gas_used || 0} / ${tx.value.tx_response?.gas_wanted || 0}`,
+            timestamp: tx.value.tx_response?.timestamp || '',
+            memo: tx.value.tx?.body?.memo || ''
+        };
+    }
+});
 </script>
 <template>
     <div>
@@ -124,7 +157,21 @@ const messages = computed(() => {
 
         <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
             <h2 class="card-title truncate mb-2">JSON</h2>
-            <JsonViewer :value="tx" :theme="baseStore.theme" style="background: transparent;" copyable boxed sort :expand-depth="5"/>
+            <div v-if="Object.keys(formattedTxData).length > 0">
+                <JsonViewer 
+                    :value="formattedTxData" 
+                    :theme="baseStore.theme || 'jv-light'" 
+                    style="background: transparent;" 
+                    :copyable="true" 
+                    :boxed="true" 
+                    :sort="true" 
+                    :expand-depth="5"
+                    :preview-mode="false"
+                />
+            </div>
+            <div v-else class="p-4 text-center text-gray-500">
+                Loading transaction data...
+            </div>
         </div>
     </div>
 </template>
