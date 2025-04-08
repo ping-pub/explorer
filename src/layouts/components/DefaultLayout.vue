@@ -127,12 +127,12 @@ onUnmounted(() => {
 // Compute which items should go in the More dropdown
 const mainNavItems = computed(() => {
   // @ts-ignore
-  return blockchain.computedChainMenu[0]?.children.slice(0, visibleNavItems.value);
+  return blockchain.computedChainMenu[0]?.children.filter(x => x.title.indexOf('dashboard') === -1).slice(0, visibleNavItems.value);
 });
 
 const moreNavItems = computed(() => {
   // @ts-ignore
-  return blockchain.computedChainMenu[0]?.children.slice(visibleNavItems.value);
+  return blockchain.computedChainMenu[0]?.children.filter(x => x.title.indexOf('dashboard') === -1).slice(visibleNavItems.value);
 });
 
 // Mobile menu functionality
@@ -168,7 +168,9 @@ const toggleMobileMenu = () => {
               </label>
               <ul v-show="dropdownOpen" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50"
                 style="font-size: 0.8rem;">
-                <li v-for="chain in dashboard.chains" :key="chain.chainName">
+                <li v-for="chain in Object.values(dashboard.chains).sort((a,b)=>{
+                  return b.prettyName.localeCompare(a.prettyName)
+                })" :key="chain.chainName">
                   <a :href="`/${chain.chainName}`" class="hover:bg-gray-100 dark:hover:bg-[#373f59]"
                     :class="{ 'font-bold': currentChain?.chainName === chain.chainName }">
                     <div class="capitalize text-gray-700 dark:text-gray-200" style="font-size: 0.8rem;">

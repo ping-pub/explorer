@@ -332,7 +332,6 @@ export const useDashboard = defineStore('dashboard', {
         this.networkType === NetworkType.Mainnet
           ? import.meta.glob('../../chains/mainnet/*.json', { eager: true })
           : import.meta.glob('../../chains/testnet/*.json', { eager: true });
-      console.log(source)
       Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
         this.chains[x.chain_name] = fromLocal(x);
       });

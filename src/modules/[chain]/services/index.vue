@@ -130,6 +130,7 @@ const sortedList = computed(() => {
 });
 </script>
 <template>
+  <p class="text-2xl font-bold">Services</p>
   <div class="bg-base-100 rounded overflow-auto servicesContainer" @scroll="pageload"
     style="height: 78vh;overflow: scroll;">
     <table class="table table-compact">

@@ -795,7 +795,7 @@ watch(() => base.allTxs.length, () => {
             <div class="text-lg font-semibold text-main">Market Data</div>
           </div>
           <div class="flex items-center gap-2">
-            <div class="dropdown dropdown-end">
+            <div class="dropdown dropdown-end" style="z-index: 100;">
               <label tabindex="0" class="btn btn-sm btn-outline">
                 {{ ticker?.market?.name || 'Market' }}
                 <Icon icon="mdi:chevron-down" class="ml-1" />

@@ -247,7 +247,8 @@ base.$subscribe((_, s) => {
 loadAvatars();
 </script>
 <template>
-    <div>
+    <div>  
+        <p class="text-2xl font-bold">Validators</p>
         <div class="bg-base-100 rounded-lg grid sm:grid-cols-1 md:grid-cols-4 p-4">
             <div class="flex">
                 <span>

@@ -132,6 +132,7 @@ watch(() => list.value.length, () => {
 
 <template>
     <div>
+        <p class="text-2xl font-bold">Blocks</p>
         <div class="tabs tabs-boxed bg-transparent mb-4">
             <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'blocks' }" @click="tab = 'blocks'">{{
                 $t('block.recent') }}</a>
