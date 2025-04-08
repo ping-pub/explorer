@@ -248,7 +248,7 @@ loadAvatars();
 </script>
 <template>
     <div>  
-        <p class="text-2xl font-bold">Validators</p>
+        <p class="text-2xl font-bold mb-4">Validators</p>
         <div class="bg-base-100 rounded-lg grid sm:grid-cols-1 md:grid-cols-4 p-4">
             <div class="flex">
                 <span>

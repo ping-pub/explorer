@@ -45,7 +45,7 @@ function pageloadInit(p: number) {
 </script>
 <template>
   <div>
-  <p class="text-2xl font-bold">Applications</p>
+  <p class="text-2xl font-bold mb-4">Applications</p>
   <div class="bg-base-100 rounded overflow-auto applicationsContainer" @scroll="pageload" style="height: 78vh;overflow: scroll;">
     <table class="table table-compact">
       <thead class="bg-base-200">

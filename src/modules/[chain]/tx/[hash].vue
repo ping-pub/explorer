@@ -157,8 +157,8 @@ const formattedTxData = computed(() => {
 
         <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
             <h2 class="card-title truncate mb-2">JSON</h2>
-            <div v-if="Object.keys(formattedTxData).length > 0">
-                <JsonViewer 
+            <div v-if="Object.keys(formattedTxData).length > 0" class="bg-base-200 p-4 rounded-md">
+                <!-- <JsonViewer 
                     :value="formattedTxData" 
                     :theme="baseStore.theme || 'jv-light'" 
                     style="background: transparent;" 
@@ -167,7 +167,8 @@ const formattedTxData = computed(() => {
                     :sort="true" 
                     :expand-depth="5"
                     :preview-mode="false"
-                />
+                /> -->
+                <pre>{{ formattedTxData }}</pre>
             </div>
             <div v-else class="p-4 text-center text-gray-500">
                 Loading transaction data...

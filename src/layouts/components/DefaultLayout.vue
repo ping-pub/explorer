@@ -148,7 +148,7 @@ const toggleMobileMenu = () => {
     <header class="bg-base-200 shadow-md dark:bg-[#231f20;] px-4">
       <!-- DESKTOP NAV - Only shown on desktop, hidden on mobile -->
       <div class="desktop-nav">
-        <div class="container mx-auto px-1 py-2 flex justify-between items-center">
+        <div class="container mx-auto px-5 py-2 flex justify-between items-center">
 
           <div class="flex items-center">
             <a :href="`/${currentChain?.chainName}`" class="flex items-center mr-5">
