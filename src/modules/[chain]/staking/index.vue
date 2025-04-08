@@ -249,8 +249,8 @@ loadAvatars();
 <template>
     <div>  
         <p class="text-2xl font-bold mb-4">Validators</p>
-        <div class="bg-base-100 rounded-lg grid sm:grid-cols-1 md:grid-cols-4 p-4">
-            <div class="flex">
+        <div class="grid sm:grid-cols-1 md:grid-cols-4 py-4 gap-4 mb-4">
+            <div class="flex bg-base-100 rounded-lg p-4">
                 <span>
                     <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
                         <Icon class="text-success" icon="mdi:trending-up" size="32" />
@@ -262,7 +262,7 @@ loadAvatars();
                     <div class="text-xs">{{ $t('staking.inflation') }}</div>
                 </span>
             </div>
-            <div class="flex">
+            <div class="flex bg-base-100 rounded-lg p-4">
                 <span>
                     <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
                         <Icon class="text-primary" icon="mdi:lock-open-outline" size="32" />
@@ -274,7 +274,7 @@ loadAvatars();
                     <div class="text-xs">{{ $t('staking.unbonding_time') }}</div>
                 </span>
             </div>
-            <div class="flex">
+            <div class="flex bg-base-100 rounded-lg p-4">
                 <span>
                     <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
                         <Icon class="text-error" icon="mdi:alert-octagon-outline" size="32" />
@@ -286,7 +286,7 @@ loadAvatars();
                     <div class="text-xs">{{ $t('staking.double_sign_slashing') }}</div>
                 </span>
             </div>
-            <div class="flex">
+            <div class="flex bg-base-100 rounded-lg p-4">
                 <span>
                     <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
                         <Icon class="text-error" icon="mdi:pause" size="32" />
@@ -301,15 +301,12 @@ loadAvatars();
         </div>
 
         <div>
-            <div class="flex items-center justify-between py-1">
-                <h2 class="text-lg font-semibold">{{ $t('staking.validators') }}</h2>
-                <div class="text-lg font-semibold">
-                    {{allValidators.filter(v => v.status === 'BOND_STATUS_BONDED').length}}/{{
-                        staking.params.max_validators }}
-                </div>
-            </div>
-
             <div class="bg-base-100 rounded shadow">
+                <!-- <div class="text-lg font-semibold">
+                    {{allValidators.filter(v => v.status === 'BOND_STATUS_BONDED').length}}/{{
+                        staking.params.max_validators }} 
+                        <span class="text-xs">{{ "Staked Validators" }}</span>
+                </div> -->
                 <div v-if="isLoading" class="flex justify-center items-center p-8">
                     <span class="loading loading-spinner loading-lg"></span>
                 </div>
