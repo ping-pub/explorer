@@ -1,0 +1,18 @@
+{
+    "chain_name": "babylon",
+    "api": ["https://babylon.nodes.guru/api"],
+    "rpc": ["https://babylon.nodes.guru/rpc"],
+    "snapshot_provider": "",
+    "sdk_version": "0.54.0",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "baby",
+    "logo": "/logos/babylon.png",
+    "assets": [{
+        "base": "ubbn",
+        "symbol": "BABY",
+        "exponent": "6",
+        "coingecko_id": "babylon", 
+        "logo": "/logos/babylon.png"
+    }]
+} 
