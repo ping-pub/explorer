@@ -37,7 +37,7 @@ jobs:
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_WORKERS_API_TOKEN }}
-        run: npx --yes wrangler@latest pages --project-name="explorer-testnet-10" deploy result >> /tmp/explorer_deploy.txt
+        run: npx --yes wrangler@latest pages --project-name="explorer" deploy result >> /tmp/explorer_deploy.txt
       - name: Set Deploy Output
         run: |
           {
@@ -74,4 +74,4 @@ jobs:
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_WORKERS_API_TOKEN }}
-        run: npx --yes wrangler@latest pages --project-name="explorer-testnet-10" --branch="main" deploy result
+        run: npx --yes wrangler@latest pages --project-name="explorer" --branch="main" deploy result

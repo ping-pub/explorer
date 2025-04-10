@@ -2,8 +2,6 @@ import { defineStore } from 'pinia';
 import { get } from '../libs/http';
 import { useBlockchain } from './useBlockchain';
 import type { Asset } from '@ping-pub/chain-registry-client/dist/types';
-import unionChainConfig from '../assets/chains/testnet/union-testnet-10.json' with { type: 'json' };
-console.info(unionChainConfig)
 
 export enum EndpointType {
   rpc,
