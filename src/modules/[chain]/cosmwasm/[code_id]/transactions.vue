@@ -23,12 +23,10 @@ const wasmStore = useWasmStore();
 const route = useRoute()
 const page = ref(new PageRequest())
 const pageRequest = ref(new PageRequest());
-const response = ref({} as PaginabledContracts);
 
 const txs = ref<PaginatedTxs>({ txs: [], tx_responses: [], pagination: { total: "0" } });
 
 const dialog = useTxDialog();
-const infoDialog = ref(false);
 const info = ref({} as ContractInfo);
 const state = ref({} as PaginabledContractStates);
 const selected = ref('');
@@ -66,6 +64,9 @@ onMounted(() => {
             selectQuery(res[0])
         }
     })
+
+    showFunds()
+    showState()
 
 })
 
@@ -136,23 +137,10 @@ function queryContract() {
     // TODO, show error in the result.
 }
 
-const radioContent = [
-    {
-        title: 'Raw Query',
-        desc: 'Return raw result',
-        value: 'raw',
-    },
-    {
-        title: 'Smart Query',
-        desc: 'Return structure result if possible',
-        value: 'smart',
-    },
-];
-
 const selectedRadio = ref('smart');
 const query = ref('');
 const result = ref({});
-const queries = ref<RegExpMatchArray | null>()
+const queries = ref<string[]>([])
 const tab = ref('detail')
 </script>
 <template>
@@ -176,21 +164,37 @@ const tab = ref('detail')
                 <DynamicComponent :value="info" />
             </div>
 
+            <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+                <div class="flex items-center justify-between px-3 pt-2">
+                    <div class="text-lg">{{ $t('cosmwasm.contract_balances') }}</div>
+                </div>
+                <ul class="menu mt-5">
+                    <li v-for="b in balances.balances">
+                        <a class="flex justify-between"><span>{{ format.formatToken(b) }}</span> {{ b.amount }}
+                        </a>
+                    </li>
+                    <li v-if="balances.pagination?.total === '0'" class="my-10 text-center">{{
+                        $t('cosmwasm.no_escrowed_assets') }}</li>
+                </ul>
+            </div>
+
+            <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+                <div class="flex items-center justify-between px-3 pt-2 mb-4">
+                    <div class="text-lg">{{ $t('cosmwasm.contract_states') }}</div>
+                </div>
+                <div class="overflow-auto">
+                    <JsonViewer
+                        :value="state.models?.map(v => ({ key: format.hexToString(v.key), value: JSON.parse(format.base64ToString(v.value)) })) || ''"
+                        :theme="baseStore.theme || 'dark'" style="background: transparent;" copyable boxed sort
+                        :expand-depth="5" />
+                    <PaginationBar :limit="pageRequest.limit" :total="state.pagination?.total"
+                        :callback="pageloadState" />
+                </div>
+            </div>
+
             <div class="text-center mb-4">
                 <RouterLink :to="`../${info.code_id}/contracts`"><span class="btn btn-xs text-xs mr-2"> Back </span>
                 </RouterLink>
-                <label @click="showFunds()" for="modal-contract-funds" class="btn btn-primary btn-xs text-xs mr-2">{{
-                    $t('cosmwasm.btn_funds') }}</label>
-                <label class="btn btn-primary btn-xs text-xs mr-2" for="modal-contract-states" @click="showState()">
-                    {{ $t('cosmwasm.btn_states') }}
-                </label>
-                <label for="modal-contract-query" class="btn btn-primary btn-xs text-xs mr-2" @click="showQuery()">
-                    {{ $t('cosmwasm.btn_query') }}
-                </label>
-                <label for="wasm_execute_contract" class="btn btn-primary btn-xs text-xs mr-2"
-                    @click="dialog.open('wasm_execute_contract', { contract: contractAddress })">
-                    {{ $t('cosmwasm.btn_execute') }}
-                </label>
 
                 <label for="wasm_migrate_contract" class="btn btn-primary btn-xs text-xs mr-2"
                     @click="dialog.open('wasm_migrate_contract', { contract: contractAddress })">
@@ -252,71 +256,53 @@ const tab = ref('detail')
                 <div class="px-3">
                     <div>
                         <div>
-                            <span v-for="q in queries" class="btn btn-xs mx-1"
-                                @click="selectQuery(q)">{{ q }}</span>
+                            <span v-for="q in queries" class="btn btn-xs mx-1" @click="selectQuery(q)">{{ q }}</span>
                         </div>
                         <textarea v-model="query" placeholder="Query String, {}" label="Query String"
                             class="my-2 textarea textarea-bordered w-full" />
 
                         <div class="mt-4 mb-4 text-center">
                             <button class="btn btn-primary btn-sm px-4 text-white" @click="queryContract()">
-                                {{ $t('cosmwasm.query_contract') }}
+                                {{ $t('cosmwasm.btn_query') }}
                             </button>
                         </div>
 
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div v-show="tab === 'execute'">
             <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
                 <div class="flex items-center justify-between px-3 pt-2 mb-4">
-                    <div class="text-lg font-semibold">{{ $t('cosmwasm.result') }}</div>
+                    <div class="text-lg font-semibold">{{ $t('cosmwasm.suggested_messages') }}</div>
                 </div>
-                <JsonViewer :value="result" :theme="baseStore.theme" style="background: transparent;" copyable boxed
-                            sort :expand-depth="5" />
+                <div class="px-3">
+                    <div>
+                        <div>
+                            <span v-for="q in queries" class="btn btn-xs mx-1" @click="selectQuery(q)">{{ q }}</span>
+                        </div>
+                        <textarea v-model="query" placeholder="Query String, {}" label="Query String"
+                            class="my-2 textarea textarea-bordered w-full" />
+
+                        <div class="mt-4 mb-4 text-center">
+                            <button class="btn btn-primary btn-sm px-4 text-white" @click="queryContract()">
+                                {{ $t('cosmwasm.btn_execute') }}
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- WasmVerification :contract="contractAddress"/ -->
 
-        <div>
-            <input type="checkbox" id="modal-contract-funds" class="modal-toggle" />
-            <label for="modal-contract-funds" class="modal cursor-pointer">
-                <label class="modal-box relative p-2" for="">
-                    <div>
-                        <div class="flex items-center justify-between px-3 pt-2">
-                            <div class="text-lg">{{ $t('cosmwasm.contract_balances') }}</div>
-                            <label for="modal-contract-funds" class="btn btn-sm btn-circle">✕</label>
-                        </div>
-                        <ul class="menu mt-5">
-                            <li v-for="b in balances.balances">
-                                <a class="flex justify-between"><span>{{ format.formatToken(b) }}</span> {{ b.amount }}
-                                </a>
-                            </li>
-                            <li v-if="balances.pagination?.total === '0'" class="my-10 text-center">{{
-                                $t('cosmwasm.no_escrowed_assets') }}</li>
-                        </ul>
-                    </div>
-                </label>
-            </label>
-
-            <input type="checkbox" id="modal-contract-states" class="modal-toggle" />
-            <label for="modal-contract-states" class="modal cursor-pointer">
-                <label class="modal-box !w-11/12 !max-w-5xl" for="">
-                    <div>
-                        <div class="flex items-center justify-between px-3 pt-2 mb-4">
-                            <div class="text-lg">{{ $t('cosmwasm.contract_states') }}</div>
-                            <label for="modal-contract-states" class="btn btn-sm btn-circle">✕</label>
-                        </div>
-                        <div class="overflow-auto">
-                            <JsonViewer
-                                :value="state.models?.map(v => ({ key: format.hexToString(v.key), value: JSON.parse(format.base64ToString(v.value)) })) || ''"
-                                :theme="baseStore.theme || 'dark'" style="background: transparent;" copyable boxed sort
-                                :expand-depth="5" />
-                            <PaginationBar :limit="pageRequest.limit" :total="state.pagination?.total"
-                                :callback="pageloadState" />
-                        </div>
-                    </div>
-                </label>
-            </label>
+        <div v-if="tab === 'execute' || tab === 'query'" class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+            <div class="flex items-center justify-between px-3 pt-2 mb-4">
+                <div class="text-lg font-semibold">{{ $t('cosmwasm.result') }}</div>
+            </div>
+            <JsonViewer :value="result" :theme="baseStore.theme" style="background: transparent;" copyable boxed sort
+                :expand-depth="5" />
         </div>
+
     </div>
 </template>

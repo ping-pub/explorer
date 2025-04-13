@@ -117,7 +117,7 @@ export interface WasmRequestRegistry extends AbstractRegistry {
       );
       let re = /`(\w+)`/g
       let x = String(message).match(re)
-      return code === 2 ? x?.map(e => e.replaceAll('`', '')) : null
+      return code === 2 && x ? x.map(e => e.replaceAll('`', '')) : []
     }
     getWasmContractStates(address: string, pr: PageRequest) {    
       if(!pr) pr = new PageRequest()
