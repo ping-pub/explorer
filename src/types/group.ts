@@ -1,3 +1,5 @@
+import type { PaginatedResponse } from "./common";
+
 export interface Group {
     admin: string,
     created_at: string,
@@ -41,3 +43,12 @@ export interface GroupVote {
     submit_time: string,
     voter: string
 }
+
+export interface PaginatedGroups extends PaginatedResponse {
+  groups: Group[];
+}
+
+export interface PaginatedGroupProposals extends PaginatedResponse {
+    proposals: GroupProposal[];
+  }
+  

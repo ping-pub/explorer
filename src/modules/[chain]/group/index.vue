@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" setup>
 import { fromBech32, fromHex, toBech32 } from '@cosmjs/encoding';
 
 let x = toBech32("neutronvaloper1", fromHex("3363E8F97B02ECC00289E72173D827543047ACDA"))
@@ -8,5 +8,5 @@ console.log(x)
 console.log(op)
 </script>
 <template>
-    <div>address: {{ x }}</div>
+    <div>address: </div>
 </template>

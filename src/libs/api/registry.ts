@@ -9,8 +9,9 @@ import type {
   GroupProposal,
   GroupTallyResult,
   NodeInfo,
-  PageResponse,
   PaginabledAccounts,
+  PaginatedGroupProposals,
+  PaginatedGroups,
   PaginatedIBCChannels,
   PaginatedIBCConnections,
   PaginatedTendermintValidator,
@@ -130,12 +131,12 @@ export interface RequestRegistry extends AbstractRegistry {
 
   params: Request<{param: any}>;
 
-  group_groups: Request<PageResponse<Group>>;
-  group_groups_by_admin: Request<PageResponse<Group>>;
-  group_groups_by_member: Request<PageResponse<Group>>;
+  group_groups: Request<PaginatedGroups>;
+  group_groups_by_admin: Request<PaginatedGroups>;
+  group_groups_by_member: Request<PaginatedGroups>;
   group_proposal: Request<{ proposal: GroupProposal }>;
   group_proposal_tally: Request<{ tally: GroupTallyResult }>;
-  group_proposals_by_group_policy: Request<PageResponse<GroupProposal>>;
+  group_proposals_by_group_policy: Request<PaginatedGroupProposals>;
 
   tx_txs: Request<PaginatedTxs>;
   tx_txs_block: Request<Tx>;
