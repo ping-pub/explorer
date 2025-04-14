@@ -1,6 +1,6 @@
 {
     "chain_name": "bfhevm_777-1",
-    "api": ["https://rest-testnet-bfhevm.xyz:443"],
+    "api": ["https://rest-testnet-bfhevm.xyz/swagger:443"],
     "rpc": ["https://rpc-bfhevm.xyz:8443"],
     "coingecko": "",
     "snapshot_provider": "",
