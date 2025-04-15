@@ -7,13 +7,11 @@ import { onMounted, ref } from 'vue';
 import { useWasmStore } from '../WasmStore';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { useRoute } from 'vue-router';
-import type { ContractInfo, PaginabledContractStates, PaginabledContracts } from '../types';
-import { post } from '@/libs';
+import type { ContractInfo, PaginabledContractStates } from '../types';
 
 import { JsonViewer } from "vue3-json-viewer"
 // if you used v1.0.5 or latster ,you should add import "vue3-json-viewer/dist/index.css"
 import "vue3-json-viewer/dist/index.css";
-import WasmVerification from '@/components/WasmVerification.vue';
 
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
@@ -152,8 +150,6 @@ const tab = ref('detail')
                 @click="tab = 'transaction'">Transactions</a>
             <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'query' }"
                 @click="tab = 'query'">Query</a>
-            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'execute' }"
-                @click="tab = 'execute'">Execute</a>
         </div>
 
         <div v-show="tab === 'detail'">
@@ -209,6 +205,11 @@ const tab = ref('detail')
                 <label for="wasm_clear_admin" class="btn btn-primary btn-xs text-xs mr-2"
                     @click="dialog.open('wasm_clear_admin', { contract: contractAddress })">
                     {{ $t('cosmwasm.btn_clear_admin') }}
+                </label>
+
+                <label for="wasm_execute_contract" class="btn btn-primary btn-xs text-xs mr-2"
+                    @click="dialog.open('wasm_execute_contract', { contract: contractAddress })">
+                    {{ $t('cosmwasm.btn_execute') }}
                 </label>
 
             </div>
