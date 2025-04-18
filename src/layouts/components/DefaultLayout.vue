@@ -215,7 +215,7 @@ const toggleMobileMenu = () => {
               </div>
             </a>
             <!-- "More" dropdown for additional nav items -->
-            <div v-if="moreNavItems.length > 0"
+            <div v-if="moreNavItems?.length > 0"
               class="dropdown dropdown-end flex align-center justify-center mr-5 border-solid border-b-1 border-success shadow-md rounded-md">
               <label tabindex="0"
                 class="btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-2 mr-5 text-primary"
