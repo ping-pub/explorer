@@ -325,13 +325,14 @@ export const useDashboard = defineStore('dashboard', {
       }
     },
     async loadingFromLocal() {
-      if(window.location.hostname.search("beta") > -1 ||  window.location.hostname.includes("localhost")) {
+      // if(window.location.hostname.search("beta") > -1 ||  window.location.hostname.includes("localhost")) {
       this.networkType = NetworkType.Testnet
-      }
+      // }
       const source: Record<string, LocalConfig> =
-        this.networkType === NetworkType.Mainnet
-          ? import.meta.glob('../../chains/mainnet/*.json', { eager: true })
-          : import.meta.glob('../../chains/testnet/*.json', { eager: true });
+        // this.networkType === NetworkType.Mainnet
+        //   ? import.meta.glob('../../chains/mainnet/*.json', { eager: true })
+        //   : 
+          import.meta.glob('../../chains/testnet/*.json', { eager: true });
       Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
         this.chains[x.chain_name] = fromLocal(x);
       });

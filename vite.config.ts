@@ -117,8 +117,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://explorer-pocket-poktroll-explorer-backend-1:3005',
-        // target: 'http://localhost:3005',
+        // target: 'http://explorer-pocket-poktroll-explorer-backend-1:3005',
+        target: 'http://localhost:3005',
         changeOrigin: true,
       },
     },
