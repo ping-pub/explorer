@@ -42,6 +42,34 @@ const transactionStats = ref({
   history: []
 });
 
+// Add computed properties for network status metrics
+const currentBlockHeight = computed(() => {
+  return base.latest?.block?.header?.height || '0';
+});
+
+const latestBlockTime = computed(() => {
+  return new Date(base.latest?.block?.header?.time || '0').toLocaleString();
+});
+
+const averageBlockTime = computed(() => {
+  return (base.blocktime / 1000).toFixed(1);
+});
+
+const averageTxPerBlock = computed(() => {
+  if (!base.recents || base.recents.length === 0) return '0.0';
+  
+  // Calculate this only once via computed property instead of in template
+  const totalTxs = base.recents.reduce((sum, block) => sum + (block.block?.data?.txs?.length || 0), 0);
+  return (totalTxs / Math.max(1, base.recents.length)).toFixed(1);
+});
+
+const activeValidatorsCount = computed(() => {
+  return String(base.latest?.block?.last_commit?.signatures.length || 0);
+});
+
+// Add loading state tracking
+const isNetworkStatusLoading = ref(true);
+
 const txChartOptions = ref({
   chart: {
     type: 'area',
@@ -134,6 +162,20 @@ const bufferSize = 5; // Number of additional items to render
 const ticking = ref(false); // For requestAnimationFrame throttling
 const blockScrollTimeout = ref<NodeJS.Timeout | null>(null);
 const txScrollTimeout = ref<NodeJS.Timeout | null>(null);
+const updateNetworkStatsTimeout = ref<NodeJS.Timeout | null>(null);
+
+// Add debounced update function for network stats
+function debouncedUpdateNetworkStats() {
+    if (updateNetworkStatsTimeout.value) {
+        clearTimeout(updateNetworkStatsTimeout.value);
+    }
+    
+    updateNetworkStatsTimeout.value = setTimeout(() => {
+        if (!isNetworkStatusLoading.value) {
+            loadNetworkStats();
+        }
+    }, 500); // 500ms debounce
+}
 
 // Add these methods for virtualization before the existing onMounted function
 function initVirtualLists() {
@@ -229,12 +271,18 @@ onMounted(async () => {
   walletStore.loadMyAsset();
   paramStore.handleAbciInfo();
   console.log("current chain", blockchain.current)
+  // Set loading state
+  isNetworkStatusLoading.value = true;
+  
   // Load transactions first
   await base.getAllTxs(blockchain.current?.transactionService);
 
   // Then load stats that depend on transaction data
   loadNetworkStats();
   loadTransactionHistory();
+  
+  // Mark network status as loaded
+  isNetworkStatusLoading.value = false;
   
   // Initialize virtual scrolling
   initVirtualLists();
@@ -427,7 +475,19 @@ const chartOptions = ref({
   }
 });
 
+// Add a cache expiration tracking
+const networkStatsCacheTime = ref(0);
+const CACHE_EXPIRATION_MS = 60000; // 1 minute cache
+
 async function loadNetworkStats() {
+    // Check cache - only reload if it's expired
+    const now = Date.now();
+    if (now - networkStatsCacheTime.value < CACHE_EXPIRATION_MS && 
+        networkStats.value.wallets > 0) {
+        console.log("Using cached network stats");
+        return;
+    }
+
     const pageRequest = new PageRequest();
     pageRequest.limit = 1;
 
@@ -446,6 +506,9 @@ async function loadNetworkStats() {
         networkStats.value.gateways = parseInt(gatewaysData.pagination?.total || 0);
         networkStats.value.services = parseInt(servicesData.pagination?.total || 0);
         networkStats.value.wallets = parseInt(accountsData.pagination?.total || '0');
+
+        // Update cache timestamp
+        networkStatsCacheTime.value = now;
 
         generateHistoricalData();
     } catch (error) {
@@ -689,6 +752,10 @@ onBeforeUnmount(() => {
     if (txScrollTimeout.value) {
         clearTimeout(txScrollTimeout.value);
     }
+    
+    if (updateNetworkStatsTimeout.value) {
+        clearTimeout(updateNetworkStatsTimeout.value);
+    }
 });
 
 // Add watchers to update virtual lists when data changes
@@ -698,6 +765,20 @@ watch(() => base.recents.length, () => {
 
 watch(() => base.allTxs.length, () => {
     updateVisibleTxs();
+});
+
+// Add watchers for network status data to trigger updates when dependencies change
+watch(() => base.latest?.block?.header?.height, (newVal, oldVal) => {
+    if (newVal && newVal !== oldVal) {
+        debouncedUpdateNetworkStats();
+    }
+});
+
+watch(() => base.blocktime, (newVal, oldVal) => {
+    if (newVal && newVal !== oldVal) {
+        // Update computed property will automatically update
+        console.log("Block time changed, updating network stats");
+    }
 });
 
 </script>
@@ -712,7 +793,12 @@ watch(() => base.allTxs.length, () => {
           <div class="text-lg font-semibold text-main">Network Status</div>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
+        <!-- Loading spinner while data is being fetched -->
+        <div v-if="isNetworkStatusLoading" class="flex justify-center items-center py-8">
+          <div class="loading loading-spinner loading-md text-info"></div>
+        </div>
+        
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
           <!-- Left Column: Block Height and Block Time Cards -->
           <div class="grid grid-cols-1 gap-4">
             <!-- Block Height Card -->
@@ -722,8 +808,8 @@ watch(() => base.allTxs.length, () => {
                 <div class="text-sm font-medium text-secondary">Current Block Height</div>
               </div>
               <div class="text-3xl font-bold text-main flex items-center">
-                {{ base.latest?.block?.header?.height || '0' }}
-                <a :href="`/${chain}/blocks/${base.latest?.block?.header?.height}`"
+                {{ currentBlockHeight }}
+                <a :href="`/${chain}/blocks/${currentBlockHeight}`"
                    class="ml-2 text-sm inline-block text-info hover:text-info/70 transition-colors duration-200">
                   <Icon icon="mdi:arrow-right-circle" class="text-xl" />
                 </a>
@@ -737,7 +823,7 @@ watch(() => base.allTxs.length, () => {
                 <div class="text-sm font-medium text-secondary">Latest Block Time</div>
               </div>
               <div class="text-xl font-bold text-main flex items-center">
-                {{ new Date(base.latest?.block?.header?.time || '0').toLocaleString() }}
+                {{ latestBlockTime }}
               </div>
             </div>
           </div>
@@ -762,7 +848,7 @@ watch(() => base.allTxs.length, () => {
                   <Icon icon="mdi:timer-outline" class="text-info mr-2" />
                   <span class="text-sm text-secondary">Avg Block Time (24h)</span>
                 </div>
-                <div class="text-lg font-bold">{{ (base.blocktime / 1000).toFixed(1) }}s</div>
+                <div class="text-lg font-bold">{{ averageBlockTime }}s</div>
               </div>
             </div>
             
@@ -774,12 +860,7 @@ watch(() => base.allTxs.length, () => {
                   <span class="text-sm text-secondary">Avg TX Per Block (24h)</span>
                 </div>
                 <div class="text-lg font-bold">
-                  {{
-                    base.recents && base.recents.length > 0
-                      ? (base.recents.reduce((sum, block) => sum + (block.block?.data?.txs?.length || 0), 0) / Math.max(1,
-                        base.recents.length)).toFixed(1)
-                      : '0.0'
-                  }}
+                  {{ averageTxPerBlock }}
                 </div>
               </div>
             </div>
@@ -975,7 +1056,7 @@ watch(() => base.allTxs.length, () => {
               <Icon icon="mdi:shield-check" class="mr-1 text-secondary" />
               <span>Active Validators</span>
             </div>
-            <div class="text-xl font-medium mt-1">{{ String(base?.latest?.block?.last_commit?.signatures.length || 0) }}</div>
+            <div class="text-xl font-medium mt-1">{{ activeValidatorsCount }}</div>
           </div>
         </div>
       </div>
