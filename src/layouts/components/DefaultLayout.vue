@@ -141,6 +141,20 @@ const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value;
 };
 
+// check if browser is safari
+const isSafari = computed(() => {
+  return navigator.userAgent.indexOf('Safari') > -1 && navigator.userAgent.indexOf('Chrome') === -1;
+});
+console.log("isSafari.value", isSafari.value)
+
+// Handle Safari-specific chain change
+const handleSafariChainChange = (event: Event) => {
+  const select = event.target as HTMLSelectElement;
+  if (select.value) {
+    window.location.href = `/${select.value}`;
+  }
+};
+
 </script>
 
 <template>
@@ -158,7 +172,24 @@ const toggleMobileMenu = () => {
                 POCKET
               </h1>
             </a>
-            <div
+            
+            <!-- Safari-specific select element for chain selection -->
+            <div v-if="isSafari" class="mr-5">
+              <select 
+                class="safari-select px-3 py-1 border-2 border-info rounded-md bg-base-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 cursor-pointer" 
+                @change="handleSafariChainChange"
+                :value="currentChain?.chainName">
+                <option v-for="chain in Object.values(dashboard.chains).sort((a,b)=>{
+                  return a.prettyName.localeCompare(b.prettyName)
+                })" :key="chain.chainName" :value="chain.chainName" 
+                :selected="currentChain?.chainName === chain.chainName">
+                  {{ chain.prettyName }}
+                </option>
+              </select>
+            </div>
+            
+            <!-- Standard dropdown for non-Safari browsers -->
+            <div v-else
               class="dropdown dropdown-end flex align-center justify-center mr-5 border-solid border-2 border-info shadow-md rounded-md">
               <label tabindex="0" class="btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-2 mr-5"
                 @click="toggleDropdown">
@@ -292,26 +323,45 @@ const toggleMobileMenu = () => {
               <div class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                 Select Blockchain
               </div>
-              <div class="flex items-center justify-between rounded-lg border border-info p-2">
-                <div class="flex items-center">
-                  <span class="text-base font-medium text-gray-700 dark:text-gray-200">{{ currentChain?.prettyName
-                  }}</span>
-                </div>
-                <button @click="toggleMobileChainDropdown" class="p-1">
-                  <Icon icon="mdi-chevron-down" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                </button>
+
+              <!-- Safari-specific select element for mobile -->
+              <div v-if="isSafari" class="mb-1">
+                <select 
+                  class="safari-select w-full px-3 py-2 border border-info rounded-lg bg-base-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 cursor-pointer"
+                  @change="handleSafariChainChange"
+                  :value="currentChain?.chainName">
+                  <option v-for="chain in Object.values(dashboard.chains).sort((a,b)=>{
+                    return a.prettyName.localeCompare(b.prettyName)
+                  })" :key="chain.chainName" :value="chain.chainName" 
+                  :selected="currentChain?.chainName === chain.chainName">
+                    {{ chain.prettyName }}
+                  </option>
+                </select>
               </div>
-              <div v-if="mobileChainDropdownOpen" class="mt-1 rounded-md bg-white dark:bg-gray-800 shadow-lg">
-                <div class="py-1 max-h-60 overflow-auto">
-                  <div v-for="chain in dashboard.chains" :key="chain.chainName"
-                    @click="mobileMenuOpen = false; mobileChainDropdownOpen = false"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
-                    <a :href="`/${chain.chainName}`" class="block w-full"
-                      :class="{ 'font-bold': currentChain?.chainName === chain.chainName }">
-                      <div class="capitalize text-gray-700 dark:text-gray-200">
-                        {{ chain.prettyName }}
-                      </div>
-                    </a>
+
+              <!-- Standard dropdown for non-Safari browsers -->
+              <div v-else>
+                <div class="flex items-center justify-between rounded-lg border border-info p-2">
+                  <div class="flex items-center">
+                    <span class="text-base font-medium text-gray-700 dark:text-gray-200">{{ currentChain?.prettyName
+                    }}</span>
+                  </div>
+                  <button @click="toggleMobileChainDropdown" class="p-1">
+                    <Icon icon="mdi-chevron-down" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                  </button>
+                </div>
+                <div v-if="mobileChainDropdownOpen" class="mt-1 rounded-md bg-white dark:bg-gray-800 shadow-lg">
+                  <div class="py-1 max-h-60 overflow-auto">
+                    <div v-for="chain in dashboard.chains" :key="chain.chainName"
+                      @click="mobileMenuOpen = false; mobileChainDropdownOpen = false"
+                      class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
+                      <a :href="`/${chain.chainName}`" class="block w-full"
+                        :class="{ 'font-bold': currentChain?.chainName === chain.chainName }">
+                        <div class="capitalize text-gray-700 dark:text-gray-200">
+                          {{ chain.prettyName }}
+                        </div>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -431,5 +481,21 @@ const toggleMobileMenu = () => {
   /* IE and Edge */
   scrollbar-width: none;
   /* Firefox */
+}
+
+/* Safari-specific select styling */
+.safari-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1em;
+  padding-right: 2.5rem!important;
+  font-size: 0.8rem;
+  text-transform: unset !important;
+}
+
+.dark .safari-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23e2e8f0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
 }
 </style>
