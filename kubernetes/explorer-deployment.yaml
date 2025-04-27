@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: explorer-deployment
+  namespace: default  # (will be replaced dynamically)
+  labels:
+    app: explorer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: explorer
+  template:
+    metadata:
+      labels:
+        app: explorer
+    spec:
+      containers:
+        - name: explorer
+          image: yourdockerhubusername/explorer-app:latest  # will be replaced dynamically
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: config-volume
+              mountPath: /usr/share/nginx/html/chains/mainnet
+              readOnly: true
+      volumes:
+        - name: config-volume
+          configMap:
+            name: explorer-config

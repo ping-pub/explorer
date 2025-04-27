@@ -1,0 +1,102 @@
+name: Deploy Explorer App
+
+on:
+  workflow_dispatch:
+    inputs:
+      RPC_ENDPOINTS:
+        description: 'JSON array of RPC endpoints'
+        required: true
+        default: '[{"provider":"primenode","address":"http://node1.devnet.verana.network:26657"}]'
+      API_ENDPOINTS:
+        description: 'JSON array of API endpoints'
+        required: true
+        default: '[{"provider":"primenode","address":"http://node1.devnet.verana.network:1317"}]'
+      CLUSTER_NODE:
+        description: 'Cluster node name'
+        required: true
+        default: 'cluster-utc-node-07efe5'
+
+env:
+  DH_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+  DH_TOKEN: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  KUBECONFIG: ${{ secrets.OVH_KUBECONFIG }}
+  IMAGE_NAME: 'explorer-app'
+  IMAGE_TAG: 'latest'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build project
+        run: yarn run vue-cli-service build
+
+      - name: Update verana.json with Input Values
+        run: |
+          mkdir -p ./chains/mainnet
+          jq --argjson rpc "${{ github.event.inputs.RPC_ENDPOINTS }}" \
+             --argjson api "${{ github.event.inputs.API_ENDPOINTS }}" \
+             '.rpc = $rpc | .api = $api' \
+             ./chains/mainnet/verana.json > ./chains/mainnet/verana-updated.json
+          mv ./chains/mainnet/verana-updated.json ./chains/mainnet/verana.json
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ env.DH_USERNAME }}
+          password: ${{ env.DH_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ env.DH_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+      - name: Determine Branch Name
+        id: determine-branch
+        run: |
+          if [ "${{ github.ref_name }}" == "main" ]; then
+            echo "BRANCH_NAME=vna-devnet-main" >> $GITHUB_ENV
+          else
+            BRANCH_NAME=$(echo "vna-devnet-${{ github.ref_name }}" | sed 's/\//-/g')
+            echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          fi
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'v1.29.9'
+
+      - name: Create Namespace
+        run: |
+          echo "$KUBECONFIG" > k8s_config
+          export KUBECONFIG=k8s_config
+          kubectl create namespace ${{ env.BRANCH_NAME }} || true
+
+      - name: Deploy ConfigMap
+        run: |
+          echo "$KUBECONFIG" > k8s_config
+          export KUBECONFIG=k8s_config
+          kubectl apply -f kubernetes/explorer-config.yaml --namespace=${{ env.BRANCH_NAME }}
+
+      - name: Deploy Explorer App
+        run: |
+          echo "$KUBECONFIG" > k8s_config
+          export KUBECONFIG=k8s_config
+          sed -i "s|yourdockerhubusername/explorer-app:latest|${{ env.DH_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}|" ./kubernetes/explorer-deployment.yaml
+          kubectl apply -f kubernetes/explorer-deployment.yaml --namespace=${{ env.BRANCH_NAME }}
+
+      - name: Deploy Explorer LoadBalancer Service (optional)
+        run: |
+          echo "$KUBECONFIG" > k8s_config
+          export KUBECONFIG=k8s_config
+          kubectl apply -f kubernetes/explorer-service.yaml --namespace=${{ env.BRANCH_NAME }}
