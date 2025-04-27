@@ -3,6 +3,14 @@ name: Deploy Explorer App
 on:
   workflow_dispatch:
     inputs:
+      CHAIN_NAME:
+        description: 'Chain name'
+        required: true
+        default: 'verana'
+      CHAIN_ID:
+        description: 'Chain ID'
+        required: true
+        default: 'vna-devnet-1'
       RPC_ENDPOINTS:
         description: 'JSON array of RPC endpoints'
         required: true
