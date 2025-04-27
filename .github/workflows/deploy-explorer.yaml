@@ -45,7 +45,7 @@ jobs:
         run: yarn install
 
       - name: Build project
-        run: yarn run vue-cli-service build
+        run: yarn build
 
       - name: Update verana.json with Input Values
         run: |
