@@ -50,10 +50,16 @@ jobs:
       - name: Update verana.json with Input Values
         run: |
           mkdir -p ./chains/mainnet
-          jq --argjson rpc "${{ github.event.inputs.RPC_ENDPOINTS }}" \
-             --argjson api "${{ github.event.inputs.API_ENDPOINTS }}" \
-             '.rpc = $rpc | .api = $api' \
-             ./chains/mainnet/verana.json > ./chains/mainnet/verana-updated.json
+          jq --arg rpc_raw '${{ github.event.inputs.RPC_ENDPOINTS }}' \
+             --arg api_raw '${{ github.event.inputs.API_ENDPOINTS }}' \
+             --arg chain_name "${{ github.event.inputs.CHAIN_NAME }}" \
+             --arg chain_id "${{ github.event.inputs.CHAIN_ID }}" \
+             '
+             .rpc = ($rpc_raw | fromjson) |
+             .api = ($api_raw | fromjson) |
+             .chain_name = $chain_name |
+             .chain_id = $chain_id
+             ' ./chains/mainnet/verana.json > ./chains/mainnet/verana-updated.json
           mv ./chains/mainnet/verana-updated.json ./chains/mainnet/verana.json
 
       - name: Log in to DockerHub
