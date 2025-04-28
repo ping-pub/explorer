@@ -93,7 +93,7 @@ jobs:
       - name: Set up kubeconfig
         run: |
           echo "${{ env.KUBECONFIG_RAW }}" > k8s_config
-          export KUBECONFIG=$PWD/k8s_config
+          echo "KUBECONFIG=$PWD/k8s_config" >> $GITHUB_ENV
 
       - name: Create Namespace
         run: |
