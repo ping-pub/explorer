@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: explorer-deployment
-  namespace: default  # (will be replaced dynamically)
+  # namespace: default  # (will be replaced dynamically)
   labels:
     app: explorer
 spec:

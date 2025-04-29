@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: explorer-config
-  namespace: default  # (this will be overridden by --namespace=${{ env.BRANCH_NAME }})
+  # namespace: default  # (this will be overridden by --namespace=${{ env.BRANCH_NAME }})
 data:
   verana.json: |
     {
