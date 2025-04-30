@@ -8,7 +8,7 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - explorer.vna-test-1.devnet.verana.network
+        - explorer.vna-devnet-1.devnet.verana.network
       secretName: explorer-ingress.network-cert
   rules:
     - host: explorer.vna-devnet-1.devnet.verana.network
