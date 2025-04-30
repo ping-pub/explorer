@@ -111,3 +111,7 @@ jobs:
       - name: Deploy Explorer LoadBalancer Service (optional)
         run: |
           kubectl apply -f kubernetes/explorer-service.yaml --namespace=${{ env.BRANCH_NAME }}
+
+      - name: Deploy Explorer Ingress
+        run: |
+          kubectl apply -f kubernetes/explorer-ingress.yaml --namespace=${{ env.BRANCH_NAME }}
