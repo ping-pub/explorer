@@ -11,7 +11,7 @@ spec:
         - explorer.vna-test-1.devnet.verana.network
       secretName: explorer-ingress.network-cert
   rules:
-    - host: explorer.vna-test-1.devnet.verana.network
+    - host: explorer.vna-devnet-1.devnet.verana.network
       http:
         paths:
           - path: /
