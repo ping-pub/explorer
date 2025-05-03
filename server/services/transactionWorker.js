@@ -10,15 +10,24 @@ dotenv.config();
 // Worker data from parent thread
 const { rpcName, rpcUrl, batchSize } = workerData;
 
-// Create a dedicated Redis connection for this worker
+// Create a dedicated Redis connection for this worker with improved settings
 const redisOptions = {
   host: process.env.REDIS_URL ? new URL(process.env.REDIS_URL).hostname : '127.0.0.1',
   port: process.env.REDIS_URL ? parseInt(new URL(process.env.REDIS_URL).port || '6379', 10) : 6379,
   password: process.env.REDIS_PASSWORD || undefined,
   db: parseInt(process.env.REDIS_DB || '0', 10),
+  connectTimeout: 10000,
+  maxRetriesPerRequest: 3,
+  retryStrategy: (times) => {
+    const delay = Math.min(Math.exp(times) * 50, 10000);
+    return delay;
+  }
 };
 
 const redis = new Redis(redisOptions);
+
+// Constants for transaction data management
+const TX_EXPIRE_TIME = 60 * 60 * 24 * 30; // 30 days in seconds
 
 // Log handler to send logs back to main thread
 function log(message) {
@@ -126,6 +135,9 @@ async function processTransactions(blockData, height) {
       Object.entries(txData).forEach(([key, value]) => {
         pipeline.hset(`tx:${rpcName}:${txHash}`, key, value);
       });
+      
+      // Set expiration for transaction data to manage Redis memory
+      pipeline.expire(`tx:${rpcName}:${txHash}`, TX_EXPIRE_TIME);
       
       // Add to the sorted set of transactions by height for fast range queries
       pipeline.zadd(`chain:${rpcName}:txs`, height, txHash);

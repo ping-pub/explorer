@@ -129,7 +129,6 @@ export const useStakingStore = defineStore('stakingStore', {
     async fetchAllKeyRotation(chain_id: string) {
       for(const val of this.validators) {
         const { prefix } = fromBech32(val.operator_address)
-        console.log(val, prefix)
         await this.fetchKeyRotation(chain_id, pubKeyToValcons(val.consensus_pubkey, prefix.replace('valoper','valcons')))
       }
     },

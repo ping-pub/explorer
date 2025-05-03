@@ -7,13 +7,29 @@ services:
       - "6379:6379"
     volumes:
       - redis-data:/data
-    command: redis-server --appendonly yes --save 60 1 --loglevel warning
+    command: >
+      redis-server 
+      --appendonly yes 
+      --save 900 1 
+      --save 300 10 
+      --save 60 10000 
+      --maxmemory 2gb 
+      --maxmemory-policy volatile-lru 
+      --loglevel warning 
+      --tcp-keepalive 300 
+      --lazyfree-lazy-eviction yes
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        compress: "true"
 
   api:
     build:
@@ -36,6 +52,12 @@ services:
       redis:
         condition: service_healthy
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        compress: "true"
 
 volumes:
   redis-data: 

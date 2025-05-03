@@ -10,6 +10,7 @@ class TransactionWorkerPool {
     this.rpcEndpoints = getRpcEndpoints();
     this.concurrency = parseInt(process.env.WORKER_CONCURRENCY || '2', 2);
     this.batchSize = parseInt(process.env.HISTORICAL_BATCH_SIZE || '50', 10);
+    this.healthCheckInterval = null;
   }
 
   /**
@@ -19,6 +20,14 @@ class TransactionWorkerPool {
     if (this.rpcEndpoints.length === 0) {
       console.error('No RPC endpoints configured, cannot start workers');
       return;
+    }
+
+    // First, check Redis connection
+    try {
+      await this.checkRedisHealth();
+    } catch (error) {
+      console.error('Redis health check failed during initialization:', error);
+      throw new Error('Failed to connect to Redis. Please check Redis configuration and ensure it is running.');
     }
 
     for (const rpc of this.rpcEndpoints) {
@@ -60,6 +69,9 @@ class TransactionWorkerPool {
         console.error(`Failed to start worker for RPC endpoint ${rpc.name}:`, error);
       }
     }
+
+    // Start periodic health checks
+    this.startHealthChecks();
   }
 
   /**
@@ -115,10 +127,67 @@ class TransactionWorkerPool {
   }
 
   /**
+   * Check Redis health and connection
+   */
+  async checkRedisHealth() {
+    try {
+      const ping = await redis.ping();
+      if (ping !== 'PONG') {
+        throw new Error('Redis ping did not return PONG');
+      }
+      
+      // Check memory usage
+      const info = await redis.info('memory');
+      console.log('Redis memory info:', info);
+      
+      return true;
+    } catch (error) {
+      console.error('Redis health check failed:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Start periodic health checks for Redis
+   */
+  startHealthChecks() {
+    // Clear any existing interval
+    if (this.healthCheckInterval) {
+      clearInterval(this.healthCheckInterval);
+    }
+    
+    // Run health check every 5 minutes
+    this.healthCheckInterval = setInterval(async () => {
+      console.log('Running Redis health check...');
+      
+      const isHealthy = await this.checkRedisHealth();
+      if (!isHealthy) {
+        console.error('Redis health check failed, attempting to recover...');
+        // Try to flush some data if necessary
+        try {
+          // Check if we need to trim some data (optional)
+          const txsSize = await redis.zcard('chain:*:txs');
+          console.log(`Current transactions in Redis: ${txsSize}`);
+          
+          // Log the status but don't take action automatically
+        } catch (error) {
+          console.error('Failed to check Redis data size:', error);
+        }
+      }
+    }, 5 * 60 * 1000); // 5 minutes
+  }
+
+  /**
    * Shutdown all workers
    */
   async shutdown() {
     console.log('Shutting down all transaction workers...');
+    
+    // Clear health check interval
+    if (this.healthCheckInterval) {
+      clearInterval(this.healthCheckInterval);
+      this.healthCheckInterval = null;
+    }
     
     const promises = [];
     for (const [name, worker] of this.workers.entries()) {
