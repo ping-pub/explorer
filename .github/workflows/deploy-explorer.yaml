@@ -60,6 +60,7 @@ jobs:
              .chain_name = $chain_name |
              .chain_id = $chain_id
              ' ./chains/mainnet/verana.json > ./chains/mainnet/verana-updated.json
+          cat ./chains/mainnet/verana-updated.json
           mv ./chains/mainnet/verana-updated.json ./chains/mainnet/verana.json
 
       - name: Log in to DockerHub
