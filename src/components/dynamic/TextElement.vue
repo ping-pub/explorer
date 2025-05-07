@@ -3,7 +3,7 @@ import { isBech32Address } from '@/libs/utils';
 import { useBlockchain, useFormatter } from '@/stores';
 import MdEditor from 'md-editor-v3';
 import { computed, onMounted, ref } from 'vue';
-import nameMatcha from '@leapwallet/name-matcha'
+import nameMatcha from '@leapwallet/name-matcha';
 import { fromBase64, toHex } from '@cosmjs/encoding';
 
 const chainStore = useBlockchain()
