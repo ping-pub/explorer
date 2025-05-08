@@ -5,8 +5,13 @@ import type {
   Coin,
   ConnectionWithProof,
   DenomTrace,
+  Group,
+  GroupProposal,
+  GroupTallyResult,
   NodeInfo,
   PaginabledAccounts,
+  PaginatedGroupProposals,
+  PaginatedGroups,
   PaginatedIBCChannels,
   PaginatedIBCConnections,
   PaginatedTendermintValidator,
@@ -125,6 +130,13 @@ export interface RequestRegistry extends AbstractRegistry {
   base_tendermint_validatorsets_height: Request<PaginatedTendermintValidator>;
 
   params: Request<{param: any}>;
+
+  group_groups: Request<PaginatedGroups>;
+  group_groups_by_admin: Request<PaginatedGroups>;
+  group_groups_by_member: Request<PaginatedGroups>;
+  group_proposal: Request<{ proposal: GroupProposal }>;
+  group_proposal_tally: Request<{ tally: GroupTallyResult }>;
+  group_proposals_by_group_policy: Request<PaginatedGroupProposals>;
 
   tx_txs: Request<PaginatedTxs>;
   tx_txs_block: Request<Tx>;

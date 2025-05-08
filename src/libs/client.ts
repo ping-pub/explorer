@@ -1,4 +1,4 @@
-import { fetchData } from '@/libs';
+import { fetchData, get } from '@/libs';
 import { DEFAULT } from '@/libs';
 import {
   adapter,
@@ -29,6 +29,13 @@ export class BaseRestClient<R extends AbstractRegistry> {
       url = url.replace(`{${k}}`, args[k] || '');
     });
     return fetchData<T>(url, adapter||request.adapter);
+  }
+  async get<T>(request: Request<T>, args: Record<string, any>, query = '' ) {
+    let url = `${request.url.startsWith("http")?'':this.endpoint}${request.url}${query}`;
+    Object.keys(args).forEach((k) => {
+      url = url.replace(`{${k}}`, args[k] || '');
+    });
+    return get(url);
   }
 }
 

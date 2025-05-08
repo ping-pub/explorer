@@ -123,6 +123,7 @@ async function initSnap() {
                 },
             },
         ],
+        features: chain.keplrFeatures || [],
     }, null, '\t')
 }
 

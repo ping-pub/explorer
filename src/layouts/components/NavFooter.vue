@@ -14,8 +14,14 @@
         href="https://ping.pub"
         target="_blank"
         rel="noopener noreferrer"
-        >Ping.pub </a
-      >&nbsp;customization by MANTRA
+        >Ping.pub</a
+      >&nbsp;-&nbsp;customization by&nbsp;
+      <a 
+        class="link link-primary no-underline"
+        href="https://mantrachain.io"
+        target="_blank"
+        rel="noopener noreferrer"
+        >MANTRA</a>
     </div>
     <div
       class="hidden md:!block"
