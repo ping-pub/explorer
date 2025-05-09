@@ -7,6 +7,7 @@ import { onMounted } from 'vue';
 
 const error = ref("")
 const conf = ref("")
+const evmConf = ref<string | null>(null)
 const dashboard = useDashboard()
 const selected = ref({} as ChainConfig)
 const wallet = ref("leap")
@@ -90,6 +91,11 @@ async function initParamsForKeplr() {
         },
         features: chain.keplrFeatures || [],
     }, null, '\t')
+
+  // Reference: https://docs.keplr.app/api/multi-ecosystem-support/evm
+  if (chain.evm) {
+    evmConf.value = JSON.stringify(chain.evm, null, '\t')
+  }
 }
 
 async function initSnap() {
@@ -135,15 +141,42 @@ function suggest() {
       window.leap.experimentalSuggestChain(JSON.parse(conf.value)).catch(e => {
         error.value = e
       })
+
+      // Reference: https://docs.keplr.app/api/multi-ecosystem-support/evm#example-usage
+      if (evmConf.value !== null) {
+        // @ts-ignore
+        window.leap.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [JSON.parse(evmConf.value)]
+        })// @ts-ignore
+          .catch(e => {
+          error.value = e
+          console.log(e);
+        })
+      }
     }
   } else if (wallet.value === "keplr") {
+    // One click suggest 2 chains
+    // @ts-ignore
+    if (window.keplr) {
+      // @ts-ignore
+      window.keplr.experimentalSuggestChain(JSON.parse(conf.value)).catch(e => {
+        error.value = e
+      })
+
+      // Reference: https://docs.keplr.app/api/multi-ecosystem-support/evm#example-usage
+      if (evmConf.value !== null) {
         // @ts-ignore
-        if (window.keplr) {
-            // @ts-ignore
-            window.keplr.experimentalSuggestChain(JSON.parse(conf.value)).catch(e => {
-                error.value = e
-            })
-        }
+        window.keplr.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [JSON.parse(evmConf.value)]
+        })// @ts-ignore
+          .catch(e => {
+          error.value = e
+          console.log(e);
+        })
+      }
+    }
     } else {
         suggestChain(JSON.parse(conf.value));
     }
@@ -177,6 +210,10 @@ function suggest() {
         </div>
         <div class="text-main mt-5">
             <textarea v-model="conf" class="textarea textarea-bordered w-full" rows="15"></textarea>
+          <div v-if="evmConf !== null">
+            <hr />
+            <textarea v-model="evmConf" class="textarea textarea-bordered w-full" rows="15"></textarea>
+          </div>
         </div>
         <div class="mt-4 mb-4">
 

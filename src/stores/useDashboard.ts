@@ -93,6 +93,18 @@ export interface ChainConfig {
     address_limit: number;
     fees: string;
   };
+  // For EVM chain only
+  evm? : {
+    chainId: string;
+    chainName: string;
+    nativeCurrency: {
+      name: string;
+      symbol: string;
+      decimals: number;
+    }
+    rpcUrls: string[];
+    iconUrls: string[];
+  };
 }
 
 export interface LocalConfig {
@@ -132,6 +144,18 @@ export interface LocalConfig {
     ip_limit: number;
     address_limit: number;
     fees: string;
+  };
+  // For EVM chain only
+  evm? : {
+    chainId: string;
+    chainName: string;
+    nativeCurrency: {
+      name: string;
+      symbol: string;
+      decimals: number;
+    }
+    rpcUrls: string[];
+    iconUrls: string[];
   };
 }
 
@@ -193,6 +217,9 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
   conf.keplrPriceStep = lc.keplr_price_step;
   conf.themeColor = lc.theme_color;
   conf.faucet = lc.faucet;
+  if (lc.evm) {
+    conf.evm = lc.evm;
+  }
   return conf;
 }
 
