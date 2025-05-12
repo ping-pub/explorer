@@ -1,17 +1,17 @@
 {
-    "chain_name": "MANTRA-Canary-Net",
+    "chain_name": "MANTRA OMStead Canary",
     "coingecko": "om",
     "type": "testnet",
     "api": [
         {
             "provider": "MANTRA",
-            "address": "https://api.canary.mantrachain.dev"
+            "address": "https://api.evm-canary.mantrachain.dev"
         }
     ],
     "rpc": [
         {
             "provider": "MANTRA",
-            "address": "https://rpc.canary.mantrachain.dev"
+            "address": "https://rpc.evm-canary.mantrachain.dev"
         }
     ],
     "snapshot_provider": "",
@@ -29,5 +29,22 @@
             "coingecko_id": "mantra-dao",
             "logo": "../assets/images/coins/om.jpg"
         }
+    ],
+    "features": [
+      "dashboard",
+      "governance",
+      "staking",
+      "blocks", 
+      "transactions",
+      "uptime",
+      "ibc",
+      "supply",
+      "parameters",
+      "consensus",
+      "cosmwasm", 
+      "state-sync",
+      "widget",
+      "eth-address-gen", 
+      "eth-key-sign"
     ]
 }

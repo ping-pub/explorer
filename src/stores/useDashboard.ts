@@ -408,7 +408,14 @@ export const useDashboard = defineStore('dashboard', {
       }
       const mainnets: Record<string, LocalConfig> = import.meta.glob('../../chains/mainnet/*.json', { eager: true });
 
-      const source = { ...mainnets, ...testnets };
+      let source: Record<string, LocalConfig> = {};
+      if (network === NetworkType.Mainnet) {
+        source = mainnets;
+      } else if (network === NetworkType.Testnet) {
+        source = testnets;
+      } else {
+        source = { ...mainnets, ...testnets };
+      }
 
       Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
         config[x.chain_name] = fromLocal(x);

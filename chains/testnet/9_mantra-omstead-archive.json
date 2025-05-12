@@ -1,0 +1,54 @@
+{
+    "chain_name": "MANTRA OMStead (Archive)",
+    "coingecko": "om",
+    "type": "testnet",
+    "api": [
+        {
+            "provider": "MANTRA",
+            "address": "https://api.archive.omstead.io"
+        }
+    ],
+    "rpc": [
+        {
+            "provider": "MANTRA",
+            "address": "https://rpc.archive.omstead.io"
+        }
+    ],
+    "snapshot_provider": "",
+    "sdk_version": "0.50.0",
+    "coin_type": "60",
+    "min_tx_fee": "100000",
+    "addr_prefix": "mantra",
+    "logo": "https://assets.mantra.finance/images/networks/dukong.svg",
+    "theme_color": "#FF97D6",
+    "assets": [
+        {
+            "base": "uom",
+            "symbol": "OM",
+            "exponent": "6",
+            "coingecko_id": "mantra-dao",
+            "logo": "../assets/images/coins/om.jpg"
+        }
+    ],
+    "keplr_features": [
+      "cosmwasm",
+      "eth-address-gen", 
+      "eth-key-sign",
+      "eth-secp256k1-cosmos"
+    ],
+    "evm": {
+        "chainId": "0x1ED0",
+        "chainName": "MANTRA OMStead EVM",
+        "nativeCurrency": {
+            "name": "MANTRA",
+            "symbol": "OM",
+            "decimals": 18
+        },
+        "rpcUrls": [
+            "https://evm.archive.omstead.io"
+        ],
+        "iconUrls": [
+            "https://assets.mantra.finance/images/networks/dukong.svg"
+        ]
+    }
+}
