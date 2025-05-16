@@ -49,19 +49,8 @@ jobs:
 
       - name: Update verana.json with Input Values
         run: |
-          mkdir -p ./chains/mainnet
-          jq --arg rpc_raw '${{ github.event.inputs.RPC_ENDPOINTS }}' \
-             --arg api_raw '${{ github.event.inputs.API_ENDPOINTS }}' \
-             --arg chain_name "${{ github.event.inputs.CHAIN_NAME }}" \
-             --arg chain_id "${{ github.event.inputs.CHAIN_ID }}" \
-             '
-             .rpc = ($rpc_raw | fromjson) |
-             .api = ($api_raw | fromjson) |
-             .chain_name = $chain_name |
-             .chain_id = $chain_id
-             ' ./chains/mainnet/verana.json > ./chains/mainnet/verana-updated.json
-          cat ./chains/mainnet/verana-updated.json
-          mv ./chains/mainnet/verana-updated.json ./chains/mainnet/verana.json
+          echo "Updating verana.json..."
+          ./scripts/update-verana-json.sh "${{ github.event.inputs.RPC_ENDPOINTS }}" "${{ github.event.inputs.API_ENDPOINTS }}" "${{ github.event.inputs.CHAIN_NAME }}" "${{ github.event.inputs.CHAIN_ID }}"
 
       - name: Log in to DockerHub
         uses: docker/login-action@v2
@@ -79,12 +68,7 @@ jobs:
       - name: Determine Branch Name
         id: determine-branch
         run: |
-          if [ "${{ github.ref_name }}" == "main" ]; then
-            echo "BRANCH_NAME=vna-devnet-main" >> $GITHUB_ENV
-          else
-            BRANCH_NAME=$(echo "vna-devnet-${{ github.ref_name }}" | sed 's/\//-/g')
-            echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-          fi
+          echo "BRANCH_NAME=${{ github.event.inputs.CHAIN_NAME }}" >> $GITHUB_ENV
 
       - name: Set up kubectl
         uses: azure/setup-kubectl@v4
@@ -102,12 +86,15 @@ jobs:
 
       - name: Deploy ConfigMap
         run: |
-          kubectl apply -f kubernetes/explorer-config.yaml --namespace=${{ env.BRANCH_NAME }}
+          kubectl create configmap explorer-config \
+          --from-file=verana.json=./chains/mainnet/verana.json \
+          --namespace="$BRANCH_NAME" \
+          --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Deploy Explorer App
         run: |
-          sed -i "s|yourdockerhubusername/explorer-app:latest|${{ env.DH_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}|" ./kubernetes/explorer-deployment.yaml
-          kubectl apply -f kubernetes/explorer-deployment.yaml --namespace=${{ env.BRANCH_NAME }}
+          sed "s|yourdockerhubusername/explorer-app:latest|$DH_USERNAME/$IMAGE_NAME:$IMAGE_TAG|" ./kubernetes/explorer-deployment.yaml \
+          | kubectl apply -f - --namespace="$BRANCH_NAME"
 
       - name: Deploy Explorer LoadBalancer Service (optional)
         run: |
