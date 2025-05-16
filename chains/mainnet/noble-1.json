@@ -8,13 +8,13 @@
     "coin_type": "118",
     "min_tx_fee": "100000",
     "addr_prefix": "noble",
-    "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/stake.png",
+    "logo": "https://bryanlabs-public.s3.amazonaws.com/thornode/logos/noble-usdc.png",
     "theme_color": "#1a1a1a",
     "assets": [{
         "base": "uusdc",
         "symbol": "USDC",
         "exponent": "6",
         "coingecko_id": "usd-coin",
-        "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/stake.png"
+        "logo": "https://bryanlabs-public.s3.amazonaws.com/thornode/logos/noble-usdc.png"
     }]
 }

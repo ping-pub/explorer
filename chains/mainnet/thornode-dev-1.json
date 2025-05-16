@@ -8,13 +8,13 @@
     "coin_type": "931",
     "min_tx_fee": "0",
     "addr_prefix": "sthor",
-    "logo": "https://pbs.twimg.com/profile_images/1841550585864019968/n-un43Dh_400x400.jpg",
+    "logo": "https://bryanlabs-public.s3.amazonaws.com/thornode/logos/rujira-logo.jpg",
     "theme_color": "#1a1a1a",
     "assets": [{
         "base": "rune",
         "symbol": "RUNE",
         "exponent": "8",
         "coingecko_id": "thorchain",
-        "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/thorchain/images/thorchain.png"
+        "logo": "https://bryanlabs-public.s3.amazonaws.com/thornode/logos/thorchain-rune.png"
     }]
 }

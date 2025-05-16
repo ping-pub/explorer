@@ -40,13 +40,13 @@ const chainStore = useBlockchain()
 <template>
   <div class="">
     <div class="flex md:!flex-row flex-col items-center justify-center mb-6 mt-14 gap-2">
-      <img class="w-20 h-20 rounded-full" src="https://avatars.githubusercontent.com/u/41028774?s=96&v=4" alt="Bryanlabs Logo" />
+      <img class="w-20 h-20 rounded-full" src="https://pbs.twimg.com/profile_images/1841550585864019968/n-un43Dh_400x400.jpg" alt="Rujira Logo" />
       <h1 class="text-primary dark:invert text-3xl md:!text-6xl font-bold">
-        Bryanlabs Infrastructure
+        Rujira Infrastructure
       </h1>
     </div>
     <div class="text-center text-base">
-      <span class="inline-block bg-bryanlabs-green text-white rounded px-3 py-1 mb-2 font-semibold">bryanlabs is a professional node operator.</span>
+      <span class="inline-block bg-bryanlabs-green text-white rounded px-3 py-1 mb-2 font-semibold">Secure, Decentralized, and Cross-Chain Liquidity for the Cosmos Ecosystem.</span>
     </div>
     <div
       v-if="dashboard.status !== LoadingStatus.Loaded"

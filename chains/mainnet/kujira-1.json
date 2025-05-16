@@ -8,13 +8,13 @@
     "coin_type": "118",
     "min_tx_fee": "3400",
     "addr_prefix": "kujira",
-    "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kujira/images/kujira-chain-logo.png",
+    "logo": "https://bryanlabs-public.s3.amazonaws.com/thornode/logos/kujira-kuji.png",
     "theme_color": "#1a1a1a",
     "assets": [{
         "base": "ukuji",
         "symbol": "KUJI",
         "exponent": "6",
         "coingecko_id": "kujira",
-        "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kujira/images/kujira-chain-logo.png"
+        "logo": "https://bryanlabs-public.s3.amazonaws.com/thornode/logos/kujira-kuji.png"
     }]
 }

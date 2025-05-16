@@ -8,13 +8,13 @@
     "coin_type": "118",
     "min_tx_fee": "5000",
     "addr_prefix": "cosmos",
-    "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png",
+    "logo": "https://bryanlabs-public.s3.amazonaws.com/thornode/logos/gaia-atom.png",
     "theme_color": "#1a1a1a",
     "assets": [{
         "base": "uatom",
         "symbol": "ATOM",
         "exponent": "6",
         "coingecko_id": "cosmos",
-        "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png"
+        "logo": "https://bryanlabs-public.s3.amazonaws.com/thornode/logos/gaia-atom.png"
     }]
 }
