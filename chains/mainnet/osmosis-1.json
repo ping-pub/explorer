@@ -4,29 +4,33 @@
     "api": ["https://osmosis-api.bryanlabs.net"],
     "rpc": ["https://osmosis-rpc.bryanlabs.net"],
     "snapshot_provider": "",
-    "sdk_version": "0.46.1",
+    "sdk_version": "0.50.11",
     "coin_type": "118",
-    "min_tx_fee": "800",
+    "min_tx_fee": "2500",
     "addr_prefix": "osmo",
-    "logo": "/logos/osmosis.jpg",
-    "theme_color": "#812cd6",
-    "assets": [{
-        "base": "uosmo",
-        "symbol": "OSMO",
-        "exponent": "6",
-        "coingecko_id": "osmosis", 
-        "logo": "/logos/osmosis.jpg"
-    },{
-        "base": "uion",
-        "symbol": "ION",
-        "exponent": "6",
-        "coingecko_id": "ion", 
-        "logo": "/logos/osmosis.jpg"
-    },{
-        "base": "usomm",
-        "symbol": "SOMM",
-        "exponent": "6",
-        "coingecko_id": "somm", 
-        "logo": ""
-    }]
+    "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png",
+    "theme_color": "#760dbb",
+    "assets": [
+        {
+            "base": "uosmo",
+            "symbol": "OSMO",
+            "exponent": "6",
+            "coingecko_id": "osmosis",
+            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png"
+        },
+        {
+            "base": "uion",
+            "symbol": "ION",
+            "exponent": "6",
+            "coingecko_id": "ion",
+            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png"
+        },
+        {
+            "base": "usomm",
+            "symbol": "SOMM",
+            "exponent": "6",
+            "coingecko_id": "somm",
+            "logo": ""
+        }
+    ]
 }

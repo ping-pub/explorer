@@ -2,19 +2,19 @@
     "chain_name": "rujira",
     "coingecko": "thorchain",
     "api": ["https://thornode-devnet-api.bryanlabs.net"],
-    "rpc": ["https://thornode-devnet.bryanlabs.net"],
+    "rpc": ["https://thornode-devnet-rpc.bryanlabs.net"],
     "snapshot_provider": "",
-    "sdk_version": "0.50.",
-    "coin_type": "118",
-    "min_tx_fee": "800",
+    "sdk_version": "v0.50.x",
+    "coin_type": "931",
+    "min_tx_fee": "0",
     "addr_prefix": "sthor",
-    "logo": "/logos/rujira.jpg",
-    "theme_color": "#812cd6",
+    "logo": "https://pbs.twimg.com/profile_images/1841550585864019968/n-un43Dh_400x400.jpg",
+    "theme_color": "#1a1a1a",
     "assets": [{
-        "base": "uthor",
-        "symbol": "RUJI",
-        "exponent": "6",
-        "coingecko_id": "thorchain", 
-        "logo": "/logos/rujira.jpg"
+        "base": "rune",
+        "symbol": "RUNE",
+        "exponent": "8",
+        "coingecko_id": "thorchain",
+        "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/thorchain/images/thorchain.png"
     }]
 }

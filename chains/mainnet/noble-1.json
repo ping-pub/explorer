@@ -1,0 +1,20 @@
+{
+    "chain_name": "noble",
+    "coingecko": "noble",
+    "api": ["https://noble-api.bryanlabs.net"],
+    "rpc": ["https://noble-rpc.bryanlabs.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.45.16",
+    "coin_type": "118",
+    "min_tx_fee": "100000",
+    "addr_prefix": "noble",
+    "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/stake.png",
+    "theme_color": "#a8bbfb",
+    "assets": [{
+        "base": "uusdc",
+        "symbol": "USDC",
+        "exponent": "6",
+        "coingecko_id": "usd-coin",
+        "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/stake.png"
+    }]
+}

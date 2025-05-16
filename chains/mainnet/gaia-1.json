@@ -1,0 +1,20 @@
+{
+    "chain_name": "gaia",
+    "coingecko": "cosmos",
+    "api": ["https://gaia-api.bryanlabs.net"],
+    "rpc": ["https://gaia-rpc.bryanlabs.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.50.9",
+    "coin_type": "118",
+    "min_tx_fee": "5000",
+    "addr_prefix": "cosmos",
+    "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png",
+    "theme_color": "#272d45",
+    "assets": [{
+        "base": "uatom",
+        "symbol": "ATOM",
+        "exponent": "6",
+        "coingecko_id": "cosmos",
+        "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png"
+    }]
+}
