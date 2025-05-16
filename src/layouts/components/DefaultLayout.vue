@@ -79,12 +79,9 @@ dayjs()
       class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-gray-700"
       :class="{ block: sidebarShow, 'hidden xl:!block': !sidebarShow }"
     >
-      <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
+      <div class="flex justify-between mt-1 pl-4 py-4 mb-1" style="background: var(--bryanlabs-dark); border-bottom: 2px solid var(--bryanlabs-green);">
         <RouterLink to="/" class="flex items-center">
-          <img class="w-10 h-10" src="../../assets/logo.svg" />
-          <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">
-            Ping.pub
-          </h1>
+          <img class="w-40 h-auto" src="https://bryanlabs.net/images/logo.png" alt="BryanLabs Banner" />
         </RouterLink>
         <div
           class="pr-4 cursor-pointer xl:!hidden"
@@ -303,10 +300,11 @@ dayjs()
         </a>
       </div>
     </div>
-    <div class="xl:!ml-64 px-3 pt-4">
+    <div class="xl:!ml-64 px-3 pt-4" style="background: var(--bryanlabs-main-bg);">
       <!-- header -->
       <div
         class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10"
+        style="background: var(--bryanlabs-dark); border-bottom: 2px solid var(--bryanlabs-green); color: var(--bryanlabs-white);"
       >
         <div
           class="text-2xl pr-3 cursor-pointer xl:!hidden"

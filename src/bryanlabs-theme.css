@@ -1,0 +1,19 @@
+/* BryanLabs color palette for easy reference and maintainability */
+:root {
+  --bryanlabs-green: #3fb68b;
+  --bryanlabs-dark: #171d30;
+  --bryanlabs-blue: #00b2ff;
+  --bryanlabs-black: #11181f;
+  --bryanlabs-white: #ffffff;
+  --bryanlabs-gray: #252d37;
+}
+
+html[data-theme='dark'] {
+  --bryanlabs-main-bg: var(--bryanlabs-dark);
+  --bryanlabs-main-text: var(--bryanlabs-white);
+}
+
+html[data-theme='light'] {
+  --bryanlabs-main-bg: var(--bryanlabs-white);
+  --bryanlabs-main-text: var(--bryanlabs-black);
+}

@@ -5,12 +5,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        yes: '#3fb68b',
+        yes: 'var(--bryanlabs-green)',
         no: '#ff5353',
-        info: '#00b2ff',
-        main: 'var(--text-main)',
+        info: 'var(--bryanlabs-blue)',
+        main: 'var(--bryanlabs-main-text)',
         secondary: 'var(--text-secondary)',
         active: 'var(--bg-active)',
+        bryanlabs: {
+          green: 'var(--bryanlabs-green)',
+          dark: 'var(--bryanlabs-dark)',
+          blue: 'var(--bryanlabs-blue)',
+          black: 'var(--bryanlabs-black)',
+          white: 'var(--bryanlabs-white)',
+          gray: 'var(--bryanlabs-gray)',
+        },
       }
     },
   },

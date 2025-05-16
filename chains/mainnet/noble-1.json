@@ -9,7 +9,7 @@
     "min_tx_fee": "100000",
     "addr_prefix": "noble",
     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/stake.png",
-    "theme_color": "#a8bbfb",
+    "theme_color": "#1a1a1a",
     "assets": [{
         "base": "uusdc",
         "symbol": "USDC",

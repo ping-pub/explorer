@@ -9,7 +9,7 @@
     "min_tx_fee": "2500",
     "addr_prefix": "osmo",
     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png",
-    "theme_color": "#760dbb",
+    "theme_color": "#1a1a1a",
     "assets": [
         {
             "base": "uosmo",

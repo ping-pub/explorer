@@ -9,7 +9,7 @@
     "min_tx_fee": "3400",
     "addr_prefix": "kujira",
     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kujira/images/kujira-chain-logo.png",
-    "theme_color": "#e33b34",
+    "theme_color": "#1a1a1a",
     "assets": [{
         "base": "ukuji",
         "symbol": "KUJI",
