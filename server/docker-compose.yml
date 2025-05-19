@@ -4,7 +4,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"  # Only bind to localhost
     volumes:
       - redis-data:/data
     command: >
@@ -18,9 +18,28 @@ services:
       --loglevel warning 
       --tcp-keepalive 300 
       --lazyfree-lazy-eviction yes
+      --replicaof no one
+      --protected-mode yes
+      --bind 0.0.0.0
+      --requirepass ${REDIS_PASSWORD:-changeme}
+      --rename-command FLUSHALL ""
+      --rename-command FLUSHDB ""
+      --rename-command CONFIG ""
+      --rename-command EVAL ""
+      --rename-command SCRIPT ""
+      --timeout 0
+      --tcp-backlog 511
+      --stop-writes-on-bgsave-error yes
+      --rdb-save-incremental-fsync yes
+      --activedefrag yes
+      --activedefrag-ignore-bytes 100mb
+      --activedefrag-threshold-lower 10
+      --activedefrag-threshold-upper 100
+      --activedefrag-cycle-min 25
+      --activedefrag-cycle-max 75
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-changeme}", "ping"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -30,6 +49,8 @@ services:
         max-size: "10m"
         max-file: "3"
         compress: "true"
+    networks:
+      - app-network
 
   api:
     build:
@@ -58,6 +79,13 @@ services:
         max-size: "10m"
         max-file: "3"
         compress: "true"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+    internal: true  # Make the network internal (no internet access)
 
 volumes:
   redis-data: 

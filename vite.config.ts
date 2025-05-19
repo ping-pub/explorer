@@ -122,5 +122,9 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    fs: {
+      // Deny access to .git directory
+      deny: ['.git']
+    }
   },
 });
