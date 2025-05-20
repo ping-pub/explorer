@@ -19,18 +19,6 @@ services:
       --tcp-keepalive 300 
       --lazyfree-lazy-eviction yes
       --replicaof no one
-      --protected-mode yes
-      --bind 0.0.0.0
-      --rename-command FLUSHALL ""
-      --rename-command FLUSHDB ""
-      --rename-command CONFIG ""
-      --rename-command EVAL ""
-      --rename-command SCRIPT ""
-      --timeout 0
-      --tcp-backlog 511
-      --stop-writes-on-bgsave-error yes
-      --rdb-save-incremental-fsync yes
-      --activedefrag yes
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-changeme}", "ping"]
