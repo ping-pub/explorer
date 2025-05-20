@@ -32,10 +32,6 @@ services:
       --stop-writes-on-bgsave-error yes
       --rdb-save-incremental-fsync yes
       --activedefrag yes
-      --activedefrag-threshold-lower 10
-      --activedefrag-threshold-upper 100
-      --activedefrag-cycle-min 25
-      --activedefrag-cycle-max 75
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-changeme}", "ping"]
