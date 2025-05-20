@@ -21,7 +21,6 @@ services:
       --replicaof no one
       --protected-mode yes
       --bind 0.0.0.0
-      --requirepass ${REDIS_PASSWORD:-changeme}
       --rename-command FLUSHALL ""
       --rename-command FLUSHDB ""
       --rename-command CONFIG ""
@@ -57,7 +56,7 @@ services:
       - .env
     environment:
       - RPC_ENDPOINTS=${RPC_ENDPOINTS}
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
       - PORT=${PORT:-3005}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - REDIS_DB=${REDIS_DB:-0}
