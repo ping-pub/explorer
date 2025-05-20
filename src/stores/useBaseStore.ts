@@ -17,7 +17,7 @@ export const useBaseStore = defineStore('baseStore', {
                 | 'light'
                 | 'dark',
             connected: true,
-            pageSize: 250,
+            pageSize: 50,
             fetchingBlocks: true,
             allTxs: [] as TxLocal[],
             pagination: {} as Pagination,
