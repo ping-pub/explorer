@@ -50,7 +50,7 @@ services:
         max-file: "3"
         compress: "true"
     networks:
-      - app-network
+      - default
 
   api:
     build:
@@ -80,12 +80,7 @@ services:
         max-file: "3"
         compress: "true"
     networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
-    internal: true  # Make the network internal (no internet access)
+      - default
 
 volumes:
   redis-data: 
