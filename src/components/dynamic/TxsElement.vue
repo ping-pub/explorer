@@ -12,11 +12,11 @@ const txs = computed(() => {
   return props.value?.map((x) => {
     const tx_bytes = fromBase64(x);
     let tx = null
-    let injected = false
+    let injected = 'Standard'
     try {
       tx = decodeTxRaw(fromBase64(x))
     } catch(e) {
-      injected = true
+      injected = 'Injected'
     } 
     return {
       hash: hashTx(tx_bytes),
@@ -34,7 +34,7 @@ const chain = useBlockchain();
     <table class="table w-full" density="compact" v-if="txs.length > 0">
       <thead>
         <tr>
-          <th>Injected</th>
+          <th>Type</th>
           <th style="position: relative; z-index: 2;">Hash</th>
           <th>Msgs</th>
           <th>Memo</th>
@@ -44,7 +44,7 @@ const chain = useBlockchain();
         <tr v-for="item in txs">
           <td>{{ item.injected }}</td>
           <td>
-            <span v-if="item.injected">{{ item.hash }}</span>
+            <span v-if="item.injected ==='Injected'">{{ item.hash }}</span>
             <RouterLink v-else :to="`/${chain.chainName}/tx/${item.hash}`" class="text-primary dark:invert">{{
               item.hash
             }}</RouterLink>
