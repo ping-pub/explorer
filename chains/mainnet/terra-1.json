@@ -1,0 +1,20 @@
+{
+    "chain_name": "terra",
+    "coingecko": "terra-luna-classic",
+    "api": ["https://terra-api.bryanlabs.net"],
+    "rpc": ["https://terra-rpc.bryanlabs.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.45.13-classic",
+    "coin_type": "330",
+    "min_tx_fee": "1000",
+    "addr_prefix": "terra",
+    "logo": "https://assets.coingecko.com/coins/images/8284/standard/01_LunaClassic_color.png",
+    "theme_color": "#1a1a1a",
+    "assets": [{
+        "base": "uluna",
+        "symbol": "LUNC",
+        "exponent": "6",
+        "coingecko_id": "terra-luna-classic",
+        "logo": "https://assets.coingecko.com/coins/images/8284/standard/01_LunaClassic_color.png"
+    }]
+}

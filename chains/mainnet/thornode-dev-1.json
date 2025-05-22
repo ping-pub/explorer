@@ -1,5 +1,5 @@
 {
-    "chain_name": "rujira",
+    "chain_name": "thorchain-devnet",
     "coingecko": "thorchain",
     "api": ["https://thornode-devnet-api.bryanlabs.net"],
     "rpc": ["https://thornode-devnet-rpc.bryanlabs.net"],
