@@ -133,6 +133,11 @@ function loadAccount(address: string) {
     })
   });
   blockchain.rpc.getBankBalances(address).then((x) => {
+    x.balances.forEach((y) => {
+      if (y.denom != 'upokt') {
+        y.denom = y.denom.toUpperCase();
+      }
+    });
     balances.value = x.balances;
   });
   blockchain.rpc.getStakingDelegatorUnbonding(address).then((x) => {
