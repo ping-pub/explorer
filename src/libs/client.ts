@@ -89,6 +89,17 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getBankBalances(address: string) {
     return this.request(this.registry.bank_balances_address, { address });
   }
+  async getBankBalanceByDenom(address: string, denom: string) {
+    try {
+      return this.request({
+        url: "/cosmos/bank/v1beta1/balances/{address}/by_denom?denom={denom}",
+        adapter
+      } as Request<{ balance: Coin }>, { address, denom });
+    } catch(err) {
+      console.error('Failed to fetch balance by denom:', err);
+      return { balance: { denom, amount: '0' } };
+    }
+  }
   async getBankDenomMetadata() {
     return this.request(this.registry.bank_denoms_metadata, {});
   }
