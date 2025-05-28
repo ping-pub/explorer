@@ -6,17 +6,12 @@ import { computed, ref, onMounted, onUnmounted } from 'vue';
 import newFooter from '@/layouts/components/NavFooter.vue';
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
 import NavbarSearch from '@/layouts/components/NavbarSearch.vue';
-import ChainProfile from '@/layouts/components/ChainProfile.vue';
 
 import { useDashboard } from '@/stores/useDashboard';
 import { useBaseStore, useBlockchain } from '@/stores';
 
-import NavBarI18n from './NavBarI18n.vue';
-import NavBarWallet from './NavBarWallet.vue';
 import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '../types';
 import dayjs from 'dayjs';
-import { routeLocationKey } from 'vue-router';
-import router from '@/router';
 
 const dashboard = useDashboard();
 dashboard.initial();
@@ -211,6 +206,7 @@ const handleSafariChainChange = (event: Event) => {
                 </li>
               </ul>
             </div>
+            <span :class="baseStore.connected ? 'text-success' : 'text-error'">{{ baseStore.connected ? '🟢  Online' : '🔴  Offline' }}</span>
             <!-- <span v-else class="pill mr-5">{{ alpha_beta }}</span> -->
           </div>
           <!-- Main nav items -->
