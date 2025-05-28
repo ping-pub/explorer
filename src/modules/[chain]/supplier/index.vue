@@ -25,14 +25,14 @@ onMounted(() => {
 function pageload() {
   const container = document.querySelector('.suppliersContainer') as HTMLDivElement;
   // Check if the scroll is at the bottom
-  // let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
-  // if (isAtBottom && parseInt(pageResponse.value.total || '0') != list.value.length) {
-  //   pageRequest.value.setPage((pageRequest.value.offset || 0 / pageRequest.value.limit) + 1)
-  //   chainStore.rpc.getSuppliers(pageRequest.value).then(x => {
-  //     list.value = Array.from(new Set([...list.value, ...x.supplier]));
-  //     pageResponse.value = x.pagination
-  //   });
-  // }
+  let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
+  if (isAtBottom && parseInt(pageResponse.value.total || '0') != list.value.length) {
+    pageRequest.value.setPage((list.value.length || 0 / pageRequest.value.limit) + 1)
+    chainStore.rpc.getSuppliers(pageRequest.value).then(x => {
+      list.value = Array.from(new Set([...list.value, ...x.supplier]));
+      pageResponse.value = x.pagination
+    });
+  }
 }
 
 function pageloadInit(p: number) {

@@ -19,7 +19,7 @@ const pageRequest = ref(new PageRequest())
 const pageResponse = ref({} as Pagination)
 
 onMounted(() => {
-  pageloadInit(1)
+  pageloadInit(0)
 });
 
 function pageload() {
@@ -27,7 +27,7 @@ function pageload() {
   // Check if the scroll is at the bottom
   let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
   if (isAtBottom && pageResponse.value.next_key != null) {
-    pageRequest.value.setPage((pageRequest.value.offset || 0 / pageRequest.value.limit) + 1)
+    pageRequest.value.setPage(((list.value.length || 0) / pageRequest.value.limit) + 1)
     chainStore.rpc.getApplications(pageRequest.value).then(x => {
       list.value = Array.from(new Set([...list.value, ...x.applications]));
       pageResponse.value = x.pagination

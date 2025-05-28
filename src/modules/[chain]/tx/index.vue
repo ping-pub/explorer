@@ -46,12 +46,6 @@ function handleScroll() {
 
         <div v-show="tab === 'recent'" class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-warning overflow-x-auto txsContainer" @scroll="handleScroll"
             style="height: 78vh; overflow: auto;">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center">
-                    <Icon icon="mdi:transfer" class="text-2xl text-warning mr-2" />
-                    <div class="text-lg font-semibold text-main">{{ $t('tx.tx_hash') }}</div>
-                </div>
-            </div>
             
             <div class="bg-base-200 rounded-md overflow-auto">
                 <table class="table w-full table-compact">
