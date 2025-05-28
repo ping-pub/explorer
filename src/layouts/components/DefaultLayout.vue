@@ -72,7 +72,7 @@ const behind = computed(() => {
 dayjs()
 
 const show_ad = computed(() => {
-  return location.hostname.indexOf('ping.pub') > 0
+  return location.hostname.indexOf('ping.pub') > -1
 })
 
 </script>
