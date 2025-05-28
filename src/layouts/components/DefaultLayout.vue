@@ -16,6 +16,7 @@ import NavBarI18n from './NavBarI18n.vue';
 import NavBarWallet from './NavBarWallet.vue';
 import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '../types';
 import dayjs from 'dayjs';
+import AdBanner from '@/components/ad/AdBanner.vue';
 
 const dashboard = useDashboard();
 dashboard.initial();
@@ -69,6 +70,10 @@ const behind = computed(() => {
 });
 
 dayjs()
+
+const show_ad = computed(() => {
+  return location.hostname.indexOf('ping.pub') > 0
+})
 
 </script>
 
@@ -340,7 +345,10 @@ dayjs()
           </div>
         <RouterView v-slot="{ Component }">
           <Transition mode="out-in">
-            <Component :is="Component" />
+            <div>
+              <AdBanner v-if="show_ad"/>
+              <Component :is="Component" />
+            </div>
           </Transition>
         </RouterView>
       </div>

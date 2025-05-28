@@ -263,8 +263,6 @@ const amount = computed({
       </div>
     </div>
 
-    <AdBanner id="chain-home-banner-ad" unit="banner" width="970px" height="90px" />
-
     <div v-if="blockchain.supportModule('governance')" class="bg-base-100 rounded mt-4 shadow">
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         {{ $t('index.active_proposals') }}
