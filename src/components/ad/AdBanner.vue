@@ -15,5 +15,5 @@ const aa = computed(() => {
 });
 </script>
 <template>
-  <iframe :data-aa='`${aa}`' :src="`//acceptable.a-ads.com/${aa}?${route.path}&size=970x90`" style='border:0px; padding:0; width:100%; height:70px; overflow:hidden; margin-bottom: 5px; background-color: transparent;'></iframe>
+  <iframe :data-aa='aa' :src='`//ad.a-ads.com/${aa}?size=970x90`' style='width:970px; height:90px; border:0px; padding:0; overflow:hidden; background-color: transparent;'></iframe>
 </template>
