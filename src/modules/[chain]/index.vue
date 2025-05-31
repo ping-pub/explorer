@@ -12,13 +12,12 @@ import {
   useParamStore,
 } from '@/stores';
 import { onMounted, ref } from 'vue';
-import { useIndexModule, colorMap } from './indexStore';
+import { useIndexModule, colorMap, tickerUrl } from './indexStore';
 import { computed } from '@vue/reactivity';
 
 import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
 import ProposalListItem from '@/components/ProposalListItem.vue';
 import ArrayObjectElement from '@/components/dynamic/ArrayObjectElement.vue'
-import AdBanner from '@/components/ad/AdBanner.vue';
 
 const props = defineProps(['chain']);
 
@@ -233,7 +232,7 @@ const amount = computed({
                 </div>
                 <label class="modal-backdrop" for="calculator">{{ $t('index.close') }}</label>
               </div>
-              <a class="my-5 !text-white btn grow" :class="{'!btn-success': store.trustColor === 'green', '!btn-warning': store.trustColor === 'yellow'}" :href="ticker.trade_url"
+              <a class="my-5 !text-white btn grow" :class="{'!btn-success': store.trustColor === 'green', '!btn-warning': store.trustColor === 'yellow'}" :href="tickerUrl(ticker.trade_url)"
                 target="_blank">
                 {{ $t('index.buy') }} {{ coinInfo.symbol || '' }}
               </a>
