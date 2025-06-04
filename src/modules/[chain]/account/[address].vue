@@ -409,7 +409,9 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               </td>
               <td class="flex items-center py-3">
                 <div class="mr-2">
-                  {{ mapAmount(v.events)?.join(", ") }}
+                  {{ v.tx.body.messages[0]?.amount && format.formatToken2(v.tx.body.messages[0].amount[0], true) }}
+                  {{ v.tx.body.messages[0]?.stake && format.formatToken2(v.tx.body.messages[0].stake, true) }}
+                  {{ !v.tx.body.messages[0]?.stake && !v.tx.body.messages[0]?.amount && v.tx.body.messages[0]['@type'] }}
                 </div>
                 <Icon v-if="v.code === 0" icon="mdi-check" class="text-success text-lg" />
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
