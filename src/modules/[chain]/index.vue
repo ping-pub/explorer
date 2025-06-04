@@ -57,7 +57,8 @@ function shortName(name: string, id: string) {
     : name;
 }
 
-const comLinks = [
+const comLinks = computed(()=> {
+  return [
   {
     name: 'Website',
     icon: 'mdi-web',
@@ -79,6 +80,7 @@ const comLinks = [
     href: store.github,
   },
 ];
+})
 
 // wallet box
 const change = computed(() => {
