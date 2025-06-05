@@ -206,7 +206,8 @@ const handleSafariChainChange = (event: Event) => {
                 </li>
               </ul>
             </div>
-            <span :class="baseStore.connected ? 'text-success' : 'text-error'">{{ baseStore.connected ? '🟢  Online' : '🔴  Offline' }}</span>
+            <span v-if="behind" class="text-error">Syncing...</span>
+            <span v-else :class="baseStore.connected ? 'text-success' : 'text-error'">{{ baseStore.connected ? '🟢  Online' : '🔴  Offline' }}</span>
             <!-- <span v-else class="pill mr-5">{{ alpha_beta }}</span> -->
           </div>
           <!-- Main nav items -->
