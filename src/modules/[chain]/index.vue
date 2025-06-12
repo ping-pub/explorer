@@ -957,10 +957,10 @@ watch(() => base.blocktime, (newVal, oldVal) => {
               <Icon icon="mdi:trending-up" class="mr-1 text-success" />
               <span>24h High / Low</span>
             </div>
-            <div class="text-base font-medium mt-1 flex items-center gap-2">
-              <span class="text-success">${{ store.coinInfo?.market_data?.high_24h?.usd?.toFixed(6) || '0.00' }}</span>
-              <span>/</span>
-              <span class="text-error">${{ store.coinInfo?.market_data?.low_24h?.usd?.toFixed(6) || '0.00' }}</span>
+            <div class="text-base font-medium mt-1 flex flex-wrap items-center gap-2">
+              <span class="text-success break-words">${{ store.coinInfo?.market_data?.high_24h?.usd?.toFixed(6) || '0.00' }}</span>
+              <span class="break-keep">/</span>
+              <span class="text-error break-words">${{ store.coinInfo?.market_data?.low_24h?.usd?.toFixed(6) || '0.00' }}</span>
             </div>
           </div>
           
