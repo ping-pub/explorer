@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useParamStore, useStakingStore } from '@/stores';
+import { useFormatter, useParamStore, useStakingStore } from '@/stores';
 import { ref, onMounted, computed } from 'vue';
 import CardParameter from '@/components/CardParameter.vue';
 import ArrayObjectElement from '@/components/dynamic/ArrayObjectElement.vue';
@@ -23,6 +23,8 @@ const stakingStore = useStakingStore();
 const chain = ref(store.chain);
 const validatorVersions = ref<Record<string, VersionData>>({});
 const isLoading = ref(true);
+const format = useFormatter()
+
 
 onMounted(async () => {
   // fetch the data
@@ -372,7 +374,7 @@ function formatTitle(v: string) {
             <Icon icon="mdi:vote" class="mr-1 text-accent" />
             <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
           </div>
-          <div class="text-base text-main font-medium overflow-hidden text-ellipsis">{{ item?.value }}</div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis">{{ item?.subtitle == 'min_deposit' ? format.formatToken(item.value[0]) : item?.value }}</div>
         </div>
       </div>
     </div>
