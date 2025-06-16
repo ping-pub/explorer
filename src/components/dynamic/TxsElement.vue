@@ -9,10 +9,21 @@ const props = defineProps({
 });
 
 const txs = computed(() => {
-  return props.value?.map((x) => ({
-    hash: hashTx(fromBase64(x)),
-    tx: decodeTxRaw(fromBase64(x)),
-  })) || []
+  return props.value?.map((x) => {
+    const tx_bytes = fromBase64(x);
+    let tx = null
+    let injected = 'Standard'
+    try {
+      tx = decodeTxRaw(fromBase64(x))
+    } catch(e) {
+      injected = 'Injected'
+    } 
+    return {
+      hash: hashTx(tx_bytes),
+      tx,
+      injected
+    }
+  }) || []
 });
 
 const format = useFormatter();
@@ -23,6 +34,7 @@ const chain = useBlockchain();
     <table class="table w-full" density="compact" v-if="txs.length > 0">
       <thead>
         <tr>
+          <th>Type</th>
           <th style="position: relative; z-index: 2;">Hash</th>
           <th>Msgs</th>
           <th>Memo</th>
@@ -30,19 +42,23 @@ const chain = useBlockchain();
       </thead>
       <tbody class="text-sm">
         <tr v-for="item in txs">
+          <td>{{ item.injected }}</td>
           <td>
-            <RouterLink :to="`/${chain.chainName}/tx/${item.hash}`" class="text-primary dark:invert">{{
+            <span v-if="item.injected ==='Injected'">{{ item.hash }}</span>
+            <RouterLink v-else :to="`/${chain.chainName}/tx/${item.hash}`" class="text-primary dark:invert">{{
               item.hash
             }}</RouterLink>
           </td>
           <td>
-            {{
-              format.messages(
-                item.tx.body.messages.map((x) => ({ '@type': x.typeUrl }))
-              )
-            }}
+            <span v-if="item.tx">
+              {{
+                format.messages(
+                  item.tx.body.messages.map((x) => ({ '@type': x.typeUrl }))
+                )
+              }}
+            </span>
           </td>
-          <td>{{ item.tx.body.memo }}</td>
+          <td><span v-if="item.tx">{{ item.tx.body.memo }}</span></td>
         </tr>
       </tbody>
     </table>

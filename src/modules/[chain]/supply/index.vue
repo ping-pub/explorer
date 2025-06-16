@@ -1,63 +1,129 @@
 <script lang="ts" setup>
-import { computed, ref } from '@vue/reactivity';
-import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
-import { PageRequest, type AuthAccount, type Pagination, type Coin } from '@/types';
+import { ref } from '@vue/reactivity';
+import { useBlockchain, useFormatter } from '@/stores';
+import { PageRequest, type Pagination, type Coin, type DenomMetadata } from '@/types';
 import { onMounted } from 'vue';
+import type { Asset } from '@ping-pub/chain-registry-client/dist/types'
 import PaginationBar from '@/components/PaginationBar.vue';
 const props = defineProps(['chain']);
 
 const format = useFormatter();
-const chainStore = useBlockchain()
+const chainStore = useBlockchain();
 
-const list = ref([] as Coin[])
-
-function showType(v: string) {
-    return v.replace("/cosmos.auth.v1beta1.", "")
-}
+const list = ref([] as ({ denom: string, amount: string, base: string, info: string, logo: string | undefined })[])
 
 const pageRequest = ref(new PageRequest())
 const pageResponse = ref({} as Pagination)
 
-const fuelItem = computed(() => {
-  return list.value.find(item => item.denom === "fuel" || item.denom === "test")
-})
+interface SupplyAsset extends Asset {
+  logo: string | undefined
+}
 
 onMounted(() => {
   pageload(1)
 });
 
+function findGlobalAssetConfig(denom: string) {
+  const assets = chainStore.current?.assets
+  if (assets) {
+    const conf = assets.find(a => a.base === denom)
+    if (conf) {
+      return conf
+    }
+  }
+  return undefined
+}
+
+async function mergeDenomMetadata(denom: string, denomsMetadatas: DenomMetadata[]): Promise<SupplyAsset> {
+  const denomMetadata = denomsMetadatas.find(d => d.base.endsWith(denom));
+  let asset = findGlobalAssetConfig(denom) as SupplyAsset
+  if (asset && denomMetadata) {
+    asset = { ...denomMetadata, ...asset }
+    asset.display = denomMetadata.display
+    asset.logo = asset.logo_URIs?.svg || asset.logo_URIs?.png || asset.logo_URIs?.jpeg || undefined
+  } else if (denomMetadata) {
+    return denomMetadata as SupplyAsset
+  }
+  return asset;
+}
+
 function pageload(p: number) {
   pageRequest.value.setPage(p)
-  chainStore.rpc.getBankSupply(pageRequest.value).then(x => {
-    list.value = x.supply
-    pageResponse.value = x.pagination
-  });
+  chainStore.rpc.getBankDenomMetadata().then(async (denomsMetaResponse) => {
+    const bankSupplyResponse = await chainStore.rpc.getBankSupply(pageRequest.value);
+    const rawList = await Promise.all(bankSupplyResponse.supply.map(async (coin: Coin) => {
+      const asset = await mergeDenomMetadata(coin.denom, denomsMetaResponse.metadatas)
+      const denom = (asset?.symbol || coin.denom)
+      return {
+        denom: denom.split('/')[denom.split('/').length - 1].toUpperCase(),
+        amount: format.tokenAmountNumber({ amount: coin.amount, denom: denom }).toString(),
+        base: asset.base || coin.denom,
+        info: asset.display || coin.denom,
+        logo: asset?.logo_URIs?.svg || asset?.logo_URIs?.png || asset?.logo_URIs?.jpeg || "/logo.svg",
+      }
+    }));
+
+    // identify fuel token in the fetched list
+    const fuelIndex = rawList.findIndex(i => i.denom.toLowerCase() === 'fuel' || i.denom.toLowerCase() === 'test')
+    let fuelRow: (typeof rawList)[number] | undefined = undefined
+    if (fuelIndex !== -1) {
+      fuelRow = rawList.splice(fuelIndex, 1)[0]
+      fuelRow.realInfo = fuelRow.info
+      fuelRow.info = "Current Sequencer supply of " + fuelRow.info
+    }
+
+    // always prepend initial supply row
+    const initialSupplyRow = {
+      denom: fuelRow?.denom || "FUEL",
+      amount: "10000000000",
+      base: fuelRow?.base || "fuel",
+      info: "Initial supply of " + (fuelRow?.realInfo || "FUEL"),
+      logo: fuelRow?.logo || "/logo.svg",
+    }
+
+    // handle no fuel token found
+    const finalList = [initialSupplyRow]
+    if (fuelRow) {
+      finalList.push(fuelRow)
+    } else {
+      finalList.push({
+        denom: "-",
+        amount: "-",
+        base: "-",
+        info: "No fuel token found",
+        logo: undefined,
+      })
+    }
+    list.value = [...finalList, ...rawList]
+    pageResponse.value = bankSupplyResponse.pagination
+  })
 }
 
 </script>
 <template>
-    <div class="overflow-auto bg-base-100">
-        <table class="table table-compact">
-            <thead class=" bg-base-200">
-                <tr>
-                    <td>Token</td>
-                    <td>Units</td>
-                </tr>
-            </thead>
-            <tr class="hover">
-                <td>{{ "fuel (initial_supply)" }}</td>
-                <td>{{ "10000000000000000000" }}</td>
-            </tr>
-            <tr v-if="fuelItem" class="hover">
-                <td>{{ "fuel (supply_on_sequencer)" }}</td>
-                <td>{{ fuelItem.amount }}</td>
-            </tr>
-            <tr v-else class="hover">
-                <td colspan="2">No fuel token found</td>
-            </tr>
-        </table>
-        <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload" />
-    </div>
+  <div class="overflow-auto bg-base-100">
+    <table class="table table-compact">
+      <thead class=" bg-base-200">
+        <tr>
+          <td>Logo</td>
+          <td>Token</td>
+          <td>Amount</td>
+          <td>Info</td>
+          <td>Base</td>
+        </tr>
+      </thead>
+      <tr v-for="item in list" class="hover">
+        <td>
+          <img v-if="item.logo" :src="item.logo" class="w-7 h-7" />
+        </td>
+        <td>{{ item.denom }}</td>
+        <td>{{ item.amount }}</td>
+        <td>{{ item.info }}</td>
+        <td>{{ item.base }}</td>
+      </tr>
+    </table>
+    <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload" />
+  </div>
 </template>
 
 <route>

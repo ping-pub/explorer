@@ -6,7 +6,7 @@ export async function fetchData<T>(
 ): Promise<T> {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`HTTP error: ${response.status}`);
+    throw new Error(`HTTP error: ${response.status}, ${response.statusText}`);
   }
   const data = await response.json();
   return adapter(data);

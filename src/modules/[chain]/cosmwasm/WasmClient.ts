@@ -13,6 +13,7 @@ import type {
 import { toBase64 } from '@cosmjs/encoding';
 import { useBlockchain } from '@/stores';
 import { PageRequest } from '@/types';
+import { get } from '@/libs';
 
 export interface WasmRequestRegistry extends AbstractRegistry {
     cosmwasm_code: Request<PaginabledCodeInfos>;
@@ -103,10 +104,20 @@ export interface WasmRequestRegistry extends AbstractRegistry {
     }
     getWasmContractSmartQuery(address: string, query: string) {
       const query_data = toBase64(new TextEncoder().encode(query));
-      return this.request(
+      return this.get(
         this.registry.cosmwasm_contract_address_smart_query_data,
         { address, query_data }
       );
+    }
+    async getWasmContractQueries(address: string) {
+      const query_data = toBase64(new TextEncoder().encode('{"":""}'));
+      const {code, message} = await this.get(
+        this.registry.cosmwasm_contract_address_smart_query_data,
+        { address, query_data }
+      );
+      let re = /`(\w+)`/g
+      let x = String(message).match(re)
+      return code === 2 && x ? x.map(e => e.replaceAll('`', '')) : []
     }
     getWasmContractStates(address: string, pr: PageRequest) {    
       if(!pr) pr = new PageRequest()

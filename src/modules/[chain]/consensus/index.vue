@@ -260,7 +260,7 @@ async function update() {
 
           <div class="flex flex-rows flex-wrap py-6">
             <div
-              class=" w-48 rounded-3xl h-5 text-sm px-2 text-slate-200 leading-5"
+              class=" w-48 rounded-3xl h-5 text-sm px-2 leading-5"
               v-for="(pre, i) in item.prevotes"
               :key="i"
               size="sm"

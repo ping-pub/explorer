@@ -197,12 +197,16 @@ const processList = computed(() => {
 });
 
 function showValidatorName(voter: string) {
-  const { data } = fromBech32(voter);
-  const hex = toHex(data);
-  const v = stakingStore.validators.find(
-    (x) => toHex(fromBech32(x.operator_address).data) === hex
-  );
-  return v ? v.description.moniker : voter;
+  try {
+      const { data } = fromBech32(voter);
+      const hex = toHex(data);
+      const v = stakingStore.validators.find(
+        (x) => toHex(fromBech32(x.operator_address).data) === hex
+      );
+      return v ? v.description.moniker : voter;
+  } catch(e){
+      return voter;
+  }
 }
 
 function pageload(p: number) {
@@ -396,7 +400,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
             <tr v-for="(item, index) of votes" :key="index">
               <td class="py-2 text-sm">{{ showValidatorName(item.voter) }}</td>
               <td
-                v-if="item.option"
+                v-if="item.option && item.option !== 'VOTE_OPTION_UNSPECIFIED'"
                 class="py-2 text-sm"
                 :class="{
                   'text-yes': item.option === 'VOTE_OPTION_YES',

@@ -91,8 +91,6 @@ const chainStore = useBlockchain()
       />
     </div>
 
-    <AdBanner id="home-banner-ad" unit="banner" width="970px" height="90px" />
-
     <div class="text-center text-base mt-6 text-primary">
       <h2 class="mb-6">{{ $t('pages.description') }}</h2>
     </div>
