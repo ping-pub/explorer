@@ -16,6 +16,10 @@ export const DEFAULT: RequestRegistry = {
     url: '/cosmos/bank/v1beta1/balances/{address}',
     adapter,
   },
+  bank_spendable_balances_address: {
+    url: '/cosmos/bank/v1beta1/spendable_balances/{address}',
+    adapter,
+  },
   bank_denoms_metadata: {
     url: '/cosmos/bank/v1beta1/denoms_metadata',
     adapter,

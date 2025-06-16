@@ -2,22 +2,41 @@
     "chain_name": "fuel-mainnet",
     "registry_name": "fuel mainnet",
     "api": [
-        {"provider": "SimplyStaking", "address": "https://rest-fuel-seq.simplystaking.xyz"}
+        {
+            "provider": "SimplyStaking",
+            "address": "https://rest-fuel-seq.simplystaking.xyz"
+        }
     ],
     "rpc": [
-        {"provider": "SimplyStaking", "address": "https://rpc-fuel-seq.simplystaking.xyz"}
+        {
+            "provider": "SimplyStaking",
+            "address": "https://rpc-fuel-seq.simplystaking.xyz"
+        }
     ],
-    "sdk_version": "0.50.10",
+    "sdk_version": "0.50.13",
     "coin_type": "118",
     "min_tx_fee": "800",
+    "assets": [
+        {
+            "base": "fuel",
+            "symbol": "FUEL",
+            "exponent": "9",
+            "coingecko_id": "fuel-network",
+            "logo": "/logos/fuel.png"
+        }
+    ],
+    "features": [
+        "dashboard",
+        "blocks",
+        "uptime",
+        "parameters",
+        "state-sync",
+        "consensus",
+        "supply",
+        "governance",
+        "staking",
+        "tx"
+    ],
     "addr_prefix": "fuelsequencer",
-    "logo": "/logos/fuel.png",
-    "assets": [{
-        "base": "fuel",
-        "symbol": "FUEL",
-        "exponent": "9",
-        "coingecko_id": "",
-        "logo": "/logos/fuel.png"
-    }],
-    "features": ["dashboard", "blocks", "uptime", "parameters", "state-sync", "consensus", "supply", "governance", "staking", "tx"]
+    "logo": "/logos/fuel.png"
 }

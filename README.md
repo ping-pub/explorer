@@ -64,6 +64,10 @@ This version of Ping.Pub was forked from from commit https://github.com/ping-pub
   - Added `fuel-testnet.json`.
 - `src/libs/`
   - In `client.ts`, added `order_by=2` to `getTxsBySender` query, for DESC ordering.
+  - In `client.ts`, added `getBankSpendableBalances` method for vesting account support.
+- `src/libs/api/`:
+  - In `index.ts`, added `bank_spendable_balances_address` endpoint mapping.
+  - In `registry.ts`, added `bank_spendable_balances_address` type definition.
 - `src/layouts/components/`:
   - Removed Sponsors from `DefaultLayout.vue`.
 - `src/modules/[chain]`:
@@ -72,6 +76,7 @@ This version of Ping.Pub was forked from from commit https://github.com/ping-pub
   - In `indexStore.ts` rename **Supply** card to **Supply on Sequencer**.
 - `src/modules/[chain]/account`:
   - In `[address].vue`, added `order_by=2` to `receivedQuery` query, for DESC ordering.
+  - In `[address].vue`, added Fuel's vesting accounts handling with detailed schedule breakdown.
 - `src/modules/[chain]/supply`:
   - In `index.vue` add `fuel (initial_supply)`.
   - In `index.vue` change fuel supply to `fuel (supply_on_sequencer)`.
@@ -81,5 +86,7 @@ This version of Ping.Pub was forked from from commit https://github.com/ping-pub
   - In `useDashboard.ts` ensure `conf.logo = lc.logo;`.
   - In `useParamsStore.ts` add `initial_supply`.
   - In `useParamsStore.ts` change `bonded_and_supply` to `bonded_from_sequencer_supply`.
+- `src/types/`:
+  - In `auth.ts`, added `VestingInfo` interface and extended `AuthAccount` for vesting account types.
 - `public/logos/`:
   - Added `fuel.png`.
