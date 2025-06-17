@@ -128,6 +128,7 @@ function loadAccount(address: string) {
     blockchain.rpc.getSuppliersInfo(address).then((x) => {
       // @ts-expect-error because delegation is being reused as stake information container, yet keeping the support for delegations
       delegations.value.push({ balance: x.supplier.stake })
+      suppliers.value = x.supplier
     }).catch(e => {
       console.error(e)
     })
@@ -182,8 +183,8 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
         <div class="flex flex-1 flex-col truncate pl-4">
           <h2 class="text-sm card-title">{{ $t('account.address') }}:</h2>
           <span class="text-xs truncate" style="width:max-content"> {{ address }} {{ "&nbsp;&nbsp;&nbsp;" }}
-          <span class="float-right" style="width:max-content" v-if="copied">&nbsp;&nbsp;Copied!</span>
-            <Icon class="float-right" icon="ic:round-content-copy" @click="copy(address)"/>
+            <span class="float-right" style="width:max-content" v-if="copied">&nbsp;&nbsp;Copied!</span>
+            <Icon class="float-right" icon="ic:round-content-copy" @click="copy(address)" />
           </span>
         </div>
       </div>
@@ -194,7 +195,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
       <div class="flex justify-between">
         <h2 class="card-title mb-4">{{ $t('account.assets') }}</h2>
         <!-- button -->
-        <div class="flex justify-end mb-4 pr-5">
+        <!-- <div class="flex justify-end mb-4 pr-5">
           <label for="send" class="btn btn-primary btn-sm mr-2" @click="dialog.open('send', {}, updateEvent)">{{
             $t('account.btn_send') }}</label>
           <label for="transfer" class="btn btn-primary btn-sm" @click="
@@ -206,7 +207,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               updateEvent
             )
             ">{{ $t('account.btn_transfer') }}</label>
-        </div>
+        </div> -->
       </div>
       <div class="grid md:!grid-cols-3">
         <div class="md:!col-span-1">
@@ -214,7 +215,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
             :series="totalAmountByCategory.map(x => { return parseFloat(format.formatToken({ amount: `${x}`, denom: 'upokt' }, true)); })"
             :labels="labels" />
         </div>
-        <div class="mt-4 md:!col-span-2 md:!mt-0 md:!ml-4">
+        <div class="mt-4 md:!col-span-1 md:!mt-0 md:!ml-4">
           <!-- list-->
           <div class="">
             <!--balances  -->
@@ -271,6 +272,27 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
             {{ $t('account.total_value') }}: ${{ totalValue }}
           </div> -->
         </div>
+        <div class="md:!col-span-1">
+          <h2 class="card-title mb-4">Staked Services</h2>
+          <table class="table-compact w-full table-fixed hidden lg:!table">
+            <thead>
+              <tr>
+                <th>Service ID</th>
+                <th>RPC Endpoint</th>
+                <!-- <th>Revenue Share (Owner/Operator)</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(service, index) of suppliers.services">
+                <td>{{ service.service_id }}</td>
+                <td>{{service.endpoints.map((ep: any) => ep.url).join(',')}}</td>
+                <!-- <td>{{ props.address }}</td> -->
+                <!-- <td>{{[...service.rev_share].filter((rs: any) => rs.address != props.address)[0]?.rev_share_percentage || '0'}}% / {{
+                  [...service.rev_share].filter((rs: any) => rs.address == props.address)[0]?.rev_share_percentage || '0' }}% </td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -294,7 +316,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               <td class="text-caption text-primary py-3 bg-slate-200" colspan="10">
                 <RouterLink :to="`/${chain}/staking/${v.validator_address}`">{{
                   v.validator_address
-                }}</RouterLink>
+                  }}</RouterLink>
               </td>
             </tr>
             <tr v-for="entry in v.entries">
@@ -342,6 +364,8 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               <th class="py-3">{{ $t('account.height') }}</th>
               <th class="py-3">{{ $t('account.hash') }}</th>
               <th class="py-3">{{ $t('account.messages') }}</th>
+              <th class="py-3">{{ $t('account.amount') }}</th>
+              <th class="py-3">{{ $t('tx.fee') }}</th>
               <th class="py-3">{{ $t('account.time') }}</th>
             </tr>
           </thead>
@@ -355,7 +379,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               <td class="text-sm py-3">
                 <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-primary dark:invert">{{
                   v.height
-                }}</RouterLink>
+                  }}</RouterLink>
               </td>
               <td class="truncate py-3" style="max-width: 200px">
                 <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
@@ -369,8 +393,16 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
                 <Icon v-if="v.code === 0" icon="mdi-check" class="text-success text-lg" />
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </td>
-              <td class="py-3">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{ format.toDay(v.timestamp,
-                'from') }})</span> </td>
+              <td>
+                <!-- {{v.tx.body?.messages[0]?.amount}} {{ v.tx.body?.messages[0]?.amount ? format.formatToken(v.tx.body?.messages[0]?.amount[0]) : '-'}} -->
+                {{ v.tx.body?.messages[0]?.amount ? format.formatToken(v.tx.body?.messages[0]?.amount[0]) : '-' }}
+              </td>
+              <td>
+                {{ v.tx.auth_info.fee.amount ? format.formatToken(v.tx.auth_info.fee.amount[0]) : '-' }}
+              </td>
+              <td class="py-3">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{
+                format.toDay(v.timestamp,
+                  'from') }})</span> </td>
             </tr>
           </tbody>
         </table>
@@ -386,7 +418,9 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
             <tr>
               <th class="py-3">{{ $t('account.height') }}</th>
               <th class="py-3">{{ $t('account.hash') }}</th>
+              <th class="py-3">{{ $t('account.messages') }}</th>
               <th class="py-3">{{ $t('account.amount') }}</th>
+              <th class="py-3">{{ $t('tx.fee') }}</th>
               <th class="py-3">{{ $t('account.time') }}</th>
             </tr>
           </thead>
@@ -400,24 +434,35 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               <td class="text-sm py-3">
                 <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-primary dark:invert">{{
                   v.height
-                }}</RouterLink>
+                  }}</RouterLink>
               </td>
               <td class="truncate py-3" style="max-width: 200px">
                 <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
                   {{ v.txhash }}
                 </RouterLink>
               </td>
+
               <td class="flex items-center py-3">
                 <div class="mr-2">
-                  {{ v.tx.body.messages[0]?.amount && format.formatToken2(v.tx.body.messages[0].amount[0], true) }}
-                  {{ v.tx.body.messages[0]?.stake && format.formatToken2(v.tx.body.messages[0].stake, true) }}
-                  {{ (!v.tx.body.messages[0]?.stake && !v.tx.body.messages[0]?.amount) ? v.tx.body.messages[0]['@type'] : '' }}
+                  {{ format.messages(v.tx.body.messages) }}
                 </div>
                 <Icon v-if="v.code === 0" icon="mdi-check" class="text-success text-lg" />
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </td>
-              <td class="py-3">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{ format.toDay(v.timestamp,
-                'from') }})</span> </td>
+              <td>
+                <div class="mr-2">
+                  {{ v.tx.body.messages[0]?.amount && format.formatToken2(v.tx.body.messages[0].amount[0], true) }}
+                  {{ v.tx.body.messages[0]?.stake && format.formatToken2(v.tx.body.messages[0].stake, true) }}
+                  {{ (!v.tx.body.messages[0]?.stake && !v.tx.body.messages[0]?.amount) ? '-' : '' }}
+                </div>
+              </td>
+              <td>
+                {{ v.tx.auth_info.fee.amount ? format.formatToken(v.tx.auth_info.fee.amount[0]) : '-' }}
+              </td>
+              <td class="py-3">
+                {{ format.toLocaleDate(v.timestamp) }}
+                <span class=" text-xs">({{ format.toDay(v.timestamp, 'from') }})</span>
+              </td>
             </tr>
           </tbody>
         </table>
