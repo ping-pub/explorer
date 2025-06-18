@@ -74,39 +74,42 @@ export const useGovStore = defineStore('govStore', {
           });
         }
 
-        // Fallback: Sequential search with max consecutive failure limit
-        const individualProposals: GovProposal[] = [...(proposals.proposals || [])];
-        let consecutiveFailures = 0;
-        const maxConsecutiveFailures = 3;
-        const statusString = PROPOSAL_STATUS_MAP[status] || status;
+        // Determine if we need sequential search based on cache freshness
+        if (GovProposalCache.shouldRequest(this.blockchain.chainName)) {
+          // Fallback: Sequential search with max consecutive failure limit
+          const individualProposals: GovProposal[] = [...(proposals.proposals || [])];
+          let consecutiveFailures = 0;
+          const maxConsecutiveFailures = 3;
+          const statusString = PROPOSAL_STATUS_MAP[status] || status;
 
-        // Sequentially check proposals starting from last known + 1, stopping after maxConsecutiveFailures
-        for (let i = lastKnownProposalId + 1; consecutiveFailures < maxConsecutiveFailures; i++) {
-          try {
-            const proposal = await this.blockchain.rpc?.getGovProposal(i.toString());
-            if (proposal?.proposal) {
-              consecutiveFailures = 0; // Reset counter on successful request
-              if (proposal.proposal.status === statusString) {
-                individualProposals.push(proposal.proposal);
+          // Sequentially check proposals starting from last known + 1, stopping after maxConsecutiveFailures
+          for (let i = lastKnownProposalId + 1; consecutiveFailures < maxConsecutiveFailures; i++) {
+            try {
+              const proposal = await this.blockchain.rpc?.getGovProposal(i.toString());
+              if (proposal?.proposal) {
+                consecutiveFailures = 0; // Reset counter on successful request
+                if (proposal.proposal.status === statusString) {
+                  individualProposals.push(proposal.proposal);
+                }
+              } else {
+                consecutiveFailures++;
               }
-            } else {
+            } catch (err) {
               consecutiveFailures++;
             }
-          } catch (err) {
-            consecutiveFailures++;
           }
+
+          // Sort by proposal_id in descending order to match the original behavior
+          individualProposals.sort((a, b) => parseInt(b.proposal_id) - parseInt(a.proposal_id));
+
+          proposals = reactive({
+            proposals: individualProposals,
+            pagination: {
+              next_key: undefined,
+              total: individualProposals.length.toString()
+            }
+          });
         }
-
-        // Sort by proposal_id in descending order to match the original behavior
-        individualProposals.sort((a, b) => parseInt(b.proposal_id) - parseInt(a.proposal_id));
-
-        proposals = reactive({
-          proposals: individualProposals,
-          pagination: {
-            next_key: undefined,
-            total: individualProposals.length.toString()
-          }
-        });
       }
 
       // Cache the results before filtering
