@@ -36,7 +36,7 @@ export const useGovStore = defineStore('govStore', {
     initial() {
       this.$reset();
       this.fetchParams();
-      this.fetchProposals('2');
+      // this.fetchProposals to be run on page load (onMounted)
     },
 
     // Cache management
