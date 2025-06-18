@@ -152,7 +152,7 @@ export const useGovStore = defineStore('govStore', {
       if (proposals?.proposals) {
         proposals.proposals = proposals.proposals.filter((item) => {
           const title = item.content?.title || item.title || ""
-          return title.toLowerCase().indexOf("airdrop")===-1
+          return title.toLowerCase().indexOf("airdrop") === -1
         });
       }
 
