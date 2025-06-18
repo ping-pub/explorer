@@ -4,6 +4,7 @@ import type { PageRequest, PaginatedProposals, GovProposal } from '@/types';
 import { LoadingStatus } from './useDashboard';
 import { useWalletStore } from './useWalletStore';
 import { reactive } from 'vue';
+import { GovProposalCache } from './govCache';
 
 // Proposal status mapping for API calls
 const PROPOSAL_STATUS_MAP: Record<string, string> = {
@@ -39,51 +40,12 @@ export const useGovStore = defineStore('govStore', {
       // this.fetchProposals to be run on page load (onMounted)
     },
 
-    // Cache management
-    getCacheKey(status: string) {
-      return `gov_proposals_${this.blockchain.chainName}_${status}`;
-    },
-
-    getCachedProposals(status: string): PaginatedProposals | null {
-      try {
-        const cacheKey = this.getCacheKey(status);
-        const cached = localStorage.getItem(cacheKey);
-        if (cached) {
-          const { data, timestamp, ttl } = JSON.parse(cached);
-          const now = Date.now();
-          if (now - timestamp < ttl) {
-            console.log(`Using cached proposals for status ${status}`);
-            return data;
-          } else {
-            localStorage.removeItem(cacheKey);
-          }
-        }
-      } catch (error) {
-        console.warn('Failed to read cached proposals:', error);
-      }
-      return null;
-    },
-
-    setCachedProposals(status: string, data: PaginatedProposals) {
-      try {
-        const cacheKey = this.getCacheKey(status);
-        const cacheData = {
-          data,
-          timestamp: Date.now(),
-          ttl: 24 * 60 * 60 * 1000 // 1 day cache
-        };
-        localStorage.setItem(cacheKey, JSON.stringify(cacheData));
-      } catch (error) {
-        console.warn('Failed to cache proposals:', error);
-      }
-    },
-
     async fetchProposals(status: string, pagination?: PageRequest) {
       //if (!this.loading[status]) {
       this.loading[status] = LoadingStatus.Loading;
 
       // Check cache first
-      const cached = this.getCachedProposals(status);
+      const cached = GovProposalCache.get(this.blockchain.chainName, status);
 
       let proposals;
       let lastKnownProposalId = 0;
@@ -148,7 +110,7 @@ export const useGovStore = defineStore('govStore', {
       }
 
       // Cache the results before filtering
-      this.setCachedProposals(status, proposals);
+      GovProposalCache.set(this.blockchain.chainName, status, proposals);
 
       //filter spam proposals
       if (proposals?.proposals) {
