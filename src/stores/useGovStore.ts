@@ -5,6 +5,13 @@ import { LoadingStatus } from './useDashboard';
 import { useWalletStore } from './useWalletStore';
 import { reactive } from 'vue';
 
+// Proposal status mapping for API calls
+const PROPOSAL_STATUS_MAP: Record<string, string> = {
+  '2': 'PROPOSAL_STATUS_VOTING_PERIOD',
+  '3': 'PROPOSAL_STATUS_PASSED',
+  '4': 'PROPOSAL_STATUS_REJECTED',
+};
+
 export const useGovStore = defineStore('govStore', {
   state: () => {
     return {
@@ -109,12 +116,7 @@ export const useGovStore = defineStore('govStore', {
         const individualProposals: GovProposal[] = [...(proposals.proposals || [])];
         let consecutiveFailures = 0;
         const maxConsecutiveFailures = 3;
-        const statusMap: Record<string, string> = {
-          '2': 'PROPOSAL_STATUS_VOTING_PERIOD',
-          '3': 'PROPOSAL_STATUS_PASSED',
-          '4': 'PROPOSAL_STATUS_REJECTED',
-        };
-        const statusString = statusMap[status] || status;
+        const statusString = PROPOSAL_STATUS_MAP[status] || status;
 
         // Sequentially check proposals starting from last known + 1, stopping after maxConsecutiveFailures
         for (let i = lastKnownProposalId + 1; consecutiveFailures < maxConsecutiveFailures; i++) {
