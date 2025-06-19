@@ -39,19 +39,28 @@ export class GovFallback {
 
         // Determine if we need sequential search based on cache freshness
         if (GovProposalCache.shouldRequest(blockchain.chainName)) {
-            const sequentialProposals = await this.performSequentialSearch(
+            const allProposals = await this.performSequentialSearch(
                 blockchain,
-                status,
                 lastKnownProposalId,
                 finalConfig,
                 proposals.proposals || []
             );
 
+            // Distribute proposals to all status caches
+            this.distributeProposalsToStatusCaches(blockchain.chainName, allProposals);
+
+            // Mark all statuses as having been searched to prevent redundant searches
+            Object.keys(PROPOSAL_STATUS_MAP).forEach(statusKey => {
+                GovProposalCache.updateRequest(GovProposalCache.getKey(blockchain.chainName, 'request'));
+            });
+
+            // Return proposals for the requested status
+            const filteredProposals = this.filterProposalsByStatus(allProposals, status);
             proposals = reactive({
-                proposals: sequentialProposals,
+                proposals: filteredProposals,
                 pagination: {
                     next_key: undefined,
-                    total: sequentialProposals.length.toString()
+                    total: filteredProposals.length.toString()
                 }
             });
         }
@@ -94,14 +103,12 @@ export class GovFallback {
      */
     private static async performSequentialSearch(
         blockchain: any,
-        status: string,
         startId: number,
         config: FallbackConfig,
         existingProposals: GovProposal[]
     ): Promise<GovProposal[]> {
-        const individualProposals: GovProposal[] = [...existingProposals];
+        const allProposals: GovProposal[] = [...existingProposals];
         let consecutiveFailures = 0;
-        const statusString = PROPOSAL_STATUS_MAP[status] || status;
 
         console.log(`Starting sequential search from proposal ${startId + 1}`);
 
@@ -112,11 +119,8 @@ export class GovFallback {
 
                 if (proposal?.proposal) {
                     consecutiveFailures = 0; // Reset counter on successful request
-
-                    if (proposal.proposal.status === statusString) {
-                        individualProposals.push(proposal.proposal);
-                        console.log(`Found matching proposal ${i} with status ${statusString}`);
-                    }
+                    allProposals.push(proposal.proposal);
+                    console.log(`Found proposal ${i} with status ${proposal.proposal.status}`);
                 } else {
                     consecutiveFailures++;
                     console.log(`No proposal found at ${i}, consecutive failures: ${consecutiveFailures}`);
@@ -128,9 +132,50 @@ export class GovFallback {
         }
 
         // Sort by proposal_id in descending order to match the original behavior
-        individualProposals.sort((a, b) => parseInt(b.proposal_id) - parseInt(a.proposal_id));
+        allProposals.sort((a, b) => parseInt(b.proposal_id) - parseInt(a.proposal_id));
 
-        console.log(`Sequential search completed, found ${individualProposals.length} proposals`);
-        return individualProposals;
+        console.log(`Sequential search completed, found ${allProposals.length} total proposals`);
+        return allProposals;
+    }
+
+    /**
+     * Distribute proposals to all status caches
+     */
+    private static distributeProposalsToStatusCaches(chainName: string, allProposals: GovProposal[]): void {
+        const proposalsByStatus: Record<string, GovProposal[]> = {};
+
+        // Group proposals by status
+        allProposals.forEach(proposal => {
+            const status = proposal.status;
+            if (!proposalsByStatus[status]) {
+                proposalsByStatus[status] = [];
+            }
+            proposalsByStatus[status].push(proposal);
+        });
+
+        // Cache proposals for each status they map to
+        Object.entries(PROPOSAL_STATUS_MAP).forEach(([statusKey, statusString]) => {
+            const proposalsForStatus = proposalsByStatus[statusString] || [];
+            const paginatedProposals: PaginatedProposals = {
+                proposals: proposalsForStatus,
+                pagination: {
+                    next_key: undefined,
+                    total: proposalsForStatus.length.toString()
+                }
+            };
+
+            GovProposalCache.set(chainName, statusKey, paginatedProposals);
+            console.log(`Cached ${proposalsForStatus.length} proposals for status ${statusKey} (${statusString})`);
+        });
+    }
+
+    /**
+     * Filter proposals by requested status
+     */
+    private static filterProposalsByStatus(allProposals: GovProposal[], status: string): GovProposal[] {
+        const statusString = PROPOSAL_STATUS_MAP[status] || status;
+        const filtered = allProposals.filter(proposal => proposal.status === statusString);
+        console.log(`Filtered ${filtered.length} proposals for status ${status} (${statusString}) from ${allProposals.length} total proposals`);
+        return filtered;
     }
 } 
