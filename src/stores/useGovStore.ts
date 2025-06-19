@@ -92,7 +92,7 @@ export const useGovStore = defineStore('govStore', {
 
       this.loading[status] = LoadingStatus.Loaded;
       this.proposals[status] = proposals;
-
+      //}
       return this.proposals[status];
     },
     async fetchParams() {
