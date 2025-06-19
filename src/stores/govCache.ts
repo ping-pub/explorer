@@ -2,7 +2,7 @@ import type { PaginatedProposals } from '@/types';
 
 export class GovProposalCache {
     // TTL for non-complete proposals (status not 3 or 4); how long to keep the data in cache
-    private static readonly NON_COMPLETE_CACHE_TTL = 60 * 60 * 1000; // 1 minute cache
+    private static readonly NON_COMPLETE_CACHE_TTL = 60 * 1000; // 1 minute cache
     // TTL for requests; how long before retrying lookup requests
     private static readonly REQUEST_CACHE_TTL = 30 * 1000; // 30 seconds cache
 
