@@ -1,8 +1,8 @@
 import type { PaginatedProposals } from '@/types';
 
 export class GovProposalCache {
-    // TTL for data; how long to keep the data in cache
-    private static readonly DATA_CACHE_TTL = 24 * 60 * 60 * 1000; // 1 day cache
+    // TTL for non-complete proposals (status not 3 or 4); how long to keep the data in cache
+    private static readonly NON_COMPLETE_CACHE_TTL = 60 * 60 * 1000; // 1 minute cache
     // TTL for requests; how long before retrying lookup requests
     private static readonly REQUEST_CACHE_TTL = 30 * 1000; // 30 seconds cache
 
@@ -11,6 +11,14 @@ export class GovProposalCache {
      */
     static getKey(chainName: string, status: string): string {
         return `gov_proposals_${chainName}_${status}`;
+    }
+
+    /**
+     * Get the appropriate TTL based on proposal status
+     */
+    private static getTTL(status: string): number | null {
+        // Status 3 = PASSED, Status 4 = REJECTED - these are complete and never expire
+        return (status === '3' || status === '4') ? null : this.NON_COMPLETE_CACHE_TTL;
     }
 
     /**
@@ -23,7 +31,9 @@ export class GovProposalCache {
             if (cached) {
                 const { data, timestamp, ttl } = JSON.parse(cached);
                 const now = Date.now();
-                if (now - timestamp < ttl) {
+
+                // If ttl is null, cache never expires (for completed proposals)
+                if (ttl === null || now - timestamp < ttl) {
                     console.log(`Using cached proposals for status ${status}`);
                     return data;
                 } else {
@@ -37,7 +47,7 @@ export class GovProposalCache {
     }
 
     /**
-     * Store proposals in cache with timestamp and TTL
+     * Store proposals in cache with timestamp and TTL based on status
      */
     static set(chainName: string, status: string, data: PaginatedProposals): void {
         try {
@@ -45,7 +55,7 @@ export class GovProposalCache {
             const cacheData = {
                 data,
                 timestamp: Date.now(),
-                ttl: this.DATA_CACHE_TTL
+                ttl: this.getTTL(status)
             };
             localStorage.setItem(cacheKey, JSON.stringify(cacheData));
         } catch (error) {
