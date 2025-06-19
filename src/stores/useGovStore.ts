@@ -1,17 +1,11 @@
 import { defineStore } from 'pinia';
 import { useBlockchain } from './useBlockchain';
-import type { PageRequest, PaginatedProposals, GovProposal } from '@/types';
+import type { PageRequest, PaginatedProposals } from '@/types';
 import { LoadingStatus } from './useDashboard';
 import { useWalletStore } from './useWalletStore';
 import { reactive } from 'vue';
 import { GovProposalCache } from './govCache';
-
-// Proposal status mapping for API calls
-const PROPOSAL_STATUS_MAP: Record<string, string> = {
-  '2': 'PROPOSAL_STATUS_VOTING_PERIOD',
-  '3': 'PROPOSAL_STATUS_PASSED',
-  '4': 'PROPOSAL_STATUS_REJECTED',
-};
+import { GovFallback } from './govFallback';
 
 export const useGovStore = defineStore('govStore', {
   state: () => {
@@ -44,75 +38,21 @@ export const useGovStore = defineStore('govStore', {
       //if (!this.loading[status]) {
       this.loading[status] = LoadingStatus.Loading;
 
-      // Check cache first
-      const cached = GovProposalCache.get(this.blockchain.chainName, status);
-
       let proposals;
-      let lastKnownProposalId = 0;
-
-      // Always try batch request first, regardless of cache
       try {
         proposals = reactive(
           await this.blockchain.rpc?.getGovProposals(status, pagination)
         );
       } catch (error) {
         console.warn('Batch proposals request failed, falling back to sequential search:', error);
-
-        // If batch fails, use cache if available and resume from last known proposal
-        if (cached && cached.proposals.length > 0) {
-          proposals = cached;
-          // Find the highest proposal ID from cache
-          lastKnownProposalId = Math.max(...cached.proposals.map(p => parseInt(p.proposal_id)));
-          console.log(`Resuming from proposal ${lastKnownProposalId + 1} using cached data`);
-        } else {
-          proposals = reactive({
-            proposals: [],
-            pagination: {
-              next_key: undefined,
-              total: '0'
-            }
-          });
-        }
-
-        // Determine if we need sequential search based on cache freshness
-        if (GovProposalCache.shouldRequest(this.blockchain.chainName)) {
-          // Fallback: Sequential search with max consecutive failure limit
-          const individualProposals: GovProposal[] = [...(proposals.proposals || [])];
-          let consecutiveFailures = 0;
-          const maxConsecutiveFailures = 3;
-          const statusString = PROPOSAL_STATUS_MAP[status] || status;
-
-          // Sequentially check proposals starting from last known + 1, stopping after maxConsecutiveFailures
-          for (let i = lastKnownProposalId + 1; consecutiveFailures < maxConsecutiveFailures; i++) {
-            try {
-              const proposal = await this.blockchain.rpc?.getGovProposal(i.toString());
-              if (proposal?.proposal) {
-                consecutiveFailures = 0; // Reset counter on successful request
-                if (proposal.proposal.status === statusString) {
-                  individualProposals.push(proposal.proposal);
-                }
-              } else {
-                consecutiveFailures++;
-              }
-            } catch (err) {
-              consecutiveFailures++;
-            }
-          }
-
-          // Sort by proposal_id in descending order to match the original behavior
-          individualProposals.sort((a, b) => parseInt(b.proposal_id) - parseInt(a.proposal_id));
-
-          proposals = reactive({
-            proposals: individualProposals,
-            pagination: {
-              next_key: undefined,
-              total: individualProposals.length.toString()
-            }
-          });
-        }
+        proposals = await GovFallback.fetchProposalsSequentially(
+          this.blockchain,
+          status,
+          { maxConsecutiveFailures: 3 }
+        );
       }
 
-      // Cache the results before filtering
+      // Cache the results
       GovProposalCache.set(this.blockchain.chainName, status, proposals);
 
       //filter spam proposals

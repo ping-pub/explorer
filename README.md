@@ -86,6 +86,8 @@ This version of Ping.Pub was forked from from commit https://github.com/ping-pub
   - In `useDashboard.ts` ensure `conf.logo = lc.logo;`.
   - In `useParamsStore.ts` add `initial_supply`.
   - In `useParamsStore.ts` change `bonded_and_supply` to `bonded_from_sequencer_supply`.
+  - Added `govCache.ts` and `govFallback.ts` for governance proposal caching and fallback fetching when batch requests fail.
+  - Enhanced `useGovStore.ts` with intelligent fallback mechanism and improved error handling for governance proposals.
 - `src/types/`:
   - In `auth.ts`, added `VestingInfo` interface and extended `AuthAccount` for vesting account types.
 - `public/logos/`:
