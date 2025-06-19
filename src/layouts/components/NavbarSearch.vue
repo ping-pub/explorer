@@ -154,7 +154,7 @@ function confirm() {
           <div class="dropdown-content bg-base-100 border rounded shadow p-2 min-w-[22rem]">
             <span v-if="loadingType" class="text-xs text-gray-400 flex items-center"><Icon icon="mdi:loading" class="animate-spin mr-1" />Detecting...</span>
             <template v-else>
-              <div v-for="detail in searchDetails" :key="detail.type" class="mb-2 last:mb-0 p-2 rounded hover:bg-base-200 transition">
+              <div v-for="detail in searchDetails" :key="detail.type" class="mb-2 last:mb-0 p-2 rounded hover:bg-base-200 transition" @click="confirm">
                 <div class="font-bold text-primary text-xs mb-1">{{ detail.type }}</div>
                 <div class="font-mono text-xs break-all mb-1">{{ detail.value }}</div>
                 <div v-if="detail.balances && detail.balances.length > 0" class="text-xs text-gray-600">
