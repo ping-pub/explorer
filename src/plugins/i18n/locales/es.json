@@ -153,7 +153,8 @@
       "PROPOSAL_STATUS_FAILED": "Fallido"
     },
     "upgrade_plan": "Plan de actualización",
-    "votes": "Votos"
+    "votes": "Votos",
+    "fallback_data_notice": "Usando datos de respaldo - algunas propuestas pueden no estar actualizadas. Actualice la página para reintentar la fuente de datos principal."
   },
   "ibc": {
     "title": "Conexiones IBC",

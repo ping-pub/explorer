@@ -153,7 +153,8 @@
       "PROPOSAL_STATUS_FAILED": "失敗"
     },
     "upgrade_plan": "アップグレード計画",
-    "votes": "票"
+    "votes": "票",
+    "fallback_data_notice": "フォールバックデータを使用中 - 一部の提案が最新ではない可能性があります。プライマリデータソースを再試行するにはページを更新してください。"
   },
   "ibc": {
     "title": "IBC接続",

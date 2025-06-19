@@ -5,7 +5,7 @@ import { LoadingStatus } from './useDashboard';
 import { useWalletStore } from './useWalletStore';
 import { reactive } from 'vue';
 import { GovProposalCache } from './govCache';
-import { GovFallback } from './govFallback';
+import { GovFallback, type FallbackResult } from './govFallback';
 
 export const useGovStore = defineStore('govStore', {
   state: () => {
@@ -17,6 +17,7 @@ export const useGovStore = defineStore('govStore', {
       },
       proposals: {} as Record<string, PaginatedProposals>,
       loading: {} as Record<string, LoadingStatus>,
+      usingFallback: false,
     };
   },
   getters: {
@@ -38,18 +39,21 @@ export const useGovStore = defineStore('govStore', {
       //if (!this.loading[status]) {
       this.loading[status] = LoadingStatus.Loading;
 
-      let proposals;
+      let proposals: PaginatedProposals;
       try {
         proposals = reactive(
           await this.blockchain.rpc?.getGovProposals(status, pagination)
         );
+        this.usingFallback = false;
       } catch (error) {
         console.warn('Batch proposals request failed, falling back to sequential search:', error);
-        proposals = await GovFallback.fetchProposalsSequentially(
+        const fallbackResult: FallbackResult = await GovFallback.fetchProposalsSequentially(
           this.blockchain,
           status,
           { maxConsecutiveFailures: 3 }
         );
+        proposals = fallbackResult;
+        this.usingFallback = fallbackResult.usingFallback;
       }
 
       // Cache the results

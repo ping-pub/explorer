@@ -142,7 +142,8 @@
         "PROPOSAL_STATUS_FAILED": "Gagal"
       },
       "upgrade_plan": "Peningkatan Rencana",
-      "votes": "Suara"
+      "votes": "Suara",
+      "fallback_data_notice": "Menggunakan data cadangan - beberapa proposal mungkin tidak terbaru. Silakan refresh halaman untuk mencoba sumber data utama lagi."
     },
     "ibc": {
       "title": "Koneksi IBC",

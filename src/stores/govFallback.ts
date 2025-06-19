@@ -13,6 +13,10 @@ export interface FallbackConfig {
     maxConsecutiveFailures: number;
 }
 
+export interface FallbackResult extends PaginatedProposals {
+    usingFallback: boolean;
+}
+
 export class GovFallback {
     private static readonly DEFAULT_CONFIG: FallbackConfig = {
         maxConsecutiveFailures: 3,
@@ -25,13 +29,14 @@ export class GovFallback {
         blockchain: any,
         status: string,
         config: Partial<FallbackConfig> = {}
-    ): Promise<PaginatedProposals> {
+    ): Promise<FallbackResult> {
         const finalConfig = { ...this.DEFAULT_CONFIG, ...config };
 
         // Check cache first
         const cached = GovProposalCache.get(blockchain.chainName, status);
         let proposals: PaginatedProposals;
         let lastKnownProposalId = 0;
+        let isUsingFallback = true; // Always true when this method is called
 
         // Initialize with cache or empty structure
         proposals = this.initializeProposalsFromCache(cached);
@@ -65,7 +70,10 @@ export class GovFallback {
             });
         }
 
-        return proposals;
+        return {
+            ...proposals,
+            usingFallback: isUsingFallback
+        };
     }
 
     /**
