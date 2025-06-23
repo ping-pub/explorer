@@ -8,7 +8,7 @@ import {
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import DonutChart from '@/components/charts/DonutChart.vue';
 import { computed, ref } from '@vue/reactivity';
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 
 import type {
@@ -50,6 +50,17 @@ const chart = {};
 onMounted(() => {
   loadAccount(props.address);
 });
+
+// Add watcher for address prop
+watch(
+  () => props.address,
+  (newAddress: string, oldAddress: string) => {
+    if (newAddress !== oldAddress) {
+      loadAccount(newAddress);
+    }
+  }
+);
+
 const totalAmountByCategory = computed(() => {
   let sumDel = 0;
   delegations.value?.forEach((x) => {
