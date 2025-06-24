@@ -89,25 +89,24 @@ const totalAmount = computed(() => {
   return totalAmountByCategory.value.reduce((p, c) => c + p, 0);
 });
 
-const totalValue = computed(() => {
-  let value = 0;
-  delegations.value?.forEach((x) => {
-    value += format.tokenValueNumber(x.balance);
-  });
-  rewards.value?.total?.forEach((x) => {
-    value += format.tokenValueNumber(x);
-  });
-  balances.value?.forEach((x) => {
-    value += format.tokenValueNumber(x);
-  });
-  unbonding.value?.forEach((x) => {
-    x.entries?.forEach((y) => {
-      value += format.tokenValueNumber({ amount: y.balance, denom: stakingStore.params.bond_denom });
-    });
-  });
-  return format.formatNumber(value, '0,0.00');
+const donutData = computed(() => {
+  // Each balance
+  const balanceSlices = balances.value.map(b => ({
+    label: b.denom.toUpperCase().replace('U', ''),
+    amount: parseFloat(format.formatToken(b, true).replace(',', ''))
+  }));
+  // Each delegation
+  const delegationSlices = delegations.value.map((d, i) => ({
+    label: `Staking #${i + 1}`,
+    amount: parseFloat(format.formatToken(d.balance, true).replace(',', ''))
+  }));
+  // Optionally, add rewards as slices too
+  // const rewardSlices = rewards.value?.total?.map((r, i) => ({
+  //   label: `Reward #${i + 1}`,
+  //   amount: parseFloat(format.formatToken(r, true))
+  // })) || [];
+  return [...balanceSlices, ...delegationSlices /*, ...rewardSlices*/];
 });
-
 
 function loadAccount(address: string) {
   blockchain.rpc.getAuthAccount(address).then((x) => {
@@ -125,6 +124,7 @@ function loadAccount(address: string) {
     blockchain.rpc.getApplicationsInfo(address).then((x) => {
       // @ts-expect-error because delegation is being reused as stake information container, yet keeping the support for delegations
       delegations.value.push({ balance: x.application.stake })
+      applications.value = x.application
     }).catch(e => {
       console.error(e)
     })
@@ -132,6 +132,7 @@ function loadAccount(address: string) {
     blockchain.rpc.getGatewaysInfo(address).then((x) => {
       // @ts-expect-error because delegation is being reused as stake information container, yet keeping the support for delegations
       delegations.value.push({ balance: x.gateway.stake })
+      gateways.value = x.gateways
     }).catch(e => {
       console.error(e)
     })
@@ -222,9 +223,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
       </div>
       <div class="grid md:!grid-cols-3">
         <div class="md:!col-span-1">
-          <DonutChart
-            :series="totalAmountByCategory.map(x => { return parseFloat(format.formatToken({ amount: `${x}`, denom: 'upokt' }, true)); })"
-            :labels="labels" />
+          <DonutChart :series="donutData.map(x => x.amount)" :labels="donutData.map(x => x.label)" />
         </div>
         <div class="mt-4 md:!col-span-1 md:!mt-0 md:!ml-4">
           <!-- list-->
@@ -283,26 +282,49 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
             {{ $t('account.total_value') }}: ${{ totalValue }}
           </div> -->
         </div>
-        <div class="md:!col-span-1">
-          <h2 class="card-title mb-4">Staked Services</h2>
-          <table class="table-compact w-full table-fixed hidden lg:!table">
-            <thead>
-              <tr>
-                <th>Service ID</th>
-                <th>RPC Endpoint</th>
-                <!-- <th>Revenue Share (Owner/Operator)</th> -->
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(service, index) of suppliers.services">
-                <td>{{ service.service_id }}</td>
-                <td>{{service.endpoints.map((ep: any) => ep.url).join(',')}}</td>
-                <!-- <td>{{ props.address }}</td> -->
-                <!-- <td>{{[...service.rev_share].filter((rs: any) => rs.address != props.address)[0]?.rev_share_percentage || '0'}}% / {{
-                  [...service.rev_share].filter((rs: any) => rs.address == props.address)[0]?.rev_share_percentage || '0' }}% </td> -->
-              </tr>
-            </tbody>
-          </table>
+        <div class="md:!col-span-1 services-table-wrapper" v-if="suppliers.services?.length > 0">
+          <h2 class="card-title mb-4">Services ({{ suppliers.services?.length }}) - Supplier</h2>
+          <div class="services-table-scroll">
+            <table class="table-compact w-full table-fixed hidden lg:!table">
+              <thead class="bg-base-200">
+                <tr>
+                  <th class="bg-base-300">Service ID</th>
+                  <th class="bg-base-300">RPC Endpoint</th>
+                  <!-- <th>Revenue Share (Owner/Operator)</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(service, index) of suppliers.services">
+                  <td>{{ service.service_id }}</td>
+                  <td>{{service.endpoints.map((ep: any) => ep.url).join(',')}}</td>
+                  <!-- <td>{{ props.address }}</td> -->
+                  <!-- <td>{{[...service.rev_share].filter((rs: any) => rs.address != props.address)[0]?.rev_share_percentage || '0'}}% / {{
+                    [...service.rev_share].filter((rs: any) => rs.address == props.address)[0]?.rev_share_percentage || '0' }}% </td> -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="md:!col-span-1 services-table-wrapper" v-if="applications.service_configs?.length > 0">
+          <h2 class="card-title mb-4">Services ({{ applications.service_configs?.length }}) - Application</h2>
+          <div class="services-table-scroll">
+            <table class="table-compact w-full table-fixed hidden lg:!table">
+              <thead class="bg-base-200">
+                <tr>
+                  <th class="bg-base-300">Service ID</th>
+                  <!-- <th>Revenue Share (Owner/Operator)</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(service, index) of applications.service_configs">
+                  <td>{{ service.service_id }}</td>
+                  <!-- <td>{{ props.address }}</td> -->
+                  <!-- <td>{{[...service.rev_share].filter((rs: any) => rs.address != props.address)[0]?.rev_share_percentage || '0'}}% / {{
+                    [...service.rev_share].filter((rs: any) => rs.address == props.address)[0]?.rev_share_percentage || '0' }}% </td> -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -314,12 +336,12 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
       <h2 class="card-title mb-4">{{ $t('account.unbonding_delegations') }}</h2>
       <div class="overflow-x-auto">
         <table class="table text-sm w-full">
-          <thead>
+          <thead class="bg-base-200">
             <tr>
-              <th class="py-3">{{ $t('account.creation_height') }}</th>
-              <th class="py-3">{{ $t('account.initial_balance') }}</th>
-              <th class="py-3">{{ $t('account.balance') }}</th>
-              <th class="py-3">{{ $t('account.completion_time') }}</th>
+              <th class="py-3 bg-base-300">{{ $t('account.creation_height') }}</th>
+              <th class="py-3 bg-base-300">{{ $t('account.initial_balance') }}</th>
+              <th class="py-3 bg-base-300">{{ $t('account.balance') }}</th>
+              <th class="py-3 bg-base-300">{{ $t('account.completion_time') }}</th>
             </tr>
           </thead>
           <tbody class="text-sm" v-for="(v, index) in unbonding" :key="index">
@@ -327,7 +349,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               <td class="text-caption text-primary py-3 bg-slate-200" colspan="10">
                 <RouterLink :to="`/${chain}/staking/${v.validator_address}`">{{
                   v.validator_address
-                  }}</RouterLink>
+                }}</RouterLink>
               </td>
             </tr>
             <tr v-for="entry in v.entries">
@@ -367,21 +389,21 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
 
     <!-- Transactions -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4">{{ $t('account.transactions') }}</h2>
-      <div class="overflow-x-auto">
+      <h2 class="card-title mb-4">{{ $t('account.sent') }}</h2>
+      <div class="services-table-wrapper services-table-scroll">
         <table class="table w-full text-sm">
-          <thead>
+          <thead class="bg-base-300">
             <tr>
-              <th class="py-3">{{ $t('account.height') }}</th>
-              <th class="py-3">{{ $t('account.hash') }}</th>
-              <th class="py-3">{{ $t('account.messages') }}</th>
-              <th class="py-3">{{ $t('account.amount') }}</th>
-              <th class="py-3">{{ $t('tx.fee') }}</th>
-              <th class="py-3">{{ $t('account.time') }}</th>
+              <th class="bg-base-300 py-3">{{ $t('account.height') }}</th>
+              <th class="bg-base-300 py-3">{{ $t('account.hash') }}</th>
+              <th class="bg-base-300 py-3">{{ $t('account.messages') }}</th>
+              <th class="bg-base-300 py-3">{{ $t('account.amount') }}</th>
+              <th class="bg-base-300 py-3">{{ $t('tx.fee') }}</th>
+              <th class="bg-base-300 py-3">{{ $t('account.time') }}</th>
             </tr>
           </thead>
-          <tbody class="text-sm">
-            <tr v-if="txs.length === 0">
+          <tbody class="text-md">
+            <tr v-if="txs?.length === 0">
               <td colspan="10">
                 <div class="text-center">{{ $t('account.no_transactions') }}</div>
               </td>
@@ -390,7 +412,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               <td class="text-sm py-3">
                 <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-primary dark:invert">{{
                   v.height
-                  }}</RouterLink>
+                }}</RouterLink>
               </td>
               <td class="truncate py-3" style="max-width: 200px">
                 <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
@@ -423,16 +445,16 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
     <!-- Received -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">{{ $t('account.received') }}</h2>
-      <div class="overflow-x-auto">
+      <div class="services-table-wrapper services-table-scroll">
         <table class="table w-full text-sm">
           <thead>
             <tr>
-              <th class="py-3">{{ $t('account.height') }}</th>
-              <th class="py-3">{{ $t('account.hash') }}</th>
-              <th class="py-3">{{ $t('account.messages') }}</th>
-              <th class="py-3">{{ $t('account.amount') }}</th>
-              <th class="py-3">{{ $t('tx.fee') }}</th>
-              <th class="py-3">{{ $t('account.time') }}</th>
+              <th class="py-3 bg-base-300">{{ $t('account.height') }}</th>
+              <th class="py-3 bg-base-300">{{ $t('account.hash') }}</th>
+              <th class="py-3 bg-base-300">{{ $t('account.messages') }}</th>
+              <th class="py-3 bg-base-300">{{ $t('account.amount') }}</th>
+              <th class="py-3 bg-base-300">{{ $t('tx.fee') }}</th>
+              <th class="py-3 bg-base-300">{{ $t('account.time') }}</th>
             </tr>
           </thead>
           <tbody class="text-sm">
@@ -445,7 +467,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               <td class="text-sm py-3">
                 <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-primary dark:invert">{{
                   v.height
-                  }}</RouterLink>
+                }}</RouterLink>
               </td>
               <td class="truncate py-3" style="max-width: 200px">
                 <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
@@ -488,3 +510,28 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
   </div>
   <div v-else class="text-no text-sm">{{ $t('account.error') }}</div>
 </template>
+
+<style scoped>
+.services-table-wrapper {
+  height: 320px;
+  max-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.services-table-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.services-table-scroll table {
+  margin-bottom: 0;
+}
+
+.services-table-scroll thead {
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 1;
+}
+</style>
