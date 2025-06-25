@@ -145,7 +145,7 @@
     },
     "upgrade_plan": "升级计划",
     "votes": "投票",
-    "fallback_data_notice": "正在使用备用数据 - 部分提案可能不是最新的。请刷新页面以重试主要数据源。"
+    "fallback_data_notice": "由于已知问题，查询所有历史提案失败。正在改用单独查询提案。"
   },
   "ibc": {
     "title": "IBC 连接",

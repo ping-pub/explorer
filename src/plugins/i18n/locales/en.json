@@ -156,7 +156,7 @@
     },
     "upgrade_plan": "Upgrade Plan",
     "votes": "Votes",
-    "fallback_data_notice": "Using fallback data - some proposals may not be up to date. Please refresh to retry the primary data source."
+    "fallback_data_notice": "Querying all historical proposals failed due to a known issue. Resorting to querying proposals individually."
   },
   "ibc": {
     "title": "IBC Connections",

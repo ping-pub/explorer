@@ -154,7 +154,7 @@
     },
     "upgrade_plan": "Upgrade-Plan",
     "votes": "Stimmen",
-    "fallback_data_notice": "Verwende Fallback-Daten - einige Vorschläge sind möglicherweise nicht aktuell. Bitte die Seite aktualisieren, um die primäre Datenquelle erneut zu versuchen."
+    "fallback_data_notice": "Abfrage aller historischen Vorschläge aufgrund eines bekannten Problems fehlgeschlagen. Wechsel zu individuellen Vorschlagsabfragen."
   },
   "ibc": {
     "title": "IBC-Verbindungen",
