@@ -66,7 +66,7 @@ export const requests: Partial<RequestRegistry> = {
     adapter,
   },
   mint_inflation: {
-    url: '/xion/mint/v1/inflation',
+    url: '/cosmos/mint/v1beta1/inflation',
     adapter: async (data: any): Promise<{ inflation: string }> => {
       try {
         const client = CosmosRestClient.newDefault(
@@ -99,6 +99,4 @@ export const requests: Partial<RequestRegistry> = {
       }
     },
   },
-  mint_params: { url: '/xion/mint/v1/params', adapter },
-  mint_annual_provisions: { url: '/xion/mint/v1beta1/annual_provisions', adapter }
 }
