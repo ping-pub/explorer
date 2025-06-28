@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import {
   useDashboard,
-  type ChainConfig,
-  type Endpoint,
-  EndpointType,
 } from './useDashboard';
+import type {
+  ChainConfig,
+  Endpoint,
+} from '@/types/chaindata';
 import type {
   NavGroup,
   NavLink,
@@ -23,7 +24,6 @@ import {
   useWalletStore
 } from '.';
 import { useBlockModule } from '@/modules/[chain]/block/block';
-import { DEFAULT } from '@/libs';
 import { hexToRgb, rgbToHsl } from '@/libs/utils';
 
 export const useBlockchain = defineStore('blockchain', {
@@ -32,11 +32,7 @@ export const useBlockchain = defineStore('blockchain', {
       status: {} as Record<string, string>,
       rest: '',
       chainName: '',
-      endpoint: {} as {
-        type?: EndpointType;
-        address: string;
-        provider: string;
-      },
+      endpoint: {} as Endpoint,
       connErr: '',
     };
   },
@@ -45,7 +41,7 @@ export const useBlockchain = defineStore('blockchain', {
       const chain = this.dashboard.chains[this.chainName]
       // update chain config with dynamic updated sdk version
       const sdkversion = localStorage.getItem(`sdk_version_${this.chainName}`)
-      if(sdkversion && chain?.versions) {
+      if (sdkversion && chain?.versions) {
         chain.versions.cosmosSdk = sdkversion;
       }
       return chain;
@@ -61,8 +57,10 @@ export const useBlockchain = defineStore('blockchain', {
       return useDashboard();
     },
     isConsumerChain() {
-      // @ts-ignore
-      return this.current && this.current.providerChain;
+      const current: any = this.current || {};
+      const providerChain = current.providerChain || {};
+      const api = providerChain.api || [];
+      return api.length > 0
     },
     computedChainMenu() {
       let currNavItem: VerticalNavItems = [];
@@ -72,7 +70,7 @@ export const useBlockchain = defineStore('blockchain', {
         if (this.current?.themeColor) {
           const { color } = hexToRgb(this.current?.themeColor);
           const { h, s, l } = rgbToHsl(color);
-          const themeColor = h + ' ' + s + '% ' + l +'%';
+          const themeColor = h + ' ' + s + '% ' + l + '%';
           document.body.style.setProperty('--p', `${themeColor}`);
           // document.body.style.setProperty('--p', `${this.current?.themeColor}`);
         } else {
@@ -87,18 +85,20 @@ export const useBlockchain = defineStore('blockchain', {
             badgeClass: 'bg-error',
             children: routes
               .filter((x) => x.meta.i18n) // defined menu name
-              .filter(
-                (x) =>
-                  !this.current?.features ||
-                  this.current.features.includes(String(x.meta.i18n))
-              ) // filter none-custom module
-              .map((x) => ({
-                title: `module.${x.meta.i18n}`,
-                to: { path: x.path.replace(':chain', this.chainName) },
-                icon: { icon: 'mdi-chevron-right', size: '22' },
-                i18n: true,
-                order: Number(x.meta.order || 100),
-              }))
+              .filter((x) => {
+                const features = this.current?.features || [];
+                if (features.length === 0) return true; // no features defined, show all
+                return features.includes(String(x.meta.i18n))
+              }) // filter none-custom module
+              .map((x) => {
+                return {
+                  title: `module.${x.meta.i18n}`,
+                  to: { path: x.path.replace(':chain', this.chainName) },
+                  icon: { icon: 'mdi-chevron-right', size: '22' },
+                  i18n: true,
+                  order: Number(x.meta.order || 100),
+                }
+              })
               .sort((a, b) => a.order - b.order),
           },
         ];
@@ -149,15 +149,33 @@ export const useBlockchain = defineStore('blockchain', {
       if (!this.isConsumerChain) {
         await useStakingStore().init();
       }
-      useBankStore().initial();
-      useBaseStore().initial();
-      useGovStore().initial();
-      useMintStore().initial();
-      useBlockModule().initial();
-      useDistributionStore().initial();
+      this.setRpc().then(() => {
+        useBankStore().initial();
+        useBaseStore().initial();
+        useGovStore().initial();
+        useMintStore().initial();
+        useBlockModule().initial();
+        useDistributionStore().initial();
+      })
     },
 
-    randomEndpoint(chainName: string) : Endpoint | undefined {
+    async setRpc() {
+      if (!this.rpc) {
+        const endpoint = this.randomEndpoint(this.chainName);
+        if (endpoint) {
+          await this.setRestEndpoint(endpoint);
+        } else {
+          this.connErr = 'No RPC endpoint available';
+        }
+      }
+    },
+
+    async getRpc() {
+      await this.setRpc();
+      return this.rpc;
+    },
+
+    randomEndpoint(chainName: string): Endpoint | undefined {
       const end = localStorage.getItem(`endpoint-${chainName}`);
       if (end) {
         return JSON.parse(end);
@@ -173,7 +191,7 @@ export const useBlockchain = defineStore('blockchain', {
 
     async randomSetupEndpoint() {
       const endpoint = this.randomEndpoint(this.chainName)
-      if(endpoint) await this.setRestEndpoint(endpoint);
+      if (endpoint) await this.setRestEndpoint(endpoint);
     },
 
     async setRestEndpoint(endpoint: Endpoint) {
@@ -185,24 +203,28 @@ export const useBlockchain = defineStore('blockchain', {
         JSON.stringify(endpoint)
       );
     },
+
     async setCurrent(name: string) {
       // Ensure chains are loaded due to asynchronous calls.
-      if(this.dashboard.length === 0) {
+      if (this.dashboard.length === 0) {
         await this.dashboard.initial();
       }
 
       // Find the case-sensitive name for the chainName, else simply use the parameter-value.
-      const caseSensitiveName = 
-        Object.keys(this.dashboard.chains).find((x) => x.toLowerCase() === name.toLowerCase()) 
+      const caseSensitiveName =
+        Object.keys(this.dashboard.chains || {}).find((x) => x.toLowerCase() === name.toLowerCase())
         || name;
 
       // Update chainName if needed
-      if (caseSensitiveName !== this.chainName) {
+      if (caseSensitiveName && caseSensitiveName !== this.chainName) {
         this.chainName = caseSensitiveName;
       }
     },
+
     supportModule(mod: string) {
       return !this.current?.features || this.current.features.includes(mod);
     },
+
+
   },
 });

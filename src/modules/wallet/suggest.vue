@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { suggestChain } from '@leapwallet/cosmos-snap-provider';
-import { useDashboard, type ChainConfig, useBlockchain, NetworkType } from '@/stores';
+import { useDashboard, useBlockchain } from '@/stores';
 import { CosmosRestClient } from '@/libs/client';
 import { onMounted } from 'vue';
+import { loadFromLocal } from '@/libs/chaindata';
+import { type ChainConfig, NetworkType } from '@/types/chaindata';
 import AdBanner from '@/components/ad/AdBanner.vue';
 
 const error = ref("")
@@ -15,7 +17,7 @@ const network = ref(NetworkType.Mainnet)
 const mainnet = ref([] as ChainConfig[])
 const testnet = ref([] as ChainConfig[])
 const chains = computed(() => {
-    return network.value === NetworkType.Mainnet? mainnet.value : testnet.value
+    return network.value === NetworkType.Mainnet ? mainnet.value : testnet.value
 })
 
 onMounted(() => {
@@ -23,10 +25,10 @@ onMounted(() => {
     selected.value = chainStore.current || Object.values(dashboard.chains)[0]
     initParamsForKeplr()
 
-    dashboard.loadLocalConfig(NetworkType.Mainnet).then((res) => {
+    loadFromLocal(NetworkType.Mainnet).then((res) => {
         mainnet.value = Object.values<ChainConfig>(res)
     })
-    dashboard.loadLocalConfig(NetworkType.Testnet).then((res) => {
+    loadFromLocal(NetworkType.Testnet).then((res) => {
         testnet.value = Object.values<ChainConfig>(res)
     })
 })
@@ -37,9 +39,9 @@ function onchange() {
 
 async function initParamsForKeplr() {
     const chain = selected.value
-    if(!chain.endpoints?.rest?.at(0)) throw new Error("Endpoint does not set");
+    if (!chain.endpoints?.rest?.at(0)) throw new Error("Endpoint does not set");
     const client = CosmosRestClient.newDefault(chain.endpoints.rest?.at(0)?.address || "")
-    const b = await client.getBaseBlockLatest()   
+    const b = await client.getBaseBlockLatest()
     const chainid = b.block.header.chain_id
 
     const gasPriceStep = chain.keplrPriceStep || {
@@ -97,9 +99,9 @@ async function initSnap() {
     const chain = selected.value
     const [token] = chain.assets
 
-    if(!chain.endpoints?.rest?.at(0)) throw new Error("Endpoint does not set");
+    if (!chain.endpoints?.rest?.at(0)) throw new Error("Endpoint does not set");
     const client = CosmosRestClient.newDefault(chain.endpoints.rest?.at(0)?.address || "")
-    const b = await client.getBaseBlockLatest()   
+    const b = await client.getBaseBlockLatest()
     const chainId = b.block.header.chain_id
 
     conf.value = JSON.stringify({
@@ -113,22 +115,22 @@ async function initSnap() {
         },
         feeCurrencies: [
             {
-            coinDenom: token.display,
-            coinMinimalDenom: token.base,
-            coinDecimals: token.denom_units.find(x => x.denom === token.display)?.exponent || 6,
-            coinGeckoId: token.coingecko_id,
-            gasPriceStep: {
-                low: 0.0625,
-                average: 0.5,
-                high: 62.5,
-            },
+                coinDenom: token.display,
+                coinMinimalDenom: token.base,
+                coinDecimals: token.denom_units.find(x => x.denom === token.display)?.exponent || 6,
+                coinGeckoId: token.coingecko_id,
+                gasPriceStep: {
+                    low: 0.0625,
+                    average: 0.5,
+                    high: 62.5,
+                },
             },
         ],
     }, null, '\t')
 }
 
 function suggest() {
-    if(wallet.value === "keplr") {
+    if (wallet.value === "keplr") {
         // @ts-ignore
         if (window.keplr) {
             // @ts-ignore
@@ -155,18 +157,22 @@ function suggest() {
                     {{ c.chainName }}
                 </option>
             </select>
-            <label><input type="radio" v-model="wallet" value="keplr" class="radio radio-bordered" @change="onchange" /> Keplr</label>
-            <label><input type="radio" v-model="wallet" value="metamask" class="radio radio-bordered ml-4" @change="onchange"/> Metamask</label>
+            <label><input type="radio" v-model="wallet" value="keplr" class="radio radio-bordered" @change="onchange" />
+                Keplr</label>
+            <label><input type="radio" v-model="wallet" value="metamask" class="radio radio-bordered ml-4"
+                    @change="onchange" /> Metamask</label>
         </div>
         <div class="text-main mt-5">
             <textarea v-model="conf" class="textarea textarea-bordered w-full" rows="15"></textarea>
         </div>
         <div class="mt-4 mb-4">
 
-            <button class="btn !bg-primary !border-primary text-white mr-2" @click="suggest">Suggest {{ selected.chainName }} TO {{ wallet }}</button>
+            <button class="btn !bg-primary !border-primary text-white mr-2" @click="suggest">Suggest {{
+                selected.chainName }} TO {{ wallet }}</button>
 
             <div class="mt-4">
-                If the chain is not offically support on Keplr/Metamask Snap, you can submit these parameters to enable Keplr/Metamask Snap.
+                If the chain is not offically support on Keplr/Metamask Snap, you can submit these parameters to enable
+                Keplr/Metamask Snap.
             </div>
         </div>
 

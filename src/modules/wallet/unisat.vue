@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useDashboard, type ChainConfig, useBlockchain } from '@/stores';
+import { useDashboard, useBlockchain } from '@/stores';
+import type { ChainConfig } from '@/types/chaindata';
 import { CosmosRestClient } from '@/libs/client';
 import { onMounted } from 'vue';
 import AdBanner from '@/components/ad/AdBanner.vue';
@@ -16,9 +17,9 @@ onMounted(() => {
 })
 async function initParamsForKeplr() {
     const chain = selected.value
-    if(!chain.endpoints?.rest?.at(0)) throw new Error("Endpoint does not set");
+    if (!chain.endpoints?.rest?.at(0)) throw new Error("Endpoint does not set");
     const client = CosmosRestClient.newDefault(chain.endpoints.rest?.at(0)?.address || "")
-    const b = await client.getBaseBlockLatest()   
+    const b = await client.getBaseBlockLatest()
     const chainid = b.block.header.chain_id
 
     const gasPriceStep = chain.keplrPriceStep || {
@@ -92,7 +93,8 @@ function suggest() {
                     {{ c.chainName }}
                 </option>
             </select>
-            <button class="btn !bg-yes !border-yes text-white px-10" @click="suggest">Add {{ selected.chainName }} TO Unisat Wallet</button>
+            <button class="btn !bg-yes !border-yes text-white px-10" @click="suggest">Add {{ selected.chainName }} TO
+                Unisat Wallet</button>
         </div>
         <div class="text-main mt-5">
             <textarea v-model="conf" class="textarea textarea-bordered w-full" rows="15"></textarea>

@@ -3,8 +3,8 @@ import { Icon } from '@iconify/vue';
 import {
   useDashboard,
   LoadingStatus,
-  type ChainConfig,
 } from '@/stores/useDashboard';
+import type { ChainConfig } from '@/types/chaindata';
 import ChainSummary from '@/components/ChainSummary.vue';
 import AdBanner from '@/components/ad/AdBanner.vue';
 

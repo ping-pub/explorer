@@ -211,11 +211,16 @@ export const useIndexModule = defineStore('module-index', {
     },
 
     coingeckoId() {
+      let coingeckoId = ""
       this.tickerIndex = 0;
-      // @ts-ignore
-      const [firstAsset] = this.blockchain?.assets || [];
-      return firstAsset.coingecko_id
-    }
+      if (this.blockchain?.assets && this.blockchain.assets.length > 0) {
+        const asset = this.blockchain.assets[0];
+        if (asset.coingecko_id) {
+          coingeckoId = asset.coingecko_id;
+        }
+        return coingeckoId;
+      }
+    },
   },
   actions: {
     async loadDashboard() {
