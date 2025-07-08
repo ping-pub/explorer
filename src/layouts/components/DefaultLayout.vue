@@ -9,7 +9,8 @@ import NavbarSearch from '@/layouts/components/NavbarSearch.vue';
 import ChainProfile from '@/layouts/components/ChainProfile.vue';
 import Sponsors from '@/layouts/components/Sponsors.vue';
 
-import { NetworkType, useDashboard } from '@/stores/useDashboard';
+import { useDashboard } from '@/stores/useDashboard';
+import { NetworkType } from '@/types/chaindata';
 import { useBaseStore, useBlockchain } from '@/stores';
 
 import NavBarI18n from './NavBarI18n.vue';

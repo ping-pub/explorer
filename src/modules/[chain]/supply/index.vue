@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { ref } from '@vue/reactivity';
 import { useBlockchain, useFormatter } from '@/stores';
-import { PageRequest, type Pagination, type Coin, type DenomMetadata } from '@/types';
+import { PageRequest, type Pagination, type Coin } from '@/types';
 import { onMounted } from 'vue';
-import type { Asset } from '@ping-pub/chain-registry-client/dist/types'
+import type { Asset } from '@/types/chaindata'
 import PaginationBar from '@/components/PaginationBar.vue';
 const props = defineProps(['chain']);
 
@@ -34,13 +34,13 @@ function findGlobalAssetConfig(denom: string) {
   return undefined
 }
 
-async function mergeDenomMetadata(denom: string, denomsMetadatas: DenomMetadata[]): Promise<SupplyAsset> {
+async function mergeDenomMetadata(denom: string, denomsMetadatas: Asset[]): Promise<SupplyAsset> {
   const denomMetadata = denomsMetadatas.find(d => d.base.endsWith(denom));
   let asset = findGlobalAssetConfig(denom) as SupplyAsset
   if (asset && denomMetadata) {
     asset = { ...denomMetadata, ...asset }
     asset.display = denomMetadata.display
-    asset.logo = asset.logo_URIs?.svg || asset.logo_URIs?.png || asset.logo_URIs?.jpeg || undefined
+    asset.logo = asset.logo_URIs?.svg || asset.logo_URIs?.png || undefined
   } else if (denomMetadata) {
     return denomMetadata as SupplyAsset
   }
@@ -59,7 +59,7 @@ function pageload(p: number) {
         amount: format.tokenAmountNumber({ amount: coin.amount, denom: denom }).toString(),
         base: asset.base || coin.denom,
         info: asset.display || coin.denom,
-        logo: asset?.logo_URIs?.svg || asset?.logo_URIs?.png || asset?.logo_URIs?.jpeg || "/logo.svg",
+        logo: asset?.logo_URIs?.svg || asset?.logo_URIs?.png || "/logo.svg",
       }
     }));
     pageResponse.value = bankSupplyResponse.pagination

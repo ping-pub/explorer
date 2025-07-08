@@ -13,7 +13,7 @@ import { consensusPubkeyToHexAddress, get } from '@/libs';
 import { useBankStore } from './useBankStore';
 import type { Coin, DenomTrace } from '@/types';
 import { useDashboard } from './useDashboard';
-import type { Asset } from '@ping-pub/chain-registry-client/dist/types'
+import type { Asset, DenomUnit } from '@/types/chaindata';
 
 dayjs.extend(localeData);
 dayjs.extend(duration);
@@ -129,7 +129,7 @@ export const useFormatter = defineStore('formatter', {
       // find the symbol
       const symbol = this.dashboard.coingecko[token.denom]?.symbol || token.denom 
       // convert denomination to symbol
-      const exponent = this.dashboard.coingecko[symbol?.toLowerCase()]?.exponent || this.specialDenom(token.denom);
+      const exponent = this.dashboard.coingecko[symbol?.toString().toLowerCase()]?.exponent || this.specialDenom(token.denom);
       // caculate amount of symbol
       const amount = Number(token.amount) / (10 ** exponent)
       return amount

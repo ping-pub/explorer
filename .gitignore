@@ -3,3 +3,8 @@ node_modules/
 yarn-error.log
 dist
 .idea
+
+# local env files
+/.env.*
+/.env*.local
+!/.env.example

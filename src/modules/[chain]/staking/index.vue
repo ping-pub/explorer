@@ -141,7 +141,7 @@ const list = computed(() => {
     if (tab.value === 'active') {
         return staking.validators.map((x, i) => ({v: x, rank: calculateRank(i), logo: logo(x.description.identity)}));
     } else if (tab.value === 'featured') {
-        const endpoint = chainStore.current?.endpoints?.rest?.map(x => x.provider)
+        const endpoint = chainStore.current?.endpoints?.rest?.map(x => x.provider) as string[]
         if(endpoint) {
             endpoint.push('ping')
             return staking.validators
