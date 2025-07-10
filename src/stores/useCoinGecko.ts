@@ -27,9 +27,7 @@ export const useCoingecko = defineStore('coingecko', {
 
   actions: {
     getMarketChart(days = 30, coinId = 'cosmos') {
-      return get(
-        `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}`
-      );
+      return get(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}`);
     },
 
     fetchCoinPrice(ids: string[]) {
