@@ -1,7 +1,16 @@
 <script lang="ts" setup>
 import PaginationBar from '@/components/PaginationBar.vue';
-import { useBaseStore, useBlockchain, useFormatter, useTxDialog } from '@/stores';
-import { PageRequest, type PaginatedBalances, type PaginatedTxs } from '@/types';
+import {
+  useBaseStore,
+  useBlockchain,
+  useFormatter,
+  useTxDialog,
+} from '@/stores';
+import {
+  PageRequest,
+  type PaginatedBalances,
+  type PaginatedTxs,
+} from '@/types';
 import { Icon } from '@iconify/vue';
 import { onMounted, ref } from 'vue';
 import { useWasmStore } from '../WasmStore';

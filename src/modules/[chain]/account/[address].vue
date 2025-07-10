@@ -219,7 +219,9 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                 <div class="text-sm font-semibold">
                   {{ format.formatToken(rewardItem) }}
                 </div>
-                <div class="text-xs">{{ format.calculatePercent(rewardItem.amount, totalAmount) }}</div>
+                <div class="text-xs">
+                  {{ format.calculatePercent(rewardItem.amount, totalAmount) }}
+                </div>
               </div>
               <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2">
                 <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"></span>${{
@@ -257,7 +259,9 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
               </div>
             </div>
           </div>
-          <div class="mt-4 text-lg font-semibold mr-5 pl-5 border-t pt-4 text-right">
+          <div
+            class="mt-4 text-lg font-semibold mr-5 pl-5 border-t pt-4 text-right"
+          >
             {{ $t('account.total_value') }}: ${{ totalValue }}
           </div>
         </div>
@@ -436,12 +440,17 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
             </tr>
             <tr v-for="(v, index) in txs" :key="index">
               <td class="text-sm py-3">
-                <RouterLink :to="`/${chain}/block/${v.height}`" class="text-primary dark:invert">{{
-                  v.height
-                }}</RouterLink>
+                <RouterLink
+                  :to="`/${chain}/block/${v.height}`"
+                  class="text-primary dark:invert"
+                  >{{ v.height }}</RouterLink
+                >
               </td>
               <td class="truncate py-3" style="max-width: 200px">
-                <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
+                <RouterLink
+                  :to="`/${chain}/tx/${v.txhash}`"
+                  class="text-primary dark:invert"
+                >
                   {{ v.txhash }}
                 </RouterLink>
               </td>
@@ -483,12 +492,17 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
             </tr>
             <tr v-for="(v, index) in recentReceived" :key="index">
               <td class="text-sm py-3">
-                <RouterLink :to="`/${chain}/block/${v.height}`" class="text-primary dark:invert">{{
-                  v.height
-                }}</RouterLink>
+                <RouterLink
+                  :to="`/${chain}/block/${v.height}`"
+                  class="text-primary dark:invert"
+                  >{{ v.height }}</RouterLink
+                >
               </td>
               <td class="truncate py-3" style="max-width: 200px">
-                <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
+                <RouterLink
+                  :to="`/${chain}/tx/${v.txhash}`"
+                  class="text-primary dark:invert"
+                >
                   {{ v.txhash }}
                 </RouterLink>
               </td>

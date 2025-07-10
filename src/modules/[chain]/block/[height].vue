@@ -94,7 +94,9 @@ onBeforeRouteUpdate(async (to, from, next) => {
               </tr>
               <tr>
                 <td>{{ $t('block.current_height') }}:</td>
-                <td class="text-right">#{{ store.latest?.block?.header.height }}</td>
+                <td class="text-right">
+                  #{{ store.latest?.block?.header.height }}
+                </td>
               </tr>
               <tr>
                 <td>{{ $t('block.remaining_blocks') }}:</td>
@@ -102,7 +104,9 @@ onBeforeRouteUpdate(async (to, from, next) => {
               </tr>
               <tr>
                 <td>{{ $t('block.average_block_time') }}:</td>
-                <td class="text-right">{{ (store.blocktime / 1000).toFixed(1) }}s</td>
+                <td class="text-right">
+                  {{ (store.blocktime / 1000).toFixed(1) }}s
+                </td>
               </tr>
             </tbody>
           </table>
@@ -134,17 +138,23 @@ onBeforeRouteUpdate(async (to, from, next) => {
       </div>
 
       <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-        <h2 class="card-title flex flex-row justify-between">{{ $t('block.block_header') }}</h2>
+        <h2 class="card-title flex flex-row justify-between">
+          {{ $t('block.block_header') }}
+        </h2>
         <DynamicComponent :value="current.block?.header" />
       </div>
 
       <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-        <h2 class="card-title flex flex-row justify-between">{{ $t('account.transactions') }}</h2>
+        <h2 class="card-title flex flex-row justify-between">
+          {{ $t('account.transactions') }}
+        </h2>
         <TxsElement :value="current.block?.data?.txs" />
       </div>
 
       <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
-        <h2 class="card-title flex flex-row justify-between">{{ $t('block.last_commit') }}</h2>
+        <h2 class="card-title flex flex-row justify-between">
+          {{ $t('block.last_commit') }}
+        </h2>
         <DynamicComponent :value="current.block?.last_commit" />
       </div>
     </div>

@@ -131,7 +131,9 @@ export const useFormatter = defineStore('formatter', {
       // find the symbol
       const symbol = this.dashboard.coingecko[token.denom]?.symbol || token.denom;
       // convert denomination to symbol
-      const exponent = this.dashboard.coingecko[symbol?.toLowerCase()]?.exponent || this.specialDenom(token.denom);
+      const exponent =
+        this.dashboard.coingecko[symbol?.toLowerCase()]?.exponent ||
+        this.specialDenom(token.denom);
       // caculate amount of symbol
       const amount = Number(token.amount) / 10 ** exponent;
       return amount;

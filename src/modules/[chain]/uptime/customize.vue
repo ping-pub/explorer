@@ -123,7 +123,9 @@ function color(v: string) {
 <template>
   <div>
     <div class="overflow-x-auto w-full">
-      <div class="lg:!flex lg:!items-center lg:!justify-between bg-base-100 p-5">
+      <div
+        class="lg:!flex lg:!items-center lg:!justify-between bg-base-100 p-5"
+      >
         <div class="min-w-0 flex-1">
           <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">
             {{ $t('uptime.my_validators') }}
@@ -175,9 +177,24 @@ function color(v: string) {
               }}</span>
             </td>
             <td>
-              <div v-if="v.sigingInfo && !v.sigingInfo?.jailed_until.startsWith('1970')" class="text-xs flex flex-wrap">
-                <div class="mt-1">{{ format.toLocaleDate(v.sigingInfo?.jailed_until) }}</div>
-                <div class="badge">{{ format.toDay(v.sigingInfo.jailed_until, 'from') }}</div>
+              <span v-if="v.sigingInfo">{{
+                Number(v.sigingInfo.index_offset) -
+                Number(v.sigingInfo.start_height)
+              }}</span>
+            </td>
+            <td>
+              <div
+                v-if="
+                  v.sigingInfo && !v.sigingInfo?.jailed_until.startsWith('1970')
+                "
+                class="text-xs flex flex-wrap"
+              >
+                <div class="mt-1">
+                  {{ format.toLocaleDate(v.sigingInfo?.jailed_until) }}
+                </div>
+                <div class="badge">
+                  {{ format.toDay(v.sigingInfo.jailed_until, 'from') }}
+                </div>
               </div>
             </td>
             <td class="capitalize">{{ v.sigingInfo?.tombstoned }}</td>
@@ -197,14 +214,25 @@ function color(v: string) {
     </div>
 
     <div class="text-center">
-      <label for="add-validator" class="btn btn-primary mt-5">{{ $t('uptime.add_validators') }}</label>
+      <label for="add-validator" class="btn btn-primary mt-5">{{
+        $t('uptime.add_validators')
+      }}</label>
     </div>
 
     <!-- Put this part before </body> tag -->
-    <input type="checkbox" id="add-validator" class="modal-toggle" @change="initial" />
+    <input
+      type="checkbox"
+      id="add-validator"
+      class="modal-toggle"
+      @change="initial"
+    />
     <div class="modal">
       <div class="modal-box relative">
-        <label for="add-validator" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+        <label
+          for="add-validator"
+          class="btn btn-sm btn-circle absolute right-2 top-2"
+          >✕</label
+        >
         <h3 class="text-lg font-bold">{{ $t('uptime.add_validators') }}</h3>
         <div class="form-control my-5 border-2">
           <div class="input-group input-group-md">
@@ -245,7 +273,9 @@ function color(v: string) {
           </table>
         </div>
         <div class="modal-action">
-          <label class="btn btn-primary" @click="add">{{ $t('uptime.add') }}</label>
+          <label class="btn btn-primary" @click="add">{{
+            $t('uptime.add')
+          }}</label>
         </div>
       </div>
     </div>

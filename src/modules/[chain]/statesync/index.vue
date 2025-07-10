@@ -56,7 +56,8 @@ onMounted(() => {
         {{ $t('statesync.title_2') }}
       </h2>
       <div class="text-sm">
-        1. {{ $t('statesync.text_1') }} ({{ appName }} {{ $t('statesync.version') }}:
+        1. {{ $t('statesync.text_1') }} ({{ appName }}
+        {{ $t('statesync.version') }}:
         {{ nodeInfo.application_version?.version || '' }})
         <br />
         {{ $t('statesync.text_1_1') }}.
@@ -65,15 +66,31 @@ onMounted(() => {
         2. {{ $t('statesync.text_2') }}<br />
         {{ $t('statesync.text_2_1') }}. <br /><br />
         <div class="mockup-code bg-base-200 my-2">
-          <pre data-prefix=">"><code class="text-gray-800 dark:invert">[state-sync]</code></pre>
-          <pre data-prefix=">"><code class="text-gray-800 dark:invert">enable = true</code></pre>
+          <pre
+            data-prefix=">"
+          ><code class="text-gray-800 dark:invert">[state-sync]</code></pre>
+          <pre
+            data-prefix=">"
+          ><code class="text-gray-800 dark:invert">enable = true</code></pre>
           <pre data-prefix=">"><code class="text-gray-800"></code></pre>
-          <pre data-prefix=">"><code class="text-gray-800 dark:invert">rpc_servers = "{{ rpcs }}"</code></pre>
-          <pre data-prefix=">"><code class="text-gray-800 dark:invert">trust_height = {{ height }} </code></pre>
-          <pre data-prefix=">"><code class="text-gray-800 dark:invert">trust_hash = "{{ hash }}"</code></pre>
-          <pre data-prefix=">"><code class="text-gray-800 dark:invert"></code></pre>
-          <pre data-prefix=">"><code class="text-green-400"># 2/3 of unbonding time</code></pre>
-          <pre data-prefix=">"><code class="text-gray-800 dark:invert">trust_period = "168h"</code></pre>
+          <pre
+            data-prefix=">"
+          ><code class="text-gray-800 dark:invert">rpc_servers = "{{ rpcs }}"</code></pre>
+          <pre
+            data-prefix=">"
+          ><code class="text-gray-800 dark:invert">trust_height = {{ height }} </code></pre>
+          <pre
+            data-prefix=">"
+          ><code class="text-gray-800 dark:invert">trust_hash = "{{ hash }}"</code></pre>
+          <pre
+            data-prefix=">"
+          ><code class="text-gray-800 dark:invert"></code></pre>
+          <pre
+            data-prefix=">"
+          ><code class="text-green-400"># 2/3 of unbonding time</code></pre>
+          <pre
+            data-prefix=">"
+          ><code class="text-gray-800 dark:invert">trust_period = "168h"</code></pre>
         </div>
         <br />
         3. {{ $t('statesync.text_3') }}:
@@ -94,7 +111,6 @@ onMounted(() => {
         {{ $t('statesync.text_title_3') }}
         <br /><br />
         <div class="mockup-code bg-base-200 my-2">
-          <pre data-prefix=">"><code class="text-gray-800 dark:invert">[state-sync]</code></pre>
           <pre
             data-prefix=">"
           ><code class="text-green-400"># snapshot-interval specifies the block interval at which local state sync snapshots are</code></pre>

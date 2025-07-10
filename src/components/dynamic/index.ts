@@ -31,7 +31,9 @@ function selectObject(v: Object, direct?: string) {
       return UInt8Array;
     case Array.isArray(v):
       return ArrayElement;
-    case v && Object.keys(v).includes('amount') && Object.keys(v).includes('denom'): {
+    case v &&
+      Object.keys(v).includes('amount') &&
+      Object.keys(v).includes('denom'): {
       return TokenElement;
     }
     case direct === 'horizontal':

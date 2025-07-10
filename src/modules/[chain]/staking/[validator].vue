@@ -70,7 +70,8 @@ const apr = computed(() => {
   const rate = Number(v.value.commission?.commission_rates.rate || 0);
   const inflation = useMintStore().inflation;
   const communityTax = Number(useDistributionStore().params.community_tax);
-  const bondedRatio = Number(staking.pool.bonded_tokens) / Number(useBankStore().supply.amount);
+  const bondedRatio =
+    Number(staking.pool.bonded_tokens) / Number(useBankStore().supply.amount);
 
   return format.percent(((1 - communityTax) * (1 - rate) * Number(inflation)) / bondedRatio);
 });
@@ -123,7 +124,8 @@ onMounted(() => {
     staking.fetchValidator(validator).then((res) => {
       v.value = res.validator;
       identity.value = res.validator?.description?.identity || '';
-      if (identity.value && !avatars.value[identity.value]) loadAvatar(identity.value);
+      if (identity.value && !avatars.value[identity.value])
+        loadAvatar(identity.value);
 
       addresses.value.hex = consensusPubkeyToHexAddress(v.value.consensus_pubkey);
       addresses.value.valCons = pubKeyToValcons(
@@ -293,7 +295,9 @@ function mapDelegators(messages: any[]) {
             <div class="card-list">
               <div class="flex items-center mb-2">
                 <Icon icon="mdi-web" class="text-xl mr-1" />
-                <span class="font-bold mr-2">{{ $t('staking.website') }}: </span>
+                <span class="font-bold mr-2"
+                  >{{ $t('staking.website') }}:
+                </span>
                 <a
                   :href="v?.description?.website || '#'"
                   :class="v?.description?.website ? 'cursor-pointer' : 'cursor-default'"
@@ -303,7 +307,9 @@ function mapDelegators(messages: any[]) {
               </div>
               <div class="flex items-center">
                 <Icon icon="mdi-email-outline" class="text-xl mr-1" />
-                <span class="font-bold mr-2">{{ $t('staking.contact') }}: </span>
+                <span class="font-bold mr-2"
+                  >{{ $t('staking.contact') }}:
+                </span>
                 <a
                   v-if="v.description?.security_contact"
                   :href="'mailto:' + v.description.security_contact || '#'"
@@ -313,7 +319,9 @@ function mapDelegators(messages: any[]) {
                 </a>
               </div>
             </div>
-            <p class="text-sm mt-4 mb-3 font-medium">{{ $t('staking.validator_status') }}</p>
+            <p class="text-sm mt-4 mb-3 font-medium">
+              {{ $t('staking.validator_status') }}
+            </p>
             <div class="card-list">
               <div class="flex items-center mb-2">
                 <Icon icon="mdi-shield-account-outline" class="text-xl mr-1" />
@@ -328,7 +336,9 @@ function mapDelegators(messages: any[]) {
                 <span> {{ v.jailed || '-' }} </span>
               </div>
             </div>
-            <p class="text-sm mt-4 mb-3 font-medium">{{ $t('staking.liquid_staking') }}</p>
+            <p class="text-sm mt-4 mb-3 font-medium">
+              {{ $t('staking.liquid_staking') }}
+            </p>
             <div class="card-list">
               <div class="flex items-center mb-2">
                 <Icon icon="mdi-lock" class="text-xl mr-1" />
@@ -339,7 +349,9 @@ function mapDelegators(messages: any[]) {
               </div>
               <div class="flex items-center">
                 <Icon icon="mdi-waves-arrow-right" class="text-xl mr-1" />
-                <span class="font-bold mr-2">{{ $t('staking.liquid_staking_shares') }}: </span>
+                <span class="font-bold mr-2"
+                  >{{ $t('staking.liquid_staking_shares') }}:
+                </span>
                 <span>
                   {{ format.formatToken({ amount: v.liquid_shares, denom: staking.params.bond_denom }, false) }}
                 </span>
@@ -401,7 +413,9 @@ function mapDelegators(messages: any[]) {
               </div>
               <div class="ml-3 flex flex-col justify-center">
                 <h4>{{ v.unbonding_height }}</h4>
-                <span class="text-sm">{{ $t('staking.unbonding_height') }}</span>
+                <span class="text-sm">{{
+                  $t('staking.unbonding_height')
+                }}</span>
               </div>
             </div>
 
@@ -567,7 +581,9 @@ function mapDelegators(messages: any[]) {
     </div>
 
     <div class="mt-5 bg-base-100 shadow rounded p-4">
-      <div class="text-lg mb-4 font-semibold">{{ $t('account.transactions') }}</div>
+      <div class="text-lg mb-4 font-semibold">
+        {{ $t('account.transactions') }}
+      </div>
       <div class="rounded overflow-auto">
         <table class="table validatore-table w-full">
           <thead>
@@ -575,7 +591,9 @@ function mapDelegators(messages: any[]) {
               {{ $t('account.height') }}
             </th>
             <th class="text-left pl-4">{{ $t('account.hash') }}</th>
-            <th class="text-left pl-4" width="40%">{{ $t('account.messages') }}</th>
+            <th class="text-left pl-4" width="40%">
+              {{ $t('account.messages') }}
+            </th>
             <th class="text-left pl-4">{{ $t('account.time') }}</th>
           </thead>
           <tbody>
@@ -625,12 +643,17 @@ function mapDelegators(messages: any[]) {
           <thead>
             <th class="text-left pl-4">{{ $t('account.delegator') }}</th>
             <th class="text-left pl-4">{{ $t('account.amount') }}</th>
-            <th class="text-left pl-4">{{ $t('account.height') }} / {{ $t('account.time') }}</th>
+            <th class="text-left pl-4">
+              {{ $t('account.height') }} / {{ $t('account.time') }}
+            </th>
           </thead>
           <tbody>
             <tr v-for="(item, i) in events.tx_responses">
               <td class="pr-2 truncate text-primary" style="max-width: 250px">
-                <RouterLink v-for="d in mapDelegators(item.tx?.body?.messages)" :to="`/${props.chain}/account/${d}`">
+                <RouterLink
+                  v-for="d in mapDelegators(item.tx?.body?.messages)"
+                  :to="`/${props.chain}/account/${d}`"
+                >
                   {{ d }}
                 </RouterLink>
               </td>

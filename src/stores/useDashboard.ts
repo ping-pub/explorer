@@ -170,7 +170,8 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
     cosmosSdk: lc.sdk_version,
   };
   conf.bech32Prefix = lc.addr_prefix;
-  conf.bech32ConsensusPrefix = lc.consensus_prefix ?? lc.addr_prefix + 'valcons';
+  conf.bech32ConsensusPrefix =
+    lc.consensus_prefix ?? lc.addr_prefix + 'valcons';
   conf.chainName = lc.chain_name;
   conf.coinType = lc.coin_type;
   conf.prettyName = lc.registry_name || lc.chain_name;
@@ -364,7 +365,11 @@ export const useDashboard = defineStore('dashboard', {
         const blockchain = useBlockchain();
         const keys = Object.keys(this.favoriteMap);
         for (let i = 0; i < keys.length; i++) {
-          if (!blockchain.chainName && this.chains[keys[i]] && this.favoriteMap[keys[i]]) {
+          if (
+            !blockchain.chainName &&
+            this.chains[keys[i]] &&
+            this.favoriteMap[keys[i]]
+          ) {
             blockchain.setCurrent(keys[i]);
             break;
           }

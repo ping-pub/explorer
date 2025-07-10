@@ -32,7 +32,12 @@ export const useTxDialog = defineStore('txDialogStore', {
     setParams(param: any) {
       this.params = JSON.stringify(param);
     },
-    openWithArgument(type: string, sender: string, endpoint: string, param: any) {
+    openWithArgument(
+      type: string,
+      sender: string,
+      endpoint: string,
+      param: any
+    ) {
       this.type = type;
       this.sender = sender;
       this.endpoint = endpoint;
