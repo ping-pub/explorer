@@ -10,7 +10,7 @@ export const useBankStore = defineStore('bankstore', {
       supply: {} as Coin,
       balances: {} as Record<string, Coin[]>,
       totalSupply: { supply: [] as Coin[] },
-      ibcDenoms: {} as Record<string, DenomTrace>
+      ibcDenoms: {} as Record<string, DenomTrace>,
     };
   },
   getters: {

@@ -47,7 +47,7 @@ import type {
   Validator,
 } from '@/types/staking';
 import type { PaginatedTxs, Tx, TxResponse } from '@/types';
-import semver from 'semver'
+import semver from 'semver';
 export interface Request<T> {
   url: string;
   adapter: (source: any) => Promise<T>;
@@ -80,10 +80,10 @@ export interface RequestRegistry extends AbstractRegistry {
   distribution_community_pool: Request<{ pool: Coin[] }>;
   distribution_delegator_rewards: Request<{
     rewards: {
-      validator_address: string, 
-      reward: Coin[]
-    }[],
-    total: Coin[]
+      validator_address: string;
+      reward: Coin[];
+    }[];
+    total: Coin[];
   }>;
 
   mint_inflation: Request<{ inflation: string }>;
@@ -95,7 +95,7 @@ export interface RequestRegistry extends AbstractRegistry {
   }>;
   mint_annual_provisions: Request<{ annual_provisions: string }>;
 
-  slashing_params: Request<{params: SlashingParam}>;
+  slashing_params: Request<{ params: SlashingParam }>;
   slashing_signing_info: Request<PaginatedSigningInfo>;
 
   gov_params_voting: Request<GovParams>;
@@ -129,7 +129,7 @@ export interface RequestRegistry extends AbstractRegistry {
   base_tendermint_validatorsets_latest: Request<PaginatedTendermintValidator>;
   base_tendermint_validatorsets_height: Request<PaginatedTendermintValidator>;
 
-  params: Request<{param: any}>;
+  params: Request<{ param: any }>;
 
   group_groups: Request<PaginatedGroups>;
   group_groups_by_admin: Request<PaginatedGroups>;
@@ -163,9 +163,19 @@ export interface RequestRegistry extends AbstractRegistry {
   ibc_core_connection_connections: Request<PaginatedIBCConnections>;
   ibc_core_connection_connections_connection_id: Request<ConnectionWithProof>;
   ibc_core_connection_connections_connection_id_client_state: Request<ClientStateWithProof>;
-  interchain_security_ccv_provider_validator_consumer_addr: Request<{consumer_address: string}>
-  interchain_security_provider_opted_in_validators: Request<{validators_provider_addresses: string[]}>
-  interchain_security_consumer_validators: Request<{validators: {provider_address: string, consumer_key: {ed25519: string}, power: string}[]}>
+  interchain_security_ccv_provider_validator_consumer_addr: Request<{
+    consumer_address: string;
+  }>;
+  interchain_security_provider_opted_in_validators: Request<{
+    validators_provider_addresses: string[];
+  }>;
+  interchain_security_consumer_validators: Request<{
+    validators: {
+      provider_address: string;
+      consumer_key: { ed25519: string };
+      power: string;
+    }[];
+  }>;
 }
 
 export function adapter<T>(source: any): Promise<T> {
@@ -188,16 +198,20 @@ export const VERSION_REGISTRY: ApiProfileRegistry = {};
 // ChainName Profile Registory
 export const NAME_REGISTRY: ApiProfileRegistry = {};
 
-export function registryVersionProfile(version: string, requests: RequestRegistry) {
-  VERSION_REGISTRY[version] = requests
+export function registryVersionProfile(
+  version: string,
+  requests: RequestRegistry
+) {
+  VERSION_REGISTRY[version] = requests;
 }
 
-export function registryChainProfile(version: string, requests: RequestRegistry) {
-  NAME_REGISTRY[version] = requests
+export function registryChainProfile(
+  version: string,
+  requests: RequestRegistry
+) {
+  NAME_REGISTRY[version] = requests;
 }
-export function findApiProfileByChain(
-  name: string,
-): RequestRegistry {
+export function findApiProfileByChain(name: string): RequestRegistry {
   const url = NAME_REGISTRY[name];
   // if (!url) {
   //   throw new Error(`Unsupported version or name: ${name}`);
@@ -206,12 +220,12 @@ export function findApiProfileByChain(
 }
 
 export function findApiProfileBySDKVersion(
-  version: string,
+  version: string
 ): RequestRegistry | undefined {
   let closestVersion: string | null = null;
-  const chain_version = version.match(/(\d+\.\d+\.?\d*)/g) || [""];
+  const chain_version = version.match(/(\d+\.\d+\.?\d*)/g) || [''];
   for (const k in VERSION_REGISTRY) {
-    const key = k.replace('v', "")
+    const key = k.replace('v', '');
     if (semver.lte(key, chain_version[0])) {
       if (!closestVersion || semver.gt(key, closestVersion)) {
         closestVersion = k;

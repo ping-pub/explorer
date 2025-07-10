@@ -67,10 +67,11 @@ export function formatTokenAmount(
   tokenDenom = 'uatom',
   format = true
 ) {
-  const denom = typeof tokenDenom === 'string'
-    ? tokenDenom
-    // @ts-ignore
-    : tokenDenom?.denom_trace?.base_denom;
+  const denom =
+    typeof tokenDenom === 'string'
+      ? tokenDenom
+      : // @ts-ignore
+        tokenDenom?.denom_trace?.base_denom;
   let amount = 0;
   const asset = assets.find((a: any) => a.base === denom);
   let exp = asset
@@ -120,24 +121,24 @@ export function isHexAddress(v: any) {
 }
 
 export function isBech32Address(v?: string) {
-  if(!v) return ""
-  const pattern = /^[a-z\d]+1[a-z\d]{38}$/g
-  return String(v).search(pattern) > -1
+  if (!v) return '';
+  const pattern = /^[a-z\d]+1[a-z\d]{38}$/g;
+  return String(v).search(pattern) > -1;
 }
 
 export function formatSeconds(value?: string) {
-  if(!value) return ''
-  const duration = Number(value.replace(/s/, ''))
-  if(duration > 24*60*60) {
-    return `${(duration / ( 24 * 60 * 60)).toFixed()} days`
+  if (!value) return '';
+  const duration = Number(value.replace(/s/, ''));
+  if (duration > 24 * 60 * 60) {
+    return `${(duration / (24 * 60 * 60)).toFixed()} days`;
   }
-  if(duration > 60*60) {
-    return `${(duration / (60 * 60)).toFixed()} hours`
-  }    
-  if(duration > 60) {
-    return `${duration / 60} mins`
+  if (duration > 60 * 60) {
+    return `${(duration / (60 * 60)).toFixed()} hours`;
   }
-  return value
+  if (duration > 60) {
+    return `${duration / 60} mins`;
+  }
+  return value;
 }
 
 export function hexToRgb(hex: string) {

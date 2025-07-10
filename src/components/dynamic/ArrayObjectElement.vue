@@ -18,7 +18,7 @@ const header = computed(() => {
 });
 </script>
 <template>
-  <div class="overflow-auto max-h-96 ">
+  <div class="overflow-auto max-h-96">
     <table class="table table-xs table-compact table-pin-rows w-full">
       <thead v-if="thead">
         <tr>

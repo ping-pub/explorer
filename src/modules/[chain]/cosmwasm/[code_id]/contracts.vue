@@ -1,10 +1,7 @@
 <script lang="ts" setup>
 import { useWasmStore } from '../WasmStore';
 import { ref } from 'vue';
-import type {
-  ContractInfo,
-  PaginabledContracts,
-} from '../types';
+import type { ContractInfo, PaginabledContracts } from '../types';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import PaginationBar from '@/components/PaginationBar.vue';
 import { PageRequest } from '@/types';
@@ -22,31 +19,30 @@ const wasmStore = useWasmStore();
 function loadContract(pageNum: number) {
   const pr = new PageRequest();
   pr.setPage(pageNum);
-  if(String(props.code_id).search(/^[\d]+$/) > -1){
+  if (String(props.code_id).search(/^[\d]+$/) > -1) {
     // query with code id
     wasmStore.wasmClient.getWasmCodeContracts(props.code_id, pr).then((x) => {
       response.value = x;
-    })
+    });
   } else {
     // query by creator
-    wasmStore.wasmClient.getWasmContractsByCreator(props.code_id, pr).then((x) => {
-      response.value = {
-        contracts: x.contract_addresses,
-        pagination: x.pagination,
-      };
-    })
+    wasmStore.wasmClient
+      .getWasmContractsByCreator(props.code_id, pr)
+      .then((x) => {
+        response.value = {
+          contracts: x.contract_addresses,
+          pagination: x.pagination,
+        };
+      });
   }
 }
 loadContract(1);
-
-
 
 function showInfo(address: string) {
   wasmStore.wasmClient.getWasmContracts(address).then((x) => {
     info.value = x.contract_info;
   });
 }
-
 </script>
 <template>
   <div>
@@ -58,7 +54,9 @@ function showInfo(address: string) {
         <table class="table table-compact w-full mt-4">
           <thead class="bg-base-200">
             <tr>
-              <th style="position: relative; z-index: 2">{{ $t('cosmwasm.contract_list') }}</th>
+              <th style="position: relative; z-index: 2">
+                {{ $t('cosmwasm.contract_list') }}
+              </th>
               <th>{{ $t('account.action') }}</th>
             </tr>
           </thead>
@@ -80,7 +78,7 @@ function showInfo(address: string) {
                   :to="`transactions?contract=${v}`"
                   class="btn btn-primary btn-xs text-xs"
                 >
-                {{ $t('cosmwasm.btn_details') }}
+                  {{ $t('cosmwasm.btn_details') }}
                 </RouterLink>
               </td>
             </tr>
@@ -125,6 +123,5 @@ function showInfo(address: string) {
         </div>
       </label>
     </label>
-
   </div>
 </template>

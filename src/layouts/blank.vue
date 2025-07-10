@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, resolveComponent, h } from 'vue'
+import { defineComponent, resolveComponent, h } from 'vue';
 
 export default defineComponent({
   setup() {

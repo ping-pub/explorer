@@ -39,10 +39,10 @@ export const useGovStore = defineStore('govStore', {
       );
 
       //filter spam proposals
-      if(proposals?.proposals) {
+      if (proposals?.proposals) {
         proposals.proposals = proposals.proposals.filter((item) => {
-          const title = item.content?.title || item.title || ""
-          return title.toLowerCase().indexOf("airdrop")===-1
+          const title = item.content?.title || item.title || '';
+          return title.toLowerCase().indexOf('airdrop') === -1;
         });
       }
 
@@ -58,17 +58,18 @@ export const useGovStore = defineStore('govStore', {
                 this.walletstore.currentAddress
               )
                 .then((res) => {
-                  item.voterStatus = res?.vote?.option || 'VOTE_OPTION_NO_WITH_VETO'
+                  item.voterStatus =
+                    res?.vote?.option || 'VOTE_OPTION_NO_WITH_VETO';
                   // 'No With Veto';
                 })
                 .catch((reject) => {
-                  item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO'
+                  item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO';
                 });
             } catch (error) {
-              item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO'
+              item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO';
             }
           } else {
-            item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO'
+            item.voterStatus = 'VOTE_OPTION_NO_WITH_VETO';
           }
         });
       }

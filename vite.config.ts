@@ -12,7 +12,7 @@ import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 
 export default defineConfig({
   define: {
-    'process.env': {}
+    'process.env': {},
   },
   plugins: [
     vue({

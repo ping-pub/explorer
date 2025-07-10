@@ -30,7 +30,7 @@ onMounted(async () => {
   rpc.value = rpcList.value[0].address + '/consensus_state';
   await fetchPosition();
   update();
-  clearTime()
+  clearTime();
   timer = setInterval(() => {
     update();
   }, 6000);
@@ -80,7 +80,7 @@ function color(i: number, txt: string) {
   }
   return txt === 'nil-Vote' ? 'gray-700' : 'success';
 }
-async function onChange () {
+async function onChange() {
   httpstatus.value = 200;
   httpStatusText.value = '';
   roundState.value = {};
@@ -170,7 +170,9 @@ async function update() {
               {{ item?.address }}/consensus_state
             </option>
           </select>
-          <button class="btn btn-primary" @click="onChange">{{ $t('consensus.monitor') }}</button>
+          <button class="btn btn-primary" @click="onChange">
+            {{ $t('consensus.monitor') }}
+          </button>
         </label>
       </div>
       <div v-if="httpstatus !== 200" class="text-error mt-1">
@@ -191,7 +193,9 @@ async function update() {
             <div
               class="bg-rose-100 text-neutral-content rounded-full w-12 h-12"
             >
-              <span class="text-2xl text-error font-semibold">{{ $t('consensus.o') }}</span>
+              <span class="text-2xl text-error font-semibold">{{
+                $t('consensus.o')
+              }}</span>
             </div>
           </div>
         </div>
@@ -207,7 +211,9 @@ async function update() {
             <div
               class="bg-green-100 text-neutral-content rounded-full w-12 h-12"
             >
-              <span class="text-2xl text-success font-semibold">{{ $t('consensus.h') }}</span>
+              <span class="text-2xl text-success font-semibold">{{
+                $t('consensus.h')
+              }}</span>
             </div>
           </div>
         </div>
@@ -223,7 +229,9 @@ async function update() {
             <div
               class="bg-violet-100 text-neutral-content rounded-full w-12 h-12"
             >
-              <span class="text-2xl text-primary font-semibold">{{ $t('consensus.r') }}</span>
+              <span class="text-2xl text-primary font-semibold">{{
+                $t('consensus.r')
+              }}</span>
             </div>
           </div>
         </div>
@@ -239,7 +247,9 @@ async function update() {
             <div
               class="bg-blue-100 text-neutral-content rounded-full w-12 h-12"
             >
-              <span class="text-2xl text-info font-semibold">{{ $t('consensus.s') }}</span>
+              <span class="text-2xl text-info font-semibold">{{
+                $t('consensus.s')
+              }}</span>
             </div>
           </div>
         </div>
@@ -255,12 +265,14 @@ async function update() {
           {{ $t('consensus.updated_at') }} {{ newTime || '' }}
         </h2>
         <div v-for="item in roundState.height_vote_set" :key="item.round">
-          <div class="text-xs mb-1">{{ $t('consensus.round') }}: {{ item.round }}</div>
+          <div class="text-xs mb-1">
+            {{ $t('consensus.round') }}: {{ item.round }}
+          </div>
           <div class="text-xs break-words">{{ item.prevotes_bit_array }}</div>
 
           <div class="flex flex-rows flex-wrap py-6">
             <div
-              class=" w-48 rounded-3xl h-5 text-sm px-2 leading-5"
+              class="w-48 rounded-3xl h-5 text-sm px-2 leading-5"
               v-for="(pre, i) in item.prevotes"
               :key="i"
               size="sm"
@@ -269,17 +281,26 @@ async function update() {
               <span class="flex flex-rows justify-between">
                 <span class="truncate">{{ showName(i, 'nil-Vote') }} </span>
                 <span>
-                  <span class="tooltip " :data-tip="pre" 
-                  :class="{
-                    'bg-green-400': String(pre).toLowerCase() !== 'nil-vote',
-                    'bg-red-400': String(pre).toLowerCase() === 'nil-vote'
-                  }"
-                  >&nbsp;</span> 
-                  <span class="tooltip ml-1" :data-tip="item.precommits[i]" 
-                  :class="{
-                    'bg-green-400': String(item.precommits[i]).toLowerCase() !== 'nil-vote',
-                    'bg-red-400': String(item.precommits[i]).toLowerCase() === 'nil-vote'
-                  }">&nbsp;</span>
+                  <span
+                    class="tooltip"
+                    :data-tip="pre"
+                    :class="{
+                      'bg-green-400': String(pre).toLowerCase() !== 'nil-vote',
+                      'bg-red-400': String(pre).toLowerCase() === 'nil-vote',
+                    }"
+                    >&nbsp;</span
+                  >
+                  <span
+                    class="tooltip ml-1"
+                    :data-tip="item.precommits[i]"
+                    :class="{
+                      'bg-green-400':
+                        String(item.precommits[i]).toLowerCase() !== 'nil-vote',
+                      'bg-red-400':
+                        String(item.precommits[i]).toLowerCase() === 'nil-vote',
+                    }"
+                    >&nbsp;</span
+                  >
                 </span>
               </span>
             </div>
@@ -287,7 +308,6 @@ async function update() {
         </div>
       </div>
       <div class="divider"></div>
-
     </div>
 
     <!-- alert-info -->
