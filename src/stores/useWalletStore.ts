@@ -1,15 +1,9 @@
 import { defineStore } from 'pinia';
 import { useBlockchain } from './useBlockchain';
 import { fromBech32, toBech32 } from '@cosmjs/encoding';
-import type {
-  Delegation,
-  Coin,
-  UnbondingResponses,
-  DelegatorRewards,
-  WalletConnected,
-} from '@/types';
+import type { Delegation, Coin, UnbondingResponses, DelegatorRewards, WalletConnected } from '@/types';
 import { useStakingStore } from './useStakingStore';
-import router from '@/router'
+import router from '@/router';
 
 export const useWalletStore = defineStore('walletStore', {
   state: () => {
@@ -17,8 +11,8 @@ export const useWalletStore = defineStore('walletStore', {
       balances: [] as Coin[],
       delegations: [] as Delegation[],
       unbonding: [] as UnbondingResponses[],
-      rewards: {total: [], rewards: []} as DelegatorRewards,
-      wallet: {} as WalletConnected
+      rewards: { total: [], rewards: [] } as DelegatorRewards,
+      wallet: {} as WalletConnected,
     };
   },
   getters: {
@@ -27,18 +21,19 @@ export const useWalletStore = defineStore('walletStore', {
     },
     connectedWallet() {
       // @ts-ignore
-      if(this.wallet.cosmosAddress) return this.wallet
+      if (this.wallet.cosmosAddress) return this.wallet;
       const chainStore = useBlockchain();
       const key = chainStore.defaultHDPath;
       const connected = JSON.parse(localStorage.getItem(key) || '{}');
-      return connected
+      return connected;
     },
     balanceOfStakingToken(): Coin {
       const stakingStore = useStakingStore();
       return (
-        this.balances.find(
-          (x) => x.denom === stakingStore.params.bond_denom
-        ) || { amount: '0', denom: stakingStore.params.bond_denom }
+        this.balances.find((x) => x.denom === stakingStore.params.bond_denom) || {
+          amount: '0',
+          denom: stakingStore.params.bond_denom,
+        }
       );
     },
     stakingAmount() {
@@ -54,9 +49,7 @@ export const useWalletStore = defineStore('walletStore', {
     rewardAmount() {
       const stakingStore = useStakingStore();
       // @ts-ignore
-      const reward = this.rewards.total?.find(
-        (x: Coin) => x.denom === stakingStore.params.bond_denom
-      );
+      const reward = this.rewards.total?.find((x: Coin) => x.denom === stakingStore.params.bond_denom);
       return reward || { amount: '0', denom: stakingStore.params.bond_denom };
     },
     unbondingAmount() {
@@ -77,35 +70,28 @@ export const useWalletStore = defineStore('walletStore', {
       return toBech32(chainStore.current?.bech32Prefix || prefix, data);
     },
     shortAddress() {
-      const address: string = this.currentAddress
-      if(address.length > 4) {
-        return `${address.substring(address.length -4)}`
+      const address: string = this.currentAddress;
+      if (address.length > 4) {
+        return `${address.substring(address.length - 4)}`;
       }
-      return ""
-    }
+      return '';
+    },
   },
   actions: {
-
     async loadMyAsset() {
       if (!this.currentAddress) return;
       this.blockchain.rpc.getBankBalances(this.currentAddress).then((x) => {
         this.balances = x.balances;
       });
-      this.blockchain.rpc
-        .getStakingDelegations(this.currentAddress)
-        .then((x) => {
-          this.delegations = x.delegation_responses;
-        });
-      this.blockchain.rpc
-        .getStakingDelegatorUnbonding(this.currentAddress)
-        .then((x) => {
-          this.unbonding = x.unbonding_responses;
-        });
-      this.blockchain.rpc
-        .getDistributionDelegatorRewards(this.currentAddress)
-        .then((x) => {
-          this.rewards = x;
-        });
+      this.blockchain.rpc.getStakingDelegations(this.currentAddress).then((x) => {
+        this.delegations = x.delegation_responses;
+      });
+      this.blockchain.rpc.getStakingDelegatorUnbonding(this.currentAddress).then((x) => {
+        this.unbonding = x.unbonding_responses;
+      });
+      this.blockchain.rpc.getDistributionDelegatorRewards(this.currentAddress).then((x) => {
+        this.rewards = x;
+      });
     },
     myBalance() {
       return this.blockchain.rpc.getBankBalances(this.currentAddress);
@@ -114,25 +100,23 @@ export const useWalletStore = defineStore('walletStore', {
       return this.blockchain.rpc.getStakingDelegations(this.currentAddress);
     },
     myUnbonding() {
-      return this.blockchain.rpc.getStakingDelegatorUnbonding(
-        this.currentAddress
-      );
+      return this.blockchain.rpc.getStakingDelegatorUnbonding(this.currentAddress);
     },
     disconnect() {
       const chainStore = useBlockchain();
       const key = chainStore.defaultHDPath;
       localStorage.removeItem(key);
-      this.$reset()
+      this.$reset();
     },
     setConnectedWallet(value: WalletConnected) {
-      if(value) this.wallet = value 
+      if (value) this.wallet = value;
     },
     suggestChain() {
       if (window.location.pathname === '/SIDE-Testnet') {
-        router.push({path: '/wallet/unisat'})
+        router.push({ path: '/wallet/unisat' });
       } else {
-        router.push({path: '/wallet/keplr'})
+        router.push({ path: '/wallet/keplr' });
       }
-    }
+    },
   },
 });

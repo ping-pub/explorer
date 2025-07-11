@@ -3,7 +3,7 @@ import ArrayBytesElement from './ArrayBytesElement.vue';
 import ArrayObjectElement from './ArrayObjectElement.vue';
 import TextElement from './TextElement.vue';
 import ArrayCoinElement from './ArrayCoinElement.vue';
-import ArrayStringElement from './ArrayStringElement.vue'
+import ArrayStringElement from './ArrayStringElement.vue';
 
 const props = defineProps({
   value: { type: Array<Object> },

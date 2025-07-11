@@ -2,7 +2,7 @@
 // router.push(`/${props.chain}/ibc/connection/connection-0`)
 </script>
 <template>
-    <div></div>
+  <div></div>
 </template>
 <route>
     {
