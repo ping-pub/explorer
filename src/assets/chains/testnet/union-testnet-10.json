@@ -6,7 +6,7 @@
   "rpc": [
     "https://rpc.rpc-node.union-testnet-10.union.build"
   ],
-  "sdk_version": "0.50.11",
+  "sdk_version": "0.50.13",
   "addr_prefix": "union",
   "min_tx_fee": "0",
   "coin_type": "1337",
@@ -14,10 +14,10 @@
   "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/uniontestnet/images/union.png",
   "assets": [
     {
-      "symbol": "UNO",
-      "base": "muno",
-      "exponent": 6,
-      "coingecko_id": "uno",
+      "symbol": "U",
+      "base": "au",
+      "exponent": 18,
+      "coingecko_id": "au",
       "logo": "https://raw.githubusercontent.com/Agoric/agoric-sdk/master/packages/wallet/ui/public/tokens/BLD.svg"
     }
   ]
