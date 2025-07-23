@@ -8,7 +8,7 @@ import {
   type DenomMetadata,
 } from '@/types';
 import { onMounted } from 'vue';
-import type { Asset } from '@ping-pub/chain-registry-client/dist/types';
+import type { Asset } from '@/types/chaindata';
 import PaginationBar from '@/components/PaginationBar.vue';
 const props = defineProps(['chain']);
 
@@ -45,7 +45,7 @@ async function mergeDenomMetadata(denom: string, denomsMetadatas: DenomMetadata[
   if (asset && denomMetadata) {
     asset = { ...denomMetadata, ...asset };
     asset.display = denomMetadata.display;
-    asset.logo = asset.logo_URIs?.svg || asset.logo_URIs?.png || asset.logo_URIs?.jpeg || undefined;
+    asset.logo = asset.logo_URIs?.svg || asset.logo_URIs?.png || undefined;
   } else if (denomMetadata) {
     return denomMetadata as SupplyAsset;
   }
@@ -65,7 +65,7 @@ function pageload(p: number) {
           amount: format.tokenAmountNumber({ amount: coin.amount, denom: denom }).toString(),
           base: asset.base || coin.denom,
           info: asset.display || coin.denom,
-          logo: asset?.logo_URIs?.svg || asset?.logo_URIs?.png || asset?.logo_URIs?.jpeg || '/logo.svg',
+          logo: asset?.logo_URIs?.svg || asset?.logo_URIs?.png || '/logo.svg',
         };
       })
     );

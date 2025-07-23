@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useDashboard, type ChainConfig, useBlockchain } from '@/stores';
+import { useDashboard, useBlockchain } from '@/stores';
+import type { ChainConfig, DenomUnit } from '@/types/chaindata';
 import { CosmosRestClient } from '@/libs/client';
 import { onMounted } from 'vue';
 import AdBanner from '@/components/ad/AdBanner.vue';
@@ -29,7 +30,7 @@ async function initParamsForKeplr() {
     high: 0.03,
   };
   const coinDecimals =
-    chain.assets[0].denom_units.find((x) => x.denom === chain.assets[0].symbol.toLowerCase())?.exponent || 6;
+    chain.assets[0].denom_units.find((x: DenomUnit) => x.denom === chain.assets[0].symbol.toLowerCase())?.exponent || 6;
   conf.value = JSON.stringify(
     {
       chainId: chainid,

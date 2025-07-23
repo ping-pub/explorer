@@ -144,7 +144,7 @@ const list = computed(() => {
     if (endpoint) {
       endpoint.push('ping');
       return staking.validators
-        .filter((x) => isFeatured(endpoint, x.description))
+        .filter((x) => isFeatured(endpoint.filter(Boolean) as string[], x.description))
         .map((x, i) => ({ v: x, rank: 'primary', logo: logo(x.description.identity) }));
     }
     return [];

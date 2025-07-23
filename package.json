@@ -13,6 +13,7 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@chain-registry/types": "^0.50.162",
     "@chenfengyuan/vue-countdown": "2",
     "@cosmjs/amino": "^0.32.3",
     "@cosmjs/crypto": "^0.32.3",
