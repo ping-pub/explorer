@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useDashboard, type ChainConfig, useBlockchain } from '@/stores';
+import { useDashboard, useBlockchain } from '@/stores';
 import { CosmosRestClient } from '@/libs/client';
 import { onMounted } from 'vue';
 import AdBanner from '@/components/ad/AdBanner.vue';
+import type { ChainConfig } from '@/types/chaindata';
 
 const error = ref('');
 const conf = ref('');

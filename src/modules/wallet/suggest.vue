@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { suggestChain } from '@leapwallet/cosmos-snap-provider';
-import {
-  useDashboard,
-  type ChainConfig,
-  useBlockchain,
-  NetworkType,
-} from '@/stores';
+import { useDashboard, useBlockchain } from '@/stores';
 import { CosmosRestClient } from '@/libs/client';
 import { onMounted } from 'vue';
+import { loadFromLocal } from '@/libs/chaindata';
+import { type ChainConfig, NetworkType } from '@/types/chaindata';
 import AdBanner from '@/components/ad/AdBanner.vue';
 
 const error = ref('');
@@ -28,10 +25,10 @@ onMounted(() => {
   selected.value = chainStore.current || Object.values(dashboard.chains)[0];
   initParamsForKeplr();
 
-  dashboard.loadLocalConfig(NetworkType.Mainnet).then((res) => {
+  loadFromLocal(NetworkType.Mainnet).then((res) => {
     mainnet.value = Object.values<ChainConfig>(res);
   });
-  dashboard.loadLocalConfig(NetworkType.Testnet).then((res) => {
+  loadFromLocal(NetworkType.Testnet).then((res) => {
     testnet.value = Object.values<ChainConfig>(res);
   });
 });

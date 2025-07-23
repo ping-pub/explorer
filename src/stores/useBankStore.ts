@@ -25,10 +25,12 @@ export const useBankStore = defineStore('bankstore', {
     initial() {
       this.$reset();
       this.supply = {} as Coin;
-      const denom = this.staking.params.bond_denom || this.blockchain.current?.assets[0].base;
+      const denom = this.staking.params.bond_denom || this.blockchain.current?.assets[0].denom_units[0].denom;
       if (denom) {
-        this.blockchain.rpc.getBankSupplyByDenom(denom).then((res) => {
-          if (res.amount) this.supply = res.amount;
+        this.blockchain.getRpc().then((rpc) => {
+          rpc.getBankSupplyByDenom(denom).then((res) => {
+            if (res.amount) this.supply = res.amount;
+          });
         });
       }
     },

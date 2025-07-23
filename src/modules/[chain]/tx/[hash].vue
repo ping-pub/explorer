@@ -125,7 +125,7 @@ const messages = computed(() => {
         copyable
         boxed
         sort
-        expand-depth="5"
+        :expand-depth="5"
       />
     </div>
   </div>

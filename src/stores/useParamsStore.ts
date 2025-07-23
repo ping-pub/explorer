@@ -168,6 +168,9 @@ export const useParamStore = defineStore('paramstore', {
     },
     async handleAbciInfo() {
       const res = await this.fetchAbciInfo();
+      if (!res) {
+        return;
+      }
 
       localStorage.setItem(`sdk_version_${this.blockchain.chainName}`, res.application_version?.cosmos_sdk_version);
 

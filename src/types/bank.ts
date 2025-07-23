@@ -1,4 +1,5 @@
 import type { Coin, PaginatedResponse } from './common';
+import type { Asset } from './chaindata';
 
 export interface BankParams {
   params: {
@@ -7,25 +8,12 @@ export interface BankParams {
   };
 }
 
-export interface DenomMetadata {
-  description: string;
-  denom_units: {
-    denom: string;
-    exponent: number;
-    aliases: string[];
-  }[];
-  base: string;
-  display: string;
-  name: string;
-  symbol: string;
-}
-
 export interface PaginatedBalances extends PaginatedResponse {
   balances: Coin[];
 }
 
 export interface PaginatedDenomMetadata extends PaginatedResponse {
-  metadatas: DenomMetadata[];
+  metadatas: Asset[];
 }
 
 export interface PaginatedSupply extends PaginatedResponse {

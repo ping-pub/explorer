@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import type { Block } from '@/types';
 import { hashTx } from '@/libs';
 import { fromBase64 } from '@cosmjs/encoding';
-import { useRouter } from 'vue-router';
 
 export const useBaseStore = defineStore('baseStore', {
   state: () => {
@@ -68,13 +67,27 @@ export const useBaseStore = defineStore('baseStore', {
     async clearRecentBlocks() {
       this.recents = [];
     },
-    async fetchLatest() {
+    async connect(retry = 0): Promise<boolean> {
+      if (retry > 5) {
+        console.error('Failed to connect to blockchain after 5 retries');
+        return false;
+      }
+      const rpc = this.blockchain.rpc;
+      if (!rpc) {
+        return false;
+      }
       try {
-        this.latest = await this.blockchain.rpc?.getBaseBlockLatest();
+        this.latest = await this.blockchain.rpc.getBaseBlockLatest();
         this.connected = true;
       } catch (e) {
+        console.error('Failed to fetch latest block:', e);
         this.connected = false;
+        return this.connect(retry + 1);
       }
+      return this.connected;
+    },
+    async fetchLatest() {
+      this.connected = await this.connect();
       if (!this.earlest || this.earlest?.block?.header?.chain_id != this.latest?.block?.header?.chain_id) {
         //reset earlest and recents
         this.earlest = this.latest;

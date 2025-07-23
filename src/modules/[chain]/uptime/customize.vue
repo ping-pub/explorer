@@ -178,6 +178,11 @@ function color(v: string) {
             </td>
             <td>
               <span v-if="v.sigingInfo">{{
+                Number(v.sigingInfo.index_offset) - Number(v.sigingInfo.start_height)
+              }}</span>
+            </td>
+            <td>
+              <span v-if="v.sigingInfo">{{
                 Number(v.sigingInfo.index_offset) -
                 Number(v.sigingInfo.start_height)
               }}</span>
