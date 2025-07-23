@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
-import { useDashboard, type ChainConfig, type Endpoint, EndpointType } from './useDashboard';
+import type { ChainConfig, Endpoint } from '@/types/chaindata';
+import { useDashboard} from './useDashboard';
 import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '@/layouts/types';
 import { useRouter } from 'vue-router';
 import { CosmosRestClient } from '@/libs/client';
@@ -22,11 +23,7 @@ export const useBlockchain = defineStore('blockchain', {
       status: {} as Record<string, string>,
       rest: '',
       chainName: '',
-      endpoint: {} as {
-        type?: EndpointType;
-        address: string;
-        provider: string;
-      },
+      endpoint: {} as Endpoint,
       connErr: '',
     };
   },
