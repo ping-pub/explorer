@@ -4,6 +4,9 @@
   "semi": true,
   "endOfLine": "auto",
   "bracketSpacing": true,
-  "TrailingCooma": true,
-  "arrowParens": "always"
+  "trailingComma": "es5",
+  "arrowParens": "always",
+  "singleAttributePerLine": false,
+  "printWidth": 120,
+  "useTabs": false
 }

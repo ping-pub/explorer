@@ -12,18 +12,13 @@ import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 
 export default defineConfig({
   define: {
-    'process.env': {}
+    'process.env': {},
   },
   plugins: [
     vue({
       template: {
         compilerOptions: {
-          isCustomElement: (tag) =>
-            [
-              'ping-connect-wallet',
-              'ping-token-convert',
-              'ping-tx-dialog',
-            ].includes(tag),
+          isCustomElement: (tag) => ['ping-connect-wallet', 'ping-token-convert', 'ping-tx-dialog'].includes(tag),
         },
       },
     }),
@@ -36,24 +31,13 @@ export default defineConfig({
       layoutsDirs: './src/layouts/',
     }),
     AutoImport({
-      imports: [
-        'vue',
-        'vue-router',
-        '@vueuse/core',
-        '@vueuse/math',
-        'vue-i18n',
-        'pinia',
-      ],
+      imports: ['vue', 'vue-router', '@vueuse/core', '@vueuse/math', 'vue-i18n', 'pinia'],
       vueTemplate: true,
     }),
     VueI18nPlugin({
       runtimeOnly: true,
       compositionOnly: true,
-      include: [
-        fileURLToPath(
-          new URL('./src/plugins/i18n/locales/**', import.meta.url)
-        ),
-      ],
+      include: [fileURLToPath(new URL('./src/plugins/i18n/locales/**', import.meta.url))],
     }),
     DefineOptions(),
   ],

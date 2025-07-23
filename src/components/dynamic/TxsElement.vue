@@ -9,21 +9,23 @@ const props = defineProps({
 });
 
 const txs = computed(() => {
-  return props.value?.map((x) => {
-    const tx_bytes = fromBase64(x);
-    let tx = null
-    let injected = 'Standard'
-    try {
-      tx = decodeTxRaw(fromBase64(x))
-    } catch(e) {
-      injected = 'Injected'
-    } 
-    return {
-      hash: hashTx(tx_bytes),
-      tx,
-      injected
-    }
-  }) || []
+  return (
+    props.value?.map((x) => {
+      const tx_bytes = fromBase64(x);
+      let tx = null;
+      let injected = 'Standard';
+      try {
+        tx = decodeTxRaw(fromBase64(x));
+      } catch (e) {
+        injected = 'Injected';
+      }
+      return {
+        hash: hashTx(tx_bytes),
+        tx,
+        injected,
+      };
+    }) || []
+  );
 });
 
 const format = useFormatter();
@@ -35,7 +37,7 @@ const chain = useBlockchain();
       <thead>
         <tr>
           <th>Type</th>
-          <th style="position: relative; z-index: 2;">Hash</th>
+          <th style="position: relative; z-index: 2">Hash</th>
           <th>Msgs</th>
           <th>Memo</th>
         </tr>
@@ -44,21 +46,19 @@ const chain = useBlockchain();
         <tr v-for="item in txs">
           <td>{{ item.injected }}</td>
           <td>
-            <span v-if="item.injected ==='Injected'">{{ item.hash }}</span>
+            <span v-if="item.injected === 'Injected'">{{ item.hash }}</span>
             <RouterLink v-else :to="`/${chain.chainName}/tx/${item.hash}`" class="text-primary dark:invert">{{
               item.hash
             }}</RouterLink>
           </td>
           <td>
             <span v-if="item.tx">
-              {{
-                format.messages(
-                  item.tx.body.messages.map((x) => ({ '@type': x.typeUrl }))
-                )
-              }}
+              {{ format.messages(item.tx.body.messages.map((x) => ({ '@type': x.typeUrl }))) }}
             </span>
           </td>
-          <td><span v-if="item.tx">{{ item.tx.body.memo }}</span></td>
+          <td>
+            <span v-if="item.tx">{{ item.tx.body.memo }}</span>
+          </td>
         </tr>
       </tbody>
     </table>

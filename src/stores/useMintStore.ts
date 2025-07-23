@@ -18,7 +18,7 @@ export const useMintStore = defineStore('mintStore', {
     },
     async fetchInflation() {
       try {
-        const res = await this.blockchain.rpc.getMintInflation()
+        const res = await this.blockchain.rpc.getMintInflation();
         if (res) {
           this.inflation = res.inflation;
         }

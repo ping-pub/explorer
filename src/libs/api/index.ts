@@ -1,7 +1,4 @@
-import {
-  type RequestRegistry,
-  adapter,
-} from './registry';
+import { type RequestRegistry, adapter } from './registry';
 
 export const DEFAULT: RequestRegistry = {
   auth_params: { url: '/cosmos/auth/v1beta1/params', adapter },
@@ -228,5 +225,4 @@ export const DEFAULT: RequestRegistry = {
     url: '/cosmos/group/v1/proposals_by_group_policy/{address}',
     adapter,
   },
-
 };

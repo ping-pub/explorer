@@ -3,10 +3,7 @@
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
   "compilerOptions": {
     // "ignoreDeprecations": "5.0",
-    "lib": [      
-      "es2022",
-      "dom"
-    ],
+    "lib": ["es2022", "dom"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

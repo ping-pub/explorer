@@ -1,17 +1,7 @@
 import { defineStore } from 'pinia';
-import {
-  useDashboard,
-} from './useDashboard';
-import type {
-  ChainConfig,
-  Endpoint,
-} from '@/types/chaindata';
-import type {
-  NavGroup,
-  NavLink,
-  NavSectionTitle,
-  VerticalNavItems,
-} from '@/layouts/types';
+import { useDashboard } from './useDashboard';
+import type { ChainConfig, Endpoint } from '@/types/chaindata';
+import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '@/layouts/types';
 import { useRouter } from 'vue-router';
 import { CosmosRestClient } from '@/libs/client';
 import {
@@ -21,7 +11,7 @@ import {
   useGovStore,
   useMintStore,
   useStakingStore,
-  useWalletStore
+  useWalletStore,
 } from '.';
 import { useBlockModule } from '@/modules/[chain]/block/block';
 import { hexToRgb, rgbToHsl } from '@/libs/utils';
@@ -38,9 +28,9 @@ export const useBlockchain = defineStore('blockchain', {
   },
   getters: {
     current(): ChainConfig | undefined {
-      const chain = this.dashboard.chains[this.chainName]
+      const chain = this.dashboard.chains[this.chainName];
       // update chain config with dynamic updated sdk version
-      const sdkversion = localStorage.getItem(`sdk_version_${this.chainName}`)
+      const sdkversion = localStorage.getItem(`sdk_version_${this.chainName}`);
       if (sdkversion && chain?.versions) {
         chain.versions.cosmosSdk = sdkversion;
       }
@@ -60,7 +50,7 @@ export const useBlockchain = defineStore('blockchain', {
       const current: any = this.current || {};
       const providerChain = current.providerChain || {};
       const api = providerChain.api || [];
-      return api.length > 0
+      return api.length > 0;
     },
     computedChainMenu() {
       let currNavItem: VerticalNavItems = [];
@@ -88,7 +78,7 @@ export const useBlockchain = defineStore('blockchain', {
               .filter((x) => {
                 const features = this.current?.features || [];
                 if (features.length === 0) return true; // no features defined, show all
-                return features.includes(String(x.meta.i18n))
+                return features.includes(String(x.meta.i18n));
               }) // filter none-custom module
               .map((x) => {
                 return {
@@ -97,7 +87,7 @@ export const useBlockchain = defineStore('blockchain', {
                   icon: { icon: 'mdi-chevron-right', size: '22' },
                   i18n: true,
                   order: Number(x.meta.order || 100),
-                }
+                };
               })
               .sort((a, b) => a.order - b.order),
           },
@@ -156,7 +146,7 @@ export const useBlockchain = defineStore('blockchain', {
         useMintStore().initial();
         useBlockModule().initial();
         useDistributionStore().initial();
-      })
+      });
     },
 
     async setRpc() {
@@ -184,13 +174,13 @@ export const useBlockchain = defineStore('blockchain', {
         if (all) {
           const rn = Math.random();
           const endpoint = all[Math.floor(rn * all.length)];
-          return endpoint
+          return endpoint;
         }
       }
     },
 
     async randomSetupEndpoint() {
-      const endpoint = this.randomEndpoint(this.chainName)
+      const endpoint = this.randomEndpoint(this.chainName);
       if (endpoint) await this.setRestEndpoint(endpoint);
     },
 
@@ -198,10 +188,7 @@ export const useBlockchain = defineStore('blockchain', {
       this.connErr = '';
       this.endpoint = endpoint;
       this.rpc = CosmosRestClient.newStrategy(endpoint.address, this.current);
-      localStorage.setItem(
-        `endpoint-${this.chainName}`,
-        JSON.stringify(endpoint)
-      );
+      localStorage.setItem(`endpoint-${this.chainName}`, JSON.stringify(endpoint));
     },
 
     async setCurrent(name: string) {
@@ -212,8 +199,7 @@ export const useBlockchain = defineStore('blockchain', {
 
       // Find the case-sensitive name for the chainName, else simply use the parameter-value.
       const caseSensitiveName =
-        Object.keys(this.dashboard.chains || {}).find((x) => x.toLowerCase() === name.toLowerCase())
-        || name;
+        Object.keys(this.dashboard.chains || {}).find((x) => x.toLowerCase() === name.toLowerCase()) || name;
 
       // Update chainName if needed
       if (caseSensitiveName && caseSensitiveName !== this.chainName) {
@@ -224,7 +210,5 @@ export const useBlockchain = defineStore('blockchain', {
     supportModule(mod: string) {
       return !this.current?.features || this.current.features.includes(mod);
     },
-
-
   },
 });

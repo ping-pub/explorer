@@ -12,13 +12,11 @@ export enum LoadingStatus {
 
 export const useDashboard = defineStore('dashboard', {
   state: () => {
-    const favMap = JSON.parse(
-      localStorage.getItem('favoriteMap') || '{}'
-    );
+    const favMap = JSON.parse(localStorage.getItem('favoriteMap') || '{}');
     return {
       status: LoadingStatus.Empty,
-      source: (ConfigSource[import.meta.env.VITE_CONFIG_SOURCE as keyof typeof ConfigSource]) || ConfigSource.Local,
-      networkType: (NetworkType[import.meta.env.VITE_NETWORK_TYPE as keyof typeof NetworkType]) || NetworkType.Mainnet,
+      source: ConfigSource[import.meta.env.VITE_CONFIG_SOURCE as keyof typeof ConfigSource] || ConfigSource.Local,
+      networkType: NetworkType[import.meta.env.VITE_NETWORK_TYPE as keyof typeof NetworkType] || NetworkType.Mainnet,
       favoriteMap: favMap as Record<string, boolean>,
       chains: {} as Record<string, ChainConfig>,
       prices: {} as Record<string, any>,
@@ -30,31 +28,31 @@ export const useDashboard = defineStore('dashboard', {
       return Object.keys(this.chains).length;
     },
     chainList(): string[] | undefined {
-      const chainListString = import.meta.env.VITE_CHAIN_LIST
+      const chainListString = import.meta.env.VITE_CHAIN_LIST;
       console.log(`Chain list from env: ${chainListString}`);
       if (chainListString) {
         const chainList = chainListString.split(',');
         chainList.forEach((chain: string) => {
           this.favoriteMap[chain] = true;
         });
-        return chainList
+        return chainList;
       }
-      return undefined
-    }
+      return undefined;
+    },
   },
   actions: {
     async initial() {
-      if (window.location.hostname.search("testnet") > -1) {
-        this.networkType = NetworkType.Testnet
+      if (window.location.hostname.search('testnet') > -1) {
+        this.networkType = NetworkType.Testnet;
       }
       if (import.meta.env.MODE === 'mainnet') {
-        this.networkType = NetworkType.Mainnet
+        this.networkType = NetworkType.Mainnet;
       } else if (import.meta.env.MODE === 'testnet') {
-        this.networkType = NetworkType.Testnet
+        this.networkType = NetworkType.Testnet;
       }
 
       if (this.status === LoadingStatus.Empty) {
-        this.status = LoadingStatus.Loading
+        this.status = LoadingStatus.Loading;
         if (this.source === ConfigSource.Local) {
           this.chains = await loadFromLocal(this.networkType);
         } else if (this.source === ConfigSource.ChainRegistry) {
