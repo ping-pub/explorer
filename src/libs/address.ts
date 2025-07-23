@@ -45,7 +45,8 @@ export function consumerKeyToBase64Address(consumerKey?: Record<string, string>)
 
   if (consumerKey.secp256k1) {
     const pubkey = fromBase64(consumerKey.secp256k1);
-    if (pubkey) return toBase64(new Ripemd160().update(sha256(pubkey)).digest());
+    if (pubkey)
+      return toBase64(new Ripemd160().update(sha256(pubkey)).digest());
   }
   return raw;
 }

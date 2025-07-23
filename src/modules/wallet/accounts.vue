@@ -216,10 +216,18 @@ async function loadBalances(chainName: string, endpoint: string, address: string
       </div>
     </div>
 
-    <AdBanner id="account-banner-ad" unit="banner" width="970px" height="90px" />
+    <AdBanner
+      id="account-banner-ad"
+      unit="banner"
+      width="970px"
+      height="90px"
+    />
 
     <div class="overflow-x-auto">
-      <div v-for="{ key, subaccounts } in accounts" class="bg-base-100 rounded-md my-5 py-5">
+      <div
+        v-for="{ key, subaccounts } in accounts"
+        class="bg-base-100 rounded-md my-5 py-5"
+      >
         <div class="flex justify-self-center">
           <div class="mx-2 p-2">
             <svg
@@ -234,7 +242,11 @@ async function loadBalances(chainName: string, endpoint: string, address: string
               xml:space="preserve"
             >
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></g>
               <g id="SVGRepo_iconCarrier">
                 <g>
                   <g>
@@ -278,7 +290,9 @@ async function loadBalances(chainName: string, endpoint: string, address: string
           <ul class="!menu w-full">
             <div v-for="x in subaccounts">
               <li v-if="x.delegation.amount">
-                <RouterLink :to="`/${x.account.chainName}/account/${x.account.address}`">
+                <RouterLink
+                  :to="`/${x.account.chainName}/account/${x.account.address}`"
+                >
                   <img :src="x.account.logo" class="w-6 h-6 mr-2" />
                   <span class="font-bold"
                     >{{ format.formatToken(x.delegation, true, '0,0.[00]', 'all') }} <br /><span
@@ -309,7 +323,9 @@ async function loadBalances(chainName: string, endpoint: string, address: string
           <ul class="!menu w-full">
             <div v-for="s in subaccounts">
               <li v-for="x in s.balances">
-                <RouterLink :to="`/${s.account.chainName}/account/${s.account.address}`">
+                <RouterLink
+                  :to="`/${s.account.chainName}/account/${s.account.address}`"
+                >
                   <img :src="s.account.logo" class="w-6 h-6 mr-2" />
                   <span class="font-bold"
                     >{{ format.formatToken(x, true, '0,0.[00]', 'all') }} <br /><span
@@ -352,7 +368,11 @@ async function loadBalances(chainName: string, endpoint: string, address: string
     <!-- Put this part before </body> tag -->
     <div class="modal" id="address-modal">
       <div class="modal-box">
-        <a href="#" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</a>
+        <a
+          href="#"
+          class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          >✕</a
+        >
         <h3 class="font-bold text-lg mb-2">Derive Account From Address</h3>
         <div>
           <label class="my-2">
@@ -365,7 +385,10 @@ async function loadBalances(chainName: string, endpoint: string, address: string
             <input v-model="sourceHdPath" class="input input-bordered w-full input-sm" placeholder="m/44/118/0'/0/0" />
           </label>
         </div>
-        <div v-show="importStep === 'step2'" class="py-4 max-h-72 overflow-y-auto">
+        <div
+          v-show="importStep === 'step2'"
+          class="py-4 max-h-72 overflow-y-auto"
+        >
           <table class="table table-compact">
             <tr v-for="acc in availableAccount">
               <td>
@@ -392,7 +415,10 @@ async function loadBalances(chainName: string, endpoint: string, address: string
                 </div>
               </td>
               <td class="text-right">
-                <span class="btn !bg-yes !border-yes btn-xs text-white" @click="addAddress(acc)">
+                <span
+                  class="btn !bg-yes !border-yes btn-xs text-white"
+                  @click="addAddress(acc)"
+                >
                   <Icon icon="mdi:plus" />
                 </span>
               </td>
@@ -400,7 +426,12 @@ async function loadBalances(chainName: string, endpoint: string, address: string
           </table>
         </div>
         <div class="modal-action mt-2 mb-0">
-          <a href="#" class="btn btn-primary btn-sm" @click="importStep = 'step1'">Close</a>
+          <a
+            href="#"
+            class="btn btn-primary btn-sm"
+            @click="importStep = 'step1'"
+            >Close</a
+          >
         </div>
       </div>
     </div>

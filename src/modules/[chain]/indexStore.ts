@@ -157,7 +157,9 @@ export const useIndexModule = defineStore('module-index', {
           title: 'Validators',
           color: 'error',
           icon: 'mdi-human-queue',
-          stats: String(base?.latest?.block?.last_commit?.signatures.length || 0),
+          stats: String(
+            base?.latest?.block?.last_commit?.signatures.length || 0
+          ),
           change: 0,
         },
         {
@@ -259,7 +261,11 @@ export const useIndexModule = defineStore('module-index', {
  * @param value - The value to set for the parameter.
  * @returns The new URL with the parameter added or replaced.
  */
-export function addOrReplaceUrlParam(url: string, param: string, value: string): string {
+export function addOrReplaceUrlParam(
+  url: string,
+  param: string,
+  value: string
+): string {
   // Parse the URL
   const urlObj = new URL(url, window.location.origin);
 

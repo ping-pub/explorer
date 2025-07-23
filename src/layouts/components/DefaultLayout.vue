@@ -15,7 +15,12 @@ import { useBaseStore, useBlockchain } from '@/stores';
 
 import NavBarI18n from './NavBarI18n.vue';
 import NavBarWallet from './NavBarWallet.vue';
-import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '../types';
+import type {
+  NavGroup,
+  NavLink,
+  NavSectionTitle,
+  VerticalNavItems,
+} from '../types';
 import dayjs from 'dayjs';
 import AdBanner from '@/components/ad/AdBanner.vue';
 
@@ -90,7 +95,10 @@ const show_ad = computed(() => {
           <img class="w-10 h-10" src="../../assets/logo.svg" />
           <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">Ping.pub</h1>
         </RouterLink>
-        <div class="pr-4 cursor-pointer xl:!hidden" @click="sidebarShow = false">
+        <div
+          class="pr-4 cursor-pointer xl:!hidden"
+          @click="sidebarShow = false"
+        >
           <Icon icon="mdi-close" class="text-2xl" />
         </div>
       </div>
@@ -122,7 +130,11 @@ const show_ad = computed(() => {
             <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
               {{ item?.title }}
             </div>
-            <div v-if="item?.badgeContent" class="mr-6 badge badge-sm text-white border-none" :class="item?.badgeClass">
+            <div
+              v-if="item?.badgeContent"
+              class="mr-6 badge badge-sm text-white border-none"
+              :class="item?.badgeClass"
+            >
               {{ item?.badgeContent }}
             </div>
           </div>
@@ -202,11 +214,18 @@ const show_ad = computed(() => {
           <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
             {{ item?.title }}
           </div>
-          <div v-if="item?.badgeContent" class="badge badge-sm text-white border-none" :class="item?.badgeClass">
+          <div
+            v-if="item?.badgeContent"
+            class="badge badge-sm text-white border-none"
+            :class="item?.badgeClass"
+          >
             {{ item?.badgeContent }}
           </div>
         </RouterLink>
-        <div v-if="isNavTitle(item)" class="px-4 text-sm text-gray-400 pb-2 uppercase">
+        <div
+          v-if="isNavTitle(item)"
+          class="px-4 text-sm text-gray-400 pb-2 uppercase"
+        >
           {{ item?.heading }}
         </div>
       </div>
@@ -219,7 +238,10 @@ const show_ad = computed(() => {
           <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
           <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">Wallet Helper</div>
         </RouterLink>
-        <div v-if="showDiscord" class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
+        <div
+          v-if="showDiscord"
+          class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase"
+        >
           {{ $t('module.sponsors') }}
         </div>
         <Sponsors v-if="showDiscord" />
@@ -253,8 +275,13 @@ const show_ad = computed(() => {
     </div>
     <div class="xl:!ml-64 px-3 pt-4">
       <!-- header -->
-      <div class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10">
-        <div class="text-2xl pr-3 cursor-pointer xl:!hidden" @click="sidebarShow = true">
+      <div
+        class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10"
+      >
+        <div
+          class="text-2xl pr-3 cursor-pointer xl:!hidden"
+          @click="sidebarShow = true"
+        >
           <Icon icon="mdi-menu" />
         </div>
 
@@ -286,7 +313,11 @@ const show_ad = computed(() => {
                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               ></path>
             </svg>
-            <span>{{ $t('pages.out_of_sync') }} {{ blocktime.format() }} ({{ blocktime.fromNow() }})</span>
+            <span
+              >{{ $t('pages.out_of_sync') }} {{ blocktime.format() }} ({{
+                blocktime.fromNow()
+              }})</span
+            >
           </div>
         </div>
         <RouterView v-slot="{ Component }">

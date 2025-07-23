@@ -126,7 +126,9 @@ const amount = computed({
           </div>
           <div class="text-xs mt-2">
             {{ $t('index.rank') }}:
-            <div class="badge text-xs badge-error bg-[#fcebea] dark:bg-[#41384d] text-red-400">
+            <div
+              class="badge text-xs badge-error bg-[#fcebea] dark:bg-[#41384d] text-red-400"
+            >
               #{{ coinInfo.market_cap_rank }}
             </div>
           </div>
@@ -150,7 +152,9 @@ const amount = computed({
                   class="bg-gray-100 dark:bg-[#384059] flex items-center justify-between px-4 py-2 cursor-pointer rounded"
                 >
                   <div>
-                    <div class="font-semibold text-xl text-[#666] dark:text-white">
+                    <div
+                      class="font-semibold text-xl text-[#666] dark:text-white"
+                    >
                       {{ ticker?.market?.name || '' }}
                     </div>
                     <div class="text-info text-sm">
@@ -161,7 +165,9 @@ const amount = computed({
                   </div>
 
                   <div class="text-right">
-                    <div class="text-xl font-semibold text-[#666] dark:text-white">
+                    <div
+                      class="text-xl font-semibold text-[#666] dark:text-white"
+                    >
                       ${{ ticker?.converted_last?.usd }}
                     </div>
                     <div class="text-sm" :class="store.priceColor">{{ store.priceChange }}%</div>
@@ -171,10 +177,19 @@ const amount = computed({
               <div class="dropdown-content pt-1">
                 <div class="h-64 overflow-auto w-full shadow rounded">
                   <ul class="menu w-full bg-gray-100 rounded dark:bg-[#384059]">
-                    <li v-for="(item, index) in store.coinInfo.tickers" :key="index" @click="store.selectTicker(index)">
-                      <div class="flex items-center justify-between hover:bg-base-100">
+                    <li
+                      v-for="(item, index) in store.coinInfo.tickers"
+                      :key="index"
+                      @click="store.selectTicker(index)"
+                    >
+                      <div
+                        class="flex items-center justify-between hover:bg-base-100"
+                      >
                         <div class="flex-1">
-                          <div class="text-main text-sm" :class="trustColor(item.trust_score)">
+                          <div
+                            class="text-main text-sm"
+                            :class="trustColor(item.trust_score)"
+                          >
                             {{ item?.market?.name }}
                           </div>
                           <div class="text-sm text-gray-500 dark:text-gray-400">
@@ -224,9 +239,13 @@ const amount = computed({
               <input type="checkbox" id="calculator" class="modal-toggle" />
               <div class="modal">
                 <div class="modal-box">
-                  <h3 class="text-lg font-bold">{{ $t('index.price_calculator') }}</h3>
+                  <h3 class="text-lg font-bold">
+                    {{ $t('index.price_calculator') }}
+                  </h3>
                   <div class="flex flex-col w-full mt-5">
-                    <div class="grid h-20 flex-grow card rounded-box place-items-center">
+                    <div
+                      class="grid h-20 flex-grow card rounded-box place-items-center"
+                    >
                       <div class="join w-full">
                         <label class="join-item btn">
                           <span class="uppercase">{{ coinInfo.symbol }}</span>
@@ -241,7 +260,9 @@ const amount = computed({
                       </div>
                     </div>
                     <div class="divider">=</div>
-                    <div class="grid h-20 flex-grow card rounded-box place-items-center">
+                    <div
+                      class="grid h-20 flex-grow card rounded-box place-items-center"
+                    >
                       <div class="join w-full">
                         <label class="join-item btn">
                           <span>USD</span>
@@ -257,7 +278,9 @@ const amount = computed({
                     </div>
                   </div>
                 </div>
-                <label class="modal-backdrop" for="calculator">{{ $t('index.close') }}</label>
+                <label class="modal-backdrop" for="calculator">{{
+                  $t('index.close')
+                }}</label>
               </div>
               <a
                 class="my-5 !text-white btn grow"
@@ -277,7 +300,10 @@ const amount = computed({
       </div>
       <div class="h-[1px] w-full bg-gray-100 dark:bg-[#384059]"></div>
       <div class="max-h-[250px] overflow-auto p-4 text-sm">
-        <MdEditor :model-value="coinInfo.description?.en" previewOnly></MdEditor>
+        <MdEditor
+          :model-value="coinInfo.description?.en"
+          previewOnly
+        ></MdEditor>
       </div>
       <div class="mx-4 flex flex-wrap items-center">
         <div
@@ -295,14 +321,20 @@ const amount = computed({
       </div>
     </div>
 
-    <div v-if="blockchain.supportModule('governance')" class="bg-base-100 rounded mt-4 shadow">
+    <div
+      v-if="blockchain.supportModule('governance')"
+      class="bg-base-100 rounded mt-4 shadow"
+    >
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         {{ $t('index.active_proposals') }}
       </div>
       <div class="px-4 pb-4">
         <ProposalListItem :proposals="store?.proposals" />
       </div>
-      <div class="pb-8 text-center" v-if="store.proposals?.proposals?.length === 0">
+      <div
+        class="pb-8 text-center"
+        v-if="store.proposals?.proposals?.length === 0"
+      >
         {{ $t('index.no_active_proposals') }}
       </div>
     </div>
@@ -317,7 +349,9 @@ const amount = computed({
           >{{ $t('index.more') }}</RouterLink
         >
       </div>
-      <div class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 px-4 pb-6">
+      <div
+        class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 px-4 pb-6"
+      >
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">{{ $t('account.balance') }}</div>
           <div class="text-lg font-semibold text-main">
@@ -348,7 +382,10 @@ const amount = computed({
         </div>
       </div>
 
-      <div v-if="walletStore.delegations.length > 0" class="px-4 pb-4 overflow-auto">
+      <div
+        v-if="walletStore.delegations.length > 0"
+        class="px-4 pb-4 overflow-auto"
+      >
         <table class="table table-compact w-full table-zebra">
           <thead>
             <tr>
@@ -434,7 +471,10 @@ const amount = computed({
         {{ $t('index.app_versions') }}
       </div>
       <!-- Application Version -->
-      <ArrayObjectElement :value="paramStore.appVersion?.items" :thead="false" />
+      <ArrayObjectElement
+        :value="paramStore.appVersion?.items"
+        :thead="false"
+      />
       <div class="h-4"></div>
     </div>
 

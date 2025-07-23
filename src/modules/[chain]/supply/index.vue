@@ -90,7 +90,11 @@ function pageload(p: number) {
         <td>{{ item.base }}</td>
       </tr>
     </table>
-    <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload" />
+    <PaginationBar
+      :limit="pageRequest.limit"
+      :total="pageResponse.total"
+      :callback="pageload"
+    />
   </div>
 </template>
 

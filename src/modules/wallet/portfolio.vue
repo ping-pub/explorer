@@ -264,8 +264,16 @@ const currencySign = computed(() => {
       </div>
       <div class="text-right">
         <div>Total Value</div>
-        <div class="text-success font-bold">{{ currencySign }} {{ format.formatNumber(totalValue, '0,0.[00]') }}</div>
-        <div class="text-xs" :class="{ 'text-success': totalChangeIn24 > 0, 'text-error': totalChangeIn24 < 0 }">
+        <div class="text-success font-bold">
+          {{ currencySign }} {{ format.formatNumber(totalValue, '0,0.[00]') }}
+        </div>
+        <div
+          class="text-xs"
+          :class="{
+            'text-success': totalChangeIn24 > 0,
+            'text-error': totalChangeIn24 < 0,
+          }"
+        >
           {{ format.formatNumber(totalChangeIn24, '+0,0.[00]') }}
         </div>
       </div>
@@ -280,7 +288,12 @@ const currencySign = computed(() => {
           />
         </div>
         <div class="md:col-span-2">
-          <ApexCharts type="area" height="280" :options="chartConfig" :series="changeData" />
+          <ApexCharts
+            type="area"
+            height="280"
+            :options="chartConfig"
+            :series="changeData"
+          />
         </div>
       </div>
       <div class="overflow-x-auto mt-4">
@@ -306,7 +319,9 @@ const currencySign = computed(() => {
                   <span class="capitalize">{{ x.chainName }} </span>
                 </div>
               </td>
-              <td class="text-right">{{ currencySign }}{{ format.formatNumber(x.value, '0,0.[00]') }}</td>
+              <td class="text-right">
+                {{ currencySign }}{{ format.formatNumber(x.value, '0,0.[00]') }}
+              </td>
               <td class="text-right">{{ format.percent(x.percentage) }}</td>
             </tr>
           </tbody>
@@ -315,7 +330,9 @@ const currencySign = computed(() => {
       <div class="p-4 text-center" v-if="tokenList.length === 0">No Data</div>
     </div>
     <div class="text-center my-5 bg-base-200">
-      <RouterLink to="./accounts" class="btn btn-link">Add More Asset</RouterLink>
+      <RouterLink to="./accounts" class="btn btn-link"
+        >Add More Asset</RouterLink
+      >
     </div>
   </div>
 </template>

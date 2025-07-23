@@ -36,7 +36,9 @@ const chainStore = useBlockchain();
 </script>
 <template>
   <div class="">
-    <div class="flex md:!flex-row flex-col items-center justify-center mb-6 mt-14 gap-2">
+    <div
+      class="flex md:!flex-row flex-col items-center justify-center mb-6 mt-14 gap-2"
+    >
       <div class="w-16 rounded-full">
         <svg
           version="1.0"

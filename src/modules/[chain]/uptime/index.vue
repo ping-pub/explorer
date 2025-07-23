@@ -228,7 +228,9 @@ function changeTab(v: string) {
           <div v-for="(unit, i) in grid" :key="i">
             <div class="flex justify-between py-0 w-[248px]">
               <label class="truncate text-sm">
-                <span class="ml-1 text-black dark:text-white">{{ i + 1 }}.{{ unit.moniker }}</span>
+                <span class="ml-1 text-black dark:text-white"
+                  >{{ i + 1 }}.{{ unit.moniker }}</span
+                >
               </label>
               <div
                 v-if="Number(unit?.missed_blocks_counter || 0) > 10"
@@ -236,7 +238,10 @@ function changeTab(v: string) {
               >
                 {{ unit?.missed_blocks_counter }}
               </div>
-              <div v-else class="badge badge-sm bg-transparent text-green-600 border-0 font-bold">
+              <div
+                v-else
+                class="badge badge-sm bg-transparent text-green-600 border-0 font-bold"
+              >
                 {{ unit?.missed_blocks_counter }}
               </div>
             </div>
@@ -246,7 +251,8 @@ function changeTab(v: string) {
         <div class="mt-5 text-xs flex justify-center gap-2">
           <span class="font-bold">{{ $t('uptime.legend') }}: </span>
           <span class="bg-green-500">&nbsp;</span> {{ $t('uptime.committed') }}
-          <span class="bg-yellow-500">&nbsp;</span> {{ $t('uptime.precommitted') }}
+          <span class="bg-yellow-500">&nbsp;</span>
+          {{ $t('uptime.precommitted') }}
           <span class="bg-red-500">&nbsp;</span> {{ $t('uptime.missed') }}
         </div>
       </div>
@@ -275,9 +281,16 @@ function changeTab(v: string) {
               </span>
             </td>
             <td>
-              <span v-if="v.signing && !v.signing.jailed_until.startsWith('1970')">
-                <div class="tooltip" :data-tip="format.toDay(v.signing.jailed_until, 'long')">
-                  <span>{{ format.toDay(v.signing.jailed_until, 'from') }}</span>
+              <span
+                v-if="v.signing && !v.signing.jailed_until.startsWith('1970')"
+              >
+                <div
+                  class="tooltip"
+                  :data-tip="format.toDay(v.signing.jailed_until, 'long')"
+                >
+                  <span>{{
+                    format.toDay(v.signing.jailed_until, 'from')
+                  }}</span>
                 </div>
               </span>
             </td>
