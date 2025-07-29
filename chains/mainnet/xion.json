@@ -1,0 +1,149 @@
+{
+  "chain_name": "xion",
+  "registry_name": "xion",
+  "coingecko": "xion",
+  "network_type": "mainnet",
+  "rpc": [
+    {
+      "address": "https://rpc.xion-mainnet-1.burnt.com",
+      "provider": "🔥BurntLabs🔥"
+    },
+    {
+      "address": "https://rpc-burnt.imperator.co/",
+      "provider": "Imperator.co"
+    },
+    {
+      "address": "https://xion-rpc.polkachu.com",
+      "provider": "Polkachu"
+    }
+  ],
+  "api": [
+    {
+      "address": "https://api.xion-mainnet-1.burnt.com",
+      "provider": "🔥BurntLabs🔥"
+    },
+    {
+      "address": "https://lcd-burnt.imperator.co/",
+      "provider": "Imperator.co"
+    },
+    {
+      "address": "https://xion-api.polkachu.com",
+      "provider": "Polkachu"
+    }
+  ],
+  "snapshot_provider": "",
+  "sdk_version": "0.50.13",
+  "coin_type": "118",
+  "min_tx_fee": "100",
+  "addr_prefix": "xion",
+  "theme_color": "#96b325",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png",
+  "assets": [
+    {
+      "base": "uxion",
+      "symbol": "XION",
+      "exponent": "6",
+      "coingecko_id": "xion-2",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png"
+    },
+    {
+      "base": "ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B",
+      "symbol": "OSMO",
+      "exponent": "6",
+      "coingecko_id": "osmosis",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png"
+    },
+    {
+      "base": "ibc/F082B65C88E4B6D5EF1DB243CDA1D331D002759E938A0F5CD3FFDC5D53B3E349",
+      "symbol": "USDC",
+      "exponent": "6",
+      "coingecko_id": "usd-coin",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.png"
+    },
+    {
+      "base": "ibc/CC7B293B3F08EA7DB96AFD4765BD0C7F95ABD7ECEAF21C74F3ACCBF7CEFB6591",
+      "symbol": "OSMO",
+      "exponent": "6",
+      "coingecko_id": "osmosis",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png"
+    },
+    {
+      "base": "ibc/9463E39D230614B313B487836D13A392BD1731928713D4C8427A083627048DB3",
+      "symbol": "AXL",
+      "exponent": "6",
+      "coingecko_id": "axelar",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/axl.png"
+    },
+    {
+      "base": "ibc/6490A7EAB61059BFC1CDDEB05917DD70BDF3A611654162A1A47DB930D40D8AF4",
+      "symbol": "axlUSDC",
+      "exponent": "6",
+      "coingecko_id": "usd-coin",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/axlusdc.png"
+    },
+    {
+      "base": "ibc/0000000000000000000000000000000000000000000000000000000000000000",
+      "symbol": "axlUSDT",
+      "exponent": "6",
+      "coingecko_id": "tether",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/axlusdc.png"
+    },
+    {
+      "base": "ibc/0000000000000000000000000000000000000000000000000000000000000000",
+      "symbol": "axlDAI",
+      "exponent": "18",
+      "coingecko_id": "dai",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/axldai.png"
+    },
+    {
+      "base": "ibc/0000000000000000000000000000000000000000000000000000000000000000",
+      "symbol": "axlFRAX",
+      "exponent": "6",
+      "coingecko_id": "frax",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/axlfrax.png"
+    },
+    {
+      "base": "ibc/AAD7136DD626569C3DDE7C5F764968BB2E939875EFC568AE5712B62081850814",
+      "symbol": "axlWETH",
+      "exponent": "18",
+      "coingecko_id": "axlweth",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/weth.png"
+    },
+    {
+      "base": "ibc/056EA54C3D9B49B3C0418955A27980A91DD4F210914BFE240A1DB19E27895ECA",
+      "symbol": "KYVE",
+      "exponent": "6",
+      "coingecko_id": "kyve-network",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kyve/images/kyve-token.png"
+    },
+    {
+      "base": "ibc/DBE9697AC1044255A305A2034AD360B4152632BFBFB5785234731F60196B9645",
+      "symbol": "ELYS",
+      "exponent": "6",
+      "coingecko_id": "elys",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/elys/images/elys.png"
+    },
+    {
+      "base": "ibc/E706A0C6CACB374ADC2BCF6A74FE1B260840FC822E45DCB776DEA962A57FED30",
+      "symbol": "axlARB",
+      "exponent": "18",
+      "coingecko_id": "arb",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/_non-cosmos/arbitrum/images/arb.png"
+    }
+  ],
+  "features": [
+    "dashboard",
+    "governance",
+    "staking",
+    "blocks",
+    "tx",
+    "uptime",
+    "ibc",
+    "supply",
+    "parameters",
+    "consensus",
+    "cosmwasm",
+    "account"
+  ],
+  "keplr_features": ["ibc-go", "ibc-transfer", "no-legacy-stdTx"]
+}

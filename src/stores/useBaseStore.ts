@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import type { Block } from '@/types';
 import { hashTx } from '@/libs';
 import { fromBase64 } from '@cosmjs/encoding';
-import { useRouter } from 'vue-router';
 
 export const useBaseStore = defineStore('baseStore', {
   state: () => {
@@ -14,7 +13,6 @@ export const useBaseStore = defineStore('baseStore', {
       latest: {} as Block,
       recents: [] as Block[],
       theme: (window.localStorage.getItem('theme') || 'dark') as 'light' | 'dark',
-      connected: true,
     };
   },
   getters: {
@@ -23,13 +21,16 @@ export const useBaseStore = defineStore('baseStore', {
         if (this.latest.block?.header?.height !== this.earlest.block?.header?.height) {
           const diff = dayjs(this.latest.block?.header?.time).diff(this.earlest.block?.header?.time);
           const blocks = Number(this.latest.block.header.height) - Number(this.earlest.block.header.height);
-          return diff / blocks;
+          return Math.round(diff / blocks);
         }
       }
-      return 6000;
+      return 1000; // better to start low and increase
     },
     blockchain() {
       return useBlockchain();
+    },
+    connected(): boolean {
+      return this.blockchain?.rpc as unknown as boolean;
     },
     currentChainId(): string {
       return this.latest.block?.header.chain_id || '';
@@ -63,31 +64,31 @@ export const useBaseStore = defineStore('baseStore', {
   },
   actions: {
     async initial() {
+      while (!this.connected) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
       this.fetchLatest();
     },
     async clearRecentBlocks() {
       this.recents = [];
     },
     async fetchLatest() {
-      try {
+      if (this.connected) {
         this.latest = await this.blockchain.rpc?.getBaseBlockLatest();
-        this.connected = true;
-      } catch (e) {
-        this.connected = false;
-      }
-      if (!this.earlest || this.earlest?.block?.header?.chain_id != this.latest?.block?.header?.chain_id) {
-        //reset earlest and recents
-        this.earlest = this.latest;
-        this.recents = [];
-      }
-      //check if the block exists in recents
-      if (this.recents.findIndex((x) => x?.block_id?.hash === this.latest?.block_id?.hash) === -1) {
-        if (this.recents.length >= 50) {
-          this.recents.shift();
+        if (!this.earlest || this.earlest?.block?.header?.chain_id != this.latest?.block?.header?.chain_id) {
+          //reset earlest and recents
+          this.earlest = this.latest;
+          this.recents = [];
         }
-        this.recents.push(this.latest);
+        //check if the block exists in recents
+        if (this.recents.findIndex((x) => x?.block_id?.hash === this.latest?.block_id?.hash) === -1) {
+          if (this.recents.length >= 50) {
+            this.recents.shift();
+          }
+          this.recents.push(this.latest);
+        }
       }
-      return this.latest;
+        return this.latest;
     },
 
     async fetchValidatorByHeight(height?: number, offset = 0) {
