@@ -13,7 +13,7 @@ import { consensusPubkeyToHexAddress, get } from '@/libs';
 import { useBankStore } from './useBankStore';
 import type { Coin, DenomTrace } from '@/types';
 import { useDashboard } from './useDashboard';
-import type { Asset } from '@ping-pub/chain-registry-client/dist/types';
+import type { Asset } from '@/types/chaindata';
 
 dayjs.extend(localeData);
 dayjs.extend(duration);

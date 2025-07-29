@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useDashboard, type ChainConfig, useBlockchain } from '@/stores';
+import { useDashboard, useBlockchain } from '@/stores';
+import type { ChainConfig } from '@/types/chaindata';
 import { CosmosRestClient } from '@/libs/client';
 import { onMounted } from 'vue';
 import AdBanner from '@/components/ad/AdBanner.vue';
