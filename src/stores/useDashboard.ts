@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia';
-import { get } from '../libs/http';
+import { get } from '@/libs/http';
 import type { ChainConfig, DirectoryChainConfig, Endpoint, LocalChainConfig } from '@/types/chaindata';
 import { ConfigSource, NetworkType } from '@/types/chaindata';
 import { useBlockchain } from './useBlockchain';
-
-
+import { coingeckoUrl } from '@/stores';
 
 function apiConverter(api: any[]) {
   if (!api) return [];
@@ -37,15 +36,14 @@ export function convertFromLocal(lc: LocalChainConfig): ChainConfig {
         { denom: x.base, exponent: 0 },
         { denom: x.symbol.toLowerCase(), exponent: Number(x.exponent) },
       ],
-      type_asset: 'sdk.coin'
+      type_asset: 'sdk.coin',
     }));
   }
   conf.versions = {
     cosmosSdk: lc.sdk_version,
   };
   conf.bech32Prefix = lc.addr_prefix;
-  conf.bech32ConsensusPrefix =
-    lc.consensus_prefix ?? lc.addr_prefix + 'valcons';
+  conf.bech32ConsensusPrefix = lc.consensus_prefix ?? lc.addr_prefix + 'valcons';
   conf.chainName = lc.chain_name;
   conf.coinType = lc.coin_type;
   conf.prettyName = lc.registry_name || lc.chain_name;
@@ -138,7 +136,6 @@ export enum LoadingStatus {
   Loaded,
 }
 
-
 export const useDashboard = defineStore('dashboard', {
   state: () => {
     const favMap = JSON.parse(localStorage.getItem('favoriteMap') || '{"cosmos":true, "osmosis":true}');
@@ -184,7 +181,7 @@ export const useDashboard = defineStore('dashboard', {
 
       const currencies = ['usd, cny']; // usd,cny,eur,jpy,krw,sgd,hkd
       get(
-        `https://api.coingecko.com/api/v3/simple/price?include_24hr_change=true&vs_currencies=${currencies.join(
+        `${coingeckoUrl}/api/v3/simple/price?include_24hr_change=true&vs_currencies=${currencies.join(
           ','
         )}&ids=${coinIds.join(',')}`
       ).then((x) => {
@@ -194,7 +191,7 @@ export const useDashboard = defineStore('dashboard', {
     async loadingFromRegistry() {
       if (this.status === LoadingStatus.Empty) {
         this.status = LoadingStatus.Loading;
-        get(this.source).then((res) => {
+        get(this.source).then((res: { chains: DirectoryChainConfig[] }) => {
           res.chains.forEach((x: DirectoryChainConfig) => {
             this.chains[x.chain_name] = convertFromDirectory(x);
           });
@@ -232,11 +229,7 @@ export const useDashboard = defineStore('dashboard', {
         const blockchain = useBlockchain();
         const keys = Object.keys(this.favoriteMap);
         for (let i = 0; i < keys.length; i++) {
-          if (
-            !blockchain.chainName &&
-            this.chains[keys[i]] &&
-            this.favoriteMap[keys[i]]
-          ) {
+          if (!blockchain.chainName && this.chains[keys[i]] && this.favoriteMap[keys[i]]) {
             blockchain.setCurrent(keys[i]);
             break;
           }

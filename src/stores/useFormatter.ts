@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { useBlockchain } from './useBlockchain';
+import { useBlockchain, useBankStore, useStakingStore, useDashboard } from '@/stores';
 import numeral from 'numeral';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
@@ -7,12 +7,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import utc from 'dayjs/plugin/utc';
 import localeData from 'dayjs/plugin/localeData';
-import { useStakingStore } from './useStakingStore';
-import { fromBase64, fromBech32, fromHex, toHex } from '@cosmjs/encoding';
+import { fromBase64, fromHex, toHex } from '@cosmjs/encoding';
 import { consensusPubkeyToHexAddress, get } from '@/libs';
-import { useBankStore } from './useBankStore';
 import type { Coin, DenomTrace } from '@/types';
-import { useDashboard } from './useDashboard';
 import type { Asset } from '@/types/chaindata';
 
 dayjs.extend(localeData);
@@ -131,9 +128,7 @@ export const useFormatter = defineStore('formatter', {
       // find the symbol
       const symbol = this.dashboard.coingecko[token.denom]?.symbol || token.denom;
       // convert denomination to symbol
-      const exponent =
-        this.dashboard.coingecko[symbol?.toLowerCase()]?.exponent ||
-        this.specialDenom(token.denom);
+      const exponent = this.dashboard.coingecko[symbol?.toLowerCase()]?.exponent || this.specialDenom(token.denom);
       // caculate amount of symbol
       const amount = Number(token.amount) / 10 ** exponent;
       return amount;
