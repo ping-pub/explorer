@@ -7,7 +7,7 @@ import { createPinia } from 'pinia';
 import LazyLoad from 'lazy-load-vue3';
 
 import router from './router';
-import { useBaseStore } from './stores/useBaseStore';
+import { useBaseStore } from '@/stores';
 
 // Create vue app
 const app = createApp(App);

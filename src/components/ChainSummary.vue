@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useDashboard } from '@/stores/useDashboard';
+import { useDashboard } from '@/stores';
 import { computed } from 'vue';
 import { Icon } from '@iconify/vue';
 
