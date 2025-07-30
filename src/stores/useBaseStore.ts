@@ -90,17 +90,15 @@ export const useBaseStore = defineStore('baseStore', {
       //check if the block exists in recents
       if (this.recents.findIndex((x) => x?.block_id?.hash === this.latest?.block_id?.hash) === -1) {
         const newBlocks = await this.fetchNewBlocks();
-        if (this.recents.length + newBlocks.length > 50) {
-          this.recents.splice(0, this.recents.length + newBlocks.length - 50);
-        }
-        this.recents.push(...newBlocks);
+        const combined = [...this.recents, ...newBlocks];
+        this.recents = combined.slice(-50);
       }
       return this.latest;
     },
     /**
-     * Fetches all recent blocks since the current latest block and adds them to recents.
-     * Only fetches blocks with height greater than this.latest.block.header.height.
-     * Returns an array of new blocks added to recents.
+     * Fetches all blocks since the last block in recents.
+     * Only fetches blocks with height greater than this.recents[-1].block.header.height.
+     * Returns an array of new blocks to be added to recents.
      */
     async fetchNewBlocks() {
       if (!this.latest?.block?.header?.height) return [];
@@ -110,6 +108,7 @@ export const useBaseStore = defineStore('baseStore', {
       // Fetch all blocks between oldHeight+1 and less than newHeight
       for (let h = oldHeight + 1; h < newHeight; h++) {
         const block = await this.fetchBlock(h);
+        if (!block?.block?.header?.height) continue; // skip if block not found
         newBlocks.push(block);
       }
       // Add the latest block
@@ -123,7 +122,15 @@ export const useBaseStore = defineStore('baseStore', {
       return this.blockchain.rpc.getBaseValidatorsetLatest(offset);
     },
     async fetchBlock(height?: number | string) {
-      return this.blockchain.rpc.getBaseBlockAt(String(height));
+      try {
+        const block = await this.blockchain.rpc.getBaseBlockAt(String(height));
+        this.connected = true;
+        return block;
+      } catch (error) {
+        console.error('Error fetching latest block:', error);
+        this.connected = false;
+      }
+      return {} as Block;
     },
     async fetchAbciInfo() {
       return this.blockchain.rpc.getBaseNodeInfo();
