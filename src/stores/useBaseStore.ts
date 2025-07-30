@@ -6,6 +6,9 @@ import type { Block } from '@/types';
 import { hashTx } from '@/libs';
 import { fromBase64 } from '@cosmjs/encoding';
 
+const FETCH_ALL_BLOCKS = import.meta.env.VITE_FETCH_ALL_BLOCKS || false;
+const RECENT_BLOCKS_LIMIT = import.meta.env.VITE_RECENT_BLOCK_LIMIT || 50;
+
 export const useBaseStore = defineStore('baseStore', {
   state: () => {
     return {
@@ -91,7 +94,7 @@ export const useBaseStore = defineStore('baseStore', {
       if (this.recents.findIndex((x) => x?.block_id?.hash === this.latest?.block_id?.hash) === -1) {
         const newBlocks = await this.fetchNewBlocks();
         const combined = [...this.recents, ...newBlocks];
-        this.recents = combined.slice(-50);
+        this.recents = combined.slice(-RECENT_BLOCKS_LIMIT);
       }
       return this.latest;
     },
@@ -102,6 +105,7 @@ export const useBaseStore = defineStore('baseStore', {
      */
     async fetchNewBlocks() {
       if (!this.latest?.block?.header?.height) return [];
+      if (!FETCH_ALL_BLOCKS) return [this.latest];
       const oldHeight = Number(this.recents[this.recents.length - 1]?.block?.header?.height);
       const newHeight = Number(this.latest.block.header.height);
       let newBlocks = [];
