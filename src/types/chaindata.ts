@@ -139,5 +139,4 @@ export interface ChainConfig {
     address_limit: number;
     fees: string;
   };
-  blocktime_ms?: number;
 }
