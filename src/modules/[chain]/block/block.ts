@@ -19,7 +19,7 @@ export const useBlockModule = defineStore('blockModule', {
       return useBaseStore().latest;
     },
     earliest() {
-      return useBaseStore().earlest;
+      return useBaseStore().earliest;
     },
     recents() {
       return useBaseStore().recents;
