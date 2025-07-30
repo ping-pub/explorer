@@ -15,8 +15,8 @@
         }
     ],
     "snapshot_provider": "",
-    "sdk_version": "0.50.0",
-    "coin_type": "118",
+    "sdk_version": "0.53.3",
+    "coin_type": "60",
     "min_tx_fee": "100000",
     "addr_prefix": "mantra",
     "logo": "https://assets.mantra.finance/images/networks/dukong.svg",
