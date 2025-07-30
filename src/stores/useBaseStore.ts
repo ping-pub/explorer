@@ -9,18 +9,19 @@ import { fromBase64 } from '@cosmjs/encoding';
 export const useBaseStore = defineStore('baseStore', {
   state: () => {
     return {
-      earlest: {} as Block,
+      earliest: {} as Block,
       latest: {} as Block,
       recents: [] as Block[],
       theme: (window.localStorage.getItem('theme') || 'dark') as 'light' | 'dark',
+      connected: false,
     };
   },
   getters: {
     blocktime(): number {
-      if (this.earlest && this.latest) {
-        if (this.latest.block?.header?.height !== this.earlest.block?.header?.height) {
-          const diff = dayjs(this.latest.block?.header?.time).diff(this.earlest.block?.header?.time);
-          const blocks = Number(this.latest.block.header.height) - Number(this.earlest.block.header.height);
+      if (this.earliest && this.latest) {
+        if (this.latest.block?.header?.height !== this.earliest.block?.header?.height) {
+          const diff = dayjs(this.latest.block?.header?.time).diff(this.earliest.block?.header?.time);
+          const blocks = Number(this.latest.block.header.height) - Number(this.earliest.block.header.height);
           return Math.round(diff / blocks);
         }
       }
@@ -29,7 +30,7 @@ export const useBaseStore = defineStore('baseStore', {
     blockchain() {
       return useBlockchain();
     },
-    connected(): boolean {
+    hasRpc(): boolean {
       return this.blockchain?.rpc as unknown as boolean;
     },
     currentChainId(): string {
@@ -64,7 +65,7 @@ export const useBaseStore = defineStore('baseStore', {
   },
   actions: {
     async initial() {
-      while (!this.connected) {
+      while (!this.hasRpc) {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
       this.fetchLatest();
@@ -73,24 +74,48 @@ export const useBaseStore = defineStore('baseStore', {
       this.recents = [];
     },
     async fetchLatest() {
-      if (this.connected) {
+      if (!this.hasRpc) return this.latest;
+      try {
         this.latest = await this.blockchain.rpc?.getBaseBlockLatest();
-        if (!this.earlest || this.earlest?.block?.header?.chain_id != this.latest?.block?.header?.chain_id) {
-          //reset earlest and recents
-          this.earlest = this.latest;
-          this.recents = [];
-        }
-        //check if the block exists in recents
-        if (this.recents.findIndex((x) => x?.block_id?.hash === this.latest?.block_id?.hash) === -1) {
-          if (this.recents.length >= 50) {
-            this.recents.shift();
-          }
-          this.recents.push(this.latest);
-        }
+        this.connected = true;
+      } catch (error) {
+        console.error('Error fetching latest block:', error);
+        this.connected = false;
       }
-        return this.latest;
+      if (!this.earliest || this.earliest?.block?.header?.chain_id != this.latest?.block?.header?.chain_id) {
+        //reset earliest and recents
+        this.earliest = this.latest;
+        this.recents = [];
+      }
+      //check if the block exists in recents
+      if (this.recents.findIndex((x) => x?.block_id?.hash === this.latest?.block_id?.hash) === -1) {
+        const newBlocks = await this.fetchNewBlocks();
+        if (this.recents.length + newBlocks.length > 50) {
+          this.recents.splice(0, this.recents.length + newBlocks.length - 50);
+        }
+        this.recents.push(...newBlocks);
+      }
+      return this.latest;
     },
-
+    /**
+     * Fetches all recent blocks since the current latest block and adds them to recents.
+     * Only fetches blocks with height greater than this.latest.block.header.height.
+     * Returns an array of new blocks added to recents.
+     */
+    async fetchNewBlocks() {
+      if (!this.latest?.block?.header?.height) return [];
+      const oldHeight = Number(this.recents[this.recents.length - 1]?.block?.header?.height);
+      const newHeight = Number(this.latest.block.header.height);
+      let newBlocks = [];
+      // Fetch all blocks between oldHeight+1 and less than newHeight
+      for (let h = oldHeight + 1; h < newHeight; h++) {
+        const block = await this.fetchBlock(h);
+        newBlocks.push(block);
+      }
+      // Add the latest block
+      newBlocks.push(this.latest);
+      return newBlocks;
+    },
     async fetchValidatorByHeight(height?: number, offset = 0) {
       return this.blockchain.rpc.getBaseValidatorsetAt(String(height), offset);
     },
