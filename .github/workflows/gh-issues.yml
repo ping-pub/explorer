@@ -1,0 +1,38 @@
+name: "Auto-add GH issues to project"
+# Add all issues opened to the issue board for triage and assignment
+# GitHub Org and Project Automation
+# https://www.notion.so/nibiru/GitHub-Org-and-Project-Automation-c771d671109849ee9fda7c8b741cd66a?pvs=4
+
+on:
+  issues:
+    types: ["opened", "labeled"]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  # https://github.com/actions/add-to-project
+  add-to-project:
+    name: "Add GH ticket to project"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: https://github.com/orgs/NibiruChain/projects/8
+          github-token: ${{ secrets.NIBIRU_PM }}
+
+  label-triage:
+    name: "Add GH ticket to project"
+    runs-on: ubuntu-latest
+    # The action comes from the "Activty types" for the "issues" webhook event
+    # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#issues
+    if: "github.event.action == 'opened'"
+    steps:
+      - uses: github/issue-labeler@v3.4
+        if: join(github.event.issue.labels) == ''
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          configuration-path: ".github/issue-labeler-config.yml"
+          enable-versioned-regex: 0
+          not-before: "2024-05-01T00:00:00Z"

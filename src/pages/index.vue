@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Icon } from '@iconify/vue';
 import { useDashboard, LoadingStatus } from '@/stores';
-import type { ChainConfig } from '@/types/chaindata';
+import { ConfigSource, type ChainConfig } from '@/types/chaindata';
 import ChainSummary from '@/components/ChainSummary.vue';
 import AdBanner from '@/components/ad/AdBanner.vue';
 
@@ -26,7 +26,7 @@ const chains = computed(() => {
 });
 
 const featured = computed(() => {
-  const names = ['cosmos', 'osmosis', 'akash', 'celestia', 'evmos', 'injective', 'dydx', 'noble'];
+  const names = [];
   return chains.value
     .filter((x) => names.includes(x.chainName))
     .sort((a, b) => names.indexOf(a.chainName) - names.indexOf(b.chainName));
@@ -103,7 +103,7 @@ const chainStore = useBlockchain();
       <h2 class="mb-6">{{ $t('pages.description') }}</h2>
     </div>
 
-    <div class="flex items-center rounded-lg bg-base-100 border border-gray-200 dark:border-gray-700 mt-10">
+    <!-- <div class="flex items-center rounded-lg bg-base-100 border border-gray-200 dark:border-gray-700 mt-10">
       <Icon icon="mdi:magnify" class="text-2xl text-gray-400 ml-3" />
       <input
         :placeholder="$t('pages.search_placeholder')"
@@ -111,7 +111,7 @@ const chainStore = useBlockchain();
         v-model="keywords"
       />
       <div class="px-4 text-base hidden md:!block">{{ chains.length }}/{{ dashboard.length }}</div>
-    </div>
+    </div> -->
 
     <div class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5">
       <ChainSummary v-for="(chain, index) in chains" :key="index" :name="chain.chainName" />

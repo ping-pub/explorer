@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "nibiru-chain"
+  },
+  "targets": {
+    "nibiru-chain": {
+      "hosting": {
+        "explorer": [
+          "nibiru-explorer"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

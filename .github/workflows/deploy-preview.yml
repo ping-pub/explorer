@@ -1,0 +1,33 @@
+name: Deploy to Preview Channel
+
+on: pull_request
+
+jobs:
+  build_and_preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/gallium'
+          cache: 'yarn'
+
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install --ignore-engines
+
+      - uses: borales/actions-yarn@v4
+        with:
+          cmd: build
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_NIBIRU_CHAIN }}'
+          projectId: nibiru-chain
+          expires: 14d
+          target: explorer
+          firebaseToolsVersion: '12.9.1'

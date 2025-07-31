@@ -141,10 +141,10 @@ export enum LoadingStatus {
 
 export const useDashboard = defineStore('dashboard', {
   state: () => {
-    const favMap = JSON.parse(localStorage.getItem('favoriteMap') || '{"cosmos":true, "osmosis":true}');
+    const favMap = JSON.parse(localStorage.getItem('favoriteMap') || '{"cataclysm-1":true}');
     return {
       status: LoadingStatus.Empty,
-      source: ConfigSource.MainnetCosmosDirectory,
+      source: "https://networks.nibiru.fi",
       networkType: NetworkType.Mainnet,
       favoriteMap: favMap as Record<string, boolean>,
       chains: {} as Record<string, ChainConfig>,

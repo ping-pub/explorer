@@ -1,0 +1,3 @@
+# Adds the "S-triage" label ot any issue that gets opened.
+S-triage: 
+  - '/.*/' 

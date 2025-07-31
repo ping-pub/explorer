@@ -8,30 +8,30 @@ const i18nLangs: Array<{ label: string; i18nLang: string }> = [
     label: 'English',
     i18nLang: 'en',
   },
-  {
-    label: '中文',
-    i18nLang: 'zh',
-  },
-  {
-    label: 'Indonesian',
-    i18nLang: 'id',
-  },
-  {
-    label: '日本語',
-    i18nLang: 'ja',
-  },
-  {
-    label: '한국인',
-    i18nLang: 'ko',
-  },
-  {
-    label: 'Deutsch',
-    i18nLang: 'de',
-  },
-  {
-    label: 'Español',
-    i18nLang: 'es',
-  },
+  // {
+  //   label: '中文',
+  //   i18nLang: 'zh',
+  // },
+  // {
+  //   label: 'Indonesian',
+  //   i18nLang: 'id',
+  // },
+  // {
+  //   label: '日本語',
+  //   i18nLang: 'ja',
+  // },
+  // {
+  //   label: '한국인',
+  //   i18nLang: 'ko',
+  // },
+  // {
+  //   label: 'Deutsch',
+  //   i18nLang: 'de',
+  // },
+  // {
+  //   label: 'Español',
+  //   i18nLang: 'es',
+  // },
 ];
 
 let locale = ref(useI18n({ useScope: 'global' }).locale);
