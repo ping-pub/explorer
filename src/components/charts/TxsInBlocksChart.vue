@@ -28,8 +28,9 @@ const options = computed(() => {
       },
       show: false,
       categories: baseStore.recents
+        .slice(0, 50)
         .map((x) => x.block.header.height)
-        .concat(Array(50 - baseStore.recents.length).fill('')),
+        .concat(Array(Math.max(0, 50)).fill('')),
     },
   };
 });

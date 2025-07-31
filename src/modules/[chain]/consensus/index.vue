@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import fetch from 'cross-fetch';
 import { onMounted, ref, computed, onUnmounted } from 'vue';
-import { useBlockchain, useFormatter, useStakingStore } from '@/stores';
+import { useBlockchain, useFormatter, useStakingStore, useBaseStore } from '@/stores';
 import { consensusPubkeyToHexAddress } from '@/libs';
 
 const format = useFormatter();
 const chainStore = useBlockchain();
 const stakingStore = useStakingStore();
+const baseStore = useBaseStore();
 const rpcList = ref(chainStore.current?.endpoints?.rpc || [{ address: '', provider: '' }]);
 let rpc = ref('');
 const validators = ref(stakingStore.validators);
@@ -31,7 +32,7 @@ onMounted(async () => {
   clearTime();
   timer = setInterval(() => {
     update();
-  }, 6000);
+  }, Math.round(baseStore.blocktime / 2));
 });
 onUnmounted(() => {
   clearTime();
@@ -87,7 +88,7 @@ async function onChange() {
   update();
   timer = setInterval(() => {
     update();
-  }, 6000);
+  }, Math.round(baseStore.blocktime / 2));
 }
 
 async function fetchPosition() {

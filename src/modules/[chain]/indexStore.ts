@@ -1,7 +1,14 @@
-import { useBlockchain, useCoingecko, useBaseStore, useBankStore, useFormatter, useGovStore } from '@/stores';
-import { useDistributionStore } from '@/stores/useDistributionStore';
-import { useMintStore } from '@/stores/useMintStore';
-import { useStakingStore } from '@/stores/useStakingStore';
+import {
+  useBlockchain,
+  useCoingecko,
+  useBaseStore,
+  useBankStore,
+  useFormatter,
+  useGovStore,
+  useDistributionStore,
+  useMintStore,
+  useStakingStore,
+} from '@/stores';
 import type { Coin, Tally } from '@/types';
 import numeral from 'numeral';
 import { defineStore } from 'pinia';
@@ -157,9 +164,7 @@ export const useIndexModule = defineStore('module-index', {
           title: 'Validators',
           color: 'error',
           icon: 'mdi-human-queue',
-          stats: String(
-            base?.latest?.block?.last_commit?.signatures.length || 0
-          ),
+          stats: String(base?.latest?.block?.last_commit?.signatures.length || 0),
           change: 0,
         },
         {
@@ -256,11 +261,7 @@ export const useIndexModule = defineStore('module-index', {
  * @param value - The value to set for the parameter.
  * @returns The new URL with the parameter added or replaced.
  */
-export function addOrReplaceUrlParam(
-  url: string,
-  param: string,
-  value: string
-): string {
+export function addOrReplaceUrlParam(url: string, param: string, value: string): string {
   // Parse the URL
   const urlObj = new URL(url, window.location.origin);
 
