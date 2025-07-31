@@ -22,10 +22,14 @@ export const useIBCModule = defineStore('module-ibc', {
       return this.chain.chainName;
     },
     sourceField(): string {
-      return this.registryConf?.chain_1?.chain_name === this.chainName ? 'chain_1' : 'chain_2';
+      return this.registryConf?.chain_1?.chain_name === this.chainName
+        ? 'chain_1'
+        : 'chain_2';
     },
     destField(): string {
-      return this.registryConf?.chain_1?.chain_name === this.chainName ? 'chain_2' : 'chain_1';
+      return this.registryConf?.chain_1?.chain_name === this.chainName
+        ? 'chain_2'
+        : 'chain_1';
     },
     registryChannels(): any {
       return this.registryConf.channels;
@@ -48,17 +52,21 @@ export const useIBCModule = defineStore('module-ibc', {
           this.info = info.sort((a, b) => {
             // Sort by remote chain name (not equal to this.chainName)
             const getRemote = (x: any) =>
-              x.chain_1.chain_name === this.chainName ? x.chain_2.chain_name : x.chain_1.chain_name;
+              x.chain_1.chain_name === this.chainName
+                ? x.chain_2.chain_name
+                : x.chain_1.chain_name;
             return getRemote(a).localeCompare(getRemote(b));
           });
         });
       });
     },
     async fetchIBCUrls(): Promise<any[]> {
-      let ibcEndpoint = 'https://api.github.com/repos/cosmos/chain-registry/contents/_IBC';
+      let ibcEndpoint =
+        'https://api.github.com/repos/cosmos/chain-registry/contents/_IBC';
       if (this.chainName.includes('testnet')) {
         console.log(this.chainName);
-        ibcEndpoint = 'https://api.github.com/repos/cosmos/chain-registry/contents/testnets/_IBC';
+        ibcEndpoint =
+          'https://api.github.com/repos/cosmos/chain-registry/contents/testnets/_IBC';
       }
       const entries = await fetch(ibcEndpoint).then((res) => res.json());
       return entries.filter((x: any) => x.name.match(this.chainName));
@@ -66,9 +74,12 @@ export const useIBCModule = defineStore('module-ibc', {
     fetchConnection(index: number) {
       const res = this.info[index];
       const isFirstChain =
-        res.chain_1.chain_name === this.chain.current?.prettyName || res.chain_1.chain_name === this.chain.chainName;
+        res.chain_1.chain_name === this.chain.current?.prettyName ||
+        res.chain_1.chain_name === this.chain.chainName;
 
-      const connId = isFirstChain ? res.chain_1.connection_id : res.chain_2.connection_id;
+      const connId = isFirstChain
+        ? res.chain_1.connection_id
+        : res.chain_2.connection_id;
 
       this.registryConf = res;
       this.showConnection(connId);
