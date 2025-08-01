@@ -120,7 +120,9 @@ function color(v: string) {
               >
                 {{ baseStore.latest?.block?.header?.chain_id }}
               </div>
-              <div class="text-sm text-gray-500 dark:text-gray-400">{{ conn.client_id }} {{ props.connection_id }}</div>
+              <div class="text-sm text-gray-500 dark:text-gray-400">
+                {{ conn.client_id }} {{ props.connection_id }}
+              </div>
             </div>
           </div>
           <div class="mx-auto flex items-center">
@@ -147,7 +149,10 @@ function color(v: string) {
 
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4 overflow-hidden">
-        {{ $t('ibc.title_2') }}<span class="ml-2 text-sm">{{ clientState.client_state?.['@type'] }}</span>
+        {{ $t('ibc.title_2')
+        }}<span class="ml-2 text-sm">{{
+          clientState.client_state?.['@type']
+        }}</span>
       </h2>
       <div class="overflow-x-auto grid grid-cols-1 md:grid-cols-2 gap-4">
         <table class="table table-sm capitalize">
@@ -204,7 +209,9 @@ function color(v: string) {
               <td colspan="2">
                 <div class="flex justify-between">
                   <span>{{ $t('ibc.allow_update_after_expiry') }}:</span>
-                  <span>{{ clientState.client_state?.allow_update_after_expiry }}</span>
+                  <span>{{
+                    clientState.client_state?.allow_update_after_expiry
+                  }}</span>
                 </div>
               </td>
             </tr>
@@ -212,7 +219,9 @@ function color(v: string) {
               <td colspan="2">
                 <div class="flex justify-between">
                   <span>{{ $t('ibc.allow_update_after_misbehaviour') }}: </span>
-                  <span>{{ clientState.client_state?.allow_update_after_misbehaviour }}</span>
+                  <span>{{
+                    clientState.client_state?.allow_update_after_misbehaviour
+                  }}</span>
                 </div>
               </td>
             </tr>
@@ -245,32 +254,6 @@ function color(v: string) {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="v in ibcStore.registryChannels">
-              <td>
-                <div class="flex gap-1">
-                  <button
-                    class="btn btn-xs"
-                    @click="fetchSendingTxs(v[ibcStore.sourceField].channel_id, v[ibcStore.sourceField].port_id)"
-                    :disabled="loading"
-                  >
-                    <span v-if="loading" class="loading loading-spinner loading-sm"></span>
-                    {{ $t('ibc.btn_out') }}
-                  </button>
-                  <button
-                    class="btn btn-xs"
-                    @click="fetchRecevingTxs(v[ibcStore.sourceField].channel_id, v[ibcStore.sourceField].port_id)"
-                    :disabled="loading"
-                  >
-                    <span v-if="loading" class="loading loading-spinner loading-sm"></span>
-                    {{ $t('ibc.btn_in') }}
-                  </button>
-                </div>
-              </td>
-              <td>
-                <a href="#">{{ v[ibcStore.sourceField].channel_id }}</a>
-              </td>
-              <td>{{ v[ibcStore.sourceField].port_id }}</td>
-            </tr>
             <tr v-for="v in channels">
               <td>
                 <div class="flex gap-1">
@@ -299,7 +282,9 @@ function color(v: string) {
                 </div>
               </td>
               <td>
-                <a href="#" @click="loadChannel(v.channel_id, v.port_id)">{{ v.channel_id }}</a>
+                <a href="#" @click="loadChannel(v.channel_id, v.port_id)">{{
+                  v.channel_id
+                }}</a>
               </td>
               <td>{{ v.port_id }}</td>
               <td>
@@ -314,7 +299,9 @@ function color(v: string) {
                   {{ v.state }}
                 </div>
               </td>
-              <td>{{ v.counterparty?.port_id }}/{{ v.counterparty?.channel_id }}</td>
+              <td>
+                {{ v.counterparty?.port_id }}/{{ v.counterparty?.channel_id }}
+              </td>
               <td>{{ v.connection_hops.join(', ') }}</td>
               <td>{{ v.version }}</td>
               <td>{{ v.ordering }}</td>
@@ -324,7 +311,9 @@ function color(v: string) {
       </div>
     </div>
     <div v-if="channel_id">
-      <h3 class="card-title capitalize">Transactions ({{ channel_id }} {{ port_id }} {{ direction }})</h3>
+      <h3 class="card-title capitalize">
+        Transactions ({{ channel_id }} {{ port_id }} {{ direction }})
+      </h3>
       <table class="table">
         <thead>
           <tr>
