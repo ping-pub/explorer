@@ -3,13 +3,6 @@ import type { IBCInfo as RegistryIBCInfo } from "@chain-registry/types"
 
 export interface IBCInfo extends RegistryIBCInfo { }
 
-export interface IBCPath {
-  path: string,
-  from?: string,
-  to?: string,
-  url?: string
-}
-
 export interface DenomTrace {
   path: string;
   base_denom: string;
