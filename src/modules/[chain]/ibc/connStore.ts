@@ -29,8 +29,8 @@ export const useIBCModule = defineStore('module-ibc', {
     },
     isFirstChain(): boolean {
       return (
-        this.registryConf?.chain_1?.chain_name === this.chain.current?.prettyName ||
-        this.registryConf?.chain_1?.chain_name === this.chain.chainName
+        this.registryConf.chain_1.chain_name === this.chain.current?.prettyName ||
+        this.registryConf.chain_1.chain_name === this.chain.chainName
       );
     },
     sourceField(): string {
@@ -56,13 +56,15 @@ export const useIBCModule = defineStore('module-ibc', {
             client.urls.push(element.download_url);
           }
         });
-
         client.fetchUrls().then(() => {
           const info = client.getChainIbcData(this.chainName);
           this.info = info.sort((a, b) => {
             // Sort by remote chain name (not equal to this.chainName)
             const getRemote = (x: any) =>
-              x.chain_1.chain_name === this.isFirstChain ? x.chain_2.chain_name : x.chain_1.chain_name;
+              x?.chain_1?.chain_name === this.chain.current?.prettyName ||
+              x?.chain_1?.chain_name === this.chain.chainName
+                ? x.chain_2.chain_name
+                : x.chain_1.chain_name;
             return getRemote(a).localeCompare(getRemote(b));
           });
         });
@@ -86,13 +88,10 @@ export const useIBCModule = defineStore('module-ibc', {
       return entries;
     },
     fetchConnection(index: number) {
-      const res = this.info[index];
-      const resIsFirstChain =
-        res.chain_1.chain_name === this.chain.current?.prettyName || res.chain_1.chain_name === this.chain.chainName;
-
-      const connId = resIsFirstChain ? res.chain_1.connection_id : res.chain_2.connection_id;
-
-      this.registryConf = res;
+      this.registryConf = this.info[index];
+      const connId = this.isFirstChain
+        ? this.registryConf.chain_1.connection_id
+        : this.registryConf.chain_2.connection_id;
       this.showConnection(connId);
     },
     showConnection(connId?: string | number) {
