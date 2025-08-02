@@ -33,16 +33,18 @@ export interface Tx {
 
 export interface TxLocal {
     "messages": { "from_address"?: string, "to_address"?: string, "@type": string, "amount"?: Coin[], packet?: { data: string } }[],
-    "fee": {
+    "fee": string | {
         "amount": Coin[],
         "gas_limit": string,
         "payer": string,
         "granter": string
     },
     "height": string,
+    "block_height": string, // Alias for height used in templates
     "hash": string,
     "status": number,
-    "timestamp": string
+    "timestamp": string,
+    "type": string // Transaction type derived from messages
 }
 export interface Attributes {
     index?: boolean,

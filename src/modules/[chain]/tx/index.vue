@@ -78,7 +78,7 @@ function handleScroll() {
                             </td>
                             <td>{{ item.messages?.length }}</td>
                             <td>{{ item.type }}</td>
-                            <td>{{ format.formatTokens([{amount: item.fee, denom: 'upokt'}]) }}  </td>
+                            <td>{{ format.formatTokens(typeof item.fee === 'string' ? [] : item.fee?.amount || [], true, '0,0.[00]') }}</td>
                             <td>{{ format.toDay(item.timestamp, 'from') }}</td>
                         </tr>
                     </tbody>
