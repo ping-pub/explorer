@@ -30,7 +30,7 @@ function handleScroll() {
     // Check if the scroll is at the bottom
     let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
     if (isAtBottom) {
-        base.appendTxsByPage((base.allTxs.length / base.pageSize) + 1, base.pageSize, chainStore?.current?.transactionService)
+        base.appendTxsByPage(Math.ceil(base.allTxs.length / base.pageSize) + 1, base.pageSize, chainStore?.current?.transactionService)
     }
 }
 </script>
@@ -68,17 +68,17 @@ function handleScroll() {
                                 }}</RouterLink>
                             </td>
                             <td class="text-sm text-warning">
-                                <RouterLink :to="`/${props.chain}/blocks/${item.height}`" class="hover:underline">{{ item.height }}</RouterLink>
+                                <RouterLink :to="`/${props.chain}/blocks/${item.block_height}`" class="hover:underline">{{ item.block_height }}</RouterLink>
                             </td>
                             <td>
                                 <span class="text-xs truncate py-1 px-3 rounded-full" 
-                                      :class="item.status === 0 ? 'bg-success/10 text-success' : 'bg-error/10 text-error'">
-                                    {{ item.status === 0 ? 'Success' : 'Failed' }}
+                                      :class="item.status ? 'bg-success/10 text-success' : 'bg-error/10 text-error'">
+                                    {{ item.status ? 'Success' : 'Failed' }}
                                 </span>
                             </td>
-                            <td>{{ item.messages.length }}</td>
-                            <td>{{ format.messages(item.messages) }}</td>
-                            <td>{{ format.formatTokens(item.fee.amount) }}</td>
+                            <td>{{ item.messages?.length }}</td>
+                            <td>{{ item.type }}</td>
+                            <td>{{ format.formatTokens([{amount: item.fee, denom: 'upokt'}]) }}  </td>
                             <td>{{ format.toDay(item.timestamp, 'from') }}</td>
                         </tr>
                     </tbody>

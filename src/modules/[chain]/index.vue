@@ -1203,16 +1203,16 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                   }}</RouterLink>
                 </td>
                 <td class="text-sm text-warning">
-                  <RouterLink :to="`/${props.chain}/blocks/${item.item.height}`" class="hover:underline">{{ item.item.height }}</RouterLink>
+                  <RouterLink :to="`/${props.chain}/blocks/${item.item.block_height}`" class="hover:underline">{{ item.item.block_height }}</RouterLink>
                 </td>
                 <td>
                   <span class="text-xs truncate py-1 px-3 rounded-full" 
-                        :class="item.item.status === 0 ? 'bg-success/10 text-success' : 'bg-error/10 text-error'">
-                    {{ item.item.status === 0 ? 'Success' : 'Failed' }}
+                        :class="item.item.status ? 'bg-success/10 text-success' : 'bg-error/10 text-error'">
+                    {{ item.item.status ? 'Success' : 'Failed' }}
                   </span>
                 </td>
-                <td>{{ format.messages(item.item.messages) }}</td>
-                <td>{{ format.formatTokens(item.item.fee.amount) }}</td>
+                <td>{{ item.item.type }}</td>
+                <td>{{ format.formatTokens([{amount: item.item.fee, denom: 'upokt'}]) }}  </td>
                 <td>{{ format.toDay(item.item.timestamp, 'from') }}</td>
               </tr>
               
