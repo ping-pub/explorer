@@ -10,25 +10,26 @@ services:
       - 5173:5173
     networks:
       - default
-
+      - pocket_indexer_network
   # Extending from server's docker-compose.yml for backend services
-  redis:
-    extends:
-      file: ./server/docker-compose.yml
-      service: redis
-    networks:
-      - default
+  # redis:
+  #   extends:
+  #     file: ./server/docker-compose.yml
+  #     service: redis
+  #   networks:
+  #     - default
 
-  pocket-poktroll-explorer-backend:
-    extends:
-      file: ./server/docker-compose.yml
-      service: api
-    networks:
-      - default
+  # pocket-poktroll-explorer-backend:
+  #   extends:
+  #     file: ./server/docker-compose.yml
+  #     service: api
+  #   networks:
+  #     - default
 
 networks:
   default:
-
+  pocket_indexer_network:
+    external: true
 
 volumes:
   redis-data: 
