@@ -71,16 +71,16 @@
   ],
   "features": [
     "dashboard",
-    "governance",
     "staking",
-    "blocks",
+    "governance",
     "tx",
-    "uptime",
+    "blocks",
     "ibc",
     "supply",
-    "parameters",
+    "uptime",
     "consensus",
     "cosmwasm",
+    "parameters",
     "account"
   ],
   "keplr_features": ["ibc-go", "ibc-transfer", "no-legacy-stdTx"]
