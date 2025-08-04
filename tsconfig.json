@@ -1,18 +1,43 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
   "compilerOptions": {
-    // "ignoreDeprecations": "5.0",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "composite": true,
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true,
+    "types": ["node"],
+    "jsx": "preserve",
+    "noImplicitThis": true,
+    "strict": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
     "lib": ["es2022", "dom"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-
+  "include": [
+    "env.d.ts",
+    "src",
+    "src/**/*.vue",
+    "server",
+    "types",
+    "components.d.ts",
+    "auto-imports.d.ts",
+    "vue3-json-viewer.d.ts"
+  ],
+  "exclude": ["src/components/ad/ad.ts"],
   "references": [
     {
       "path": "./tsconfig.config.json"
+    },
+    {
+      "path": "./tsconfig.worker.json"
     }
   ]
 }

@@ -4,7 +4,7 @@ import { useDashboard, LoadingStatus } from '@/stores';
 import type { ChainConfig } from '@/types/chaindata';
 import ChainSummary from '@/components/xion/ChainSummary.vue';
 
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useBlockchain } from '@/stores';
 
 const dashboard = useDashboard();
@@ -51,7 +51,7 @@ const chainStore = useBlockchain();
             class="dark:invert"
             stroke="none"
           >
-            <!-- <path
+            <path
               d="M500 1310 l-125 -5 -182 -315 c-100 -173 -182 -321 -182 -329 -1 -7
             81 -159 181 -337 l183 -324 372 0 371 0 186 325 c102 179 186 330 186 337 0 7
             -82 157 -182 335 l-183 323 -250 -2 c-137 -1 -306 -5 -375 -8z m588 -454 c61
@@ -70,7 +70,7 @@ const chainStore = useBlockchain();
             <path
               d="M360 625 c0 -7 148 -263 172 -297 l19 -28 186 0 c101 0 183 3 181 8
             -1 4 -43 78 -93 165 l-90 157 -187 0 c-104 0 -188 -2 -188 -5z"
-            /> -->
+            />
           </g>
         </svg>
       </div>
@@ -87,7 +87,7 @@ const chainStore = useBlockchain();
       <progress class="progress progress-info w-80 h-1"></progress>
     </div>
 
-    <!-- <div v-if="featured.length > 0" class="text-center text-base mt-6 text-primary">
+    <div v-if="featured.length > 0" class="text-center text-base mt-6 text-primary">
       <h2 class="mb-6">Featured Blockchains 🔥</h2>
     </div>
 
@@ -96,13 +96,13 @@ const chainStore = useBlockchain();
       class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"
     >
       <ChainSummary v-for="(chain, index) in featured" :key="index" :name="chain.chainName" />
-    </div> -->
+    </div>
 
     <div class="text-center text-base mt-6 text-primary">
       <h2 class="mb-6">{{ $t('pages.description') }}</h2>
     </div>
 
-    <!-- <div class="flex items-center rounded-lg bg-base-100 border border-gray-200 dark:border-gray-700 mt-10">
+    <div class="flex items-center rounded-lg bg-base-100 border border-gray-200 dark:border-gray-700 mt-10">
       <Icon icon="mdi:magnify" class="text-2xl text-gray-400 ml-3" />
       <input
         :placeholder="$t('pages.search_placeholder')"
@@ -110,10 +110,9 @@ const chainStore = useBlockchain();
         v-model="keywords"
       />
       <div class="px-4 text-base hidden md:!block">{{ chains.length }}/{{ dashboard.length }}</div>
-    </div> -->
+    </div>
 
-    <!--div class="grid  grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-3 center"-->
-    <div class="grid grid-cols-2 gap-4 mt-6 w-max mx-auto">
+    <div class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5">
       <ChainSummary v-for="(chain, index) in chains" :key="index" :name="chain.chainName" />
     </div>
   </div>
@@ -124,4 +123,3 @@ const chainStore = useBlockchain();
   fill: #171d30;
 }
 </style>
-@/components/ad/ad

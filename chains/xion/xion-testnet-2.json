@@ -1,0 +1,87 @@
+{
+  "chain_name": "xiontestnet2",
+  "chain_id": "xion-testnet-2",
+  "registry_name": "xion",
+  "coingecko": "xion",
+  "network_type": "testnet",
+  "rpc": [
+    {
+      "address": "https://rpc.xion-testnet-2.burnt.com",
+      "provider": "🔥BurntLabs🔥"
+    },
+    {
+      "address": "https://xion-testnet-rpc.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://burnt-testnet-rpc.itrocket.net",
+      "provider": "ITRocket"
+    }
+  ],
+  "api": [
+    {
+      "address": "https://api.xion-testnet-2.burnt.com",
+      "provider": "🔥BurntLabs🔥"
+    },
+    {
+      "address": "https://xion-testnet-api.polkachu.com",
+      "provider": "Polkachu"
+    },
+    {
+      "address": "https://burnt-testnet-api.itrocket.net",
+      "provider": "ITRocket"
+    }
+  ],
+  "snapshot_provider": "",
+  "sdk_version": "0.53.3",
+  "coin_type": "118",
+  "min_tx_fee": "100",
+  "addr_prefix": "xion",
+  "theme_color": "#ffaa4a",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png",
+  "assets": [
+    {
+      "base": "uxion",
+      "symbol": "XION",
+      "exponent": "6",
+      "coingecko_id": "xion-2",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png"
+    },
+    {
+      "base": "ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B",
+      "symbol": "OSMO",
+      "exponent": "6",
+      "coingecko_id": "osmosis",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png"
+    },
+    {
+      "base": "ibc/6490A7EAB61059BFC1CDDEB05917DD70BDF3A611654162A1A47DB930D40D8AF4",
+      "symbol": "USDC",
+      "exponent": "6",
+      "coingecko_id": "usd-coin",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.png"
+    },
+    {
+      "base": "ibc/2DD421C34C750BA522D4C8A6657DE220ED7874EF32B56C0791660149B8A51ED4",
+      "symbol": "USDC",
+      "exponent": "6",
+      "coingecko_id": "usd-coin",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.png"
+    }
+  ],
+  "features": [
+    "dashboard",
+    "governance",
+    "staking",
+    "blocks",
+    "tx",
+    "uptime",
+    "ibc",
+    "supply",
+    "parameters",
+    "consensus",
+    "cosmwasm",
+    "account"
+  ],
+  "keplr_features": ["ibc-go", "ibc-transfer", "no-legacy-stdTx"]
+}

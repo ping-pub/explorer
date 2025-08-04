@@ -140,7 +140,7 @@ export enum LoadingStatus {
 
 export const useDashboard = defineStore('dashboard', {
   state: () => {
-    const favMap = JSON.parse(localStorage.getItem('favoriteMap') || '{"cosmos":true, "osmosis":true}');
+    const favMap = JSON.parse(localStorage.getItem('favoriteMap') || '{"xion":true, "xiontestnet2":true}');
     return {
       status: LoadingStatus.Empty,
       source: ConfigSource.MainnetCosmosDirectory,
@@ -212,7 +212,7 @@ export const useDashboard = defineStore('dashboard', {
       Object.values<LocalChainConfig>(source).forEach((x: LocalChainConfig) => {
         this.chains[x.chain_name] = convertFromLocal(x);
         if (!this.chains[x.chain_name].networkType) {
-          this.chains[x.chain_name].networkType = this.networkType.toString().toLowerCase();
+          this.chains[x.chain_name].networkType = this.networkType;
         }
       });
       this.setupDefault();
@@ -227,7 +227,7 @@ export const useDashboard = defineStore('dashboard', {
       Object.values<LocalChainConfig>(source).forEach((x: LocalChainConfig) => {
         config[x.chain_name] = convertFromLocal(x);
         if (!config[x.chain_name].networkType) {
-          config[x.chain_name].networkType = network.toString().toLowerCase();
+          config[x.chain_name].networkType = network.toLowerCase();
         }
       });
       return config;

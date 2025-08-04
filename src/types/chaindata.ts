@@ -2,8 +2,8 @@ import type { Asset as RegistryAsset, DenomUnit as RegistryDenomUnit } from '@ch
 import type { Chain as RegistryChain, Endpoint as RegistryEndPoint } from '@chain-registry/types/chain.schema';
 
 export enum NetworkType {
-  Mainnet,
-  Testnet,
+  Mainnet = 'mainnet',
+  Testnet = 'testnet',
 }
 
 export enum ConfigSource {
@@ -41,6 +41,7 @@ export interface LocalChainConfig {
     symbol: string;
   }[];
   chain_name: string;
+  network_type?: string;
   coin_type: string;
   logo: string;
   theme_color?: string;
@@ -103,6 +104,7 @@ export interface DirectoryChainConfig {
 export interface ChainConfig {
   chainName: string;
   prettyName: string;
+  networkType?: string;
   bech32Prefix: string;
   bech32ConsensusPrefix: string;
   chainId: string;

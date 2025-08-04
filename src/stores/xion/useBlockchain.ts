@@ -59,7 +59,7 @@ export const useBlockchain = defineStore('blockchain', {
           const { color } = hexToRgb(this.current?.themeColor);
           const { h, s, l } = rgbToHsl(color);
           const themeColor = h + ' ' + s + '% ' + l + '%';
-          document.body.style.setProperty('--p', `${themeColor}`);
+          document.body.style.setProperty('--bc', `${themeColor}`);
           // document.body.style.setProperty('--p', `${this.current?.themeColor}`);
         } else {
           document.body.style.setProperty('--p', '237.65 100% 70%');
@@ -101,6 +101,7 @@ export const useBlockchain = defineStore('blockchain', {
       // combine all together
       return [
         ...currNavItem,
+        /*
         { heading: 'Ecosystem' } as NavSectionTitle,
         {
           title: 'Favorite',
@@ -110,8 +111,9 @@ export const useBlockchain = defineStore('blockchain', {
           i18n: true,
           icon: { icon: 'mdi-star', size: '22' },
         } as NavGroup,
+         */
         {
-          title: 'All Blockchains',
+          title: 'Xion Networks',
           to: { path: '/' },
           badgeContent: this.dashboard.length,
           badgeClass: 'bg-primary',

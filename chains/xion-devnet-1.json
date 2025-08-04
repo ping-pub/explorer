@@ -1,0 +1,48 @@
+{
+  "chain_name": "xion-devnet-1",
+  "registry_name": "xiondevnet",
+  "coingecko": "xion",
+  "network_type": "devnet",
+  "rpc": [
+    {
+      "address": "http://localhost:26657",
+      "provider": "localhost"
+    }
+  ],
+  "api": [
+    {
+      "address": "http://localhost:1317",
+      "provider": "localhost"
+    }
+  ],
+  "snapshot_provider": "",
+  "sdk_version": "0.53.3",
+  "coin_type": "118",
+  "min_tx_fee": "100",
+  "addr_prefix": "xion",
+  "theme_color": "#aa4aff",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png",
+  "assets": [
+    {
+      "base": "uxion",
+      "symbol": "XION",
+      "exponent": "6",
+      "coingecko_id": "xion-2",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt-round.png"
+    }
+  ],
+  "features": [
+    "dashboard",
+    "governance",
+    "staking",
+    "blocks",
+    "tx",
+    "uptime",
+    "ibc",
+    "supply",
+    "parameters",
+    "consensus",
+    "cosmwasm"
+  ],
+  "keplr_features": ["ibc-go", "ibc-transfer", "no-legacy-stdTx"]
+}

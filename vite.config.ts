@@ -10,6 +10,7 @@ import Pages from 'vite-plugin-pages';
 
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 
+// https://vitejs.dev/config/
 export default defineConfig({
   define: {
     'process.env': {},
@@ -24,11 +25,11 @@ export default defineConfig({
     }),
     vueJsx(),
     Pages({
-      dirs: ['./src/modules', './src/pages'],
+      dirs: ['./src/modules', './src/pages', './src/pages/xion'],
       exclude: ['**/*.ts'], // only load .vue as modules
     }),
     Layouts({
-      layoutsDirs: './src/layouts/',
+      layoutsDirs: ['/src/layouts/xion/', './src/layouts/'],
     }),
     AutoImport({
       imports: ['vue', 'vue-router', '@vueuse/core', '@vueuse/math', 'vue-i18n', 'pinia'],
@@ -37,7 +38,7 @@ export default defineConfig({
     VueI18nPlugin({
       runtimeOnly: true,
       compositionOnly: true,
-      include: [fileURLToPath(new URL('./src/plugins/i18n/locales/**', import.meta.url))],
+      include: [fileURLToPath(new URL('./src/plugins/i18n/locales', import.meta.url)) + '/**'],
     }),
     DefineOptions(),
   ],

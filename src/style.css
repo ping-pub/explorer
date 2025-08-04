@@ -7,6 +7,7 @@
 html,
 body {
   height: 100%;
+  background-color: var(--root-bg);
 }
 
 body {
@@ -21,7 +22,9 @@ body {
 }
 
 :root {
-  --text-main: #333;
+  --root-bg: #000000;
+  --color-base-100: #000000;
+  --text-main: #333333;
   --text-secondary: #4b525d;
   --bg-active: #fbfbfc;
 }
@@ -30,7 +33,38 @@ html.dark,
 html[data-theme='dark'] {
   --text-main: #f7f7f7;
   --text-secondary: #6f6e84;
-  --bg-active: #242b40;
+  --bg-active: #1a1a1a;
+}
+
+html.dark .bg-base-100,
+html[data-theme='dark'] .bg-base-100 {
+  background-color: #1a1a1a;
+}
+
+html.dark th,
+.bg-base-200,
+html[data-theme='dark'] th,
+.bg-base-200 {
+  background-color: #000000;
+}
+
+html.dark tr.hover:hover,
+html[data-theme='dark'] tr.hover:hover {
+  background-color: #3a3a3a;
+}
+
+html.dark .modal-box,
+html[data-theme='dark'] .modal-box {
+  background-color: #000000;
+}
+
+html.dark input,
+textarea.textarea,
+select.select,
+html[data-theme='dark'] input,
+textarea.textarea,
+select.select {
+  background-color: #1a1a1a;
 }
 
 .table th:first-child {
