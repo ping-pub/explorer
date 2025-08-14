@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ping Dashboard - Cosmos Blockchain Explorer And Web Wallet</title>
-    <meta name="description" content="Ping Dashboard is a block explorer/web wallet for blockchains built on Cosmos SDK, Cosmoshub, Osmosis, Juno, Evmos, Injective, Canto and 70+ blockchains listed on ping.pub" />
-    <link rel="stylesheet" type="text/css" href="/loader.css" />    
+    <meta
+      name="description"
+      content="Ping Dashboard is a block explorer/web wallet for blockchains built on Cosmos SDK, Cosmoshub, Osmosis, Juno, Evmos, Injective, Canto and 70+ blockchains listed on ping.pub"
+    />
+    <link rel="stylesheet" type="text/css" href="/loader.css" />
   </head>
   <body>
     <div id="app">
@@ -23,22 +26,26 @@
     </div>
     <script type="module" src="/src/main.ts"></script>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SSBKVF3GMX"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-SSBKVF3GMX"
+    ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag() {
+        dataLayer.push(arguments);
+      }
       gtag('js', new Date());
       // Set default consent to 'denied' as a placeholder
       // Determine actual values based on your own requirements
       gtag('consent', 'default', {
-        'ad_storage': 'denied',
-        'ad_user_data': 'denied',
-        'ad_personalization': 'denied',
-        'analytics_storage': 'denied'
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
       });
       gtag('config', 'G-SSBKVF3GMX');
     </script>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/ping-widget@v0.3.8/dist/ping-widget.min.js"></script>
-
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ping-pub/widget@latest/dist/widget.min.js"></script>
   </body>
 </html>

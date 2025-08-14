@@ -1,0 +1,20 @@
+{
+    "chain_name": "pryzm",
+    "coingecko": "pryzm",
+    "api": ["https://pryzm-api.bryanlabs.net"],
+    "rpc": ["https://pryzm-rpc.bryanlabs.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.50.9",
+    "coin_type": "118",
+    "min_tx_fee": "5000",
+    "addr_prefix": "pryzm",
+    "logo": "/pryzm.png",
+    "theme_color": "#1a1a1a",
+    "assets": [{
+        "base": "upryzm",
+        "symbol": "PRYZM",
+        "exponent": "6",
+        "coingecko_id": "pryzm",
+        "logo": "/pryzm.png"
+    }]
+}

@@ -1,0 +1,20 @@
+{
+    "chain_name": "dydx",
+    "coingecko": "dydx",
+    "api": ["https://dydx-api.bryanlabs.net"],
+    "rpc": ["https://dydx-rpc.bryanlabs.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.50.9",
+    "coin_type": "118",
+    "min_tx_fee": "2500",
+    "addr_prefix": "dydx",
+    "logo": "/dydx.png",
+    "theme_color": "#1a1a1a",
+    "assets": [{
+        "base": "adydx",
+        "symbol": "DYDX",
+        "exponent": "18",
+        "coingecko_id": "dydx",
+        "logo": "/dydx.png"
+    }]
+}

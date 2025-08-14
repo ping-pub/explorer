@@ -4,8 +4,18 @@ import { useBlockchain } from './useBlockchain';
 import { get } from '@/libs/http';
 import type { StakingParam, StakingPool, Validator } from '@/types';
 import { CosmosRestClient } from '@/libs/client';
-import { consensusPubkeyToHexAddress, pubKeyToValcons, valconsToBase64 } from '@/libs';
-import { toHex, fromBase64, toBase64, fromHex, fromBech32 } from '@cosmjs/encoding';
+import {
+  consensusPubkeyToHexAddress,
+  pubKeyToValcons,
+  valconsToBase64,
+} from '@/libs';
+import {
+  toHex,
+  fromBase64,
+  toBase64,
+  fromHex,
+  fromBech32,
+} from '@cosmjs/encoding';
 import { useBaseStore } from './useBaseStore';
 
 export const useStakingStore = defineStore('stakingStore', {
@@ -47,9 +57,7 @@ export const useStakingStore = defineStore('stakingStore', {
       return await this.fetchParams();
     },
     async keybase(identity: string) {
-      return get(
-        `https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`
-      );
+      return get(`https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`);
     },
     async fetchParams() {
       const response = await this.blockchain.rpc?.getStakingParams();
@@ -67,93 +75,81 @@ export const useStakingStore = defineStore('stakingStore', {
     },
     async fetchInacitveValdiators() {
       return this.fetchValidators('BOND_STATUS_UNBONDED');
-    },    
+    },
     async fetchUnbondingValdiators() {
       return this.fetchValidators('BOND_STATUS_UNBONDING');
     },
     async fetchValidator(validatorAddr: string) {
       return this.blockchain.rpc.getStakingValidator(validatorAddr);
     },
-    async fetchValidatorDelegation(
-      validatorAddr: string,
-      delegatorAddr: string
-    ) {
-      return await this.blockchain.rpc?.getStakingValidatorsDelegationsDelegator(
-        validatorAddr,
-        delegatorAddr
-      );
+    async fetchValidatorDelegation(validatorAddr: string, delegatorAddr: string) {
+      return await this.blockchain.rpc?.getStakingValidatorsDelegationsDelegator(validatorAddr, delegatorAddr);
     },
-    async fetchKeyRotation(chain_id: string, validatorAddr: string ) : Promise<string> {
-      if(this.blockchain.isConsumerChain) {
-        if(this.blockchain.current?.providerChain.api && this.blockchain.current.providerChain.api.length > 0) {
-          const signatures = useBaseStore().latest?.block?.last_commit.signatures
-          if(signatures) {
+    async fetchKeyRotation(chain_id: string, validatorAddr: string): Promise<string> {
+      if (this.blockchain.isConsumerChain) {
+        if (this.blockchain.current?.providerChain.api && this.blockchain.current.providerChain.api.length > 0) {
+          const signatures = useBaseStore().latest?.block?.last_commit.signatures;
+          if (signatures) {
             // console.log(signatures)
-            const key = toBase64(fromHex(valconsToBase64(validatorAddr)))
-            const exists = signatures.findIndex((x) => x.validator_address === key)
-            if(exists < 0) {
-
-              const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address)
+            const key = toBase64(fromHex(valconsToBase64(validatorAddr)));
+            const exists = signatures.findIndex((x) => x.validator_address === key);
+            if (exists < 0) {
+              const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address);
 
               client.getInterchainSecurityProviderOptedInValidators(chain_id).then((res) => {
-                console.log(res)
-              })
+                console.log(res);
+              });
               const res = await client.getInterchainSecurityValidatorRotatedKey(chain_id, validatorAddr);
-              if(res.consumer_address) {
-                this.keyRotation[validatorAddr] = res.consumer_address
-                localStorage.setItem(`key-rotation-${chain_id}`, JSON.stringify(this.keyRotation))
+              if (res.consumer_address) {
+                this.keyRotation[validatorAddr] = res.consumer_address;
+                localStorage.setItem(`key-rotation-${chain_id}`, JSON.stringify(this.keyRotation));
               }
-              return res.consumer_address
+              return res.consumer_address;
             }
           }
         }
       }
-      return ""
+      return '';
     },
 
     async loadKeyRotationFromLocalstorage(chain_id: string) {
-      const keyRotation = localStorage.getItem(`key-rotation-${chain_id}`)
-      this.keyRotation = keyRotation ? JSON.parse(keyRotation) : {}
+      const keyRotation = localStorage.getItem(`key-rotation-${chain_id}`);
+      this.keyRotation = keyRotation ? JSON.parse(keyRotation) : {};
     },
 
-    findRotatedHexAddress(key: {
-      "@type": string;
-      key: string;
-    }) {
-
-      const prefix  = "cosmos"
-      const conskey = pubKeyToValcons(key, prefix)
-      const rotated = this.keyRotation[conskey]
-      if(rotated) {
-        return valconsToBase64(rotated)
+    findRotatedHexAddress(key: { '@type': string; key: string }) {
+      const prefix = 'cosmos';
+      const conskey = pubKeyToValcons(key, prefix);
+      const rotated = this.keyRotation[conskey];
+      if (rotated) {
+        return valconsToBase64(rotated);
       }
-      return consensusPubkeyToHexAddress(key)
-
+      return consensusPubkeyToHexAddress(key);
     },
     async getConsumerValidators(chain_id: string) {
-      if(this.blockchain.current?.providerChain?.api && this.blockchain.current.providerChain.api.length > 0) {
-        const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address)
-        await client.getStakingValidators('BOND_STATUS_BONDED', 500).then((res) => { this.validators = res.validators });
-        const id_map = {"neutron": "0", "stride": "1"} as Record<string, string>;
+      if (this.blockchain.current?.providerChain?.api && this.blockchain.current.providerChain.api.length > 0) {
+        const client = CosmosRestClient.newDefault(this.blockchain.current.providerChain.api[0].address);
+        await client.getStakingValidators('BOND_STATUS_BONDED', 500).then((res) => {
+          this.validators = res.validators;
+        });
+        const id_map = { neutron: '0', stride: '1' } as Record<string, string>;
         const consumer_id = Object.keys(id_map).find((k) => chain_id.startsWith(k)) || 0;
-        return client.getInterchainSecurityConsumerValidators(id_map[consumer_id])
+        return client.getInterchainSecurityConsumerValidators(id_map[consumer_id]);
       } else {
-        return { validators: [] }
+        return { validators: [] };
       }
     },
     async fetchAllKeyRotation(chain_id: string) {
-      let vs = []
-      for(const val of this.validators) {
-        const { prefix } = fromBech32(val.operator_address)
-        const cons = pubKeyToValcons(val.consensus_pubkey, prefix.replace('valoper','valcons'))
-        vs.push(cons)
+      let vs = [];
+      for (const val of this.validators) {
+        const { prefix } = fromBech32(val.operator_address);
+        const cons = pubKeyToValcons(val.consensus_pubkey, prefix.replace('valoper', 'valcons'));
+        vs.push(cons);
       }
     },
     async fetchValidators(status: string, limit = 300) {
       return this.blockchain.rpc?.getStakingValidators(status, limit).then((res) => {
-        const vals = res.validators.sort(
-          (a, b) => Number(b.delegator_shares) - Number(a.delegator_shares)
-        );
+        const vals = res.validators.sort((a, b) => Number(b.delegator_shares) - Number(a.delegator_shares));
         if (status === 'BOND_STATUS_BONDED') {
           this.validators = vals;
         }
@@ -162,5 +158,3 @@ export const useStakingStore = defineStore('stakingStore', {
     },
   },
 });
-
-

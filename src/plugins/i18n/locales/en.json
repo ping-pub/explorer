@@ -130,6 +130,8 @@
     "no_escrowed_assets": "No Escrowed Assets",
     "contract_states": "Contract States",
     "query_contract": "Query Contract",
+    "suggested_messages": "Suggested Messages",
+    "result": "Result",
     "tips_description_1": "This feature is available when deploying contracts via WELLDONE Code. For more information, please check the document at the link below."
   },
   "gov": {
@@ -225,8 +227,8 @@
     "signer_addr": "Signer Address",
     "consensus_pub_key": "Consensus Public Key",
     "liquid_staking": "Liquid Staking",
-    "liquid_staking_shares":"Liquid Shares",
-    "validator_bond_share":"Validator Bonded"
+    "liquid_staking_shares": "Liquid Shares",
+    "validator_bond_share": "Validator Bonded"
   },
   "statesync": {
     "title": "What's State Sync?",

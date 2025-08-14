@@ -1,0 +1,20 @@
+{
+    "chain_name": "neutron",
+    "coingecko": "neutron",
+    "api": ["https://neutron-api.bryanlabs.net"],
+    "rpc": ["https://neutron-rpc.bryanlabs.net"],
+    "snapshot_provider": "",
+    "sdk_version": "v0.50.9",
+    "coin_type": "118",
+    "min_tx_fee": "5000",
+    "addr_prefix": "neutron",
+    "logo": "/neutron.png",
+    "theme_color": "#1a1a1a",
+    "assets": [{
+        "base": "untrn",
+        "symbol": "NTRN",
+        "exponent": "6",
+        "coingecko_id": "neutron",
+        "logo": "/neutron.png"
+    }]
+}

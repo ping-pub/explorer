@@ -9,13 +9,20 @@ import NavbarSearch from '@/layouts/components/NavbarSearch.vue';
 import ChainProfile from '@/layouts/components/ChainProfile.vue';
 import Sponsors from '@/layouts/components/Sponsors.vue';
 
-import { NetworkType, useDashboard } from '@/stores/useDashboard';
+import { useDashboard } from '@/stores/useDashboard';
+import { NetworkType } from '@/types/chaindata';
 import { useBaseStore, useBlockchain } from '@/stores';
 
 import NavBarI18n from './NavBarI18n.vue';
 import NavBarWallet from './NavBarWallet.vue';
-import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '../types';
+import type {
+  NavGroup,
+  NavLink,
+  NavSectionTitle,
+  VerticalNavItems,
+} from '../types';
 import dayjs from 'dayjs';
+import AdBanner from '@/components/ad/AdBanner.vue';
 
 const dashboard = useDashboard();
 dashboard.initial();
@@ -24,10 +31,10 @@ blockchain.randomSetupEndpoint();
 const baseStore = useBaseStore();
 
 const current = ref(''); // the current chain
-const temp = ref('')
+const temp = ref('');
 blockchain.$subscribe((m, s) => {
-  if(current.value ===s.chainName && temp.value != s.endpoint.address) {
-    temp.value = s.endpoint.address
+  if (current.value === s.chainName && temp.value != s.endpoint.address) {
+    temp.value = s.endpoint.address;
     blockchain.initial();
   }
   if (current.value != s.chainName) {
@@ -47,29 +54,33 @@ const changeOpen = (index: Number) => {
 const showDiscord = window.location.host.search('ping.pub') > -1;
 
 function isNavGroup(nav: VerticalNavItems | any): nav is NavGroup {
-   return (<NavGroup>nav).children !== undefined;
+  return (<NavGroup>nav).children !== undefined;
 }
 function isNavLink(nav: VerticalNavItems | any): nav is NavLink {
-   return (<NavLink>nav).to !== undefined;
+  return (<NavLink>nav).to !== undefined;
 }
 function isNavTitle(nav: VerticalNavItems | any): nav is NavSectionTitle {
-   return (<NavSectionTitle>nav).heading !== undefined;
+  return (<NavSectionTitle>nav).heading !== undefined;
 }
 function selected(route: any, nav: NavLink) {
-  const b = route.path === nav.to?.path || route.path.startsWith(nav.to?.path) && nav.title.indexOf('dashboard') === -1
-  return b
+  const b =
+    route.path === nav.to?.path || (route.path.startsWith(nav.to?.path) && nav.title.indexOf('dashboard') === -1);
+  return b;
 }
 const blocktime = computed(() => {
-  return dayjs(baseStore.latest?.block?.header?.time)
+  return dayjs(baseStore.latest?.block?.header?.time);
 });
 
 const behind = computed(() => {
-  const current = dayjs().subtract(10, 'minute')
-  return blocktime.value.isBefore(current)
+  const current = dayjs().subtract(10, 'minute');
+  return blocktime.value.isBefore(current);
 });
 
-dayjs()
+dayjs();
 
+const show_ad = computed(() => {
+  return location.hostname.indexOf('ping.pub') > -1;
+});
 </script>
 
 <template>
@@ -81,7 +92,7 @@ dayjs()
     >
       <div class="flex justify-between mt-1 pl-4 py-4 mb-1" style="background: var(--bryanlabs-dark); border-bottom: 2px solid var(--bryanlabs-green);">
         <RouterLink to="/" class="flex items-center">
-          <img class="w-40 h-auto" src="https://bryanlabs.net/images/logo.png" alt="BryanLabs Banner" />
+          <span class="text-2xl font-bold text-white">BryanLabs</span>
         </RouterLink>
         <div
           class="pr-4 cursor-pointer xl:!hidden"
@@ -90,27 +101,18 @@ dayjs()
           <Icon icon="mdi-close" class="text-2xl" />
         </div>
       </div>
-      <div
-        v-for="(item, index) of blockchain.computedChainMenu"
-        :key="index"
-        class="px-2"
-      >
+      <div v-for="(item, index) of blockchain.computedChainMenu" :key="index" class="px-2">
         <div
           v-if="isNavGroup(item)"
           :tabindex="index"
           class="collapse"
           :class="{
-            'collapse-arrow':index > 0 && item?.children?.length > 0,
+            'collapse-arrow': index > 0 && item?.children?.length > 0,
             'collapse-open': index === 0 && sidebarOpen,
             'collapse-close': index === 0 && !sidebarOpen,
           }"
         >
-          <input
-            v-if="index > 0"
-            type="checkbox"
-            class="cursor-pointer !h-10 block"
-            @click="changeOpen(index)"
-          />
+          <input v-if="index > 0" type="checkbox" class="cursor-pointer !h-10 block" @click="changeOpen(index)" />
           <div
             class="collapse-title !py-0 px-4 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
           >
@@ -123,14 +125,8 @@ dayjs()
                 'text-blue-500': item?.title !== 'Favorite',
               }"
             />
-            <img
-              v-if="item?.icon?.image"
-              :src="item?.icon?.image"
-              class="w-6 h-6 rounded-full mr-3"
-            />
-            <div
-              class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap"
-            >
+            <img v-if="item?.icon?.image" :src="item?.icon?.image" class="w-6 h-6 rounded-full mr-3" />
+            <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
               {{ item?.title }}
             </div>
             <div
@@ -141,7 +137,7 @@ dayjs()
               {{ item?.badgeContent }}
             </div>
           </div>
-          <div class="collapse-content">            
+          <div class="collapse-content">
             <div v-for="(el, key) of item?.children" class="menu bg-base-100 w-full !p-0">
               <RouterLink
                 v-if="isNavLink(el)"
@@ -157,17 +153,16 @@ dayjs()
                   icon="mdi:chevron-right"
                   class="mr-2 ml-3"
                   :class="{
-                    'text-white':
-                      $route.path === el?.to?.path &&
-                      item?.title !== 'Favorite',
+                    'text-white': $route.path === el?.to?.path && item?.title !== 'Favorite',
                   }"
                 />
                 <img
                   v-if="el?.icon?.image"
                   :src="el?.icon?.image"
-                  class="w-6 h-6 rounded-full mr-3 ml-4 " :class="{
-                  'border border-gray-300 bg-white': selected($route, el),
-                }"
+                  class="w-6 h-6 rounded-full mr-3 ml-4"
+                  :class="{
+                    'border border-gray-300 bg-white': selected($route, el),
+                  }"
                 />
                 <div
                   class="text-base capitalize text-gray-500 dark:text-gray-300"
@@ -179,24 +174,17 @@ dayjs()
                 </div>
               </RouterLink>
             </div>
-            <div v-if="index === 0 && dashboard.networkType === NetworkType.Testnet" class="menu bg-base-100 w-full !p-0">
-              <RouterLink 
-              class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
-              :to="`/${blockchain.chainName}/faucet`">
-                <Icon
-                  icon="mdi:chevron-right"
-                  class="mr-2 ml-3"
-                  ></Icon>
-                <div
-                  class="text-base capitalize text-gray-500 dark:text-gray-300"
-                >
-                  Faucet
-                </div>
-                <div
-                  class="badge badge-sm text-white border-none badge-error ml-auto" 
-                >
-                  New
-                </div>
+            <div
+              v-if="index === 0 && dashboard.networkType === NetworkType.Testnet"
+              class="menu bg-base-100 w-full !p-0"
+            >
+              <RouterLink
+                class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
+                :to="`/${blockchain.chainName}/faucet`"
+              >
+                <Icon icon="mdi:chevron-right" class="mr-2 ml-3"></Icon>
+                <div class="text-base capitalize text-gray-500 dark:text-gray-300">Faucet</div>
+                <div class="badge badge-sm text-white border-none badge-error ml-auto">New</div>
               </RouterLink>
             </div>
           </div>
@@ -222,14 +210,12 @@ dayjs()
             :src="item?.icon?.image"
             class="w-6 h-6 rounded-full mr-3 border border-blue-100"
           />
-          <div
-            class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap"
-          >
+          <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
             {{ item?.title }}
           </div>
           <div
             v-if="item?.badgeContent"
-            class="badge badge-sm text-white border-none" 
+            class="badge badge-sm text-white border-none"
             :class="item?.badgeClass"
           >
             {{ item?.badgeContent }}
@@ -243,23 +229,21 @@ dayjs()
         </div>
       </div>
       <div class="px-2">
-          <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
-            Tools
-          </div>
-          <RouterLink to="/wallet/suggest"
+        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">Tools</div>
+        <RouterLink
+          to="/wallet/suggest"
           class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
-          >
-            <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
-            <div
-              class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200"
-            >
-              Wallet Helper
-            </div>
-          </RouterLink>
-          <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">
+        >
+          <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
+          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">Wallet Helper</div>
+        </RouterLink>
+        <div
+          v-if="showDiscord"
+          class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase"
+        >
           {{ $t('module.sponsors') }}
         </div>
-        <Sponsors />
+        <Sponsors v-if="showDiscord" />
         <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">{{ $t('module.links') }}</div>
         <a
           href="https://twitter.com/ping_pub"
@@ -267,11 +251,7 @@ dayjs()
           class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <Icon icon="mdi:twitter" class="text-xl mr-2" />
-          <div
-            class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200"
-          >
-            Twitter
-          </div>
+          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">Twitter</div>
         </a>
         <a
           v-if="showDiscord"
@@ -280,11 +260,7 @@ dayjs()
           class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <Icon icon="mdi:discord" class="text-xl mr-2" />
-          <div
-            class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200"
-          >
-            Discord
-          </div>
+          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">Discord</div>
         </a>
         <a
           href="https://github.com/ping-pub/explorer/discussions"
@@ -292,11 +268,7 @@ dayjs()
           class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
         >
           <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
-          <div
-            class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200"
-          >
-            FAQ
-          </div>
+          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">FAQ</div>
         </a>
       </div>
     </div>
@@ -325,20 +297,35 @@ dayjs()
       </div>
 
       <!-- 👉 Pages -->
-      <div style="min-height: calc(100vh - 180px);">
-          <div v-if="behind" class="alert alert-error mb-4">
-              <div class="flex gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                      class="stroke-current flex-shrink-0 w-6 h-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                  <span>{{ $t('pages.out_of_sync') }} {{ blocktime.format() }} ({{ blocktime.fromNow() }})</span>
-              </div>
+      <div style="min-height: calc(100vh - 180px)">
+        <div v-if="behind" class="alert alert-error mb-4">
+          <div class="flex gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              class="stroke-current flex-shrink-0 w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <span
+              >{{ $t('pages.out_of_sync') }} {{ blocktime.format() }} ({{
+                blocktime.fromNow()
+              }})</span
+            >
           </div>
+        </div>
         <RouterView v-slot="{ Component }">
           <Transition mode="out-in">
-            <Component :is="Component" />
+            <div>
+              <AdBanner v-if="show_ad" />
+              <Component :is="Component" />
+            </div>
           </Transition>
         </RouterView>
       </div>

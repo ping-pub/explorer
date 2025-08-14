@@ -1,10 +1,4 @@
-import {
-  fromBase64,
-  fromBech32,
-  toBase64,
-  toBech32,
-  toHex,
-} from '@cosmjs/encoding';
+import { fromBase64, fromBech32, toBase64, toBech32, toHex } from '@cosmjs/encoding';
 import { Ripemd160, sha256 } from '@cosmjs/crypto';
 
 export function decodeAddress(address: string) {
@@ -25,10 +19,7 @@ export function operatorAddressToAccount(operAddress?: string) {
   return toBech32(prefix.replace('valoper', ''), data);
 }
 
-export function consensusPubkeyToHexAddress(consensusPubkey?: {
-  '@type': string;
-  key: string;
-}) {
+export function consensusPubkeyToHexAddress(consensusPubkey?: { '@type': string; key: string }) {
   if (!consensusPubkey) return '';
   let raw = '';
   if (consensusPubkey['@type'] === '/cosmos.crypto.ed25519.PubKey') {
@@ -45,7 +36,6 @@ export function consensusPubkeyToHexAddress(consensusPubkey?: {
 
 // not work as expected, will fix later or remove
 export function consumerKeyToBase64Address(consumerKey?: Record<string, string>) {
-
   if (!consumerKey) return '';
   let raw = '';
   if (consumerKey.ed25519) {
@@ -55,15 +45,13 @@ export function consumerKeyToBase64Address(consumerKey?: Record<string, string>)
 
   if (consumerKey.secp256k1) {
     const pubkey = fromBase64(consumerKey.secp256k1);
-    if (pubkey) return toBase64(new Ripemd160().update(sha256(pubkey)).digest());
+    if (pubkey)
+      return toBase64(new Ripemd160().update(sha256(pubkey)).digest());
   }
   return raw;
 }
 
-export function pubKeyToValcons(
-  consensusPubkey: { '@type': string; key: string },
-  prefix: string
-) {
+export function pubKeyToValcons(consensusPubkey: { '@type': string; key: string }, prefix: string) {
   if (consensusPubkey && consensusPubkey.key) {
     const pubkey = fromBase64(consensusPubkey.key);
     if (pubkey) {

@@ -61,14 +61,8 @@ function confirm() {
 </script>
 <template>
   <div>
-    <button
-      class="btn btn-ghost btn-circle btn-sm mx-1"
-      @click="openSearchModal"
-    >
-      <Icon
-        icon="mdi:magnify"
-        class="text-2xl text-gray-500 dark:text-gray-400"
-      />
+    <button class="btn btn-ghost btn-circle btn-sm mx-1" @click="openSearchModal">
+      <Icon icon="mdi:magnify" class="text-2xl text-gray-500 dark:text-gray-400" />
     </button>
 
     <!-- modal -->
@@ -77,29 +71,15 @@ function confirm() {
       class="cursor-pointer modal !pointer-events-auto !opacity-100 !visible"
       @click="closeSearchModal"
     >
-      <div
-        class="relative modal-box cursor-default"
-        @click="(event) => preventClick(event)"
-      >
+      <div class="relative modal-box cursor-default" @click="(event) => preventClick(event)">
         <!-- header -->
         <div class="flex items-center justify-between">
-          <div
-            class="text-lg font-bold flex flex-col md:!flex-row justify-between items-baseline"
-          >
+          <div class="text-lg font-bold flex flex-col md:!flex-row justify-between items-baseline">
             <span class="mr-2">Search</span>
-            <span class="capitalize text-sm md:!text-base"
-              >Height/Transaction/Account Address</span
-            >
+            <span class="capitalize text-sm md:!text-base">Height/Transaction/Account Address</span>
           </div>
-          <label
-            htmlFor="modal-pool-modal"
-            class="cursor-pointer"
-            @click="closeSearchModal"
-          >
-            <Icon
-              icon="zondicons:close-outline"
-              class="text-2xl text-gray-500 dark:text-gray-400"
-            />
+          <label htmlFor="modal-pool-modal" class="cursor-pointer" @click="closeSearchModal">
+            <Icon icon="zondicons:close-outline" class="text-2xl text-gray-500 dark:text-gray-400" />
           </label>
         </div>
         <!-- body -->
@@ -110,19 +90,14 @@ function confirm() {
               v-model="searchQuery"
               placeholder="Height/Transaction/Account Address"
             />
-            <div
-              class="mt-2 text-right text-sm text-error"
-              v-show="errorMessage"
-            >
+            <div class="mt-2 text-right text-sm text-error" v-show="errorMessage">
               {{ errorMessage }}
             </div>
           </div>
         </div>
         <!-- foot -->
         <div class="mt-6">
-          <button class="w-full btn btn-primary" @click="confirm">
-            Confirm
-          </button>
+          <button class="w-full btn btn-primary" @click="confirm">Confirm</button>
         </div>
       </div>
     </div>

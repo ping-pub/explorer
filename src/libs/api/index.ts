@@ -1,7 +1,4 @@
-import {
-  type RequestRegistry,
-  adapter,
-} from './registry';
+import { type RequestRegistry, adapter } from './registry';
 
 export const DEFAULT: RequestRegistry = {
   auth_params: { url: '/cosmos/auth/v1beta1/params', adapter },
@@ -10,7 +7,10 @@ export const DEFAULT: RequestRegistry = {
     url: '/cosmos/auth/v1beta1/accounts/{address}',
     adapter,
   },
-  params: { url: '/cosmos/params/v1beta1/params?subspace={subspace}&key={key}', adapter },
+  params: {
+    url: '/cosmos/params/v1beta1/params?subspace={subspace}&key={key}',
+    adapter,
+  },
   bank_params: { url: '/cosmos/bank/v1beta1/params', adapter },
   bank_balances_address: {
     url: '/cosmos/bank/v1beta1/balances/{address}',
@@ -201,6 +201,31 @@ export const DEFAULT: RequestRegistry = {
   },
   interchain_security_consumer_validators: {
     url: '/interchain_security/ccv/provider/consumer_validators/{chain_id}',
+    adapter,
+  },
+
+  group_groups: {
+    url: '/cosmos/group/v1/groups',
+    adapter,
+  },
+  group_groups_by_admin: {
+    url: '/cosmos/group/v1/groups_by_admin/{admin}',
+    adapter,
+  },
+  group_groups_by_member: {
+    url: '/cosmos/group/v1/groups_by_member/{address}',
+    adapter,
+  },
+  group_proposal: {
+    url: '/cosmos/group/v1/proposal/{proposal_id}',
+    adapter,
+  },
+  group_proposal_tally: {
+    url: '/cosmos/group/v1/proposals/{proposal_id}/tally',
+    adapter,
+  },
+  group_proposals_by_group_policy: {
+    url: '/cosmos/group/v1/proposals_by_group_policy/{address}',
     adapter,
   },
 };
