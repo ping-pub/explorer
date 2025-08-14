@@ -5,7 +5,7 @@ ARG VITE_DEPLOYMENT_ENV=mainnet
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
 RUN set -eux \
   && yarn install
