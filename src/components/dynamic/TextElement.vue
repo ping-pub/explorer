@@ -6,7 +6,7 @@ import { computed, onMounted, ref } from 'vue';
 
 import { fromBase64, toHex } from '@cosmjs/encoding';
 
-import { registry as nameMatcha } from '@leapwallet/name-matcha';
+import nameMatcha from '@leapwallet/name-matcha';
 
 const chainStore = useBlockchain();
 const props = defineProps(['value']);
@@ -43,7 +43,7 @@ const names = ref([] as { name?: any; provider?: string }[]);
 
 onMounted(() => {
   if (isAddress())
-    nameMatcha.lookupAll(props.value).then((re) => {
+    nameMatcha.lookupAll(props.value).then((re: any) => {
       names.value = Object.keys(re)
         .map((key) => ({ name: re[key], provider: key }))
         .filter((x) => x.name);
