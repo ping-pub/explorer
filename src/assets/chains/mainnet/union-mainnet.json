@@ -1,10 +1,10 @@
 {
   "chain_name": "union",
   "api": [
-    "https://api.rpc-node.union-1.union.build"
+    "https://rest.union.build"
   ],
   "rpc": [
-    "https://rpc.rpc-node.union-1.union.build"
+    "https://rpc.union.build"
   ],
   "sdk_version": "0.50.11",
   "addr_prefix": "union",
@@ -14,18 +14,9 @@
   "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/uniontestnet/images/union.png",
   "assets": [
     {
-      "symbol": "POA",
-      "base": "upoa",
-      "exponent": 6,
-      "coingecko_id": "gas",
-      "logo": "https://raw.githubusercontent.com/Agoric/agoric-sdk/master/packages/wallet/ui/public/tokens/BLD.svg"
-    },
-    {
-      "symbol": "GAS",
-      "base": "ugas",
-      "exponent": 6,
-      "coingecko_id": "gas",
-      "logo": "https://raw.githubusercontent.com/Agoric/agoric-sdk/master/packages/wallet/ui/public/tokens/BLD.svg"
+      "symbol": "U",
+      "base": "au",
+      "exponent": 18,
     }
   ]
 }

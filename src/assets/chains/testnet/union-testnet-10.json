@@ -16,9 +16,7 @@
     {
       "symbol": "U",
       "base": "au",
-      "exponent": 18,
-      "coingecko_id": "au",
-      "logo": "https://raw.githubusercontent.com/Agoric/agoric-sdk/master/packages/wallet/ui/public/tokens/BLD.svg"
+      "exponent": 18
     }
   ]
 }
