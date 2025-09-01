@@ -144,12 +144,13 @@ function confirm() {
 <template>
   <div>
     <div class="flex">
-      <div class="flex items-center relative">
-        <input class="input w-[22rem] !input-bordered" v-model="searchQuery"
-          placeholder="Height/Transaction/Account Address" />
-        <button class="btn btn-ghost btn-circle btn-sm mx-1" @click="confirm">
-          <Icon icon="mdi:magnify" class="text-2xl text-gray-500 dark:text-gray-400" />
+      <div class="flex items-center relative bg-white dark:bg-[#2a334c] rounded-xl border-[#64748B80] border-1">
+          <button class="btn btn-ghost btn-circle btn-sm" @click="confirm">
+          <Icon icon="mdi:magnify" class="text-2xl text-[#64748B80] dark:text-gray-400" />
         </button>
+        <input class="input w-[22rem] !p-0 !h-[2rem]" v-model="searchQuery"
+          placeholder="Height/Transaction/Account Address" />
+      
         <div v-if="searchQuery && (searchDetails.length > 0 || loadingType)" class="absolute left-0 top-full mt-1 w-full z-10">
           <div class="dropdown-content bg-base-100 border rounded shadow p-2 min-w-[22rem]">
             <span v-if="loadingType" class="text-xs text-gray-400 flex items-center"><Icon icon="mdi:loading" class="animate-spin mr-1" />Detecting...</span>
