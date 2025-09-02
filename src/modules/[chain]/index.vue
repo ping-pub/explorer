@@ -898,7 +898,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                       '0.00' }}</span>
                     /
                     <span class="text-error">${{ store.coinInfo?.market_data?.low_24h?.usd?.toFixed(6) || '0.00'
-                    }}</span>
+                      }}</span>
                   </div>
                 </div>
                 <div
@@ -1259,7 +1259,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                 <td class="truncate text-[#09279F]" style="max-width:14rem">
                   <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.item.hash}`">{{
                     item.item.hash
-                  }}</RouterLink>
+                    }}</RouterLink>
                 </td>
                 <td class="text-sm text-[#09279F]">
                   <RouterLink :to="`/${props.chain}/blocks/${item.item.block_height}`" class="hover:underline">{{
@@ -1299,6 +1299,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
         <ArrayObjectElement :value="paramStore.nodeVersion?.items" :thead="false" />
       </div>
     </div>
+  </div>
 </template>
 
 <route>
