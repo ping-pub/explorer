@@ -96,9 +96,9 @@ function getMiningDifficultyValue(serviceId: string) {
 // Determine difficulty level based on num_relays_ema
 function getDifficultyLevel(numRelaysEma: string) {
   const relays = parseInt(numRelaysEma) || 0
-  if (relays > 1000) return { level: 'high', color: 'text-error', label: 'High' }
-  if (relays > 100) return { level: 'medium', color: 'text-warning', label: 'Medium' }
-  return { level: 'low', color: 'text-success', label: 'Low' }
+  if (relays > 1000) return { level: 'high', color: 'bg-[#E0383433;] text-[#E03834;]', label: 'High' }
+  if (relays > 100) return { level: 'medium', color: 'bg-[#FFB20633;] text-[#FFB206;]', label: 'Medium' }
+  return { level: 'low', color: 'bg-[#60BC2933;] text-[#60BC29;]', label: 'Low' }
 }
 
 // Check if target hash indicates maximum difficulty
@@ -131,11 +131,11 @@ const sortedList = computed(() => {
 </script>
 <template>
   <div>
-  <p class="text-2xl font-bold mb-4">Services</p>
-  <div class="bg-base-100 rounded overflow-auto servicesContainer" @scroll="pageload"
+  <p class="bg-[#09279F] dark:bg-base-200 text-2xl rounded-md px-4 py-2 my-4 font-bold text-[#ffffff;]">Services</p>
+  <div class="bg-[#EFF2F5;] dark:bg-base-200 rounded-md px-0.5 pt-0.5 pb-0.5 overflow-auto servicesContainer" @scroll="pageload"
     style="height: 78vh;overflow: scroll;">
-    <table class="table table-compact">
-      <thead class="bg-base-200">
+    <table class="table w-full table-compact">
+      <thead class="dark:bg-base-200 bg-white sticky top-0">
         <tr>
           <td>ID</td>
           <td>Name</td>
@@ -152,7 +152,7 @@ const sortedList = computed(() => {
           </td>
         </tr>
       </thead>
-      <tr v-for="item, index in sortedList" class="hover">
+      <tr v-for="item, index in sortedList" class="hover dark-bg-base-200 bg-white">
         <td>{{ item.id }}</td>
         <td class="font-bold">{{ item.name }}</td>
         <td>
@@ -181,11 +181,11 @@ const sortedList = computed(() => {
             <!-- <div class="flex items-center gap-2 text-xs">
               
             </div> -->
-            <span class="text-sm">Relays EMA: {{ getMiningDifficultyForService(item.id)?.num_relays_ema }}</span>
+            <span class="text-xs">Relays EMA: {{ getMiningDifficultyForService(item.id)?.num_relays_ema }}</span>
             <span v-if="isMaxDifficulty(getMiningDifficultyForService(item.id)?.target_hash || '')" 
                     class="badge badge-error text-xs">Max Difficulty</span>
               <span v-else 
-                    :class="`badge ${getDifficultyLevel(getMiningDifficultyForService(item.id)?.num_relays_ema || '0').color} text-xs`">
+                    :class="`badge ${getDifficultyLevel(getMiningDifficultyForService(item.id)?.num_relays_ema || '0').color} text-[8px]`">
                 {{ getDifficultyLevel(getMiningDifficultyForService(item.id)?.num_relays_ema || '0').label }} Difficulty
               </span>
           </div>

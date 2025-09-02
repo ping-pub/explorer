@@ -154,13 +154,13 @@ watch(() => list.value.length, () => {
             
             <div class="bg-base-200 rounded-md overflow-auto">
                 <table class="table table-compact w-full">
-                    <thead class="bg-base-300 sticky top-0 z-10">
+                    <thead class="bg-white sticky top-0 z-10">
                         <tr>
-                            <th class="bg-base-300">{{ $t('block.block_header') }}</th>
-                            <th class="bg-base-300">{{ $t('account.hash') }}</th>
-                            <th class="bg-base-300">{{ $t('block.proposer') }}</th>
-                            <th class="bg-base-300">{{ $t('account.no_of_transactions') }}</th>
-                            <th class="bg-base-300">{{ $t('account.time') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('block.block_header') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('account.hash') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('block.proposer') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('account.no_of_transactions') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('account.time') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -172,7 +172,7 @@ watch(() => list.value.length, () => {
                         <!-- Render visible blocks normally without absolute positioning -->
                         <tr v-for="({ item }, i) in visibleBlocks"
                             :key="i"
-                            class="hover:bg-base-300 transition-colors duration-200">
+                            class="transition-colors duration-200">
                             <td class="font-medium">{{ item.block.header.height }}</td>
                             <td class="truncate text-info" style="max-width: 18rem; overflow:hidden;">
                                 <RouterLink class="truncate hover:underline" :title="item.block_id.hash"

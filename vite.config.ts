@@ -33,18 +33,18 @@ const securityPlugin = (): Plugin => ({
       try {
         // Get URL and decode safely
         const url = req.url || '';
-        
+
         // Check for suspicious patterns
         if (SUSPICIOUS_PATTERNS.some(pattern => url.includes(pattern))) {
           // Log blocked attempt
           console.log(`Blocked suspicious request: ${url}`);
-          
+
           // Return 403 Forbidden
           res.statusCode = 403;
           res.end('Forbidden');
           return;
         }
-        
+
         // Process normal requests
         next();
       } catch (error) {
@@ -117,7 +117,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://pocket_indexer_api:3006',
+        // target: 'http://pocket_indexer_api:3006',
+        target: 'https://explorer.pocket.network',
         // target: 'http://127.0.0.1:3005',
         changeOrigin: true,
       },

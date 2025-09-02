@@ -787,92 +787,87 @@ watch(() => base.blocktime, (newVal, oldVal) => {
   <div>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
       <!-- Block Height and Network Performance Cards -->
-      <div class="bg-base-100 px-4 pt-4 pb-4 rounded-md shadow-md border-t-4 border-info">
+      <div class="bg-white dark:bg-base-200 px-4 pt-4 pb-4">
         <div class="flex items-center mb-4">
-          <Icon icon="mdi:cube-outline" class="text-2xl text-info mr-2" />
           <div class="text-lg font-semibold text-main">Network Status</div>
         </div>
-        
+
         <!-- Loading spinner while data is being fetched -->
         <div v-if="isNetworkStatusLoading" class="flex justify-center items-center py-8">
           <div class="loading loading-spinner loading-md text-info"></div>
         </div>
-        
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
-          <!-- Left Column: Block Height and Block Time Cards -->
-          <div class="grid grid-cols-1 gap-4">
-            <!-- Block Height Card -->
-            <div class="bg-base-200 p-4 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
+
+        <div v-else class="grid grid-cols-1 gap-4 mt-1">
+          <!-- First Line: Current Block Height, Consensus Nodes, Avg Block Time -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Current Block Height -->
+            <div class="bg-base-200 p-4 rounded-[20px] hover:bg-base-300 transition-all duration-200">
               <div class="flex items-center mb-3">
-                <Icon icon="mdi:cube-scan" class="text-xl text-info mr-2" />
-                <div class="text-sm font-medium text-secondary">Current Block Height</div>
+                <Icon icon="mdi:cube-scan" class="text-xl text-[#64748B] mr-2" />
+                <div class="text-xs font-medium text-[#64748B]">Current Block Height</div>
               </div>
               <div class="text-3xl font-bold text-main flex items-center">
                 {{ currentBlockHeight }}
-                <a :href="`/${chain}/blocks/${currentBlockHeight}`"
-                   class="ml-2 text-sm inline-block text-info hover:text-info/70 transition-colors duration-200">
-                  <Icon icon="mdi:arrow-right-circle" class="text-xl" />
+                <a :href="`/${chain}/blocks/${currentBlockHeight}`" class="ml-2 text-sm inline-block text-info hover:text-info/70 transition-colors duration-200">
+                  <Icon icon="mdi:arrow-right-circle" class="text-[#64748B] text-2xl" />
                 </a>
               </div>
             </div>
 
-            <!-- Block Time Card -->
-            <div class="bg-base-200 p-4 py-8 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
-              <div class="flex items-center mb-3">
-                <Icon icon="mdi:clock-outline" class="text-xl text-info mr-2" />
-                <div class="text-sm font-medium text-secondary">Latest Block Time</div>
+            <!-- Consensus Nodes -->
+            <div class="bg-base-200 p-5 w-2xl rounded-[20px] hover:bg-base-300 transition-all duration-200">
+              <div class="flex justify-center items-center mb-3">
+                <Icon icon="mdi:server-network" class="text-[#64748B] mr-2" />
+                <div class="text-xs text-[#64748B]">Consensus Nodes</div>
               </div>
-              <div class="text-xl font-bold text-main flex items-center">
-                {{ latestBlockTime }}
+              <div class="text-3xl font-bold text-main flex items-center justify-center">
+                {{ paramStore.nodeVersion?.items?.length || '0' }}
+              </div>
+            </div>
+
+            <!-- Avg Block Time (24h) -->
+            <div class="bg-base-200 w-5xl py-5 rounded-[20px] hover:bg-base-300 transition-all duration-200">
+              <div class="flex justify-center items-center mb-3">
+                <Icon icon="mdi:timer-outline" class="text-[#64748B] mr-2" />
+                <span class="text-xs text-[#64748B]">Avg Block Time (24h)</span>
+              </div>
+              <div class="text-3xl font-bold text-main flex items-center justify-center">
+                {{ averageBlockTime }}s
               </div>
             </div>
           </div>
 
-          <!-- Right Column: Network Performance Stats -->
-          <div class="grid grid-cols-1 gap-4">
-            <!-- Consensus Nodes -->
-            <div class="bg-base-200 p-5 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
-              <div class="flex justify-between items-center">
-                <div class="flex items-center">
-                  <Icon icon="mdi:server-network" class="text-info mr-2" />
-                  <span class="text-sm text-secondary">Consensus Nodes</span>
-                </div>
-                <div class="text-lg font-bold">{{ paramStore.nodeVersion?.items?.length || '0' }}</div>
+          <!-- Second Line: Latest Block Time, Avg Tx Per Block -->
+          <div class="flex gap-4">
+            <!-- Latest Block Time -->
+            <div class="bg-base-200 p-4 py-8 w-[66.66%] rounded-[20px] hover:bg-base-300 transition-all duration-200">
+              <div class="flex items-center justify-center mb-3">
+                <Icon icon="mdi:clock-outline" class="text-xl text-[#64748B] mr-2" />
+                <div class="text-xs font-medium text-[#64748B]">Latest Block Time</div>
+              </div>
+              <div class="text-xl font-bold text-main flex items-center justify-center">
+                {{ latestBlockTime }}
               </div>
             </div>
-            
-            <!-- Block Time -->
-            <div class="bg-base-200 p-5 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
-              <div class="flex justify-between items-center">
-                <div class="flex items-center">
-                  <Icon icon="mdi:timer-outline" class="text-info mr-2" />
-                  <span class="text-sm text-secondary">Avg Block Time (24h)</span>
-                </div>
-                <div class="text-lg font-bold">{{ averageBlockTime }}s</div>
+
+            <!-- Avg Tx Per Block -->
+            <div class="bg-base-200 py-5 w-[32%] rounded-[20px] hover:bg-base-300 transition-all duration-200">
+              <div class="flex justify-center items-center mb-3">
+                <Icon icon="mdi:chart-box-outline" class="text-[#64748B] mr-2" />
+                <span class="text-xs text-[#64748B]">Avg TX Per Block (24h)</span>
               </div>
-            </div>
-            
-            <!-- Tx Per Block -->
-            <div class="bg-base-200 p-5 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-info/50">
-              <div class="flex justify-between items-center">
-                <div class="flex items-center">
-                  <Icon icon="mdi:chart-box-outline" class="text-info mr-2" />
-                  <span class="text-sm text-secondary">Avg TX Per Block (24h)</span>
-                </div>
-                <div class="text-lg font-bold">
-                  {{ averageTxPerBlock }}
-                </div>
+              <div class="text-3xl font-bold text-main flex items-center justify-center">
+                {{ averageTxPerBlock }}
               </div>
             </div>
           </div>
         </div>
       </div>
-      
+
       <!-- Market Data Section -->
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-success">
+      <div class="bg-white dark:bg-base-200 px-4 pt-3 pb-4">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center">
-            <Icon icon="mdi:chart-areaspline" class="text-2xl text-success mr-2" />
             <div class="text-lg font-semibold text-main">Market Data</div>
           </div>
           <div class="flex items-center gap-2">
@@ -883,180 +878,208 @@ watch(() => base.blocktime, (newVal, oldVal) => {
               </label>
               <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-1">
                 <li v-for="(tic, index) in tickers" :key="tic.market.identifier">
-                  <a @click="() => { store.selectTicker(index); }"
-                    :class="{ 'active': index === store.tickerIndex }">
+                  <a @click="() => { store.selectTicker(index); }" :class="{ 'active': index === store.tickerIndex }">
                     {{ tic.market.name }}
                   </a>
                 </li>
               </ul>
             </div>
             <a class="!text-white btn btn-sm"
-              :class="{ '!btn-success': store.trustColor === 'green', '!btn-warning': store.trustColor === 'yellow' }"
-              :href="ticker?.trade_url" target="_blank">
+               :class="{ '!btn-success': store.trustColor === 'green', '!btn-warning': store.trustColor === 'yellow' }"
+               :href="ticker?.trade_url" target="_blank">
               {{ $t('index.buy') }} {{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}
             </a>
           </div>
         </div>
-        
-        <!-- Coin Header -->
-        <div class="flex items-center mb-4 bg-base-200 p-3 rounded-md">
-          <div class="w-10 h-10 flex items-center justify-center rounded-md overflow-hidden mr-3">
-            <img v-if="blockchain.logo" :src="blockchain.logo" alt="Coin logo"
-              class="w-full h-full object-cover" />
-            <div v-else class="w-full h-full bg-success flex items-center justify-center">
-              <Icon icon="mdi:currency-usd" class="text-xl text-white" />
+
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <!-- Row 1 -->
+          <!-- Volume -->
+          <div class="bg-base-200 p-3 h-[18vh] rounded-[20px] hover:bg-base-300 transition-all duration-200">
+            <div class="text-xs text-secondary flex items-center justify-center">
+              <Icon icon="mdi:swap-horizontal" class="mr-1 text-[#64748B]" />
+              <span class="text-xs text-[#64748B]">24h Volume</span>
+            </div>
+            <div class="text-base font-medium mt-1 flex items-center justify-center">
+              ${{ format.formatNumber((store.coinInfo?.market_data?.total_volume?.usd || 0), '123,456,789.[00]') }}
             </div>
           </div>
-          <div>
-            <div class="text-xl font-bold">{{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}</div>
-            <div class="text-sm text-secondary">{{ store.coinInfo?.name || 'Cryptocurrency' }}</div>
-          </div>
-          <div class="ml-auto flex flex-col items-end">
-            <div class="text-xl font-bold">${{ store.coinInfo?.market_data?.current_price?.usd?.toFixed(6) || '0.00' }}</div>
-            <div class="text-sm" :class="(store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0 ? 'text-success' : 'text-error'">
-              {{ (store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0 ? '+' : '' }}{{ store.coinInfo?.market_data?.price_change_percentage_24h?.toFixed(2) || '0.00' }}%
+
+          <!-- Market Cap -->
+          <div class="bg-base-200 p-3 rounded-[20px] hover:bg-base-300 transition-all duration-200">
+            <div class="text-xs text-secondary flex items-center justify-center">
+              <Icon icon="mdi:chart-pie" class="mr-1 text-[#64748B]" />
+              <span class="text-xs text-[#64748B]">Market Cap</span>
+            </div>
+            <div class="text-base font-medium mt-1 flex items-center justify-center">
+              ${{ format.formatNumber(store.coinInfo?.market_data?.market_cap?.usd || 0, '123,456,789.[00]') }}
             </div>
           </div>
-        </div>
-        
-        <!-- Market Data Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <!-- Volume Card -->
-          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50">
-            <div class="text-xs text-secondary flex items-center">
-              <Icon icon="mdi:swap-horizontal" class="mr-1 text-success" />
-              <span>24h Volume</span>
+
+          <!-- Circulating Supply -->
+         <div class="bg-base-200 py-3 rounded-[20px] hover:bg-base-300 transition-all duration-200 flex flex-col items-center justify-center">
+            <!-- Title -->
+            <div class="text-xs text-secondary flex items-center justify-center">
+              <Icon icon="mdi:coins" class="mr-1 text-[#64748B]" />
+              <span class="text-xs text-[#64748B]">Circulating Supply</span>
             </div>
-            <div class="text-base font-medium mt-1">${{ format.formatNumber((store.coinInfo?.market_data?.total_volume?.usd || 0), '123,456,789.[00]') }}</div>
-          </div>
-          
-          <!-- Market Cap Card -->
-          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50">
-            <div class="text-xs text-secondary flex items-center">
-              <Icon icon="mdi:chart-pie" class="mr-1 text-success" />
-              <span>Market Cap</span>
-            </div>
-            <div class="text-base font-medium mt-1">${{ format.formatNumber(store.coinInfo?.market_data?.market_cap?.usd || 0, '123,456,789.[00]') }}</div>
-          </div>
-          
-          <!-- Circulating Supply Card -->
-          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50">
-            <div class="text-xs text-secondary flex items-center">
-              <Icon icon="mdi:coins" class="mr-1 text-success" />
-              <span>Circulating Supply</span>
-            </div>
-            <div class="text-base font-medium mt-1">
+            <!-- Value -->
+            <div class="text-base font-medium mt-1 flex items-center justify-center">
               {{ format.formatNumber((store.coinInfo?.market_data?.circulating_supply || 0), '123,456,789.[00]') }}
-              <span class="text-xs">{{ store.coinInfo?.symbol?.toUpperCase() || '' }}</span>
+            </div>
+            <!-- Symbol (3rd line) -->
+            <div class="text-xs mt-1">
+              {{ store.coinInfo?.symbol?.toUpperCase() || '' }}
             </div>
           </div>
-          
-          <!-- 24h High/Low Card -->
-          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50">
-            <div class="text-xs text-secondary flex items-center">
-              <Icon icon="mdi:trending-up" class="mr-1 text-success" />
-              <span>24h High / Low</span>
+
+
+          <!-- Coin Header (POKT box) spanning 2 rows -->
+          <div class="row-span-2 bg-base-200 p-3 rounded-[20px] flex flex-col">
+            <div class="flex items-center mb-4">
+              <div class="w-10 h-10 flex items-center justify-center rounded-md overflow-hidden mr-3">
+                <img v-if="blockchain.logo" :src="blockchain.logo" alt="Coin logo" class="w-full h-full object-cover" />
+                <div v-else class="w-full h-full bg-success flex items-center justify-center">
+                  <Icon icon="mdi:currency-usd" class="text-xl text-white" />
+                </div>
+              </div>
+              <div>
+                <div class="text-xl font-bold">{{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}</div>
+                <div class="text-sm text-secondary">{{ store.coinInfo?.name || 'Cryptocurrency' }}</div>
+              </div>
             </div>
-            <div class="text-base font-medium mt-1 flex flex-wrap items-center gap-2">
+            <div class="ml-auto flex flex-col items-end">
+              <div class="text-xl font-bold">
+                ${{ store.coinInfo?.market_data?.current_price?.usd?.toFixed(6) || '0.00' }}
+              </div>
+              <div class="text-sm" :class="(store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0 ? 'text-success' : 'text-error'">
+                {{ (store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0 ? '+' : '' }}
+                {{ store.coinInfo?.market_data?.price_change_percentage_24h?.toFixed(2) || '0.00' }}%
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2 -->
+          <!-- 24h High / Low -->
+          <!-- Row 2 -->
+          <!-- 24h High / Low -->
+          <div class="bg-base-200 p-3 h-[18vh] rounded-[20px] hover:bg-base-300 transition-all duration-200">
+            <div class="text-xs text-secondary flex items-center justify-center">
+              <Icon icon="mdi:trophy" class="mr-1 text-[#64748B]" />
+              <span class="text-[#64748B]">24h High / Low</span>
+            </div>
+            <div class="text-xs font-medium mt-1 flex flex-wrap items-center justify-center gap-2">
               <span class="text-success break-words">${{ store.coinInfo?.market_data?.high_24h?.usd?.toFixed(6) || '0.00' }}</span>
               <span class="break-keep">/</span>
               <span class="text-error break-words">${{ store.coinInfo?.market_data?.low_24h?.usd?.toFixed(6) || '0.00' }}</span>
             </div>
           </div>
-          
-          <!-- ATH Card -->
-          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50">
-            <div class="text-xs text-secondary flex items-center">
-              <Icon icon="mdi:trophy" class="mr-1 text-success" />
-              <span>All Time High</span>
-            </div>
-            <div class="text-base font-medium mt-1">
-              ${{ store.coinInfo?.market_data?.ath?.usd?.toFixed(6) || '0.00' }}
-              <span class="text-xs ml-1" :class="{'text-error': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) < 0, 'text-success': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) > 0}">
-                ({{ store.coinInfo?.market_data?.ath_change_percentage?.usd?.toFixed(2) || '0.00' }}%)
-              </span>
-            </div>
-          </div>
 
-          <!-- ATL Card -->
-          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50">
-            <div class="text-xs text-secondary flex items-center">
-              <Icon icon="mdi:trending-down" class="mr-1 text-error" />
-              <span>All Time Low</span>
+          <!-- ATH -->
+          <div class="bg-base-200 p-3 rounded-[20px] hover:bg-base-300 transition-all duration-200">
+            <!-- Top row: Title + % Change -->
+            <div class="text-xs text-secondary flex items-center justify-between">
+              <div class="flex items-center">
+                <Icon icon="mdi:trending-up" class="mr-1 text-[#60BC29]" />
+                <span class="text-[#64748B]">All Time High</span>
+              </div>
+                <span class="text-xs ml-2" :class="{'text-error': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) < 0,
+                  'text-success': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) > 0}">
+                  ({{ store.coinInfo?.market_data?.ath_change_percentage?.usd?.toFixed(2) || '0.00' }}%)
+                </span>
+              </div>
+              <!-- Price -->
+              <div class="text-base font-medium mt-1">
+                ${{ store.coinInfo?.market_data?.ath?.usd?.toFixed(6) || '0.00' }}
+              </div>
             </div>
-            <div class="text-base font-medium mt-1">
-              ${{ store.coinInfo?.market_data?.atl?.usd?.toFixed(6) || '0.00' }}
-              <span class="text-xs ml-1" :class="{'text-error': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) < 0, 'text-success': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) > 0}">
-                ({{ store.coinInfo?.market_data?.atl_change_percentage?.usd?.toFixed(2) || '0.00' }}%)
-              </span>
+
+
+          <!-- ATL -->
+          <div class="bg-base-200 p-3 rounded-[20px] hover:bg-base-300 transition-all duration-200">
+            <!-- Top row: Title + % Change -->
+            <div class="text-xs text-secondary flex items-center justify-between">
+              <div class="flex items-center">
+                <Icon icon="mdi:trending-down" class="mr-1 text-[#EE6161]" />
+                <span class="text-[#64748B]">All Time Low</span>
+              </div>
+                <span class="text-xs ml-2" :class="{'text-error': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) < 0,
+                  'text-success': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) > 0}">
+                  ({{ store.coinInfo?.market_data?.atl_change_percentage?.usd?.toFixed(2) || '0.00' }}%)
+                </span>
+              </div>
+              <!-- Price -->
+              <div class="text-base font-medium mt-1">
+                ${{ store.coinInfo?.market_data?.atl?.usd?.toFixed(6) || '0.00' }}
+              </div>
             </div>
-          </div>
         </div>
       </div>
     </div>
-
-    <!-- Network Statistics Section -->
+  </div>
+ <!-- Network Statistics Section -->
     
       <!-- Network Statistics -->
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-secondary mt-5">
+      <div class="bg-white dark:bg-base-200 px-4 pt-3 pb-4">
         <div class="flex items-center mb-4">
-          <Icon icon="mdi:network" class="text-2xl text-secondary mr-2" />
+          <!-- <Icon icon="mdi:network" class="text-2xl text-secondary mr-2" /> -->
           <div class="text-lg font-semibold text-main">Network Statistics</div>
         </div>
         
         <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
           <!-- Total Wallets -->
-          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-secondary/50">
-            <div class="text-xs text-secondary flex items-center">
-              <Icon icon="mdi:wallet" class="mr-1 text-secondary" />
-              <span>Total Wallets</span>
+          <div class="bg-base-200 p-3 rounded-[20px] hover:bg-base-300">
+            <div class="text-xs text-secondary flex items-center justify-center">
+              <Icon icon="mdi:wallet" class="mr-1 text-[#64748B;]" />
+              <span class="text-[#64748B;]">Total Wallets</span>
             </div>
-            <div class="text-xl font-medium mt-1">{{ networkStats.wallets.toLocaleString() }}</div>
+            <div class="text-xl font-medium mt-1 flex items-center justify-center">{{ networkStats.wallets.toLocaleString() }}</div>
           </div>
           
           <!-- Applications -->
-          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-secondary/50">
-            <div class="text-xs text-secondary flex items-center">
-              <Icon icon="mdi:apps" class="mr-1 text-secondary" />
-              <span>Applications</span>
+          <div class="bg-base-200 p-3 rounded-[20px] hover:bg-base-300">
+            <div class="text-xs text-secondary flex items-center justify-center">
+              <Icon icon="mdi:apps" class="mr-1 text-[#64748B;]" />
+              <span class="text-[#64748B;]">Applications</span>
             </div>
-            <div class="text-xl font-medium mt-1">{{ networkStats.applications.toLocaleString() }}</div>
+            <div class="text-xl font-medium mt-1 flex items-center justify-center">{{ networkStats.applications.toLocaleString() }}</div>
           </div>
           
           <!-- Suppliers -->
-          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-secondary/50">
-            <div class="text-xs text-secondary flex items-center">
-              <Icon icon="mdi:package-variant" class="mr-1 text-secondary" />
-              <span>Suppliers</span>
+          <div class="bg-base-200 p-3 rounded-[20px] hover:bg-base-300">
+            <div class="text-xs text-secondary flex items-center justify-center">
+              <Icon icon="mdi:package-variant" class="mr-1 text-[#64748B;]" />
+              <span class="text-[#64748B;]">Suppliers</span>
             </div>
-            <div class="text-xl font-medium mt-1">{{ networkStats.suppliers.toLocaleString() }}</div>
+            <div class="text-xl font-medium mt-1 flex items-center justify-center">{{ networkStats.suppliers.toLocaleString() }}</div>
           </div>
           
           <!-- Gateways -->
-          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-secondary/50">
-            <div class="text-xs text-secondary flex items-center">
-              <Icon icon="mdi:gate" class="mr-1 text-secondary" />
-              <span>Gateways</span>
+          <div class="bg-base-200 p-3 rounded-[20px] hover:bg-base-300">
+            <div class="text-xs text-secondary flex items-center justify-center">
+              <Icon icon="mdi:gate" class="mr-1 text-[#64748B;]" />
+              <span class="text-[#64748B;]">Gateways</span>
             </div>
-            <div class="text-xl font-medium mt-1">{{ networkStats.gateways.toLocaleString() }}</div>
+            <div class="text-xl font-medium mt-1 flex items-center justify-center">{{ networkStats.gateways.toLocaleString() }}</div>
           </div>
           
           <!-- Services -->
-          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-secondary/50">
-            <div class="text-xs text-secondary flex items-center">
-              <Icon icon="mdi:handshake" class="mr-1 text-secondary" />
-              <span>Services</span>
+          <div class="bg-base-200 p-3 rounded-[20px] hover:bg-base-300">
+            <div class="text-xs text-secondary flex items-center justify-center">
+              <Icon icon="mdi:handshake" class="mr-1 text-[#64748B;]" />
+              <span class="text-[#64748B;]">Services</span>
             </div>
-            <div class="text-xl font-medium mt-1">{{ networkStats.services.toLocaleString() }}</div>
+            <div class="text-xl font-medium mt-1 flex items-center justify-center">{{ networkStats.services.toLocaleString() }}</div>
           </div>
           
           <!-- Active Validators -->
-          <div class="bg-base-200 p-3 rounded-md hover:bg-base-300 transition-all duration-200 border-l-4 border-secondary/50">
-            <div class="text-xs text-secondary flex items-center">
-              <Icon icon="mdi:shield-check" class="mr-1 text-secondary" />
-              <span>Active Validators</span>
+          <div class="bg-base-200 p-3 rounded-[20px] hover:bg-base-300">
+            <div class="text-xs text-secondary flex items-center justify-center">
+              <Icon icon="mdi:shield-check" class="mr-1 text-[#64748B;]" />
+              <span class="text-[#64748B;]">Active Validators</span>
             </div>
-            <div class="text-xl font-medium mt-1">{{ activeValidatorsCount }}</div>
+            <div class="text-xl font-medium mt-1 flex items-center justify-center">{{ activeValidatorsCount }}</div>
           </div>
         </div>
       </div>
@@ -1076,33 +1099,74 @@ watch(() => base.blocktime, (newVal, oldVal) => {
           <div class="text-secondary">No active proposals at this time</div>
         </div>
       </div>
-    
 
     <!-- Charts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
       <!-- Network Growth Chart -->
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-primary">
+      <div class="bg-base-200 px-4 pt-3 pb-4 rounded-md shadow-md">
         <div class="flex items-center mb-4">
-          <Icon icon="mdi:chart-line" class="text-2xl text-primary mr-2" />
+          <!-- <Icon icon="mdi:chart-line" class="text-2xl text-primary mr-2" /> -->
           <div class="text-lg font-semibold text-main">Network Growth (7 Days)</div>
         </div>
-        <div class="bg-base-200 p-4 rounded-md">
+        <div class="bg-white dark:bg-base-200 p-4 rounded-md">
           <div class="h-80">
             <ApexCharts type="area" height="280" :options="chartOptions" :series="historicalData.series" />
           </div>
         </div>
+        <div class="text-xs text-secondary mt-2 mr-2 flex space-x-4 items-center">
+          <span class="flex items-center space-x-0.5">
+            <span class="w-3 h-3 bg-[#FFB206;] rounded"></span>
+            <span>Applications</span>
+          </span>
+
+          <span class="flex items-center space-x-0.5">
+            <span class="w-3 h-3 bg-[#09279F;] rounded"></span>
+            <span>Suppliers</span>
+          </span>
+
+          <span class="flex items-center space-x-0.5">
+            <span class="w-3 h-3 bg-[#5E9AE4;] rounded"></span>
+            <span>Gateways</span>
+          </span>
+
+          <span class="flex items-center space-x-0.5">
+            <span class="w-3 h-3 bg-[#60BC29;] rounded"></span>
+            <span>Services</span>
+          </span>
+        </div>
       </div>
       
       <!-- Transaction History Chart -->
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-warning">
+      <div class="bg-base-200 px-4 pt-3 pb-4 rounded-md shadow-md">
         <div class="flex items-center mb-4">
-          <Icon icon="mdi:chart-timeline-variant" class="text-2xl text-warning mr-2" />
+          <!-- <Icon icon="mdi:chart-timeline-variant" class="text-2xl text-warning mr-2" /> -->
           <div class="text-lg font-semibold text-main">Transaction History</div>
         </div>
-        <div class="bg-base-200 p-4 rounded-md">
+        <div class="bg-white dark:bg-base-200 p-4 rounded-md">
           <div class="h-80">
             <ApexCharts type="area" height="280" :options="txChartOptions" :series="txChartSeries" />
           </div>
+        </div>
+        <div class="text-xs text-secondary mt-2 mr-2 flex space-x-4 items-center">
+          <span class="flex items-center space-x-0.5">
+            <span class="w-3 h-3 bg-[#FFB206;] rounded"></span>
+            <span>XX</span>
+          </span>
+
+          <span class="flex items-center space-x-0.5">
+            <span class="w-3 h-3 bg-[#09279F;] rounded"></span>
+            <span>XX</span>
+          </span>
+
+          <span class="flex items-center space-x-0.5">
+            <span class="w-3 h-3 bg-[#5E9AE4;] rounded"></span>
+            <span>X</span>
+          </span>
+
+          <span class="flex items-center space-x-0.5">
+            <span class="w-3 h-3 bg-[#60BC29;] rounded"></span>
+            <span>X</span>
+          </span>
         </div>
       </div>
     </div>
@@ -1110,30 +1174,30 @@ watch(() => base.blocktime, (newVal, oldVal) => {
     <!-- Tables Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
       <!-- Blocks Table -->
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-info">
+      <div class="bg-base-200 px-4 pt-3 pb-4 rounded-md shadow-md ">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center">
-            <Icon icon="mdi:cube-outline" class="text-2xl text-info mr-2" />
+            <!-- <Icon icon="mdi:cube-outline" class="text-2xl text-info mr-2" /> -->
             <div class="text-lg font-semibold text-main">Latest Blocks</div>
           </div>
-          <RouterLink :to="`/${chain}/block`" class="text-info hover:text-info/70 text-sm flex items-center transition-colors duration-200">
+          <RouterLink :to="`/${chain}/block`" class="text-[#64748B;] hover:text-info/70 text-sm flex items-center transition-colors duration-200">
             View All
             <Icon icon="mdi:arrow-right" class="ml-1" />
           </RouterLink>
         </div>
         
-        <div class="bg-base-200 rounded-md overflow-auto" style="max-height: 30rem;" ref="blockTableContainer">
+        <div class="bg-white rounded-md overflow-auto" style="max-height: 30rem;" ref="blockTableContainer">
           <div class="flex justify-center items-center py-8" v-if="base.fetchingBlocks">
             <div class="loading loading-spinner loading-lg text-info"></div>
           </div>
           <table class="table table-compact w-full" v-else>
-            <thead class="bg-base-300 sticky top-0">
+            <thead class="bg-white sticky top-0">
               <tr>
-                <th class="bg-base-300">{{ $t('block.block_header') }}</th>
-                <th class="bg-base-300">{{ $t('account.hash') }}</th>
-                <th class="bg-base-300">{{ $t('block.proposer') }}</th>
-                <th class="bg-base-300">{{ $t('module.tx') }}</th>
-                <th class="bg-base-300">{{ $t('account.time') }}</th>
+                <th class="bg-white dark:bg-base-200">{{ $t('block.block_header') }}</th>
+                <th class="bg-white dark:bg-base-200">{{ $t('account.hash') }}</th>
+                <th class="bg-white dark:bg-base-200">{{ $t('block.proposer') }}</th>
+                <th class="bg-white dark:bg-base-200">{{ $t('module.tx') }}</th>
+                <th class="bg-white dark:bg-base-200">{{ $t('account.time') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -1143,7 +1207,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
               </tr>
               
               <!-- Render only visible blocks -->
-              <tr v-for="item in visibleBlocks" :key="item.index" class="hover:bg-base-300 transition-colors duration-200">
+              <tr v-for="item in visibleBlocks" :key="item.index" class="dark:bg-base-200 hover:bg-base-300 transition-colors duration-200">
                 <td class="font-medium">{{ item.item.block.header.height }}</td>
                 <td class="truncate text-info" style="max-width: 18rem; overflow:hidden;">
                   <RouterLink class="truncate hover:underline" :title="item.item.block_id.hash"
@@ -1165,28 +1229,28 @@ watch(() => base.blocktime, (newVal, oldVal) => {
       </div>
       
       <!-- Transactions Table -->
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-warning">
+      <div class="bg-base-200 px-4 pt-3 pb-4 rounded-md shadow-md">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center">
-            <Icon icon="mdi:file-document-outline" class="text-2xl text-warning mr-2" />
+            <!-- <Icon icon="mdi:file-document-outline" class="text-2xl text-warning mr-2" /> -->
             <div class="text-lg font-semibold text-main">{{ $t('module.rtx') }}</div>
           </div>
-          <RouterLink :to="`/${chain}/tx`" class="text-warning hover:text-warning/70 text-sm flex items-center transition-colors duration-200">
+          <RouterLink :to="`/${chain}/tx`" class="text-[#64748B;] hover:text-info/70 text-sm flex items-center transition-colors duration-200">
             View All
             <Icon icon="mdi:arrow-right" class="ml-1" />
           </RouterLink>
         </div>
         
-        <div class="bg-base-200 rounded-md overflow-auto" style="max-height: 30rem;" ref="txTableContainer">
+        <div class="bg-white rounded-md overflow-auto" style="max-height: 30rem;" ref="txTableContainer">
           <table class="table table-compact w-full">
-            <thead class="bg-base-300 sticky top-0">
+            <thead class="bg-white sticky top-0">
               <tr>
-                <th class="bg-base-300">{{ $t('tx.tx_hash') }}</th>
-                <th class="bg-base-300">{{ $t('block.block') }}</th>
-                <th class="bg-base-300">{{ $t('staking.status') }}</th>
-                <th class="bg-base-300">{{ $t('account.type') }}</th>
-                <th class="bg-base-300">{{ $t('block.fees') }}</th>
-                <th class="bg-base-300">{{ $t('account.time') }}</th>
+                <th class="bg-white dark:bg-base-200">{{ $t('tx.tx_hash') }}</th>
+                <th class="bg-white dark:bg-base-200">{{ $t('block.block') }}</th>
+                <th class="bg-white dark:bg-base-200">{{ $t('staking.status') }}</th>
+                <th class="bg-white dark:bg-base-200">{{ $t('account.type') }}</th>
+                <th class="bg-white dark:bg-base-200">{{ $t('block.fees') }}</th>
+                <th class="bg-white dark:bg-base-200">{{ $t('account.time') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -1196,7 +1260,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
               </tr>
               
               <!-- Render only visible transactions -->
-              <tr v-for="item in visibleTxs" :key="item.index" class="hover:bg-base-300 transition-colors duration-200">
+              <tr v-for="item in visibleTxs" :key="item.index" class="dark:bg-base-200 hover:bg-base-300 transition-colors duration-200">
                 <td class="truncate text-warning" style="max-width:14rem">
                   <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.item.hash}`">{{
                     item.item.hash
@@ -1236,7 +1300,6 @@ watch(() => base.blocktime, (newVal, oldVal) => {
         <ArrayObjectElement :value="paramStore.nodeVersion?.items" :thead="false" />
       </div>
     </div>
-  </div>
 </template>
 
 <route>

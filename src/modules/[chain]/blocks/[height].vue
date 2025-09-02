@@ -105,37 +105,51 @@ onBeforeRouteUpdate(async (to, from, next) => {
       </div>
     </div>
     <div v-else>
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-        <h2 class="card-title flex flex-row justify-between">
-          <p class="">#{{ current.block?.header?.height }}</p>
-          <div class="flex" v-if="props.height">
-            <RouterLink :to="`/${store.blockchain.chainName}/blocks/${height - 1}`"
-              class="btn btn-primary btn-sm p-1 text-2xl mr-2">
-              <Icon icon="mdi-arrow-left" class="w-full h-full" />
-            </RouterLink>
-            <RouterLink :to="`/${store.blockchain.chainName}/blocks/${height + 1}`"
-              class="btn btn-primary btn-sm p-1 text-2xl">
-              <Icon icon="mdi-arrow-right" class="w-full h-full" />
-            </RouterLink>
-          </div>
-        </h2>
+      <div class="flex flex-row justify-between mb-4 mt-4 gap-4">
+        <div class="dark:bg-base-100 bg-[#09279F;] w-[85%;] h-[60px;] px-4 rounded-2xl mb-4 bt-4">
+          <h2 class="card-title flex flex-row justify-between items-center">
+            <p class="text-[#ffffff;] text-[30px]/[66px]">#{{ current.block?.header?.height }}</p>
+          </h2>
+        </div>
+        <div class="flex justify-end items-center mb-4 w-[15%;] space-x-0" v-if="props.height">
+          <RouterLink :to="`/${store.blockchain.chainName}/blocks/${height - 1}`"
+            class="dark:bg-[#09279F;] bg-[#F2F2F2;] rounded-2xl p-1 w-[47%;] h-[60px;] text-2xl mr-1 flex items-center justify-center">
+            <Icon icon="mdi-arrow-left" class="w-[24px;] h-[24px;] dark:text-blue-100/50 text-[#64748B;]" />
+          </RouterLink>
+          <RouterLink :to="`/${store.blockchain.chainName}/blocks/${height + 1}`"
+            class="dark:bg-[#09279F] bg-[#64748B] rounded-2xl p-1 w-[45%] h-[60px] text-2xl flex items-center justify-center">
+            <Icon icon="mdi-arrow-right" class="w-[24px] h-[24px] dark:text-blue-100/50 text-[#FFFFFF]" />
+          </RouterLink>
+        </div>
+      </div>
+      
+      
+
+      <div class="dark:bg-base-200  px-4 pt-3 pb-4 rounded-2xl mb-4 border dark:border-base-100 border-gray-200">
         <div>
           <DynamicComponent :value="current.block_id" />
         </div>
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-        <h2 class="card-title flex flex-row justify-between">{{ $t('block.block_header') }}</h2>
+
+      <div class="dark:bg-base-100 bg-base-200 rounded-2xl border border-gray-200 dark:border-gray-700 mb-4 overflow-auto">
+        <div class="px-4 py-2">
+          <h2 class="text-base font-semibold text-[#171C1F] dark:text-[#ffffff;]">{{ $t('block.block_header') }}</h2>
+        </div>
         <DynamicComponent :value="current.block?.header" />
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-        <h2 class="card-title flex flex-row justify-between">{{ $t('account.transactions') }}</h2>
+      <div class="bg-base-200 rounded-2xl border border-gray-200 dark:border-gray-700 mb-4 overflow-auto">
+        <div class="px-4 py-2">
+          <h2 class="card-title flex flex-row justify-between text-[#171C1F] dark:text-[#ffffff;]">{{ $t('account.transactions') }}</h2>
+        </div>
         <TxsElement :value="current.block?.data?.txs" />
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
-        <h2 class="card-title flex flex-row justify-between">{{ $t('block.last_commit') }}</h2>
+      <div class="bg-base-200 rounded-2xl border border-gray-200 dark:border-gray-700 mb-4 overflow-auto">
+        <div class="px-4 py-2">
+          <h2 class="card-title flex flex-row justify-between text-[#171C1F] dark:text-[#ffffff;]">{{ $t('block.last_commit') }}</h2>
+        </div>
         <DynamicComponent :value="current.block?.last_commit" />
       </div>
   </div>

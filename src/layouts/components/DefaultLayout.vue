@@ -154,246 +154,151 @@ const handleSafariChainChange = (event: Event) => {
 
 <template>
   <div>
-    <header class="bg-base-200 shadow-md dark:bg-[#231f20;] px-4">
-      <!-- DESKTOP NAV - Only shown on desktop, hidden on mobile -->
-      <div class="desktop-nav">
-        <div class="container mx-auto px-5 py-2 flex justify-between items-center">
+<header class="bg-white shadow-md dark:bg-[#231f20;] px-4" style="background-color: #09279F;">
+  <!-- DESKTOP NAV -->
+  <div class="desktop-nav">
+    <div class="container mx-auto px-5 py-2 flex justify-between items-center">
 
-          <div class="flex items-center">
-            <a :href="`/${currentChain?.chainName}`" class="flex items-center mr-5">
-              <img class="w-10 h-10"
-                src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
-              <h1 class="flex-1 ml-1 text-lg font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
-                POCKET
-              </h1>
-            </a>
-            
-            <!-- Safari-specific select element for chain selection -->
-            <div v-if="isSafari" class="mr-5">
-              <select 
-                class="safari-select px-3 py-1 border-2 border-info rounded-md bg-base-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 cursor-pointer" 
-                @change="handleSafariChainChange"
-                :value="currentChain?.chainName">
-                <option v-for="chain in Object.values(dashboard.chains).sort((a,b)=>{
-                  return a.prettyName.localeCompare(b.prettyName)
-                })" :key="chain.chainName" :value="chain.chainName" 
-                :selected="currentChain?.chainName === chain.chainName">
+      <div class="flex items-center">
+        <a :href="`/${currentChain?.chainName}`" class="flex items-center mr-5">
+          <img class="w-10 h-10"
+            src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
+          <h1 class="flex-1 ml-1 text-white font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
+            POCKET
+          </h1>
+        </a>
+        
+        <!-- Safari-specific select element -->
+        <div v-if="isSafari" class="mr-5">
+          <select 
+            class="safari-select px-3 py-1 border-2 border-info rounded-md bg-white dark:bg-gray-800 text-slate-500 dark:text-slate-500 cursor-pointer"
+            @change="handleSafariChainChange"
+            :value="currentChain?.chainName">
+            <option v-for="chain in Object.values(dashboard.chains).sort((a,b)=>{
+              return a.prettyName.localeCompare(b.prettyName)
+            })" :key="chain.chainName" :value="chain.chainName" 
+            :selected="currentChain?.chainName === chain.chainName">
+              {{ chain.prettyName }}
+            </option>
+          </select>
+        </div>
+        
+        <!-- Standard dropdown for non-Safari -->
+        <div v-else
+          class="dropdown dropdown-end flex align-center justify-center mr-5 border-solid border-2 border-info shadow-md rounded-md bg-white dark:bg-[#231f20]">
+          <label tabindex="0" class="btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-2 mr-5"
+            @click="toggleDropdown">
+            <span class="mr-1 flex flex-2 text-slate-500" style="font-size: 0.8rem;text-transform: unset !important;">{{
+              currentChain?.prettyName }}</span>
+              <span v-if="behind" class="text-error">Syncing...</span>
+              <span v-else :class="baseStore.connected ? 'text-success' : 'text-error'">{{ baseStore.connected ? '🟢' : '🔴' }}</span>
+            <Icon icon="mdi-chevron-down" class="ml-1 flex flex-1" />
+          </label>
+          <ul v-show="dropdownOpen" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50"
+            style="font-size: 0.8rem;">
+            <li v-for="chain in Object.values(dashboard.chains).sort((a,b)=>{
+              return b.prettyName.localeCompare(a.prettyName)
+            })" :key="chain.chainName">
+              <a :href="`/${chain.chainName}`" 
+                 class="hover:bg-gray-100 dark:hover:bg-[#373f59] bg-white dark:bg-[#231f20]"
+                 :class="{ 'font-bold': currentChain?.chainName === chain.chainName }">
+                <div class="capitalize text-slate-500 dark:text-gray-200" style="font-size: 0.8rem;">
                   {{ chain.prettyName }}
-                </option>
-              </select>
-            </div>
-            
-            <!-- Standard dropdown for non-Safari browsers -->
-            <div v-else
-              class="dropdown dropdown-end flex align-center justify-center mr-5 border-solid border-2 border-info shadow-md rounded-md">
-              <label tabindex="0" class="btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-2 mr-5"
-                @click="toggleDropdown">
-                <span class="mr-1 flex flex-2" style="font-size: 0.8rem;text-transform: unset !important;">{{
-                  currentChain?.prettyName }}</span>
-                <Icon icon="mdi-chevron-down" class="ml-1 flex flex-1" />
-              </label>
-              <ul v-show="dropdownOpen" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50"
-                style="font-size: 0.8rem;">
-                <li v-for="chain in Object.values(dashboard.chains).sort((a,b)=>{
-                  return b.prettyName.localeCompare(a.prettyName)
-                })" :key="chain.chainName">
-                  <a :href="`/${chain.chainName}`" class="hover:bg-gray-100 dark:hover:bg-[#373f59]"
-                    :class="{ 'font-bold': currentChain?.chainName === chain.chainName }">
-                    <div class="capitalize text-gray-700 dark:text-gray-200" style="font-size: 0.8rem;">
-                      {{ chain.prettyName }}
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <span v-if="behind" class="text-error">Syncing...</span>
-            <span v-else :class="baseStore.connected ? 'text-success' : 'text-error'">{{ baseStore.connected ? '🟢  Online' : '🔴  Offline' }}</span>
-            <!-- <span v-else class="pill mr-5">{{ alpha_beta }}</span> -->
-          </div>
-          <!-- Main nav items -->
-          <div class="flex items-center">
-            <div v-for="(item, index) of mainNavItems" :key="index" class="flex justify-between items-center">
-              <div v-if="isNavGroup(item)" :tabindex="index" class="collapse flex" :class="{
-                'collapse-arrow': index > 0 && item?.children?.length > 0,
-                'collapse-open': index === 0 && sidebarOpen,
-                'collapse-close': index === 0 && !sidebarOpen,
-              }">
-                <input v-if="index > 0" type="checkbox" class="cursor-pointer !h-10 block" @click="changeOpen(index)" />
-              </div>
-
-              <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="sidebarShow = false"
-                class="cursor-pointer rounded-lg px-2 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
-                <div class="capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap"
-                  style="font-size: 0.8rem;">
-                  {{ $t(item?.title) }}
                 </div>
-                <div v-if="item?.badgeContent" class="badge badge-sm text-white border-none" :class="item?.badgeClass">
-                  {{ item?.badgeContent }}
-                </div>
-              </RouterLink>
-
-              <div v-if="isNavTitle(item)" class="px-1 text-sm text-gray-400 pb-2 uppercase">
-                {{ item?.heading }}
-              </div>
-            </div>
-            <a :href="`/${currentChain?.chainName}`" @click="sidebarShow = false"
-              class="hover:bg-gray-100 dark:hover:bg-[#373f59] mr-5">
-              <div class="capitalize text-gray-700 dark:text-gray-200" style="font-size: 1rem;">
-                Home
-              </div>
-            </a>
-            <!-- "More" dropdown for additional nav items -->
-            <div v-if="moreNavItems?.length > 0"
-              class="dropdown dropdown-end flex align-center justify-center mr-5 border-solid border-b-1 border-success shadow-md rounded-md">
-              <label tabindex="0"
-                class="btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-2 mr-5 text-primary"
-                @click="toggleModuleDropdown">
-                <span class="mr-1 flex flex-1" style="font-size: 1rem;text-transform: unset !important;">
-                  <!-- {{ show title of the current route }} -->
-                  Blockchain
-                </span>
-                <Icon icon="mdi-chevron-down" class="ml-1 flex flex-1" />
-              </label>
-              <ul v-show="moduleDropdownOpen" tabindex="0"
-                class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50" style="font-size: 0.8rem;">
-                <li v-for="(item, index) in moreNavItems" :key="'more-' + index" @click="toggleModuleDropdown">
-                  <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="sidebarShow = false"
-                    class="hover:bg-gray-100 dark:hover:bg-[#373f59]">
-                    <div class="capitalize text-gray-700 dark:text-gray-200" style="font-size: 0.8rem;">
-                      {{ $t(item?.title) }}
-                    </div>
-                    <div v-if="item?.badgeContent" class="badge badge-sm text-white border-none"
-                      :class="item?.badgeClass">
-                      {{ item?.badgeContent }}
-                    </div>
-                  </RouterLink>
-
-                  <!-- Special handling for NavGroups in dropdown -->
-                  <div v-if="isNavGroup(item)" class="dropdown dropdown-hover dropdown-right">
-                    <label tabindex="0" class="hover:bg-gray-100 dark:hover:bg-[#373f59] w-full text-start">
-                      <span style="font-size: 0.9rem;">{{ $t(item?.title) }}</span>
-                    </label>
-                    <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50">
-                      <li v-for="(subItem, subIndex) in item.children" :key="'submenu-' + subIndex">
-                        <RouterLink v-if="isNavLink(subItem)" :to="subItem?.to" @click="sidebarShow = false"
-                          class="hover:bg-gray-100 dark:hover:bg-[#373f59]">
-                          <span style="font-size: 0.9rem;">{{ $t(subItem?.title) }}</span>
-                        </RouterLink>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Icons section -->
-            <div class="py-2 flex justify-between items-center">
-              <NavbarSearch class="!inline-block" />
-              <NavbarThemeSwitcher class="!inline-block pt-1" />
-            </div>
-          </div>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
 
-      <!-- MOBILE NAV - Only shown on mobile, hidden on desktop -->
-      <div class="mobile-nav">
-        <div class="container mx-auto px-1 py-2 flex items-center justify-between">
-          <button class="flex items-center px-3 py-2" @click="toggleMobileMenu">
-            <Icon icon="mdi:menu" class="h-6 w-6 dark:text-white" />
-          </button>
+      <!-- Main nav items -->
+      <div class="flex items-center">
+        <div v-for="(item, index) of mainNavItems" :key="index" class="flex justify-between items-center">
+          <div v-if="isNavGroup(item)" :tabindex="index" class="collapse flex" :class="{
+            'collapse-arrow': index > 0 && item?.children?.length > 0,
+            'collapse-open': index === 0 && sidebarOpen,
+            'collapse-close': index === 0 && !sidebarOpen,
+          }">
+            <input v-if="index > 0" type="checkbox" class="cursor-pointer !h-10 block" @click="changeOpen(index)" />
+          </div>
 
-          <a :href="`/${currentChain?.chainName}`" class="flex items-center">
-            <img class="w-8 h-8"
-              src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
-            <h1 class="flex-1 ml-2 text-base font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
-              POCKET
-            </h1>
-          </a>
+          <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="sidebarShow = false"
+            class="cursor-pointer rounded-lg px-2 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
+            <div class="capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap"
+              style="font-size: 0.8rem;">
+              {{ $t(item?.title) }}
+            </div>
+            <div v-if="item?.badgeContent" class="badge badge-sm text-white border-none" :class="item?.badgeClass">
+              {{ item?.badgeContent }}
+            </div>
+          </RouterLink>
 
-          <NavbarThemeSwitcher class="!inline-block pt-1" />
+          <div v-if="isNavTitle(item)" class="px-1 text-sm text-gray-400 pb-2 uppercase">
+            {{ item?.heading }}
+          </div>
         </div>
 
-        <div v-if="mobileMenuOpen" class="mobile-menu">
-          <div class="px-2 pt-2 pb-3 space-y-1">
-            <!-- Add Chain Selection Dropdown for mobile -->
-            <div class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 mb-2">
-              <div class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
-                Select Blockchain
-              </div>
+        <a :href="`/${currentChain?.chainName}`" @click="sidebarShow = false"
+          class="hover:bg-gray-100 dark:hover:bg-[#373f59] mr-5">
+          <div class="capitalize text-white dark:text-gray-200" style="font-size: 1rem;">
+            Home
+          </div>
+        </a>
 
-              <!-- Safari-specific select element for mobile -->
-              <div v-if="isSafari" class="mb-1">
-                <select 
-                  class="safari-select w-full px-3 py-2 border border-info rounded-lg bg-base-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 cursor-pointer"
-                  @change="handleSafariChainChange"
-                  :value="currentChain?.chainName">
-                  <option v-for="chain in Object.values(dashboard.chains).sort((a,b)=>{
-                    return a.prettyName.localeCompare(b.prettyName)
-                  })" :key="chain.chainName" :value="chain.chainName" 
-                  :selected="currentChain?.chainName === chain.chainName">
-                    {{ chain.prettyName }}
-                  </option>
-                </select>
-              </div>
+        <!-- Icons section (Search + Theme + Blockchain) -->
+        <div class="py-2 flex justify-between items-center">
+          <NavbarSearch class="!inline-block" />
+          <NavbarThemeSwitcher class="!inline-block pt-1" />
 
-              <!-- Standard dropdown for non-Safari browsers -->
-              <div v-else>
-                <div class="flex items-center justify-between rounded-lg border border-info p-2">
-                  <div class="flex items-center">
-                    <span class="text-base font-medium text-gray-700 dark:text-gray-200">{{ currentChain?.prettyName
-                    }}</span>
-                  </div>
-                  <button @click="toggleMobileChainDropdown" class="p-1">
-                    <Icon icon="mdi-chevron-down" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                  </button>
-                </div>
-                <div v-if="mobileChainDropdownOpen" class="mt-1 rounded-md bg-white dark:bg-gray-800 shadow-lg">
-                  <div class="py-1 max-h-60 overflow-auto">
-                    <div v-for="chain in dashboard.chains" :key="chain.chainName"
-                      @click="mobileMenuOpen = false; mobileChainDropdownOpen = false"
-                      class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]">
-                      <a :href="`/${chain.chainName}`" class="block w-full"
-                        :class="{ 'font-bold': currentChain?.chainName === chain.chainName }">
-                        <div class="capitalize text-gray-700 dark:text-gray-200">
-                          {{ chain.prettyName }}
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End Chain Selection -->
-
-            <div v-for="(item, index) of mainNavItems.concat(moreNavItems)" :key="'mobile-' + index">
-              <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="mobileMenuOpen = false; sidebarShow = false"
-                class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-[#373f59] text-gray-700 dark:text-gray-200">
-                {{ $t(item?.title) }}
-              </RouterLink>
-
-              <template v-if="isNavGroup(item)">
-                <div class="space-y-1 pl-4">
-                  <div class="px-3 py-2 text-gray-500 dark:text-gray-400 font-medium">
+          <!-- Blockchain moved here -->
+          <div v-if="moreNavItems?.length > 0"
+            class="dropdown dropdown-end flex bg-white dark:bg-[#231f20;] align-center justify-center ml-3 border-solid border-b-1 border-success shadow-md rounded-md">
+            <label tabindex="0"
+              class="btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-2 mr-5 text-primary"
+              @click="toggleModuleDropdown">
+              <span class="mr-1 flex flex-1 text-[#64748B;]" style="font-size: 1rem;text-transform: unset !important;">
+                Blockchain
+              </span>
+              <Icon icon="mdi-chevron-down" class="ml-1 flex flex-1" />
+            </label>
+            <ul v-show="moduleDropdownOpen" tabindex="0"
+              class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50" style="font-size: 0.8rem;">
+              <li v-for="(item, index) in moreNavItems" :key="'more-' + index" @click="toggleModuleDropdown">
+                <RouterLink v-if="isNavLink(item)" :to="item?.to" @click="sidebarShow = false"
+                  class="hover:bg-gray-100 dark:hover:bg-[#373f59]">
+                  <div class="capitalize text-gray-700 dark:text-gray-200" style="font-size: 0.8rem;">
                     {{ $t(item?.title) }}
                   </div>
-                  <div v-for="(subItem, subIndex) in (item as NavGroup).children" :key="'mobile-sub-' + subIndex">
-                    <RouterLink v-if="isNavLink(subItem)" :to="subItem?.to"
-                      @click="mobileMenuOpen = false; sidebarShow = false"
-                      class="block px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-[#373f59] text-gray-700 dark:text-gray-200">
-                      {{ $t(subItem?.title) }}
-                    </RouterLink>
+                  <div v-if="item?.badgeContent" class="badge badge-sm text-white border-none"
+                    :class="item?.badgeClass">
+                    {{ item?.badgeContent }}
                   </div>
+                </RouterLink>
+
+                <!-- Sub menu -->
+                <div v-if="isNavGroup(item)" class="dropdown dropdown-hover dropdown-right">
+                  <label tabindex="0" class="hover:bg-gray-100 dark:hover:bg-[#373f59] w-full text-start">
+                    <span style="font-size: 0.9rem;">{{ $t(item?.title) }}</span>
+                  </label>
+                  <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50">
+                    <li v-for="(subItem, subIndex) in item.children" :key="'submenu-' + subIndex">
+                      <RouterLink v-if="isNavLink(subItem)" :to="subItem?.to" @click="sidebarShow = false"
+                        class="hover:bg-gray-100 dark:hover:bg-[#373f59]">
+                        <span style="font-size: 0.9rem;">{{ $t(subItem?.title) }}</span>
+                      </RouterLink>
+                    </li>
+                  </ul>
                 </div>
-              </template>
-            </div>
-          </div>
-          <div class="px-4 py-3 border-t border-gray-200 dark:border-gray-700 flex justify-between">
-            <NavbarSearch class="!inline-block" />
+              </li>
+            </ul>
           </div>
         </div>
       </div>
-    </header>
-    <div class="bg-base-200 dark:bg-[#231f20;] overflow-scroll no-scrollbar" style="height:calc(100vh - 5rem)">
+    </div>
+  </div>
+</header>
+
+    <div class="bg-white dark:bg-[#231f20;] overflow-scroll no-scrollbar" style="height:calc(100vh - 5rem)">
       <div class="w-11/12 mx-auto">
         <!-- 👉 Pages -->
         <div class="overflow-scroll no-scrollbar" style="height:calc(100vh - 8rem)">

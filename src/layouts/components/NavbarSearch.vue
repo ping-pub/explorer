@@ -146,7 +146,7 @@ function confirm() {
     <div class="flex">
       <div class="flex items-center relative">
         <input class="input w-[22rem] !input-bordered" v-model="searchQuery"
-          placeholder="Height/Transaction/Account Address" />
+          placeholder="Search by Address / Transaction / Block / Token..." />
         <button class="btn btn-ghost btn-circle btn-sm mx-1" @click="confirm">
           <Icon icon="mdi:magnify" class="text-2xl text-gray-500 dark:text-gray-400" />
         </button>
