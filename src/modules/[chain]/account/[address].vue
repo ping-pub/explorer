@@ -182,18 +182,18 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
 <template>
   <div v-if="account">
     <!-- address -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-[#09279F] dark:bg-base-200 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">
       <div class="flex items-center">
         <!-- img -->
-        <div class="inline-flex relative w-11 h-11 rounded-md">
+        <!-- <div class="inline-flex relative w-11 h-11 rounded-md">
           <div class="w-11 h-11 absolute rounded-md opacity-10 bg-primary"></div>
           <div class="w-full inline-flex items-center align-middle flex-none justify-center">
             <Icon icon="mdi-qrcode" class="text-primary" style="width: 27px; height: 27px" />
           </div>
-        </div>
+        </div> -->
         <!-- content -->
-        <div class="flex flex-1 flex-col truncate pl-4">
-          <h2 class="text-sm card-title">{{ $t('account.address') }}:</h2>
+        <div class="flex items-center flex-1 space-x-10 pl-4">
+          <h2 class="text-3xl card-title">{{ $t('account.address') }}</h2>
           <span class="text-xs truncate" style="width:max-content"> {{ address }} {{ "&nbsp;&nbsp;&nbsp;" }}
             <span class="float-right" style="width:max-content" v-if="copied">&nbsp;&nbsp;Copied!</span>
             <Icon class="float-right" icon="ic:round-content-copy" @click="copy(address)" />
@@ -203,9 +203,9 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
     </div>
 
     <!-- Assets -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <div class="flex justify-between">
-        <h2 class="card-title mb-4">{{ $t('account.assets') }}</h2>
+    <div class="rounded-2xl border dark:border-gray-700 border-[#FFB206;] mb-4 overflow-auto">
+      <div class="flex justify-between text-main mb-4 dark:bg-base-100 bg-base-200 px-4 py-2">
+        <h2 class="text-2xl font-semibold text-[#171C1F] dark:text-[#ffffff;]">{{ $t('account.assets') }}</h2>
         <!-- button -->
         <!-- <div class="flex justify-end mb-4 pr-5">
           <label for="send" class="btn btn-primary btn-sm mr-2" @click="dialog.open('send', {}, updateEvent)">{{
@@ -225,44 +225,67 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
         <div class="md:!col-span-1">
           <DonutChart :series="donutData.map(x => x.amount)" :labels="donutData.map(x => x.label)" />
         </div>
-        <div class="mt-4 md:!col-span-1 md:!mt-0 md:!ml-4">
+        <div class="mt-4 md:!col-span-1 md:!mt-0 md:!ml-3">
           <!-- list-->
           <div class="">
             <!--balances  -->
-            <div class="flex items-center px-4 mb-2" v-for="(balanceItem, index) in balances" :key="index">
-              <div class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4">
+
+          <div class="grid grid-cols-3 gap-[50%]">
+            <div class="flex flex-col items-start mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
+              <h2 class="text-[#64748B;] text-sm">Status</h2>
+              <!-- <div class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4">
                 <Icon icon="mdi-account-cash" class="text-balance" size="20" />
                 <div class="absolute top-0 bottom-0 left-0 right-0 bg-balance opacity-20"></div>
-              </div>
-              <div class="flex-1">
-                <div class="text-sm font-semibold">
+              </div> -->
+              <div class="flex flex-col gap-4">
+                <div class="text-sm font-semibold whitespace-nowrap">
                   {{ format.formatToken(balanceItem) }}
                 </div>
-                <div class="text-xs">
+              </div>
+            </div>
+
+
+            <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
+              <h2 class="text-[#64748B;] text-sm">Amount</h2>
+              <!-- <div class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4">
+                <Icon icon="mdi-account-cash" class="text-balance" size="20" />
+                <div class="absolute top-0 bottom-0 left-0 right-0 bg-balance opacity-20"></div>
+              </div> -->
+              <div class="flex-1">
+                <div class="text-sm font-semibold whitespace-nowrap">
+                  {{ format.formatToken(balanceItem) }}
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
+              <h2 class="text-[#64748B;] text-sm">Percentage</h2>
+              <div class="flex-1">
+                <div class="text-xs font-semibold">
                   {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
                 </div>
               </div>
             </div>
+
+            </div>
+
             <!--delegations  -->
-            <div class="flex items-center px-4 mb-2" v-for="(delegationItem, index) in delegations" :key="index">
-              <div class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4">
-                <Icon icon="mdi-user-clock" class="text-staking" size="20" />
-                <div class="absolute top-0 bottom-0 left-0 right-0 bg-staking opacity-20"></div>
-              </div>
-              <div class="flex-1">
-                <div class="text-sm font-semibold">
-                  {{ format.formatToken(delegationItem?.balance) }}
-                </div>
-                <div class="text-xs">
-                  {{
-                    format.calculatePercent(
-                      delegationItem?.balance?.amount,
-                      totalAmount
-                    )
-                  }}
-                </div>
+            <div class="grid grid-rows-3">
+              <div class="flex flex-row items-start mb-2 gap-4" v-for="(delegationItem, index) in delegations" :key="index">
+                  <div class="flex flex-row gap-x-[88%]">
+                    <div class="flex text-sm font-semibold whitespace-nowrap gap-8">
+                      {{ format.formatToken(delegationItem?.balance) }}
+                    </div>
+                    <div class="flex text-sm font-semibold whitespace-nowrap gap-8">
+                        {{ format.formatToken(delegationItem?.balance) }}
+                    </div>
+                    <div class="flex items-start text-xs font-semibold">
+                      {{format.calculatePercent(delegationItem?.balance?.amount, totalAmount)}}
+                    </div>
+                  </div>
               </div>
             </div>
+            
             <!-- rewards.total -->
             <div class="flex items-center px-4 mb-2" v-for="(rewardItem, index) in rewards.total" :key="index">
               <div class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4">
@@ -388,52 +411,52 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
     </div>
 
     <!-- Transactions -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4">{{ $t('account.sent') }}</h2>
+    <div class="bg-base-200  px-0.5 pt-0.5 pb-0.5 rounded-2xl mb-4">
+      <h2 class="card-title mb-4 px-4 py-2">{{ $t('account.sent') }}</h2>
       <div class="services-table-wrapper services-table-scroll">
         <table class="table w-full text-sm">
           <thead class="bg-base-300">
             <tr>
-              <th class="bg-base-300 py-3">{{ $t('account.height') }}</th>
-              <th class="bg-base-300 py-3">{{ $t('account.hash') }}</th>
-              <th class="bg-base-300 py-3">{{ $t('account.messages') }}</th>
-              <th class="bg-base-300 py-3">{{ $t('account.amount') }}</th>
-              <th class="bg-base-300 py-3">{{ $t('tx.fee') }}</th>
-              <th class="bg-base-300 py-3">{{ $t('account.time') }}</th>
+              <th class="dark:bg-base-300 bg-white py-3">{{ $t('account.height') }}</th>
+              <th class="dark:bg-base-300 bg-white py-3">{{ $t('account.hash') }}</th>
+              <th class="dark:bg-base-300 bg-white py-3">{{ $t('account.messages') }}</th>
+              <th class="dark:bg-base-300 bg-white py-3">{{ $t('account.amount') }}</th>
+              <th class="dark:bg-base-300 bg-white py-3">{{ $t('tx.fee') }}</th>
+              <th class="dark:bg-base-300 bg-white py-3">{{ $t('account.time') }}</th>
             </tr>
           </thead>
-          <tbody class="text-md">
+          <tbody class="text-md dark:bg-base-200 bg-white">
             <tr v-if="txs?.length === 0">
               <td colspan="10">
                 <div class="text-center">{{ $t('account.no_transactions') }}</div>
               </td>
             </tr>
             <tr v-for="(v, index) in txs" :key="index">
-              <td class="text-sm py-3">
+              <td class="text-sm py-3 dark:bg-base-200 bg-white">
                 <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-primary dark:invert">{{
                   v.height
                 }}</RouterLink>
               </td>
-              <td class="truncate py-3" style="max-width: 200px">
+              <td class="truncate py-3 dark:bg-base-200 bg-white" style="max-width: 200px">
                 <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
                   {{ v.txhash }}
                 </RouterLink>
               </td>
-              <td class="flex items-center py-3">
+              <td class="flex items-center py-3 dark:bg-base-200 bg-white">
                 <div class="mr-2">
                   {{ format.messages(v.tx.body.messages) }}
                 </div>
                 <Icon v-if="v.code === 0" icon="mdi-check" class="text-success text-lg" />
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </td>
-              <td>
+              <td class="dark:bg-base-200 bg-white">
                 <!-- {{v.tx.body?.messages[0]?.amount}} {{ v.tx.body?.messages[0]?.amount ? format.formatToken(v.tx.body?.messages[0]?.amount[0]) : '-'}} -->
                 {{ v.tx.body?.messages[0]?.amount ? format.formatToken(v.tx.body?.messages[0]?.amount[0]) : '-' }}
               </td>
-              <td>
+              <td class="dark:bg-base-200 bg-white">
                 {{ v.tx.auth_info.fee.amount ? format.formatToken(v.tx.auth_info.fee.amount[0]) : '-' }}
               </td>
-              <td class="py-3">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{
+              <td class="py-3 dark:bg-base-200 bg-white">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{
                 format.toDay(v.timestamp,
                   'from') }})</span> </td>
             </tr>
@@ -443,56 +466,56 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
     </div>
 
     <!-- Received -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4">{{ $t('account.received') }}</h2>
+    <div class="bg-base-200  px-0.5 pt-0.5 pb-0.5 rounded-2xl mb-4">
+      <h2 class="card-title mb-4 px-4 py-2">{{ $t('account.received') }}</h2>
       <div class="services-table-wrapper services-table-scroll">
         <table class="table w-full text-sm">
           <thead>
             <tr>
-              <th class="py-3 bg-base-300">{{ $t('account.height') }}</th>
-              <th class="py-3 bg-base-300">{{ $t('account.hash') }}</th>
-              <th class="py-3 bg-base-300">{{ $t('account.messages') }}</th>
-              <th class="py-3 bg-base-300">{{ $t('account.amount') }}</th>
-              <th class="py-3 bg-base-300">{{ $t('tx.fee') }}</th>
-              <th class="py-3 bg-base-300">{{ $t('account.time') }}</th>
+              <th class="py-3 dark:bg-base-300 bg-white">{{ $t('account.height') }}</th>
+              <th class="py-3 dark:bg-base-300 bg-white">{{ $t('account.hash') }}</th>
+              <th class="py-3 dark:bg-base-300 bg-white">{{ $t('account.messages') }}</th>
+              <th class="py-3 dark:bg-base-300 bg-white">{{ $t('account.amount') }}</th>
+              <th class="py-3 dark:bg-base-300 bg-white">{{ $t('tx.fee') }}</th>
+              <th class="py-3 dark:bg-base-300 bg-white">{{ $t('account.time') }}</th>
             </tr>
           </thead>
-          <tbody class="text-sm">
+          <tbody class="text-sm dark:bg-base-200 bg-white">
             <tr v-if="recentReceived.length === 0">
               <td colspan="10">
                 <div class="text-center">{{ $t('account.no_transactions') }}</div>
               </td>
             </tr>
             <tr v-for="(v, index) in recentReceived" :key="index">
-              <td class="text-sm py-3">
+              <td class="text-sm text-[#09279F;] py-3 dark:bg-base-200 bg-white">
                 <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-primary dark:invert">{{
                   v.height
                 }}</RouterLink>
               </td>
-              <td class="truncate py-3" style="max-width: 200px">
+              <td class="truncate py-3 dark:bg-base-200 bg-white text-[#09279F;]" style="max-width: 200px">
                 <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
                   {{ v.txhash }}
                 </RouterLink>
               </td>
 
-              <td class="flex items-center py-3">
-                <div class="mr-2">
+              <td class="flex items-center py-3 dark:bg-base-200 bg-white">
+                <div class="mr-2 text-[#171C1F;]">
                   {{ format.messages(v.tx.body.messages) }}
                 </div>
                 <Icon v-if="v.code === 0" icon="mdi-check" class="text-success text-lg" />
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </td>
-              <td>
-                <div class="mr-2">
+              <td class="dark:bg-base-200 bg-white">
+                <div class="mr-2 text-[#171C1F;]">
                   {{ v.tx.body.messages[0]?.amount && format.formatToken2(v.tx.body.messages[0].amount[0], true) }}
                   {{ v.tx.body.messages[0]?.stake && format.formatToken2(v.tx.body.messages[0].stake, true) }}
                   {{ (!v.tx.body.messages[0]?.stake && !v.tx.body.messages[0]?.amount) ? '-' : '' }}
                 </div>
               </td>
-              <td>
+              <td class="dark:bg-base-200 bg-white text-[#171C1F;]">
                 {{ v.tx.auth_info.fee.amount ? format.formatToken(v.tx.auth_info.fee.amount[0]) : '-' }}
               </td>
-              <td class="py-3">
+              <td class="py-3 dark:bg-base-200 bg-white text-[#171C1F;]">
                 {{ format.toLocaleDate(v.timestamp) }}
                 <span class=" text-xs">({{ format.toDay(v.timestamp, 'from') }})</span>
               </td>
@@ -503,8 +526,8 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
     </div>
 
     <!-- Account -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4">{{ $t('account.acc') }}</h2>
+    <div class="bg-base-200  px-0.5 pt-0.5 pb-0.5 rounded-2xl mb-4">
+      <h2 class="card-title mb-4 px-4 py-2">{{ $t('account.acc') }}</h2>
       <DynamicComponent :value="account" />
     </div>
   </div>

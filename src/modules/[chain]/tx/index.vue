@@ -36,50 +36,50 @@ function handleScroll() {
 </script>
 <template>
     <div>
-        <p class="text-2xl font-bold mb-4">Transactions</p>
-        <div class="tabs tabs-boxed bg-transparent mb-4">
+        <p class="bg-[#09279F] dark:bg-base-200 text-2xl rounded-md px-4 py-2 my-4 font-bold text-[#ffffff;]">Transactions</p>
+        <!-- <div class="tabs tabs-boxed bg-transparent mb-4">
             <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'recent' }" @click="tab = 'recent'">{{
                 $t('block.recent') }}</a>
             <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'search' }"
                 @click="tab = 'search'">Search</a>
-        </div>
+        </div> -->
 
-        <div v-show="tab === 'recent'" class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-warning overflow-x-auto txsContainer" @scroll="handleScroll"
+        <div v-show="tab === 'recent'" class="bg-[#EFF2F5;] dark:bg-base-200 px-0.5 pt-0.5 pb-4 rounded-md shadow-md overflow-x-auto txsContainer" @scroll="handleScroll"
             style="height: 78vh; overflow: auto;">
             
             <div class="bg-base-200 rounded-md overflow-auto">
                 <table class="table w-full table-compact">
-                    <thead class="bg-base-300 sticky top-0">
+                    <thead class="bg-white sticky top-0">
                         <tr>
-                            <th class="bg-base-300">{{ $t('tx.tx_hash') }}</th>
-                            <th class="bg-base-300">{{ $t('block.block') }}</th>
-                            <th class="bg-base-300">{{ $t('staking.status') }}</th>
-                            <th class="bg-base-300">Messages</th>
-                            <th class="bg-base-300">{{ $t('account.type') }}</th>
-                            <th class="bg-base-300">{{ $t('block.fees') }}</th>
-                            <th class="bg-base-300">{{ $t('account.time') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('tx.tx_hash') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('block.block') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('staking.status') }}</th>
+                            <th class="bg-white dark:bg-base-200">Messages</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('account.type') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('block.fees') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('account.time') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in base.allTxs" :index="index" class="hover:bg-base-300 transition-colors duration-200">
-                            <td class="truncate text-warning" style="max-width:25vw">
+                            <td class="dark:bg-base-200 bg-white truncate dark:text-warning text-[#09279F;]" style="max-width:25vw">
                                 <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.hash}`">{{
                                     item.hash
                                 }}</RouterLink>
                             </td>
-                            <td class="text-sm text-warning">
+                            <td class="dark:bg-base-200 bg-white text-sm dark:text-warning text-[#09279F;]">
                                 <RouterLink :to="`/${props.chain}/blocks/${item.block_height}`" class="hover:underline">{{ item.block_height }}</RouterLink>
                             </td>
-                            <td>
+                            <td class="dark:bg-base-200 bg-white text-[#60BC29;]">
                                 <span class="text-xs truncate py-1 px-3 rounded-full" 
                                       :class="item.status ? 'bg-success/10 text-success' : 'bg-error/10 text-error'">
                                     {{ item.status ? 'Success' : 'Failed' }}
                                 </span>
                             </td>
-                            <td>{{ item.messages?.length }}</td>
-                            <td>{{ item.type }}</td>
-                            <td>{{ format.formatTokens(typeof item.fee === 'string' ? [] : item.fee?.amount || [], true, '0,0.[00]') }}</td>
-                            <td>{{ format.toDay(item.timestamp, 'from') }}</td>
+                            <td class="dark:bg-base-200 bg-white text-[#171C1F;]">{{ item.messages?.length }}</td>
+                            <td class="dark:bg-base-200 bg-white dark:text-base-100 text-[#171C1F;]">{{ item.type }}</td>
+                            <td class="dark:bg-base-200 bg-white dark:text-base-100 text-[#171C1F;]">{{ format.formatTokens(typeof item.fee === 'string' ? [] : item.fee?.amount || [], true, '0,0.[00]') }}</td>
+                            <td class="dark:bg-base-200 bg-white dark:text-base-100 text-[#171C1F;]">{{ format.toDay(item.timestamp, 'from') }}</td>
                         </tr>
                     </tbody>
                 </table>

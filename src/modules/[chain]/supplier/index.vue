@@ -45,10 +45,10 @@ function pageloadInit(p: number) {
 </script>
 <template>
   <div>
-    <p class="text-2xl font-bold mb-4">Suppliers</p>
-  <div class="bg-base-100 rounded overflow-auto suppliersContainer" @scroll="pageload" style="height: 78vh;overflow: scroll;">
-    <table class="table table-compact">
-      <thead class="bg-base-200">
+    <p class="bg-[#09279F] dark:bg-base-200 text-2xl rounded-md px-4 py-2 my-4 font-bold text-[#ffffff;]">Suppliers</p>
+  <div class="bg-[#EFF2F5;] dark:bg-base-200 rounded-md px-0.5 pt-0.5 pb-0.5 overflow-auto suppliersContainer" @scroll="pageload" style="height: 78vh;overflow: scroll;">
+    <table class="table w-full table-compact">
+      <thead class="dark:bg-base-200 bg-white sticky top-0">
         <tr>
           <td>Rank</td>
           <td>Address</td>
@@ -59,7 +59,7 @@ function pageloadInit(p: number) {
       </thead>
       <tr v-for="item, index in list.sort((a: any, b: any) => {
           return parseInt(b.stake.amount) - parseInt(a.stake.amount);
-        })" class="hover">
+        })" class="hover dark-bg-base-200 bg-white">
         <td>{{ index + 1 }}</td>
         <td>
           <div class="flex flex-col">

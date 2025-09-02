@@ -340,7 +340,7 @@ const handleSafariChainChange = (event: Event) => {
                 <div class="flex items-center justify-between rounded-lg border border-info p-2">
                   <div class="flex items-center">
                     <span class="text-base font-medium text-gray-700 dark:text-gray-200">{{ currentChain?.prettyName
-                    }}</span>
+                      }}</span>
                   </div>
                   <button @click="toggleMobileChainDropdown" class="p-1">
                     <Icon icon="mdi-chevron-down" class="h-5 w-5 text-gray-500 dark:text-gray-400" />

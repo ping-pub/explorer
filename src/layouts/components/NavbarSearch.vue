@@ -56,7 +56,7 @@ async function detectSearchType(query: string) {
         types.push('Application');
         details.push({ type: 'Application', value: query, data: app.application });
       }
-    } catch {}
+    } catch { }
     // Supplier
     try {
       const supplier = await blockStore.rpc.getSuppliersInfo(query);
@@ -64,7 +64,7 @@ async function detectSearchType(query: string) {
         types.push('Supplier');
         details.push({ type: 'Supplier', value: query, data: supplier.supplier });
       }
-    } catch {}
+    } catch { }
     // Gateway
     try {
       const gateway = await blockStore.rpc.getGatewaysInfo(query);
@@ -72,13 +72,13 @@ async function detectSearchType(query: string) {
         types.push('Gateway');
         details.push({ type: 'Gateway', value: query, data: gateway.gateway });
       }
-    } catch {}
+    } catch { }
     // Account (always try to fetch balance)
     let accountData = null;
     try {
       const balances = await blockStore.rpc.getBankBalances(query);
       accountData = balances && balances.balances ? balances.balances : [];
-    } catch {}
+    } catch { }
     if (types.length === 0) {
       types.push('Account');
       details.push({ type: 'Account', value: query, balances: accountData });
@@ -145,17 +145,21 @@ function confirm() {
   <div>
     <div class="flex">
       <div class="flex items-center relative bg-white dark:bg-[#2a334c] rounded-xl border-[#64748B80] border-1">
-          <button class="btn btn-ghost btn-circle btn-sm" @click="confirm">
+        <button class="btn btn-ghost btn-circle btn-sm" @click="confirm">
           <Icon icon="mdi:magnify" class="text-2xl text-[#64748B80] dark:text-gray-400" />
         </button>
         <input class="input w-[22rem] !p-0 !h-[2rem]" v-model="searchQuery"
           placeholder="Height/Transaction/Account Address" />
-      
-        <div v-if="searchQuery && (searchDetails.length > 0 || loadingType)" class="absolute left-0 top-full mt-1 w-full z-10">
+
+        <div v-if="searchQuery && (searchDetails.length > 0 || loadingType)"
+          class="absolute left-0 top-full mt-1 w-full z-10">
           <div class="dropdown-content bg-base-100 border rounded shadow p-2 min-w-[22rem]">
-            <span v-if="loadingType" class="text-xs text-gray-400 flex items-center"><Icon icon="mdi:loading" class="animate-spin mr-1" />Detecting...</span>
+            <span v-if="loadingType" class="text-xs text-gray-400 flex items-center">
+              <Icon icon="mdi:loading" class="animate-spin mr-1" />Detecting...
+            </span>
             <template v-else>
-              <div v-for="detail in searchDetails" :key="detail.type" class="mb-2 last:mb-0 p-2 rounded hover:bg-base-200 transition" @click="confirm">
+              <div v-for="detail in searchDetails" :key="detail.type"
+                class="mb-2 last:mb-0 p-2 rounded hover:bg-base-200 transition" @click="confirm">
                 <div class="font-bold text-primary text-xs mb-1">{{ detail.type }}</div>
                 <div class="font-mono text-xs break-all mb-1">{{ detail.value }}</div>
                 <div v-if="detail.balances && detail.balances.length > 0" class="text-xs text-gray-600">
@@ -166,7 +170,8 @@ function confirm() {
                   </template>
                 </div>
                 <div v-else-if="detail.data && detail.data.stake" class="text-xs text-gray-600">
-                  Stake: {{ detail.data.stake.amount }} {{ detail.data.stake.denom && detail.data.stake.denom.toUpperCase() }}
+                  Stake: {{ detail.data.stake.amount }} {{ detail.data.stake.denom &&
+                    detail.data.stake.denom.toUpperCase() }}
                 </div>
                 <div v-else class="text-xs text-gray-400">No balance info</div>
               </div>
