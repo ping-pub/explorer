@@ -53,3 +53,10 @@ html[data-theme='dark'] {
   opacity: 0;
   transform: translateY(-calc(15%));
 }
+
+.pokt-footer__copy {
+  margin: 22px 0 18px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #ffffff;
+}

@@ -40,7 +40,7 @@ const chain = useBlockchain();
           <td>
             <RouterLink
               :to="`/${chain.chainName}/tx/${item.hash}`"
-              class="text-[#09279F;] dark:invert"
+              class="text-[#153cd8;] dark:invert"
               >{{ item.hash }}</RouterLink
             >
           </td>

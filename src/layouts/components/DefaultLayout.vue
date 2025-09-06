@@ -153,8 +153,8 @@ const handleSafariChainChange = (event: Event) => {
 </script>
 
 <template>
-  <div>
-    <header class="bg-[#09279F] shadow-md dark:bg-[#231f20;] px-4 py-3">
+  <div class="dark:bg-[#00125b;]">
+    <header class="bg-[#09279F] shadow-md dark:bg-[#00125b;] px-4 py-3">
       <!-- DESKTOP NAV - Only shown on desktop, hidden on mobile -->
       <div class="desktop-nav">
         <div class="container mx-auto px-5 py-2 flex justify-between items-center">
@@ -392,7 +392,7 @@ const handleSafariChainChange = (event: Event) => {
         </div>
       </div>
     </header>
-    <div class="bg-white dark:bg-[#231f20;]">
+    <div class="bg-white dark:bg-[#00125b;]">
       <div class="w-11/12 mx-auto">
         <!-- 👉 Pages -->
         <div class="">

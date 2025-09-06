@@ -487,12 +487,12 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               </td>
             </tr>
             <tr v-for="(v, index) in recentReceived" :key="index">
-              <td class="text-sm text-[#09279F;] py-3 dark:bg-base-200 bg-white">
+              <td class="text-sm text-[#153cd8;] py-3 dark:bg-base-200 bg-white">
                 <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-primary dark:invert">{{
                   v.height
                 }}</RouterLink>
               </td>
-              <td class="truncate py-3 dark:bg-base-200 bg-white text-[#09279F;]" style="max-width: 200px">
+              <td class="truncate py-3 dark:bg-base-200 bg-white text-[#153cd8;]" style="max-width: 200px">
                 <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
                   {{ v.txhash }}
                 </RouterLink>

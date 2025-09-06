@@ -509,7 +509,7 @@ function getTransactionFee(tx: any): string {
             <div class="text-sm dark:text-gray-500 text-[#64748B;] mb-2">{{ $t('staking.commissions') }}</div>
             <div class="flex flex-wrap">
               <div v-for="(i, k) in commission" :key="`commission-${k}`"
-                class="mr-2 mb-2 text-2xl dark:text-[#ffffff;] text-[#09279F;]">
+                class="mr-2 mb-2 text-2xl dark:text-[#ffffff;] text-[#153cd8;]">
                 {{ format.formatToken2(i) }}
               </div>
             </div>
@@ -519,7 +519,7 @@ function getTransactionFee(tx: any): string {
             <div class="text-sm dark:text-gray-500 text-[#64748B;] mb-2">{{ $t('staking.outstanding') }} {{ $t('account.rewards') }}</div>
             <div class="flex flex-wrap">
               <div v-for="(i, k) in rewards" :key="`reward-${k}`"
-                class="mr-2 mb-2 text-2xl dark:text-[#ffffff;] text-[#09279F;]">
+                class="mr-2 mb-2 text-2xl dark:text-[#ffffff;] text-[#153cd8;]">
                 {{ format.formatToken2(i) }}
               </div>
             </div>
@@ -654,17 +654,17 @@ function getTransactionFee(tx: any): string {
           </thead>
           <tbody>
             <tr v-for="(item, i) in txs.tx_responses">
-              <td class="dark:text-primary text-[#09279F;] font-medium">
+              <td class="dark:text-primary text-[#153cd8;] font-medium">
                 <RouterLink :to="`/${props.chain}/blocks/${item.height}`">{{
                   item.height
                   }}</RouterLink>
               </td>
-              <td class="truncate dark:text-primary text-[#09279F;]" style="max-width: 120px">
+              <td class="truncate dark:text-primary text-[#153cd8;]" style="max-width: 120px">
                 <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
                   {{ item.txhash }}
                 </RouterLink>
               </td>
-              <td class="truncate dark:text-primary text-[#09279F;]" style="max-width: 120px">
+              <td class="truncate dark:text-primary text-[#153cd8;]" style="max-width: 120px">
                 <RouterLink v-if="getSignerAddress(item.tx?.body?.messages?.[0], item) !== '-'"
                   :to="`/${props.chain}/account/${getSignerAddress(item.tx?.body?.messages?.[0], item)}`">
                   {{ getSignerAddress(item.tx?.body?.messages?.[0], item) }}
@@ -705,7 +705,7 @@ function getTransactionFee(tx: any): string {
           </thead>
           <tbody>
             <tr v-for="(item, i) in events.tx_responses">
-              <td class="pr-2 truncate dark:text-primary text-[#09279F;]" style="max-width: 250px">
+              <td class="pr-2 truncate dark:text-primary text-[#153cd8;]" style="max-width: 250px">
                 <RouterLink v-for="d in mapDelegators(item.tx?.body?.messages)" :to="`/${props.chain}/account/${d}`">
                   {{ d }}
                 </RouterLink>
@@ -726,7 +726,7 @@ function getTransactionFee(tx: any): string {
                 </div>
               </td>
               <td>
-                <RouterLink class="dark:text-primary text-[#09279F;] font-medium block" :to="`/${props.chain}/blocks/${item.height}`">
+                <RouterLink class="dark:text-primary text-[#153cd8;] font-medium block" :to="`/${props.chain}/blocks/${item.height}`">
                   {{ item.height }}
                 </RouterLink>
                 <!-- <span class="text-xs text-gray-500">{{ format.toDay(item.timestamp, 'from') }}</span> -->

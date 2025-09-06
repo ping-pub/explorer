@@ -90,7 +90,7 @@ const formattedTxData = computed(() => {
 
                     <tr>
                         <td class="py-3 px-2 dark:text-gray-400 text-[#64748B]">{{ $t('account.height') }}</td>
-                        <td class="py-3 px-2 overflow-hidden dark:text-warning text-[#09279F]">
+                        <td class="py-3 px-2 overflow-hidden dark:text-warning text-[#153cd8]">
                             <RouterLink
                                 :to="`/${props.chain}/blocks/${tx.tx_response.height}`"
                                 class="text-primary dark:invert"

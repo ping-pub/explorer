@@ -112,7 +112,7 @@ const txChartOptions = ref({
     categories: [],
     labels: {
       style: {
-        colors: 'rgba(255, 255, 255, 0.7)'
+        colors: 'rgb(116, 109, 105)'
       },
       formatter: function (value: string) {
         return value;
@@ -128,7 +128,7 @@ const txChartOptions = ref({
   yaxis: {
     labels: {
       style: {
-        colors: 'rgba(255, 255, 255, 0.7)'
+        colors: 'rgb(116, 109, 105)'
       },
       formatter: function (value: number) {
         return format.formatNumber(value);
@@ -443,7 +443,7 @@ const chartOptions = ref({
     type: 'category',
     labels: {
       style: {
-        colors: 'rgba(255, 255, 255, 0.7)'
+        colors: 'rgb(116, 109, 105)'
       },
       formatter: function (value: string) {
         return value;
@@ -459,7 +459,7 @@ const chartOptions = ref({
   yaxis: {
     labels: {
       style: {
-        colors: 'rgba(255, 255, 255, 0.7)'
+        colors: 'rgb(116, 109, 105)'
       }
     }
   },
@@ -467,7 +467,7 @@ const chartOptions = ref({
     position: 'top',
     horizontalAlign: 'right',
     labels: {
-      colors: 'rgba(255, 255, 255, 0.7)'
+      colors: 'rgb(116, 109, 105)'
     }
   },
   tooltip: {
@@ -786,7 +786,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
 <template>
   <div>
     <div class="flex my-4">
-      <div class="flex w-full bg-base-100">
+      <div class="flex w-full bg-base-100 dark:bg-[#00125b;]">
         <div class="w-[40%] p-2 ">
           <div class="text-lg font-semibold text-main">Network Status</div>
           <div class="flex gap-2 my-2 h-[15vh]">
@@ -846,7 +846,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
             </div>
           </div>
         </div>
-        <div class="w-[60%] p-2 ">
+        <div class="w-[60%] p-2" style="z-index: 1;">
           <div class="text-lg font-semibold text-main">Market Data</div>
           <div class=" flex w-full gap-2">
             <div class="w-[80%]">
@@ -879,10 +879,10 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                     <Icon icon="mdi:coins" class="mr-1 text-[#64748B]" />
                     <span class="text-[14px] text-secondary">Circulating Supply</span>
                   </div>
-                  <div class="text-3xl text-main flex items-center justify-center font-medium flex-col"> {{
+                  <div class="text-xl text-main flex items-center justify-center font-medium flex-col"> {{
                     format.formatNumber((store.coinInfo?.market_data?.circulating_supply
-                      || 0), '123,456,789.[00]') }}
-                    <span class="text-3xl font-medium">{{ store.coinInfo?.symbol?.toUpperCase() || '' }}</span>
+                      || 0), '123,456,789.[]') }}
+                    <span class="text-xl font-medium">{{ store.coinInfo?.symbol?.toUpperCase() || '' }}</span>
                   </div>
                 </div>
               </div>
@@ -938,7 +938,8 @@ watch(() => base.blocktime, (newVal, oldVal) => {
             <div
               class="bg-base-200 p-4 rounded-[20px] hover:bg-base-300 transition-all flex flex-col items-center justify-between">
               <!-- Logo -->
-              <img src="https://pocket.network/wp-content/uploads/2024/12/logo.png" alt="Coin logo" class="w-2/3" />
+              <img v-if="useBaseStore().theme === 'dark'" src="https://pocket.network/wp-content/uploads/2025/01/logo-white.png" alt="Coin logo" class="w-2/3" />
+              <img v-else src="https://pocket.network/wp-content/uploads/2024/12/logo.png" alt="Coin logo" class="w-2/3" />
 
               <!-- Price -->
               <div class="flex flex-col item-center mx-auto">
@@ -961,13 +962,15 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                   {{ ticker?.market?.name || 'Market' }}
                   <Icon icon="mdi:chevron-down" class="ml-1" />
                 </label>
-                <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-1">
+                <div tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-1"  style="height: 300px; overflow-y: scroll;">
+                <ul tabindex="0" class="">
                   <li v-for="(tic, index) in tickers" :key="tic.market.identifier">
                     <a @click="() => { store.selectTicker(index); }" :class="{ 'active': index === store.tickerIndex }">
                       {{ tic.market.name }}
                     </a>
                   </li>
                 </ul>
+                </div>
               </div>
 
               <!-- Buy Button -->
@@ -986,7 +989,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
     <!-- Network Statistics Section -->
 
     <!-- Network Statistics -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 mt-5">
+    <div class="bg-base-100 dark:bg-[#00125b;] px-4 pt-3 pb-4 mt-5">
       <div class="flex items-center mb-4">
         <div class="text-lg font-semibold text-main">Network Statistics</div>
       </div>
@@ -1200,7 +1203,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
               <tr v-for="item in visibleBlocks" :key="item.index"
                 class="hover:bg-base-300 transition-colors duration-200 border-none">
                 <td class="font-medium">{{ item.item.block.header.height }}</td>
-                <td class="truncate text-[#09279F]" style="max-width: 18rem; overflow:hidden;">
+                <td class="truncate text-[#153cd8]" style="max-width: 18rem; overflow:hidden;">
                   <RouterLink class="truncate hover:underline" :title="item.item.block_id.hash"
                     :to="`/${chain}/blocks/${item.item.block.header.height}`">{{ item.item.block_id.hash }}
                   </RouterLink>
@@ -1256,12 +1259,12 @@ watch(() => base.blocktime, (newVal, oldVal) => {
               <!-- Render only visible transactions -->
               <tr v-for="item in visibleTxs" :key="item.index"
                 class="hover:bg-base-300 transition-colors duration-200 border-none">
-                <td class="truncate text-[#09279F]" style="max-width:14rem">
+                <td class="truncate text-[#153cd8]" style="max-width:14rem">
                   <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.item.hash}`">{{
                     item.item.hash
                     }}</RouterLink>
                 </td>
-                <td class="text-sm text-[#09279F]">
+                <td class="text-sm text-[#153cd8]">
                   <RouterLink :to="`/${props.chain}/blocks/${item.item.block_height}`" class="hover:underline">{{
                     item.item.block_height }}</RouterLink>
                 </td>

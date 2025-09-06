@@ -1,6 +1,6 @@
 <template>
   <!-- footer -->
-  <footer class="bg-[#0d2fb8] text-white px-4 py-14 md:py-10" role="contentinfo">
+  <footer class="bg-[#0d2fb8] dark:bg-[#00125b;] text-white px-4 py-14 md:py-10" role="contentinfo">
     <div class="max-w-[1200px] mx-auto">
       <!-- Top row: logo | social -->
       <div class="flex flex-row justify-between items-center">
@@ -26,12 +26,17 @@
 
       <!-- Powered by + legal links -->
       <div class="flex flex-row justify-between items-center mt-4">
-        <p class="text-white/85 text-[0.95rem]">
+        <!-- <p class="text-white/85 text-[0.95rem]">
           Powered by
           <a href="https://stakenodes.org" target="_blank" class="inline-flex items-center gap-1">
             <img src="https://stakenodes.org/favicon.png" alt="Stakenodes" class="h-5" />
             <span class="text-base">Stakenodes</span>
           </a>
+        </p> -->
+        <p class="pokt-footer__copy flex flex-row items-center justify-center">
+          <span>Powered by</span> <a class="flex flex-row items-center gap-1 ml-2" href="https://stakenodes.org" target="_blank"><img alt="https://stakenodes.org"
+              src="https://stakenodes.org/favicon.png" style="height:1.2rem;" /><span
+              style="font-size: 1rem;">Stakenodes</span></a>
         </p>
 
         <div class="flex gap-6 text-white text-base mt-[22px] mb-[18px]">

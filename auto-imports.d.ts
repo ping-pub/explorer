@@ -84,7 +84,6 @@ declare global {
   const useRouter: typeof import('vue-router')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
   const useSum: typeof import('@vueuse/math')['useSum']
-  const useToFixed: typeof import('@vueuse/math')['useToFixed']
   const useTrunc: typeof import('@vueuse/math')['useTrunc']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
@@ -178,7 +177,6 @@ declare module 'vue' {
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
     readonly useSum: UnwrapRef<typeof import('@vueuse/math')['useSum']>
-    readonly useToFixed: UnwrapRef<typeof import('@vueuse/math')['useToFixed']>
     readonly useTrunc: UnwrapRef<typeof import('@vueuse/math')['useTrunc']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>

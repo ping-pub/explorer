@@ -65,13 +65,13 @@ function handleScroll() {
                     <tbody>
                         <tr v-for="(item, index) in base.allTxs" :index="index"
                             class="hover:bg-base-300 transition-colors duration-200">
-                            <td class="dark:bg-base-200 bg-white truncate dark:text-warning text-[#09279F;]"
+                            <td class="dark:bg-base-200 bg-white truncate dark:text-warning text-[#153cd8;]"
                                 style="max-width:25vw">
                                 <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.hash}`">{{
                                     item.hash
                                     }}</RouterLink>
                             </td>
-                            <td class="dark:bg-base-200 bg-white text-sm dark:text-warning text-[#09279F;]">
+                            <td class="dark:bg-base-200 bg-white text-sm dark:text-warning text-[#153cd8;]">
                                 <RouterLink :to="`/${props.chain}/blocks/${item.block_height}`" class="hover:underline">
                                     {{ item.block_height }}</RouterLink>
                             </td>
