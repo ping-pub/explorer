@@ -1,3 +1,5 @@
+<script setup lang="ts">
+</script>
 <template>
   <!-- footer -->
   <footer class="bg-[#0d2fb8] dark:bg-[#00125b;] text-white px-4 py-14 md:py-10" role="contentinfo">

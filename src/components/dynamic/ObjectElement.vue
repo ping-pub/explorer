@@ -4,8 +4,8 @@ import { select } from './index';
 
 const props = defineProps(['value']);
 
-function formatKey(key: string) {
-  return key.replaceAll('_', ' ');
+function formatKey(key: string | number) {
+  return String(key).replaceAll('_', ' ');
 }
 </script>
 
@@ -13,7 +13,7 @@ function formatKey(key: string) {
     <div class="grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-y-3 text-sm dark:bg-base-200 bg-[#ffffff;] px-4 py-2 pt-0.5 pb-0.5 overflow-x-auto txsContainer">
       <template v-for="(v, k) in value" :key="k">
         <div
-            :class="k === 'signatures'
+            :class="String(k) === 'signatures'
             ? 'text-[#171C1F;] dark:text-[#ffffff;] font-bold capitalize whitespace-break-spaces'
             : 'text-[#64748B] font-medium capitalize whitespace-break-spaces'"
             >

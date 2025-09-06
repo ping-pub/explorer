@@ -732,9 +732,9 @@ function getTransactionFee(tx: any): string {
                 <!-- <span class="text-xs text-gray-500">{{ format.toDay(item.timestamp, 'from') }}</span> -->
               </td>
               <td>
-                <RouterLink class="text-xs dark:text-gray-500 text-[#171C1F;]">
+                <span class="text-xs dark:text-gray-500 text-[#171C1F;]">
                   {{ format.toDay(item.timestamp, 'from') }}
-                </RouterLink>
+                </span>
               </td>
             </tr>
           </tbody>
