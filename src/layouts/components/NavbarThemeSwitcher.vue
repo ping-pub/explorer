@@ -42,7 +42,7 @@ onMounted(() => {
             class="btn btn-ghost btn-circle btn-sm mx-1"
             @click="changeMode()"
         >
-            <Icon :icon="themeMap?.[theme]" class="text-2xl text-gray-500 dark:text-gray-400" />
+            <Icon :icon="themeMap?.[theme]" class="text-2xl text-white dark:text-gray-400" />
         </button>
     </div>
     <span></span>

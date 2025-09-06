@@ -1,6 +1,6 @@
 {
-  "name": "ping.pub",
-  "version": "3.0.0",
+  "name": "pocket-explorer",
+  "version": "2.0.0",
   "private": true,
   "target": "",
   "scripts": {

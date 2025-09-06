@@ -30,6 +30,7 @@ const isLoading = ref(true);
 
 onMounted(async () => {
     isLoading.value = true;
+    useStakingStore().init();
 
     // Fetch slashing parameters
     chainStore.rpc.getSlashingParams().then(res => {
@@ -167,7 +168,7 @@ const validatorsList = computed(() => {
 const getStatusBadge = (status: string) => {
     switch (status) {
         case 'BOND_STATUS_BONDED':
-            return { class: 'badge-success', text: 'Staked' };
+            return { class: 'badge-success', color: 'bg-[#6AC13633;] text-[#60BC29;]', text: 'Staked' };
         case 'BOND_STATUS_UNBONDING':
             return { class: 'badge-warning', text: 'Unstaking' };
         case 'BOND_STATUS_UNBONDED':
@@ -248,54 +249,54 @@ loadAvatars();
 </script>
 <template>
     <div>  
-        <p class="text-2xl font-bold mb-4">Validators</p>
+        <p class="bg-[#09279F;] dark:bg-base-200 text-2xl rounded-md px-4 py-2 my-4 font-bold text-[#ffffff;]">Validators</p>
         <div class="grid sm:grid-cols-1 md:grid-cols-4 py-4 gap-4 mb-4">
-            <div class="flex bg-base-100 rounded-lg p-4">
+            <div class="flex dark:bg-base-100 bg-base-200 rounded-lg p-4">
                 <span>
-                    <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
-                        <Icon class="text-success" icon="mdi:trending-up" size="32" />
+                    <div class="bg-[#5E9AE4;] relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                        <Icon class="text-[#ffffff;]" icon="mdi:trending-up" size="32" />
                         <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-success"></div>
                     </div>
                 </span>
                 <span>
+                    <div class="text-xs text-[#64748B;]">{{ $t('staking.inflation') }}</div>
                     <div class="font-bold">{{ format.percent(mintStore.inflation) }}</div>
-                    <div class="text-xs">{{ $t('staking.inflation') }}</div>
                 </span>
             </div>
-            <div class="flex bg-base-100 rounded-lg p-4">
+            <div class="flex dark:bg-base-100 bg-base-200 rounded-lg p-4">
                 <span>
-                    <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
-                        <Icon class="text-primary" icon="mdi:lock-open-outline" size="32" />
+                    <div class="bg-[#5E9AE4;] relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                        <Icon class="text-[#ffffff;]" icon="mdi:lock-open-outline" size="32" />
                         <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-primary"></div>
                     </div>
                 </span>
                 <span>
+                    <div class="text-xs text-[#64748B;]">{{ $t('staking.unbonding_time') }}</div>
                     <div class="font-bold">{{ formatSeconds(staking.params?.unbonding_time) }}</div>
-                    <div class="text-xs">{{ $t('staking.unbonding_time') }}</div>
                 </span>
             </div>
-            <div class="flex bg-base-100 rounded-lg p-4">
+            <div class="flex dark:bg-base-100 bg-base-200 rounded-lg p-4">
                 <span>
-                    <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
-                        <Icon class="text-error" icon="mdi:alert-octagon-outline" size="32" />
+                    <div class="bg-[#5E9AE4;] relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                        <Icon class="text-[#ffffff;]" icon="mdi:alert-octagon-outline" size="32" />
                         <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-error"></div>
                     </div>
                 </span>
                 <span>
+                    <div class="text-xs text-[#64748B;]">{{ $t('staking.double_sign_slashing') }}</div>
                     <div class="font-bold">{{ format.percent(slashing.slash_fraction_double_sign) }}</div>
-                    <div class="text-xs">{{ $t('staking.double_sign_slashing') }}</div>
                 </span>
             </div>
-            <div class="flex bg-base-100 rounded-lg p-4">
+            <div class="flex dark:bg-base-100 bg-base-200 rounded-lg p-4">
                 <span>
-                    <div class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
-                        <Icon class="text-error" icon="mdi:pause" size="32" />
+                    <div class="bg-[#5E9AE4;] relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                        <Icon class="text-[#ffffff;]" icon="mdi:pause" size="32" />
                         <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-error"></div>
                     </div>
                 </span>
                 <span>
+                    <div class="text-xs text-[#64748B;]">{{ $t('staking.downtime_slashing') }}</div>
                     <div class="font-bold">{{ format.percent(slashing.slash_fraction_downtime) }}</div>
-                    <div class="text-xs">{{ $t('staking.downtime_slashing') }}</div>
                 </span>
             </div>
         </div>
@@ -310,36 +311,33 @@ loadAvatars();
                 <div v-if="isLoading" class="flex justify-center items-center p-8">
                     <span class="loading loading-spinner loading-lg"></span>
                 </div>
-                <div v-else class="overflow-x-auto">
-                    <table class="table staking-table w-full">
-                        <thead class="bg-base-200">
-                            <tr>
-                                <td scope="col" class="" style="width: 3rem; position: relative">
-                                    {{ $t('staking.rank') }}
-                                </td>
-                                <td scope="col" class="">{{ $t('staking.validator') }}</td>
-                                <td scope="col" class="text-center ">{{ $t('staking.status') }}</td>
-                                <td scope="col" class="text-right ">{{ $t('staking.voting_power') }}</td>
-                                <td scope="col" class="text-right ">{{ $t('staking.24h_changes') }}</td>
-                                <td scope="col" class="text-right ">{{ $t('staking.commission') }}</td>
+                <div v-else class="bg-[#EFF2F5;] dark:bg-base-200 rounded-md px-0.5 pt-0.5 pb-0.5 overflow-x-auto">
+                    <table class="table w-full border-collapse">
+                        <thead class="dark:bg-base-200 bg-white sticky top-0 border-0">
+                            <tr class="border-0">   <!-- ✅ border hataya -->
+                                <td scope="col" style="width: 3rem; position: relative">{{ $t('staking.rank') }}</td>
+                                <td scope="col">{{ $t('staking.validator') }}</td>
+                                <td scope="col" class="text-center">{{ $t('staking.status') }}</td>
+                                <td scope="col" class="text-right">{{ $t('staking.voting_power') }}</td>
+                                <td scope="col" class="text-right">{{ $t('staking.24h_changes') }}</td>
+                                <td scope="col" class="text-right">{{ $t('staking.commission') }}</td>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr v-for="({ v, rank, logo, statusBadge }, i) in validatorsList" :key="v.operator_address"
-                                class="hover:bg-gray-100 dark:hover:bg-[#384059]">
-                                <!-- 👉 rank -->
+                        
+                        <tbody class="divide-y-0">
+                            <tr
+                            v-for="({ v, rank, logo, statusBadge }, i) in validatorsList" :key="v.operator_address" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0">
+                            <!-- 👉 rank -->
                                 <td>
-                                    <div class="text-xs truncate relative px-2 py-1 rounded-full w-fit"
-                                        :class="`text-${rank}`">
-                                        <span class="inset-x-0 inset-y-0 opacity-10 absolute"
-                                            :class="`bg-${rank}`"></span>
+                                    <div class="text-xs truncate relative px-2 py-1 rounded-full w-fit" :class="`text-${rank}`">
+                                        <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${rank}`"></span>
                                         {{ i + 1 }}
                                     </div>
                                 </td>
                                 <!-- 👉 Validator -->
                                 <td>
                                     <div class="flex items-center overflow-hidden" style="max-width: 300px">
-                                        <div class="avatar mr-4 relative w-8 h-8 rounded-full">
+                                        <!-- <div class="avatar mr-4 relative w-8 h-8 rounded-full">
                                             <div class="w-8 h-8 rounded-full bg-gray-400 absolute opacity-10"></div>
                                             <div class="w-8 h-8 rounded-full">
                                                 <img v-if="logo" :src="logo" class="object-contain" @error="
@@ -351,7 +349,7 @@ loadAvatars();
                                                 <Icon v-else class="text-3xl" :icon="`mdi-help-circle-outline`" />
 
                                             </div>
-                                        </div>
+                                        </div> -->
 
                                         <div class="flex flex-col">
                                             <span
@@ -423,10 +421,24 @@ loadAvatars();
                             </tr>
                         </tbody>
                     </table>
+
+                    <div class="flex flex-row items-center dark:bg-base-200 bg-white px-3.5 py-4 gap-2">
+                        <div class="text-xs truncate relative py-2 px-4 rounded-[15px;] w-fit text-error mr-2">
+                            <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-[#E0383433;]"></span>
+                            {{ $t('staking.top') }} 33%
+                        </div>
+                        <div class="text-xs truncate relative py-2 px-4 rounded-[15px;] w-fit text-warning">
+                            <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-[#FFB20633;]"></span>
+                            {{ $t('staking.top') }} 67%
+                        </div>
+                        <div class="text-sm dark:text-[#64748B;] text-[#171C1FA6;] hidden md:!block pl-2 rounded-[15px;] px-4 pt-0.5 pb-0.5 border border-[#64748B;] ">
+                            {{ $t('staking.description') }}
+                        </div>
+                    </div>
                 </div>
 
-                <div class="divider"></div>
-                <div class="flex flex-row items-center">
+                <!-- <div class="divider"></div> -->
+                <!-- <div class="flex flex-row items-center">
                     <div class="text-xs truncate relative py-2 px-4 rounded-md w-fit text-error mr-2">
                         <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-error"></span>
                         {{ $t('staking.top') }} 33%
@@ -438,7 +450,7 @@ loadAvatars();
                     <div class="text-xs hidden md:!block pl-2">
                         {{ $t('staking.description') }}
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

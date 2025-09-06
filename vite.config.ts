@@ -22,7 +22,7 @@ const SUSPICIOUS_PATTERNS = [
   'invokefunction',
   '../',
   '..%2f',
-  '%2e%2e%2f'  // URL encoded ../
+  '%2e%2e%2f', // URL encoded ../
 ];
 
 // Create a custom security plugin
@@ -33,34 +33,34 @@ const securityPlugin = (): Plugin => ({
       try {
         // Get URL and decode safely
         const url = req.url || '';
-        
+
         // Check for suspicious patterns
-        if (SUSPICIOUS_PATTERNS.some(pattern => url.includes(pattern))) {
+        if (SUSPICIOUS_PATTERNS.some((pattern) => url.includes(pattern))) {
           // Log blocked attempt
           console.log(`Blocked suspicious request: ${url}`);
-          
+
           // Return 403 Forbidden
           res.statusCode = 403;
           res.end('Forbidden');
           return;
         }
-        
+
         // Process normal requests
         next();
       } catch (error) {
         // Handle any errors during middleware processing
-        console.error("Middleware error:", error);
+        console.error('Middleware error:', error);
         res.statusCode = 400;
         res.end('Bad Request');
       }
     });
-  }
+  },
 });
 
 // https://vitejs.dev/config/
 export default defineConfig({
   define: {
-    'process.env': {}
+    'process.env': {},
   },
   plugins: [
     // Add the security plugin FIRST to filter requests before other plugins
@@ -86,13 +86,7 @@ export default defineConfig({
       layoutsDirs: './src/layouts/',
     }),
     AutoImport({
-      imports: [
-        'vue',
-        'vue-router',
-        '@vueuse/math',
-        'vue-i18n',
-        'pinia',
-      ],
+      imports: ['vue', 'vue-router', '@vueuse/math', 'vue-i18n', 'pinia'],
       vueTemplate: true,
     }),
     VueI18nPlugin({
@@ -117,14 +111,15 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://pocket_indexer_api:3006',
+        // target: 'http://pocket_indexer_api:3006',
         // target: 'http://127.0.0.1:3005',
+        target: 'https://explorer.pocket.network',
         changeOrigin: true,
       },
     },
     fs: {
       // Deny access to .git directory
-      deny: ['.git']
-    }
+      deny: ['.git'],
+    },
   },
 });

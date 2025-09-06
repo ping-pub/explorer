@@ -118,28 +118,32 @@ const chartConfig = computed(() => {
 </script>
 
 <template>
-    <div class="bg-base-100 rounded shadow p-4">
-        <div class="text-lg text-main font-semibold mb-1">Commission Rate</div>
-        <div class="text-sm text-gray-500 dark:text-gray-400">
+    <div class="rounded-2xl border border-[#FFB206;] dark:border-gray-700 mb-4 overflow-auto">
+        <div class="dark:bg-base-100 bg-base-200 px-4 py-2">
+            <h2 class="text-2xl font-semibold text-[#171C1F] dark:text-[#ffffff;]">Commission Rate</h2>
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 px-4 py-2">
             {{ `Updated at ${format.toDay(props.commission?.update_time, 'short')}` }}
         </div>
-        <div class="w-80 m-auto">
-            <ApexCharts type="donut" :options="chartConfig" :series="series" />
-        </div>
-        <div>
-            <div class="flex items-center justify-center flex-wrap gap-x-3">
-                <div class="flex items-center gap-x-2">
-                    <div class="bg-success w-[6px] h-[6px] rounded-full"></div>
-                    <span class="text-caption">Rate:{{ rate.toFixed(0) }}%</span>
+        <div class="flex flex-row items-center justify-start gap-14">
+            <div class="px-4 py-2">
+                <div class="flex  flex-col gap-x-3">
+                    <div class="flex items-center gap-x-2">
+                        <div class="dark:bg-success bg-[#60BC29;] w-[14px] h-[14px] rounded"></div>
+                        <span class="text-caption">Rate: {{ rate.toFixed(0) }}%</span>
+                    </div>
+                    <div class="flex items-center gap-x-2">
+                        <div class="dark:bg-success bg-[#E8F3D9;] w-[14px] h-[14px] rounded opacity-60"></div>
+                        <span class="text-caption">24h: ±{{ change }}%</span>
+                    </div>
+                    <div class="flex items-center gap-x-2">
+                        <div class="dark:bg-secondary bg-[#E0E3E8;] w-[14px] h-[14px] rounded"></div>
+                        <span class="text-caption">Max: {{ max }}%</span>
+                    </div>
                 </div>
-                <div class="flex items-center gap-x-2">
-                    <div class="bg-success w-[6px] h-[6px] rounded-full opacity-60"></div>
-                    <span class="text-caption">24h: ±{{ change }}%</span>
-                </div>
-                <div class="flex items-center gap-x-2">
-                    <div class="bg-secondary w-[6px] h-[6px] rounded-full"></div>
-                    <span class="text-caption">Max:{{ max }}%</span>
-                </div>
+            </div>
+            <div class="flex items-center justify-start">
+                <ApexCharts type="donut" :options="chartConfig" :series="series" />
             </div>
         </div>
     </div>

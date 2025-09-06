@@ -24,7 +24,8 @@ module.exports = {
           ...require('daisyui/src/theming/themes')['[data-theme=light]'],
           primary: '#666cff',
           'base-100': '#231f20',
-          'base-200': '#252d37'
+          'base-200': '#252d37',
+          'success': '#1E8242',
         },
       },
       {
@@ -32,7 +33,8 @@ module.exports = {
           ...require('daisyui/src/theming/themes')['[data-theme=dark]'],
           primary: '#666cff',
           'base-100': '#231f20',
-          'base-200': '#252d37'
+          'base-200': '#252d37',
+          'success': '#1E8242',
         },
       },
     ],

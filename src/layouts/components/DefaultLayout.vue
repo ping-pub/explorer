@@ -153,48 +153,47 @@ const handleSafariChainChange = (event: Event) => {
 </script>
 
 <template>
-  <div>
-    <header class="bg-base-200 shadow-md dark:bg-[#231f20;] px-4">
+  <div class="dark:bg-[#00125b;]">
+    <header class="bg-[#09279F] shadow-md dark:bg-[#00125b;] px-4 py-3">
       <!-- DESKTOP NAV - Only shown on desktop, hidden on mobile -->
       <div class="desktop-nav">
         <div class="container mx-auto px-5 py-2 flex justify-between items-center">
 
           <div class="flex items-center">
             <a :href="`/${currentChain?.chainName}`" class="flex items-center mr-5">
-              <img class="w-10 h-10"
-                src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
-              <h1 class="flex-1 ml-1 text-lg font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
+              <img class="w-[9.89vw]" src="https://pocket.network/wp-content/uploads/2025/01/logo-white.png" />
+              <!-- <h1 class="flex-1 ml-1 text-lg font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
                 POCKET
-              </h1>
+              </h1> -->
             </a>
-            
+
             <!-- Safari-specific select element for chain selection -->
             <div v-if="isSafari" class="mr-5">
-              <select 
-                class="safari-select px-3 py-1 border-2 border-info rounded-md bg-base-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 cursor-pointer" 
-                @change="handleSafariChainChange"
-                :value="currentChain?.chainName">
-                <option v-for="chain in Object.values(dashboard.chains).sort((a,b)=>{
+              <select
+                class="safari-select px-3 py-1 border-2 border-info rounded-md bg-base-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 cursor-pointer"
+                @change="handleSafariChainChange" :value="currentChain?.chainName">
+                <option v-for="chain in Object.values(dashboard.chains).sort((a, b) => {
                   return a.prettyName.localeCompare(b.prettyName)
-                })" :key="chain.chainName" :value="chain.chainName" 
-                :selected="currentChain?.chainName === chain.chainName">
+                })" :key="chain.chainName" :value="chain.chainName"
+                  :selected="currentChain?.chainName === chain.chainName">
                   {{ chain.prettyName }}
                 </option>
               </select>
             </div>
-            
+
             <!-- Standard dropdown for non-Safari browsers -->
             <div v-else
-              class="dropdown dropdown-end flex align-center justify-center mr-5 border-solid border-2 border-info shadow-md rounded-md">
-              <label tabindex="0" class="btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-2 mr-5"
+              class="dropdown dropdown-end flex align-center justify-center mr-5 border-solid border-2 border-[#64748B80] bg-white rounded-xl dark:bg-transparent">
+              <label tabindex="0" class="btn-ghost btn-sm cursor-pointer flex items-center justify-center flex-row"
                 @click="toggleDropdown">
                 <span class="mr-1 flex flex-2" style="font-size: 0.8rem;text-transform: unset !important;">{{
                   currentChain?.prettyName }}</span>
+                {{ baseStore.connected ? '🟢' : '🔴' }}
                 <Icon icon="mdi-chevron-down" class="ml-1 flex flex-1" />
               </label>
               <ul v-show="dropdownOpen" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50"
                 style="font-size: 0.8rem;">
-                <li v-for="chain in Object.values(dashboard.chains).sort((a,b)=>{
+                <li v-for="chain in Object.values(dashboard.chains).sort((a, b) => {
                   return b.prettyName.localeCompare(a.prettyName)
                 })" :key="chain.chainName">
                   <a :href="`/${chain.chainName}`" class="hover:bg-gray-100 dark:hover:bg-[#373f59]"
@@ -207,7 +206,7 @@ const handleSafariChainChange = (event: Event) => {
               </ul>
             </div>
             <span v-if="behind" class="text-error">Syncing...</span>
-            <span v-else :class="baseStore.connected ? 'text-success' : 'text-error'">{{ baseStore.connected ? '🟢  Online' : '🔴  Offline' }}</span>
+            <!-- <span v-else :class="baseStore.connected ? 'text-success' : 'text-error'">{{ baseStore.connected ? '🟢  Online' : '🔴  Offline' }}</span> -->
             <!-- <span v-else class="pill mr-5">{{ alpha_beta }}</span> -->
           </div>
           <!-- Main nav items -->
@@ -236,19 +235,24 @@ const handleSafariChainChange = (event: Event) => {
                 {{ item?.heading }}
               </div>
             </div>
-            <a :href="`/${currentChain?.chainName}`" @click="sidebarShow = false"
-              class="hover:bg-gray-100 dark:hover:bg-[#373f59] mr-5">
-              <div class="capitalize text-gray-700 dark:text-gray-200" style="font-size: 1rem;">
+
+            <!-- "More" dropdown for additional nav items -->
+
+            <a :href="`/${currentChain?.chainName}`" @click="sidebarShow = false" class="mr-5">
+              <div class="capitalize text-white dark:text-gray-200" style="font-size: 1rem;">
                 Home
               </div>
             </a>
-            <!-- "More" dropdown for additional nav items -->
+
+            <!-- Icons section -->
+            <div class="py-2 flex justify-between items-center">
+              <NavbarSearch class="!inline-block" />
+            </div>
             <div v-if="moreNavItems?.length > 0"
-              class="dropdown dropdown-end flex align-center justify-center mr-5 border-solid border-b-1 border-success shadow-md rounded-md">
-              <label tabindex="0"
-                class="btn-ghost btn-sm m-1 cursor-pointer flex items-center flex-row px-2 mr-5 text-primary"
+              class="dropdown dropdown-end flex align-center justify-center ml-5 border-solid border-2 border-[#64748B80] bg-white rounded-xl dark:bg-transparent">
+              <label tabindex="0" class="btn-ghost btn-sm cursor-pointer flex items-center justify-center flex-row"
                 @click="toggleModuleDropdown">
-                <span class="mr-1 flex flex-1" style="font-size: 1rem;text-transform: unset !important;">
+                <span class="mr-1 flex flex-1" style="text-transform: unset !important;">
                   <!-- {{ show title of the current route }} -->
                   Blockchain
                 </span>
@@ -285,12 +289,7 @@ const handleSafariChainChange = (event: Event) => {
                 </li>
               </ul>
             </div>
-
-            <!-- Icons section -->
-            <div class="py-2 flex justify-between items-center">
-              <NavbarSearch class="!inline-block" />
-              <NavbarThemeSwitcher class="!inline-block pt-1" />
-            </div>
+            <NavbarThemeSwitcher class="!inline-block pt-1" />
           </div>
         </div>
       </div>
@@ -311,6 +310,7 @@ const handleSafariChainChange = (event: Event) => {
           </a>
 
           <NavbarThemeSwitcher class="!inline-block pt-1" />
+
         </div>
 
         <div v-if="mobileMenuOpen" class="mobile-menu">
@@ -323,14 +323,13 @@ const handleSafariChainChange = (event: Event) => {
 
               <!-- Safari-specific select element for mobile -->
               <div v-if="isSafari" class="mb-1">
-                <select 
+                <select
                   class="safari-select w-full px-3 py-2 border border-info rounded-lg bg-base-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 cursor-pointer"
-                  @change="handleSafariChainChange"
-                  :value="currentChain?.chainName">
-                  <option v-for="chain in Object.values(dashboard.chains).sort((a,b)=>{
+                  @change="handleSafariChainChange" :value="currentChain?.chainName">
+                  <option v-for="chain in Object.values(dashboard.chains).sort((a, b) => {
                     return a.prettyName.localeCompare(b.prettyName)
-                  })" :key="chain.chainName" :value="chain.chainName" 
-                  :selected="currentChain?.chainName === chain.chainName">
+                  })" :key="chain.chainName" :value="chain.chainName"
+                    :selected="currentChain?.chainName === chain.chainName">
                     {{ chain.prettyName }}
                   </option>
                 </select>
@@ -341,7 +340,7 @@ const handleSafariChainChange = (event: Event) => {
                 <div class="flex items-center justify-between rounded-lg border border-info p-2">
                   <div class="flex items-center">
                     <span class="text-base font-medium text-gray-700 dark:text-gray-200">{{ currentChain?.prettyName
-                    }}</span>
+                      }}</span>
                   </div>
                   <button @click="toggleMobileChainDropdown" class="p-1">
                     <Icon icon="mdi-chevron-down" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
@@ -393,10 +392,10 @@ const handleSafariChainChange = (event: Event) => {
         </div>
       </div>
     </header>
-    <div class="bg-base-200 dark:bg-[#231f20;] overflow-scroll no-scrollbar" style="height:calc(100vh - 5rem)">
+    <div class="bg-white dark:bg-[#00125b;]">
       <div class="w-11/12 mx-auto">
         <!-- 👉 Pages -->
-        <div class="overflow-scroll no-scrollbar" style="height:calc(100vh - 8rem)">
+        <div class="">
           <div v-if="behind" class="alert alert-error mb-4">
             <div class="flex gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -413,10 +412,9 @@ const handleSafariChainChange = (event: Event) => {
             </Transition>
           </RouterView>
         </div>
-
-        <newFooter />
       </div>
     </div>
+    <newFooter />
   </div>
 </template>
 
@@ -487,7 +485,7 @@ const handleSafariChainChange = (event: Event) => {
   background-repeat: no-repeat;
   background-position: right 0.5rem center;
   background-size: 1em;
-  padding-right: 2.5rem!important;
+  padding-right: 2.5rem !important;
   font-size: 0.8rem;
   text-transform: unset !important;
 }

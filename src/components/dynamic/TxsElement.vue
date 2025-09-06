@@ -18,22 +18,31 @@ const txs = computed(() => {
 const format = useFormatter();
 const chain = useBlockchain();
 </script>
+
 <template>
-  <div class="overflow-x-auto mt-4">
-    <table class="table w-full" density="compact" v-if="txs.length > 0">
+  <div
+    class="grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-y-3 text-sm dark:bg-base-200 bg-[#ffffff;] px-4 py-2 pt-0.5 pb-0.5 overflow-x-auto txsContainer"
+  >
+    <table
+      class="table w-full border-separate border-spacing-0"
+      density="compact"
+      v-if="txs.length > 0"
+    >
       <thead>
         <tr>
           <th style="position: relative; z-index: 2;">Hash</th>
-          <th>Msgs</th>
+          <th>Messages</th>
           <th>Memo</th>
         </tr>
       </thead>
       <tbody class="text-sm">
         <tr v-for="item in txs">
           <td>
-            <RouterLink :to="`/${chain.chainName}/tx/${item.hash}`" class="text-primary dark:invert">{{
-              item.hash
-            }}</RouterLink>
+            <RouterLink
+              :to="`/${chain.chainName}/tx/${item.hash}`"
+              class="text-[#153cd8;] dark:invert"
+              >{{ item.hash }}</RouterLink
+            >
           </td>
           <td>
             {{
