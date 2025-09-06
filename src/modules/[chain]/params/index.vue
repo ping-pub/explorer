@@ -233,7 +233,7 @@ function formatTitle(v: string) {
     <div class="bg-base-100 px-4 pt-3 pb-4 w-[80%;] rounded-md">
       <div class="flex items-center mb-4">
         <!-- <Icon icon="mdi:cube-outline" class="text-2xl text-info mr-2" /> -->
-        <div class="text-[30px]/[76px] font-semibold text-main">{{ chain.title }}</div>
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ chain.title }}</div>
       </div>
       <div
         class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4"
@@ -256,7 +256,7 @@ function formatTitle(v: string) {
 <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md mt-6">
   <div class="flex items-center mb-4">
     <!-- Title -->
-    <div class="text-[30px]/[76px] font-semibold text-main">
+    <div class="text-[30px]/[40px] font-semibold text-main">
       Validator Version Distribution
     </div>
   </div>
@@ -361,7 +361,7 @@ function formatTitle(v: string) {
       v-if="store.staking?.items && store.staking?.items?.length > 0">
       <div class="flex items-center mb-4">
         <!-- <Icon icon="mdi:bank" class="text-2xl text-secondary mr-2" /> -->
-        <div class="text-[30px]/[76px] font-semibold text-main">{{ store.staking?.title }}</div>
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.staking?.title }}</div>
       </div>
       <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
         <div
@@ -383,7 +383,7 @@ function formatTitle(v: string) {
       v-if="store.gov?.items && store.gov?.items?.length > 0">
       <div class="flex items-center mb-4">
         <!-- <Icon icon="mdi:gavel" class="text-2xl text-accent mr-2" /> -->
-        <div class="text-[30px]/[76px] font-semibold text-main">{{ store.gov?.title }}</div>
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.gov?.title }}</div>
       </div>
       <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-6 2xl:!grid-cols-7 gap-4">
         <div
@@ -405,7 +405,7 @@ function formatTitle(v: string) {
       v-if="store.distribution?.items && store.distribution?.items?.length > 0">
       <div class="flex items-center mb-4">
         <!-- <Icon icon="mdi:share-variant" class="text-2xl text-warning mr-2" /> -->
-        <div class="text-[30px]/[76px] font-semibold text-main">{{ store.distribution?.title }}</div>
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.distribution?.title }}</div>
       </div>
       <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
         <div
@@ -427,7 +427,7 @@ function formatTitle(v: string) {
       v-if="store.slashing?.items && store.slashing?.items?.length > 0">
       <div class="flex items-center mb-4">
         <!-- <Icon icon="mdi:alert" class="text-2xl text-error mr-2" /> -->
-        <div class="text-[30px]/[76px] font-semibold text-main">{{ store.slashing?.title }}</div>
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.slashing?.title }}</div>
       </div>
       <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
         <div

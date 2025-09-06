@@ -231,18 +231,18 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
             <!--balances  -->
 
           <div class="grid grid-cols-3 gap-[50%]">
-            <div class="flex flex-col items-start mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
-              <h2 class="text-[#64748B;] text-sm">Status</h2>
+            <!-- <div class="flex flex-col items-start mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
+              <h2 class="text-[#64748B;] text-sm">Status</h2> -->
               <!-- <div class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4">
                 <Icon icon="mdi-account-cash" class="text-balance" size="20" />
                 <div class="absolute top-0 bottom-0 left-0 right-0 bg-balance opacity-20"></div>
               </div> -->
-              <div class="flex flex-col gap-4">
+              <!-- <div class="flex flex-col gap-4">
                 <div class="text-sm font-semibold whitespace-nowrap">
                   {{ format.formatToken(balanceItem) }}
                 </div>
               </div>
-            </div>
+            </div> -->
 
 
             <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
