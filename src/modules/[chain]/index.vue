@@ -1141,23 +1141,19 @@ watch(() => base.blocktime, (newVal, oldVal) => {
         </div>
         <div class="text-xs text-secondary mt-2 mr-2 flex space-x-4 items-center">
           <span class="flex items-center space-x-0.5">
-            <span class="w-3 h-3 bg-[#FFB206;] rounded"></span>
-            <span>XX</span>
+            
           </span>
 
           <span class="flex items-center space-x-0.5">
-            <span class="w-3 h-3 bg-[#09279F;] rounded"></span>
-            <span>XX</span>
+            
           </span>
 
           <span class="flex items-center space-x-0.5">
-            <span class="w-3 h-3 bg-[#5E9AE4;] rounded"></span>
-            <span>X</span>
+            
           </span>
 
           <span class="flex items-center space-x-0.5">
-            <span class="w-3 h-3 bg-[#60BC29;] rounded"></span>
-            <span>X</span>
+            
           </span>
         </div>
       </div>
