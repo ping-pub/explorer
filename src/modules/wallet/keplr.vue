@@ -14,7 +14,6 @@ const selected = ref({} as ChainConfig);
 onMounted(() => {
   const chainStore = useBlockchain();
   selected.value = chainStore.current || Object.values(dashboard.chains)[0];
-  debugger;
   initParamsForKeplr();
 });
 async function initParamsForKeplr() {
