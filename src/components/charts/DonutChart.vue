@@ -17,7 +17,7 @@ const expenseRationChartConfig = computed(() => {
 <template>
   <ApexCharts
     type="donut"
-    height="410"
+    height="265"
     :options="expenseRationChartConfig"
     :series="series"
   />

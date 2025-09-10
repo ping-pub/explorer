@@ -261,12 +261,9 @@ function fetchAllKeyRotation() {
               </span>
             </td>
             <td class="text-xs text-right">
-              <span v-if="v.signing && v.signing.jailed_until.startsWith('1970')" class="text-right">{{
-        format.percent(
-          Number(v.signing.index_offset) /
-          (latest - Number(v.signing.start_height))
-        )
-      }}</span>
+              <span v-if="v.signing && v.signing.jailed_until.startsWith('1970')" class="text-right">
+                {{format.percent(Number(v.signing.index_offset) /(latest - Number(v.signing.start_height)))}}
+              </span>
               {{ v.signing?.index_offset }}
             </td>
             <td class="text-right">{{ v.signing?.start_height }}</td>
@@ -276,10 +273,11 @@ function fetchAllKeyRotation() {
             <tr>
               <td colspan="2" class="text-right">
                 {{ $t('uptime.minimum_uptime') }}:
-                <span class="lowercase tooltip" :data-tip="`Window size: ${slashingParam.signed_blocks_window}`"><span
-                    class="ml-2 btn btn-error btn-xs">{{
-        format.percent(slashingParam.min_signed_per_window)
-                    }}</span>
+                <span class="lowercase tooltip" :data-tip="`Window size: ${slashingParam.signed_blocks_window}`">
+                  <span
+                    class="ml-2 btn btn-error btn-xs">
+                    {{format.percent(slashingParam.min_signed_per_window)}}
+                  </span>
                 </span>
               </td>
               <td colspan="8"></td>

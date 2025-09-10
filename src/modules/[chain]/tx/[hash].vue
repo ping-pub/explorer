@@ -76,10 +76,10 @@ const formattedTxData = computed(() => {
                 >Search</RouterLink>
             <a class="tab text-gray-400 uppercase tab-active">Transaction</a>
         </div> -->
-        <h2 class="bg-[#09279F] dark:bg-base-200 text-2xl rounded-2xl px-4 py-2 my-4 font-bold text-[#ffffff;]">{{ $t('tx.title') }}</h2>
-        <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded-2xl mb-4 border dark:border-base-200">
+        <h2 class="bg-[#09279F] dark:bg-base-100 text-3xl rounded-2xl px-4 py-4 my-4 font-bold text-[#ffffff;]">{{ $t('tx.title') }}</h2>
+        <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded-2xl mb-4 border dark:border-base-100">
             <div class="overflow-hidden">
-               <table class="text-sm border-none divide-none w-full">
+               <table class="text-sm border-none divide-none w-full rounded-xl">
                <tbody>
                     <tr>
                         <td class="py-3 px-2 dark:text-gray-400 text-[#64748B]">{{ $t('tx.tx_hash') }}</td>
@@ -90,7 +90,7 @@ const formattedTxData = computed(() => {
 
                     <tr>
                         <td class="py-3 px-2 dark:text-gray-400 text-[#64748B]">{{ $t('account.height') }}</td>
-                        <td class="py-3 px-2 overflow-hidden dark:text-warning text-[#153cd8]">
+                        <td class="py-3 px-2 overflow-hidden dark:text-warning text-[#09279F] font-bold">
                             <RouterLink
                                 :to="`/${props.chain}/blocks/${tx.tx_response.height}`"
                                 class="text-primary dark:invert"
@@ -153,21 +153,21 @@ const formattedTxData = computed(() => {
         </div>
     </div>
 
-        <div v-if="tx.tx_response" class="bg-[#EFF2F5;] dark:bg-base-100 rounded-md border dark:border-base-200 mb-4">
-            <h2 class="card-title truncate mt-2 ml-4 mb-2 font-semibold align-middle">
+        <div v-if="tx.tx_response" class="bg-[#EFF2F5;] dark:bg-base-100 rounded-xl border dark:border-base-100 mb-4">
+            <h2 class="card-title truncate text-2xl mt-2 ml-4 font-semibold align-middle">
                 {{ $t('account.messages') }} ({{ messages.length }})
             </h2>
             <div v-for="(msg, i) in messages">
-                <div class="mt-4">
+                <div class="mt-2 mb-4">
                     <DynamicComponent :value="msg" />
                 </div>
             </div>
             <div v-if="messages.length === 0">{{ $t('tx.no_messages') }}</div>
         </div>
 
-        <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
-            <h2 class="card-title truncate mb-2">JSON</h2>
-            <div v-if="Object.keys(formattedTxData).length > 0" class="bg-base-200 p-4 rounded-md">
+        <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded-xl shadow">
+            <h2 class="card-title truncate text-2xl mb-2">JSON</h2>
+            <div v-if="Object.keys(formattedTxData).length > 0" class="bg-base-200 p-4 rounded-xl">
                 <!-- <JsonViewer 
                     :value="formattedTxData" 
                     :theme="baseStore.theme || 'jv-light'" 

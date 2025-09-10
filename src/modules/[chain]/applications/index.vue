@@ -45,10 +45,10 @@ function pageloadInit(p: number) {
 </script>
 <template>
   <div>
-  <p class="bg-[#09279F] dark:bg-base-200 text-2xl rounded-md px-4 py-2 my-4 font-bold text-[#ffffff;]">Applications</p>
-  <div class="bg-[#EFF2F5;] dark:bg-base-200 px-0.5 pt-0.5 pb-0.5 rounded-md overflow-x-auto txsContainer" @scroll="pageload" style="height: 78vh;overflow: scroll;">
-    <table class="table w-full table-compact">
-      <thead class="dark:bg-base-200 bg-white text-[#64748B;] sticky top-0">
+  <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">Applications</p>
+  <div class="bg-[#EFF2F5;] dark:bg-base-100 px-0.5 pt-0.5 pb-0.5 rounded-xl overflow-x-auto txsContainer" @scroll="pageload" style="height: 78vh;overflow: scroll;">
+    <table class="table w-full table-compact rounded-xl">
+      <thead class="dark:bg-base-100 bg-white text-[#64748B;] sticky top-0">
         <tr>
           <td>Rank</td>
           <td>Address</td>

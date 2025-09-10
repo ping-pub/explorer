@@ -111,13 +111,13 @@ onBeforeRouteUpdate(async (to, from, next) => {
             <p class="text-[#ffffff;] text-[30px]/[66px]">#{{ current.block?.header?.height }}</p>
           </h2>
         </div>
-        <div class="flex justify-end items-center mb-4 w-[15%;] space-x-0" v-if="props.height">
+        <div class="flex justify-end items-center mb-4 w-[15%;] gap-1" v-if="props.height">
           <RouterLink :to="`/${store.blockchain.chainName}/blocks/${height - 1}`"
-            class="dark:bg-[#09279F;] bg-[#F2F2F2;] rounded-2xl p-1 w-[47%;] h-[60px;] text-2xl mr-1 flex items-center justify-center">
+            class="dark:bg-gray-400 bg-[#F2F2F2;] rounded-2xl p-1 w-[47%;] h-[60px;] text-2xl mr-1 flex items-center justify-center">
             <Icon icon="mdi-arrow-left" class="w-[24px;] h-[24px;] dark:text-blue-100/50 text-[#64748B;]" />
           </RouterLink>
           <RouterLink :to="`/${store.blockchain.chainName}/blocks/${height + 1}`"
-            class="dark:bg-[#09279F] bg-[#64748B] rounded-2xl p-1 w-[45%] h-[60px] text-2xl flex items-center justify-center">
+            class="dark:bg-base-100 bg-[#64748B] rounded-2xl p-1 w-[45%] h-[60px] text-2xl flex items-center justify-center">
             <Icon icon="mdi-arrow-right" class="w-[24px] h-[24px] dark:text-blue-100/50 text-[#FFFFFF]" />
           </RouterLink>
         </div>
@@ -125,7 +125,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
       
       
 
-      <div class="dark:bg-base-200  px-4 pt-3 pb-4 rounded-2xl mb-4 border dark:border-base-100 border-gray-200">
+      <div class="dark:bg-base-100  px-4 pt-3 pb-4 rounded-2xl mb-4 border dark:border-base-100 border-gray-200">
         <div>
           <DynamicComponent :value="current.block_id" />
         </div>
@@ -139,14 +139,14 @@ onBeforeRouteUpdate(async (to, from, next) => {
         <DynamicComponent :value="current.block?.header" />
       </div>
 
-      <div class="bg-base-200 rounded-2xl border border-gray-200 dark:border-gray-700 mb-4 overflow-auto">
+      <div class="bg-base-200 dark:bg-base-100 rounded-2xl border border-gray-200 dark:border-gray-700 mb-4 overflow-auto">
         <div class="px-4 py-2">
           <h2 class="card-title flex flex-row justify-between text-[#171C1F] dark:text-[#ffffff;]">{{ $t('account.transactions') }}</h2>
         </div>
         <TxsElement :value="current.block?.data?.txs" />
       </div>
 
-      <div class="bg-base-200 rounded-2xl border border-gray-200 dark:border-gray-700 mb-4 overflow-auto">
+      <div class="flex flex-col  bg-base-200 dark:bg-base-100 rounded-2xl border border-gray-200 dark:border-gray-700 mb-4 overflow-auto">
         <div class="px-4 py-2">
           <h2 class="card-title flex flex-row justify-between text-[#171C1F] dark:text-[#ffffff;]">{{ $t('block.last_commit') }}</h2>
         </div>

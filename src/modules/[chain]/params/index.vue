@@ -227,10 +227,10 @@ function formatTitle(v: string) {
 </script>
 <template>
   <div>
-  <p class="bg-[#09279F;] dark:bg-base-200 text-2xl rounded-md px-4 py-2 my-4 font-bold text-[#ffffff;]">Parameters</p>
+  <p class="bg-[#09279F;] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">Parameters</p>
   <div class="overflow-hidden">
     <!-- Chain ID -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 w-[80%;] rounded-md">
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl">
       <div class="flex items-center mb-4">
         <!-- <Icon icon="mdi:cube-outline" class="text-2xl text-info mr-2" /> -->
         <div class="text-[30px]/[40px] font-semibold text-main">{{ chain.title }}</div>
@@ -241,7 +241,7 @@ function formatTitle(v: string) {
         <div
           v-for="(item, index) of chain.items"
           :key="index"
-          class="rounded-2xl bg-base-200 px-4 py-3 hover:bg-base-300"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
         >
           <div class="text-xs mb-2 text-secondary flex items-center justify-center">
             <Icon :icon="`mdi:${item.icon || 'information-outline'}`" class="mr-1 text-info" />
@@ -253,7 +253,7 @@ function formatTitle(v: string) {
     </div>
 
     <!-- Validator Version Distribution -->
-<div class="bg-base-100 px-4 pt-3 pb-4 rounded-md mt-6">
+<div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6">
   <div class="flex items-center mb-4">
     <!-- Title -->
     <div class="text-[30px]/[40px] font-semibold text-main">
@@ -271,7 +271,7 @@ function formatTitle(v: string) {
       <!-- Version Box (small width) -->
       <div class="md:col-span-1">
         <div v-for="(versionData, version) in validatorVersions" :key="version" 
-          class="bg-base-200 p-4 rounded-2xl hover:bg-base-300"
+          class="bg-base-200 p-4 rounded-xl hover:bg-base-300"
           :class="versionData.count === stakingStore.validators.length ? 'border-success' : versionData.count > stakingStore.validators.length / 2 ? 'border-primary' : 'border-warning'">
           <div class="flex justify-between items-center mb-2">
             <div class="flex items-center">
@@ -290,7 +290,7 @@ function formatTitle(v: string) {
               {{ Math.round(versionData.count / stakingStore.validators.length * 100) }}%
             </span>
           </div>
-          <div class="mt-3 w-full bg-base-300 rounded-full h-2.5 overflow-hidden">
+          <div class="mt-3 w-full bg-base-300 rounded-xl h-2.5 overflow-hidden">
             <div class="h-2.5 rounded-full transition-all duration-500 bg-[#60BC29;]" 
               :class="versionData.count === stakingStore.validators.length ? 'bg-success' : versionData.count > stakingStore.validators.length / 2 ? 'bg-primary' : 'bg-warning'"
               :style="`width: ${versionData.count / stakingStore.validators.length * 100}%`"></div>
@@ -299,15 +299,15 @@ function formatTitle(v: string) {
       </div>
 
       <!-- Status Summary Box (bigger width) -->
-      <div class="md:col-span-2 w-[50%;]">
-        <div class="p-3 rounded-2xl border-[#60BC29;] h-full flex items-center"
+      <div class="md:col-span-2 w-[50%] border border-[#60BC29] rounded-xl">
+        <div class="p-3 rounded-xl h-full flex items-center"
           :class="Object.keys(validatorVersions).length === 1 ? 'bg-success/10 border border-success/20' : Object.keys(validatorVersions).length > 1 ? 'bg-warning/10 border border-warning/20' : 'bg-base-200'">
           <Icon :icon="Object.keys(validatorVersions).length === 1 ? 'mdi:check-circle' : 'mdi:alert-circle'" 
-            class="text-3xl mr-2" 
+            class="text-5xl mr-2" 
             :class="Object.keys(validatorVersions).length === 1 ? 'text-[#60BC29;]' : 'text-warning'" />
           <div>
             <span class="text-xs">
-              <span v-if="Object.keys(validatorVersions).length === 1" class="dark:text-[#60BC29;] text-[#171C1F;]">
+              <span v-if="Object.keys(validatorVersions).length === 1" class="dark:text-[#60BC29;] text-[#171C1F;] font-semibold">
                 All validators are running the latest protocol version.
               </span>
               <span v-else-if="Object.keys(validatorVersions).length > 1" class="text-warning">
@@ -334,7 +334,7 @@ function formatTitle(v: string) {
 
 
 <!-- Custom template for CardParameter components -->
-<div class="bg-base-100 px-4 pt-3 pb-4 rounded-md mt-6 shadow-md border-t-4 border-success"
+<div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6 shadow-md border-t-4 border-success"
   v-if="store.mint?.items && store.mint?.items?.length > 0">
   <div class="flex items-center mb-4">
     <Icon icon="mdi:cash-multiple" class="text-2xl text-success mr-2" />
@@ -344,7 +344,7 @@ function formatTitle(v: string) {
     <div
       v-for="(item, index) of store.mint?.items"
       :key="index"
-      class="rounded-md bg-base-200 px-4 py-3 hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50"
+      class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50"
     >
       <div class="text-xs mb-2 text-secondary flex items-center">
         <Icon icon="mdi:currency-usd" class="mr-1 text-success" />
@@ -357,7 +357,7 @@ function formatTitle(v: string) {
 
     
     <!-- Staking Parameters -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md mt-6"
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
       v-if="store.staking?.items && store.staking?.items?.length > 0">
       <div class="flex items-center mb-4">
         <!-- <Icon icon="mdi:bank" class="text-2xl text-secondary mr-2" /> -->
@@ -367,7 +367,7 @@ function formatTitle(v: string) {
         <div
           v-for="(item, index) of store.staking?.items"
           :key="index"
-          class="rounded-2xl bg-base-200 px-4 py-3 hover:bg-base-300"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
         >
           <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
             <!-- <Icon icon="mdi:gavel" class="mr-1 text-secondary" /> -->
@@ -379,7 +379,7 @@ function formatTitle(v: string) {
     </div>
     
     <!-- Governance Parameters -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md mt-6"
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
       v-if="store.gov?.items && store.gov?.items?.length > 0">
       <div class="flex items-center mb-4">
         <!-- <Icon icon="mdi:gavel" class="text-2xl text-accent mr-2" /> -->
@@ -389,7 +389,7 @@ function formatTitle(v: string) {
         <div
           v-for="(item, index) of store.gov?.items"
           :key="index"
-          class="rounded-md bg-base-200 px-4 py-3 hover:bg-base-300"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
         >
           <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
             <!-- <Icon icon="mdi:vote" class="mr-1 text-accent" /> -->
@@ -401,7 +401,7 @@ function formatTitle(v: string) {
     </div>
     
     <!-- Distribution Parameters -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md mt-6"
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
       v-if="store.distribution?.items && store.distribution?.items?.length > 0">
       <div class="flex items-center mb-4">
         <!-- <Icon icon="mdi:share-variant" class="text-2xl text-warning mr-2" /> -->
@@ -411,7 +411,7 @@ function formatTitle(v: string) {
         <div
           v-for="(item, index) of store.distribution?.items"
           :key="index"
-          class="rounded-2xl bg-base-200 px-4 py-3 hover:bg-base-300"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
         >
           <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
             <!-- <Icon icon="mdi:percent" class="mr-1 text-warning" /> -->
@@ -423,7 +423,7 @@ function formatTitle(v: string) {
     </div>
     
     <!-- Slashing Parameters -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-md mt-6"
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
       v-if="store.slashing?.items && store.slashing?.items?.length > 0">
       <div class="flex items-center mb-4">
         <!-- <Icon icon="mdi:alert" class="text-2xl text-error mr-2" /> -->
@@ -433,7 +433,7 @@ function formatTitle(v: string) {
         <div
           v-for="(item, index) of store.slashing?.items"
           :key="index"
-          class="rounded-2xl bg-base-200 px-4 py-3 hover:bg-base-300"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
         >
           <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
             <!-- <Icon icon="mdi:sword" class="mr-1 text-error" /> -->

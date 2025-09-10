@@ -132,7 +132,7 @@ watch(() => list.value.length, () => {
 
 <template>
     <div>
-        <p class="text-2xl font-bold mb-4">Blocks</p>
+        <p class="flex items-center justify-start bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">Blocks</p>
         <div class="tabs tabs-boxed bg-transparent mb-4">
             <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'blocks' }" @click="tab = 'blocks'">{{
                 $t('block.recent') }}</a>
@@ -142,20 +142,20 @@ watch(() => list.value.length, () => {
         </div>
 
         <div v-show="tab === 'blocks'" 
-            class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-info overflow-x-auto blocksContainer" 
+            class="dark:bg-base-100 bg-base-200 px-0.5 pt-0.5 pb-0.5 rounded-xl border dark:border-base-100 overflow-x-auto blocksContainer" 
             ref="blockContainer"
             style="height: 78vh; overflow: auto;">
-            <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center justify-between mb-2">
                 <div class="flex items-center">
-                    <Icon icon="mdi:cube-outline" class="text-2xl text-info mr-2" />
-                    <div class="text-lg font-semibold text-main">{{ $t('block.recent') }} {{ $t('block.block_header') }}</div>
+                    <!-- <Icon icon="mdi:cube-outline" class="text-2xl text-info mr-2" /> -->
+                    <div class="text-2xl font-semibold text-main px-4 pt-2">{{ $t('block.recent') }} {{ $t('block.block_header') }}</div>
                 </div>
             </div>
             
-            <div class="bg-base-200 rounded-md overflow-auto">
+            <div class="bg-base-200 rounded-xl overflow-auto">
                 <table class="table table-compact w-full">
-                    <thead class="bg-white sticky top-0 z-10">
-                        <tr>
+                    <thead class="sticky top-0 z-10">
+                        <tr class="border-none">
                             <th class="bg-white dark:bg-base-200">{{ $t('block.block_header') }}</th>
                             <th class="bg-white dark:bg-base-200">{{ $t('account.hash') }}</th>
                             <th class="bg-white dark:bg-base-200">{{ $t('block.proposer') }}</th>
@@ -163,7 +163,7 @@ watch(() => list.value.length, () => {
                             <th class="bg-white dark:bg-base-200">{{ $t('account.time') }}</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="dark:bg-base-200 bg-white relative">
                         <!-- Add spacer at the top to push the visible items to the correct scroll position -->
                         <tr v-if="visibleBlocks.length > 0" class="h-0 m-0 p-0 border-none">
                             <td :style="{ height: `${visibleBlocks[0].index * itemHeight}px`, padding: 0 }" colspan="5"></td>
@@ -172,9 +172,9 @@ watch(() => list.value.length, () => {
                         <!-- Render visible blocks normally without absolute positioning -->
                         <tr v-for="({ item }, i) in visibleBlocks"
                             :key="i"
-                            class="transition-colors duration-200">
-                            <td class="font-medium">{{ item.block.header.height }}</td>
-                            <td class="truncate text-info" style="max-width: 18rem; overflow:hidden;">
+                            class="transition-colors duration-200 border-none">
+                            <td class="font-medium dark:text-warning text-[#09279F;]">{{ item.block.header.height }}</td>
+                            <td class="truncate dark:text-warning text-[#09279F;]" style="max-width: 18rem; overflow:hidden;">
                                 <RouterLink class="truncate hover:underline" :title="item.block_id.hash"
                                     :to="`/${chain}/blocks/${item.block.header.height}`">{{ item.block_id.hash }}
                                 </RouterLink>

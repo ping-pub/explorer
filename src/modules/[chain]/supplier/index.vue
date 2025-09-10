@@ -45,39 +45,39 @@ function pageloadInit(p: number) {
 </script>
 <template>
   <div>
-    <p class="bg-[#09279F] dark:bg-base-200 text-2xl rounded-md px-4 py-2 my-4 font-bold text-[#ffffff;]">Suppliers</p>
-  <div class="bg-[#EFF2F5;] dark:bg-base-200 rounded-md px-0.5 pt-0.5 pb-0.5 overflow-auto suppliersContainer" @scroll="pageload" style="height: 78vh;overflow: scroll;">
-    <table class="table w-full table-compact">
-      <thead class="dark:bg-base-200 bg-white sticky top-0">
-        <tr>
-          <td>Rank</td>
-          <td>Address</td>
-          <td>Stake</td>
-          <td>No. Of Services</td>
-          <td>Services</td>
-        </tr>
-      </thead>
-      <tr v-for="item, index in list.sort((a: any, b: any) => {
-          return parseInt(b.stake.amount) - parseInt(a.stake.amount);
-        })" class="hover dark-bg-base-200 bg-white">
-        <td>{{ index + 1 }}</td>
-        <td>
-          <div class="flex flex-col">
-            <span class="text-sm text-primary dark:invert whitespace-nowrap overflow-hidden">
+    <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">Suppliers</p>
+    <div class="bg-[#EFF2F5;] dark:bg-base-100 rounded-xl px-0.5 pt-0.5 pb-0.5 overflow-auto suppliersContainer" @scroll="pageload" style="height: 78vh;overflow: scroll;">
+      <table class="table w-full table-compact rounded-xl">
+        <thead class="dark:bg-base-100 bg-white sticky top-0">
+          <tr>
+            <td>Rank</td>
+            <td>Address</td>
+            <td>Stake</td>
+            <td>No. Of Services</td>
+            <td>Services</td>
+          </tr>
+        </thead>
+        <tr tr v-for="item, index in list.sort((a: any, b: any) => {
+            return parseInt(b.stake.amount) - parseInt(a.stake.amount);
+          })" class="hover dark:bg-base-200 bg-white rounded-xl">
+          <td>{{ index + 1 }}</td>
+          <td>
+            <div class="flex flex-col">
+              <span class="text-sm text-primary dark:invert whitespace-nowrap overflow-hidden">
 
-              <RouterLink :to="`/${chainStore.chainName}/account/${item?.operator_address}`" class="font-weight-medium">{{
-                item.operator_address }}</RouterLink>
-            </span>
-            <span class="text-xs">Owned by: {{ item.owner_address }}</span>
-          </div>
-        </td>
-        <td class="font-bold">{{ format.formatToken(item.stake) }}</td>
-        <td>{{ item.services?.length }}</td>
-        <td>{{ item.services?.map((sc: any) => sc.service_name?.length > 0 ? sc.service_name : sc.service_id).join(", ")
-        }}</td>
-      </tr>
-    </table>
-  </div>
+                <RouterLink :to="`/${chainStore.chainName}/account/${item?.operator_address}`" class="font-weight-medium">{{
+                  item.operator_address }}</RouterLink>
+              </span>
+              <span class="text-xs">Owned by: {{ item.owner_address }}</span>
+            </div>
+          </td>
+          <td class="font-bold">{{ format.formatToken(item.stake) }}</td>
+          <td>{{ item.services?.length }}</td>
+          <td>{{ item.services?.map((sc: any) => sc.service_name?.length > 0 ? sc.service_name : sc.service_id).join(", ")
+          }}</td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
 

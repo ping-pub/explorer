@@ -326,28 +326,12 @@ function getTransactionFee(tx: any): string {
     <!-- Updated Validator Header Card -->
     <div class="dark:bg-base-100 bg-[#09279F;] rounded-2xl p-4 flex items-center gap-[50px;] mt-4 mb-4">
       <!-- Validator Header with Avatar and Basic Info -->
-      <!-- <div class="flex items-center mb-4"> -->
-        <!-- <div class="avatar relative w-16 h-16 rounded-lg overflow-hidden mr-4"> -->
-          <!-- <div class="w-full h-full absolute opacity-10"></div> -->
-          <!-- <div class="w-full h-full rounded-lg flex items-center justify-center bg-base-200">
-            <img v-if="identity && avatars[identity] !== 'undefined'" v-lazy="logo(identity)"
-              class="object-contain w-full h-full" @error="(e) => { loadAvatar(identity); }" />
-            <Icon v-else class="text-5xl" :icon="`mdi-help-circle-outline`" />
-          </div> -->
-        <!-- </div> -->
         <div>
           <h2 class="text-2xl font-bold text-[#FFFFFF;]">{{ v.description?.moniker }}</h2>
-          <!-- <div class="text-sm text-gray-500 mb-2">
-            {{ v.description?.identity || '-' }}
-          </div> -->
-
         </div>
-      <!-- </div> -->
 
       <!-- Validator Details -->
-      <!-- <div class=""> -->
         <p class="text-sm dark:text-gray-200 text-[#FFFFFF;]">{{ v.description?.details }}</p>
-      <!-- </div> -->
     </div>
 
     <!-- Validator Stats Grid -->
@@ -395,41 +379,7 @@ function getTransactionFee(tx: any): string {
     <!-- Secondary Information Section -->
     <div class="grid grid-cols-1 md:!grid-cols-2 gap-4 my-4">
       <!-- About and Status Information -->
-
       <div class="bg-base-100 rounded-2xl p-4">
-        <!-- <div class="text-lg font-semibold text-main mb-4">{{ $t('staking.about_us') }}</div> -->
-
-        <!-- Website and Contact Info -->
-
-        <!-- <div class="grid grid-cols-1 gap-4 mb-4">
-          <div class="bg-base-200 rounded-lg p-3">
-            <div class="flex items-center">
-              <Icon icon="mdi-web" class="text-xl mr-2 text-primary" />
-              <span class="font-medium mr-1">{{ $t('staking.website') }}:</span>
-              <a :href="v?.description?.website || '#'"
-                :class="v?.description?.website ? 'cursor-pointer text-primary' : 'cursor-default'">
-                {{ v.description?.website || '-' }}
-              </a>
-              <Icon v-if="v?.description?.website" icon="mdi:content-copy" class="ml-2 cursor-pointer text-gray-500"
-                @click="copyWebsite(v.description?.website || '')" />
-            </div>
-          </div>
-
-          <div class="bg-base-200 rounded-lg p-3">
-            <div class="flex items-center">
-              <Icon icon="mdi-email-outline" class="text-xl mr-2 text-primary" />
-              <span class="font-medium mr-1">{{ $t('staking.contact') }}:</span>
-              <a v-if="v.description?.security_contact" :href="'mailto:' + v.description.security_contact || '#'"
-                class="cursor-pointer text-primary">
-                {{ v.description?.security_contact || '-' }}
-              </a>
-              <span v-else>-</span>
-              <Icon v-if="v.description?.security_contact" icon="mdi:content-copy"
-                class="ml-2 cursor-pointer text-gray-500" @click="copyWebsite(v.description?.security_contact || '')" />
-            </div>
-          </div>
-        </div> -->
-
         <!-- Validator Status -->
         <div class="text-2xl font-semibold text-main mb-2 mt-4">{{ $t('staking.validator_status') }}</div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -481,7 +431,7 @@ function getTransactionFee(tx: any): string {
         </div>
 
         <!-- Liquid Staking Section -->
-        <div class="text-2xl font-semibold text-main mb-4 mt-8">{{ $t('staking.liquid_staking') }}</div>
+        <!-- <div class="text-2xl font-semibold text-main mb-4 mt-8">{{ $t('staking.liquid_staking') }}</div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="bg-base-200 rounded-2xl p-3 flex flex-col items-center justify-center gap-6 pb-10">
             <div class="text-xs text-gray-500 text-[#64748B;]">{{ $t('staking.validator_bond_share') }}</div>
@@ -496,37 +446,36 @@ function getTransactionFee(tx: any): string {
               {{ format.formatToken({ amount: v.liquid_shares, denom: staking.params.bond_denom }, false) }}
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Commissions & Rewards -->
-         <div class="bg-base-100 rounded-2xl pt-3">
-        <div class="text-2xl font-semibold text-main mb-4">
-          {{ $t('staking.commissions_&_rewards') }}
-        </div>
+        <div class="bg-base-100 rounded-2xl pt-3">
+          <div class="text-2xl font-semibold text-main mb-4 mt-4">
+            {{ $t('staking.commissions_&_rewards') }}
+          </div> 
 
-        <div class="grid grid-cols-1 md:!grid-cols-2 gap-4">
-          <div class="bg-base-200 rounded-2xl p-3 flex flex-col items-center justify-center gap-4 pb-8">
-            <div class="text-sm dark:text-gray-500 text-[#64748B;] mb-2">{{ $t('staking.commissions') }}</div>
-            <div class="flex flex-wrap">
-              <div v-for="(i, k) in commission" :key="`commission-${k}`"
-                class="mr-2 mb-2 text-2xl dark:text-[#ffffff;] text-[#153cd8;]">
-                {{ format.formatToken2(i) }}
+          <div class="grid grid-cols-1 md:!grid-cols-2 gap-4">
+            <div class="bg-base-200 rounded-2xl p-3 flex flex-col items-center justify-center gap-4 pb-8">
+              <div class="text-sm dark:text-gray-500 text-[#64748B;] mb-2">{{ $t('staking.commissions') }}</div>
+              <div class="flex flex-wrap">
+                <div v-for="(i, k) in commission" :key="`commission-${k}`" class="mr-2 mb-2 text-2xl dark:text-[#ffffff;] text-[#153cd8;]">
+                  {{ format.formatToken2(i) }}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="bg-base-200 rounded-2xl  p-3 flex flex-col items-center justify-center gap-4 pb-8">
-            <div class="text-sm dark:text-gray-500 text-[#64748B;] mb-2">{{ $t('staking.outstanding') }} {{ $t('account.rewards') }}</div>
-            <div class="flex flex-wrap">
-              <div v-for="(i, k) in rewards" :key="`reward-${k}`"
-                class="mr-2 mb-2 text-2xl dark:text-[#ffffff;] text-[#153cd8;]">
-                {{ format.formatToken2(i) }}
+            <div class="bg-base-200 rounded-2xl  p-3 flex flex-col items-center justify-center gap-4 pb-8">
+              <div class="text-sm dark:text-gray-500 text-[#64748B;] mb-2">{{ $t('staking.outstanding') }} {{ $t('account.rewards') }}</div>
+              <div class="flex flex-wrap">
+                <div v-for="(i, k) in rewards" :key="`reward-${k}`"
+                  class="mr-2 mb-2 text-2xl dark:text-[#ffffff;] text-[#153cd8;]">
+                  {{ format.formatToken2(i) }}
+                </div>
               </div>
             </div>
+          <!-- </div> -->
           </div>
         </div>
-      </div>
-
       </div>
 
       <!-- Addresses Section -->
@@ -554,7 +503,7 @@ function getTransactionFee(tx: any): string {
               <Icon icon="mdi:content-copy" class="ml-2 cursor-pointer text-[#64748B;]" v-show="v.operator_address"
                 @click="copyWebsite(v.operator_address || '')" />
             </div>
-          </div>
+          </div>  
 
           <div class="bg-base-200 rounded-2xl p-3">
             <div class="text-sm dark:text-gray-500 text-[#64748B;] flex items-center">
@@ -562,7 +511,7 @@ function getTransactionFee(tx: any): string {
             </div>
             <div class="font-medium truncate flex flex-row items-center">
               {{ addresses.hex }}
-              <Icon icon="mdi:content-copy" class="ml-2 cursor-pointer " v-show="addresses.hex"
+              <Icon icon="mdi:content-copy" class="ml-2 cursor-pointer text-[#64748B;]" v-show="addresses.hex"
                 @click="copyWebsite(addresses.hex || '')" />
             </div>
           </div>
@@ -758,7 +707,7 @@ function getTransactionFee(tx: any): string {
         </div>
       </div>
     </div>
-  </div>
+  </div>  
 </template>
 
 <style>

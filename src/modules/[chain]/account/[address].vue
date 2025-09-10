@@ -182,7 +182,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
 <template>
   <div v-if="account">
     <!-- address -->
-    <div class="bg-[#09279F] dark:bg-base-200 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">
+    <div class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">
       <div class="flex items-center">
         <!-- img -->
         <!-- <div class="inline-flex relative w-11 h-11 rounded-md">
@@ -192,7 +192,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
           </div>
         </div> -->
         <!-- content -->
-        <div class="flex items-center flex-1 space-x-10 pl-4">
+        <div class="flex items-center flex-1 space-x-10">
           <h2 class="text-3xl card-title">{{ $t('account.address') }}</h2>
           <span class="text-xs truncate" style="width:max-content"> {{ address }} {{ "&nbsp;&nbsp;&nbsp;" }}
             <span class="float-right" style="width:max-content" v-if="copied">&nbsp;&nbsp;Copied!</span>
@@ -203,7 +203,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
     </div>
 
     <!-- Assets -->
-    <div class="rounded-2xl border dark:border-gray-700 border-[#FFB206;] mb-4 overflow-auto">
+    <div class="rounded-xl border dark:border-gray-700 border-[#FFB206;] mb-4 overflow-auto">
       <div class="flex justify-between text-main mb-4 dark:bg-base-100 bg-base-200 px-4 py-2">
         <h2 class="text-2xl font-semibold text-[#171C1F] dark:text-[#ffffff;]">{{ $t('account.assets') }}</h2>
         <!-- button -->
@@ -241,8 +241,16 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
                 <div class="text-sm font-semibold whitespace-nowrap">
                   {{ format.formatToken(balanceItem) }}
                 </div>
+              </div> -->
+
+              <!--delegations  -->
+              <div class="flex flex-row items-start mb-2 gap-4" v-for="(delegationItem, index) in delegations" :key="index">
+                <div class="flex text-sm font-semibold whitespace-nowrap">
+                  {{ format.formatToken(delegationItem?.balance) }}
+                </div>
               </div>
-            </div> -->
+
+            </div>
 
 
             <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
@@ -256,6 +264,13 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
                   {{ format.formatToken(balanceItem) }}
                 </div>
               </div>
+
+              <!--delegations  -->
+              <div class="flex flex-row items-start mb-2 gap-4" v-for="(delegationItem, index) in delegations" :key="index">
+                <div class="flex text-sm font-semibold whitespace-nowrap">
+                  {{ format.formatToken(delegationItem?.balance) }}
+                </div>
+              </div>
             </div>
             
             <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
@@ -265,18 +280,25 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
                   {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
                 </div>
               </div>
+
+              <!--delegations  -->
+              <div class="flex flex-row items-start mb-2 gap-4" v-for="(delegationItem, index) in delegations" :key="index">
+                <div class="flex items-start text-xs font-semibold">
+                  {{format.calculatePercent(delegationItem?.balance?.amount, totalAmount)}}
+                </div>
+              </div>
             </div>
 
             </div>
 
             <!--delegations  -->
-            <div class="grid grid-rows-3">
+            <!-- <div class="grid grid-rows-3">
               <div class="flex flex-row items-start mb-2 gap-4" v-for="(delegationItem, index) in delegations" :key="index">
-                  <div class="flex flex-row gap-x-[88%]">
-                    <div class="flex text-sm font-semibold whitespace-nowrap gap-8">
+                  <div class="flex flex-row gap-[80%]">
+                    <div class="flex text-sm font-semibold whitespace-nowrap">
                       {{ format.formatToken(delegationItem?.balance) }}
                     </div>
-                    <div class="flex text-sm font-semibold whitespace-nowrap gap-8">
+                    <div class="flex text-sm font-semibold whitespace-nowrap">
                         {{ format.formatToken(delegationItem?.balance) }}
                     </div>
                     <div class="flex items-start text-xs font-semibold">
@@ -284,7 +306,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
                     </div>
                   </div>
               </div>
-            </div>
+            </div> -->
             
             <!-- rewards.total -->
             <div class="flex items-center px-4 mb-2" v-for="(rewardItem, index) in rewards.total" :key="index">
@@ -411,18 +433,18 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
     </div>
 
     <!-- Transactions -->
-    <div class="bg-base-200  px-0.5 pt-0.5 pb-0.5 rounded-2xl mb-4">
-      <h2 class="card-title mb-4 px-4 py-2">{{ $t('account.sent') }}</h2>
-      <div class="services-table-wrapper services-table-scroll">
+    <div class="dark:bg-base-100 bg-base-200  px-0.5 pt-0.5 pb-0.5 rounded-xl mb-4">
+      <h2 class="card-title text-2xl px-4 py-2">{{ $t('account.sent') }}</h2>
+      <div class="services-table-wrapper services-table-scroll rounded-xl">
         <table class="table w-full text-sm">
-          <thead class="bg-base-300">
+          <thead class="bg-base-200 ">
             <tr>
-              <th class="dark:bg-base-300 bg-white py-3">{{ $t('account.height') }}</th>
-              <th class="dark:bg-base-300 bg-white py-3">{{ $t('account.hash') }}</th>
-              <th class="dark:bg-base-300 bg-white py-3">{{ $t('account.messages') }}</th>
-              <th class="dark:bg-base-300 bg-white py-3">{{ $t('account.amount') }}</th>
-              <th class="dark:bg-base-300 bg-white py-3">{{ $t('tx.fee') }}</th>
-              <th class="dark:bg-base-300 bg-white py-3">{{ $t('account.time') }}</th>
+              <th class="dark:bg-base-200 bg-white py-3">{{ $t('account.height') }}</th>
+              <th class="dark:bg-base-200 bg-white py-3">{{ $t('account.hash') }}</th>
+              <th class="dark:bg-base-200 bg-white py-3">{{ $t('account.messages') }}</th>
+              <th class="dark:bg-base-200 bg-white py-3">{{ $t('account.amount') }}</th>
+              <th class="dark:bg-base-200 bg-white py-3">{{ $t('tx.fee') }}</th>
+              <th class="dark:bg-base-200 bg-white py-3">{{ $t('account.time') }}</th>
             </tr>
           </thead>
           <tbody class="text-md dark:bg-base-200 bg-white">
@@ -433,12 +455,12 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
             </tr>
             <tr v-for="(v, index) in txs" :key="index">
               <td class="text-sm py-3 dark:bg-base-200 bg-white">
-                <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-primary dark:invert">{{
+                <RouterLink :to="`/${chain}/blocks/${v.height}`" class="dark:text-primary text-[#09279F;] dark:invert">{{
                   v.height
                 }}</RouterLink>
               </td>
               <td class="truncate py-3 dark:bg-base-200 bg-white" style="max-width: 200px">
-                <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-primary dark:invert">
+                <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="dark:text-primary text-[#09279F;] dark:invert">
                   {{ v.txhash }}
                 </RouterLink>
               </td>
@@ -446,7 +468,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
                 <div class="mr-2">
                   {{ format.messages(v.tx.body.messages) }}
                 </div>
-                <Icon v-if="v.code === 0" icon="mdi-check" class="text-success text-lg" />
+                <Icon v-if="v.code === 0" icon="mdi-check" class="text-[#60BC29;] text-lg" />
                 <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </td>
               <td class="dark:bg-base-200 bg-white">
@@ -466,18 +488,18 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
     </div>
 
     <!-- Received -->
-    <div class="bg-base-200  px-0.5 pt-0.5 pb-0.5 rounded-2xl mb-4">
-      <h2 class="card-title mb-4 px-4 py-2">{{ $t('account.received') }}</h2>
-      <div class="services-table-wrapper services-table-scroll">
+    <div class="dark:bg-base-100 bg-base-200 px-0.5 pt-0.5 pb-0.5 rounded-xl mb-4">
+      <h2 class="card-title  px-4 py-2 text-2xl">{{ $t('account.received') }}</h2>
+      <div class="services-table-wrapper services-table-scroll rounded-xl">
         <table class="table w-full text-sm">
           <thead>
             <tr>
-              <th class="py-3 dark:bg-base-300 bg-white">{{ $t('account.height') }}</th>
-              <th class="py-3 dark:bg-base-300 bg-white">{{ $t('account.hash') }}</th>
-              <th class="py-3 dark:bg-base-300 bg-white">{{ $t('account.messages') }}</th>
-              <th class="py-3 dark:bg-base-300 bg-white">{{ $t('account.amount') }}</th>
-              <th class="py-3 dark:bg-base-300 bg-white">{{ $t('tx.fee') }}</th>
-              <th class="py-3 dark:bg-base-300 bg-white">{{ $t('account.time') }}</th>
+              <th class="py-3 dark:bg-base-200 bg-white">{{ $t('account.height') }}</th>
+              <th class="py-3 dark:bg-base-200 bg-white">{{ $t('account.hash') }}</th>
+              <th class="py-3 dark:bg-base-200 bg-white">{{ $t('account.messages') }}</th>
+              <th class="py-3 dark:bg-base-200 bg-white">{{ $t('account.amount') }}</th>
+              <th class="py-3 dark:bg-base-200 bg-white">{{ $t('tx.fee') }}</th>
+              <th class="py-3 dark:bg-base-200 bg-white">{{ $t('account.time') }}</th>
             </tr>
           </thead>
           <tbody class="text-sm dark:bg-base-200 bg-white">
@@ -526,12 +548,14 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
     </div>
 
     <!-- Account -->
-    <div class="bg-base-200  px-0.5 pt-0.5 pb-0.5 rounded-2xl mb-4">
-      <h2 class="card-title mb-4 px-4 py-2">{{ $t('account.acc') }}</h2>
+    <div v-if="account" class="dark:bg-base-100 bg-base-200 px-0.5 pt-0.5 pb-0.5 rounded-xl mb-4">
+      <h2 class="card-title text-2xl px-4 py-2">{{ $t('account.acc') }}</h2>
       <DynamicComponent :value="account" />
     </div>
-  </div>
-  <div v-else class="text-no text-sm">{{ $t('account.error') }}</div>
+
+    <div v-else class="text-no text-sm">
+      {{ $t('account.error') }}
+    </div>
 </template>
 
 <style scoped>
