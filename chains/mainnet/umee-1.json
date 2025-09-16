@@ -1,17 +1,31 @@
 {
     "chain_name": "umee-1",
-    "api": ["https://api.djtibdrvjusuzjq0furs0tls0tck1jsum.network.umee.cc"],
-    "rpc": ["https://umee-rpc.polkachu.com:443"],
+    "api": [
+        {
+            "address": "https://umee-api.polkachu.com:443",
+            "provider": "Polkachu",
+            "type": "rest"
+        }
+    ],
+    "rpc": [
+        {
+            "address": "https://umee-rpc.polkachu.com:443",
+            "provider": "Polkachu",
+            "type": "rpc"
+        }
+    ],
     "sdk_version": "0.47.11",
     "coin_type": "118",
     "min_tx_fee": "8000",
     "addr_prefix": "umee",
     "logo": "/logos/umee.png",
-    "assets": [{
-        "base": "uumee",
-        "symbol": "UMEE",
-        "exponent": "6",
-        "coingecko_id": "umee",
-        "logo": "/logos/umee.png"
-    }]
-  }
+    "assets": [
+        {
+            "base": "uumee",
+            "symbol": "UMEE",
+            "exponent": "6",
+            "coingecko_id": "umee",
+            "logo": "/logos/umee.png"
+        }
+    ]
+}
