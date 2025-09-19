@@ -45,7 +45,7 @@ function pageloadInit(p: number) {
 </script>
 <template>
   <div>
-  <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">Gateways</p>
+  <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-[#ffffff]">Gateways</p>
   <div class="bg-[#EFF2F5;] dark:bg-base-100 rounded-xl px-0.5 pt-0.5 pb-0.5 overflow-auto gatewaysContainer" @scroll="pageload"
     style="height: 78vh;overflow: scroll;">
     <table class="table w-full table-compact">
@@ -62,7 +62,7 @@ function pageloadInit(p: number) {
         <td>{{ index + 1 }}</td>
         <td>
           <div class="flex flex-col">
-            <span class="text-sm text-primary dark:invert whitespace-nowrap overflow-hidden">
+            <span class="text-sm text-[#09279F] dark:invert whitespace-nowrap overflow-hidden">
 
               <RouterLink :to="`/${chainStore.chainName}/account/${item?.address}`" class="font-weight-medium">{{
                 item.address }}</RouterLink>

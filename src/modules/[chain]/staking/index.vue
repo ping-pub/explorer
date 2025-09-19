@@ -249,53 +249,53 @@ loadAvatars();
 </script>
 <template>
     <div>  
-        <p class="bg-[#09279F;] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">Validators</p>
+        <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-[#ffffff]">Validators</p>
         <div class="grid sm:grid-cols-1 md:grid-cols-4 py-4 gap-4 mb-4">
             <div class="flex dark:bg-base-100 bg-base-200 rounded-xl p-4">
                 <span>
-                    <div class="bg-[#5E9AE4;] relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
-                        <Icon class="text-[#ffffff;]" icon="mdi:trending-up" size="32" />
+                    <div class="bg-[#5E9AE4] relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                        <Icon class="text-[#ffffff]" icon="mdi:trending-up" size="32" />
                         <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-success"></div>
                     </div>
                 </span>
                 <span>
-                    <div class="text-xs text-[#64748B;]">{{ $t('staking.inflation') }}</div>
+                    <div class="text-xs text-[#64748B]">{{ $t('staking.inflation') }}</div>
                     <div class="font-bold">{{ format.percent(mintStore.inflation) }}</div>
                 </span>
             </div>
             <div class="flex dark:bg-base-100 bg-base-200 rounded-xl p-4">
                 <span>
-                    <div class="bg-[#5E9AE4;] relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
-                        <Icon class="text-[#ffffff;]" icon="mdi:lock-open-outline" size="32" />
+                    <div class="bg-[#5E9AE4] relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                        <Icon class="text-[#ffffff]" icon="mdi:lock-open-outline" size="32" />
                         <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-primary"></div>
                     </div>
                 </span>
                 <span>
-                    <div class="text-xs text-[#64748B;]">{{ $t('staking.unbonding_time') }}</div>
+                    <div class="text-xs text-[#64748B]">{{ $t('staking.unbonding_time') }}</div>
                     <div class="font-bold">{{ formatSeconds(staking.params?.unbonding_time) }}</div>
                 </span>
             </div>
             <div class="flex dark:bg-base-100 bg-base-200 rounded-xl p-4">
                 <span>
-                    <div class="bg-[#5E9AE4;] relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
-                        <Icon class="text-[#ffffff;]" icon="mdi:alert-octagon-outline" size="32" />
+                    <div class="bg-[#5E9AE4] relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                        <Icon class="text-[#ffffff]" icon="mdi:alert-octagon-outline" size="32" />
                         <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-error"></div>
                     </div>
                 </span>
                 <span>
-                    <div class="text-xs text-[#64748B;]">{{ $t('staking.double_sign_slashing') }}</div>
+                    <div class="text-xs text-[#64748B]">{{ $t('staking.double_sign_slashing') }}</div>
                     <div class="font-bold">{{ format.percent(slashing.slash_fraction_double_sign) }}</div>
                 </span>
             </div>
             <div class="flex dark:bg-base-100 bg-base-200 rounded-xl p-4">
                 <span>
-                    <div class="bg-[#5E9AE4;] relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
-                        <Icon class="text-[#ffffff;]" icon="mdi:pause" size="32" />
+                    <div class="bg-[#5E9AE4] relative w-9 h-9 rounded overflow-hidden flex items-center justify-center mr-2">
+                        <Icon class="text-[#ffffff]" icon="mdi:pause" size="32" />
                         <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20 bg-error"></div>
                     </div>
                 </span>
                 <span>
-                    <div class="text-xs text-[#64748B;]">{{ $t('staking.downtime_slashing') }}</div>
+                    <div class="text-xs text-[#64748B]">{{ $t('staking.downtime_slashing') }}</div>
                     <div class="font-bold">{{ format.percent(slashing.slash_fraction_downtime) }}</div>
                 </span>
             </div>
@@ -404,12 +404,12 @@ loadAvatars();
                     </table>
 
                     <div class="flex flex-row items-center dark:bg-base-200 bg-white px-3.5 py-4 gap-2">
-                        <div class="text-xs truncate relative py-2 px-4 rounded-[15px;] w-fit text-error mr-2">
-                            <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-[#E0383433;]"></span>
+                        <div class="text-xs truncate relative py-2 px-4 rounded-[15px;] w-fit text-[#171C1F] dark:text-error mr-2">
+                            <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-[#E03834]"></span>
                             {{ $t('staking.top') }} 33%
                         </div>
-                        <div class="text-xs truncate relative py-2 px-4 rounded-[15px;] w-fit text-warning">
-                            <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-[#FFB20633;]"></span>
+                        <div class="text-xs truncate relative py-2 px-4 rounded-[15px;] w-fit text-[#171C1F] dark:text-warning">
+                            <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-[#FFB206]"></span>
                             {{ $t('staking.top') }} 67%
                         </div>
                         <div class="text-sm dark:text-[#64748B;] text-[#171C1FA6;] hidden md:!block pl-2 rounded-[15px;] px-4 pt-0.5 pb-0.5 border border-[#64748B;] ">

@@ -893,10 +893,10 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                     <span class="text-xs text-secondary">24h High / Low</span>
                   </div>
                   <div class="text-xs font-medium mt-1 flex gap-1">
-                    <span class="text-xs text-success">${{ store.coinInfo?.market_data?.high_24h?.usd?.toFixed(6) ||
+                    <span class="text-xs text-[#60BC29]">${{ store.coinInfo?.market_data?.high_24h?.usd?.toFixed(6) ||
                       '0.00' }}</span>
                     /
-                    <span class="text-xs text-error">${{ store.coinInfo?.market_data?.low_24h?.usd?.toFixed(6) || '0.00'
+                    <span class="text-xs text-[#EE6161]">${{ store.coinInfo?.market_data?.low_24h?.usd?.toFixed(6) || '0.00'
                       }}</span>
                   </div>
                 </div>
@@ -906,7 +906,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                     <Icon icon="mdi:trending-up" class=" text-sm mr-1 text-[#64748B]" />
                     <span class="text-xs text-secondary">All Time High</span>
                     <span class="text-xs ml-2"
-                      :class="{ 'text-error': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) < 0, 'text-success': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) > 0 }">
+                      :class="{ 'text-[#EE6161]': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) < 0, 'text-[#60BC29]': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) > 0 }">
                       ({{
                         store.coinInfo?.market_data?.ath_change_percentage?.usd?.toFixed(2)
                         || '0.00' }}%)
@@ -922,7 +922,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                     <Icon icon="mdi:trending-down" class="text-sm mr-1 text-[#64748B]" />
                     <span class="text-xs text-secondary">All Time Low</span>
                     <span class="text-xs ml-2"
-                      :class="{ 'text-error': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) < 0, 'text-success': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) > 0 }">
+                      :class="{ 'text-[#EE6161]': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) < 0, 'text-[#60BC29]': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) > 0 }">
                       ({{
                         store.coinInfo?.market_data?.atl_change_percentage?.usd?.toFixed(2)
                         || '0.00' }}%)
@@ -947,7 +947,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                     '0.00' }}
                 </div>
                 <div class="text-sm text-end"
-                  :class="(store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0 ? 'text-success' : 'text-error'">
+                  :class="(store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0 ? 'text-[#60BC29]' : 'text-[#EE6161]'">
                   {{ (store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0
                     ? '+' : '' }} {{
                     store.coinInfo?.market_data?.price_change_percentage_24h?.toFixed(2)
@@ -974,7 +974,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
 
               <!-- Buy Button -->
               <a class="!text-white btn btn-sm w-full !bg-[#09279F] !border-[#09279F]"
-                :class="{ '!btn-success': store.trustColor === 'green', '!btn-warning': store.trustColor === 'yellow' }"
+                :class="{ '!btn-[#60BC29]': store.trustColor === 'green', '!btn-warning': store.trustColor === 'yellow' }"
                 :href="ticker?.trade_url" target="_blank">
                 {{ $t('index.buy') }} {{ store.coinInfo?.symbol?.toUpperCase() || 'COIN'
                 }}
@@ -1093,7 +1093,6 @@ watch(() => base.blocktime, (newVal, oldVal) => {
       <!-- Network Growth Chart -->
       <div class="dark:bg-base-100 bg-base-200 px-1 pt-3 pb-1 rounded-md">
         <div class="flex items-center mb-4">
-          <!-- <Icon icon="mdi:chart-line" class="text-2xl text-primary mr-2" /> -->
           <div class="text-lg font-semibold text-main ml-5">Network Growth (7 Days)</div>
         </div>
         <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md">

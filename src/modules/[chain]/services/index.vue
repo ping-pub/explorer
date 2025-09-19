@@ -131,7 +131,7 @@ const sortedList = computed(() => {
 </script>
 <template>
   <div>
-  <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">Services</p>
+  <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-[#ffffff]">Services</p>
   <div class="bg-[#EFF2F5;] dark:bg-base-100 rounded-xl px-0.5 pt-0.5 pb-0.5 overflow-auto servicesContainer" @scroll="pageload"
     style="height: 78vh;overflow: scroll;">
     <table class="table w-full table-compact">
@@ -157,7 +157,7 @@ const sortedList = computed(() => {
         <td class="font-bold dark:bg-base-200 bg-[#ffffff]">{{ item.name }}</td>
         <td class="dark:bg-base-200 bg-[#ffffff]">
           <div class="flex flex-col">
-            <span class="text-sm text-primary dark:invert whitespace-nowrap overflow-hidden">
+            <span class="text-sm text-[#09279F] dark:invert whitespace-nowrap overflow-hidden">
 
               <RouterLink :to="`/${chainStore.chainName}/account/${item?.owner_address}`" class="font-weight-medium">{{
                 item.owner_address }}</RouterLink>
