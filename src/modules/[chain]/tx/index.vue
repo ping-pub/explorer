@@ -51,7 +51,7 @@ function handleScroll() {
             <div class="bg-base-200 rounded-md overflow-auto">
                 <table class="table w-full table-compact">
                     <thead class="bg-white sticky top-0">
-                        <tr>
+                        <tr class="border-b-[0px]">
                             <th class="bg-white dark:bg-base-100">{{ $t('tx.tx_hash') }}</th>
                             <th class="bg-white dark:bg-base-100">{{ $t('block.block') }}</th>
                             <th class="bg-white dark:bg-base-100">{{ $t('staking.status') }}</th>
@@ -63,7 +63,7 @@ function handleScroll() {
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in base.allTxs" :index="index"
-                            class="hover:bg-base-300 transition-colors rounded-xl duration-200">
+                            class="hover:bg-base-300 transition-colors rounded-xl duration-200 border-b-[0px]">
                             <td class="dark:bg-base-200 bg-white truncate dark:text-warning text-[#153cd8;]"
                                 style="max-width:25vw">
                                 <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.hash}`">{{

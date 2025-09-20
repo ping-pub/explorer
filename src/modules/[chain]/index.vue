@@ -787,7 +787,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
 <template>
   <div>
     <div class="flex mt-4 mb-2">
-      <div class="flex bg-base-100 dark:bg-[#00125b;] gap-10">
+      <div class="flex bg-base-100 dark:bg-[#00125b;] gap-10 flex-1">
         <div class="w-[45%] py-2">
           <div class="text-lg font-semibold text-main">Network Status</div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-2 my-2">
@@ -874,14 +874,14 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                 </div>
                 <div
                   class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-1 rounded-xl hover:bg-base-300 items-center w-full">
-                  <div class="flex mb-3 items-center">
+                  <div class="flex mb-5 items-center">
                     <Icon icon="mdi:coins" class="text-sm mr-1 text-[#64748B]" />
                     <span class="text-xs text-secondary">Circulating Supply</span>
                   </div>
-                  <div class="text-sm text-main flex items-center justify-center font-medium flex-col"> {{
+                  <div class="text-xl text-main flex items-center justify-center font-medium"> {{
                     format.formatNumber((store.coinInfo?.market_data?.circulating_supply
-                      || 0), '123,456,789.[]') }}
-                    <span class="text-sm font-medium">{{ store.coinInfo?.symbol?.toUpperCase() || '' }}</span>
+                      || 0), '123,456,789.[]') }} {{ store.coinInfo?.symbol?.toUpperCase() || '' }}
+                    <!-- <span class="text-sm font-medium"></span> -->
                   </div>
                 </div>
               </div>
@@ -937,8 +937,8 @@ watch(() => base.blocktime, (newVal, oldVal) => {
             <div
               class="dark:bg-base-100 bg-base-200 p-4 rounded-[20px] hover:bg-base-300 grid grid-cols-1 md:grid-cols-1 w-[25%] items-center justify-between">
               <!-- Logo -->
-              <img v-if="useBaseStore().theme === 'dark'" src="https://pocket.network/wp-content/uploads/2025/01/logo-white.png" alt="Coin logo" class="w-2/3" />
-              <img v-else src="https://pocket.network/wp-content/uploads/2024/12/logo.png" alt="Coin logo" class="w-2/3" />
+              <img v-if="useBaseStore().theme === 'dark'" src="https://pocket.network/wp-content/uploads/2025/01/logo-white.png" alt="Coin logo" class="w-2/3 justify-self-center" />
+              <img v-else src="https://pocket.network/wp-content/uploads/2024/12/logo.png" alt="Coin logo" class="w-2/3 justify-self-center" />
 
               <!-- Price -->
               <div class="flex flex-col item-center mx-auto">
@@ -1091,7 +1091,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
     <!-- Charts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
       <!-- Network Growth Chart -->
-      <div class="dark:bg-base-100 bg-base-200 px-1 pt-3 pb-1 rounded-md">
+      <div class="dark:bg-base-100 bg-base-200 pt-3 rounded-lg border-[3px] border-solid border-base-200 dark:border-base-100">
         <div class="flex items-center mb-4">
           <div class="text-lg font-semibold text-main ml-5">Network Growth (7 Days)</div>
         </div>
@@ -1103,7 +1103,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
       </div>
 
       <!-- Transaction History Chart -->
-      <div class="dark:bg-base-100 bg-base-200 px-1 pt-3 pb-1 rounded-md ">
+      <div class="dark:bg-base-100 bg-base-200 pt-3 rounded-lg border-[3px] border-solid border-base-200 dark:border-base-100">
         <div class="flex items-center mb-4">
           <!-- <Icon icon="mdi:chart-timeline-variant" class="text-2xl text-warning mr-2" /> -->
           <div class="text-lg font-semibold text-main ml-5">Transaction History</div>
@@ -1113,30 +1113,13 @@ watch(() => base.blocktime, (newVal, oldVal) => {
             <ApexCharts type="area" height="280" :options="txChartOptions" :series="txChartSeries" />
           </div>
         </div>
-        <div class="text-xs text-secondary mt-2 mr-2 flex space-x-4 items-center">
-          <span class="flex items-center space-x-0.5">
-            
-          </span>
-
-          <span class="flex items-center space-x-0.5">
-            
-          </span>
-
-          <span class="flex items-center space-x-0.5">
-            
-          </span>
-
-          <span class="flex items-center space-x-0.5">
-            
-          </span>
-        </div>
       </div>
     </div>
 
     <!-- Tables Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
       <!-- Blocks Table -->
-      <div class="dark:bg-base-100 bg-base-200 px-1 pt-3 pb-1 rounded-md mb-5">
+      <div class="dark:bg-base-100 bg-base-200 pt-3 rounded-lg mb-5 border-[3px] border-solid border-base-200 dark:border-base-100">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center">
             <!-- <Icon icon="mdi:cube-outline" class="text-2xl text-info mr-2" /> -->
@@ -1195,7 +1178,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
       </div>
 
       <!-- Transactions Table -->
-      <div class="dark:bg-base-100 bg-base-200 px-1 pt-3 pb-1 rounded-md mb-5">
+      <div class="dark:bg-base-100 bg-base-200 pt-3 rounded-lg mb-5 border-[3px] border-solid border-base-200 dark:border-base-100">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center">
             <!-- <Icon icon="mdi:file-document-outline" class="text-2xl text-black mr-2" /> -->

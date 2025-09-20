@@ -30,15 +30,17 @@ onMounted(() => {
 
 function pageload() {
   const container = document.querySelector('.servicesContainer') as HTMLDivElement;
+  if (!container) return;
+  
   // Check if the scroll is at the bottom
-  // let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
-  // if (isAtBottom && parseInt(pageResponse.value.total || '0') != list.value.length) {
-  //   pageRequest.value.setPage((pageRequest.value.offset || 0 / pageRequest.value.limit) + 1)
-  //   chainStore.rpc.getServices(pageRequest.value).then(x => {
-  //     list.value = [...list.value, ...x.service]
-  //     pageResponse.value = x.pagination
-  //   });
-  // }
+  let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
+  if (isAtBottom && parseInt(pageResponse.value.total || '0') > list.value.length) {
+    pageRequest.value.setPage(Math.floor(list.value.length / pageRequest.value.limit) + 1)
+    chainStore.rpc.getServices(pageRequest.value).then(x => {
+      list.value = [...list.value, ...x.service]
+      pageResponse.value = x.pagination
+    });
+  }
 }
 
 function pageloadInit(p: number) {
@@ -130,7 +132,7 @@ const sortedList = computed(() => {
 });
 </script>
 <template>
-  <div>
+  <div class="mb-[2vh]">
   <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-[#ffffff]">Services</p>
   <div class="bg-[#EFF2F5;] dark:bg-base-100 rounded-xl px-0.5 pt-0.5 pb-0.5 overflow-auto servicesContainer" @scroll="pageload"
     style="height: 78vh;overflow: scroll;">

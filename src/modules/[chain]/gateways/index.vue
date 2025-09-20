@@ -24,10 +24,12 @@ onMounted(() => {
 
 function pageload() {
   const container = document.querySelector('.gatewaysContainer') as HTMLDivElement;
+  if (!container) return;
+  
   // Check if the scroll is at the bottom
   let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
-  if (isAtBottom && parseInt(pageResponse.value.total || '0') != list.value.length) {
-    pageRequest.value.setPage((list.value.length || 0 / pageRequest.value.limit) + 1)
+  if (isAtBottom && parseInt(pageResponse.value.total || '0') > list.value.length) {
+    pageRequest.value.setPage(Math.floor(list.value.length / pageRequest.value.limit) + 1)
     chainStore.rpc.getGateways(pageRequest.value).then(x => {
       list.value = [...list.value, ...x.gateways]
       pageResponse.value = x.pagination
@@ -44,7 +46,7 @@ function pageloadInit(p: number) {
 }
 </script>
 <template>
-  <div>
+  <div class="mb-[2vh]">
   <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-[#ffffff]">Gateways</p>
   <div class="bg-[#EFF2F5;] dark:bg-base-100 rounded-xl px-0.5 pt-0.5 pb-0.5 overflow-auto gatewaysContainer" @scroll="pageload"
     style="height: 78vh;overflow: scroll;">

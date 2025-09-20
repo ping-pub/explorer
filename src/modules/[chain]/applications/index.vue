@@ -24,6 +24,8 @@ onMounted(() => {
 
 function pageload() {
   const container = document.querySelector('.applicationsContainer') as HTMLDivElement;
+  if (!container) return;
+  
   // Check if the scroll is at the bottom
   let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
   if (isAtBottom && pageResponse.value.next_key != null) {
@@ -44,9 +46,9 @@ function pageloadInit(p: number) {
 }
 </script>
 <template>
-  <div>
+  <div class="mb-[2vh]">
   <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-[#ffffff]">Applications</p>
-  <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-0.5 rounded-xl overflow-x-auto txsContainer" @scroll="pageload" style="height: 78vh; overflow: scroll;">
+  <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-0.5 rounded-xl overflow-x-auto applicationsContainer" @scroll="pageload" style="height: 78vh; overflow: scroll;">
     <table class="table w-full table-compact rounded-xl">
       <thead class="dark:bg-base-100 bg-white text-[#64748B] sticky top-0">
         <tr>

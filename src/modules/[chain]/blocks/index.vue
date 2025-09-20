@@ -145,12 +145,6 @@ watch(() => list.value.length, () => {
             class="dark:bg-base-100 bg-base-200 px-0.5 pt-0.5 pb-0.5 rounded-xl border dark:border-base-100 overflow-x-auto blocksContainer" 
             ref="blockContainer"
             style="height: 78vh; overflow: auto;">
-            <div class="flex items-center justify-between mb-2">
-                <div class="flex items-center">
-                    <!-- <Icon icon="mdi:cube-outline" class="text-2xl text-info mr-2" /> -->
-                    <div class="text-2xl font-semibold text-main px-4 pt-2">{{ $t('block.recent') }} {{ $t('block.block_header') }}</div>
-                </div>
-            </div>
             
             <div class="bg-base-200 rounded-xl overflow-auto">
                 <table class="table table-compact w-full">
