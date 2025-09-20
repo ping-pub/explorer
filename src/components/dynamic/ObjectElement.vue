@@ -10,11 +10,11 @@ function formatKey(key: string | number) {
 </script>
 
 <template>
-    <div class="grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-y-3 text-sm dark:bg-base-200 bg-[#ffffff;] px-4 py-2 pt-0.5 pb-0.5 overflow-x-auto txsContainer">
+    <div class="grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-y-3 text-sm dark:bg-base-200 bg-[#ffffff] rounded-xl px-4 py-2 pt-0.5 pb-0.5 overflow-x-auto txsContainer">
       <template v-for="(v, k) in value" :key="k">
         <div
             :class="String(k) === 'signatures'
-            ? 'text-[#171C1F;] dark:text-[#ffffff;] font-bold capitalize whitespace-break-spaces'
+            ? 'text-[#171C1F] dark:text-[#ffffff] font-bold capitalize whitespace-break-spaces'
             : 'text-[#64748B] font-medium capitalize whitespace-break-spaces'"
             >
             {{ formatKey(k) }}

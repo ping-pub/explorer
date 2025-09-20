@@ -24,6 +24,8 @@ onMounted(() => {
 
 function pageload() {
   const container = document.querySelector('.applicationsContainer') as HTMLDivElement;
+  if (!container) return;
+  
   // Check if the scroll is at the bottom
   let isAtBottom = container.scrollTop + container.clientHeight + 1 >= container.scrollHeight;
   if (isAtBottom && pageResponse.value.next_key != null) {
@@ -44,11 +46,11 @@ function pageloadInit(p: number) {
 }
 </script>
 <template>
-  <div>
-  <p class="bg-[#09279F] dark:bg-base-200 text-2xl rounded-md px-4 py-2 my-4 font-bold text-[#ffffff;]">Applications</p>
-  <div class="bg-[#EFF2F5;] dark:bg-base-200 px-0.5 pt-0.5 pb-0.5 rounded-md overflow-x-auto txsContainer" @scroll="pageload" style="height: 78vh;overflow: scroll;">
-    <table class="table w-full table-compact">
-      <thead class="dark:bg-base-200 bg-white text-[#64748B;] sticky top-0">
+  <div class="mb-[2vh]">
+  <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-[#ffffff]">Applications</p>
+  <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-0.5 rounded-xl overflow-x-auto applicationsContainer" @scroll="pageload" style="height: 78vh; overflow: scroll;">
+    <table class="table w-full table-compact rounded-xl">
+      <thead class="dark:bg-base-100 bg-white text-[#64748B] sticky top-0">
         <tr>
           <td>Rank</td>
           <td>Address</td>
@@ -63,17 +65,17 @@ function pageloadInit(p: number) {
         <td class="dark:bg-base-200 bg-white">{{ index + 1 }}</td>
         <td class="dark:bg-base-200 bg-white">
           <div class="flex flex-col">
-            <span class="text-sm text-primary dark:invert whitespace-nowrap overflow-hidden">
+            <span class="text-sm text-[#09279F] dark:invert whitespace-nowrap overflow-hidden">
 
               <RouterLink :to="`/${chainStore.chainName}/account/${item?.address}`" class="font-weight-medium">{{
                 item.address }}</RouterLink>
             </span>
-            <span class="text-xs">{{ item.address }}</span>
+            <span class="text-xs text-[#171C1F] dark:text-secondary">{{ item.address }}</span>
           </div>
         </td>
-        <td class="font-bold dark:bg-base-200 bg-white">{{ format.formatToken(item.stake) }}</td>
-        <td class="dark:bg-base-200 bg-white">{{ item.service_configs?.length }}</td>
-        <td class="dark:bg-base-200 bg-white">{{ item.service_configs?.map((sc: any) => sc.service_name?.length > 0 ? sc.service_name :
+        <td class="font-bold dark:bg-base-200 bg-white text-[#171C1F] dark:text-secondary">{{ format.formatToken(item.stake) }}</td>
+        <td class="dark:bg-base-200 bg-white text-[#171C1F] dark:text-secondary">{{ item.service_configs?.length }}</td>
+        <td class="dark:bg-base-200 bg-white text-[#171C1F] dark:text-secondary">{{ item.service_configs?.map((sc: any) => sc.service_name?.length > 0 ? sc.service_name :
           sc.service_id).join(", ")
         }}</td>
       </tr>

@@ -36,8 +36,7 @@ function handleScroll() {
 </script>
 <template>
     <div>
-        <p class="bg-[#09279F] dark:bg-base-200 text-2xl rounded-md px-4 py-2 my-4 font-bold text-[#ffffff;]">
-            Transactions</p>
+        <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">Transactions</p>
         <!-- <div class="tabs tabs-boxed bg-transparent mb-4">
             <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'recent' }" @click="tab = 'recent'">{{
                 $t('block.recent') }}</a>
@@ -46,25 +45,25 @@ function handleScroll() {
         </div> -->
 
         <div v-show="tab === 'recent'"
-            class="bg-[#EFF2F5;] dark:bg-base-200 px-0.5 pt-0.5 pb-4 rounded-md shadow-md overflow-x-auto txsContainer"
+            class="bg-[#EFF2F5;] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md overflow-x-auto txsContainer"
             @scroll="handleScroll" style="height: 78vh; overflow: auto;">
 
             <div class="bg-base-200 rounded-md overflow-auto">
                 <table class="table w-full table-compact">
                     <thead class="bg-white sticky top-0">
-                        <tr>
-                            <th class="bg-white dark:bg-base-200">{{ $t('tx.tx_hash') }}</th>
-                            <th class="bg-white dark:bg-base-200">{{ $t('block.block') }}</th>
-                            <th class="bg-white dark:bg-base-200">{{ $t('staking.status') }}</th>
-                            <th class="bg-white dark:bg-base-200">Messages</th>
-                            <th class="bg-white dark:bg-base-200">{{ $t('account.type') }}</th>
-                            <th class="bg-white dark:bg-base-200">{{ $t('block.fees') }}</th>
-                            <th class="bg-white dark:bg-base-200">{{ $t('account.time') }}</th>
+                        <tr class="border-b-[0px]">
+                            <th class="bg-white dark:bg-base-100">{{ $t('tx.tx_hash') }}</th>
+                            <th class="bg-white dark:bg-base-100">{{ $t('block.block') }}</th>
+                            <th class="bg-white dark:bg-base-100">{{ $t('staking.status') }}</th>
+                            <th class="bg-white dark:bg-base-100">Messages</th>
+                            <th class="bg-white dark:bg-base-100">{{ $t('account.type') }}</th>
+                            <th class="bg-white dark:bg-base-100">{{ $t('block.fees') }}</th>
+                            <th class="bg-white dark:bg-base-100">{{ $t('account.time') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in base.allTxs" :index="index"
-                            class="hover:bg-base-300 transition-colors duration-200">
+                            class="hover:bg-base-300 transition-colors rounded-xl duration-200 border-b-[0px]">
                             <td class="dark:bg-base-200 bg-white truncate dark:text-warning text-[#153cd8;]"
                                 style="max-width:25vw">
                                 <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.hash}`">{{
