@@ -2,12 +2,22 @@
     "chain_name": "umee-1",
     "api": [
         {
+            "address": "https://api-umee.mzonder.com/",
+            "provider": "mzonder",
+            "type": "rest"
+        },
+        {
             "address": "https://umee-api.polkachu.com:443",
             "provider": "Polkachu",
             "type": "rest"
         }
     ],
     "rpc": [
+        {
+            "address": "https://rpc-umee.mzonder.com/",
+            "provider": "mzonder",
+            "type": "rpc"
+        },
         {
             "address": "https://umee-rpc.polkachu.com:443",
             "provider": "Polkachu",
