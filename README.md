@@ -47,7 +47,7 @@ Your donation will help us make better products. Thanks in advance.
 
 ## Hire us
 
-You can hire us by submiting an issue and fund the issue on [IssueHunter](https://issuehunt.io/r/ping-pub/explorer)
+You can hire us by submitting an issue and fund the issue on [IssueHunter](https://issuehunt.io/r/ping-pub/explorer)
 
 
 ## Contributors

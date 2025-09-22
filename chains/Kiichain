@@ -1,0 +1,26 @@
+{
+  "chain_name": "kiichain",
+  "registry_name": "kiichain",
+  "api": [
+    { "provider": "kiichain", "address": "https://api-kiichain.gon.world" },
+    { "provider": "gamisama", "address": "https://kiichain-api.gamisama.com" }
+  ],
+  "rpc": [
+    { "provider": "kiichain", "address": "https://rpc-kiichain.gon.world" },
+    { "provider": "gamisama", "address": "https://kiichain-rpc.gamisama.com" }
+  ],
+  "sdk_version": "0.47.0",
+  "coin_type": "118",
+  "min_tx_fee": "100",
+  "addr_prefix": "ki",
+  "logo": "/logos/kiichain.svg",
+  "assets": [
+    {
+      "base": "uki",
+      "symbol": "KII",
+      "exponent": "6",
+      "coingecko_id": "kiichain",
+      "logo": "/logos/kiichain.svg"
+    }
+  ]
+}

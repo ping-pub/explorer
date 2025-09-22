@@ -1,15 +1,10 @@
 <script lang="ts" setup>
-import {
-  useBlockchain,
-  useFormatter,
-  useStakingStore,
-  useTxDialog,
-} from '@/stores';
+import { useBlockchain, useFormatter, useStakingStore, useTxDialog } from '@/stores';
 import { select } from '@/components/dynamic/index';
 import type { PaginatedProposals } from '@/types';
 import ProposalProcess from './ProposalProcess.vue';
 import type { PropType } from 'vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 const dialog = useTxDialog();
 defineProps({
   proposals: { type: Object as PropType<PaginatedProposals> },
@@ -38,6 +33,10 @@ const voterStatusMap: Record<string, string> = {
 };
 
 const proposalInfo = ref();
+
+function metaItem(metadata: string | undefined): { title: string; summary: string } {
+  return metadata ? JSON.parse(metadata) : {};
+}
 </script>
 <template>
   <div class="bg-white dark:bg-[#28334e] rounded text-sm">
@@ -59,7 +58,11 @@ const proposalInfo = ref();
                 :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
                 class="text-main text-base mb-1 block hover:text-indigo-400 truncate"
               >
-                {{ item?.content?.title || item?.title }}
+                {{
+                  item?.content?.title ||
+                  item?.title ||
+                  metaItem(item?.metadata)?.title
+                }}
               </RouterLink>
               <div
                 v-if="item.content"
@@ -70,10 +73,7 @@ const proposalInfo = ref();
             </div>
           </td>
           <td class="w-60">
-            <ProposalProcess
-              :pool="staking.pool"
-              :tally="item.final_tally_result"
-            ></ProposalProcess>
+            <ProposalProcess :pool="staking.pool" :tally="item.final_tally_result"></ProposalProcess>
           </td>
           <td class="w-36">
             <div class="pl-4">
@@ -133,19 +133,11 @@ const proposalInfo = ref();
     </table>
 
     <div class="lg:!hidden">
-      <div
-        v-for="(item, index) in proposals?.proposals"
-        :key="index"
-        class="px-4 py-4"
-      >
-        <div
-          class="text-main text-base mb-1 flex justify-between hover:text-indigo-400"
-        >
-          <RouterLink
-            :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
-            class="flex-1 w-0 truncate mr-4"
-            >{{ item?.content?.title || item?.title }}</RouterLink
-          >
+      <div v-for="(item, index) in proposals?.proposals" :key="index" class="px-4 py-4">
+        <div class="text-main text-base mb-1 flex justify-between hover:text-indigo-400">
+          <RouterLink :to="`/${chain.chainName}/gov/${item?.proposal_id}`" class="flex-1 w-0 truncate mr-4">{{
+            item?.content?.title || item?.title || metaItem(item?.metadata)?.title
+          }}</RouterLink>
           <label
             for="proposal-detail-modal"
             class="text-main text-base hover:text-indigo-400 cursor-pointer"
@@ -165,18 +157,13 @@ const proposalInfo = ref();
             </div>
           </div>
 
-          <div
-            class="truncate text-xs text-gray-500 dark:text-gray-400 flex items-center justify-end"
-          >
+          <div class="truncate text-xs text-gray-500 dark:text-gray-400 flex items-center justify-end">
             {{ format.toDay(item.voting_end_time, 'from') }}
           </div>
         </div>
 
         <div>
-          <ProposalProcess
-            :pool="staking.pool"
-            :tally="item.final_tally_result"
-          ></ProposalProcess>
+          <ProposalProcess :pool="staking.pool" :tally="item.final_tally_result"></ProposalProcess>
         </div>
 
         <div class="mt-4" v-if="statusMap?.[item?.status] === 'VOTING'">
@@ -220,7 +207,6 @@ const proposalInfo = ref();
 
               <span v-else>Vote</span></label
             >
-           
           </div>
         </div>
       </div>
@@ -229,17 +215,24 @@ const proposalInfo = ref();
     <input type="checkbox" id="proposal-detail-modal" class="modal-toggle" />
     <label for="proposal-detail-modal" class="modal">
       <label class="modal-box !w-11/12 !max-w-5xl" for="">
-        <label
-          for="proposal-detail-modal"
-          class="btn btn-sm btn-circle absolute right-2 top-2"
-          >✕</label
-        >
+        <label for="proposal-detail-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
         <h3 class="font-bold text-lg">Description</h3>
         <p class="py-4">
           <Component
-            v-if="proposalInfo?.content?.description || proposalInfo?.summary"
-            :is="select(proposalInfo?.content?.description || proposalInfo?.summary, 'horizontal')"
-            :value="proposalInfo?.content?.description || proposalInfo?.summary"
+            v-if="
+              proposalInfo?.content?.description || proposalInfo?.summary || metaItem(proposalInfo?.metadata)?.summary
+            "
+            :is="
+              select(
+                proposalInfo?.content?.description ||
+                  proposalInfo?.summary ||
+                  metaItem(proposalInfo?.metadata)?.summary,
+                'horizontal'
+              )
+            "
+            :value="
+              proposalInfo?.content?.description || proposalInfo?.summary || metaItem(proposalInfo?.metadata)?.summary
+            "
           >
           </Component>
         </p>

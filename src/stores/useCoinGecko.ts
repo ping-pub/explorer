@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { get } from '../libs/http';
-import type { LoadingStatus } from './useDashboard';
+import { get } from '@/libs/http';
+import type { LoadingStatus } from '@/stores';
 
 export interface PriceMeta {
   usd?: string;
@@ -12,6 +12,8 @@ export interface PriceMeta {
 }
 
 const LocalStoreKey = 'currency';
+
+export const coingeckoUrl = import.meta.env.VITE_COINGECKO_URL || 'https://api.coingecko.com';
 
 export const useCoingecko = defineStore('coingecko', {
   state: () => {
@@ -27,13 +29,11 @@ export const useCoingecko = defineStore('coingecko', {
 
   actions: {
     getMarketChart(days = 30, coinId = 'cosmos') {
-      return get(
-        `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}`
-      );
+      return get(`${coingeckoUrl}/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}`);
     },
 
     fetchCoinPrice(ids: string[]) {
-      const url = `https://api.coingecko.com/api/v3/simple/price?include_24hr_change=true&vs_currencies=${[
+      const url = `${coingeckoUrl}/api/v3/simple/price?include_24hr_change=true&vs_currencies=${[
         'usd',
         this.currency,
       ].join(',')}&ids=${ids.join(',')}`;
@@ -42,7 +42,7 @@ export const useCoingecko = defineStore('coingecko', {
       });
     },
     getCoinInfo(coinId: string) {
-      return get(`https://api.coingecko.com/api/v3/coins/${coinId}`);
+      return get(`${coingeckoUrl}/api/v3/coins/${coinId}`);
     },
     setSecondaryCurrency(currency: string) {
       if (currency !== 'usd') {
