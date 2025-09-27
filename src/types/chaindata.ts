@@ -41,6 +41,7 @@ export interface LocalChainConfig {
     symbol: string;
   }[];
   chain_name: string;
+  network_type?: string;
   coin_type: string;
   logo: string;
   theme_color?: string;
@@ -103,6 +104,7 @@ export interface DirectoryChainConfig {
 export interface ChainConfig {
   chainName: string;
   prettyName: string;
+  networkType?: string;
   bech32Prefix: string;
   bech32ConsensusPrefix: string;
   chainId: string;
