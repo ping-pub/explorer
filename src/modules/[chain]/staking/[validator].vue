@@ -324,7 +324,7 @@ function getTransactionFee(tx: any): string {
 <template>
   <div>
     <!-- Updated Validator Header Card -->
-    <div class="dark:bg-base-100 bg-[#09279F] rounded-xl p-4 flex items-center gap-[50px] mt-4 mb-4">
+    <div class="dark:bg-base-100 bg-[#09279F] rounded-xl space-x-10 p-4 flex items-center mt-4 mb-4">
       <!-- Validator Header with Avatar and Basic Info -->
         <div>
           <h2 class="text-2xl font-bold text-[#FFFFFF]">{{ v.description?.moniker }}</h2>
@@ -473,7 +473,6 @@ function getTransactionFee(tx: any): string {
                 </div>
               </div>
             </div>
-          <!-- </div> -->
           </div>
         </div>
       </div>
@@ -604,9 +603,7 @@ function getTransactionFee(tx: any): string {
           <tbody>
             <tr v-for="(item, i) in txs.tx_responses">
               <td class="dark:text-primary text-[#153cd8;] font-medium">
-                <RouterLink :to="`/${props.chain}/blocks/${item.height}`">{{
-                  item.height
-                  }}</RouterLink>
+                <RouterLink :to="`/${props.chain}/blocks/${item.height}`">{{item.height}}</RouterLink>
               </td>
               <td class="truncate dark:text-primary text-[#153cd8]" style="max-width: 120px">
                 <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
@@ -628,9 +625,7 @@ function getTransactionFee(tx: any): string {
               </td>
               <td>
                 <div class="flex items-center">
-                  <span class="mr-2 truncate">{{
-                    format.messages(item.tx.body.messages)
-                    }}</span>
+                  <span class="mr-2 truncate">{{format.messages(item.tx.body.messages)}}</span>
                   <Icon v-if="item.code === 0" icon="mdi-check" class="text-[#60BC29]" />
                   <Icon v-else icon="mdi-multiply" class="text-no" />
                 </div>
@@ -666,9 +661,7 @@ function getTransactionFee(tx: any): string {
                 }">
                   <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
                     <span class="mr-2">
-                      {{ (selectedEventType === EventType.Delegate ? '+' : '-') }} {{
-                        mapEvents(item.events)
-                      }}</span>
+                      {{ (selectedEventType === EventType.Delegate ? '+' : '-') }} {{mapEvents(item.events)}}</span>
                   </RouterLink>
                   <Icon v-if="item.code === 0" icon="mdi-check" class="text-[#60BC29]" />
                   <Icon v-else icon="mdi-multiply" class="text-no" />

@@ -345,11 +345,7 @@ loadAvatars();
                                                         {{ v.description?.moniker }}
                                                     </RouterLink>
                                                 </span>
-                                                <span class="text-xs">{{
-                                                    v.operator_address ||
-                                                    v.description?.identity ||
-                                                    '-'
-                                                    }}</span>
+                                                <span class="text-xs">{{v.operator_address || v.description?.identity || '-'}}</span>
                                             </div>
                                         </div>
                                     </td>
@@ -365,26 +361,9 @@ loadAvatars();
                                     <td class="text-right">
                                         <div class="flex flex-col">
                                             <h6 class="text-sm font-weight-medium whitespace-nowrap ">
-                                                {{
-                                                    format.formatToken(
-                                                        {
-                                                            amount: parseInt(
-                                                                v.tokens
-                                                            ).toString(),
-                                                            denom: staking.params
-                                                                .bond_denom,
-                                                        },
-                                                        true,
-                                                        '0,0'
-                                                    )
-                                                }}
+                                                {{format.formatToken({amount: parseInt(v.tokens).toString(), denom: staking.params.bond_denom,}, true, '0,0')}}
                                             </h6>
-                                            <span class="text-xs">{{
-                                                format.calculatePercent(
-                                                    v.delegator_shares,
-                                                    staking.totalPower
-                                                )
-                                                }}</span>
+                                            <span class="text-xs">{{format.calculatePercent(v.delegator_shares, staking.totalPower)}}</span>
                                         </div>
                                     </td>
                                     <!-- 👉 24h Changes -->
@@ -393,11 +372,7 @@ loadAvatars();
                                     </td>
                                     <!-- 👉 commission -->
                                     <td class="text-right text-xs">
-                                        {{
-                                            format.formatCommissionRate(
-                                                v.commission?.commission_rates?.rate
-                                            )
-                                        }}
+                                        {{format.formatCommissionRate(v.commission?.commission_rates?.rate)}}
                                     </td>
                             </tr>
                         </tbody>

@@ -67,8 +67,7 @@ function pageloadInit(p: number) {
             <div class="flex flex-col">
               <span class="text-sm text-primary dark:invert whitespace-nowrap overflow-hidden">
 
-                <RouterLink :to="`/${chainStore.chainName}/account/${item?.operator_address}`" class="font-weight-medium">{{
-                  item.operator_address }}</RouterLink>
+                <RouterLink :to="`/${chainStore.chainName}/account/${item?.operator_address}`" class="font-weight-medium">{{item.operator_address }}</RouterLink>
               </span>
               <span class="text-xs">Owned by: {{ item.owner_address }}</span>
             </div>

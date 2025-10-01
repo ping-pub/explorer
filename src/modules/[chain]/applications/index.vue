@@ -67,17 +67,14 @@ function pageloadInit(p: number) {
           <div class="flex flex-col">
             <span class="text-sm text-[#09279F] dark:invert whitespace-nowrap overflow-hidden">
 
-              <RouterLink :to="`/${chainStore.chainName}/account/${item?.address}`" class="font-weight-medium">{{
-                item.address }}</RouterLink>
+              <RouterLink :to="`/${chainStore.chainName}/account/${item?.address}`" class="font-weight-medium">{{item.address }}</RouterLink>
             </span>
             <span class="text-xs text-[#171C1F] dark:text-secondary">{{ item.address }}</span>
           </div>
         </td>
         <td class="font-bold dark:bg-base-200 bg-white text-[#171C1F] dark:text-secondary">{{ format.formatToken(item.stake) }}</td>
         <td class="dark:bg-base-200 bg-white text-[#171C1F] dark:text-secondary">{{ item.service_configs?.length }}</td>
-        <td class="dark:bg-base-200 bg-white text-[#171C1F] dark:text-secondary">{{ item.service_configs?.map((sc: any) => sc.service_name?.length > 0 ? sc.service_name :
-          sc.service_id).join(", ")
-        }}</td>
+        <td class="dark:bg-base-200 bg-white text-[#171C1F] dark:text-secondary">{{ item.service_configs?.map((sc: any) => sc.service_name?.length > 0 ? sc.service_name : sc.service_id).join(", ")}}</td>
       </tr>
     </table>
   </div>

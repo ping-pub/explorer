@@ -192,9 +192,9 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
           </div>
         </div> -->
         <!-- content -->
-        <div class="flex items-center flex-1 space-x-10">
+        <div class="flex items-center flex-1 space-x-3">
           <h2 class="text-2xl card-title">{{ $t('account.address') }}</h2>
-          <span class="text-xs truncate" style="width:max-content"> {{ address }} {{ "&nbsp;&nbsp;&nbsp;" }}
+          <span class="text-[10px] truncate flex items-center" style="width:max-content"> {{ address }} {{ "&nbsp;&nbsp;&nbsp;" }}
             <span class="float-right" style="width:max-content" v-if="copied">&nbsp;&nbsp;Copied!</span>
             <Icon class="float-right" icon="ic:round-content-copy" @click="copy(address)" />
           </span>
@@ -202,155 +202,325 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
       </div>
     </div>
 
-    <!-- Assets -->
-    <div class="flex flex-row w-full gap-8">
-      <div class="rounded-xl border dark:border-gray-700 border-[#FFB206] mb-4 overflow-auto w-[70%]">
-        <div class="flex justify-between text-main mb-4 dark:bg-base-100 bg-base-200 px-4 py-2">
-          <h2 class="text-2xl font-semibold text-[#171C1F] dark:text-[#ffffff;]">{{ $t('account.assets') }}</h2>
-        </div>
-        <div class="grid md:!grid-cols-3">
-          <div class="md:!col-span-1">
-            <DonutChart :series="donutData.map(x => x.amount)" :labels="donutData.map(x => x.label)" />
+    <div class="bg-base-100 dark:bg-[#00125b] pt-2">
+      <!-- Laptop View -->
+      <div class="desktop-address flex flex-1 gap-8">
+        <!-- Assets -->
+        <div class="flex flex-row w-full gap-8">
+          <div class="rounded-xl border dark:border-gray-700 border-[#FFB206] mb-4 overflow-auto w-[70%]">
+            <div class="flex justify-between text-main mb-4 dark:bg-base-100 bg-base-200 px-4 py-2 w-full">
+              <h2 class="text-2xl font-semibold text-[#171C1F] dark:text-[#ffffff;]">{{ $t('account.assets') }}</h2>
+            </div>
+            <div class="grid md:!grid-cols-3">
+              <div class="md:!col-span-1">
+                <DonutChart :series="donutData.map(x => x.amount)" :labels="donutData.map(x => x.label)" />
+              </div>
+              <div class="mt-4 md:!col-span-1 md:!mt-0 md:!ml-3">
+                <!-- list-->
+                <div class="">
+                  <!--balances  -->
+                  <div class="flex flex-row gap-8">
+                    <div class="flex flex-col items-start">
+                      <h2 class="text-[#64748B] text-sm px-4 mb-2">Status</h2>
+                      <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
+                        <div class="flex items-center justify-start text-sm font-semibold whitespace-nowrap gap-1">
+                          <span class="w-3 h-3 bg-[#FFB206] inline-block"></span>
+                          {{`Staked`}}
+                        </div>
+                        <!--delegations  -->
+                        <div class="flex flex-row items-start mb-2" v-for="(delegationItem, index) in delegations" :key="index">
+                          <div class="flex items-center justify-center text-sm font-semibold whitespace-nowrap gap-1">
+                            <span class="w-3 h-3 bg-[#09279F] inline-block"></span>
+                            {{`Available`}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex flex-col">
+                      <h2 class="text-[#64748B;] text-sm px-4 mb-2">Amount</h2>
+                      <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
+                        <div class="text-sm font-semibold whitespace-nowrap">
+                          {{ format.formatToken(balanceItem) }}
+                        </div>
+                        <!--delegations  -->
+                        <div class="flex flex-row items-start mb-2 gap-4" v-for="(delegationItem, index) in delegations" :key="index">
+                          <div class="flex text-sm font-semibold whitespace-nowrap">
+                            {{ format.formatToken(delegationItem?.balance) }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex flex-col">
+                      <h2 class="text-[#64748B;] text-sm px-4 mb-2">Percentage</h2>
+                      <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
+                        <div class="text-xs font-semibold">
+                          {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
+                        </div>
+                        <!--delegations  -->
+                        <div class="flex flex-row items-start mb-2 gap-4" v-for="(delegationItem, index) in delegations" :key="index">
+                          <div class="flex items-start text-xs font-semibold">
+                            {{format.calculatePercent(delegationItem?.balance?.amount, totalAmount)}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>            
+              </div>
+            </div>
+
+            <div class="md:!col-span-1 services-table-wrapper w-[46%] mb-4 rounded-xl border bg-base-200 dark:border-base-100 dark:bg-base-100 max-h-80 overflow-y-auto overflow-x-auto" v-if="suppliers.services?.length > 0">
+              <h2 class="card-title mb-1 px-4 py-2">Services ({{ suppliers.services?.length }})</h2>
+              <div class="services-table-scroll bg-[#ffffff] dark:bg-base-200 rounded-xl">
+                <table class="min-w-full text-sm divide-none border-spacing-y-1 border-spacing-x-4 mt-2">
+                  <thead class="sticky dark:bg-base-200">
+                    <tr class="text-xs mb-4 text-[#64748B]">
+                      <th class="px-2 py-2 text-left">Service ID</th>
+                      <th class="px-3 py-2 text-left">RPC Endpoint</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(service, index) in suppliers.services" :key="index" class="dark:bg-base-200 rounded-xl">
+                      <td class="px-3 py-1">{{ service.service_id }}</td>
+                      <td class="px-3 py-1">
+                        <a v-for="(ep, i) in service.endpoints" :key="i" :href="ep.url" target="_blank" class="text-[#09279F] hover:underline block truncate">
+                          {{ ep.url }}
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="md:!col-span-1 services-table-wrapper  w-[46%] mb-4 rounded-xl border bg-base-200 dark:border-base-100 dark:bg-base-100 max-h-80 overflow-y-auto overflow-x-auto" v-if="applications.service_configs?.length > 0">
+                <h2 class="card-title mb-1 px-4 py-2">Services ({{ applications.service_configs?.length }})</h2>
+                <div class="services-table-scroll rounded-xl dark:bg-base-200 bg-[#ffffff]">
+                  <table class="min-w-full text-sm divide-none mt-2">
+                    <thead class="">
+                      <tr>
+                        <th class="text-left px-4 py-2 text-[#64748B]">Service ID</th>
+                        <!-- <th>Revenue Share (Owner/Operator)</th> -->
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(service, index) of applications.service_configs">
+                        <td class="px-4 py-1">{{ service.service_id }}</td>
+                        <td class="px-2 py-2 text-[#09279F]">{{ props.address }}</td>
+                        <!-- <td>{{[...service.rev_share].filter((rs: any) => rs.address != props.address)[0]?.rev_share_percentage || '0'}}% / {{[...service.rev_share].filter((rs: any) => rs.address == props.address)[0]?.rev_share_percentage || '0' }}% </td> -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
           </div>
-          <div class="mt-4 md:!col-span-1 md:!mt-0 md:!ml-3">
-            <!-- list-->
-            <div class="">
-              <!--balances  -->
-              <div class="flex flex-row gap-8">
-                <div class="flex flex-col items-start">
-                  <h2 class="text-[#64748B] text-sm px-4 mb-2">Status</h2>
-                  <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
-                    <div class="flex items-center justify-start text-sm font-semibold whitespace-nowrap gap-1">
-                      <span class="w-3 h-3 bg-[#FFB206] inline-block"></span>
-                      {{`Staked`}}
-                    </div>
-                    <!--delegations  -->
-                    <div class="flex flex-row items-start mb-2" v-for="(delegationItem, index) in delegations" :key="index">
-                      <div class="flex items-center justify-center text-sm font-semibold whitespace-nowrap gap-1">
-                        <span class="w-3 h-3 bg-[#09279F] inline-block"></span>
-                        {{`Available`}}
-                      </div>
-                    </div>
-                  </div>
+        </div>
+      </div>
+    </div>    
+
+    <div class="flex mt-4 mb-2 w-full flex-col lg:flex-row gap-4 bg-base-100 dark:bg-[#00125b]">
+      <!-- Mobile / Tablet view -->
+      <div class="mobile-address flex flex-col gap-4 w-full lg:hidden">
+        <!-- Assets -->
+        <div class="w-full">
+          <div class="rounded-xl border w-full dark:border-gray-700 border-[#FFB206] mb-4 overflow-auto">
+            <div class="flex justify-between text-main mb-4 dark:bg-base-100 bg-base-200 px-4 py-2 w-full">
+              <h2 class="text-2xl font-semibold text-[#171C1F] dark:text-[#ffffff;]">{{ $t('account.assets') }}</h2>
+            </div>
+            <div class="grid md:!grid-cols-2 gap-4">
+              <div class="md:!col-span-1">
+                <DonutChart :series="donutData.map(x => x.amount)" :labels="donutData.map(x => x.label)" />
+              </div>
+              <div class="flex flex-cols-3 gap-2 p-1 mt-10 justify-center">
+  
+                <!-- div 1 Labels -->
+                <div class="flex flex-col gap-2 items-start h-full">
+                  <span class="text-sm px-2 py-0.5 text-[#64748B]">Status</span>
+                  <span class="text-sm px-2 py-0.5 text-[#64748B]">Amount</span>
+                  <span class="text-sm px-2 py-0.5 text-[#64748B]">Percentage</span>
                 </div>
-                <div class="flex flex-col">
-                  <h2 class="text-[#64748B;] text-sm px-4 mb-2">Amount</h2>
-                  <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
-                    <div class="text-sm font-semibold whitespace-nowrap">
+
+                <!-- div 2 Balances -->
+                <div class="flex flex-col gap-2 items-start h-full">
+                  <!-- Status -->
+                  <div class="flex items-center px-2 py-1 text-xs font-semibold"
+                    v-for="(balanceItem, index) in balances"
+                    :key="index"
+                  >
+                    <span class="w-2 h-2 bg-[#FFB206] inline-block mr-1"></span>
+                    {{ `Staked` }}
+                  </div>
+
+                  <!-- Amount -->
+                  <div class="flex flex-row text-[10px] font-bold px-2 py-1"
+                    v-for="(balanceItem, index) in balances"
+                    :key="index"
+                    >
                       {{ format.formatToken(balanceItem) }}
-                    </div>
-                    <!--delegations  -->
-                    <div class="flex flex-row items-start mb-2 gap-4" v-for="(delegationItem, index) in delegations" :key="index">
-                      <div class="flex text-sm font-semibold whitespace-nowrap">
-                        {{ format.formatToken(delegationItem?.balance) }}
-                      </div>
-                    </div>
+                  </div>      
+
+                  <!-- Percentage -->
+                  <div class="px-2 py-1 text-xs font-semibold"
+                    v-for="(balanceItem, index) in balances"
+                    :key="index"
+                  >
+                    {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
                   </div>
                 </div>
-                <div class="flex flex-col">
-                  <h2 class="text-[#64748B;] text-sm px-4 mb-2">Percentage</h2>
-                  <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
-                    <div class="text-xs font-semibold">
-                      {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
-                    </div>
-                    <!--delegations  -->
-                    <div class="flex flex-row items-start mb-2 gap-4" v-for="(delegationItem, index) in delegations" :key="index">
-                      <div class="flex items-start text-xs font-semibold">
-                        {{format.calculatePercent(delegationItem?.balance?.amount, totalAmount)}}
-                      </div>
-                    </div>
+
+                <!-- div 3 Delegations -->
+                <div class="flex flex-col gap-2 items-start h-full">
+                  <!-- Status -->
+                  <div class="flex items-center px-2 py-1 text-xs font-semibold"
+                    v-for="(delegationItem, i) in delegations"
+                    :key="i"
+                  >
+                    <span class="w-2 h-2 bg-[#09279F] inline-block mr-1"></span>
+                    {{ `Available` }}
+                  </div>
+
+                  <!-- Amount -->
+                  <div class="px-2 py-1 text-[10px] font-bold"
+                    v-for="(delegationItem, i) in delegations"
+                    :key="i"
+                  >
+                    {{ format.formatToken(delegationItem?.balance) }}
+                  </div>
+
+                  <!-- Percentage -->
+                  <div class="px-2 py-1 text-xs font-semibold"
+                    v-for="(delegationItem, i) in delegations"
+                    :key="i"
+                  >
+                    {{ format.calculatePercent(delegationItem?.balance?.amount, totalAmount) }}
                   </div>
                 </div>
               </div>
             </div>
 
-              <!--delegations  -->
-              <!-- <div class="grid grid-rows-3">
-                <div class="flex flex-row items-start mb-2 gap-4" v-for="(delegationItem, index) in delegations" :key="index">
-                  <div class="flex flex-row gap-[80%]">
-                    <div class="flex text-sm font-semibold whitespace-nowrap">
-                      {{ format.formatToken(delegationItem?.balance) }}
-                    </div>
-                    <div class="flex text-sm font-semibold whitespace-nowrap">
-                      {{ format.formatToken(delegationItem?.balance) }}
-                    </div>
-                    <div class="flex items-start text-xs font-semibold">
-                      {{format.calculatePercent(delegationItem?.balance?.amount, totalAmount)}}
-                    </div>
-                  </div>
-                </div>
-              </div> -->
-              
-              <!-- rewards.total -->
-
-              <!-- <div class="flex items-center px-4 mb-2" v-for="(rewardItem, index) in rewards.total" :key="index">
-                <div class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4">
-                  <Icon icon="mdi-account-arrow-up" class="text-success" size="20" />
-                  <div class="absolute top-0 bottom-0 left-0 right-0 bg-success opacity-20"></div>
-                </div>
-                <div class="flex-1">
-                  <div class="text-sm font-semibold">
-                    {{ format.formatToken(rewardItem) }}
-                  </div>
-                  <div class="text-xs">{{ format.calculatePercent(rewardItem.amount, totalAmount) }}</div>
-                </div>
-              </div> -->
-            </div>
-            <!-- <div class="mt-4 text-lg font-semibold mr-5  pl-5 border-t pt-4 text-right">
-              {{ $t('account.total_value') }}: ${{ totalValue }}
-            </div> -->
-          </div>
-        </div>
-
-        <div class="md:!col-span-1 services-table-wrapper w-[46%] mb-4 rounded-xl border bg-base-200 dark:border-base-100 dark:bg-base-100 max-h-80 overflow-y-auto overflow-x-auto" v-if="suppliers.services?.length > 0">
-          <h2 class="card-title mb-1 px-4 py-2">Services ({{ suppliers.services?.length }})</h2>
-          <div class="services-table-scroll bg-[#ffffff] dark:bg-base-200 rounded-xl">
-            <table class="min-w-full text-sm divide-none border-spacing-y-1 border-spacing-x-4 mt-2">
-              <thead class="sticky dark:bg-base-200">
-                <tr class="text-xs mb-4 text-[#64748B]">
-                  <th class="px-2 py-2 text-left">Service ID</th>
-                  <th class="px-3 py-2 text-left">RPC Endpoint</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(service, index) in suppliers.services" :key="index" class="dark:bg-base-200 rounded-xl">
-                  <td class="px-3 py-1">{{ service.service_id }}</td>
-                  <td class="px-3 py-1">
-                    <a v-for="(ep, i) in service.endpoints" :key="i" :href="ep.url" target="_blank" class="text-[#09279F] hover:underline block truncate">
-                      {{ ep.url }}
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <div class="md:!col-span-1 services-table-wrapper  w-[46%] mb-4 rounded-xl border bg-base-200 dark:border-base-100 dark:bg-base-100 max-h-80 overflow-y-auto overflow-x-auto" v-if="applications.service_configs?.length > 0">
-            <h2 class="card-title mb-1 px-4 py-2">Services ({{ applications.service_configs?.length }})</h2>
-            <div class="services-table-scroll rounded-xl dark:bg-base-200 bg-[#ffffff]">
-              <table class="min-w-full text-sm divide-none mt-2">
-                <thead class="">
-                  <tr>
-                    <th class="text-left px-4 py-2 text-[#64748B]">Service ID</th>
-                    <!-- <th>Revenue Share (Owner/Operator)</th> -->
+                <!-- <div class="mt-4 md:!col-span-1 md:!mt-0 md:!ml-3 flex items-center justify-center"> -->
+                  <!--balances  -->
+                  <!-- <div class="grid grid-cols-2 md:grid-cols-3 gap-y-6 md:gap-y-10 gap-x-6 md:gap-x-0"> -->
                     
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(service, index) of applications.service_configs">
-                    <td class="px-4 py-1">{{ service.service_id }}</td>
-                    <td class="px-2 py-2 text-[#09279F]">{{ props.address }}</td>
-                    <!-- <td>{{[...service.rev_share].filter((rs: any) => rs.address != props.address)[0]?.rev_share_percentage || '0'}}% / {{
-                      [...service.rev_share].filter((rs: any) => rs.address == props.address)[0]?.rev_share_percentage || '0' }}% </td> -->
+                    <!-- Status -->
+                    <!-- <div class="flex flex-row items-center justify-center">
+                      <h2 class="text-[#64748B] text-sm px-4 mb-2 mt-2">Status</h2>
+                      <div class="flex flex-col items-start justify-center px-4 gap-4"
+                        v-for="(balanceItem, index) in balances"
+                        :key="index"
+                      >
+                        <div class="flex items-center justify-start text-xs font-semibold whitespace-nowrap gap-1">
+                          <span class="w-2 h-2 bg-[#FFB206] inline-block"></span>
+                          {{ `Staked` }}
+                        </div> -->
+                        <!-- delegations -->
+                        <!-- <div class="flex items-center gap-1 text-xs font-semibold mb-2"
+                          v-for="(delegationItem, i) in delegations"
+                          :key="i"
+                        >
+                          <span class="w-2 h-2 bg-[#09279F] inline-block"></span>
+                          {{ `Available` }}
+                        </div>
+                      </div>
+                    </div> -->
 
-                  </tr>
-                </tbody>
-              </table>
+                    <!-- Amount -->
+                    <!-- <div class="flex flex-row items-center justify-center">
+                      <h2 class="text-[#64748B] text-sm px-4 mb-2">Amount</h2>
+                      <div class="flex flex-col items-center gap-4"
+                        v-for="(balanceItem, index) in balances"
+                        :key="index"
+                      >
+                        <div class="text-[10px] font-bold whitespace-nowrap">
+                          {{ format.formatToken(balanceItem) }}
+                        </div> -->
+                        <!-- delegations -->
+                        <!-- <div class="flex text-[10px] font-bold"
+                          v-for="(delegationItem, i) in delegations"
+                          :key="i"
+                        >
+                          {{ format.formatToken(delegationItem?.balance) }}
+                        </div>
+                      </div>
+                    </div> -->
+
+                    <!-- Percentage -->
+                    <!-- <div class="flex flex-row items-center justify-center">
+                      <h2 class="text-[#64748B] text-sm px-4 mb-2">Percentage</h2>
+                      <div class="flex flex-col items-center justify-center px-4 gap-4"
+                        v-for="(balanceItem, index) in balances"
+                        :key="index"
+                      >
+                        <div class="text-xs font-semibold">
+                          {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
+                        </div> -->
+                        <!-- delegations -->
+                        <!-- <div class="flex items-start text-xs font-semibold mb-2"
+                          v-for="(delegationItem, i) in delegations"
+                          :key="i"
+                        >
+                          {{ format.calculatePercent(delegationItem?.balance?.amount, totalAmount) }}
+                        </div>
+                      </div>
+                    </div> -->
+
+                  <!-- </div>
+                </div> -->
+
+              </div>
             </div>
+
+            <div class="md:!col-span-1 services-table-wrapper w-full mb-4 rounded-xl border bg-base-200 dark:border-base-100 dark:bg-base-100 max-h-80 overflow-y-auto overflow-x-auto" v-if="suppliers.services?.length > 0">
+              <h2 class="card-title mb-1 px-4 py-2">Services ({{ suppliers.services?.length }})</h2>
+              <div class="services-table-scroll bg-[#ffffff] dark:bg-base-200 rounded-xl">
+                <table class="min-w-full text-sm divide-none border-spacing-y-1 border-spacing-x-4 mt-2">
+                  <thead class="sticky dark:bg-base-200">
+                    <tr class="text-xs mb-4 text-[#64748B]">
+                      <th class="px-2 py-2 text-left">Service ID</th>
+                      <th class="px-3 py-2 text-left">RPC Endpoint</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(service, index) in suppliers.services" :key="index" class="dark:bg-base-200 rounded-xl">
+                      <td class="px-3 py-1">{{ service.service_id }}</td>
+                      <td class="px-3 py-1">
+                        <a v-for="(ep, i) in service.endpoints" :key="i" :href="ep.url" target="_blank" class="text-[#09279F] hover:underline block truncate">
+                          {{ ep.url }}
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="md:!col-span-1 services-table-wrapper  w-full mb-4 rounded-xl border bg-base-200 dark:border-base-100 dark:bg-base-100 max-h-80 overflow-y-auto overflow-x-auto" v-if="applications.service_configs?.length > 0">
+                <h2 class="card-title mb-1 px-4 py-2">Services ({{ applications.service_configs?.length }})</h2>
+                <div class="services-table-scroll rounded-xl dark:bg-base-200 bg-[#ffffff]">
+                  <table class="min-w-full text-sm divide-none mt-2">
+                    <thead class="">
+                      <tr>
+                        <th class="text-left px-4 py-2 text-[#64748B]">Service ID</th>
+                        <!-- <th>Revenue Share (Owner/Operator)</th> -->
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(service, index) of applications.service_configs">
+                        <td class="px-4 py-1">{{ service.service_id }}</td>
+                        <td class="px-2 py-2 text-[#09279F]">{{ props.address }}</td>
+                        <!-- <td>{{[...service.rev_share].filter((rs: any) => rs.address != props.address)[0]?.rev_share_percentage || '0'}}% / {{[...service.rev_share].filter((rs: any) => rs.address == props.address)[0]?.rev_share_percentage || '0' }}% </td> -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
           </div>
+        <!-- </div> -->
       </div>
-    </div>
+    <!-- </div> -->
 
     <!-- Delegations -->
 
@@ -370,36 +540,16 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
           <tbody class="text-sm" v-for="(v, index) in unbonding" :key="index">
             <tr>
               <td class="text-caption text-primary py-3 bg-slate-200" colspan="10">
-                <RouterLink :to="`/${chain}/staking/${v.validator_address}`">{{
-                  v.validator_address
-                }}</RouterLink>
+                <RouterLink :to="`/${chain}/staking/${v.validator_address}`">{{v.validator_address}}</RouterLink>
               </td>
             </tr>
             <tr v-for="entry in v.entries">
               <td class="py-3">{{ entry.creation_height }}</td>
               <td class="py-3">
-                {{
-                  format.formatToken(
-                    {
-                      amount: entry.initial_balance,
-                      denom: stakingStore.params.bond_denom,
-                    },
-                    true,
-                    '0,0.[00]'
-                  )
-                }}
+                {{format.formatToken({amount: entry.initial_balance, denom: stakingStore.params.bond_denom,}, true, '0,0.[00]')}}
               </td>
               <td class="py-3">
-                {{
-                  format.formatToken(
-                    {
-                      amount: entry.balance,
-                      denom: stakingStore.params.bond_denom,
-                    },
-                    true,
-                    '0,0.[00]'
-                  )
-                }}
+                {{format.formatToken({amount: entry.balance, denom: stakingStore.params.bond_denom,}, true, '0,0.[00]')}}
               </td>
               <td class="py-3">
                 <Countdown :time="new Date(entry.completion_time).getTime() - new Date().getTime()" />
@@ -433,9 +583,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
             </tr>
             <tr v-for="(v, index) in txs" :key="index">
               <td class="text-sm py-3 dark:bg-base-200 bg-white">
-                <RouterLink :to="`/${chain}/blocks/${v.height}`" class="dark:text-primary text-[#09279F] dark:invert">{{
-                  v.height
-                }}</RouterLink>
+                <RouterLink :to="`/${chain}/blocks/${v.height}`" class="dark:text-primary text-[#09279F] dark:invert">{{v.height}}</RouterLink>
               </td>
               <td class="truncate py-3 dark:bg-base-200 bg-white" style="max-width: 200px">
                 <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="dark:text-primary text-[#09279F] dark:invert">
@@ -456,9 +604,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               <td class="dark:bg-base-200 bg-white">
                 {{ v.tx.auth_info.fee.amount ? format.formatToken(v.tx.auth_info.fee.amount[0]) : '-' }}
               </td>
-              <td class="py-3 dark:bg-base-200 bg-white">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{
-                format.toDay(v.timestamp,
-                  'from') }})</span> </td>
+              <td class="py-3 dark:bg-base-200 bg-white">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{format.toDay(v.timestamp, 'from') }})</span> </td>
             </tr>
           </tbody>
         </table>
@@ -488,9 +634,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
             </tr>
             <tr v-for="(v, index) in recentReceived" :key="index">
               <td class="text-sm py-3 dark:bg-base-200 bg-white">
-                <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-[#09279F] dark:text-primary dark:invert">{{
-                  v.height
-                }}</RouterLink>
+                <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-[#09279F] dark:text-primary dark:invert">{{v.height}}</RouterLink>
               </td>
               <td class="truncate py-3 dark:bg-base-200 bg-white" style="max-width: 200px">
                 <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-[#09279F] dark:text-primary dark:invert">
@@ -537,6 +681,26 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
 </template>
 
 <style scoped>
+
+.desktop-address {
+  display: none;
+}
+
+.mobile-address {
+  display: block;
+}
+
+/* Media query for desktop */
+@media (min-width: 1024px) {
+  .desktop-address {
+    display: flex;
+  }
+
+  .mobile-address {
+    display: none;
+  }
+}
+
 .services-table-wrapper {
   height: 320px;
   max-height: 320px;

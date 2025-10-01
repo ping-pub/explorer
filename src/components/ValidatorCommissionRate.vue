@@ -122,10 +122,10 @@ const chartConfig = computed(() => {
         <div class="dark:bg-base-100 bg-base-200 px-4 py-2">
             <h2 class="text-2xl font-semibold text-[#171C1F] dark:text-[#ffffff;]">Commission Rate</h2>
         </div>
-        <div class="text-xs text-gray-500 dark:text-gray-400 px-4 py-2">
+        <div class="text-xs text-gray-500 dark:text-gray-400 px-4 py-2 gap-14">
             {{ `Updated at ${format.toDay(props.commission?.update_time, 'short')}` }}
         </div>
-        <div class="flex flex-row items-center justify-start gap-14">
+        <div class="flex flex-row items-center justify-start">
             <div class="px-4 py-2">
                 <div class="flex  flex-col gap-x-3">
                     <div class="flex items-center gap-x-2">

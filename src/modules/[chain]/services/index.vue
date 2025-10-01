@@ -161,8 +161,7 @@ const sortedList = computed(() => {
           <div class="flex flex-col">
             <span class="text-sm text-[#09279F] dark:invert whitespace-nowrap overflow-hidden">
 
-              <RouterLink :to="`/${chainStore.chainName}/account/${item?.owner_address}`" class="font-weight-medium">{{
-                item.owner_address }}</RouterLink>
+              <RouterLink :to="`/${chainStore.chainName}/account/${item?.owner_address}`" class="font-weight-medium">{{item.owner_address }}</RouterLink>
             </span>
             <span class="text-xs">{{ item.owner_address }}</span>
           </div>
