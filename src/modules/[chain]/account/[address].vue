@@ -202,26 +202,26 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
       </div>
     </div>
 
-    <div class="bg-base-100 dark:bg-[#00125b] pt-2">
+    <!-- <div class="bg-base-100 dark:bg-[#00125b] pt-2"> -->
       <!-- Laptop View -->
-      <div class="desktop-address flex flex-1 gap-8">
+      <div class="desktop-address flex flex-1 overflow-auto gap-8">
         <!-- Assets -->
-        <div class="flex flex-row w-full gap-8">
+        <div class="flex flex-row overflow-auto gap-8">
           <div class="rounded-xl border dark:border-gray-700 border-[#FFB206] mb-4 overflow-auto w-[70%]">
             <div class="flex justify-between text-main mb-4 dark:bg-base-100 bg-base-200 px-4 py-2 w-full">
               <h2 class="text-2xl font-semibold text-[#171C1F] dark:text-[#ffffff;]">{{ $t('account.assets') }}</h2>
             </div>
-            <div class="grid md:!grid-cols-3">
+            <div class="grid md:!grid-cols-2">
               <div class="md:!col-span-1">
                 <DonutChart :series="donutData.map(x => x.amount)" :labels="donutData.map(x => x.label)" />
               </div>
-              <div class="mt-4 md:!col-span-1 md:!mt-0 md:!ml-3">
+              <div class="md:!col-span-1 md:!mt-0">
                 <!-- list-->
                 <div class="">
                   <!--balances  -->
-                  <div class="flex flex-row gap-8">
+                  <div class="flex flex-row overflow-auto">
                     <div class="flex flex-col items-start">
-                      <h2 class="text-[#64748B] text-sm px-4 mb-2">Status</h2>
+                      <h2 class="text-[#64748B] text-sm px-4 mb-2 mt-10">Status</h2>
                       <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
                         <div class="flex items-center justify-start text-sm font-semibold whitespace-nowrap gap-1">
                           <span class="w-3 h-3 bg-[#FFB206] inline-block"></span>
@@ -237,7 +237,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
                       </div>
                     </div>
                     <div class="flex flex-col">
-                      <h2 class="text-[#64748B;] text-sm px-4 mb-2">Amount</h2>
+                      <h2 class="text-[#64748B;] text-sm px-4 mb-2 mt-10">Amount</h2>
                       <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
                         <div class="text-sm font-semibold whitespace-nowrap">
                           {{ format.formatToken(balanceItem) }}
@@ -251,7 +251,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
                       </div>
                     </div>
                     <div class="flex flex-col">
-                      <h2 class="text-[#64748B;] text-sm px-4 mb-2">Percentage</h2>
+                      <h2 class="text-[#64748B;] text-sm px-4 mb-2 mt-10">Percentage</h2>
                       <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index">
                         <div class="text-xs font-semibold">
                           {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
@@ -270,7 +270,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               </div>
             </div>
 
-            <div class="md:!col-span-1 services-table-wrapper w-[46%] mb-4 rounded-xl border bg-base-200 dark:border-base-100 dark:bg-base-100 max-h-80 overflow-y-auto overflow-x-auto" v-if="suppliers.services?.length > 0">
+            <div class="md:!col-span-1 services-table-wrapper w-[30%] mb-4 rounded-xl border bg-base-200 dark:border-base-100 dark:bg-base-100 max-h-80 overflow-y-auto overflow-x-auto" v-if="suppliers.services?.length > 0">
               <h2 class="card-title mb-1 px-4 py-2">Services ({{ suppliers.services?.length }})</h2>
               <div class="services-table-scroll bg-[#ffffff] dark:bg-base-200 rounded-xl">
                 <table class="min-w-full text-sm divide-none border-spacing-y-1 border-spacing-x-4 mt-2">
@@ -318,9 +318,9 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
           </div>
         </div>
       </div>
-    </div>    
+    <!-- </div>     -->
 
-    <div class="flex mt-4 mb-2 w-full flex-col lg:flex-row gap-4 bg-base-100 dark:bg-[#00125b]">
+    <!-- <div class="flex mt-4 mb-2 w-full overflow-scroll flex-col lg:flex-row gap-4 bg-base-100 dark:bg-[#00125b]"> -->
       <!-- Mobile / Tablet view -->
       <div class="mobile-address flex flex-col gap-4 w-full lg:hidden">
         <!-- Assets -->
@@ -519,7 +519,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               </div>
           </div>
         <!-- </div> -->
-      </div>
+      <!-- </div> -->
     <!-- </div> -->
 
     <!-- Delegations -->
