@@ -1,0 +1,34 @@
+# # Specify a default Code Owner for all files with a wildcard:
+# * @default-owner
+
+# # Specify multiple Code Owners to a specific file:
+# README.md @doc-team @tech-lead
+
+# # Specify a Code Owner to all files with a specific extension:
+# *.rb @ruby-owner
+
+# # Specify Code Owners with usernames or email addresses:
+# LICENSE @legal janedoe@gitlab.com
+
+# # Use group names to match groups and nested groups:
+# README @group @group/with-nested/subgroup
+
+# # Specify a Code Owner to a directory and all its contents:
+# /docs/ @all-docs
+# /docs/* @root-docs
+# /docs/**/*.md @markdown-docs  # Match specific file types in any subdirectory
+# /db/**/index.md @index-docs   # Match a specific file name in any subdirectory
+
+# # Use a section to group related rules:
+# [Documentation]
+# ee/docs    @docs
+# docs       @docs
+
+# # Assign a role as a Code Owner:
+# /config/ @@maintainer
+
+* @burnt-labs/Burnt_Engineering/Burnt_Frontend
+
+.github/ @burnt-labs/Burnt_Engineering/Burnt_DevOps
+.goreleaser @burnt-labs/Burnt_Engineering/Burnt_DevOps
+Dockerfile @burnt-labs/Burnt_Engineering/Burnt_DevOps
