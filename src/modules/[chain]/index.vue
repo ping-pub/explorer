@@ -258,7 +258,7 @@ function updateVisibleTxs() {
   if (visibleTxs.value.length === 0 ||
     Math.abs(visibleTxs.value[0]?.index - start) >= 2 ||
     Math.abs(visibleTxs.value[visibleTxs.value.length - 1]?.index - (end - 1)) >= 2) {
-
+console.log("visibleTxs", visibleTxs.value)
     visibleTxs.value = base.allTxs.slice(start, end).map((item, index) => ({
       item,
       index: start + index
@@ -785,10 +785,11 @@ watch(() => base.blocktime, (newVal, oldVal) => {
 </script>
 
 <template>
-  <div>
-    <div class="flex mt-4 mb-2">
-      <div class="flex bg-base-100 dark:bg-[#00125b;] gap-10 flex-1">
-        <div class="w-[45%] py-2">
+  <div class="">
+      <div class="bg-base-100 dark:bg-[#00125b] pt-2">
+        <!-- Laptop View -->
+        <div class="desktop-home flex flex-1 gap-8">
+          <div class="w-[45%] py-2">
           <div class="text-lg font-semibold text-main">Network Status</div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-2 my-2">
             <div
@@ -873,14 +874,14 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                   </div>
                 </div>
                 <div
-                  class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-1 rounded-xl hover:bg-base-300 items-center w-full">
+                  class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-1 rounded-xl hover:bg-base-300 items-center justify-center w-full">
                   <div class="flex mb-5 items-center">
                     <Icon icon="mdi:coins" class="text-sm mr-1 text-[#64748B]" />
-                    <span class="text-xs text-secondary">Circulating Supply</span>
+                    <span class="text-[10px] text-secondary">Circulating Supply</span>
+                    <span class="text-[10px] text-secondary ml-1">({{ store.coinInfo?.symbol?.toUpperCase() || '' }})</span>
                   </div>
                   <div class="text-xl text-main flex items-center justify-center font-medium"> {{
-                    format.formatNumber((store.coinInfo?.market_data?.circulating_supply
-                      || 0), '123,456,789.[]') }} {{ store.coinInfo?.symbol?.toUpperCase() || '' }}
+                    format.formatNumber((store.coinInfo?.market_data?.circulating_supply || 0), '123,456,789.[]') }}
                     <!-- <span class="text-sm font-medium"></span> -->
                   </div>
                 </div>
@@ -982,8 +983,191 @@ watch(() => base.blocktime, (newVal, oldVal) => {
             </div>
           </div>
         </div>
+        </div>  
+
+      </div>  
+      <div class="flex mt-4 mb-2 w-full flex-col lg:flex-row gap-4 bg-base-100 dark:bg-[#00125b]">  
+        <!-- Mobile / Tablet view -->
+        <div class="mobile-home">
+          <!-- Network Status -->
+          <div class="p-2 w-full lg:w-2/3">
+            <div class="text-lg font-semibold text-main">Network Status</div>
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 my-2">
+                <!-- Current Block Height -->
+                <div class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-2 rounded-xl hover:bg-base-300 items-center justify-center">
+                  <div class="flex items-center mb-5">
+                    <Icon icon="mdi:cube-scan" class="text-sm max-[1024px]:text-[8px] max-[1024px]:font-bold text-[#64748B] mr-1" />
+                    <span class="text-[10px] max-[1024px]:text-[8px] max-[1024px]:font-bold text-secondary">Current Block Height</span>
+                  </div>
+                  <div class="text-xl max-[1024px]:text-xs text-main flex items-center justify-center font-medium">
+                    {{ currentBlockHeight }}
+                    <a :href="`/${chain}/blocks/${currentBlockHeight}`" class="ml-2 text-xl max-[1024px]:text-xs inline-block text-[#64748B] hover:text-info/70">
+                      <Icon icon="mdi:arrow-right-circle" class="text-sm max-[1024px]:text-xs" />
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Consensus Nodes -->
+                <div class="flex flex-col dark:bg-base-100 bg-base-200 w-full py-4 px-2 rounded-xl hover:bg-base-300 items-center justify-center">
+                  <div class="flex mb-5 items-center">
+                    <Icon icon="mdi:server-network" class="text-sm max-[1024px]:text-[8px] max-[1024px]:font-bold text-[#64748B] mr-1" />
+                    <span class="text-[10px] max-[1024px]:text-[8px] max-[1024px]:font-bold text-secondary">Consensus Nodes</span>
+                  </div>
+                  <div class="text-xl max-[1024px]:text-xs text-main flex items-center justify-center font-medium">
+                    {{ paramStore.nodeVersion?.items?.length || '0' }}
+                  </div>
+                </div>
+
+                <!-- Avg Block Time (24) -->
+                <div class="flex flex-col dark:bg-base-100 bg-base-200 w-full py-4 rounded-xl hover:bg-base-300 items-center justify-center">
+                  <div class="flex mb-5 items-center">
+                    <Icon icon="mdi:timer-outline" class="text-sm max-[1024px]:text-[8px] max-[1024px]:font-bold text-[#64748B] mr-1" />
+                    <span class="text-[10px] max-[1024px]:text-[8px] max-[1024px]:font-bold text-secondary">Avg Block Time (24h)</span>
+                  </div>
+                  <div class="text-xl max-[1024px]:text-xs text-main flex items-center justify-center font-medium">
+                    {{ averageBlockTime }}s
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex gap-2 flex-col md:flex-row">
+
+                <!-- Latest Block Time -->
+                <div class="flex flex-col dark:bg-base-100 bg-base-200 rounded-xl py-4 px-2 hover:bg-base-300 items-center justify-center w-full md:w-2/3">
+                  <div class="flex mb-5 items-center">
+                    <Icon icon="mdi:clock-outline" class="text-sm max-[1024px]:text-[8px] max-[1024px]:font-bold text-[#64748B] mr-1" />
+                    <div class="text-[10px] max-[1024px]:text-[8px] max-[1024px]:font-bold text-secondary">Latest Block Time</div>
+                  </div>
+                  <div class="text-xl max-[1024px]:text-xs text-main flex items-center justify-center font-medium">
+                    {{ latestBlockTime }}
+                  </div>
+                </div>
+
+                <!-- Avg TX Per Block (24h) -->
+                <div class="flex flex-col dark:bg-base-100 bg-base-200 rounded-xl py-4 hover:bg-base-300 items-center justify-center w-full md:w-1/3">
+                  <div class="flex mb-5 items-center">
+                    <Icon icon="mdi:chart-box-outline" class="text-sm max-[1024px]:text-[8px] max-[1024px]:font-bold text-[#64748B] mr-1" />
+                    <div class="text-[10px] max-[1024px]:text-[8px] max-[1024px]:font-bold text-secondary">Avg TX Per Block (24h)</div>
+                  </div>
+                  <div class="text-xl max-[1024px]:text-xs text-main flex items-center justify-center font-medium">
+                    {{ averageTxPerBlock }}
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile / Tablet view -->
+        <div class="mobile-home">
+          <!-- Market Data -->
+          <div class="p-2 w-full lg:w-1/3">
+            <div class="text-lg font-semibold text-main">Market Data</div>
+            <div class="flex flex-col lg:flex-row gap-2">
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 my-2 w-full">
+                <!-- 24h Volume -->
+                <div class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-2 rounded-xl hover:bg-base-300 items-center justify-center w-full">
+                  <div class="flex mb-5 items-center">
+                    <Icon icon="mdi:swap-horizontal" class="text-sm mr-1 text-[#64748B]" />
+                    <span class="text-[10px] text-secondary">24h Volume</span>
+                  </div>
+                  <div class="text-xl text-main flex items-center justify-center font-medium">
+                    ${{ format.formatNumber((store.coinInfo?.market_data?.total_volume?.usd || 0), '123,456,789.[00]') }}
+                  </div>
+                </div>
+
+                <!-- Market Cap -->
+                <div class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-2 rounded-xl hover:bg-base-300 items-center justify-center w-full">
+                  <div class="flex mb-5 items-center">
+                    <Icon icon="mdi:chart-pie" class="text-sm mr-1 text-[#64748B]" />
+                    <span class="text-[10px] text-secondary">Market Cap</span>
+                  </div>
+                  <div class="text-xl text-main flex items-center justify-center font-medium">
+                    ${{ format.formatNumber(store.coinInfo?.market_data?.market_cap?.usd || 0, '123,456,789.[00]') }}
+                  </div>
+                </div>
+
+                <!-- Circulating Supply -->
+                <div class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-2 rounded-xl hover:bg-base-300 items-center justify-center w-full">
+                  <div class="flex mb-5 items-center gap-1">
+                    <Icon icon="mdi:coins" class="text-sm mr-1 text-[#64748B]" />
+                    <span class="text-[10px] text-secondary">Circulating Supply</span>
+                    <span class="text-[10px] text-secondary">({{ store.coinInfo?.symbol?.toUpperCase() || '' }})</span>
+                  </div>
+                  <div class="text-xl text-main flex flex-col items-center font-medium">
+                    {{ format.formatNumber((store.coinInfo?.market_data?.circulating_supply || 0), '123,456,789.[]') }}
+                  </div>
+                </div>
+
+                <!-- 24h High/Low -->
+                <div class="flex flex-col dark:bg-base-100 bg-base-200 py-4 rounded-xl hover:bg-base-300 items-center justify-center w-full">
+                  <div class="flex mb-5 items-center">
+                    <Icon icon="mdi:trophy" class="text-sm mr-1 text-[#64748B]" />
+                    <span class="text-[10px] text-secondary">24h High / Low</span>
+                  </div>
+                  <div class="text-xs font-medium mt-1 flex gap-1">
+                    <span class="text-xs text-[#60BC29]">${{ store.coinInfo?.market_data?.high_24h?.usd?.toFixed(6) ||'0.00' }}</span> /
+                    <span class="text-xs text-[#EE6161]">${{ store.coinInfo?.market_data?.low_24h?.usd?.toFixed(6) || '0.00' }}</span>
+                  </div>
+                </div>
+
+                <!-- All Time High -->
+                <div class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-1 rounded-xl hover:bg-base-300 items-center justify-center w-full">
+                  <div class="flex mb-5 items-center">
+                    <Icon icon="mdi:trending-up" class=" text-sm mr-1 text-[#64748B]" />
+                    <span class="text-[10px] text-secondary">All Time High</span>
+                    <span class="text-xs ml-2"
+                      :class="{ 'text-[#EE6161]': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) < 0, 'text-[#60BC29]': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) > 0 }">
+                      ({{ store.coinInfo?.market_data?.ath_change_percentage?.usd?.toFixed(2) || '0.00' }}%)
+                    </span>
+                  </div>
+                  <div class="text-xl text-main flex items-center justify-center font-medium">
+                    ${{ store.coinInfo?.market_data?.ath?.usd?.toFixed(6) || '0.00' }}
+                  </div>
+                </div>
+
+                <!-- All Time Low -->
+                <div class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-1 rounded-xl hover:bg-base-300 items-center justify-center w-full">
+                  <div class="flex mb-5 items-center justify-evenly">
+                    <Icon icon="mdi:trending-down" class="text-sm mr-1 text-[#64748B]" />
+                    <span class="text-[10px] text-secondary">All Time Low</span>
+                    <span class="text-xs ml-2"
+                      :class="{ 'text-[#EE6161]': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) < 0, 'text-[#60BC29]': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) > 0 }">
+                      ({{ store.coinInfo?.market_data?.atl_change_percentage?.usd?.toFixed(2) || '0.00' }}%)
+                    </span>
+                  </div>
+                  <div class="text-xl text-main flex items-center justify-center font-medium">
+                    ${{ store.coinInfo?.market_data?.atl?.usd?.toFixed(6) || '0.00' }}
+                  </div>
+                </div>
+
+                <!-- Logo + Price + Buy Button -->
+                <div class="flex flex-col items-center gap-2 mt-3 dark:bg-base-100 bg-base-200 p-3 rounded-xl">
+                  <img v-if="useBaseStore().theme === 'dark'"
+                      src="https://pocket.network/wp-content/uploads/2025/01/logo-white.png"
+                      alt="Coin logo" class="w-24" />
+                  <img v-else
+                      src="https://pocket.network/wp-content/uploads/2024/12/logo.png"
+                      alt="Coin logo" class="w-24" />
+
+                  <div class="text-sm text-center">
+                    ${{ store.coinInfo?.market_data?.current_price?.usd?.toFixed(6) || '0.00' }}
+                  </div>
+                  <div class="text-xs"
+                      :class="(store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0 ? 'text-[#60BC29]' : 'text-[#EE6161]'">
+                    {{ (store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0 ? '+' : '' }}
+                    {{ store.coinInfo?.market_data?.price_change_percentage_24h?.toFixed(2) || '0.00' }}%
+                  </div>
+
+                  <a class="!text-white btn btn-sm w-full !bg-[#09279F] !border-[#09279F]"
+                    :href="ticker?.trade_url" target="_blank">
+                    {{ $t('index.buy') }} {{ store.coinInfo?.symbol?.toUpperCase() || 'COIN' }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
 
     <!-- Network Statistics Section -->
 
@@ -1001,8 +1185,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
             <Icon icon="mdi:wallet" class="text-sm mr-1 text-secondary" />
             <span class="text-xs text-secondary">Total Wallets</span>
           </div>
-          <div class="text-xl text-main flex items-center justify-center font-medium"> {{
-            networkStats.wallets.toLocaleString() }}
+          <div class="text-xl text-main flex items-center justify-center font-medium"> {{ networkStats.wallets.toLocaleString() }}
           </div>
         </div>
 
@@ -1213,18 +1396,15 @@ watch(() => base.blocktime, (newVal, oldVal) => {
               <tr v-for="item in visibleTxs" :key="item.index"
                 class="dark:bg-base-200 bg-base-100 hover:dark:bg-base-100 hover:bg-base-300 transition-colors duration-200 border-none">
                 <td class="truncate text-[#153cd8]" style="max-width:14rem">
-                  <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.item.hash}`">{{
-                    item.item.hash
-                    }}</RouterLink>
+                  <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.item.hash}`">{{ item.item.hash }}</RouterLink>
                 </td>
                 <td class="text-sm text-[#153cd8]">
-                  <RouterLink :to="`/${props.chain}/blocks/${item.item.block_height}`" class="hover:underline">{{
-                    item.item.block_height }}</RouterLink>
+                  <RouterLink :to="`/${props.chain}/blocks/${item.item.block_height}`" class="hover:underline">{{ item.item.block_height }}</RouterLink>
                 </td>
                 <td>
                   <span class="text-xs truncate py-1 px-3 rounded-full"
-                    :class="item.item.status ? 'bg-[#60BC29]/10 text-[#60BC29]' : 'bg-[#E03834]/10 text-[#E03834]'">
-                    {{ item.item.status ? 'Success' : 'Failed' }}
+                    :class="item.item.status || item.item.tx_response.code === 0 ? 'bg-[#60BC29]/10 text-[#60BC29]' : 'bg-[#E03834]/10 text-[#E03834]'">
+                    {{ item.item.status || item.item.tx_response.code === 0 ? 'Success' : 'Failed' }}
                   </span>
                 </td>
                 <td>{{ item.item.type }}</td>
@@ -1268,6 +1448,26 @@ watch(() => base.blocktime, (newVal, oldVal) => {
 </route>
 
 <style scoped>
+
+.desktop-home {
+  display: none;
+}
+
+.mobile-home {
+  display: block;
+}
+
+/* Media query for desktop */
+@media (min-width: 1024px) {
+  .desktop-home {
+    display: flex;
+  }
+
+  .mobile-home {
+    display: none;
+  }
+}
+
 /* Styles for virtualized tables */
 .table tr.h-0 {
   display: table-row;

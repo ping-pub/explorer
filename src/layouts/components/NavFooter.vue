@@ -27,7 +27,7 @@
       </div>
 
       <!-- Powered by + legal links -->
-      <div class="flex flex-row justify-between items-center mt-4">
+      <div class="flex flex-col md:!flex-row justify-between items-center mt-4">
         <!-- <p class="text-white/85 text-[0.95rem]">
           Powered by
           <a href="https://stakenodes.org" target="_blank" class="inline-flex items-center gap-1">
@@ -52,8 +52,8 @@
       </div>
 
       <!-- Bottom row: copyright + nav -->
-      <div class="flex flex-row justify-between items-center mt-4">
-        <p class="text-white/85 text-[0.95rem]">
+      <div class="flex flex-col-reverse lg:flex-row justify-between items-center mt-4">
+        <p class="text-white/85 text-[0.95rem] mt-5 lg:mt-0">
           © <span id="currentYear"></span> Pocket Network. All rights reserved.
         </p>
 
