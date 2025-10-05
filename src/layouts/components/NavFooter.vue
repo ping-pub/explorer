@@ -52,12 +52,12 @@
       </div>
 
       <!-- Bottom row: copyright + nav -->
-      <div class="flex flex-col-reverse lg:flex-row justify-between items-center mt-4">
-        <p class="text-white/85 text-[0.95rem] mt-5 lg:mt-0">
+      <div class="flex flex-col-reverse lg:flex-row justify-between items-center">
+        <p class="text-white/85 text-[0.95rem] mt-4">
           © <span id="currentYear"></span> Pocket Network. All rights reserved.
         </p>
 
-        <nav class="flex flex-wrap justify-center gap-x-6 gap-y-4 text-[0.98rem]" aria-label="Footer">
+        <nav class="flex flex-wrap justify-center gap-x-6 gap-y-4 text-[0.98rem] mt-4" aria-label="Footer">
           <a target="_blank" href="https://forum.pokt.network/" class="hover:underline underline-offset-2">Forum</a>
           <a target="_blank" href="https://explorer.pocket.network/"
             class="hover:underline underline-offset-2">Explorer</a>
