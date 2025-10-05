@@ -258,7 +258,7 @@ function updateVisibleTxs() {
   if (visibleTxs.value.length === 0 ||
     Math.abs(visibleTxs.value[0]?.index - start) >= 2 ||
     Math.abs(visibleTxs.value[visibleTxs.value.length - 1]?.index - (end - 1)) >= 2) {
-
+console.log("visibleTxs", visibleTxs.value)
     visibleTxs.value = base.allTxs.slice(start, end).map((item, index) => ({
       item,
       index: start + index
@@ -1403,8 +1403,8 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                 </td>
                 <td>
                   <span class="text-xs truncate py-1 px-3 rounded-full"
-                    :class="item.item.status ? 'bg-[#60BC29]/10 text-[#60BC29]' : 'bg-[#E03834]/10 text-[#E03834]'">
-                    {{ item.item.status ? 'Success' : 'Failed' }}
+                    :class="item.item.status || item.item.tx_response.code === 0 ? 'bg-[#60BC29]/10 text-[#60BC29]' : 'bg-[#E03834]/10 text-[#E03834]'">
+                    {{ item.item.status || item.item.tx_response.code === 0 ? 'Success' : 'Failed' }}
                   </span>
                 </td>
                 <td>{{ item.item.type }}</td>

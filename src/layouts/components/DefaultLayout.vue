@@ -298,19 +298,18 @@ const handleSafariChainChange = (event: Event) => {
       <div class="mobile-nav">
         <div class="container mx-auto px-1 py-2 flex items-center justify-between">
           <button class="flex items-center px-3 py-2" @click="toggleMobileMenu">
-            <Icon icon="mdi:menu" class="h-6 w-6 dark:text-white" />
+            <Icon icon="mdi:menu" class="h-6 w-6 text-white" />
           </button>
 
           <a :href="`/${currentChain?.chainName}`" class="flex items-center">
             <img class="w-8 h-8"
               src="https://assets-global.website-files.com/651fe0a9a906d151784935f8/65c62e2727ed4e265bc9911a_universal-logo.png" />
-            <h1 class="flex-1 ml-2 text-base font-semibold dark:text-white whitespace-nowrap mr-2 items-center">
+            <h1 class="flex-1 ml-2 text-base font-semibold text-white whitespace-nowrap mr-2 items-center">
               POCKET
             </h1>
           </a>
 
           <NavbarThemeSwitcher class="!inline-block pt-1" />
-
         </div>
 
         <div v-if="mobileMenuOpen" class="mobile-menu">

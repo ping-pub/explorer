@@ -111,9 +111,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://pocket_indexer_api:3006',
+        // target: 'http://pocket_indexer_api:3006',
         // target: 'http://127.0.0.1:3005',
-        // target: 'https://explorer.pocket.network',
+        target: 'https://explorer.pocket.network',
         changeOrigin: true,
       },
     },

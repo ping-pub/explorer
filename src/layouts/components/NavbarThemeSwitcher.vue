@@ -45,5 +45,4 @@ onMounted(() => {
             <Icon :icon="themeMap?.[theme]" class="text-2xl text-white dark:text-gray-400" />
         </button>
     </div>
-    <span></span>
 </template>
