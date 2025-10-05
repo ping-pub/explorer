@@ -258,7 +258,6 @@ function updateVisibleTxs() {
   if (visibleTxs.value.length === 0 ||
     Math.abs(visibleTxs.value[0]?.index - start) >= 2 ||
     Math.abs(visibleTxs.value[visibleTxs.value.length - 1]?.index - (end - 1)) >= 2) {
-console.log("visibleTxs", visibleTxs.value)
     visibleTxs.value = base.allTxs.slice(start, end).map((item, index) => ({
       item,
       index: start + index

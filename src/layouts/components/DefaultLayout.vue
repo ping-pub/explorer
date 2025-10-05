@@ -445,7 +445,7 @@ const handleSafariChainChange = (event: Event) => {
 }
 
 .dark .mobile-menu {
-  background-color: #231f20;
+  background-color: #ffffff;
 }
 
 .pill {

@@ -181,7 +181,7 @@ watch(() => list.value.length, () => {
                         <!-- Add spacer at the bottom to maintain scroll height -->
                         <tr v-if="visibleBlocks.length > 0" class="h-0 m-0 p-0 border-none">
                             <td :style="{ 
-                                height: `${Math.max(0, list.length - (visibleBlocks[visibleBlocks.length-1].index + 1)) * itemHeight}px`, 
+                                height: `${(Math.max(0, list.length - (visibleBlocks[visibleBlocks.length-1].index + 1)) > 0 ? 0 : Math.max(0, list.length - (visibleBlocks[visibleBlocks.length-1].index + 1)) * itemHeight)}px`, 
                                 padding: 0 
                              }" colspan="5"></td>
                         </tr>
