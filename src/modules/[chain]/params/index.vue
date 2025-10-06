@@ -421,6 +421,226 @@ function formatTitle(v: string) {
         </div>
       </div>
     </div>
+
+    <!-- Bank Parameters -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
+      v-if="store.bank?.items && store.bank?.items?.length > 0">
+      <div class="flex items-center mb-4">
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.bank?.title }}</div>
+      </div>
+      <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
+        <div
+          v-for="(item, index) of store.bank?.items"
+          :key="index"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
+        >
+          <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
+            <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
+          </div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis flex items-center justify-center">{{ item?.value }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auth Parameters -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
+      v-if="store.auth?.items && store.auth?.items?.length > 0">
+      <div class="flex items-center mb-4">
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.auth?.title }}</div>
+      </div>
+      <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
+        <div
+          v-for="(item, index) of store.auth?.items"
+          :key="index"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
+        >
+          <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
+            <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
+          </div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis flex items-center justify-center">{{ item?.value }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Parameters -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
+      v-if="store.applicationParams?.items && store.applicationParams?.items?.length > 0">
+      <div class="flex items-center mb-4">
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.applicationParams?.title }}</div>
+      </div>
+      <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
+        <div
+          v-for="(item, index) of store.applicationParams?.items"
+          :key="index"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
+        >
+          <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
+            <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
+          </div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis flex items-center justify-center">{{ item?.subtitle == 'min_stake' ? format.formatToken(item.value) : item?.value }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gateway Parameters -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
+      v-if="store.gatewayParams?.items && store.gatewayParams?.items?.length > 0">
+      <div class="flex items-center mb-4">
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.gatewayParams?.title }}</div>
+      </div>
+      <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
+        <div
+          v-for="(item, index) of store.gatewayParams?.items"
+          :key="index"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
+        >
+          <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
+            <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
+          </div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis flex items-center justify-center">{{ item?.subtitle == 'min_stake' ? format.formatToken(item.value) : item?.value }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Migration Parameters -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
+      v-if="store.migrationParams?.items && store.migrationParams?.items?.length > 0">
+      <div class="flex items-center mb-4">
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.migrationParams?.title }}</div>
+      </div>
+      <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
+        <div
+          v-for="(item, index) of store.migrationParams?.items"
+          :key="index"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
+        >
+          <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
+            <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
+          </div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis flex items-center justify-center">{{ item?.subtitle == 'min_stake' ? format.formatToken(item.value) : item?.value }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proof Parameters -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
+      v-if="store.proofParams?.items && store.proofParams?.items?.length > 0">
+      <div class="flex items-center mb-4">
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.proofParams?.title }}</div>
+      </div>
+      <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
+        <div
+          v-for="(item, index) of store.proofParams?.items"
+          :key="index"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
+        >
+          <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
+            <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
+          </div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis flex items-center justify-center">{{ ['proof_missing_penalty','proof_requirement_threshold','proof_submission_fee'].includes(item?.subtitle) ? format.formatToken(item.value) : item?.value }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service Parameters -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
+      v-if="store.serviceParams?.items && store.serviceParams?.items?.length > 0">
+      <div class="flex items-center mb-4">
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.serviceParams?.title }}</div>
+      </div>
+      <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
+        <div
+          v-for="(item, index) of store.serviceParams?.items"
+          :key="index"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
+        >
+          <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
+            <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
+          </div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis flex items-center justify-center">{{ item?.subtitle == 'add_service_fee' ? format.formatToken(item.value) : item?.value }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session Parameters -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
+      v-if="store.sessionParams?.items && store.sessionParams?.items?.length > 0">
+      <div class="flex items-center mb-4">
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.sessionParams?.title }}</div>
+      </div>
+      <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
+        <div
+          v-for="(item, index) of store.sessionParams?.items"
+          :key="index"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
+        >
+          <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
+            <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
+          </div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis flex items-center justify-center">{{ item?.value }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shared Parameters -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
+      v-if="store.sharedParams?.items && store.sharedParams?.items?.length > 0">
+      <div class="flex items-center mb-4">
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.sharedParams?.title }}</div>
+      </div>
+      <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
+        <div
+          v-for="(item, index) of store.sharedParams?.items"
+          :key="index"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
+        >
+          <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
+            <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
+          </div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis flex items-center justify-center">{{ item?.value }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Supplier Parameters -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
+      v-if="store.supplierParams?.items && store.supplierParams?.items?.length > 0">
+      <div class="flex items-center mb-4">
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.supplierParams?.title }}</div>
+      </div>
+      <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
+        <div
+          v-for="(item, index) of store.supplierParams?.items"
+          :key="index"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
+        >
+          <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
+            <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
+          </div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis flex items-center justify-center">{{ ['min_stake','staking_fee'].includes(item?.subtitle) ? format.formatToken(item.value) : item?.value }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tokenomics Parameters -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"
+      v-if="store.tokenomicsParams?.items && store.tokenomicsParams?.items?.length > 0">
+      <div class="flex items-center mb-4">
+        <div class="text-[30px]/[40px] font-semibold text-main">{{ store.tokenomicsParams?.title }}</div>
+      </div>
+      <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
+        <div
+          v-for="(item, index) of store.tokenomicsParams?.items"
+          :key="index"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300"
+        >
+          <div class="text-xs mb-2 text-[#64748B;] flex items-center justify-center">
+            <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
+          </div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis flex items-center justify-center">{{ item?.value }}</div>
+        </div>
+      </div>
+    </div>
     
     <!-- Slashing Parameters -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6"

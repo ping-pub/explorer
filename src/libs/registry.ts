@@ -56,9 +56,18 @@ export interface AbstractRegistry {
 export interface RequestRegistry extends AbstractRegistry {
   auth_params: Request<any>;
   application: Request<any>;
+  application_params: Request<{params: any}>;
   gateway: Request<any>;
+  gateway_params: Request<{params: any}>;
   supplier: Request<any>;
+  supplier_params: Request<{params: any}>;
   services: Request<any>;
+  service_params: Request<{params: any}>;
+  migration_params: Request<{params: any}>;
+  proof_params: Request<{params: any}>;
+  session_params: Request<{params: any}>;
+  shared_params: Request<{params: any}>;
+  tokenomics_params: Request<{params: any}>;
   application_info: Request<any>;
   gateway_info: Request<any>;
   supplier_info: Request<any>;

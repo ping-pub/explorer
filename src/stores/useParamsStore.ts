@@ -56,12 +56,56 @@ export const useParamStore = defineStore('paramstore', {
       title: 'Distribution Parameters',
       items: [] as Array<any>,
     },
+    applicationParams: {
+      title: 'Application Parameters',
+      items: [] as Array<any>,
+    },
+    gatewayParams: {
+      title: 'Gateway Parameters',
+      items: [] as Array<any>,
+    },
+    migrationParams: {
+      title: 'Migration Parameters',
+      items: [] as Array<any>,
+    },
+    proofParams: {
+      title: 'Proof Parameters',
+      items: [] as Array<any>,
+    },
+    serviceParams: {
+      title: 'Service Parameters',
+      items: [] as Array<any>,
+    },
+    sessionParams: {
+      title: 'Session Parameters',
+      items: [] as Array<any>,
+    },
+    sharedParams: {
+      title: 'Shared Parameters',
+      items: [] as Array<any>,
+    },
+    supplierParams: {
+      title: 'Supplier Parameters',
+      items: [] as Array<any>,
+    },
+    tokenomicsParams: {
+      title: 'Tokenomics Parameters',
+      items: [] as Array<any>,
+    },
+    bank: {
+      title: 'Bank Parameters',
+      items: [] as Array<any>,
+    },
     slashing: {
       title: 'Slashing Parameters',
       items: [] as Array<any>,
     },
     gov: {
       title: 'Governance Parameters',
+      items: [] as Array<any>,
+    },
+    auth: {
+      title: 'Auth Parameters',
       items: [] as Array<any>,
     },
     appVersion: {
@@ -85,6 +129,17 @@ export const useParamStore = defineStore('paramstore', {
       this.handleStakingParams();
       this.handleSlashingParams();
       this.handleDistributionParams();
+      this.handleBankParams();
+      this.handleAuthParams();
+      this.handleApplicationParams();
+      this.handleGatewayParams();
+      this.handleMigrationParams();
+      this.handleProofParams();
+      this.handleServiceParams();
+      this.handleSessionParams();
+      this.handleSharedParams();
+      this.handleSupplierParams();
+      this.handleTokenomicsParams();
       this.handleGovernanceParams();
       this.handleAbciInfo();
     },
@@ -170,6 +225,119 @@ export const useParamStore = defineStore('paramstore', {
         ([key, value]) => ({ subtitle: key, value: value })
       );
     },
+    async handleApplicationParams() {
+      try {
+        const res = await this.getApplicationParams();
+        const params = res?.params || res;
+        if(params) {
+          this.applicationParams.items = Object.entries(params).map(([key, value]) => ({ subtitle: key, value }));
+        }
+      } catch (e) {
+        console.warn('Failed to load application params', e)
+      }
+    },
+    async handleGatewayParams() {
+      try {
+        const res = await this.getGatewayParams();
+        const params = res?.params || res;
+        if(params) {
+          this.gatewayParams.items = Object.entries(params).map(([key, value]) => ({ subtitle: key, value }));
+        }
+      } catch (e) {
+        console.warn('Failed to load gateway params', e)
+      }
+    },
+    async handleMigrationParams() {
+      try {
+        const res = await this.getMigrationParams();
+        const params = res?.params || res;
+        if(params) {
+          this.migrationParams.items = Object.entries(params).map(([key, value]) => ({ subtitle: key, value }));
+        }
+      } catch (e) {
+        console.warn('Failed to load migration params', e)
+      }
+    },
+    async handleProofParams() {
+      try {
+        const res = await this.getProofParams();
+        const params = res?.params || res;
+        if(params) {
+          this.proofParams.items = Object.entries(params).map(([key, value]) => ({ subtitle: key, value }));
+        }
+      } catch (e) {
+        console.warn('Failed to load proof params', e)
+      }
+    },
+    async handleServiceParams() {
+      try {
+        const res = await this.getServiceParams();
+        const params = res?.params || res;
+        if(params) {
+          this.serviceParams.items = Object.entries(params).map(([key, value]) => ({ subtitle: key, value }));
+        }
+      } catch (e) {
+        console.warn('Failed to load service params', e)
+      }
+    },
+    async handleSessionParams() {
+      try {
+        const res = await this.getSessionParams();
+        const params = res?.params || res;
+        if(params) {
+          this.sessionParams.items = Object.entries(params).map(([key, value]) => ({ subtitle: key, value }));
+        }
+      } catch (e) {
+        console.warn('Failed to load session params', e)
+      }
+    },
+    async handleSharedParams() {
+      try {
+        const res = await this.getSharedParams();
+        const params = res?.params || res;
+        if(params) {
+          this.sharedParams.items = Object.entries(params).map(([key, value]) => ({ subtitle: key, value }));
+        }
+      } catch (e) {
+        console.warn('Failed to load shared params', e)
+      }
+    },
+    async handleSupplierParams() {
+      try {
+        const res = await this.getSupplierParams();
+        const params = res?.params || res;
+        if(params) {
+          this.supplierParams.items = Object.entries(params).map(([key, value]) => ({ subtitle: key, value }));
+        }
+      } catch (e) {
+        console.warn('Failed to load supplier params', e)
+      }
+    },
+    async handleTokenomicsParams() {
+      try {
+        const res = await this.getTokenomicsParams();
+        const params = res?.params || res;
+        if(params) {
+          this.tokenomicsParams.items = Object.entries(params).map(([key, value]) => ({ subtitle: key, value }));
+        }
+      } catch (e) {
+        console.warn('Failed to load tokenomics params', e)
+      }
+    },
+    async handleBankParams() {
+      const res = await this.getBankParams();
+      const params = res?.params || res; // some chains may return params at root
+      if(params) {
+        this.bank.items = Object.entries(params).map(([key, value]) => ({ subtitle: key, value }));
+      }
+    },
+    async handleAuthParams() {
+      const res = await this.getAuthParams();
+      const params = res?.params || res;
+      if(params) {
+        this.auth.items = Object.entries(params).map(([key, value]) => ({ subtitle: key, value }));
+      }
+    },
     async handleGovernanceParams() {
       const excludes = this.blockchain.current?.excludes;
       if (excludes && excludes.indexOf('governance') > -1) {
@@ -230,6 +398,39 @@ export const useParamStore = defineStore('paramstore', {
     },
     async getDistributionParams() {
       return await this.blockchain.rpc?.getDistributionParams();
+    },
+    async getBankParams() {
+      return await this.blockchain.rpc?.getBankParams();
+    },
+    async getAuthParams() {
+      return await this.blockchain.rpc?.getAuthParams();
+    },
+    async getApplicationParams() {
+      return await this.blockchain.rpc?.getApplicationParams();
+    },
+    async getGatewayParams() {
+      return await this.blockchain.rpc?.getGatewayParams();
+    },
+    async getMigrationParams() {
+      return await this.blockchain.rpc?.getMigrationParams();
+    },
+    async getProofParams() {
+      return await this.blockchain.rpc?.getProofParams();
+    },
+    async getServiceParams() {
+      return await this.blockchain.rpc?.getServiceParams();
+    },
+    async getSessionParams() {
+      return await this.blockchain.rpc?.getSessionParams();
+    },
+    async getSharedParams() {
+      return await this.blockchain.rpc?.getSharedParams();
+    },
+    async getSupplierParams() {
+      return await this.blockchain.rpc?.getSupplierParams();
+    },
+    async getTokenomicsParams() {
+      return await this.blockchain.rpc?.getTokenomicsParams();
     },
     async getGovParamsVoting() {
       return await this.blockchain.rpc?.getGovParamsVoting();

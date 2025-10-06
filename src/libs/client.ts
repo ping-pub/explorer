@@ -63,6 +63,9 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
 
   // Auth Module
+  async getAuthParams() {
+    return this.request(this.registry.auth_params, {});
+  }
   async getAuthAccounts(page?: PageRequest) {
     if(!page) page = new PageRequest()
     const query =`?${page.toQueryString()}`;
@@ -108,20 +111,47 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     const query =`?${page.toQueryString()}`;
     return this.request(this.registry.application, {}, query);
   }
+  async getApplicationParams(){
+    return this.request(this.registry.application_params, {});
+  }
   async getSuppliers(page?: PageRequest){
     if(!page) page = new PageRequest();
     const query =`?${page.toQueryString()}`;
     return this.request(this.registry.supplier, {}, query);
+  }
+  async getSupplierParams(){
+    return this.request(this.registry.supplier_params, {});
   }
   async getGateways(page?: PageRequest){
     if(!page) page = new PageRequest();
     const query =`?${page.toQueryString()}`;
     return this.request(this.registry.gateway, {}, query);
   }
+  async getGatewayParams(){
+    return this.request(this.registry.gateway_params, {});
+  }
   async getServices(page?: PageRequest){
     if(!page) page = new PageRequest();
     const query =`?${page.toQueryString()}`;
     return this.request(this.registry.services, {}, query);
+  }
+  async getServiceParams(){
+    return this.request(this.registry.service_params, {});
+  }
+  async getMigrationParams(){
+    return this.request(this.registry.migration_params, {});
+  }
+  async getProofParams(){
+    return this.request(this.registry.proof_params, {});
+  }
+  async getSessionParams(){
+    return this.request(this.registry.session_params, {});
+  }
+  async getSharedParams(){
+    return this.request(this.registry.shared_params, {});
+  }
+  async getTokenomicsParams(){
+    return this.request(this.registry.tokenomics_params, {});
   }
   async getApplicationsInfo(address: string){
     return this.request(this.registry.application_info, {address});
