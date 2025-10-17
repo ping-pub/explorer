@@ -531,7 +531,7 @@ function getTransactionFee(tx: any): string {
             <div class="text-sm text-[#64748B] flex items-center">
               {{ $t('staking.consensus_pub_key') }}
             </div>
-            <div class="font-medium truncate text-xs flex flex-row items-center">
+            <div class="font-medium truncate text-[10px] flex flex-row items-center">
               {{ v.consensus_pubkey }}
               <Icon icon="mdi:content-copy" class="ml-2 cursor-pointer text-[#64748B]" v-show="v.consensus_pubkey"
                 @click="copyWebsite(JSON.stringify(v.consensus_pubkey) || '')" />
@@ -603,11 +603,7 @@ function getTransactionFee(tx: any): string {
           </thead>
           <tbody>
             <tr v-for="(item, i) in txs.tx_responses">
-              <td class="dark:text-primary text-[#153cd8;] font-medium">
-                <RouterLink :to="`/${props.chain}/blocks/${item.height}`">{{
-                  item.height
-                  }}</RouterLink>
-              </td>
+              <td class="dark:text-primary text-[#153cd8;] font-medium"> <RouterLink :to="`/${props.chain}/blocks/${item.height}`">{{item.height}}</RouterLink> </td>
               <td class="truncate dark:text-primary text-[#153cd8]" style="max-width: 120px">
                 <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
                   {{ item.txhash }}
@@ -628,9 +624,7 @@ function getTransactionFee(tx: any): string {
               </td>
               <td>
                 <div class="flex items-center">
-                  <span class="mr-2 truncate">{{
-                    format.messages(item.tx.body.messages)
-                    }}</span>
+                  <span class="mr-2 truncate">{{format.messages(item.tx.body.messages)}}</span>
                   <Icon v-if="item.code === 0" icon="mdi-check" class="text-[#60BC29]" />
                   <Icon v-else icon="mdi-multiply" class="text-no" />
                 </div>
@@ -664,12 +658,7 @@ function getTransactionFee(tx: any): string {
                   'text-[#60BC29]': selectedEventType === EventType.Delegate,
                   'text-no': selectedEventType === EventType.Unbond,
                 }">
-                  <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
-                    <span class="mr-2">
-                      {{ (selectedEventType === EventType.Delegate ? '+' : '-') }} {{
-                        mapEvents(item.events)
-                      }}</span>
-                  </RouterLink>
+                  <RouterLink :to="`/${props.chain}/tx/${item.txhash}`"> <span class="mr-2">{{ (selectedEventType === EventType.Delegate ? '+' : '-') }} {{mapEvents(item.events)}}</span> </RouterLink>
                   <Icon v-if="item.code === 0" icon="mdi-check" class="text-[#60BC29]" />
                   <Icon v-else icon="mdi-multiply" class="text-no" />
                 </div>

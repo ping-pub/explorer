@@ -44,6 +44,17 @@ function pageloadInit(p: number) {
     pageResponse.value = x.pagination
   });
 }
+
+const value = ref('stake')
+
+// Computed property to show text based on value
+const statusText = computed(() => {
+  if (value.value === 'stake') {
+    return 'Staked'
+  } else {
+    return 'Unstaked'
+  }
+})
 </script>
 <template>
   <div class="mb-[2vh]">
@@ -55,7 +66,9 @@ function pageloadInit(p: number) {
         <tr>
           <td>Rank</td>
           <td>Address</td>
+          <td>Status</td>
           <td>Stake</td>
+          <td>Balance</td>
         </tr>
       </thead>
       <tr v-for="item, index in list.sort((a: any, b: any) => {
@@ -72,7 +85,9 @@ function pageloadInit(p: number) {
             <span class="text-xs">{{ item.address }}</span>
           </div>
         </td>
-        <td class="font-bold">{{ format.formatToken(item.stake) }}</td>
+        <td class="text-success">{{ statusText }}</td>
+        <td class="font-bold dark:text-secondary">{{ format.formatToken(item.stake) }}</td>
+        <td class="dark:text-secondary">{{ format.formatToken(item.balance) }}</td>
       </tr>
     </table>
   </div>

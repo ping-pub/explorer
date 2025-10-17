@@ -6,6 +6,7 @@ import { useBlockModule } from "@/modules/[chain]/blocks/block";
 import { PageRequest, type AuthAccount, type Pagination, type Block } from '@/types';
 import PaginationBar from '@/components/PaginationBar.vue';
 import { watch } from 'vue';
+import { formatDate } from '@vueuse/core';
 
 const props = defineProps(['chain']);
 
@@ -155,6 +156,8 @@ watch(() => list.value.length, () => {
                             <th class="bg-white dark:bg-base-200">{{ $t('block.proposer') }}</th>
                             <th class="bg-white dark:bg-base-200">{{ $t('account.no_of_transactions') }}</th>
                             <th class="bg-white dark:bg-base-200">{{ $t('account.time') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('Relays') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('Size') }}</th>
                         </tr>
                     </thead>
                     <tbody class="dark:bg-base-200 bg-white relative">
@@ -176,6 +179,8 @@ watch(() => list.value.length, () => {
                             <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
                             <td>{{ item.block?.data?.txs.length }}</td>
                             <td>{{ format.toDay(item.block?.header?.time, 'from') }}</td>
+                            <td>{{ item.block?.header?.extensions?.[0]?.relay_count || 0 }}</td>
+                            <td>{{ item.block?.data?.txs?.length ? item.block.data.txs.join(', ').length : 0 }} bytes</td>
                         </tr>
                         
                         <!-- Add spacer at the bottom to maintain scroll height -->

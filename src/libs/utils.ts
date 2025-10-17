@@ -204,3 +204,27 @@ export function rgbToHsl(color: string) {
     l,
   };
 }
+
+// Convert operator address to account address (for cosmos chains)
+export function operatorAddressToAccount(operatorAddress: string) {
+  if (!operatorAddress) return '';
+
+  try {
+    // Usually cosmos operator addresses start with 'cosmosvaloper'
+    // and we replace it with 'cosmos' to get account address.
+    if (operatorAddress.startsWith('cosmosvaloper')) {
+      return operatorAddress.replace('cosmosvaloper', 'cosmos');
+    }
+
+    // For other chains (like osmosisvaloper -> osmo)
+    if (operatorAddress.includes('valoper')) {
+      return operatorAddress.replace('valoper', '');
+    }
+
+    return operatorAddress;
+  } catch (e) {
+    console.error('Error converting operator address:', e);
+    return '';
+  }
+}
+

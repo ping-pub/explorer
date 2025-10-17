@@ -11,7 +11,10 @@ import { computed } from '@vue/reactivity';
 import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import type { Key, SlashingParam, Validator } from '@/types';
-import { formatSeconds } from '@/libs/utils'
+import { formatSeconds, operatorAddressToAccount } from '@/libs/utils'
+
+const props = defineProps(['validator', 'chain']);
+const validator: string = props.validator;
 
 const staking = useStakingStore();
 const base = useBaseStore();
@@ -27,40 +30,99 @@ const yesterday = ref({} as Record<string, number>);
 const slashing = ref({} as SlashingParam)
 const allValidators = ref([] as Validator[]);
 const isLoading = ref(true);
+const addresses = ref(
+  {} as {
+    account: string;
+    operAddress: string;
+    hex: string;
+    valCons: string;
+  }
+);
+const selfBonded = ref({} as Delegation);
 
-onMounted(async () => {
-    isLoading.value = true;
-    useStakingStore().init();
+addresses.value.account = operatorAddressToAccount(validator);
+// load self bond
+staking
+  .fetchValidatorDelegation(validator, addresses.value.account)
+  .then((x) => {
+    if (x) {
+      selfBonded.value = x.delegation_response;
+    }
+  });
+
+
+// onMounted(async () => {
+//     isLoading.value = true;
+//     useStakingStore().init();
 
     // Fetch slashing parameters
-    chainStore.rpc.getSlashingParams().then(res => {
-        slashing.value = res.params;
-    });
+    // chainStore.rpc.getSlashingParams().then(res => {
+    //     slashing.value = res.params;
+    // });
 
     // Fetch all validators (bonded, unbonding, and unbonded)
-    try {
-        const bonded = await staking.fetchValidators('BOND_STATUS_BONDED');
-        const unbonding = await staking.fetchValidators('BOND_STATUS_UNBONDING');
-        const unbonded = await staking.fetchValidators('BOND_STATUS_UNBONDED');
+    // try {
+    //     const bonded = await staking.fetchValidators('BOND_STATUS_BONDED');
+    //     const unbonding = await staking.fetchValidators('BOND_STATUS_UNBONDING');
+    //     const unbonded = await staking.fetchValidators('BOND_STATUS_UNBONDED');
 
         // Combine all validators into a single list
-        allValidators.value = [
-            ...bonded,
-            ...unbonding,
-            ...unbonded
-        ];
+        // allValidators.value = [
+        //     ...bonded,
+        //     ...unbonding,
+        //     ...unbonded
+        // ];
 
         // Sort by delegator shares (voting power) in descending order
-        allValidators.value.sort((a, b) => Number(b.delegator_shares) - Number(a.delegator_shares));
-    } catch (error) {
-        console.error("Error fetching validators:", error);
-    } finally {
-        isLoading.value = false;
-    }
+    //     allValidators.value.sort((a, b) => Number(b.delegator_shares) - Number(a.delegator_shares));
+    // } catch (error) {
+    //     console.error("Error fetching validators:", error);
+    // } finally {
+    //     isLoading.value = false;
+    // }
 
     // Start fetching voting power changes
-    fetchChange();
+//     fetchChange();
+// });
+
+
+onMounted(async () => {
+  isLoading.value = true;
+  useStakingStore().init();
+
+  addresses.value.account = operatorAddressToAccount(validator);
+
+  const res = await chainStore.rpc.getSlashingParams();
+  slashing.value = res.params;
+
+  try {
+    const delegation = await staking.fetchValidatorDelegation(validator, addresses.value.account);
+    if (delegation?.delegation_response?.balance) {
+      selfBonded.value = delegation.delegation_response;
+    } else {
+      selfBonded.value = { balance: { amount: '0', denom: staking.params?.bond_denom || 'uatom' } };
+    }
+  } catch (err) {
+    console.error('Failed to fetch self-bonded info:', err);
+  }
+
+  try {
+    const bonded = await staking.fetchValidators('BOND_STATUS_BONDED');
+    const unbonding = await staking.fetchValidators('BOND_STATUS_UNBONDING');
+    const unbonded = await staking.fetchValidators('BOND_STATUS_UNBONDED');
+
+    allValidators.value = [...bonded, ...unbonding, ...unbonded];
+    allValidators.value.sort((a, b) => Number(b.delegator_shares) - Number(a.delegator_shares));
+  } catch (error) {
+    console.error("Error fetching validators:", error);
+  } finally {
+    isLoading.value = false;
+  }
+
+  fetchChange();
 });
+
+
 
 async function fetchChange(blockWindow: number = 14400) {
     let page = 0;
@@ -315,7 +377,9 @@ loadAvatars();
                                 <td scope="col" class="text-center">{{ $t('staking.status') }}</td>
                                 <td scope="col" class="text-right">{{ $t('staking.voting_power') }}</td>
                                 <td scope="col" class="text-right">{{ $t('staking.24h_changes') }}</td>
+                                <td scope="col" class="text-right">{{ $t('Self Staked') }}</td>
                                 <td scope="col" class="text-right">{{ $t('staking.commission') }}</td>
+                                <td scope="col" class="text-right">{{ $t('Max. Commission') }}</td>
                             </tr>
                         </thead>
                         
@@ -345,60 +409,35 @@ loadAvatars();
                                                         {{ v.description?.moniker }}
                                                     </RouterLink>
                                                 </span>
-                                                <span class="text-xs">{{
-                                                    v.operator_address ||
-                                                    v.description?.identity ||
-                                                    '-'
-                                                    }}</span>
+                                                <span class="text-[10px]">{{ v.operator_address || v.description?.identity || '-' }}</span>
                                             </div>
                                         </div>
                                     </td>
 
                                     <!-- 👉 Status -->
-                                    <td class="text-center">
-                                        <div class="badge" :class="statusBadge.class">
-                                            {{ statusBadge.text }}
-                                        </div>
-                                    </td>
+                                    <td class="text-center"> <div class="badge" :class="statusBadge.class">{{ statusBadge.text }}</div> </td>
 
                                     <!-- 👉 Voting Power -->
                                     <td class="text-right">
                                         <div class="flex flex-col">
                                             <h6 class="text-sm font-weight-medium whitespace-nowrap ">
-                                                {{
-                                                    format.formatToken(
-                                                        {
-                                                            amount: parseInt(
-                                                                v.tokens
-                                                            ).toString(),
-                                                            denom: staking.params
-                                                                .bond_denom,
-                                                        },
-                                                        true,
-                                                        '0,0'
-                                                    )
-                                                }}
+                                                {{ format.formatToken({amount: parseInt(v.tokens).toString(), denom: staking.params.bond_denom,}, true, '0,0') }}
                                             </h6>
-                                            <span class="text-xs">{{
-                                                format.calculatePercent(
-                                                    v.delegator_shares,
-                                                    staking.totalPower
-                                                )
-                                                }}</span>
+                                            <span class="text-xs">{{ format.calculatePercent(v.delegator_shares, staking.totalPower) }}</span>
                                         </div>
                                     </td>
                                     <!-- 👉 24h Changes -->
-                                    <td class="text-right text-xs" :class="change24Color(v)">
-                                        {{ change24Text(v) }}
-                                    </td>
+                                    <td class="text-right text-xs text-black" :class="change24Color(v)">{{ change24Text(v) }}</td>
+
+                                    <!-- Self Staked -->
+                                    <!-- <td class="text-xs text-right">{{ format.formatToken(selfBonded.balance) }}</td> -->
+                                    <td class="text-xs text-right">{{ selfBonded?.balance ? $format.formatToken(selfBonded.balance) : '0' }}</td>
+
                                     <!-- 👉 commission -->
-                                    <td class="text-right text-xs">
-                                        {{
-                                            format.formatCommissionRate(
-                                                v.commission?.commission_rates?.rate
-                                            )
-                                        }}
-                                    </td>
+                                    <td class="text-right text-xs">{{ format.formatCommissionRate(v.commission?.commission_rates?.rate) }}</td>
+
+                                    <!-- 👉 Max commission -->
+                                    <td class="text-right text-xs">{{ format.formatCommissionRate(v.commission?.commission_rates?.max_rate) }}</td>
                             </tr>
                         </tbody>
                     </table>

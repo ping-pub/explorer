@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from '@vue/reactivity';
 import { useApplicationStore, useBlockchain, useFormatter } from '@/stores';
-import { PageRequest, type AuthAccount, type Pagination, type Service, type RelayMiningDifficulty } from '@/types';
+import { PageRequest, type AuthAccount, type Pagination, type Service, type RelayMiningDifficulty, type Supplier, type Application } from '@/types';
 import { onMounted } from 'vue';
 import PaginationBar from '@/components/PaginationBar.vue';
 const props = defineProps(['chain']);
@@ -15,6 +15,8 @@ const sortDirection = ref('desc'); // Add sort direction state
 const sortField = ref('computeUnits'); // Default sort field: computeUnits or miningDifficulty
 const isLoadingMiningDifficulties = ref(false);
 const hasMiningDifficultyError = ref(false);
+const suppliers = ref([] as Supplier[])
+const applications = ref([] as Application[])
 
 function showType(v: string) {
   return v.replace("/cosmos.auth.v1beta1.", "")
@@ -26,6 +28,8 @@ const pageResponse = ref({} as Pagination)
 onMounted(() => {
   pageloadInit(1)
   loadMiningDifficulties()
+  loadSuppliers()
+  loadApplications()
 });
 
 function pageload() {
@@ -68,6 +72,29 @@ function loadMiningDifficulties() {
     hasMiningDifficultyError.value = true;
   })
 }
+
+const loadSuppliers = async () => {
+  try {
+    const res = await chainStore.rpc.getSuppliers()
+    suppliers.value = (res?.suppliers || []) as Supplier[]
+    console.log('Suppliers Loaded:', suppliers.value)
+  } catch (err) {
+    console.error('Error loading suppliers:', err)
+    suppliers.value = []
+  }
+}
+
+const loadApplications = async () => {
+  try {
+    const res = await chainStore.rpc.getApplications()
+    applications.value = (res?.applications || []) as Application[]
+    console.log('Applications Loaded:', applications.value)
+  } catch (err) {
+    console.error('Error loading applications:', err)
+    applications.value = []
+  }
+}
+
 
 // Toggle sort direction
 function toggleSort() {
@@ -152,6 +179,8 @@ const sortedList = computed(() => {
             <span v-if="sortField === 'computeUnits' && sortDirection === 'desc'">↓</span>
             <span v-if="sortField === 'computeUnits' && sortDirection === 'asc'">↑</span>
           </td>
+          <td>Suppliers</td>
+          <td>Applications</td>
         </tr>
       </thead>
       <tr v-for="item, index in sortedList" class="hover dark-bg-base-200 bg-white">
@@ -194,6 +223,8 @@ const sortedList = computed(() => {
           <span v-else>-</span>
         </td>
         <td class="dark:bg-base-200 bg-[#ffffff]">{{ item.compute_units_per_relay }}</td>
+        <td class="dark:bg-base-200 bg-[#ffffff]">{{ suppliers.find(s => s.owner_address === item.owner_address)?.services || '-' }}</td>
+        <td class="dark:bg-base-200 bg-[#ffffff]">{{ applications.find(a => a.address === item.address)?.service_configs || '-' }}</td>
       </tr>
     </table>
   </div>

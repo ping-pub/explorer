@@ -44,17 +44,30 @@ function pageloadInit(p: number) {
     pageResponse.value = x.pagination
   });
 }
+
+const value = ref('stake')
+
+// Computed property to show text based on value
+const statusText = computed(() => {
+  if (value.value === 'stake') {
+    return 'Staked'
+  } else {
+    return 'Unstaked'
+  }
+})
 </script>
 <template>
   <div class="mb-[2vh]">
     <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">Suppliers</p>
-    <div class="bg-[#EFF2F5;] dark:bg-base-100 rounded-xl px-0.5 pt-0.5 pb-0.5 overflow-auto suppliersContainer" @scroll="pageload" style="height: 78vh;overflow: scroll;">
+    <div class="bg-[#EFF2F5;] dark:bg-base-100 rounded-xl px-0.5 pt-0.5 pb-0.5 overflow-auto suppliersContainer" @scroll="pageload" style="height: 78vh; overflow: scroll;">
       <table class="table w-full table-compact rounded-xl">
         <thead class="dark:bg-base-100 bg-white sticky top-0">
           <tr>
             <td>Rank</td>
             <td>Address</td>
+            <td>Status</td>
             <td>Stake</td>
+            <td>Balance</td>
             <td>No. Of Services</td>
             <td>Services</td>
           </tr>
@@ -73,7 +86,9 @@ function pageloadInit(p: number) {
               <span class="text-xs">Owned by: {{ item.owner_address }}</span>
             </div>
           </td>
-          <td class="font-bold">{{ format.formatToken(item.stake) }}</td>
+          <td class="text-success">{{ statusText }}</td>
+          <td class="font-bold dark:text-secondary">{{ format.formatToken(item.stake) }}</td>
+          <td class="dark:text-secondary">{{ format.formatToken(item.balance) }}</td>
           <td>{{ item.services?.length }}</td>
           <td>
             <span v-if="item.services?.length <= 5">
