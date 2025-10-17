@@ -809,9 +809,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                 <Icon icon="mdi:server-network" class="text-sm text-[#64748B] mr-1" />
                 <span class="text-xs text-secondary">Consensus Nodes</span>
               </div>
-              <div class="text-xl text-main flex items-center justify-center font-medium"> {{
-                paramStore.nodeVersion?.items?.length
-                || '0' }}
+              <div class="text-xl text-main flex items-center justify-center font-medium"> {{paramStore.nodeVersion?.items?.length || '0' }}
               </div>
             </div>
             <div class="flex flex-col dark:bg-base-100 bg-base-200 w-full py-4 rounded-xl hover:bg-base-300 items-center justify-center">
@@ -856,9 +854,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                     <Icon icon="mdi:swap-horizontal" class="text-sm mr-1 text-[#64748B]" />
                     <span class="text-xs text-secondary">24h Volume</span>
                   </div>
-                  <div class="text-xl text-main flex items-center justify-center font-medium"> ${{
-                    format.formatNumber((store.coinInfo?.market_data?.total_volume?.usd ||
-                      0), '123,456,789.[00]') }}
+                  <div class="text-xl text-main flex items-center justify-center font-medium"> ${{format.formatNumber((store.coinInfo?.market_data?.total_volume?.usd || 0), '123,456,789.[00]') }}
                   </div>
                 </div>
                 <div
@@ -868,8 +864,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                     <span class="text-xs text-secondary">Market Cap</span>
                   </div>
                   <div class="text-xl text-main flex items-center justify-center font-medium">
-                    ${{ format.formatNumber(store.coinInfo?.market_data?.market_cap?.usd
-                      || 0, '123,456,789.[00]') }}
+                    ${{ format.formatNumber(store.coinInfo?.market_data?.market_cap?.usd || 0, '123,456,789.[00]') }}
                   </div>
                 </div>
                 <div
@@ -879,8 +874,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                     <span class="text-[10px] text-secondary">Circulating Supply</span>
                     <span class="text-[10px] text-secondary ml-1">({{ store.coinInfo?.symbol?.toUpperCase() || '' }})</span>
                   </div>
-                  <div class="text-xl text-main flex items-center justify-center font-medium"> {{
-                    format.formatNumber((store.coinInfo?.market_data?.circulating_supply || 0), '123,456,789.[]') }}
+                  <div class="text-xl text-main flex items-center justify-center font-medium"> {{format.formatNumber((store.coinInfo?.market_data?.circulating_supply || 0), '123,456,789.[]') }}
                     <!-- <span class="text-sm font-medium"></span> -->
                   </div>
                 </div>
@@ -893,11 +887,9 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                     <span class="text-xs text-secondary">24h High / Low</span>
                   </div>
                   <div class="text-xs font-medium mt-1 flex gap-1">
-                    <span class="text-xs text-[#60BC29]">${{ store.coinInfo?.market_data?.high_24h?.usd?.toFixed(6) ||
-                      '0.00' }}</span>
+                    <span class="text-xs text-[#60BC29]">${{ store.coinInfo?.market_data?.high_24h?.usd?.toFixed(6) || '0.00' }}</span>
                     /
-                    <span class="text-xs text-[#EE6161]">${{ store.coinInfo?.market_data?.low_24h?.usd?.toFixed(6) || '0.00'
-                      }}</span>
+                    <span class="text-xs text-[#EE6161]">${{ store.coinInfo?.market_data?.low_24h?.usd?.toFixed(6) || '0.00'}}</span>
                   </div>
                 </div>
                 <div
@@ -907,9 +899,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                     <span class="text-xs text-secondary">All Time High</span>
                     <span class="text-xs ml-2"
                       :class="{ 'text-[#EE6161]': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) < 0, 'text-[#60BC29]': (store.coinInfo?.market_data?.ath_change_percentage?.usd || 0) > 0 }">
-                      ({{
-                        store.coinInfo?.market_data?.ath_change_percentage?.usd?.toFixed(2)
-                        || '0.00' }}%)
+                      ({{store.coinInfo?.market_data?.ath_change_percentage?.usd?.toFixed(2) || '0.00' }}%)
                     </span>
                   </div>
                   <div class="text-xl text-main flex items-center justify-center font-medium">
@@ -923,9 +913,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                     <span class="text-xs text-secondary">All Time Low</span>
                     <span class="text-xs ml-2"
                       :class="{ 'text-[#EE6161]': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) < 0, 'text-[#60BC29]': (store.coinInfo?.market_data?.atl_change_percentage?.usd || 0) > 0 }">
-                      ({{
-                        store.coinInfo?.market_data?.atl_change_percentage?.usd?.toFixed(2)
-                        || '0.00' }}%)
+                      ({{store.coinInfo?.market_data?.atl_change_percentage?.usd?.toFixed(2) || '0.00' }}%)
                     </span>
                   </div>
                   <div class="text-xl text-main flex items-center justify-center font-medium">
@@ -935,7 +923,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
               </div>
             </div>
             <div
-              class="dark:bg-base-100 bg-base-200 p-4 rounded-[20px] hover:bg-base-300 grid grid-cols-1 md:grid-cols-1 w-[25%] items-center justify-between">
+              class="dark:bg-base-100 bg-base-200 p-4 mt-2 rounded-[20px] hover:bg-base-300 grid grid-cols-1 md:grid-cols-1 w-[25%] items-center justify-between">
               <!-- Logo -->
               <img v-if="useBaseStore().theme === 'dark'" src="https://pocket.network/wp-content/uploads/2025/01/logo-white.png" alt="Coin logo" class="w-2/3 justify-self-center" />
               <img v-else src="https://pocket.network/wp-content/uploads/2024/12/logo.png" alt="Coin logo" class="w-2/3 justify-self-center" />
@@ -943,15 +931,11 @@ watch(() => base.blocktime, (newVal, oldVal) => {
               <!-- Price -->
               <div class="flex flex-col item-center mx-auto">
                 <div class="text-xl text-center">
-                  ${{ store.coinInfo?.market_data?.current_price?.usd?.toFixed(6) ||
-                    '0.00' }}
+                  ${{ store.coinInfo?.market_data?.current_price?.usd?.toFixed(6) || '0.00' }}
                 </div>
                 <div class="text-sm text-end"
                   :class="(store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0 ? 'text-[#60BC29]' : 'text-[#EE6161]'">
-                  {{ (store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0
-                    ? '+' : '' }} {{
-                    store.coinInfo?.market_data?.price_change_percentage_24h?.toFixed(2)
-                    || '0.00' }}%
+                  {{ (store.coinInfo?.market_data?.price_change_percentage_24h || 0) > 0 ? '+' : '' }} {{store.coinInfo?.market_data?.price_change_percentage_24h?.toFixed(2) || '0.00' }}%
                 </div>
               </div>
 
@@ -976,8 +960,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
               <a class="!text-white btn btn-sm w-full !bg-[#09279F] !border-[#09279F]"
                 :class="{ '!btn-[#60BC29]': store.trustColor === 'green', '!btn-warning': store.trustColor === 'yellow' }"
                 :href="ticker?.trade_url" target="_blank">
-                {{ $t('index.buy') }} {{ store.coinInfo?.symbol?.toUpperCase() || 'COIN'
-                }}
+                {{ $t('index.buy') }} {{ store.coinInfo?.symbol?.toUpperCase() || 'COIN'}}
               </a>
             </div>
           </div>

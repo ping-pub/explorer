@@ -138,8 +138,7 @@ const formattedTxData = computed(() => {
                     <tr>
                         <td class="py-3 px-2 dark:text-gray-400 text-[#64748B]">{{ $t('tx.fee') }}</td>
                         <td class="py-3 px-2 dark:text-gray-400 text-[#171C1F]">
-                            {{format.formatTokens(tx.tx?.auth_info?.fee?.amount, true, '0,0.[00]')
-                            }}
+                            {{format.formatTokens(tx.tx?.auth_info?.fee?.amount, true, '0,0.[00]')}}
                         </td>
                     </tr>
                     <tr>
@@ -152,7 +151,7 @@ const formattedTxData = computed(() => {
             </table>
         </div>
     </div>
-
+    
         <div v-if="tx.tx_response" class="bg-[#EFF2F5;] dark:bg-base-100 rounded-xl border dark:border-base-100 mb-4">
             <h2 class="card-title truncate text-2xl mt-2 ml-4 font-semibold align-middle">
                 {{ $t('account.messages') }} ({{ messages.length }})
@@ -165,7 +164,7 @@ const formattedTxData = computed(() => {
             <div v-if="messages.length === 0">{{ $t('tx.no_messages') }}</div>
         </div>
 
-        <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded-xl shadow">
+        <div v-if="tx.tx_response" class=" bg-base-100 px-4 pt-3 pb-4 mb-4 rounded-xl shadow">
             <h2 class="card-title truncate text-2xl mb-2">JSON</h2>
             <div v-if="Object.keys(formattedTxData).length > 0" class="bg-base-200 p-4 rounded-xl">
                 <!-- <JsonViewer 

@@ -186,8 +186,7 @@ const handleSafariChainChange = (event: Event) => {
               class="dropdown dropdown-end flex align-center justify-center mr-5 border-solid border-2 border-[#64748B80] bg-white rounded-xl dark:bg-transparent">
               <label tabindex="0" class="btn-ghost btn-sm cursor-pointer flex items-center justify-center flex-row"
                 @click="toggleDropdown">
-                <span class="mr-1 flex flex-2" style="font-size: 0.8rem;text-transform: unset !important;">{{
-                  currentChain?.prettyName }}</span>
+                <span class="mr-1 flex flex-2" style="font-size: 0.8rem;text-transform: unset !important;">{{currentChain?.prettyName }}</span>
                 {{ baseStore.connected ? '🟢' : '🔴' }}
                 <Icon icon="mdi-chevron-down" class="ml-1 flex flex-1" />
               </label>
@@ -338,8 +337,7 @@ const handleSafariChainChange = (event: Event) => {
               <div v-else>
                 <div class="flex items-center justify-between rounded-lg border border-info p-2">
                   <div class="flex items-center">
-                    <span class="text-base font-medium text-gray-700 dark:text-gray-200">{{ currentChain?.prettyName
-                      }}</span>
+                    <span class="text-base font-medium text-gray-700 dark:text-gray-200">{{ currentChain?.prettyName}}</span>
                   </div>
                   <button @click="toggleMobileChainDropdown" class="p-1">
                     <Icon icon="mdi-chevron-down" class="h-5 w-5 text-gray-500 dark:text-gray-400" />

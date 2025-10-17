@@ -38,8 +38,7 @@ function handleScroll() {
     <div>
         <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">Transactions</p>
         <!-- <div class="tabs tabs-boxed bg-transparent mb-4">
-            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'recent' }" @click="tab = 'recent'">{{
-                $t('block.recent') }}</a>
+            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'recent' }" @click="tab = 'recent'">{{$t('block.recent') }}</a>
             <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'search' }"
                 @click="tab = 'search'">Search</a>
         </div> -->
@@ -66,7 +65,12 @@ function handleScroll() {
                     <tbody>
                         <tr v-for="(item, index) in base.allTxs" :index="index"
                             class="hover:bg-base-300 transition-colors rounded-xl duration-200 border-b-[0px]">
+<<<<<<< HEAD
                             <td class="dark:bg-base-200 bg-white truncate dark:text-warning text-[#153cd8;]" style="max-width:25vw">
+=======
+                            <td class="dark:bg-base-200 bg-white truncate dark:text-warning text-[#153cd8;]"
+                                style="max-width:25vw">
+>>>>>>> origin/Hamas
                                 <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.hash}`">{{item.hash}}</RouterLink>
                             </td>
                             <td class="dark:bg-base-200 bg-white text-sm dark:text-warning text-[#153cd8;]">
@@ -75,10 +79,16 @@ function handleScroll() {
                             <td class="dark:bg-base-200 bg-white text-[#60BC29;]">
                                 <span class="text-xs truncate py-1 px-3 rounded-full" :class="item.status ? 'bg-[#60BC29]/10 text-[#60BC29]' : 'bg-[#E03834]/10 text-[#E03834]'">{{ item.status ? 'Success' : 'Failed' }}</span>
                             </td>
+<<<<<<< HEAD
                             <td class="dark:bg-base-200 bg-white dark:text-base-100 text-[#171C1F;]">{{ format.formatTokens(item.messages?.[0]?.amount || [], true, '0,0.[00]') }}</td>
                             <td class="dark:bg-base-200 bg-white dark:text-base-100 text-[#171C1F;]">{{ item.messages?.length }}</td>
                             <td class="dark:bg-base-200 bg-white dark:text-base-100 text-[#171C1F;]">{{ item.height }}</td>
                             <td class="dark:bg-base-200 bg-white dark:text-base-100 text-[#171C1F;]">{{ item.type }}</td>
+=======
+                            <td class="dark:bg-base-200 bg-white text-[#171C1F;]">{{ item.messages?.length }}</td>
+                            <td class="dark:bg-base-200 bg-white dark:text-base-100 text-[#171C1F;]">{{ item.type }}
+                            </td>
+>>>>>>> origin/Hamas
                             <td class="dark:bg-base-200 bg-white dark:text-base-100 text-[#171C1F;]">{{format.formatTokens(typeof item.fee === 'string' ? [] : item.fee?.amount || [], true, '0,0.[00]') }}</td>
                             <td class="dark:bg-base-200 bg-white dark:text-base-100 text-[#171C1F;]">{{format.toDay(item.timestamp, 'from') }}</td>
                         </tr>
@@ -88,7 +98,7 @@ function handleScroll() {
         </div>
 
         <div v-show="tab === 'search'"
-            class="bg-base-100 px-4 pt-3 pb-4 rounded-md shadow-md border-t-4 border-warning">
+            class="bg-base-100 px-4 pt-3 pb-4 mb-4 rounded-md shadow-md border-t-4 border-warning">
             <div class="flex items-center mb-4">
                 <Icon icon="mdi:magnify" class="text-2xl text-warning mr-2" />
                 <div class="text-lg font-semibold text-main">Search Transactions</div>

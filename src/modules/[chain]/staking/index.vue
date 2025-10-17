@@ -409,7 +409,11 @@ loadAvatars();
                                                         {{ v.description?.moniker }}
                                                     </RouterLink>
                                                 </span>
+<<<<<<< HEAD
                                                 <span class="text-[10px]">{{ v.operator_address || v.description?.identity || '-' }}</span>
+=======
+                                                <span class="text-xs">{{v.operator_address || v.description?.identity || '-'}}</span>
+>>>>>>> origin/Hamas
                                             </div>
                                         </div>
                                     </td>
@@ -421,9 +425,15 @@ loadAvatars();
                                     <td class="text-right">
                                         <div class="flex flex-col">
                                             <h6 class="text-sm font-weight-medium whitespace-nowrap ">
+<<<<<<< HEAD
                                                 {{ format.formatToken({amount: parseInt(v.tokens).toString(), denom: staking.params.bond_denom,}, true, '0,0') }}
                                             </h6>
                                             <span class="text-xs">{{ format.calculatePercent(v.delegator_shares, staking.totalPower) }}</span>
+=======
+                                                {{format.formatToken({amount: parseInt(v.tokens).toString(), denom: staking.params.bond_denom,}, true, '0,0')}}
+                                            </h6>
+                                            <span class="text-xs">{{format.calculatePercent(v.delegator_shares, staking.totalPower)}}</span>
+>>>>>>> origin/Hamas
                                         </div>
                                     </td>
                                     <!-- 👉 24h Changes -->
@@ -434,10 +444,16 @@ loadAvatars();
                                     <td class="text-xs text-right">{{ selfBonded?.balance ? $format.formatToken(selfBonded.balance) : '0' }}</td>
 
                                     <!-- 👉 commission -->
+<<<<<<< HEAD
                                     <td class="text-right text-xs">{{ format.formatCommissionRate(v.commission?.commission_rates?.rate) }}</td>
 
                                     <!-- 👉 Max commission -->
                                     <td class="text-right text-xs">{{ format.formatCommissionRate(v.commission?.commission_rates?.max_rate) }}</td>
+=======
+                                    <td class="text-right text-xs">
+                                        {{format.formatCommissionRate(v.commission?.commission_rates?.rate)}}
+                                    </td>
+>>>>>>> origin/Hamas
                             </tr>
                         </tbody>
                     </table>

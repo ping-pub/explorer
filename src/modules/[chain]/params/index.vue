@@ -299,7 +299,7 @@ function formatTitle(v: string) {
       </div>
 
       <!-- Status Summary Box (bigger width) -->
-      <div class="md:col-span-2 w-[50%] border border-[#60BC29] rounded-xl">
+      <div class="md:grid-cols-2 border border-[#60BC29] rounded-xl">
         <div class="p-3 rounded-xl h-full flex items-center"
           :class="Object.keys(validatorVersions).length === 1 ? 'bg-success/10 border border-success/20' : Object.keys(validatorVersions).length > 1 ? 'bg-warning/10 border border-warning/20' : 'bg-base-200'">
           <Icon :icon="Object.keys(validatorVersions).length === 1 ? 'mdi:check-circle' : 'mdi:alert-circle'" 
@@ -395,7 +395,9 @@ function formatTitle(v: string) {
             <!-- <Icon icon="mdi:vote" class="mr-1 text-accent" /> -->
             <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
           </div>
-          <div class="text-xs text-main font-medium overflow-hidden text-ellipsis flex items-center justify-center">{{ item?.subtitle == 'min_deposit' ? format.formatToken(item.value[0]) : item?.value }}</div>
+          <div class="text-xs text-main font-medium overflow-hidden text-ellipsis flex items-center justify-center">
+            {{ item?.subtitle == 'min_deposit' ? format.formatToken(item.value[0]) : item?.value }}
+          </div>
         </div>
       </div>
     </div>
