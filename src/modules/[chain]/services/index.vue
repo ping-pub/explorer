@@ -8,6 +8,8 @@ const props = defineProps(['chain']);
 
 const format = useFormatter();
 const chainStore = useBlockchain()
+const suppliers = ref([])
+const applications = ref([])
 
 const list = ref([] as Service[])
 const miningDifficulties = ref([] as RelayMiningDifficulty[])
@@ -15,8 +17,6 @@ const sortDirection = ref('desc'); // Add sort direction state
 const sortField = ref('computeUnits'); // Default sort field: computeUnits or miningDifficulty
 const isLoadingMiningDifficulties = ref(false);
 const hasMiningDifficultyError = ref(false);
-const suppliers = ref([] as Supplier[])
-const applications = ref([] as Application[])
 
 function showType(v: string) {
   return v.replace("/cosmos.auth.v1beta1.", "")
@@ -73,10 +73,20 @@ function loadMiningDifficulties() {
   })
 }
 
+const waitForRpc = async () => {
+  // wait jab tak rpc load nahi hota
+  while (!chainStore.rpc) {
+    console.log('⏳ Waiting for chainStore.rpc...')
+    await new Promise(resolve => setTimeout(resolve, 500))
+  }
+  console.log('✅ RPC is ready:', chainStore.rpc)
+}
+
 const loadSuppliers = async () => {
   try {
+    await waitForRpc()
     const res = await chainStore.rpc.getSuppliers()
-    suppliers.value = (res?.suppliers || []) as Supplier[]
+    suppliers.value = (res?.suppliers || [])
     console.log('Suppliers Loaded:', suppliers.value)
   } catch (err) {
     console.error('Error loading suppliers:', err)
@@ -86,8 +96,9 @@ const loadSuppliers = async () => {
 
 const loadApplications = async () => {
   try {
+    await waitForRpc()
     const res = await chainStore.rpc.getApplications()
-    applications.value = (res?.applications || []) as Application[]
+    applications.value = (res?.applications || [])
     console.log('Applications Loaded:', applications.value)
   } catch (err) {
     console.error('Error loading applications:', err)

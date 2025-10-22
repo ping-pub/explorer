@@ -88,7 +88,9 @@
     "recent": "Recent",
     "future": "Future",
     "fees": "Fees",
-    "only_tx": "Only show txs in recent blocks"
+    "only_tx": "Only show txs in recent blocks",
+    "relay": "Relays",
+    "size": "Size"
   },
   "consensus": {
     "monitor": "Monitor",
@@ -217,6 +219,7 @@
     "status": "Status",
     "total_bonded": "Total Staked Tokens",
     "self_bonded": "Self Staked",
+    "max_commission": "Max. Commission",
     "min_self": "Min Self Delegation",
     "annual_profit": "Annual Profit",
     "unbonding_height": "Unstaking Height",

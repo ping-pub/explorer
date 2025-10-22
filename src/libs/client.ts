@@ -13,6 +13,7 @@ import {
 } from './registry';
 import { PageRequest,type Coin } from '@/types';
 
+
 export class BaseRestClient<R extends AbstractRegistry> {
   endpoint: string;
   registry: R;

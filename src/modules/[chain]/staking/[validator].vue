@@ -602,13 +602,7 @@ function getTransactionFee(tx: any): string {
           </thead>
           <tbody>
             <tr v-for="(item, i) in txs.tx_responses">
-<<<<<<< HEAD
               <td class="dark:text-primary text-[#153cd8;] font-medium"> <RouterLink :to="`/${props.chain}/blocks/${item.height}`">{{item.height}}</RouterLink> </td>
-=======
-              <td class="dark:text-primary text-[#153cd8;] font-medium">
-                <RouterLink :to="`/${props.chain}/blocks/${item.height}`">{{item.height}}</RouterLink>
-              </td>
->>>>>>> origin/Hamas
               <td class="truncate dark:text-primary text-[#153cd8]" style="max-width: 120px">
                 <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
                   {{ item.txhash }}
@@ -663,14 +657,8 @@ function getTransactionFee(tx: any): string {
                   'text-[#60BC29]': selectedEventType === EventType.Delegate,
                   'text-no': selectedEventType === EventType.Unbond,
                 }">
-<<<<<<< HEAD
                   <RouterLink :to="`/${props.chain}/tx/${item.txhash}`"> <span class="mr-2">{{ (selectedEventType === EventType.Delegate ? '+' : '-') }} {{mapEvents(item.events)}}</span> </RouterLink>
-=======
-                  <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
-                    <span class="mr-2">
-                      {{ (selectedEventType === EventType.Delegate ? '+' : '-') }} {{mapEvents(item.events)}}</span>
-                  </RouterLink>
->>>>>>> origin/Hamas
+
                   <Icon v-if="item.code === 0" icon="mdi-check" class="text-[#60BC29]" />
                   <Icon v-else icon="mdi-multiply" class="text-no" />
                 </div>

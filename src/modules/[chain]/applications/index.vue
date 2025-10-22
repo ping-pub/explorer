@@ -44,10 +44,10 @@ onMounted(async () => {
   pageloadInit(0)
 
   // ye dono calls API se data laengi
-  const balanceRes = await chainStore.rpc.getBalances(props.chain.bech32_prefix)
+  const balanceRes = await chainStore.rpc.getBankBalances(props.chain.bech32_prefix)
   balances.value = balanceRes.balances
 
-  const delegationRes = await chainStore.rpc.getDelegations(props.chain.bech32_prefix)
+  const delegationRes = await chainStore.rpc.getStakingDelegations(props.chain.bech32_prefix)
   delegations.value = delegationRes.delegation_responses
 })
 
@@ -104,8 +104,6 @@ const statusText = computed(() => {
             <td>Status</td>
           </tr>
         </thead>
-
-<<<<<<< HEAD
         <!-- ✅ v-for syntax fixed, index now comes from second argument -->
         <tr v-for="item, index in list.sort((a, b) => { return parseInt(b.stake.amount) - parseInt(a.stake.amount); })" class="hover">
           <td class="dark:bg-base-200 bg-white">{{ index + 1 }}</td>
@@ -125,18 +123,6 @@ const statusText = computed(() => {
         </tr>
       </table>
     </div>
-=======
-              <RouterLink :to="`/${chainStore.chainName}/account/${item?.address}`" class="font-weight-medium">{{item.address }}</RouterLink>
-            </span>
-            <span class="text-xs text-[#171C1F] dark:text-secondary">{{ item.address }}</span>
-          </div>
-        </td>
-        <td class="font-bold dark:bg-base-200 bg-white text-[#171C1F] dark:text-secondary">{{ format.formatToken(item.stake) }}</td>
-        <td class="dark:bg-base-200 bg-white text-[#171C1F] dark:text-secondary">{{ item.service_configs?.length }}</td>
-        <td class="dark:bg-base-200 bg-white text-[#171C1F] dark:text-secondary">{{ item.service_configs?.map((sc: any) => sc.service_name?.length > 0 ? sc.service_name : sc.service_id).join(", ")}}</td>
-      </tr>
-    </table>
->>>>>>> origin/Hamas
   </div>
 </template>
 

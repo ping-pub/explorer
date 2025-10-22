@@ -316,30 +316,6 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
                 </div>
               </div>
           </div>
-<<<<<<< HEAD
-          <div class="mt-4 md:!col-span-1 md:!mt-0 md:!ml-3">
-            <!-- list-->
-            <div class="">
-              <!--balances  -->
-              <div class="flex flex-row gap-8">
-                <div class="flex flex-col items-start">
-                  <h2 class="text-[#64748B] text-sm px-4 mb-2">Status</h2>
-                  <!-- <div class="flex flex-col items-start px-4 mb-2 gap-4" v-for="(balanceItem, index) in balances" :key="index"> -->
-                  <div class="flex flex-col items-start px-4 mb-2 gap-4">
-                    <div class="flex items-center justify-start text-sm font-semibold whitespace-nowrap gap-1">
-                      <span class="w-3 h-3 bg-[#FFB206] inline-block"></span>
-                      {{`Available`}}
-                    </div>
-                    <!--delegations  -->
-                    <!-- <div class="flex flex-row items-start mb-2" v-for="(delegationItem, index) in delegations" :key="index"> -->
-                      <div class="flex items-center justify-center text-sm font-semibold whitespace-nowrap gap-1">
-                        <span class="w-3 h-3 bg-[#09279F] inline-block"></span>
-                        {{`Staked`}}
-                      </div>
-                    <!-- </div> -->
-                  <!-- </div> -->
-                  </div>   
-=======
         </div>
       </div>
     <!-- </div>     -->
@@ -364,7 +340,6 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
                   <span class="text-sm px-2 py-0.5 text-[#64748B]">Status</span>
                   <span class="text-sm px-2 py-0.5 text-[#64748B]">Amount</span>
                   <span class="text-sm px-2 py-0.5 text-[#64748B]">Percentage</span>
->>>>>>> origin/Hamas
                 </div>
 
                 <!-- div 2 Balances -->

@@ -135,8 +135,7 @@ watch(() => list.value.length, () => {
     <div>
         <p class="flex items-center justify-start bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">Blocks</p>
         <div class="tabs tabs-boxed bg-transparent mb-4">
-            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'blocks' }" @click="tab = 'blocks'">{{
-                $t('block.recent') }}</a>
+            <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'blocks' }" @click="tab = 'blocks'">{{ $t('block.recent') }}</a>
             <RouterLink class="tab text-gray-400 uppercase"
                 :to="`/${chain}/blocks/${Number(base.latest?.block?.header.height || 0) + 10000}`">{{ $t('block.future') }}
             </RouterLink>
@@ -156,8 +155,8 @@ watch(() => list.value.length, () => {
                             <th class="bg-white dark:bg-base-200">{{ $t('block.proposer') }}</th>
                             <th class="bg-white dark:bg-base-200">{{ $t('account.no_of_transactions') }}</th>
                             <th class="bg-white dark:bg-base-200">{{ $t('account.time') }}</th>
-                            <th class="bg-white dark:bg-base-200">{{ $t('Relays') }}</th>
-                            <th class="bg-white dark:bg-base-200">{{ $t('Size') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('block.relay') }}</th>
+                            <th class="bg-white dark:bg-base-200">{{ $t('block.size') }}</th>
                         </tr>
                     </thead>
                     <tbody class="dark:bg-base-200 bg-white relative">
