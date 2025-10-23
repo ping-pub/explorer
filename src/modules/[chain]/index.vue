@@ -1290,7 +1290,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
             <!-- <Icon icon="mdi:cube-outline" class="text-2xl text-info mr-2" /> -->
             <div class="text-lg font-semibold text-main ml-5">Latest Blocks</div>
           </div>
-          <RouterLink :to="`/${chain}/block`"
+          <RouterLink :to="`/${chain}/blocks`"
             class="hover:text-info/70 text-sm flex items-center transition-colors duration-200 mr-5">
             View All
             <Icon icon="mdi:arrow-right" class="ml-1" />

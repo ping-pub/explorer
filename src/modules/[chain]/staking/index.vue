@@ -50,42 +50,6 @@ staking
     }
   });
 
-
-// onMounted(async () => {
-//     isLoading.value = true;
-//     useStakingStore().init();
-
-    // Fetch slashing parameters
-    // chainStore.rpc.getSlashingParams().then(res => {
-    //     slashing.value = res.params;
-    // });
-
-    // Fetch all validators (bonded, unbonding, and unbonded)
-    // try {
-    //     const bonded = await staking.fetchValidators('BOND_STATUS_BONDED');
-    //     const unbonding = await staking.fetchValidators('BOND_STATUS_UNBONDING');
-    //     const unbonded = await staking.fetchValidators('BOND_STATUS_UNBONDED');
-
-        // Combine all validators into a single list
-        // allValidators.value = [
-        //     ...bonded,
-        //     ...unbonding,
-        //     ...unbonded
-        // ];
-
-        // Sort by delegator shares (voting power) in descending order
-    //     allValidators.value.sort((a, b) => Number(b.delegator_shares) - Number(a.delegator_shares));
-    // } catch (error) {
-    //     console.error("Error fetching validators:", error);
-    // } finally {
-    //     isLoading.value = false;
-    // }
-
-    // Start fetching voting power changes
-//     fetchChange();
-// });
-
-
 onMounted(async () => {
   isLoading.value = true;
   useStakingStore().init();
@@ -308,6 +272,33 @@ base.$subscribe((_, s) => {
 });
 
 loadAvatars();
+
+const currentPage = ref(1)
+const itemsPerPage = 10
+
+const totalPages = computed(() =>
+  Math.ceil(validatorsList.value.length / itemsPerPage)
+)
+
+const paginatedValidators = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return validatorsList.value.slice(start, end)
+})
+
+function nextPage() {
+  if (currentPage.value < totalPages.value) currentPage.value++
+}
+function prevPage() {
+  if (currentPage.value > 1) currentPage.value--
+}
+function goToFirst() {
+  currentPage.value = 1
+}
+function goToLast() {
+  currentPage.value = totalPages.value
+}
+
 </script>
 <template>
     <div>  
@@ -364,100 +355,170 @@ loadAvatars();
         </div>
 
         <div>
-            <div class="bg-base-100 rounded-xl mb-4">
-                <div v-if="isLoading" class="flex justify-center items-center p-8 rounded-xl">
-                    <span class="loading loading-spinner loading-lg"></span>
-                </div>
-                <div v-else class="bg-[#EFF2F5] dark:bg-base-100 rounded-xl dark:border-base-100 px-0.5 pt-0.5 pb-0.5 overflow-x-auto">
-                    <table class="table w-full rounded-xl">
-                        <thead class="dark:bg-base-100 bg-white sticky top-0 border-0">
-                            <tr class="">   <!-- ✅ border hataya -->
-                                <td scope="col" style="width: 3rem; position: relative">{{ $t('staking.rank') }}</td>
-                                <td scope="col">{{ $t('staking.validator') }}</td>
-                                <td scope="col" class="text-center">{{ $t('staking.status') }}</td>
-                                <td scope="col" class="text-right">{{ $t('staking.voting_power') }}</td>
-                                <td scope="col" class="text-right">{{ $t('staking.24h_changes') }}</td>
-                                <td scope="col" class="text-right">{{ $t('staking.self_bonded') }}</td>
-                                <td scope="col" class="text-right">{{ $t('staking.commission') }}</td>
-                                <td scope="col" class="text-right">{{ $t('staking.max_commission') }}</td>
-                            </tr>
-                        </thead>
-                        
-                        <tbody class="divide-y-0 rounded-xl">
-                            <tr
-                                v-for="({ v, rank, logo, statusBadge }, i) in validatorsList" :key="v.operator_address" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
-                                <!-- 👉 rank -->
-                                    <td>
-                                        <div class="text-xs truncate relative px-2 py-1 rounded-full w-fit" :class="`text-${rank}`">
-                                            <span class="inset-x-0 inset-y-0 opacity-10 absolute" :class="`bg-${rank}`"></span>
-                                            {{ i + 1 }}
-                                        </div>
-                                    </td>
-                                    <!-- 👉 Validator -->
-                                    <td>
-                                        <div class="flex items-center overflow-hidden" style="max-width: 300px">
-                                            <div class="flex flex-col">
-                                                <span
-                                                    class="text-sm text-primary dark:invert whitespace-nowrap overflow-hidden">
-                                                    <RouterLink :to="{
-                                                        name: 'chain-staking-validator',
-                                                        params: {
-                                                            validator:
-                                                                v.operator_address,
-                                                        },
-                                                    }" class="font-weight-medium">
-                                                        {{ v.description?.moniker }}
-                                                    </RouterLink>
-                                                </span>
-                                                <span class="text-[10px]">{{ v.operator_address || v.description?.identity || '-' }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
+        <div class="bg-base-100 rounded-xl mb-4">
+            <div v-if="isLoading" class="flex justify-center items-center p-8 rounded-xl">
+            <span class="loading loading-spinner loading-lg"></span>
+            </div>
 
-                                    <!-- 👉 Status -->
-                                    <td class="text-center"> <div class="badge" :class="statusBadge.class">{{ statusBadge.text }}</div> </td>
+            <!-- ✅ scroll hataya -->
+            <div
+            v-else
+            class="bg-[#EFF2F5] dark:bg-base-100 rounded-xl dark:border-base-100 px-4 pt-2 pb-2"
+            >
+            <table class="table w-full rounded-xl">
+                <thead class="dark:bg-base-100 bg-white sticky top-0 border-0">
+                <tr>
+                    <td style="width: 3rem">{{ $t('staking.rank') }}</td>
+                    <td>{{ $t('staking.validator') }}</td>
+                    <td class="text-center">{{ $t('staking.status') }}</td>
+                    <td class="text-right">{{ $t('staking.voting_power') }}</td>
+                    <td class="text-right">{{ $t('staking.24h_changes') }}</td>
+                    <td class="text-right">{{ $t('staking.self_bonded') }}</td>
+                    <td class="text-right">{{ $t('staking.commission') }}</td>
+                    <td class="text-right">{{ $t('staking.max_commission') }}</td>
+                </tr>
+                </thead>
 
-                                    <!-- 👉 Voting Power -->
-                                    <td class="text-right">
-                                        <div class="flex flex-col">
-                                            <h6 class="text-sm font-weight-medium whitespace-nowrap ">
-                                                {{ format.formatToken({amount: parseInt(v.tokens).toString(), denom: staking.params.bond_denom,}, true, '0,0') }}
-                                            </h6>
-                                            <span class="text-xs">{{ format.calculatePercent(v.delegator_shares, staking.totalPower) }}</span>
-                                        </div>
-                                    </td>
-                                    <!-- 👉 24h Changes -->
-                                    <td class="text-right text-xs text-black" :class="change24Color(v)">{{ change24Text(v) }}</td>
+                <tbody>
+                <tr
+                    v-for="({ v, rank, logo, statusBadge }, i) in paginatedValidators"
+                    :key="v.operator_address"
+                    class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl"
+                >
+                    <!-- 👉 rank -->
+                    <td>
+                    <div
+                        class="text-xs truncate relative px-2 py-1 rounded-full w-fit"
+                        :class="`text-${rank}`"
+                    >
+                        <span
+                        class="inset-x-0 inset-y-0 opacity-10 absolute"
+                        :class="`bg-${rank}`"
+                        ></span>
+                        {{ i + 1 + (currentPage - 1) * itemsPerPage }}
+                    </div>
+                    </td>
 
-                                    <!-- Self Staked -->
-                                    <!-- <td class="text-xs text-right">{{ format.formatToken(selfBonded.balance) }}</td> -->
-                                    <td class="text-xs text-right">{{ selfBonded?.balance ? $format.formatToken(selfBonded.balance) : '0' }}</td>
-
-                                    <!-- 👉 commission -->
-                                    <td class="text-right text-xs">{{ format.formatCommissionRate(v.commission?.commission_rates?.rate) }}</td>
-
-                                    <!-- 👉 Max commission -->
-                                    <td class="text-right text-xs">{{ format.formatCommissionRate(v.commission?.commission_rates?.max_rate) }}</td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="flex flex-row items-center dark:bg-base-200 bg-white px-3.5 py-4 gap-2">
-                        <div class="text-xs truncate relative py-2 px-4 rounded-[15px;] w-fit text-[#171C1F] dark:text-error mr-2">
-                            <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-[#E03834]"></span>
-                            {{ $t('staking.top') }} 33%
-                        </div>
-                        <div class="text-xs truncate relative py-2 px-4 rounded-[15px;] w-fit text-[#171C1F] dark:text-warning">
-                            <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-[#FFB206]"></span>
-                            {{ $t('staking.top') }} 67%
-                        </div>
-                        <div class="text-sm dark:text-[#64748B;] text-[#171C1FA6;] hidden md:!block pl-2 rounded-[15px;] px-4 pt-0.5 pb-0.5 border border-[#64748B;] ">
-                            {{ $t('staking.description') }}
+                    <!-- 👉 Validator -->
+                    <td>
+                    <div class="flex items-center overflow-hidden" style="max-width: 300px">
+                        <div class="flex flex-col">
+                        <span
+                            class="text-sm text-primary dark:invert whitespace-nowrap overflow-hidden"
+                        >
+                            <RouterLink
+                            :to="{
+                                name: 'chain-staking-validator',
+                                params: { validator: v.operator_address },
+                            }"
+                            class="font-weight-medium"
+                            >
+                            {{ v.description?.moniker }}
+                            </RouterLink>
+                        </span>
+                        <span class="text-[10px]">{{
+                            v.operator_address || v.description?.identity || '-'
+                        }}</span>
                         </div>
                     </div>
-                </div>
+                    </td>
+
+                    <!-- 👉 Status -->
+                    <td class="text-center">
+                    <div class="badge" :class="statusBadge.class">{{ statusBadge.text }}</div>
+                    </td>
+
+                    <!-- 👉 Voting Power -->
+                    <td class="text-right">
+                    <div class="flex flex-col">
+                        <h6 class="text-sm font-weight-medium whitespace-nowrap">
+                        {{
+                            format.formatToken(
+                            {
+                                amount: parseInt(v.tokens).toString(),
+                                denom: staking.params.bond_denom,
+                            },
+                            true,
+                            '0,0'
+                            )
+                        }}
+                        </h6>
+                        <span class="text-xs">{{
+                        format.calculatePercent(v.delegator_shares, staking.totalPower)
+                        }}</span>
+                    </div>
+                    </td>
+
+                    <!-- 👉 24h Changes -->
+                    <td
+                    class="text-right text-xs text-black"
+                    :class="change24Color(v)"
+                    >
+                    {{ change24Text(v) }}
+                    </td>
+
+                    <!-- 👉 Self Bonded -->
+                    <td class="text-xs text-right">
+                    {{
+                        selfBonded?.balance
+                        ? $format.formatToken(selfBonded.balance)
+                        : '0'
+                    }}
+                    </td>
+
+                    <!-- 👉 Commission -->
+                    <td class="text-right text-xs">
+                    {{ format.formatCommissionRate(v.commission?.commission_rates?.rate) }}
+                    </td>
+
+                    <!-- 👉 Max commission -->
+                    <td class="text-right text-xs">
+                    {{ format.formatCommissionRate(v.commission?.commission_rates?.max_rate) }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- ✅ Pagination Section -->
+            <div
+                class="flex justify-end items-center gap-2 my-6 px-6"
+            >
+                <button
+                class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+                @click="goToFirst"
+                :disabled="currentPage === 1"
+                >
+                First
+                </button>
+                <button
+                class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+                @click="prevPage"
+                :disabled="currentPage === 1"
+                >
+                &lt;
+                </button>
+
+                <span class="text-xs">
+                Page {{ currentPage }} of {{ totalPages }}
+                </span>
+
+                <button
+                class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+                @click="nextPage"
+                :disabled="currentPage === totalPages"
+                >
+                &gt;
+                </button>
+                <button
+                class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+                @click="goToLast"
+                :disabled="currentPage === totalPages"
+                >
+                Last
+                </button>
             </div>
+            </div>
+        </div>
         </div>
     </div>
 </template>
@@ -475,5 +536,16 @@ loadAvatars();
 .staking-table.table :where(th, td) {
     padding: 8px 5px;
     background: transparent;
+}
+</style>
+
+<style scoped>
+.page-btn:hover {
+  background-color: #e9ecef;
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>
