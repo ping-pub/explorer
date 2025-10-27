@@ -1,7 +1,24 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { Icon } from '@iconify/vue';
 import ApexCharts from 'vue3-apexcharts';
+import { useBlockchain } from '@/stores';
+
+const props = defineProps(['chain']);
+const chainStore = useBlockchain();
+
+// Map frontend chain names to API chain names
+const getApiChainName = (chainName: string) => {
+  const chainMap: Record<string, string> = {
+    'pocket-beta': 'pocket-testnet-beta',
+    'pocket-alpha': 'pocket-testnet-alpha',
+    'pocket-mainnet': 'pocket-mainnet'
+  };
+  return chainMap[chainName] || chainName || 'pocket-testnet-beta';
+};
+
+const current = chainStore?.current?.chainName || props.chain || 'pocket-beta';
+const apiChainName = computed(() => getApiChainName(current));
 
 interface ProofSubmission {
   id: number;
@@ -112,6 +129,7 @@ const relaysChartOptions = ref({
 async function loadSummaryStats() {
   try {
     const params = new URLSearchParams();
+    params.append('chain', apiChainName.value);
     if (selectedService.value) params.append('service_id', selectedService.value);
     if (selectedSupplier.value) params.append('supplier_address', selectedSupplier.value);
     if (selectedApplication.value) params.append('application_address', selectedApplication.value);
@@ -133,6 +151,7 @@ async function loadRewardAnalytics() {
   loading.value = true;
   try {
     const params = new URLSearchParams();
+    params.append('chain', apiChainName.value);
     if (selectedService.value) params.append('service_id', selectedService.value);
     if (selectedSupplier.value) params.append('supplier_address', selectedSupplier.value);
     if (selectedApplication.value) params.append('application_address', selectedApplication.value);
@@ -173,6 +192,7 @@ async function loadProofSubmissions() {
   loading.value = true;
   try {
     const params = new URLSearchParams();
+    params.append('chain', apiChainName.value);
     if (selectedService.value) params.append('service_id', selectedService.value);
     if (selectedSupplier.value) params.append('supplier_address', selectedSupplier.value);
     if (selectedApplication.value) params.append('application_address', selectedApplication.value);
