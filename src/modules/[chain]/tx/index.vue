@@ -198,13 +198,13 @@ function changePageSize(newSize: number) {
                 </span>
               </td>
               <td class="dark:bg-base-200 bg-white">
-                {{ item.amount }}
+                {{ format.formatToken({ denom: 'upokt', amount: item.amount }) }}
               </td>
               <td class="dark:bg-base-200 bg-white">
                 {{ item.type }}
               </td>
               <td class="dark:bg-base-200 bg-white">
-                {{ item.fee }}
+                {{ format.formatToken({ denom: 'upokt', amount: item.fee }) }}
               </td>
               <td class="dark:bg-base-200 bg-white">
                 {{ format.toDay(item.timestamp, 'from') }}
