@@ -258,7 +258,7 @@ onMounted(() => {
               {{ suppliers.find((s) => s.owner_address === item.owner_address)?.services || '-' }}
             </td>
             <td>
-              {{ applications.find((a) => a.address === item.address)?.service_configs || '-' }}
+              {{ applications.find((a) => a.address === item.owner_address)?.service_configs || '-' }}
             </td>
           </tr>
         </tbody>

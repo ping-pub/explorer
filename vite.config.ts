@@ -100,13 +100,27 @@ export default defineConfig({
     }),
     DefineOptions(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-vue': ['vue', 'vue-router', 'pinia'],
+          'vendor-charts': ['vue3-apexcharts', 'apexcharts'],
+          'vendor-cosm': ['@cosmjs/stargate', '@cosmjs/amino', '@cosmjs/encoding'],
+          'vendor-ui': ['@iconify/vue', 'daisyui'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
+  optimizeDeps: {
+    entries: ['./src/**/*.vue'],
+    include: ['vue', 'vue-router', 'pinia', '@iconify/vue'],
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
-  },
-  optimizeDeps: {
-    entries: ['./src/**/*.vue'],
   },
   server: {
     proxy: {

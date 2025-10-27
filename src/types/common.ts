@@ -58,6 +58,7 @@ export interface Coin {
 export interface Supplier {
     owner_address: any;
     stake: Coin;
+    balance?: Coin;
     services: any;
     operator_address: string;
 }
@@ -65,6 +66,7 @@ export interface Supplier {
 export interface Gateway {
     address: any;
     stake: Coin;
+    balance?: Coin;
     services: any;
 }
 
@@ -85,6 +87,7 @@ export interface RelayMiningDifficulty {
 export interface Application {
     address: any;
     stake: Coin;
+    balance?: Coin;
     service_configs: any;
 }
 

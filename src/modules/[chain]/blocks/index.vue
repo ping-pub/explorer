@@ -118,7 +118,7 @@ function prevPage() {
               <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
               <td>{{ item.block?.data?.txs.length }}</td>
               <td>{{ format.toDay(item.block?.header?.time, 'from') }}</td>
-              <td>{{ item.block?.header?.extensions?.[0]?.relay_count || 0 }}</td>
+              <td>{{ 0 }}</td>
               <td>
                 {{ item.block?.data?.txs?.length ? item.block.data.txs.join(', ').length : 0 }}
                 bytes

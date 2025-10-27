@@ -10,7 +10,7 @@ import {
 import { computed } from '@vue/reactivity';
 import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue';
-import type { Key, SlashingParam, Validator } from '@/types';
+import type { Key, SlashingParam, Validator, Delegation } from '@/types';
 import { formatSeconds, operatorAddressToAccount } from '@/libs/utils'
 
 const props = defineProps(['validator', 'chain']);
@@ -38,7 +38,17 @@ const addresses = ref(
     valCons: string;
   }
 );
-const selfBonded = ref({} as Delegation);
+const selfBonded = ref({
+  delegation: {
+    delegator_address: '',
+    validator_address: '',
+    shares: '0'
+  },
+  balance: {
+    amount: '0',
+    denom: 'uatom'
+  }
+} as Delegation);
 
 addresses.value.account = operatorAddressToAccount(validator);
 // load self bond
@@ -64,7 +74,14 @@ onMounted(async () => {
     if (delegation?.delegation_response?.balance) {
       selfBonded.value = delegation.delegation_response;
     } else {
-      selfBonded.value = { balance: { amount: '0', denom: staking.params?.bond_denom || 'uatom' } };
+      selfBonded.value = { 
+        delegation: {
+          delegator_address: addresses.value.account,
+          validator_address: validator,
+          shares: '0'
+        },
+        balance: { amount: '0', denom: staking.params?.bond_denom || 'uatom' } 
+      };
     }
   } catch (err) {
     console.error('Failed to fetch self-bonded info:', err);
@@ -461,7 +478,7 @@ function goToLast() {
                     <td class="text-xs text-right">
                     {{
                         selfBonded?.balance
-                        ? $format.formatToken(selfBonded.balance)
+                        ? format.formatToken(selfBonded.balance)
                         : '0'
                     }}
                     </td>

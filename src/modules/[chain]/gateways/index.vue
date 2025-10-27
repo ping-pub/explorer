@@ -126,7 +126,7 @@
 
             <td class="text-success">{{ statusText }}</td>
             <td class="font-bold dark:text-secondary">{{ format.formatToken(item.stake) }}</td>
-            <td class="dark:text-secondary">{{ format.formatToken(item.balance) }}</td>
+            <td class="dark:text-secondary">{{ item.balance ? format.formatToken(item.balance) : '-' }}</td>
           </tr>
         </tbody>
       </table>
