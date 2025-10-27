@@ -1,6 +1,7 @@
 {
   "module": {
     "dashboard": "Dashboard",
+    "noderunning": "Node Running",
     "blocks": "Blocks",
     "applications": "Applications",
     "gateways": "Gateways",

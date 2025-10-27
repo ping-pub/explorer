@@ -288,6 +288,28 @@ const handleSafariChainChange = (event: Event) => {
                 </li>
               </ul>
             </div>
+
+            <div class="dropdown dropdown-end flex align-center justify-center ml-5 border-solid border-2 border-[#64748B80] bg-white rounded-xl dark:bg-transparent">
+              <label tabindex="0" class="btn-ghost btn-sm cursor-pointer flex items-center justify-center flex-row"
+                @click="toggleModuleDropdown">
+                <span class="mr-1 flex flex-1" style="text-transform: unset !important;">
+                  <!-- {{ show title of the current route }} -->
+                  Dashboards
+                </span>
+                <Icon icon="mdi-chevron-down" class="ml-1 flex flex-1" />
+              </label>
+              <ul v-show="moduleDropdownOpen" tabindex="0"
+                class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50" style="font-size: 0.8rem;">
+                <li v-for="(item, index) in ['services', 'noderunning']" :key="'dashboard-' + index" @click="toggleModuleDropdown">
+                  <RouterLink :to="`/${currentChain?.chainName}/dashboards/${item}`" @click="sidebarShow = false"
+                    class="hover:bg-gray-100 dark:hover:bg-[#373f59]">
+                    <div class="capitalize text-gray-700 dark:text-gray-200" style="font-size: 0.8rem;">
+                      {{ $t(`module.${item}`) }}
+                    </div>
+                  </RouterLink>
+                </li>
+              </ul>
+            </div>
             <NavbarThemeSwitcher class="!inline-block pt-1" />
           </div>
         </div>
