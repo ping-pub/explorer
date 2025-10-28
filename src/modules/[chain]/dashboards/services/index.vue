@@ -347,11 +347,11 @@ onMounted(() => {
         <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md"><div class="h-80"><ApexCharts type="line" height="280" :options="efficiencyChartOptions" :series="efficiencyChartSeries" /></div></div>
       </div>
     </div>
-
+<!-- 
     <div class="dark:bg-base-100 bg-base-200 pt-3 rounded-lg border-[3px] border-solid border-base-200 dark:border-base-100 mb-5" v-if="rewardAnalytics.length > 0">
       <div class="flex items-center mb-4"><div class="text-lg font-semibold text-main ml-5">Hourly Relays</div></div>
       <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md"><div class="h-80"><ApexCharts type="column" height="280" :options="relaysChartOptions" :series="relaysChartSeries" /></div></div>
-    </div>
+    </div> -->
 
     <div class="dark:bg-base-100 bg-base-200 pt-3 rounded-lg border-[3px] border-solid border-base-200 dark:border-base-100 mb-5">
       <div class="flex items-center justify-between mb-4 ml-5">
