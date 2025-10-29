@@ -3,10 +3,33 @@ import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { computed, ref } from '@vue/reactivity';
 import type { Tx, TxResponse } from '@/types';
+import JsonTreeViewer from '@/components/common/JsonTreeViewer.vue'
+
 
 import { JsonViewer } from "vue3-json-viewer"
 // if you used v1.0.5 or latster ,you should add import "vue3-json-viewer/dist/index.css"
 import "vue3-json-viewer/dist/index.css";
+
+import { watch } from 'vue'
+
+// ✅ move watcher BELOW tx declaration
+watch(
+  () => props.hash,
+  async (newHash) => {
+    if (!newHash) return
+    console.log('🔍 Fetching TX for hash:', newHash)
+
+    try {
+      const result = await blockchain.rpc.getTx(newHash)
+      tx.value = result
+    } catch (error) {
+      console.error('❌ Failed to fetch TX:', error)
+      tx.value = null
+    }
+  },
+  { immediate: true }
+)
+
 
 const props = defineProps(['hash', 'chain']);
 
@@ -14,14 +37,15 @@ const blockchain = useBlockchain();
 const baseStore = useBaseStore();
 const format = useFormatter();
 const tx = ref(
-    {} as {
-        tx: Tx;
-        tx_response: TxResponse;
-    }
-);
+  {} as {
+    tx: Tx;
+    tx_response: TxResponse;
+  }
+)
 if (props.hash) {
-    blockchain.rpc.getTx(props.hash).then((x) => (tx.value = x));
+  blockchain.rpc.getTx(props.hash).then((x) => (tx.value = x));
 }
+
 const messages = computed(() => {
     return tx.value.tx?.body?.messages.map(x=> {
         if(x.packet?.data) {
@@ -32,50 +56,64 @@ const messages = computed(() => {
     }) || [];
 });
 
-// Format JSON data for viewer to prevent display issues
+ // 🧠 Clean formatted JSON
 const formattedTxData = computed(() => {
-    if (!tx.value || Object.keys(tx.value).length === 0) {
-        return {};
-    }
-    
-    try {
-        // Handle potential circular references by using a replacer function
-        const cache = new Set();
-        const cleanData = JSON.parse(JSON.stringify(tx.value, (key, value) => {
-            if (typeof value === 'object' && value !== null) {
-                if (cache.has(value)) {
-                    return '[Circular Reference]';
-                }
-                cache.add(value);
-            }
-            return value;
-        }));
-        return cleanData;
-    } catch (error) {
-        console.error('Error formatting tx data for JSON viewer:', error);
-        // If JSON conversion fails, provide a simpler object representation
-        return {
-            tx_hash: tx.value.tx_response?.txhash || '',
-            height: tx.value.tx_response?.height || '',
-            status: tx.value.tx_response?.code === 0 ? 'Success' : 'Failed',
-            gas: `${tx.value.tx_response?.gas_used || 0} / ${tx.value.tx_response?.gas_wanted || 0}`,
-            timestamp: tx.value.tx_response?.timestamp || '',
-            memo: tx.value.tx?.body?.memo || ''
-        };
-    }
-});
+  if (!tx.value || Object.keys(tx.value).length === 0) return {}
+  try {
+    const cache = new Set()
+    const cleanData = JSON.parse(
+      JSON.stringify(tx.value, (key, value) => {
+        if (typeof value === 'object' && value !== null) {
+          if (cache.has(value)) return '[Circular Reference]'
+          cache.add(value)
+        }
+        return value
+      })
+    )
+    return cleanData
+  } catch (error) {
+    return {}
+  }
+})
+
+// 🎨 Theme adaptive syntax colors
+const colors = computed(() => ({
+  key: baseStore.theme === 'dark' ? '#c792ea' : '#7b1fa2',
+  string: baseStore.theme === 'dark' ? '#c3e88d' : '#2e7d32',
+  number: baseStore.theme === 'dark' ? '#f78c6c' : '#d84315',
+  boolean: baseStore.theme === 'dark' ? '#89ddff' : '#0288d1',
+  null: baseStore.theme === 'dark' ? '#ff5370' : '#d32f2f'
+}))
+
+// 🌈 JSON syntax highlight
+const formattedJson = computed(() => {
+  const json = JSON.stringify(formattedTxData.value, null, 2)
+  return json
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(
+      /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+      (match) => {
+        let color = ''
+        if (/^"/.test(match)) {
+          color = /:$/.test(match) ? colors.value.key : colors.value.string
+        } else if (/true|false/.test(match)) {
+          color = colors.value.boolean
+        } else if (/null/.test(match)) {
+          color = colors.value.null
+        } else {
+          color = colors.value.number
+        }
+        return `<span style="color:${color}">${match}</span>`
+      }
+    )
+})
+
 </script>
 <template>
+<div>    
     <div>
-        <!-- <div class="tabs tabs-boxed bg-transparent mb-4">
-            <RouterLink class="tab text-gray-400 uppercase" 
-                :to="`/${chain}/tx/?tab=recent`"
-                >{{ $t('block.recent') }}</RouterLink>
-            <RouterLink class="tab text-gray-400 uppercase" 
-                :to="`/${chain}/tx/?tab=search`"
-                >Search</RouterLink>
-            <a class="tab text-gray-400 uppercase tab-active">Transaction</a>
-        </div> -->
         <h2 class="bg-[#09279F] dark:bg-base-100 text-3xl rounded-2xl px-4 py-4 my-4 font-bold text-[#ffffff;]">{{ $t('tx.title') }}</h2>
         <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded-2xl mb-4 border dark:border-base-100">
             <div class="overflow-hidden">
@@ -164,24 +202,37 @@ const formattedTxData = computed(() => {
             <div v-if="messages.length === 0">{{ $t('tx.no_messages') }}</div>
         </div>
 
-        <div v-if="tx.tx_response" class=" bg-base-100 px-4 pt-3 pb-4 mb-4 rounded-xl shadow">
-            <h2 class="card-title truncate text-2xl mb-2">JSON</h2>
-            <div v-if="Object.keys(formattedTxData).length > 0" class="bg-base-200 p-4 rounded-xl">
-                <!-- <JsonViewer 
-                    :value="formattedTxData" 
-                    :theme="baseStore.theme || 'jv-light'" 
-                    style="background: transparent;" 
-                    :copyable="true" 
-                    :boxed="true" 
-                    :sort="true" 
-                    :expand-depth="5"
-                    :preview-mode="false"
-                /> -->
-                <pre>{{ formattedTxData }}</pre>
+        <!-- <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 mb-4 rounded-xl shadow">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="card-title truncate text-2xl">JSON</h2>
+            </div>
+            <div v-if="Object.keys(formattedTxData).length > 0" class="bg-base-200 p-4 rounded-xl overflow-auto max-h-[600px]">
+                <pre v-html="formattedJson"></pre>
             </div>
             <div v-else class="p-4 text-center text-gray-500">
                 Loading transaction data...
             </div>
+        </div> -->
+
+
+
+                <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 mb-4 rounded-xl shadow">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="card-title truncate text-2xl">JSON</h2>
+            </div>
+
+            <div v-if="Object.keys(formattedTxData).length > 0"
+                 class="bg-base-200 p-4 rounded-xl overflow-auto max-h-[600px]">
+                
+                <!-- ✅ Interactive JSON Viewer -->
+                <JsonTreeViewer :data="formattedTxData" />
+            </div>
+
+            <div v-else class="p-4 text-center text-gray-500">
+                Loading transaction data...
+            </div>
         </div>
+
     </div>
+</div>    
 </template>

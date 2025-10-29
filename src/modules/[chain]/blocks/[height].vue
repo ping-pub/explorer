@@ -152,5 +152,6 @@ onBeforeRouteUpdate(async (to, from, next) => {
         </div>
         <DynamicComponent :value="current.block?.last_commit" />
       </div>
+    </div>
   </div>
-</div></template>
+</template>

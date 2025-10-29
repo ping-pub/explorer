@@ -180,29 +180,22 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
 }
 </script>
 <template>
+<div>
   <div v-if="account">
-    <!-- address -->
-    <div class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-[#ffffff]">
-      <div class="flex items-center">
-        <!-- img -->
-        <!-- <div class="inline-flex relative w-11 h-11 rounded-md">
-          <div class="w-11 h-11 absolute rounded-md opacity-10 bg-primary"></div>
-          <div class="w-full inline-flex items-center align-middle flex-none justify-center">
-            <Icon icon="mdi-qrcode" class="text-primary" style="width: 27px; height: 27px" />
+      <!-- address -->
+      <div class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-[#ffffff]">
+        <div class="flex items-center">
+          <!-- content -->
+          <div class="flex items-center flex-1 space-x-3">
+            <h2 class="text-2xl card-title">{{ $t('account.address') }}</h2>
+            <span class="text-[10px] truncate flex items-center" style="width:max-content"> {{ address }} {{ "&nbsp;&nbsp;&nbsp;" }}
+              <span class="float-right" style="width:max-content" v-if="copied">&nbsp;&nbsp;Copied!</span>
+              <Icon class="float-right" icon="ic:round-content-copy" @click="copy(address)" />
+            </span>
           </div>
-        </div> -->
-        <!-- content -->
-        <div class="flex items-center flex-1 space-x-3">
-          <h2 class="text-2xl card-title">{{ $t('account.address') }}</h2>
-          <span class="text-[10px] truncate flex items-center" style="width:max-content"> {{ address }} {{ "&nbsp;&nbsp;&nbsp;" }}
-            <span class="float-right" style="width:max-content" v-if="copied">&nbsp;&nbsp;Copied!</span>
-            <Icon class="float-right" icon="ic:round-content-copy" @click="copy(address)" />
-          </span>
         </div>
       </div>
-    </div>
 
-    <!-- <div class="bg-base-100 dark:bg-[#00125b] pt-2"> -->
       <!-- Laptop View -->
       <div class="desktop-address flex flex-1 overflow-auto gap-8">
         <!-- Assets -->
@@ -318,9 +311,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
           </div>
         </div>
       </div>
-    <!-- </div>     -->
 
-    <!-- <div class="flex mt-4 mb-2 w-full overflow-scroll flex-col lg:flex-row gap-4 bg-base-100 dark:bg-[#00125b]"> -->
       <!-- Mobile / Tablet view -->
       <div class="mobile-address flex flex-col gap-4 w-full lg:hidden">
         <!-- Assets -->
@@ -400,75 +391,6 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
               </div>
             </div>
 
-                <!-- <div class="mt-4 md:!col-span-1 md:!mt-0 md:!ml-3 flex items-center justify-center"> -->
-                  <!--balances  -->
-                  <!-- <div class="grid grid-cols-2 md:grid-cols-3 gap-y-6 md:gap-y-10 gap-x-6 md:gap-x-0"> -->
-                    
-                    <!-- Status -->
-                    <!-- <div class="flex flex-row items-center justify-center">
-                      <h2 class="text-[#64748B] text-sm px-4 mb-2 mt-2">Status</h2>
-                      <div class="flex flex-col items-start justify-center px-4 gap-4"
-                        v-for="(balanceItem, index) in balances"
-                        :key="index"
-                      >
-                        <div class="flex items-center justify-start text-xs font-semibold whitespace-nowrap gap-1">
-                          <span class="w-2 h-2 bg-[#FFB206] inline-block"></span>
-                          {{ `Staked` }}
-                        </div> -->
-                        <!-- delegations -->
-                        <!-- <div class="flex items-center gap-1 text-xs font-semibold mb-2"
-                          v-for="(delegationItem, i) in delegations"
-                          :key="i"
-                        >
-                          <span class="w-2 h-2 bg-[#09279F] inline-block"></span>
-                          {{ `Available` }}
-                        </div>
-                      </div>
-                    </div> -->
-
-                    <!-- Amount -->
-                    <!-- <div class="flex flex-row items-center justify-center">
-                      <h2 class="text-[#64748B] text-sm px-4 mb-2">Amount</h2>
-                      <div class="flex flex-col items-center gap-4"
-                        v-for="(balanceItem, index) in balances"
-                        :key="index"
-                      >
-                        <div class="text-[10px] font-bold whitespace-nowrap">
-                          {{ format.formatToken(balanceItem) }}
-                        </div> -->
-                        <!-- delegations -->
-                        <!-- <div class="flex text-[10px] font-bold"
-                          v-for="(delegationItem, i) in delegations"
-                          :key="i"
-                        >
-                          {{ format.formatToken(delegationItem?.balance) }}
-                        </div>
-                      </div>
-                    </div> -->
-
-                    <!-- Percentage -->
-                    <!-- <div class="flex flex-row items-center justify-center">
-                      <h2 class="text-[#64748B] text-sm px-4 mb-2">Percentage</h2>
-                      <div class="flex flex-col items-center justify-center px-4 gap-4"
-                        v-for="(balanceItem, index) in balances"
-                        :key="index"
-                      >
-                        <div class="text-xs font-semibold">
-                          {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
-                        </div> -->
-                        <!-- delegations -->
-                        <!-- <div class="flex items-start text-xs font-semibold mb-2"
-                          v-for="(delegationItem, i) in delegations"
-                          :key="i"
-                        >
-                          {{ format.calculatePercent(delegationItem?.balance?.amount, totalAmount) }}
-                        </div>
-                      </div>
-                    </div> -->
-
-                  <!-- </div>
-                </div> -->
-
               </div>
             </div>
 
@@ -517,10 +439,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
                   </table>
                 </div>
               </div>
-          </div>
-        <!-- </div> -->
-      <!-- </div> -->
-    <!-- </div> -->
+      </div>
 
     <!-- Delegations -->
 
@@ -678,6 +597,7 @@ function mapAmount(events: { type: string, attributes: { key: string, value: str
     <div v-else class="text-no text-sm">
       {{ $t('account.error') }}
     </div>
+</div>  
 </template>
 
 <style scoped>
