@@ -8,8 +8,9 @@ const isObject = (val: any) =>
 
 const expanded = ref<{ [key: string]: boolean }>({});
 
-const toggle = (key: string) => {
-  expanded.value[key] = !expanded.value[key];
+const toggle = (key: string | number) => {
+  const k = String(key)
+  expanded.value[k] = !expanded.value[k];
 };
 </script>
 
@@ -20,7 +21,7 @@ const toggle = (key: string) => {
         <!-- Expand/Collapse Icons -->
         <span class="mr-1 text-blue-500 select-none">
           <span v-if="isObject(value)">
-            {{ expanded[key] ? '▼' : '▶' }}
+            {{ expanded[String(key)] ? '▼' : '▶' }}
           </span>
           <span v-else class="text-transparent">▶</span>
         </span>
@@ -52,7 +53,7 @@ const toggle = (key: string) => {
 
       <!-- Nested Children -->
       <div
-        v-if="expanded[key] && isObject(value)"
+        v-if="expanded[String(key)] && isObject(value)"
         class="ml-5 border-l border-gray-300 pl-3 mt-1"
       >
         <JsonTreeViewer :data="value" />
