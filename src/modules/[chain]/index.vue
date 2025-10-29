@@ -401,7 +401,7 @@ const historicalData = ref({
 
 const chartOptions = ref({
   chart: {
-    type: 'area',
+    type: 'bar',
     height: 280,
     toolbar: {
       show: false
@@ -463,7 +463,7 @@ const chartOptions = ref({
     }
   },
   legend: {
-    show: false,
+    show: true,
     position: 'bottom',
     horizontalAlign: 'left',
     labels: {
@@ -1262,7 +1262,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
         </div>
         <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md">
           <div class="h-80">
-            <ApexCharts type="area" height="280" :options="chartOptions" :series="historicalData.series" />
+            <ApexCharts type="bar" height="280" :options="chartOptions" :series="historicalData.series" />
           </div>
         </div>
       </div>
