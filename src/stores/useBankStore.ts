@@ -31,6 +31,8 @@ export const useBankStore = defineStore('bankstore', {
       if (denom) {
         this.blockchain.rpc.getBankSupplyByDenom(denom).then((res) => {
           if (res.amount) this.supply = res.amount;
+        }).catch(() => {
+          console.error("Error fetching supply: ", denom)
         });
       }
     },
