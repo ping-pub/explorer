@@ -226,7 +226,7 @@ function formatTitle(v: string) {
 }
 </script>
 <template>
-  <div>
+<div>
   <p class="bg-[#09279F;] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">Parameters</p>
   <div class="overflow-hidden">
     <!-- Chain ID -->
@@ -253,107 +253,107 @@ function formatTitle(v: string) {
     </div>
 
     <!-- Validator Version Distribution -->
-<div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6">
-  <div class="flex items-center mb-4">
-    <!-- Title -->
-    <div class="text-[30px]/[40px] font-semibold text-main">
-      Validator Version Distribution
-    </div>
-  </div>
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6">
+      <div class="flex items-center mb-4">
+        <!-- Title -->
+        <div class="text-[30px]/[40px] font-semibold text-main">
+          Validator Version Distribution
+        </div>
+      </div>
 
-  <div v-if="isLoading" class="flex justify-center py-8">
-    <div class="loading loading-spinner loading-lg text-primary"></div>
-  </div>
+      <div v-if="isLoading" class="flex justify-center py-8">
+        <div class="loading loading-spinner loading-lg text-primary"></div>
+      </div>
 
-  <div v-else>
-    <!-- Row for Version Box + Status Summary -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-5">
-      <!-- Version Box (small width) -->
-      <div class="md:col-span-1">
-        <div v-for="(versionData, version) in validatorVersions" :key="version" 
-          class="bg-base-200 p-4 rounded-xl hover:bg-base-300"
-          :class="versionData.count === stakingStore.validators.length ? 'border-success' : versionData.count > stakingStore.validators.length / 2 ? 'border-primary' : 'border-warning'">
-          <div class="flex justify-between items-center mb-2">
-            <div class="flex items-center">
-              <!-- <Icon icon="mdi:tag-text" class="mr-2 text-primary" /> -->
-              <span class="text-[#64748B;] font-semibold">v{{ version }}</span>
+      <div v-else>
+        <!-- Row for Version Box + Status Summary -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-5">
+          <!-- Version Box (small width) -->
+          <div class="md:col-span-1">
+            <div v-for="(versionData, version) in validatorVersions" :key="version" 
+              class="bg-base-200 p-4 rounded-xl hover:bg-base-300"
+              :class="versionData.count === stakingStore.validators.length ? 'border-success' : versionData.count > stakingStore.validators.length / 2 ? 'border-primary' : 'border-warning'">
+              <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center">
+                  <!-- <Icon icon="mdi:tag-text" class="mr-2 text-primary" /> -->
+                  <span class="text-[#64748B;] font-semibold">v{{ version }}</span>
+                </div>
+                <!-- <span class="badge badge-lg" 
+                  :class="versionData.count === stakingStore.validators.length ? 'badge-success' : versionData.count > stakingStore.validators.length / 2 ? 'badge-primary' : 'badge-warning'">
+                  {{ Math.round(versionData.count / stakingStore.validators.length * 100) }}%
+                </span>         -->
+              </div>
+              <div class="text-sm dark:text-gray-200 text-[#171C1F;] flex justify-between items-center mb-2">
+                <span class="font-medium">{{ versionData.count }} out of {{ stakingStore.validators.length }} validators </span>
+                <span class="badge badge-lg dark:bg-success bg-[#6AC13633;] dark:text-[#171C1F;] text-[#60BC29;]" 
+                  :class="versionData.count === stakingStore.validators.length ? 'badge-success' : versionData.count > stakingStore.validators.length / 2 ? 'badge-primary' : 'badge-warning'">
+                  {{ Math.round(versionData.count / stakingStore.validators.length * 100) }}%
+                </span>
+              </div>
+              <div class="mt-3 w-full bg-base-300 rounded-xl h-2.5 overflow-hidden">
+                <div class="h-2.5 rounded-full transition-all duration-500 bg-[#60BC29;]" 
+                  :class="versionData.count === stakingStore.validators.length ? 'bg-success' : versionData.count > stakingStore.validators.length / 2 ? 'bg-primary' : 'bg-warning'"
+                  :style="`width: ${versionData.count / stakingStore.validators.length * 100}%`"></div>
+              </div>
             </div>
-            <!-- <span class="badge badge-lg" 
-              :class="versionData.count === stakingStore.validators.length ? 'badge-success' : versionData.count > stakingStore.validators.length / 2 ? 'badge-primary' : 'badge-warning'">
-              {{ Math.round(versionData.count / stakingStore.validators.length * 100) }}%
-            </span>         -->
           </div>
-          <div class="text-sm dark:text-gray-200 text-[#171C1F;] flex justify-between items-center mb-2">
-            <span class="font-medium">{{ versionData.count }} out of {{ stakingStore.validators.length }} validators </span>
-            <span class="badge badge-lg dark:bg-success bg-[#6AC13633;] dark:text-[#171C1F;] text-[#60BC29;]" 
-              :class="versionData.count === stakingStore.validators.length ? 'badge-success' : versionData.count > stakingStore.validators.length / 2 ? 'badge-primary' : 'badge-warning'">
-              {{ Math.round(versionData.count / stakingStore.validators.length * 100) }}%
-            </span>
-          </div>
-          <div class="mt-3 w-full bg-base-300 rounded-xl h-2.5 overflow-hidden">
-            <div class="h-2.5 rounded-full transition-all duration-500 bg-[#60BC29;]" 
-              :class="versionData.count === stakingStore.validators.length ? 'bg-success' : versionData.count > stakingStore.validators.length / 2 ? 'bg-primary' : 'bg-warning'"
-              :style="`width: ${versionData.count / stakingStore.validators.length * 100}%`"></div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Status Summary Box (bigger width) -->
-      <div class="md:grid-cols-2 border border-[#60BC29] rounded-xl">
-        <div class="p-3 rounded-xl h-full flex items-center"
-          :class="Object.keys(validatorVersions).length === 1 ? 'bg-success/10 border border-success/20' : Object.keys(validatorVersions).length > 1 ? 'bg-warning/10 border border-warning/20' : 'bg-base-200'">
-          <Icon :icon="Object.keys(validatorVersions).length === 1 ? 'mdi:check-circle' : 'mdi:alert-circle'" 
-            class="text-5xl mr-2" 
-            :class="Object.keys(validatorVersions).length === 1 ? 'text-[#60BC29;]' : 'text-warning'" />
-          <div>
-            <span class="text-xs">
-              <span v-if="Object.keys(validatorVersions).length === 1" class="dark:text-[#60BC29;] text-[#171C1F;] font-semibold">
-                All validators are running the latest protocol version.
-              </span>
-              <span v-else-if="Object.keys(validatorVersions).length > 1" class="text-warning">
-                Multiple validator versions detected
-              </span>
-              <span v-else class="text-secondary">
-                No validator version data available
-              </span>
-            </span>
-            <p class="text-xs mt-1 text-secondary">
-              <span v-if="Object.keys(validatorVersions).length === 1" class="dark:text-gray-200 text-[#171C1FA6;]">
-                Network is synchronized with all validators on the same software version.
-              </span>
-              <span v-else-if="Object.keys(validatorVersions).length > 1">
-                Network upgrade in progress. Some validators may need to update their software.
-              </span>
-            </p>
+          <!-- Status Summary Box (bigger width) -->
+          <div class="md:grid-cols-2 border border-[#60BC29] rounded-xl">
+            <div class="p-3 rounded-xl h-full flex items-center"
+              :class="Object.keys(validatorVersions).length === 1 ? 'bg-success/10 border border-success/20' : Object.keys(validatorVersions).length > 1 ? 'bg-warning/10 border border-warning/20' : 'bg-base-200'">
+              <Icon :icon="Object.keys(validatorVersions).length === 1 ? 'mdi:check-circle' : 'mdi:alert-circle'" 
+                class="text-5xl mr-2" 
+                :class="Object.keys(validatorVersions).length === 1 ? 'text-[#60BC29;]' : 'text-warning'" />
+              <div>
+                <span class="text-xs">
+                  <span v-if="Object.keys(validatorVersions).length === 1" class="dark:text-[#60BC29;] text-[#171C1F;] font-semibold">
+                    All validators are running the latest protocol version.
+                  </span>
+                  <span v-else-if="Object.keys(validatorVersions).length > 1" class="text-warning">
+                    Multiple validator versions detected
+                  </span>
+                  <span v-else class="text-secondary">
+                    No validator version data available
+                  </span>
+                </span>
+                <p class="text-xs mt-1 text-secondary">
+                  <span v-if="Object.keys(validatorVersions).length === 1" class="dark:text-gray-200 text-[#171C1FA6;]">
+                    Network is synchronized with all validators on the same software version.
+                  </span>
+                  <span v-else-if="Object.keys(validatorVersions).length > 1">
+                    Network upgrade in progress. Some validators may need to update their software.
+                  </span>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
 
-<!-- Custom template for CardParameter components -->
-<div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6 shadow-md border-t-4 border-success"
-  v-if="store.mint?.items && store.mint?.items?.length > 0">
-  <div class="flex items-center mb-4">
-    <Icon icon="mdi:cash-multiple" class="text-2xl text-success mr-2" />
-    <div class="text-lg font-semibold text-main">{{ store.mint?.title }}</div>
-  </div>
-  <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
-    <div
-      v-for="(item, index) of store.mint?.items"
-      :key="index"
-      class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50"
-    >
-      <div class="text-xs mb-2 text-secondary flex items-center">
-        <Icon icon="mdi:currency-usd" class="mr-1 text-success" />
-        <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
+    <!-- Custom template for CardParameter components -->
+    <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl mt-6 shadow-md border-t-4 border-success"
+      v-if="store.mint?.items && store.mint?.items?.length > 0">
+      <div class="flex items-center mb-4">
+        <Icon icon="mdi:cash-multiple" class="text-2xl text-success mr-2" />
+        <div class="text-lg font-semibold text-main">{{ store.mint?.title }}</div>
       </div>
-      <div class="text-base text-main font-medium overflow-hidden text-ellipsis">{{ item?.value }}</div>
+      <div class="grid grid-cols-2 md:!grid-cols-4 lg:!grid-cols-5 2xl:!grid-cols-6 gap-4">
+        <div
+          v-for="(item, index) of store.mint?.items"
+          :key="index"
+          class="rounded-xl bg-base-200 px-4 py-3 hover:bg-base-300 transition-all duration-200 border-l-4 border-success/50"
+        >
+          <div class="text-xs mb-2 text-secondary flex items-center">
+            <Icon icon="mdi:currency-usd" class="mr-1 text-success" />
+            <span class="capitalize">{{ formatTitle(item?.subtitle) }}</span>
+          </div>
+          <div class="text-base text-main font-medium overflow-hidden text-ellipsis">{{ item?.value }}</div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
     
     <!-- Staking Parameters -->

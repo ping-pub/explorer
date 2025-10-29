@@ -510,28 +510,21 @@ async function loadAddressPerformance(address: string) {
 }
 </script>
 <template>
+<div>
   <div v-if="account">
-    <!-- address -->
-    <div class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-[#ffffff]">
-      <div class="flex items-center">
-        <!-- img -->
-        <!-- <div class="inline-flex relative w-11 h-11 rounded-md">
-          <div class="w-11 h-11 absolute rounded-md opacity-10 bg-primary"></div>
-          <div class="w-full inline-flex items-center align-middle flex-none justify-center">
-            <Icon icon="mdi-qrcode" class="text-primary" style="width: 27px; height: 27px" />
+      <!-- address -->
+      <div class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-[#ffffff]">
+        <div class="flex items-center">
+          <!-- content -->
+          <div class="flex items-center flex-1 space-x-3">
+            <h2 class="text-2xl card-title">{{ $t('account.address') }}</h2>
+            <span class="text-[10px] truncate flex items-center" style="width:max-content"> {{ address }} {{ "&nbsp;&nbsp;&nbsp;" }}
+              <span class="float-right" style="width:max-content" v-if="copied">&nbsp;&nbsp;Copied!</span>
+              <Icon class="float-right" icon="ic:round-content-copy" @click="copy(address)" />
+            </span>
           </div>
-        </div> -->
-        <!-- content -->
-        <div class="flex items-center flex-1 space-x-3">
-          <h2 class="text-2xl card-title">{{ $t('account.address') }}</h2>
-          <span class="text-[10px] truncate flex items-center" style="width:max-content"> {{ address }} {{
-            "&nbsp;&nbsp;&nbsp;" }}
-            <span class="float-right" style="width:max-content" v-if="copied">&nbsp;&nbsp;Copied!</span>
-            <Icon class="float-right" icon="ic:round-content-copy" @click="copy(address)" />
-          </span>
         </div>
       </div>
-    </div>
 
     <!-- <div class="bg-base-100 dark:bg-[#00125b] pt-2"> -->
     <!-- Laptop View -->
@@ -1210,6 +1203,7 @@ async function loadAddressPerformance(address: string) {
 
   <div v-else class="text-no text-sm">
     {{ $t('account.error') }}
+  </div>
   </div>
 </template>
 
