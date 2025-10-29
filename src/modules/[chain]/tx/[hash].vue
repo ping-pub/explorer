@@ -12,24 +12,6 @@ import "vue3-json-viewer/dist/index.css";
 
 import { watch } from 'vue'
 
-// ✅ move watcher BELOW tx declaration
-watch(
-  () => props.hash,
-  async (newHash) => {
-    if (!newHash) return
-    console.log('🔍 Fetching TX for hash:', newHash)
-
-    try {
-      const result = await blockchain.rpc.getTx(newHash)
-      tx.value = result
-    } catch (error) {
-      console.error('❌ Failed to fetch TX:', error)
-      tx.value = null
-    }
-  },
-  { immediate: true }
-)
-
 
 const props = defineProps(['hash', 'chain']);
 
@@ -42,9 +24,21 @@ const tx = ref(
     tx_response: TxResponse;
   }
 )
-if (props.hash) {
-  blockchain.rpc.getTx(props.hash).then((x) => (tx.value = x));
-}
+// Initial fetch and reactive refetch when the hash changes
+watch(
+  () => props.hash,
+  async (newHash) => {
+    if (!newHash) return
+    try {
+      const result = await blockchain.rpc.getTx(newHash)
+      tx.value = result
+    } catch (error) {
+      console.error('❌ Failed to fetch TX:', error)
+      tx.value = null as any
+    }
+  },
+  { immediate: true }
+)
 
 const messages = computed(() => {
     return tx.value.tx?.body?.messages.map(x=> {

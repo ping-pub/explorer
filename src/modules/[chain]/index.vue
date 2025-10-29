@@ -152,6 +152,63 @@ const txChartSeries = ref([
   }
 ]);
 
+// Blocks API state (server-side fetched, like transactions)
+interface ApiBlockItem {
+  id: string;
+  height: number;
+  hash: string;
+  timestamp: string;
+  proposer: string;
+  chain: string;
+  transaction_count?: number;
+}
+
+// Map frontend chain names to API chain names
+const getApiChainName = (chainName: string) => {
+  const chainMap: Record<string, string> = {
+    'pocket-beta': 'pocket-testnet-beta',
+    'pocket-alpha': 'pocket-testnet-alpha',
+    'pocket-mainnet': 'pocket-mainnet'
+  };
+  return chainMap[chainName] || chainName || 'pocket-testnet-beta';
+};
+
+const currentChainName = blockchain?.current?.chainName || props.chain || 'pocket-beta';
+const apiChainName = getApiChainName(currentChainName);
+
+const blocks = ref<ApiBlockItem[]>([]);
+const loadingBlocks = ref(false);
+const blocksPage = ref(1);
+const blocksLimit = ref(25);
+const blocksTotal = ref(0);
+const blocksTotalPages = ref(0);
+
+async function loadBlocks() {
+  loadingBlocks.value = true;
+  try {
+    const url = `/api/v1/blocks?chain=${apiChainName}&page=${blocksPage.value}&limit=${blocksLimit.value}`;
+    const response = await fetch(url);
+    const result = await response.json();
+    if (response.ok) {
+      blocks.value = result.data || [];
+      blocksTotal.value = result.meta?.total || 0;
+      blocksTotalPages.value = result.meta?.totalPages || 0;
+    } else {
+      blocks.value = [];
+      blocksTotal.value = 0;
+      blocksTotalPages.value = 0;
+      console.error('Error loading blocks:', result);
+    }
+  } catch (e) {
+    console.error('Error loading blocks:', e);
+    blocks.value = [];
+    blocksTotal.value = 0;
+    blocksTotalPages.value = 0;
+  } finally {
+    loadingBlocks.value = false;
+  }
+}
+
 // Add these refs for block list virtualization after the existing refs
 const visibleBlocks = ref<{ item: any; index: number }[]>([]);
 const visibleTxs = ref<{ item: any; index: number }[]>([]);
@@ -180,12 +237,6 @@ function debouncedUpdateNetworkStats() {
 // Add these methods for virtualization before the existing onMounted function
 function initVirtualLists() {
   nextTick(() => {
-    // Initialize block table virtualization
-    if (blockTableContainer.value) {
-      updateVisibleBlocks();
-      blockTableContainer.value.addEventListener('scroll', handleBlockScroll, { passive: true });
-    }
-
     // Initialize transaction table virtualization
     if (txTableContainer.value) {
       updateVisibleTxs();
@@ -274,7 +325,7 @@ onMounted(async () => {
   isNetworkStatusLoading.value = true;
 
   // Load transactions first
-  await base.getAllTxs(blockchain.current?.transactionService);
+  base.getAllTxs(blockchain.current?.transactionService);
 
   // Then load stats that depend on transaction data
   loadNetworkStats();
@@ -285,6 +336,9 @@ onMounted(async () => {
 
   // Initialize virtual scrolling
   initVirtualLists();
+
+  // Load latest blocks via API for the dashboard table
+  loadBlocks();
 });
 
 const ticker = computed(() => store.coinInfo.tickers[store.tickerIndex]);
@@ -1297,11 +1351,11 @@ watch(() => base.blocktime, (newVal, oldVal) => {
           </RouterLink>
         </div>
 
-        <div class="bg-base-200 rounded-md overflow-auto" style="max-height: 30rem;" ref="blockTableContainer">
-          <div class="flex justify-center items-center py-8" v-if="base.fetchingBlocks">
+        <div class="bg-base-200 rounded-md overflow-auto" style="max-height: 30rem;">
+          <div class="flex justify-center items-center py-8" v-if="loadingBlocks">
             <div class="loading loading-spinner loading-lg text-info"></div>
           </div>
-          <table class="table table-compact w-full bg-base-100" v-else>
+          <table class="table table-compact w-full bg-base-100" v-else-if="blocks.length > 0">
             <thead class="bg-base-300 sticky top-0">
               <tr class="border-none">
                 <th class="dark:bg-base-200 bg-base-100">{{ $t('block.block_header') }}</th>
@@ -1312,33 +1366,21 @@ watch(() => base.blocktime, (newVal, oldVal) => {
               </tr>
             </thead>
             <tbody>
-              <!-- Add spacer at the top to push visible content -->
-              <tr v-if="visibleBlocks.length > 0" class="h-0 m-0 p-0 border-none">
-                <td :style="{ height: `${visibleBlocks[0].index * itemHeight}px`, padding: 0 }" colspan="5"></td>
-              </tr>
-
-              <!-- Render only visible blocks -->
-              <tr v-for="item in visibleBlocks" :key="item.index"
+              <tr v-for="block in blocks" :key="block.id"
                 class="dark:bg-base-200 bg-base-100 hover:dark:bg-base-100 hover:bg-base-300 transition-colors duration-200 border-none">
-                <td class="font-medium">{{ item.item.block.header.height }}</td>
-                <td class="truncate text-[#153cd8] dark:text-warning" style="max-width: 18rem; overflow:hidden;">
-                  <RouterLink class="truncate hover:underline" :title="item.item.block_id.hash"
-                    :to="`/${chain}/blocks/${item.item.block.header.height}`">{{ item.item.block_id.hash }}
+                <td class="font-medium">{{ block.height }}</td>
+                <td class="truncate text-[#153cd8] dark:text-warning" style="max-width: 12rem; overflow:hidden;">
+                  <RouterLink class="truncate hover:underline" :title="block.hash"
+                    :to="`/${chain}/blocks/${block.height}`">{{ block.hash || block.id.split(":")[1] }}
                   </RouterLink>
                 </td>
-                <td>{{ format.validator(item.item.block?.header?.proposer_address) }}</td>
-                <td>{{ item.item.block?.data?.txs.length }}</td>
-                <td>{{ format.toDay(item.item.block?.header?.time, 'from') }}</td>
-              </tr>
-
-              <!-- Add spacer at the bottom to maintain scroll height -->
-              <tr v-if="visibleBlocks.length > 0 && base.recents.length > 0" class="h-0 m-0 p-0 border-none">
-                <td
-                  :style="{ height: `${Math.max(0, base.recents.length - (visibleBlocks[visibleBlocks.length - 1].index + 1)) * itemHeight}px`, padding: 0 }"
-                  colspan="5"></td>
+                <td>{{ format.validator(block.proposer) }}</td>
+                <td>{{ (block.transaction_count ?? 0).toLocaleString() }}</td>
+                <td class="text-sm">{{ format.toDay(block?.timestamp, 'from') }}</td>
               </tr>
             </tbody>
           </table>
+          <div v-else class="flex justify-center items-center py-10 text-secondary">No blocks found</div>
         </div>
       </div>
 
@@ -1356,7 +1398,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
           </RouterLink>
         </div>
 
-        <div class="bg-base-200 rounded-md overflow-auto" style="max-height: 30rem;" ref="txTableContainer">
+        <div class="bg-base-200 rounded-md overflow-auto" style="height: 30rem;" ref="txTableContainer">
           <table class="table table-compact w-full bg-base-100">
             <thead class="bg-base-300 sticky top-0">
               <tr class="border-none">
@@ -1377,7 +1419,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
               <!-- Render only visible transactions -->
               <tr v-for="item in visibleTxs" :key="item.index"
                 class="dark:bg-base-200 bg-base-100 hover:dark:bg-base-100 hover:bg-base-300 transition-colors duration-200 border-none">
-                <td class="truncate text-[#153cd8]" style="max-width:14rem">
+                <td class="truncate text-[#153cd8]" style="max-width:10rem">
                   <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.item.hash}`">{{ item.item.hash }}</RouterLink>
                 </td>
                 <td class="text-sm text-[#153cd8]">
@@ -1391,7 +1433,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                 </td>
                 <td>{{ item.item.type }}</td>
                 <td>{{ format.formatTokens([{ amount: item.item.fee, denom: 'upokt' }]) }} </td>
-                <td>{{ format.toDay(item.item.timestamp, 'from') }}</td>
+                <td class="text-sm">{{ format.toDay(item.item.timestamp, 'from') }}</td>
               </tr>
 
               <!-- Add spacer at the bottom to maintain scroll height -->

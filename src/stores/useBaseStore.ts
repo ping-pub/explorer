@@ -30,19 +30,21 @@ export const useBaseStore = defineStore('baseStore', {
     },
     getters: {
         blocktime(): number {
-            if (this.earlest && this.latest) {
+            if (this.earlest?.block?.header && this.latest?.block?.header) {
                 if (
-                    this.latest.block?.header?.height !==
-                    this.earlest.block?.header?.height
+                    this.latest.block.header.height !==
+                    this.earlest.block.header.height
                 ) {
-                    const diff = dayjs(this.latest.block?.header?.time).diff(
-                        this.earlest.block?.header?.time
+                    const diff = dayjs(this.latest.block.header.time).diff(
+                        this.earlest.block.header.time
                     );
                     const blocks = Number(this.latest.block.header.height) - Number(this.earlest.block.header.height)
-                    return diff / (blocks);
+                    if (blocks > 0) {
+                        return diff / blocks;
+                    }
                 }
             }
-            return 6000;
+            return 15000;
         },
         blockchain() {
             return useBlockchain();
@@ -92,20 +94,6 @@ export const useBaseStore = defineStore('baseStore', {
             } catch (e) {
                 return []
             }
-        },
-        async appendTxsByPage(page: number = 2, limit: number = 10, chain = 'pocket-mainnet') {
-            let res = await fetch(`/api/v1/transactions?page=${page}&limit=${limit}&chain=${chain}`);
-            const resJson = await res.json();
-            var temp: TxLocal[] = [];
-            const nameSet: any = {};
-            [...this.allTxs, ...resJson.data].forEach(item => {
-                if (!nameSet[item.hash]) {
-                    nameSet[item.hash] = true;
-                    temp.push(item);
-                }
-            });
-            this.allTxs = temp
-            return res
         },
         async updatePageSize(pgsz: number) {
             // Only set fetching flag if we're actually going to load new blocks
@@ -282,114 +270,6 @@ export const useBaseStore = defineStore('baseStore', {
                 }
                 
                 this.latest = latestBlock;
-
-                if (
-                    !this.earlest ||
-                    this.earlest?.block?.header?.chain_id !=
-                    this.latest?.block?.header?.chain_id
-                ) {
-                    // Reset earlest and recents
-                    this.earlest = this.latest;
-                    this.recents = [];
-                }
-
-                // Fetch initial blocks only if recents is empty
-                if (this.recents.length === 0) {
-                    this.fetchingBlocks = true;
-                    
-                    // Use Promise.all for parallel fetching instead of sequential
-                    const fetchPromises = [];
-                    const batchSize = 10; // Process in smaller batches for better UX
-                    
-                    for (let i = 1; i <= Math.min(this.pageSize, 50); i++) {
-                        fetchPromises.push(this.blockchain.rpc?.getBaseBlockAt(
-                            `${parseInt(this.latest.block.header.height) - i}`
-                        ).catch(e => {
-                            console.error(e);
-                            return null;
-                        }));
-                        
-                        // Process in batches to avoid overwhelming the API
-                        if (fetchPromises.length === batchSize || i === Math.min(this.pageSize, 50)) {
-                            const blocks = await Promise.all(fetchPromises);
-                            blocks.forEach(block => {
-                                if (block) {
-                                    this.recents.push(block);
-                                }
-                            });
-                            fetchPromises.length = 0;
-                        }
-                    }
-                    
-                    this.fetchingBlocks = false;
-                }
-
-                // Check if the latest block exists in recents
-                if (
-                    this.recents.findIndex(
-                        (x) => x?.block_id?.hash === this.latest?.block_id?.hash
-                    ) === -1
-                ) {
-                    this.recents.push(this.latest);
-                    
-                    // Lazy load transactions for the latest block to improve initial rendering performance
-                    setTimeout(async () => {
-                        let transactions: TxLocal[] = [];
-                        const txPromises = [];
-                        
-                        // Process transactions in parallel rather than sequentially
-                        for (var tx of this.latest.block.data.txs) {
-                            const txHash = hashTx(fromBase64(tx));
-                            
-                            // Skip if we already have this transaction
-                            if (this.allTxs.some(existingTx => existingTx.hash === txHash)) {
-                                continue;
-                            }
-                            
-                            txPromises.push(this.fetchTx(txHash).then(txRes => {
-                                if (!txRes) return null;
-                                
-                                // First decode the raw transaction
-                                const decodedTx = decodeTxRaw(fromBase64(tx));
-                                
-                                // Create a transaction object that matches the TxLocal type
-                                const transaction = {
-                                    status: txRes.tx_response.code,
-                                    timestamp: txRes.tx_response.timestamp,
-                                    // Handle the messages - ensuring they have the required @type property
-                                    messages: decodedTx.body.messages.map(msg => {
-                                        // The Any type in Cosmos typically has a typeUrl property we can use for @type
-                                        const msgAny = msg as any;
-                                        return {
-                                            ...msgAny.value,
-                                            "@type": msgAny.typeUrl || ""
-                                        };
-                                    }),
-                                    fee: decodedTx.authInfo.fee,
-                                    hash: txHash,
-                                    height: this.latest.block.header.height
-                                };
-                                
-                                return transaction as unknown as TxLocal;
-                            }).catch(e => {
-                                console.error('Failed to fetch tx:', e);
-                                return null;
-                            }));
-                        }
-                        
-                        const results = await Promise.all(txPromises);
-                        transactions = results.filter(tx => tx !== null) as TxLocal[];
-                        
-                        if (transactions.length > 0) {
-                            this.allTxs = [...transactions, ...this.allTxs.slice(0, 100)]; // Limit stored transactions
-                        }
-                    }, 100);
-                }
-                
-                // Limit the recents array size to prevent memory growth
-                if (this.recents.length > this.pageSize) {
-                    this.recents = this.recents.slice(0, this.pageSize);
-                }
                     
                 return this.latest;
             } catch (e) {

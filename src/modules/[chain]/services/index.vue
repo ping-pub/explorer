@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useBlockchain, useFormatter } from '@/stores';
 import {
   PageRequest,
@@ -20,7 +20,8 @@ const list = ref<Service[]>([]);
 const miningDifficulties = ref<RelayMiningDifficulty[]>([]);
 
 const currentPage = ref(1);
-const itemsPerPage = 10;
+const itemsPerPage = ref(10);
+const loading = ref(false);
 
 const sortDirection = ref<'asc' | 'desc'>('desc');
 const sortField = ref<'computeUnits' | 'miningDifficulty'>('computeUnits');
@@ -28,8 +29,19 @@ const sortField = ref<'computeUnits' | 'miningDifficulty'>('computeUnits');
 const isLoadingMiningDifficulties = ref(false);
 const hasMiningDifficultyError = ref(false);
 
-const totalPages = computed(() => Math.ceil(list.value.length / itemsPerPage));
+// Server-side pagination metadata
+const pageRequest = ref(new PageRequest());
+const pageResponse = ref({} as Pagination);
 
+const totalPages = computed(() => {
+  const total = parseInt(pageResponse.value.total || '0');
+  if (total === 0) return 0;
+  return Math.ceil(total / itemsPerPage.value);
+});
+
+const totalServices = computed(() => parseInt(pageResponse.value.total || '0'));
+
+// Client-side sorting (applied after server returns page data)
 const sortedList = computed(() => {
   return [...list.value].sort((a, b) => {
     if (sortField.value === 'computeUnits') {
@@ -44,12 +56,6 @@ const sortedList = computed(() => {
   });
 });
 
-const paginatedList = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return sortedList.value.slice(start, end);
-});
-
 // 🔹 Sorting toggle
 function toggleSortField(field: string) {
   if (sortField.value === field) {
@@ -60,33 +66,64 @@ function toggleSortField(field: string) {
   }
 }
 
+// 🔹 Watch for page changes
+watch(currentPage, () => {
+  loadServices();
+});
+
+// 🔹 Watch for page size changes
+watch(itemsPerPage, () => {
+  currentPage.value = 1;
+  loadServices();
+});
+
+// 🔹 Data loading
+async function loadServices() {
+  if (!chainStore.rpc) {
+    await waitForRpc();
+  }
+  
+  loading.value = true;
+  try {
+    pageRequest.value.setPageSize(itemsPerPage.value);
+    pageRequest.value.setPage(currentPage.value);
+    pageRequest.value.count_total = true;
+    
+    const response = await chainStore.rpc.getServices(pageRequest.value);
+    list.value = response.service || [];
+    pageResponse.value = response.pagination || {};
+  } catch (error) {
+    console.error('Error loading services:', error);
+    list.value = [];
+    pageResponse.value = {} as Pagination;
+  } finally {
+    loading.value = false;
+  }
+}
+
 // 🔹 Pagination methods
 function goToFirst() {
-  currentPage.value = 1;
+  if (currentPage.value !== 1) {
+    currentPage.value = 1;
+  }
 }
 
 function goToLast() {
-  currentPage.value = totalPages.value;
+  if (currentPage.value !== totalPages.value && totalPages.value > 0) {
+    currentPage.value = totalPages.value;
+  }
 }
 
 function nextPage() {
-  if (currentPage.value < totalPages.value) currentPage.value++;
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
 }
 
 function prevPage() {
-  if (currentPage.value > 1) currentPage.value--;
-}
-
-// 🔹 Data loading
-const pageRequest = ref(new PageRequest());
-const pageResponse = ref({} as Pagination);
-
-function pageloadInit(p: number) {
-  pageRequest.value.setPage(p);
-  chainStore.rpc.getServices(pageRequest.value).then((x) => {
-    list.value = x.service;
-    pageResponse.value = x.pagination;
-  });
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
 }
 
 async function waitForRpc() {
@@ -161,7 +198,7 @@ function isMaxDifficulty(targetHash: string) {
 }
 
 onMounted(() => {
-  pageloadInit(1);
+  loadServices();
   loadMiningDifficulties();
   loadSuppliers();
   loadApplications();
@@ -197,8 +234,22 @@ onMounted(() => {
         </thead>
 
         <tbody>
+          <tr v-if="loading" class="text-center">
+            <td colspan="7" class="py-8">
+              <div class="flex justify-center items-center">
+                <div class="loading loading-spinner loading-md"></div>
+                <span class="ml-2">Loading services...</span>
+              </div>
+            </td>
+          </tr>
+          <tr v-else-if="sortedList.length === 0" class="text-center">
+            <td colspan="7" class="py-8">
+              <div class="text-gray-500">No services found</div>
+            </td>
+          </tr>
           <tr
-            v-for="item in paginatedList"
+            v-else
+            v-for="item in sortedList"
             :key="item.id"
             class="hover:bg-gray-100 dark:hover:bg-base-200 transition"
           >
@@ -265,35 +316,64 @@ onMounted(() => {
       </table>
 
       <!-- ✅ Pagination -->
-      <div class="flex justify-end items-center gap-2 my-6 px-6">
-        <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
-          @click="goToFirst" :disabled="currentPage === 1"
+      <div class="flex justify-between items-center gap-4 my-6 px-6">
+        <!-- Page Size Dropdown -->
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-600">Show:</span>
+          <select 
+            v-model="itemsPerPage" 
+            class="select select-bordered select-sm w-20"
           >
-          First
-        </button>
+            <option :value="10">10</option>
+            <option :value="25">25</option>
+            <option :value="50">50</option>
+            <option :value="100">100</option>
+          </select>
+          <span class="text-sm text-gray-600">per page</span>
+        </div>
 
-        <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
-          @click="prevPage" :disabled="currentPage === 1"
-          >
-          &lt;
-        </button>
+        <!-- Pagination Info and Controls -->
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-600">
+            Showing {{ ((currentPage - 1) * itemsPerPage) + 1 }} to {{ Math.min(currentPage * itemsPerPage, totalServices) }} of {{ totalServices }} services
+          </span>
+          
+          <div class="flex items-center gap-1">
+            <button
+              class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+              @click="goToFirst"
+              :disabled="currentPage === 1 || totalPages === 0"
+            >
+              First
+            </button>
+            <button
+              class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+              @click="prevPage"
+              :disabled="currentPage === 1 || totalPages === 0"
+            >
+              &lt;
+            </button>
 
-        <span class="text-xs">
-          Page {{ currentPage }} of {{ totalPages }}
-        </span>
+            <span class="text-xs px-2">
+              Page {{ currentPage }} of {{ totalPages }}
+            </span>
 
-        <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
-          @click="nextPage" 
-          :disabled="currentPage === totalPages"
-          >
-          &gt;
-        </button>
-        <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
-          @click="goToLast" 
-          :disabled="currentPage === totalPages"
-          >
-          Last
-        </button>
+            <button
+              class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+              @click="nextPage" 
+              :disabled="currentPage === totalPages || totalPages === 0"
+            >
+              &gt;
+            </button>
+            <button
+              class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+              @click="goToLast" 
+              :disabled="currentPage === totalPages || totalPages === 0"
+            >
+              Last
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

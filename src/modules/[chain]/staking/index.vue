@@ -8,7 +8,7 @@ import {
     useTxDialog,
 } from '@/stores';
 import { computed } from '@vue/reactivity';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 import type { Key, SlashingParam, Validator, Delegation } from '@/types';
 import { formatSeconds, operatorAddressToAccount } from '@/libs/utils'
@@ -46,7 +46,7 @@ const selfBonded = ref({
   },
   balance: {
     amount: '0',
-    denom: 'uatom'
+    denom: 'upokt'
   }
 } as Delegation);
 
@@ -291,16 +291,21 @@ base.$subscribe((_, s) => {
 loadAvatars();
 
 const currentPage = ref(1)
-const itemsPerPage = 10
+const itemsPerPage = ref(10)
 
 const totalPages = computed(() =>
-  Math.ceil(validatorsList.value.length / itemsPerPage)
+  Math.ceil(validatorsList.value.length / itemsPerPage.value)
 )
 
 const paginatedValidators = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage
-  const end = start + itemsPerPage
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  const end = start + itemsPerPage.value
   return validatorsList.value.slice(start, end)
+})
+
+// Reset to first page when page size changes
+watch(itemsPerPage, () => {
+  currentPage.value = 1
 })
 
 function nextPage() {
@@ -402,7 +407,7 @@ function goToLast() {
                     :key="v.operator_address"
                     class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl"
                 >
-                    <!-- 👉 rank -->
+                    <!-- rank -->
                     <td>
                     <div
                         class="text-xs truncate relative px-2 py-1 rounded-full w-fit"
@@ -416,7 +421,7 @@ function goToLast() {
                     </div>
                     </td>
 
-                    <!-- 👉 Validator -->
+                    <!-- Validator -->
                     <td>
                     <div class="flex items-center overflow-hidden" style="max-width: 300px">
                         <div class="flex flex-col">
@@ -440,12 +445,12 @@ function goToLast() {
                     </div>
                     </td>
 
-                    <!-- 👉 Status -->
+                    <!-- Status -->
                     <td class="text-center">
                     <div class="badge" :class="statusBadge.class">{{ statusBadge.text }}</div>
                     </td>
 
-                    <!-- 👉 Voting Power -->
+                    <!-- Voting Power -->
                     <td class="text-right">
                     <div class="flex flex-col">
                         <h6 class="text-sm font-weight-medium whitespace-nowrap">
@@ -466,7 +471,7 @@ function goToLast() {
                     </div>
                     </td>
 
-                    <!-- 👉 24h Changes -->
+                    <!-- 24h Changes -->
                     <td
                     class="text-right text-xs text-black"
                     :class="change24Color(v)"
@@ -474,7 +479,7 @@ function goToLast() {
                     {{ change24Text(v) }}
                     </td>
 
-                    <!-- 👉 Self Bonded -->
+                    <!-- Self Bonded -->
                     <td class="text-xs text-right">
                     {{
                         selfBonded?.balance
@@ -483,12 +488,12 @@ function goToLast() {
                     }}
                     </td>
 
-                    <!-- 👉 Commission -->
+                    <!-- Commission -->
                     <td class="text-right text-xs">
                     {{ format.formatCommissionRate(v.commission?.commission_rates?.rate) }}
                     </td>
 
-                    <!-- 👉 Max commission -->
+                    <!-- Max commission -->
                     <td class="text-right text-xs">
                     {{ format.formatCommissionRate(v.commission?.commission_rates?.max_rate) }}
                     </td>
@@ -497,42 +502,64 @@ function goToLast() {
             </table>
 
             <!-- ✅ Pagination Section -->
-            <div
-                class="flex justify-end items-center gap-2 my-6 px-6"
-            >
-                <button
-                class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
-                @click="goToFirst"
-                :disabled="currentPage === 1"
-                >
-                First
-                </button>
-                <button
-                class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
-                @click="prevPage"
-                :disabled="currentPage === 1"
-                >
-                &lt;
-                </button>
+            <div class="flex justify-between items-center gap-4 my-6 px-6">
+                <!-- Page Size Dropdown -->
+                <div class="flex items-center gap-2">
+                    <span class="text-sm text-gray-600">Show:</span>
+                    <select 
+                        v-model="itemsPerPage" 
+                        class="select select-bordered select-sm w-20"
+                    >
+                        <option :value="10">10</option>
+                        <option :value="25">25</option>
+                        <option :value="50">50</option>
+                        <option :value="100">100</option>
+                    </select>
+                    <span class="text-sm text-gray-600">per page</span>
+                </div>
 
-                <span class="text-xs">
-                Page {{ currentPage }} of {{ totalPages }}
-                </span>
+                <!-- Pagination Info and Controls -->
+                <div class="flex items-center gap-2">
+                    <span class="text-sm text-gray-600">
+                        Showing {{ ((currentPage - 1) * itemsPerPage) + 1 }} to {{ Math.min(currentPage * itemsPerPage, validatorsList.length) }} of {{ validatorsList.length }} validators
+                    </span>
+                    
+                    <div class="flex items-center gap-1">
+                        <button
+                            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+                            @click="goToFirst"
+                            :disabled="currentPage === 1 || totalPages === 0"
+                        >
+                            First
+                        </button>
+                        <button
+                            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+                            @click="prevPage"
+                            :disabled="currentPage === 1 || totalPages === 0"
+                        >
+                            &lt;
+                        </button>
 
-                <button
-                class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
-                @click="nextPage"
-                :disabled="currentPage === totalPages"
-                >
-                &gt;
-                </button>
-                <button
-                class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
-                @click="goToLast"
-                :disabled="currentPage === totalPages"
-                >
-                Last
-                </button>
+                        <span class="text-xs px-2">
+                            Page {{ currentPage }} of {{ totalPages }}
+                        </span>
+
+                        <button
+                            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+                            @click="nextPage"
+                            :disabled="currentPage === totalPages || totalPages === 0"
+                        >
+                            &gt;
+                        </button>
+                        <button
+                            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+                            @click="goToLast"
+                            :disabled="currentPage === totalPages || totalPages === 0"
+                        >
+                            Last
+                        </button>
+                    </div>
+                </div>
             </div>
             </div>
         </div>

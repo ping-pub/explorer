@@ -2,11 +2,11 @@
 import { ref, onMounted, computed } from 'vue';
 import { Icon } from '@iconify/vue';
 import ApexCharts from 'vue3-apexcharts';
-import { useBlockchain } from '@/stores';
+import { useBlockchain, useFormatter } from '@/stores';
 
 const props = defineProps(['chain']);
 const chainStore = useBlockchain();
-
+const format = useFormatter();
 // Map frontend chain names to API chain names
 const getApiChainName = (chainName: string) => {
   const chainMap: Record<string, string> = {
@@ -73,6 +73,30 @@ interface SummaryStats {
   last_submission: string;
 }
 
+interface TopServiceByComputeUnits {
+  service_id: string;
+  chain: string;
+  total_claimed_compute_units: string;
+  total_estimated_compute_units: string;
+  submission_count: string;
+  avg_efficiency_percent: string;
+  period_start: string;
+  period_end: string;
+}
+
+interface TopServiceByPerformance {
+  rank: number;
+  service_id: string;
+  chain: string;
+  total_claimed_compute_units: number;
+  total_estimated_compute_units: number;
+  submission_count: number;
+  avg_efficiency_percent: number;
+  percentage_of_total: number;
+  period_start: string;
+  period_end: string;
+}
+
 const loading = ref(false);
 const summaryStats = ref<SummaryStats | null>(null);
 const submissions = ref<ProofSubmission[]>([]);
@@ -86,6 +110,16 @@ const selectedApplication = ref('');
 const startDate = ref('');
 const endDate = ref('');
 const uniqueServices = ref(['iotex', 'avax', 'blast', 'fuse']);
+
+// New state for services endpoints
+const topServicesByComputeUnits = ref<TopServiceByComputeUnits[]>([]);
+const topServicesByPerformance = ref<TopServiceByPerformance[]>([]);
+const totalComputeUnits = ref(0);
+const loadingTopServices = ref(false);
+const loadingPerformanceTable = ref(false);
+const topServicesLimit = ref(10);
+const topServicesDays = ref(30);
+const performanceDays = ref(30);
 
 const rewardsChartSeries = ref([{ name: 'Total Rewards', data: [] as number[] }]);
 const efficiencyChartSeries = ref([{ name: 'Efficiency %', data: [] as number[] }]);
@@ -126,6 +160,19 @@ const relaysChartOptions = ref({
   tooltip: { theme: 'dark', y: { formatter: (v: number) => v.toLocaleString() + ' relays' } }
 });
 
+// Chart for top services by compute units (growth graph)
+const topServicesChartSeries = ref([{ name: 'Compute Units', data: [] as number[] }]);
+const topServicesChartOptions = ref({
+  chart: { type: 'bar', height: 350, toolbar: { show: false } },
+  colors: ['#A3E635'],
+  dataLabels: { enabled: true, formatter: (v: number) => (v / 1000000000).toFixed(2) + 'B', style: { colors: ['#000'] } },
+  plotOptions: { bar: { horizontal: false, columnWidth: '55%', borderRadius: 4 } },
+  grid: { borderColor: 'rgba(255, 255, 255, 0.1)' },
+  xaxis: { categories: [] as string[], labels: { style: { colors: 'rgb(116, 109, 105)' }, rotate: -45, rotateAlways: false } },
+  yaxis: { labels: { style: { colors: 'rgb(116, 109, 105)' }, formatter: (v: number) => (v / 1000000000).toFixed(2) + 'B' } },
+  tooltip: { theme: 'dark', y: { formatter: (v: number) => v.toLocaleString() + ' compute units' } }
+});
+
 async function loadSummaryStats() {
   try {
     const params = new URLSearchParams();
@@ -144,36 +191,6 @@ async function loadSummaryStats() {
     }
   } catch (error) {
     console.error('Error loading summary stats:', error);
-  }
-}
-
-async function loadRewardAnalytics() {
-  loading.value = true;
-  try {
-    const params = new URLSearchParams();
-    params.append('chain', apiChainName.value);
-    if (selectedService.value) params.append('service_id', selectedService.value);
-    if (selectedSupplier.value) params.append('supplier_address', selectedSupplier.value);
-    if (selectedApplication.value) params.append('application_address', selectedApplication.value);
-    if (startDate.value) params.append('start_date', startDate.value);
-    if (endDate.value) params.append('end_date', endDate.value);
-    params.append('limit', '100');
-    
-    const response = await fetch(`/api/v1/proof-submissions/rewards?${params.toString()}`);
-    const data = await response.json();
-    
-    if (response.ok) {
-      rewardAnalytics.value = data.data || [];
-      updateCharts();
-    } else {
-      console.error('Error loading reward analytics:', data);
-      rewardAnalytics.value = [];
-    }
-  } catch (error) {
-    console.error('Error loading reward analytics:', error);
-    rewardAnalytics.value = [];
-  } finally {
-    loading.value = false;
   }
 }
 
@@ -224,7 +241,6 @@ async function loadProofSubmissions() {
 function applyFilters() {
   currentPage.value = 1;
   loadSummaryStats();
-  loadRewardAnalytics();
   loadProofSubmissions();
 }
 
@@ -232,16 +248,91 @@ function nextPage() { if (currentPage.value < totalPages.value) { currentPage.va
 function prevPage() { if (currentPage.value > 1) { currentPage.value--; loadProofSubmissions(); } }
 function goToFirst() { currentPage.value = 1; loadProofSubmissions(); }
 function goToLast() { currentPage.value = totalPages.value; loadProofSubmissions(); }
+async function loadTopServicesByComputeUnits() {
+  loadingTopServices.value = true;
+  try {
+    const params = new URLSearchParams();
+    params.append('limit', topServicesLimit.value.toString());
+    params.append('days', topServicesDays.value.toString());
+    params.append('chain', apiChainName.value);
+    
+    const response = await fetch(`/api/v1/services/top-by-compute-units?${params.toString()}`);
+    const data = await response.json();
+    
+    if (response.ok) {
+      topServicesByComputeUnits.value = data.data || [];
+      updateTopServicesChart();
+    } else {
+      console.error('Error loading top services by compute units:', data);
+      topServicesByComputeUnits.value = [];
+    }
+  } catch (error) {
+    console.error('Error loading top services by compute units:', error);
+    topServicesByComputeUnits.value = [];
+  } finally {
+    loadingTopServices.value = false;
+  }
+}
+
+async function loadTopServicesByPerformance() {
+  loadingPerformanceTable.value = true;
+  try {
+    const params = new URLSearchParams();
+    params.append('days', performanceDays.value.toString());
+    params.append('chain', apiChainName.value);
+    
+    const response = await fetch(`/api/v1/services/top-by-performance?${params.toString()}`);
+    const data = await response.json();
+    
+    if (response.ok) {
+      topServicesByPerformance.value = data.data || [];
+      totalComputeUnits.value = data.total_compute_units || 0;
+    } else {
+      console.error('Error loading top services by performance:', data);
+      topServicesByPerformance.value = [];
+      totalComputeUnits.value = 0;
+    }
+  } catch (error) {
+    console.error('Error loading top services by performance:', error);
+    topServicesByPerformance.value = [];
+    totalComputeUnits.value = 0;
+  } finally {
+    loadingPerformanceTable.value = false;
+  }
+}
+
+function updateTopServicesChart() {
+  const sorted = [...topServicesByComputeUnits.value].sort((a, b) => 
+    parseInt(b.total_claimed_compute_units) - parseInt(a.total_claimed_compute_units)
+  );
+  const labels = sorted.map(s => s.service_id);
+  const data = sorted.map(s => parseInt(s.total_claimed_compute_units));
+  
+  topServicesChartSeries.value = [{ name: 'Compute Units', data }];
+  topServicesChartOptions.value = {
+    ...topServicesChartOptions.value,
+    xaxis: { ...topServicesChartOptions.value.xaxis, categories: labels }
+  };
+}
+
 function formatNumber(num: number | string): string { return new Intl.NumberFormat().format(typeof num === 'string' ? parseInt(num) : num); }
-function formatUpokt(upokt: number | string): string { 
-  const value = typeof upokt === 'string' ? parseInt(upokt) : upokt;
-  return (value / 1000000).toFixed(4);
+function formatComputeUnits(units: number | string): string {
+  const value = typeof units === 'string' ? parseInt(units) : units;
+  if (value >= 1000000000) {
+    return (value / 1000000000).toFixed(2) + 'B';
+  } else if (value >= 1000000) {
+    return (value / 1000000).toFixed(2) + 'M';
+  } else if (value >= 1000) {
+    return (value / 1000).toFixed(2) + 'K';
+  }
+  return value.toString();
 }
 
 onMounted(() => {
   loadSummaryStats();
-  loadRewardAnalytics();
   loadProofSubmissions();
+  loadTopServicesByComputeUnits();
+  loadTopServicesByPerformance();
 });
 </script>
 
@@ -251,100 +342,226 @@ onMounted(() => {
       {{ $t('module.services') }} Dashboard
     </p>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-5" v-if="summaryStats">
-      <div class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-2 rounded-xl hover:bg-base-300 transition-all duration-200 items-center justify-center">
-        <div class="flex mb-2 items-center">
-          <Icon icon="mdi:file-document-multiple" class="text-sm mr-1 text-secondary" />
-          <span class="text-xs text-secondary">Submissions</span>
-        </div>
-        <div class="text-xl text-main flex items-center justify-center font-medium">{{ formatNumber(parseInt(summaryStats.total_submissions)) }}</div>
+    <div v-if="summaryStats" class="mb-5">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-lg font-semibold text-main">Summary Statistics</h3>
+        <span class="text-xs text-secondary bg-base-200 dark:bg-base-300 px-3 py-1 rounded-full">Last 24 Hours</span>
       </div>
-      <div class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-2 rounded-xl hover:bg-base-300 transition-all duration-200 items-center justify-center">
-        <div class="flex mb-2 items-center">
-          <Icon icon="mdi:package-variant" class="text-sm mr-1 text-secondary" />
-          <span class="text-xs text-secondary">Suppliers</span>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 dark:bg-base-200 bg-[#5E9AE4] rounded-lg flex items-center justify-center">
+                <Icon icon="mdi:file-document-multiple" class="text-lg text-white" />
+              </div>
+              <div class="text-sm text-secondary">Submissions</div>
+            </div>
+            <div class="text-xl font-bold">{{ formatNumber(parseInt(summaryStats.total_submissions)) }}</div>
+          </div>
         </div>
-        <div class="text-xl text-main flex items-center justify-center font-medium">{{ formatNumber(parseInt(summaryStats.unique_suppliers)) }}</div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 dark:bg-base-200 bg-[#60BC29] rounded-lg flex items-center justify-center">
+                <Icon icon="mdi:package-variant" class="text-lg text-white" />
+              </div>
+              <div class="text-sm text-secondary">Suppliers</div>
+            </div>
+            <div class="text-xl font-bold">{{ formatNumber(parseInt(summaryStats.unique_suppliers)) }}</div>
+          </div>
+        </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 dark:bg-base-200 bg-[#FFB206] rounded-lg flex items-center justify-center">
+                <Icon icon="mdi:apps" class="text-lg text-white" />
+              </div>
+              <div class="text-sm text-secondary">Applications</div>
+            </div>
+            <div class="text-xl font-bold">{{ formatNumber(parseInt(summaryStats.unique_applications)) }}</div>
+          </div>
+        </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 dark:bg-base-200 bg-[#09279F] rounded-lg flex items-center justify-center">
+                <Icon icon="mdi:handshake" class="text-lg text-white" />
+              </div>
+              <div class="text-sm text-secondary">Services</div>
+            </div>
+            <div class="text-xl font-bold">{{ formatNumber(parseInt(summaryStats.unique_services)) }}</div>
+          </div>
+        </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 dark:bg-base-200 bg-[#A3E635] rounded-lg flex items-center justify-center">
+                <Icon icon="mdi:network" class="text-lg text-white" />
+              </div>
+              <div class="text-sm text-secondary">Total Relays</div>
+            </div>
+            <div class="text-xl font-bold">{{ formatNumber(parseInt(summaryStats.total_relays)) }}</div>
+          </div>
+        </div>
       </div>
-      <div class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-2 rounded-xl hover:bg-base-300 transition-all duration-200 items-center justify-center">
-        <div class="flex mb-2 items-center">
-          <Icon icon="mdi:apps" class="text-sm mr-1 text-secondary" />
-          <span class="text-xs text-secondary">Applications</span>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 dark:bg-base-200 bg-[#5E9AE4] rounded-lg flex items-center justify-center">
+                <Icon icon="mdi:percent" class="text-lg text-white" />
+              </div>
+              <div class="text-sm text-secondary">Avg Efficiency</div>
+            </div>
+            <div class="text-xl font-bold">{{ parseFloat(summaryStats.avg_efficiency_percent).toFixed(2) }}%</div>
+          </div>
         </div>
-        <div class="text-xl text-main flex items-center justify-center font-medium">{{ formatNumber(parseInt(summaryStats.unique_applications)) }}</div>
-      </div>
-      <div class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-2 rounded-xl hover:bg-base-300 transition-all duration-200 items-center justify-center">
-        <div class="flex mb-2 items-center">
-          <Icon icon="mdi:handshake" class="text-sm mr-1 text-secondary" />
-          <span class="text-xs text-secondary">Services</span>
+        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 dark:bg-base-200 bg-[#60BC29] rounded-lg flex items-center justify-center">
+                <Icon icon="mdi:coin" class="text-lg text-white" />
+              </div>
+              <div class="text-sm text-secondary">Avg Reward/Relay</div>
+            </div>
+            <div class="text-right">
+              <div class="text-xl font-bold">{{ (parseFloat(summaryStats.avg_reward_per_relay) / 1000000).toFixed(6) }}</div>
+              <div class="text-xs text-secondary">POKT</div>
+            </div>
+          </div>
         </div>
-        <div class="text-xl text-main flex items-center justify-center font-medium">{{ formatNumber(parseInt(summaryStats.unique_services)) }}</div>
-      </div>
-      <div class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-2 rounded-xl hover:bg-base-300 transition-all duration-200 items-center justify-center">
-        <div class="flex mb-2 items-center">
-          <Icon icon="mdi:currency-usd" class="text-sm mr-1 text-secondary" />
-          <span class="text-xs text-secondary">Total Rewards</span>
+        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 dark:bg-base-200 bg-[#FFB206] rounded-lg flex items-center justify-center">
+                <Icon icon="mdi:cpu-64-bit" class="text-lg text-white" />
+              </div>
+              <div class="text-sm text-secondary">Claimed Compute Units</div>
+            </div>
+            <div class="text-xl font-bold">{{ formatComputeUnits(parseInt(summaryStats.total_claimed_compute_units)) }}</div>
+          </div>
         </div>
-        <div class="text-xl text-main flex items-center justify-center font-medium">{{ formatUpokt(summaryStats.total_rewards_upokt) }}</div>
-        <div class="text-xs text-secondary mt-1">POKT</div>
-      </div>
-      <div class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-2 rounded-xl hover:bg-base-300 transition-all duration-200 items-center justify-center">
-        <div class="flex mb-2 items-center">
-          <Icon icon="mdi:network" class="text-sm mr-1 text-secondary" />
-          <span class="text-xs text-secondary">Total Relays</span>
+        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 dark:bg-base-200 bg-[#A3E635] rounded-lg flex items-center justify-center">
+                <Icon icon="mdi:currency-usd" class="text-lg text-white" />
+              </div>
+              <div class="text-sm text-secondary">Total Rewards</div>
+            </div>
+            <div class="text-right">
+              <div class="text-xl font-bold">{{ format.formatToken({ denom: 'upokt', amount: String(summaryStats.total_rewards_upokt) }) }}</div>
+            </div>
+          </div>
         </div>
-        <div class="text-xl text-main flex items-center justify-center font-medium">{{ formatNumber(parseInt(summaryStats.total_relays)) }}</div>
       </div>
     </div>
 
-    <div v-if="summaryStats" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
-      <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
-        <div class="flex items-center mb-2">
-          <div class="w-10 h-10 dark:bg-base-200 bg-[#5E9AE4] rounded-lg flex items-center justify-center mr-3">
-            <Icon icon="mdi:percent" class="text-2xl text-white" />
-          </div>
-          <div class="text-sm text-secondary">Avg Efficiency</div>
+    <!-- Top Services by Compute Units Growth Chart -->
+    <div class="dark:bg-base-100 bg-base-200 pt-3 rounded-lg border-[3px] border-solid border-base-200 dark:border-base-100 mb-5">
+      <div class="flex items-center justify-between mb-4 ml-5 mr-5">
+        <div class="text-lg font-semibold text-main">Top Services by Compute Units</div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-secondary">Limit:</span>
+          <select v-model="topServicesLimit" @change="loadTopServicesByComputeUnits()" class="select select-bordered select-sm w-20">
+            <option :value="5">5</option>
+            <option :value="10">10</option>
+            <option :value="25">25</option>
+            <option :value="50">50</option>
+          </select>
+          <span class="text-sm text-secondary">Days:</span>
+          <select v-model="topServicesDays" @change="loadTopServicesByComputeUnits()" class="select select-bordered select-sm w-20">
+            <option :value="7">7</option>
+            <option :value="15">15</option>
+            <option :value="30">30</option>
+          </select>
         </div>
-        <div class="text-2xl font-bold">{{ parseFloat(summaryStats.avg_efficiency_percent).toFixed(2) }}%</div>
       </div>
-      <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
-        <div class="flex items-center mb-2">
-          <div class="w-10 h-10 dark:bg-base-200 bg-[#60BC29] rounded-lg flex items-center justify-center mr-3">
-            <Icon icon="mdi:coin" class="text-2xl text-white" />
-          </div>
-          <div class="text-sm text-secondary">Avg Reward/Relay</div>
+      <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md">
+        <div v-if="loadingTopServices" class="flex justify-center items-center h-96">
+          <div class="loading loading-spinner loading-lg"></div>
+          <span class="ml-2">Loading services data...</span>
         </div>
-        <div class="text-2xl font-bold">{{ (parseFloat(summaryStats.avg_reward_per_relay) / 1000000).toFixed(6) }}</div>
-        <div class="text-xs text-secondary">POKT</div>
-      </div>
-      <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
-        <div class="flex items-center mb-2">
-          <div class="w-10 h-10 dark:bg-base-200 bg-[#FFB206] rounded-lg flex items-center justify-center mr-3">
-            <Icon icon="mdi:cpu-64-bit" class="text-2xl text-white" />
-          </div>
-          <div class="text-sm text-secondary">Claimed Compute Units</div>
+        <div v-else-if="topServicesByComputeUnits.length === 0" class="flex justify-center items-center h-96 text-gray-500">
+          No services data found
         </div>
-        <div class="text-2xl font-bold">{{ formatNumber(parseInt(summaryStats.total_claimed_compute_units)) }}</div>
-      </div>
-      <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
-        <div class="flex items-center mb-2">
-          <div class="w-10 h-10 dark:bg-base-200 bg-[#09279F] rounded-lg flex items-center justify-center mr-3">
-            <Icon icon="mdi:calendar-start" class="text-2xl text-white" />
-          </div>
-          <div class="text-sm text-secondary">First Submission</div>
+        <div v-else class="h-96">
+          <ApexCharts type="bar" height="350" :options="topServicesChartOptions" :series="topServicesChartSeries" />
         </div>
-        <div class="text-sm font-bold">{{ new Date(summaryStats.first_submission).toLocaleDateString() }}</div>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5" v-if="rewardAnalytics.length > 0">
-      <div class="dark:bg-base-100 bg-base-200 pt-3 rounded-lg border-[3px] border-solid border-base-200 dark:border-base-100">
-        <div class="flex items-center mb-4"><div class="text-lg font-semibold text-main ml-5">Hourly Rewards</div></div>
-        <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md"><div class="h-80"><ApexCharts type="area" height="280" :options="rewardsChartOptions" :series="rewardsChartSeries" /></div></div>
+    <!-- Top Services by Performance Table -->
+    <div class="dark:bg-base-100 bg-base-200 pt-3 rounded-lg border-[3px] border-solid border-base-200 dark:border-base-100 mb-5">
+      <div class="flex items-center justify-between mb-4 ml-5 mr-5">
+        <div class="text-lg font-semibold text-main">Top Services Performance (Market Share)</div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-secondary">Days:</span>
+          <select v-model="performanceDays" @change="loadTopServicesByPerformance()" class="select select-bordered select-sm w-20">
+            <option :value="7">7</option>
+            <option :value="15">15</option>
+            <option :value="30">30</option>
+          </select>
+        </div>
       </div>
-      <div class="dark:bg-base-100 bg-base-200 pt-3 rounded-lg border-[3px] border-solid border-base-200 dark:border-base-100">
-        <div class="flex items-center mb-4"><div class="text-lg font-semibold text-main ml-5">Compute Unit Efficiency</div></div>
-        <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md"><div class="h-80"><ApexCharts type="line" height="280" :options="efficiencyChartOptions" :series="efficiencyChartSeries" /></div></div>
+      <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md">
+        <div v-if="loadingPerformanceTable" class="flex justify-center items-center py-8">
+          <div class="loading loading-spinner loading-md"></div>
+          <span class="ml-2">Loading performance data...</span>
+        </div>
+        <div v-else-if="topServicesByPerformance.length === 0" class="text-center py-8 text-gray-500">
+          No performance data found
+        </div>
+        <div v-else class="overflow-auto">
+          <table class="table w-full">
+            <thead class="bg-white sticky top-0">
+              <tr class="border-b-[0px]">
+                <th>Rank</th>
+                <th>Service</th>
+                <th>Compute Units</th>
+                <th>Market Share</th>
+                <th>Submissions</th>
+                <th>Efficiency</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="service in topServicesByPerformance" :key="service.service_id" class="hover:bg-base-300 transition-colors duration-200 border-b-[0px]">
+                <td class="dark:bg-base-200 bg-white font-bold">
+                  <span class="badge badge-lg" :class="service.rank === 1 ? 'badge-primary' : service.rank === 2 ? 'badge-secondary' : service.rank === 3 ? 'badge-accent' : 'badge-ghost'">
+                    #{{ service.rank }}
+                  </span>
+                </td>
+                <td class="dark:bg-base-200 bg-white">
+                  <span class="badge badge-primary badge-sm">{{ service.service_id }}</span>
+                </td>
+                <td class="dark:bg-base-200 bg-white">{{ formatNumber(service.total_claimed_compute_units) }}</td>
+                <td class="dark:bg-base-200 bg-white">
+                  <div class="flex items-center gap-2">
+                    <div class="flex-1 bg-base-300 rounded-full h-4 overflow-hidden">
+                      <div 
+                        class="h-full rounded-full transition-all duration-500"
+                        :class="service.rank === 1 ? 'bg-primary' : service.rank === 2 ? 'bg-secondary' : service.rank === 3 ? 'bg-accent' : 'bg-info'"
+                        :style="{ width: `${service.percentage_of_total}%` }"
+                      ></div>
+                    </div>
+                    <span class="text-sm font-semibold min-w-[50px]">{{ service.percentage_of_total.toFixed(2) }}%</span>
+                  </div>
+                </td>
+                <td class="dark:bg-base-200 bg-white">{{ formatNumber(service.submission_count) }}</td>
+                <td class="dark:bg-base-200 bg-white">
+                  <span :class="service.avg_efficiency_percent >= 95 ? 'text-success' : service.avg_efficiency_percent >= 80 ? 'text-warning' : 'text-error'">
+                    {{ service.avg_efficiency_percent.toFixed(2) }}%
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-if="totalComputeUnits > 0" class="mt-4 text-sm text-secondary px-4">
+            Total Network Compute Units: <span class="font-semibold">{{ formatNumber(totalComputeUnits) }}</span>
+          </div>
+        </div>
       </div>
     </div>
 <!-- 
@@ -390,7 +607,7 @@ onMounted(() => {
                 <td class="truncate dark:bg-base-200 bg-white" style="max-width:180px">{{ submission.supplier_operator_address }}</td>
                 <td class="truncate dark:bg-base-200 bg-white" style="max-width:180px">{{ submission.application_address }}</td>
                 <td class="dark:bg-base-200 bg-white">{{ formatNumber(parseInt(submission.num_relays)) }}</td>
-                <td class="dark:bg-base-200 bg-white">{{ formatUpokt(submission.claimed_upokt_amount) }}</td>
+                <td class="dark:bg-base-200 bg-white">{{ format.formatToken({ denom: 'upokt', amount: String(submission.claimed_upokt_amount) }) }}</td>
                 <td class="dark:bg-base-200 bg-white"><span :class="parseFloat(submission.compute_unit_efficiency) >= 95 ? 'text-success' : parseFloat(submission.compute_unit_efficiency) >= 80 ? 'text-warning' : 'text-error'">{{ parseFloat(submission.compute_unit_efficiency).toFixed(2) }}%</span></td>
                 <td class="dark:bg-base-200 bg-white">{{ (parseFloat(submission.reward_per_relay) / 1000000).toFixed(6) }}</td>
                 <td class="dark:bg-base-200 bg-white text-sm">{{ new Date(submission.timestamp).toLocaleString() }}</td>
