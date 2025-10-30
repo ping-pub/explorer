@@ -1352,22 +1352,29 @@ watch(() => base.blocktime, (newVal, oldVal) => {
         </div>
 
         <div class="bg-base-200 rounded-md overflow-auto" style="max-height: 30rem;">
-          <div class="flex justify-center items-center py-8" v-if="loadingBlocks">
-            <div class="loading loading-spinner loading-lg text-info"></div>
-          </div>
-          <table class="table table-compact w-full bg-base-100" v-else-if="blocks.length > 0">
-            <thead class="bg-base-300 sticky top-0">
+          <table class="table table-compact w-full bg-base-200">
+            <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
               <tr class="border-none">
-                <th class="dark:bg-base-200 bg-base-100">{{ $t('block.block_header') }}</th>
-                <th class="dark:bg-base-200 bg-base-100">{{ $t('account.hash') }}</th>
-                <th class="dark:bg-base-200 bg-base-100">{{ $t('block.proposer') }}</th>
-                <th class="dark:bg-base-200 bg-base-100">{{ $t('module.tx') }}</th>
-                <th class="dark:bg-base-200 bg-base-100">{{ $t('account.time') }}</th>
+                <th class="dark:bg-base-100 bg-base-200">{{ $t('block.block_header') }}</th>
+                <th class="dark:bg-base-100 bg-base-200">{{ $t('account.hash') }}</th>
+                <th class="dark:bg-base-100 bg-base-200">{{ $t('block.proposer') }}</th>
+                <th class="dark:bg-base-100 bg-base-200">{{ $t('module.tx') }}</th>
+                <th class="dark:bg-base-100 bg-base-200">{{ $t('account.time') }}</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody v-if="loadingBlocks" >
+            <tr class="text-center">
+              <td colspan="5" class="py-8">
+                <div class="flex justify-center items-center">
+                  <div class="loading loading-spinner loading-md"></div>
+                  <span class="ml-2">Loading blocks...</span>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+            <tbody  v-if="!loadingBlocks && blocks.length > 0">
               <tr v-for="block in blocks" :key="block.id"
-                class="dark:bg-base-200 bg-base-100 hover:dark:bg-base-100 hover:bg-base-300 transition-colors duration-200 border-none">
+                class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
                 <td class="font-medium">{{ block.height }}</td>
                 <td class="truncate text-[#153cd8] dark:text-warning" style="max-width: 12rem; overflow:hidden;">
                   <RouterLink class="truncate hover:underline" :title="block.hash"
@@ -1379,8 +1386,13 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                 <td class="text-sm">{{ format.toDay(block?.timestamp, 'from') }}</td>
               </tr>
             </tbody>
+            <tbody v-else-if="!loadingBlocks && blocks.length === 0">
+              <tr>
+                <td colspan="5" class="text-center">No blocks found</td>
+              </tr>
+            </tbody>
           </table>
-          <div v-else class="flex justify-center items-center py-10 text-secondary">No blocks found</div>
+          
         </div>
       </div>
 
@@ -1399,15 +1411,15 @@ watch(() => base.blocktime, (newVal, oldVal) => {
         </div>
 
         <div class="bg-base-200 rounded-md overflow-auto" style="height: 30rem;" ref="txTableContainer">
-          <table class="table table-compact w-full bg-base-100">
-            <thead class="bg-base-300 sticky top-0">
+          <table class="table table-compact w-full bg-base-200">
+            <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
               <tr class="border-none">
-                <th class="dark:bg-base-200 bg-base-100">{{ $t('tx.tx_hash') }}</th>
-                <th class="dark:bg-base-200 bg-base-100">{{ $t('block.block') }}</th>
-                <th class="dark:bg-base-200 bg-base-100">{{ $t('staking.status') }}</th>
-                <th class="dark:bg-base-200 bg-base-100">{{ $t('account.type') }}</th>
-                <th class="dark:bg-base-200 bg-base-100">{{ $t('block.fees') }}</th>
-                <th class="dark:bg-base-200 bg-base-100">{{ $t('account.time') }}</th>
+                <th class="dark:bg-base-100 bg-base-200">{{ $t('tx.tx_hash') }}</th>
+                <th class="dark:bg-base-100 bg-base-200">{{ $t('block.block') }}</th>
+                <th class="dark:bg-base-100 bg-base-200">{{ $t('staking.status') }}</th>
+                <th class="dark:bg-base-100 bg-base-200">{{ $t('account.type') }}</th>
+                <th class="dark:bg-base-100 bg-base-200">{{ $t('block.fees') }}</th>
+                <th class="dark:bg-base-100 bg-base-200">{{ $t('account.time') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -1418,7 +1430,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
 
               <!-- Render only visible transactions -->
               <tr v-for="item in visibleTxs" :key="item.index"
-                class="dark:bg-base-200 bg-base-100 hover:dark:bg-base-100 hover:bg-base-300 transition-colors duration-200 border-none">
+                class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
                 <td class="truncate text-[#153cd8]" style="max-width:10rem">
                   <RouterLink class="truncate hover:underline" :to="`/${props.chain}/tx/${item.item.hash}`">{{ item.item.hash }}</RouterLink>
                 </td>

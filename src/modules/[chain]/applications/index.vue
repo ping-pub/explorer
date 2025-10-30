@@ -119,9 +119,9 @@ onMounted(() => {
       Applications
     </p>
 
-    <div class="bg-[#EFF2F5] dark:bg-base-100 rounded-xl p-2">
+    <div class="bg-base-200 dark:bg-base-100 rounded-xl p-2">
       <table class="table w-full table-compact rounded-xl">
-        <thead class="dark:bg-base-100 bg-white text-[#64748B] sticky top-0">
+        <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
           <tr class="text-sm font-semibold">
             <th>Rank</th>
             <th>Address</th>
@@ -151,7 +151,7 @@ onMounted(() => {
             v-else
             v-for="(item, index) in sortedList"
             :key="item.address"
-            class="hover:bg-gray-100 dark:hover:bg-base-200 transition"
+            class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl"
           >
             <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
 

@@ -9,8 +9,8 @@ export interface Validator {
     "delegator_shares": string,
     "description": {
         "moniker": string,
-        "identity"?: string,
-        "website"?: string,
+        "identity": string,
+        "website": string,
         "security_contact"?: string,
         "details"?: string
     },

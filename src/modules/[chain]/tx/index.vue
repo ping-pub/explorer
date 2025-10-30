@@ -48,14 +48,14 @@ const apiChainName = getApiChainName(current)
 
 // 🔹 Pagination state
 const currentPage = ref(1)
-const itemsPerPage = ref(25)
+const itemsPerPage = ref(10)
 const totalTransactions = ref(0)
 const totalPages = ref(0)
 const transactions = ref<ApiTransaction[]>([])
 const loading = ref(false)
 
 // 🔹 Page size options
-const pageSizeOptions = [25, 50, 100]
+const pageSizeOptions = [10, 25, 50, 100]
 
 onMounted(async () => {
   tab.value = String(router.currentRoute.value.query.tab || 'recent')
@@ -139,7 +139,7 @@ function changePageSize(newSize: number) {
     >
       <div class="bg-base-200 rounded-md overflow-auto">
         <table class="table w-full table-compact">
-          <thead class="bg-white sticky top-0">
+          <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
             <tr class="border-b-[0px]">
               <th>{{ $t('tx.tx_hash') }}</th>
               <th>{{ $t('block.block') }}</th>

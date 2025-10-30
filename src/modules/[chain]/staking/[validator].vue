@@ -319,13 +319,27 @@ function getTransactionFee(tx: any): string {
   
   return '-';
 }
-
 </script>
 <template>
   <div>
     <!-- Updated Validator Header Card -->
     <div class="dark:bg-base-100 bg-[#09279F] rounded-xl space-x-10 p-4 flex items-center mt-4 mb-4">
       <!-- Validator Header with Avatar and Basic Info -->
+      <img
+                  v-if="v.description?.identity && avatars[v.description.identity] !== 'undefined'"
+                  v-lazy="logo(v.description?.identity)"
+                  class="object-contain w-16 h-16 rounded-lg"
+                  @error="
+                    (e) => {
+                      loadAvatar(v.description?.identity);
+                    }
+                  "
+                />
+                <Icon
+                  v-else
+                  class="text-4xl"
+                  :icon="`mdi-help-circle-outline`"
+                />
         <div>
           <h2 class="text-2xl font-bold text-[#FFFFFF]">{{ v.description?.moniker }}</h2>
         </div>

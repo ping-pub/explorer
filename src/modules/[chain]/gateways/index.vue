@@ -118,11 +118,11 @@
     </p>
 
     <div
-      class="bg-[#EFF2F5] dark:bg-base-100 rounded-xl px-2 pt-2 pb-2 gatewaysContainer"
-      style="height: 78vh; overflow: auto"
+      class="bg-base-200 dark:bg-base-100 rounded-xl px-2 pt-2 pb-2 gatewaysContainer"
+      style="max-height: 78vh; overflow: auto"
     >
       <table class="table w-full table-compact">
-        <thead class="dark:bg-base-100 bg-white sticky top-0 z-10">
+        <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
           <tr class="text-sm font-semibold">
             <th>Rank</th>
             <th>Address</th>
@@ -150,7 +150,7 @@
             v-else
             v-for="(item, index) in sortedList"
             :key="item.address"
-            class="hover:bg-gray-100 dark:hover:bg-base-200 transition"
+            class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl"
           >
             <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
 

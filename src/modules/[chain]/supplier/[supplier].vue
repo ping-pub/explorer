@@ -96,8 +96,8 @@ const fetchAvatar = (identity: string) => {
     staking
       .keybase(identity)
       .then((d) => {
-        if (Array.isArray(d.them) && d.them.length > 0) {
-          const uri = String(d.them[0]?.pictures?.primary?.url).replace(
+        if (d.list[0].keybase.picture_url) {
+          const uri = String(d.list[0].keybase.picture_url).replace(
             'https://s3.amazonaws.com/keybase_processed_uploads/',
             ''
           );
@@ -266,7 +266,7 @@ function mapDelegators(messages: any[]) {
                 <img
                   v-if="identity && avatars[identity] !== 'undefined'"
                   v-lazy="logo(identity)"
-                  class="object-contain"
+                  class="object-contain w-24 h-24 rounded-lg"
                   @error="
                     (e) => {
                       loadAvatar(identity);

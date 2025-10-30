@@ -213,7 +213,7 @@ onMounted(() => {
 
     <div class="bg-[#EFF2F5] dark:bg-base-100 rounded-xl p-2">
       <table class="table w-full table-compact">
-        <thead class="dark:bg-base-100 bg-white sticky top-0 z-10 rounded-xl">
+        <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
           <tr class="text-sm font-semibold rounded-xl">
             <th>ID</th>
             <th>Name</th>
@@ -251,7 +251,7 @@ onMounted(() => {
             v-else
             v-for="item in sortedList"
             :key="item.id"
-            class="hover:bg-gray-100 dark:hover:bg-base-200 transition"
+            class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl"
           >
             <td>{{ item.id }}</td>
             <td class="font-bold">{{ item.name }}</td>

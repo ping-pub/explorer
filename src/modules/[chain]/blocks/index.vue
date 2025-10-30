@@ -9,34 +9,82 @@ const tab = ref('blocks');
 const base = useBaseStore();
 const format = useFormatter();
 
-const list = computed(() => base.recents);
-
-const pageRequest = ref(new PageRequest());
-const pageResponse = ref({} as Pagination);
-
-const currentPage = ref(1);
-const itemsPerPage = 10;
-
-const totalPages = computed(() =>
-  Math.ceil(parseInt(pageResponse.value.total || list.value.length.toString()) / itemsPerPage)
-);
-
-const paginatedList = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return list.value.slice(start, end);
-});
-
-function pageload(p: number) {
-  pageRequest.value.setPage(p);
+// Server-side blocks fetching (consistent with TX page)
+interface ApiBlockItem {
+  id: string;
+  height: number;
+  hash: string;
+  timestamp: string;
+  proposer: string;
+  chain: string;
+  transaction_count?: number;
 }
 
-onMounted(() => {
-  pageload(1);
-  pageRequest.value.setPageSize(10);
-  pageResponse.value = {
-    total: base.latest?.block?.header.height
+const getApiChainName = (chainName: string) => {
+  const chainMap: Record<string, string> = {
+    'pocket-beta': 'pocket-testnet-beta',
+    'pocket-alpha': 'pocket-testnet-alpha',
+    'pocket-mainnet': 'pocket-mainnet'
   };
+  return chainMap[chainName] || chainName || 'pocket-testnet-beta';
+};
+
+import { useBlockchain } from '@/stores';
+const chainStore = useBlockchain();
+const apiChainName = computed(() => getApiChainName(chainStore.current?.chainName || props.chain || 'pocket-beta'));
+
+const blocks = ref<ApiBlockItem[]>([]);
+const loading = ref(false);
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
+const totalBlocks = ref(0);
+const totalPages = ref(0);
+const pageSizeOptions = [10, 25, 50, 100];
+
+async function loadBlocks() {
+  loading.value = true;
+  try {
+    const url = `/api/v1/blocks?chain=${apiChainName.value}&page=${currentPage.value}&limit=${itemsPerPage.value}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (res.ok) {
+      blocks.value = data.data || [];
+      totalBlocks.value = data.meta?.total || 0;
+      totalPages.value = data.meta?.totalPages || 0;
+    } else {
+      blocks.value = [];
+      totalBlocks.value = 0;
+      totalPages.value = 0;
+      console.error('Error loading blocks:', data);
+    }
+  } catch (e) {
+    console.error('Error loading blocks:', e);
+    blocks.value = [];
+    totalBlocks.value = 0;
+    totalPages.value = 0;
+  } finally {
+    loading.value = false;
+  }
+}
+
+watch(itemsPerPage, () => {
+  currentPage.value = 1;
+  loadBlocks();
+});
+
+watch(currentPage, () => {
+  loadBlocks();
+});
+
+watch(apiChainName, (n, o) => {
+  if (n !== o) {
+    currentPage.value = 1;
+    loadBlocks();
+  }
+});
+
+onMounted(() => {
+  loadBlocks();
 });
 
 // ✅ Pagination functions
@@ -95,72 +143,64 @@ function prevPage() {
           </thead>
 
           <tbody class="bg-base-100 relative">
-            <tr
-              v-for="(item, i) in paginatedList"
-              :key="i"
-              class="transition-colors duration-200 border-none"
-            >
-              <td class="font-medium dark:text-warning text-[#09279F]">
-                {{ item.block.header.height }}
+            <tr v-if="loading">
+              <td colspan="7" class="py-8">
+                <div class="flex justify-center items-center">
+                  <div class="loading loading-spinner loading-md"></div>
+                  <span class="ml-2">Loading blocks...</span>
+                </div>
               </td>
-              <td
-                class="truncate dark:text-warning text-[#09279F]"
-                style="max-width: 18rem; overflow: hidden"
-              >
-                <RouterLink
-                  class="truncate hover:underline"
-                  :title="item.block_id.hash"
-                  :to="`/${chain}/blocks/${item.block.header.height}`"
-                >
-                  {{ item.block_id.hash }}
+            </tr>
+            <tr v-else-if="!loading && blocks.length === 0">
+              <td colspan="7" class="py-8 text-center text-gray-500">
+                No blocks found
+              </td>
+            </tr>
+            <tr v-else v-for="block in blocks" :key="block.id"
+              class="transition-colors duration-200 border-none">
+              <td class="font-medium dark:text-warning text-[#09279F]">
+                {{ block.height }}
+              </td>
+              <td class="truncate dark:text-warning text-[#09279F]" style="max-width: 18rem; overflow: hidden">
+                <RouterLink class="truncate hover:underline" :title="block.hash" :to="`/${chain}/blocks/${block.height}`">
+                  {{ block.hash || block.id.split(':')[1] }}
                 </RouterLink>
               </td>
-              <td>{{ format.validator(item.block?.header?.proposer_address) }}</td>
-              <td>{{ item.block?.data?.txs.length }}</td>
-              <td>{{ format.toDay(item.block?.header?.time, 'from') }}</td>
+              <td>{{ format.validator(block.proposer) }}</td>
+              <td>{{ (block.transaction_count ?? 0).toLocaleString() }}</td>
+              <td>{{ format.toDay(block.timestamp, 'from') }}</td>
               <td>{{ 0 }}</td>
-              <td>
-                {{ item.block?.data?.txs?.length ? item.block.data.txs.join(', ').length : 0 }}
-                bytes
-              </td>
+              <td>0 bytes</td>
             </tr>
           </tbody>
         </table>
 
         <!-- ✅ Pagination Bar -->
-        <div class="flex justify-end items-center gap-2 my-6 px-6">
-          <button
-            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
-            @click="goToFirst"
-            :disabled="currentPage === 1"
-          >
-            First
-          </button>
-          <button
-            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
-            @click="prevPage"
-            :disabled="currentPage === 1"
-          >
-            &lt;
-          </button>
+        <div class="flex justify-between items-center gap-4 my-6 px-6">
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-gray-600">Show:</span>
+            <select v-model="itemsPerPage" class="select select-bordered select-sm w-20">
+              <option v-for="size in pageSizeOptions" :key="size" :value="size">{{ size }}</option>
+            </select>
+            <span class="text-sm text-gray-600">per page</span>
+          </div>
 
-          <span class="text-xs">
-            Page {{ currentPage }} of {{ totalPages }}
-          </span>
-
-          <button
-            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
-            @click="nextPage"
-            :disabled="currentPage === totalPages"
-          >
-            &gt;
-          </button>
-          <button
-            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"            @click="goToLast"
-            :disabled="currentPage === totalPages"
-          >
-            Last
-          </button>
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-gray-600">
+              Showing {{ ((currentPage - 1) * itemsPerPage) + 1 }} to {{ Math.min(currentPage * itemsPerPage, totalBlocks) }} of {{ totalBlocks }} blocks
+            </span>
+            <div class="flex items-center gap-1">
+              <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+                @click="goToFirst" :disabled="currentPage === 1 || totalPages === 0">First</button>
+              <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+                @click="prevPage" :disabled="currentPage === 1 || totalPages === 0">&lt;</button>
+              <span class="text-xs px-2">Page {{ currentPage }} of {{ totalPages }}</span>
+              <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+                @click="nextPage" :disabled="currentPage === totalPages || totalPages === 0">&gt;</button>
+              <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+                @click="goToLast" :disabled="currentPage === totalPages || totalPages === 0">Last</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

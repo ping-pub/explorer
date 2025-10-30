@@ -118,10 +118,10 @@ const statusText = computed(() => (value.value === 'stake' ? 'Staked' : 'Unstake
 
     <!-- ✅ Scroll hataya gaya -->
     <div
-      class="bg-[#EFF2F5] dark:bg-base-100 rounded-xl p-3"
+      class="bg-base-200 dark:bg-base-100 rounded-xl p-3"
     >
       <table class="table w-full table-compact rounded-xl">
-        <thead class="dark:bg-base-100 bg-white sticky top-0">
+        <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
           <tr>
             <td>Rank</td>
             <td>Address</td>
@@ -151,7 +151,7 @@ const statusText = computed(() => (value.value === 'stake' ? 'Staked' : 'Unstake
             v-else
             v-for="(item, index) in sortedList"
             :key="item.operator_address"
-            class="hover dark:bg-base-200 bg-white rounded-xl"
+            class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl"
           >
             <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
             <td>

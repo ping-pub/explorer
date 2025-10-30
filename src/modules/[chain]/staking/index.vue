@@ -58,6 +58,8 @@ staking
     if (x) {
       selfBonded.value = x.delegation_response;
     }
+  }).catch((error) => {
+    console.error('Failed to fetch self-bonded info:', error);
   });
 
 onMounted(async () => {
@@ -70,9 +72,23 @@ onMounted(async () => {
   slashing.value = res.params;
 
   try {
-    const delegation = await staking.fetchValidatorDelegation(validator, addresses.value.account);
+    const delegation = await staking.fetchValidatorDelegation(validator, addresses.value.account).catch(err => {
+        console.error('Failed to fetch self-bonded info:', err);
+        return {
+            delegation_response: {
+                balance: { amount: '0', denom: staking.params?.bond_denom || 'upokt' }
+            }
+        };
+    });
     if (delegation?.delegation_response?.balance) {
-      selfBonded.value = delegation.delegation_response;
+      selfBonded.value = {
+        delegation: {
+          delegator_address: addresses.value.account,
+          validator_address: validator,
+          shares: '0'
+        },
+        balance: delegation.delegation_response.balance
+      };
     } else {
       selfBonded.value = { 
         delegation: {
@@ -80,7 +96,7 @@ onMounted(async () => {
           validator_address: validator,
           shares: '0'
         },
-        balance: { amount: '0', denom: staking.params?.bond_denom || 'uatom' } 
+        balance: { amount: '0', denom: staking.params?.bond_denom || 'upokt' } 
       };
     }
   } catch (err) {
@@ -94,6 +110,7 @@ onMounted(async () => {
 
     allValidators.value = [...bonded, ...unbonding, ...unbonded];
     allValidators.value.sort((a, b) => Number(b.delegator_shares) - Number(a.delegator_shares));
+    loadAvatars();
   } catch (error) {
     console.error("Error fetching validators:", error);
   } finally {
@@ -227,8 +244,8 @@ const fetchAvatar = (identity: string) => {
         staking
             .keybase(identity)
             .then((d) => {
-                if (Array.isArray(d.them) && d.them.length > 0) {
-                    const uri = String(d.them[0]?.pictures?.primary?.url).replace(
+                if (d.list[0].keybase.picture_url) {
+                    const uri = String(d.list[0].keybase.picture_url).replace(
                         'https://s3.amazonaws.com/keybase_processed_uploads/',
                         ''
                     );
@@ -238,7 +255,7 @@ const fetchAvatar = (identity: string) => {
                 } else throw new Error(`failed to fetch avatar for ${identity}`);
             })
             .catch((error) => {
-                // console.error(error); // uncomment this if you want the user to see which avatars failed to load.
+                console.error(error); // uncomment this if you want the user to see which avatars failed to load.
                 resolve();
             });
     });
@@ -255,7 +272,6 @@ const loadAvatars = () => {
     // fetches all avatars from keybase and stores it in localStorage
     const promises = allValidators.value.map((validator) => {
         const identity = validator.description?.identity;
-
         // Here we also check whether we haven't already fetched the avatar
         if (identity && !avatars.value[identity]) {
             return fetchAvatar(identity);
@@ -264,8 +280,9 @@ const loadAvatars = () => {
         }
     });
 
-    Promise.all(promises).then(() =>
+    Promise.allSettled(promises).then(() =>{
         localStorage.setItem('avatars', JSON.stringify(avatars.value))
+    }
     );
 };
 
@@ -288,7 +305,6 @@ base.$subscribe((_, s) => {
     }
 });
 
-loadAvatars();
 
 const currentPage = ref(1)
 const itemsPerPage = ref(10)
@@ -385,12 +401,13 @@ function goToLast() {
             <!-- ✅ scroll hataya -->
             <div
             v-else
-            class="bg-[#EFF2F5] dark:bg-base-100 rounded-xl dark:border-base-100 px-4 pt-2 pb-2"
+            class="bg-base-200 dark:bg-base-100 rounded-xl dark:border-base-200 px-4 pt-2 pb-2"
             >
             <table class="table w-full rounded-xl">
-                <thead class="dark:bg-base-100 bg-white sticky top-0 border-0">
+                <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
                 <tr>
                     <td style="width: 3rem">{{ $t('staking.rank') }}</td>
+                    <td>Logo</td>
                     <td>{{ $t('staking.validator') }}</td>
                     <td class="text-center">{{ $t('staking.status') }}</td>
                     <td class="text-right">{{ $t('staking.voting_power') }}</td>
@@ -413,14 +430,13 @@ function goToLast() {
                         class="text-xs truncate relative px-2 py-1 rounded-full w-fit"
                         :class="`text-${rank}`"
                     >
-                        <span
-                        class="inset-x-0 inset-y-0 opacity-10 absolute"
-                        :class="`bg-${rank}`"
-                        ></span>
                         {{ i + 1 + (currentPage - 1) * itemsPerPage }}
                     </div>
                     </td>
-
+                    <td>
+                        <img v-if="logo" :src="logo" class="w-8 h-8 rounded-full mr-2" style="display: inline-block;" /> 
+                        <Icon v-else class="text-2xl" :icon="`mdi-help-circle-outline`" />
+                    </td>
                     <!-- Validator -->
                     <td>
                     <div class="flex items-center overflow-hidden" style="max-width: 300px">
