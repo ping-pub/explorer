@@ -872,13 +872,13 @@ async function loadAddressPerformance(address: string) {
       <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-0.5 rounded-xl shadow-md mb-4">
         <div class="services-table-wrapper services-table-scroll rounded-xl">
           <table class="table table-compact w-full">
-            <thead class="sticky top-0 bg-white">
+            <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
               <tr class="border-b-[0px]">
-                <th class="bg-white dark:bg-base-200">Service ID</th>
-                <th class="bg-white dark:bg-base-200">JSON_RPC URL</th>
-                <th class="bg-white dark:bg-base-200">WEBSOCKET URL</th>
-                <th class="bg-white dark:bg-base-200">Revenue Share Address</th>
-                <th class="bg-white dark:bg-base-200">Percentage</th>
+                <th class="">Service ID</th>
+                <th class="">JSON_RPC URL</th>
+                <th class="">WEBSOCKET URL</th>
+                <th class="">Revenue Share Address</th>
+                <th class="">Percentage</th>
               </tr>
             </thead>
             <tbody class="bg-base-100 relative">
@@ -1026,17 +1026,17 @@ async function loadAddressPerformance(address: string) {
       class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-0.5 rounded-xl shadow-md mb-4">
       <div class="services-table-wrapper services-table-scroll rounded-xl">
         <table class="table table-compact w-full">
-          <thead class="sticky top-0 bg-white">
-            <tr class="border-b-[0px]">
-              <th class="bg-white dark:bg-base-200">Day</th>
-              <th class="bg-white dark:bg-base-200">Rewards (POKT)</th>
-              <th class="bg-white dark:bg-base-200">Relays</th>
-              <th class="bg-white dark:bg-base-200">Submissions</th>
-              <th class="bg-white dark:bg-base-200">Avg Efficiency</th>
-              <th class="bg-white dark:bg-base-200" v-if="performanceType === 'supplier'">Unique Applications</th>
-              <th class="bg-white dark:bg-base-200" v-if="performanceType === 'application'">Unique Suppliers</th>
-              <th class="bg-white dark:bg-base-200">Unique Services</th>
-              <th class="bg-white dark:bg-base-200">Reward/Relay</th>
+          <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
+            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+              <th class="">Day</th>
+              <th class="">Rewards (POKT)</th>
+              <th class="">Relays</th>
+              <th class="">Submissions</th>
+              <th class="">Avg Efficiency</th>
+              <th class="" v-if="performanceType === 'supplier'">Unique Applications</th>
+              <th class="" v-if="performanceType === 'application'">Unique Suppliers</th>
+              <th class="">Unique Services</th>
+              <th class="">Reward/Relay</th>
             </tr>
           </thead>
           <tbody class="bg-base-100 relative">
@@ -1054,7 +1054,7 @@ async function loadAddressPerformance(address: string) {
               </td>
             </tr>
             <tr v-else v-for="(row, i) in performanceRows" :key="i"
-              class="hover:bg-base-300 transition-colors rounded-xl duration-200 border-b-[0px]">
+              class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
               <td class="dark:bg-base-200 bg-white">{{ format.toLocaleDate(row.day_bucket) }}</td>
               <td class="dark:bg-base-200 bg-white">{{ format.formatToken({
                 denom: 'upokt', amount:
@@ -1081,51 +1081,51 @@ async function loadAddressPerformance(address: string) {
     </div>
   </div>
   <!-- Transactions -->
-  <div class="dark:bg-base-100 bg-base-200  px-0.5 pt-0.5 pb-0.5 rounded-xl mb-4">
+  <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">
     <h2 class="card-title text-2xl px-4 py-2">{{ $t('account.sent') }}</h2>
     <div class="services-table-wrapper services-table-scroll rounded-xl">
-      <table class="table w-full text-sm">
-        <thead class="bg-base-200 ">
-          <tr>
-            <th class="dark:bg-base-200 bg-white py-3">{{ $t('account.height') }}</th>
-            <th class="dark:bg-base-200 bg-white py-3">{{ $t('account.hash') }}</th>
-            <th class="dark:bg-base-200 bg-white py-3">{{ $t('account.messages') }}</th>
-            <th class="dark:bg-base-200 bg-white py-3">{{ $t('account.amount') }}</th>
-            <th class="dark:bg-base-200 bg-white py-3">{{ $t('tx.fee') }}</th>
-            <th class="dark:bg-base-200 bg-white py-3">{{ $t('account.time') }}</th>
+      <table class="table table-compact w-full">
+        <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
+          <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+            <th class="">{{ $t('account.height') }}</th>
+            <th class="">{{ $t('account.hash') }}</th>
+            <th class="">{{ $t('account.messages') }}</th>
+            <th class="">{{ $t('account.amount') }}</th>
+            <th class="">{{ $t('tx.fee') }}</th>
+            <th class="">{{ $t('account.time') }}</th>
           </tr>
         </thead>
-        <tbody class="text-md dark:bg-base-200 bg-white">
+        <tbody class="bg-base-100 relative">
           <tr v-if="txs?.length === 0">
             <td colspan="10">
               <div class="text-center">{{ $t('account.no_transactions') }}</div>
             </td>
           </tr>
-          <tr v-for="(v, index) in txs" :key="index">
-            <td class="text-sm py-3 dark:bg-base-200 bg-white">
+          <tr v-for="(v, index) in txs" :key="index" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
+            <td class="text-sm py-3">
               <RouterLink :to="`/${chain}/blocks/${v.height}`" class="dark:text-primary text-[#09279F] dark:invert">
                 {{ v.height }}</RouterLink>
             </td>
-            <td class="truncate py-3 dark:bg-base-200 bg-white" style="max-width: 200px">
+            <td class="truncate py-3" style="max-width: 200px">
               <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="dark:text-primary text-[#09279F] dark:invert">
                 {{ v.txhash }}
               </RouterLink>
             </td>
-            <td class="flex items-center py-3 dark:bg-base-200 bg-white">
+            <td class="flex items-center py-3">
               <div class="mr-2">
                 {{ format.messages(v.tx.body.messages) }}
               </div>
               <Icon v-if="v.code === 0" icon="mdi-check" class="text-[#60BC29] text-lg" />
               <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
             </td>
-            <td class="dark:bg-base-200 bg-white">
+            <td>
               <!-- {{v.tx.body?.messages[0]?.amount}} {{ v.tx.body?.messages[0]?.amount ? format.formatToken(v.tx.body?.messages[0]?.amount[0]) : '-'}} -->
               {{ v.tx.body?.messages[0]?.amount ? format.formatToken(v.tx.body?.messages[0]?.amount[0]) : '-' }}
             </td>
-            <td class="dark:bg-base-200 bg-white">
+            <td>
               {{ v.tx.auth_info.fee.amount ? format.formatToken(v.tx.auth_info.fee.amount[0]) : '-' }}
             </td>
-            <td class="py-3 dark:bg-base-200 bg-white">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{
+            <td class="py-3">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{
               format.toDay(v.timestamp, 'from') }})</span> </td>
           </tr>
         </tbody>
@@ -1134,55 +1134,55 @@ async function loadAddressPerformance(address: string) {
   </div>
 
   <!-- Received -->
-  <div class="dark:bg-base-100 bg-base-200 px-0.5 pt-0.5 pb-0.5 rounded-xl mb-4">
+  <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">
     <h2 class="card-title  px-4 py-2 text-2xl">{{ $t('account.received') }}</h2>
     <div class="services-table-wrapper services-table-scroll rounded-xl">
-      <table class="table w-full text-sm">
-        <thead>
-          <tr>
-            <th class="py-3 dark:bg-base-200 bg-white">{{ $t('account.height') }}</th>
-            <th class="py-3 dark:bg-base-200 bg-white">{{ $t('account.hash') }}</th>
-            <th class="py-3 dark:bg-base-200 bg-white">{{ $t('account.messages') }}</th>
-            <th class="py-3 dark:bg-base-200 bg-white">{{ $t('account.amount') }}</th>
-            <th class="py-3 dark:bg-base-200 bg-white">{{ $t('tx.fee') }}</th>
-            <th class="py-3 dark:bg-base-200 bg-white">{{ $t('account.time') }}</th>
+      <table class="table table-compact w-full">
+        <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
+          <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+            <th class="">{{ $t('account.height') }}</th>
+            <th class="">{{ $t('account.hash') }}</th>
+            <th class="">{{ $t('account.messages') }}</th>
+            <th class="">{{ $t('account.amount') }}</th>
+            <th class="">{{ $t('tx.fee') }}</th>
+            <th class="">{{ $t('account.time') }}</th>
           </tr>
         </thead>
-        <tbody class="text-sm dark:bg-base-200 bg-white">
+        <tbody class="bg-base-100 relative">
           <tr v-if="recentReceived.length === 0">
             <td colspan="10">
               <div class="text-center">{{ $t('account.no_transactions') }}</div>
             </td>
           </tr>
-          <tr v-for="(v, index) in recentReceived" :key="index">
-            <td class="text-sm py-3 dark:bg-base-200 bg-white">
+          <tr v-for="(v, index) in recentReceived" :key="index" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
+            <td class="text-sm py-3">
               <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-[#09279F] dark:text-primary dark:invert">
                 {{ v.height }}</RouterLink>
             </td>
-            <td class="truncate py-3 dark:bg-base-200 bg-white" style="max-width: 200px">
+            <td class="truncate py-3" style="max-width: 200px">
               <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-[#09279F] dark:text-primary dark:invert">
                 {{ v.txhash }}
               </RouterLink>
             </td>
 
-            <td class="flex items-center py-3 dark:bg-base-200 bg-white">
+            <td class="flex items-center py-3">
               <div class="mr-2">
                 {{ format.messages(v.tx.body.messages) }}
               </div>
               <Icon v-if="v.code === 0" icon="mdi-check" class="text-[#60BC29] text-lg" />
               <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
             </td>
-            <td class="dark:bg-base-200 bg-white">
+            <td>
               <div class="mr-2">
                 {{ v.tx.body.messages[0]?.amount && format.formatToken2(v.tx.body.messages[0].amount[0], true) }}
                 {{ v.tx.body.messages[0]?.stake && format.formatToken2(v.tx.body.messages[0].stake, true) }}
                 {{ (!v.tx.body.messages[0]?.stake && !v.tx.body.messages[0]?.amount) ? '-' : '' }}
               </div>
             </td>
-            <td class="dark:bg-base-200 bg-white">
+            <td>
               {{ v.tx.auth_info.fee.amount ? format.formatToken(v.tx.auth_info.fee.amount[0]) : '-' }}
             </td>
-            <td class="py-3 dark:bg-base-200 bg-white">
+            <td class="py-3">
               {{ format.toLocaleDate(v.timestamp) }}
               <span class=" text-xs">({{ format.toDay(v.timestamp, 'from') }})</span>
             </td>

@@ -168,7 +168,7 @@ function changePageSize(newSize: number) {
             <tr
               v-for="(item, index) in transactions"
               :key="item.hash"
-              class="hover:bg-base-300 transition-colors rounded-xl duration-200 border-b-[0px]"
+              class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl"
             >
               <td
                 class="dark:bg-base-200 bg-white truncate dark:text-warning text-[#153cd8]"

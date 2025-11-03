@@ -130,15 +130,15 @@ function prevPage() {
     >
       <div class="bg-base-200 rounded-md overflow-auto">
         <table class="table table-compact w-full">
-          <thead class="sticky top-0 bg-white">
+          <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
             <tr class="border-b-[0px]">
-              <th class="bg-white dark:bg-base-200">{{ $t('block.block_header') }}</th>
-              <th class="bg-white dark:bg-base-200">{{ $t('account.hash') }}</th>
-              <th class="bg-white dark:bg-base-200">{{ $t('block.proposer') }}</th>
-              <th class="bg-white dark:bg-base-200">{{ $t('account.no_of_transactions') }}</th>
-              <th class="bg-white dark:bg-base-200">{{ $t('account.time') }}</th>
-              <th class="bg-white dark:bg-base-200">{{ $t('block.relay') }}</th>
-              <th class="bg-white dark:bg-base-200">{{ $t('block.size') }}</th>
+              <th class="">{{ $t('block.block_header') }}</th>
+              <th class="">{{ $t('account.hash') }}</th>
+              <th class="">{{ $t('block.proposer') }}</th>
+              <th class="">{{ $t('account.no_of_transactions') }}</th>
+              <th class="">{{ $t('account.time') }}</th>
+              <th class="">{{ $t('block.relay') }}</th>
+              <th class="">{{ $t('block.size') }}</th>
             </tr>
           </thead>
 
@@ -157,7 +157,7 @@ function prevPage() {
               </td>
             </tr>
             <tr v-else v-for="block in blocks" :key="block.id"
-              class="transition-colors duration-200 border-none">
+              class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
               <td class="font-medium dark:text-warning text-[#09279F]">
                 {{ block.height }}
               </td>

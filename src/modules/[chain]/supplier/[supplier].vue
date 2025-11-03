@@ -603,7 +603,7 @@ function mapDelegators(messages: any[]) {
       <div class="text-lg mb-4 font-semibold">{{ $t('account.transactions') }}</div>
       <div class="rounded overflow-auto">
         <table class="table validatore-table w-full">
-          <thead>
+          <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
             <th class="text-left pl-4" style="position: relative; z-index: 2">
               {{ $t('account.height') }}
             </th>
@@ -612,7 +612,7 @@ function mapDelegators(messages: any[]) {
             <th class="text-left pl-4">{{ $t('account.time') }}</th>
           </thead>
           <tbody>
-            <tr v-for="(item, i) in txs.tx_responses">
+            <tr v-for="(item, i) in txs.tx_responses" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
               <td class="text-sm text-primary">
                 <RouterLink :to="`/${props.chain}/blocks/${item.height}`">{{
                   item.height

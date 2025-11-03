@@ -330,6 +330,7 @@ onMounted(async () => {
   // Then load stats that depend on transaction data
   loadNetworkStats();
   loadTransactionHistory();
+  loadServicesSummary24h();
 
   // Mark network status as loaded
   isNetworkStatusLoading.value = false;
@@ -350,6 +351,8 @@ blockchain.$subscribe((m, s) => {
     store.loadDashboard();
     walletStore.loadMyAsset();
     paramStore.handleAbciInfo()
+    // Reload 24h services summary on chain change
+    loadServicesSummary24h();
   }
 });
 function shortName(name: string, id: string) {
@@ -424,6 +427,24 @@ const amount = computed({
   }
 })
 
+// Helpers for formatting numbers in tooltips
+function formatWithCommas(value: number) {
+  try {
+    return Number(value || 0).toLocaleString();
+  } catch (e) {
+    return String(value);
+  }
+}
+
+function formatCompact(value: number) {
+  const n = Number(value || 0);
+  if (n >= 1_000_000_000_000) return (n / 1_000_000_000_000).toFixed(2) + 'T';
+  if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(2) + 'B';
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + 'M';
+  if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
+  return String(n);
+}
+
 const networkStats = ref({
   wallets: 0,
   applications: 0,
@@ -432,30 +453,45 @@ const networkStats = ref({
   services: 0
 });
 
+// 24h services summary (relays and compute units)
+const totalRelays24h = ref(0);
+const totalComputeUnits24h = ref(0);
+
+async function loadServicesSummary24h() {
+  try {
+    const params = new URLSearchParams();
+    params.append('chain', apiChainName);
+    const response = await fetch(`/api/v1/proof-submissions/summary?${params.toString()}`);
+    const result = await response.json();
+    if (response.ok && result?.data) {
+      totalRelays24h.value = Number(result.data.total_relays || 0);
+      totalComputeUnits24h.value = Number(result.data.total_claimed_compute_units || 0);
+    } else {
+      totalRelays24h.value = 0;
+      totalComputeUnits24h.value = 0;
+      console.error('Error loading 24h services summary:', result);
+    }
+  } catch (e) {
+    totalRelays24h.value = 0;
+    totalComputeUnits24h.value = 0;
+    console.error('Error loading 24h services summary:', e);
+  }
+}
+
 const historicalData = ref({
   series: [
-    {
-      name: 'Applications',
-      data: []
-    },
-    {
-      name: 'Suppliers',
-      data: []
-    },
-    {
-      name: 'Gateways',
-      data: []
-    },
-    {
-      name: 'Services',
-      data: []
-    }
+    { name: 'Applications', data: [], yAxisIndex: 0 },
+    { name: 'Suppliers', data: [], yAxisIndex: 0 },
+    { name: 'Gateways', data: [], yAxisIndex: 0 },
+    { name: 'Services', data: [], yAxisIndex: 0 },
+    { name: 'Relays', data: [], yAxisIndex: 1 },
+    { name: 'Compute Units', data: [], yAxisIndex: 1 }
   ]
 });
 
 const chartOptions = ref({
   chart: {
-    type: 'bar',
+    type: 'area',
     height: 280,
     toolbar: {
       show: false
@@ -464,22 +500,18 @@ const chartOptions = ref({
       enabled: false
     }
   },
-  colors: ['#FFB206', '#09279F', '#5E9AE4', '#60BC29'],
+  colors: ['#FFB206', '#09279F', '#5E9AE4', '#60BC29', '#A855F7', '#EF4444'],
   dataLabels: {
     enabled: false
   },
   stroke: {
     curve: 'smooth',
-    width: 2
+    width: [2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+    dashArray: [0, 0, 0, 0, 4, 4]
   },
   fill: {
-    type: 'gradient',
-    gradient: {
-      shadeIntensity: 1,
-      opacityFrom: 0.7,
-      opacityTo: 0.3,
-      stops: [0, 90, 100]
-    }
+    type: 'solid',
+    opacity: [0.15, 0.15, 0.15, 0.15, 0.08, 0.08]
   },
   grid: {
     borderColor: 'rgba(255, 255, 255, 0.1)',
@@ -489,7 +521,11 @@ const chartOptions = ref({
     }
   },
   markers: {
-    size: 0
+    size: 2,
+    strokeWidth: 0,
+    hover: {
+      size: 5
+    }
   },
   xaxis: {
     categories: [],
@@ -509,13 +545,15 @@ const chartOptions = ref({
       show: false
     }
   },
-  yaxis: {
-    labels: {
-      style: {
-        colors: 'rgb(116, 109, 105)'
-      }
-    }
-  },
+  yaxis: [
+    { labels: { style: { colors: 'rgb(116, 109, 105)' } }, title: { text: 'Entities' } },
+    { opposite: true, labels: { style: { colors: 'rgb(116, 109, 105)' }, formatter: function (value: number) {
+      if (value >= 1_000_000_000) return (value / 1_000_000_000).toFixed(1) + 'B';
+      if (value >= 1_000_000) return (value / 1_000_000).toFixed(1) + 'M';
+      if (value >= 1_000) return (value / 1_000).toFixed(1) + 'K';
+      return String(value);
+    } }, title: { text: 'Relays / Compute Units' } }
+  ],
   legend: {
     show: true,
     position: 'bottom',
@@ -525,7 +563,19 @@ const chartOptions = ref({
     }
   },
   tooltip: {
-    theme: 'dark'
+    theme: 'dark',
+    shared: true,
+    intersect: false,
+    y: {
+      formatter: function (value: number, opts: any) {
+        const i = opts?.seriesIndex ?? 0;
+        // Series 0-3 are entities; 4-5 are relays/CU
+        if (i <= 3) {
+          return `Entities: ${formatWithCommas(value)}`;
+        }
+        return `Relays / Compute Units: ${formatCompact(value)}`;
+      }
+    }
   }
 });
 
@@ -564,9 +614,117 @@ async function loadNetworkStats() {
     // Update cache timestamp
     networkStatsCacheTime.value = now;
 
-    generateHistoricalData();
+    // After updating current totals from node, try to load server time series
+    await loadNetworkGrowthTimeSeries().catch(() => {
+      // Fallback to client-side generated data if API fails
+      generateHistoricalData();
+    });
   } catch (error) {
     console.error("Error loading network stats:", error);
+  }
+}
+
+// Load time series for network growth from server API and build chart series
+async function loadNetworkGrowthTimeSeries(windowDays: number = 7) {
+  try {
+    const params = new URLSearchParams();
+    params.append('window', String(windowDays));
+    params.append('chain', apiChainName);
+
+    const response = await fetch(`/api/v1/network-growth?${params.toString()}`);
+    const result = await response.json();
+
+    if (!response.ok) {
+      console.error('Error loading network growth:', result);
+      throw new Error('Network growth API error');
+    }
+
+    const timeline = result?.data?.timeline || [];
+
+    // Pre-aggregate by day because API may return two rows per day (entities vs relays/CU)
+    const byDay = new Map<string, { day: string; applications: number; suppliers: number; gateways: number; services: number; relays: number; compute_units: number }>();
+    for (const item of timeline) {
+      // Normalize to YYYY-MM-DD
+      const key = (item.day || '').slice(0, 10);
+      if (!key) continue;
+      const prev = byDay.get(key) || { day: key, applications: 0, suppliers: 0, gateways: 0, services: 0, relays: 0, compute_units: 0 };
+      prev.applications += Number(item.applications || 0);
+      prev.suppliers += Number(item.suppliers || 0);
+      prev.gateways += Number(item.gateways || 0);
+      prev.services += Number(item.services || 0);
+      prev.relays += Number(item.relays || 0);
+      prev.compute_units += Number(item.compute_units || 0);
+      byDay.set(key, prev);
+    }
+
+    // Sort days ascending
+    const daysAsc = Array.from(byDay.values()).sort((a, b) => a.day.localeCompare(b.day));
+
+    // Build labels (e.g., "Jan 15") and transform API daily counts into cumulative
+    const labels: string[] = [];
+    const applicationsDaily: number[] = [];
+    const suppliersDaily: number[] = [];
+    const gatewaysDaily: number[] = [];
+    const servicesDaily: number[] = [];
+    // Relays and Compute Units (daily sums)
+    const relaysDaily: number[] = [];
+    const computeUnitsDaily: number[] = [];
+    for (const dayItem of daysAsc) {
+      const d = new Date(dayItem.day + 'T00:00:00Z');
+      labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      applicationsDaily.push(Number(dayItem.applications || 0));
+      suppliersDaily.push(Number(dayItem.suppliers || 0));
+      gatewaysDaily.push(Number(dayItem.gateways || 0));
+      servicesDaily.push(Number(dayItem.services || 0));
+      relaysDaily.push(Number(dayItem.relays || 0));
+      computeUnitsDaily.push(Number(dayItem.compute_units || 0));
+    }
+
+    // Current totals from node
+    const totalApps = Number(networkStats.value.applications || 0);
+    const totalSuppliers = Number(networkStats.value.suppliers || 0);
+    const totalGateways = Number(networkStats.value.gateways || 0);
+    const totalServices = Number(networkStats.value.services || 0);
+
+    // Helper to build cumulative series that ends at current total
+    const toCumulative = (daily: number[], currentTotal: number) => {
+      const sumDaily = daily.reduce((a, b) => a + (Number(b) || 0), 0);
+      let startValue = Math.max(0, currentTotal - sumDaily);
+      const cumulative: number[] = [];
+      for (let i = 0; i < daily.length; i++) {
+        startValue += (Number(daily[i]) || 0);
+        cumulative.push(startValue);
+      }
+      return cumulative;
+    };
+
+    const applications = toCumulative(applicationsDaily, totalApps);
+    const suppliers = toCumulative(suppliersDaily, totalSuppliers);
+    const gateways = toCumulative(gatewaysDaily, totalGateways);
+    const services = toCumulative(servicesDaily, totalServices);
+
+    // Update chart options and series
+    chartOptions.value = {
+      ...chartOptions.value,
+      xaxis: {
+        ...chartOptions.value.xaxis,
+        categories: labels as never[],
+        labels: {
+          ...chartOptions.value.xaxis.labels,
+          formatter: function (value: string) { return value; }
+        }
+      }
+    };
+
+    historicalData.value.series[0].data = applications as never[];
+    historicalData.value.series[1].data = suppliers as never[];
+    historicalData.value.series[2].data = gateways as never[];
+    historicalData.value.series[3].data = services as never[];
+    historicalData.value.series[4].data = relaysDaily as never[];
+    historicalData.value.series[5].data = computeUnitsDaily as never[];
+  } catch (e) {
+    // Propagate to allow caller to fallback
+    throw e;
   }
 }
 
@@ -1213,7 +1371,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
         <div class="text-lg font-semibold text-main">Network Statistics</div>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+      <div class="grid grid-cols-2 md:grid-cols-8 gap-4">
         <!-- Total Wallets -->
         <div
           class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-2 rounded-xl hover:bg-base-300 transition-all duration-200 items-center justify-center w-full">
@@ -1273,6 +1431,29 @@ watch(() => base.blocktime, (newVal, oldVal) => {
           </div>
         </div>
 
+        <!-- Relays (24h) -->
+        <div
+          class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-2 rounded-xl hover:bg-base-300 transition-all duration-200 items-center justify-center w-full">
+          <div class="flex mb-5 items-center">
+            <Icon icon="mdi:network" class="text-sm mr-1 text-secondary" />
+            <span class="text-xs text-secondary">Relays (24h)</span>
+          </div>
+          <div class="text-xl text-main flex items-center justify-center font-medium">
+            {{ formatWithCommas(totalRelays24h) }}
+          </div>
+        </div>
+
+        <!-- Compute Units (24h) -->
+        <div
+          class="flex flex-col dark:bg-base-100 bg-base-200 py-4 px-2 rounded-xl hover:bg-base-300 transition-all duration-200 items-center justify-center w-full">
+          <div class="flex mb-5 items-center">
+            <Icon icon="mdi:cpu-64-bit" class="text-sm mr-1 text-secondary" />
+            <span class="text-xs text-secondary">Compute Units (24h)</span>
+          </div>
+          <div class="text-xl text-main flex items-center justify-center font-medium">
+            {{ formatCompact(totalComputeUnits24h) }}
+          </div>
+        </div>
 
         <!-- Active Validators -->
         <div

@@ -56,7 +56,7 @@
     "btn_withdraw": "Withdraw",
     "btn_unbond": "Unbond",
     "validator": "Validator",
-    "delegation": "Staking",
+    "delegation": "Delegation",
     "delegator": "Delegator",
     "rewards": "Rewards",
     "action": "Action",
@@ -197,6 +197,7 @@
   },
   "staking": {
     "inflation": "Inflation",
+    "delegations": "Delegations",
     "unbonding_time": "Unstaking Time",
     "double_sign_slashing": "Double Sign Slashing",
     "downtime_slashing": "Downtime Slashing",

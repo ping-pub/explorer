@@ -40,7 +40,7 @@ const voterStatusMap: Record<string, string> = {
 const proposalInfo = ref();
 
 function metaItem(metadata: string|undefined): { title: string; summary: string } {
-  return metadata ? JSON.parse(metadata) : {}
+  return metadata ? JSON.parse(metadata) : { title: '', summary: '' } as { title: string; summary: string }
 }
 
 </script>
@@ -48,7 +48,7 @@ function metaItem(metadata: string|undefined): { title: string; summary: string 
   <div class="bg-white dark:bg-[#28334e] rounded text-sm">
     <table class="table-compact w-full table-fixed hidden lg:!table">
       <tbody>
-        <tr v-for="(item, index) in proposals?.proposals" :key="index">
+        <tr v-for="(item, index) in proposals?.proposals" :key="index" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
           <td class="px-4 w-20">
             <label
               for="proposal-detail-modal"

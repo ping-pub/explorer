@@ -30,7 +30,7 @@ export const useIndexModule = defineStore('module-index', {
   state: () => {
     return {
       days: 14,
-      tickerIndex: 0,
+      tickerIndex: 1,
       coinInfo: {
         name: '',
         symbol: '',

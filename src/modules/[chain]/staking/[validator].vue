@@ -37,6 +37,8 @@ const identity = ref('');
 const rewards = ref([] as Coin[] | undefined);
 const commission = ref([] as Coin[] | undefined);
 const delegations = ref({} as PaginatedDelegations)
+const delegationsPage = ref(1)
+const eventsPage = ref(1)
 const addresses = ref(
   {} as {
     account: string;
@@ -160,7 +162,7 @@ onMounted(() => {
 
     // Disable delegations due to its bad performance
     // Comment out the following code if you want to enable it
-    // pageload(1)
+    pageload(1)
 
   }
 });
@@ -190,7 +192,8 @@ const tipMsg = computed(() => {
 
 function pageload(p: number) {
   page.setPage(p);
-  page.limit = 10;
+  page.limit = 6;
+  delegationsPage.value = p;
 
   blockchain.rpc.getStakingValidatorsDelegations(validator, page).then(res => {
     delegations.value = res
@@ -213,6 +216,7 @@ function loadPowerEvents(p: number, type: EventType) {
   blockchain.rpc.getTxs("?order_by=2&query={type}.validator='{validator}'", { type: selectedEventType.value, validator }, page).then(res => {
     events.value = res
   })
+  eventsPage.value = p
 }
 
 function pagePowerEvents(page: number) {
@@ -220,6 +224,25 @@ function pagePowerEvents(page: number) {
 }
 
 pagePowerEvents(1)
+
+const totalDelegationsPages = computed(() => {
+  const total = Number(delegations.value.pagination?.total || 0)
+  return total > 0 ? Math.ceil(total / 6) : 0
+})
+const totalEventsPages = computed(() => {
+  const total = Number(events.value.pagination?.total || 0)
+  return total > 0 ? Math.ceil(total / 6) : 0
+})
+
+function goToFirstDelegations() { if (delegationsPage.value !== 1) pageload(1) }
+function goToLastDelegations() { if (delegationsPage.value !== totalDelegationsPages.value) pageload(totalDelegationsPages.value) }
+function prevDelegations() { if (delegationsPage.value > 1) pageload(delegationsPage.value - 1) }
+function nextDelegations() { if (delegationsPage.value < totalDelegationsPages.value) pageload(delegationsPage.value + 1) }
+
+function goToFirstEvents() { if (eventsPage.value !== 1) pagePowerEvents(1) }
+function goToLastEvents() { if (eventsPage.value !== totalEventsPages.value) pagePowerEvents(totalEventsPages.value) }
+function prevEvents() { if (eventsPage.value > 1) pagePowerEvents(eventsPage.value - 1) }
+function nextEvents() { if (eventsPage.value < totalEventsPages.value) pagePowerEvents(eventsPage.value + 1) }
 
 function mapEvents(events: { type: string, attributes: { key: string, value: string }[] }[]) {
   const attributes = events
@@ -358,7 +381,7 @@ function getTransactionFee(tx: any): string {
           </div>
           <div>
             <div class="text-sm font-semibold dark:text-main text-[#64748B]">{{ $t('staking.total_bonded') }}</div>
-            <div class="text-3xl font-bold mt-2">{{format.formatToken2({amount: v.tokens, denom: staking.params.bond_denom, }) }}</div>
+            <div class="text-3xl font-bold mt-2">{{format.formatToken({amount: v.tokens, denom: selfBonded.balance?.denom, }) }}</div>
           </div>
         </div>
       </div>
@@ -563,86 +586,108 @@ function getTransactionFee(tx: any): string {
     </div>
 
     <!-- Delegations Table (if enabled) -->
-    <div v-if="delegations.delegation_responses" class="bg-base-100 rounded-lg my-4">
-      <div class="flex items-center justify-between mb-4">
-        <div class="text-lg font-semibold text-main">{{ $t('account.delegations') }}</div>
-        <div class="text-sm text-gray-500">
-          {{ delegations.delegation_responses?.length || 0 }} / {{ delegations.pagination?.total || 0 }}
-        </div>
+    <div v-if="delegations.delegation_responses" class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md my-4">
+      <div class="text-lg font-semibold text-main dark:bg-base-100 bg-base-200 px-4 py-2">
+        <h2 class="text-2xl font-semibold text-[#171C1F] dark:text-[#ffffff]">
+          {{ $t('staking.delegations') }}
+        </h2>
       </div>
-
-      <div class="rounded overflow-auto">
-        <table class="table validatore-table w-full">
-          <thead>
-            <th class="text-left pl-4 bg-base-200" style="position: relative; z-index: 2">
-              {{ $t('account.delegator') }}
-            </th>
-            <th class="text-left pl-4 bg-base-200">{{ $t('account.delegation') }}</th>
+      <div class="validator-table-wrapper validator-table-scroll rounded-xl">
+        <table class="table table-compact w-full">
+          <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
+            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+              <th class="">{{ $t('account.delegator') }}</th>
+              <th class="">{{ $t('account.delegation') }}</th>
+            </tr>
           </thead>
-          <tbody>
-            <tr v-for="{ balance, delegation } in delegations.delegation_responses">
-              <td class="text-primary font-medium">
-                {{ delegation.delegator_address }}
+          <tbody class="bg-base-100 relative">
+            <tr v-for="{ balance, delegation } in delegations.delegation_responses" :key="delegation.delegator_address" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
+              <td class="py-3">
+                <RouterLink :to="`/${props.chain}/account/${delegation.delegator_address}`" class="dark:text-primary text-[#09279F] dark:invert">
+                  {{ delegation.delegator_address }}
+                </RouterLink>
               </td>
-              <td class="truncate text-primary font-bold">
+              <td class="py-3">
                 {{ format.formatToken(balance) }}
               </td>
             </tr>
           </tbody>
         </table>
-        <PaginationBar :total="delegations.pagination?.total" :limit="page.limit" :callback="pageload" />
+      </div>
+      <div v-if="Number(delegations.pagination?.total || 0) > 0" class="flex justify-between items-center gap-4 my-6 px-6">
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-600">Showing {{ ((delegationsPage - 1) * 6) + 1 }} to {{ Math.min(delegationsPage * 6, Number(delegations.pagination?.total || 0)) }} of {{ Number(delegations.pagination?.total || 0) }}</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+            @click="goToFirstDelegations" :disabled="delegationsPage === 1 || totalDelegationsPages === 0">First</button>
+          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+            @click="prevDelegations" :disabled="delegationsPage === 1 || totalDelegationsPages === 0">&lt;</button>
+          <span class="text-xs px-2">Page {{ delegationsPage }} of {{ totalDelegationsPages }}</span>
+          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+            @click="nextDelegations" :disabled="delegationsPage === totalDelegationsPages || totalDelegationsPages === 0">&gt;</button>
+          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+            @click="goToLastDelegations" :disabled="delegationsPage === totalDelegationsPages || totalDelegationsPages === 0">Last</button>
+        </div>
       </div>
     </div>
 
     <!-- Transactions Table -->
-    <div class="rounded-xl border dark:border-gray-700 mb-4 overflow-auto">
-      <div class="text-lg font-semibold text-main mb-4 dark:bg-base-100 bg-base-200 px-4 py-2">
+    <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">
+      <div class="text-lg font-semibold text-main dark:bg-base-100 bg-base-200 px-4 py-2">
         <h2 class="text-2xl font-semibold text-[#171C1F] dark:text-[#ffffff]">
           {{ $t('account.transactions') }}
         </h2>
       </div>
-      <div class="rounded overflow-auto">
-        <table class="table validatore-table w-full">
-          <thead>
-            <th class="text-left pl-4 dark:bg-base-200 bg-[#ffffff]" style="position: relative; z-index: 2">
-              {{ $t('account.height') }}
-            </th>
-            <th class="text-left pl-4 dark:bg-base-200 bg-[#ffffff]">{{ $t('account.hash') }}</th>
-            <th class="text-left pl-4 dark:bg-base-200 bg-[#ffffff]">{{ $t('account.signer') }}</th>
-            <th class="text-left pl-4 dark:bg-base-200 bg-[#ffffff]">{{ $t('account.amount') }}</th>
-            <th class="text-left pl-4 dark:bg-base-200 bg-[#ffffff]">{{ $t('block.fees') }}</th>
-            <th class="text-left pl-4 dark:bg-base-200 bg-[#ffffff]" width="25%">{{ $t('account.messages') }}</th>
-            <th class="text-left pl-4 dark:bg-base-200 bg-[#ffffff]">{{ $t('account.time') }}</th>
+      <div class="validator-table-wrapper validator-table-scroll rounded-xl">
+        <table class="table table-compact w-full">
+          <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
+            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+              <th class="">{{ $t('account.height') }}</th>
+              <th class="">{{ $t('account.hash') }}</th>
+              <th class="">{{ $t('account.signer') }}</th>
+              <th class="">{{ $t('account.amount') }}</th>
+              <th class="">{{ $t('block.fees') }}</th>
+              <th class="" width="25%">{{ $t('account.messages') }}</th>
+              <th class="">{{ $t('account.time') }}</th>
+            </tr>
           </thead>
-          <tbody>
-            <tr v-for="(item, i) in txs.tx_responses">
-              <td class="dark:text-primary text-[#153cd8;] font-medium"> <RouterLink :to="`/${props.chain}/blocks/${item.height}`">{{item.height}}</RouterLink> </td>
-              <td class="truncate dark:text-primary text-[#153cd8]" style="max-width: 120px">
-                <RouterLink :to="`/${props.chain}/tx/${item.txhash}`">
+          <tbody class="bg-base-100 relative">
+            <tr v-for="(item, i) in txs.tx_responses" :key="i" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
+              <td class="text-sm py-3">
+                <RouterLink :to="`/${props.chain}/blocks/${item.height}`" class="dark:text-primary text-[#09279F] dark:invert">
+                  {{ item.height }}
+                </RouterLink>
+              </td>
+              <td class="truncate py-3" style="max-width: 200px">
+                <RouterLink :to="`/${props.chain}/tx/${item.txhash}`" class="dark:text-primary text-[#09279F] dark:invert">
                   {{ item.txhash }}
                 </RouterLink>
               </td>
-              <td class="truncate dark:text-primary text-[#153cd8]" style="max-width: 120px">
+              <td class="truncate py-3" style="max-width: 200px">
                 <RouterLink v-if="getSignerAddress(item.tx?.body?.messages?.[0], item) !== '-'"
-                  :to="`/${props.chain}/account/${getSignerAddress(item.tx?.body?.messages?.[0], item)}`">
+                  :to="`/${props.chain}/account/${getSignerAddress(item.tx?.body?.messages?.[0], item)}`" class="dark:text-primary text-[#09279F] dark:invert">
                   {{ getSignerAddress(item.tx?.body?.messages?.[0], item) }}
                 </RouterLink>
                 <span v-else>-</span>
               </td>
-              <td class="truncate" style="max-width: 120px">
+              <td class="py-3">
                 {{ getTransactionAmount(item.tx?.body?.messages?.[0]) }}
               </td>
-              <td class="truncate" style="max-width: 120px">
+              <td class="py-3">
                 {{ getTransactionFee(item.tx) }}
               </td>
-              <td>
+              <td class="py-3">
                 <div class="flex items-center">
-                  <span class="mr-2 truncate">{{format.messages(item.tx.body.messages)}}</span>
-                  <Icon v-if="item.code === 0" icon="mdi-check" class="text-[#60BC29]" />
-                  <Icon v-else icon="mdi-multiply" class="text-no" />
+                  <span class="mr-2 truncate">{{ format.messages(item.tx.body.messages) }}</span>
+                  <Icon v-if="item.code === 0" icon="mdi-check" class="text-[#60BC29] text-lg" />
+                  <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
                 </div>
               </td>
-              <td>{{ format.toDay(item.timestamp, 'from') }}</td>
+              <td class="py-3">
+                {{ format.toLocaleDate(item.timestamp) }}
+                <span class="text-xs">({{ format.toDay(item.timestamp, 'from') }})</span>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -650,48 +695,68 @@ function getTransactionFee(tx: any): string {
     </div>
 
     <!-- Voting Power Events Table -->
-    <div class="rounded-xl p-4 dark:bg-base-200 bg-[#ffffff] border dark:border-gray-700 my-4">
-      <div class="rounded overflow-auto dark:bg-base-200 bg-[#ffffff]">
-        <table class="table validatore-table w-full">
-          <thead>
-            <th class="text-left pl-4 dark:bg-base-200 bg-[#ffffff]">{{ $t('account.delegator') }}</th>
-            <th class="text-left pl-4 dark:bg-base-200 bg-[#ffffff]">{{ $t('account.amount') }}</th>
-            <th class="text-left pl-4 dark:bg-base-200 bg-[#ffffff]">{{ $t('account.height') }}</th>
-            <th class="text-center pl-4 dark:bg-base-200 bg-[#ffffff]">{{ $t('account.time') }}</th>
+    <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md my-4">
+      <div class="text-lg font-semibold text-main dark:bg-base-100 bg-base-200 px-4 py-2">
+        <h2 class="text-2xl font-semibold text-[#171C1F] dark:text-[#ffffff]">
+          {{ $t('staking.delegations') }}
+        </h2>
+      </div>
+      <div class="validator-table-wrapper validator-table-scroll rounded-xl">
+        <table class="table table-compact w-full">
+          <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
+            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+              <th class="">{{ $t('account.delegator') }}</th>
+              <th class="">{{ $t('account.amount') }}</th>
+              <th class="">{{ $t('account.height') }}</th>
+              <th class="">{{ $t('account.time') }}</th>
+            </tr>
           </thead>
-          <tbody>
-            <tr v-for="(item, i) in events.tx_responses">
-              <td class="pr-2 truncate dark:text-primary text-[#153cd8]" style="max-width: 250px">
-                <RouterLink v-for="d in mapDelegators(item.tx?.body?.messages)" :to="`/${props.chain}/account/${d}`">
-                  {{ d }}
-                </RouterLink>
-              </td>
-              <td>
-                <div class="flex items-center" :class="{
-                  'text-[#60BC29]': selectedEventType === EventType.Delegate,
-                  'text-no': selectedEventType === EventType.Unbond,
-                }">
-                  <RouterLink :to="`/${props.chain}/tx/${item.txhash}`"> <span class="mr-2">{{ (selectedEventType === EventType.Delegate ? '+' : '-') }} {{mapEvents(item.events)}}</span> </RouterLink>
-
-                  <Icon v-if="item.code === 0" icon="mdi-check" class="text-[#60BC29]" />
-                  <Icon v-else icon="mdi-multiply" class="text-no" />
+          <tbody class="bg-base-100 relative">
+            <tr v-for="(item, i) in events.tx_responses" :key="i" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
+              <td class="py-3">
+                <div class="truncate" style="max-width: 250px">
+                  <RouterLink v-for="d in mapDelegators(item.tx?.body?.messages)" :key="d" :to="`/${props.chain}/account/${d}`" class="dark:text-primary text-[#09279F] dark:invert">
+                    {{ d }}
+                  </RouterLink>
                 </div>
               </td>
-              <td>
-                <RouterLink class="dark:text-primary text-[#153cd8] font-medium block" :to="`/${props.chain}/blocks/${item.height}`">
+              <td class="py-3">
+                <div class="flex items-center" :class="{ 'text-[#60BC29]': selectedEventType === EventType.Delegate, 'text-error': selectedEventType === EventType.Unbond }">
+                  <RouterLink :to="`/${props.chain}/tx/${item.txhash}`" class="dark:text-primary text-inherit">
+                    <span class="mr-2">{{ (selectedEventType === EventType.Delegate ? '+' : '-') }} {{ mapEvents(item.events) }}</span>
+                  </RouterLink>
+                  <Icon v-if="item.code === 0" icon="mdi-check" class="text-[#60BC29] text-lg" />
+                  <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
+                </div>
+              </td>
+              <td class="py-3">
+                <RouterLink class="dark:text-primary text-[#09279F] dark:invert" :to="`/${props.chain}/blocks/${item.height}`">
                   {{ item.height }}
                 </RouterLink>
-                <!-- <span class="text-xs text-gray-500">{{ format.toDay(item.timestamp, 'from') }}</span> -->
               </td>
-              <td>
-                <span class="text-xs dark:text-gray-500 text-[#171C1F]">
-                  {{ format.toDay(item.timestamp, 'from') }}
-                </span>
+              <td class="py-3">
+                {{ format.toLocaleDate(item.timestamp) }}
+                <span class="text-xs">({{ format.toDay(item.timestamp, 'from') }})</span>
               </td>
             </tr>
           </tbody>
         </table>
-        <PaginationBar :total="events.pagination?.total" :limit="page.limit" :callback="pagePowerEvents" />
+      </div>
+      <div v-if="Number(events.pagination?.total || 0) > 0" class="flex justify-between items-center gap-4 my-6 px-6">
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-600">Showing {{ ((eventsPage - 1) * 5) + 1 }} to {{ Math.min(eventsPage * 5, Number(events.pagination?.total || 0)) }} of {{ Number(events.pagination?.total || 0) }}</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+            @click="goToFirstEvents" :disabled="eventsPage === 1 || totalEventsPages === 0">First</button>
+          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+            @click="prevEvents" :disabled="eventsPage === 1 || totalEventsPages === 0">&lt;</button>
+          <span class="text-xs px-2">Page {{ eventsPage }} of {{ totalEventsPages }}</span>
+          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+            @click="nextEvents" :disabled="eventsPage === totalEventsPages || totalEventsPages === 0">&gt;</button>
+          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+            @click="goToLastEvents" :disabled="eventsPage === totalEventsPages || totalEventsPages === 0">Last</button>
+        </div>
       </div>
     </div>
 
@@ -718,4 +783,30 @@ function getTransactionFee(tx: any): string {
   padding: 0.6rem 1rem;
   font-size: 14px;
 }
+.validatore-table.table {
+  height: 320px;
+  max-height: 320px;
+}
+
+/* Fixed-height scrollable table container for validator tables */
+.validator-table-wrapper {
+  height: 320px;
+  max-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+.validator-table-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+.validator-table-scroll table {
+  margin-bottom: 0;
+}
+.validator-table-scroll thead {
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 1;
+}
+
 </style>

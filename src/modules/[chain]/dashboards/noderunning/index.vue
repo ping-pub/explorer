@@ -367,15 +367,15 @@ onMounted(() => {
       <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">
         <div class="bg-base-200 rounded-md overflow-auto">
           <table class="table table-compact w-full">
-            <thead class="sticky top-0 bg-white">
+            <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
               <tr class="border-b-[0px]">
-                <th class="bg-white dark:bg-base-200">Rank</th>
-                <th class="bg-white dark:bg-base-200">Service</th>
-                <th class="bg-white dark:bg-base-200">Supplier Address</th>
-                <th class="bg-white dark:bg-base-200">Application Address</th>
-                <th class="bg-white dark:bg-base-200">Rewards (upokt)</th>
-                <th class="bg-white dark:bg-base-200">Efficiency</th>
-                <th class="bg-white dark:bg-base-200">Relays</th>
+                <th class="">Rank</th>
+                <th class="">Service</th>
+                <th class="">Supplier Address</th>
+                <th class="">Application Address</th>
+                <th class="">Rewards (upokt)</th>
+                <th class="">Efficiency</th>
+                <th class="">Relays</th>
               </tr>
             </thead>
             <tbody class="bg-base-100 relative">

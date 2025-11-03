@@ -10,7 +10,7 @@ export interface Validator {
     "description": {
         "moniker": string,
         "identity": string,
-        "website": string,
+        "website"?: string,
         "security_contact"?: string,
         "details"?: string
     },
