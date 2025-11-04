@@ -16,10 +16,10 @@ import { onMounted, ref, watch, nextTick, onBeforeUnmount } from 'vue';
 import { useIndexModule, colorMap } from './indexStore';
 import { computed } from '@vue/reactivity';
 
-import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
+// import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
 import ProposalListItem from '@/components/ProposalListItem.vue';
 import ArrayObjectElement from '@/components/dynamic/ArrayObjectElement.vue'
-import AdBanner from '@/components/ad/AdBanner.vue';
+// import AdBanner from '@/components/ad/AdBanner.vue';
 import ApexCharts from 'vue3-apexcharts';
 import { PageRequest } from '@/types';
 
@@ -29,13 +29,13 @@ const blockchain = useBlockchain();
 const store = useIndexModule();
 const walletStore = useWalletStore();
 const format = useFormatter();
-const dialog = useTxDialog();
-const stakingStore = useStakingStore();
+// const dialog = useTxDialog();
+// const stakingStore = useStakingStore();
 const paramStore = useParamStore()
 const base = useBaseStore()
-const coinInfo = computed(() => {
-  return store.coinInfo;
-});
+// const coinInfo = computed(() => {
+//   return store.coinInfo;
+// });
 
 const transactionStats = ref({
   total: 0,
@@ -489,94 +489,182 @@ const historicalData = ref({
   ]
 });
 
-const chartOptions = ref({
-  chart: {
-    type: 'area',
-    height: 280,
-    toolbar: {
-      show: false
-    },
-    zoom: {
-      enabled: false
-    }
-  },
-  colors: ['#FFB206', '#09279F', '#5E9AE4', '#60BC29', '#A855F7', '#EF4444'],
-  dataLabels: {
-    enabled: false
-  },
-  stroke: {
-    curve: 'smooth',
-    width: [2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
-    dashArray: [0, 0, 0, 0, 4, 4]
-  },
-  fill: {
-    type: 'solid',
-    opacity: [0.15, 0.15, 0.15, 0.15, 0.08, 0.08]
-  },
-  grid: {
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    row: {
-      colors: ['transparent'],
-      opacity: 0.5
-    }
-  },
-  markers: {
-    size: 2,
-    strokeWidth: 0,
-    hover: {
-      size: 5
-    }
-  },
-  xaxis: {
-    categories: [],
-    type: 'category',
-    labels: {
-      style: {
-        colors: 'rgb(116, 109, 105)'
-      },
-      formatter: function (value: string) {
-        return value;
-      }
-    },
-    axisBorder: {
-      show: false
-    },
-    axisTicks: {
-      show: false
-    }
-  },
-  yaxis: [
-    { labels: { style: { colors: 'rgb(116, 109, 105)' } }, title: { text: 'Entities' } },
-    { opposite: true, labels: { style: { colors: 'rgb(116, 109, 105)' }, formatter: function (value: number) {
-      if (value >= 1_000_000_000) return (value / 1_000_000_000).toFixed(1) + 'B';
-      if (value >= 1_000_000) return (value / 1_000_000).toFixed(1) + 'M';
-      if (value >= 1_000) return (value / 1_000).toFixed(1) + 'K';
-      return String(value);
-    } }, title: { text: 'Relays / Compute Units' } }
-  ],
-  legend: {
-    show: true,
-    position: 'bottom',
-    horizontalAlign: 'left',
-    labels: {
-      colors: 'rgb(116, 109, 105)'
-    }
-  },
-  tooltip: {
-    theme: 'dark',
-    shared: true,
-    intersect: false,
-    y: {
-      formatter: function (value: number, opts: any) {
-        const i = opts?.seriesIndex ?? 0;
-        // Series 0-3 are entities; 4-5 are relays/CU
-        if (i <= 3) {
-          return `Entities: ${formatWithCommas(value)}`;
-        }
-        return `Relays / Compute Units: ${formatCompact(value)}`;
-      }
-    }
+// Chart state for Network Growth
+const networkGrowthTab = ref<'core-services' | 'performance'>('core-services');
+const networkGrowthChartType = ref<'bar' | 'area' | 'line'>('bar');
+const chartCategories = ref<string[]>([]);
+
+// Computed series based on active tab
+const activeNetworkGrowthSeries = computed(() => {
+  if (!historicalData.value.series || historicalData.value.series.length === 0) {
+    return [];
   }
+  
+  if (networkGrowthTab.value === 'core-services') {
+    // Return Core Services series (Applications, Suppliers, Gateways, Services)
+    const series = historicalData.value.series.slice(0, 4);
+    return series.filter(s => s.data && s.data.length > 0).map(s => ({
+      ...s,
+      yAxisIndex: 0 // Use first y-axis
+    }));
+  } else {
+    // Return Performance series (Relays, Compute Units) with separate y-axes
+    const series = historicalData.value.series.slice(4, 6);
+    return series.filter(s => s.data && s.data.length > 0).map((s, index) => ({
+      ...s,
+      yAxisIndex: index === 0 ? 0 : 1 // Relays (index 0) -> yAxis 0, Compute Units (index 1) -> yAxis 1
+    }));
+  }
+});
+
+// Computed chart options based on chart type and active tab
+const chartOptions = computed(() => {
+  const isCoreServices = networkGrowthTab.value === 'core-services';
+  const chartType = networkGrowthChartType.value;
+  
+  // Base colors - Core Services: first 4, Performance: last 2
+  const colors = isCoreServices 
+    ? ['#FFB206', '#09279F', '#5E9AE4', '#60BC29']
+    : ['#A855F7', '#EF4444'];
+  
+  // Stroke configuration based on chart type
+  const strokeConfig = chartType === 'bar' 
+    ? { width: 0 } // No stroke for bar charts
+    : {
+        curve: chartType === 'area' ? 'smooth' : 'straight',
+        width: isCoreServices ? [2.5, 2.5, 2.5, 2.5] : [2.5, 2.5],
+        dashArray: isCoreServices ? [0, 0, 0, 0] : [4, 4]
+      };
+  
+  // Fill configuration
+  const fillConfig = chartType === 'bar'
+    ? { opacity: 1, type: 'solid' }
+    : {
+        type: chartType === 'area' ? 'gradient' : 'solid',
+        opacity: isCoreServices ? [0.15, 0.15, 0.15, 0.15] : [0.08, 0.08],
+        gradient: chartType === 'area' ? {
+          shadeIntensity: 1,
+          opacityFrom: 0.7,
+          opacityTo: 0.3,
+          stops: [0, 90, 100]
+        } : undefined
+      };
+  
+  // Y-axis configuration
+  const yaxisConfig = isCoreServices
+    ? [{ 
+        labels: { style: { colors: 'rgb(116, 109, 105)' } }, 
+        title: { text: 'Entities' } 
+      }]
+    : [
+        // Left y-axis for Relays (millions scale)
+        { 
+          labels: { 
+            style: { colors: 'rgb(116, 109, 105)' },
+            formatter: function (value: number) {
+              if (value >= 1_000_000_000) return (value / 1_000_000_000).toFixed(1) + 'B';
+              if (value >= 1_000_000) return (value / 1_000_000).toFixed(1) + 'M';
+              if (value >= 1_000) return (value / 1_000).toFixed(1) + 'K';
+              return String(value);
+            }
+          }, 
+          title: { text: 'Relays', style: { color: '#A855F7' } },
+          opposite: false
+        },
+        // Right y-axis for Compute Units (billions scale)
+        { 
+          labels: { 
+            style: { colors: 'rgb(116, 109, 105)' },
+            formatter: function (value: number) {
+              if (value >= 1_000_000_000) return (value / 1_000_000_000).toFixed(1) + 'B';
+              if (value >= 1_000_000) return (value / 1_000_000).toFixed(1) + 'M';
+              if (value >= 1_000) return (value / 1_000).toFixed(1) + 'K';
+              return String(value);
+            }
+          }, 
+          title: { text: 'Compute Units', style: { color: '#EF4444' } },
+          opposite: true
+        }
+      ];
+  
+  return {
+    chart: {
+      type: chartType,
+      height: 280,
+      toolbar: {
+        show: false
+      },
+      zoom: {
+        enabled: false
+      },
+      animations: {
+        enabled: true,
+        easing: 'easeinout',
+        speed: 800
+      }
+    },
+    colors: colors,
+    dataLabels: {
+      enabled: false
+    },
+    stroke: strokeConfig,
+    fill: fillConfig,
+    grid: {
+      borderColor: 'rgba(255, 255, 255, 0.1)',
+      row: {
+        colors: ['transparent'],
+        opacity: 0.5
+      }
+    },
+    markers: chartType === 'bar' ? { size: 0 } : {
+      size: 2,
+      strokeWidth: 0,
+      hover: {
+        size: 5
+      }
+    },
+    xaxis: {
+      categories: chartCategories.value || [],
+      type: 'category',
+      labels: {
+        style: {
+          colors: 'rgb(116, 109, 105)'
+        },
+        formatter: function (value: string) {
+          return value;
+        }
+      },
+      axisBorder: {
+        show: false
+      },
+      axisTicks: {
+        show: false
+      }
+    },
+    yaxis: yaxisConfig,
+    legend: {
+      show: true,
+      position: 'bottom',
+      horizontalAlign: 'left',
+      labels: {
+        colors: 'rgb(116, 109, 105)'
+      }
+    },
+    tooltip: {
+      theme: 'dark',
+      shared: true,
+      intersect: false,
+      y: {
+        formatter: function (value: number, opts: any) {
+          const i = opts?.seriesIndex ?? 0;
+          if (isCoreServices) {
+            return `Entities: ${formatWithCommas(value)}`;
+          }
+          return `Relays / Compute Units: ${formatCompact(value)}`;
+        }
+      }
+    }
+  };
 });
 
 // Add a cache expiration tracking
@@ -703,18 +791,8 @@ async function loadNetworkGrowthTimeSeries(windowDays: number = 7) {
     const gateways = toCumulative(gatewaysDaily, totalGateways);
     const services = toCumulative(servicesDaily, totalServices);
 
-    // Update chart options and series
-    chartOptions.value = {
-      ...chartOptions.value,
-      xaxis: {
-        ...chartOptions.value.xaxis,
-        categories: labels as never[],
-        labels: {
-          ...chartOptions.value.xaxis.labels,
-          formatter: function (value: string) { return value; }
-        }
-      }
-    };
+    // Update chart categories and series
+    chartCategories.value = labels;
 
     historicalData.value.series[0].data = applications as never[];
     historicalData.value.series[1].data = suppliers as never[];
@@ -741,8 +819,8 @@ function generateHistoricalData() {
     labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
   }
 
-  // Set the categories directly in the chartOptions
-  chartOptions.value.xaxis.categories = labels as never[];
+  // Set the categories
+  chartCategories.value = labels;
 
   // Generate more visible data with larger values
   const appData = [];
@@ -793,21 +871,6 @@ function generateHistoricalData() {
   historicalData.value.series[1].data = supplierData as never[];
   historicalData.value.series[2].data = gatewayData as never[];
   historicalData.value.series[3].data = serviceData as never[];
-
-  // Force chart to update by creating a new object
-  chartOptions.value = {
-    ...chartOptions.value,
-    xaxis: {
-      ...chartOptions.value.xaxis,
-      categories: labels as never[],
-      labels: {
-        ...chartOptions.value.xaxis.labels,
-        formatter: function (value: string) {
-          return value;
-        }
-      }
-    }
-  };
 }
 
 async function loadTransactionHistory() {
@@ -1492,12 +1555,81 @@ watch(() => base.blocktime, (newVal, oldVal) => {
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
       <!-- Network Growth Chart -->
       <div class="dark:bg-base-100 bg-base-200 pt-3 rounded-lg border-[3px] border-solid border-base-200 dark:border-base-100">
-        <div class="flex items-center mb-4">
-          <div class="text-lg font-semibold text-main ml-5">Network Growth (7 Days)</div>
+        <div class="flex items-center justify-between mb-1 px-5 gap-4">
+          <div class="flex flex-1 items-center gap-4 justify-between">
+            <div class="flex text-lg font-semibold text-main">Network Growth (7 Days)</div>
+            <!-- Tabs -->
+            <div class="flex tabs tabs-boxed bg-base-200 dark:bg-base-300">
+              <button
+                @click="networkGrowthTab = 'core-services'"
+                :class="[
+                  'tab',
+                  networkGrowthTab === 'core-services' ? 'tab-active bg-[#09279F] text-white' : ''
+                ]">
+                Core Services
+              </button>
+              <button
+                @click="networkGrowthTab = 'performance'"
+                :class="[
+                  'tab',
+                  networkGrowthTab === 'performance' ? 'tab-active bg-[#09279F] text-white' : ''
+                ]">
+                Performance
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md">
+        
+        <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md relative">
           <div class="h-80">
-            <ApexCharts type="bar" height="280" :options="chartOptions" :series="historicalData.series" />
+            <ApexCharts 
+              v-if="chartCategories.length > 0 && activeNetworkGrowthSeries.length > 0"
+              :key="`${networkGrowthTab}-${networkGrowthChartType}`"
+              :type="networkGrowthChartType" 
+              height="280" 
+              :options="chartOptions" 
+              :series="activeNetworkGrowthSeries" 
+            />
+            <div v-else class="flex items-center justify-center h-full">
+              <div class="loading loading-spinner loading-md"></div>
+              <span class="ml-2 text-secondary">Loading chart data...</span>
+            </div>
+          </div>
+          <!-- Chart Type Selector - Bottom Right -->
+          <div class="absolute bottom-2 right-2 tabs tabs-boxed bg-base-200 dark:bg-base-300">
+            <button
+              @click="networkGrowthChartType = 'bar'"
+              :class="[
+                'tab',
+                networkGrowthChartType === 'bar' 
+                  ? 'tab-active bg-[#09279F] text-white' 
+                  : ''
+              ]"
+              title="Bar Chart">
+              <Icon icon="mdi:chart-bar" class="text-sm" />
+            </button>
+            <button
+              @click="networkGrowthChartType = 'area'"
+              :class="[
+                'tab',
+                networkGrowthChartType === 'area' 
+                  ? 'tab-active bg-[#09279F] text-white' 
+                  : ''
+              ]"
+              title="Area Chart">
+              <Icon icon="mdi:chart-areaspline" class="text-sm" />
+            </button>
+            <button
+              @click="networkGrowthChartType = 'line'"
+              :class="[
+                'tab',
+                networkGrowthChartType === 'line' 
+                  ? 'tab-active bg-[#09279F] text-white' 
+                  : ''
+              ]"
+              title="Line Chart">
+              <Icon icon="mdi:chart-line" class="text-sm" />
+            </button>
           </div>
         </div>
       </div>

@@ -48,7 +48,7 @@ const apiChainName = getApiChainName(current)
 
 // 🔹 Pagination state
 const currentPage = ref(1)
-const itemsPerPage = ref(10)
+const itemsPerPage = ref(25)
 const totalTransactions = ref(0)
 const totalPages = ref(0)
 const transactions = ref<ApiTransaction[]>([])

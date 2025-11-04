@@ -16,7 +16,7 @@ const pageRequest = ref(new PageRequest())
 const pageResponse = ref({} as Pagination)
 
 const currentPage = ref(1)
-const itemsPerPage = ref(10)
+const itemsPerPage = ref(25)
 
 // ✅ Status text
 const value = ref('stake')

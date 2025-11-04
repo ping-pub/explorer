@@ -784,13 +784,11 @@ function getTransactionFee(tx: any): string {
   font-size: 14px;
 }
 .validatore-table.table {
-  height: 320px;
   max-height: 320px;
 }
 
 /* Fixed-height scrollable table container for validator tables */
 .validator-table-wrapper {
-  height: 320px;
   max-height: 320px;
   display: flex;
   flex-direction: column;

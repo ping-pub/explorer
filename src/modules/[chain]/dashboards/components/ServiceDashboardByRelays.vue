@@ -267,11 +267,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff]">
-      {{ $t('module.noderunning') }} 
-    </p>
-
-    <div v-if="loading" class="flex justify-center items-center py-8">
+    <div v-if="loading" class="flex justify-center items-center py-8 mb-[50vh]">
       <div class="loading loading-spinner loading-lg"></div>
       <span class="ml-2">Loading hourly analytics...</span>
     </div>

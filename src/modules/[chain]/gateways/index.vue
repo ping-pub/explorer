@@ -14,7 +14,7 @@
   const pageResponse = ref({} as Pagination);
 
   const currentPage = ref(1);
-  const itemsPerPage = ref(10);
+  const itemsPerPage = ref(25);
 
   // 🔹 Server-side pagination logic
   const totalPages = computed(() => {

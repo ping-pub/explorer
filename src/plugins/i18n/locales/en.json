@@ -1,7 +1,7 @@
 {
   "module": {
     "dashboard": "Dashboard",
-    "noderunning": "Node Running",
+    "noderunners": "Node Runner Performance",
     "blocks": "Blocks",
     "applications": "Applications",
     "gateways": "Gateways",
@@ -309,5 +309,37 @@
     "receive": "Receive",
     "app_versions": "Application Versions",
     "node_info": "Node Information"
+  }
+  ,
+  "validator": {
+    "filters": {
+      "title": "Validator Filters",
+      "domain": "Domain",
+      "owner": "Owner Address",
+      "supplier": "Supplier Operator Address",
+      "dateRange": "Date Range (UTC)",
+      "groupByDay": "Day (fixed)",
+      "apply": "Apply",
+      "cancel": "Cancel"
+    },
+    "kpi": {
+      "totalRelays": "Total Relays (7d)",
+      "claimedCU": "Claimed Compute Units (7d)",
+      "avgEfficiency": "Avg Efficiency (weighted)",
+      "validators": "Validators"
+    },
+    "charts": {
+      "relaysByDay": "Relays by Day",
+      "cuByDay": "Claimed CU by Day"
+    },
+    "table": {
+      "moniker": "Moniker",
+      "domain": "Domain",
+      "relays": "Relays",
+      "cu": "Claimed CU",
+      "avgEff": "Avg Eff",
+      "apps": "Apps",
+      "services": "Services"
+    }
   }
 }
