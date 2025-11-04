@@ -307,7 +307,7 @@ base.$subscribe((_, s) => {
 
 
 const currentPage = ref(1)
-const itemsPerPage = ref(10)
+const itemsPerPage = ref(25)
 
 const totalPages = computed(() =>
   Math.ceil(validatorsList.value.length / itemsPerPage.value)

@@ -1082,7 +1082,7 @@ async function loadAddressPerformance(address: string) {
   </div>
   <!-- Transactions -->
   <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">
-    <h2 class="card-title text-2xl px-4 py-2">{{ $t('account.sent') }}</h2>
+    <h2 class="card-title text-2xl px-4 py-2">Transaction (Sent)</h2>
     <div class="services-table-wrapper services-table-scroll rounded-xl">
       <table class="table table-compact w-full">
         <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
@@ -1135,7 +1135,7 @@ async function loadAddressPerformance(address: string) {
 
   <!-- Received -->
   <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">
-    <h2 class="card-title  px-4 py-2 text-2xl">{{ $t('account.received') }}</h2>
+    <h2 Received class="card-title  px-4 py-2 text-2xl">Transaction (Received)</h2>
     <div class="services-table-wrapper services-table-scroll rounded-xl">
       <table class="table table-compact w-full">
         <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">

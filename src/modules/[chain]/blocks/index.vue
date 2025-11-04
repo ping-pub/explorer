@@ -36,7 +36,7 @@ const apiChainName = computed(() => getApiChainName(chainStore.current?.chainNam
 const blocks = ref<ApiBlockItem[]>([]);
 const loading = ref(false);
 const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const itemsPerPage = ref(25);
 const totalBlocks = ref(0);
 const totalPages = ref(0);
 const pageSizeOptions = [10, 25, 50, 100];

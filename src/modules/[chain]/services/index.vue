@@ -20,7 +20,7 @@ const list = ref<Service[]>([]);
 const miningDifficulties = ref<RelayMiningDifficulty[]>([]);
 
 const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const itemsPerPage = ref(25);
 const loading = ref(false);
 
 const sortDirection = ref<'asc' | 'desc'>('desc');
