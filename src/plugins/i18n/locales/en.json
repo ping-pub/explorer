@@ -1,7 +1,7 @@
 {
   "module": {
     "dashboard": "Dashboard",
-    "noderunners": "Node Runner Performance",
+    "noderunners": "Node Runners",
     "blocks": "Blocks",
     "applications": "Applications",
     "gateways": "Gateways",
