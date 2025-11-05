@@ -312,8 +312,17 @@ const rewardsChartOptions = ref({
   grid: { borderColor: 'rgba(255, 255, 255, 0.1)', row: { colors: ['transparent'], opacity: 0.5 } },
   markers: { size: 0 },
   xaxis: { categories: [] as string[], labels: { style: { colors: 'rgb(116, 109, 105)' }, rotate: -45, rotateAlways: false } },
-  yaxis: { labels: { style: { colors: 'rgb(116, 109, 105)' }, formatter: (v: number) => (v / 1000000).toFixed(1) + 'M' } },
-  tooltip: { theme: 'dark', y: { formatter: (v: number) => v.toLocaleString() + ' upokt' } }
+  yaxis: { 
+    labels: { 
+      style: { colors: 'rgb(116, 109, 105)' }, 
+      formatter: (v: number) => {
+        if (v >= 1000000) return (v / 1000000).toFixed(1) + 'M';
+        if (v >= 1000) return (v / 1000).toFixed(1) + 'K';
+        return v.toFixed(2);
+      }
+    } 
+  },
+  tooltip: { theme: 'dark', y: { formatter: (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 }) + ' POKT' } }
 });
 
 const relaysChartOptions = ref({
@@ -366,7 +375,7 @@ function updateCharts() {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   });
 
-  rewardsChartSeries.value = [{ name: 'Total Rewards (upokt)', data: sorted.map(d => d.total_rewards_upokt) }];
+  rewardsChartSeries.value = [{ name: 'Total Rewards (POKT)', data: sorted.map(d => d.total_rewards_upokt / 1000000) }];
   relaysChartSeries.value = [{ name: 'Total Relays', data: sorted.map(d => d.total_relays) }];
 
   rewardsChartOptions.value.xaxis = {
@@ -438,6 +447,73 @@ const supplierServiceRows = computed(() => {
 
 function getServiceRowSpan(serviceId: string): number {
   return supplierServiceRows.value.filter(r => r.serviceId === serviceId).length
+}
+
+// Grouped services with all revenue share addresses
+interface GroupedServiceRow {
+  serviceId: string
+  jsonRpcUrl: string
+  websocketUrl: string
+  revenueShares: Array<{ address: string; percentage: string }>
+}
+
+const groupedSupplierServices = computed(() => {
+  if (!suppliers.value?.services) return []
+  const grouped: GroupedServiceRow[] = []
+
+  suppliers.value.services.forEach((service: any) => {
+    // Extract JSON_RPC and WEBSOCKET URLs
+    let jsonRpcUrl = ''
+    let websocketUrl = ''
+
+    service.endpoints?.forEach((endpoint: any) => {
+      if (endpoint.rpc_type === 'JSON_RPC') {
+        jsonRpcUrl = endpoint.url || ''
+      } else if (endpoint.rpc_type === 'WEBSOCKET') {
+        websocketUrl = endpoint.url || ''
+      }
+    })
+
+    // Collect all revenue shares
+    const revenueShares: Array<{ address: string; percentage: string }> = []
+    if (service.rev_share && service.rev_share.length > 0) {
+      service.rev_share.forEach((share: any) => {
+        revenueShares.push({
+          address: share.address || '',
+          percentage: share.rev_share_percentage || '0'
+        })
+      })
+    }
+
+    grouped.push({
+      serviceId: service.service_id,
+      jsonRpcUrl,
+      websocketUrl,
+      revenueShares
+    })
+  })
+
+  return grouped
+})
+
+// Track expanded services
+const expandedServices = ref<Set<string>>(new Set())
+
+function toggleServiceExpansion(serviceId: string) {
+  if (expandedServices.value.has(serviceId)) {
+    expandedServices.value.delete(serviceId)
+  } else {
+    expandedServices.value.add(serviceId)
+  }
+}
+
+function isServiceExpanded(serviceId: string): boolean {
+  return expandedServices.value.has(serviceId)
+}
+
+function formatAddress(address: string, maxLength: number = 20): string {
+  if (!address) return ''
+  return address.length > maxLength ? address.substring(0, maxLength - 3) + '...' : address
 }
 
 async function fetchJson(url: string) {
@@ -873,50 +949,83 @@ async function loadAddressPerformance(address: string) {
         <div class="services-table-wrapper services-table-scroll rounded-xl">
           <table class="table table-compact w-full">
             <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-              <tr class="border-b-[0px]">
-                <th class="">Service ID</th>
-                <th class="">JSON_RPC URL</th>
-                <th class="">WEBSOCKET URL</th>
-                <th class="">Revenue Share Address</th>
-                <th class="">Percentage</th>
+              <tr class="border-b-[0px] text-sm font-semibold">
+                <th class="dark:bg-base-100 bg-base-200">Service ID</th>
+                <th class="dark:bg-base-100 bg-base-200">JSON_RPC URL</th>
+                <th class="dark:bg-base-100 bg-base-200">WEBSOCKET URL</th>
+                <th class="dark:bg-base-100 bg-base-200">Revenue Share Addresses</th>
               </tr>
             </thead>
             <tbody class="bg-base-100 relative">
-              <template v-for="(row, index) in supplierServiceRows" :key="index">
+              <template v-for="service in groupedSupplierServices" :key="service.serviceId">
                 <tr class="hover:bg-base-300 transition-colors rounded-xl duration-200 border-b-[0px]">
-                  <td v-if="index === 0 || supplierServiceRows[index - 1].serviceId !== row.serviceId"
-                    :rowspan="getServiceRowSpan(row.serviceId)" class="dark:bg-base-200 bg-white align-top font-medium">
-                    {{ row.serviceId }}
+                  <td class="dark:bg-base-200 bg-white align-top font-medium">
+                    {{ service.serviceId }}
                   </td>
-                  <td v-if="index === 0 || supplierServiceRows[index - 1].serviceId !== row.serviceId"
-                    :rowspan="getServiceRowSpan(row.serviceId)" class="dark:bg-base-200 bg-white align-top">
-                    <a v-if="row.jsonRpcUrl" :href="row.jsonRpcUrl" target="_blank"
+                  <td class="dark:bg-base-200 bg-white align-top">
+                    <a v-if="service.jsonRpcUrl" :href="service.jsonRpcUrl" target="_blank"
                       class="text-[#09279F] dark:text-warning hover:underline font-mono text-xs"
-                      :title="row.jsonRpcUrl">
-                      {{ row.jsonRpcUrl }}
+                      :title="service.jsonRpcUrl">
+                      {{ service.jsonRpcUrl }}
                     </a>
                     <span v-else class="text-xs text-gray-500">-</span>
                   </td>
-                  <td v-if="index === 0 || supplierServiceRows[index - 1].serviceId !== row.serviceId"
-                    :rowspan="getServiceRowSpan(row.serviceId)" class="dark:bg-base-200 bg-white align-top">
-                    <a v-if="row.websocketUrl" :href="row.websocketUrl" target="_blank"
+                  <td class="dark:bg-base-200 bg-white align-top">
+                    <a v-if="service.websocketUrl" :href="service.websocketUrl" target="_blank"
                       class="text-[#09279F] dark:text-warning hover:underline font-mono text-xs"
-                      :title="row.websocketUrl">
-                      {{ row.websocketUrl }}
+                      :title="service.websocketUrl">
+                      {{ service.websocketUrl }}
                     </a>
                     <span v-else class="text-xs text-gray-500">-</span>
                   </td>
-                  <td class="dark:bg-base-200 bg-white">
-                    <RouterLink v-if="row.revenueShareAddress" :to="`/${chain}/account/${row.revenueShareAddress}`"
-                      class="dark:text-warning text-[#153cd8] hover:underline font-mono text-xs"
-                      :title="row.revenueShareAddress">
-                      {{ row.revenueShareAddress.length > 20 ? row.revenueShareAddress.substring(0, 17) + '...' :
-                        row.revenueShareAddress }}
-                    </RouterLink>
+                  <td class="dark:bg-base-200 bg-white align-top">
+                    <div v-if="service.revenueShares.length > 0" class="space-y-1">
+                      <!-- Truncated view (first 1 address) -->
+                      <template v-if="!isServiceExpanded(service.serviceId)">
+                        <div v-for="(share, idx) in service.revenueShares.slice(0, 1)" :key="idx" class="flex items-center gap-2">
+                          <RouterLink :to="`/${chain}/account/${share.address}`"
+                            class="dark:text-warning text-[#153cd8] hover:underline font-mono text-xs"
+                            :title="share.address">
+                            {{ formatAddress(share.address) }}
+                          </RouterLink>
+                          <span class="text-xs text-gray-500">({{ share.percentage }}%)</span>
+                          <div v-if="service.revenueShares.length > 1" class="flex items-center gap-2">
+                          <button
+                            @click="toggleServiceExpansion(service.serviceId)"
+                            class="text-xs text-[#09279F] dark:text-warning hover:underline flex items-center gap-1">
+                            <Icon icon="mdi:chevron-down" class="text-sm" />
+                            +{{ service.revenueShares.length - 1 }} more
+                          </button>
+                        </div>
+                        </div>
+                        <!-- <div v-if="service.revenueShares.length > 1" class="flex items-center gap-2">
+                          <button
+                            @click="toggleServiceExpansion(service.serviceId)"
+                            class="text-xs text-[#09279F] dark:text-warning hover:underline flex items-center gap-1">
+                            <Icon icon="mdi:chevron-down" class="text-sm" />
+                            +{{ service.revenueShares.length - 1 }} more
+                          </button>
+                        </div> -->
+                      </template>
+                      <!-- Expanded view (all addresses) -->
+                      <template v-else>
+                        <div v-for="(share, idx) in service.revenueShares" :key="idx" class="flex items-center gap-2">
+                          <RouterLink :to="`/${chain}/account/${share.address}`"
+                            class="dark:text-warning text-[#153cd8] hover:underline font-mono text-xs"
+                            :title="share.address">
+                            {{ formatAddress(share.address) }}
+                          </RouterLink>
+                          <span class="text-xs text-gray-500">({{ share.percentage }}%)</span>
+                        </div>
+                        <button
+                          @click="toggleServiceExpansion(service.serviceId)"
+                          class="text-xs text-[#09279F] dark:text-warning hover:underline flex items-center gap-1 mt-1">
+                          <Icon icon="mdi:chevron-up" class="text-sm" />
+                          Show less
+                        </button>
+                      </template>
+                    </div>
                     <span v-else class="text-xs text-gray-500">-</span>
-                  </td>
-                  <td class="dark:bg-base-200 bg-white">
-                    <span class="text-xs">{{ row.revenueSharePercentage }}%</span>
                   </td>
                 </tr>
               </template>
@@ -953,7 +1062,7 @@ async function loadAddressPerformance(address: string) {
     <div class="overflow-x-auto">
       <table class="table text-sm w-full">
         <thead class="bg-base-200">
-          <tr>
+          <tr class="text-sm font-semibold">
             <th class="py-3 bg-base-300">{{ $t('account.creation_height') }}</th>
             <th class="py-3 bg-base-300">{{ $t('account.initial_balance') }}</th>
             <th class="py-3 bg-base-300">{{ $t('account.balance') }}</th>
@@ -984,7 +1093,7 @@ async function loadAddressPerformance(address: string) {
       </table>
     </div>
   </div>
-  <div v-if="performanceType !== 'unknown'" class="mb-4">
+  <div v-if="performanceType !== 'unknown'" class="pt-3 rounded mb-4">
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-2xl card-title">
         {{ performanceType === 'supplier' ? 'Supplier Performance' : 'Application Usage' }}
@@ -1024,10 +1133,13 @@ async function loadAddressPerformance(address: string) {
     <!-- Detailed Table -->
     <div v-if="performanceRows.length > 0"
       class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-0.5 rounded-xl shadow-md mb-4">
+      <div class="flex items-center mb-4 pt-3">
+          <div class="text-lg font-semibold text-main ml-5">Performance Summary (Last {{ performanceRows.length }} days)</div>
+        </div>
       <div class="services-table-wrapper services-table-scroll rounded-xl">
         <table class="table table-compact w-full">
           <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px] text-sm font-semibold">
               <th class="">Day</th>
               <th class="">Rewards (POKT)</th>
               <th class="">Relays</th>
@@ -1080,13 +1192,16 @@ async function loadAddressPerformance(address: string) {
       </div>
     </div>
   </div>
+  <h2 class="text-2xl card-title mb-4 pt-3">
+    {{ $t('account.transactions') }}
+  </h2>
   <!-- Transactions -->
   <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">
-    <h2 class="card-title text-2xl px-4 py-2">Transaction (Sent)</h2>
+    <h2 class="card-title text-lg px-4 py-2">{{ $t('account.sent') }}</h2>
     <div class="services-table-wrapper services-table-scroll rounded-xl">
       <table class="table table-compact w-full">
         <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-          <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+          <tr class="dark:bg-base-100 bg-base-200 border-b-[0px] text-sm font-semibold">
             <th class="">{{ $t('account.height') }}</th>
             <th class="">{{ $t('account.hash') }}</th>
             <th class="">{{ $t('account.messages') }}</th>
@@ -1135,11 +1250,11 @@ async function loadAddressPerformance(address: string) {
 
   <!-- Received -->
   <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">
-    <h2 Received class="card-title  px-4 py-2 text-2xl">Transaction (Received)</h2>
+    <h2 class="card-title  px-4 py-2 text-lg">{{ $t('account.received') }}</h2>
     <div class="services-table-wrapper services-table-scroll rounded-xl">
       <table class="table table-compact w-full">
         <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-          <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+          <tr class="dark:bg-base-100 bg-base-200 border-b-[0px] text-sm font-semibold">
             <th class="">{{ $t('account.height') }}</th>
             <th class="">{{ $t('account.hash') }}</th>
             <th class="">{{ $t('account.messages') }}</th>
@@ -1228,7 +1343,6 @@ async function loadAddressPerformance(address: string) {
 }
 
 .services-table-wrapper {
-  height: 320px;
   max-height: 320px;
   display: flex;
   flex-direction: column;
