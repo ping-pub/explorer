@@ -227,7 +227,7 @@ function formatTitle(v: string) {
 </script>
 <template>
 <div>
-  <p class="bg-[#09279F;] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff;]">Parameters</p>
+  <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-white">Parameters</p>
   <div class="overflow-hidden">
     <!-- Chain ID -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded-xl">

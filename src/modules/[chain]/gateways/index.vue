@@ -113,10 +113,7 @@
 
 <template>
   <div class="mb-[2vh]">
-    <p class="bg-[#09279F] text-2xl rounded-xl px-4 py-4 my-4 font-bold text-white">
-      Gateways
-    </p>
-
+    <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-white">Gateways</p>
     <div
       class="bg-base-200 dark:bg-base-100 rounded-xl px-2 pt-2 pb-2 gatewaysContainer"
       style="max-height: 78vh; overflow: auto"

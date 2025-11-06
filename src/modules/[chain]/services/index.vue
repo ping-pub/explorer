@@ -207,10 +207,7 @@ onMounted(() => {
 
 <template>
   <div class="mb-[2vh]">
-    <p class="bg-[#09279F] text-2xl rounded-xl px-4 py-4 my-4 font-bold text-white">
-      Services
-    </p>
-
+    <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-white">Services</p>
     <div class="bg-[#EFF2F5] dark:bg-base-100 rounded-xl p-2">
       <table class="table w-full table-compact">
         <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">

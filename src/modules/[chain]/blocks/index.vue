@@ -104,10 +104,7 @@ function prevPage() {
 
 <template>
   <div>
-    <p class="flex items-center justify-start bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-white">
-      Blocks
-    </p>
-
+    <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-white">Blocks</p>
     <div class="tabs tabs-boxed bg-transparent mb-4">
       <a
         class="tab text-gray-400 uppercase"
@@ -131,7 +128,7 @@ function prevPage() {
       <div class="bg-base-200 rounded-md overflow-auto">
         <table class="table table-compact w-full">
           <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-            <tr class="border-b-[0px]">
+            <tr class="border-b-[0px] text-sm font-semibold">
               <th class="">{{ $t('block.block_header') }}</th>
               <th class="">{{ $t('account.hash') }}</th>
               <th class="">{{ $t('block.proposer') }}</th>

@@ -949,11 +949,11 @@ async function loadAddressPerformance(address: string) {
         <div class="services-table-wrapper services-table-scroll rounded-xl">
           <table class="table table-compact w-full">
             <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-              <tr class="border-b-[0px]">
-                <th class="">Service ID</th>
-                <th class="">JSON_RPC URL</th>
-                <th class="">WEBSOCKET URL</th>
-                <th class="">Revenue Share Addresses</th>
+              <tr class="border-b-[0px] text-sm font-semibold">
+                <th class="dark:bg-base-100 bg-base-200">Service ID</th>
+                <th class="dark:bg-base-100 bg-base-200">JSON_RPC URL</th>
+                <th class="dark:bg-base-100 bg-base-200">WEBSOCKET URL</th>
+                <th class="dark:bg-base-100 bg-base-200">Revenue Share Addresses</th>
               </tr>
             </thead>
             <tbody class="bg-base-100 relative">
@@ -989,8 +989,7 @@ async function loadAddressPerformance(address: string) {
                             {{ formatAddress(share.address) }}
                           </RouterLink>
                           <span class="text-xs text-gray-500">({{ share.percentage }}%)</span>
-                        </div>
-                        <div v-if="service.revenueShares.length > 1" class="flex items-center gap-2">
+                          <div v-if="service.revenueShares.length > 1" class="flex items-center gap-2">
                           <button
                             @click="toggleServiceExpansion(service.serviceId)"
                             class="text-xs text-[#09279F] dark:text-warning hover:underline flex items-center gap-1">
@@ -998,6 +997,15 @@ async function loadAddressPerformance(address: string) {
                             +{{ service.revenueShares.length - 1 }} more
                           </button>
                         </div>
+                        </div>
+                        <!-- <div v-if="service.revenueShares.length > 1" class="flex items-center gap-2">
+                          <button
+                            @click="toggleServiceExpansion(service.serviceId)"
+                            class="text-xs text-[#09279F] dark:text-warning hover:underline flex items-center gap-1">
+                            <Icon icon="mdi:chevron-down" class="text-sm" />
+                            +{{ service.revenueShares.length - 1 }} more
+                          </button>
+                        </div> -->
                       </template>
                       <!-- Expanded view (all addresses) -->
                       <template v-else>
@@ -1054,7 +1062,7 @@ async function loadAddressPerformance(address: string) {
     <div class="overflow-x-auto">
       <table class="table text-sm w-full">
         <thead class="bg-base-200">
-          <tr>
+          <tr class="text-sm font-semibold">
             <th class="py-3 bg-base-300">{{ $t('account.creation_height') }}</th>
             <th class="py-3 bg-base-300">{{ $t('account.initial_balance') }}</th>
             <th class="py-3 bg-base-300">{{ $t('account.balance') }}</th>
@@ -1131,7 +1139,7 @@ async function loadAddressPerformance(address: string) {
       <div class="services-table-wrapper services-table-scroll rounded-xl">
         <table class="table table-compact w-full">
           <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px] text-sm font-semibold">
               <th class="">Day</th>
               <th class="">Rewards (POKT)</th>
               <th class="">Relays</th>
@@ -1189,11 +1197,11 @@ async function loadAddressPerformance(address: string) {
   </h2>
   <!-- Transactions -->
   <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">
-    <h2 class="card-title text-lg px-4 py-2">{{ $t('account.transactions') }} ({{ $t('account.sent') }})</h2>
+    <h2 class="card-title text-lg px-4 py-2">{{ $t('account.sent') }}</h2>
     <div class="services-table-wrapper services-table-scroll rounded-xl">
       <table class="table table-compact w-full">
         <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-          <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+          <tr class="dark:bg-base-100 bg-base-200 border-b-[0px] text-sm font-semibold">
             <th class="">{{ $t('account.height') }}</th>
             <th class="">{{ $t('account.hash') }}</th>
             <th class="">{{ $t('account.messages') }}</th>
@@ -1242,11 +1250,11 @@ async function loadAddressPerformance(address: string) {
 
   <!-- Received -->
   <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">
-    <h2 class="card-title  px-4 py-2 text-lg">{{ $t('account.transactions') }} ({{ $t('account.received') }})</h2>
+    <h2 class="card-title  px-4 py-2 text-lg">{{ $t('account.received') }}</h2>
     <div class="services-table-wrapper services-table-scroll rounded-xl">
       <table class="table table-compact w-full">
         <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-          <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+          <tr class="dark:bg-base-100 bg-base-200 border-b-[0px] text-sm font-semibold">
             <th class="">{{ $t('account.height') }}</th>
             <th class="">{{ $t('account.hash') }}</th>
             <th class="">{{ $t('account.messages') }}</th>
