@@ -285,7 +285,7 @@ function getSignerAddress(message: any, item?: any): string {
   } else if (message && message.sender) {
     return message.sender;
   }
-  
+
   // If not found in message, check tx events
   if (item && item.events) {
     // Look for sender in message events
@@ -296,7 +296,7 @@ function getSignerAddress(message: any, item?: any): string {
         return senderAttr.value;
       }
     }
-    
+
     // Look in tx events (fee_payer is typically the signer)
     const txEvents = item.events.filter((event: any) => event.type === 'tx');
     for (const event of txEvents) {
@@ -306,7 +306,7 @@ function getSignerAddress(message: any, item?: any): string {
       }
     }
   }
-  
+
   return '-';
 }
 
@@ -321,7 +321,7 @@ function getTransactionAmount(message: any): string {
   } else if (message && message.amount?.length) {
     return format.formatTokens(message.amount);
   }
-  
+
   // If amount isn't in message, check events
   return '-';
 }
@@ -330,7 +330,7 @@ function getTransactionFee(tx: any): string {
   if (tx?.auth_info?.fee?.amount && tx.auth_info.fee.amount.length > 0) {
     return format.formatTokens(tx.auth_info.fee.amount);
   }
-  
+
   // Check if fee is in gas_wanted (with a default gas price)
   if (tx?.auth_info?.fee?.gas_limit) {
     const gasLimit = parseInt(tx.auth_info.fee.gas_limit);
@@ -339,36 +339,51 @@ function getTransactionFee(tx: any): string {
       return `~${format.formatNumber(gasLimit / 1000000)} ${staking.params.bond_denom || ""}`;
     }
   }
-  
+
   return '-';
 }
 </script>
 <template>
   <div>
     <!-- Updated Validator Header Card -->
-    <div class="flex dark:bg-base-100 bg-[#09279F] rounded-xl space-x-10 p-4 my-4 text-white items-center text-2xl font-bold">
+    <div
+      class="flex dark:bg-base-100 bg-[#09279F] rounded-xl space-x-60 p-4 my-4 text-white items-center text-2xl font-bold">
       <!-- Validator Header with Avatar and Basic Info -->
-      <img
-                  v-if="v.description?.identity && avatars[v.description.identity] !== 'undefined'"
-                  v-lazy="logo(v.description?.identity)"
-                  class="object-contain w-16 h-16 rounded-lg"
-                  @error="
-                    (e) => {
-                      loadAvatar(v.description?.identity);
-                    }
-                  "
-                />
-                <Icon
-                  v-else
-                  class="text-4xl"
-                  :icon="`mdi-help-circle-outline`"
-                />
+      <div class="flex items-center space-x-4">
+        <img v-if="v.description?.identity && avatars[v.description.identity] !== 'undefined'"
+          v-lazy="logo(v.description?.identity)" class="object-contain w-16 h-16 rounded-lg" @error="
+            (e) => {
+              loadAvatar(v.description?.identity);
+            }
+          " />
+        <Icon v-else class="text-4xl" :icon="`mdi-help-circle-outline`" />
         <div>
           <h2 class="text-2xl font-bold text-[#FFFFFF]">{{ v.description?.moniker }}</h2>
         </div>
 
-      <!-- Validator Details -->
+        <!-- Validator Details -->
         <p class="text-sm dark:text-gray-200 text-[#FFFFFF]">{{ v.description?.details }}</p>
+      </div>
+      <div class="card-list ml-20">
+        <div class="flex items-center mb-2">
+          <Icon icon="mdi-web" class="text-xl mr-1" />
+          <span class="font-bold mr-2 text-sm">{{ $t('staking.website') }}: </span>
+          <a :href="v?.description?.website || '#'" :class="v?.description?.website
+            ? 'cursor-pointer text-sm'
+            : 'cursor-default text-sm'
+            ">
+            {{ v.description?.website || '-' }}
+          </a>
+        </div>
+        <div class="flex items-center">
+          <Icon icon="mdi-email-outline" class="text-xl mr-1" />
+          <span class="font-bold mr-2 text-sm">{{ $t('staking.contact') }}: </span>
+          <a v-if="v.description?.security_contact" :href="'mailto:' + v.description.security_contact || '#'"
+            class="cursor-pointer text-sm">
+            {{ v.description?.security_contact || '-' }}
+          </a>
+        </div>
+      </div>
     </div>
 
     <!-- Validator Stats Grid -->
@@ -381,7 +396,10 @@ function getTransactionFee(tx: any): string {
           </div>
           <div>
             <div class="text-sm font-semibold dark:text-main text-[#64748B]">{{ $t('staking.total_bonded') }}</div>
-            <div class="text-3xl font-bold mt-2">{{format.formatToken({amount: v.tokens, denom: selfBonded.balance?.denom, }) }}</div>
+            <div class="text-3xl font-bold mt-2">{{ format.formatToken({
+              amount: v.tokens, denom:
+                selfBonded.balance?.denom,
+            }) }}</div>
           </div>
         </div>
       </div>
@@ -394,7 +412,8 @@ function getTransactionFee(tx: any): string {
           </div>
           <div>
             <div class="text-sm font-semibold dark:text-main text-[#64748B]">{{ $t('staking.self_bonded') }}</div>
-            <div class="text-2xl font-bold mt-2">{{ format.formatToken(selfBonded.balance) }}<span class="text-sm font-normal text-gray-500 ml-1">({{ selfRate }})</span></div>
+            <div class="text-2xl font-bold mt-2">{{ format.formatToken(selfBonded.balance) }}<span
+                class="text-sm font-normal text-gray-500 ml-1">({{ selfRate }})</span></div>
           </div>
         </div>
       </div>
@@ -428,7 +447,8 @@ function getTransactionFee(tx: any): string {
               'dark:bg-warning bg-[#6AC13633]': v.status === 'BOND_STATUS_UNBONDED',
               'bg-error': v.status === 'BOND_STATUS_UNBONDING'
             }">
-              {{ String(v.status).replace('BOND_STATUS_', '').replace('BONDED', 'Staked').replace('UNBONDING', 'Unstaking').replace('UNBONDED', 'Unstaked') }}
+              {{ String(v.status).replace('BOND_STATUS_', '').replace('BONDED', 'Staked').replace('UNBONDING',
+                'Unstaking').replace('UNBONDED', 'Unstaked') }}
             </div>
             <!-- <div class="text-xl font-bold">
               {{ String(v.status).replace('BOND_STATUS_', '').replace('BONDED', 'STAKED').replace('UNBONDING', 'UNSTAKING').replace('UNBONDED', 'UNSTAKED') }}
@@ -489,13 +509,14 @@ function getTransactionFee(tx: any): string {
         <div class="bg-base-100 rounded-xl pt-3">
           <div class="text-2xl font-semibold text-main mb-4 mt-4">
             {{ $t('staking.commissions_&_rewards') }}
-          </div> 
+          </div>
 
           <div class="grid grid-cols-1 md:!grid-cols-2 gap-4">
             <div class="bg-base-200 rounded-xl p-3 flex flex-col items-center justify-center gap-4 pb-8">
               <div class="text-sm text-[#64748B] mb-2">{{ $t('staking.commissions') }}</div>
               <div class="flex flex-wrap">
-                <div v-for="(i, k) in commission" :key="`commission-${k}`" class="mr-2 mb-2 text-2xl dark:text-[#ffffff] text-[#153cd8]">
+                <div v-for="(i, k) in commission" :key="`commission-${k}`"
+                  class="mr-2 mb-2 text-2xl dark:text-[#ffffff] text-[#153cd8]">
                   {{ format.formatToken2(i) }}
                 </div>
               </div>
@@ -523,7 +544,8 @@ function getTransactionFee(tx: any): string {
             <div class="text-sm text-[#64748B]flex items-center">
               {{ $t('staking.account_addr') }}
             </div>
-            <RouterLink class="text-primary font-medium truncate flex flex-row items-center " :to="`/${chain}/account/${addresses.account}`">
+            <RouterLink class="text-primary font-medium truncate flex flex-row items-center "
+              :to="`/${chain}/account/${addresses.account}`">
               {{ addresses.account }}
               <Icon icon="mdi:content-copy" class="ml-2 cursor-pointer text-[#64748B]" v-show="addresses.account"
                 @click="copyWebsite(addresses.account || '')" />
@@ -539,7 +561,7 @@ function getTransactionFee(tx: any): string {
               <Icon icon="mdi:content-copy" class="ml-2 cursor-pointer text-[#64748B]" v-show="v.operator_address"
                 @click="copyWebsite(v.operator_address || '')" />
             </div>
-          </div>  
+          </div>
 
           <div class="bg-base-200 rounded-xl p-3">
             <div class="text-sm text-[#64748B] flex items-center">
@@ -586,7 +608,8 @@ function getTransactionFee(tx: any): string {
     </div>
 
     <!-- Delegations Table (if enabled) -->
-    <div v-if="delegations.delegation_responses" class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md my-4">
+    <div v-if="delegations.delegation_responses"
+      class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md my-4">
       <div class="text-lg font-semibold text-main dark:bg-base-100 bg-base-200 px-4 py-2">
         <h2 class="text-2xl font-semibold text-[#171C1F] dark:text-[#ffffff]">
           {{ $t('staking.delegations') }}
@@ -601,9 +624,11 @@ function getTransactionFee(tx: any): string {
             </tr>
           </thead>
           <tbody class="bg-base-100 relative">
-            <tr v-for="{ balance, delegation } in delegations.delegation_responses" :key="delegation.delegator_address" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
+            <tr v-for="{ balance, delegation } in delegations.delegation_responses" :key="delegation.delegator_address"
+              class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
               <td class="py-3">
-                <RouterLink :to="`/${props.chain}/account/${delegation.delegator_address}`" class="dark:text-primary text-[#09279F] dark:invert">
+                <RouterLink :to="`/${props.chain}/account/${delegation.delegator_address}`"
+                  class="dark:text-primary text-[#09279F] dark:invert">
                   {{ delegation.delegator_address }}
                 </RouterLink>
               </td>
@@ -614,20 +639,30 @@ function getTransactionFee(tx: any): string {
           </tbody>
         </table>
       </div>
-      <div v-if="Number(delegations.pagination?.total || 0) > 0" class="flex justify-between items-center gap-4 my-6 px-6">
+      <div v-if="Number(delegations.pagination?.total || 0) > 0"
+        class="flex justify-between items-center gap-4 my-6 px-6">
         <div class="flex items-center gap-2">
-          <span class="text-sm text-gray-600">Showing {{ ((delegationsPage - 1) * 6) + 1 }} to {{ Math.min(delegationsPage * 6, Number(delegations.pagination?.total || 0)) }} of {{ Number(delegations.pagination?.total || 0) }}</span>
+          <span class="text-sm text-gray-600">Showing {{ ((delegationsPage - 1) * 6) + 1 }} to {{
+            Math.min(delegationsPage *
+              6, Number(delegations.pagination?.total || 0)) }} of {{ Number(delegations.pagination?.total || 0) }}</span>
         </div>
         <div class="flex items-center gap-1">
-          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
-            @click="goToFirstDelegations" :disabled="delegationsPage === 1 || totalDelegationsPages === 0">First</button>
-          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+          <button
+            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+            @click="goToFirstDelegations"
+            :disabled="delegationsPage === 1 || totalDelegationsPages === 0">First</button>
+          <button
+            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
             @click="prevDelegations" :disabled="delegationsPage === 1 || totalDelegationsPages === 0">&lt;</button>
           <span class="text-xs px-2">Page {{ delegationsPage }} of {{ totalDelegationsPages }}</span>
-          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
-            @click="nextDelegations" :disabled="delegationsPage === totalDelegationsPages || totalDelegationsPages === 0">&gt;</button>
-          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
-            @click="goToLastDelegations" :disabled="delegationsPage === totalDelegationsPages || totalDelegationsPages === 0">Last</button>
+          <button
+            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+            @click="nextDelegations"
+            :disabled="delegationsPage === totalDelegationsPages || totalDelegationsPages === 0">&gt;</button>
+          <button
+            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
+            @click="goToLastDelegations"
+            :disabled="delegationsPage === totalDelegationsPages || totalDelegationsPages === 0">Last</button>
         </div>
       </div>
     </div>
@@ -653,20 +688,24 @@ function getTransactionFee(tx: any): string {
             </tr>
           </thead>
           <tbody class="bg-base-100 relative">
-            <tr v-for="(item, i) in txs.tx_responses" :key="i" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
+            <tr v-for="(item, i) in txs.tx_responses" :key="i"
+              class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
               <td class="text-sm py-3">
-                <RouterLink :to="`/${props.chain}/blocks/${item.height}`" class="dark:text-primary text-[#09279F] dark:invert">
+                <RouterLink :to="`/${props.chain}/blocks/${item.height}`"
+                  class="dark:text-primary text-[#09279F] dark:invert">
                   {{ item.height }}
                 </RouterLink>
               </td>
               <td class="truncate py-3" style="max-width: 200px">
-                <RouterLink :to="`/${props.chain}/tx/${item.txhash}`" class="dark:text-primary text-[#09279F] dark:invert">
+                <RouterLink :to="`/${props.chain}/tx/${item.txhash}`"
+                  class="dark:text-primary text-[#09279F] dark:invert">
                   {{ item.txhash }}
                 </RouterLink>
               </td>
               <td class="truncate py-3" style="max-width: 200px">
                 <RouterLink v-if="getSignerAddress(item.tx?.body?.messages?.[0], item) !== '-'"
-                  :to="`/${props.chain}/account/${getSignerAddress(item.tx?.body?.messages?.[0], item)}`" class="dark:text-primary text-[#09279F] dark:invert">
+                  :to="`/${props.chain}/account/${getSignerAddress(item.tx?.body?.messages?.[0], item)}`"
+                  class="dark:text-primary text-[#09279F] dark:invert">
                   {{ getSignerAddress(item.tx?.body?.messages?.[0], item) }}
                 </RouterLink>
                 <span v-else>-</span>
@@ -712,25 +751,30 @@ function getTransactionFee(tx: any): string {
             </tr>
           </thead>
           <tbody class="bg-base-100 relative">
-            <tr v-for="(item, i) in events.tx_responses" :key="i" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
+            <tr v-for="(item, i) in events.tx_responses" :key="i"
+              class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
               <td class="py-3">
                 <div class="truncate" style="max-width: 250px">
-                  <RouterLink v-for="d in mapDelegators(item.tx?.body?.messages)" :key="d" :to="`/${props.chain}/account/${d}`" class="dark:text-primary text-[#09279F] dark:invert">
+                  <RouterLink v-for="d in mapDelegators(item.tx?.body?.messages)" :key="d"
+                    :to="`/${props.chain}/account/${d}`" class="dark:text-primary text-[#09279F] dark:invert">
                     {{ d }}
                   </RouterLink>
                 </div>
               </td>
               <td class="py-3">
-                <div class="flex items-center" :class="{ 'text-[#60BC29]': selectedEventType === EventType.Delegate, 'text-error': selectedEventType === EventType.Unbond }">
+                <div class="flex items-center"
+                  :class="{ 'text-[#60BC29]': selectedEventType === EventType.Delegate, 'text-error': selectedEventType === EventType.Unbond }">
                   <RouterLink :to="`/${props.chain}/tx/${item.txhash}`" class="dark:text-primary text-inherit">
-                    <span class="mr-2">{{ (selectedEventType === EventType.Delegate ? '+' : '-') }} {{ mapEvents(item.events) }}</span>
+                    <span class="mr-2">{{ (selectedEventType === EventType.Delegate ? '+' : '-') }} {{
+                      mapEvents(item.events) }}</span>
                   </RouterLink>
                   <Icon v-if="item.code === 0" icon="mdi-check" class="text-[#60BC29] text-lg" />
                   <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
                 </div>
               </td>
               <td class="py-3">
-                <RouterLink class="dark:text-primary text-[#09279F] dark:invert" :to="`/${props.chain}/blocks/${item.height}`">
+                <RouterLink class="dark:text-primary text-[#09279F] dark:invert"
+                  :to="`/${props.chain}/blocks/${item.height}`">
                   {{ item.height }}
                 </RouterLink>
               </td>
@@ -744,17 +788,22 @@ function getTransactionFee(tx: any): string {
       </div>
       <div v-if="Number(events.pagination?.total || 0) > 0" class="flex justify-between items-center gap-4 my-6 px-6">
         <div class="flex items-center gap-2">
-          <span class="text-sm text-gray-600">Showing {{ ((eventsPage - 1) * 5) + 1 }} to {{ Math.min(eventsPage * 5, Number(events.pagination?.total || 0)) }} of {{ Number(events.pagination?.total || 0) }}</span>
+          <span class="text-sm text-gray-600">Showing {{ ((eventsPage - 1) * 5) + 1 }} to {{ Math.min(eventsPage * 5,
+            Number(events.pagination?.total || 0)) }} of {{ Number(events.pagination?.total || 0) }}</span>
         </div>
         <div class="flex items-center gap-1">
-          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+          <button
+            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
             @click="goToFirstEvents" :disabled="eventsPage === 1 || totalEventsPages === 0">First</button>
-          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+          <button
+            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
             @click="prevEvents" :disabled="eventsPage === 1 || totalEventsPages === 0">&lt;</button>
           <span class="text-xs px-2">Page {{ eventsPage }} of {{ totalEventsPages }}</span>
-          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+          <button
+            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
             @click="nextEvents" :disabled="eventsPage === totalEventsPages || totalEventsPages === 0">&gt;</button>
-          <button class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+          <button
+            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]"
             @click="goToLastEvents" :disabled="eventsPage === totalEventsPages || totalEventsPages === 0">Last</button>
         </div>
       </div>
@@ -775,7 +824,7 @@ function getTransactionFee(tx: any): string {
         </div>
       </div>
     </div>
-  </div>  
+  </div>
 </template>
 
 <style>
@@ -783,6 +832,7 @@ function getTransactionFee(tx: any): string {
   padding: 0.6rem 1rem;
   font-size: 14px;
 }
+
 .validatore-table.table {
   max-height: 320px;
 }
@@ -793,18 +843,20 @@ function getTransactionFee(tx: any): string {
   display: flex;
   flex-direction: column;
 }
+
 .validator-table-scroll {
   flex: 1 1 auto;
   overflow-y: auto;
 }
+
 .validator-table-scroll table {
   margin-bottom: 0;
 }
+
 .validator-table-scroll thead {
   position: sticky;
   top: 0;
   background: inherit;
   z-index: 1;
 }
-
 </style>
