@@ -346,7 +346,7 @@ function getTransactionFee(tx: any): string {
 <template>
   <div>
     <!-- Updated Validator Header Card -->
-    <div class="dark:bg-base-100 bg-[#09279F] rounded-xl space-x-10 p-4 flex items-center mt-4 mb-4">
+    <div class="flex dark:bg-base-100 bg-[#09279F] rounded-xl space-x-10 p-4 my-4 text-white items-center text-2xl font-bold">
       <!-- Validator Header with Avatar and Basic Info -->
       <img
                   v-if="v.description?.identity && avatars[v.description.identity] !== 'undefined'"
@@ -595,7 +595,7 @@ function getTransactionFee(tx: any): string {
       <div class="validator-table-wrapper validator-table-scroll rounded-xl">
         <table class="table table-compact w-full">
           <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px] text-sm font-semibold">
               <th class="">{{ $t('account.delegator') }}</th>
               <th class="">{{ $t('account.delegation') }}</th>
             </tr>
@@ -642,7 +642,7 @@ function getTransactionFee(tx: any): string {
       <div class="validator-table-wrapper validator-table-scroll rounded-xl">
         <table class="table table-compact w-full">
           <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px] text-sm font-semibold">
               <th class="">{{ $t('account.height') }}</th>
               <th class="">{{ $t('account.hash') }}</th>
               <th class="">{{ $t('account.signer') }}</th>
@@ -704,7 +704,7 @@ function getTransactionFee(tx: any): string {
       <div class="validator-table-wrapper validator-table-scroll rounded-xl">
         <table class="table table-compact w-full">
           <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px]">
+            <tr class="dark:bg-base-100 bg-base-200 border-b-[0px] text-sm font-semibold">
               <th class="">{{ $t('account.delegator') }}</th>
               <th class="">{{ $t('account.amount') }}</th>
               <th class="">{{ $t('account.height') }}</th>

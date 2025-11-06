@@ -126,13 +126,7 @@ function changePageSize(newSize: number) {
 
 <template>
   <div>
-    <p
-      class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-2 my-4 font-bold text-[#ffffff]"
-    >
-      Transactions
-    </p>
-
-
+    <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-white">Transactions</p>
     <div
       v-show="tab === 'recent'"
       class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4"
@@ -140,7 +134,7 @@ function changePageSize(newSize: number) {
       <div class="bg-base-200 rounded-md overflow-auto">
         <table class="table w-full table-compact">
           <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-            <tr class="border-b-[0px]">
+            <tr class="border-b-[0px] text-sm font-semibold">
               <th>{{ $t('tx.tx_hash') }}</th>
               <th>{{ $t('block.block') }}</th>
               <th>{{ $t('staking.status') }}</th>

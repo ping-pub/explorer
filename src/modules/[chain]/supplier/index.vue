@@ -110,19 +110,14 @@ const statusText = computed(() => (value.value === 'stake' ? 'Staked' : 'Unstake
 
 <template>
   <div class="mb-[2vh]">
-    <p
-      class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-3 my-4 font-bold text-white"
-    >
-      Suppliers
-    </p>
-
+    <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-white">Suppliers</p>
     <!-- ✅ Scroll hataya gaya -->
     <div
       class="bg-base-200 dark:bg-base-100 rounded-xl p-3"
     >
       <table class="table w-full table-compact rounded-xl">
         <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-          <tr>
+          <tr class="text-sm font-semibold">
             <td>Rank</td>
             <td>Address</td>
             <td>Status</td>

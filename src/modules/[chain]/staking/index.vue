@@ -340,7 +340,7 @@ function goToLast() {
 </script>
 <template>
     <div>  
-        <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-[#ffffff]">Validators</p>
+        <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-white">Validators</p>
         <div class="grid sm:grid-cols-1 md:grid-cols-4 py-4 gap-4 mb-4">
             <div class="flex dark:bg-base-100 bg-base-200 rounded-xl p-4">
                 <span>
@@ -405,7 +405,7 @@ function goToLast() {
             >
             <table class="table w-full rounded-xl">
                 <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-                <tr>
+                <tr class="text-sm font-semibold">
                     <td style="width: 3rem">{{ $t('staking.rank') }}</td>
                     <td>Logo</td>
                     <td>{{ $t('staking.validator') }}</td>
