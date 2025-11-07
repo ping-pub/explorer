@@ -84,14 +84,39 @@ export const useBaseStore = defineStore('baseStore', {
         async clearRecentBlocks() {
             this.recents = [];
         },
-        async getAllTxs(chain = 'pocket-mainnet') {
+        async getAllTxs(chain = 'pocket-mainnet', filters?: {
+            type?: string;
+            status?: string;
+            start_date?: string;
+            end_date?: string;
+            min_amount?: number;
+            max_amount?: number;
+            sort_by?: 'timestamp' | 'amount' | 'fee' | 'block_height' | 'type' | 'status';
+            sort_order?: 'asc' | 'desc';
+        }) {
             try {
                 //fetch from the transaction service
-                let res = await fetch("/api/v1/transactions?page=1&limit=" + this.pageSize + "&chain=" + (chain)).catch(err => console.error("Error Fetching Transactions"));
-                const resJson = await res?.json();
-                this.allTxs = resJson?.data || []
-                return res
+                const { fetchTransactions } = await import('@/libs/transactions');
+                const data = await fetchTransactions({
+                    chain,
+                    page: 1,
+                    limit: this.pageSize,
+                    ...filters
+                });
+                // Map ApiTransaction to TxLocal format
+                this.allTxs = (data.data || []).map((tx: any): TxLocal => ({
+                    messages: tx.tx_data?.body?.messages || [],
+                    fee: tx.fee,
+                    height: String(tx.block_height),
+                    block_height: String(tx.block_height),
+                    hash: tx.hash,
+                    status: tx.status === 'success' ? 0 : 1,
+                    timestamp: tx.timestamp,
+                    type: tx.type
+                }));
+                return data
             } catch (e) {
+                console.error("Error Fetching Transactions", e);
                 return []
             }
         },

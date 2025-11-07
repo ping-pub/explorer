@@ -2,25 +2,8 @@
 import { computed, ref, onMounted, watch } from 'vue'
 import { useBaseStore, useBlockchain, useFormatter } from '@/stores'
 import { useRouter } from 'vue-router'
-import type { TxLocal } from '@/types'
-
-// Interface for API response transaction
-interface ApiTransaction {
-  id: string
-  hash: string
-  block_id: string
-  sender: string
-  recipient: string
-  amount: string
-  fee: string
-  memo: string
-  type: string
-  status: string
-  chain: string
-  timestamp: string
-  block_height: number
-  tx_data: any
-}
+import { Icon } from '@iconify/vue'
+import { fetchTransactions, type ApiTransaction, type TransactionFilters } from '@/libs/transactions'
 
 const props = defineProps(['chain'])
 const router = useRouter()
@@ -57,6 +40,45 @@ const loading = ref(false)
 // 🔹 Page size options
 const pageSizeOptions = [10, 25, 50, 100]
 
+// 🔹 Filter state
+const selectedTypeTab = ref<'all' | 'send' | 'claim' | 'proof' | 'governance' | 'staking'>('all')
+const statusFilter = ref<string>('')
+const startDate = ref<string>('')
+const endDate = ref<string>('')
+const minAmount = ref<number | undefined>(undefined)
+const maxAmount = ref<number | undefined>(undefined)
+const sortBy = ref<'timestamp' | 'amount' | 'fee' | 'block_height' | 'type' | 'status'>('timestamp')
+const sortOrder = ref<'asc' | 'desc'>('desc')
+const showAdvancedFilters = ref(false)
+
+// 🔹 Type tab mappings
+const typeTabMap: Record<string, string[]> = {
+  all: [],
+  send: ['MsgSend (bank)', 'MsgMultiSend (bank)'],
+  claim: ['MsgCreateClaim (proof)'],
+  proof: ['MsgSubmitProof (proof)'],
+  governance: [
+    'MsgSubmitProposal (governance)',
+    'MsgVote (governance)',
+    'MsgDeposit (governance)',
+    'MsgVoteWeighted (governance)'
+  ],
+  staking: [
+    'MsgDelegate (node)',
+    'MsgUndelegate (node)',
+    'MsgBeginRedelegate (node)',
+    'MsgStakeApplication (application)',
+    'MsgUnstakeApplication (application)',
+    'MsgStakeSupplier (supplier)',
+    'MsgUnstakeSupplier (supplier)',
+    'MsgStakeGateway (gateway)',
+    'MsgUnstakeGateway (gateway)'
+  ]
+}
+
+// 🔹 Debounce timer
+let debounceTimer: ReturnType<typeof setTimeout> | null = null
+
 onMounted(async () => {
   tab.value = String(router.currentRoute.value.query.tab || 'recent')
   await loadTransactions()
@@ -66,14 +88,42 @@ onMounted(async () => {
 async function loadTransactions() {
   loading.value = true
   try {
-    const url = `/api/v1/transactions?page=${currentPage.value}&limit=${itemsPerPage.value}&chain=${apiChainName}`
-    const response = await fetch(url)
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+    const filters: TransactionFilters = {
+      chain: apiChainName,
+      page: currentPage.value,
+      limit: itemsPerPage.value,
+      sort_by: sortBy.value,
+      sort_order: sortOrder.value,
     }
-    
-    const data = await response.json()
+
+    // Add type filter based on selected tab
+    const selectedTypes = typeTabMap[selectedTypeTab.value]
+    if (selectedTypes.length > 0) {
+      // For multiple types, we need to make separate calls or use a different approach
+      // For now, we'll use the first type as the API supports single type filter
+      // In a real implementation, you might want to handle multiple types differently
+      filters.type = selectedTypes[0]
+    }
+
+    if (statusFilter.value) {
+      filters.status = statusFilter.value === 'success' ? "true" : "false"
+    }
+    if (startDate.value) {
+      // Convert datetime-local to ISO 8601
+      filters.start_date = new Date(startDate.value).toISOString()
+    }
+    if (endDate.value) {
+      // Convert datetime-local to ISO 8601
+      filters.end_date = new Date(endDate.value).toISOString()
+    }
+    if (minAmount.value !== undefined) {
+      filters.min_amount = minAmount.value
+    }
+    if (maxAmount.value !== undefined) {
+      filters.max_amount = maxAmount.value
+    }
+
+    const data = await fetchTransactions(filters)
     
     transactions.value = data.data || []
     totalTransactions.value = data.meta?.total || 0
@@ -87,6 +137,22 @@ async function loadTransactions() {
     loading.value = false
   }
 }
+
+// 🔹 Debounced load function
+function debouncedLoad() {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer)
+  }
+  debounceTimer = setTimeout(() => {
+    currentPage.value = 1
+    loadTransactions()
+  }, 300)
+}
+
+// 🔹 Watch for filter changes
+watch([selectedTypeTab, statusFilter, startDate, endDate, minAmount, maxAmount, sortBy, sortOrder], () => {
+  debouncedLoad()
+})
 
 // 🔹 Watch for page size changes
 watch(itemsPerPage, () => {
@@ -131,6 +197,141 @@ function changePageSize(newSize: number) {
       v-show="tab === 'recent'"
       class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4"
     >
+      <!-- Filter Section - Compact & Modern -->
+      <div class="bg-base-200 dark:bg-base-300 rounded-lg border border-base-300 dark:border-base-400 mb-4">
+        <!-- Main Filter Bar -->
+        <div class="flex flex-wrap items-center gap-3 px-4 py-3">
+          <!-- Type Tabs - Compact Horizontal -->
+          <div class="flex items-center gap-1 flex-wrap">
+            <span class="text-xs font-medium text-base-content/70 mr-1">Type:</span>
+            <button
+              v-for="typeOption in [
+                { value: 'all', label: 'All' },
+                { value: 'send', label: 'Send' },
+                { value: 'claim', label: 'Claim' },
+                { value: 'proof', label: 'Proof' },
+                { value: 'governance', label: 'Gov' },
+                { value: 'staking', label: 'Stake' }
+              ]"
+              :key="typeOption.value"
+              @click="selectedTypeTab = typeOption.value as any"
+              class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200"
+              :class="selectedTypeTab === typeOption.value
+                ? 'bg-[#007bff] text-white shadow-sm'
+                : 'bg-base-100 dark:bg-base-200 text-base-content hover:bg-base-300 dark:hover:bg-base-100 border border-base-300 dark:border-base-400'"
+            >
+              {{ typeOption.label }}
+            </button>
+          </div>
+
+          <!-- Divider -->
+          <div class="h-6 w-px bg-base-300 dark:bg-base-500"></div>
+
+          <!-- Quick Filters -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <!-- Status -->
+            <div class="flex items-center gap-1.5">
+              <Icon icon="mdi:check-circle-outline" class="text-base-content/60 text-sm" />
+              <select v-model="statusFilter" class="select select-bordered select-xs h-8 min-h-8 px-2 text-xs w-24">
+                <option value="">All</option>
+                <option value="success">Success</option>
+                <option value="failed">Failed</option>
+              </select>
+            </div>
+
+            <!-- Sort By -->
+            <div class="flex items-center gap-1.5">
+              <Icon icon="mdi:sort" class="text-base-content/60 text-sm" />
+              <select v-model="sortBy" class="select select-bordered select-xs h-8 min-h-8 px-2 text-xs w-28">
+                <option value="timestamp">Time</option>
+                <option value="amount">Amount</option>
+                <option value="fee">Fee</option>
+                <option value="block_height">Block</option>
+                <option value="type">Type</option>
+                <option value="status">Status</option>
+              </select>
+            </div>
+
+            <!-- Sort Order Toggle -->
+            <button
+              @click="sortOrder = sortOrder === 'desc' ? 'asc' : 'desc'"
+              class="btn btn-xs h-8 min-h-8 px-2 gap-1"
+              :class="sortOrder === 'desc' ? 'btn-primary' : 'btn-ghost'"
+              :title="sortOrder === 'desc' ? 'Descending' : 'Ascending'"
+            >
+              <Icon :icon="sortOrder === 'desc' ? 'mdi:sort-descending' : 'mdi:sort-ascending'" class="text-sm" />
+            </button>
+          </div>
+
+          <!-- Advanced Filters Toggle -->
+          <div class="ml-auto">
+            <button
+              @click="showAdvancedFilters = !showAdvancedFilters"
+              class="btn btn-xs h-8 min-h-8 px-3 gap-1.5"
+              :class="showAdvancedFilters ? 'btn-primary' : 'btn-ghost'"
+            >
+              <Icon :icon="showAdvancedFilters ? 'mdi:chevron-up' : 'mdi:chevron-down'" class="text-sm" />
+              <span class="text-xs">Advanced</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Advanced Filters - Collapsible -->
+        <div v-show="showAdvancedFilters" class="border-t border-base-300 dark:border-base-400 px-4 py-3">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Date Range -->
+            <div>
+              <label class="label py-1">
+                <span class="label-text text-xs font-medium flex items-center gap-1.5">
+                  <Icon icon="mdi:calendar-range" class="text-sm" />
+                  Date Range
+                </span>
+              </label>
+              <div class="flex gap-2">
+                <input
+                  v-model="startDate"
+                  type="datetime-local"
+                  class="input input-bordered input-xs h-8 text-xs flex-1"
+                  placeholder="Start"
+                />
+                <span class="self-center text-xs text-base-content/50">→</span>
+                <input
+                  v-model="endDate"
+                  type="datetime-local"
+                  class="input input-bordered input-xs h-8 text-xs flex-1"
+                  placeholder="End"
+                />
+              </div>
+            </div>
+
+            <!-- Amount Range -->
+            <div>
+              <label class="label py-1">
+                <span class="label-text text-xs font-medium flex items-center gap-1.5">
+                  <Icon icon="mdi:currency-usd" class="text-sm" />
+                  Amount Range
+                </span>
+              </label>
+              <div class="flex gap-2">
+                <input
+                  v-model.number="minAmount"
+                  type="number"
+                  class="input input-bordered input-xs h-8 text-xs flex-1"
+                  placeholder="Min"
+                />
+                <span class="self-center text-xs text-base-content/50">-</span>
+                <input
+                  v-model.number="maxAmount"
+                  type="number"
+                  class="input input-bordered input-xs h-8 text-xs flex-1"
+                  placeholder="Max"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="bg-base-200 rounded-md overflow-auto">
         <table class="table w-full table-compact">
           <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">

@@ -27,6 +27,7 @@ import type { Coin } from '@cosmjs/amino';
 import Countdown from '@/components/Countdown.vue';
 import { fromBase64 } from '@cosmjs/encoding';
 import { useClipboard } from '@vueuse/core'
+import { fetchTransactions, type ApiTransaction, type TransactionFilters } from '@/libs/transactions';
 
 const props = defineProps(['address', 'chain']);
 
@@ -41,25 +42,77 @@ const account = ref({} as AuthAccount);
 const applications = ref({} as Application);
 const gateways = ref({} as Gateway);
 const suppliers = ref({} as Supplier);
-const txs = ref({} as TxResponse[]);
+const txs = ref<ApiTransaction[]>([]);
 const delegations = ref([] as Delegation[]);
 const rewards = ref({} as DelegatorRewards);
 const balances = ref([] as Coin[]);
-const recentReceived = ref([] as TxResponse[]);
 const unbonding = ref([] as UnbondingResponses[]);
 const unbondingTotal = ref(0);
 const chart = {};
 // Cancellation token to avoid updating state from stale requests
 let activeLoadToken = 0;
+
+// Transaction filter state
+const currentTxPage = ref(1);
+const txItemsPerPage = ref(25);
+const totalTxPages = ref(0);
+const totalTxCount = ref(0);
+const loadingTxs = ref(false);
+const selectedTypeTab = ref<'all' | 'send' | 'claim' | 'proof' | 'governance' | 'staking'>('all');
+const txStatusFilter = ref<string>('');
+const txStartDate = ref<string>('');
+const txEndDate = ref<string>('');
+const txMinAmount = ref<number | undefined>(undefined);
+const txMaxAmount = ref<number | undefined>(undefined);
+const txSortBy = ref<'timestamp' | 'amount' | 'fee' | 'block_height' | 'type' | 'status'>('timestamp');
+const txSortOrder = ref<'asc' | 'desc'>('desc');
+const showAdvancedTxFilters = ref(false);
+
+// Map frontend chain names to API chain names
+const getApiChainName = (chainName: string) => {
+  const chainMap: Record<string, string> = {
+    'pocket-beta': 'pocket-testnet-beta',
+    'pocket-alpha': 'pocket-testnet-alpha',
+    'pocket-mainnet': 'pocket-mainnet'
+  };
+  return chainMap[chainName] || chainName || 'pocket-testnet-beta';
+};
+
+// Type tab mappings
+const typeTabMap: Record<string, string[]> = {
+  all: [],
+  send: ['MsgSend (bank)', 'MsgMultiSend (bank)'],
+  claim: ['MsgCreateClaim (proof)'],
+  proof: ['MsgSubmitProof (proof)'],
+  governance: [
+    'MsgSubmitProposal (governance)',
+    'MsgVote (governance)',
+    'MsgDeposit (governance)',
+    'MsgVoteWeighted (governance)'
+  ],
+  staking: [
+    'MsgDelegate (node)',
+    'MsgUndelegate (node)',
+    'MsgBeginRedelegate (node)',
+    'MsgStakeApplication (application)',
+    'MsgUnstakeApplication (application)',
+    'MsgStakeSupplier (supplier)',
+    'MsgUnstakeSupplier (supplier)',
+    'MsgStakeGateway (gateway)',
+    'MsgUnstakeGateway (gateway)'
+  ]
+};
+
+let txDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
 function resetAccountState() {
   account.value = {} as AuthAccount
   applications.value = {} as Application
   gateways.value = {} as Gateway
   suppliers.value = {} as Supplier
-  txs.value = [] as unknown as TxResponse[]
+  txs.value = []
   rewards.value = {} as DelegatorRewards
   balances.value = [] as Coin[]
-  recentReceived.value = [] as TxResponse[]
   delegations.value = [] as Delegation[]
   unbonding.value = [] as UnbondingResponses[]
   unbondingTotal.value = 0
@@ -67,6 +120,9 @@ function resetAccountState() {
   performanceType.value = 'unknown'
   loadingPerformance.value = false
   performanceError.value = ''
+  currentTxPage.value = 1
+  totalTxPages.value = 0
+  totalTxCount.value = 0
 }
 
 async function loadAll(address: string) {
@@ -145,13 +201,14 @@ const donutData = computed(() => {
   return [...balanceSlices, ...delegationSlices /*, ...rewardSlices*/];
 });
 
-function loadAccount(address: string) {
+async function loadAccount(address: string) {
   blockchain.rpc.getAuthAccount(address).then((x) => {
     account.value = x.account;
   });
-  blockchain.rpc.getTxsBySender(address).then((x) => {
-    txs.value = x.tx_responses;
-  });
+  
+  // Load transactions using new API
+  await loadTransactions(address);
+  
   blockchain.rpc.getDistributionDelegatorRewards(address).then((x) => {
     rewards.value = x;
   });
@@ -261,12 +318,81 @@ function loadAccount(address: string) {
       });
     });
   });
-
-  const receivedQuery = `?&pagination.reverse=true&query=coin_received.receiver='${address}'&pagination.limit=5`;
-  blockchain.rpc.getTxs(receivedQuery, {}).then((x) => {
-    recentReceived.value = x.tx_responses;
-  });
 }
+
+async function loadTransactions(address: string) {
+  loadingTxs.value = true;
+  try {
+    const apiChainName = getApiChainName(props.chain || blockchain.current?.chainName || 'pocket-beta');
+    const filters: TransactionFilters = {
+      address,
+      chain: apiChainName,
+      page: currentTxPage.value,
+      limit: txItemsPerPage.value,
+      sort_by: txSortBy.value,
+      sort_order: txSortOrder.value,
+    };
+
+    // Add type filter based on selected tab
+    const selectedTypes = typeTabMap[selectedTypeTab.value];
+    if (selectedTypes.length > 0) {
+      filters.type = selectedTypes[0];
+    }
+
+    if (txStatusFilter.value) {
+      filters.status = txStatusFilter.value == 'success' ? "true" : "false";
+    }
+    if (txStartDate.value) {
+      // Convert datetime-local to ISO 8601
+      filters.start_date = new Date(txStartDate.value).toISOString();
+    }
+    if (txEndDate.value) {
+      // Convert datetime-local to ISO 8601
+      filters.end_date = new Date(txEndDate.value).toISOString();
+    }
+    if (txMinAmount.value !== undefined) {
+      filters.min_amount = txMinAmount.value;
+    }
+    if (txMaxAmount.value !== undefined) {
+      filters.max_amount = txMaxAmount.value;
+    }
+
+    const data = await fetchTransactions(filters);
+    txs.value = data.data || [];
+    totalTxCount.value = data.meta?.total || 0;
+    totalTxPages.value = data.meta?.totalPages || 0;
+  } catch (error) {
+    console.error('Error loading transactions:', error);
+    txs.value = [];
+    totalTxCount.value = 0;
+    totalTxPages.value = 0;
+  } finally {
+    loadingTxs.value = false;
+  }
+}
+
+function debouncedLoadTransactions(address: string) {
+  if (txDebounceTimer) {
+    clearTimeout(txDebounceTimer);
+  }
+  txDebounceTimer = setTimeout(() => {
+    currentTxPage.value = 1;
+    loadTransactions(address);
+  }, 300);
+}
+
+// Watch for filter changes
+watch([selectedTypeTab, txStatusFilter, txStartDate, txEndDate, txMinAmount, txMaxAmount, txSortBy, txSortOrder], () => {
+  if (props.address) {
+    debouncedLoadTransactions(props.address);
+  }
+});
+
+watch([currentTxPage, txItemsPerPage], () => {
+  if (props.address) {
+    loadTransactions(props.address);
+  }
+});
 
 function updateEvent() {
   loadAccount(props.address);
@@ -1197,113 +1323,256 @@ async function loadAddressPerformance(address: string) {
   </h2>
   <!-- Transactions -->
   <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">
-    <h2 class="card-title text-lg px-4 py-2">{{ $t('account.sent') }}</h2>
+    <!-- Filter Section - Compact & Modern -->
+    <div class="bg-base-200 dark:bg-base-300 rounded-lg border border-base-300 dark:border-base-400 mb-4">
+      <!-- Main Filter Bar -->
+      <div class="flex flex-wrap items-center gap-3 px-4 py-3">
+        <!-- Type Tabs - Compact Horizontal -->
+        <div class="flex items-center gap-1 flex-wrap">
+          <span class="text-xs font-medium text-base-content/70 mr-1">Type:</span>
+          <button
+            v-for="typeOption in [
+              { value: 'all', label: 'All' },
+              { value: 'send', label: 'Send' },
+              { value: 'claim', label: 'Claim' },
+              { value: 'proof', label: 'Proof' },
+              { value: 'governance', label: 'Gov' },
+              { value: 'staking', label: 'Stake' }
+            ]"
+            :key="typeOption.value"
+            @click="selectedTypeTab = typeOption.value as any"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200"
+            :class="selectedTypeTab === typeOption.value
+              ? 'bg-[#007bff] text-white shadow-sm'
+              : 'bg-base-100 dark:bg-base-200 text-base-content hover:bg-base-300 dark:hover:bg-base-100 border border-base-300 dark:border-base-400'"
+          >
+            {{ typeOption.label }}
+          </button>
+        </div>
+
+        <!-- Divider -->
+        <div class="h-6 w-px bg-base-300 dark:bg-base-500"></div>
+
+        <!-- Quick Filters -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <!-- Status -->
+          <div class="flex items-center gap-1.5">
+            <Icon icon="mdi:check-circle-outline" class="text-base-content/60 text-sm" />
+            <select v-model="txStatusFilter" class="select select-bordered select-xs h-8 min-h-8 px-2 text-xs w-24">
+              <option value="">All</option>
+              <option value="success">Success</option>
+              <option value="failed">Failed</option>
+            </select>
+          </div>
+
+          <!-- Sort By -->
+          <div class="flex items-center gap-1.5">
+            <Icon icon="mdi:sort" class="text-base-content/60 text-sm" />
+            <select v-model="txSortBy" class="select select-bordered select-xs h-8 min-h-8 px-2 text-xs w-28">
+              <option value="timestamp">Time</option>
+              <option value="amount">Amount</option>
+              <option value="fee">Fee</option>
+              <option value="block_height">Block</option>
+              <option value="type">Type</option>
+              <option value="status">Status</option>
+            </select>
+          </div>
+
+          <!-- Sort Order Toggle -->
+          <button
+            @click="txSortOrder = txSortOrder === 'desc' ? 'asc' : 'desc'"
+            class="btn btn-xs h-8 min-h-8 px-2 gap-1"
+            :class="txSortOrder === 'desc' ? 'btn-primary' : 'btn-ghost'"
+            :title="txSortOrder === 'desc' ? 'Descending' : 'Ascending'"
+          >
+            <Icon :icon="txSortOrder === 'desc' ? 'mdi:sort-descending' : 'mdi:sort-ascending'" class="text-sm" />
+          </button>
+        </div>
+
+        <!-- Advanced Filters Toggle -->
+        <div class="ml-auto">
+          <button
+            @click="showAdvancedTxFilters = !showAdvancedTxFilters"
+            class="btn btn-xs h-8 min-h-8 px-3 gap-1.5"
+            :class="showAdvancedTxFilters ? 'btn-primary' : 'btn-ghost'"
+          >
+            <Icon :icon="showAdvancedTxFilters ? 'mdi:chevron-up' : 'mdi:chevron-down'" class="text-sm" />
+            <span class="text-xs">Advanced</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Advanced Filters - Collapsible -->
+      <div v-show="showAdvancedTxFilters" class="border-t border-base-300 dark:border-base-400 px-4 py-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Date Range -->
+          <div>
+            <label class="label py-1">
+              <span class="label-text text-xs font-medium flex items-center gap-1.5">
+                <Icon icon="mdi:calendar-range" class="text-sm" />
+                Date Range
+              </span>
+            </label>
+            <div class="flex gap-2">
+              <input
+                v-model="txStartDate"
+                type="datetime-local"
+                class="input input-bordered input-xs h-8 text-xs flex-1"
+                placeholder="Start"
+              />
+              <span class="self-center text-xs text-base-content/50">→</span>
+              <input
+                v-model="txEndDate"
+                type="datetime-local"
+                class="input input-bordered input-xs h-8 text-xs flex-1"
+                placeholder="End"
+              />
+            </div>
+          </div>
+
+          <!-- Amount Range -->
+          <div>
+            <label class="label py-1">
+              <span class="label-text text-xs font-medium flex items-center gap-1.5">
+                <Icon icon="mdi:currency-usd" class="text-sm" />
+                Amount Range
+              </span>
+            </label>
+            <div class="flex gap-2">
+              <input
+                v-model.number="txMinAmount"
+                type="number"
+                class="input input-bordered input-xs h-8 text-xs flex-1"
+                placeholder="Min"
+              />
+              <span class="self-center text-xs text-base-content/50">-</span>
+              <input
+                v-model.number="txMaxAmount"
+                type="number"
+                class="input input-bordered input-xs h-8 text-xs flex-1"
+                placeholder="Max"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="services-table-wrapper services-table-scroll rounded-xl">
       <table class="table table-compact w-full">
         <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
           <tr class="dark:bg-base-100 bg-base-200 border-b-[0px] text-sm font-semibold">
             <th class="">{{ $t('account.height') }}</th>
             <th class="">{{ $t('account.hash') }}</th>
-            <th class="">{{ $t('account.messages') }}</th>
+            <th class="">{{ $t('account.type') }}</th>
             <th class="">{{ $t('account.amount') }}</th>
             <th class="">{{ $t('tx.fee') }}</th>
             <th class="">{{ $t('account.time') }}</th>
           </tr>
         </thead>
         <tbody class="bg-base-100 relative">
-          <tr v-if="txs?.length === 0">
-            <td colspan="10">
+          <tr v-if="loadingTxs" class="text-center">
+            <td colspan="6" class="py-8">
+              <div class="flex justify-center items-center">
+                <div class="loading loading-spinner loading-md"></div>
+                <span class="ml-2">Loading transactions...</span>
+              </div>
+            </td>
+          </tr>
+          <tr v-else-if="txs?.length === 0">
+            <td colspan="6">
               <div class="text-center">{{ $t('account.no_transactions') }}</div>
             </td>
           </tr>
-          <tr v-for="(v, index) in txs" :key="index" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
+          <tr v-for="(item, index) in txs" :key="item.hash" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
             <td class="text-sm py-3">
-              <RouterLink :to="`/${chain}/blocks/${v.height}`" class="dark:text-primary text-[#09279F] dark:invert">
-                {{ v.height }}</RouterLink>
+              <RouterLink :to="`/${chain}/blocks/${item.block_height}`" class="dark:text-primary text-[#09279F] dark:invert">
+                {{ item.block_height }}</RouterLink>
             </td>
             <td class="truncate py-3" style="max-width: 200px">
-              <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="dark:text-primary text-[#09279F] dark:invert">
-                {{ v.txhash }}
+              <RouterLink :to="`/${chain}/tx/${item.hash}`" class="dark:text-primary text-[#09279F] dark:invert">
+                {{ item.hash }}
               </RouterLink>
             </td>
-            <td class="flex items-center py-3">
-              <div class="mr-2">
-                {{ format.messages(v.tx.body.messages) }}
+            <td class="py-3">
+              <div class="flex items-center">
+                <span class="mr-2">{{ item.type }}</span>
+                <Icon v-if="item.status === 'true'" icon="mdi-check" class="text-[#60BC29] text-lg" />
+                <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
               </div>
-              <Icon v-if="v.code === 0" icon="mdi-check" class="text-[#60BC29] text-lg" />
-              <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
             </td>
-            <td>
-              <!-- {{v.tx.body?.messages[0]?.amount}} {{ v.tx.body?.messages[0]?.amount ? format.formatToken(v.tx.body?.messages[0]?.amount[0]) : '-'}} -->
-              {{ v.tx.body?.messages[0]?.amount ? format.formatToken(v.tx.body?.messages[0]?.amount[0]) : '-' }}
+            <td class="py-3">
+              {{ format.formatToken({ denom: 'upokt', amount: item.amount }) }}
             </td>
-            <td>
-              {{ v.tx.auth_info.fee.amount ? format.formatToken(v.tx.auth_info.fee.amount[0]) : '-' }}
+            <td class="py-3">
+              {{ format.formatToken({ denom: 'upokt', amount: item.fee }) }}
             </td>
-            <td class="py-3">{{ format.toLocaleDate(v.timestamp) }} <span class=" text-xs">({{
-              format.toDay(v.timestamp, 'from') }})</span> </td>
+            <td class="py-3">
+              {{ format.toLocaleDate(item.timestamp) }}
+              <span class="text-xs">({{ format.toDay(item.timestamp, 'from') }})</span>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
-  </div>
 
-  <!-- Received -->
-  <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">
-    <h2 class="card-title  px-4 py-2 text-lg">{{ $t('account.received') }}</h2>
-    <div class="services-table-wrapper services-table-scroll rounded-xl">
-      <table class="table table-compact w-full">
-        <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
-          <tr class="dark:bg-base-100 bg-base-200 border-b-[0px] text-sm font-semibold">
-            <th class="">{{ $t('account.height') }}</th>
-            <th class="">{{ $t('account.hash') }}</th>
-            <th class="">{{ $t('account.messages') }}</th>
-            <th class="">{{ $t('account.amount') }}</th>
-            <th class="">{{ $t('tx.fee') }}</th>
-            <th class="">{{ $t('account.time') }}</th>
-          </tr>
-        </thead>
-        <tbody class="bg-base-100 relative">
-          <tr v-if="recentReceived.length === 0">
-            <td colspan="10">
-              <div class="text-center">{{ $t('account.no_transactions') }}</div>
-            </td>
-          </tr>
-          <tr v-for="(v, index) in recentReceived" :key="index" class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
-            <td class="text-sm py-3">
-              <RouterLink :to="`/${chain}/blocks/${v.height}`" class="text-[#09279F] dark:text-primary dark:invert">
-                {{ v.height }}</RouterLink>
-            </td>
-            <td class="truncate py-3" style="max-width: 200px">
-              <RouterLink :to="`/${chain}/tx/${v.txhash}`" class="text-[#09279F] dark:text-primary dark:invert">
-                {{ v.txhash }}
-              </RouterLink>
-            </td>
+    <!-- Pagination -->
+    <div class="flex justify-between items-center gap-4 my-6 px-6">
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-gray-600">Show:</span>
+        <select 
+          v-model="txItemsPerPage" 
+          class="select select-bordered select-sm w-20"
+        >
+          <option :value="10">10</option>
+          <option :value="25">25</option>
+          <option :value="50">50</option>
+          <option :value="100">100</option>
+        </select>
+        <span class="text-sm text-gray-600">per page</span>
+      </div>
 
-            <td class="flex items-center py-3">
-              <div class="mr-2">
-                {{ format.messages(v.tx.body.messages) }}
-              </div>
-              <Icon v-if="v.code === 0" icon="mdi-check" class="text-[#60BC29] text-lg" />
-              <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
-            </td>
-            <td>
-              <div class="mr-2">
-                {{ v.tx.body.messages[0]?.amount && format.formatToken2(v.tx.body.messages[0].amount[0], true) }}
-                {{ v.tx.body.messages[0]?.stake && format.formatToken2(v.tx.body.messages[0].stake, true) }}
-                {{ (!v.tx.body.messages[0]?.stake && !v.tx.body.messages[0]?.amount) ? '-' : '' }}
-              </div>
-            </td>
-            <td>
-              {{ v.tx.auth_info.fee.amount ? format.formatToken(v.tx.auth_info.fee.amount[0]) : '-' }}
-            </td>
-            <td class="py-3">
-              {{ format.toLocaleDate(v.timestamp) }}
-              <span class=" text-xs">({{ format.toDay(v.timestamp, 'from') }})</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-gray-600">
+          Showing {{ ((currentTxPage - 1) * txItemsPerPage) + 1 }} to {{ Math.min(currentTxPage * txItemsPerPage, totalTxCount) }} of {{ totalTxCount }} transactions
+        </span>
+        
+        <div class="flex items-center gap-1">
+          <button
+            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+            @click="currentTxPage = 1"
+            :disabled="currentTxPage === 1 || totalTxPages === 0"
+          >
+            First
+          </button>
+          <button
+            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+            @click="currentTxPage--"
+            :disabled="currentTxPage === 1 || totalTxPages === 0"
+          >
+            &lt;
+          </button>
+
+          <span class="text-xs px-2">
+            Page {{ currentTxPage }} of {{ totalTxPages }}
+          </span>
+
+          <button
+            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+            @click="currentTxPage++"
+            :disabled="currentTxPage === totalTxPages || totalTxPages === 0"
+          >
+            &gt;
+          </button>
+          <button
+            class="page-btn bg-[#f8f9fa] border border-[#ccc] rounded px-[10px] py-[5px] cursor-pointer text-[#007bff] transition-colors duration-200 hover:bg-[#e9ecef] disabled:opacity-50 disabled:cursor-not-allowed text-[14px]" 
+            @click="currentTxPage = totalTxPages"
+            :disabled="currentTxPage === totalTxPages || totalTxPages === 0"
+          >
+            Last
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
