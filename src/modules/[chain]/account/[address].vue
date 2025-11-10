@@ -224,7 +224,7 @@ async function loadAccount(address: string) {
   });
   
   // Load transactions using new API
-  await loadTransactions(address);
+  void loadTransactions(address);
   
   blockchain.rpc.getDistributionDelegatorRewards(address).then((x) => {
     rewards.value = x;
