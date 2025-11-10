@@ -1,11 +1,18 @@
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import { Icon } from '@iconify/vue';
 import ApexCharts from 'vue3-apexcharts';
 import { useBlockchain } from '@/stores';
 
-const props = defineProps(['chain']);
+const props = defineProps<{
+  chain?: string;
+  filters?: {
+    supplier_address?: string;
+    owner_address?: string;
+  };
+}>();
+
 const chainStore = useBlockchain();
 
 // Map frontend chain names to API chain names
@@ -20,6 +27,53 @@ const getApiChainName = (chainName: string) => {
 
 const current = chainStore?.current?.chainName || props.chain || 'pocket-beta';
 const apiChainName = computed(() => getApiChainName(current));
+
+// Helper function to determine if we should use POST (multiple addresses or long URL)
+function shouldUsePost(params: URLSearchParams): boolean {
+  // Use filters from props if provided, otherwise use internal selectedSupplier
+  const supplierFilter = props.filters?.supplier_address || selectedSupplier.value;
+  if (!supplierFilter) return false;
+  
+  // Check if it's comma-separated (multiple addresses)
+  if (typeof supplierFilter === 'string' && supplierFilter.includes(',')) {
+    return true;
+  }
+  
+  // Check if URL would be too long (conservative estimate: > 2000 chars)
+  const url = `?${params.toString()}`;
+  return url.length > 2000;
+}
+
+// Helper function to make API request (GET or POST)
+async function fetchApi(url: string, params: URLSearchParams): Promise<any> {
+  if (shouldUsePost(params)) {
+    // Use POST with request body
+    const postBody: any = {};
+    params.forEach((value, key) => {
+      if (key === 'supplier_address' && value.includes(',')) {
+        // Convert comma-separated to array
+        postBody[key] = value.split(',').map((addr: string) => addr.trim()).filter((addr: string) => addr.length > 0);
+      } else {
+        postBody[key] = value;
+      }
+    });
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(postBody),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data?.error || `HTTP ${response.status}`);
+    return data;
+  } else {
+    // Use GET
+    const response = await fetch(`${url}?${params.toString()}`);
+    const data = await response.json();
+    if (!response.ok) throw new Error(data?.error || `HTTP ${response.status}`);
+    return data;
+  }
+}
 
 interface ProofSubmission {
   id: number;
@@ -94,15 +148,49 @@ const relaysChartSeries = ref([{ name: 'Total Relays', data: [] as number[] }]);
 
 // Bar chart for top services by rewards (most recent hour)
 const topServicesChartSeries = ref([{ name: 'Rewards (upokt)', data: [] as number[] }]);
-const topServicesChartOptions = ref({
-  chart: { type: 'bar', height: 350, toolbar: { show: false } },
-  colors: ['#A3E635'],
-  dataLabels: { enabled: true, formatter: (v: number) => (v / 1000000).toFixed(2) + 'M', style: { colors: ['#000'] } },
-  plotOptions: { bar: { horizontal: false, columnWidth: '55%', borderRadius: 4 } },
-  grid: { borderColor: 'rgba(255, 255, 255, 0.1)' },
-  xaxis: { categories: [] as string[], labels: { style: { colors: 'rgb(116, 109, 105)' }, rotate: -45, rotateAlways: false } },
-  yaxis: { labels: { style: { colors: 'rgb(116, 109, 105)' }, formatter: (v: number) => (v / 1000000).toFixed(2) + 'M' } },
-  tooltip: { theme: 'dark', y: { formatter: (v: number) => v.toLocaleString() + ' upokt' } }
+const topServicesChartType = ref<'bar' | 'area' | 'line'>('bar');
+const topServicesChartCategories = ref<string[]>([]);
+
+const topServicesChartOptions = computed(() => {
+  const chartType = topServicesChartType.value;
+  
+  const strokeConfig = chartType === 'bar' 
+    ? { width: 0 }
+    : {
+        curve: chartType === 'area' ? 'smooth' : 'straight',
+        width: 2
+      };
+  
+  const fillConfig = chartType === 'bar'
+    ? { opacity: 1, type: 'solid' }
+    : {
+        type: chartType === 'area' ? 'gradient' : 'solid',
+        opacity: chartType === 'area' ? 0.3 : 0,
+        gradient: chartType === 'area' ? {
+          shadeIntensity: 1,
+          opacityFrom: 0.7,
+          opacityTo: 0.3,
+          stops: [0, 90, 100]
+        } : undefined
+      };
+
+  return {
+    chart: { type: chartType, height: 350, toolbar: { show: false } },
+    colors: ['#A3E635'],
+    dataLabels: { enabled: chartType === 'bar', formatter: (v: number) => (v / 1000000).toFixed(2) + 'M', style: { colors: ['#000'] } },
+    plotOptions: chartType === 'bar' ? { bar: { horizontal: false, columnWidth: '55%', borderRadius: 4 } } : {},
+    stroke: strokeConfig,
+    fill: fillConfig,
+    grid: { borderColor: 'rgba(255, 255, 255, 0.1)' },
+    markers: chartType === 'bar' ? { size: 0 } : chartType === 'line' ? {
+      size: 4,
+      strokeWidth: 0,
+      hover: { size: 6 }
+    } : { size: 2, hover: { size: 5 } },
+    xaxis: { categories: topServicesChartCategories.value, labels: { style: { colors: 'rgb(116, 109, 105)' }, rotate: -45, rotateAlways: false } },
+    yaxis: { labels: { style: { colors: 'rgb(116, 109, 105)' }, formatter: (v: number) => (v / 1000000).toFixed(2) + 'M' } },
+    tooltip: { theme: 'dark', y: { formatter: (v: number) => v.toLocaleString() + ' upokt' } }
+  };
 });
 
 
@@ -111,18 +199,15 @@ async function loadSummaryStats() {
     const params = new URLSearchParams();
     params.append('chain', apiChainName.value);
     if (selectedService.value) params.append('service_id', selectedService.value);
-    if (selectedSupplier.value) params.append('supplier_address', selectedSupplier.value);
+    // Use filters from props if provided, otherwise use internal selectedSupplier
+    const supplierFilter = props.filters?.supplier_address || selectedSupplier.value;
+    if (supplierFilter) params.append('supplier_address', supplierFilter);
+    if (props.filters?.owner_address) params.append('owner_address', props.filters.owner_address);
     if (selectedApplication.value) params.append('application_address', selectedApplication.value);
     
-    const response = await fetch(`/api/v1/proof-submissions/summary?${params.toString()}`);
-    const data = await response.json();
-    
-    if (response.ok) {
-      summaryStats.value = data.data;
-    } else {
-      console.error('Error loading summary stats:', data);
-    }
-  } catch (error) {
+    const data = await fetchApi('/api/v1/proof-submissions/summary', params);
+    summaryStats.value = data.data;
+  } catch (error: any) {
     console.error('Error loading summary stats:', error);
   }
 }
@@ -133,23 +218,19 @@ async function loadRewardAnalytics() {
     const params = new URLSearchParams();
     params.append('chain', apiChainName.value);
     if (selectedService.value) params.append('service_id', selectedService.value);
-    if (selectedSupplier.value) params.append('supplier_address', selectedSupplier.value);
+    // Use filters from props if provided, otherwise use internal selectedSupplier
+    const supplierFilter = props.filters?.supplier_address || selectedSupplier.value;
+    if (supplierFilter) params.append('supplier_address', supplierFilter);
+    if (props.filters?.owner_address) params.append('owner_address', props.filters.owner_address);
     if (selectedApplication.value) params.append('application_address', selectedApplication.value);
     if (startDate.value) params.append('start_date', startDate.value);
     if (endDate.value) params.append('end_date', endDate.value);
     params.append('limit', '100');
     
-    const response = await fetch(`/api/v1/proof-submissions/rewards?${params.toString()}`);
-    const data = await response.json();
-    
-    if (response.ok) {
-      rewardAnalytics.value = data.data || [];
-      updateCharts();
-    } else {
-      console.error('Error loading reward analytics:', data);
-      rewardAnalytics.value = [];
-    }
-  } catch (error) {
+    const data = await fetchApi('/api/v1/proof-submissions/rewards', params);
+    rewardAnalytics.value = data.data || [];
+    updateCharts();
+  } catch (error: any) {
     console.error('Error loading reward analytics:', error);
     rewardAnalytics.value = [];
   } finally {
@@ -219,10 +300,7 @@ function updateCharts() {
   
   // Update bar chart for top services
   topServicesChartSeries.value = [{ name: 'Rewards (upokt)', data: topServices.map(s => s.rewards) }];
-  topServicesChartOptions.value.xaxis = {
-    ...topServicesChartOptions.value.xaxis,
-    categories: topServices.map(s => s.serviceId)
-  };
+  topServicesChartCategories.value = topServices.map(s => s.serviceId);
   
   // Store latest hour bucket time for display
   latestHourBucketTime.value = latestHourBucket;
@@ -259,6 +337,12 @@ function formatUpokt(upokt: number | string): string {
   return (value / 1000000).toFixed(4);
 }
 
+// Watch for filter changes and reload data
+watch(() => props.filters, () => {
+  loadSummaryStats();
+  loadRewardAnalytics();
+}, { deep: true });
+
 onMounted(() => {
   loadSummaryStats();
   loadRewardAnalytics();
@@ -278,144 +362,257 @@ onMounted(() => {
       <p class="text-xs text-secondary mt-2">Data is aggregated by hour buckets</p>
     </div>
     
-    <!-- Last Hour Summary for Node Runners -->
-    <div v-if="topServicesData.length > 0" class="mb-5">
-      <div class="flex items-center justify-between mb-3">
-        <h3 class="text-lg font-semibold text-main">Last Hour Summary</h3>
-        <span v-if="latestHourBucketTime" class="text-xs text-secondary bg-base-200 dark:bg-base-300 px-3 py-1 rounded-full">
+    <!-- Top Row: 8 KPI Boxes (Compact) -->
+    <div v-if="summaryStats" class="mb-3">
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-2">
+          <div class="text-xs text-secondary mb-1">Submissions</div>
+          <div class="text-lg font-bold">{{ formatNumber(parseInt(summaryStats.total_submissions)) }}</div>
+        </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-2">
+          <div class="text-xs text-secondary mb-1">Suppliers</div>
+          <div class="text-lg font-bold">{{ formatNumber(parseInt(summaryStats.unique_suppliers)) }}</div>
+        </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-2">
+          <div class="text-xs text-secondary mb-1">Applications</div>
+          <div class="text-lg font-bold">{{ formatNumber(parseInt(summaryStats.unique_applications)) }}</div>
+        </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-2">
+          <div class="text-xs text-secondary mb-1">Services</div>
+          <div class="text-lg font-bold">{{ formatNumber(parseInt(summaryStats.unique_services)) }}</div>
+        </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-2">
+          <div class="text-xs text-secondary mb-1">Total Relays</div>
+          <div class="text-lg font-bold">{{ formatNumber(parseInt(summaryStats.total_relays)) }}</div>
+        </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-2">
+          <div class="text-xs text-secondary mb-1">Avg Efficiency</div>
+          <div class="text-lg font-bold">{{ parseFloat(summaryStats.avg_efficiency_percent).toFixed(2) }}%</div>
+        </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-2">
+          <div class="text-xs text-secondary mb-1">Compute Units</div>
+          <div class="text-lg font-bold">{{ formatNumber(parseInt(summaryStats.total_claimed_compute_units)) }}</div>
+        </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-2">
+          <div class="text-xs text-secondary mb-1">Total Rewards</div>
+          <div class="text-lg font-bold">{{ formatUpokt(summaryStats.total_rewards_upokt) }}</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Last Hour Summary for Supplier Performance -->
+    <div v-if="topServicesData.length > 0" class="mb-3">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-semibold text-main">Last Hour Summary</h3>
+        <span v-if="latestHourBucketTime" class="text-xs text-secondary bg-base-200 dark:bg-base-300 px-2 py-1 rounded-full">
           {{ new Date(latestHourBucketTime).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }}
         </span>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 dark:bg-base-200 bg-[#A3E635] rounded-lg flex items-center justify-center">
-                <Icon icon="mdi:currency-usd" class="text-lg text-white" />
-              </div>
-              <div class="text-sm text-secondary">Rewards (upokt)</div>
-            </div>
-            <div class="text-xl font-bold">{{ formatNumber(lastHourTotalRewards) }}</div>
-          </div>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-2">
+          <div class="text-xs text-secondary mb-1">Rewards (upokt)</div>
+          <div class="text-lg font-bold">{{ formatNumber(lastHourTotalRewards) }}</div>
         </div>
-        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 dark:bg-base-200 bg-[#09279F] rounded-lg flex items-center justify-center">
-                <Icon icon="mdi:network" class="text-lg text-white" />
-              </div>
-              <div class="text-sm text-secondary">Relays</div>
-            </div>
-            <div class="text-xl font-bold">{{ formatNumber(lastHourTotalRelays) }}</div>
-          </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-2">
+          <div class="text-xs text-secondary mb-1">Relays</div>
+          <div class="text-lg font-bold">{{ formatNumber(lastHourTotalRelays) }}</div>
         </div>
-        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 dark:bg-base-200 bg-[#5E9AE4] rounded-lg flex items-center justify-center">
-                <Icon icon="mdi:percent" class="text-lg text-white" />
-              </div>
-              <div class="text-sm text-secondary">Avg Efficiency</div>
-            </div>
-            <div class="text-xl font-bold">{{ lastHourAvgEfficiency.toFixed(2) }}%</div>
-          </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-2">
+          <div class="text-xs text-secondary mb-1">Avg Efficiency</div>
+          <div class="text-lg font-bold">{{ lastHourAvgEfficiency.toFixed(2) }}%</div>
         </div>
-        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 dark:bg-base-200 bg-[#60BC29] rounded-lg flex items-center justify-center">
-                <Icon icon="mdi:file-document-multiple" class="text-lg text-white" />
-              </div>
-              <div class="text-sm text-secondary">Submissions</div>
-            </div>
-            <div class="text-xl font-bold">{{ formatNumber(lastHourSubmissions) }}</div>
-          </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-2">
+          <div class="text-xs text-secondary mb-1">Submissions</div>
+          <div class="text-lg font-bold">{{ formatNumber(lastHourSubmissions) }}</div>
         </div>
-        <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 dark:bg-base-200 bg-[#FFB206] rounded-lg flex items-center justify-center">
-                <Icon icon="mdi:star" class="text-lg text-white" />
-              </div>
-              <div class="text-sm text-secondary">Top Service</div>
-            </div>
-            <div class="text-xl font-bold truncate max-w-[10rem]" :title="lastHourTopService">{{ lastHourTopService || '-' }}</div>
-          </div>
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-2">
+          <div class="text-xs text-secondary mb-1">Top Service</div>
+          <div class="text-lg font-bold truncate" :title="lastHourTopService">{{ lastHourTopService || '-' }}</div>
         </div>
       </div>
     </div>
 
-    <!-- Top 10 Services by Rewards (Most Recent Hour) -->
-    <div v-if="topServicesData.length > 0" class="dark:bg-base-100 bg-base-200 pt-3 rounded-lg border-[3px] border-solid border-base-200 dark:border-base-100 mb-5">
-      <div class="flex items-center justify-between mb-4 ml-5 mr-5">
-        <div class="text-lg font-semibold text-main">Top 10 Services by Rewards (Last Hour)</div>
-        <span v-if="latestHourBucketTime" class="text-xs text-secondary bg-base-200 dark:bg-base-300 px-3 py-1 rounded-full">
+    <!-- Middle Section: Rewards Distribution Table (Large) -->
+    <div v-if="topServicesData.length > 0" class="dark:bg-base-100 bg-base-200 pt-3 rounded-lg border-[3px] border-solid border-base-200 dark:border-base-100 mb-3">
+      <div class="flex items-center justify-between mb-3 ml-4 mr-4">
+        <div class="text-base font-semibold text-main">Rewards Distribution</div>
+        <span v-if="latestHourBucketTime" class="text-xs text-secondary bg-base-200 dark:bg-base-300 px-2 py-1 rounded-full">
           {{ new Date(latestHourBucketTime).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }}
         </span>
       </div>
-      <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md">
-        <div class="h-96">
-          <ApexCharts type="bar" height="350" :options="topServicesChartOptions" :series="topServicesChartSeries" />
-        </div>
-      </div>
-      
-      <!-- Service Details Table -->
-      <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">
-        <div class="bg-base-200 rounded-md overflow-auto">
-          <table class="table table-compact w-full">
+      <div class="dark:bg-base-200 bg-base-100 p-2 rounded-md">
+        <div class="overflow-auto">
+          <table class="table table-compact w-full text-xs">
             <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
               <tr class="border-b-[0px]">
-                <th class="">Rank</th>
-                <th class="">Service</th>
-                <th class="">Supplier Address</th>
-                <th class="">Application Address</th>
-                <th class="">Rewards (upokt)</th>
-                <th class="">Efficiency</th>
-                <th class="">Relays</th>
+                <th class="py-1">Rank</th>
+                <th class="py-1">Service</th>
+                <th class="py-1">Supplier</th>
+                <th class="py-1">Application</th>
+                <th class="py-1">Rewards (upokt)</th>
+                <th class="py-1">Efficiency</th>
+                <th class="py-1">Relays</th>
               </tr>
             </thead>
             <tbody class="bg-base-100 relative">
-              <tr v-for="(service, index) in topServicesData" :key="service.serviceId" class="hover:bg-base-300 transition-colors rounded-xl duration-200 border-b-[0px]">
-                <td class="dark:bg-base-200 bg-white font-bold">
-                  <span class="badge badge-lg" :class="index === 0 ? 'badge-primary' : index === 1 ? 'badge-secondary' : index === 2 ? 'badge-accent' : 'badge-ghost'">
+              <tr v-for="(service, index) in topServicesData" :key="service.serviceId" class="hover:bg-base-300 transition-colors duration-200 border-b-[0px]">
+                <td class="dark:bg-base-200 bg-white font-bold py-1">
+                  <span class="badge badge-sm" :class="index === 0 ? 'badge-primary' : index === 1 ? 'badge-secondary' : index === 2 ? 'badge-accent' : 'badge-ghost'">
                     #{{ index + 1 }}
                   </span>
                 </td>
-                <td class="dark:bg-base-200 bg-white">
-                  <span class="badge badge-primary badge-sm">{{ service.serviceId }}</span>
+                <td class="dark:bg-base-200 bg-white py-1">
+                  <span class="badge badge-primary badge-xs">{{ service.serviceId }}</span>
                 </td>
-                <td class="dark:bg-base-200 bg-white truncate dark:text-warning text-[#153cd8]" style="max-width:25vw">
+                <td class="dark:bg-base-200 bg-white truncate py-1 text-xs" style="max-width:120px">
                   <RouterLink
                     v-if="service.topSupplier && service.topSupplier !== 'unknown'"
-                    class="truncate hover:underline font-mono text-xs"
+                    class="truncate hover:underline font-mono dark:text-warning text-[#153cd8]"
                     :to="`/${chain}/account/${service.topSupplier}`"
                     :title="service.topSupplier"
                   >
-                    {{ service.topSupplier.length > 20 ? service.topSupplier.substring(0, 17) + '...' : service.topSupplier }}
+                    {{ service.topSupplier.length > 15 ? service.topSupplier.substring(0, 12) + '...' : service.topSupplier }}
                   </RouterLink>
-                  <span v-else class="font-mono text-xs text-gray-500">-</span>
+                  <span v-else class="font-mono text-gray-500">-</span>
                 </td>
-                <td class="dark:bg-base-200 bg-white truncate dark:text-warning text-[#153cd8]" style="max-width:25vw">
+                <td class="dark:bg-base-200 bg-white truncate py-1 text-xs" style="max-width:120px">
                   <RouterLink
                     v-if="service.topApplication && service.topApplication !== 'unknown'"
-                    class="truncate hover:underline font-mono text-xs"
+                    class="truncate hover:underline font-mono dark:text-warning text-[#153cd8]"
                     :to="`/${chain}/account/${service.topApplication}`"
                     :title="service.topApplication"
                   >
-                    {{ service.topApplication.length > 20 ? service.topApplication.substring(0, 17) + '...' : service.topApplication }}
+                    {{ service.topApplication.length > 15 ? service.topApplication.substring(0, 12) + '...' : service.topApplication }}
                   </RouterLink>
-                  <span v-else class="font-mono text-xs text-gray-500">-</span>
+                  <span v-else class="font-mono text-gray-500">-</span>
                 </td>
-                <td class="dark:bg-base-200 bg-white">{{ formatNumber(service.rewards) }}</td>
-                <td class="dark:bg-base-200 bg-white">
-                  <span :class="service.efficiency >= 95 ? 'text-success' : service.efficiency >= 80 ? 'text-warning' : 'text-error'">
+                <td class="dark:bg-base-200 bg-white py-1 text-xs">{{ formatNumber(service.rewards) }}</td>
+                <td class="dark:bg-base-200 bg-white py-1">
+                  <span :class="service.efficiency >= 95 ? 'text-success' : service.efficiency >= 80 ? 'text-warning' : 'text-error'" class="text-xs">
                     {{ service.efficiency.toFixed(2) }}%
                   </span>
                 </td>
-                <td class="dark:bg-base-200 bg-white">{{ formatNumber(service.relays) }}</td>
+                <td class="dark:bg-base-200 bg-white py-1 text-xs">{{ formatNumber(service.relays) }}</td>
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Section: 3 Columns -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 mb-3">
+      <div>
+      <!-- Left Column: Servicer & Producer Cards (Stacked) -->
+      <div class="space-y-3 mb-3">
+        <div class="dark:bg-base-100 bg-base-200 rounded-lg p-3">
+          <div class="text-sm font-semibold mb-2">Servicer</div>
+          <div class="space-y-1 text-xs">
+            <div class="flex justify-between">
+              <span class="text-secondary mb-1">Relays Last 24H:</span>
+              <span class="font-medium">{{ formatNumber(parseInt(summaryStats?.total_relays || '0')) }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-secondary mb-1">Rewards Last 24H:</span>
+              <span class="font-medium">{{ formatUpokt(summaryStats?.total_rewards_upokt || '0') }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-secondary mb-1">Avg Efficiency:</span>
+              <span class="font-medium">{{ parseFloat(summaryStats?.avg_efficiency_percent || '0').toFixed(2) }}%</span>
+            </div>
+          </div>
+          <div class="space-y-1 text-xs">
+            <div class="flex justify-between">
+              <span class="text-secondary mb-1">Rewards / Times 24H:</span>
+              <span class="font-medium">{{ formatUpokt(summaryStats?.total_rewards_upokt || '0') }} / {{ formatNumber(parseInt(summaryStats?.total_submissions || '0')) }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-secondary mb-1">Rewards / Times 48H:</span>
+              <span class="font-medium">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Middle Column: Performance Card -->
+      <div class="dark:bg-base-100 bg-base-200 rounded-lg p-3">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-sm font-semibold">Performance</div>
+        </div>
+        <div class="space-y-2 text-xs">
+          <div class="flex justify-between">
+            <div class="text-secondary mb-1">Total Rewards <span>24H:</span></div>
+            <div>
+              <span class="font-medium">{{ formatUpokt(summaryStats?.total_rewards_upokt || '0') }}</span>
+            </div>
+          </div>
+          <div class="flex justify-between">
+            <div class="text-secondary mb-1">Servicer Avg Relays <span>24H:</span></div>
+            <div>
+              <span class="font-medium">{{ formatNumber(parseInt(summaryStats?.total_relays || '0')) }}</span>
+            </div>
+          </div>
+          <div class="flex justify-between">
+            <div class="text-secondary mb-1">Validator Avg Rewards <span>24H:</span></div>
+            <div class="">
+              <span class="font-medium">{{ (parseFloat(summaryStats?.avg_reward_per_relay || '0') / 1000000).toFixed(2) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      <!-- Right Column: Services Chart -->
+      <div class="dark:bg-base-100 bg-base-200 rounded-lg p-3">
+        <div class="text-sm font-semibold mb-2">Services</div>
+        <div class="dark:bg-base-200 bg-base-100 p-2 rounded-md">
+          <div v-if="topServicesData.length === 0" class="flex justify-center items-center h-64 text-gray-500 text-xs">
+            No data
+          </div>
+          <div v-else class="h-64 relative">
+            <ApexCharts 
+              :type="topServicesChartType" 
+              height="250" 
+              :options="topServicesChartOptions" 
+              :series="topServicesChartSeries"
+              :key="`topServices-${topServicesChartType}`"
+            />
+            <!-- Chart Type Selector - Bottom Right -->
+            <div class="absolute bottom-2 right-2 tabs tabs-boxed bg-base-200 dark:bg-base-300">
+              <button
+                @click="topServicesChartType = 'bar'"
+                :class="[
+                  'tab',
+                  topServicesChartType === 'bar' 
+                    ? 'tab-active bg-[#09279F] text-white' 
+                    : ''
+                ]"
+                title="Bar Chart">
+                <Icon icon="mdi:chart-bar" class="text-sm" />
+              </button>
+              <button
+                @click="topServicesChartType = 'area'"
+                :class="[
+                  'tab',
+                  topServicesChartType === 'area' 
+                    ? 'tab-active bg-[#09279F] text-white' 
+                    : ''
+                ]"
+                title="Area Chart">
+                <Icon icon="mdi:chart-areaspline" class="text-sm" />
+              </button>
+              <button
+                @click="topServicesChartType = 'line'"
+                :class="[
+                  'tab',
+                  topServicesChartType === 'line' 
+                    ? 'tab-active bg-[#09279F] text-white' 
+                    : ''
+                ]"
+                title="Line Chart">
+                <Icon icon="mdi:chart-line" class="text-sm" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

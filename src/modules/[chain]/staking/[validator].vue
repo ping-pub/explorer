@@ -483,39 +483,19 @@ function getTransactionFee(tx: any): string {
         <!-- Validator Details -->
         <p class="text-sm dark:text-gray-200 text-[#FFFFFF]">{{ v.description?.details }}</p>
       </div>
-      <div class="card-list ml-20">
-        <div class="flex items-center mb-2">
-          <Icon icon="mdi-web" class="text-xl mr-1" />
-          <span class="font-bold mr-2 text-sm">{{ $t('staking.website') }}: </span>
-          <a :href="v?.description?.website || '#'" :class="v?.description?.website
-            ? 'cursor-pointer text-sm'
-            : 'cursor-default text-sm'
-            ">
-            {{ v.description?.website || '-' }}
-          </a>
-        </div>
-        <div class="flex items-center">
-          <Icon icon="mdi-email-outline" class="text-xl mr-1" />
-          <span class="font-bold mr-2 text-sm">{{ $t('staking.contact') }}: </span>
-          <a v-if="v.description?.security_contact" :href="'mailto:' + v.description.security_contact || '#'"
-            class="cursor-pointer text-sm">
-            {{ v.description?.security_contact || '-' }}
-          </a>
-        </div>
-      </div>
     </div>
 
     <!-- Validator Stats Grid -->
-    <div class="grid grid-cols-1 md:!grid-cols-3 gap-4 my-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 my-4">
       <!-- Total Bonded Card -->
-      <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
-        <div class="flex items-center">
-          <div class="w-12 h-12 dark:bg-base-200 bg-[#5E9AE4] rounded-lg flex items-center justify-center mr-4">
-            <Icon icon="mdi-coin" class="text-3xl dark:text-primary text-[#FFFFFF]" />
+      <div class="dark:bg-base-100 bg-base-200 rounded-xl p-3 flex flex-col h-full">
+        <div class="flex items-center flex-1">
+          <div class="w-10 h-10 dark:bg-base-200 bg-[#5E9AE4] rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+            <Icon icon="mdi-coin" class="text-xl dark:text-primary text-[#FFFFFF]" />
           </div>
-          <div>
-            <div class="text-sm font-semibold dark:text-main text-[#64748B]">{{ $t('staking.total_bonded') }}</div>
-            <div class="text-3xl font-bold mt-2">{{ format.formatToken({
+          <div class="flex-1">
+            <div class="text-xs font-semibold dark:text-main text-[#64748B] mb-1">{{ $t('staking.total_bonded') }}</div>
+            <div class="text-xl font-bold dark:text-main text-[#171C1F]">{{ format.formatToken({
               amount: v.tokens, denom:
                 selfBonded.balance?.denom,
             }) }}</div>
@@ -524,28 +504,62 @@ function getTransactionFee(tx: any): string {
       </div>
 
       <!-- Self Bonded Card -->
-      <div class="dark:bg-base-100 bg-base-200 rounded-xl p-4">
-        <div class="flex items-center">
-          <div class="w-12 h-12 dark:bg-base-200 bg-[#5E9AE4] rounded-lg flex items-center justify-center mr-4">
-            <Icon icon="mdi-percent" class="text-3xl dark:text-primary text-[#FFFFFF]" />
+      <div class="dark:bg-base-100 bg-base-200 rounded-xl p-3 flex flex-col h-full">
+        <div class="flex items-center flex-1">
+          <div class="w-10 h-10 dark:bg-base-200 bg-[#5E9AE4] rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+            <Icon icon="mdi-percent" class="text-xl dark:text-primary text-[#FFFFFF]" />
           </div>
-          <div>
-            <div class="text-sm font-semibold dark:text-main text-[#64748B]">{{ $t('staking.self_bonded') }}</div>
-            <div class="text-2xl font-bold mt-2">{{ format.formatToken(selfBonded.balance) }}<span
-                class="text-sm font-normal text-gray-500 ml-1">({{ selfRate }})</span></div>
+          <div class="flex-1">
+            <div class="text-xs font-semibold dark:text-main text-[#64748B] mb-1">{{ $t('staking.self_bonded') }}</div>
+            <div class="text-xl font-bold dark:text-main text-[#171C1F]">{{ format.formatToken(selfBonded.balance) }}<span
+                class="text-xs font-normal text-gray-500 ml-1">({{ selfRate }})</span></div>
           </div>
         </div>
       </div>
 
       <!-- Annual Profit Card -->
-      <div class="dark:bg-base-100 bg-base-200 rounded-2xl p-4">
-        <div class="flex items-center">
-          <div class="w-12 h-12 dark:bg-base-200 bg-[#5E9AE4] rounded-lg flex items-center justify-center mr-4">
-            <Icon icon="mdi-finance" class="text-3xl dark:text-success text-[#ffffff]" />
+      <div class="dark:bg-base-100 bg-base-200 rounded-xl p-3 flex flex-col h-full">
+        <div class="flex items-center flex-1">
+          <div class="w-10 h-10 dark:bg-base-200 bg-[#5E9AE4] rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+            <Icon icon="mdi-finance" class="text-xl dark:text-success text-[#ffffff]" />
           </div>
-          <div>
-            <div class="text-sm font-semibold dark:text-main text-[#64748B]">{{ $t('staking.annual_profit') }}</div>
-            <div class="text-3xl font-bold mt-2 dark:text-success text-[#171C1F]">{{ apr }}</div>
+          <div class="flex-1">
+            <div class="text-xs font-semibold dark:text-main text-[#64748B] mb-1">{{ $t('staking.annual_profit') }}</div>
+            <div class="text-xl font-bold dark:text-success text-[#171C1F]">{{ apr }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- About Us Card -->
+      <div class="dark:bg-base-100 bg-base-200 rounded-xl p-3 flex flex-col h-full">
+        <div class="flex items-start flex-1">
+          <div class="w-10 h-10 dark:bg-base-200 bg-[#5E9AE4] rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+            <Icon icon="mdi-information-outline" class="text-xl dark:text-primary text-[#FFFFFF]" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-semibold dark:text-main text-[#64748B] mb-2">{{ $t('staking.about_us') || 'About Us' }}</div>
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-1.5">
+                <Icon icon="mdi-web" class="text-xs text-[#64748B] flex-shrink-0" />
+                <a :href="v?.description?.website || '#'" 
+                   :class="v?.description?.website
+                     ? 'cursor-pointer text-xs text-primary hover:underline truncate'
+                     : 'cursor-default text-xs text-gray-400'"
+                   :target="v?.description?.website ? '_blank' : undefined"
+                   :rel="v?.description?.website ? 'noopener noreferrer' : undefined">
+                  {{ v.description?.website || '-' }}
+                </a>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <Icon icon="mdi-email-outline" class="text-xs text-[#64748B] flex-shrink-0" />
+                <a v-if="v.description?.security_contact" 
+                   :href="'mailto:' + v.description.security_contact" 
+                   class="cursor-pointer text-xs text-primary hover:underline truncate">
+                  {{ v.description?.security_contact }}
+                </a>
+                <span v-else class="text-xs text-gray-400">-</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -183,20 +183,37 @@ const totalAmount = computed(() => {
 });
 
 const donutData = computed(() => {
-  // Each balance
-  const balanceSlices = balances.value.map(b => ({
-    label: b.denom.toUpperCase().replace('U', ''),
-    amount: parseFloat(format.formatToken(b, true).replace(',', ''))
-  }));
+  // Define colors: #09279F for Available, #FFB206 for Staked, #9E9E9E for MACT (grey/unusable)
+  const availableColor = '#09279F';
+  const stakedColor = '#FFB206';
+  const mactColor = '#9E9E9E'; // Grey for unusable MACT
+  
+  // Each balance - check if it's MACT
+  const balanceSlices = balances.value.map(b => {
+    const denom = b.denom.toUpperCase();
+    const isMACT = denom.includes('MACT');
+    return {
+      label: denom.replace('U', ''),
+      amount: parseFloat(format.formatToken(b, true).replace(',', '')),
+      color: isMACT ? mactColor : availableColor,
+      type: 'balance',
+      isMACT: isMACT,
+      balanceItem: b
+    };
+  });
   // Each delegation
   const delegationSlices = delegations.value.map((d, i) => ({
     label: `Staking #${i + 1}`,
-    amount: parseFloat(format.formatToken(d.balance, true).replace(',', ''))
+    amount: parseFloat(format.formatToken(d.balance, true).replace(',', '')),
+    color: stakedColor,
+    type: 'delegation',
+    isMACT: false,
+    delegationItem: d
   }));
   // Optionally, add rewards as slices too
   // const rewardSlices = rewards.value?.total?.map((r, i) => ({
   //   label: `Reward #${i + 1}`,
-  //   amount: parseFloat(format.formatToken(r, true))
+  //   amount: parseFloat(format.token(r, true))
   // })) || [];
   return [...balanceSlices, ...delegationSlices /*, ...rewardSlices*/];
 });
@@ -429,38 +446,100 @@ const performanceError = ref('')
 const rewardsChartSeries = ref([{ name: 'Total Rewards', data: [] as number[] }]);
 const relaysChartSeries = ref([{ name: 'Total Relays', data: [] as number[] }]);
 
-const rewardsChartOptions = ref({
-  chart: { type: 'area', height: 280, toolbar: { show: false }, zoom: { enabled: false } },
-  colors: ['#A3E635'],
-  dataLabels: { enabled: false },
-  stroke: { curve: 'smooth', width: 2 },
-  fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.3, stops: [0, 90, 100] } },
-  grid: { borderColor: 'rgba(255, 255, 255, 0.1)', row: { colors: ['transparent'], opacity: 0.5 } },
-  markers: { size: 0 },
-  xaxis: { categories: [] as string[], labels: { style: { colors: 'rgb(116, 109, 105)' }, rotate: -45, rotateAlways: false } },
-  yaxis: { 
-    labels: { 
-      style: { colors: 'rgb(116, 109, 105)' }, 
-      formatter: (v: number) => {
-        if (v >= 1000000) return (v / 1000000).toFixed(1) + 'M';
-        if (v >= 1000) return (v / 1000).toFixed(1) + 'K';
-        return v.toFixed(2);
-      }
-    } 
-  },
-  tooltip: { theme: 'dark', y: { formatter: (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 }) + ' POKT' } }
+const rewardsChartType = ref<'bar' | 'area' | 'line'>('area');
+const relaysChartType = ref<'bar' | 'area' | 'line'>('line');
+const rewardsChartCategories = ref<string[]>([]);
+const relaysChartCategories = ref<string[]>([]);
+
+const rewardsChartOptions = computed(() => {
+  const chartType = rewardsChartType.value;
+  
+  const strokeConfig = chartType === 'bar' 
+    ? { width: 0 }
+    : {
+        curve: chartType === 'area' ? 'smooth' : 'straight',
+        width: 2
+      };
+  
+  const fillConfig = chartType === 'bar'
+    ? { opacity: 1, type: 'solid' }
+    : {
+        type: chartType === 'area' ? 'gradient' : 'solid',
+        opacity: chartType === 'area' ? 0.3 : 0,
+        gradient: chartType === 'area' ? {
+          shadeIntensity: 1,
+          opacityFrom: 0.7,
+          opacityTo: 0.3,
+          stops: [0, 90, 100]
+        } : undefined
+      };
+
+  return {
+    chart: { type: chartType, height: 280, toolbar: { show: false }, zoom: { enabled: false } },
+    colors: ['#A3E635'],
+    dataLabels: { enabled: false },
+    stroke: strokeConfig,
+    fill: fillConfig,
+    grid: { borderColor: 'rgba(255, 255, 255, 0.1)', row: { colors: ['transparent'], opacity: 0.5 } },
+    markers: chartType === 'bar' ? { size: 0 } : chartType === 'line' ? {
+      size: 4,
+      strokeWidth: 0,
+      hover: { size: 6 }
+    } : { size: 0, hover: { size: 4 } },
+    xaxis: { categories: rewardsChartCategories.value, labels: { style: { colors: 'rgb(116, 109, 105)' }, rotate: -45, rotateAlways: false } },
+    yaxis: { 
+      labels: { 
+        style: { colors: 'rgb(116, 109, 105)' }, 
+        formatter: (v: number) => {
+          if (v >= 1000000) return (v / 1000000).toFixed(1) + 'M';
+          if (v >= 1000) return (v / 1000).toFixed(1) + 'K';
+          return v.toFixed(2);
+        }
+      } 
+    },
+    tooltip: { theme: 'dark', y: { formatter: (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 }) + ' POKT' } }
+  };
 });
 
-const relaysChartOptions = ref({
-  chart: { type: 'line', height: 280, toolbar: { show: false }, zoom: { enabled: false } },
-  colors: ['#5E9AE4'],
-  dataLabels: { enabled: false },
-  stroke: { curve: 'smooth', width: 2 },
-  grid: { borderColor: 'rgba(255, 255, 255, 0.1)', row: { colors: ['transparent'], opacity: 0.5 } },
-  markers: { size: 0 },
-  xaxis: { categories: [] as string[], labels: { style: { colors: 'rgb(116, 109, 105)' }, rotate: -45, rotateAlways: false } },
-  yaxis: { labels: { style: { colors: 'rgb(116, 109, 105)' }, formatter: (v: number) => (v / 1000).toFixed(0) + 'K' } },
-  tooltip: { theme: 'dark', y: { formatter: (v: number) => v.toLocaleString() + ' relays' } }
+const relaysChartOptions = computed(() => {
+  const chartType = relaysChartType.value;
+  
+  const strokeConfig = chartType === 'bar' 
+    ? { width: 0 }
+    : {
+        curve: chartType === 'area' ? 'smooth' : 'straight',
+        width: 2
+      };
+  
+  const fillConfig = chartType === 'bar'
+    ? { opacity: 1, type: 'solid' }
+    : {
+        type: chartType === 'area' ? 'gradient' : 'solid',
+        opacity: chartType === 'area' ? 0.3 : 0,
+        gradient: chartType === 'area' ? {
+          shadeIntensity: 1,
+          opacityFrom: 0.7,
+          opacityTo: 0.3,
+          stops: [0, 90, 100]
+        } : undefined
+      };
+
+  return {
+    chart: { type: chartType, height: 280, toolbar: { show: false }, zoom: { enabled: false } },
+    colors: ['#5E9AE4'],
+    dataLabels: { enabled: false },
+    stroke: strokeConfig,
+    fill: fillConfig,
+    grid: { borderColor: 'rgba(255, 255, 255, 0.1)', row: { colors: ['transparent'], opacity: 0.5 } },
+    markers: chartType === 'bar' ? { size: 0 } : chartType === 'line' ? {
+      size: 4,
+      strokeWidth: 0,
+      hover: { size: 6 }
+    } : { size: 0, hover: { size: 4 } },
+    xaxis: { categories: relaysChartCategories.value, labels: { style: { colors: 'rgb(116, 109, 105)' }, rotate: -45, rotateAlways: false } },
+    yaxis: { labels: { style: { colors: 'rgb(116, 109, 105)' }, formatter: (v: number) => (v / 1000).toFixed(0) + 'K' } },
+    tooltip: { theme: 'dark', y: { formatter: (v: number) => v.toLocaleString() + ' relays' } }
+  };
 });
 
 // Summary metrics
@@ -504,15 +583,8 @@ function updateCharts() {
   rewardsChartSeries.value = [{ name: 'Total Rewards (POKT)', data: sorted.map(d => d.total_rewards_upokt / 1000000) }];
   relaysChartSeries.value = [{ name: 'Total Relays', data: sorted.map(d => d.total_relays) }];
 
-  rewardsChartOptions.value.xaxis = {
-    ...rewardsChartOptions.value.xaxis,
-    categories: labels
-  };
-
-  relaysChartOptions.value.xaxis = {
-    ...relaysChartOptions.value.xaxis,
-    categories: labels
-  };
+  rewardsChartCategories.value = labels;
+  relaysChartCategories.value = labels;
 }
 
 function formatNumber(num: number | string): string {
@@ -739,7 +811,11 @@ async function loadAddressPerformance(address: string) {
           </div>
           <div class="grid md:!grid-cols-2">
             <div class="md:!col-span-1">
-              <DonutChart :series="donutData.map(x => x.amount)" :labels="donutData.map(x => x.label)" />
+              <DonutChart 
+                :series="donutData.map(x => x.amount)" 
+                :labels="donutData.map(x => x.label)"
+                :colors="donutData.map(x => x.color)"
+              />
             </div>
             <div class="md:!col-span-1 md:!mt-0">
               <!-- list-->
@@ -749,47 +825,40 @@ async function loadAddressPerformance(address: string) {
                   <div class="flex flex-col items-start">
                     <h2 class="text-[#64748B] text-sm px-4 mb-2 mt-10">Status</h2>
                     <div class="flex flex-col items-start px-4 mb-2 gap-4">
-                      <!-- Available balances -->
-                      <div v-for="(balanceItem, index) in balances" :key="`balance-${index}`"
+                      <!-- Items from donutData to match order and colors -->
+                      <div v-for="(item, index) in donutData" :key="`item-${index}`"
                         class="flex items-center justify-start text-sm font-semibold whitespace-nowrap gap-1">
-                        <span class="w-3 h-3 bg-[#09279F] inline-block"></span>
-                        {{ `Available` }}
-                      </div>
-                      <!-- Staked delegations -->
-                      <div v-for="(delegationItem, index) in delegations" :key="`delegation-${index}`"
-                        class="flex items-center justify-center text-sm font-semibold whitespace-nowrap gap-1">
-                        <span class="w-3 h-3 bg-[#FFB206] inline-block"></span>
-                        {{ `Staked` }}
+                        <span 
+                          class="w-3 h-3 inline-block rounded-sm"
+                          :style="{ backgroundColor: item.color }"
+                        ></span>
+                        <span :class="{ 'text-gray-400': item.isMACT }">
+                          {{ item.type === 'balance' ? (item.isMACT ? 'MACT (Unusable)' : 'Available') : 'Staked' }}
+                        </span>
                       </div>
                     </div>
                   </div>
                   <div class="flex flex-col">
                     <h2 class="text-[#64748B;] text-sm px-4 mb-2 mt-10">Amount</h2>
                     <div class="flex flex-col items-start px-4 mb-2 gap-4">
-                      <!-- Available balances -->
-                      <div v-for="(balanceItem, index) in balances" :key="`balance-${index}`"
-                        class="text-sm font-semibold whitespace-nowrap">
-                        {{ format.formatToken(balanceItem) }}
-                      </div>
-                      <!-- Staked delegations -->
-                      <div v-for="(delegationItem, index) in delegations" :key="`delegation-${index}`"
-                        class="flex text-sm font-semibold whitespace-nowrap">
-                        {{ format.formatToken(delegationItem?.balance) }}
+                      <!-- Items from donutData to match order -->
+                      <div v-for="(item, index) in donutData" :key="`item-${index}`"
+                        class="text-sm font-semibold whitespace-nowrap"
+                        :class="{ 'text-gray-400': item.isMACT }">
+                        {{ item.type === 'balance' ? format.formatToken((item as any).balanceItem) : format.formatToken((item as any).delegationItem?.balance) }}
                       </div>
                     </div>
                   </div>
                   <div class="flex flex-col">
                     <h2 class="text-[#64748B;] text-sm px-4 mb-2 mt-10">Percentage</h2>
                     <div class="flex flex-col items-start px-4 mb-2 gap-4">
-                      <!-- Available balances -->
-                      <div v-for="(balanceItem, index) in balances" :key="`balance-${index}`"
-                        class="text-xs font-semibold">
-                        {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
-                      </div>
-                      <!-- Staked delegations -->
-                      <div v-for="(delegationItem, index) in delegations" :key="`delegation-${index}`"
-                        class="flex items-start text-xs font-semibold">
-                        {{ format.calculatePercent(delegationItem?.balance?.amount, totalAmount) }}
+                      <!-- Items from donutData to match order -->
+                      <div v-for="(item, index) in donutData" :key="`item-${index}`"
+                        class="text-xs font-semibold"
+                        :class="{ 'text-gray-400': item.isMACT }">
+                        {{ item.type === 'balance' 
+                          ? format.calculatePercent((item as any).balanceItem.amount, totalAmount) 
+                          : format.calculatePercent((item as any).delegationItem?.balance?.amount, totalAmount) }}
                       </div>
                     </div>
                   </div>
@@ -907,7 +976,11 @@ async function loadAddressPerformance(address: string) {
           </div>
           <div class="grid md:!grid-cols-2">
             <div class="md:!col-span-1">
-              <DonutChart :series="donutData.map(x => x.amount)" :labels="donutData.map(x => x.label)" />
+              <DonutChart 
+                :series="donutData.map(x => x.amount)" 
+                :labels="donutData.map(x => x.label)"
+                :colors="donutData.map(x => x.color)"
+              />
             </div>
             <div class="md:!col-span-1 md:!mt-0">
               <!-- list-->
@@ -917,47 +990,40 @@ async function loadAddressPerformance(address: string) {
                   <div class="flex flex-col items-start">
                     <h2 class="text-[#64748B] text-sm px-4 mb-2 mt-10">Status</h2>
                     <div class="flex flex-col items-start px-4 mb-2 gap-4">
-                      <!-- Available balances -->
-                      <div v-for="(balanceItem, index) in balances" :key="`balance-${index}`"
+                      <!-- Items from donutData to match order and colors -->
+                      <div v-for="(item, index) in donutData" :key="`item-${index}`"
                         class="flex items-center justify-start text-sm font-semibold whitespace-nowrap gap-1">
-                        <span class="w-3 h-3 bg-[#09279F] inline-block"></span>
-                        {{ `Available` }}
-                      </div>
-                      <!-- Staked delegations -->
-                      <div v-for="(delegationItem, index) in delegations" :key="`delegation-${index}`"
-                        class="flex items-center justify-center text-sm font-semibold whitespace-nowrap gap-1">
-                        <span class="w-3 h-3 bg-[#FFB206] inline-block"></span>
-                        {{ `Staked` }}
+                        <span 
+                          class="w-3 h-3 inline-block rounded-sm"
+                          :style="{ backgroundColor: item.color }"
+                        ></span>
+                        <span :class="{ 'text-gray-400': item.isMACT }">
+                          {{ item.type === 'balance' ? (item.isMACT ? 'MACT (Unusable)' : 'Available') : 'Staked' }}
+                        </span>
                       </div>
                     </div>
                   </div>
                   <div class="flex flex-col">
                     <h2 class="text-[#64748B;] text-sm px-4 mb-2 mt-10">Amount</h2>
                     <div class="flex flex-col items-start px-4 mb-2 gap-4">
-                      <!-- Available balances -->
-                      <div v-for="(balanceItem, index) in balances" :key="`balance-${index}`"
-                        class="text-sm font-semibold whitespace-nowrap">
-                        {{ format.formatToken(balanceItem) }}
-                      </div>
-                      <!-- Staked delegations -->
-                      <div v-for="(delegationItem, index) in delegations" :key="`delegation-${index}`"
-                        class="flex text-sm font-semibold whitespace-nowrap">
-                        {{ format.formatToken(delegationItem?.balance) }}
+                      <!-- Items from donutData to match order -->
+                      <div v-for="(item, index) in donutData" :key="`item-${index}`"
+                        class="text-sm font-semibold whitespace-nowrap"
+                        :class="{ 'text-gray-400': item.isMACT }">
+                        {{ item.type === 'balance' ? format.formatToken((item as any).balanceItem) : format.formatToken((item as any).delegationItem?.balance) }}
                       </div>
                     </div>
                   </div>
                   <div class="flex flex-col">
                     <h2 class="text-[#64748B;] text-sm px-4 mb-2 mt-10">Percentage</h2>
                     <div class="flex flex-col items-start px-4 mb-2 gap-4">
-                      <!-- Available balances -->
-                      <div v-for="(balanceItem, index) in balances" :key="`balance-${index}`"
-                        class="text-xs font-semibold">
-                        {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
-                      </div>
-                      <!-- Staked delegations -->
-                      <div v-for="(delegationItem, index) in delegations" :key="`delegation-${index}`"
-                        class="flex items-start text-xs font-semibold">
-                        {{ format.calculatePercent(delegationItem?.balance?.amount, totalAmount) }}
+                      <!-- Items from donutData to match order -->
+                      <div v-for="(item, index) in donutData" :key="`item-${index}`"
+                        class="text-xs font-semibold"
+                        :class="{ 'text-gray-400': item.isMACT }">
+                        {{ item.type === 'balance' 
+                          ? format.calculatePercent((item as any).balanceItem.amount, totalAmount) 
+                          : format.calculatePercent((item as any).delegationItem?.balance?.amount, totalAmount) }}
                       </div>
                     </div>
                   </div>
@@ -1237,9 +1303,51 @@ async function loadAddressPerformance(address: string) {
         <div class="flex items-center mb-4">
           <div class="text-lg font-semibold text-main ml-5">Daily Rewards Trend</div>
         </div>
-        <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md">
+        <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md relative">
           <div class="h-80">
-            <ApexCharts type="area" height="280" :options="rewardsChartOptions" :series="rewardsChartSeries" />
+            <ApexCharts 
+              :type="rewardsChartType" 
+              height="280" 
+              :options="rewardsChartOptions" 
+              :series="rewardsChartSeries"
+              :key="`rewards-${rewardsChartType}`"
+            />
+          </div>
+          <!-- Chart Type Selector - Bottom Right -->
+          <div class="absolute bottom-2 right-2 tabs tabs-boxed bg-base-200 dark:bg-base-300">
+            <button
+              @click="rewardsChartType = 'bar'"
+              :class="[
+                'tab',
+                rewardsChartType === 'bar' 
+                  ? 'tab-active bg-[#09279F] text-white' 
+                  : ''
+              ]"
+              title="Bar Chart">
+              <Icon icon="mdi:chart-bar" class="text-sm" />
+            </button>
+            <button
+              @click="rewardsChartType = 'area'"
+              :class="[
+                'tab',
+                rewardsChartType === 'area' 
+                  ? 'tab-active bg-[#09279F] text-white' 
+                  : ''
+              ]"
+              title="Area Chart">
+              <Icon icon="mdi:chart-areaspline" class="text-sm" />
+            </button>
+            <button
+              @click="rewardsChartType = 'line'"
+              :class="[
+                'tab',
+                rewardsChartType === 'line' 
+                  ? 'tab-active bg-[#09279F] text-white' 
+                  : ''
+              ]"
+              title="Line Chart">
+              <Icon icon="mdi:chart-line" class="text-sm" />
+            </button>
           </div>
         </div>
       </div>
@@ -1248,9 +1356,51 @@ async function loadAddressPerformance(address: string) {
         <div class="flex items-center mb-4">
           <div class="text-lg font-semibold text-main ml-5">Daily Relays Trend</div>
         </div>
-        <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md">
+        <div class="dark:bg-base-200 bg-base-100 p-4 rounded-md relative">
           <div class="h-80">
-            <ApexCharts type="line" height="280" :options="relaysChartOptions" :series="relaysChartSeries" />
+            <ApexCharts 
+              :type="relaysChartType" 
+              height="280" 
+              :options="relaysChartOptions" 
+              :series="relaysChartSeries"
+              :key="`relays-${relaysChartType}`"
+            />
+          </div>
+          <!-- Chart Type Selector - Bottom Right -->
+          <div class="absolute bottom-2 right-2 tabs tabs-boxed bg-base-200 dark:bg-base-300">
+            <button
+              @click="relaysChartType = 'bar'"
+              :class="[
+                'tab',
+                relaysChartType === 'bar' 
+                  ? 'tab-active bg-[#09279F] text-white' 
+                  : ''
+              ]"
+              title="Bar Chart">
+              <Icon icon="mdi:chart-bar" class="text-sm" />
+            </button>
+            <button
+              @click="relaysChartType = 'area'"
+              :class="[
+                'tab',
+                relaysChartType === 'area' 
+                  ? 'tab-active bg-[#09279F] text-white' 
+                  : ''
+              ]"
+              title="Area Chart">
+              <Icon icon="mdi:chart-areaspline" class="text-sm" />
+            </button>
+            <button
+              @click="relaysChartType = 'line'"
+              :class="[
+                'tab',
+                relaysChartType === 'line' 
+                  ? 'tab-active bg-[#09279F] text-white' 
+                  : ''
+              ]"
+              title="Line Chart">
+              <Icon icon="mdi:chart-line" class="text-sm" />
+            </button>
           </div>
         </div>
       </div>
