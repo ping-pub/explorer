@@ -1,23 +1,67 @@
 <script lang="ts" setup>
-import { computed, ref, reactive, onMounted, nextTick, onBeforeUnmount, watch } from 'vue';
-import { useBaseStore, useFormatter } from '@/stores';
-import { PageRequest, type Pagination, type Block } from '@/types';
-import { formatDate } from '@vueuse/core';
+import { computed, ref, onMounted, watch } from 'vue'
+import { useStakingStore, useBaseStore, useFormatter } from '@/stores'
+import { PageRequest } from '@/types'
+import { useBlockchain } from '@/stores'
 
-const props = defineProps(['chain']);
-const tab = ref('blocks');
-const base = useBaseStore();
-const format = useFormatter();
+const props = defineProps(['chain'])
+const tab = ref('blocks')
+const base = useBaseStore()
+const stakingStore = useStakingStore();
+stakingStore.init()
+const format = useFormatter()
+const blockchain = useBlockchain()
 
-// Server-side blocks fetching (consistent with TX page)
+// ✅ Network Stats
+const networkStats = ref({
+  wallets: 0,
+  applications: 0,
+  suppliers: 0,
+  gateways: 0,
+})
+
+// ✅ Cache control
+const networkStatsCacheTime = ref(0)
+const CACHE_EXPIRATION_MS = 60000
+
+// ✅ Load network stats
+async function loadNetworkStats() {
+  const now = Date.now()
+  if (now - networkStatsCacheTime.value < CACHE_EXPIRATION_MS && networkStats.value.wallets > 0) {
+    return
+  }
+
+  const pageRequest = new PageRequest()
+  pageRequest.limit = 1
+
+  try {
+    const [applicationsData, suppliersData, gatewaysData] = await Promise.all([
+      blockchain.rpc.getApplications(pageRequest),
+      blockchain.rpc.getSuppliers(pageRequest),
+      blockchain.rpc.getGateways(pageRequest),
+    ])
+
+    networkStats.value.applications = parseInt(applicationsData.pagination?.total || '0')
+    networkStats.value.suppliers = parseInt(suppliersData.pagination?.total || '0')
+    networkStats.value.gateways = parseInt(gatewaysData.pagination?.total || '0')
+    networkStatsCacheTime.value = now
+  } catch (error) {
+    console.error('Error loading network stats:', error)
+  }
+}
+
+// ✅ API blocks interface
 interface ApiBlockItem {
-  id: string;
-  height: number;
-  hash: string;
-  timestamp: string;
-  proposer: string;
-  chain: string;
-  transaction_count?: number;
+  id: string
+  height: number
+  hash: string
+  timestamp: string
+  proposer: string
+  chain: string
+  transaction_count?: number
+  // size?: number
+  block_production_time?: number
+  raw_block_size?: number
 }
 
 const getApiChainName = (chainName: string) => {
@@ -25,86 +69,111 @@ const getApiChainName = (chainName: string) => {
     'pocket-beta': 'pocket-testnet-beta',
     'pocket-alpha': 'pocket-testnet-alpha',
     'pocket-mainnet': 'pocket-mainnet'
-  };
-  return chainMap[chainName] || chainName || 'pocket-testnet-beta';
-};
+  }
+  return chainMap[chainName] || chainName || 'pocket-testnet-beta'
+}
 
-import { useBlockchain } from '@/stores';
-const chainStore = useBlockchain();
-const apiChainName = computed(() => getApiChainName(chainStore.current?.chainName || props.chain || 'pocket-beta'));
+const chainStore = useBlockchain()
+const apiChainName = computed(() =>
+  getApiChainName(chainStore.current?.chainName || props.chain || 'pocket-beta')
+)
 
-const blocks = ref<ApiBlockItem[]>([]);
-const loading = ref(false);
-const currentPage = ref(1);
-const itemsPerPage = ref(25);
-const totalBlocks = ref(0);
-const totalPages = ref(0);
-const pageSizeOptions = [10, 25, 50, 100];
+const blocks = ref<ApiBlockItem[]>([])
+const loading = ref(false)
+const currentPage = ref(1)
+const itemsPerPage = ref(25)
+const totalBlocks = ref(0)
+const totalPages = ref(0)
+const pageSizeOptions = [10, 25, 50, 100]
 
+// ✅ Fetch blocks
 async function loadBlocks() {
-  loading.value = true;
+  loading.value = true
   try {
-    const url = `/api/v1/blocks?chain=${apiChainName.value}&page=${currentPage.value}&limit=${itemsPerPage.value}`;
-    const res = await fetch(url);
-    const data = await res.json();
+    const url = `/api/v1/blocks?chain=${apiChainName.value}&page=${currentPage.value}&limit=${itemsPerPage.value}`
+    const res = await fetch(url)
+    const data = await res.json()
+
     if (res.ok) {
-      blocks.value = data.data || [];
-      totalBlocks.value = data.meta?.total || 0;
-      totalPages.value = data.meta?.totalPages || 0;
+      blocks.value = data.data.map((b: ApiBlockItem) => ({
+        ...b,
+        size: b.raw_block_size || (b.transaction_count ? b.transaction_count * 250 : 0)
+      }))
+      totalBlocks.value = data.meta?.total || 0
+      totalPages.value = data.meta?.totalPages || 0
     } else {
-      blocks.value = [];
-      totalBlocks.value = 0;
-      totalPages.value = 0;
-      console.error('Error loading blocks:', data);
+      console.error('Error loading blocks:', data)
+      blocks.value = []
+      totalBlocks.value = 0
+      totalPages.value = 0
     }
   } catch (e) {
-    console.error('Error loading blocks:', e);
-    blocks.value = [];
-    totalBlocks.value = 0;
-    totalPages.value = 0;
+    console.error('Error loading blocks:', e)
+    blocks.value = []
+    totalBlocks.value = 0
+    totalPages.value = 0
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
-watch(itemsPerPage, () => {
-  currentPage.value = 1;
-  loadBlocks();
-});
+// ✅ Watchers
+watch(itemsPerPage, () => { currentPage.value = 1; loadBlocks() })
+watch(currentPage, () => loadBlocks())
+watch(apiChainName, (n, o) => { if(n!==o){ currentPage.value=1; loadBlocks() } })
 
-watch(currentPage, () => {
-  loadBlocks();
-});
+// ✅ Convert bytes → largest appropriate unit (B, KB, MB, GB, TB, PB)
+function formatBytes(bytes?: number): string {
+  if (!bytes || bytes === 0) return '0 B'
+  
+  const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+  const k = 1024
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  
+  // Clamp i to valid unit index
+  const unitIndex = Math.min(i, units.length - 1)
+  const value = bytes / Math.pow(k, unitIndex)
+  
+  // Format with appropriate decimal places
+  const decimals = unitIndex === 0 ? 0 : value < 10 ? 2 : 1
+  return `${value.toFixed(decimals)} ${units[unitIndex]}`
+}
 
-watch(apiChainName, (n, o) => {
-  if (n !== o) {
-    currentPage.value = 1;
-    loadBlocks();
+
+// ✅ Convert seconds → "Xs" or "Xm Ys" without decimal in seconds
+function formatBlockTime(secondsStr?: string | number) {
+  if (!secondsStr) return '0s'
+  const totalSeconds = typeof secondsStr === 'string' ? parseFloat(secondsStr) : secondsStr
+
+  if (totalSeconds < 60) {
+    return `${Math.round(totalSeconds)}s` // sirf seconds, rounded
   }
-});
 
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = Math.round(totalSeconds % 60) // seconds rounded to integer
+  return `${minutes}m ${seconds}s` // minutes aur seconds, no decimal
+}
+
+
+// ✅ Pagination
+function goToFirst() { if (currentPage.value !== 1) currentPage.value = 1 }
+function goToLast() { if (currentPage.value !== totalPages.value) currentPage.value = totalPages.value }
+function nextPage() { if (currentPage.value < totalPages.value) currentPage.value++ }
+function prevPage() { if (currentPage.value > 1) currentPage.value-- }
+
+// ✅ Auto-load on mount
 onMounted(() => {
-  loadBlocks();
-});
-
-// ✅ Pagination functions
-function goToFirst() {
-  if (currentPage.value !== 1) currentPage.value = 1;
-}
-function goToLast() {
-  if (currentPage.value !== totalPages.value) currentPage.value = totalPages.value;
-}
-function nextPage() {
-  if (currentPage.value < totalPages.value) currentPage.value++;
-}
-function prevPage() {
-  if (currentPage.value > 1) currentPage.value--;
-}
+  loadNetworkStats()
+  loadBlocks()
+})
 </script>
 
 <template>
   <div>
-    <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-white">Blocks</p>
+    <p class="bg-[#09279F] dark:bg-base-100 text-2xl rounded-xl px-4 py-4 my-4 font-bold text-white">
+      Blocks
+    </p>
+
     <div class="tabs tabs-boxed bg-transparent mb-4">
       <a
         class="tab text-gray-400 uppercase"
@@ -115,7 +184,7 @@ function prevPage() {
       </a>
       <RouterLink
         class="tab text-gray-400 uppercase"
-        :to="`/${chain}/blocks/${Number(base.latest?.block?.header.height || 0) + 10000}`"
+        :to="`/${props.chain}/blocks/${Number(base.latest?.block?.header.height || 0) + 10000}`"
       >
         {{ $t('block.future') }}
       </RouterLink>
@@ -129,19 +198,23 @@ function prevPage() {
         <table class="table table-compact w-full">
           <thead class="dark:bg-base-100 bg-base-200 sticky top-0 border-0">
             <tr class="border-b-[0px] text-sm font-semibold">
-              <th class="">{{ $t('block.block_header') }}</th>
-              <th class="">{{ $t('account.hash') }}</th>
-              <th class="">{{ $t('block.proposer') }}</th>
-              <th class="">{{ $t('account.no_of_transactions') }}</th>
-              <th class="">{{ $t('account.time') }}</th>
-              <th class="">{{ $t('block.relay') }}</th>
-              <th class="">{{ $t('block.size') }}</th>
+              <th>{{ $t('block.block_header') }}</th>
+              <th>{{ $t('account.hash') }}</th>
+              <th>{{ $t('block.proposer') }}</th>
+              <th>{{ $t('account.no_of_transactions') }}</th>
+              <th>{{ $t('account.time') }}</th>
+              <th>Applications</th>
+              <th>Suppliers</th>
+              <th>Gateways</th>
+              <th>Relays</th>
+              <th>{{ $t('block.production_time') }}</th>
+              <th>{{ $t('block.size') }}</th>
             </tr>
           </thead>
 
           <tbody class="bg-base-100 relative">
             <tr v-if="loading">
-              <td colspan="7" class="py-8">
+              <td colspan="11" class="py-8">
                 <div class="flex justify-center items-center">
                   <div class="loading loading-spinner loading-md"></div>
                   <span class="ml-2">Loading blocks...</span>
@@ -149,25 +222,36 @@ function prevPage() {
               </td>
             </tr>
             <tr v-else-if="!loading && blocks.length === 0">
-              <td colspan="7" class="py-8 text-center text-gray-500">
-                No blocks found
-              </td>
+              <td colspan="11" class="py-8 text-center text-gray-500">No blocks found</td>
             </tr>
-            <tr v-else v-for="block in blocks" :key="block.id"
-              class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl">
-              <td class="font-medium dark:text-warning text-[#09279F]">
-                {{ block.height }}
-              </td>
-              <td class="truncate dark:text-warning text-[#09279F]" style="max-width: 18rem; overflow: hidden">
-                <RouterLink class="truncate hover:underline" :title="block.hash" :to="`/${chain}/blocks/${block.height}`">
+            <tr
+              v-else
+              v-for="block in blocks"
+              :key="block.id"
+              class="hover:bg-gray-100 dark:hover:bg-[#384059] dark:bg-base-200 bg-white border-0 rounded-xl"
+            >
+              <td class="font-medium dark:text-warning text-[#09279F]">{{ block.height }}</td>
+              <td
+                class="truncate dark:text-warning text-[#09279F]"
+                style="max-width: 18rem; overflow: hidden"
+              >
+                <RouterLink
+                  class="truncate hover:underline"
+                  :title="block.hash"
+                  :to="`/${props.chain}/blocks/${block.height}`"
+                >
                   {{ block.hash || block.id.split(':')[1] }}
                 </RouterLink>
               </td>
               <td>{{ format.validator(block.proposer) }}</td>
               <td>{{ (block.transaction_count ?? 0).toLocaleString() }}</td>
               <td>{{ format.toDay(block.timestamp, 'from') }}</td>
+              <td>{{ networkStats.applications.toLocaleString() }}</td>
+              <td>{{ networkStats.suppliers.toLocaleString() }}</td>
+              <td>{{ networkStats.gateways.toLocaleString() }}</td>
               <td>{{ 0 }}</td>
-              <td>0 bytes</td>
+              <td>{{ formatBlockTime(block.block_production_time) }}</td>
+              <td>{{ formatBytes(block.raw_block_size) }}</td>
             </tr>
           </tbody>
         </table>
