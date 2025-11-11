@@ -202,14 +202,24 @@ const donutData = computed(() => {
     };
   });
   // Each delegation
-  const delegationSlices = delegations.value.map((d, i) => ({
-    label: `Staking #${i + 1}`,
-    amount: format.tokenDisplayNumber(d.balance),
-    color: stakedColor,
-    type: 'delegation',
-    isMACT: false,
-    delegationItem: d
-  }));
+  const delegationSlices = delegations.value.map((d, i) => {
+    const stakeType = (d as any).stakeType || 'delegation';
+    const typeLabels: Record<string, string> = {
+      'supplier': 'Supplier Stake',
+      'application': 'Application Stake',
+      'gateway': 'Gateway Stake',
+      'delegation': 'Delegation'
+    };
+    return {
+      label: stakeType === 'delegation' ? `Staking #${i + 1}` : typeLabels[stakeType],
+      amount: format.tokenDisplayNumber(d.balance),
+      color: stakedColor,
+      type: 'delegation',
+      stakeType: stakeType,
+      isMACT: false,
+      delegationItem: d
+    };
+  });
   // Optionally, add rewards as slices too
   // const rewardSlices = rewards.value?.total?.map((r, i) => ({
   //   label: `Reward #${i + 1}`,
@@ -239,7 +249,7 @@ async function loadAccount(address: string) {
       if (supplierData.supplier?.stake) {
         // If supplier, only show supplier stake, not regular delegations
         // @ts-expect-error because delegation is being reused as stake information container
-        delegations.value = [{ balance: supplierData.supplier.stake }]
+        delegations.value = [{ balance: supplierData.supplier.stake, stakeType: 'supplier' }]
       } else {
         // Not a supplier, check application
         return blockchain.rpc.getApplicationsInfo(address).then((appData) => {
@@ -247,7 +257,7 @@ async function loadAccount(address: string) {
           if (appData.application?.stake) {
             // If application, only show application stake
             // @ts-expect-error because delegation is being reused as stake information container
-            delegations.value = [{ balance: appData.application.stake }]
+            delegations.value = [{ balance: appData.application.stake, stakeType: 'application' }]
           } else {
             // Not an application, check gateway
             return blockchain.rpc.getGatewaysInfo(address).then((gatewayData) => {
@@ -255,14 +265,14 @@ async function loadAccount(address: string) {
               if (gatewayData.gateway?.stake) {
                 // If gateway, only show gateway stake
                 // @ts-expect-error because delegation is being reused as stake information container
-                delegations.value = [{ balance: gatewayData.gateway.stake }]
+                delegations.value = [{ balance: gatewayData.gateway.stake, stakeType: 'gateway' }]
               } else {
                 // Not a gateway either, use regular delegations
-                delegations.value = regularDelegations
+                delegations.value = regularDelegations.map(d => ({ ...d, stakeType: 'delegation' }))
               }
             }).catch(() => {
               // Gateway check failed, use regular delegations
-              delegations.value = regularDelegations
+              delegations.value = regularDelegations.map(d => ({ ...d, stakeType: 'delegation' }))
             })
           }
         }).catch(() => {
@@ -271,12 +281,12 @@ async function loadAccount(address: string) {
             gateways.value = gatewayData.gateways
             if (gatewayData.gateway?.stake) {
               // @ts-expect-error because delegation is being reused as stake information container
-              delegations.value = [{ balance: gatewayData.gateway.stake }]
+              delegations.value = [{ balance: gatewayData.gateway.stake, stakeType: 'gateway' }]
             } else {
-              delegations.value = regularDelegations
+              delegations.value = regularDelegations.map(d => ({ ...d, stakeType: 'delegation' }))
             }
           }).catch(() => {
-            delegations.value = regularDelegations
+            delegations.value = regularDelegations.map(d => ({ ...d, stakeType: 'delegation' }))
           })
         })
       }
@@ -286,19 +296,19 @@ async function loadAccount(address: string) {
         applications.value = appData.application
         if (appData.application?.stake) {
           // @ts-expect-error because delegation is being reused as stake information container
-          delegations.value = [{ balance: appData.application.stake }]
+          delegations.value = [{ balance: appData.application.stake, stakeType: 'application' }]
         } else {
           // Try gateway
           return blockchain.rpc.getGatewaysInfo(address).then((gatewayData) => {
             gateways.value = gatewayData.gateways
             if (gatewayData.gateway?.stake) {
               // @ts-expect-error because delegation is being reused as stake information container
-              delegations.value = [{ balance: gatewayData.gateway.stake }]
+              delegations.value = [{ balance: gatewayData.gateway.stake, stakeType: 'gateway' }]
             } else {
-              delegations.value = regularDelegations
+              delegations.value = regularDelegations.map(d => ({ ...d, stakeType: 'delegation' }))
             }
           }).catch(() => {
-            delegations.value = regularDelegations
+            delegations.value = regularDelegations.map(d => ({ ...d, stakeType: 'delegation' }))
           })
         }
       }).catch(() => {
@@ -307,12 +317,12 @@ async function loadAccount(address: string) {
           gateways.value = gatewayData.gateways
           if (gatewayData.gateway?.stake) {
             // @ts-expect-error because delegation is being reused as stake information container
-            delegations.value = [{ balance: gatewayData.gateway.stake }]
+            delegations.value = [{ balance: gatewayData.gateway.stake, stakeType: 'gateway' }]
           } else {
-            delegations.value = regularDelegations
+            delegations.value = regularDelegations.map(d => ({ ...d, stakeType: 'delegation' }))
           }
         }).catch(() => {
-          delegations.value = regularDelegations
+          delegations.value = regularDelegations.map(d => ({ ...d, stakeType: 'delegation' }))
         })
       })
     }).finally(() => {
@@ -833,7 +843,12 @@ async function loadAddressPerformance(address: string) {
                           :style="{ backgroundColor: item.color }"
                         ></span>
                         <span :class="{ 'text-gray-400': item.isMACT }">
-                          {{ item.type === 'balance' ? (item.isMACT ? 'MACT (Unusable)' : 'Available') : 'Staked' }}
+                          {{ item.type === 'balance' 
+                            ? (item.isMACT ? 'MACT (Unusable)' : 'Available') 
+                            : ((item as any).stakeType === 'supplier' ? 'Supplier Stake' 
+                              : (item as any).stakeType === 'application' ? 'Application Stake'
+                              : (item as any).stakeType === 'gateway' ? 'Gateway Stake'
+                              : 'Delegation') }}
                         </span>
                       </div>
                     </div>
@@ -998,7 +1013,12 @@ async function loadAddressPerformance(address: string) {
                           :style="{ backgroundColor: item.color }"
                         ></span>
                         <span :class="{ 'text-gray-400': item.isMACT }">
-                          {{ item.type === 'balance' ? (item.isMACT ? 'MACT (Unusable)' : 'Available') : 'Staked' }}
+                          {{ item.type === 'balance' 
+                            ? (item.isMACT ? 'MACT (Unusable)' : 'Available') 
+                            : ((item as any).stakeType === 'supplier' ? 'Supplier Stake' 
+                              : (item as any).stakeType === 'application' ? 'Application Stake'
+                              : (item as any).stakeType === 'gateway' ? 'Gateway Stake'
+                              : 'Delegation') }}
                         </span>
                       </div>
                     </div>
