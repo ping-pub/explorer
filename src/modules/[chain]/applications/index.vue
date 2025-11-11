@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useBlockchain, useFormatter } from '@/stores'
-import { PageRequest, type Pagination, type Application } from '@/types'
+import { PageRequest, type Pagination, type Application, type Coin } from '@/types'
 
 const props = defineProps<{ chain: string }>()
 
@@ -66,6 +66,20 @@ async function loadApplications() {
     const response = await chainStore.rpc.getApplications(pageRequest.value)
     list.value = response.applications || []
     pageResponse.value = response.pagination || {}
+
+    // 🔹 Fallback fetch for missing balances
+    for (const app of list.value) {
+      if (!app.balance || !app.balance.amount) {
+        try {
+          const bal: Coin = await chainStore.rpc.getBankBalances(app.address)
+          app.balance = bal
+        } catch (e) {
+          console.error('Error fetching balance for', app.address, e)
+          app.balance = { denom: 'TOKEN', amount: '0' }
+        }
+      }
+    }
+
   } catch (error) {
     console.error('Error loading applications:', error)
     list.value = []
@@ -167,7 +181,7 @@ onMounted(() => {
             </td>
 
             <td class="font-bold dark:text-secondary">{{ format.formatToken(item.stake) }}</td>
-            <td class="dark:text-secondary">{{ item.balance ? format.formatToken(item.balance) : '-' }}</td>
+            <td class="dark:text-secondary">{{ item.type === 'balance' ? format.formatToken((item as any).balanceItem) : "-" }}</td>
             <td>{{ item.service_configs?.length || 0 }}</td>
             <td>
               {{
@@ -246,15 +260,6 @@ onMounted(() => {
     </div>
   </div>
 </template>
-
-<route>
-{
-  meta: {
-    i18n: 'applications',
-    order: 4
-  }
-}
-</route>
 
 <style scoped>
 .page-btn:hover {
