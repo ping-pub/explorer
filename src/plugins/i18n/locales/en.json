@@ -72,6 +72,7 @@
     "hash": "Hash",
     "messages": "Messages",
     "time": "Time",
+    "produced_at": "Produced At",
     "error": "Account does not exists on chain"
   },
   "block": {

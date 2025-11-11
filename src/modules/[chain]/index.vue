@@ -1747,6 +1747,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                 <th class="dark:bg-base-100 bg-base-200">{{ $t('block.proposer') }}</th>
                 <th class="dark:bg-base-100 bg-base-200">{{ $t('module.tx') }}</th>
                 <th class="dark:bg-base-100 bg-base-200">{{ $t('account.time') }}</th>
+                <th class="dark:bg-base-100 bg-base-200 w-1/2">{{ $t('account.produced_at') }}</th>
               </tr>
             </thead>
             <tbody v-if="loadingBlocks" >
@@ -1771,6 +1772,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                 <td>{{ format.validator(block.proposer) }}</td>
                 <td>{{ (block.transaction_count ?? 0).toLocaleString() }}</td>
                 <td class="text-sm">{{ format.toDay(block?.timestamp, 'from') }}</td>
+                <td colspan="2">{{ new Date(block?.timestamp || '0').toLocaleString()}}</td>
               </tr>
             </tbody>
             <tbody v-else-if="!loadingBlocks && blocks.length === 0">

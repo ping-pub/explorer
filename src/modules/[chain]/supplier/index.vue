@@ -214,7 +214,7 @@ const statusText = computed(() => (value.value === 'stake' ? 'Staked' : 'Unstake
         </tbody>
       </table>
 
-      <!-- ✅ Pagination Bar -->
+      <!-- Pagination Bar -->
       <div class="flex justify-between items-center gap-4 my-6 px-6">
         <!-- Page Size Dropdown -->
         <div class="flex items-center gap-2">
