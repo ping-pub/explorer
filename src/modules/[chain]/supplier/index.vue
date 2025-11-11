@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { useBlockchain, useFormatter } from '@/stores';
 import { PageRequest, type Pagination, type Supplier } from '@/types';
-
+import type { PaginatedBalances } from '@/types/bank'
 const props = defineProps(['chain']);
 
 const format = useFormatter();
@@ -61,6 +61,19 @@ async function loadSuppliers() {
     const response = await chainStore.rpc.getSuppliers(pageRequest.value);
     list.value = response.supplier || [];
     pageResponse.value = response.pagination || {};
+
+    // 🔹 Fallback fetch for missing balances
+    for (const app of list.value) {
+      if (!app.balance || !app.balance.amount) {
+        try {
+          const bal: PaginatedBalances = await chainStore.rpc.getBankBalances(app.operator_address)
+          app.balance = bal.balances.find(b => b.denom === 'upokt') || { denom: 'upokt', amount: '0' }
+        } catch (e) {
+          console.error('Error fetching balance for', app.operator_address, e)
+          app.balance = { denom: 'TOKEN', amount: '0' }
+        }
+      }
+    }
   } catch (error) {
     console.error('Error loading suppliers:', error);
     list.value = [];

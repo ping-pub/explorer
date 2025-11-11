@@ -97,7 +97,7 @@ async function loadBlocks() {
     if (res.ok) {
       blocks.value = data.data.map((b: ApiBlockItem) => ({
         ...b,
-        size: b.size || (b.transaction_count ? b.transaction_count * 250 : 0)
+        size: b.raw_block_size || (b.transaction_count ? b.transaction_count * 250 : 0)
       }))
       totalBlocks.value = data.meta?.total || 0
       totalPages.value = data.meta?.totalPages || 0
@@ -122,10 +122,21 @@ watch(itemsPerPage, () => { currentPage.value = 1; loadBlocks() })
 watch(currentPage, () => loadBlocks())
 watch(apiChainName, (n, o) => { if(n!==o){ currentPage.value=1; loadBlocks() } })
 
-// ✅ Convert bytes → KB
-function bytesToKB(bytes?: number) {
-  if (!bytes) return '0'
-  return (bytes / 1024).toFixed(2)
+// ✅ Convert bytes → largest appropriate unit (B, KB, MB, GB, TB, PB)
+function formatBytes(bytes?: number): string {
+  if (!bytes || bytes === 0) return '0 B'
+  
+  const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+  const k = 1024
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  
+  // Clamp i to valid unit index
+  const unitIndex = Math.min(i, units.length - 1)
+  const value = bytes / Math.pow(k, unitIndex)
+  
+  // Format with appropriate decimal places
+  const decimals = unitIndex === 0 ? 0 : value < 10 ? 2 : 1
+  return `${value.toFixed(decimals)} ${units[unitIndex]}`
 }
 
 
@@ -195,8 +206,8 @@ onMounted(() => {
               <th>Applications</th>
               <th>Suppliers</th>
               <th>Gateways</th>
-              <th>Relayss</th>
-              <th>{{ 'Block Production Time' }}</th>
+              <th>Relays</th>
+              <th>{{ $t('block.production_time') }}</th>
               <th>{{ $t('block.size') }}</th>
             </tr>
           </thead>
@@ -240,7 +251,7 @@ onMounted(() => {
               <td>{{ networkStats.gateways.toLocaleString() }}</td>
               <td>{{ 0 }}</td>
               <td>{{ formatBlockTime(block.block_production_time) }}</td>
-              <td>{{ bytesToKB(block.raw_block_size) }} KB</td>
+              <td>{{ formatBytes(block.raw_block_size) }}</td>
             </tr>
           </tbody>
         </table>

@@ -82,6 +82,7 @@
     "countdown_for_block_input": "Input A New Target Block Number",
     "btn_update": "Update",
     "current_height": "Current Height",
+    "production_time": "Production Time",
     "remaining_blocks": "Remaining Blocks",
     "average_block_time": "Average Block Time",
     "block_header": "Block Header",

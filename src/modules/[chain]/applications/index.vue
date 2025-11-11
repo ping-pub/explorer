@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useBlockchain, useFormatter } from '@/stores'
 import { PageRequest, type Pagination, type Application, type Coin } from '@/types'
+import type { PaginatedBalances } from '@/types/bank'
 
 const props = defineProps<{ chain: string }>()
 
@@ -73,8 +74,8 @@ async function loadApplications() {
     for (const app of list.value) {
       if (!app.balance || !app.balance.amount) {
         try {
-          const bal: Coin = await chainStore.rpc.getBankBalances(app.address)
-          app.balance = bal
+          const bal: PaginatedBalances = await chainStore.rpc.getBankBalances(app.address)
+          app.balance = bal.balances.find(b => b.denom === 'upokt') || { denom: 'upokt', amount: '0' }
         } catch (e) {
           console.error('Error fetching balance for', app.address, e)
           app.balance = { denom: 'TOKEN', amount: '0' }
@@ -160,7 +161,7 @@ onMounted(() => {
 
         <tbody>
           <tr v-if="loading" class="text-center">
-            <td colspan="7" class="py-8">
+            <td colspan="8" class="py-8">
               <div class="flex justify-center items-center">
                 <div class="loading loading-spinner loading-md"></div>
                 <span class="ml-2">Loading applications...</span>
@@ -168,7 +169,7 @@ onMounted(() => {
             </td>
           </tr>
           <tr v-else-if="sortedList.length === 0" class="text-center">
-            <td colspan="7" class="py-8">
+            <td colspan="8" class="py-8">
               <div class="text-gray-500">No applications found</div>
             </td>
           </tr>
@@ -195,7 +196,7 @@ onMounted(() => {
             </td>
 
             <td class="font-bold dark:text-secondary">{{ format.formatToken(item.stake) }}</td>
-            <td class="dark:text-secondary">{{ item.type === 'balance' ? format.formatToken((item as any).balanceItem) : "-" }}</td>
+            <td class="dark:text-secondary">{{ item.balance ? format.formatToken(item.balance) : "-" }}</td>
             <td>{{ item.service_configs?.length || 0 }}</td>
             <td>
               {{
@@ -212,13 +213,14 @@ onMounted(() => {
                 <div v-if="expandedDelegateeRows[item.address]">
                   <!-- Expanded view: show all addresses -->
                   <div class="flex flex-col gap-1">
-                    <div 
-                      v-for="(addr, idx) in item.delegatee_gateway_addresses" 
+                    <RouterLink
+                      v-for="(addr, idx) in item.delegatee_gateway_addresses"
                       :key="idx"
-                      class="text-sm font-mono"
+                      :to="`/${chainStore.chainName}/account/${addr}`"
+                      class="text-sm text-[#09279F] dark:invert font-mono hover:underline"
                     >
                       {{ addr }}
-                    </div>
+                    </RouterLink>
                     <button
                       @click="toggleDelegateeExpanded(item.address)"
                       class="text-xs text-[#007bff] hover:underline mt-1"
@@ -230,7 +232,12 @@ onMounted(() => {
                 <div v-else>
                   <!-- Collapsed view: show first address truncated -->
                   <div class="flex items-center gap-2">
-                    <span class="text-sm font-mono">{{ truncateAddress(item.delegatee_gateway_addresses[0]) }}</span>
+                    <RouterLink
+                      :to="`/${chainStore.chainName}/account/${item.delegatee_gateway_addresses[0]}`"
+                      class="text-sm text-[#09279F] dark:invert font-mono hover:underline"
+                    >
+                      {{ truncateAddress(item.delegatee_gateway_addresses[0]) }}
+                    </RouterLink>
                     <button
                       v-if="item.delegatee_gateway_addresses.length > 1"
                       @click="toggleDelegateeExpanded(item.address)"
@@ -310,7 +317,14 @@ onMounted(() => {
     </div>
   </div>
 </template>
-
+<route>
+  {
+    meta: {
+      i18n: 'applications',
+      order: 4
+    }
+  }
+  </route>
 <style scoped>
 .page-btn:hover {
   background-color: #e9ecef;

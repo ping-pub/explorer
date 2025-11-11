@@ -87,7 +87,7 @@ export interface RelayMiningDifficulty {
 export interface Application {
     address: any;
     stake: Coin;
-    balance: Coin;
+    balance?: Coin;
     service_configs: any;
     delegatee_gateway_addresses: string[];
 }
