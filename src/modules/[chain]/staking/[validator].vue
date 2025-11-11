@@ -741,7 +741,7 @@ function getTransactionFee(tx: any): string {
     </div>
 
     <!-- Delegations Table (if enabled) -->
-    <div v-if="delegations.delegation_responses"
+    <!-- <div v-if="delegations.delegation_responses"
       class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md my-4">
       <div class="text-lg font-semibold text-main dark:bg-base-100 bg-base-200 px-4 py-2">
         <h2 class="text-2xl font-semibold text-[#171C1F] dark:text-[#ffffff]">
@@ -798,7 +798,7 @@ function getTransactionFee(tx: any): string {
             :disabled="delegationsPage === totalDelegationsPages || totalDelegationsPages === 0">Last</button>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Transactions Table -->
     <div class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4">

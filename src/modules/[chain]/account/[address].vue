@@ -194,7 +194,7 @@ const donutData = computed(() => {
     const isMACT = denom.includes('MACT');
     return {
       label: denom.replace('U', ''),
-      amount: parseFloat(format.formatToken(b, true).replace(',', '')),
+      amount: format.tokenDisplayNumber(b),
       color: isMACT ? mactColor : availableColor,
       type: 'balance',
       isMACT: isMACT,
@@ -204,7 +204,7 @@ const donutData = computed(() => {
   // Each delegation
   const delegationSlices = delegations.value.map((d, i) => ({
     label: `Staking #${i + 1}`,
-    amount: parseFloat(format.formatToken(d.balance, true).replace(',', '')),
+    amount: format.tokenDisplayNumber(d.balance),
     color: stakedColor,
     type: 'delegation',
     isMACT: false,
@@ -213,7 +213,7 @@ const donutData = computed(() => {
   // Optionally, add rewards as slices too
   // const rewardSlices = rewards.value?.total?.map((r, i) => ({
   //   label: `Reward #${i + 1}`,
-  //   amount: parseFloat(format.token(r, true))
+  //   amount: format.tokenDisplayNumber(r)
   // })) || [];
   return [...balanceSlices, ...delegationSlices /*, ...rewardSlices*/];
 });
