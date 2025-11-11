@@ -16,7 +16,6 @@ const networkStats = ref({
   applications: 0,
   suppliers: 0,
   gateways: 0,
-  services: 0
 })
 
 // ✅ Cache control for stats
@@ -38,22 +37,16 @@ async function loadNetworkStats() {
     const [
       applicationsData,
       suppliersData,
-      gatewaysData,
-      servicesData,
-      accountsData
+      gatewaysData
     ] = await Promise.all([
       blockchain.rpc.getApplications(pageRequest),
       blockchain.rpc.getSuppliers(pageRequest),
       blockchain.rpc.getGateways(pageRequest),
-      blockchain.rpc.getServices(pageRequest),
-      blockchain.rpc.getAuthAccounts(pageRequest)
     ])
 
     networkStats.value.applications = parseInt(applicationsData.pagination?.total || '0')
     networkStats.value.suppliers = parseInt(suppliersData.pagination?.total || '0')
     networkStats.value.gateways = parseInt(gatewaysData.pagination?.total || '0')
-    networkStats.value.services = parseInt(servicesData.pagination?.total || '0')
-    networkStats.value.wallets = parseInt(accountsData.pagination?.total || '0')
 
     networkStatsCacheTime.value = now
   } catch (error) {
@@ -205,7 +198,7 @@ onMounted(() => {
               <th>Applications</th>
               <th>Suppliers</th>
               <th>Gateways</th>
-              <th>Services</th>
+              <th>Relayss</th>
               <th>{{ $t('block.size') }}</th>
             </tr>
           </thead>
@@ -247,7 +240,7 @@ onMounted(() => {
               <td>{{ networkStats.applications.toLocaleString() }}</td>
               <td>{{ networkStats.suppliers.toLocaleString() }}</td>
               <td>{{ networkStats.gateways.toLocaleString() }}</td>
-              <td>{{ networkStats.services.toLocaleString() }}</td>
+              <td>{{ 0 }}</td>
               <td>{{ bytesToKB(block.size) }} KB</td>
             </tr>
           </tbody>
