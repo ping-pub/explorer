@@ -1,16 +1,18 @@
 <script lang="ts" setup>
 import { computed, ref, onMounted, watch } from 'vue'
-import { useBaseStore, useFormatter } from '@/stores'
+import { useStakingStore, useBaseStore, useFormatter } from '@/stores'
 import { PageRequest } from '@/types'
 import { useBlockchain } from '@/stores'
 
 const props = defineProps(['chain'])
 const tab = ref('blocks')
 const base = useBaseStore()
+const stakingStore = useStakingStore();
+stakingStore.init()
 const format = useFormatter()
 const blockchain = useBlockchain()
 
-// ✅ Network Stats (Applications, Suppliers, etc.)
+// ✅ Network Stats
 const networkStats = ref({
   wallets: 0,
   applications: 0,
@@ -18,15 +20,14 @@ const networkStats = ref({
   gateways: 0,
 })
 
-// ✅ Cache control for stats
+// ✅ Cache control
 const networkStatsCacheTime = ref(0)
-const CACHE_EXPIRATION_MS = 60000 // 1 minute
+const CACHE_EXPIRATION_MS = 60000
 
-// ✅ Load Applications, Suppliers, Gateways, Services, Wallets counts
+// ✅ Load network stats
 async function loadNetworkStats() {
   const now = Date.now()
   if (now - networkStatsCacheTime.value < CACHE_EXPIRATION_MS && networkStats.value.wallets > 0) {
-    console.log('Using cached network stats')
     return
   }
 
@@ -34,11 +35,7 @@ async function loadNetworkStats() {
   pageRequest.limit = 1
 
   try {
-    const [
-      applicationsData,
-      suppliersData,
-      gatewaysData
-    ] = await Promise.all([
+    const [applicationsData, suppliersData, gatewaysData] = await Promise.all([
       blockchain.rpc.getApplications(pageRequest),
       blockchain.rpc.getSuppliers(pageRequest),
       blockchain.rpc.getGateways(pageRequest),
@@ -47,14 +44,13 @@ async function loadNetworkStats() {
     networkStats.value.applications = parseInt(applicationsData.pagination?.total || '0')
     networkStats.value.suppliers = parseInt(suppliersData.pagination?.total || '0')
     networkStats.value.gateways = parseInt(gatewaysData.pagination?.total || '0')
-
     networkStatsCacheTime.value = now
   } catch (error) {
     console.error('Error loading network stats:', error)
   }
 }
 
-// ✅ Server-side blocks fetching
+// ✅ API blocks interface
 interface ApiBlockItem {
   id: string
   height: number
@@ -63,7 +59,9 @@ interface ApiBlockItem {
   proposer: string
   chain: string
   transaction_count?: number
-  size?: number
+  // size?: number
+  block_production_time?: number
+  raw_block_size?: number
 }
 
 const getApiChainName = (chainName: string) => {
@@ -88,7 +86,7 @@ const totalBlocks = ref(0)
 const totalPages = ref(0)
 const pageSizeOptions = [10, 25, 50, 100]
 
-// ✅ Fetch blocks from API
+// ✅ Fetch blocks
 async function loadBlocks() {
   loading.value = true
   try {
@@ -119,18 +117,10 @@ async function loadBlocks() {
   }
 }
 
-// ✅ Pagination & watchers
-watch(itemsPerPage, () => {
-  currentPage.value = 1
-  loadBlocks()
-})
+// ✅ Watchers
+watch(itemsPerPage, () => { currentPage.value = 1; loadBlocks() })
 watch(currentPage, () => loadBlocks())
-watch(apiChainName, (n, o) => {
-  if (n !== o) {
-    currentPage.value = 1
-    loadBlocks()
-  }
-})
+watch(apiChainName, (n, o) => { if(n!==o){ currentPage.value=1; loadBlocks() } })
 
 // ✅ Convert bytes → KB
 function bytesToKB(bytes?: number) {
@@ -138,21 +128,29 @@ function bytesToKB(bytes?: number) {
   return (bytes / 1024).toFixed(2)
 }
 
-// ✅ Page navigation
-function goToFirst() {
-  if (currentPage.value !== 1) currentPage.value = 1
-}
-function goToLast() {
-  if (currentPage.value !== totalPages.value) currentPage.value = totalPages.value
-}
-function nextPage() {
-  if (currentPage.value < totalPages.value) currentPage.value++
-}
-function prevPage() {
-  if (currentPage.value > 1) currentPage.value--
+
+// ✅ Convert seconds → "Xs" or "Xm Ys" without decimal in seconds
+function formatBlockTime(secondsStr?: string | number) {
+  if (!secondsStr) return '0s'
+  const totalSeconds = typeof secondsStr === 'string' ? parseFloat(secondsStr) : secondsStr
+
+  if (totalSeconds < 60) {
+    return `${Math.round(totalSeconds)}s` // sirf seconds, rounded
+  }
+
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = Math.round(totalSeconds % 60) // seconds rounded to integer
+  return `${minutes}m ${seconds}s` // minutes aur seconds, no decimal
 }
 
-// ✅ Auto-load data on mount
+
+// ✅ Pagination
+function goToFirst() { if (currentPage.value !== 1) currentPage.value = 1 }
+function goToLast() { if (currentPage.value !== totalPages.value) currentPage.value = totalPages.value }
+function nextPage() { if (currentPage.value < totalPages.value) currentPage.value++ }
+function prevPage() { if (currentPage.value > 1) currentPage.value-- }
+
+// ✅ Auto-load on mount
 onMounted(() => {
   loadNetworkStats()
   loadBlocks()
@@ -181,7 +179,6 @@ onMounted(() => {
       </RouterLink>
     </div>
 
-    <!-- ✅ Blocks Table -->
     <div
       v-show="tab === 'blocks'"
       class="bg-[#EFF2F5] dark:bg-base-100 px-0.5 pt-0.5 pb-4 rounded-xl shadow-md mb-4"
@@ -199,13 +196,14 @@ onMounted(() => {
               <th>Suppliers</th>
               <th>Gateways</th>
               <th>Relayss</th>
+              <th>{{ 'Block Production Time' }}</th>
               <th>{{ $t('block.size') }}</th>
             </tr>
           </thead>
 
           <tbody class="bg-base-100 relative">
             <tr v-if="loading">
-              <td colspan="10" class="py-8">
+              <td colspan="11" class="py-8">
                 <div class="flex justify-center items-center">
                   <div class="loading loading-spinner loading-md"></div>
                   <span class="ml-2">Loading blocks...</span>
@@ -213,7 +211,7 @@ onMounted(() => {
               </td>
             </tr>
             <tr v-else-if="!loading && blocks.length === 0">
-              <td colspan="10" class="py-8 text-center text-gray-500">No blocks found</td>
+              <td colspan="11" class="py-8 text-center text-gray-500">No blocks found</td>
             </tr>
             <tr
               v-else
@@ -241,7 +239,8 @@ onMounted(() => {
               <td>{{ networkStats.suppliers.toLocaleString() }}</td>
               <td>{{ networkStats.gateways.toLocaleString() }}</td>
               <td>{{ 0 }}</td>
-              <td>{{ bytesToKB(block.size) }} KB</td>
+              <td>{{ formatBlockTime(block.block_production_time) }}</td>
+              <td>{{ bytesToKB(block.raw_block_size) }} KB</td>
             </tr>
           </tbody>
         </table>
@@ -279,13 +278,13 @@ onMounted(() => {
 </template>
 
 <route>
-  {
-    meta: {
-      i18n: 'blocks',
-      order: 2
+    {
+      meta: {
+        i18n: 'blocks',
+        order: 2
+      }
     }
-  }
-</route>
+  </route>
 
 <style scoped>
 .table tr.h-0 {
