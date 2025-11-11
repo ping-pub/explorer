@@ -89,6 +89,7 @@ export interface Application {
     stake: Coin;
     balance: Coin;
     service_configs: any;
+    delegatee_gateway_addresses: string[];
 }
 
 

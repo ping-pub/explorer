@@ -7,8 +7,7 @@ const props = defineProps<{ chain: string }>()
 
 const chainStore = useBlockchain()
 const format = useFormatter()
-
-// ✅ Main data list
+// Main data list
 const list = ref<Application[]>([])
 const loading = ref(false)
 
@@ -17,6 +16,9 @@ const pageResponse = ref({} as Pagination)
 
 const currentPage = ref(1)
 const itemsPerPage = ref(25)
+
+// Track expanded rows for delegatee addresses
+const expandedDelegateeRows = ref<Record<string, boolean>>({})
 
 // ✅ Status text
 const value = ref('stake')
@@ -121,6 +123,17 @@ function prevPage() {
   }
 }
 
+// Helper function to truncate address
+function truncateAddress(address: string, maxLength: number = 20): string {
+  if (address.length <= maxLength) return address
+  return address.substring(0, maxLength) + '...'
+}
+
+// Toggle expanded state for delegatee addresses
+function toggleDelegateeExpanded(address: string) {
+  expandedDelegateeRows.value[address] = !expandedDelegateeRows.value[address]
+}
+
 // ✅ Mounted
 onMounted(() => {
   loadApplications()
@@ -141,6 +154,7 @@ onMounted(() => {
             <th>No. of Services</th>
             <th>Services</th>
             <th>Status</th>
+            <th>Delegated To</th>
           </tr>
         </thead>
 
@@ -193,6 +207,42 @@ onMounted(() => {
               }}
             </td>
             <td class="text-success">{{ statusText }}</td>
+            <td>
+              <div v-if="item.delegatee_gateway_addresses && item.delegatee_gateway_addresses.length > 0">
+                <div v-if="expandedDelegateeRows[item.address]">
+                  <!-- Expanded view: show all addresses -->
+                  <div class="flex flex-col gap-1">
+                    <div 
+                      v-for="(addr, idx) in item.delegatee_gateway_addresses" 
+                      :key="idx"
+                      class="text-sm font-mono"
+                    >
+                      {{ addr }}
+                    </div>
+                    <button
+                      @click="toggleDelegateeExpanded(item.address)"
+                      class="text-xs text-[#007bff] hover:underline mt-1"
+                    >
+                      Show less
+                    </button>
+                  </div>
+                </div>
+                <div v-else>
+                  <!-- Collapsed view: show first address truncated -->
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-mono">{{ truncateAddress(item.delegatee_gateway_addresses[0]) }}</span>
+                    <button
+                      v-if="item.delegatee_gateway_addresses.length > 1"
+                      @click="toggleDelegateeExpanded(item.address)"
+                      class="text-xs text-[#007bff] hover:underline"
+                    >
+                      +{{ item.delegatee_gateway_addresses.length - 1 }} more
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <span v-else>-</span>
+            </td>
           </tr>
         </tbody>
       </table>
