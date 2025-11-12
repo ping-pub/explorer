@@ -203,11 +203,11 @@ onMounted(() => {
               <th>{{ $t('block.proposer') }}</th>
               <th>{{ $t('account.no_of_transactions') }}</th>
               <th>{{ $t('account.time') }}</th>
-              <th>Applications</th>
-              <th>Suppliers</th>
-              <th>Gateways</th>
-              <th>Relays</th>
               <th>{{ $t('block.production_time') }}</th>
+              <th>{{ $t('block.application') }}</th>
+              <th>{{ $t('block.supplier') }}</th>
+              <th>{{ $t('block.gateway') }}</th>
+              <!-- <th>{{ $t('block.relay') }}</th> -->
               <th>{{ $t('block.size') }}</th>
             </tr>
           </thead>
@@ -246,11 +246,11 @@ onMounted(() => {
               <td>{{ format.validator(block.proposer) }}</td>
               <td>{{ (block.transaction_count ?? 0).toLocaleString() }}</td>
               <td>{{ format.toDay(block.timestamp, 'from') }}</td>
+              <td>{{ formatBlockTime(block.block_production_time) }}</td>
               <td>{{ networkStats.applications.toLocaleString() }}</td>
               <td>{{ networkStats.suppliers.toLocaleString() }}</td>
               <td>{{ networkStats.gateways.toLocaleString() }}</td>
-              <td>{{ 0 }}</td>
-              <td>{{ formatBlockTime(block.block_production_time) }}</td>
+              <!-- <td>{{ 0 }}</td> -->
               <td>{{ formatBytes(block.raw_block_size) }}</td>
             </tr>
           </tbody>
@@ -289,13 +289,13 @@ onMounted(() => {
 </template>
 
 <route>
-    {
-      meta: {
-        i18n: 'blocks',
-        order: 2
-      }
+  {
+    meta: {
+      i18n: 'blocks',
+      order: 2
     }
-  </route>
+  }
+</route>
 
 <style scoped>
 .table tr.h-0 {

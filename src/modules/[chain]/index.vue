@@ -185,6 +185,7 @@ interface ApiBlockItem {
   height: number;
   hash: string;
   timestamp: string;
+  block_production_time?: number;
   proposer: string;
   chain: string;
   transaction_count?: number;
@@ -1059,6 +1060,20 @@ watch(() => base.blocktime, (newVal, oldVal) => {
   }
 });
 
+// ✅ Convert seconds → "Xs" or "Xm Ys" without decimal in seconds
+function formatBlockTime(secondsStr?: string | number) {
+  if (!secondsStr) return '0s'
+  const totalSeconds = typeof secondsStr === 'string' ? parseFloat(secondsStr) : secondsStr
+
+  if (totalSeconds < 60) {
+    return `${Math.round(totalSeconds)}s` // sirf seconds, rounded
+  }
+
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = Math.round(totalSeconds % 60) // seconds rounded to integer
+  return `${minutes}m ${seconds}s` // minutes aur seconds, no decimal
+}
+
 </script>
 
 <template>
@@ -1747,7 +1762,7 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                 <th class="dark:bg-base-100 bg-base-200">{{ $t('block.proposer') }}</th>
                 <th class="dark:bg-base-100 bg-base-200">{{ $t('module.tx') }}</th>
                 <th class="dark:bg-base-100 bg-base-200">{{ $t('account.time') }}</th>
-                <th class="dark:bg-base-100 bg-base-200">{{ $t('account.produced_at') }}</th>
+                <th class="dark:bg-base-100 bg-base-200">{{ $t('account.production_time') }}</th>
               </tr>
             </thead>
             <tbody v-if="loadingBlocks" >
@@ -1771,8 +1786,8 @@ watch(() => base.blocktime, (newVal, oldVal) => {
                 </td>
                 <td>{{ format.validator(block.proposer) }}</td>
                 <td>{{ (block.transaction_count ?? 0).toLocaleString() }}</td>
-                <td class="text-sm">{{ format.toDay(block?.timestamp, 'from') }}</td>
-                <td class="w-full">{{ new Date(block?.timestamp || '0').toLocaleString()}}</td>
+                <td class="text-sm">{{ format.toDay(block.timestamp, 'from') }}</td>
+                <td class="">{{ formatBlockTime(block.block_production_time || '0') }}</td>
               </tr>
             </tbody>
             <tbody v-else-if="!loadingBlocks && blocks.length === 0">
