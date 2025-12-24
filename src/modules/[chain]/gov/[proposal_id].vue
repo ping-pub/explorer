@@ -220,7 +220,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
         class="card-title flex flex-col md:!justify-between md:!flex-row mb-2"
       >
         <p class="truncate w-full">
-          {{ proposal_id }}. {{ proposal.title || metaItem(proposal?.metadata)?.title }}
+          {{ proposal_id }}. {{ proposal.title }}
         </p>
         <div
           class="badge badge-ghost"
@@ -232,11 +232,11 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
       <div class="">
         <ObjectElement :value="proposal.content" />
       </div>
-      <div v-if="proposal.summary || metaItem(proposal?.metadata)?.summary">
+      <div v-if="proposal.summary">
         <MdEditor
           :model-value="
             format.multiLine(
-              proposal.summary || metaItem(proposal?.metadata)?.summary
+              proposal.summary
             )
           "
           previewOnly
