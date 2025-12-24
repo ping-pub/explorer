@@ -37,12 +37,12 @@ export const useGovStore = defineStore('govStore', {
       const proposals = reactive(await this.blockchain.rpc?.getGovProposals(status, pagination));
 
       //filter spam proposals
-      if (proposals?.proposals) {
-        proposals.proposals = proposals.proposals.filter((item) => {
-          const title = item.content?.title || item.title || '';
-          return title.toLowerCase().indexOf('airdrop') === -1;
-        });
-      }
+      // if (proposals?.proposals) {
+      //   proposals.proposals = proposals.proposals.filter((item) => {
+      //     const title = item.title || '';
+      //     return title.toLowerCase().indexOf('airdrop') === -1;
+      //   });
+      // }
 
       if (status === '2') {
         proposals?.proposals?.forEach((item) => {

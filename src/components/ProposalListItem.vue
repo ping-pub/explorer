@@ -59,7 +59,6 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
                 class="text-main text-base mb-1 block hover:text-indigo-400 truncate"
               >
                 {{
-                  item?.content?.title ||
                   item?.title ||
                   metaItem(item?.metadata)?.title
                 }}
