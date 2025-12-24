@@ -232,6 +232,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
       <div class="">
         <ObjectElement :value="proposal.content" />
       </div>
+      <div>{{ proposal }}</div>
       <div v-if="proposal.summary">
         <MdEditor
           :model-value="
