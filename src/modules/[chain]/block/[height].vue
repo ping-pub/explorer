@@ -32,6 +32,25 @@ const isFutureBlock = computed({
   },
 });
 
+const latestBlockHeight = computed(() => {
+  return store.latest?.block?.header.height
+})
+
+const nextBlocks = computed(() => {
+  const height = latestBlockHeight.value
+  console.log('latest height', height)
+  const blocks = []
+  const curr_time = new Date().getTime()
+  for (let h = 1; h <= 10; h++) {
+    blocks.push({
+      height: height - 0 + h,
+      distance: h,
+      est: new Date(curr_time + h * store.blocktime)
+    })
+  }
+  return blocks
+})
+
 const remainingBlocks = computed(() => {
   const latest = store.latest?.block?.header.height;
   return latest ? Number(target.value) - Number(latest) : 0;
@@ -64,13 +83,48 @@ onBeforeRouteUpdate(async (to, from, next) => {
   <div>
     <div v-if="isFutureBlock" class="text-center">
       <div v-if="remainingBlocks > 0">
-        <div class="text-primary font-bold text-lg my-10">#{{ target }}</div>
-        <Countdown :time="estimateTime" css="md:!text-5xl font-sans md:mx-5" />
-        <div class="my-5">
-          {{ $t('block.estimated_time') }}:
-          <span class="text-xl font-bold">{{ format.toLocaleDate(estimateDate) }}</span>
+        <div class="flex items-center">
+          <div class="rounded p-4 shadow bg-base-100 font-bold text-lg my-10">
+            <div>Block</div>
+            #{{ latestBlockHeight }}
+          </div>
+          <Icon icon="mdi-arrow-right" class="w-4 h-4 m-10 text-secondary" />
+          <div class="bg-base-100 my-5 rounded p-4 shadow">
+            <Countdown :time="estimateTime" css="text-md font-sans md:mx-5" />
+            <div class="text-sm text-gray-400">({{ remainingBlocks }} blocks) </div>
+          </div>
+          <Icon icon="mdi-arrow-right" class="w-4 h-4 m-10 text-secondary" />
+          <div class="flex flex-col justify-between rounded p-4 shadow bg-base-100">
+            <h3 class="text-md font-bold sm:!text-lg text-green-600">
+              {{ target }}
+            </h3>
+            <div class="mt-2 hidden text-sm sm:!block truncate">
+              <span> {{ format.toLocaleDate(estimateDate) }}</span>
+            </div>
+          </div>
         </div>
-        <div class="pt-10 flex justify-center">
+        <div class="grid xl:!grid-cols-6 md:!grid-cols-4 grid-cols-1 gap-3">
+          <div
+            v-for="item in nextBlocks"
+            class="flex flex-col justify-between rounded p-4 shadow bg-base-100"
+          >
+            <div class="flex justify-between">
+              <h3 class="text-md font-bold sm:!text-lg">
+                {{ item.height }}
+              </h3>
+              <span class="rounded text-xs whitespace-nowrap font-medium text-secondary-600">
+                +{{ item.distance }} 
+              </span>
+            </div>
+            <div class="flex justify-between tooltip" data-tip="Block Proposor">
+              <div class="mt-2 hidden text-sm sm:!block truncate">
+                <span> {{ format.toLocaleDate(item.est) }}</span>
+              </div>
+              <span class="text-right mt-1 whitespace-nowrap text-green-600"> {{ format.toDay(item.est, 'from') }} </span>
+            </div>
+          </div>
+        </div>
+        <div class="pt-10 flex justify-center hide">
           <table class="table w-max rounded-lg bg-base-100">
             <tbody>
               <tr class="hover cursor-pointer" @click="edit = !edit">
