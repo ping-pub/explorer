@@ -41,13 +41,13 @@ const nextBlocks = computed(() => {
   // console.log('latest height', height)
   const blocks = []
   const curr_time = new Date().getTime()
-  for (let h = 1; h <= 10; h++) {
-    blocks.push({
-      height: (height - 0 + h) || 0,
-      distance: h,
-      est: new Date(curr_time + h * store.blocktime)
-    })
-  }
+  // for (let h = 1; h <= 10; h++) {
+  //   blocks.push({
+  //     height: (height - 0 + h) || 0,
+  //     distance: h,
+  //     est: new Date(curr_time + h * store.blocktime)
+  //   })
+  // }
   return blocks
 })
 
