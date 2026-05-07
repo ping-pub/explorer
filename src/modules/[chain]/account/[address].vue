@@ -32,20 +32,20 @@ onMounted(() => {
 const totalAmountByCategory = computed(() => {
   let sumDel = 0;
   delegations.value?.forEach((x) => {
-    sumDel += Number(x.balance.amount);
+    sumDel += format.tokenAmountNumber(x.balance);
   });
   let sumRew = 0;
   rewards.value?.total?.forEach((x) => {
-    sumRew += Number(x.amount);
+    sumRew += format.tokenAmountNumber(x);
   });
   let sumBal = 0;
   balances.value?.forEach((x) => {
-    sumBal += Number(x.amount);
+    sumBal += format.tokenAmountNumber(x);
   });
   let sumUn = 0;
   unbonding.value?.forEach((x) => {
     x.entries?.forEach((y) => {
-      sumUn += Number(y.balance);
+      sumUn += format.tokenAmountNumber({ amount: y.balance, denom: stakingStore.params.bond_denom });
     });
   });
   return [sumBal, sumDel, sumRew, sumUn];
@@ -182,7 +182,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                   {{ format.formatToken(balanceItem) }}
                 </div>
                 <div class="text-xs">
-                  {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
+                  {{ format.calculatePercent(format.tokenAmountNumber(balanceItem), totalAmount) }}
                 </div>
               </div>
               <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2">
@@ -201,7 +201,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                   {{ format.formatToken(delegationItem?.balance) }}
                 </div>
                 <div class="text-xs">
-                  {{ format.calculatePercent(delegationItem?.balance?.amount, totalAmount) }}
+                  {{ format.calculatePercent(format.tokenAmountNumber(delegationItem?.balance), totalAmount) }}
                 </div>
               </div>
               <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2">
@@ -220,7 +220,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                   {{ format.formatToken(rewardItem) }}
                 </div>
                 <div class="text-xs">
-                  {{ format.calculatePercent(rewardItem.amount, totalAmount) }}
+                  {{ format.calculatePercent(format.tokenAmountNumber(rewardItem), totalAmount) }}
                 </div>
               </div>
               <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2">
@@ -245,7 +245,15 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                   }}
                 </div>
                 <div class="text-xs">
-                  {{ format.calculatePercent(unbondingTotal, totalAmount) }}
+                  {{
+                    format.calculatePercent(
+                      format.tokenAmountNumber({
+                        amount: String(unbondingTotal),
+                        denom: stakingStore.params.bond_denom,
+                      }),
+                      totalAmount
+                    )
+                  }}
                 </div>
               </div>
               <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2">
