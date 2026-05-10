@@ -125,6 +125,21 @@ export const useFormatter = defineStore('formatter', {
     tokenAmountNumber(token?: Coin) {
       if (!token || !token.denom) return 0;
 
+      // IBC denoms: resolve exponent from ibcMetadata (fetched lazily)
+      if (token.denom.startsWith('ibc/')) {
+        const ibcDenom = token.denom.replace('ibc/', '');
+        const conf = this.ibcMetadata[ibcDenom];
+        if (!conf) {
+          this.fetchDenomMetadata(ibcDenom);
+        } else {
+          let exponent = 0;
+          conf.denom_units.forEach((x) => {
+            if (x.exponent >= exponent) exponent = x.exponent;
+          });
+          return Number(token.amount) / 10 ** exponent;
+        }
+      }
+
       // find the symbol
       const symbol = this.dashboard.coingecko[token.denom]?.symbol || token.denom;
       // convert denomination to symbol
