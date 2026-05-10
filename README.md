@@ -1,56 +1,49 @@
 <div align="center">
 
-![Ping Wallet](./public/logo.svg)
+<img src="https://raw.githubusercontent.com/vultisig/vultisig-windows/refs/heads/main/core/ui/public/coins/qbtc.svg" alt="qBTC" width="120" />
 
-<h1>Ping Dashboard</h1>
+<h1>qBTC Explorer</h1>
 
-**Ping Dashboard is not only an explorer but also a wallet and more ... 🛠**
-
-[![version](https://img.shields.io/github/tag/ping-pub/explorer.svg)](https://github.com/ping-pub/explorer/releases/latest)
-[![GitHub](https://img.shields.io/github/license/ping-pub/explorer.svg)](https://github.com/ping-pub/explorer/blob/master/LICENSE)
-[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/bukotsunikki.svg?style=social&label=Follow%20%40ping_pub)](https://twitter.com/ping_pub)
-[![https://discord.gg/CmjYVSr6GW](https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat)](https://discord.gg/CmjYVSr6GW)
-
+**A light block explorer and wallet for the qBTC chain.**
 
 </div>
 
-`Ping Dashboard` is a light explorer for Cosmos-based Blockchains.  https://ping.pub .
+`qBTC Explorer` is a single-chain explorer for [qBTC](https://qbtcapi.odindex.io), built on top of [Ping Dashboard](https://github.com/ping-pub/explorer). It fetches data live from the qBTC LCD/RPC endpoints with no caching or pre-processing — what you see is the chain's actual state at the moment of query.
 
-## What sets Ping Dashboard apart from other explorers?
-**Ping Dashboard** stands out by providing a real-time exploration of blockchain data without relying on caching or pre-processing. It exclusively fetches data from the Cosmos full node via LCD/RPC endpoints, ensuring a truly authentic experience. This approach is referred to as the "Light Explorer."
+## Endpoints
 
-## Are you interested in listing your blockchain on https://ping.pub?
+| | URL |
+|--|--|
+| LCD (API) | https://qbtcapi.odindex.io |
+| RPC | https://qbtcrpc.odindex.io |
+| Address prefix | `qbtc` |
 
-To make this repository clean, please submit your request to https://github.com/ping-pub/ping.pub.git
+The chain config lives at [chains/mainnet/qbtc.json](chains/mainnet/qbtc.json).
 
+## Local development
 
-## Why does Ping Dashboard rely on official/trusted third-party public LCD/RPC servers?
-There are two primary reasons for this choice:
+Requirements: Node.js and Yarn.
 
- - Trust: In a decentralized system, it is crucial to avoid relying solely on a single entity. By utilizing official/trusted third-party public LCD/RPC servers, Ping Dashboard ensures that the data is sourced from a network of trusted participants.
- - Limited Resources: As Ping Dashboard plans to list hundreds of Cosmos-based blockchains in the future, it is impractical for the Ping team to operate validators or full nodes for all of them. Leveraging trusted third-party servers allows for more efficient resource allocation.
-
-## Donation
-
-Your donation will help us make better products. Thanks in advance.
-
- - Address for ERC20: USDC, USDT, ETH
-```
-0x88BFec573Dd3E4b7d2E6BfD4D0D6B11F843F8aa1
+```bash
+yarn install
+yarn dev
 ```
 
-#### Donations from project
+The dev server runs on Vite. Edit [chains/mainnet/qbtc.json](chains/mainnet/qbtc.json) to change endpoints, logo, or other chain metadata — the app will pick up the change on reload.
 
-- Point Network: 1000USDC and $1000 worth of POINT
-- Bitsong: 50k BTSG
-- IRISnet: 100k IRIS
+## Production build
 
-## Hire us
+```bash
+yarn build
+yarn preview
+```
 
-You can hire us by submitting an issue and fund the issue on [IssueHunter](https://issuehunt.io/r/ping-pub/explorer)
+The site is deployed on Vercel with a redirect from `/` to `/qbtc` (see [vercel.json](vercel.json)). Chain JSON is bundled into the JS at build time via Vite's `import.meta.glob`, so a change to `chains/mainnet/qbtc.json` requires a rebuild/redeploy to take effect.
 
+## Upstream
 
-## Contributors
+This project is a fork of [ping-pub/explorer](https://github.com/ping-pub/explorer). The bulk of the UI, wallet integration, and indexing logic comes from there; this fork periodically syncs `ping-pub:master` into `master`.
 
-Developers: @liangping @dingyiming
+## License
 
+[GPL-2.0](LICENSE), inherited from the upstream Ping Dashboard project.
