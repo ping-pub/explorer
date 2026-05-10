@@ -110,7 +110,9 @@ export const useWalletStore = defineStore('walletStore', {
       this.$reset();
     },
     setConnectedWallet(value: WalletConnected) {
-      if (value) this.wallet = value;
+      if (!value) return;
+      this.wallet = value;
+      this.loadMyAsset();
     },
     async suggestChain() {
       if (window.location.pathname === '/SIDE-Testnet') {
