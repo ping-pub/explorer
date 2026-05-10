@@ -355,28 +355,28 @@ const amount = computed({
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">{{ $t('account.balance') }}</div>
           <div class="text-lg font-semibold text-main">
-            {{ format.formatToken(walletStore.balanceOfStakingToken) }}
+            {{ format.formatToken(walletStore.balanceOfStakingToken, true, '0,0.[000000]') }}
           </div>
           <div class="text-sm" :class="color">${{ format.tokenValue(walletStore.balanceOfStakingToken) }}</div>
         </div>
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">{{ $t('module.staking') }}</div>
           <div class="text-lg font-semibold text-main">
-            {{ format.formatToken(walletStore.stakingAmount) }}
+            {{ format.formatToken(walletStore.stakingAmount, true, '0,0.[000000]') }}
           </div>
           <div class="text-sm" :class="color">${{ format.tokenValue(walletStore.stakingAmount) }}</div>
         </div>
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">{{ $t('index.reward') }}</div>
           <div class="text-lg font-semibold text-main">
-            {{ format.formatToken(walletStore.rewardAmount) }}
+            {{ format.formatToken(walletStore.rewardAmount, true, '0,0.[000000]') }}
           </div>
           <div class="text-sm" :class="color">${{ format.tokenValue(walletStore.rewardAmount) }}</div>
         </div>
         <div class="bg-gray-100 dark:bg-[#373f59] rounded-sm px-4 py-3">
           <div class="text-sm mb-1">{{ $t('index.unbonding') }}</div>
           <div class="text-lg font-semibold text-main">
-            {{ format.formatToken(walletStore.unbondingAmount) }}
+            {{ format.formatToken(walletStore.unbondingAmount, true, '0,0.[000000]') }}
           </div>
           <div class="text-sm" :class="color">${{ format.tokenValue(walletStore.unbondingAmount) }}</div>
         </div>
@@ -405,7 +405,7 @@ const amount = computed({
                   {{ format.validatorFromBech32(item?.delegation?.validator_address) }}
                 </RouterLink>
               </td>
-              <td>{{ format.formatToken(item?.balance) }}</td>
+              <td>{{ format.formatToken(item?.balance, true, '0,0.[000000]') }}</td>
               <td>
                 {{
                   format.formatTokens(
