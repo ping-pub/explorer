@@ -1,7 +1,7 @@
 {
   "chain_name": "qbtc",
   "registry_name": "qbtc",
-  "logo": "https://ping-dashboard-five.vercel.app/logos/qbtc.svg",
+  "logo": "https://raw.githubusercontent.com/vultisig/vultisig-windows/refs/heads/main/core/ui/public/coins/qbtc.svg",
   "api": [
     "https://qbtcapi.odindex.io"
   ],
@@ -18,7 +18,7 @@
       "symbol": "QBTC",
       "exponent": "8",
       "coingecko_id": "",
-      "logo": "https://ping-dashboard-five.vercel.app/logos/qbtc.svg"
+      "logo": "https://raw.githubusercontent.com/vultisig/vultisig-windows/refs/heads/main/core/ui/public/coins/qbtc.svg"
     }
   ]
 }
