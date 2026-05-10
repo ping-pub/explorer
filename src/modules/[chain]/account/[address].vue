@@ -179,7 +179,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
               </div>
               <div class="flex-1">
                 <div class="text-sm font-semibold">
-                  {{ format.formatToken(balanceItem) }}
+                  {{ format.formatToken(balanceItem, true, '0,0.[000000]') }}
                 </div>
                 <div class="text-xs">
                   {{ format.calculatePercent(format.tokenAmountNumber(balanceItem), totalAmount) }}
@@ -198,7 +198,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
               </div>
               <div class="flex-1">
                 <div class="text-sm font-semibold">
-                  {{ format.formatToken(delegationItem?.balance) }}
+                  {{ format.formatToken(delegationItem?.balance, true, '0,0.[000000]') }}
                 </div>
                 <div class="text-xs">
                   {{ format.calculatePercent(format.tokenAmountNumber(delegationItem?.balance), totalAmount) }}
@@ -217,7 +217,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
               </div>
               <div class="flex-1">
                 <div class="text-sm font-semibold">
-                  {{ format.formatToken(rewardItem) }}
+                  {{ format.formatToken(rewardItem, true, '0,0.[000000]') }}
                 </div>
                 <div class="text-xs">
                   {{ format.calculatePercent(format.tokenAmountNumber(rewardItem), totalAmount) }}
@@ -238,10 +238,14 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
               <div class="flex-1">
                 <div class="text-sm font-semibold">
                   {{
-                    format.formatToken({
-                      amount: String(unbondingTotal),
-                      denom: stakingStore.params.bond_denom,
-                    })
+                    format.formatToken(
+                      {
+                        amount: String(unbondingTotal),
+                        denom: stakingStore.params.bond_denom,
+                      },
+                      true,
+                      '0,0.[000000]'
+                    )
                   }}
                 </div>
                 <div class="text-xs">
