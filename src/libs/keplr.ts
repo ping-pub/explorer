@@ -1,4 +1,4 @@
-import type { ChainConfig, DenomUnit } from '@/types/chaindata';
+import type { ChainConfig } from '@/types/chaindata';
 import { CosmosRestClient } from '@/libs/client';
 
 export async function buildKeplrChainInfo(chain: ChainConfig) {
@@ -12,9 +12,7 @@ export async function buildKeplrChainInfo(chain: ChainConfig) {
     average: 0.025,
     high: 0.03,
   };
-  const coinDecimals =
-    chain.assets[0].denom_units.find((x: DenomUnit) => x.denom === chain.assets[0].symbol.toLowerCase())?.exponent ||
-    6;
+  const coinDecimals = Number(chain.assets[0].exponent ?? 6);
 
   return {
     chainId,
