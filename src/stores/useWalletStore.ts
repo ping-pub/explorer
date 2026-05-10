@@ -3,6 +3,7 @@ import { useBlockchain } from './useBlockchain';
 import { fromBech32, toBech32 } from '@cosmjs/encoding';
 import type { Delegation, Coin, UnbondingResponses, DelegatorRewards, WalletConnected } from '@/types';
 import { useStakingStore } from './useStakingStore';
+import { suggestKeplrChain } from '@/libs/keplr';
 import router from '@/router';
 
 export const useWalletStore = defineStore('walletStore', {
@@ -111,12 +112,23 @@ export const useWalletStore = defineStore('walletStore', {
     setConnectedWallet(value: WalletConnected) {
       if (value) this.wallet = value;
     },
-    suggestChain() {
+    async suggestChain() {
       if (window.location.pathname === '/SIDE-Testnet') {
         router.push({ path: '/wallet/unisat' });
-      } else {
-        router.push({ path: '/wallet/keplr' });
+        return;
       }
+      const chainStore = useBlockchain();
+      const chain = chainStore.current;
+      // @ts-ignore
+      if (chain && window.keplr) {
+        try {
+          await suggestKeplrChain(chain);
+          return;
+        } catch (e) {
+          console.error('experimentalSuggestChain failed, falling back to manual page', e);
+        }
+      }
+      router.push({ path: '/wallet/keplr' });
     },
   },
 });

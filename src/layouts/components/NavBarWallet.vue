@@ -2,12 +2,29 @@
 import { useRoute } from 'vue-router';
 import { useBaseStore, useBlockchain, useWalletStore } from '@/stores';
 import { Icon } from '@iconify/vue';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
+import { suggestKeplrChain } from '@/libs/keplr';
 
 const route = useRoute();
 const walletStore = useWalletStore();
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
+
+// Pre-register the active chain with Keplr so the connect modal doesn't
+// trip on "no modular chain info" before the user can interact.
+// experimentalSuggestChain is a no-op if the chain is already added.
+const suggested = new Set<string>();
+watch(
+  () => chainStore.current?.chainName,
+  (name) => {
+    const chain = chainStore.current;
+    // @ts-ignore
+    if (!chain || !name || suggested.has(name) || !window.keplr) return;
+    suggested.add(name);
+    suggestKeplrChain(chain).catch((e) => console.warn('keplr suggest skipped:', e?.message || e));
+  },
+  { immediate: true }
+);
 // walletStore.$subscribe((m, s) => {
 //   console.log(m, s);
 // });
