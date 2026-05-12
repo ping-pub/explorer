@@ -1,11 +1,18 @@
 #loading-bg {
-  background: var(--initial-loader-bg, #fff);
+  position: fixed;
+  inset: 0;
+  background: var(--initial-loader-bg, #171d30);
 }
 
 .loading-logo {
   position: absolute;
   inset-block-start: 40%;
-  inset-inline-start: calc(50% - 75px);
+  inset-inline-start: calc(50% - 60px);
+}
+
+.loading-logo img {
+  width: 120px;
+  height: 120px;
 }
 
 .pre-loading {
