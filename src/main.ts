@@ -2,6 +2,7 @@
 import App from '@/App.vue';
 import i18n from '@/plugins/i18n';
 import '@/style.css';
+import '@/style-overrides.css';
 import { createApp, ref } from 'vue';
 import { createPinia } from 'pinia';
 import LazyLoad from 'lazy-load-vue3';

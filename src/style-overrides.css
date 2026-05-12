@@ -1,0 +1,9 @@
+/* Fork-only overrides. Keep this file self-contained to avoid merge conflicts with upstream. */
+
+/* Hide the "Ecosystem" heading in the sidebar.
+   The hardcoded Tools/Sponsors/Links headings use `pt-2`; the v-for-rendered
+   NavSectionTitle (Ecosystem) does not — so we target headings without `pt-2`.
+   `:has()` also hides the wrapper to avoid leftover whitespace. */
+.px-2:has(> div.px-4.text-sm.text-gray-400.pb-2.uppercase:not(.pt-2)) {
+  display: none;
+}
