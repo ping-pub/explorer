@@ -13,6 +13,7 @@ import { computed, onMounted } from 'vue';
 import { ref } from 'vue';
 import { useIBCModule } from '../connStore';
 import PaginationBar from '@/components/PaginationBar.vue';
+import Loading from '@/components/Loading.vue';
 import { Icon } from '@iconify/vue';
 
 const props = defineProps(['chain', 'connection_id']);
@@ -23,6 +24,8 @@ const ibcStore = useIBCModule();
 const conn = ref({} as Connection);
 const clientState = ref({} as { client_id: string; client_state: ClientState });
 const channels = ref([] as Channel[]);
+const clientStateLoaded = ref(false);
+const channelsLoaded = ref(false);
 
 const connId = computed(() => {
   return props.connection_id || 0;
@@ -41,12 +44,18 @@ onMounted(() => {
     chainStore.rpc.getIBCConnectionsById(connId.value).then((x) => {
       conn.value = x.connection;
     });
-    chainStore.rpc.getIBCConnectionsClientState(connId.value).then((x) => {
-      clientState.value = x.identified_client_state;
-    });
-    chainStore.rpc.getIBCConnectionsChannels(connId.value).then((x) => {
-      channels.value = x.channels;
-    });
+    chainStore.rpc
+      .getIBCConnectionsClientState(connId.value)
+      .then((x) => {
+        clientState.value = x.identified_client_state;
+      })
+      .finally(() => (clientStateLoaded.value = true));
+    chainStore.rpc
+      .getIBCConnectionsChannels(connId.value)
+      .then((x) => {
+        channels.value = x.channels;
+      })
+      .finally(() => (channelsLoaded.value = true));
   }
 });
 
@@ -154,7 +163,8 @@ function color(v: string) {
           clientState.client_state?.['@type']
         }}</span>
       </h2>
-      <div class="overflow-x-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+      <Loading v-if="!clientStateLoaded" :bordered="false" />
+      <div v-else class="overflow-x-auto grid grid-cols-1 md:grid-cols-2 gap-4">
         <table class="table table-sm capitalize">
           <thead class="bg-base-200">
             <tr>
@@ -237,7 +247,8 @@ function color(v: string) {
     </div>
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow overflow-hidden">
       <h2 class="card-title">{{ $t('ibc.channels') }}</h2>
-      <div class="overflow-auto">
+      <Loading v-if="!channelsLoaded" :bordered="false" />
+      <div v-else class="overflow-auto">
         <table class="table w-full mt-4">
           <thead>
             <tr>

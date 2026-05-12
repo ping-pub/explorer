@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { onMounted, ref, watchEffect } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import TxsElement from '@/components/dynamic/TxsElement.vue';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
+import Loading from '@/components/Loading.vue';
 import { computed } from '@vue/reactivity';
 import { onBeforeRouteUpdate } from 'vue-router';
 import { useBaseStore, useFormatter } from '@/stores';
@@ -15,21 +16,16 @@ const store = useBaseStore();
 const format = useFormatter();
 const current = ref({} as Block);
 const target = ref(Number(props.height || 0));
+const loading = ref(true);
 
 const height = computed(() => {
   return Number(current.value.block?.header?.height || props.height || 0);
 });
 
-const isFutureBlock = computed({
-  get: () => {
-    const latest = store.latest?.block?.header.height;
-    const isFuture = latest ? target.value > Number(latest) : true;
-    if (!isFuture && !current.value.block_id) store.fetchBlock(target.value).then((x) => (current.value = x));
-    return isFuture;
-  },
-  set: (val) => {
-    console.log(val);
-  },
+const isFutureBlock = computed(() => {
+  const latest = store.latest?.block?.header.height;
+  if (!latest) return false;
+  return target.value > Number(latest);
 });
 
 const remainingBlocks = computed(() => {
@@ -50,19 +46,43 @@ const edit = ref(false);
 const newHeight = ref(props.height);
 function updateTarget() {
   target.value = Number(newHeight.value);
-  console.log(target.value);
+  loadBlock(target.value);
 }
+
+async function loadBlock(h: number | string) {
+  loading.value = true;
+  try {
+    if (!store.latest?.block?.header?.height) {
+      await store.fetchLatest();
+    }
+    const latest = store.latest?.block?.header?.height;
+    if (latest && Number(h) <= Number(latest)) {
+      current.value = await store.fetchBlock(h);
+    } else {
+      current.value = {} as Block;
+    }
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(() => {
+  loadBlock(target.value);
+});
 
 onBeforeRouteUpdate(async (to, from, next) => {
   if (from.path !== to.path) {
-    store.fetchBlock(String(to.params.height)).then((x) => (current.value = x));
-    next();
+    target.value = Number(to.params.height);
+    current.value = {} as Block;
+    loadBlock(target.value);
   }
+  next();
 });
 </script>
 <template>
   <div>
-    <div v-if="isFutureBlock" class="text-center">
+    <Loading v-if="loading" />
+    <div v-else-if="isFutureBlock" class="text-center">
       <div v-if="remainingBlocks > 0">
         <div class="text-primary font-bold text-lg my-10">#{{ target }}</div>
         <Countdown :time="estimateTime" css="md:!text-5xl font-sans md:mx-5" />
