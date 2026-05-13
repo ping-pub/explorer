@@ -31,6 +31,11 @@ export function consensusPubkeyToHexAddress(consensusPubkey?: { '@type': string;
     const pubkey = fromBase64(consensusPubkey.key);
     if (pubkey) return toHex(new Ripemd160().update(sha256(pubkey)).digest());
   }
+
+  if (consensusPubkey['@type'] === '/cosmos.crypto.mldsa.PubKey') {
+    const pubkey = fromBase64(consensusPubkey.key);
+    if (pubkey) return toHex(new Ripemd160().update(sha256(pubkey)).digest()).toUpperCase();
+  }
   return raw;
 }
 
