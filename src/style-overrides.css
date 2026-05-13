@@ -7,3 +7,32 @@
 .px-2:has(> div.px-4.text-sm.text-gray-400.pb-2.uppercase:not(.pt-2)) {
   display: none;
 }
+
+/* Hide the "Favorite" NavGroup in the sidebar.
+   Favorite is the only sidebar group whose icon receives `text-yellow-500`
+   (applied conditionally on `item.title === 'Favorite'` in DefaultLayout.vue). */
+.px-2:has(.collapse-title .text-yellow-500) {
+  display: none;
+}
+
+/* Hide the "All Blockchains" NavLink in the sidebar.
+   It is the only top-level NavLink with `to: { path: '/' }`, which renders
+   as a direct-child `<a href="/">` under the v-for `.px-2` wrapper. */
+.px-2:has(> a[href="/"]) {
+  display: none;
+}
+
+/* Hide the bottom hardcoded sidebar block
+   (Tools / Wallet Helper / Sponsors / Links / Twitter / Discord / FAQ).
+   It is the only `.px-2` whose direct children include heading-style divs
+   that use `pt-2` — the v-for NavSectionTitle above does not. */
+.px-2:has(> div.pt-2.uppercase) {
+  display: none;
+}
+
+/* Hide the "Ping.pub" branding (logo + title) at the top of the sidebar.
+   Keep the parent flex wrapper visible so the mobile-only close button
+   (`xl:!hidden`) stays positioned correctly by `justify-between`. */
+.w-64 > div.flex.justify-between.mt-1.pl-4.py-4.mb-1 > a.flex.items-center {
+  display: none;
+}
