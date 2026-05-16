@@ -4,20 +4,38 @@ import { useBaseStore, useBlockchain, useWalletStore } from '@/stores';
 import { Icon } from '@iconify/vue';
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { suggestKeplrChain } from '@/libs/keplr';
+import {
+  describeQbtcError,
+  getAuthorizedQbtcAccount,
+  isQbtcProviderAvailable,
+  requestQbtcAccount,
+} from '@/libs/vultisig-qbtc';
 
 const route = useRoute();
 const walletStore = useWalletStore();
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
 
+// QBTC signs with ML-DSA-44, not secp256k1, so it can't ride the Keplr
+// proxy. When the active chain is QBTC, bypass the Ping-Pub widget and
+// talk to `window.vultisig.qbtc` directly (vultisig-windows PR #3933).
+const isQbtc = computed(() => chainStore.current?.bech32Prefix === 'qbtc');
+const qbtcError = ref('');
+
 // Pre-register the active chain with Keplr so the connect modal doesn't
 // trip on "no modular chain info" before the user can interact.
 // experimentalSuggestChain is a no-op if the chain is already added.
+// Skipped for QBTC — it uses the dedicated `window.vultisig.qbtc` provider
+// instead of Keplr.
 const suggested = new Set<string>();
 watch(
   () => chainStore.current?.chainName,
   (name) => {
     const chain = chainStore.current;
+    if (chain?.bech32Prefix === 'qbtc') {
+      restoreQbtcSilently();
+      return;
+    }
     // @ts-ignore
     if (!chain || !name || suggested.has(name) || !window.keplr) return;
     suggested.add(name);
@@ -67,6 +85,44 @@ const VULTISIG_RDNS = 'me.vultisig';
 
 function isVultisigInstalled(): boolean {
   return typeof (window as any).vultisig !== 'undefined';
+}
+
+async function connectQbtc() {
+  qbtcError.value = '';
+  if (!isQbtcProviderAvailable()) {
+    window.open(VULTISIG_INSTALL_URL, '_blank', 'noopener');
+    return;
+  }
+  try {
+    const address = await requestQbtcAccount();
+    walletStore.setConnectedWallet({
+      wallet: 'vultisig',
+      cosmosAddress: address,
+      hdPath: chainStore.defaultHDPath,
+    });
+  } catch (e) {
+    qbtcError.value = describeQbtcError(e);
+  }
+}
+
+// Silent restore: if the user already approved this dApp for QBTC in a
+// previous session, `get_accounts` returns the address without opening a
+// popup. Skip when a wallet is already in local state.
+async function restoreQbtcSilently() {
+  if (walletStore.currentAddress) return;
+  if (!isQbtcProviderAvailable()) return;
+  try {
+    const address = await getAuthorizedQbtcAccount();
+    if (address) {
+      walletStore.setConnectedWallet({
+        wallet: 'vultisig',
+        cosmosAddress: address,
+        hdPath: chainStore.defaultHDPath,
+      });
+    }
+  } catch (e) {
+    console.warn('qbtc silent restore failed:', e);
+  }
 }
 
 // Vultisig broadcasts its icon (and name/rdns) per EIP-6963. Listen for the
@@ -133,13 +189,28 @@ onUnmounted(() => {
       tabindex="0"
       class="dropdown-content menu shadow p-2 bg-base-100 rounded w-52 md:!w-64 overflow-auto"
     >
+      <button
+        v-if="!walletStore?.currentAddress && isQbtc"
+        type="button"
+        class="btn btn-sm btn-primary"
+        @click="connectQbtc"
+      >
+        <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Vultisig</span>
+      </button>
       <label
-        v-if="!walletStore?.currentAddress"
+        v-else-if="!walletStore?.currentAddress"
         for="PingConnectWallet"
         class="btn btn-sm btn-primary"
       >
         <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Vultisig</span>
       </label>
+      <div
+        v-if="qbtcError && isQbtc && !walletStore?.currentAddress"
+        class="px-2 mt-1 text-xs text-error"
+        style="overflow-wrap: anywhere"
+      >
+        {{ qbtcError }}
+      </div>
       <div class="px-2 mb-1 text-gray-500 dark:text-gray-400 font-semibold">
         {{ walletStore.connectedWallet?.wallet ? 'Vultisig' : '' }}
       </div>
