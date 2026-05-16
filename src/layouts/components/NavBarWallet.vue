@@ -81,7 +81,6 @@ const params = computed(() => {
 
 const VULTISIG_INSTALL_URL =
   'https://chromewebstore.google.com/search/Vultisig%20Extension';
-const VULTISIG_RDNS = 'me.vultisig';
 
 function isVultisigInstalled(): boolean {
   return typeof (window as any).vultisig !== 'undefined';
@@ -125,20 +124,6 @@ async function restoreQbtcSilently() {
   }
 }
 
-// Vultisig broadcasts its icon (and name/rdns) per EIP-6963. Listen for the
-// announcement and expose the icon as a CSS variable so the modal can swap
-// the Keplr logo for the real Vultisig logo without bundling an asset.
-function handleProviderAnnounce(e: Event) {
-  const detail = (e as CustomEvent).detail;
-  const info = detail?.info;
-  if (info?.rdns === VULTISIG_RDNS && info.icon) {
-    document.documentElement.style.setProperty(
-      '--vultisig-icon-url',
-      `url("${info.icon}")`
-    );
-  }
-}
-
 // Toggle a body class so CSS can relabel the modal's "Connect" button
 // to "Install" when the Vultisig extension isn't detected.
 function refreshVultisigState() {
@@ -164,16 +149,12 @@ onMounted(() => {
   refreshVultisigState();
   window.addEventListener('focus', refreshVultisigState);
   document.addEventListener('click', interceptInstallClick, true);
-  window.addEventListener('eip6963:announceProvider', handleProviderAnnounce);
-  window.dispatchEvent(new Event('eip6963:requestProvider'));
 });
 
 onUnmounted(() => {
   window.removeEventListener('focus', refreshVultisigState);
   document.removeEventListener('click', interceptInstallClick, true);
-  window.removeEventListener('eip6963:announceProvider', handleProviderAnnounce);
   document.body.classList.remove('vultisig-not-installed');
-  document.documentElement.style.removeProperty('--vultisig-icon-url');
 });
 </script>
 
@@ -189,28 +170,13 @@ onUnmounted(() => {
       tabindex="0"
       class="dropdown-content menu shadow p-2 bg-base-100 rounded w-52 md:!w-64 overflow-auto"
     >
-      <button
-        v-if="!walletStore?.currentAddress && isQbtc"
-        type="button"
-        class="btn btn-sm btn-primary"
-        @click="connectQbtc"
-      >
-        <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Vultisig</span>
-      </button>
       <label
-        v-else-if="!walletStore?.currentAddress"
+        v-if="!walletStore?.currentAddress"
         for="PingConnectWallet"
         class="btn btn-sm btn-primary"
       >
         <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Vultisig</span>
       </label>
-      <div
-        v-if="qbtcError && isQbtc && !walletStore?.currentAddress"
-        class="px-2 mt-1 text-xs text-error"
-        style="overflow-wrap: anywhere"
-      >
-        {{ qbtcError }}
-      </div>
       <div class="px-2 mb-1 text-gray-500 dark:text-gray-400 font-semibold">
         {{ walletStore.connectedWallet?.wallet ? 'Vultisig' : '' }}
       </div>
@@ -302,13 +268,19 @@ ping-connect-wallet ul[role='list'] li:has(img[src*='keplr']) p::before {
   font-weight: 600;
 }
 /*
- * Replace the Keplr logo with the real Vultisig icon when available.
- * --vultisig-icon-url is set at runtime from the EIP-6963 announcement;
- * if unset, the `var()` lookup fails and the original img src renders.
+ * Always swap the Keplr logo for the official Vultisig icon — keeps the
+ * modal visually consistent whether or not the extension is installed
+ * (no EIP-6963 announcement needed pre-install).
+ *
+ * The widget's img has `bg-gray-50 rounded-full` — those clip into the
+ * Vultisig icon's own circular design. Drop them so the SVG renders at
+ * its natural shape, without any border.
  */
 ping-connect-wallet ul[role='list'] li:has(img[src*='keplr']) img {
-  content: var(--vultisig-icon-url);
-  border: 1px solid rgba(128, 128, 128, 0.25);
+  content: url('https://raw.githubusercontent.com/vultisig/vultisig-windows/cedaf85b7b6ed21d35487ce1b4b64688b79c5c74/ci/deb/vultisig.svg');
+  background-color: transparent;
+  border-radius: 0;
+  object-fit: contain;
 }
 ping-connect-wallet .modal-box h3 {
   font-size: 0;
@@ -331,5 +303,59 @@ body.vultisig-not-installed ping-connect-wallet .ping-connect-confirm::before {
   content: 'Install';
   font-size: 1rem;
   font-weight: 600;
+}
+
+/*
+ * The widget renders unregistered-chain feedback as:
+ *   <div class="text-error mt-3">
+ *     <span>Error: There is no chain info for <id>.</span>
+ *     <div><a class="btn btn-link">Suggest a chain to Keplr</a></div>
+ *   </div>
+ *
+ * For our flow this is a normal connection step, not an error — re-color
+ * to neutral, replace the message wording, drop the Keplr name from the
+ * link, and left-align the link with the message above it.
+ */
+ping-connect-wallet .text-error {
+  color: inherit;
+}
+ping-connect-wallet .text-error > span {
+  font-size: 0;
+}
+ping-connect-wallet .text-error > span::before {
+  content: 'This chain is not yet registered with Vultisig.';
+  font-size: 0.875rem;
+}
+ping-connect-wallet .text-error .btn-link {
+  font-size: 0;
+  padding-left: 0;
+  padding-right: 0;
+  min-height: 0;
+  height: auto;
+  justify-content: flex-start;
+  text-align: left;
+}
+ping-connect-wallet .text-error .btn-link::before {
+  content: 'Add this chain to Vultisig';
+  font-size: 0.875rem;
+  text-decoration: underline;
+}
+
+/*
+ * The widget renders a gear-icon `<label class="btn mr-1">` next to the
+ * primary Connect button. It emits `keplr-config` — the same action as
+ * the "Add this chain to Vultisig" link in the unregistered-chain notice
+ * above. Redundant for our flow, so hide it.
+ */
+ping-connect-wallet .modal-box .mt-8.text-right > label.btn:not(.ping-connect-confirm) {
+  display: none !important;
+}
+
+/*
+ * Hide the green "selected" checkmark on the wallet row. Only one wallet
+ * (Vultisig) is ever shown, so the selection state is meaningless.
+ */
+ping-connect-wallet ul[role='list'] li .bg-green-200 {
+  display: none !important;
 }
 </style>
