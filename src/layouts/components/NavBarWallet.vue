@@ -2,7 +2,7 @@
 import { useRoute } from 'vue-router';
 import { useBaseStore, useBlockchain, useWalletStore } from '@/stores';
 import { Icon } from '@iconify/vue';
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { suggestKeplrChain } from '@/libs/keplr';
 
 const route = useRoute();
@@ -58,7 +58,66 @@ const params = computed(() => {
       wallet: ['okex', 'unisat'],
     });
   }
-  return '';
+  return JSON.stringify({ wallet: ['keplr'] });
+});
+
+const VULTISIG_INSTALL_URL =
+  'https://chromewebstore.google.com/search/Vultisig%20Extension';
+const VULTISIG_RDNS = 'me.vultisig';
+
+function isVultisigInstalled(): boolean {
+  return typeof (window as any).vultisig !== 'undefined';
+}
+
+// Vultisig broadcasts its icon (and name/rdns) per EIP-6963. Listen for the
+// announcement and expose the icon as a CSS variable so the modal can swap
+// the Keplr logo for the real Vultisig logo without bundling an asset.
+function handleProviderAnnounce(e: Event) {
+  const detail = (e as CustomEvent).detail;
+  const info = detail?.info;
+  if (info?.rdns === VULTISIG_RDNS && info.icon) {
+    document.documentElement.style.setProperty(
+      '--vultisig-icon-url',
+      `url("${info.icon}")`
+    );
+  }
+}
+
+// Toggle a body class so CSS can relabel the modal's "Connect" button
+// to "Install" when the Vultisig extension isn't detected.
+function refreshVultisigState() {
+  document.body.classList.toggle(
+    'vultisig-not-installed',
+    !isVultisigInstalled()
+  );
+}
+
+// Capture-phase listener so we run BEFORE the widget's own @click handler.
+// If Vultisig isn't installed, we hijack the Connect button to open the
+// chrome web store instead of letting the widget call window.keplr.enable().
+function interceptInstallClick(e: Event) {
+  const target = e.target as HTMLElement | null;
+  if (target?.closest('.ping-connect-confirm') && !isVultisigInstalled()) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.open(VULTISIG_INSTALL_URL, '_blank', 'noopener');
+  }
+}
+
+onMounted(() => {
+  refreshVultisigState();
+  window.addEventListener('focus', refreshVultisigState);
+  document.addEventListener('click', interceptInstallClick, true);
+  window.addEventListener('eip6963:announceProvider', handleProviderAnnounce);
+  window.dispatchEvent(new Event('eip6963:requestProvider'));
+});
+
+onUnmounted(() => {
+  window.removeEventListener('focus', refreshVultisigState);
+  document.removeEventListener('click', interceptInstallClick, true);
+  window.removeEventListener('eip6963:announceProvider', handleProviderAnnounce);
+  document.body.classList.remove('vultisig-not-installed');
+  document.documentElement.style.removeProperty('--vultisig-icon-url');
 });
 </script>
 
@@ -69,7 +128,6 @@ const params = computed(() => {
       class="btn btn-sm btn-primary m-1 lowercase truncate !inline-flex text-xs md:!text-sm"
     >
       <Icon icon="mdi:wallet" />
-      <span class="ml-1 hidden md:block"> {{ walletStore.shortAddress || 'Wallet' }}</span>
     </label>
     <div
       tabindex="0"
@@ -80,10 +138,10 @@ const params = computed(() => {
         for="PingConnectWallet"
         class="btn btn-sm btn-primary"
       >
-        <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Wallet</span>
+        <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Vultisig</span>
       </label>
       <div class="px-2 mb-1 text-gray-500 dark:text-gray-400 font-semibold">
-        {{ walletStore.connectedWallet?.wallet }}
+        {{ walletStore.connectedWallet?.wallet ? 'Vultisig' : '' }}
       </div>
       <div>
         <a
@@ -149,5 +207,58 @@ const params = computed(() => {
 .ping-connect-btn,
 .ping-connect-dropdown {
   display: none !important;
+}
+
+/*
+ * Limit @ping-pub/widget modal to show only Vultisig.
+ * The widget ignores the `params` prop in the version we load from CDN,
+ * so we filter via CSS instead. Vultisig impersonates window.keplr, so
+ * the Keplr row is the one that actually connects Vultisig — we keep
+ * that row, hide everything else, and relabel it as "Vultisig".
+ */
+ping-connect-wallet ul[role='list'] li {
+  display: none !important;
+}
+ping-connect-wallet ul[role='list'] li:has(img[src*='keplr']) {
+  display: flex !important;
+}
+ping-connect-wallet ul[role='list'] li:has(img[src*='keplr']) p {
+  font-size: 0;
+}
+ping-connect-wallet ul[role='list'] li:has(img[src*='keplr']) p::before {
+  content: 'Vultisig';
+  font-size: 1rem;
+  font-weight: 600;
+}
+/*
+ * Replace the Keplr logo with the real Vultisig icon when available.
+ * --vultisig-icon-url is set at runtime from the EIP-6963 announcement;
+ * if unset, the `var()` lookup fails and the original img src renders.
+ */
+ping-connect-wallet ul[role='list'] li:has(img[src*='keplr']) img {
+  content: var(--vultisig-icon-url);
+  border: 1px solid rgba(128, 128, 128, 0.25);
+}
+ping-connect-wallet .modal-box h3 {
+  font-size: 0;
+}
+ping-connect-wallet .modal-box h3::before {
+  content: 'Connect Vultisig';
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/*
+ * When Vultisig isn't detected, relabel the modal's "Connect" button to
+ * "Install". The click is intercepted in JS (interceptInstallClick) to
+ * open the chrome web store instead of running the widget's connect flow.
+ */
+body.vultisig-not-installed ping-connect-wallet .ping-connect-confirm {
+  font-size: 0;
+}
+body.vultisig-not-installed ping-connect-wallet .ping-connect-confirm::before {
+  content: 'Install';
+  font-size: 1rem;
+  font-weight: 600;
 }
 </style>
