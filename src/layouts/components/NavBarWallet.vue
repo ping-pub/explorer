@@ -128,7 +128,6 @@ onUnmounted(() => {
       class="btn btn-sm btn-primary m-1 lowercase truncate !inline-flex text-xs md:!text-sm"
     >
       <Icon icon="mdi:wallet" />
-      <span class="ml-1 hidden md:block"> {{ walletStore.shortAddress || 'Vultisig' }}</span>
     </label>
     <div
       tabindex="0"
@@ -235,16 +234,10 @@ ping-connect-wallet ul[role='list'] li:has(img[src*='keplr']) p::before {
  * Replace the Keplr logo with the real Vultisig icon when available.
  * --vultisig-icon-url is set at runtime from the EIP-6963 announcement;
  * if unset, the `var()` lookup fails and the original img src renders.
- *
- * The widget's img has `bg-gray-50 rounded-full` — these clip into the
- * Vultisig icon's own circular design, creating a jagged border. Drop
- * both so the icon renders at its natural shape.
  */
 ping-connect-wallet ul[role='list'] li:has(img[src*='keplr']) img {
   content: var(--vultisig-icon-url);
-  background-color: transparent;
-  border-radius: 0;
-  object-fit: contain;
+  border: 1px solid rgba(128, 128, 128, 0.25);
 }
 ping-connect-wallet .modal-box h3 {
   font-size: 0;
