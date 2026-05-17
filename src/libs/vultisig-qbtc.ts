@@ -86,11 +86,10 @@ export async function sendQbtcTransaction(params: QbtcSendTxParams): Promise<str
 export function describeQbtcError(err: unknown): string {
   const e = err as { code?: number; message?: string } | undefined;
   if (e?.code === QBTC_ERR_USER_REJECTED) return 'Connection rejected.';
+  // Override the provider's own 4100 message (it points to the obsolete
+  // "Developer Options" toggle) with the current path in Vultisig.
   if (e?.code === QBTC_ERR_UNAUTHORIZED) {
-    return (
-      e.message ||
-      'QBTC requires an MLDSA-enabled vault. Enable MLDSA in Vultisig Developer Options and create a new vault.'
-    );
+    return 'QBTC requires a post-quantum (MLDSA) key on this vault. In Vultisig, open Settings → Vault Settings → Post-Quantum Key Generation to generate one, then try connecting again — or choose another vault.';
   }
   return e?.message || 'Failed to connect Vultisig QBTC.';
 }

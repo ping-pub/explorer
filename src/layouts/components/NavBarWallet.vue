@@ -2,7 +2,7 @@
 import { useRoute } from 'vue-router';
 import { useBaseStore, useBlockchain, useWalletStore } from '@/stores';
 import { Icon } from '@iconify/vue';
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue';
 import { suggestKeplrChain } from '@/libs/keplr';
 import {
   describeQbtcError,
@@ -17,10 +17,11 @@ const chainStore = useBlockchain();
 const baseStore = useBaseStore();
 
 // QBTC signs with ML-DSA-44, not secp256k1, so it can't ride the Keplr
-// proxy. When the active chain is QBTC, bypass the Ping-Pub widget and
-// talk to `window.vultisig.qbtc` directly (vultisig-windows PR #3933).
+// proxy. When the active chain is QBTC we let the user click "Connect"
+// inside the Ping-Pub modal as usual, but intercept that click and talk
+// to `window.vultisig.qbtc` directly (vultisig-windows PR #3933) so we
+// surface the dedicated 4100 error when the picked vault lacks MLDSA.
 const isQbtc = computed(() => chainStore.current?.bech32Prefix === 'qbtc');
-const qbtcError = ref('');
 
 // Pre-register the active chain with Keplr so the connect modal doesn't
 // trip on "no modular chain info" before the user can interact.
@@ -86,12 +87,36 @@ function isVultisigInstalled(): boolean {
   return typeof (window as any).vultisig !== 'undefined';
 }
 
-async function connectQbtc() {
-  qbtcError.value = '';
-  if (!isQbtcProviderAvailable()) {
-    window.open(VULTISIG_INSTALL_URL, '_blank', 'noopener');
-    return;
-  }
+const QBTC_MODAL_ERROR_CLASS = 'qbtc-modal-error';
+
+function removeQbtcModalError() {
+  document
+    .querySelectorAll(`.${QBTC_MODAL_ERROR_CLASS}`)
+    .forEach((el) => el.remove());
+}
+
+// Render the error inline in the widget's modal-box, just above the
+// Connect button row, so the user sees it without the dropdown closing.
+function showQbtcModalError(message: string) {
+  removeQbtcModalError();
+  const buttonRow = document.querySelector(
+    'ping-connect-wallet .modal-box .mt-8.text-right'
+  );
+  const parent = buttonRow?.parentElement;
+  if (!buttonRow || !parent) return;
+  const el = document.createElement('div');
+  el.className = `${QBTC_MODAL_ERROR_CLASS} text-red-500`;
+  el.textContent = message;
+  parent.insertBefore(el, buttonRow);
+}
+
+function closePingConnectModal() {
+  const cb = document.getElementById('PingConnectWallet');
+  if (cb instanceof HTMLInputElement) cb.checked = false;
+}
+
+async function connectQbtcFromModal() {
+  removeQbtcModalError();
   try {
     const address = await requestQbtcAccount();
     walletStore.setConnectedWallet({
@@ -99,8 +124,9 @@ async function connectQbtc() {
       cosmosAddress: address,
       hdPath: chainStore.defaultHDPath,
     });
+    closePingConnectModal();
   } catch (e) {
-    qbtcError.value = describeQbtcError(e);
+    showQbtcModalError(describeQbtcError(e));
   }
 }
 
@@ -134,27 +160,47 @@ function refreshVultisigState() {
 }
 
 // Capture-phase listener so we run BEFORE the widget's own @click handler.
-// If Vultisig isn't installed, we hijack the Connect button to open the
-// chrome web store instead of letting the widget call window.keplr.enable().
-function interceptInstallClick(e: Event) {
+// Two interceptions on the modal's Connect button:
+//   1) Extension not installed → open the chrome web store.
+//   2) Active chain is QBTC → bypass the Keplr-proxy path (which swallows
+//      the "no MLDSA" case) and connect via `window.vultisig.qbtc`, which
+//      surfaces a clear 4100 error when the picked vault lacks MLDSA.
+function interceptConnectClick(e: Event) {
   const target = e.target as HTMLElement | null;
-  if (target?.closest('.ping-connect-confirm') && !isVultisigInstalled()) {
+  if (!target?.closest('.ping-connect-confirm')) return;
+  if (!isVultisigInstalled()) {
     e.preventDefault();
     e.stopImmediatePropagation();
     window.open(VULTISIG_INSTALL_URL, '_blank', 'noopener');
+    return;
   }
+  if (isQbtc.value && isQbtcProviderAvailable()) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    void connectQbtcFromModal();
+  }
+}
+
+// Clear any injected QBTC error when the modal closes (the widget's modal
+// is a daisyUI checkbox-controlled modal — closing flips the checkbox off).
+function handleModalCheckboxChange(e: Event) {
+  const t = e.target as HTMLInputElement | null;
+  if (t?.id === 'PingConnectWallet' && !t.checked) removeQbtcModalError();
 }
 
 onMounted(() => {
   refreshVultisigState();
   window.addEventListener('focus', refreshVultisigState);
-  document.addEventListener('click', interceptInstallClick, true);
+  document.addEventListener('click', interceptConnectClick, true);
+  document.addEventListener('change', handleModalCheckboxChange);
 });
 
 onUnmounted(() => {
   window.removeEventListener('focus', refreshVultisigState);
-  document.removeEventListener('click', interceptInstallClick, true);
+  document.removeEventListener('click', interceptConnectClick, true);
+  document.removeEventListener('change', handleModalCheckboxChange);
   document.body.classList.remove('vultisig-not-installed');
+  removeQbtcModalError();
 });
 </script>
 
@@ -349,5 +395,18 @@ ping-connect-wallet .text-error .btn-link::before {
  */
 ping-connect-wallet .modal-box .mt-8.text-right > label.btn:not(.ping-connect-confirm) {
   display: none !important;
+}
+
+/*
+ * Error injected into the modal-box when QBTC `request_accounts` fails
+ * (most often: picked vault has no MLDSA key — provider returns 4100).
+ * Sits right above the button row so the user can read it before
+ * dismissing the modal.
+ */
+ping-connect-wallet .modal-box .qbtc-modal-error {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  text-align: left;
+  overflow-wrap: anywhere;
 }
 </style>
