@@ -85,7 +85,7 @@ function suggest() {
     // @ts-ignore
     window.unisat
       .experimentalSuggestChain(JSON.parse(conf.value))
-      .catch((e) => {
+      .catch((e: any) => {
         error.value = e;
       });
   }
