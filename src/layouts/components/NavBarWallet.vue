@@ -175,7 +175,7 @@ onUnmounted(() => {
         for="PingConnectWallet"
         class="btn btn-sm btn-primary"
       >
-        <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Vultisig</span>
+        <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Wallet</span>
       </label>
       <div class="px-2 mb-1 text-gray-500 dark:text-gray-400 font-semibold">
         {{ walletStore.connectedWallet?.wallet ? 'Vultisig' : '' }}
@@ -348,14 +348,6 @@ ping-connect-wallet .text-error .btn-link::before {
  * above. Redundant for our flow, so hide it.
  */
 ping-connect-wallet .modal-box .mt-8.text-right > label.btn:not(.ping-connect-confirm) {
-  display: none !important;
-}
-
-/*
- * Hide the green "selected" checkmark on the wallet row. Only one wallet
- * (Vultisig) is ever shown, so the selection state is meaningless.
- */
-ping-connect-wallet ul[role='list'] li .bg-green-200 {
   display: none !important;
 }
 </style>
