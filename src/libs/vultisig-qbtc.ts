@@ -89,7 +89,7 @@ export function describeQbtcError(err: unknown): string {
   // Override the provider's own 4100 message (it points to the obsolete
   // "Developer Options" toggle) with the current path in Vultisig.
   if (e?.code === QBTC_ERR_UNAUTHORIZED) {
-    return 'QBTC requires a post-quantum (MLDSA) key on this vault. In Vultisig, open Settings → Vault Settings → Post-Quantum Key Generation to generate one, then try connecting again — or choose another vault.';
+    return 'QBTC requires a post-quantum (MLDSA) key on this vault. Enable it in Vault Settings, or choose another vault.';
   }
   return e?.message || 'Failed to connect Vultisig QBTC.';
 }
