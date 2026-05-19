@@ -18,7 +18,9 @@ onMounted(() => {
 async function initParamsForKeplr() {
   const chain = selected.value;
   if (!chain.endpoints?.rest?.at(0)) throw new Error('Endpoint does not set');
-  const client = CosmosRestClient.newDefault(chain.endpoints.rest?.at(0)?.address || '');
+  const client = CosmosRestClient.newDefault(
+    chain.endpoints.rest?.at(0)?.address || ''
+  );
   const b = await client.getBaseBlockLatest();
   const chainid = b.block.header.chain_id;
 
@@ -81,9 +83,11 @@ function suggest() {
   // @ts-ignore
   if (window.unisat) {
     // @ts-ignore
-    window.unisat.experimentalSuggestChain(JSON.parse(conf.value)).catch((e) => {
-      error.value = e;
-    });
+    window.unisat
+      .experimentalSuggestChain(JSON.parse(conf.value))
+      .catch((e: any) => {
+        error.value = e;
+      });
   }
 }
 </script>
@@ -92,7 +96,11 @@ function suggest() {
   <div class="bg-base-100 p-4 rounded text-center">
     <AdBanner id="keplr-banner-ad" unit="banner" width="970px" height="90px" />
     <div class="flex">
-      <select v-model="selected" class="select select-bordered mx-5" @change="initParamsForKeplr">
+      <select
+        v-model="selected"
+        class="select select-bordered mx-5"
+        @change="initParamsForKeplr"
+      >
         <option v-for="c in dashboard.chains" :value="c">
           {{ c.chainName }}
         </option>
@@ -102,10 +110,15 @@ function suggest() {
       </button>
     </div>
     <div class="text-main mt-5">
-      <textarea v-model="conf" class="textarea textarea-bordered w-full" rows="15"></textarea>
+      <textarea
+        v-model="conf"
+        class="textarea textarea-bordered w-full"
+        rows="15"
+      ></textarea>
     </div>
     <div class="mt-4 mb-4">
-      If the chain is not offically support on Keplr, you can submit these parameters to enable Keplr.
+      If the chain is not officially supported by Unisat, you can submit these
+      parameters to register it.
     </div>
   </div>
 </template>

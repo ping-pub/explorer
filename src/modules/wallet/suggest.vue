@@ -185,8 +185,7 @@ function suggest() {
       </button>
 
       <div class="mt-4">
-        If the chain is not offically support on Keplr/Metamask Snap, you can submit these parameters to enable
-        Keplr/Metamask Snap.
+        If the chain is not officially supported by {{ wallet }}, you can submit these parameters to register it.
       </div>
     </div>
 
