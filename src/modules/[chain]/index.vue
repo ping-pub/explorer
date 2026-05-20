@@ -3,7 +3,8 @@ import MdEditor from 'md-editor-v3';
 import PriceMarketChart from '@/components/charts/PriceMarketChart.vue';
 
 import { Icon } from '@iconify/vue';
-import { useBlockchain, useFormatter, useTxDialog, useWalletStore, useStakingStore, useParamStore } from '@/stores';
+import { useBlockchain, useFormatter, useTxDialog, useWalletStore, useStakingStore, useParamStore, useGovStore } from '@/stores';
+import { LoadingStatus } from '@/stores/useDashboard';
 import { onMounted, ref } from 'vue';
 import { useIndexModule, colorMap, tickerUrl } from './indexStore';
 import { computed } from '@vue/reactivity';
@@ -11,6 +12,7 @@ import { computed } from '@vue/reactivity';
 import CardStatisticsVertical from '@/components/CardStatisticsVertical.vue';
 import ProposalListItem from '@/components/ProposalListItem.vue';
 import ArrayObjectElement from '@/components/dynamic/ArrayObjectElement.vue';
+import Loading from '@/components/Loading.vue';
 
 const props = defineProps(['chain']);
 
@@ -21,9 +23,17 @@ const format = useFormatter();
 const dialog = useTxDialog();
 const stakingStore = useStakingStore();
 const paramStore = useParamStore();
+const govStore = useGovStore();
 const coinInfo = computed(() => {
   return store.coinInfo;
 });
+const isAppVersionLoading = computed(
+  () => !Array.isArray(paramStore.appVersion?.items) || paramStore.appVersion.items.length === 0
+);
+const isNodeVersionLoading = computed(
+  () => !Array.isArray(paramStore.nodeVersion?.items) || paramStore.nodeVersion.items.length === 0
+);
+const isProposalsLoading = computed(() => govStore.loading['2'] !== LoadingStatus.Loaded);
 
 onMounted(() => {
   store.loadDashboard();
@@ -328,15 +338,18 @@ const amount = computed({
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         {{ $t('index.active_proposals') }}
       </div>
-      <div class="px-4 pb-4">
-        <ProposalListItem :proposals="store?.proposals" />
-      </div>
-      <div
-        class="pb-8 text-center"
-        v-if="store.proposals?.proposals?.length === 0"
-      >
-        {{ $t('index.no_active_proposals') }}
-      </div>
+      <Loading v-if="isProposalsLoading" :bordered="false" />
+      <template v-else>
+        <div class="px-4 pb-4">
+          <ProposalListItem :proposals="store?.proposals" />
+        </div>
+        <div
+          class="pb-8 text-center"
+          v-if="store.proposals?.proposals?.length === 0"
+        >
+          {{ $t('index.no_active_proposals') }}
+        </div>
+      </template>
     </div>
 
     <div class="bg-base-100 rounded mt-4 shadow">
@@ -471,7 +484,9 @@ const amount = computed({
         {{ $t('index.app_versions') }}
       </div>
       <!-- Application Version -->
+      <Loading v-if="isAppVersionLoading" :bordered="false" />
       <ArrayObjectElement
+        v-else
         :value="paramStore.appVersion?.items"
         :thead="false"
       />
@@ -482,7 +497,8 @@ const amount = computed({
       <div class="px-4 pt-4 pb-2 text-lg font-semibold text-main">
         {{ $t('index.node_info') }}
       </div>
-      <ArrayObjectElement :value="paramStore.nodeVersion?.items" :thead="false" />
+      <Loading v-if="isNodeVersionLoading" :bordered="false" />
+      <ArrayObjectElement v-else :value="paramStore.nodeVersion?.items" :thead="false" />
       <div class="h-4"></div>
     </div>
   </div>

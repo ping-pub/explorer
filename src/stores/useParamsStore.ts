@@ -154,17 +154,20 @@ export const useParamStore = defineStore('paramstore', {
       if (excludes && excludes.indexOf('governance') > -1) {
         return;
       }
-      Promise.all([this.getGovParamsVoting(), this.getGovParamsDeposit(), this.getGovParamsTally()]).then((resArr) => {
-        const govParams = {
-          ...resArr[0]?.voting_params,
-          ...resArr[1]?.deposit_params,
-          ...resArr[2]?.tally_params,
-        };
-        this.gov.items = Object.entries(govParams).map(([key, value]) => ({
-          subtitle: key,
-          value: value,
-        }));
-      });
+      const resArr = await Promise.all([
+        this.getGovParamsVoting(),
+        this.getGovParamsDeposit(),
+        this.getGovParamsTally(),
+      ]);
+      const govParams = {
+        ...resArr[0]?.voting_params,
+        ...resArr[1]?.deposit_params,
+        ...resArr[2]?.tally_params,
+      };
+      this.gov.items = Object.entries(govParams).map(([key, value]) => ({
+        subtitle: key,
+        value: value,
+      }));
     },
     async handleAbciInfo() {
       const res = await this.fetchAbciInfo();

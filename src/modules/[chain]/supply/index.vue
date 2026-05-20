@@ -10,12 +10,14 @@ import {
 import { onMounted } from 'vue';
 import type { Asset } from '@/types/chaindata';
 import PaginationBar from '@/components/PaginationBar.vue';
+import Loading from '@/components/Loading.vue';
 const props = defineProps(['chain']);
 
 const format = useFormatter();
 const chainStore = useBlockchain();
 
 const list = ref([] as { denom: string; amount: string; base: string; info: string; logo: string | undefined }[]);
+const loading = ref(true);
 
 const pageRequest = ref(new PageRequest());
 const pageResponse = ref({} as Pagination);
@@ -54,23 +56,27 @@ async function mergeDenomMetadata(denom: string, denomsMetadatas: DenomMetadata[
 
 function pageload(p: number) {
   pageRequest.value.setPage(p);
-  chainStore.rpc.getBankDenomMetadata().then(async (denomsMetaResponse) => {
-    const bankSupplyResponse = await chainStore.rpc.getBankSupply(pageRequest.value);
-    list.value = await Promise.all(
-      bankSupplyResponse.supply.map(async (coin: Coin) => {
-        const asset = await mergeDenomMetadata(coin.denom, denomsMetaResponse.metadatas);
-        const denom = asset?.symbol || coin.denom;
-        return {
-          denom: denom.split('/')[denom.split('/').length - 1].toUpperCase(),
-          amount: format.tokenAmountNumber({ amount: coin.amount, denom: denom }).toString(),
-          base: asset.base || coin.denom,
-          info: asset.display || coin.denom,
-          logo: asset?.logo_URIs?.svg || asset?.logo_URIs?.png || '/logo.svg',
-        };
-      })
-    );
-    pageResponse.value = bankSupplyResponse.pagination;
-  });
+  loading.value = true;
+  chainStore.rpc
+    .getBankDenomMetadata()
+    .then(async (denomsMetaResponse) => {
+      const bankSupplyResponse = await chainStore.rpc.getBankSupply(pageRequest.value);
+      list.value = await Promise.all(
+        bankSupplyResponse.supply.map(async (coin: Coin) => {
+          const asset = await mergeDenomMetadata(coin.denom, denomsMetaResponse.metadatas);
+          const denom = asset?.symbol || coin.denom;
+          return {
+            denom: denom.split('/')[denom.split('/').length - 1].toUpperCase(),
+            amount: format.tokenAmountNumber({ amount: coin.amount, denom: denom }).toString(),
+            base: asset.base || coin.denom,
+            info: asset.display || coin.denom,
+            logo: asset?.logo_URIs?.svg || asset?.logo_URIs?.png || '/logo.svg',
+          };
+        })
+      );
+      pageResponse.value = bankSupplyResponse.pagination;
+    })
+    .finally(() => (loading.value = false));
 }
 </script>
 <template>
@@ -85,17 +91,21 @@ function pageload(p: number) {
           <td>Base</td>
         </tr>
       </thead>
-      <tr v-for="item in list" class="hover">
-        <td>
-          <img v-if="item.logo" :src="item.logo" class="w-7 h-7" />
-        </td>
-        <td>{{ item.denom }}</td>
-        <td>{{ item.amount }}</td>
-        <td>{{ item.info }}</td>
-        <td>{{ item.base }}</td>
-      </tr>
+      <tbody v-if="!loading">
+        <tr v-for="item in list" class="hover">
+          <td>
+            <img v-if="item.logo" :src="item.logo" class="w-7 h-7" />
+          </td>
+          <td>{{ item.denom }}</td>
+          <td>{{ item.amount }}</td>
+          <td>{{ item.info }}</td>
+          <td>{{ item.base }}</td>
+        </tr>
+      </tbody>
     </table>
+    <Loading v-if="loading" :bordered="false" />
     <PaginationBar
+      v-else
       :limit="pageRequest.limit"
       :total="pageResponse.total"
       :callback="pageload"
