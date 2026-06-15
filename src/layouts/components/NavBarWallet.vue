@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { useBaseStore, useBlockchain, useWalletStore } from '@/stores';
+import { useBaseStore, useBlockchain, useWalletStore, useStorageStore } from '@/stores';
 import { Icon } from '@iconify/vue';
 import { ref, computed } from 'vue';
 
@@ -8,6 +8,7 @@ const route = useRoute();
 const walletStore = useWalletStore();
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
+const storageStore = useStorageStore();
 // walletStore.$subscribe((m, s) => {
 //   console.log(m, s);
 // });
@@ -92,6 +93,16 @@ const params = computed(() => {
             Portfolio
           </div>
         </RouterLink>
+        <div class="divider mt-1 mb-1"></div>
+        <div class="flex items-center justify-between py-2 px-2 text-sm">
+          <span class="text-xs">Persist session</span>
+          <input
+            type="checkbox"
+            class="toggle toggle-xs"
+            :checked="!storageStore.isSession"
+            @change="storageStore.toggle()"
+          />
+        </div>
         <div v-if="walletStore.currentAddress" class="divider mt-1 mb-1"></div>
         <a
           v-if="walletStore.currentAddress"

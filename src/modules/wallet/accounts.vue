@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { CosmosRestClient } from '@/libs/client';
-import { useBlockchain, useDashboard, useFormatter } from '@/stores';
+import { useBlockchain, useDashboard, useFormatter, useStorageStore } from '@/stores';
 import type { Coin, CoinWithPrice, Delegation } from '@/types';
 import { fromBech32, toBase64, toBech32, toHex } from '@cosmjs/encoding';
 import { Icon } from '@iconify/vue';
@@ -12,12 +12,13 @@ import AdBanner from '@/components/ad/AdBanner.vue';
 const dashboard = useDashboard();
 const chainStore = useBlockchain();
 const format = useFormatter();
+const storageStore = useStorageStore();
 const sourceAddress = ref(''); //
 const sourceHdPath = ref("m/44/118/0'/0/0"); //
 const selectedSource = ref({} as LocalKey); //
 const importStep = ref('step1');
 
-const conf = ref(JSON.parse(localStorage.getItem('imported-addresses') || '{}') as Record<string, AccountEntry[]>);
+const conf = ref(JSON.parse(storageStore.currentStorage.getItem('imported-addresses') || localStorage.getItem('imported-addresses') || '{}') as Record<string, AccountEntry[]>);
 const balances = ref({} as Record<string, CoinWithPrice[]>);
 const delegations = ref({} as Record<string, Delegation[]>);
 
@@ -136,7 +137,7 @@ function removeAddress(addr: string) {
     if (acc.length > 0) newConf[key] = acc;
   });
   conf.value = newConf;
-  localStorage.setItem('imported-addresses', JSON.stringify(conf.value));
+  storageStore.currentStorage.setItem('imported-addresses', JSON.stringify(conf.value));
 }
 
 // add address to the local list
@@ -164,7 +165,7 @@ async function addAddress(acc: AccountEntry) {
     loadBalances(acc.chainName, acc.endpoint, acc.address);
   }
 
-  localStorage.setItem('imported-addresses', JSON.stringify(conf.value));
+  storageStore.currentStorage.setItem('imported-addresses', JSON.stringify(conf.value));
 }
 
 // load balances for an address

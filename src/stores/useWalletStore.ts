@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
 import { useBlockchain } from './useBlockchain';
+import { useStorageStore } from './useStorageStore';
 import { fromBech32, toBech32 } from '@cosmjs/encoding';
 import type { Delegation, Coin, UnbondingResponses, DelegatorRewards, WalletConnected } from '@/types';
 import { useStakingStore } from './useStakingStore';
 import router from '@/router';
+import { encryptWallet, decryptWallet } from '@/utils/crypto';
 
 export const useWalletStore = defineStore('walletStore', {
   state: () => {
@@ -24,8 +26,27 @@ export const useWalletStore = defineStore('walletStore', {
       if (this.wallet.cosmosAddress) return this.wallet;
       const chainStore = useBlockchain();
       const key = chainStore.defaultHDPath;
-      const connected = JSON.parse(localStorage.getItem(key) || '{}');
-      return connected;
+      const storageStore = useStorageStore();
+      const storage = storageStore.currentStorage;
+      const raw = storage.getItem(key) || localStorage.getItem(key);
+      if (!raw) return {};
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed?.cosmosAddress || parsed?.hdPath) {
+          const encrypted = encryptWallet(raw);
+          storage.setItem(key, encrypted);
+          if (!storageStore.isSession) sessionStorage.removeItem(key);
+          return parsed;
+        }
+      } catch {
+        // not plaintext JSON, try decrypting
+      }
+      const decrypted = decryptWallet(raw);
+      try {
+        return JSON.parse(decrypted);
+      } catch {
+        return {};
+      }
     },
     balanceOfStakingToken(): Coin {
       const stakingStore = useStakingStore();
@@ -106,10 +127,21 @@ export const useWalletStore = defineStore('walletStore', {
       const chainStore = useBlockchain();
       const key = chainStore.defaultHDPath;
       localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
       this.$reset();
     },
     setConnectedWallet(value: WalletConnected) {
       if (!value) return;
+      const chainStore = useBlockchain();
+      const key = chainStore.defaultHDPath;
+      const storageStore = useStorageStore();
+      const storage = storageStore.currentStorage;
+      storage.setItem(key, encryptWallet(JSON.stringify(value)));
+      if (storageStore.isSession) {
+        localStorage.removeItem(key);
+      } else {
+        sessionStorage.removeItem(key);
+      }
       this.wallet = value;
       this.loadMyAsset();
     },

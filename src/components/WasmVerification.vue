@@ -7,6 +7,7 @@ import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { codeToHtml } from 'shiki';
 import { useWasmStore } from '@/modules/[chain]/cosmwasm/WasmStore';
 import { toBase64 } from '@cosmjs/encoding';
+import DOMPurify from 'dompurify';
 
 import { JsonViewer } from 'vue3-json-viewer';
 import { CosmjsOfflineSigner } from '@leapwallet/cosmos-snap-provider';
@@ -264,7 +265,7 @@ function callFunction(title: string, method: string, arg: Argument) {
         >
           <input type="radio" name="sourceCodeAccordion" :checked="false" />
           <div class="collapse-title font-medium">{{ sc.path }}</div>
-          <div class="collapse-content overflow-auto" v-html="sc.sourceCode"></div>
+          <div class="collapse-content overflow-auto" v-html="DOMPurify.sanitize(sc.sourceCode)"></div>
         </div>
       </div>
     </div>
