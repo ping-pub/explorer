@@ -10,6 +10,10 @@
       content="Ping Dashboard is a block explorer/web wallet for blockchains built on Cosmos SDK, Cosmoshub, Osmosis, Juno, Evmos, Injective, Canto and 70+ blockchains listed on ping.pub"
     />
     <link rel="stylesheet" type="text/css" href="/loader.css" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://cdn.jsdelivr.net https://*.ping.pub; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self' https: http:; frame-src 'self' https://wallet.keplr.app; font-src 'self' data:;"
+    />
   </head>
   <body>
     <div id="app">
@@ -46,6 +50,11 @@
       });
       gtag('config', 'G-SSBKVF3GMX');
     </script>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@ping-pub/widget@latest/dist/widget.min.js"></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ping-pub/widget@latest/dist/widget.min.js"
+      integrity="sha384-a8a0d62ff74f8e44f3aa7e37ffebc4e7682bbed5c180fc72ee53d6fafc678e93a7f7326e1e2bb80c9d9347716b94f079"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

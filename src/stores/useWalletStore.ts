@@ -4,6 +4,7 @@ import { fromBech32, toBech32 } from '@cosmjs/encoding';
 import type { Delegation, Coin, UnbondingResponses, DelegatorRewards, WalletConnected } from '@/types';
 import { useStakingStore } from './useStakingStore';
 import router from '@/router';
+import { encryptWallet, decryptWallet } from '@/utils/crypto';
 
 export const useWalletStore = defineStore('walletStore', {
   state: () => {
@@ -24,8 +25,24 @@ export const useWalletStore = defineStore('walletStore', {
       if (this.wallet.cosmosAddress) return this.wallet;
       const chainStore = useBlockchain();
       const key = chainStore.defaultHDPath;
-      const connected = JSON.parse(localStorage.getItem(key) || '{}');
-      return connected;
+      const raw = localStorage.getItem(key);
+      if (!raw) return {};
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed?.cosmosAddress || parsed?.hdPath) {
+          const encrypted = encryptWallet(raw);
+          localStorage.setItem(key, encrypted);
+          return parsed;
+        }
+      } catch {
+        // not plaintext JSON, try decrypting
+      }
+      const decrypted = decryptWallet(raw);
+      try {
+        return JSON.parse(decrypted);
+      } catch {
+        return {};
+      }
     },
     balanceOfStakingToken(): Coin {
       const stakingStore = useStakingStore();
