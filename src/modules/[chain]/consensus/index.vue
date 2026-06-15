@@ -20,6 +20,7 @@ let height = ref('');
 let round = ref('');
 let step = ref('');
 let timer = null as any;
+let loading = false;
 let updatetime = ref(new Date());
 let positions = ref([]);
 let validatorsData = ref([] as any);
@@ -36,6 +37,7 @@ onMounted(async () => {
 });
 onUnmounted(() => {
   clearTime();
+  loading = false;
 });
 
 function clearTime() {
@@ -80,15 +82,21 @@ function color(i: number, txt: string) {
   return txt === 'nil-Vote' ? 'gray-700' : 'success';
 }
 async function onChange() {
+  if (loading) return;
+  loading = true;
   httpstatus.value = 200;
   httpStatusText.value = '';
   roundState.value = {};
   clearTime();
-  await fetchPosition();
-  update();
-  timer = setInterval(() => {
+  try {
+    await fetchPosition();
     update();
-  }, Math.round(baseStore.blocktime / 2));
+    timer = setInterval(() => {
+      update();
+    }, Math.round(baseStore.blocktime / 2));
+  } finally {
+    loading = false;
+  }
 }
 
 async function fetchPosition() {
