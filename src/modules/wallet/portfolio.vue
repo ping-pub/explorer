@@ -4,7 +4,7 @@ import type { Coin, Delegation } from '@/types';
 import { ref, watchEffect } from 'vue';
 import type { AccountEntry } from './utils';
 import { computed } from 'vue';
-import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
+import { useBaseStore, useBlockchain, useFormatter, useStorageStore } from '@/stores';
 import DonutChart from '@/components/charts/DonutChart.vue';
 import ApexCharts from 'vue3-apexcharts';
 import { get } from '@/libs';
@@ -12,7 +12,8 @@ import { getMarketPriceChartConfig } from '@/components/charts/apexChartConfig';
 import AdBanner from '@/components/ad/AdBanner.vue';
 
 const format = useFormatter();
-const conf = ref(JSON.parse(localStorage.getItem('imported-addresses') || '{}') as Record<string, AccountEntry[]>);
+const storageStore = useStorageStore();
+const conf = ref(JSON.parse(storageStore.currentStorage.getItem('imported-addresses') || localStorage.getItem('imported-addresses') || '{}') as Record<string, AccountEntry[]>);
 const chainStore = useBlockchain();
 const balances = ref({} as Record<string, Coin[]>);
 const delegations = ref({} as Record<string, Delegation[]>);

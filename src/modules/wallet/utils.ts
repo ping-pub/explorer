@@ -1,6 +1,7 @@
 import { useDashboard } from '@/stores';
 import type { Coin } from '@/types';
 import { fromBech32, toBech32 } from '@cosmjs/encoding';
+import { decryptWallet, encryptWallet } from '@/utils/crypto';
 
 export interface AccountEntry {
   chainName: string;
@@ -18,15 +19,32 @@ export interface LocalKey {
 
 export function scanLocalKeys() {
   const connected = [] as LocalKey[];
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key?.startsWith('m/44')) {
-      const wallet = JSON.parse(localStorage.getItem(key) || '');
-      if (wallet) {
-        connected.push(wallet);
+  const storages = [localStorage, sessionStorage];
+  storages.forEach((storage) => {
+    for (let i = 0; i < storage.length; i++) {
+      const key = storage.key(i);
+      if (key?.startsWith('m/44')) {
+        const raw = storage.getItem(key) || '';
+        let wallet: LocalKey;
+        try {
+          wallet = JSON.parse(raw);
+          if (wallet?.cosmosAddress || wallet?.hdPath) {
+            const encrypted = encryptWallet(raw);
+            storage.setItem(key, encrypted);
+          }
+        } catch {
+          try {
+            wallet = JSON.parse(decryptWallet(raw));
+          } catch {
+            continue;
+          }
+        }
+        if (wallet && !connected.find((w) => w.cosmosAddress === wallet.cosmosAddress)) {
+          connected.push(wallet);
+        }
       }
     }
-  }
+  });
   return connected;
 }
 
