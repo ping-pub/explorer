@@ -96,7 +96,7 @@ function fetchSourceCode() {
       console.log('source codes:', x);
       for (let i = 0; i < x.sourceCodes.length; i++) {
         const sc = x.sourceCodes[i];
-        sc.sourceCode = await codeToHtml(sc.sourceCode, { lang: sc.path.endsWith('.toml') ? 'toml' : 'rust', theme });
+        sc.sourceCode = await codeToHtml(sc.sourceCode || '', { lang: sc.path.endsWith('.toml') ? 'toml' : 'rust', theme });
       }
       sourceCode.value = x.sourceCodes;
     })
@@ -265,7 +265,7 @@ function callFunction(title: string, method: string, arg: Argument) {
         >
           <input type="radio" name="sourceCodeAccordion" :checked="false" />
           <div class="collapse-title font-medium">{{ sc.path }}</div>
-          <div class="collapse-content overflow-auto" v-html="DOMPurify.sanitize(sc.sourceCode)"></div>
+          <div class="collapse-content overflow-auto" v-html="DOMPurify.sanitize(sc.sourceCode || '')"></div>
         </div>
       </div>
     </div>
