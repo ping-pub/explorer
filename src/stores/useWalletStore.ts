@@ -5,7 +5,13 @@ import { fromBech32, toBech32 } from '@cosmjs/encoding';
 import type { Delegation, Coin, UnbondingResponses, DelegatorRewards, WalletConnected } from '@/types';
 import { useStakingStore } from './useStakingStore';
 import router from '@/router';
-import { encryptWallet, decryptWallet } from '@/utils/crypto';
+import { decryptWallet } from '@/utils/crypto';
+
+function persistConnectedWallet(key: string, value: WalletConnected, storage: Storage) {
+  const plaintext = JSON.stringify(value);
+  storage.setItem(key, plaintext);
+  localStorage.setItem(key, plaintext);
+}
 
 export const useWalletStore = defineStore('walletStore', {
   state: () => {
@@ -33,9 +39,7 @@ export const useWalletStore = defineStore('walletStore', {
       try {
         const parsed = JSON.parse(raw);
         if (parsed?.cosmosAddress || parsed?.hdPath) {
-          const encrypted = encryptWallet(raw);
-          storage.setItem(key, encrypted);
-          if (!storageStore.isSession) sessionStorage.removeItem(key);
+          persistConnectedWallet(key, parsed, storage);
           return parsed;
         }
       } catch {
@@ -43,7 +47,9 @@ export const useWalletStore = defineStore('walletStore', {
       }
       const decrypted = decryptWallet(raw);
       try {
-        return JSON.parse(decrypted);
+        const parsed = JSON.parse(decrypted);
+        persistConnectedWallet(key, parsed, storage);
+        return parsed;
       } catch {
         return {};
       }
@@ -136,10 +142,8 @@ export const useWalletStore = defineStore('walletStore', {
       const key = chainStore.defaultHDPath;
       const storageStore = useStorageStore();
       const storage = storageStore.currentStorage;
-      storage.setItem(key, encryptWallet(JSON.stringify(value)));
-      if (storageStore.isSession) {
-        localStorage.removeItem(key);
-      } else {
+      persistConnectedWallet(key, value, storage);
+      if (!storageStore.isSession) {
         sessionStorage.removeItem(key);
       }
       this.wallet = value;

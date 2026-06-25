@@ -1,7 +1,7 @@
 import { useDashboard } from '@/stores';
 import type { Coin } from '@/types';
 import { fromBech32, toBech32 } from '@cosmjs/encoding';
-import { decryptWallet, encryptWallet } from '@/utils/crypto';
+import { decryptWallet } from '@/utils/crypto';
 
 export interface AccountEntry {
   chainName: string;
@@ -28,13 +28,10 @@ export function scanLocalKeys() {
         let wallet: LocalKey;
         try {
           wallet = JSON.parse(raw);
-          if (wallet?.cosmosAddress || wallet?.hdPath) {
-            const encrypted = encryptWallet(raw);
-            storage.setItem(key, encrypted);
-          }
         } catch {
           try {
             wallet = JSON.parse(decryptWallet(raw));
+            storage.setItem(key, JSON.stringify(wallet));
           } catch {
             continue;
           }
