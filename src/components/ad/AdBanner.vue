@@ -1,12 +1,14 @@
 <template>
   <!-- Ad container with required attributes -->
-  <ins
-    class="adsbyslise"
-    :style="adStyle"
-    :data-ad-slot="slot"
-    :data-ad-pub="publisherId"
-    :data-ad-format="format"
-  ></ins>
+  <div class="flex w-full justify-center">
+    <ins
+      class="adsbyslise"
+      :style="adStyle"
+      :data-ad-slot="slot"
+      :data-ad-pub="publisherId"
+      :data-ad-format="format"
+    ></ins>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -31,13 +33,22 @@ const props = defineProps({
   format: {
     type: String,
     default: '728x90'
+  },
+  width: {
+    type: String,
+    default: '728px'
+  },
+  height: {
+    type: String,
+    default: '90px'
   }
 });
 
 const adStyle = {
   display: 'inline-block',
-  width: '728px',
-  height: '90px'
+  width: props.width,
+  height: props.height,
+  maxWidth: '100%'
 };
 
 onMounted(() => {
