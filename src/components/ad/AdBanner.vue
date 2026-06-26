@@ -1,6 +1,6 @@
 <template>
   <!-- Ad container with required attributes -->
-  <div class="flex w-full justify-center">
+  <div ref="containerRef" class="flex w-full justify-center overflow-hidden" :style="containerStyle">
     <ins
       class="adsbyslise"
       :style="adStyle"
@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
 declare global {
   interface Window {
@@ -44,14 +44,43 @@ const props = defineProps({
   }
 });
 
-const adStyle = {
+const containerRef = ref<HTMLElement | null>(null);
+const scale = ref(1);
+
+function toPixels(value: string) {
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+const adWidth = computed(() => toPixels(props.width));
+const adHeight = computed(() => toPixels(props.height));
+
+const containerStyle = computed(() => ({
+  height: `${adHeight.value * scale.value}px`
+}));
+
+const adStyle = computed(() => ({
   display: 'inline-block',
   width: props.width,
   height: props.height,
-  maxWidth: '100%'
-};
+  transform: `scale(${scale.value})`,
+  transformOrigin: 'top center'
+}));
+
+let observer: ResizeObserver | undefined;
+
+function updateScale() {
+  if (!containerRef.value || !adWidth.value) return;
+  scale.value = Math.min(1, containerRef.value.clientWidth / adWidth.value);
+}
 
 onMounted(() => {
+  updateScale();
+  observer = new ResizeObserver(updateScale);
+  if (containerRef.value) {
+    observer.observe(containerRef.value);
+  }
+
   // Load script only once
   if (!document.querySelector('script[src="https://v1.slise.xyz/scripts/embed.js"]')) {
     const script = document.createElement('script');
@@ -68,5 +97,9 @@ onMounted(() => {
   if (typeof window.adsbyslisesync === 'function') {
     window.adsbyslisesync();
   }
+});
+
+onBeforeUnmount(() => {
+  observer?.disconnect();
 });
 </script>
