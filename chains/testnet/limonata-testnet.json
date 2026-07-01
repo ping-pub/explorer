@@ -1,0 +1,24 @@
+{
+  "chain_name": "limonata-testnet",
+  "api": [
+    "https://rest.limonata.xyz"
+  ],
+  "rpc": [
+    "https://cosmos-rpc.limonata.xyz"
+  ],
+  "snapshot_provider": "",
+  "sdk_version": "0.54.3",
+  "coin_type": "60",
+  "min_tx_fee": "20000000",
+  "addr_prefix": "cosmos",
+  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/limonatatestnet/images/limonatatestnet.png",
+  "assets": [
+    {
+      "base": "aLIMO",
+      "symbol": "LIMO",
+      "exponent": "18",
+      "coingecko_id": "",
+      "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/limonatatestnet/images/limonatatestnet.png"
+    }
+  ]
+}
