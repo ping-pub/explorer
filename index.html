@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Warm up the Slise ad origin and start fetching the embed script in
+         parallel with the app bundle, so banners can render as the page loads
+         instead of after the ad component mounts. -->
+    <link rel="preconnect" href="https://v1.slise.xyz" crossorigin />
+    <link rel="dns-prefetch" href="https://v1.slise.xyz" />
+    <link rel="preload" href="https://v1.slise.xyz/scripts/embed.js" as="script" />
     <title>Ping Dashboard - Cosmos Blockchain Explorer And Web Wallet</title>
     <meta
       name="description"
