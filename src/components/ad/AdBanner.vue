@@ -21,6 +21,8 @@ declare global {
   }
 }
 
+const SLISE_EMBED_SRC = 'https://v1.slise.xyz/scripts/embed.js';
+
 const props = defineProps({
   slot: {
     type: String,
@@ -81,21 +83,22 @@ onMounted(() => {
     observer.observe(containerRef.value);
   }
 
-  // Load script only once
-  if (!document.querySelector('script[src="https://v1.slise.xyz/scripts/embed.js"]')) {
-    const script = document.createElement('script');
-    script.src = 'https://v1.slise.xyz/scripts/embed.js';
-    script.async = true;
-    document.head.appendChild(script);
-  }
-
-  // Initialize ad queue
   window.adsbyslise = window.adsbyslise || [];
   window.adsbyslise.push({ slot: props.slot });
-  
-  // Sync if available
-  if (typeof window.adsbyslisesync === 'function') {
-    window.adsbyslisesync();
+
+  const sync = () => window.adsbyslisesync?.();
+  const existing = document.querySelector(`script[src="${SLISE_EMBED_SRC}"]`);
+
+  if (window.adsbyslisesync) {
+    sync();
+  } else if (existing) {
+    existing.addEventListener('load', sync, { once: true });
+  } else {
+    const script = document.createElement('script');
+    script.src = SLISE_EMBED_SRC;
+    script.async = true;
+    script.addEventListener('load', sync, { once: true });
+    document.head.appendChild(script);
   }
 });
 
