@@ -320,12 +320,10 @@ const show_ad = computed(() => {
             >
           </div>
         </div>
+        <AdBanner v-if="show_ad" />
         <RouterView v-slot="{ Component }">
           <Transition mode="out-in">
-            <div>
-              <AdBanner v-if="show_ad" />
-              <Component :is="Component" />
-            </div>
+            <Component :is="Component" />
           </Transition>
         </RouterView>
       </div>

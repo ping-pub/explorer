@@ -2,6 +2,7 @@
   <!-- Ad container with required attributes -->
   <div ref="containerRef" class="flex w-full justify-center overflow-hidden" :style="containerStyle">
     <ins
+      ref="insRef"
       class="adsbyslise"
       :style="adStyle"
       :data-ad-slot="slot"
@@ -12,7 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 declare global {
   interface Window {
@@ -47,7 +49,9 @@ const props = defineProps({
 });
 
 const containerRef = ref<HTMLElement | null>(null);
+const insRef = ref<HTMLElement | null>(null);
 const scale = ref(1);
+const route = useRoute();
 
 function toPixels(value: string) {
   const parsed = Number.parseFloat(value);
@@ -100,6 +104,12 @@ onMounted(() => {
     script.addEventListener('load', sync, { once: true });
     document.head.appendChild(script);
   }
+});
+
+watch(() => route.fullPath, () => {
+  if (!insRef.value || typeof window.adsbyslisesync !== 'function') return;
+  insRef.value.removeAttribute('data-ad-loaded');
+  window.adsbyslisesync();
 });
 
 onBeforeUnmount(() => {
