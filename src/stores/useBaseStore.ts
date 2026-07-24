@@ -80,11 +80,19 @@ export const useBaseStore = defineStore('baseStore', {
       if (!this.hasRpc) return this.latest;
       try {
         const latest = await this.blockchain.rpc?.getBaseBlockLatest();
-        // A malformed 200 (an error body, a rate-limit page) would otherwise be
-        // stored as `latest`; its missing chain_id then trips the reset below and
-        // wipes earliest/recents, resetting the average block time to the 1000ms
+        // A malformed 200 - an error body, a rate-limit page, a truncated
+        // response - would otherwise be stored as `latest`. The chain_id
+        // comparison below would then see undefined against the previous chain,
+        // wipe earliest/recents and reset the average block time to the 1000ms
         // placeholder. Treat it as a failed poll instead.
-        if (!latest?.block?.header?.height) throw new Error('malformed blocks/latest payload');
+        //
+        // chain_id is checked as well as height: it is specifically the missing
+        // chain_id that trips that reset, so a partial payload carrying a height
+        // but no chain_id would otherwise still cause the state loss this guards.
+        const header = latest?.block?.header;
+        if (!header?.height || !header?.chain_id) {
+          throw new Error('malformed blocks/latest payload');
+        }
         this.latest = latest;
         this.connected = true;
       } catch (error) {
