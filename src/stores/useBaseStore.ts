@@ -79,7 +79,13 @@ export const useBaseStore = defineStore('baseStore', {
     async fetchLatest() {
       if (!this.hasRpc) return this.latest;
       try {
-        this.latest = await this.blockchain.rpc?.getBaseBlockLatest();
+        const latest = await this.blockchain.rpc?.getBaseBlockLatest();
+        // A malformed 200 (an error body, a rate-limit page) would otherwise be
+        // stored as `latest`; its missing chain_id then trips the reset below and
+        // wipes earliest/recents, resetting the average block time to the 1000ms
+        // placeholder. Treat it as a failed poll instead.
+        if (!latest?.block?.header?.height) throw new Error('malformed blocks/latest payload');
+        this.latest = latest;
         this.connected = true;
       } catch (error) {
         console.error('Error fetching latest block:', error);
