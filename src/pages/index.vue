@@ -48,8 +48,8 @@ const chainStore = useBlockchain();
         >
           <g
             transform="translate(0.000000,132.000000) scale(0.100000,-0.100000)"
-            :fill="chainStore.current?.themeColor || '#666CFF'"
-            class="dark:invert"
+            :fill="chainStore.current?.themeColor || 'currentColor'"
+            class="text-primary dark:invert"
             stroke="none"
           >
             <path
