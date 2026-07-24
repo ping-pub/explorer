@@ -4,9 +4,8 @@ import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { computed, ref } from '@vue/reactivity';
 import type { Tx, TxResponse } from '@/types';
 
-import { JsonViewer } from 'vue3-json-viewer';
-// if you used v1.0.5 or latster ,you should add import "vue3-json-viewer/dist/index.css"
-import 'vue3-json-viewer/dist/index.css';
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 
 const props = defineProps(['hash', 'chain']);
 
@@ -33,6 +32,29 @@ const messages = computed(() => {
     }) || []
   );
 });
+
+// JSON viewer controls. `deep` is reactive, so re-assigning it expands or
+// collapses the whole tree; 1 leaves only the top level open.
+const JSON_DEFAULT_DEPTH = 2;
+const jsonDepth = ref(JSON_DEFAULT_DEPTH);
+const jsonExpanded = ref(false);
+const copied = ref(false);
+
+function toggleJson() {
+  jsonExpanded.value = !jsonExpanded.value;
+  jsonDepth.value = jsonExpanded.value ? Number.MAX_SAFE_INTEGER : 1;
+}
+
+async function copyJson() {
+  try {
+    await navigator.clipboard.writeText(JSON.stringify(tx.value, null, 2));
+    copied.value = true;
+    setTimeout(() => (copied.value = false), 1500);
+  } catch (err) {
+    console.error('Could not copy JSON to the clipboard:', err);
+  }
+}
+
 </script>
 <template>
   <div>
@@ -117,15 +139,27 @@ const messages = computed(() => {
     </div>
 
     <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
-      <h2 class="card-title truncate mb-2">JSON</h2>
-      <JsonViewer
-        :value="tx"
+      <div class="flex items-center justify-between gap-2 mb-2">
+        <h2 class="card-title truncate">JSON</h2>
+        <div class="flex items-center gap-1">
+          <button class="btn btn-xs btn-ghost" @click="toggleJson">
+            {{ jsonExpanded ? $t('tx.collapse_all') : $t('tx.expand_all') }}
+          </button>
+          <button class="btn btn-xs btn-ghost" @click="copyJson">
+            {{ copied ? $t('tx.copied') : $t('tx.copy') }}
+          </button>
+        </div>
+      </div>
+      <VueJsonPretty
+        :data="tx"
+        :deep="jsonDepth"
         :theme="baseStore.theme"
-        style="background: transparent"
-        copyable
-        boxed
-        sort
-        expand-depth="5"
+        :height="480"
+        :item-height="20"
+        show-icon
+        show-length
+        show-line-number
+        virtual
       />
     </div>
   </div>

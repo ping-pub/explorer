@@ -253,7 +253,11 @@
     "gas": "Gas",
     "fee": "Fee",
     "memo": "Memo",
-    "no_messages": "No messages"
+    "no_messages": "No messages",
+    "expand_all": "Expand all",
+    "collapse_all": "Collapse all",
+    "copy": "Copy",
+    "copied": "Copied"
   },
   "uptime": {
     "overall": "Overall",
