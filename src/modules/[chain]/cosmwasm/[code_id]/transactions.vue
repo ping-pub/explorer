@@ -18,8 +18,7 @@ import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { useRoute } from 'vue-router';
 import type { ContractInfo, PaginabledContractStates } from '../types';
 
-import VueJsonPretty from 'vue-json-pretty';
-import 'vue-json-pretty/lib/styles.css';
+import JsonTree from '@/components/JsonTree.vue';
 
 const chainStore = useBlockchain();
 const baseStore = useBaseStore();
@@ -192,18 +191,12 @@ const tab = ref('detail');
           <div class="text-lg">{{ $t('cosmwasm.contract_states') }}</div>
         </div>
         <div class="overflow-auto">
-          <VueJsonPretty
-        :data="
+          <JsonTree :data="
               state.models?.map((v) => ({
                 key: format.hexToString(v.key),
                 value: JSON.parse(format.base64ToString(v.value)),
               })) || ''
-            "
-        :deep="2"
-        :theme="baseStore.theme || 'dark'"
-        show-icon
-        show-length
-      />
+            " :deep="2" />
           <PaginationBar :limit="pageRequest.limit" :total="state.pagination?.total" :callback="pageloadState" />
         </div>
       </div>
@@ -338,13 +331,7 @@ const tab = ref('detail');
       <div class="flex items-center justify-between px-3 pt-2 mb-4">
         <div class="text-lg font-semibold">{{ $t('cosmwasm.result') }}</div>
       </div>
-      <VueJsonPretty
-        :data="result"
-        :deep="2"
-        :theme="baseStore.theme"
-        show-icon
-        show-length
-      />
+      <JsonTree :data="result" :deep="2" />
     </div>
   </div>
 </template>

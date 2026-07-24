@@ -9,8 +9,7 @@ import { useWasmStore } from '@/modules/[chain]/cosmwasm/WasmStore';
 import { toBase64 } from '@cosmjs/encoding';
 import DOMPurify from 'dompurify';
 
-import VueJsonPretty from 'vue-json-pretty';
-import 'vue-json-pretty/lib/styles.css';
+import JsonTree from '@/components/JsonTree.vue';
 import { CosmjsOfflineSigner } from '@leapwallet/cosmos-snap-provider';
 
 interface Verification {
@@ -244,13 +243,7 @@ function callFunction(title: string, method: string, arg: Argument) {
                   <label v-else class="btn btn-sm" @click="callFunction(title, method, props)">{{ method }}</label>
                 </div>
                 <div v-if="result[`${title}-${method}`]" class="mt-2">
-                  <VueJsonPretty
-        :data="result[`${title}-${method}`]"
-        :deep="2"
-        :theme="baseStore.theme || 'dark'"
-        show-icon
-        show-length
-      />
+                  <JsonTree :data="result[`${title}-${method}`]" :deep="2" />
                 </div>
               </div>
             </div>
