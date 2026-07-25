@@ -56,7 +56,7 @@ const messages = computed(() => {
             <tr>
               <td>{{ $t('account.height') }}</td>
               <td>
-                <RouterLink :to="`/${props.chain}/block/${tx.tx_response.height}`" class="text-primary dark:invert"
+                <RouterLink :to="`/${props.chain}/block/${tx.tx_response.height}`" class="text-primary"
                   >{{ tx.tx_response.height }}
                 </RouterLink>
               </td>
