@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 const props = defineProps({
   total: { type: String },
   limit: { type: Number },
   callback: { type: Function, required: true },
+  page: { type: Number, default: 1 },
 });
-const current = ref(1);
+const current = ref(props.page);
+watch(() => props.page, (page) => (current.value = page));
 const showSize = 3;
 const pages = computed(() => {
   const pages: { color: string; page: number }[] = [];
@@ -37,7 +39,7 @@ function gotoPage(pageNum: number) {
 </script>
 <template>
   <div class="my-5 text-center">
-    <div v-if="total && limit" class="btn-group">
+    <div v-if="total && limit" class="inline-flex max-w-full flex-wrap justify-center gap-1">
       <button
         v-for="{ page, color } in pages"
         :key="page"
