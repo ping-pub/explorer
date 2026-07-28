@@ -624,7 +624,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
         <table class="table w-full text-sm">
           <tbody>
             <template v-for="(value, key) in account" :key="key">
-              <template v-if="key === 'pub_key' && value && typeof value === 'object'">
+              <template v-if="key === 'pub_key' && value && typeof value === 'object' && typeof value.key === 'string'">
                 <tr>
                   <td class="w-1/5 capitalize">Pub Key Type</td>
                   <td>{{ value['@type'] }}</td>
