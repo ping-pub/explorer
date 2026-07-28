@@ -1,12 +1,17 @@
 <script lang="ts" setup>
 import { useBaseStore, useBlockchain, useFormatter } from '@/stores';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
-import { computed, ref } from '@vue/reactivity';
+import { computed, ref, watch } from 'vue';
 import type { Tx, TxResponse } from '@/types';
 
 import JsonTree from '@/components/JsonTree.vue';
+import { useRouter } from 'vue-router';
 
 const props = defineProps(['hash', 'chain']);
+const router = useRouter();
+const searchHash = ref('');
+const searchError = ref('');
+const hashPattern = /^[A-Fa-f\d]{64}$/;
 
 const blockchain = useBlockchain();
 const baseStore = useBaseStore();
@@ -17,8 +22,21 @@ const tx = ref(
     tx_response: TxResponse;
   }
 );
-if (props.hash) {
-  blockchain.rpc.getTx(props.hash).then((x) => (tx.value = x));
+async function loadTransaction(hash: string) {
+  tx.value = {} as { tx: Tx; tx_response: TxResponse };
+  tx.value = await blockchain.rpc.getTx(hash);
+}
+watch(() => props.hash, (hash) => {
+  if (hash) void loadTransaction(hash);
+}, { immediate: true });
+function search() {
+  const value = searchHash.value.trim();
+  if (!hashPattern.test(value)) {
+    searchError.value = 'Enter a valid 64-character transaction hash.';
+    return;
+  }
+  searchError.value = '';
+  router.push(`/${props.chain}/tx/${value.toUpperCase()}`);
 }
 const messages = computed(() => {
   return (
@@ -35,13 +53,13 @@ const messages = computed(() => {
 </script>
 <template>
   <div>
-    <div class="tabs tabs-boxed bg-transparent mb-4">
-      <RouterLink class="tab text-gray-400 uppercase" :to="`/${chain}/tx/?tab=recent`">{{
-        $t('block.recent')
-      }}</RouterLink>
-      <RouterLink class="tab text-gray-400 uppercase" :to="`/${chain}/tx/?tab=search`">Search</RouterLink>
-      <a class="tab text-gray-400 uppercase tab-active">Transaction</a>
-    </div>
+    <form class="mb-4" role="search" @submit.prevent="search">
+      <div class="join flex w-full">
+        <input v-model="searchHash" type="text" class="input join-item input-sm h-10 min-w-0 flex-1 border border-base-300 bg-base-100 px-4 focus:border-primary" placeholder="Enter transaction hash" aria-label="Transaction hash" @input="searchError = ''" />
+        <button type="submit" class="btn btn-primary join-item !h-10 !min-h-10 py-0">Search</button>
+      </div>
+      <p v-if="searchError" class="mt-2 text-sm text-error">{{ searchError }}</p>
+    </form>
 
     <div v-if="tx.tx_response" class="bg-base-100 px-4 pt-3 pb-4 rounded shadow mb-4">
       <h2 class="card-title truncate mb-2">{{ $t('tx.title') }}</h2>
