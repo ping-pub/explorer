@@ -10,8 +10,10 @@ import type { AuthAccount, Delegation, TxResponse, DelegatorRewards, UnbondingRe
 import type { Coin } from '@cosmjs/amino';
 import Countdown from '@/components/Countdown.vue';
 import { fromBase64 } from '@cosmjs/encoding';
+import { useQRCode } from '@vueuse/integrations/useQRCode';
 
 const props = defineProps(['address', 'chain']);
+const addressQrCode = useQRCode(computed(() => String(props.address || '')));
 
 const blockchain = useBlockchain();
 const stakingStore = useStakingStore();
@@ -25,6 +27,9 @@ const balances = ref([] as Coin[]);
 const recentReceived = ref([] as TxResponse[]);
 const unbonding = ref([] as UnbondingResponses[]);
 const unbondingTotal = ref(0);
+const addressQrModal = ref(false);
+const addressCopied = ref(false);
+const copiedTxHash = ref('');
 const chart = {};
 onMounted(() => {
   loadAccount(props.address);
@@ -111,6 +116,20 @@ function updateEvent() {
   loadAccount(props.address);
 }
 
+async function copyAddress() {
+  await navigator.clipboard.writeText(props.address);
+  addressCopied.value = true;
+  window.setTimeout(() => (addressCopied.value = false), 1200);
+}
+
+async function copyTxHash(hash: string) {
+  await navigator.clipboard.writeText(hash);
+  copiedTxHash.value = hash;
+  window.setTimeout(() => {
+    if (copiedTxHash.value === hash) copiedTxHash.value = '';
+  }, 1200);
+}
+
 function mapAmount(events: { type: string; attributes: { key: string; value: string }[] }[]) {
   if (!events) return [];
   return events
@@ -125,18 +144,56 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <div class="flex items-center">
         <!-- img -->
-        <div class="inline-flex relative w-11 h-11 rounded-md">
+        <button
+          type="button"
+          class="inline-flex relative w-11 h-11 rounded-md"
+          aria-label="Show address QR code"
+          @click="addressQrModal = true"
+        >
           <div class="w-11 h-11 absolute rounded-md opacity-10 bg-primary"></div>
           <div class="w-full inline-flex items-center align-middle flex-none justify-center">
             <Icon icon="mdi-qrcode" class="text-primary" style="width: 27px; height: 27px" />
           </div>
-        </div>
+        </button>
         <!-- content -->
         <div class="flex flex-1 flex-col truncate pl-4">
           <h2 class="text-sm card-title">{{ $t('account.address') }}:</h2>
-          <span class="text-xs truncate"> {{ address }}</span>
+          <div class="flex items-center gap-1 overflow-hidden">
+            <span class="text-xs truncate">{{ address }}</span>
+            <button
+              type="button"
+              class="btn btn-ghost btn-xs shrink-0"
+              :aria-label="addressCopied ? 'Address copied' : 'Copy address'"
+              @click="copyAddress"
+            >
+              <Icon :icon="addressCopied ? 'mdi-check' : 'mdi-content-copy'" class="text-sm" />
+            </button>
+          </div>
         </div>
       </div>
+    </div>
+
+    <input v-model="addressQrModal" type="checkbox" class="modal-toggle" />
+    <div class="modal" role="dialog" aria-labelledby="address-qr-title">
+      <div class="modal-box max-w-sm text-center">
+        <div class="flex items-center justify-between">
+          <h2 id="address-qr-title" class="text-xl font-semibold">Account Address</h2>
+          <button
+            type="button"
+            class="btn btn-circle btn-ghost btn-sm"
+            aria-label="Close"
+            @click="addressQrModal = false"
+          >
+            ✕
+          </button>
+        </div>
+        <img :src="addressQrCode" alt="Account address QR code" class="mx-auto my-6 h-64 w-64 rounded" />
+        <button type="button" class="flex w-full items-center justify-center gap-2 break-all text-sm" @click="copyAddress">
+          <span>{{ address }}</span>
+          <Icon :icon="addressCopied ? 'mdi-check' : 'mdi-content-copy'" class="shrink-0" />
+        </button>
+      </div>
+      <button type="button" class="modal-backdrop" aria-label="Close" @click="addressQrModal = false"></button>
     </div>
 
     <!-- Assets -->
@@ -455,12 +512,23 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                 >
               </td>
               <td class="truncate py-3" style="max-width: 200px">
-                <RouterLink
-                  :to="`/${chain}/tx/${v.txhash}`"
-                  class="text-primary dark:invert"
-                >
-                  {{ v.txhash }}
-                </RouterLink>
+                <div class="flex items-center gap-1 overflow-hidden">
+                  <RouterLink
+                    :to="`/${chain}/tx/${v.txhash}`"
+                    class="truncate text-primary dark:invert"
+                    :title="v.txhash"
+                  >
+                    {{ v.txhash }}
+                  </RouterLink>
+                  <button
+                    type="button"
+                    class="btn btn-ghost btn-xs shrink-0"
+                    :aria-label="copiedTxHash === v.txhash ? 'Transaction hash copied' : 'Copy transaction hash'"
+                    @click="copyTxHash(v.txhash)"
+                  >
+                    <Icon :icon="copiedTxHash === v.txhash ? 'mdi-check' : 'mdi-content-copy'" class="h-4 w-4" />
+                  </button>
+                </div>
               </td>
               <td class="flex items-center py-3">
                 <div class="mr-2">
@@ -507,12 +575,23 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                 >
               </td>
               <td class="truncate py-3" style="max-width: 200px">
-                <RouterLink
-                  :to="`/${chain}/tx/${v.txhash}`"
-                  class="text-primary dark:invert"
-                >
-                  {{ v.txhash }}
-                </RouterLink>
+                <div class="flex items-center gap-1 overflow-hidden">
+                  <RouterLink
+                    :to="`/${chain}/tx/${v.txhash}`"
+                    class="truncate text-primary dark:invert"
+                    :title="v.txhash"
+                  >
+                    {{ v.txhash }}
+                  </RouterLink>
+                  <button
+                    type="button"
+                    class="btn btn-ghost btn-xs shrink-0"
+                    :aria-label="copiedTxHash === v.txhash ? 'Transaction hash copied' : 'Copy transaction hash'"
+                    @click="copyTxHash(v.txhash)"
+                  >
+                    <Icon :icon="copiedTxHash === v.txhash ? 'mdi-check' : 'mdi-content-copy'" class="h-4 w-4" />
+                  </button>
+                </div>
               </td>
               <td class="flex items-center py-3">
                 <div class="mr-2">
