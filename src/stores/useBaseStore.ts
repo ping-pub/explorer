@@ -8,6 +8,13 @@ import { fromBase64 } from '@cosmjs/encoding';
 
 const FETCH_ALL_BLOCKS = import.meta.env.VITE_FETCH_ALL_BLOCKS || false;
 const RECENT_BLOCKS_LIMIT = import.meta.env.VITE_RECENT_BLOCK_LIMIT || 50;
+// Number of historical blocks to backfill on a cold start (e.g. page refresh) so the
+// recent-blocks / recent-txs views are populated immediately instead of growing one
+// block per polling interval. Defaults to the recent-blocks window size.
+const INITIAL_BLOCK_SEED = Number(import.meta.env.VITE_INITIAL_BLOCK_SEED) || Number(RECENT_BLOCKS_LIMIT) || 50;
+
+// Prevents overlapping seed backfills when polls fire while a seed is still running.
+let seedingInFlight = false;
 
 export const useBaseStore = defineStore('baseStore', {
   state: () => {
@@ -90,11 +97,27 @@ export const useBaseStore = defineStore('baseStore', {
         this.earliest = this.latest;
         this.recents = [];
       }
+      // A seed backfill is already running; let it finish before mutating recents.
+      if (seedingInFlight) return this.latest;
       //check if the block exists in recents
       if (this.recents.findIndex((x) => x?.block_id?.hash === this.latest?.block_id?.hash) === -1) {
-        const newBlocks = await this.fetchNewBlocks();
-        const combined = [...this.recents, ...newBlocks];
-        this.recents = combined.slice(-RECENT_BLOCKS_LIMIT);
+        if (this.recents.length === 0) {
+          // Cold start (e.g. page refresh): backfill the recent window in one shot so
+          // the /block and /tx pages are populated immediately.
+          seedingInFlight = true;
+          try {
+            const seeded = await this.seedRecentBlocks();
+            this.recents = [...seeded, this.latest].slice(-RECENT_BLOCKS_LIMIT);
+            // Use the oldest seeded block as the earliest so blocktime is accurate at once.
+            if (seeded.length) this.earliest = seeded[0];
+          } finally {
+            seedingInFlight = false;
+          }
+        } else {
+          const newBlocks = await this.fetchNewBlocks();
+          const combined = [...this.recents, ...newBlocks];
+          this.recents = combined.slice(-RECENT_BLOCKS_LIMIT);
+        }
       }
       return this.latest;
     },
@@ -118,6 +141,29 @@ export const useBaseStore = defineStore('baseStore', {
       // Add the latest block
       newBlocks.push(this.latest);
       return newBlocks;
+    },
+    /**
+     * Backfills the most recent blocks so the UI has a full window immediately after a
+     * cold start (page refresh / chain switch) instead of accumulating one block per poll.
+     * Fetches sequentially and skips any block that fails, so a single bad height cannot
+     * abort the whole seed. The latest block is appended by the caller, so this stops at
+     * latestHeight - 1. Returns the fetched blocks in ascending height order.
+     */
+    async seedRecentBlocks(): Promise<Block[]> {
+      const latestHeight = Number(this.latest?.block?.header?.height);
+      if (!latestHeight) return [];
+      const seedCount = Math.min(Number(RECENT_BLOCKS_LIMIT) || 50, INITIAL_BLOCK_SEED);
+      const start = Math.max(1, latestHeight - seedCount + 1);
+      const blocks: Block[] = [];
+      for (let h = start; h < latestHeight; h++) {
+        try {
+          const block = await this.fetchBlock(h);
+          if (block?.block?.header?.height) blocks.push(block);
+        } catch (error) {
+          console.error(`Error seeding block ${h}:`, error);
+        }
+      }
+      return blocks;
     },
     async fetchValidatorByHeight(height?: number, offset = 0) {
       return this.blockchain.rpc.getBaseValidatorsetAt(String(height), offset);

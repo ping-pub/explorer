@@ -5,6 +5,7 @@ interface ImportMetaEnv {
     readonly VITE_REFRESH_INTERVAL?: number,
     readonly VITE_FETCH_ALL_BLOCKS?: boolean,
     readonly VITE_RECENT_BLOCK_LIMIT?: number,
+    readonly VITE_INITIAL_BLOCK_SEED?: number,
     readonly VITE_COINGECKO_URL?: string,
     readonly VITE_GITHUB_API_URL?: string,
     readonly VITE_PINGPUB_API_URL?: string,
