@@ -29,6 +29,7 @@ const unbonding = ref([] as UnbondingResponses[]);
 const unbondingTotal = ref(0);
 const addressQrModal = ref(false);
 const addressCopied = ref(false);
+const publicKeyCopied = ref(false);
 const copiedTxHash = ref('');
 const chart = {};
 onMounted(() => {
@@ -120,6 +121,12 @@ async function copyAddress() {
   await navigator.clipboard.writeText(props.address);
   addressCopied.value = true;
   window.setTimeout(() => (addressCopied.value = false), 1200);
+}
+
+async function copyPublicKey(value: string) {
+  await navigator.clipboard.writeText(value);
+  publicKeyCopied.value = true;
+  window.setTimeout(() => (publicKeyCopied.value = false), 1200);
 }
 
 async function copyTxHash(hash: string) {
@@ -613,7 +620,58 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
     <!-- Account -->
     <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
       <h2 class="card-title mb-4">{{ $t('account.acc') }}</h2>
-      <DynamicComponent :value="account" />
+      <div class="overflow-x-auto">
+        <table class="table w-full text-sm">
+          <tbody>
+            <template v-for="(value, key) in account" :key="key">
+              <template v-if="key === 'pub_key' && value && typeof value === 'object'">
+                <tr>
+                  <td class="w-1/5 capitalize">Pub Key Type</td>
+                  <td>{{ value['@type'] }}</td>
+                </tr>
+                <tr>
+                  <td class="w-1/5 capitalize">Pub Key</td>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      <span class="break-all">{{ value.key }}</span>
+                      <button
+                        type="button"
+                        class="btn btn-ghost btn-xs shrink-0"
+                        :aria-label="publicKeyCopied ? 'Public key copied' : 'Copy public key'"
+                        :title="publicKeyCopied ? 'Copied' : 'Copy public key'"
+                        @click="copyPublicKey(value.key)"
+                      >
+                        <Icon :icon="publicKeyCopied ? 'mdi-check' : 'mdi-content-copy'" class="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </template>
+              <tr v-else-if="key === 'address'">
+                <td class="w-1/5 capitalize">Address</td>
+                <td>
+                  <div class="flex items-center gap-2">
+                    <span class="break-all">{{ value }}</span>
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-xs shrink-0"
+                      :aria-label="addressCopied ? 'Address copied' : 'Copy address'"
+                      :title="addressCopied ? 'Copied' : 'Copy address'"
+                      @click="copyAddress"
+                    >
+                      <Icon :icon="addressCopied ? 'mdi-check' : 'mdi-content-copy'" class="h-4 w-4" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr v-else>
+                <td class="w-1/5 capitalize">{{ String(key).replaceAll('_', ' ') }}</td>
+                <td><DynamicComponent :value="value" /></td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
   <div v-else class="text-no text-sm">{{ $t('account.error') }}</div>
