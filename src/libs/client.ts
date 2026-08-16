@@ -197,7 +197,11 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
   // staking
   async getStakingDelegations(delegator_addr: string) {
-    return this.request(this.registry.staking_deletations, { delegator_addr });
+    const response = await this.request(this.registry.staking_deletations, { delegator_addr });
+    return {
+      ...response,
+      delegation_responses: response.delegation_responses.filter((delegation) => delegation.balance.amount !== '0'),
+    };
   }
   async getStakingDelegatorRedelegations(delegator_addr: string) {
     return this.request(this.registry.staking_delegator_redelegations, {
