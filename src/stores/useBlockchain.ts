@@ -63,7 +63,10 @@ export const useBlockchain = defineStore('blockchain', {
           document.body.style.setProperty('--p', `${themeColor}`);
           // document.body.style.setProperty('--p', `${this.current?.themeColor}`);
         } else {
-          document.body.style.setProperty('--p', '237.65 100% 70%');
+          // Fall back to the theme's primary rather than a duplicate of it. Setting
+          // it inline here beat `daisyui.themes`, so a configured primary never
+          // applied on any chain without its own theme_color.
+          document.body.style.removeProperty('--p');
         }
         currNavItem = [
           {

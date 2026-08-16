@@ -76,7 +76,7 @@ function gotoHistory() {
             <td>
               <RouterLink
                 :to="`/${props.chain}/cosmwasm/${v.code_id}/contracts`"
-                class="truncate max-w-[200px] block text-primary dark:invert"
+                class="truncate max-w-[200px] block text-primary"
                 :title="v.data_hash"
               >
                 {{ v.data_hash }}
