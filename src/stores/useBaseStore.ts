@@ -6,8 +6,9 @@ import type { Block } from '@/types';
 import { hashTx } from '@/libs';
 import { fromBase64 } from '@cosmjs/encoding';
 
-const FETCH_ALL_BLOCKS = import.meta.env.VITE_FETCH_ALL_BLOCKS || false;
-const RECENT_BLOCKS_LIMIT = import.meta.env.VITE_RECENT_BLOCK_LIMIT || 50;
+// `"false"` is a truthy string, so compare explicitly.
+const FETCH_ALL_BLOCKS = import.meta.env.VITE_FETCH_ALL_BLOCKS === 'true';
+const RECENT_BLOCKS_LIMIT = Number(import.meta.env.VITE_RECENT_BLOCK_LIMIT) || 50;
 
 export const useBaseStore = defineStore('baseStore', {
   state: () => {
@@ -79,7 +80,21 @@ export const useBaseStore = defineStore('baseStore', {
     async fetchLatest() {
       if (!this.hasRpc) return this.latest;
       try {
-        this.latest = await this.blockchain.rpc?.getBaseBlockLatest();
+        const latest = await this.blockchain.rpc?.getBaseBlockLatest();
+        // A malformed 200 - an error body, a rate-limit page, a truncated
+        // response - would otherwise be stored as `latest`. The chain_id
+        // comparison below would then see undefined against the previous chain,
+        // wipe earliest/recents and reset the average block time to the 1000ms
+        // placeholder. Treat it as a failed poll instead.
+        //
+        // chain_id is checked as well as height: it is specifically the missing
+        // chain_id that trips that reset, so a partial payload carrying a height
+        // but no chain_id would otherwise still cause the state loss this guards.
+        const header = latest?.block?.header;
+        if (!header?.height || !header?.chain_id) {
+          throw new Error('malformed blocks/latest payload');
+        }
+        this.latest = latest;
         this.connected = true;
       } catch (error) {
         console.error('Error fetching latest block:', error);

@@ -4,7 +4,7 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import TxDialog from './components/TxDialog.vue';
 import { useBaseStore } from '@/stores';
 
-const REFRESH_INTERVAL = import.meta.env.VITE_REFRESH_INTERVAL || 6000;
+const REFRESH_INTERVAL = Number(import.meta.env.VITE_REFRESH_INTERVAL) || 6000;
 
 const blockStore = useBaseStore();
 const requestCounter = ref(0);

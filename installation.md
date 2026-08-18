@@ -80,3 +80,54 @@ server {
 }
 ```
 3. config your blockchain in [./chains/mainnet]()
+
+# Theming
+
+Colours live in the daisyUI themes in `tailwind.config.js`. Editing them re-themes
+the app; no component changes are needed.
+
+```js
+// tailwind.config.js
+daisyui: {
+  themes: [
+    {
+      light: {
+        ...require('daisyui/src/theming/themes')['[data-theme=light]'],
+        primary: '#0f766e',
+      },
+    },
+    {
+      dark: {
+        ...require('daisyui/src/theming/themes')['[data-theme=dark]'],
+        primary: '#2dd4bf',
+        'base-100': '#0b1220', // cards, sidebar, header
+        'base-200': '#111a2e', // page bands, table headers
+      },
+    },
+  ],
+},
+```
+
+Spreading the stock theme first means you only list what you want to change.
+
+The tokens you will reach for most:
+
+| token | used for |
+| --- | --- |
+| `primary` | active nav, buttons, links, chart accent |
+| `base-100` | cards, sidebar, header |
+| `base-200` / `base-300` | page bands, table headers, hover |
+| `base-content` | default text colour |
+| `info` `success` `warning` `error` | status text, badges, vote bars |
+
+Full list: https://daisyui.com/docs/colors/
+
+Tailwind reads the config at startup, so restart the dev server after editing.
+
+Two caveats:
+
+- A component that hardcodes a colour (`text-gray-400`, `bg-green-500`, ...) will
+  not follow the theme. Those are gradually being moved onto tokens.
+- `@ping-pub/widget` injects its own daisyUI build at runtime, which would
+  otherwise override these values. `postcss.config.js` re-emits the theme at a
+  higher specificity so the app's config wins - keep that plugin if you fork.

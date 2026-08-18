@@ -299,5 +299,11 @@
     "receive": "Receive",
     "app_versions": "Application Versions",
     "node_info": "Node Information"
+  },
+  "json": {
+    "expand_all": "Expand all",
+    "collapse_all": "Collapse all",
+    "copy": "Copy",
+    "copied": "Copied"
   }
 }

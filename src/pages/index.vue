@@ -48,8 +48,8 @@ const chainStore = useBlockchain();
         >
           <g
             transform="translate(0.000000,132.000000) scale(0.100000,-0.100000)"
-            :fill="chainStore.current?.themeColor || '#666CFF'"
-            class="dark:invert"
+            :fill="chainStore.current?.themeColor || 'currentColor'"
+            class="text-primary"
             stroke="none"
           >
             <path
@@ -75,7 +75,7 @@ const chainStore = useBlockchain();
           </g>
         </svg>
       </div>
-      <h1 class="text-primary dark:invert text-3xl md:!text-6xl font-bold">
+      <h1 class="text-primary text-3xl md:!text-6xl font-bold">
         {{ $t('pages.title') }}
       </h1>
     </div>

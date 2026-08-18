@@ -249,7 +249,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                   {{ format.calculatePercent(format.tokenAmountNumber(balanceItem), totalAmount) }}
                 </div>
               </div>
-              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2">
+              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2">
                 <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"></span>
                 ${{ format.tokenValue(balanceItem) }}
               </div>
@@ -268,7 +268,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                   {{ format.calculatePercent(format.tokenAmountNumber(delegationItem?.balance), totalAmount) }}
                 </div>
               </div>
-              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2">
+              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2">
                 <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"></span>
                 ${{ format.tokenValue(delegationItem?.balance) }}
               </div>
@@ -287,7 +287,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                   {{ format.calculatePercent(format.tokenAmountNumber(rewardItem), totalAmount) }}
                 </div>
               </div>
-              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2">
+              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2">
                 <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"></span>${{
                   format.tokenValue(rewardItem)
                 }}
@@ -320,7 +320,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                   }}
                 </div>
               </div>
-              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2">
+              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary mr-2">
                 <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert"></span>
                 ${{
                   format.tokenValue({
@@ -514,7 +514,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
               <td class="text-sm py-3">
                 <RouterLink
                   :to="`/${chain}/block/${v.height}`"
-                  class="text-primary dark:invert"
+                  class="text-primary"
                   >{{ v.height }}</RouterLink
                 >
               </td>
@@ -522,7 +522,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                 <div class="flex items-center gap-1 overflow-hidden">
                   <RouterLink
                     :to="`/${chain}/tx/${v.txhash}`"
-                    class="truncate text-primary dark:invert"
+                    class="truncate text-primary"
                     :title="v.txhash"
                   >
                     {{ v.txhash }}
@@ -577,7 +577,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
               <td class="text-sm py-3">
                 <RouterLink
                   :to="`/${chain}/block/${v.height}`"
-                  class="text-primary dark:invert"
+                  class="text-primary"
                   >{{ v.height }}</RouterLink
                 >
               </td>
@@ -585,7 +585,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                 <div class="flex items-center gap-1 overflow-hidden">
                   <RouterLink
                     :to="`/${chain}/tx/${v.txhash}`"
-                    class="truncate text-primary dark:invert"
+                    class="truncate text-primary"
                     :title="v.txhash"
                   >
                     {{ v.txhash }}
