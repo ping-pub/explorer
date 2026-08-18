@@ -131,9 +131,9 @@ function color(v: string) {
             {{ $t('uptime.my_validators') }}
           </h2>
           <div class="mt-1 flex flex-col sm:!mt-0 sm:!flex-row sm:!flex-wrap sm:!space-x-6">
-            <div class="mt-2 flex items-center text-sm text-gray-500">
+            <div class="mt-2 flex items-center text-sm text-base-content/70">
               <svg
-                class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                class="mr-1.5 h-5 w-5 flex-shrink-0 text-base-content/60"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 aria-hidden="true"

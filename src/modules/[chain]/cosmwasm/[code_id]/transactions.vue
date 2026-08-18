@@ -150,16 +150,16 @@ const tab = ref('detail');
 <template>
   <div>
     <div class="tabs tabs-boxed bg-transparent mb-4">
-      <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'detail' }" @click="tab = 'detail'">{{
+      <a class="tab text-base-content/60 uppercase" :class="{ 'tab-active': tab === 'detail' }" @click="tab = 'detail'">{{
         $t('cosmwasm.contract_detail')
       }}</a>
       <a
-        class="tab text-gray-400 uppercase"
+        class="tab text-base-content/60 uppercase"
         :class="{ 'tab-active': tab === 'transaction' }"
         @click="tab = 'transaction'"
         >Transactions</a
       >
-      <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'query' }" @click="tab = 'query'">Query</a>
+      <a class="tab text-base-content/60 uppercase" :class="{ 'tab-active': tab === 'query' }" @click="tab = 'query'">Query</a>
     </div>
 
     <div v-show="tab === 'detail'">

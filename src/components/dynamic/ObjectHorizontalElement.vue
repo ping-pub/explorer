@@ -12,7 +12,7 @@ const changeTab = (val: string) => {
   <div>
     <div class="tabs">
       <a
-        class="tab tab-bordered text-gray-400 capitalize"
+        class="tab tab-bordered text-base-content/60 capitalize"
         v-for="(item, index) of value"
         :value="index"
         :class="{ 'tab-active': tab === String(index) }"

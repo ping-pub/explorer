@@ -41,7 +41,7 @@ function gotoPage(pageNum: number) {
       <button
         v-for="{ page, color } in pages"
         :key="page"
-        class="btn bg-gray-100 text-gray-500 hover:text-white border-none dark:bg-gray-800 dark:text-white"
+        class="btn bg-base-200 text-base-content/70 hover:text-primary-content border-none"
         :class="{
           '!btn-primary': color === 'btn-primary',
         }"

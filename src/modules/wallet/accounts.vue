@@ -187,9 +187,9 @@ async function loadBalances(chainName: string, endpoint: string, address: string
         <div class="min-w-0">
           <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">Accounts</h2>
           <div class="mt-1 flex flex-col sm:!mt-0 sm:!flex-row sm:!flex-wrap sm:!space-x-6">
-            <div class="mt-2 items-center text-sm text-gray-500 hidden md:!flex">
+            <div class="mt-2 items-center text-sm text-base-content/70 hidden md:!flex">
               <svg
-                class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                class="mr-1.5 h-5 w-5 flex-shrink-0 text-base-content/60"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 aria-hidden="true"
@@ -353,9 +353,9 @@ async function loadBalances(chainName: string, endpoint: string, address: string
       <div class="text-center bg-base-100 rounded-md my-4 p-4">
         <a
           href="#address-modal"
-          class="inline-flex items-center ml-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          class="inline-flex items-center ml-3 rounded-md bg-base-100 px-3 py-2 text-sm font-semibold text-base-content shadow-sm ring-1 ring-inset ring-base-300 hover:bg-active"
         >
-          <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-base-content/60" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path
               d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z"
             />
