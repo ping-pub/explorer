@@ -9,6 +9,13 @@ import { fromBase64 } from '@cosmjs/encoding';
 // `"false"` is a truthy string, so compare explicitly.
 const FETCH_ALL_BLOCKS = import.meta.env.VITE_FETCH_ALL_BLOCKS === 'true';
 const RECENT_BLOCKS_LIMIT = Number(import.meta.env.VITE_RECENT_BLOCK_LIMIT) || 50;
+type Theme = 'light' | 'dark';
+const DEFAULT_THEME: Theme = import.meta.env.VITE_DEFAULT_THEME === 'light' ? 'light' : 'dark';
+
+function initialTheme(): Theme {
+  const storedTheme = window.localStorage.getItem('theme');
+  return storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : DEFAULT_THEME;
+}
 
 export const useBaseStore = defineStore('baseStore', {
   state: () => {
@@ -16,7 +23,7 @@ export const useBaseStore = defineStore('baseStore', {
       earliest: {} as Block,
       latest: {} as Block,
       recents: [] as Block[],
-      theme: (window.localStorage.getItem('theme') || 'dark') as 'light' | 'dark',
+      theme: initialTheme(),
       connected: false,
     };
   },
