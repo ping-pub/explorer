@@ -406,7 +406,7 @@ async function loadBalances(chainName: string, endpoint: string, address: string
                       :class="acc.compatiable ? 'tooltip-success' : 'tooltip-error'"
                       :data-tip="`Coin Type: ${acc.coinType}`"
                     >
-                      <div class="font-bold capitalize" :class="acc.compatiable ? 'text-green-500' : 'text-red-500'">
+                      <div class="font-bold capitalize" :class="acc.compatiable ? 'text-success' : 'text-error'">
                         {{ acc.chainName }}
                       </div>
                     </div>

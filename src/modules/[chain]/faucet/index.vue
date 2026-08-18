@@ -139,7 +139,7 @@ onMounted(() => {
             <pre><code class="text-gray-800 dark:invert">{{ it.title }}: </code>{{ it.status ? '✅' : '❌' }} </pre>
           </div>
 
-          <pre class="text-xs text-red-500">{{ configChecker }}</pre>
+          <pre class="text-xs text-error">{{ configChecker }}</pre>
           <pre></pre>
           <a
             class="btn-ghost text-white rounded-md p-2 ml-4"
@@ -161,11 +161,11 @@ onMounted(() => {
     <div class="modal" role="dialog">
       <div class="modal-box">
         <div v-if="ret.status === 'error'">
-          <h3 class="font-bold text-red-500">Error</h3>
+          <h3 class="font-bold text-error">Error</h3>
           <div>{{ ret.message }}</div>
         </div>
         <div v-else-if="ret.status === 'ok'">
-          <h3 class="font-bold text-green-500">Token Sent!</h3>
+          <h3 class="font-bold text-success">Token Sent!</h3>
           <div class="text-center mt-4">
             <RouterLink :to="`/${chainStore.chainName}/tx/${ret.result.txhash}`">View Transaction</RouterLink>
           </div>

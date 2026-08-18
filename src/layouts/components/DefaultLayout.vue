@@ -122,7 +122,7 @@ const show_ad = computed(() => {
               :icon="item?.icon?.icon"
               class="text-xl mr-2"
               :class="{
-                'text-yellow-500': item?.title === 'Favorite',
+                'text-warning': item?.title === 'Favorite',
                 'text-blue-500': item?.title !== 'Favorite',
               }"
             />
@@ -202,7 +202,7 @@ const show_ad = computed(() => {
             :icon="item?.icon?.icon"
             class="text-xl mr-2"
             :class="{
-              'text-yellow-500': item?.title === 'Favorite',
+              'text-warning': item?.title === 'Favorite',
               'text-blue-500': item?.title !== 'Favorite',
             }"
           />
