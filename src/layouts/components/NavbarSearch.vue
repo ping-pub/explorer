@@ -64,7 +64,7 @@ function confirm() {
 <template>
   <div>
     <button class="btn btn-ghost btn-circle btn-sm mx-1" @click="openSearchModal">
-      <Icon icon="mdi:magnify" class="text-2xl text-gray-500 dark:text-gray-400" />
+      <Icon icon="mdi:magnify" class="text-2xl text-base-content/70" />
     </button>
 
     <!-- modal -->
@@ -81,7 +81,7 @@ function confirm() {
             <span class="capitalize text-sm md:!text-base">Height/Transaction/Account Address</span>
           </div>
           <label htmlFor="modal-pool-modal" class="cursor-pointer" @click="closeSearchModal">
-            <Icon icon="zondicons:close-outline" class="text-2xl text-gray-500 dark:text-gray-400" />
+            <Icon icon="zondicons:close-outline" class="text-2xl text-base-content/70" />
           </label>
         </div>
         <!-- body -->

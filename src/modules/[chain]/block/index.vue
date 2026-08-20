@@ -20,11 +20,11 @@ const list = computed(() => {
 <template>
   <div>
     <div class="tabs tabs-boxed bg-transparent mb-4">
-      <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'blocks' }" @click="tab = 'blocks'">{{
+      <a class="tab text-base-content/60 uppercase" :class="{ 'tab-active': tab === 'blocks' }" @click="tab = 'blocks'">{{
         $t('block.recent')
       }}</a>
       <RouterLink
-        class="tab text-gray-400 uppercase"
+        class="tab text-base-content/60 uppercase"
         :to="`/${chain}/block/${Number(base.latest?.block?.header.height || 0) + 10000}`"
         >{{ $t('block.future') }}</RouterLink
       >
@@ -43,7 +43,7 @@ const list = computed(() => {
             <h3 class="text-md font-bold sm:!text-lg">
               {{ item.block.header.height }}
             </h3>
-            <span class="rounded text-xs whitespace-nowrap font-medium text-green-600">
+            <span class="rounded text-xs whitespace-nowrap font-medium text-success">
               {{ format.toDay(item.block?.header?.time, 'from') }}
             </span>
           </div>

@@ -33,14 +33,14 @@ function changeChart(type: string) {
 <template>
   <div class="tabs tabs-boxed bg-transparent justify-end">
     <a
-      class="tab text-xs mr-2 text-gray-400 uppercase"
+      class="tab text-xs mr-2 text-base-content/60 uppercase"
       :class="{ 'tab-active': kind === 'price' }"
       @click="changeChart('price')"
     >
       Price
     </a>
     <a
-      class="tab text-xs text-gray-400 uppercase"
+      class="tab text-xs text-base-content/60 uppercase"
       :class="{ 'tab-active': kind === 'volume' }"
       @click="changeChart('volume')"
     >

@@ -129,7 +129,7 @@ function color(v: string) {
               >
                 {{ baseStore.latest?.block?.header?.chain_id }}
               </div>
-              <div class="text-sm text-gray-500 dark:text-gray-400">
+              <div class="text-sm text-base-content/70">
                 {{ conn.client_id }} {{ props.connection_id }}
               </div>
             </div>
@@ -148,7 +148,7 @@ function color(v: string) {
             >
               {{ clientState.client_state?.chain_id }}
             </div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">
+            <div class="text-sm text-base-content/70">
               {{ conn.counterparty?.connection_id }} {{ clientState.client_id }}
             </div>
           </div>

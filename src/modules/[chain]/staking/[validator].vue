@@ -625,13 +625,13 @@ function mapDelegators(messages: any[]) {
         <div class="tabs tabs-boxed bg-transparent">
           <span class="mr-10">Voting Power Events: </span>
           <a
-            class="tab text-gray-400"
+            class="tab text-base-content/60"
             :class="{ 'tab-active': selectedEventType === EventType.Delegate }"
             @click="loadPowerEvents(1, EventType.Delegate)"
             >{{ $t('account.btn_delegate') }}</a
           >
           <a
-            class="tab text-gray-400"
+            class="tab text-base-content/60"
             :class="{ 'tab-active': selectedEventType === EventType.Unbond }"
             @click="loadPowerEvents(1, EventType.Unbond)"
             >{{ $t('account.btn_unbond') }}</a
