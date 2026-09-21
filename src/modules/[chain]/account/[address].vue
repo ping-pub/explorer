@@ -31,6 +31,8 @@ const addressQrModal = ref(false);
 const addressCopied = ref(false);
 const publicKeyCopied = ref(false);
 const copiedTxHash = ref('');
+const EVM_ADDRESS_RE = /^0x[0-9a-fA-F]{40}$/;
+const addressRisk = ref<{ sanctioned: boolean } | null>(null);
 const chart = {};
 onMounted(() => {
   loadAccount(props.address);
@@ -107,6 +109,19 @@ function loadAccount(address: string) {
     });
   });
 
+  if (EVM_ADDRESS_RE.test(address)) {
+    fetch(`https://presend.pages.dev/api/address-risk?address=${address}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (typeof data.sanctioned === 'boolean') addressRisk.value = data;
+      })
+      .catch(() => {
+        // best-effort check, never block or break the page on failure
+      });
+  } else {
+    addressRisk.value = null;
+  }
+
   const receivedQuery = `?&pagination.reverse=true&events=coin_received.receiver='${address}'&pagination.limit=5`;
   blockchain.rpc.getTxs(receivedQuery, {}).then((x) => {
     recentReceived.value = x.tx_responses;
@@ -175,6 +190,24 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
             >
               <Icon :icon="addressCopied ? 'mdi-check' : 'mdi-content-copy'" class="text-sm" />
             </button>
+          </div>
+          <div v-if="addressRisk" class="mt-1">
+            <span
+              v-if="addressRisk.sanctioned"
+              class="badge badge-error badge-sm gap-1"
+              title="This address appears on the OFAC sanctions list (via Presend)"
+            >
+              <Icon icon="mdi-alert" class="h-3 w-3" />
+              OFAC sanctioned
+            </span>
+            <span
+              v-else
+              class="badge badge-ghost badge-sm gap-1"
+              title="Checked against the OFAC sanctions list via Presend -- not listed"
+            >
+              <Icon icon="mdi-shield-check-outline" class="h-3 w-3" />
+              Not OFAC sanctioned
+            </span>
           </div>
         </div>
       </div>
