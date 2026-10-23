@@ -1,38 +1,37 @@
 {
     "chain_name": "luxa",
-    "registry_name": "luxa",
     "api": [
         {
-            "provider": "LUXA Ecosystem",
-            "address": "https://api.luxaecosystem.xyz"
+            "address": "https://api.luxaecosystem.xyz",
+            "provider": "LUXA Ecosystem"
         }
     ],
     "rpc": [
         {
-            "provider": "LUXA Ecosystem",
-            "address": "https://rpc.luxaecosystem.xyz"
+            "address": "https://rpc.luxaecosystem.xyz:443",
+            "provider": "LUXA Ecosystem"
         }
     ],
     "sdk_version": "0.50.10",
     "coin_type": "118",
     "min_tx_fee": "5000",
-    "addr_prefix": "luxa",
-    "logo": "https://luxaecosystem.xyz/logo.png",
-    "theme_color": "#6C5CE7",
     "assets": [
         {
             "base": "uluxa",
             "symbol": "LUXA",
             "exponent": "6",
             "coingecko_id": "",
-            "logo": "https://luxaecosystem.xyz/logo.png"
+            "logo": "https://raw.githubusercontent.com/luxaecosystem/luxa-logo/main/logos/luxa.png"
         },
         {
             "base": "ushard",
             "symbol": "SHARD",
             "exponent": "6",
             "coingecko_id": "",
-            "logo": "https://luxaecosystem.xyz/logo.png"
+            "logo": "https://raw.githubusercontent.com/luxaecosystem/luxa-logo/main/logos/ushard.png"
         }
-    ]
+    ],
+    "addr_prefix": "luxa",
+    "theme_color": "#6C5CE7",
+    "logo": "https://raw.githubusercontent.com/luxaecosystem/luxa-logo/main/logos/luxa.png"
 }
