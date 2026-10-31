@@ -13,7 +13,7 @@
       "provider": "Sunima Labs"
     }
   ],
-  "sdk_version": "0.50.14",
+  "sdk_version": "0.50.15",
   "coin_type": "118",
   "min_tx_fee": "400000000000000",
   "addr_prefix": "sunima",
