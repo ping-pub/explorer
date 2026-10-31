@@ -1,0 +1,31 @@
+{
+  "chain_name": "sunima",
+  "registry_name": "sunima",
+  "api": [
+    {
+      "address": "https://sunima.uk/chain-rest",
+      "provider": "Sunima Labs"
+    }
+  ],
+  "rpc": [
+    {
+      "address": "https://sunima.uk/chain-rpc",
+      "provider": "Sunima Labs"
+    }
+  ],
+  "sdk_version": "0.50.14",
+  "coin_type": "118",
+  "min_tx_fee": "400000000000000",
+  "addr_prefix": "sunima",
+  "logo": "https://sunima.uk/sunima-logo-200.png",
+  "theme_color": "#7c3aed",
+  "assets": [
+    {
+      "base": "asuna",
+      "symbol": "SUNA",
+      "exponent": "18",
+      "coingecko_id": "",
+      "logo": "https://sunima.uk/sunima-logo-200.png"
+    }
+  ]
+}
